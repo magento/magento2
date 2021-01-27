@@ -62,15 +62,15 @@ class FileTest extends \PHPUnit\Framework\TestCase
             . $this->testData['html_id_suffix'];
 
         $this->assertStringContainsString('<label class="addbefore" for="' . $expectedHtmlId . '"', $html);
-        $this->assertContains($this->testData['before_element_html'], $html);
+        $this->assertStringContainsString($this->testData['before_element_html'], $html);
         $this->assertStringContainsString('<input id="' . $expectedHtmlId . '"', $html);
         $this->assertStringContainsString('name="' . $this->testData['name'] . '"', $html);
         $this->assertStringContainsString('value="' . $this->testData['value'] . '"', $html);
         $this->assertStringContainsString('disabled="disabled"', $html);
         $this->assertStringContainsString('type="file"', $html);
-        $this->assertContains($this->testData['after_element_js'], $html);
+        $this->assertStringContainsString($this->testData['after_element_js'], $html);
         $this->assertStringContainsString('<label class="addafter" for="' . $expectedHtmlId . '"', $html);
-        $this->assertContains($this->testData['after_element_html'], $html);
+        $this->assertStringContainsString($this->testData['after_element_html'], $html);
         $this->assertStringContainsString('<input type="checkbox" name="' . $this->testData['name'] . '[delete]"', $html);
     }
 }

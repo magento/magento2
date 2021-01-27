@@ -160,8 +160,7 @@ class AttributeMetadataHydratorTest extends \PHPUnit\Framework\TestCase
             $attributeMetadataData['attribute_code'],
             $attributeMetadata->getAttributeCode()
         );
-        $this->assertInternalType(
-            \PHPUnit\Framework\Constraint\IsType::TYPE_ARRAY,
+        $this->assertIsArray(
             $attributeMetadata->getOptions()
         );
         $this->assertArrayHasKey(
@@ -176,8 +175,7 @@ class AttributeMetadataHydratorTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey(1, $attributeMetadata->getOptions());
         $this->assertInstanceOf(OptionInterface::class, $attributeMetadata->getOptions()[1]);
 
-        $this->assertInternalType(
-            \PHPUnit\Framework\Constraint\IsType::TYPE_ARRAY,
+        $this->assertIsArray(
             $attributeMetadata->getOptions()[1]->getOptions()
         );
         $this->assertArrayHasKey(0, $attributeMetadata->getOptions()[1]->getOptions());
@@ -186,8 +184,7 @@ class AttributeMetadataHydratorTest extends \PHPUnit\Framework\TestCase
             $optionThreeData['label'],
             $attributeMetadata->getOptions()[1]->getOptions()[0]->getLabel()
         );
-        $this->assertInternalType(
-            \PHPUnit\Framework\Constraint\IsType::TYPE_ARRAY,
+        $this->assertIsArray(
             $attributeMetadata->getValidationRules()
         );
         $this->assertArrayHasKey(0, $attributeMetadata->getValidationRules());

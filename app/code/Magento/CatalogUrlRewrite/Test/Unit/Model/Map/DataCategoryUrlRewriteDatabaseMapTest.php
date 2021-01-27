@@ -103,7 +103,7 @@ class DataCategoryUrlRewriteDatabaseMapTest extends \PHPUnit\Framework\TestCase
             ->willReturn([]);
         $this->temporaryTableServiceMock->expects($this->any())
             ->method('createFromSelect')
-            ->withConsecutive(
+            ->with(
                 $selectMock,
                 $connectionMock,
                 [

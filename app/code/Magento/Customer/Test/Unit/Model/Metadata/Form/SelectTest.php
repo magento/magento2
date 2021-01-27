@@ -6,6 +6,7 @@
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 
 use Magento\Customer\Model\Metadata\Form\Select;
+use Magento\Framework\Phrase;
 
 /**
  * test Magento\Customer\Model\Metadata\Form\Select
@@ -65,7 +66,7 @@ class SelectTest extends AbstractFormTestCase
      */
     public function testValidateValueRequired($value, $expected)
     {
-        $this->attributeMetadataMock->expects($this->any())->method('isRequired')->will($this->returnValue(true));
+        $this->attributeMetadataMock->expects($this->any())->method('isRequired')->willReturn(true);
 
         $select = $this->getClass($value);
         $actual = $select->validateValue($value);
@@ -73,7 +74,16 @@ class SelectTest extends AbstractFormTestCase
         if (is_bool($actual)) {
             $this->assertEquals($expected, $actual);
         } else {
-            $this->assertStringContainsString($expected, $actual);
+            if (is_array($actual)) {
+                $actual = array_map(
+                    function (Phrase $message) {
+                        return $message->__toString();
+                    },
+                    $actual
+                );
+            }
+
+            $this->assertContains($expected, $actual);
         }
     }
 
@@ -85,7 +95,7 @@ class SelectTest extends AbstractFormTestCase
         return [
             'empty' => ['', '"" is a required value.'],
             'null' => [null, '"" is a required value.'],
-            '0' => [0, true],
+            '0' => [0, '"" is a required value.'],
             'string' => ['some text', true],
             'number' => [123, true],
             'true' => [true, true],

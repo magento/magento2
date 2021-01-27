@@ -10,6 +10,7 @@ namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 
 use Magento\Customer\Api\Data\ValidationRuleInterface;
 use Magento\Customer\Model\Metadata\Form\Text;
+use Magento\Framework\Phrase;
 
 class TextTest extends AbstractFormTestCase
 {
@@ -88,7 +89,15 @@ class TextTest extends AbstractFormTestCase
         if (is_bool($actual)) {
             $this->assertEquals($expected, $actual);
         } else {
-            $this->assertStringContainsString($expected, $actual);
+            if (is_array($actual)) {
+                $actual = array_map(
+                    function (Phrase $message) {
+                        return $message->__toString();
+                    },
+                    $actual
+                );
+            }
+            $this->assertContains($expected, $actual);
         }
     }
 
@@ -100,7 +109,7 @@ class TextTest extends AbstractFormTestCase
         return [
             'empty' => ['', '"" is a required value.'],
             'null' => [null, '"" is a required value.'],
-            '0' => [0, true],
+            '0' => [0, '"" is a required value.'],
             'zero' => ['0', true],
             'string' => ['some text', true],
             'number' => [123, true],
@@ -169,7 +178,12 @@ class TextTest extends AbstractFormTestCase
         if (is_bool($actual)) {
             $this->assertEquals($expected, $actual);
         } else {
-            $this->assertStringContainsString($expected, $actual);
+            if (is_array($actual)) {
+                $actual = array_map(function (Phrase $message) {
+                    return $message->__toString();
+                }, $actual);
+            }
+            $this->assertContains($expected, $actual);
         }
     }
 

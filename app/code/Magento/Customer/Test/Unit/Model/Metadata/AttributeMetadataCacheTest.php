@@ -59,7 +59,7 @@ class AttributeMetadataCacheTest extends \PHPUnit\Framework\TestCase
      * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
-    
+
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -146,8 +146,7 @@ class AttributeMetadataCacheTest extends \PHPUnit\Framework\TestCase
             ->with($attributeMetadataOneData)
             ->willReturn($attributeMetadataMock);
         $attributesMetadata = $this->attributeMetadataCache->load($entityType, $suffix);
-        $this->assertInternalType(
-            \PHPUnit\Framework\Constraint\IsType::TYPE_ARRAY,
+        $this->assertIsArray(
             $attributesMetadata
         );
         $this->assertArrayHasKey(

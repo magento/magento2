@@ -230,7 +230,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      * @param string|null $priceCurrency
      * @param string|null $customerGroupId
      */
-    public function testGetCacheKeyInfo(array $expected, string $priceCurrency = null, string $customerGroupId = null)
+    public function testGetCacheKeyInfo(array $expected, ?string $priceCurrency, ?int $customerGroupId)
     {
         $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->setMethods(['getCurrentCurrency'])

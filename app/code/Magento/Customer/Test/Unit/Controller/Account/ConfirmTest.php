@@ -250,7 +250,7 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->requestMock->expects($this->any())
             ->method('getParam')
@@ -264,41 +264,52 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
         $this->customerRepositoryMock->expects($this->any())
             ->method('getById')
             ->with($customerId)
-            ->will($this->returnValue($this->customerDataMock));
+            ->willReturn($this->customerDataMock);
 
         $email = 'test@example.com';
         $this->customerDataMock->expects($this->once())
             ->method('getEmail')
-            ->will($this->returnValue($email));
+            ->willReturn($email);
 
         $this->customerAccountManagementMock->expects($this->once())
             ->method('activate')
-            ->with($this->equalTo($email), $this->equalTo($key))
-            ->will($this->returnValue($this->customerDataMock));
+            ->with($email, $key)
+            ->willReturn($this->customerDataMock);
 
         $this->customerSessionMock->expects($this->any())
             ->method('setCustomerDataAsLoggedIn')
-            ->with($this->equalTo($this->customerDataMock))
+            ->with($this->customerDataMock)
             ->willReturnSelf();
 
-        $this->messageManagerMock->expects($this->any())
-            ->method('addSuccessMessage')
-            ->with($this->stringContains($successMessage))
+        $this->messageManagerMock
+            ->method('addSuccess')
+            ->with($successMessage)
             ->willReturnSelf();
+
+        $this->messageManagerMock
+            ->expects($this->never())
+            ->method('addException');
+
+        $this->urlMock
+            ->method('getUrl')
+            ->willReturnMap([
+                ['customer/address/edit', null, 'http://store.web/customer/address/edit'],
+                ['*/*/admin', ['_secure' => true], 'http://store.web/back']
+            ]);
 
         $this->addressHelperMock->expects($this->once())
             ->method('isVatValidationEnabled')
-            ->will($this->returnValue($vatValidationEnabled));
+            ->willReturn($vatValidationEnabled);
         $this->addressHelperMock->expects($this->any())
             ->method('getTaxCalculationAddressType')
-            ->will($this->returnValue($addressType));
+            ->willReturn($addressType);
 
         $this->storeMock->expects($this->any())
             ->method('getFrontendName')
-            ->will($this->returnValue('frontend'));
+            ->willReturn('frontend');
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
 
         $cookieMetadataManager = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\PhpCookieManager::class)
             ->disableOriginalConstructor()
@@ -369,7 +380,7 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->requestMock->expects($this->any())
             ->method('getParam')
@@ -384,43 +395,50 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
         $this->customerRepositoryMock->expects($this->any())
             ->method('getById')
             ->with($customerId)
-            ->will($this->returnValue($this->customerDataMock));
+            ->willReturn($this->customerDataMock);
 
         $email = 'test@example.com';
         $this->customerDataMock->expects($this->once())
             ->method('getEmail')
-            ->will($this->returnValue($email));
+            ->willReturn($email);
 
         $this->customerAccountManagementMock->expects($this->once())
             ->method('activate')
-            ->with($this->equalTo($email), $this->equalTo($key))
-            ->will($this->returnValue($this->customerDataMock));
+            ->with($email, $key)
+            ->willReturn($this->customerDataMock);
 
         $this->customerSessionMock->expects($this->any())
             ->method('setCustomerDataAsLoggedIn')
-            ->with($this->equalTo($this->customerDataMock))
+            ->with($this->customerDataMock)
             ->willReturnSelf();
 
-        $this->messageManagerMock->expects($this->any())
-            ->method('addSuccessMessage')
-            ->with($this->stringContains($successMessage))
+        $this->messageManagerMock
+            ->method('addSuccess')
+            ->with($successMessage)
             ->willReturnSelf();
+
+        $this->messageManagerMock
+            ->expects($this->never())
+            ->method('addException');
+
+        $this->urlMock
+            ->method('getUrl')
+            ->willReturnMap([
+                ['customer/address/edit', null, 'http://store.web/customer/address/edit'],
+                ['*/*/admin', ['_secure' => true], 'http://store.web/back'],
+                ['*/*/index', ['_secure' => true], $successUrl]
+            ]);
 
         $this->storeMock->expects($this->any())
             ->method('getFrontendName')
-            ->will($this->returnValue('frontend'));
+            ->willReturn('frontend');
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
-
-        $this->urlMock->expects($this->any())
-            ->method('getUrl')
-            ->with($this->equalTo('*/*/index'), ['_secure' => true])
-            ->will($this->returnValue($successUrl));
+            ->willReturn($this->storeMock);
 
         $this->redirectMock->expects($this->once())
             ->method('success')
-            ->with($this->equalTo($resultUrl))
+            ->with($resultUrl)
             ->willReturn($resultUrl);
 
         $this->scopeConfigMock->expects($this->any())

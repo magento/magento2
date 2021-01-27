@@ -119,14 +119,12 @@ class PasswordTest extends \PHPUnit\Framework\TestCase
 
         $customer->expects($this->exactly(2))->method('getData')->willReturn($randomValue);
 
-        $this->assertInternalType(
-            'string',
+        $this->assertIsString(
             $customer->getPassword(),
             'Customer password should always return a string'
         );
 
-        $this->assertInternalType(
-            'string',
+        $this->assertIsString(
             $customer->getPasswordConfirm(),
             'Customer password-confirm should always return a string'
         );
