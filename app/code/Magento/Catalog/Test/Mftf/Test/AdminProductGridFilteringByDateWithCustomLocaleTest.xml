@@ -20,6 +20,8 @@
         </annotations>
 
         <before>
+            <!-- Deploy static content with United Kingdom locale-->
+            <magentoCLI command="setup:static-content:deploy en_GB" stepKey="deployStaticContentWithUnitedKingdomLocale"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -27,9 +29,10 @@
 
             <!-- Create new User -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
-            <actionGroup ref="AdminCreateUserWithRoleActionGroup" stepKey="createAdminUser">
+            <actionGroup ref="AdminCreateUserWithRoleAndLocaleActionGroup" stepKey="createAdminUser">
                 <argument name="user" value="activeAdmin"/>
                 <argument name="role" value="roleDefaultAdministrator"/>
+                <argument name="interfaceLocale" value="en_GB"/>
             </actionGroup>
         </before>
         <after>
@@ -84,11 +87,6 @@
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginToNewAdmin">
             <argument name="username" value="{{activeAdmin.username}}"/>
             <argument name="password" value="{{activeAdmin.password}}"/>
-        </actionGroup>
-
-        <!--Set Admin "Interface Locale" to "English (United Kingdom)"-->
-        <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminInterfaceLocaleToFrance">
-            <argument name="InterfaceLocaleByValue" value="en_GB"/>
         </actionGroup>
 
         <!-- Open Product Index Page and filter the product -->
