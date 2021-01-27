@@ -9,7 +9,6 @@ use Magento\Customer\Helper\Address;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\App\ObjectManager;
 use Magento\Newsletter\Model\Config;
-use Magento\Store\Model\ScopeInterface;
 
 /**
  * Customer register form block
@@ -185,7 +184,7 @@ class Register extends \Magento\Directory\Block\Data
     public function isNewsletterEnabled()
     {
         return $this->_moduleManager->isOutputEnabled('Magento_Newsletter')
-            && $this->newsLetterConfig->isActive(ScopeInterface::SCOPE_STORE);
+            && $this->newsLetterConfig->isActive();
     }
 
     /**

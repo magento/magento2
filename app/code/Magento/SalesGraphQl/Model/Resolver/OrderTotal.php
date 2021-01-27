@@ -60,8 +60,7 @@ class OrderTotal implements ResolverInterface
                 ],
                 'taxes' => $this->getAppliedShippingTaxesDetails($order),
                 'discounts' => $this->getShippingDiscountDetails($order),
-            ],
-            'model' => $order
+            ]
         ];
     }
 
