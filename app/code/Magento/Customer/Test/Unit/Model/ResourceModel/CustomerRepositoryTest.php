@@ -159,7 +159,8 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
             true,
             true,
             [
-                '__toArray'
+                '__toArray',
+                'getCustomAttributes',
             ]
         );
         $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
@@ -242,6 +243,9 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
             'getLockExpires',
             ]
         );
+        $this->customer->expects($this->once())
+            ->method('getCustomAttributes')
+            ->willReturn([]);
         $this->customer->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($customerId);
@@ -415,6 +419,9 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
                 'setAddresses'
             ]
         );
+        $this->customer->expects($this->once())
+            ->method('getCustomAttributes')
+            ->willReturn([]);
         $customerModel->expects($this->atLeastOnce())
             ->method('setRpToken')
             ->with(null);
