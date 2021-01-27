@@ -218,38 +218,6 @@ class SaveTest extends AbstractInvoiceControllerTest
     }
 
     /**
-     * Get order items qty invoiced
-     *
-     * @param int $orderId
-     * @return array
-     */
-    private function getOrderItemsQtyInvoiced(int $orderId): array
-    {
-        $connection = $this->orderItemResource->getConnection();
-        $select = $connection->select()
-            ->from($this->orderItemResource->getMainTable(), OrderItemInterface::QTY_INVOICED)
-            ->where(OrderItemInterface::ORDER_ID . ' = ?', $orderId);
-
-        return $connection->fetchCol($select);
-    }
-
-    /**
-     * Get order items qty ordered
-     *
-     * @param int $orderId
-     * @return array
-     */
-    private function getOrderItemsQtyOrdered(int $orderId): array
-    {
-        $connection = $this->orderItemResource->getConnection();
-        $select = $connection->select()
-            ->from($this->orderItemResource->getMainTable(), OrderItemInterface::QTY_ORDERED)
-            ->where(OrderItemInterface::ORDER_ID . ' = ?', $orderId);
-
-        return $connection->fetchCol($select);
-    }
-
-    /**
      * @magentoDataFixture Magento/Sales/_files/order_with_bundle_dynamic_price_no.php
      *
      * @return void
@@ -347,5 +315,37 @@ class SaveTest extends AbstractInvoiceControllerTest
             $this->stringContains(sprintf('sales/order/view/order_id/%u', (int)$order->getEntityId()))
         );
         $this->assertSessionMessages($this->containsEqual((string)__($message)));
+    }
+
+    /**
+     * Get order items qty invoiced
+     *
+     * @param int $orderId
+     * @return array
+     */
+    private function getOrderItemsQtyInvoiced(int $orderId): array
+    {
+        $connection = $this->orderItemResource->getConnection();
+        $select = $connection->select()
+            ->from($this->orderItemResource->getMainTable(), OrderItemInterface::QTY_INVOICED)
+            ->where(OrderItemInterface::ORDER_ID . ' = ?', $orderId);
+
+        return $connection->fetchCol($select);
+    }
+
+    /**
+     * Get order items qty ordered
+     *
+     * @param int $orderId
+     * @return array
+     */
+    private function getOrderItemsQtyOrdered(int $orderId): array
+    {
+        $connection = $this->orderItemResource->getConnection();
+        $select = $connection->select()
+            ->from($this->orderItemResource->getMainTable(), OrderItemInterface::QTY_ORDERED)
+            ->where(OrderItemInterface::ORDER_ID . ' = ?', $orderId);
+
+        return $connection->fetchCol($select);
     }
 }
