@@ -23,7 +23,7 @@ class Price implements ResolverInterface
     /**
      * @var CollectionFactory
      */
-    protected $priceCollectionFactory;
+    private $priceCollectionFactory;
 
     /**
      * @var AlertsHelper
@@ -52,8 +52,8 @@ class Price implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!$this->helper->isStockAlertAllowed()) {
-            throw new GraphQlInputException(__('The product stock alerts is currently disabled.'));
+        if (!$this->helper->isPriceAlertAllowed()) {
+            throw new GraphQlInputException(__('The product price alerts is currently disabled.'));
         }
 
         $customerId = $context->getUserId();

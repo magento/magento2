@@ -23,7 +23,7 @@ class Stock implements ResolverInterface
     /**
      * @var CollectionFactory
      */
-    protected $stockCollectionFactory;
+    private $stockCollectionFactory;
 
     /**
      * @var AlertsHelper
