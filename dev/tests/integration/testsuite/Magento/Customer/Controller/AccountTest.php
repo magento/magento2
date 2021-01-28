@@ -70,7 +70,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('customer/account/index');
 
         $body = $this->getResponse()->getBody();
-        $this->assertContains('Green str, 67', $body);
+        $this->assertStringContainsString('Green str, 67', $body);
     }
 
     /**
@@ -184,7 +184,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         // should be redirected to forgotpassword page
         $response = $this->getResponse();
         $this->assertEquals(302, $response->getHttpResponseCode());
-        $this->assertContains('customer/account/forgotpassword', $response->getHeader('Location')->getFieldValue());
+        $this->assertStringContainsString('customer/account/forgotpassword', $response->getHeader('Location')->getFieldValue());
         $this->assertCustomerConfirmationEquals(1, 'confirmation');
     }
 
@@ -322,9 +322,9 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $body = $this->getResponse()->getBody();
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode(), $body);
-        $this->assertContains('<div class="field field-name-firstname required">', $body);
+        $this->assertStringContainsString('<div class="field field-name-firstname required">', $body);
         // Verify the password check box is not checked
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<input type="checkbox" name="change_password" id="change-password" '
             . 'data-role="change-password" value="1" title="Change&#x20;Password" class="checkbox" />',
             $body
@@ -342,9 +342,9 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $body = $this->getResponse()->getBody();
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode(), $body);
-        $this->assertContains('<div class="field field-name-firstname required">', $body);
+        $this->assertStringContainsString('<div class="field field-name-firstname required">', $body);
         // Verify the password check box is checked
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<input type="checkbox" name="change_password" id="change-password" '
             . 'data-role="change-password" value="1" title="Change&#x20;Password" checked="checked" '
             . 'class="checkbox" />',

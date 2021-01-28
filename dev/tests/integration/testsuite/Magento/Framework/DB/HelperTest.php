@@ -32,7 +32,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
     public function testPrepareColumnsList()
     {
         $columns = $this->_model->prepareColumnsList($this->_select);
-        $this->assertContains('STORE_ID', array_keys($columns));
+        $this->assertStringContainsString('STORE_ID', array_keys($columns));
     }
 
     public function testAddGroupConcatColumn()

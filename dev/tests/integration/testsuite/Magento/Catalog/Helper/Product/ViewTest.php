@@ -92,7 +92,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertStringContainsString("product-{$uniqid}", $bodyClass);
         $handles = $this->page->getLayout()->getUpdate()->getHandles();
-        $this->assertContains('catalog_product_view_type_simple', $handles);
+        $this->assertStringContainsString('catalog_product_view_type_simple', $handles);
     }
 
     /**

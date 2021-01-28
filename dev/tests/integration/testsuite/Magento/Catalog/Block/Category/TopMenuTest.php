@@ -130,7 +130,7 @@ class TopMenuTest extends TestCase
         $this->updateCategories($categories);
         $output = $this->block->getHtml('level-top', 'submenu', 0);
         foreach ($expectedCategories as $data) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $data['name'],
                 $output,
                 'Category ' . $data['name'] . ' should appear in the menu!'
@@ -430,7 +430,7 @@ class TopMenuTest extends TestCase
     ): void {
         $this->storeManager->setCurrentStore($storeCode);
         $output = $this->block->getHtml('level-top', 'submenu', 0);
-        $this->assertContains(
+        $this->assertStringContainsString(
             $expectedCategory,
             $output,
             'Category "' . $expectedCategory . '" should appear in the menu!'

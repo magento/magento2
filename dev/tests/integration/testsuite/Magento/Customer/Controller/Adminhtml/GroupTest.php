@@ -49,7 +49,7 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->assertMatchesRegularExpression('/<h1 class\="page-title">\s*New Customer Group\s*<\/h1>/', $responseBody);
         $expected = '<input id="customer_group_code" name="code"  '
             . 'data-ui-id="group-form-fieldset-element-text-code"  value=""';
-        $this->assertContains($expected, $responseBody);
+        $this->assertStringContainsString($expected, $responseBody);
     }
 
     /**
@@ -78,7 +78,7 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->assertMatchesRegularExpression('/<h1 class\="page-title">\s*New Customer Group\s*<\/h1>/', $responseBody);
         $expected = '<input id="customer_group_code" name="code"  '
             . 'data-ui-id="group-form-fieldset-element-text-code"  value="' . self::CUSTOMER_GROUP_CODE . '"';
-        $this->assertContains($expected, $responseBody);
+        $this->assertStringContainsString($expected, $responseBody);
     }
 
     /**

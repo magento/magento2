@@ -45,7 +45,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     {
         $this->collection->filterByProductType('simple');
         $whereParts = $this->collection->getSelect()->getPart(\Magento\Framework\DB\Select::WHERE);
-        $this->assertContains('simple', $whereParts[0]);
+        $this->assertStringContainsString('simple', $whereParts[0]);
     }
 
     /**

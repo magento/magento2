@@ -137,8 +137,8 @@ class RowsTest extends \PHPUnit\Framework\TestCase
         $secondProductId = $productRepository->get('simpleC')->getId();
 
         $this->assertCount(2, $productIds);
-        $this->assertContains($secondProductId, $productIds);
-        $this->assertContains($firstProductId, $productIds);
+        $this->assertStringContainsString($secondProductId, $productIds);
+        $this->assertStringContainsString($firstProductId, $productIds);
     }
 
     /**

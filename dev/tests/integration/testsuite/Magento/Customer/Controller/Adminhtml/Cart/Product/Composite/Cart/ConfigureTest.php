@@ -95,7 +95,7 @@ class ConfigureTest extends AbstractBackendController
             'website_id' => $this->baseWebsiteId,
             'id' => $itemId,
         ]);
-        $this->assertContains(
+        $this->assertStringContainsString(
             $expectedResponseBody,
             $this->getResponse()->getBody()
         );

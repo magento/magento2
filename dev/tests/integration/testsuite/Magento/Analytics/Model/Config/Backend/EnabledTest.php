@@ -151,7 +151,7 @@ class EnabledTest extends \PHPUnit\Framework\TestCase
      */
     private function checkReEnabledStatus()
     {
-        $this->assertContains(
+        $this->assertStringContainsString(
             $this->subscriptionStatusProvider->getStatus(),
             [
                 SubscriptionStatusProvider::ENABLED,

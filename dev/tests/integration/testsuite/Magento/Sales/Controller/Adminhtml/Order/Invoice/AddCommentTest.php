@@ -39,7 +39,7 @@ class AddCommentTest extends AbstractInvoiceControllerTest
         $this->dispatch($this->uri);
 
         $html = $this->getResponse()->getBody();
-        $this->assertContains($comment, $html);
+        $this->assertStringContainsString($comment, $html);
 
         $message = $this->transportBuilder->getSentMessage();
         $this->assertNotNull($message);

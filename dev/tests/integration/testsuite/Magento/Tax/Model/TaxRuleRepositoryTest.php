@@ -334,7 +334,7 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($searchCriteria, $searchResults->getSearchCriteria());
         $this->assertEquals(count($expectedRuleCodes), $searchResults->getTotalCount());
         foreach ($searchResults->getItems() as $rule) {
-            $this->assertContains($rule->getCode(), $expectedRuleCodes);
+            $this->assertStringContainsString($rule->getCode(), $expectedRuleCodes);
         }
 
         $this->tearDownDefaultRules();

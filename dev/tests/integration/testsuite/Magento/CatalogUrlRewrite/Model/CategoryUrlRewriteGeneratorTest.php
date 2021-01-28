@@ -366,7 +366,7 @@ class CategoryUrlRewriteGeneratorTest extends TestCase
     {
         $this->assertEquals(count($expected), count($actual), 'Number of rewrites does not match');
         foreach ($expected as $row) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $row,
                 $actual,
                 'Expected: ' . var_export($row, true) . "\nIn Actual: " . var_export($actual, true)

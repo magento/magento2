@@ -85,6 +85,6 @@ class DataProviderTest extends TestCase
             $actualIds[] = $document->getId();
         }
         $product = $this->productRepository->get('simple_for_search');
-        $this->assertContains($product->getId(), $actualIds, 'Product not found by searchable attribute.');
+        $this->assertStringContainsString($product->getId(), $actualIds, 'Product not found by searchable attribute.');
     }
 }

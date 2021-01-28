@@ -77,8 +77,8 @@ class SendTest extends AbstractController
         );
         $this->assertNotNull($this->transportBuilder->getSentMessage());
         $messageContent = $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent();
-        $this->assertContains($shareMessage, $messageContent);
-        $this->assertContains(
+        $this->assertStringContainsString($shareMessage, $messageContent);
+        $this->assertStringContainsString(
             sprintf(
                 '%s wants to share this Wish List',
                 $this->customerNameGeneration->getCustomerName($this->customerSession->getCustomerDataObject())

@@ -63,7 +63,7 @@ class PlaceTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
             ['context' => $context]
         );
         $controller->execute();
-        $this->assertContains(json_encode($requestToAuthorizenetData), $this->getResponse()->getBody());
+        $this->assertStringContainsString(json_encode($requestToAuthorizenetData), $this->getResponse()->getBody());
     }
 
     /**

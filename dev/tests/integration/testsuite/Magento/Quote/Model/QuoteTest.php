@@ -210,7 +210,7 @@ class QuoteTest extends TestCase
         $customer = $quote->getCustomer();
         $actual = $this->extensibleDataObjectConverter->toFlatArray($customer);
         foreach ($expected as $item) {
-            $this->assertContains($item, $actual);
+            $this->assertStringContainsString($item, $actual);
         }
         $this->assertEquals('test@example.com', $quote->getCustomerEmail());
     }

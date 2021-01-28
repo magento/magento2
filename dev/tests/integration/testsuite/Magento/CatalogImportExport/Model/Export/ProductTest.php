@@ -189,7 +189,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     public function verifyHeaderColumns(array $headerColumns): void
     {
         foreach (self::$stockItemAttributes as $stockItemAttribute) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $stockItemAttribute,
                 $headerColumns,
                 "Stock item attribute {$stockItemAttribute} is absent among header columns"

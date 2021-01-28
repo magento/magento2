@@ -28,8 +28,8 @@ class IndexerTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
             ),
             'Mode selector is not found'
         );
-        $this->assertContains('option value="change_mode_onthefly"', $body);
-        $this->assertContains('option value="change_mode_changelog"', $body);
+        $this->assertStringContainsString('option value="change_mode_onthefly"', $body);
+        $this->assertStringContainsString('option value="change_mode_changelog"', $body);
     }
 
     /**

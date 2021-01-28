@@ -212,14 +212,14 @@ class CreatePostTest extends AbstractController
         $sendMessage = $this->transportBuilderMock->getSentMessage();
         $this->assertNotNull($sendMessage);
         $rawMessage = $sendMessage->getBody()->getParts()[0]->getRawContent();
-        $this->assertContains(
+        $this->assertStringContainsString(
             (string)__(
                 'You must confirm your %customer_email email before you can sign in (link is only valid once):',
                 ['customer_email' => $email]
             ),
             $rawMessage
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             sprintf('customer/account/confirm/?id=%s&amp;key=%s', $customer->getId(), $confirmation),
             $rawMessage
         );

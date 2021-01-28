@@ -559,7 +559,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $validationResult = $this->_model->validate();
         $this->assertCount(1, $validationResult);
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             'The value of the "' . $attribute->getDefaultFrontendLabel() .
             '" attribute isn\'t unique. Set a unique value and try again.',
             $validationResult

@@ -230,12 +230,12 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
             'email',
         ];
         foreach ($expectedInBefore as $key) {
-            $this->assertContains($key, array_keys($inBeforeOnly));
+            $this->assertStringContainsString($key, array_keys($inBeforeOnly));
         }
-        $this->assertContains('created_in', array_keys($inAfterOnly));
-        $this->assertContains('firstname', array_keys($inAfterOnly));
-        $this->assertContains('lastname', array_keys($inAfterOnly));
-        $this->assertContains('email', array_keys($inAfterOnly));
+        $this->assertStringContainsString('created_in', array_keys($inAfterOnly));
+        $this->assertStringContainsString('firstname', array_keys($inAfterOnly));
+        $this->assertStringContainsString('lastname', array_keys($inAfterOnly));
+        $this->assertStringContainsString('email', array_keys($inAfterOnly));
         $this->assertNotContains('password_hash', array_keys($inAfterOnly));
     }
 

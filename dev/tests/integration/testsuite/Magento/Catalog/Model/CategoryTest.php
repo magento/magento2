@@ -130,7 +130,7 @@ class CategoryTest extends TestCase
     {
         $this->_model = $this->getCategoryByName('Category 1.1');
         /* id from fixture */
-        $this->assertContains(
+        $this->assertStringContainsString(
             Bootstrap::getObjectManager()->get(StoreManagerInterface::class)->getStore()->getId(),
             $this->_model->getStoreIds()
         );
@@ -220,8 +220,8 @@ class CategoryTest extends TestCase
             $this->_model->getDesignAttributes()
         );
 
-        $this->assertContains('custom_design_from', $attributeCodes);
-        $this->assertContains('custom_design_to', $attributeCodes);
+        $this->assertStringContainsString('custom_design_from', $attributeCodes);
+        $this->assertStringContainsString('custom_design_to', $attributeCodes);
     }
 
     public function testCheckId(): void
@@ -279,9 +279,9 @@ class CategoryTest extends TestCase
     public function testGetAvailableSortByOptions(): void
     {
         $options = $this->_model->getAvailableSortByOptions();
-        $this->assertContains('price', array_keys($options));
-        $this->assertContains('position', array_keys($options));
-        $this->assertContains('name', array_keys($options));
+        $this->assertStringContainsString('price', array_keys($options));
+        $this->assertStringContainsString('position', array_keys($options));
+        $this->assertStringContainsString('name', array_keys($options));
     }
 
     public function testGetDefaultSortBy(): void

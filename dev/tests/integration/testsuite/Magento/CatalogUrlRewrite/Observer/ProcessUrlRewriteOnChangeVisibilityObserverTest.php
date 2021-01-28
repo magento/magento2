@@ -81,7 +81,7 @@ class ProcessUrlRewriteOnChangeVisibilityObserverTest extends \PHPUnit\Framework
 
         $actual = $this->getActualResults($productFilter);
         foreach ($expected as $row) {
-            $this->assertContains($row, $actual);
+            $this->assertStringContainsString($row, $actual);
         }
 
         $this->eventManager->dispatch(
@@ -144,7 +144,7 @@ class ProcessUrlRewriteOnChangeVisibilityObserverTest extends \PHPUnit\Framework
 
         $actual = $this->getActualResults($productFilter);
         foreach ($expected as $row) {
-            $this->assertContains($row, $actual);
+            $this->assertStringContainsString($row, $actual);
         }
     }
 

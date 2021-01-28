@@ -25,9 +25,9 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
             $majorMinor = $versionParts[0] . '.' . $versionParts[1];
 
             // Response must contain Major.Minor version, product name, and edition
-            $this->assertContains($majorMinor, $body);
-            $this->assertContains($name, $body);
-            $this->assertContains($edition, $body);
+            $this->assertStringContainsString($majorMinor, $body);
+            $this->assertStringContainsString($name, $body);
+            $this->assertStringContainsString($edition, $body);
 
             // Response must not contain full version including patch version
             $this->assertNotContains($fullVersion, $body);

@@ -126,7 +126,7 @@ class CategoryTest extends AbstractController
         /* Layout updates */
         $handles = $this->layout->getUpdate()->getHandles();
         foreach ($expectedHandles as $expectedHandleName) {
-            $this->assertContains($expectedHandleName, $handles);
+            $this->assertStringContainsString($expectedHandleName, $handles);
         }
 
         $responseBody = $this->getResponse()->getBody();
@@ -197,6 +197,6 @@ class CategoryTest extends AbstractController
         $handles = Bootstrap::getObjectManager()->get(\Magento\Framework\View\LayoutInterface::class)
             ->getUpdate()
             ->getHandles();
-        $this->assertContains("catalog_category_view_selectable_{$categoryId}_{$file}", $handles);
+        $this->assertStringContainsString("catalog_category_view_selectable_{$categoryId}_{$file}", $handles);
     }
 }

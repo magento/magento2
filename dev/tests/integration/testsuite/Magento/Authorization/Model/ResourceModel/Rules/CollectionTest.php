@@ -32,7 +32,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql $connection */
         $connection = $this->_collection->getConnection();
         $quote = $connection->getQuoteIdentifierSymbol();
-        $this->assertContains("({$quote}role_id{$quote} = '" . $user->getRole()->getId() . "')", $where);
+        $this->assertStringContainsString("({$quote}role_id{$quote} = '" . $user->getRole()->getId() . "')", $where);
     }
 
     public function testAddSortByLength()
@@ -40,6 +40,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->_collection->addSortByLength();
 
         $order = $this->_collection->getSelect()->getPart(\Magento\Framework\DB\Select::ORDER);
-        $this->assertContains(['length', 'DESC'], $order);
+        $this->assertStringContainsString(['length', 'DESC'], $order);
     }
 }

@@ -95,7 +95,7 @@ class ViewTest extends AbstractController
         );
         $this->dispatch('catalog/product/view/id/1/');
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<link  rel="canonical" href="http://localhost/index.php/catalog/product/view/_ignore_category/1/id/1/" />',
             $this->getResponse()->getBody()
         );
@@ -286,7 +286,7 @@ class ViewTest extends AbstractController
         $pTag = Product::CACHE_TAG . '_' . $product->getId();
         $hTags = $this->getResponse()->getHeader('X-Magento-Tags');
         $tags = $hTags && $hTags->getFieldValue() ? explode(',', $hTags->getFieldValue()) : [];
-        $this->assertContains(
+        $this->assertStringContainsString(
             $pTag,
             $tags,
             "Failed asserting that X-Magento-Tags: {$hTags->getFieldValue()} contains \"$pTag\""

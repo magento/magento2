@@ -48,20 +48,20 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     {
         $this->_collection->addGroupFilter(1);
         $quote = $this->_getQuoteIdentifierSymbol();
-        $this->assertContains("{$quote}group_id{$quote} IN", (string)$this->_collection->getSelect(), 'Group filter');
+        $this->assertStringContainsString("{$quote}group_id{$quote} IN", (string)$this->_collection->getSelect(), 'Group filter');
 
         $this->_collection->addIdFilter(1);
-        $this->assertContains("{$quote}store_id{$quote} IN", (string)$this->_collection->getSelect(), 'Id filter');
+        $this->assertStringContainsString("{$quote}store_id{$quote} IN", (string)$this->_collection->getSelect(), 'Id filter');
 
         $this->_collection->addWebsiteFilter(1);
-        $this->assertContains(
+        $this->assertStringContainsString(
             "{$quote}website_id{$quote} IN",
             (string)$this->_collection->getSelect(),
             'Website filter'
         );
 
         $this->_collection->addCategoryFilter(1);
-        $this->assertContains(
+        $this->assertStringContainsString(
             "{$quote}root_category_id{$quote} IN",
             (string)$this->_collection->getSelect(),
             'Category filter'

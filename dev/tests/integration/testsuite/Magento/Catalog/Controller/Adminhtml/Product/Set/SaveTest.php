@@ -204,7 +204,7 @@ class SaveTest extends AbstractBackendController
         $jsonResponse = $this->json->unserialize($this->getResponse()->getBody());
         $this->assertNotNull($jsonResponse);
         $this->assertEquals(1, $jsonResponse['error']);
-        $this->assertContains(
+        $this->assertStringContainsString(
             (string)__('Attribute group with same code already exist. Please rename &quot;attribute-group-name&quot; group'),
             $jsonResponse['message']
         );

@@ -441,12 +441,12 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
         $product->load(1);
         // fixture
         $data = $this->_model->getSearchableData($product);
-        $this->assertContains('Test Field', $data);
-        $this->assertContains('Test Date and Time', $data);
-        $this->assertContains('Test Select', $data);
-        $this->assertContains('Test Radio', $data);
-        $this->assertContains('Option 1', $data);
-        $this->assertContains('Option 2', $data);
+        $this->assertStringContainsString('Test Field', $data);
+        $this->assertStringContainsString('Test Date and Time', $data);
+        $this->assertStringContainsString('Test Select', $data);
+        $this->assertStringContainsString('Test Radio', $data);
+        $this->assertStringContainsString('Option 1', $data);
+        $this->assertStringContainsString('Option 2', $data);
     }
 
     public function testGetProductsToPurchaseByReqGroups()

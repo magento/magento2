@@ -198,21 +198,21 @@ class DeployTest extends \PHPUnit\Framework\TestCase
     private function assertCssUrlFixerPostProcessor($actualRootCssContent)
     {
         //assert CssUrlFixer fix urls
-        $this->assertContains(
+        $this->assertStringContainsString(
             'url("../../../../../frontend/Magento/zoom1/default/images/logo-magento-1.png")',
             $actualRootCssContent
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             'url("../../../../../frontend/Magento/zoom2/default/images/logo-magento-2.png")',
             $actualRootCssContent
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             'url("../images/logo-magento-3.png")',
             $actualRootCssContent
         );
         //_testA is included from Magento/zoom3
         //_testB is included from Magento/zoom2
-        $this->assertContains('color:#111', $actualRootCssContent);
+        $this->assertStringContainsString('color:#111', $actualRootCssContent);
     }
 
     /**

@@ -370,7 +370,7 @@ class ProductTest extends AbstractBackendController
             foreach ($options as $option) {
                 $attribute = $this->getAttribute($option->getAttributeId());
                 foreach ($childProducts as $childProduct) {
-                    $this->assertContains($attribute->getAttributeCode(), array_keys($childProduct['attributes']));
+                    $this->assertStringContainsString($attribute->getAttributeCode(), array_keys($childProduct['attributes']));
                 }
             }
         }

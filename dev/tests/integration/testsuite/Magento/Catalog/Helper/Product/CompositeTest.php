@@ -82,11 +82,11 @@ class CompositeTest extends TestCase
         $this->assertTrue($preparedProduct && $preparedCurrentProduct);
         $this->assertEquals(1, $this->registry->registry(RegistryConstants::CURRENT_CUSTOMER_ID));
         $this->assertNotNull($preparedProduct->getPreconfiguredValues());
-        $this->assertContains(
+        $this->assertStringContainsString(
             'CATALOG_PRODUCT_COMPOSITE_CONFIGURE',
             $resultLayout->getLayout()->getUpdate()->getHandles()
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             'catalog_product_view_type_' . $product->getTypeId(),
             $resultLayout->getLayout()->getUpdate()->getHandles()
         );
@@ -110,7 +110,7 @@ class CompositeTest extends TestCase
             $expectedErrorMessage,
             $this->registry->registry('composite_configure_result_error_message')
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             'CATALOG_PRODUCT_COMPOSITE_CONFIGURE_ERROR',
             $resultLayout->getLayout()->getUpdate()->getHandles()
         );

@@ -147,7 +147,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
                 . $expectedPrice . '" data-price-type="finalPrice" '
                 . 'class="price-wrapper "><span class="price">$' . $expectedPrice . '.00</span></span>';
 
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedPriceBox,
                 $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent()
             );
