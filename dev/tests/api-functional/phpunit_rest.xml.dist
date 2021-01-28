@@ -19,6 +19,7 @@
         <testsuite name="Magento REST web API functional tests">
             <directory>testsuite</directory>
             <exclude>testsuite/Magento/GraphQl</exclude>
+            <directory>../../../app/code/*/*/Test/Api</directory>
         </testsuite>
     </testsuites>
 

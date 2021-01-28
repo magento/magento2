@@ -17,13 +17,13 @@
             <directory suffix="Test.php">../../../app/code/*/*/Test/Unit</directory>
         </testsuite>
         <testsuite name="Magento_Unit_Tests_Other">
-            <directory suffix="Test.php">../../../lib/internal/*/*/Test/Unit</directory>
-            <directory suffix="Test.php">../../../lib/internal/*/*/*/Test/Unit</directory>
-            <directory suffix="Test.php">../../../setup/src/*/*/Test/Unit</directory>
-            <directory suffix="Test.php">../../../vendor/*/module-*/Test/Unit</directory>
-            <directory suffix="Test.php">../../../vendor/*/framework/Test/Unit</directory>
-            <directory suffix="Test.php">../../../vendor/*/framework/*/Test/Unit</directory>
-            <directory suffix="Test.php">../../tests/unit/*/Test/Unit</directory>
+            <directory>../../../lib/internal/*/*/Test/Unit</directory>
+            <directory>../../../lib/internal/*/*/*/Test/Unit</directory>
+            <directory>../../../setup/src/*/*/Test/Unit</directory>
+            <directory>../../../vendor/*/module-*/Test/Unit</directory>
+            <directory>../../../vendor/*/framework/Test/Unit</directory>
+            <directory>../../../vendor/*/framework/*/Test/Unit</directory>
+            <directory>../../tests/unit/*/Test/Unit</directory>
         </testsuite>
     </testsuites>
 
