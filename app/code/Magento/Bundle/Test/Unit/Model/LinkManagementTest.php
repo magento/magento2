@@ -549,7 +549,7 @@ class LinkManagementTest extends TestCase
         $productLink->method('getOptionId')->willReturn(1);
         $productLink->method('getSelectionId')->willReturn(1);
 
-        $this->metadataMock->expects($this->once())->method('getLinkField')->willReturn($this->linkField);
+        $this->metadataMock->expects($this->exactly(2))->method('getLinkField')->willReturn($this->linkField);
         $productMock = $this->createMock(Product::class);
         $productMock->expects($this->once())
             ->method('getTypeId')
@@ -626,7 +626,7 @@ class LinkManagementTest extends TestCase
         $productLink->method('getOptionId')->willReturn(1);
         $productLink->method('getSelectionId')->willReturn(1);
 
-        $this->metadataMock->expects($this->once())->method('getLinkField')->willReturn($this->linkField);
+        $this->metadataMock->expects($this->exactly(2))->method('getLinkField')->willReturn($this->linkField);
         $productMock = $this->createMock(Product::class);
         $productMock->expects($this->once())->method('getTypeId')->willReturn(Type::TYPE_BUNDLE);
         $productMock
