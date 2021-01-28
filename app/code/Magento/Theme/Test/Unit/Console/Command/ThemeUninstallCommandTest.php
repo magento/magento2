@@ -131,7 +131,7 @@ class ThemeUninstallCommandTest extends \PHPUnit\Framework\TestCase
         $this->collection->expects($this->any())->method('hasTheme')->willReturn(true);
         $this->tester->execute(['theme' => ['area/vendor/test1', 'area/vendor/test2']]);
         $this->assertStringContainsString('test1 is not an installed Composer package', $this->tester->getDisplay());
-        $this->assertNotContains(
+        $this->assertStringNotContainsString(
             'test2 is not an installed Composer package',
             $this->tester->getDisplay()
         );
@@ -188,7 +188,7 @@ class ThemeUninstallCommandTest extends \PHPUnit\Framework\TestCase
             ],
         ]);
         $this->assertStringContainsString('area/vendor/test1, area/vendor/test4 are not installed Composer packages', $this->tester->getDisplay());
-        $this->assertNotContains(
+        $this->assertStringNotContainsString(
             'area/vendor/test2 is not an installed Composer package',
             $this->tester->getDisplay()
         );
@@ -295,7 +295,7 @@ class ThemeUninstallCommandTest extends \PHPUnit\Framework\TestCase
         $this->assertStringContainsString('Enabling maintenance mode', $this->tester->getDisplay());
         $this->assertStringContainsString('Disabling maintenance mode', $this->tester->getDisplay());
         $this->assertStringContainsString('Alert: Generated static view files were not cleared.', $this->tester->getDisplay());
-        $this->assertNotContains('Generated static view files cleared successfully', $this->tester->getDisplay());
+        $this->assertStringNotContainsString('Generated static view files cleared successfully', $this->tester->getDisplay());
     }
 
     public function testExecuteCleanStaticFiles()
@@ -305,7 +305,7 @@ class ThemeUninstallCommandTest extends \PHPUnit\Framework\TestCase
         $this->tester->execute(['theme' => ['area/vendor/test'], '-c' => true]);
         $this->assertStringContainsString('Enabling maintenance mode', $this->tester->getDisplay());
         $this->assertStringContainsString('Disabling maintenance mode', $this->tester->getDisplay());
-        $this->assertNotContains('Alert: Generated static view files were not cleared.', $this->tester->getDisplay());
+        $this->assertStringNotContainsString('Alert: Generated static view files were not cleared.', $this->tester->getDisplay());
         $this->assertStringContainsString('Generated static view files cleared successfully', $this->tester->getDisplay());
     }
 

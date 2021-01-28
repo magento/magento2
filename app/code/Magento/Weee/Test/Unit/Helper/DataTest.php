@@ -195,7 +195,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $weeeObject1 = new \Magento\Framework\DataObject(
             [
                 'code' => $fptCode1,
-                'amount' => '15',
+                'amount' => '15.00',
                 'amount_excl_tax' => '15.0000',
                 'tax_amount' => '1'
             ]
@@ -203,7 +203,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $weeeObject2 = new \Magento\Framework\DataObject(
             [
                 'code' => $fptCode2,
-                'amount' => '10',
+                'amount' => '10.00',
                 'amount_excl_tax' => '10.0000',
                 'tax_amount' => '5'
             ]
@@ -226,28 +226,28 @@ class DataTest extends \PHPUnit\Framework\TestCase
         );
 
         $expectedArray = [$prodId1 => [$fptCode1 => $expectedObject1], $prodId2 => [$fptCode2 => $expectedObject2]];
-        $this->weeeTax->expects($this->any())
+        $this->weeeTax
             ->method('getProductWeeeAttributes')
-            ->will($this->returnValue([$weeeObject1, $weeeObject2]));
-        $this->taxData->expects($this->any())
+            ->willReturn([$weeeObject1, $weeeObject2]);
+        $this->taxData
             ->method('getPriceDisplayType')
             ->willReturn($priceDisplay);
-        $this->taxData->expects($this->any())
+        $this->taxData
             ->method('priceIncludesTax')
             ->willReturn($priceIncludesTax);
 
         $productSimple = $this->createPartialMock(\Magento\Catalog\Model\Product\Type\Simple::class, ['getId']);
         $productSimple->expects($this->at(0))
             ->method('getId')
-            ->will($this->returnValue($prodId1));
+            ->willReturn($prodId1);
         $productSimple->expects($this->at(1))
             ->method('getId')
-            ->will($this->returnValue($prodId2));
+            ->willReturn($prodId2);
 
         $productInstance = $this->createMock(\Magento\Bundle\Model\Product\Type::class);
         $productInstance->expects($this->any())
             ->method('getSelectionsCollection')
-            ->will($this->returnValue([$productSimple]));
+            ->willReturn([$productSimple]);
 
         $store=$this->createMock(\Magento\Store\Model\Store::class);
         /** @var \Magento\Catalog\Model\Product $product */
@@ -255,26 +255,26 @@ class DataTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Product::class,
             ['getTypeInstance', 'getStoreId', 'getStore', 'getTypeId']
         );
-        $product->expects($this->any())
+        $product
             ->method('getTypeInstance')
-            ->will($this->returnValue($productInstance));
-        $product->expects($this->any())
+            ->willReturn($productInstance);
+        $product
             ->method('getStoreId')
-            ->will($this->returnValue(1));
-        $product->expects($this->any())
+            ->willReturn(1);
+        $product
             ->method('getStore')
-            ->will($this->returnValue($store));
-        $product->expects($this->any())
+            ->willReturn($store);
+        $product
             ->method('getTypeId')
-            ->will($this->returnValue('bundle'));
+            ->willReturn('bundle');
 
         $registry=$this->createMock(\Magento\Framework\Registry::class);
-        $registry->expects($this->any())
+        $registry
             ->method('registry')
             ->with('current_product')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
 
-        $result =  $this->helperData->getWeeeAttributesForBundle($product);
+        $result = $this->helperData->getWeeeAttributesForBundle($product);
         $this->assertEquals($expectedArray, $result);
     }
 
@@ -287,7 +287,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             [2, false, ["16.00", "15.00"]],
             [2, true, ["15.00", "10.00"]],
             [1, false, ["15.00", "10.00"]],
-            [1, true, ["15.00", "10.00"]],
+            [1, true, ["15.0000", "10.0000"]],
             [3, false, ["16.00", "15.00"]],
             [3, true, ["15.00", "10.00"]],
         ];

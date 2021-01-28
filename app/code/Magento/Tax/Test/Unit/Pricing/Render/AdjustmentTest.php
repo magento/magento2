@@ -92,7 +92,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     {
         $defaultExclusions = $this->model->getDefaultExclusions();
         $this->assertNotEmpty($defaultExclusions, 'Expected to have at least one default exclusion');
-        $this->assertStringContainsString($this->model->getAdjustmentCode(), $defaultExclusions);
+        $this->assertContains($this->model->getAdjustmentCode(), $defaultExclusions);
     }
 
     /**

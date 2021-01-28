@@ -28,7 +28,7 @@ class PoolTest extends \PHPUnit\Framework\TestCase
 
     public function testGetValidators()
     {
-        $this->assertStringContainsString($this->validators['discount'][0], $this->pool->getValidators('discount'));
+        $this->assertContains($this->validators['discount'][0], $this->pool->getValidators('discount'));
         $this->assertEquals([], $this->pool->getValidators('fake'));
     }
 }

@@ -80,8 +80,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
             $this->model->changeResetPasswordLinkToken($token)
         );
         $this->assertEquals($token, $this->model->getRpToken());
-        $this->assertInternalType(
-            'string',
+        $this->assertIsString(
             $this->model->getRpTokenCreatedAt()
         );
     }

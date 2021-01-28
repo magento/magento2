@@ -123,11 +123,11 @@ class RssTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($rssData['charset'], $data['charset']);
         $this->assertEquals($rssData['entries']['title'], $data['entries'][0]['title']);
         $this->assertEquals($rssData['entries']['link'], $data['entries'][0]['link']);
-        $this->assertContains($rssData['entries']['description']['rss_url'], $data['entries'][0]['description']);
-        $this->assertContains($rssData['entries']['description']['name'], $data['entries'][0]['description']);
-        $this->assertContains($rssData['entries']['description']['summary'], $data['entries'][0]['description']);
-        $this->assertContains($rssData['entries']['description']['review'], $data['entries'][0]['description']);
-        $this->assertContains($rssData['entries']['description']['store'], $data['entries'][0]['description']);
+        $this->assertStringContainsString($rssData['entries']['description']['rss_url'], $data['entries'][0]['description']);
+        $this->assertStringContainsString($rssData['entries']['description']['name'], $data['entries'][0]['description']);
+        $this->assertStringContainsString($rssData['entries']['description']['summary'], $data['entries'][0]['description']);
+        $this->assertStringContainsString($rssData['entries']['description']['review'], $data['entries'][0]['description']);
+        $this->assertStringContainsString($rssData['entries']['description']['store'], $data['entries'][0]['description']);
     }
 
     /**

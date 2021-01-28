@@ -9,7 +9,7 @@ use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
-use PHPUnit\Framework\MockObject\Matcher\InvokedCount as InvokedCountMatch;
+use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCountMatch;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\Data\CartInterface;

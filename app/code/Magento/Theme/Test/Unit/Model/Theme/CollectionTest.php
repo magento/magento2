@@ -168,6 +168,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddConstraint(array $inputValues, array $expected)
     {
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
+
         foreach ($inputValues as $data) {
             $type = $data[0];
             $value = $data[1];

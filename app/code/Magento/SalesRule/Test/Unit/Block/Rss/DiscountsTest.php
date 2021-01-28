@@ -174,10 +174,10 @@ class DiscountsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($rssData['language'], $data['language']);
         $this->assertEquals($rssData['entries']['title'], $data['entries'][0]['title']);
         $this->assertEquals($rssData['entries']['link'], $data['entries'][0]['link']);
-        $this->assertContains($rssData['entries']['description']['description'], $data['entries'][0]['description']);
-        $this->assertContains($rssData['entries']['description']['start_date'], $data['entries'][0]['description']);
-        $this->assertContains($rssData['entries']['description']['end_date'], $data['entries'][0]['description']);
-        $this->assertContains($rssData['entries']['description']['coupon_code'], $data['entries'][0]['description']);
+        $this->assertStringContainsString($rssData['entries']['description']['description'], $data['entries'][0]['description']);
+        $this->assertStringContainsString($rssData['entries']['description']['start_date'], $data['entries'][0]['description']);
+        $this->assertStringContainsString($rssData['entries']['description']['end_date'], $data['entries'][0]['description']);
+        $this->assertStringContainsString($rssData['entries']['description']['coupon_code'], $data['entries'][0]['description']);
     }
 
     public function testGetCacheLifetime()

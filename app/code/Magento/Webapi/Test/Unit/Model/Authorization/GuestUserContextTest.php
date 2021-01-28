@@ -34,7 +34,7 @@ class GuestUserContextTest extends \PHPUnit\Framework\TestCase
 
     public function testGetUserId()
     {
-        $this->assertNull($this->guestUserContext->getUserId());
+        $this->assertSame(0, $this->guestUserContext->getUserId());
     }
 
     public function testGetUserType()

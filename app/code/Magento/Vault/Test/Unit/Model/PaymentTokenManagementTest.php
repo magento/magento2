@@ -486,7 +486,6 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->searchCriteriaBuilder->expects(self::exactly(4))
             ->method('addFilters')
-            ->withConsecutive($customerFilter, $visibilityFilter, $isActiveFilter, $expiresAtFilter)
             ->willReturnSelf();
 
         $this->searchCriteriaBuilder->expects(self::once())

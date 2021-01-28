@@ -126,7 +126,7 @@ XML;
     {
         $this->_appStateMock->expects($this->any())->method('getMode')->will($this->returnValue('developer'));
         $actualXml = $this->_soapFault->toXml();
-        $this->assertContains('<m:Trace>', $actualXml, 'Exception trace is not found in XML.');
+        $this->assertStringContainsString('<m:Trace>', $actualXml, 'Exception trace is not found in XML.');
     }
 
     /**

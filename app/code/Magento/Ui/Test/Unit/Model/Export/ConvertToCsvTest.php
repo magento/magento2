@@ -143,8 +143,8 @@ class ConvertToCsvTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('type', $result);
         $this->assertArrayHasKey('value', $result);
         $this->assertArrayHasKey('rm', $result);
-        $this->assertStringContainsString($componentName, $result);
-        $this->assertStringContainsString('.csv', $result);
+        $this->assertStringContainsString($componentName, $result['value']);
+        $this->assertStringContainsString('.csv', $result['value']);
     }
 
     /**
