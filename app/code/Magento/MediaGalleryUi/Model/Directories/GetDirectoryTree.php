@@ -76,11 +76,11 @@ class GetDirectoryTree
      * Build directory tree array in format for jstree strandart
      *
      * @param string|null $path
-     * @param int|null $depth
+     * @param int $depth
      * @return array
      * @throws FileSystemException
      */
-    private function getDirectories(?string $path = null, ?int $depth = null): array
+    private function getDirectories(?string $path = null, int $depth = -1): array
     {
         $directories = [];
 

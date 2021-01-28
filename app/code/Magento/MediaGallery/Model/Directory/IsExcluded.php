@@ -9,6 +9,7 @@ namespace Magento\MediaGallery\Model\Directory;
 
 use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 use Magento\MediaGalleryApi\Model\ExcludedPatternsConfigInterface;
+use function preg_match;
 
 /**
  * Check if the path is excluded for media gallery. Directory path may be blacklisted if it's reserved by the system
@@ -37,15 +38,11 @@ class IsExcluded implements IsPathExcludedInterface
     public function execute(string $path): bool
     {
         foreach ($this->config->get() as $pattern) {
-            if (empty($pattern)) {
-                continue;
-            }
-            preg_match($pattern, $path, $result);
-
-            if ($result) {
+            if ($pattern && preg_match($pattern, $path)) {
                 return true;
             }
         }
+
         return false;
     }
 }
