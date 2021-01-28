@@ -241,8 +241,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             ->method('getFullProductIndexData')
             ->willReturn($productData);
 
-        $this->assertInternalType(
-            'array',
+        $this->assertIsArray(
             $this->model->map($productId, $productData, $storeId)
         );
     }

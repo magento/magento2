@@ -6,6 +6,7 @@
 
 namespace Magento\Eav\Test\Unit\Helper;
 
+use Magento\Framework\Phrase;
 use Magento\Store\Model\ScopeInterface;
 
 class DataTest extends \PHPUnit\Framework\TestCase
@@ -96,7 +97,16 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function testGetFrontendClasses()
     {
         $result = $this->helper->getFrontendClasses('someNonExistedClass');
-        $this->assertTrue(count($result) > 1);
+        $this->assertGreaterThan(1, count($result));
+
+        $result = array_map(function ($item) {
+            if ($item['label'] instanceof Phrase) {
+                $item['label'] = $item['label']->getText();
+            }
+
+            return $item;
+        }, $result);
+
         $this->assertContains(['value' => '', 'label' => 'None'], $result);
         $this->assertContains(['value' => 'validate-number', 'label' => 'Decimal Number'], $result);
     }

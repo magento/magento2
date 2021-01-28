@@ -491,8 +491,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             ->method('getOptions')
             ->willReturn([$attributeOption]);
 
-        $this->assertInternalType(
-            'array',
+        $this->assertIsArray(
             $this->model->getFullProductIndexData(
                 1,
                 [
@@ -541,8 +540,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
                 'position' => 1,
             ]]);
 
-        $this->assertInternalType(
-            'array',
+        $this->assertIsArray(
             $this->model->getFullCategoryProductIndexData(1, [1, ])
         );
     }

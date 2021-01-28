@@ -302,6 +302,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testSetAttributesWhiteList()
     {
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
+
         $attributes = ['attr1', 'attr2', 'attr3'];
         $attrDataFactory = $this->getMockBuilder(\Magento\Eav\Model\AttributeDataFactory::class)
             ->setConstructorArgs(
@@ -319,6 +321,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testSetAttributesBlackList()
     {
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
+
         $attributes = ['attr1', 'attr2', 'attr3'];
         $attrDataFactory = $this->getMockBuilder(\Magento\Eav\Model\AttributeDataFactory::class)
             ->setConstructorArgs(
