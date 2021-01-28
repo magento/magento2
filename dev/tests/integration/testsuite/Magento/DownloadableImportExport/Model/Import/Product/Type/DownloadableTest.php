@@ -138,7 +138,7 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
                 'title' => 'TEST Import Link Title File',
                 'sort_order' => '78',
                 'sample_type' => 'file',
-                'price' => '123',
+                'price' => 123,
                 'number_of_downloads' => '123',
                 'is_shareable' => '0',
                 'link_type' => 'file'
@@ -148,7 +148,7 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
                 'sort_order' => '42',
                 'sample_type' => 'url',
                 'sample_url' => 'http://www.bing.com',
-                'price' => '1',
+                'price' => 1,
                 'number_of_downloads' => '0',
                 'is_shareable' => '1',
                 'link_type' => 'url',

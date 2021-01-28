@@ -124,7 +124,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->assertStringNotContainsString(SidResolverInterface::SESSION_ID_QUERY_PARAM . '=', $location);
         $beforeAuthUrl = $this->_customerSession->getData('before_auth_url');
         $this->assertNotEmpty($beforeAuthUrl);
-        $this->assertNotContains(SidResolverInterface::SESSION_ID_QUERY_PARAM .'=', $beforeAuthUrl);
+        $this->assertStringNotContainsString(SidResolverInterface::SESSION_ID_QUERY_PARAM .'=', $beforeAuthUrl);
 
         $this->_customerSession->authenticate('/customer/account');
         $location = (string)$this->response->getHeader('Location');

@@ -82,7 +82,7 @@ class TransparentTest extends TestCase
             'Authorization transaction id should be equal to PNREF.'
         );
 
-        self::assertContains(
+        self::assertStringContainsString(
             'Order is suspended as an account verification transaction is suspected to be fraudulent.',
             $this->getOrderComment($orderId)
         );

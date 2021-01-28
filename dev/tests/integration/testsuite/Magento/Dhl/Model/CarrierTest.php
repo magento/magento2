@@ -441,10 +441,10 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             self::assertEquals($expectedRates[$i], $actualRate);
         }
         $requestXml = $this->httpClient->getLastRequest()->getBody();
-        self::assertContains('<Weight>18.223</Weight>', $requestXml);
-        self::assertContains('<Height>0.63</Height>', $requestXml);
-        self::assertContains('<Width>0.63</Width>', $requestXml);
-        self::assertContains('<Depth>0.63</Depth>', $requestXml);
+        self::assertStringContainsString('<Weight>18.223</Weight>', $requestXml);
+        self::assertStringContainsString('<Height>0.63</Height>', $requestXml);
+        self::assertStringContainsString('<Width>0.63</Width>', $requestXml);
+        self::assertStringContainsString('<Depth>0.63</Depth>', $requestXml);
     }
 
     /**

@@ -32,7 +32,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql $connection */
         $connection = $this->_collection->getConnection();
         $quote = $connection->getQuoteIdentifierSymbol();
-        $this->assertStringContainsString("({$quote}role_id{$quote} = '" . $user->getRole()->getId() . "')", $where);
+        $this->assertContains("({$quote}role_id{$quote} = '" . $user->getRole()->getId() . "')", $where);
     }
 
     public function testAddSortByLength()

@@ -54,6 +54,7 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
     protected function setUp(): void
     {
         parent::setUp();
+        // phpstan:ignore "Class Magento\TestModuleAsyncAmqp\Model\AsyncTestData not found."
         $this->msgObject = $this->objectManager->create(AsyncTestData::class);
         $this->reader = $this->objectManager->get(FileReader::class);
         $this->filesystem = $this->objectManager->get(Filesystem::class);
@@ -111,10 +112,9 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
         }
 
         // Checks that consumers do not wait 4th message and die
-        $this->assertArraySubset(
-            ['mixed.sync.and.async.queue.consumer' => []],
-            $this->publisherConsumerController->getConsumersProcessIds()
-        );
+        $consumersProcessIds = $this->publisherConsumerController->getConsumersProcessIds();
+        $this->assertArrayHasKey('mixed.sync.and.async.queue.consumer', $consumersProcessIds);
+        $this->assertEquals([], $consumersProcessIds['mixed.sync.and.async.queue.consumer']);
     }
 
     /**

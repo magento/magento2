@@ -32,7 +32,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertEquals(1, $addToCartCount, '"Add to Cart" button should appear on the page exactly once.');
         $actualLinkCount = substr_count($responseBody, '>Bundle Product Items<');
         $this->assertEquals(1, $actualLinkCount, 'Bundle product options should appear on the page exactly once.');
-        $this->assertNotContains('class="options-container-big"', $responseBody);
+        $this->assertStringNotContainsString('class="options-container-big"', $responseBody);
         $this->assertEquals(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
