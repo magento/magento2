@@ -111,7 +111,7 @@ abstract class BaseService extends \Magento\TestFramework\TestCase\WebapiAbstrac
             }
 
             if ($expectedMessage) {
-                $this->assertContains($expectedMessage, $e->getMessage());
+                $this->assertStringContainsString($expectedMessage, $e->getMessage());
             }
         }
     }

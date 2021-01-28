@@ -195,9 +195,9 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail('Did not throw expected InputException');
         } catch (\SoapFault $e) {
-            $this->assertContains('No such entity with customer_tax_class_ids = %fieldValue', $e->getMessage());
+            $this->assertStringContainsString('No such entity with customer_tax_class_ids = %fieldValue', $e->getMessage());
         } catch (\Exception $e) {
-            $this->assertContains('No such entity with customer_tax_class_ids = %fieldValue', $e->getMessage());
+            $this->assertStringContainsString('No such entity with customer_tax_class_ids = %fieldValue', $e->getMessage());
         }
     }
 
