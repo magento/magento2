@@ -227,7 +227,12 @@ class Validator extends AbstractValidator implements RowValidatorInterface
                 $valid = $this->validateOption($attrCode, $attrParams['options'], $rowData[$attrCode]);
                 break;
             case 'multiselect':
-                $values = $this->context->parseMultiselectValues($rowData[$attrCode]);
+                $separator = $this->context->getMultipleValueSeparator();
+                // added to prevent backward compatibility since before we didn't use separator param value
+                $values = $separator === ','
+                    ? $this->context->parseMultiselectValues($rowData[$attrCode])
+                    : $this->context->parseMultiselectValues($rowData[$attrCode], $separator);
+
                 foreach ($values as $value) {
                     $valid = $this->validateOption($attrCode, $attrParams['options'], $value);
                     if (!$valid) {
