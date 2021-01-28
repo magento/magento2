@@ -13,7 +13,8 @@
         "magento/module-eav-graph-ql": "*",
         "magento/module-catalog-search": "*",
         "magento/framework": "*",
-        "magento/module-graph-ql": "*"
+        "magento/module-graph-ql": "*",
+        "magento/module-config": "*"
     },
     "suggest": {
         "magento/module-graph-ql-cache": "*",
