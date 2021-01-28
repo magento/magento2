@@ -259,9 +259,8 @@ $formData = $block->getFormData();
                        autocomplete="off">
             </div>
         </div>
-        <div class="field choice">
-            <input type="checkbox" name="show-password" title="Show Password" id="show-password" class="checkbox" data-role="show-password" data-mage-init='{"showPassword": {"passwordSelector": "#password,#password-confirmation"}}'>
-            <label for="show-password" class="label"><span><?= $escaper->escapeHtml(__('Show Password')) ?></span></label>
+        <div class="field choice" data-bind="scope: 'showPassword'">
+            <!-- ko template: getTemplate() --><!-- /ko -->
         </div>
     </fieldset>
 
@@ -358,6 +357,14 @@ script;
         "*": {
             "Magento_Customer/js/block-submit-on-send": {
                 "formId": "form-validate"
+            },
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "showPassword": {
+                        "component": "Magento_Customer/js/show-password",
+                        "passwordSelector": "#password,#password-confirmation"
+                    }
+                }
             }
         }
     }

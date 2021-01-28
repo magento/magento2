@@ -42,9 +42,8 @@
                                data-validate="{required:true}">
                     </div>
                 </div>
-                <div class="field choice">
-                    <input type="checkbox" name="show-password" title="Show Password" id="show-password" class="checkbox" data-role="show-password" data-mage-init='{"showPassword": {"passwordSelector": "#pass"}}'>
-                    <label for="show-password" class="label"><span><?= $escaper->escapeHtml(__('Show Password')) ?></span></label>
+                <div class="field choice" data-bind="scope: 'showPassword'">
+                    <!-- ko template: getTemplate() --><!-- /ko -->
                 </div>
                 <?= $block->getChildHtml('form_additional_info') ?>
                 <div class="actions-toolbar">
@@ -59,6 +58,14 @@
             "*": {
                 "Magento_Customer/js/block-submit-on-send": {
                     "formId": "login-form"
+                },
+                "Magento_Ui/js/core/app": {
+                    "components": {
+                        "showPassword": {
+                            "component": "Magento_Customer/js/show-password",
+                            "passwordSelector": "#pass"
+                        }
+                    }
                 }
             }
         }

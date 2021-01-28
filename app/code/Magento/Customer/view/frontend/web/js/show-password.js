@@ -1,37 +1,44 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
+* Copyright © Magento, Inc. All rights reserved.
+* See COPYING.txt for license details.
+*/
 
 define([
-    'jquery'
-], function ($) {
+    'jquery',
+    'ko',
+    'uiComponent'
+], function ($, ko, Component) {
     'use strict';
 
-    $.widget('mage.showPassword', {
-        options: {
-            passwordSelector: '',
-            showPasswordSelector: '[data-role=show-password]',
-            passwordInputType: 'password',
-            textInputType: 'text'
+    return Component.extend({
+        passwordSelector: '',
+        showPasswordSelector: '[data-role=show-password]',
+        passwordInputType: 'password',
+        textInputType: 'text',
+
+        defaults: {
+            template: 'Magento_Customer/show-password'
+        },
+
+        /** @inheritdoc */
+        initialize: function () {
+            this._super();
         },
 
         /**
-         * Widget initialization
-         * @private
+         * @return {Object}
          */
-        _create: function () {
-            this._bind();
-        },
+        initObservable: function () {
+            var self = this;
+            this._super()
+                .observe({
+                    isChecked: ko.observable(false)
+                });
 
-        /**
-         * Event binding, will monitor click event on show password.
-         * @private
-         */
-        _bind: function () {
-            this._on(this.options.showPasswordSelector, {
-                'click': this._showPassword
+            this.isChecked.subscribe(function () {
+                self._showPassword();
             });
+            return this;
         },
 
         /**
@@ -39,11 +46,11 @@ define([
          * @private
          */
         _showPassword: function () {
-            var passwordField = this.options.passwordSelector;
+            var passwordField = this.passwordSelector;
 
             $(passwordField).attr('type',
-                $(passwordField).attr('type') === this.options.passwordInputType ?
-                this.options.textInputType : this.options.passwordInputType
+                $(passwordField).attr('type') === this.passwordInputType ?
+                this.textInputType : this.passwordInputType
             );
         }
     });
