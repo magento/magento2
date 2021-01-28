@@ -1,2 +1,3 @@
+catalog_product_entity_media_gallery_value_to_entity
 catalog_url_rewrite_product_category
 queue_poison_pill
