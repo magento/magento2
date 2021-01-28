@@ -11,7 +11,9 @@ use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\Framework\Indexer\IndexerRegistry;
@@ -61,6 +63,11 @@ class ReportTest extends TestCase
     protected $varDirectory;
 
     /**
+     * @var Read|MockObject
+     */
+    protected $importHistoryDirectory;
+
+    /**
      * @var Report
      */
     protected $report;
@@ -87,14 +94,48 @@ class ReportTest extends TestCase
             ->getMock();
         $this->varDirectory = $this->createPartialMock(
             Write::class,
-            ['getRelativePath', 'readFile', 'isFile', 'stat']
+            ['getRelativePath', 'getAbsolutePath', 'readFile', 'isFile', 'stat']
         );
-        $this->filesystem = $this->createPartialMock(Filesystem::class, ['getDirectoryWrite']);
-        $this->varDirectory->expects($this->any())->method('getRelativePath')->willReturn('path');
-        $this->varDirectory->expects($this->any())->method('readFile')->willReturn('contents');
-        $this->varDirectory->expects($this->any())->method('isFile')->willReturn(true);
-        $this->varDirectory->expects($this->any())->method('stat')->willReturn(false);
-        $this->filesystem->expects($this->any())->method('getDirectoryWrite')->willReturn($this->varDirectory);
+        $this->importHistoryDirectory = $this->createPartialMock(
+            Read::class,
+            ['getAbsolutePath']
+        );
+
+        $this->filesystem = $this->createPartialMock(
+            Filesystem::class,
+            ['getDirectoryWrite', 'getDirectoryReadByPath']
+        );
+        $this->varDirectory
+            ->expects($this->any())
+            ->method('getRelativePath')
+            ->willReturn('path');
+        $this->varDirectory
+            ->expects($this->any())
+            ->method('getAbsolutePath')
+            ->willReturn('path');
+        $this->varDirectory
+            ->expects($this->any())
+            ->method('readFile')
+            ->willReturn('contents');
+        $this->varDirectory
+            ->expects($this->any())
+            ->method('isFile')
+            ->willReturn(true);
+        $this->varDirectory
+            ->expects($this->any())
+            ->method('stat')
+            ->willReturn(false);
+        $this->filesystem
+            ->expects($this->any())
+            ->method('getDirectoryWrite')
+            ->willReturn($this->varDirectory);
+        $this->importHistoryDirectory
+            ->expects($this->any())->method('getAbsolutePath')
+            ->willReturnArgument(0);
+        $this->filesystem
+            ->expects($this->any())
+            ->method('getDirectoryReadByPath')
+            ->willReturn($this->importHistoryDirectory);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->report = $this->objectManagerHelper->getObject(
             Report::class,
@@ -144,9 +185,15 @@ class ReportTest extends TestCase
             Product::class,
             ['getEntityTypeCode', 'setParameters']
         );
-        $product->expects($this->any())->method('getEntityTypeCode')->willReturn('catalog_product');
-        $product->expects($this->any())->method('setParameters')->willReturn('');
-        $entityFactory->expects($this->any())->method('create')->willReturn($product);
+        $product->expects($this->any())
+            ->method('getEntityTypeCode')
+            ->willReturn('catalog_product');
+        $product->expects($this->any())
+            ->method('setParameters')
+            ->willReturn('');
+        $entityFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($product);
         $importData = $this->createMock(\Magento\ImportExport\Model\ResourceModel\Import\Data::class);
         $csvFactory = $this->createMock(CsvFactory::class);
         $httpFactory = $this->createMock(FileTransferFactory::class);
@@ -184,7 +231,10 @@ class ReportTest extends TestCase
     public function testImportFileExistsException($fileName)
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Filename has not permitted symbols in it');
+        $this->expectExceptionMessage('File not found');
+        $this->importHistoryDirectory->expects($this->any())
+            ->method('getAbsolutePath')
+            ->will($this->throwException(new ValidatorException(__("Error"))));
         $this->report->importFileExists($fileName);
     }
 
