@@ -22,7 +22,7 @@ class SortOrderTest extends \PHPUnit\Framework\TestCase
     {
         $this->sortOrder = new SortOrder();
     }
-    
+
     public function testItReturnsNullIfNoOrderIsSet()
     {
         $this->assertNull($this->sortOrder->getDirection());
@@ -44,14 +44,14 @@ class SortOrderTest extends \PHPUnit\Framework\TestCase
     {
         return [[SortOrder::SORT_ASC], [SortOrder::SORT_DESC]];
     }
-    
+
     /**
      * @param mixed $invalidDirection
      * @dataProvider invalidSortDirectionProvider
-     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testItThrowsAnExceptionIfAnInvalidSortOrderIsSet($invalidDirection)
     {
+        $this->expectException('\Magento\Framework\Exception\InputException');
         $this->sortOrder->setDirection($invalidDirection);
     }
 
@@ -76,28 +76,24 @@ class SortOrderTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(SortOrder::SORT_ASC, $this->sortOrder->getDirection());
         $this->sortOrder->setDirection(strtoupper(SortOrder::SORT_ASC));
         $this->assertSame(SortOrder::SORT_ASC, $this->sortOrder->getDirection());
-        
+
         $this->sortOrder->setDirection(strtolower(SortOrder::SORT_DESC));
         $this->assertSame(SortOrder::SORT_DESC, $this->sortOrder->getDirection());
         $this->sortOrder->setDirection(strtoupper(SortOrder::SORT_DESC));
         $this->assertSame(SortOrder::SORT_DESC, $this->sortOrder->getDirection());
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     */
     public function testItValidatesADirectionAssignedDuringInstantiation()
     {
+        $this->expectException('\Magento\Framework\Exception\InputException');
         $this->sortOrder = new SortOrder([
             SortOrder::DIRECTION => 'not-asc-or-desc'
         ]);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     */
     public function testValidateField()
     {
+        $this->expectException('\Magento\Framework\Exception\InputException');
         $this->sortOrder = new SortOrder([
             SortOrder::FIELD => 'invalid field (value);'
         ]);

@@ -90,12 +90,11 @@ class AclResourceTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \DomainException
-     * @expectedExceptionMessage Connection "invalid" is not defined
-     */
     public function testGetConnectionFail()
     {
+        $this->expectException('\DomainException');
+        $this->expectExceptionMessage('Connection "invalid" is not defined');
+
         $this->resource->getConnectionByName('invalid');
     }
 

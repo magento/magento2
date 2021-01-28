@@ -57,11 +57,10 @@ class CollectionProcessorTest extends \PHPUnit\Framework\TestCase
         $model->process($searchCriteriaMock, $collectionMock);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testProcessWithException()
     {
+        $this->expectException('\InvalidArgumentException');
+
         /** @var CollectionProcessorInterface|\PHPUnit\Framework\MockObject\MockObject $customFilterMock */
         $processorOneMock = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->setMethods(['process'])

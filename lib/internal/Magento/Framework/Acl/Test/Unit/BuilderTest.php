@@ -72,11 +72,9 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->_aclMock, $this->_model->getAcl());
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testGetAclRethrowsException()
     {
+        $this->expectException('LogicException');
         $this->_aclFactoryMock->expects(
             $this->once()
         )->method(

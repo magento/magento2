@@ -58,12 +58,11 @@ class ResourceLoaderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test for \Magento\Framework\Acl\Loader\ResourceLoader::populateAcl
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Missing ACL resource identifier
      */
     public function testPopulateAclWithException()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Missing ACL resource identifier');
         /** @var $aclResource \Magento\Framework\Acl\AclResource */
         $aclResource = $this->createMock(\Magento\Framework\Acl\AclResource::class);
 

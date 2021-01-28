@@ -149,11 +149,10 @@ class FilterProcessorTest extends \PHPUnit\Framework\TestCase
         $model->process($searchCriteriaMock, $collectionMock);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testProcessWithException()
     {
+        $this->expectException('\InvalidArgumentException');
+
         /** @var \stdClass|\PHPUnit\Framework\MockObject\MockObject $customFilterMock */
         $customFilterMock = $this->getMockBuilder(\stdClass::class)
             ->setMethods(['apply'])
