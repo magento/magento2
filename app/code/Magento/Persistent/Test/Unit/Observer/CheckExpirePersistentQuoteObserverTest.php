@@ -142,18 +142,20 @@ class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $refererUri
      * @param string $requestUri
-     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $expireCounter
-     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $dispatchCounter
-     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $setCustomerIdCounter
+     * @param \PHPUnit\Framework\MockObject\Rule\InvokedCount $expireCounter
+     * @param \PHPUnit\Framework\MockObject\Rule\InvokedCount $dispatchCounter
+     * @param \PHPUnit\Framework\MockObject\Rule\InvokedCount $setCustomerIdCounter
      * @return void
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @dataProvider requestDataProvider
      */
     public function testExecuteWhenPersistentIsEnabled(
         string $refererUri,
         string $requestUri,
-        \PHPUnit\Framework\MockObject\Matcher\InvokedCount $expireCounter,
-        \PHPUnit\Framework\MockObject\Matcher\InvokedCount $dispatchCounter,
-        \PHPUnit\Framework\MockObject\Matcher\InvokedCount $setCustomerIdCounter
+        \PHPUnit\Framework\MockObject\Rule\InvokedCount $expireCounter,
+        \PHPUnit\Framework\MockObject\Rule\InvokedCount $dispatchCounter,
+        \PHPUnit\Framework\MockObject\Rule\InvokedCount $setCustomerIdCounter
     ): void {
         $this->persistentHelperMock
             ->expects($this->once())

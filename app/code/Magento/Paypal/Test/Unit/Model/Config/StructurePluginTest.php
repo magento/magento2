@@ -72,15 +72,15 @@ class StructurePluginTest extends \PHPUnit\Framework\TestCase
     {
         $countries = ConfigStructurePlugin::getPaypalConfigCountries(true);
 
-        $this->assertStringContainsString('payment_us', $countries);
-        $this->assertStringContainsString('payment_other', $countries);
+        $this->assertContains('payment_us', $countries);
+        $this->assertContains('payment_other', $countries);
     }
 
     public function testGetPaypalConfigCountries()
     {
         $countries = ConfigStructurePlugin::getPaypalConfigCountries(false);
 
-        $this->assertStringContainsString('payment_us', $countries);
+        $this->assertContains('payment_us', $countries);
         $this->assertNotContains('payment_other', $countries);
     }
 

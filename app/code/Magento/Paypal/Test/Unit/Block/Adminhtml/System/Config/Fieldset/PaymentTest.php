@@ -82,7 +82,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
                 [[self::CONFIG_PATH_ACTIVE, null, null, '1'], [self::CONFIG_PATH_NOT_ACTIVE, null, null, '0']]
             ));
         $html = $this->_model->render($this->_element);
-        $this->assertContains($expected, $html);
+        $this->assertStringContainsString($expected, $html);
     }
 
     /**
