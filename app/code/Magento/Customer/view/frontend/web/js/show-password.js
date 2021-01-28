@@ -30,6 +30,7 @@ define([
          */
         initObservable: function () {
             var self = this;
+
             this._super()
                 .observe({
                     isChecked: ko.observable(false)
@@ -38,6 +39,7 @@ define([
             this.isChecked.subscribe(function () {
                 self._showPassword();
             });
+
             return this;
         },
 
