@@ -60,7 +60,7 @@ class DataTest extends TestCase
      */
     public function testGetProductMediaGalleryWithHiddenImage(): void
     {
-        $result = $this->helper->getProductMediaGallery($this->productRepository->get('simple'));
+        $result = $this->helper->getProductMediaGallery($this->productRepository->get('simple_with_disabled_img'));
         $this->assertEmpty($result);
     }
 }
