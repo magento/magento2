@@ -199,7 +199,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
         $product = $repository->get('simple');
         // fixture
 
-        $this->assertContains("The product's required option(s) weren't entered. Make sure the options are entered and try again.",$this->_model->prepareForCart(new \Magento\Framework\DataObject(), $product));
+        $this->assertStringContainsString("The product's required option(s) weren't entered. Make sure the options are entered and try again.",$this->_model->prepareForCart(new \Magento\Framework\DataObject(), $product));
     }
 
     public function testGetSpecifyOptionMessage()

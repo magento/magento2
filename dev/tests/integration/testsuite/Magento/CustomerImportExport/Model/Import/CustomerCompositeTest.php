@@ -122,7 +122,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
             $this->assertSameSize($expectedData[$email]['addresses'], $addresses);
             /** @var $address \Magento\Customer\Model\Address */
             foreach ($addresses as $address) {
-                $this->assertStringContainsString($address->getData('postcode'), $expectedData[$email]['addresses']);
+                $this->assertContains($address->getData('postcode'), $expectedData[$email]['addresses']);
             }
         }
     }

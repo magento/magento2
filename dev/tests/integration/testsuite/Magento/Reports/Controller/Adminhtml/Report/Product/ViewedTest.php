@@ -24,7 +24,7 @@ class ViewedTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
             'cGVyaW9kX3R5cGU9ZGF5JmZyb209MDIlMkYxJTJGMjAxNSZ0bz0wMiUyRjE2JTJGMjAxNSZzaG93X2VtcHR5X3Jvd3M9MA');
         $actual = $this->getResponse()->getBody();
         $this->assertStringContainsString('Product Views Report', $actual);
-        $this->assertNotContains('An error occurred while showing the product views report.', $actual);
+        $this->assertStringNotContainsString('An error occurred while showing the product views report.', $actual);
     }
 
     public function testExecuteWithError()

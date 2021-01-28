@@ -597,7 +597,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($searchCriteria, $searchResults->getSearchCriteria());
         $this->assertEquals(count($expectedRateCodes), $searchResults->getTotalCount());
         foreach ($searchResults->getItems() as $rate) {
-            $this->assertStringContainsString($rate->getCode(), $expectedRateCodes);
+            $this->assertContains($rate->getCode(), $expectedRateCodes);
         }
     }
 

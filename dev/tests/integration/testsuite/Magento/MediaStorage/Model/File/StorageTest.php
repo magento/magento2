@@ -32,10 +32,10 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             $config['media_directory']
         );
         $this->assertIsArray($config['allowed_resources']);
-        $this->assertStringContainsString('css', $config['allowed_resources']);
-        $this->assertStringContainsString('css_secure', $config['allowed_resources']);
-        $this->assertStringContainsString('js', $config['allowed_resources']);
-        $this->assertStringContainsString('theme', $config['allowed_resources']);
+        $this->assertContains('css', $config['allowed_resources']);
+        $this->assertContains('css_secure', $config['allowed_resources']);
+        $this->assertContains('js', $config['allowed_resources']);
+        $this->assertContains('theme', $config['allowed_resources']);
         $this->assertEquals(1000, $config['update_time']);
     }
 }

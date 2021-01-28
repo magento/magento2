@@ -30,7 +30,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
             $this->assertStringContainsString($edition, $body);
 
             // Response must not contain full version including patch version
-            $this->assertNotContains($fullVersion, $body);
+            $this->assertStringNotContainsString($fullVersion, $body);
         } else {
             // Response is supposed to be empty when the project is installed from git
             $this->assertEmpty($body);

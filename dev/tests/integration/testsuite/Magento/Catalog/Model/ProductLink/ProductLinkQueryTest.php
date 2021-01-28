@@ -127,7 +127,7 @@ class ProductLinkQueryTest extends TestCase
                 $this->assertEquals($criteria->getBelongsToProductSku(), $link->getSku());
                 if ($criteria->getLinkTypes()) {
                     //If link filter was set no other link types must be returned
-                    $this->assertStringContainsString($link->getLinkType(), $criteria->getLinkTypes());
+                    $this->assertContains($link->getLinkType(), $criteria->getLinkTypes());
                 }
                 //Type must be accurate
                 $this->assertEquals(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, $link->getLinkedProductType());

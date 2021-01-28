@@ -244,6 +244,6 @@ class ProductTest extends AbstractController
         $handles = Bootstrap::getObjectManager()->get(\Magento\Framework\View\LayoutInterface::class)
             ->getUpdate()
             ->getHandles();
-        $this->assertStringContainsString("catalog_product_view_selectable_{$sku}_{$file}", $handles);
+        $this->assertContains("catalog_product_view_selectable_{$sku}_{$file}", $handles);
     }
 }

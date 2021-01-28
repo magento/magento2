@@ -135,11 +135,11 @@ class UserTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $roles = $this->_model->getRoles();
-        $this->assertEquals(1, count($roles));
+        $this->assertCount(1, $roles);
         $this->assertEquals(\Magento\TestFramework\Bootstrap::ADMIN_ROLE_NAME, $this->_model->getRole()->getRoleName());
         $this->_model->setRoleId(self::$_newRole->getId())->save();
         $roles = $this->_model->getRoles();
-        $this->assertEquals(1, count($roles));
+        $this->assertCount(1, $roles);
         $this->assertEquals(self::$_newRole->getId(), $roles[0]);
     }
 
@@ -236,14 +236,12 @@ class UserTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *
-     *
      * @magentoDbIsolation enabled
      */
     public function testAuthenticateInactiveUser()
     {
         $this->expectException(\Magento\Framework\Exception\AuthenticationException::class);
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->_model->load(1);
         $this->_model->setIsActive(0)->save();
         $this->_model->authenticate(
@@ -253,12 +251,12 @@ class UserTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *
      * @magentoDbIsolation enabled
      */
     public function testAuthenticateUserWithoutRole()
     {
         $this->expectException(\Magento\Framework\Exception\AuthenticationException::class);
+
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $roles = $this->_model->getRoles();
         $this->_model->setRoleId(reset($roles))->deleteFromRole();
@@ -313,7 +311,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $role = $this->_model->hasAssigned2Role($this->_model);
-        $this->assertEquals(1, count($role));
+        $this->assertCount(1, $role);
         $this->assertArrayHasKey('role_id', $role[0]);
         $roles = $this->_model->getRoles();
         $this->_model->setRoleId(reset($roles))->deleteFromRole();
@@ -321,22 +319,20 @@ class UserTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *
-     *
-     *
-     *
-     *
-     *
      * @magentoDbIsolation enabled
      */
     public function testBeforeSaveRequiredFieldsValidation()
     {
-        $this->expectExceptionMessage("\"Password\" is required. Enter and try again.");
-        $this->expectExceptionMessage("Please enter a valid email.");
-        $this->expectExceptionMessage("\"Last Name\" is required. Enter and try again.");
-        $this->expectExceptionMessage("\"First Name\" is required. Enter and try again.");
-        $this->expectExceptionMessage("\"User Name\" is required. Enter and try again.");
+        $expectedMessages = '"User Name" is required. Enter and try again.' . PHP_EOL
+            . '"First Name" is required. Enter and try again.' . PHP_EOL
+            . '"Last Name" is required. Enter and try again.' . PHP_EOL
+            . 'Please enter a valid email.' . PHP_EOL
+            . 'Password is required field.' . PHP_EOL
+            . 'Invalid type given. String expected' . PHP_EOL
+            . 'Invalid type given. String, integer or float expected';
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage($expectedMessages);
+
         $this->_model->setSomething('some_value');
         // force model change
         $this->_model->save();
@@ -362,7 +358,11 @@ class UserTest extends \PHPUnit\Framework\TestCase
             '123123q'
         );
         $this->_model->save();
-        $this->assertStringNotContainsString('123123q', $this->_model->getPassword(), 'Password is expected to be hashed');
+        $this->assertStringNotContainsString(
+            '123123q',
+            $this->_model->getPassword(),
+            'Password is expected to be hashed'
+        );
         $this->assertMatchesRegularExpression(
             $pattern,
             $this->_model->getPassword(),
@@ -380,43 +380,40 @@ class UserTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *
-     *
      * @magentoDbIsolation enabled
      */
     public function testBeforeSavePasswordsDoNotMatch()
     {
-        $this->expectExceptionMessage("Your password confirmation must match your password.");
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Your password confirmation must match your password.');
+
         $this->_model->setPassword('password2');
         $this->_model->setPasswordConfirmation('password1');
         $this->_model->save();
     }
 
     /**
-     *
-     *
      * @magentoDbIsolation enabled
      */
     public function testBeforeSavePasswordTooShort()
     {
-        $this->expectExceptionMessage("Your password must include both numeric and alphabetic characters.");
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Your password must include both numeric and alphabetic characters.');
+
         $this->_model->setPassword('123456');
         $this->_model->save();
     }
 
     /**
      * @dataProvider beforeSavePasswordInsecureDataProvider
-     *
-     *
      * @magentoDbIsolation enabled
      * @param string $password
      */
     public function testBeforeSavePasswordInsecure($password)
     {
-        $this->expectExceptionMessage("Your password must include both numeric and alphabetic characters.");
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Your password must include both numeric and alphabetic characters.');
+
         $this->_model->setPassword($password);
         $this->_model->save();
     }
@@ -427,14 +424,13 @@ class UserTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *
-     *
      * @magentoDbIsolation enabled
      */
     public function testBeforeSaveUserIdentityViolation()
     {
-        $this->expectExceptionMessage("A user with the same user name or email already exists.");
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('A user with the same user name or email already exists.');
+
         $this->_model->setUsername('user');
         $this->_model->save();
     }
@@ -520,11 +516,11 @@ class UserTest extends \PHPUnit\Framework\TestCase
      * Here we check for a wrong password
      *
      * @magentoDataFixture Magento/User/_files/user_with_role.php
-     *
      */
     public function testPerformIdentityCheckWrongPassword()
     {
         $this->expectException(\Magento\Framework\Exception\AuthenticationException::class);
+
         $this->_model->loadByUsername('adminUser');
         $passwordString = 'wrongPassword';
         $this->_model->performIdentityCheck($passwordString);
@@ -538,11 +534,11 @@ class UserTest extends \PHPUnit\Framework\TestCase
      * Here we check for a locked user
      *
      * @magentoDataFixture Magento/User/_files/locked_users.php
-     *
      */
     public function testPerformIdentityCheckLockExpires()
     {
         $this->expectException(\Magento\Framework\Exception\State\UserLockedException::class);
+
         $this->_model->loadByUsername('adminUser2');
         $this->_model->performIdentityCheck(\Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
 
