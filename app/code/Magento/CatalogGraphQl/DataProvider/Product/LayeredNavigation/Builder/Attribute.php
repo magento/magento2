@@ -113,9 +113,9 @@ class Attribute implements LayerBuilderInterface
      *
      * @param array $attribute
      * @param array $metrics
-     * @return string
+     * @return mixed
      */
-    private function getOptionLabel(array $attribute, array $metrics): string
+    private function getOptionLabel(array $attribute, array $metrics)
     {
         if ($attribute['frontend_input'] === 'boolean') {
             $yesNoOptions = $this->yesNo->toArray();
