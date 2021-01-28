@@ -75,10 +75,12 @@ class GetDirectoryTree
     /**
      * Build directory tree array in format for jstree strandart
      *
+     * @param string|null $path
+     * @param int|null $depth
      * @return array
      * @throws FileSystemException
      */
-    private function getDirectories(): array
+    private function getDirectories(?string $path = null, ?int $depth = null): array
     {
         $directories = [];
 
@@ -95,17 +97,15 @@ class GetDirectoryTree
         try {
             $iterator = new RecursiveIteratorIterator(
                 new RecursiveCallbackFilterIterator(
-                    new RecursiveDirectoryIterator($directory->getAbsolutePath(), $flags),
-                    static function (
-                        SplFileInfo $file,
-                        $key,
-                        RecursiveIterator $iterator
-                    ) use ($isExcluded): bool {
+                    new RecursiveDirectoryIterator($directory->getAbsolutePath($path), $flags),
+                    static function (SplFileInfo $file, $key, RecursiveIterator $iterator) use ($isExcluded): bool {
                         return $file->isDir() && $iterator->hasChildren() && !$isExcluded($file->getPathname());
                     }
                 ),
                 RecursiveIteratorIterator::CHILD_FIRST
             );
+            $iterator->setMaxDepth($depth);
+
             /** @var FilesystemIterator $file */
             foreach ($iterator as $file) {
                 $path = $directory->getRelativePath($file->getPathname());
