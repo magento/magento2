@@ -1015,7 +1015,9 @@ class Filter extends Template
                 }
             }
         } catch (ContentProcessorException $exception) {
-            $css = $exception->getMessage();
+            throw new MailException(
+                __($exception->getMessage())
+            );
         } catch (NotFoundException $exception) {
             $css = '';
         }
@@ -1046,8 +1048,6 @@ class Filter extends Template
             try {
                 // Don't try to compile CSS that has compilation errors
                 if (strpos($cssToInline, ContentProcessorInterface::ERROR_MESSAGE_PREFIX)
-                    !== false ||
-                    strpos($cssToInline, 'undefined')
                     !== false
                 ) {
                     throw new MailException(
@@ -1063,13 +1063,7 @@ class Filter extends Template
 
                 $processedHtml = $this->cssInliner->process();
             } catch (Exception $e) {
-                if ($this->_appState->getMode() == State::MODE_DEVELOPER) {
-                    $processedHtml = __('CSS inlining error:') . PHP_EOL . $e->getMessage()
-                        . PHP_EOL
-                        . $html;
-                } else {
-                    $processedHtml = $html;
-                }
+                $processedHtml = $html;
                 $this->_logger->error($e);
             }
         } else {
