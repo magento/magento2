@@ -16,7 +16,8 @@
             <severity value="AVERAGE"/>
             <testCaseId value="MC-40646"/>
             <useCaseId value="MC-37657"/>
-            <group value="Sales"/>
+            <group value="sales"/>
+            <group value="customer"/>
         </annotations>
         <before>
             <createData entity="Customer_With_Vat_Number" stepKey="createCustomer"/>
@@ -30,6 +31,6 @@
         <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$createCustomer$"/>
         </actionGroup>
-        <actionGroup ref="AssertAdminFieldsFilledDefaultBillingAddressActionGroup" stepKey="assertFieldsFilled"/>
+        <actionGroup ref="AssertAdminBillingAddressFieldsOnOrderCreateFormActionGroup" stepKey="assertFieldsFilled"/>
     </test>
 </tests>
