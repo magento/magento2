@@ -39,12 +39,11 @@ class ObjectManagerFactoryTest extends \PHPUnit\Framework\TestCase
         \Magento\Framework\Filesystem\Io\File::rmdirRecursive(__DIR__ . '/_files/var/');
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     * @expectedExceptionMessage Magento\Framework\App\Test\Unit\ObjectManager\FactoryStub::__construct
-     */
     public function testCreateObjectManagerFactoryCouldBeOverridden()
     {
+        $this->expectException('\BadMethodCallException');
+        $this->expectExceptionMessage('Magento\Framework\App\Test\Unit\ObjectManager\FactoryStub::__construct');
+
         $rootPath = __DIR__ . '/_files/';
         $factory = Bootstrap::createObjectManagerFactory($rootPath, []);
         $factory->create([], false);

@@ -188,12 +188,11 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->responseMock, $this->http->launch());
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Message
-     */
     public function testLaunchException()
     {
+        $this->expectException('\Exception');
+        $this->expectExceptionMessage('Message');
+
         $this->setUpLaunch();
         $this->frontControllerMock->expects($this->once())
             ->method('dispatch')

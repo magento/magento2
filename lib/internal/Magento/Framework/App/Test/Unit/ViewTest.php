@@ -120,12 +120,11 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->_layoutMock, $this->_view->getLayout());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Layout must be loaded only once.
-     */
     public function testLoadLayoutWhenLayoutAlreadyLoaded()
     {
+        $this->expectException('\RuntimeException');
+        $this->expectExceptionMessage('Layout must be loaded only once.');
+
         $this->_view->setIsLayoutLoaded(true);
         $this->_view->loadLayout();
     }

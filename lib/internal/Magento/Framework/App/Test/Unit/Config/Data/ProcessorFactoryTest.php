@@ -54,10 +54,10 @@ class ProcessorFactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Framework\App\Config\Data\ProcessorFactory::get
-     * @expectedException \InvalidArgumentException
      */
     public function testGetModelWithWrongInterface()
     {
+        $this->expectException('InvalidArgumentException');
         $this->_objectManager->expects(
             $this->once()
         )->method(

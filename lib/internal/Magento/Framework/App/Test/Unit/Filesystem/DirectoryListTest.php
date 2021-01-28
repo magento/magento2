@@ -34,6 +34,9 @@ class DirectoryListTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnknownDirectory()
     {
+        $this->expectException('\InvalidArgumentException');
+        $this->expectExceptionMessage('Unknown type: test');
+
         new DirectoryList('/root/dir', ['test' => [DirectoryList::PATH => '/baz']]);
     }
 

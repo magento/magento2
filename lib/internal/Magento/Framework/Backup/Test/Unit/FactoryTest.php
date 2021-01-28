@@ -23,11 +23,9 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->_model = new \Magento\Framework\Backup\Factory($this->_objectManager);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     */
     public function testCreateWrongType()
     {
+        $this->expectException('\Magento\Framework\Exception\LocalizedException');
         $this->_model->create('WRONG_TYPE');
     }
 

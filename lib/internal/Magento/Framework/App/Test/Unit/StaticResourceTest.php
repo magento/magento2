@@ -246,12 +246,11 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Requested path 'short/path.js' is wrong
-     */
     public function testLaunchWrongPath()
     {
+        $this->expectException('\InvalidArgumentException');
+        $this->expectExceptionMessage('Requested path \'short/path.js\' is wrong');
+
         $this->stateMock->expects($this->once())
             ->method('getMode')
             ->will($this->returnValue(\Magento\Framework\App\State::MODE_DEVELOPER));
@@ -285,11 +284,10 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->object->catchException($bootstrap, $exception));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testLaunchPathAbove()
     {
+        $this->expectException('\InvalidArgumentException');
+
         $path = 'frontend/..\..\folder_above/././Magento_Ui/template/messages.html';
         $this->stateMock->expects($this->once())
             ->method('getMode')

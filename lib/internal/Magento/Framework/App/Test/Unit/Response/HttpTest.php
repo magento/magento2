@@ -290,13 +290,11 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('json_string', $this->model->getBody('default'));
     }
 
-    /**
-     *
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage ObjectManager isn't initialized
-     */
     public function testWakeUpWithException()
     {
+        $this->expectException('\RuntimeException');
+        $this->expectExceptionMessage('ObjectManager isn\'t initialized');
+
         /* ensure that the test preconditions are met */
         $objectManagerClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
         $instanceProperty = $objectManagerClass->getProperty('_instance');
