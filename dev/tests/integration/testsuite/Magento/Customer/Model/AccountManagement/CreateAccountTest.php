@@ -499,7 +499,7 @@ class CreateAccountTest extends TestCase
         ];
         $actualInAfterOnly = array_keys($inAfterOnly);
         foreach ($expectedInAfter as $item) {
-            $this->assertStringContainsString($item, $actualInAfterOnly);
+            $this->assertContains($item,$actualInAfterOnly);
         }
     }
 

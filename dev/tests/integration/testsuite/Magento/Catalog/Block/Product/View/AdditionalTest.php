@@ -30,7 +30,7 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
 
         $this->assertIsArray($list);
         $this->assertCount(2, $list);
-        $this->assertStringContainsString($htmlFirst, $list);
-        $this->assertStringContainsString($htmlSecond, $list);
+        $this->assertContains($htmlFirst,$list);
+        $this->assertContains($htmlSecond,$list);
     }
 }

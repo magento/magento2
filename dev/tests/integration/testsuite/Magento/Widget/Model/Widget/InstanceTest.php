@@ -77,9 +77,9 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
         $this->_model->setType(\Magento\Catalog\Block\Product\Widget\NewWidget::class);
         $containers = $this->_model->getWidgetSupportedContainers();
         $this->assertIsArray($containers);
-        $this->assertStringContainsString('sidebar.main', $containers);
-        $this->assertStringContainsString('content', $containers);
-        $this->assertStringContainsString('sidebar.additional', $containers);
+        $this->assertContains('sidebar.main',$containers);
+        $this->assertContains('content',$containers);
+        $this->assertContains('sidebar.additional',$containers);
         return $this->_model;
     }
 

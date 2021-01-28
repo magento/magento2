@@ -100,7 +100,7 @@ class PageTest extends AbstractController
         /** @var LayoutInterface $layout */
         $layout = $this->_objectManager->get(LayoutInterface::class);
         $handles = $layout->getUpdate()->getHandles();
-        $this->assertStringContainsString('cms_page_view_selectable_test_custom_layout_page_3_test_selected', $handles);
+        $this->assertContains('cms_page_view_selectable_test_custom_layout_page_3_test_selected',$handles);
     }
 
     /**

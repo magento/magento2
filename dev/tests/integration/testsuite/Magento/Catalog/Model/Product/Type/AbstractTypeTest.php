@@ -199,7 +199,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
         $product = $repository->get('simple');
         // fixture
 
-        $this->assertStringContainsString("The product's required option(s) weren't entered. Make sure the options are entered and try again.", $this->_model->prepareForCart(new \Magento\Framework\DataObject(), $product));
+        $this->assertContains("The product's required option(s) weren't entered. Make sure the options are entered and try again.",$this->_model->prepareForCart(new \Magento\Framework\DataObject(), $product));
     }
 
     public function testGetSpecifyOptionMessage()
@@ -441,12 +441,12 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
         $product->load(1);
         // fixture
         $data = $this->_model->getSearchableData($product);
-        $this->assertStringContainsString('Test Field', $data);
-        $this->assertStringContainsString('Test Date and Time', $data);
-        $this->assertStringContainsString('Test Select', $data);
-        $this->assertStringContainsString('Test Radio', $data);
-        $this->assertStringContainsString('Option 1', $data);
-        $this->assertStringContainsString('Option 2', $data);
+        $this->assertContains('Test Field',$data);
+        $this->assertContains('Test Date and Time',$data);
+        $this->assertContains('Test Select',$data);
+        $this->assertContains('Test Radio',$data);
+        $this->assertContains('Option 1',$data);
+        $this->assertContains('Option 2',$data);
     }
 
     public function testGetProductsToPurchaseByReqGroups()

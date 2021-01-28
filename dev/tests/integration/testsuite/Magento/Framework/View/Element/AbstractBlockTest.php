@@ -199,7 +199,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $parent->unsetChild('block3');
         $this->assertNotSame($blockThree, $parent->getChildBlock('block3'));
         $parent->insert($blockOne, '', true, 'block1');
-        $this->assertStringContainsString($nameOne, $parent->getChildNames());
+        $this->assertContains($nameOne,$parent->getChildNames());
         $parent->unsetChild('block1');
         $this->assertNotSame($blockOne, $parent->getChildBlock('block1'));
         $this->assertNotContains($nameOne, $parent->getChildNames());
@@ -360,7 +360,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $parent = $this->_createBlockWithLayout('parent', 'parent');
         $block = $this->_createBlockWithLayout('');
         $parent->setChild('', $block);
-        $this->assertStringContainsString('abstractblockmock_0', $parent->getChildNames());
+        $this->assertContains('abstractblockmock_0',$parent->getChildNames());
     }
 
     /**
@@ -371,7 +371,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $parent = $this->_createBlockWithLayout('parent', 'parent');
         $block = $this->_createBlockWithLayout('block_name');
         $parent->insert($block, '', true, 'block_alias');
-        $this->assertStringContainsString('block_name', $parent->getChildNames());
+        $this->assertContains('block_name',$parent->getChildNames());
         $this->assertSame($block, $parent->getChildBlock('block_alias'));
     }
 
@@ -381,7 +381,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $parent = $this->_createBlockWithLayout('parent', 'parent');
         $blockOne = $this->_createBlockWithLayout($name1);
         $parent->insert($blockOne);
-        $this->assertStringContainsString($name1, $parent->getChildNames());
+        $this->assertContains($name1,$parent->getChildNames());
 
         $name2 = 'block_two';
         $blockTwo = $this->_createBlockWithLayout($name2);
@@ -453,8 +453,8 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $this->_layout->addToParentGroup('block1', 'group');
         $this->_layout->addToParentGroup('block2', 'group');
         $group = $parent->getGroupChildNames('group');
-        $this->assertStringContainsString('block1', $group);
-        $this->assertStringContainsString('block2', $group);
+        $this->assertContains('block1',$group);
+        $this->assertContains('block2',$group);
         $this->assertSame($group[0], 'block1');
         $this->assertSame($group[1], 'block2');
     }

@@ -88,7 +88,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         $childProductCollection = $product->getTypeInstance()->getAssociatedProducts($product);
 
         foreach ($childProductCollection as $childProduct) {
-            $this->assertStringContainsString($childProduct->getSku(), $this->optionSkuList);
+            $this->assertContains($childProduct->getSku(),$this->optionSkuList);
         }
     }
 }

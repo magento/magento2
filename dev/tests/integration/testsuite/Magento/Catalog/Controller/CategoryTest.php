@@ -126,7 +126,7 @@ class CategoryTest extends AbstractController
         /* Layout updates */
         $handles = $this->layout->getUpdate()->getHandles();
         foreach ($expectedHandles as $expectedHandleName) {
-            $this->assertStringContainsString($expectedHandleName, $handles);
+            $this->assertContains($expectedHandleName,$handles);
         }
 
         $responseBody = $this->getResponse()->getBody();

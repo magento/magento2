@@ -102,7 +102,7 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
 
         $actualRequiredExtensions = $composerInfo->getRequiredExtensions();
         foreach ($expectedExtensions as $expectedExtension) {
-            $this->assertStringContainsString($expectedExtension, $actualRequiredExtensions);
+            $this->assertContains($expectedExtension,$actualRequiredExtensions);
         }
     }
 

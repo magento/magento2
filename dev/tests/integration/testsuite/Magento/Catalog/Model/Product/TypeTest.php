@@ -127,7 +127,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     {
         $options = $this->_productType->getAllOptions();
         $types = $this->_assertOptions($options);
-        $this->assertStringContainsString('', $types);
+        $this->assertContains('',$types);
     }
 
     public function testGetOptions()
@@ -174,7 +174,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     {
         $types = $this->_productType->getCompositeTypes();
         $this->assertIsArray($types);
-        $this->assertStringContainsString(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE, $types);
+        $this->assertContains(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE,$types);
     }
 
     public function testGetTypesByPriority()
@@ -216,10 +216,10 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             $this->assertArrayHasKey('label', $option);
             $types[] = $option['value'];
         }
-        $this->assertStringContainsString(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, $types);
-        $this->assertStringContainsString(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL, $types);
-        $this->assertStringContainsString(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE, $types);
-        $this->assertStringContainsString(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE, $types);
+        $this->assertContains(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,$types);
+        $this->assertContains(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL,$types);
+        $this->assertContains(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE,$types);
+        $this->assertContains(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE,$types);
         return $types;
     }
 }

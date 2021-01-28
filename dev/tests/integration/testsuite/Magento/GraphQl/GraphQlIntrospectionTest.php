@@ -91,7 +91,7 @@ QUERY;
                     ]
                 ]
             ];
-        $this->assertStringContainsString($expectedFragment, $output['types']);
+        $this->assertContains($expectedFragment,$output['types']);
     }
 
     /**
@@ -230,7 +230,7 @@ QUERY;
                 ]
             ];
         $output = $response->toArray()['data']['__schema']['types'];
-        $this->assertStringContainsString($expectedResult, $output);
+        $this->assertContains($expectedResult,$output);
     }
 
     /**

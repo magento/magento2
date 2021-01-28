@@ -133,8 +133,8 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
 
         if ($expectedCanTest) {
             $actualHeaders = xdebug_get_headers();
-            $this->assertStringContainsString($expectedHeader, $actualHeaders);
-            $this->assertStringContainsString($expectedCookie, $actualHeaders);
+            $this->assertContains($expectedHeader,$actualHeaders);
+            $this->assertContains($expectedCookie,$actualHeaders);
         }
     }
 
