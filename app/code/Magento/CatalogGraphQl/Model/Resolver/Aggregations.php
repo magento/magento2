@@ -21,11 +21,6 @@ use Magento\Store\Api\Data\StoreInterface;
 class Aggregations implements ResolverInterface
 {
     /**
-     * @var Layer\DataProvider\Filters
-     */
-    private $filtersDataProvider;
-
-    /**
      * @var LayerBuilder
      */
     private $layerBuilder;
@@ -36,16 +31,13 @@ class Aggregations implements ResolverInterface
     private $priceCurrency;
 
     /**
-     * @param \Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters $filtersDataProvider
      * @param LayerBuilder $layerBuilder
      * @param PriceCurrency $priceCurrency
      */
     public function __construct(
-        \Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters $filtersDataProvider,
         LayerBuilder $layerBuilder,
         PriceCurrency $priceCurrency = null
     ) {
-        $this->filtersDataProvider = $filtersDataProvider;
         $this->layerBuilder = $layerBuilder;
         $this->priceCurrency = $priceCurrency ?: ObjectManager::getInstance()->get(PriceCurrency::class);
     }
@@ -60,7 +52,7 @@ class Aggregations implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($value['layer_type']) || !isset($value['search_result'])) {
+        if (!isset($value['layer_type'], $value['search_result'])) {
             return null;
         }
 
@@ -82,8 +74,8 @@ class Aggregations implements ResolverInterface
                 }
             }
             return $results;
-        } else {
-            return [];
         }
+
+        return [];
     }
 }

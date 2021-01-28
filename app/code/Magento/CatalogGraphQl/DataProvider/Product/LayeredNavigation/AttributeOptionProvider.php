@@ -33,8 +33,9 @@ class AttributeOptionProvider
     /**
      * @param ResourceConnection $resourceConnection
      */
-    public function __construct(ResourceConnection $resourceConnection)
-    {
+    public function __construct(
+        ResourceConnection $resourceConnection
+    ) {
         $this->resourceConnection = $resourceConnection;
     }
 
@@ -62,6 +63,7 @@ class AttributeOptionProvider
                     'attribute_id' => 'a.attribute_id',
                     'attribute_code' => 'a.attribute_code',
                     'attribute_label' => 'a.frontend_label',
+                    'frontend_input' => 'a.frontend_input',
                 ]
             )
             ->joinLeft(
@@ -126,8 +128,8 @@ class AttributeOptionProvider
                 $result[$option['attribute_code']] = [
                     'attribute_id' => $option['attribute_id'],
                     'attribute_code' => $option['attribute_code'],
-                    'attribute_label' => $option['attribute_store_label']
-                        ? $option['attribute_store_label'] : $option['attribute_label'],
+                    'attribute_label' => $option['attribute_store_label'] ?: $option['attribute_label'],
+                    'frontend_input' => $option['frontend_input'],
                     'options' => [],
                 ];
             }
