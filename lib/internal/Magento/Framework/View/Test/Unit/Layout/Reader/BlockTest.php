@@ -110,7 +110,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $aclValue
     ) {
         $this->context->expects($this->once())->method('getScheduledStructure')
-            ->will($this->returnValue($this->scheduledStructure));
+            ->willReturn($this->scheduledStructure);
         $this->scheduledStructure->expects($getCondition)
             ->method('getStructureElementData')
             ->with($literal, [])
@@ -143,7 +143,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
             );
 
         $helper = $this->createMock(\Magento\Framework\View\Layout\ScheduledStructure\Helper::class);
-        $helper->expects($scheduleStructureCount)->method('scheduleStructure')->will($this->returnValue($literal));
+        $helper->expects($scheduleStructureCount)->method('scheduleStructure')->willReturn($literal);
 
         $this->prepareReaderPool(
             '<' . $literal . ' ifconfig="' . $ifconfigValue . '" ' . $aclKey . '="' . $aclValue . '" >'
@@ -259,7 +259,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         }
 
         $this->context->expects($this->once())->method('getScheduledStructure')
-            ->will($this->returnValue($this->scheduledStructure));
+            ->willReturn($this->scheduledStructure);
 
         $this->scheduledStructure->expects($setRemoveCondition)
             ->method('setElementToRemoveList')

@@ -203,7 +203,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     public function testIsDeletable($themeType, $isDeletable)
     {
         $themeModel = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['getType']);
-        $themeModel->expects($this->once())->method('getType')->will($this->returnValue($themeType));
+        $themeModel->expects($this->once())->method('getType')->willReturn($themeType);
         /** @var $themeModel \Magento\Theme\Model\Theme */
         $this->assertEquals($isDeletable, $themeModel->isDeletable());
     }

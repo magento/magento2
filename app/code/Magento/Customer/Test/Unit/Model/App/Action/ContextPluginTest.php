@@ -60,19 +60,19 @@ class ContextPluginTest extends \PHPUnit\Framework\TestCase
     {
         $this->customerSessionMock->expects($this->once())
             ->method('getCustomerGroupId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->httpContextMock->expects($this->atLeastOnce())
             ->method('setValue')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         [Context::CONTEXT_GROUP, 'UAH', $this->httpContextMock],
                         [Context::CONTEXT_AUTH, 0, $this->httpContextMock],
                     ]
-                )
+                
             );
         $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
     }

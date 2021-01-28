@@ -63,7 +63,7 @@ class SearchTest extends WebapiAbstract
 
         self::assertArrayHasKey('search_criteria', $response);
         self::assertArrayHasKey('items', $response);
-        self::assertEquals(0, count($response['items']));
+        self::assertCount(0, $response['items']);
     }
 
     /**

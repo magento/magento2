@@ -67,11 +67,11 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
         $order->expects($this->atLeastOnce())
             ->method('setHistoryEntityName')
             ->with($entityName)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->orderRepository->expects($this->atLeastOnce())
             ->method('get')
-            ->will($this->returnValue($order));
+            ->willReturn($order);
 
         $this->assertEquals($order, $this->shipment->getOrder());
     }

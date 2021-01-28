@@ -40,7 +40,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
     /**
      * Execute per test initialization.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('adminhtml');
@@ -60,7 +60,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
     /**
      * Execute post class cleanup after all tests have executed.
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->coreRegistry->unregister(RegistryConstants::CURRENT_CUSTOMER_ID);
     }

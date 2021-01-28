@@ -76,7 +76,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ['getAttributeCode', '__wakeup']
         );
 
-        $abstractAttrMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('code'));
+        $abstractAttrMock->expects($this->any())->method('getAttributeCode')->willReturn('code');
 
         $this->product->setAttribute($abstractAttrMock);
 

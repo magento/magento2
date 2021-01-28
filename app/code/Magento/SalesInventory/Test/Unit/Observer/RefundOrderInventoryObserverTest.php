@@ -105,7 +105,7 @@ class RefundOrderInventoryObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->eventObserver->expects($this->atLeastOnce())
             ->method('getEvent')
-            ->will($this->returnValue($this->event));
+            ->willReturn($this->event);
 
         $this->orderRepositoryMock = $this->getMockBuilder(OrderRepository::class)
             ->disableOriginalConstructor()
@@ -157,10 +157,10 @@ class RefundOrderInventoryObserverTest extends \PHPUnit\Framework\TestCase
 
         $creditMemo->expects($this->once())
             ->method('getItems')
-            ->will($this->returnValue($items));
+            ->willReturn($items);
         $this->event->expects($this->once())
             ->method('getCreditmemo')
-            ->will($this->returnValue($creditMemo));
+            ->willReturn($creditMemo);
 
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')

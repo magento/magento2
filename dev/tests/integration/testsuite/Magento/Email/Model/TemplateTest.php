@@ -74,7 +74,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
 
-        $this->model->expects($this->any())->method('_getMail')->will($this->returnCallback([$this, 'getMail']));
+        $this->model->expects($this->any())->method('_getMail')->willReturnCallback([$this, 'getMail']);
         $this->model->setSenderName('sender')->setSenderEmail('sender@example.com')->setTemplateSubject('Subject');
     }
 
@@ -110,7 +110,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->assertNotEmpty($this->model->getTemplateText());
         $this->assertNotEmpty($this->model->getTemplateSubject());
         $this->assertNotEmpty($this->model->getOrigTemplateVariables());
-        $this->assertInternalType('array', json_decode($this->model->getOrigTemplateVariables(), true));
+        $this->assertIsArray(json_decode($this->model->getOrigTemplateVariables(), true));
     }
 
     /**
@@ -457,7 +457,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
             $themeDirectory->expects($this->once())
                 ->method('readFile')
-                ->will($this->returnValue('<!--@styles p { color: #111; } @--> {{var template_styles}}'));
+                ->willReturn('<!--@styles p { color: #111; } @--> {{var template_styles}}');
 
             $filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
                 ->disableOriginalConstructor()
@@ -467,7 +467,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             $filesystem->expects($this->once())
                 ->method('getDirectoryRead')
                 ->with(DirectoryList::ROOT)
-                ->will($this->returnValue($themeDirectory));
+                ->willReturn($themeDirectory);
 
             $this->mockModel($filesystem);
 
@@ -700,10 +700,11 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $config
      * @dataProvider setDesignConfigExceptionDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testSetDesignConfigException($config)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->mockModel();
         $model = $this->objectManager->create(\Magento\Email\Model\Template::class);
         $model->setDesignConfig($config);
@@ -737,11 +738,12 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Email template 'foo' is not defined.
      */
     public function testGetTypeNonExistentType()
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Email template \'foo\' is not defined.');
+
         $this->mockModel();
         $this->model->setId('foo');
         $this->model->getType();
@@ -791,11 +793,12 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\MailException
-     * @expectedExceptionMessage Please enter a template name.
      */
     public function testBeforeSaveEmptyTemplateCode()
     {
+        $this->expectException(\Magento\Framework\Exception\MailException::class);
+        $this->expectExceptionMessage('Please enter a template name.');
+
         $this->mockModel();
         $this->model->beforeSave();
     }

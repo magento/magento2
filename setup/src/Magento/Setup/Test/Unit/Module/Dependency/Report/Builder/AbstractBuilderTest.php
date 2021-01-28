@@ -35,12 +35,13 @@ class AbstractBuilderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $options
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Passed option section "parse" is wrong.
      * @dataProvider dataProviderWrongParseOptions
      */
     public function testBuildWithWrongParseOptions($options)
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Passed option section "parse" is wrong.');
+
         $this->builder->build($options);
     }
 
@@ -54,12 +55,13 @@ class AbstractBuilderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $options
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Passed option section "write" is wrong.
      * @dataProvider dataProviderWrongWriteOptions
      */
     public function testBuildWithWrongWriteOptions($options)
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Passed option section "write" is wrong.');
+
         $this->builder->build($options);
     }
 
@@ -87,8 +89,8 @@ class AbstractBuilderTest extends \PHPUnit\Framework\TestCase
             'parse'
         )->with(
             $options['parse']
-        )->will(
-            $this->returnValue($parseResult)
+        )->willReturn(
+            $parseResult
         );
         $this->builder->expects(
             $this->once()
@@ -96,8 +98,8 @@ class AbstractBuilderTest extends \PHPUnit\Framework\TestCase
             'buildData'
         )->with(
             $parseResult
-        )->will(
-            $this->returnValue($configMock)
+        )->willReturn(
+            $configMock
         );
         $this->reportWriterMock->expects($this->once())->method('write')->with($options['write'], $configMock);
 

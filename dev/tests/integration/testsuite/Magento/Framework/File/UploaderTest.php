@@ -62,13 +62,14 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid parameter given. A valid $fileId[tmp_name] is expected.
      *
      * @return void
      */
     public function testUploadFileFromNotAllowedFolder(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid parameter given. A valid $fileId[tmp_name] is expected.');
+
         $fileName = 'text.txt';
         $tmpDir = 'tmp';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::LOG);

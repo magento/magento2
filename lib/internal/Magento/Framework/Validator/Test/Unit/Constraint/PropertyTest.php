@@ -74,8 +74,8 @@ class PropertyTest extends \PHPUnit\Framework\TestCase
             'isValid'
         )->with(
             $validateValue
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
 
         if ($expectedResult) {
@@ -85,8 +85,8 @@ class PropertyTest extends \PHPUnit\Framework\TestCase
                 $this->once()
             )->method(
                 'getMessages'
-            )->will(
-                $this->returnValue($validatorMessages)
+            )->willReturn(
+                $validatorMessages
             );
         }
 

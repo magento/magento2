@@ -180,8 +180,8 @@ string',
 
         $this->dataObject->setData('key2', 'value2');
         $this->assertEquals('value2', $this->dataObject->getData('key2'));
-        $this->assertEquals(null, $this->dataObject->getKey2());
-        $this->assertEquals(null, $this->dataObject->getDataUsingMethod('key2'));
+        $this->assertNull($this->dataObject->getKey2());
+        $this->assertNull($this->dataObject->getDataUsingMethod('key2'));
     }
 
     /**
@@ -282,10 +282,12 @@ string',
 
     /**
      * Tests \Magento\Framework\DataObject->__call()
+     *
      */
     public function testCall()
     {
-        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->dataObject->setData('key', 'value');
         $this->dataObject->setTest('test');
         $this->assertEquals('test', $this->dataObject->getData('test'));

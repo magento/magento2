@@ -45,15 +45,15 @@ class ActionsTest extends \PHPUnit\Framework\TestCase
 
         $this->_element->expects($this->any())
             ->method('getRule')
-            ->will($this->returnValue($rule));
+            ->willReturn($rule);
 
         $rule->expects($this->any())
             ->method('getActions')
-            ->will($this->returnValue($actions));
+            ->willReturn($actions);
 
         $actions->expects($this->once())
             ->method('asHtmlRecursive')
-            ->will($this->returnValue('action html'));
+            ->willReturn('action html');
 
         $this->assertEquals('action html', $this->actions->render($this->_element));
     }

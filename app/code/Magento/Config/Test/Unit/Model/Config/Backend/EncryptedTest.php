@@ -29,8 +29,8 @@ class EncryptedTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getEventDispatcher'
-        )->will(
-            $this->returnValue($eventDispatcherMock)
+        )->willReturn(
+            $eventDispatcherMock
         );
         $this->_resourceMock = $this->createPartialMock(
             \Magento\Framework\Model\ResourceModel\AbstractResource::class,
@@ -67,8 +67,8 @@ class EncryptedTest extends \PHPUnit\Framework\TestCase
             'decrypt'
         )->with(
             $value
-        )->will(
-            $this->returnValue($result)
+        )->willReturn(
+            $result
         );
         $this->assertEquals($result, $this->_model->processValue($value));
     }
@@ -86,7 +86,7 @@ class EncryptedTest extends \PHPUnit\Framework\TestCase
         $this->_encryptorMock->expects($this->exactly($encryptMethodCall))
             ->method('encrypt')
             ->with($value)
-            ->will($this->returnValue('encrypted'));
+            ->willReturn('encrypted');
 
         $this->_model->setValue($value);
         $this->_model->setPath('some/path');

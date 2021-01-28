@@ -169,7 +169,7 @@ class ReviewReportEntityTest extends Injectable
      *
      * return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->customerAccountLogout->open();
     }

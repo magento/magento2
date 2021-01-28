@@ -47,11 +47,12 @@ class ConstructorArgumentTypesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\ValidatorException
-     * @expectedExceptionMessage Invalid constructor argument(s) in \stdClass
      */
     public function testValidateWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\ValidatorException::class);
+        $this->expectExceptionMessage('Invalid constructor argument(s) in \\stdClass');
+
         $className = '\stdClass';
         $classMock = new \ReflectionClass($className);
         $this->argumentsReaderMock->expects($this->once())->method('getConstructorArguments')->with($classMock)

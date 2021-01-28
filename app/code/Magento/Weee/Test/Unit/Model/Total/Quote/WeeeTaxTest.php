@@ -52,7 +52,7 @@ class WeeeTaxTest extends \PHPUnit\Framework\TestCase
         $taxHelper = $this->createMock(\Magento\Tax\Helper\Data::class);
 
         foreach ($taxConfig as $method => $value) {
-            $taxHelper->expects($this->any())->method($method)->will($this->returnValue($value));
+            $taxHelper->expects($this->any())->method($method)->willReturn($value);
         }
 
         return $taxHelper;
@@ -69,7 +69,7 @@ class WeeeTaxTest extends \PHPUnit\Framework\TestCase
         $weeeHelper = $this->createMock(\Magento\Weee\Helper\Data::class);
 
         foreach ($weeeConfig as $method => $value) {
-            $weeeHelper->expects($this->any())->method($method)->will($this->returnValue($value));
+            $weeeHelper->expects($this->any())->method($method)->willReturn($value);
         }
 
         return $weeeHelper;
@@ -92,8 +92,8 @@ class WeeeTaxTest extends \PHPUnit\Framework\TestCase
             ]);
 
         $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $itemMock->expects($this->any())->method('getProduct')->will($this->returnValue($productMock));
-        $itemMock->expects($this->any())->method('getTotalQty')->will($this->returnValue($itemQty));
+        $itemMock->expects($this->any())->method('getProduct')->willReturn($productMock);
+        $itemMock->expects($this->any())->method('getTotalQty')->willReturn($itemQty);
 
         return $itemMock;
     }
@@ -158,16 +158,16 @@ class WeeeTaxTest extends \PHPUnit\Framework\TestCase
             }
         }
 
-        $totalMock->expects($this->any())->method('getWeeeCodeToItemMap')->will($this->returnValue($map));
-        $totalMock->expects($this->any())->method('getExtraTaxableDetails')->will($this->returnValue($extraDetails));
+        $totalMock->expects($this->any())->method('getWeeeCodeToItemMap')->willReturn($map);
+        $totalMock->expects($this->any())->method('getExtraTaxableDetails')->willReturn($extraDetails);
         $totalMock
             ->expects($this->any())
             ->method('getWeeeTotalExclTax')
-            ->will($this->returnValue($weeeTotals));
+            ->willReturn($weeeTotals);
         $totalMock
             ->expects($this->any())
             ->method('getWeeeBaseTotalExclTax')
-            ->will($this->returnValue($weeeBaseTotals));
+            ->willReturn($weeeBaseTotals);
 
         return $totalMock;
     }

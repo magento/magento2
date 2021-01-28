@@ -70,13 +70,13 @@ class IframeTest extends \PHPUnit\Framework\TestCase
 
         $this->checkoutSessionMock->expects($this->any())
             ->method('getQuote')
-            ->will($this->returnValue($this->quoteMock));
+            ->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->any())
             ->method('getPayment')
-            ->will($this->returnValue($this->paymentMock));
+            ->willReturn($this->paymentMock);
         $this->hssHelperMock->expects($this->any())
             ->method('getHssMethods')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
     }
 
     /**

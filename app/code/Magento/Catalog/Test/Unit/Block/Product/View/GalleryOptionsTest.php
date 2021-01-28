@@ -115,10 +115,10 @@ class GalleryOptionsTest extends \PHPUnit\Framework\TestCase
 
         $this->configView->expects($this->any())
             ->method('getVarValue')
-            ->will($this->returnValueMap($configMap));
+            ->willReturnMap($configMap);
         $this->gallery->expects($this->any())
             ->method('getImageAttribute')
-            ->will($this->returnValueMap($imageAttributesMap));
+            ->willReturnMap($imageAttributesMap);
 
         $json = $this->model->getOptionsJson();
 
@@ -160,7 +160,7 @@ class GalleryOptionsTest extends \PHPUnit\Framework\TestCase
 
         $this->configView->expects($this->any())
             ->method('getVarValue')
-            ->will($this->returnValueMap($configMap));
+            ->willReturnMap($configMap);
 
         $json = $this->model->getFSOptionsJson();
 
@@ -190,7 +190,7 @@ class GalleryOptionsTest extends \PHPUnit\Framework\TestCase
 
         $this->configView->expects($this->any())
             ->method('getVarValue')
-            ->will($this->returnValueMap($configMap));
+            ->willReturnMap($configMap);
 
         $json = $this->model->getOptionsJson();
 
@@ -210,7 +210,7 @@ class GalleryOptionsTest extends \PHPUnit\Framework\TestCase
 
         $this->configView->expects($this->any())
             ->method('getVarValue')
-            ->will($this->returnValueMap($configMap));
+            ->willReturnMap($configMap);
 
         $json = $this->model->getFSOptionsJson();
 

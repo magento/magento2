@@ -41,26 +41,32 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     */
     public function testGetNullConfig()
     {
-        $this->expectException('\LogicException');
+        $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('Unknown connection name amqp');
+
         $this->deploymentConfigMock->expects($this->once())
             ->method('getConfigData')
             ->with(Config::QUEUE_CONFIG)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->amqpConfig->getValue(Config::HOST);
     }
 
+    /**
+     */
     public function testGetEmptyConfig()
     {
-        $this->expectException('\LogicException');
+        $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('Unknown connection name amqp');
+
         $this->deploymentConfigMock->expects($this->once())
             ->method('getConfigData')
             ->with(Config::QUEUE_CONFIG)
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->amqpConfig->getValue(Config::HOST);
     }
@@ -78,7 +84,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->deploymentConfigMock->expects($this->once())
             ->method('getConfigData')
             ->with(Config::QUEUE_CONFIG)
-            ->will($this->returnValue(
+            ->willReturn(
                 [
                     Config::AMQP_CONFIG => [
                         'host' => $expectedHost,
@@ -91,7 +97,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                         'randomKey' => 'randomValue',
                     ]
                 ]
-            ));
+            );
 
         $this->assertEquals($expectedHost, $this->amqpConfig->getValue(Config::HOST));
         $this->assertEquals($expectedPort, $this->amqpConfig->getValue(Config::PORT));
@@ -116,7 +122,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->deploymentConfigMock->expects($this->once())
             ->method('getConfigData')
             ->with(Config::QUEUE_CONFIG)
-            ->will($this->returnValue(
+            ->willReturn(
                 [
                     'connections' => [
                         'connection-01' => [
@@ -130,7 +136,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                         ]
                     ]
                 ]
-            ));
+            );
 
         $this->assertEquals($expectedHost, $amqpConfig->getValue(Config::HOST));
         $this->assertEquals($expectedPort, $amqpConfig->getValue(Config::PORT));

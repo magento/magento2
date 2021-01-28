@@ -32,11 +32,11 @@ class EngineTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $resource->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connection));
+            ->willReturn($this->connection);
 
         $resource->expects($this->any())
             ->method('getTableName')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $objectManager = new ObjectManager($this);
         $this->target = $objectManager->getObject(

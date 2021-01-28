@@ -165,7 +165,7 @@ class ImageResizeTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->imageMock);
         $this->assetImageMock->expects($this->any())
             ->method('getPath')
-            ->will($this->returnValue($this->testfilepath));
+            ->willReturn($this->testfilepath);
         $this->assetImageFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->assetImageMock);
@@ -248,28 +248,28 @@ class ImageResizeTest extends \PHPUnit\Framework\TestCase
     {
         $this->databaseMock->expects($this->any())
             ->method('checkDbUsage')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->productImageMock->expects($this->any())
             ->method('getCountUsedProductImages')
             ->willReturn(1);
         $this->productImageMock->expects($this->any())
             ->method('getUsedProductImages')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function () {
                         $data = [[ 'filepath' => $this->testfilename ]];
                         foreach ($data as $e) {
                             yield $e;
                         }
                     }
-                )
+                
             );
 
         $this->mediaDirectoryMock->expects($this->any())
             ->method('isFile')
             ->with($this->testfilepath)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->databaseMock->expects($this->once())
             ->method('saveFileToFilesystem')
@@ -288,7 +288,7 @@ class ImageResizeTest extends \PHPUnit\Framework\TestCase
     {
         $this->databaseMock->expects($this->any())
             ->method('checkDbUsage')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->mediaDirectoryMock->expects($this->any())
             ->method('isFile')

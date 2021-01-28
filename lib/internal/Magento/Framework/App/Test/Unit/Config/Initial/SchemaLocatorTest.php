@@ -29,7 +29,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
         $this->_moduleReaderMock->expects($this->once())
             ->method('getModuleDir')
             ->with('etc', 'moduleName')
-            ->will($this->returnValue('schema_dir'));
+            ->willReturn('schema_dir');
         $this->_model = $this->objectManager->getObject(
             \Magento\Framework\App\Config\Initial\SchemaLocator::class,
             [

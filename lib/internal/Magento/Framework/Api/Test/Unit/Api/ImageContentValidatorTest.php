@@ -29,10 +29,13 @@ class ImageContentValidatorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     */
     public function testIsValidEmptyContent()
     {
-        $this->expectException('\Magento\Framework\Exception\InputException');
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
         $this->expectExceptionMessage('The image content must be valid base64 encoded data.');
+
         $imageContent = $this->getMockBuilder(\Magento\Framework\Api\Data\ImageContentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -43,10 +46,13 @@ class ImageContentValidatorTest extends \PHPUnit\Framework\TestCase
         $this->imageContentValidator->isValid($imageContent);
     }
 
+    /**
+     */
     public function testIsValidEmptyProperties()
     {
-        $this->expectException('\Magento\Framework\Exception\InputException');
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
         $this->expectExceptionMessage('The image content must be valid base64 encoded data.');
+
         $imageContent = $this->getMockBuilder(\Magento\Framework\Api\Data\ImageContentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -57,10 +63,13 @@ class ImageContentValidatorTest extends \PHPUnit\Framework\TestCase
         $this->imageContentValidator->isValid($imageContent);
     }
 
+    /**
+     */
     public function testIsValidInvalidMIMEType()
     {
-        $this->expectException('\Magento\Framework\Exception\InputException');
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
         $this->expectExceptionMessage('The image MIME type is not valid or not supported.');
+
         $pathToImageFile = __DIR__ . '/_files/image.jpg';
         $encodedData = @base64_encode(file_get_contents($pathToImageFile));
 
@@ -77,10 +86,13 @@ class ImageContentValidatorTest extends \PHPUnit\Framework\TestCase
         $this->imageContentValidator->isValid($imageContent);
     }
 
+    /**
+     */
     public function testIsValidInvalidName()
     {
-        $this->expectException('\Magento\Framework\Exception\InputException');
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
         $this->expectExceptionMessage('Provided image name contains forbidden characters.');
+
         $pathToImageFile = __DIR__ . '/_files/image.jpg';
         $encodedData = @base64_encode(file_get_contents($pathToImageFile));
 

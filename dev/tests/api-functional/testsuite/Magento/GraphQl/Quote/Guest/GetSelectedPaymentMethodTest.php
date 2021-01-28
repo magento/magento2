@@ -78,10 +78,11 @@ class GetSelectedPaymentMethodTest extends GraphQlAbstract
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testGetSelectedPaymentMethodFromNonExistentCart()
     {
+        $this->expectException(\Exception::class);
+
         $maskedQuoteId = 'non_existent_masked_id';
         $query = $this->getQuery($maskedQuoteId);
 

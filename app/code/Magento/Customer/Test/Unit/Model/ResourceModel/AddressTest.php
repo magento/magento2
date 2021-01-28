@@ -150,8 +150,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $resource->expects($this->any())->method('getConnection')->will($this->returnValue($dbAdapter));
-        $resource->expects($this->any())->method('getTableName')->will($this->returnValue('customer_address_entity'));
+        $resource->expects($this->any())->method('getConnection')->willReturn($dbAdapter);
+        $resource->expects($this->any())->method('getTableName')->willReturn('customer_address_entity');
 
         return $resource;
     }

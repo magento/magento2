@@ -126,9 +126,11 @@ class StateTest extends \PHPUnit\Framework\TestCase
         return $this->model->isAreaCodeEmulated();
     }
 
+    /**
+     */
     public function testEmulateAreaCodeException()
     {
-        $this->expectException('\Exception');
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Some error');
 
         $areaCode = Area::AREA_FRONTEND;
@@ -169,9 +171,11 @@ class StateTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     */
     public function testConstructorException()
     {
-        $this->expectException('\Exception');
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Unknown application mode: unknown mode');
 
         new \Magento\Framework\App\State(
@@ -180,9 +184,11 @@ class StateTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     */
     public function testCheckAreaCodeException()
     {
-        $this->expectException('\Magento\Framework\Exception\LocalizedException');
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->expectExceptionMessage('Area code "any code" does not exist');
 
         $this->model->setAreaCode('any code');

@@ -65,7 +65,7 @@ class ConsolidatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->configCacheTypeMock->expects($this->once())
             ->method('load')
             ->with(Config::CACHE_ID)
-            ->will($this->returnValue($serializedIntegrations));
+            ->willReturn($serializedIntegrations);
         $this->serializer->expects($this->once())
             ->method('unserialize')
             ->with($serializedIntegrations)
@@ -81,10 +81,10 @@ class ConsolidatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->configCacheTypeMock->expects($this->once())
             ->method('load')
             ->with(Config::CACHE_ID)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->configReaderMock->expects($this->once())
             ->method('read')
-            ->will($this->returnValue($integrations));
+            ->willReturn($integrations);
         $this->serializer->expects($this->once())
             ->method('serialize')
             ->with($integrations)

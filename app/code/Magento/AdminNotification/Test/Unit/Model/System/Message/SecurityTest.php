@@ -64,14 +64,14 @@ class SecurityTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsDisplayed($expectedResult, $cached, $response)
     {
-        $this->_cacheMock->expects($this->any())->method('load')->will($this->returnValue($cached));
-        $this->_cacheMock->expects($this->any())->method('save')->will($this->returnValue(null));
+        $this->_cacheMock->expects($this->any())->method('load')->willReturn($cached);
+        $this->_cacheMock->expects($this->any())->method('save')->willReturn(null);
 
         $httpAdapterMock = $this->createMock(\Magento\Framework\HTTP\Adapter\Curl::class);
-        $httpAdapterMock->expects($this->any())->method('read')->will($this->returnValue($response));
-        $this->_curlFactoryMock->expects($this->any())->method('create')->will($this->returnValue($httpAdapterMock));
+        $httpAdapterMock->expects($this->any())->method('read')->willReturn($response);
+        $this->_curlFactoryMock->expects($this->any())->method('create')->willReturn($httpAdapterMock);
 
-        $this->_scopeConfigMock->expects($this->any())->method('getValue')->will($this->returnValue(null));
+        $this->_scopeConfigMock->expects($this->any())->method('getValue')->willReturn(null);
 
         $this->assertEquals($expectedResult, $this->_messageModel->isDisplayed());
     }

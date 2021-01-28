@@ -38,7 +38,7 @@ class ScopeResolverPoolTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetException($scope)
     {
-        $this->expectException('\InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid scope type');
 
         $scopeResolver = $this->_helper->getObject(

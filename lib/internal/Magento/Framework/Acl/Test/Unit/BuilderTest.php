@@ -43,7 +43,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     {
         $this->_aclMock = new \Magento\Framework\Acl();
         $this->_aclFactoryMock = $this->createMock(\Magento\Framework\AclFactory::class);
-        $this->_aclFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->_aclMock));
+        $this->_aclFactoryMock->expects($this->any())->method('create')->willReturn($this->_aclMock);
         $this->_roleLoader = $this->createMock(\Magento\Framework\Acl\Loader\DefaultLoader::class);
         $this->_ruleLoader = $this->createMock(\Magento\Framework\Acl\Loader\DefaultLoader::class);
         $this->_resourceLoader = $this->createMock(\Magento\Framework\Acl\Loader\DefaultLoader::class);
@@ -72,9 +72,12 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->_aclMock, $this->_model->getAcl());
     }
 
+    /**
+     */
     public function testGetAclRethrowsException()
     {
-        $this->expectException('LogicException');
+        $this->expectException(\LogicException::class);
+
         $this->_aclFactoryMock->expects(
             $this->once()
         )->method(

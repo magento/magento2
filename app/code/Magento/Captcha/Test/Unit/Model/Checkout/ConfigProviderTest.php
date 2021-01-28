@@ -61,20 +61,20 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
     public function testGetConfig($isRequired, $captchaGenerations, $expectedConfig)
     {
         $this->captchaHelperMock->expects($this->any())->method('getCaptcha')->with($this->formId)
-            ->will($this->returnValue($this->captchaMock));
+            ->willReturn($this->captchaMock);
 
-        $this->captchaMock->expects($this->any())->method('isCaseSensitive')->will($this->returnValue(1));
-        $this->captchaMock->expects($this->any())->method('getHeight')->will($this->returnValue('12px'));
-        $this->captchaMock->expects($this->any())->method('isRequired')->will($this->returnValue($isRequired));
+        $this->captchaMock->expects($this->any())->method('isCaseSensitive')->willReturn(1);
+        $this->captchaMock->expects($this->any())->method('getHeight')->willReturn('12px');
+        $this->captchaMock->expects($this->any())->method('isRequired')->willReturn($isRequired);
 
         $this->captchaMock->expects($this->exactly($captchaGenerations))->method('generate');
         $this->captchaMock->expects($this->exactly($captchaGenerations))->method('getImgSrc')
-            ->will($this->returnValue('source'));
+            ->willReturn('source');
 
-        $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($this->storeMock));
-        $this->storeMock->expects($this->once())->method('isCurrentlySecure')->will($this->returnValue(true));
+        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
+        $this->storeMock->expects($this->once())->method('isCurrentlySecure')->willReturn(true);
         $this->storeMock->expects($this->once())->method('getUrl')->with('captcha/refresh', ['_secure' => true])
-            ->will($this->returnValue('https://magento.com/captcha'));
+            ->willReturn('https://magento.com/captcha');
 
         $config = $this->model->getConfig();
         unset($config['captcha'][$this->formId]['timestamp']);

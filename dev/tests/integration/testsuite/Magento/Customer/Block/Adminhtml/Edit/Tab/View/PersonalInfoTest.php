@@ -48,7 +48,7 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
      */
     protected $dateTime;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -85,7 +85,7 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->_coreRegistry->unregister(RegistryConstants::CURRENT_CUSTOMER_ID);
         /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */

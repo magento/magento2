@@ -81,7 +81,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         );
         $storeMangerMock->expects($this->any())
             ->method('getWebsite')
-            ->will($this->returnValue($this->websiteMock));
+            ->willReturn($this->websiteMock);
 
         $this->scopeConfigMock = $this->getMockForAbstractClass(
             \Magento\Framework\App\Config\ScopeConfigInterface::class,
@@ -98,7 +98,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->groupManagementMock =
             $this->createMock(\Magento\Customer\Api\GroupManagementInterface::class);
         $this->groupManagementMock->expects($this->any())->method('getAllCustomersGroup')
-            ->will($this->returnValue($group));
+            ->willReturn($group);
         $this->tierPriceExtensionFactoryMock = $this->getMockBuilder(ProductTierPriceExtensionFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -161,16 +161,16 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     public function testTierPrices($priceScope, $expectedWebsiteId)
     {
         // establish the behavior of the mocks
-        $this->scopeConfigMock->expects($this->any())->method('getValue')->will($this->returnValue($priceScope));
-        $this->websiteMock->expects($this->any())->method('getId')->will($this->returnValue($expectedWebsiteId));
+        $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn($priceScope);
+        $this->websiteMock->expects($this->any())->method('getId')->willReturn($expectedWebsiteId);
         $this->tpFactory->expects($this->any())
             ->method('create')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function () {
                         return $this->objectManagerHelper->getObject(\Magento\Catalog\Model\Product\TierPrice::class);
                     }
-                )
+                
             );
 
         // create sample TierPrice objects that would be coming from a REST call

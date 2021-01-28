@@ -45,10 +45,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testExtendWithCacheMock()
     {
         $definitions = $this->createMock(\Magento\Framework\ObjectManager\DefinitionInterface::class);
-        $definitions->expects($this->once())->method('getClasses')->will($this->returnValue(['FooType']));
+        $definitions->expects($this->once())->method('getClasses')->willReturn(['FooType']);
 
         $cache = $this->createMock(\Magento\Framework\ObjectManager\ConfigCacheInterface::class);
-        $cache->expects($this->once())->method('get')->will($this->returnValue(false));
+        $cache->expects($this->once())->method('get')->willReturn(false);
 
         $config = new Config(null, $definitions);
         $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);

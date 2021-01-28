@@ -39,7 +39,7 @@ class RegexTest extends \PHPUnit\Framework\TestCase
         $eventMock = $this->createMock(\Magento\Framework\Event::class);
         $eventMock->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue($name));
+            ->willReturn($name);
 
         $this->assertEquals($expectedResult, $this->regex->isValidFor($eventMock));
     }

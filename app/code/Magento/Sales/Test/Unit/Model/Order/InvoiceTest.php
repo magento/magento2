@@ -150,7 +150,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $this->order->expects($this->once())
             ->method('setHistoryEntityName')
             ->with($this->entityType)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->assertEquals($this->order, $this->model->getOrder());
     }

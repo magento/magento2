@@ -58,8 +58,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getStoreManager'
-        )->will(
-            $this->returnValue($this->storeManager)
+        )->willReturn(
+            $this->storeManager
         );
         $this->context->expects($this->any())
             ->method('getRequest')
@@ -95,8 +95,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getStore'
-        )->will(
-            $this->returnValue(new \Magento\Framework\DataObject(['id' => $storeId]))
+        )->willReturn(
+            new \Magento\Framework\DataObject(['id' => $storeId])
         );
 
         $this->requestMock->expects($this->once())
@@ -154,7 +154,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->serializerMock->expects($this->once())->method('serialize')
-            ->will($this->returnValue(json_encode($jsLayout)));
+            ->willReturn(json_encode($jsLayout));
         $this->assertEquals('{"some-layout":"layout information"}', $this->object->getJsLayout());
     }
 }

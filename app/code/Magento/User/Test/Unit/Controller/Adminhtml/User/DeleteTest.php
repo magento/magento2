@@ -122,7 +122,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
     public function testExecute($currentUserPassword, $userId, $currentUserId, $resultMethod)
     {
         $currentUserMock = $this->userMock;
-        $this->authSessionMock->expects($this->any())->method('getUser')->will($this->returnValue($currentUserMock));
+        $this->authSessionMock->expects($this->any())->method('getUser')->willReturn($currentUserMock);
 
         $currentUserMock->expects($this->any())->method('getId')->willReturn($currentUserId);
 
@@ -143,7 +143,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
 
         $userMock = clone $currentUserMock;
 
-        $this->userFactoryMock->expects($this->any())->method('create')->will($this->returnValue($userMock));
+        $this->userFactoryMock->expects($this->any())->method('create')->willReturn($userMock);
         $this->responseMock->expects($this->any())->method('setRedirect')->willReturnSelf();
         $this->userMock->expects($this->any())->method('load')->with($userId)->willReturn($this->userFactoryMock);
         $this->userMock->expects($this->any())->method('delete')->willReturnSelf();
@@ -163,7 +163,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $currentUserMock = $this->userMock;
         $this->authSessionMock->expects($this->any())
             ->method('getUser')
-            ->will($this->returnValue($currentUserMock));
+            ->willReturn($currentUserMock);
 
         $currentUserMock->expects($this->any())->method('getId')->willReturn($currentUserId);
 

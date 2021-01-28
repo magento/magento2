@@ -62,7 +62,7 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
      */
     public function testInitializeWithException($options)
     {
-        $this->expectException('\Zend_Cache_Exception');
+        $this->expectException(\Zend_Cache_Exception::class);
 
         $this->objectManager->getObject(
             \Magento\Framework\Cache\Backend\RemoteSynchronizedCache::class,
@@ -157,23 +157,23 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
         $this->localCacheMockExample
             ->expects($this->at(0))
             ->method('load')
-            ->will($this->returnValue($localData));
+            ->willReturn($localData);
 
         $this->remoteCacheMockExample
             ->expects($this->at(0))
             ->method('load')
-            ->will($this->returnValue(\hash('sha256', $remoteData)));
+            ->willReturn(\hash('sha256', $remoteData));
 
         $this->remoteCacheMockExample
             ->expects($this->at(1))
             ->method('load')
-            ->will($this->returnValue($remoteData));
+            ->willReturn($remoteData);
 
         $this->localCacheMockExample
             ->expects($this->atLeastOnce())
             ->method('save')
             ->with($remoteData)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertEquals($remoteData, $this->remoteSyncCacheInstance->load(1));
     }
@@ -186,12 +186,12 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
         $this->localCacheMockExample
             ->expects($this->at(0))
             ->method('load')
-            ->will($this->returnValue($localData));
+            ->willReturn($localData);
 
         $this->remoteCacheMockExample
             ->expects($this->at(0))
             ->method('load')
-            ->will($this->returnValue($remoteData));
+            ->willReturn($remoteData);
 
         $this->assertEquals($remoteData, $this->remoteSyncCacheInstance->load(1));
     }
@@ -204,17 +204,17 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
         $this->localCacheMockExample
             ->expects($this->atLeastOnce())
             ->method('load')
-            ->will($this->returnValue($localData));
+            ->willReturn($localData);
 
         $this->remoteCacheMockExample
             ->expects($this->at(0))
             ->method('load')
-            ->will($this->returnValue($remoteData));
+            ->willReturn($remoteData);
 
         $this->localCacheMockExample
             ->expects($this->atLeastOnce())
             ->method('save')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertEquals($remoteData, $this->remoteSyncCacheInstance->load(1));
     }

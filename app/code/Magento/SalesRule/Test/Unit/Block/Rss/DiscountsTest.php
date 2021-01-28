@@ -90,8 +90,8 @@ class DiscountsTest extends \PHPUnit\Framework\TestCase
             ]);
 
         $this->storeManagerInterface->expects($this->any())->method('getStore')
-            ->will($this->returnValue($this->storeModel));
-        $this->storeModel->expects($this->any())->method('getId')->will($this->returnValue(1));
+            ->willReturn($this->storeModel);
+        $this->storeModel->expects($this->any())->method('getId')->willReturn(1);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $this->objectManagerHelper->getObject(
@@ -147,23 +147,23 @@ class DiscountsTest extends \PHPUnit\Framework\TestCase
                 'getName'
             ]);
 
-        $this->storeModel->expects($this->once())->method('getWebsiteId')->will($this->returnValue(1));
+        $this->storeModel->expects($this->once())->method('getWebsiteId')->willReturn(1);
         $this->storeModel->expects($this->never())->method('getName');
         $this->storeModel->expects($this->atLeastOnce())->method('getFrontendName')->willReturn('Frontend Name');
 
-        $this->requestInterface->expects($this->any())->method('getParam')->will($this->returnValue(1));
-        $this->urlBuilderInterface->expects($this->any())->method('getUrl')->will($this->returnValue($url));
-        $this->rssBuilderInterface->expects($this->any())->method('getUrl')->will($this->returnValue($rssUrl));
-        $this->scopeConfigInterface->expects($this->any())->method('getValue')->will($this->returnValue('en_US'));
-        $ruleModel->expects($this->any())->method('getCouponCode')->will($this->returnValue($ruleData['coupon_code']));
-        $ruleModel->expects($this->any())->method('getToDate')->will($this->returnValue($ruleData['to_date']));
-        $ruleModel->expects($this->once())->method('getFromDate')->will($this->returnValue($ruleData['from_date']));
+        $this->requestInterface->expects($this->any())->method('getParam')->willReturn(1);
+        $this->urlBuilderInterface->expects($this->any())->method('getUrl')->willReturn($url);
+        $this->rssBuilderInterface->expects($this->any())->method('getUrl')->willReturn($rssUrl);
+        $this->scopeConfigInterface->expects($this->any())->method('getValue')->willReturn('en_US');
+        $ruleModel->expects($this->any())->method('getCouponCode')->willReturn($ruleData['coupon_code']);
+        $ruleModel->expects($this->any())->method('getToDate')->willReturn($ruleData['to_date']);
+        $ruleModel->expects($this->once())->method('getFromDate')->willReturn($ruleData['from_date']);
         $ruleModel->expects($this->once())->method('getDescription')
-            ->will($this->returnValue($ruleData['description']));
-        $ruleModel->expects($this->once())->method('getName')->will($this->returnValue($ruleData['name']));
+            ->willReturn($ruleData['description']);
+        $ruleModel->expects($this->once())->method('getName')->willReturn($ruleData['name']);
         $this->rssModel->expects($this->any())->method('getDiscountCollection')
-            ->will($this->returnValue([$ruleModel]));
-        $this->timezoneInterface->expects($this->any())->method('formatDateTime')->will($this->returnValue('12/12/14'));
+            ->willReturn([$ruleModel]);
+        $this->timezoneInterface->expects($this->any())->method('formatDateTime')->willReturn('12/12/14');
 
         $data = $this->block->getRssData();
 
@@ -191,7 +191,7 @@ class DiscountsTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsAllowed($isAllowed)
     {
-        $this->scopeConfigInterface->expects($this->once())->method('isSetFlag')->will($this->returnValue($isAllowed));
+        $this->scopeConfigInterface->expects($this->once())->method('isSetFlag')->willReturn($isAllowed);
         $this->assertEquals($isAllowed, $this->block->isAllowed());
     }
 
@@ -214,9 +214,9 @@ class DiscountsTest extends \PHPUnit\Framework\TestCase
         ];
         $this->rssBuilderInterface->expects($this->any())
             ->method('getUrl')
-            ->will($this->returnValue($feedData['link']));
+            ->willReturn($feedData['link']);
 
-        $this->scopeConfigInterface->expects($this->once())->method('isSetFlag')->will($this->returnValue(true));
+        $this->scopeConfigInterface->expects($this->once())->method('isSetFlag')->willReturn(true);
         $this->assertEquals($feedData, $this->block->getFeeds());
     }
 }

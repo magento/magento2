@@ -49,25 +49,25 @@ class AbstractStorageTest extends \PHPUnit\Framework\TestCase
         $this->storage->expects($this->once())
             ->method('doFindAllByData')
             ->with($data)
-            ->will($this->returnValue($rows));
+            ->willReturn($rows);
 
         $this->dataObjectHelper->expects($this->at(0))
             ->method('populateWithArray')
             ->with($urlRewrites[0], $rows[0], \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->urlRewriteFactory->expects($this->at(0))
             ->method('create')
-            ->will($this->returnValue($urlRewrites[0]));
+            ->willReturn($urlRewrites[0]);
 
         $this->dataObjectHelper->expects($this->at(1))
             ->method('populateWithArray')
             ->with($urlRewrites[1], $rows[1], \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->urlRewriteFactory->expects($this->at(1))
             ->method('create')
-            ->will($this->returnValue($urlRewrites[1]));
+            ->willReturn($urlRewrites[1]);
 
         $this->assertEquals($urlRewrites, $this->storage->findAllByData($data));
     }
@@ -79,7 +79,7 @@ class AbstractStorageTest extends \PHPUnit\Framework\TestCase
         $this->storage->expects($this->once())
             ->method('doFindOneByData')
             ->with($data)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->assertNull($this->storage->findOneByData($data));
     }
@@ -93,16 +93,16 @@ class AbstractStorageTest extends \PHPUnit\Framework\TestCase
         $this->storage->expects($this->once())
             ->method('doFindOneByData')
             ->with($data)
-            ->will($this->returnValue($row));
+            ->willReturn($row);
 
         $this->dataObjectHelper->expects($this->once())
             ->method('populateWithArray')
             ->with($urlRewrite, $row, \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->urlRewriteFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($urlRewrite));
+            ->willReturn($urlRewrite);
 
         $this->assertEquals($urlRewrite, $this->storage->findOneByData($data));
     }

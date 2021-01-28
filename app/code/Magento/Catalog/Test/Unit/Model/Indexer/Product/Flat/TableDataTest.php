@@ -53,8 +53,8 @@ class TableDataTest extends \PHPUnit\Framework\TestCase
             'isTableExists'
         )->with(
             $flatTable
-        )->will(
-            $this->returnValue($isFlatTableExists)
+        )->willReturn(
+            $isFlatTableExists
         );
 
         $this->_connectionMock->expects(
@@ -69,8 +69,8 @@ class TableDataTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getConnection'
-        )->will(
-            $this->returnValue($this->_connectionMock)
+        )->willReturn(
+            $this->_connectionMock
         );
 
         $model = $this->_objectManager->getObject(

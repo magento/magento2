@@ -58,24 +58,24 @@ class CanonicalUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         $productId = 'product_id';
         $targetPath = 'catalog/product/view/id/' . $productId;
 
-        $this->product->expects($this->any())->method('getId')->will($this->returnValue($productId));
+        $this->product->expects($this->any())->method('getId')->willReturn($productId);
         $this->productUrlPathGenerator->expects($this->any())->method('getUrlPathWithSuffix')
-            ->will($this->returnValue($requestPath));
+            ->willReturn($requestPath);
         $this->productUrlPathGenerator->expects($this->any())->method('getCanonicalUrlPath')
-            ->will($this->returnValue($targetPath));
-        $this->categoryRegistry->expects($this->any())->method('getList')->will($this->returnValue([]));
+            ->willReturn($targetPath);
+        $this->categoryRegistry->expects($this->any())->method('getList')->willReturn([]);
 
         $this->urlRewrite->expects($this->any())->method('setStoreId')->with($storeId)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setEntityId')->with($productId)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setEntityType')
-            ->with(ProductUrlRewriteGenerator::ENTITY_TYPE)->will($this->returnSelf());
+            ->with(ProductUrlRewriteGenerator::ENTITY_TYPE)->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setRequestPath')->with($requestPath)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setTargetPath')->with($targetPath)
-            ->will($this->returnSelf());
-        $this->urlRewriteFactory->expects($this->any())->method('create')->will($this->returnValue($this->urlRewrite));
+            ->willReturnSelf();
+        $this->urlRewriteFactory->expects($this->any())->method('create')->willReturn($this->urlRewrite);
         $this->assertEquals(
             [
                 $this->urlRewrite,

@@ -72,10 +72,10 @@ class StateTest extends \PHPUnit\Framework\TestCase
         );
         $this->orderStatusCollectionFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($collectionMock));
+            ->willReturn($collectionMock);
         $collectionMock->expects($this->once())
             ->method('joinStates')
-            ->will($this->returnValue($statuses));
+            ->willReturn($statuses);
 
         $result = $this->stateColumn->decorateState('processing', $rowMock, $columnMock, false);
         $this->assertSame('processing[Suspected Fraud]', $result);

@@ -49,16 +49,16 @@ class CatalogAttributeDeleteAfterObserverTest extends \PHPUnit\Framework\TestCas
 
         $observer->expects($this->once())
             ->method('getEvent')
-            ->will($this->returnValue($event));
+            ->willReturn($event);
         $event->expects($this->any())
             ->method('getAttribute')
-            ->will($this->returnValue($attribute));
+            ->willReturn($attribute);
         $attribute->expects($this->any())
             ->method('getIsUsedForPromoRules')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $attribute->expects($this->any())
             ->method('getAttributeCode')
-            ->will($this->returnValue($attributeCode));
+            ->willReturn($attributeCode);
 
         $this->checkSalesRulesAvailability
             ->expects($this->once())

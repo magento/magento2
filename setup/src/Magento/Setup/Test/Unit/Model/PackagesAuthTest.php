@@ -31,7 +31,7 @@ class PackagesAuthTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject */
     private $serializerMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $zendServiceLocator = $this->createMock(\Zend\ServiceManager\ServiceLocatorInterface::class);
         $zendServiceLocator
@@ -77,7 +77,7 @@ class PackagesAuthTest extends \PHPUnit\Framework\TestCase
         $this->curl->expects($this->once())->method('getStatus')->willReturn(200);
         $this->curl->expects($this->once())->method('getBody')->willReturn("{'someJson'}");
         $directory = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
-        $this->filesystem->expects($this->once())->method('getDirectoryWrite')->will($this->returnValue($directory));
+        $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($directory);
         $directory->expects($this->once())
             ->method('writeFile')
             ->with(PackagesAuth::PATH_TO_PACKAGES_FILE, "{'someJson'}");
@@ -103,10 +103,10 @@ class PackagesAuthTest extends \PHPUnit\Framework\TestCase
     {
         $directoryWrite = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
         $directoryRead = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
-        $this->filesystem->expects($this->once())->method('getDirectoryRead')->will($this->returnValue($directoryRead));
+        $this->filesystem->expects($this->once())->method('getDirectoryRead')->willReturn($directoryRead);
         $this->filesystem->expects($this->once())
             ->method('getDirectoryWrite')
-            ->will($this->returnValue($directoryWrite));
+            ->willReturn($directoryWrite);
         $directoryWrite->expects($this->once())->method('isExist')->willReturn(true);
         $directoryWrite->expects($this->once())->method('isReadable')->willReturn(true);
         $directoryWrite->expects($this->once())->method('delete')->willReturn(true);
@@ -124,7 +124,7 @@ class PackagesAuthTest extends \PHPUnit\Framework\TestCase
         $directoryWrite = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
         $this->filesystem->expects($this->once())
             ->method('getDirectoryWrite')
-            ->will($this->returnValue($directoryWrite));
+            ->willReturn($directoryWrite);
         $directoryWrite->expects($this->once())->method('writeFile')->willReturn(true);
 
         $this->assertTrue($this->packagesAuth->saveAuthJson("testusername", "testpassword"));

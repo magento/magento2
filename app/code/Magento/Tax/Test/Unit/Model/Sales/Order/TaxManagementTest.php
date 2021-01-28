@@ -47,7 +47,7 @@ class TaxManagementTest extends \PHPUnit\Framework\TestCase
         $orderFactoryMock = $this->createPartialMock(\Magento\Sales\Model\OrderFactory::class, $methods);
         $orderFactoryMock->expects($this->atLeastOnce())
             ->method('create')
-            ->will($this->returnValue($this->orderMock));
+            ->willReturn($this->orderMock);
 
         $className = \Magento\Sales\Model\ResourceModel\Order\Tax\Item::class;
         $this->taxItemResourceMock = $this->createPartialMock($className, ['getTaxItemsByOrderId']);
@@ -107,11 +107,11 @@ class TaxManagementTest extends \PHPUnit\Framework\TestCase
         $this->orderMock->expects($this->once())
             ->method('load')
             ->with($orderId)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->taxItemResourceMock->expects($this->once())
             ->method('getTaxItemsByOrderId')
             ->with($orderId)
-            ->will($this->returnValue($orderItemAppliedTaxes));
+            ->willReturn($orderItemAppliedTaxes);
 
         $this->assertEquals($this->orderTaxDetailsDataObject, $this->taxManagement->getOrderTaxDetails($orderId));
 

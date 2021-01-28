@@ -65,10 +65,10 @@ class ParserTest extends \PHPUnit\Framework\TestCase
         //4. Set expectations
         $this->filesCollector->expects($this->any())
             ->method('getFiles')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [$options[0]['paths'], '', $phpFiles],
                 [$options[1]['paths'], '', $jsFiles],
-            ]));
+            ]);
 
         $result = $this->parser->parse($options);
         $this->assertEquals($expectedResult, $result);

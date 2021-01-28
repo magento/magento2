@@ -72,7 +72,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->customerSessionMock->expects($this->any())
             ->method('isLoggedIn')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->formKeyValidatorMock = $this->getMockBuilder(\Magento\Framework\Data\Form\FormKey\Validator::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -100,7 +100,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     {
         $this->formKeyValidatorMock->expects($this->once())
             ->method('validate')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->redirectMock->expects($this->once())
             ->method('redirect')
             ->with($this->responseMock, 'customer/account/', []);
@@ -115,10 +115,10 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     {
         $this->formKeyValidatorMock->expects($this->once())
             ->method('validate')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->customerSessionMock->expects($this->any())
             ->method('getCustomerId')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->redirectMock->expects($this->once())
             ->method('redirect')
             ->with($this->responseMock, 'customer/account/', []);
@@ -134,10 +134,10 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     {
         $this->formKeyValidatorMock->expects($this->once())
             ->method('validate')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->customerSessionMock->expects($this->any())
             ->method('getCustomerId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->customerRepositoryMock->expects($this->any())
             ->method('getById')
             ->will(

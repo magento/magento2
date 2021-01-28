@@ -28,7 +28,7 @@ class ChainTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->asset = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\LocalInterface::class);
-        $this->asset->expects($this->once())->method('getContentType')->will($this->returnValue('assetType'));
+        $this->asset->expects($this->once())->method('getContentType')->willReturn('assetType');
         $this->object = new Chain($this->asset, 'origContent', 'origType', 'origPath');
     }
 
@@ -56,11 +56,12 @@ class ChainTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage The requested asset type was 'assetType', but ended up with 'type'
      */
     public function testAssertValid()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('The requested asset type was \'assetType\', but ended up with \'type\'');
+
         $this->object->setContentType('type');
         $this->object->assertValid();
     }

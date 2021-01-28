@@ -218,7 +218,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
 
         foreach ($constructorMethods as $method) {
-            $this->product->expects($this->once())->method($method)->will($this->returnSelf());
+            $this->product->expects($this->once())->method($method)->willReturnSelf();
         }
 
         $this->product->__construct(

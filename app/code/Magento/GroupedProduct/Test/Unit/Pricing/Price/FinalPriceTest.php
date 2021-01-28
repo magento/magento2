@@ -58,11 +58,11 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
         $typeInstanceMock->expects($this->once())
             ->method('getAssociatedProducts')
             ->with($this->equalTo($this->saleableItemMock))
-            ->will($this->returnValue([$product1, $product2]));
+            ->willReturn([$product1, $product2]);
 
         $this->saleableItemMock->expects($this->once())
             ->method('getTypeInstance')
-            ->will($this->returnValue($typeInstanceMock));
+            ->willReturn($typeInstanceMock);
 
         $this->assertEquals($product1, $this->finalPrice->getMinProduct());
     }
@@ -76,11 +76,11 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
         $typeInstanceMock->expects($this->once())
             ->method('getAssociatedProducts')
             ->with($this->equalTo($this->saleableItemMock))
-            ->will($this->returnValue([$product1, $product2]));
+            ->willReturn([$product1, $product2]);
 
         $this->saleableItemMock->expects($this->once())
             ->method('getTypeInstance')
-            ->will($this->returnValue($typeInstanceMock));
+            ->willReturn($typeInstanceMock);
 
         $this->assertEquals(10, $this->finalPrice->getValue());
     }
@@ -93,11 +93,11 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
         $typeInstanceMock->expects($this->once())
             ->method('getAssociatedProducts')
             ->with($this->equalTo($this->saleableItemMock))
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->saleableItemMock->expects($this->once())
             ->method('getTypeInstance')
-            ->will($this->returnValue($typeInstanceMock));
+            ->willReturn($typeInstanceMock);
 
         $this->assertEquals(0.00, $this->finalPrice->getValue());
     }
@@ -111,13 +111,13 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
         $priceTypeMock = $this->createMock(\Magento\Catalog\Pricing\Price\FinalPrice::class);
         $priceTypeMock->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($price));
+            ->willReturn($price);
 
         $priceInfoMock = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
         $priceInfoMock->expects($this->any())
             ->method('getPrice')
             ->with($this->equalTo(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE))
-            ->will($this->returnValue($priceTypeMock));
+            ->willReturn($priceTypeMock);
 
         $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $productMock->expects($this->any())
@@ -125,7 +125,7 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo(\Magento\Framework\Pricing\PriceInfoInterface::PRODUCT_QUANTITY_DEFAULT));
         $productMock->expects($this->any())
             ->method('getPriceInfo')
-            ->will($this->returnValue($priceInfoMock));
+            ->willReturn($priceInfoMock);
 
         return $productMock;
     }

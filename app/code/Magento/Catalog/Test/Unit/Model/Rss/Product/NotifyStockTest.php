@@ -58,14 +58,14 @@ class NotifyStockTest extends \PHPUnit\Framework\TestCase
     {
         $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $this->productFactory = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
-        $this->productFactory->expects($this->any())->method('create')->will($this->returnValue($this->product));
+        $this->productFactory->expects($this->any())->method('create')->willReturn($this->product);
 
         $this->stock = $this->createMock(\Magento\CatalogInventory\Model\ResourceModel\Stock::class);
         $this->stockFactory = $this->createPartialMock(
             \Magento\CatalogInventory\Model\ResourceModel\StockFactory::class,
             ['create']
         );
-        $this->stockFactory->expects($this->any())->method('create')->will($this->returnValue($this->stock));
+        $this->stockFactory->expects($this->any())->method('create')->willReturn($this->stock);
 
         $this->status = $this->createMock(\Magento\Catalog\Model\Product\Attribute\Source\Status::class);
         $this->eventManager = $this->createMock(\Magento\Framework\Event\Manager::class);
@@ -87,11 +87,11 @@ class NotifyStockTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
         $productCollection =
             $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
-        $this->product->expects($this->once())->method('getCollection')->will($this->returnValue($productCollection));
+        $this->product->expects($this->once())->method('getCollection')->willReturn($productCollection);
 
-        $productCollection->expects($this->once())->method('addAttributeToSelect')->will($this->returnSelf());
-        $productCollection->expects($this->once())->method('addAttributeToFilter')->will($this->returnSelf());
-        $productCollection->expects($this->once())->method('setOrder')->will($this->returnSelf());
+        $productCollection->expects($this->once())->method('addAttributeToSelect')->willReturnSelf();
+        $productCollection->expects($this->once())->method('addAttributeToFilter')->willReturnSelf();
+        $productCollection->expects($this->once())->method('setOrder')->willReturnSelf();
 
         $this->eventManager->expects($this->once())->method('dispatch')->with(
             'rss_catalog_notify_stock_collection_select'

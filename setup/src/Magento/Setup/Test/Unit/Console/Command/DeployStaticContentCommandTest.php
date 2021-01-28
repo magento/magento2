@@ -165,11 +165,12 @@ class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $mode
      * @return void
-     * @expectedException  \Magento\Framework\Exception\LocalizedException
      * @dataProvider executionInNonProductionModeDataProvider
      */
     public function testExecuteInNonProductionMode($mode)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->appState->expects($this->any())->method('getMode')->willReturn($mode);
         $this->objectManager->expects($this->never())->method('create');
 

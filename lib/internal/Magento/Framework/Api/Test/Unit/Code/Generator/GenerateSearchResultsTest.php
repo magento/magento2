@@ -45,14 +45,14 @@ class GenerateSearchResultsTest extends \PHPUnit\Framework\TestCase
         $this->ioObjectMock->expects($this->once())
             ->method('generateResultFileName')
             ->with('\\' . \Magento\Framework\Api\Code\Generator\SampleSearchResults::class)
-            ->will($this->returnValue('SampleSearchResults.php'));
+            ->willReturn('SampleSearchResults.php');
         $this->ioObjectMock->expects($this->once())
             ->method('writeResultFile')
             ->with('SampleSearchResults.php', $sampleSearchResultBuilderCode);
 
         $model->expects($this->once())
             ->method('_validateData')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertEquals('SampleSearchResults.php', $model->generate());
     }
 }

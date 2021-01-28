@@ -51,25 +51,25 @@ class GroupTest extends \PHPUnit\Framework\TestCase
         );
         $this->_element->expects($this->any())
             ->method('getHtmlId')
-            ->will($this->returnValue('html id'));
+            ->willReturn('html id');
         $this->_element->expects($this->any())
             ->method('getElementHtml')
-            ->will($this->returnValue('element html'));
+            ->willReturn('element html');
         $this->_element->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('name'));
+            ->willReturn('name');
         $this->_element->expects($this->any())
             ->method('getElements')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->_element->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue('id'));
+            ->willReturn('id');
         $this->_user = $this->createMock(\Magento\User\Model\User::class);
         $this->_authSession = $this->createMock(\Magento\Backend\Model\Auth\Session::class);
         $this->_authSession->expects($this->any())
             ->method('__call')
             ->with('getUser')
-            ->will($this->returnValue($this->_user));
+            ->willReturn($this->_user);
         $this->_model = $helper->getObject(
             \Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Group::class,
             ['authSession' => $this->_authSession]

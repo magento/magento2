@@ -117,9 +117,11 @@ class ImageProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($imageDataMock, $this->imageProcessor->save($imageDataMock, 'testEntityType'));
     }
 
+    /**
+     */
     public function testSaveInputException()
     {
-        $this->expectException('\Magento\Framework\Exception\InputException');
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
         $this->expectExceptionMessage('The image content is invalid. Verify the content and try again.');
 
         $imageContent = $this->getMockBuilder(\Magento\Framework\Api\Data\ImageContentInterface::class)
@@ -241,9 +243,11 @@ class ImageProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($imageData, $this->imageProcessor->save($imageData, 'testEntityType', $prevImageData));
     }
 
+    /**
+     */
     public function testSaveWithoutFileExtension()
     {
-        $this->expectException('\Magento\Framework\Exception\InputException');
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
         $this->expectExceptionMessage('Cannot recognize image extension.');
 
         $imageContent = $this->getMockBuilder(\Magento\Framework\Api\Data\ImageContentInterface::class)

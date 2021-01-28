@@ -109,7 +109,7 @@ class CommonTaxCollectorTest extends TestCase
 
         $this->quote->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->store));
+            ->willReturn($this->store);
 
         $this->address = $this->getMockBuilder(QuoteAddress::class)
             ->disableOriginalConstructor()
@@ -117,7 +117,7 @@ class CommonTaxCollectorTest extends TestCase
 
         $this->address->expects($this->any())
             ->method('getQuote')
-            ->will($this->returnValue($this->quote));
+            ->willReturn($this->quote);
         $methods = ['create'];
         $this->quoteDetailsItemDataObject = $objectManager->getObject(ItemDetails::class);
         $this->taxClassKeyDataObject = $objectManager->getObject(TaxClassKey::class);
@@ -184,11 +184,11 @@ class CommonTaxCollectorTest extends TestCase
         $this->taxConfig->expects($this->any())
             ->method('getShippingTaxClass')
             ->with($this->store)
-            ->will($this->returnValue($shippingTaxClass));
+            ->willReturn($shippingTaxClass);
         $this->taxConfig->expects($this->any())
             ->method('shippingPriceIncludesTax')
             ->with($this->store)
-            ->will($this->returnValue($shippingPriceInclTax));
+            ->willReturn($shippingPriceInclTax);
         $totalsMock
              ->expects($this->atLeastOnce())
              ->method('getShippingDiscountAmount')

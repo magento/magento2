@@ -33,7 +33,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->postHelper->expects($this->once())
             ->method('getPostData')
             ->with('someUrl')
-            ->will($this->returnValue('{parsedAction}'));
+            ->willReturn('{parsedAction}');
         $this->assertEquals('{parsedAction}', $this->block->getPostAction());
     }
 }

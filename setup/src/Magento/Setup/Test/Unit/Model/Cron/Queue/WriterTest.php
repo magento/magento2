@@ -24,7 +24,7 @@ class WriterTest extends \PHPUnit\Framework\TestCase
      */
     private $writer;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $directoryRead = $this->getMockForAbstractClass(

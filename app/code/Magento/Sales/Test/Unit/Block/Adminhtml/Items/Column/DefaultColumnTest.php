@@ -41,10 +41,10 @@ class DefaultColumnTest extends \PHPUnit\Framework\TestCase
         $expectedResult = 8;
         $this->itemMock->expects($this->once())
             ->method('getRowTotal')
-            ->will($this->returnValue($rowTotal));
+            ->willReturn($rowTotal);
         $this->itemMock->expects($this->once())
             ->method('getDiscountAmount')
-            ->will($this->returnValue($discountAmount));
+            ->willReturn($discountAmount);
         $this->assertEquals($expectedResult, $this->defaultColumn->getTotalAmount($this->itemMock));
     }
 
@@ -55,10 +55,10 @@ class DefaultColumnTest extends \PHPUnit\Framework\TestCase
         $expectedResult = 8;
         $this->itemMock->expects($this->once())
             ->method('getBaseRowTotal')
-            ->will($this->returnValue($baseRowTotal));
+            ->willReturn($baseRowTotal);
         $this->itemMock->expects($this->once())
             ->method('getBaseDiscountAmount')
-            ->will($this->returnValue($baseDiscountAmount));
+            ->willReturn($baseDiscountAmount);
         $this->assertEquals($expectedResult, $this->defaultColumn->getBaseTotalAmount($this->itemMock));
     }
 }

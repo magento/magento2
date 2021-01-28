@@ -40,7 +40,7 @@ class SpecificationFactoryTest extends \PHPUnit\Framework\TestCase
         $modelFactory = new SpecificationFactory($this->_compositeFactory, $specificationMapping);
         $this->_compositeFactory->expects($this->once())->method('create')->with(
             ['list' => $specificationMapping]
-        )->will($this->returnValue($expectedComposite));
+        )->willReturn($expectedComposite);
 
         $this->assertEquals($expectedComposite, $modelFactory->create([self::SPECIFICATION_KEY]));
     }

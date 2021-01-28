@@ -24,9 +24,9 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
         )->getMock();
         $this->priceCurrency->expects($this->any())
             ->method('round')
-            ->will($this->returnCallback(function ($argument) {
+            ->willReturnCallback(function ($argument) {
                 return round($argument, 2);
-            }));
+            });
 
         $this->_model = new \Magento\Framework\Math\Calculator($this->priceCurrency);
     }

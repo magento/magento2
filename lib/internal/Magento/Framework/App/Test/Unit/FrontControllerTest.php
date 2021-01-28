@@ -106,12 +106,10 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage  Front controller reached 100 router match iterations
      */
     public function testDispatchThrowException()
     {
-        $this->expectException('\LogicException');
+        $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('Front controller reached 100 router match iterations');
 
         $validCounter = 0;
@@ -119,18 +117,18 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
             $validCounter++;
             return $validCounter % 10 ? false : true;
         };
-        $this->routerList->expects($this->any())->method('valid')->will($this->returnCallback($callbackValid));
+        $this->routerList->expects($this->any())->method('valid')->willReturnCallback($callbackValid);
 
         $this->router->expects($this->any())
             ->method('match')
             ->with($this->request)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->routerList->expects($this->any())
             ->method('current')
-            ->will($this->returnValue($this->router));
+            ->willReturn($this->router);
 
-        $this->request->expects($this->any())->method('isDispatched')->will($this->returnValue(false));
+        $this->request->expects($this->any())->method('isDispatched')->willReturn(false);
 
         $this->model->dispatch($this->request);
     }
@@ -146,10 +144,10 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
         $this->appStateMock->expects($this->any())->method('getAreaCode')->willReturn('frontend');
         $this->areaMock->expects($this->at(0))->method('load')->with(Area::PART_DESIGN)->willReturnSelf();
         $this->areaMock->expects($this->at(1))->method('load')->with(Area::PART_TRANSLATE)->willReturnSelf();
-        $this->areaListMock->expects($this->any())->method('getArea')->will($this->returnValue($this->areaMock));
+        $this->areaListMock->expects($this->any())->method('getArea')->willReturn($this->areaMock);
         $this->routerList->expects($this->any())
             ->method('valid')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $response = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $controllerInstance = $this->getMockBuilder(\Magento\Framework\App\Action\Action::class)
@@ -158,23 +156,23 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
         $controllerInstance->expects($this->any())
             ->method('dispatch')
             ->with($this->request)
-            ->will($this->returnValue($response));
+            ->willReturn($response);
         $this->router->expects($this->at(0))
             ->method('match')
             ->with($this->request)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->router->expects($this->at(1))
             ->method('match')
             ->with($this->request)
-            ->will($this->returnValue($controllerInstance));
+            ->willReturn($controllerInstance);
 
         $this->routerList->expects($this->any())
             ->method('current')
-            ->will($this->returnValue($this->router));
+            ->willReturn($this->router);
 
-        $this->request->expects($this->at(0))->method('isDispatched')->will($this->returnValue(false));
+        $this->request->expects($this->at(0))->method('isDispatched')->willReturn(false);
         $this->request->expects($this->at(1))->method('setDispatched')->with(true);
-        $this->request->expects($this->at(2))->method('isDispatched')->will($this->returnValue(true));
+        $this->request->expects($this->at(2))->method('isDispatched')->willReturn(true);
 
         $this->requestValidator->expects($this->once())
             ->method('validate')->with($this->request, $controllerInstance)->willThrowException($exception);
@@ -191,7 +189,7 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
     {
         $this->routerList->expects($this->any())
             ->method('valid')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $response = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $controllerInstance = $this->getMockBuilder(\Magento\Framework\App\Action\Action::class)
@@ -200,23 +198,23 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
         $controllerInstance->expects($this->any())
             ->method('dispatch')
             ->with($this->request)
-            ->will($this->returnValue($response));
+            ->willReturn($response);
         $this->router->expects($this->at(0))
             ->method('match')
             ->with($this->request)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->router->expects($this->at(1))
             ->method('match')
             ->with($this->request)
-            ->will($this->returnValue($controllerInstance));
+            ->willReturn($controllerInstance);
 
         $this->routerList->expects($this->any())
             ->method('current')
-            ->will($this->returnValue($this->router));
+            ->willReturn($this->router);
 
-        $this->request->expects($this->at(0))->method('isDispatched')->will($this->returnValue(false));
+        $this->request->expects($this->at(0))->method('isDispatched')->willReturn(false);
         $this->request->expects($this->at(1))->method('setDispatched')->with(true);
-        $this->request->expects($this->at(2))->method('isDispatched')->will($this->returnValue(true));
+        $this->request->expects($this->at(2))->method('isDispatched')->willReturn(true);
 
         $this->assertEquals($response, $this->model->dispatch($this->request));
     }
@@ -225,7 +223,7 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
     {
         $this->routerList->expects($this->any())
             ->method('valid')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $response = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $controllerInstance = $this->getMockBuilder(\Magento\Framework\App\Action\Action::class)
@@ -234,7 +232,7 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
         $controllerInstance->expects($this->any())
             ->method('dispatch')
             ->with($this->request)
-            ->will($this->returnValue($response));
+            ->willReturn($response);
         $this->router->expects($this->at(0))
             ->method('match')
             ->with($this->request)
@@ -242,19 +240,19 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
         $this->router->expects($this->at(1))
             ->method('match')
             ->with($this->request)
-            ->will($this->returnValue($controllerInstance));
+            ->willReturn($controllerInstance);
 
         $this->routerList->expects($this->any())
             ->method('current')
-            ->will($this->returnValue($this->router));
+            ->willReturn($this->router);
 
-        $this->request->expects($this->at(0))->method('isDispatched')->will($this->returnValue(false));
+        $this->request->expects($this->at(0))->method('isDispatched')->willReturn(false);
         $this->request->expects($this->at(1))->method('initForward');
         $this->request->expects($this->at(2))->method('setActionName')->with('noroute');
         $this->request->expects($this->at(3))->method('setDispatched')->with(false);
-        $this->request->expects($this->at(4))->method('isDispatched')->will($this->returnValue(false));
+        $this->request->expects($this->at(4))->method('isDispatched')->willReturn(false);
         $this->request->expects($this->at(5))->method('setDispatched')->with(true);
-        $this->request->expects($this->at(6))->method('isDispatched')->will($this->returnValue(true));
+        $this->request->expects($this->at(6))->method('isDispatched')->willReturn(true);
 
         $this->assertEquals($response, $this->model->dispatch($this->request));
     }

@@ -22,7 +22,7 @@ class BoldMixinTest extends \PHPUnit\Framework\TestCase
      */
     private $wordWrapperMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->randomWordSelectorMock =
             $this->createMock(\Magento\Setup\Model\Description\Mixin\Helper\RandomWordSelector::class);

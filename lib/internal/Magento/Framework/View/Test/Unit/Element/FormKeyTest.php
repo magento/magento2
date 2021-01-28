@@ -21,7 +21,7 @@ class FormKeyTest extends \PHPUnit\Framework\TestCase
 
         $formKeyMock->expects($this->any())
             ->method('getFormKey')
-            ->will($this->returnValue('form_key'));
+            ->willReturn('form_key');
 
         $this->formKeyElement = $objectManagerHelper->getObject(
             \Magento\Framework\View\Element\FormKey::class,

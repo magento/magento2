@@ -92,7 +92,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->resource->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionAdapter));
+            ->willReturn($this->connectionAdapter);
 
         $this->mapper = $this->getMockBuilder(\Magento\Framework\Search\Adapter\Mysql\Mapper::class)
             ->setMethods(['buildQuery'])
@@ -181,15 +181,15 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
 
         $this->connectionAdapter->expects($this->any())
             ->method('fetchAssoc')
-            ->will($this->returnValue($selectResult['documents']));
+            ->willReturn($selectResult['documents']);
         $this->mapper->expects($this->once())
             ->method('buildQuery')
             ->with($this->request)
-            ->will($this->returnValue($this->select));
+            ->willReturn($this->select);
         $this->responseFactory->expects($this->once())
             ->method('create')
             ->with($selectResult)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
         $this->aggregatioBuilder->expects($this->once())
             ->method('build')
             ->with($this->request, $table, $selectResult['documents'])

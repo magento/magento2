@@ -38,7 +38,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         );
         $this->optionFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->option));
+            ->willReturn($this->option);
         $this->attribute = $this->createMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class);
 
         $this->model = (new ObjectManager($this))
@@ -89,7 +89,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $code = 'attribute-code';
         $this->attribute->expects($this->any())
             ->method('getAttributeCode')
-            ->will($this->returnValue($code));
+            ->willReturn($code);
 
         $columns = $this->model->getFlatColumns();
 
@@ -114,7 +114,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->option->expects($this->once())
             ->method('getFlatUpdateSelect')
             ->with($this->attribute, $store, false)
-            ->will($this->returnValue($select));
+            ->willReturn($select);
 
         $this->assertEquals($select, $this->model->getFlatUpdateSelect($store));
     }

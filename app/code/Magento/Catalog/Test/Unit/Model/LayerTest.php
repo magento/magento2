@@ -118,7 +118,7 @@ class LayerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->storeManager->expects($this->any())->method('getStore')
-            ->will($this->returnValue($this->store));
+            ->willReturn($this->store);
 
         $this->stateKeyGenerator = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Category\StateKey::class)
             ->setMethods(['toString'])
@@ -149,11 +149,11 @@ class LayerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->context->expects($this->any())->method('getStateKey')
-            ->will($this->returnValue($this->stateKeyGenerator));
+            ->willReturn($this->stateKeyGenerator);
         $this->context->expects($this->any())->method('getCollectionFilter')
-            ->will($this->returnValue($this->collectionFilter));
+            ->willReturn($this->collectionFilter);
         $this->context->expects($this->any())->method('getCollectionProvider')
-            ->will($this->returnValue($this->collectionProvider));
+            ->willReturn($this->collectionProvider);
 
         $this->state = $this->getMockBuilder(\Magento\Catalog\Model\Layer\State::class)
             ->disableOriginalConstructor()
@@ -163,7 +163,7 @@ class LayerTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->stateFactory->expects($this->any())->method('create')->will($this->returnValue($this->state));
+        $this->stateFactory->expects($this->any())->method('create')->willReturn($this->state);
 
         $this->collection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
             ->disableOriginalConstructor()
@@ -196,11 +196,11 @@ class LayerTest extends \PHPUnit\Framework\TestCase
     {
         $stateKey = 'sk';
         $this->registry->expects($this->once())->method('registry')->with($this->equalTo('current_category'))
-            ->will($this->returnValue($this->category));
+            ->willReturn($this->category);
 
         $this->stateKeyGenerator->expects($this->once())->method('toString')
             ->with($this->equalTo($this->category))
-            ->will($this->returnValue($stateKey));
+            ->willReturn($stateKey);
 
         $this->assertEquals($stateKey, $this->model->getStateKey());
     }
@@ -208,16 +208,16 @@ class LayerTest extends \PHPUnit\Framework\TestCase
     public function testGetProductCollection()
     {
         $this->registry->expects($this->once())->method('registry')->with($this->equalTo('current_category'))
-            ->will($this->returnValue($this->category));
+            ->willReturn($this->category);
 
-        $this->category->expects($this->any())->method('getId')->will($this->returnValue(333));
+        $this->category->expects($this->any())->method('getId')->willReturn(333);
 
         $this->collectionFilter->expects($this->once())->method('filter')
             ->with($this->equalTo($this->collection), $this->equalTo($this->category));
 
         $this->collectionProvider->expects($this->once())->method('getCollection')
             ->with($this->equalTo($this->category))
-            ->will($this->returnValue($this->collection));
+            ->willReturn($this->collection);
 
         $result = $this->model->getProductCollection();
         $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Product\Collection::class, $result);
@@ -229,18 +229,18 @@ class LayerTest extends \PHPUnit\Framework\TestCase
     {
         $stateKey = 'sk';
         $this->registry->expects($this->once())->method('registry')->with($this->equalTo('current_category'))
-            ->will($this->returnValue($this->category));
+            ->willReturn($this->category);
 
         $this->stateKeyGenerator->expects($this->once())->method('toString')
             ->with($this->equalTo($this->category))
-            ->will($this->returnValue($stateKey));
+            ->willReturn($stateKey);
 
-        $this->state->expects($this->any())->method('getFilters')->will($this->returnValue([$this->filter]));
+        $this->state->expects($this->any())->method('getFilters')->willReturn([$this->filter]);
 
-        $this->filter->expects($this->once())->method('getFilter')->will($this->returnValue($this->abstractFilter));
-        $this->filter->expects($this->once())->method('getValueString')->will($this->returnValue('t'));
+        $this->filter->expects($this->once())->method('getFilter')->willReturn($this->abstractFilter);
+        $this->filter->expects($this->once())->method('getValueString')->willReturn('t');
 
-        $this->abstractFilter->expects($this->once())->method('getRequestVar')->will($this->returnValue('t'));
+        $this->abstractFilter->expects($this->once())->method('getRequestVar')->willReturn('t');
 
         $result = $this->model->apply();
         $this->assertInstanceOf(\Magento\Catalog\Model\Layer::class, $result);
@@ -249,7 +249,7 @@ class LayerTest extends \PHPUnit\Framework\TestCase
     public function testPrepareProductCollection()
     {
         $this->registry->expects($this->once())->method('registry')->with($this->equalTo('current_category'))
-            ->will($this->returnValue($this->category));
+            ->willReturn($this->category);
 
         $this->collectionFilter->expects($this->once())->method('filter')
             ->with($this->equalTo($this->collection), $this->equalTo($this->category));
@@ -268,7 +268,7 @@ class LayerTest extends \PHPUnit\Framework\TestCase
         $categoryId = 333;
         $currentCategoryId = 334;
 
-        $this->category->expects($this->any())->method('getId')->will($this->returnValue($categoryId));
+        $this->category->expects($this->any())->method('getId')->willReturn($categoryId);
         $this->categoryRepository->expects($this->once())->method('get')->with($categoryId)
             ->willReturn($this->currentCategory);
 
@@ -284,7 +284,7 @@ class LayerTest extends \PHPUnit\Framework\TestCase
     {
         $categoryId = 333;
 
-        $this->category->expects($this->any())->method('getId')->will($this->returnValue($categoryId));
+        $this->category->expects($this->any())->method('getId')->willReturn($categoryId);
 
         $this->categoryRepository->expects($this->once())->method('get')->with($categoryId)
             ->willReturn($this->category);
@@ -325,7 +325,7 @@ class LayerTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->expectExceptionMessage('Please correct the category.');
 
-        $this->category->expects($this->once())->method('getId')->will($this->returnValue(null));
+        $this->category->expects($this->once())->method('getId')->willReturn(null);
 
         $this->model->setCurrentCategory($this->category);
     }
@@ -351,7 +351,7 @@ class LayerTest extends \PHPUnit\Framework\TestCase
         $this->categoryRepository->expects($this->once())->method('get')->with($rootCategoryId)
             ->willReturn($this->currentCategory);
         $this->store->expects($this->any())->method('getRootCategoryId')
-            ->will($this->returnValue($rootCategoryId));
+            ->willReturn($rootCategoryId);
 
         $this->assertEquals($this->currentCategory, $this->model->getCurrentCategory());
         $this->assertEquals($this->currentCategory, $this->model->getData('current_category'));

@@ -20,7 +20,7 @@ class ShellTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Framework\App\Shell */
     private $model;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()

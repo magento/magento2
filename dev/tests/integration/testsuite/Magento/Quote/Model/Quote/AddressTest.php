@@ -61,7 +61,7 @@ class AddressTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->_quote = Bootstrap::getObjectManager()->create(
             Quote::class
@@ -262,7 +262,7 @@ class AddressTest extends TestCase
         $this->_quote->setOrigData('customer_id', null);
         $shippingAddress = $this->_quote->getShippingAddress();
         $shippingAddress->beforeSave();
-        $this->assertEquals(false, $this->_quote->getShippingAddress()->getSameAsBilling());
+        $this->assertFalse($this->_quote->getShippingAddress()->getSameAsBilling());
     }
 
     /**

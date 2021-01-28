@@ -334,7 +334,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertContains(json_encode([]), $this->getResponse()->getBody());
         $items = $quote->getItems()->getItems();
-        $this->assertTrue(is_array($items), 'Quote doesn\'t have any items');
+        $this->assertIsArray($items, 'Quote doesn\'t have any items');
         $this->assertCount(1, $items, 'Expected quote items not equal to 1');
         $item = reset($items);
         $this->assertEquals(1, $item->getProductId(), 'Quote has more than one product');

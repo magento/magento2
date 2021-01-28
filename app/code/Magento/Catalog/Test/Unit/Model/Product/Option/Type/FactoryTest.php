@@ -40,8 +40,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             $className,
             []
-        )->will(
-            $this->returnValue($filterMock)
+        )->willReturn(
+            $filterMock
         );
 
         $this->assertEquals($filterMock, $this->_factory->create($className));
@@ -60,8 +60,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             $className,
             $arguments
-        )->will(
-            $this->returnValue($filterMock)
+        )->willReturn(
+            $filterMock
         );
 
         $this->assertEquals($filterMock, $this->_factory->create($className, $arguments));
@@ -77,7 +77,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $className = 'WrongClass';
 
         $filterMock = $this->getMockBuilder($className)->disableOriginalConstructor()->getMock();
-        $this->_objectManagerMock->expects($this->once())->method('create')->will($this->returnValue($filterMock));
+        $this->_objectManagerMock->expects($this->once())->method('create')->willReturn($filterMock);
 
         $this->_factory->create($className);
     }

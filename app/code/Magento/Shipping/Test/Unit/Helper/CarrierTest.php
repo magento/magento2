@@ -47,8 +47,8 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         )->with(
             'carriers',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        )->will(
-            $this->returnValue($carriers)
+        )->willReturn(
+            $carriers
         );
         $this->assertEquals($result, $this->helper->getOnlineCarrierCodes());
     }
@@ -82,8 +82,8 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         )->with(
             sprintf('carriers/%s/%s', $carrierCode, $configPath),
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        )->will(
-            $this->returnValue($configValue)
+        )->willReturn(
+            $configValue
         );
         $this->assertEquals($configValue, $this->helper->getCarrierConfigValue($carrierCode, $configPath));
     }
@@ -97,8 +97,8 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         )->with(
             'general/country/eu_countries',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        )->will(
-            $this->returnValue("GB")
+        )->willReturn(
+            "GB"
         );
 
         $this->assertTrue($this->helper->isCountryInEU("GB"));

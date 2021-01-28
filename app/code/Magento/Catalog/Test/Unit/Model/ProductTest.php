@@ -252,13 +252,13 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
         $this->appStateMock->expects($this->any())
             ->method('getAreaCode')
-            ->will($this->returnValue(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE));
+            ->willReturn(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
 
         $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $actionValidatorMock = $this->createMock(
             \Magento\Framework\Model\ActionValidator\RemoveAction::class
         );
-        $actionValidatorMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
+        $actionValidatorMock->expects($this->any())->method('isAllowed')->willReturn(true);
         $cacheInterfaceMock = $this->createMock(\Magento\Framework\App\CacheInterface::class);
 
         $contextMock = $this->createPartialMock(
@@ -268,16 +268,16 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             '',
             false
         );
-        $contextMock->expects($this->any())->method('getAppState')->will($this->returnValue($this->appStateMock));
+        $contextMock->expects($this->any())->method('getAppState')->willReturn($this->appStateMock);
         $contextMock->expects($this->any())
             ->method('getEventDispatcher')
-            ->will($this->returnValue($this->eventManagerMock));
+            ->willReturn($this->eventManagerMock);
         $contextMock->expects($this->any())
             ->method('getCacheManager')
-            ->will($this->returnValue($cacheInterfaceMock));
+            ->willReturn($cacheInterfaceMock);
         $contextMock->expects($this->any())
             ->method('getActionValidator')
-            ->will($this->returnValue($actionValidatorMock));
+            ->willReturn($actionValidatorMock);
 
         $this->optionInstanceMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option::class)
             ->setMethods(['setProduct', 'saveOptions', '__wakeup', '__sleep'])
@@ -314,10 +314,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->storeManager->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->store));
+            ->willReturn($this->store);
         $this->storeManager->expects($this->any())
             ->method('getWebsite')
-            ->will($this->returnValue($this->website));
+            ->willReturn($this->website);
         $this->indexerRegistryMock = $this->createPartialMock(
             \Magento\Framework\Indexer\IndexerRegistry::class,
             ['get']
@@ -431,16 +431,16 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getSetAttributes'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->productTypeInstanceMock->expects($this->any())->method('factory')->will(
-            $this->returnValue($productType)
+        $this->productTypeInstanceMock->expects($this->any())->method('factory')->willReturn(
+            $productType
         );
         $attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->setMethods(['__wakeup', 'isInGroup'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $attribute->expects($this->any())->method('isInGroup')->will($this->returnValue(true));
-        $productType->expects($this->any())->method('getSetAttributes')->will(
-            $this->returnValue([$attribute])
+        $attribute->expects($this->any())->method('isInGroup')->willReturn(true);
+        $productType->expects($this->any())->method('getSetAttributes')->willReturn(
+            [$attribute]
         );
         $expect = [$attribute];
         $this->assertEquals($expect, $this->model->getAttributes(5));
@@ -452,7 +452,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $expectedStoreIds = [1, 2, 3];
         $websiteIds = ['test'];
         $this->model->setWebsiteIds($websiteIds);
-        $this->website->expects($this->once())->method('getStoreIds')->will($this->returnValue($expectedStoreIds));
+        $this->website->expects($this->once())->method('getStoreIds')->willReturn($expectedStoreIds);
         $this->assertEquals($expectedStoreIds, $this->model->getStoreIds());
     }
 
@@ -476,12 +476,12 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             )
         )
             ->method('isSingleStoreMode')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->website->expects(
             $this->once()
         )->method('getStoreIds')
-            ->will($this->returnValue($websiteIDs));
+            ->willReturn($websiteIDs);
 
         $this->assertEquals($websiteIDs, $this->model->getStoreIds());
     }
@@ -506,7 +506,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->model->setStoreId(3);
         $this->assertEquals(3, $this->model->getStoreId());
         $this->model->unsStoreId();
-        $this->store->expects($this->once())->method('getId')->will($this->returnValue(5));
+        $this->store->expects($this->once())->method('getId')->willReturn(5);
         $this->assertEquals(5, $this->model->getStoreId());
     }
 
@@ -515,7 +515,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $collection = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resource->expects($this->once())->method('getCategoryCollection')->will($this->returnValue($collection));
+        $this->resource->expects($this->once())->method('getCategoryCollection')->willReturn($collection);
         $this->assertInstanceOf(\Magento\Framework\Data\Collection::class, $this->model->getCategoryCollection());
     }
 
@@ -596,33 +596,33 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $collection = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resource->expects($this->once())->method('getCategoryCollection')->will($this->returnValue($collection));
+        $this->resource->expects($this->once())->method('getCategoryCollection')->willReturn($collection);
         $this->assertSame($this->model->getCategoryCollection(), $this->model->getCategoryCollection());
     }
 
     public function testGetCategory()
     {
         $this->model->setData('category_ids', [10]);
-        $this->category->expects($this->any())->method('getId')->will($this->returnValue(10));
-        $this->registry->expects($this->any())->method('registry')->will($this->returnValue($this->category));
-        $this->categoryRepository->expects($this->any())->method('get')->will($this->returnValue($this->category));
+        $this->category->expects($this->any())->method('getId')->willReturn(10);
+        $this->registry->expects($this->any())->method('registry')->willReturn($this->category);
+        $this->categoryRepository->expects($this->any())->method('get')->willReturn($this->category);
         $this->assertInstanceOf(\Magento\Catalog\Model\Category::class, $this->model->getCategory());
     }
 
     public function testGetCategoryId()
     {
         $this->model->setData('category_ids', [10]);
-        $this->category->expects($this->any())->method('getId')->will($this->returnValue(10));
+        $this->category->expects($this->any())->method('getId')->willReturn(10);
 
         $this->registry->expects($this->at(0))->method('registry');
-        $this->registry->expects($this->at(1))->method('registry')->will($this->returnValue($this->category));
+        $this->registry->expects($this->at(1))->method('registry')->willReturn($this->category);
         $this->assertFalse($this->model->getCategoryId());
         $this->assertEquals(10, $this->model->getCategoryId());
     }
 
     public function testGetIdBySku()
     {
-        $this->resource->expects($this->once())->method('getIdBySku')->will($this->returnValue(5));
+        $this->resource->expects($this->once())->method('getIdBySku')->willReturn(5);
         $this->assertEquals(5, $this->model->getIdBySku('someSku'));
     }
 
@@ -677,10 +677,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             $this->indexerRegistryMock->expects($this->exactly($productFlatCount))
                 ->method('get')
                 ->with(\Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID)
-                ->will($this->returnValue($this->categoryIndexerMock));
+                ->willReturn($this->categoryIndexerMock);
             $this->categoryIndexerMock->expects($this->any())
                 ->method('isScheduled')
-                ->will($this->returnValue($isScheduled));
+                ->willReturn($isScheduled);
             $this->categoryIndexerMock->expects($this->exactly($categoryIndexerCount))->method('reindexRow');
         }
         $this->productFlatProcessor->expects($this->exactly($productFlatCount))->method('reindexRow');
@@ -886,7 +886,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->productTypeInstanceMock->expects($this->once())
             ->method('getPriceInfo')
             ->with($this->equalTo($this->model))
-            ->will($this->returnValue($this->_priceInfoMock));
+            ->willReturn($this->_priceInfoMock);
         $this->assertEquals($this->model->getPriceInfo(), $this->_priceInfoMock);
     }
 
@@ -898,7 +898,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->productTypeInstanceMock->expects($this->exactly(2))
             ->method('getPriceInfo')
             ->with($this->equalTo($this->model))
-            ->will($this->returnValue($this->_priceInfoMock));
+            ->willReturn($this->_priceInfoMock);
 
         //initialize the priceInfo field
         $this->model->getPriceInfo();
@@ -917,7 +917,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->productTypeInstanceMock->expects($this->exactly(2))
             ->method('getPriceInfo')
             ->with($this->equalTo($this->model))
-            ->will($this->returnValue($this->_priceInfoMock));
+            ->willReturn($this->_priceInfoMock);
         $this->assertEquals($this->_priceInfoMock, $this->model->getPriceInfo());
         $this->assertEquals($this->_priceInfoMock, $this->model->reloadPriceInfo());
     }
@@ -1009,14 +1009,14 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     {
         $productTypeMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Type\Simple::class)
             ->disableOriginalConstructor()->setMethods(['beforeSave', 'save'])->getMock();
-        $productTypeMock->expects($this->once())->method('beforeSave')->will($this->returnSelf());
-        $productTypeMock->expects($this->once())->method('save')->will($this->returnSelf());
+        $productTypeMock->expects($this->once())->method('beforeSave')->willReturnSelf();
+        $productTypeMock->expects($this->once())->method('save')->willReturnSelf();
 
         $this->productTypeInstanceMock->expects($this->once())->method('factory')->with($this->model)
-            ->will($this->returnValue($productTypeMock));
+            ->willReturn($productTypeMock);
 
-        $this->model->getResource()->expects($this->any())->method('addCommitCallback')->will($this->returnSelf());
-        $this->model->getResource()->expects($this->any())->method('commit')->will($this->returnSelf());
+        $this->model->getResource()->expects($this->any())->method('addCommitCallback')->willReturnSelf();
+        $this->model->getResource()->expects($this->any())->method('commit')->willReturnSelf();
     }
 
     /**
@@ -1043,14 +1043,14 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->moduleManager->expects($this->once())
             ->method('isEnabled')
             ->with('Magento_CatalogInventory')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->dataObjectHelperMock->expects($this->once())
             ->method('populateWithArray')
             ->with($stockItemMock, $data['stock_item'], \Magento\CatalogInventory\Api\Data\StockItemInterface::class)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->stockItemFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($stockItemMock));
+            ->willReturn($stockItemMock);
         $stockItemMock->expects($this->once())->method('setProduct')->with($this->model);
 
         $this->assertEquals($this->model, $this->model->fromArray($data));
@@ -1061,7 +1061,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->indexerRegistryMock->expects($this->once())
             ->method('get')
             ->with(\Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID)
-            ->will($this->returnValue($this->categoryIndexerMock));
+            ->willReturn($this->categoryIndexerMock);
     }
 
     /**
@@ -1112,8 +1112,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getSetAttributes'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->productTypeInstanceMock->expects($this->any())->method('factory')->will(
-            $this->returnValue($productType)
+        $this->productTypeInstanceMock->expects($this->any())->method('factory')->willReturn(
+            $productType
         );
 
         $frontendMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend::class)
@@ -1138,8 +1138,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->willReturn($frontendMock);
         $attributeSmallImage->expects($this->any())->method('getAttributeCode')->willReturn('small_image');
 
-        $productType->expects($this->any())->method('getSetAttributes')->will(
-            $this->returnValue(['image' => $attributeImage, 'small_image' => $attributeSmallImage])
+        $productType->expects($this->any())->method('getSetAttributes')->willReturn(
+            ['image' => $attributeImage, 'small_image' => $attributeSmallImage]
         );
 
         return [$attributeImage, $attributeSmallImage];
@@ -1460,12 +1460,12 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $productTypePriceMock->expects($this->any())
             ->method('getFinalPrice')
             ->with($qty, $this->model)
-            ->will($this->returnValue($finalPrice));
+            ->willReturn($finalPrice);
 
         $this->productTypeInstanceMock->expects($this->any())
             ->method('priceFactory')
             ->with($this->model->getTypeId())
-            ->will($this->returnValue($productTypePriceMock));
+            ->willReturn($productTypePriceMock);
 
         $this->assertEquals($finalPrice, $this->model->getFinalPrice($qty));
         $this->model->setFinalPrice(9.99);
@@ -1500,8 +1500,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->productTypeInstanceMock->expects($this->exactly(2))->method('factory')->will(
-            $this->returnValue($productType)
+        $this->productTypeInstanceMock->expects($this->exactly(2))->method('factory')->willReturn(
+            $productType
         );
 
         $this->model->getTypeInstance();

@@ -116,10 +116,10 @@ class SelectTest extends AbstractFormTestCase
             ->getMockForAbstractClass();
         $option1->expects($this->any())
             ->method('getLabel')
-            ->will($this->returnValue('fourteen'));
+            ->willReturn('fourteen');
         $option1->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue('14'));
+            ->willReturn('14');
 
         $option2 = $this->getMockBuilder(\Magento\Customer\Api\Data\OptionInterface::class)
             ->disableOriginalConstructor()
@@ -127,10 +127,10 @@ class SelectTest extends AbstractFormTestCase
             ->getMockForAbstractClass();
         $option2->expects($this->any())
             ->method('getLabel')
-            ->will($this->returnValue('some string'));
+            ->willReturn('some string');
         $option2->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue('some key'));
+            ->willReturn('some key');
 
         $option3 = $this->getMockBuilder(\Magento\Customer\Api\Data\OptionInterface::class)
             ->disableOriginalConstructor()
@@ -138,23 +138,23 @@ class SelectTest extends AbstractFormTestCase
             ->getMockForAbstractClass();
         $option3->expects($this->any())
             ->method('getLabel')
-            ->will($this->returnValue('True'));
+            ->willReturn('True');
         $option3->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue('true'));
+            ->willReturn('true');
 
         $this->attributeMetadataMock->expects(
             $this->any()
         )->method(
             'getOptions'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 [
                     $option1,
                     $option2,
                     $option3,
                 ]
-            )
+            
         );
         $select = $this->getClass($value);
         $actual = $select->outputValue();

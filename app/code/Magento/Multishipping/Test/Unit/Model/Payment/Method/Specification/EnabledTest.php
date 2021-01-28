@@ -46,8 +46,8 @@ class EnabledTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getMethodsInfo'
-        )->will(
-            $this->returnValue($methodsInfo)
+        )->willReturn(
+            $methodsInfo
         );
 
         $configSpecification = $this->objectManager->getObject(

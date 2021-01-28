@@ -35,7 +35,7 @@ class AbstractSidebarTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetItemQty($itemQty, $qty, $expectedValue)
     {
-        $this->itemMock->expects($this->exactly($itemQty))->method('getQty')->will($this->returnValue($qty));
+        $this->itemMock->expects($this->exactly($itemQty))->method('getQty')->willReturn($qty);
         $this->assertEquals($expectedValue, $this->abstractSidebar->getItemQty($this->itemMock));
     }
 

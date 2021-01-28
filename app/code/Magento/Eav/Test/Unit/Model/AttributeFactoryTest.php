@@ -30,8 +30,8 @@ class AttributeFactoryTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'create'
-        )->will(
-            $this->returnCallback([$this, 'getModelInstance'])
+        )->willReturnCallback(
+            [$this, 'getModelInstance']
         );
 
         $this->_factory = new \Magento\Eav\Model\AttributeFactory($objectManagerMock);

@@ -125,8 +125,7 @@ class DeploymentsTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->zendClientMock);
 
-        $this->assertIsString(
-            $this->model->setDeployment($data['description'], $data['change'], $data['user'])
+        $this->assertIsString($this->model->setDeployment($data['description'], $data['change'], $data['user'])
         );
     }
 
@@ -187,8 +186,7 @@ class DeploymentsTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->zendClientMock);
 
-        $this->assertIsBool(
-            $this->model->setDeployment($data['description'], $data['change'], $data['user'])
+        $this->assertIsBool($this->model->setDeployment($data['description'], $data['change'], $data['user'])
         );
     }
 
@@ -244,8 +242,7 @@ class DeploymentsTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->zendClientMock);
 
-        $this->assertIsBool(
-            $this->model->setDeployment($data['description'], $data['change'], $data['user'])
+        $this->assertIsBool($this->model->setDeployment($data['description'], $data['change'], $data['user'])
         );
     }
 

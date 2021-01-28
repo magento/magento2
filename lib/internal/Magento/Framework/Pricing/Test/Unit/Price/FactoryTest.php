@@ -47,19 +47,20 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with($className, $argumentsResult)
-            ->will($this->returnValue($priceMock));
+            ->willReturn($priceMock);
 
         $this->assertEquals($priceMock, $this->model->create($saleableItem, $className, $quantity, $arguments));
     }
 
     /**
      * @codingStandardsIgnoreStart
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Magento\Framework\Pricing\PriceInfo\Base doesn't implement \Magento\Framework\Pricing\Price\PriceInterface
      * @codingStandardsIgnoreEnd
      */
     public function testCreateWithException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Magento\\Framework\\Pricing\\PriceInfo\\Base doesn\'t implement \\Magento\\Framework\\Pricing\\Price\\PriceInterface');
+
         $quantity = 2.2;
         $className = \Magento\Framework\Pricing\PriceInfo\Base::class;
         $priceMock = $this->getMockBuilder($className)->disableOriginalConstructor()->getMock();
@@ -71,7 +72,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with($className, $argumentsResult)
-            ->will($this->returnValue($priceMock));
+            ->willReturn($priceMock);
 
         $this->model->create($saleableItem, $className, $quantity, $arguments);
     }

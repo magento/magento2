@@ -38,8 +38,8 @@ class ColumnSetTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getChildBlocks'
-        )->will(
-            $this->returnValue([$this->_columnMock])
+        )->willReturn(
+            [$this->_columnMock]
         );
 
         $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

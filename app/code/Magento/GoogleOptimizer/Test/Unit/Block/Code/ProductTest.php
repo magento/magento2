@@ -36,15 +36,15 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     {
         $productTags = ['catalog_product_1'];
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $product->expects($this->once())->method('getIdentities')->will($this->returnValue($productTags));
+        $product->expects($this->once())->method('getIdentities')->willReturn($productTags);
         $this->registry->expects(
             $this->once()
         )->method(
             'registry'
         )->with(
             'current_product'
-        )->will(
-            $this->returnValue($product)
+        )->willReturn(
+            $product
         );
         $this->assertEquals($productTags, $this->block->getIdentities());
     }

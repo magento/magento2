@@ -343,7 +343,7 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->currentSessionMock);
         $this->currentSessionMock->expects($this->once())
             ->method('getStatus')
-            ->will($this->returnValue($sessionStatus));
+            ->willReturn($sessionStatus);
 
         $this->assertEquals($expectedResult, $this->model->getLogoutReasonMessage());
     }

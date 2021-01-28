@@ -65,14 +65,14 @@ class CollectionFilterTest extends \PHPUnit\Framework\TestCase
         $this->storeManagerMock->expects($this->once())->method('getStore');
 
         $collectionMock->expects($this->once())->method('addAttributeToSelect')
-            ->will($this->returnValue($collectionMock));
-        $collectionMock->expects($this->once())->method('setStore')->will($this->returnValue($collectionMock));
-        $collectionMock->expects($this->once())->method('addMinimalPrice')->will($this->returnValue($collectionMock));
-        $collectionMock->expects($this->once())->method('addFinalPrice')->will($this->returnValue($collectionMock));
-        $collectionMock->expects($this->once())->method('addTaxPercents')->will($this->returnValue($collectionMock));
-        $collectionMock->expects($this->once())->method('addStoreFilter')->will($this->returnValue($collectionMock));
-        $collectionMock->expects($this->once())->method('addUrlRewrite')->will($this->returnValue($collectionMock));
-        $collectionMock->expects($this->once())->method('setVisibility')->will($this->returnValue($collectionMock));
+            ->willReturn($collectionMock);
+        $collectionMock->expects($this->once())->method('setStore')->willReturn($collectionMock);
+        $collectionMock->expects($this->once())->method('addMinimalPrice')->willReturn($collectionMock);
+        $collectionMock->expects($this->once())->method('addFinalPrice')->willReturn($collectionMock);
+        $collectionMock->expects($this->once())->method('addTaxPercents')->willReturn($collectionMock);
+        $collectionMock->expects($this->once())->method('addStoreFilter')->willReturn($collectionMock);
+        $collectionMock->expects($this->once())->method('addUrlRewrite')->willReturn($collectionMock);
+        $collectionMock->expects($this->once())->method('setVisibility')->willReturn($collectionMock);
 
         $this->model->filter($collectionMock, $categoryMock);
     }

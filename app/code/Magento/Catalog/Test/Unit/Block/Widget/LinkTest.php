@@ -61,7 +61,7 @@ class LinkTest extends TestCase
         $context = $this->createMock(Context::class);
         $context->expects($this->any())
             ->method('getStoreManager')
-            ->will($this->returnValue($this->storeManager));
+            ->willReturn($this->storeManager);
 
         $this->entityResource =
             $this->createMock(AbstractResource::class);
@@ -131,10 +131,10 @@ class LinkTest extends TestCase
 
         $this->storeManager->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($store));
+            ->willReturn($store);
 
         $this->urlFinder->expects($this->once())->method('findOneByData')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->assertFalse($this->block->getHref());
     }
@@ -229,11 +229,11 @@ class LinkTest extends TestCase
                     UrlRewrite::STORE_ID => $this->storeManager->getStore($storeId)->getStoreId(),
                 ]
             )
-            ->will($this->returnValue($rewrite));
+            ->willReturn($rewrite);
 
         $rewrite->expects($this->once())
             ->method('getRequestPath')
-            ->will($this->returnValue($path));
+            ->willReturn($path);
 
         $this->assertEquals($expected, $this->block->getHref());
     }
@@ -259,9 +259,9 @@ class LinkTest extends TestCase
         $store = 1;
 
         $this->block->setData('id_path', $idPath);
-        $this->storeManager->expects($this->once())->method('getStore')->will($this->returnValue($store));
+        $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
         $this->entityResource->expects($this->once())->method('getAttributeRawValue')->with($id, 'name', $store)
-            ->will($this->returnValue($category));
+            ->willReturn($category);
         $this->assertEquals($category, $this->block->getLabel());
     }
 
@@ -292,11 +292,11 @@ class LinkTest extends TestCase
         $store = $this->createPartialMock(Store::class, ['getId', '__wakeUp']);
         $store->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($storeId));
+            ->willReturn($storeId);
 
         $this->storeManager->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($store));
+            ->willReturn($store);
 
         $this->urlFinder->expects($this->once())
             ->method('findOneByData')
@@ -308,7 +308,7 @@ class LinkTest extends TestCase
                     UrlRewrite::METADATA => ['category_id' => 'category_id'],
                 ]
             )
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->block->getHref();
     }

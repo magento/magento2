@@ -37,7 +37,7 @@ class AllmethodsTest extends \PHPUnit\Framework\TestCase
         $this->_paymentData->expects($this->once())
             ->method('getPaymentMethodList')
             ->with(true, true, true)
-            ->will($this->returnValue($expectedArray));
+            ->willReturn($expectedArray);
         $this->assertEquals($expectedArray, $this->_model->toOptionArray());
     }
 }

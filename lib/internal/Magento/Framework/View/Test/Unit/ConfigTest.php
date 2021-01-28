@@ -45,7 +45,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $themeMock = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['getFullPath']);
         $themeMock->expects($this->atLeastOnce())
             ->method('getFullPath')
-            ->will($this->returnValue($themeCode));
+            ->willReturn($themeCode);
         $params = [
             'themeModel' => $themeMock,
             'area'       => 'frontend'
@@ -53,7 +53,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->repositoryMock->expects($this->atLeastOnce())
             ->method('updateDesignParams')
             ->with($this->equalTo($params))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $configViewMock = $this->createMock(\Magento\Framework\Config\View::class);
         $this->viewConfigFactoryMock->expects($this->once())
             ->method('create')

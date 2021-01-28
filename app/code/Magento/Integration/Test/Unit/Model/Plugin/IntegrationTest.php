@@ -102,11 +102,11 @@ class IntegrationTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $integrationModelMock->expects($this->exactly(2))
             ->method('getId')
-            ->will($this->returnValue($integrationId));
+            ->willReturn($integrationId);
         $integrationModelMock->expects($this->once())
             ->method('getData')
             ->with('all_resources')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->integrationAuthServiceMock->expects($this->once())
             ->method('grantAllPermissions')
@@ -123,19 +123,19 @@ class IntegrationTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $integrationModelMock->expects($this->exactly(2))
             ->method('getId')
-            ->will($this->returnValue($integrationId));
+            ->willReturn($integrationId);
         $integrationModelMock->expects($this->at(2))
             ->method('getData')
             ->with('all_resources')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $integrationModelMock->expects($this->at(3))
             ->method('getData')
             ->with('resource')
-            ->will($this->returnValue(['testResource']));
+            ->willReturn(['testResource']);
         $integrationModelMock->expects($this->at(5))
             ->method('getData')
             ->with('resource')
-            ->will($this->returnValue(['testResource']));
+            ->willReturn(['testResource']);
 
         $this->integrationAuthServiceMock->expects($this->once())
             ->method('grantPermissions')
@@ -152,15 +152,15 @@ class IntegrationTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $integrationModelMock->expects($this->exactly(2))
             ->method('getId')
-            ->will($this->returnValue($integrationId));
+            ->willReturn($integrationId);
         $integrationModelMock->expects($this->at(2))
             ->method('getData')
             ->with('all_resources')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $integrationModelMock->expects($this->at(3))
             ->method('getData')
             ->with('resource')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->integrationAuthServiceMock->expects($this->once())
             ->method('grantPermissions')
@@ -177,11 +177,11 @@ class IntegrationTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $integrationModelMock->expects($this->exactly(2))
             ->method('getId')
-            ->will($this->returnValue($integrationId));
+            ->willReturn($integrationId);
         $integrationModelMock->expects($this->once())
             ->method('getData')
             ->with('all_resources')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->integrationAuthServiceMock->expects($this->once())
             ->method('grantAllPermissions')
@@ -198,7 +198,7 @@ class IntegrationTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $integrationModelMock->expects($this->exactly(2))
             ->method('getId')
-            ->will($this->returnValue($integrationId));
+            ->willReturn($integrationId);
         $integrationModelMock->expects($this->once())
             ->method('setData')
             ->with('resource', ['testResource']);
@@ -224,7 +224,7 @@ class IntegrationTest extends \PHPUnit\Framework\TestCase
         $this->aclRetrieverMock->expects($this->once())
             ->method('getAllowedResourcesByUser')
             ->with(\Magento\Authorization\Model\UserContextInterface::USER_TYPE_INTEGRATION, $integrationId)
-            ->will($this->returnValue(['testResource']));
+            ->willReturn(['testResource']);
 
         $this->integrationPlugin->afterGet($this->subjectMock, $integrationModelMock);
     }

@@ -129,8 +129,7 @@ class AbstractExtensibleModelTest extends \PHPUnit\Framework\TestCase
             $this->model->getCustomAttributes(),
             "Empty array is expected as a result of getCustomAttributes() when custom attributes are not set."
         );
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $this->model->getCustomAttribute('not_existing_custom_attribute'),
             "Null is expected as a result of getCustomAttribute(\$code) when custom attribute is not set."
         );
@@ -211,10 +210,11 @@ class AbstractExtensibleModelTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testRestrictedCustomAttributesGet()
     {
+        $this->expectException(\LogicException::class);
+
         $this->model->getData(\Magento\Framework\Api\CustomAttributesDataInterface::CUSTOM_ATTRIBUTES);
     }
 
@@ -229,11 +229,11 @@ class AbstractExtensibleModelTest extends \PHPUnit\Framework\TestCase
         $attributeMock->expects($this->never())
             ->method('setAttributeCode')
             ->with($attributeCode)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $attributeMock->expects($this->never())
             ->method('setValue')
             ->with($attributeValue)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->attributeValueFactoryMock->expects($this->never())->method('create')
             ->willReturn($attributeMock);
         $this->model->setData(

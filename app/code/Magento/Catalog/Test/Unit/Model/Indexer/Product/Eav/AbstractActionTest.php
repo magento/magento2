@@ -65,11 +65,11 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
 
         $this->_eavSourceFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($expectedIndexers['source']));
+            ->willReturn($expectedIndexers['source']);
 
         $this->_eavDecimalFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($expectedIndexers['decimal']));
+            ->willReturn($expectedIndexers['decimal']);
 
         $this->assertEquals($expectedIndexers, $this->_model->getIndexers());
     }
@@ -83,11 +83,11 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
 
         $this->_eavSourceFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue('return_value'));
+            ->willReturn('return_value');
 
         $this->_eavDecimalFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue('return_value'));
+            ->willReturn('return_value');
 
         $this->_model->getIndexer('unknown_type');
     }
@@ -100,11 +100,11 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
     {
         $this->_eavSourceFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue('source_return_value'));
+            ->willReturn('source_return_value');
 
         $this->_eavDecimalFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue('decimal_return_value'));
+            ->willReturn('decimal_return_value');
 
         $this->assertEquals('source_return_value', $this->_model->getIndexer('source'));
     }
@@ -131,11 +131,11 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
 
         $this->_eavSourceFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($eavSource));
+            ->willReturn($eavSource);
 
         $this->_eavDecimalFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($eavDecimal));
+            ->willReturn($eavDecimal);
 
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
@@ -199,11 +199,11 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
 
         $this->_eavSourceFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($eavSource));
+            ->willReturn($eavSource);
 
         $this->_eavDecimalFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($eavDecimal));
+            ->willReturn($eavDecimal);
 
         $this->scopeConfig->expects($this->once())
             ->method('getValue')

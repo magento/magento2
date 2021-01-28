@@ -92,11 +92,12 @@ class PlaceOrderTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_id" is missing
      */
     public function testPlaceOrderIfCartIdIsEmpty()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Required parameter "cart_id" is missing');
+
         $maskedQuoteId = '';
         $query = $this->getQuery($maskedQuoteId);
 
@@ -316,7 +317,7 @@ QUERY;
     /**
      * @inheritdoc
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->registry->unregister('isSecureArea');
         $this->registry->register('isSecureArea', true);

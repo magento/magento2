@@ -26,7 +26,7 @@ class CollectionFactoryTest extends \PHPUnit\Framework\TestCase
         $objectManagerMock =
             $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['create']);
         $collectionMock = $this->createMock(\Magento\Framework\Data\Form\Element\Collection::class);
-        $objectManagerMock->expects($this->once())->method('create')->will($this->returnValue($collectionMock));
+        $objectManagerMock->expects($this->once())->method('create')->willReturn($collectionMock);
         $this->_model = new \Magento\Framework\Data\Form\Element\CollectionFactory($objectManagerMock);
     }
 

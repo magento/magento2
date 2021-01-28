@@ -33,8 +33,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         )->with(
             "renderers/page_type",
             []
-        )->will(
-            $this->returnValue($configuration)
+        )->willReturn(
+            $configuration
         );
 
         $this->assertSame($configuration, $this->_model->getRenderersPerProduct('page_type'));
@@ -51,8 +51,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         )->with(
             'totals',
             []
-        )->will(
-            $this->returnValue($configuration)
+        )->willReturn(
+            $configuration
         );
 
         $this->assertSame($configuration, $this->_model->getTotals());

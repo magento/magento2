@@ -94,8 +94,8 @@ class DirectoryTest extends \PHPUnit\Framework\TestCase
             )
         )
             ->method('getParents')
-            ->will(
-                $this->returnValueMap($parents)
+            ->willReturnMap(
+                $parents
             );
 
         $this->logMock->expects($this->never())
@@ -133,8 +133,8 @@ class DirectoryTest extends \PHPUnit\Framework\TestCase
 
         $this->classReaderMock->expects($this->exactly(count($classes)))
             ->method('getParents')
-            ->will(
-                $this->returnValueMap($parents)
+            ->willReturnMap(
+                $parents
             );
 
         $this->logMock->expects($this->never())

@@ -121,10 +121,11 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     /**
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      * @throws \Zend_Db_Statement_Exception
-     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
      */
     public function testlockWithAlreadyAcquiredLockInSameSession()
     {
+        $this->expectException(\Magento\Framework\Exception\AlreadyExistsException::class);
+
         $this->deploymentConfig
             ->method('isDbAvailable')
             ->with()

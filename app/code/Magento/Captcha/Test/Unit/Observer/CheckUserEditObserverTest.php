@@ -108,8 +108,8 @@ class CheckUserEditObserverTest extends \PHPUnit\Framework\TestCase
             ->willReturn([\Magento\Captcha\Observer\CheckUserEditObserver::FORM_ID => $captchaValue]);
 
         $controller = $this->createMock(\Magento\Framework\App\Action\Action::class);
-        $controller->expects($this->any())->method('getRequest')->will($this->returnValue($request));
-        $controller->expects($this->any())->method('getResponse')->will($this->returnValue($response));
+        $controller->expects($this->any())->method('getRequest')->willReturn($request);
+        $controller->expects($this->any())->method('getResponse')->willReturn($response);
 
         $this->captchaStringResolverMock->expects($this->once())
             ->method('resolve')

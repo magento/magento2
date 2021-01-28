@@ -40,7 +40,7 @@ class SodiumChachaPatchTest extends \PHPUnit\Framework\TestCase
         $structureMock = $this->createMock(\Magento\Config\Model\Config\Structure\Proxy::class);
         $structureMock->expects($this->once())
             ->method('getFieldPathsByAttribute')
-            ->will($this->returnValue([$testPath]));
+            ->willReturn([$testPath]);
         $structureMock->expects($this->once())
             ->method('getFieldPaths')
             ->willReturn([]);

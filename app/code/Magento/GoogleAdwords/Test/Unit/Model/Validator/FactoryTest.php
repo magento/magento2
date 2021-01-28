@@ -92,16 +92,16 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
                     ],
                 ]
             ]
-        )->will(
-            $this->returnValue($this->_vbMock)
+        )->willReturn(
+            $this->_vbMock
         );
 
         $this->_vbMock->expects(
             $this->once()
         )->method(
             'createValidator'
-        )->will(
-            $this->returnValue($this->_validatorMock)
+        )->willReturn(
+            $this->_validatorMock
         );
 
         $this->assertEquals($this->_validatorMock, $this->_factory->createColorValidator($currentColor));
@@ -138,16 +138,16 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
                     ],
                 ]
             ]
-        )->will(
-            $this->returnValue($this->_vbMock)
+        )->willReturn(
+            $this->_vbMock
         );
 
         $this->_vbMock->expects(
             $this->once()
         )->method(
             'createValidator'
-        )->will(
-            $this->returnValue($this->_validatorMock)
+        )->willReturn(
+            $this->_validatorMock
         );
 
         $this->assertEquals($this->_validatorMock, $this->_factory->createConversionIdValidator($conversionId));

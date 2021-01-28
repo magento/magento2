@@ -69,7 +69,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testConstructorWithCache()
     {
-        $this->cache->expects($this->once())->method('test')->with($this->cacheId)->will($this->returnValue(true));
+        $this->cache->expects($this->once())->method('test')->with($this->cacheId)->willReturn(true);
         $this->cache->expects($this->once())
             ->method('load')
             ->with($this->cacheId);
@@ -91,26 +91,26 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testConstructorWithoutCache()
     {
-        $this->cache->expects($this->once())->method('test')->with($this->cacheId)->will($this->returnValue(false));
-        $this->cache->expects($this->once())->method('load')->with($this->cacheId)->will($this->returnValue(false));
+        $this->cache->expects($this->once())->method('test')->with($this->cacheId)->willReturn(false);
+        $this->cache->expects($this->once())->method('load')->with($this->cacheId)->willReturn(false);
 
-        $this->reader->expects($this->once())->method('read')->will($this->returnValue($this->views));
+        $this->reader->expects($this->once())->method('read')->willReturn($this->views);
 
         $stateExistent = $this->getMockBuilder(\Magento\Framework\Mview\View\StateInterface::class)
             ->setMethods(['getViewId', '__wakeup', 'delete'])
             ->getMockForAbstractClass();
-        $stateExistent->expects($this->once())->method('getViewId')->will($this->returnValue('view1'));
+        $stateExistent->expects($this->once())->method('getViewId')->willReturn('view1');
         $stateExistent->expects($this->never())->method('delete');
 
         $stateNonexistent = $this->getMockBuilder(\Magento\Framework\Mview\View\StateInterface::class)
             ->setMethods(['getViewId', '__wakeup', 'delete'])
             ->getMockForAbstractClass();
-        $stateNonexistent->expects($this->once())->method('getViewId')->will($this->returnValue('view2'));
+        $stateNonexistent->expects($this->once())->method('getViewId')->willReturn('view2');
         $stateNonexistent->expects($this->once())->method('delete');
 
         $states = [$stateExistent, $stateNonexistent];
 
-        $this->stateCollection->expects($this->once())->method('getItems')->will($this->returnValue($states));
+        $this->stateCollection->expects($this->once())->method('getItems')->willReturn($states);
 
         $this->config = new \Magento\Framework\Mview\Config\Data(
             $this->reader,

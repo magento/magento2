@@ -65,8 +65,8 @@ class InfoTest extends \PHPUnit\Framework\TestCase
 
         // we set encrypted data
         $this->info->setData($keyCcEnc, $keyCcEnc);
-        $this->encryptorInterfaceMock->expects($this->once())->method('decrypt')->with($keyCcEnc)->will(
-            $this->returnValue($keyCc)
+        $this->encryptorInterfaceMock->expects($this->once())->method('decrypt')->with($keyCcEnc)->willReturn(
+            $keyCc
         );
         $this->assertEquals($keyCc, $this->info->getData($keyCc));
     }
@@ -158,8 +158,8 @@ class InfoTest extends \PHPUnit\Framework\TestCase
         $data = 'data';
         $encryptedData = 'd1a2t3a4';
 
-        $this->encryptorInterfaceMock->expects($this->once())->method('encrypt')->with($data)->will(
-            $this->returnValue($encryptedData)
+        $this->encryptorInterfaceMock->expects($this->once())->method('encrypt')->with($data)->willReturn(
+            $encryptedData
         );
         $this->assertEquals($encryptedData, $this->info->encrypt($data));
     }
@@ -169,8 +169,8 @@ class InfoTest extends \PHPUnit\Framework\TestCase
         $data = 'data';
         $encryptedData = 'd1a2t3a4';
 
-        $this->encryptorInterfaceMock->expects($this->once())->method('decrypt')->with($encryptedData)->will(
-            $this->returnValue($data)
+        $this->encryptorInterfaceMock->expects($this->once())->method('decrypt')->with($encryptedData)->willReturn(
+            $data
         );
         $this->assertEquals($data, $this->info->decrypt($encryptedData));
     }

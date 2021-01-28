@@ -43,7 +43,7 @@ class FormatTest extends \PHPUnit\Framework\TestCase
         ];
         $this->salesRuleCoupon->expects($this->once())
             ->method('getFormatsList')
-            ->will($this->returnValue([$formatTitle]));
+            ->willReturn([$formatTitle]);
 
         $this->assertEquals($expected, $this->model->toOptionArray());
     }

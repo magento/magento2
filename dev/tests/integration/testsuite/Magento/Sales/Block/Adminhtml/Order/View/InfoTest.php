@@ -91,7 +91,7 @@ class InfoTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             array_merge(['customer_group_id' => 0], $additionalOrderData)
         );
 
-        $registry->expects($this->any())->method('registry')->with('current_order')->will($this->returnValue($order));
+        $registry->expects($this->any())->method('registry')->with('current_order')->willReturn($order);
 
         return $registry;
     }

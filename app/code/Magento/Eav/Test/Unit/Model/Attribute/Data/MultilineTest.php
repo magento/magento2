@@ -56,10 +56,10 @@ class MultilineTest extends \PHPUnit\Framework\TestCase
         /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Eav\Model\Attribute $attributeMock */
         $attributeMock = $this->createMock(\Magento\Eav\Model\Attribute::class);
 
-        $requestMock->expects($this->once())->method('getParam')->will($this->returnValue($param));
+        $requestMock->expects($this->once())->method('getParam')->willReturn($param);
         $attributeMock->expects($this->once())
             ->method('getAttributeCode')
-            ->will($this->returnValue('attributeCode'));
+            ->willReturn('attributeCode');
 
         $this->model->setAttribute($attributeMock);
         $this->assertEquals($expectedResult, $this->model->extractValue($requestMock));
@@ -95,7 +95,7 @@ class MultilineTest extends \PHPUnit\Framework\TestCase
         $entityMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
         $entityMock->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue("value1\nvalue2"));
+            ->willReturn("value1\nvalue2");
 
         /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Eav\Model\Attribute $attributeMock */
         $attributeMock = $this->createMock(\Magento\Eav\Model\Attribute::class);
@@ -146,21 +146,21 @@ class MultilineTest extends \PHPUnit\Framework\TestCase
         $entityMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
         $entityMock->expects($this->any())
             ->method('getDataUsingMethod')
-            ->will($this->returnValue("value1\nvalue2"));
+            ->willReturn("value1\nvalue2");
 
         /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Eav\Model\Attribute $attributeMock */
         $attributeMock = $this->createMock(\Magento\Eav\Model\Attribute::class);
-        $attributeMock->expects($this->any())->method('getMultilineCount')->will($this->returnValue(2));
-        $attributeMock->expects($this->any())->method('getValidateRules')->will($this->returnValue($rules));
+        $attributeMock->expects($this->any())->method('getMultilineCount')->willReturn(2);
+        $attributeMock->expects($this->any())->method('getValidateRules')->willReturn($rules);
         $attributeMock->expects($this->any())
             ->method('getStoreLabel')
-            ->will($this->returnValue('Label'));
+            ->willReturn('Label');
 
         $attributeMock->expects($this->any())
             ->method('getIsRequired')
-            ->will($this->returnValue($isAttributeRequired));
+            ->willReturn($isAttributeRequired);
 
-        $this->stringMock->expects($this->any())->method('strlen')->will($this->returnValue(5));
+        $this->stringMock->expects($this->any())->method('strlen')->willReturn(5);
 
         $this->model->setEntity($entityMock);
         $this->model->setAttribute($attributeMock);

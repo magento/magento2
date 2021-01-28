@@ -80,7 +80,7 @@ class RulesTest extends \PHPUnit\Framework\TestCase
 
         $this->contextMock->expects($this->once())
             ->method('getResources')
-            ->will($this->returnValue($this->resourceConnectionMock));
+            ->willReturn($this->resourceConnectionMock);
 
         $this->connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
@@ -90,12 +90,12 @@ class RulesTest extends \PHPUnit\Framework\TestCase
         $this->resourceConnectionMock->expects($this->once())
             ->method('getConnection')
             ->with('connection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
 
         $this->resourceConnectionMock->expects($this->any())
             ->method('getTableName')
             ->with('authorization_rule', 'connection')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->aclBuilderMock = $this->getMockBuilder(\Magento\Framework\Acl\Builder::class)
             ->disableOriginalConstructor()
@@ -119,7 +119,7 @@ class RulesTest extends \PHPUnit\Framework\TestCase
 
         $this->aclBuilderMock->expects($this->any())
             ->method('getConfigCache')
-            ->will($this->returnValue($this->aclDataCacheMock));
+            ->willReturn($this->aclDataCacheMock);
 
         $this->ruleMock = $this->getMockBuilder(\Magento\Authorization\Model\Rules::class)
             ->disableOriginalConstructor()
@@ -128,7 +128,7 @@ class RulesTest extends \PHPUnit\Framework\TestCase
 
         $this->ruleMock->expects($this->any())
             ->method('getRoleId')
-            ->will($this->returnValue(self::TEST_ROLE_ID));
+            ->willReturn(self::TEST_ROLE_ID);
 
         $this->model = new \Magento\Authorization\Model\ResourceModel\Rules(
             $this->contextMock,
@@ -173,7 +173,7 @@ class RulesTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['render'])
             ->getMock();
 
-        $exceptionPhrase->expects($this->any())->method('render')->will($this->returnValue('TestException'));
+        $exceptionPhrase->expects($this->any())->method('render')->willReturn('TestException');
 
         $exception = new \Magento\Framework\Exception\LocalizedException($exceptionPhrase);
 

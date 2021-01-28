@@ -44,11 +44,12 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Activation policy is expected to be a callable.
      */
     public function testConstructorException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Activation policy is expected to be a callable.');
+
         new \Magento\TestFramework\Bootstrap\Memory($this->_memoryLimit, 'non_existing_callable');
     }
 
@@ -60,8 +61,8 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'printStats'
-        )->will(
-            $this->returnValue('Dummy Statistics')
+        )->willReturn(
+            'Dummy Statistics'
         );
         $this->_object->displayStats();
     }

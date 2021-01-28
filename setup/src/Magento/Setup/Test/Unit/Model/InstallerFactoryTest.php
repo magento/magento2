@@ -51,7 +51,7 @@ class InstallerFactoryTest extends \PHPUnit\Framework\TestCase
             ServiceLocatorInterface::class
         );
         $serviceLocatorMock->expects($this->any())->method('get')
-            ->will($this->returnValueMap($this->getReturnValueMap()));
+            ->willReturnMap($this->getReturnValueMap());
 
         /** @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject $log */
         $log = $this->getMockForAbstractClass(LoggerInterface::class);
@@ -60,7 +60,7 @@ class InstallerFactoryTest extends \PHPUnit\Framework\TestCase
         $resourceFactoryMock
             ->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->createMock(\Magento\Framework\App\ResourceConnection::class)));
+            ->willReturn($this->createMock(\Magento\Framework\App\ResourceConnection::class));
         $installerFactory = new InstallerFactory($serviceLocatorMock, $resourceFactoryMock);
         $installer = $installerFactory->create($log);
         $this->assertInstanceOf(\Magento\Setup\Model\Installer::class, $installer);

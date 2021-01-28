@@ -52,18 +52,18 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     public function testGetTotalModels()
     {
         $total = $this->getMockForAbstractClass(\Magento\Sales\Model\Order\Total\AbstractTotal::class);
-        $this->salesConfig->expects($this->once())->method('getGroupTotals')->will(
-            $this->returnValue([
+        $this->salesConfig->expects($this->once())->method('getGroupTotals')->willReturn(
+            [
                 'some_code' =>
                     ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 1903],
                 'other_code' =>
                     ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 1723],
-            ])
+            ]
         );
 
         $this->orderTotalFactory->expects($this->any())->method('create')
             ->with(\Magento\Sales\Model\Order\Total\AbstractTotal::class)
-            ->will($this->returnValue($total));
+            ->willReturn($total);
 
         $sortedCodes = ['other_code', 'some_code'];
         $serializedCodes = '["other_code", "some_code"]';
@@ -87,18 +87,18 @@ class BaseTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->expectExceptionMessage('The total model should be extended from \\Magento\\Sales\\Model\\Order\\Total\\AbstractTotal.');
 
-        $this->salesConfig->expects($this->once())->method('getGroupTotals')->will(
-            $this->returnValue([
+        $this->salesConfig->expects($this->once())->method('getGroupTotals')->willReturn(
+            [
                 'some_code' =>
                     ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 1903],
                 'other_code' =>
                     ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 1723],
-            ])
+            ]
         );
 
         $this->orderTotalFactory->expects($this->any())->method('create')
             ->with(\Magento\Sales\Model\Order\Total\AbstractTotal::class)
-            ->will($this->returnValue($this));
+            ->willReturn($this);
 
         $this->object->getTotalModels();
     }
@@ -106,23 +106,23 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     public function testGetTotalUnserializeCachedCollectorCodes()
     {
         $total = $this->getMockForAbstractClass(\Magento\Sales\Model\Order\Total\AbstractTotal::class);
-        $this->salesConfig->expects($this->any())->method('getGroupTotals')->will(
-            $this->returnValue([
+        $this->salesConfig->expects($this->any())->method('getGroupTotals')->willReturn(
+            [
                 'some_code' =>
                     ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 1903],
                 'other_code' =>
                     ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 1723],
-            ])
+            ]
         );
 
         $this->orderTotalFactory->expects($this->any())->method('create')
             ->with(\Magento\Sales\Model\Order\Total\AbstractTotal::class)
-            ->will($this->returnValue($total));
+            ->willReturn($total);
 
         $sortedCodes = ['other_code', 'some_code'];
         $serializedCodes = '["other_code", "some_code"]';
         $this->configCacheType->expects($this->once())->method('load')->with('sorted_collectors')
-            ->will($this->returnValue($serializedCodes));
+            ->willReturn($serializedCodes);
         $this->serializer->expects($this->once())
             ->method('unserialize')
             ->with($serializedCodes)
@@ -138,20 +138,20 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     public function testGetTotalModelsSortingSubroutine()
     {
         $total = $this->getMockForAbstractClass(\Magento\Sales\Model\Order\Total\AbstractTotal::class);
-        $this->salesConfig->expects($this->once())->method('getGroupTotals')->will(
-            $this->returnValue([
+        $this->salesConfig->expects($this->once())->method('getGroupTotals')->willReturn(
+            [
                 'some_code' =>
                     ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 1903],
                 'other_code' =>
                     ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 1112],
                 'big_order' =>
                     ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 3000],
-            ])
+            ]
         );
 
         $this->orderTotalFactory->expects($this->any())->method('create')
             ->with(\Magento\Sales\Model\Order\Total\AbstractTotal::class)
-            ->will($this->returnValue($total));
+            ->willReturn($total);
 
         $this->assertSame(
             [

@@ -30,10 +30,13 @@ class BindingInstallerTest extends \PHPUnit\Framework\TestCase
         $model->install($channel, $binding, 'magento');
     }
 
+    /**
+     */
     public function testInstallInvalidType()
     {
-        $this->expectException('\InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Installer type [test] is not configured');
+
         $installerOne = $this->getMockForAbstractClass(BindingInstallerInterface::class);
         $installerTwo = $this->getMockForAbstractClass(BindingInstallerInterface::class);
         $model = new BindingInstaller(

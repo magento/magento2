@@ -208,7 +208,7 @@ class AbstractConditionTest extends \PHPUnit\Framework\TestCase
         $this->_condition
             ->expects($this->any())
             ->method('getInputType')
-            ->will($this->returnValue($inputType));
+            ->willReturn($inputType);
 
         $this->assertEquals(
             $expectedResult,

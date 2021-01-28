@@ -143,22 +143,22 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $contextMock->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
         $contextMock->expects($this->any())
             ->method('getResponse')
-            ->will($this->returnValue($this->responseMock));
+            ->willReturn($this->responseMock);
         $contextMock->expects($this->any())
             ->method('getTitle')
-            ->will($this->returnValue($this->titleMock));
+            ->willReturn($this->titleMock);
         $contextMock->expects($this->any())
             ->method('getView')
-            ->will($this->returnValue($this->viewMock));
+            ->willReturn($this->viewMock);
         $contextMock->expects($this->any())
             ->method('getActionFlag')
-            ->will($this->returnValue($this->actionFlagMock));
+            ->willReturn($this->actionFlagMock);
         $contextMock->expects($this->any())
             ->method('getSession')
-            ->will($this->returnValue($this->sessionMock));
+            ->willReturn($this->sessionMock);
         $this->viewMock->expects($this->any())
             ->method('getPage')
             ->willReturn($this->resultPageMock);
@@ -205,7 +205,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->at(0))
             ->method('getParam')
             ->with('invoice_id')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
         $this->requestMock->expects($this->at(1))
             ->method('getParam')
             ->with('come_from')
@@ -217,11 +217,11 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $menuBlockMock->expects($this->any())
             ->method('getMenuModel')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $menuBlockMock->expects($this->any())
             ->method('getParentItems')
             ->with('Magento_Sales::sales_order')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $invoiceViewBlockMock = $this->getMockBuilder(\Magento\Sales\Block\Adminhtml\Order\Invoice\View::class)
             ->disableOriginalConstructor()
@@ -235,11 +235,11 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $layoutMock->expects($this->at(0))
             ->method('getBlock')
             ->with('sales_invoice_view')
-            ->will($this->returnValue($invoiceViewBlockMock));
+            ->willReturn($invoiceViewBlockMock);
 
         $this->resultPageMock->expects($this->any())
             ->method('getLayout')
-            ->will($this->returnValue($layoutMock));
+            ->willReturn($layoutMock);
 
         $invoiceMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
             ->disableOriginalConstructor()
@@ -254,7 +254,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
 
         $this->resultPageFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->resultPageMock));
+            ->willReturn($this->resultPageMock);
 
         $this->assertSame($this->resultPageMock, $this->controller->execute());
     }
@@ -266,7 +266,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('invoice_id')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
 
         $this->invoiceRepository->expects($this->once())
             ->method('get')
@@ -276,11 +276,11 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $resultForward->expects($this->once())->method('forward')->with(('noroute'))->will($this->returnSelf());
+        $resultForward->expects($this->once())->method('forward')->with(('noroute'))->willReturnSelf();
 
         $this->resultForwardFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($resultForward));
+            ->willReturn($resultForward);
 
         $this->assertSame($resultForward, $this->controller->execute());
     }

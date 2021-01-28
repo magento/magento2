@@ -45,7 +45,7 @@ class CompilerPreparationTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->serviceManagerMock = $this->getMockBuilder(ServiceManager::class)
             ->disableOriginalConstructor()

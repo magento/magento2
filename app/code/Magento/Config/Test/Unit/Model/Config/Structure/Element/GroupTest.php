@@ -80,8 +80,8 @@ class GroupTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             'clone_model_name'
-        )->will(
-            $this->returnValue($cloneModel)
+        )->willReturn(
+            $cloneModel
         );
         $this->_model->setData(['clone_model' => 'clone_model_name'], 'scope');
         $this->assertEquals($cloneModel, $this->_model->getCloneModel());
@@ -145,8 +145,8 @@ class GroupTest extends \PHPUnit\Framework\TestCase
         )->with(
             $fields,
             'test_scope'
-        )->will(
-            $this->returnArgument(0)
+        )->willReturnArgument(
+            0
         );
 
         $this->assertEquals($fields, $this->_model->getDependencies('test_scope'));

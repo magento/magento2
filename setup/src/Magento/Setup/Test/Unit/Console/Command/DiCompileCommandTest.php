@@ -48,7 +48,7 @@ class DiCompileCommandTest extends \PHPUnit\Framework\TestCase
     /** @var \Symfony\Component\Console\Formatter\OutputFormatterInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $outputFormatterMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $objectManagerProviderMock = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);

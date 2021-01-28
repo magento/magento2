@@ -27,7 +27,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ['getAttributeCode', '__wakeup']
         );
 
-        $abstractAttributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('code'));
+        $abstractAttributeMock->expects($this->any())->method('getAttributeCode')->willReturn('code');
 
         $this->_model->setAttribute($abstractAttributeMock);
 

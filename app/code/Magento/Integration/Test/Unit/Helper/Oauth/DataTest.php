@@ -30,19 +30,19 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testIsCleanupProbabilityZero()
     {
-        $this->_scopeConfigMock->expects($this->once())->method('getValue')->will($this->returnValue(0));
+        $this->_scopeConfigMock->expects($this->once())->method('getValue')->willReturn(0);
         $this->assertFalse($this->_dataHelper->isCleanupProbability());
     }
 
     public function testIsCleanupProbabilityRandomOne()
     {
-        $this->_scopeConfigMock->expects($this->once())->method('getValue')->will($this->returnValue(1));
+        $this->_scopeConfigMock->expects($this->once())->method('getValue')->willReturn(1);
         $this->assertTrue($this->_dataHelper->isCleanupProbability());
     }
 
     public function testGetCleanupExpirationPeriodZero()
     {
-        $this->_scopeConfigMock->expects($this->once())->method('getValue')->will($this->returnValue(0));
+        $this->_scopeConfigMock->expects($this->once())->method('getValue')->willReturn(0);
         $this->assertEquals(
             \Magento\Integration\Helper\Oauth\Data::CLEANUP_EXPIRATION_PERIOD_DEFAULT,
             $this->_dataHelper->getCleanupExpirationPeriod()
@@ -51,25 +51,25 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCleanupExpirationPeriodNonZero()
     {
-        $this->_scopeConfigMock->expects($this->once())->method('getValue')->will($this->returnValue(10));
+        $this->_scopeConfigMock->expects($this->once())->method('getValue')->willReturn(10);
         $this->assertEquals(10, $this->_dataHelper->getCleanupExpirationPeriod());
     }
 
     public function testConsumerPostMaxRedirectsZero()
     {
-        $this->_scopeConfigMock->expects($this->once())->method('getValue')->will($this->returnValue(0));
+        $this->_scopeConfigMock->expects($this->once())->method('getValue')->willReturn(0);
         $this->assertEquals(0, $this->_dataHelper->getConsumerPostMaxRedirects());
     }
 
     public function testConsumerPostMaxRedirectsNonZero()
     {
-        $this->_scopeConfigMock->expects($this->once())->method('getValue')->will($this->returnValue(10));
+        $this->_scopeConfigMock->expects($this->once())->method('getValue')->willReturn(10);
         $this->assertEquals(10, $this->_dataHelper->getConsumerPostMaxRedirects());
     }
 
     public function testGetConsumerPostTimeoutZero()
     {
-        $this->_scopeConfigMock->expects($this->once())->method('getValue')->will($this->returnValue(0));
+        $this->_scopeConfigMock->expects($this->once())->method('getValue')->willReturn(0);
         $this->assertEquals(
             \Magento\Integration\Helper\Oauth\Data::CONSUMER_POST_TIMEOUT_DEFAULT,
             $this->_dataHelper->getConsumerPostTimeout()
@@ -78,7 +78,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testGetConsumerPostTimeoutNonZero()
     {
-        $this->_scopeConfigMock->expects($this->once())->method('getValue')->will($this->returnValue(10));
+        $this->_scopeConfigMock->expects($this->once())->method('getValue')->willReturn(10);
         $this->assertEquals(10, $this->_dataHelper->getConsumerPostTimeout());
     }
 
@@ -88,7 +88,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getValue')
             ->with('oauth/access_token_lifetime/customer')
-            ->will($this->returnValue(10));
+            ->willReturn(10);
         $this->assertEquals(10, $this->_dataHelper->getCustomerTokenLifetime());
     }
 
@@ -98,7 +98,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getValue')
             ->with('oauth/access_token_lifetime/customer')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->assertEquals(0, $this->_dataHelper->getCustomerTokenLifetime());
     }
 
@@ -108,7 +108,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getValue')
             ->with('oauth/access_token_lifetime/admin')
-            ->will($this->returnValue(10));
+            ->willReturn(10);
         $this->assertEquals(10, $this->_dataHelper->getAdminTokenLifetime());
     }
 
@@ -118,7 +118,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getValue')
             ->with('oauth/access_token_lifetime/admin')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->assertEquals(0, $this->_dataHelper->getAdminTokenLifetime());
     }
 }

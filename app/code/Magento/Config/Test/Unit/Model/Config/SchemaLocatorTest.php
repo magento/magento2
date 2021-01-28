@@ -28,8 +28,8 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
         )->with(
             'etc',
             'Magento_Config'
-        )->will(
-            $this->returnValue('schema_dir')
+        )->willReturn(
+            'schema_dir'
         );
         $this->_model = new \Magento\Config\Model\Config\SchemaLocator($this->_moduleReaderMock);
     }

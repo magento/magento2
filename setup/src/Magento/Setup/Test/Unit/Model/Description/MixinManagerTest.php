@@ -17,7 +17,7 @@ class MixinManagerTest extends \PHPUnit\Framework\TestCase
      */
     private $mixinFactoryMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->mixinFactoryMock = $this->createMock(\Magento\Setup\Model\Description\Mixin\MixinFactory::class);
         $this->mixinManager = new \Magento\Setup\Model\Description\MixinManager($this->mixinFactoryMock);

@@ -29,12 +29,12 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $item = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, ['getAddress', '__wakeup']);
-        $item->expects($this->once())->method('getAddress')->will($this->returnValue($addressMock));
+        $item->expects($this->once())->method('getAddress')->willReturn($addressMock);
 
         $this->_model->expects($this->once())
             ->method('_getRules')
             ->with($addressMock)
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->assertInstanceOf(
             \Magento\OfflineShipping\Model\SalesRule\Calculator::class,

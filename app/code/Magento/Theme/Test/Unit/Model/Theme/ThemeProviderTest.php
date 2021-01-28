@@ -178,7 +178,7 @@ class ThemeProviderTest extends \PHPUnit\Framework\TestCase
             ->method('toArray')
             ->willReturn($themeArray);
 
-        $this->themeFactory->expects($this->once())->method('create')->will($this->returnValue($this->theme));
+        $this->themeFactory->expects($this->once())->method('create')->willReturn($this->theme);
         $this->cache->expects($this->once())
             ->method('load')
             ->with('theme-by-id-' . self::THEME_ID)

@@ -59,7 +59,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->readDirFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
         $this->readDirFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->directory));
+            ->willReturn($this->directory);
 
         $this->model = new Collection(
             $this->entityFactory,
@@ -89,16 +89,16 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $themePackage = $this->createMock(\Magento\Framework\View\Design\Theme\ThemePackage::class);
         $themePackage->expects($this->any())
             ->method('getArea')
-            ->will($this->returnValue('frontend'));
+            ->willReturn('frontend');
         $themePackage->expects($this->any())
             ->method('getVendor')
-            ->will($this->returnValue('theme'));
+            ->willReturn('theme');
         $themePackage->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('code'));
+            ->willReturn('code');
         $this->themePackageList->expects($this->once())
             ->method('getThemes')
-            ->will($this->returnValue([$themePackage]));
+            ->willReturn([$themePackage]);
         $this->directory->expects($this->once())
             ->method('isExist')
             ->with($themeConfigFile)

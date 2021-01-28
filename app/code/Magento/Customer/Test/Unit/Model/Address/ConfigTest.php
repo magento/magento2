@@ -41,8 +41,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getStore'
-        )->will(
-            $this->returnValue($this->storeMock)
+        )->willReturn(
+            $this->storeMock
         );
 
         $this->addressHelperMock = $this->createMock(\Magento\Customer\Helper\Address::class);
@@ -53,13 +53,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'load'
         )->with(
             $cacheId
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
 
         $fixtureConfigData = require __DIR__ . '/Config/_files/formats_merged.php';
 
-        $readerMock->expects($this->once())->method('read')->will($this->returnValue($fixtureConfigData));
+        $readerMock->expects($this->once())->method('read')->willReturn($fixtureConfigData);
 
         $cacheMock->expects($this->once())
             ->method('save')
@@ -103,7 +103,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $this->storeMock->expects($this->once())->method('getId');
 
-        $this->scopeConfigMock->expects($this->any())->method('getValue')->will($this->returnValue('someValue'));
+        $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn('someValue');
 
         $rendererMock = $this->createMock(\Magento\Framework\DataObject::class);
 
@@ -111,8 +111,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getRenderer'
-        )->will(
-            $this->returnValue($rendererMock)
+        )->willReturn(
+            $rendererMock
         );
 
         $firstExpected = new \Magento\Framework\DataObject();

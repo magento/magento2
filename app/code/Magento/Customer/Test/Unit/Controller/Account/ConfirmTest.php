@@ -112,7 +112,7 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
         $urlFactoryMock = $this->createMock(\Magento\Framework\UrlFactory::class);
         $urlFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->urlMock));
+            ->willReturn($this->urlMock);
 
         $this->customerAccountManagementMock =
             $this->getMockForAbstractClass(\Magento\Customer\Api\AccountManagementInterface::class);
@@ -175,7 +175,7 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->redirectResultMock->expects($this->once())
             ->method('setPath')
@@ -192,16 +192,16 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->requestMock->expects($this->at(0))
             ->method('getParam')
             ->with($this->equalTo('id'), false)
-            ->will($this->returnValue($customerId));
+            ->willReturn($customerId);
         $this->requestMock->expects($this->at(1))
             ->method('getParam')
             ->with($this->equalTo('key'), false)
-            ->will($this->returnValue($key));
+            ->willReturn($key);
 
         $this->messageManagerMock->expects($this->once())
             ->method('addErrorMessage')
@@ -211,12 +211,12 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
         $this->urlMock->expects($this->once())
             ->method('getUrl')
             ->with($this->equalTo('*/*/index'), ['_secure' => true])
-            ->will($this->returnValue($testUrl));
+            ->willReturn($testUrl);
 
         $this->redirectMock->expects($this->once())
             ->method('error')
             ->with($this->equalTo($testUrl))
-            ->will($this->returnValue($testUrl));
+            ->willReturn($testUrl);
 
         $this->redirectResultMock->expects($this->once())
             ->method('setUrl')
@@ -273,29 +273,18 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
 
         $this->customerAccountManagementMock->expects($this->once())
             ->method('activate')
-            ->with($email, $key)
+            ->with($this->equalTo($email), $this->equalTo($key))
             ->willReturn($this->customerDataMock);
 
         $this->customerSessionMock->expects($this->any())
             ->method('setCustomerDataAsLoggedIn')
-            ->with($this->customerDataMock)
+            ->with($this->equalTo($this->customerDataMock))
             ->willReturnSelf();
 
-        $this->messageManagerMock
-            ->method('addSuccess')
-            ->with($successMessage)
+        $this->messageManagerMock->expects($this->any())
+            ->method('addSuccessMessage')
+            ->with($this->stringContains($successMessage))
             ->willReturnSelf();
-
-        $this->messageManagerMock
-            ->expects($this->never())
-            ->method('addException');
-
-        $this->urlMock
-            ->method('getUrl')
-            ->willReturnMap([
-                ['customer/address/edit', null, 'http://store.web/customer/address/edit'],
-                ['*/*/admin', ['_secure' => true], 'http://store.web/back']
-            ]);
 
         $this->addressHelperMock->expects($this->once())
             ->method('isVatValidationEnabled')
@@ -404,30 +393,18 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
 
         $this->customerAccountManagementMock->expects($this->once())
             ->method('activate')
-            ->with($email, $key)
+            ->with($this->equalTo($email), $this->equalTo($key))
             ->willReturn($this->customerDataMock);
 
         $this->customerSessionMock->expects($this->any())
             ->method('setCustomerDataAsLoggedIn')
-            ->with($this->customerDataMock)
+            ->with($this->equalTo($this->customerDataMock))
             ->willReturnSelf();
 
-        $this->messageManagerMock
-            ->method('addSuccess')
-            ->with($successMessage)
+        $this->messageManagerMock->expects($this->any())
+            ->method('addSuccessMessage')
+            ->with($this->stringContains($successMessage))
             ->willReturnSelf();
-
-        $this->messageManagerMock
-            ->expects($this->never())
-            ->method('addException');
-
-        $this->urlMock
-            ->method('getUrl')
-            ->willReturnMap([
-                ['customer/address/edit', null, 'http://store.web/customer/address/edit'],
-                ['*/*/admin', ['_secure' => true], 'http://store.web/back'],
-                ['*/*/index', ['_secure' => true], $successUrl]
-            ]);
 
         $this->storeMock->expects($this->any())
             ->method('getFrontendName')
@@ -436,9 +413,14 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
             ->method('getStore')
             ->willReturn($this->storeMock);
 
+        $this->urlMock->expects($this->any())
+            ->method('getUrl')
+            ->with($this->equalTo('*/*/index'), ['_secure' => true])
+            ->willReturn($successUrl);
+
         $this->redirectMock->expects($this->once())
             ->method('success')
-            ->with($resultUrl)
+            ->with($this->equalTo($resultUrl))
             ->willReturn($resultUrl);
 
         $this->scopeConfigMock->expects($this->any())

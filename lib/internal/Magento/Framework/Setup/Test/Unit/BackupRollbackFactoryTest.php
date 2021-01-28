@@ -27,10 +27,10 @@ class BackupRollbackFactoryTest extends \PHPUnit\Framework\TestCase
         );
         $objectManager->expects($this->exactly(2))
             ->method('create')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [\Magento\Framework\Setup\ConsoleLogger::class, ['output' => $output], $consoleLogger],
                 [\Magento\Framework\Setup\BackupRollback::class, ['log' => $consoleLogger], $factory],
-            ]));
+            ]);
         $model = new BackupRollbackFactory($objectManager);
         $this->assertInstanceOf(\Magento\Framework\Setup\BackupRollback::class, $model->create($output));
     }

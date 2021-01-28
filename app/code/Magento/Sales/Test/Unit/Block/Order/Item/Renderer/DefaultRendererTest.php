@@ -79,7 +79,7 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('item_unit_price')
-            ->will($this->returnValue($this->priceRenderBlock));
+            ->willReturn($this->priceRenderBlock);
 
         $this->priceRenderBlock->expects($this->once())
             ->method('setItem')
@@ -87,7 +87,7 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
 
         $this->priceRenderBlock->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue($html));
+            ->willReturn($html);
 
         $this->assertEquals($html, $this->block->getItemPriceHtml($this->itemMock));
     }
@@ -99,7 +99,7 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('item_row_total')
-            ->will($this->returnValue($this->priceRenderBlock));
+            ->willReturn($this->priceRenderBlock);
 
         $this->priceRenderBlock->expects($this->once())
             ->method('setItem')
@@ -107,7 +107,7 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
 
         $this->priceRenderBlock->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue($html));
+            ->willReturn($html);
 
         $this->assertEquals($html, $this->block->getItemRowTotalHtml($this->itemMock));
     }
@@ -119,7 +119,7 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('item_row_total_after_discount')
-            ->will($this->returnValue($this->priceRenderBlock));
+            ->willReturn($this->priceRenderBlock);
 
         $this->priceRenderBlock->expects($this->once())
             ->method('setItem')
@@ -127,7 +127,7 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
 
         $this->priceRenderBlock->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue($html));
+            ->willReturn($html);
 
         $this->assertEquals($html, $this->block->getItemRowTotalAfterDiscountHtml($this->itemMock));
     }
@@ -147,19 +147,19 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
             + $weeeTaxAppliedRowAmount;
         $this->itemMock->expects($this->once())
             ->method('getRowTotal')
-            ->will($this->returnValue($rowTotal));
+            ->willReturn($rowTotal);
         $this->itemMock->expects($this->once())
             ->method('getTaxAmount')
-            ->will($this->returnValue($taxAmount));
+            ->willReturn($taxAmount);
         $this->itemMock->expects($this->once())
             ->method('getDiscountTaxCompensationAmount')
-            ->will($this->returnValue($discountTaxCompensationAmount));
+            ->willReturn($discountTaxCompensationAmount);
         $this->itemMock->expects($this->once())
             ->method('getDiscountAmount')
-            ->will($this->returnValue($discountAmount));
+            ->willReturn($discountAmount);
         $this->itemMock->expects($this->once())
             ->method('getWeeeTaxAppliedRowAmount')
-            ->will($this->returnValue($weeeTaxAppliedRowAmount));
+            ->willReturn($weeeTaxAppliedRowAmount);
 
         $this->assertEquals($expectedResult, $this->block->getTotalAmount($this->itemMock));
     }

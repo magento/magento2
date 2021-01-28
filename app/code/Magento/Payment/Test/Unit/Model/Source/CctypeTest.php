@@ -73,8 +73,8 @@ class CctypeTest extends \PHPUnit\Framework\TestCase
 
     private function _preparePaymentConfig()
     {
-        $this->_paymentConfig->expects($this->once())->method('getCcTypes')->will(
-            $this->returnValue($this->_cctypesArray)
+        $this->_paymentConfig->expects($this->once())->method('getCcTypes')->willReturn(
+            $this->_cctypesArray
         );
     }
 }

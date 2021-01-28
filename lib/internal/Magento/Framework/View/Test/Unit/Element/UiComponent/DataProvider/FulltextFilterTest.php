@@ -124,10 +124,11 @@ class FulltextFilterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testApplyWrongCollectionType()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         /** @var MviewCollection $mviewCollection */
         $mviewCollection = $this->getMockBuilder(MviewCollection::class)
             ->setMethods([])

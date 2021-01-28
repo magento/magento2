@@ -41,7 +41,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     /** @var  View */
     private $_block;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -74,7 +74,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->_coreRegistry->unregister(RegistryConstants::CURRENT_CUSTOMER_ID);
     }

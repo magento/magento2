@@ -42,12 +42,12 @@ class RangeTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->conditionManager->expects($this->any())
             ->method('generateCondition')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($field, $operator, $value) {
                         return sprintf('%s %s \'%s\'', $field, $operator, $value);
                     }
-                )
+                
             );
 
         $this->filter = $objectManager->getObject(
@@ -70,13 +70,13 @@ class RangeTest extends \PHPUnit\Framework\TestCase
     {
         $this->requestFilter->expects($this->any())
             ->method('getField')
-            ->will($this->returnValue($field));
+            ->willReturn($field);
         $this->requestFilter->expects($this->atLeastOnce())
             ->method('getFrom')
-            ->will($this->returnValue($from));
+            ->willReturn($from);
         $this->requestFilter->expects($this->atLeastOnce())
             ->method('getTo')
-            ->will($this->returnValue($to));
+            ->willReturn($to);
 
         $actualResult = $this->filter->buildFilter($this->requestFilter, $isNegation);
         $this->assertEquals($expectedResult, $actualResult);

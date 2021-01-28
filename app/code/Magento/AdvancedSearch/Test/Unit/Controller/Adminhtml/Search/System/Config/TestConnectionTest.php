@@ -73,8 +73,8 @@ class TestConnectionTest extends \PHPUnit\Framework\TestCase
                 )
             )
             ->getMock();
-        $context->expects($this->once())->method('getRequest')->will($this->returnValue($this->requestMock));
-        $context->expects($this->once())->method('getResponse')->will($this->returnValue($responseMock));
+        $context->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
+        $context->expects($this->once())->method('getResponse')->willReturn($responseMock);
 
         $this->clientResolverMock = $this->getMockBuilder(\Magento\AdvancedSearch\Model\Client\ClientResolver::class)
             ->disableOriginalConstructor()
@@ -108,10 +108,10 @@ class TestConnectionTest extends \PHPUnit\Framework\TestCase
     public function testExecuteEmptyEngine()
     {
         $this->requestMock->expects($this->once())->method('getParams')
-            ->will($this->returnValue(['engine' => '']));
+            ->willReturn(['engine' => '']);
 
         $this->resultJsonFactory->expects($this->once())->method('create')
-            ->will($this->returnValue($this->resultJson));
+            ->willReturn($this->resultJson);
 
         $result = ['success' => false, 'errorMessage' => 'Missing search engine parameter.'];
 
@@ -124,17 +124,17 @@ class TestConnectionTest extends \PHPUnit\Framework\TestCase
     public function testExecute()
     {
         $this->requestMock->expects($this->once())->method('getParams')
-            ->will($this->returnValue(['engine' => 'engineName']));
+            ->willReturn(['engine' => 'engineName']);
 
         $this->clientResolverMock->expects($this->once())->method('create')
             ->with($this->equalTo('engineName'))
-            ->will($this->returnValue($this->clientMock));
+            ->willReturn($this->clientMock);
 
         $this->clientMock->expects($this->once())->method('testConnection')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->resultJsonFactory->expects($this->once())->method('create')
-            ->will($this->returnValue($this->resultJson));
+            ->willReturn($this->resultJson);
 
         $result = ['success' => true, 'errorMessage' => ''];
 
@@ -147,17 +147,17 @@ class TestConnectionTest extends \PHPUnit\Framework\TestCase
     public function testExecutePingFailed()
     {
         $this->requestMock->expects($this->once())->method('getParams')
-            ->will($this->returnValue(['engine' => 'engineName']));
+            ->willReturn(['engine' => 'engineName']);
 
         $this->clientResolverMock->expects($this->once())->method('create')
             ->with($this->equalTo('engineName'))
-            ->will($this->returnValue($this->clientMock));
+            ->willReturn($this->clientMock);
 
         $this->clientMock->expects($this->once())->method('testConnection')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->resultJsonFactory->expects($this->once())->method('create')
-            ->will($this->returnValue($this->resultJson));
+            ->willReturn($this->resultJson);
 
         $result = ['success' => false, 'errorMessage' => ''];
 

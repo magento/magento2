@@ -75,11 +75,12 @@ class ExchangeFactoryTest extends \PHPUnit\Framework\TestCase
      * Test for create method with undefined connection type.
      *
      * @return void
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Not found exchange for connection name 'db' in config
      */
     public function testCreateWithUndefinedConnectionType()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Not found exchange for connection name \'db\' in config');
+
         $connectionName = 'db';
         $data = ['key1' => 'value1'];
         $this->connectionTypeResolver->expects($this->once())
@@ -92,11 +93,12 @@ class ExchangeFactoryTest extends \PHPUnit\Framework\TestCase
      * Test for create method with wrong exchange type.
      *
      * @return void
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Exchange for connection name 'amqp' does not implement interface
      */
     public function testCreateWithWrongExchangeType()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Exchange for connection name \'amqp\' does not implement interface');
+
         $connectionName = 'amqp';
         $data = ['key1' => 'value1'];
         $this->connectionTypeResolver->expects($this->once())

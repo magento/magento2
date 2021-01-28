@@ -86,7 +86,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
 
         $this->collectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($collection));
+            ->willReturn($collection);
         return $collection;
     }
 
@@ -131,7 +131,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
 
         $collectionForAdd->expects($this->atLeastOnce())
             ->method('getItems')
-            ->will($this->returnValue($arrayMessages));
+            ->willReturn($arrayMessages);
 
         $this->assertSame($this->messages, $this->messages->addMessages($collectionForAdd));
     }
@@ -158,7 +158,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
         $this->messageFactory->expects($this->once())
             ->method('create')
             ->with(MessageInterface::TYPE_ERROR, $messageText)
-            ->will($this->returnValue($message));
+            ->willReturn($message);
 
         $collection = $this->initMessageCollection();
         $collection->expects($this->once())
@@ -177,7 +177,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
         $this->messageFactory->expects($this->once())
             ->method('create')
             ->with(MessageInterface::TYPE_WARNING, $messageText)
-            ->will($this->returnValue($message));
+            ->willReturn($message);
 
         $collection = $this->initMessageCollection();
         $collection->expects($this->once())
@@ -196,7 +196,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
         $this->messageFactory->expects($this->once())
             ->method('create')
             ->with(MessageInterface::TYPE_NOTICE, $messageText)
-            ->will($this->returnValue($message));
+            ->willReturn($message);
 
         $collection = $this->initMessageCollection();
         $collection->expects($this->once())
@@ -215,7 +215,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
         $this->messageFactory->expects($this->once())
             ->method('create')
             ->with(MessageInterface::TYPE_SUCCESS, $messageText)
-            ->will($this->returnValue($message));
+            ->willReturn($message);
 
         $collection = $this->initMessageCollection();
         $collection->expects($this->once())
@@ -234,7 +234,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
         $collection->expects($this->once())
             ->method('getItemsByType')
             ->with($messageType)
-            ->will($this->returnValue($resultMessages));
+            ->willReturn($resultMessages);
 
         $this->assertSame($resultMessages, $this->messages->getMessagesByType($messageType));
     }

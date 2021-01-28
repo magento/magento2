@@ -44,7 +44,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     public function testGetLink()
     {
         $rssUrl = 'http://rss.magento.com';
-        $this->urlBuilderInterface->expects($this->once())->method('getUrl')->will($this->returnValue($rssUrl));
+        $this->urlBuilderInterface->expects($this->once())->method('getUrl')->willReturn($rssUrl);
         $this->assertEquals($rssUrl, $this->link->getLink());
     }
 

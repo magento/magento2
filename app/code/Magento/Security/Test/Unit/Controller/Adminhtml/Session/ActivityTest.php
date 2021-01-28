@@ -50,7 +50,7 @@ class ActivityTest extends \PHPUnit\Framework\TestCase
         $this->viewMock = $this->createMock(\Magento\Framework\App\ViewInterface::class);
         $this->contextMock->expects($this->any())
             ->method('getView')
-            ->will($this->returnValue($this->viewMock));
+            ->willReturn($this->viewMock);
 
         $this->controller = $this->objectManager->getObject(
             \Magento\Security\Controller\Adminhtml\Session\Activity::class,

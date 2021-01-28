@@ -69,13 +69,13 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
         $this->customer->expects($this->once())
             ->method('load')
             ->with(self::CUSTOMER_ID)
-            ->will($this->returnValue($this->customer));
+            ->willReturn($this->customer);
         $this->customer->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(self::CUSTOMER_ID));
+            ->willReturn(self::CUSTOMER_ID);
         $this->customerFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->customer));
+            ->willReturn($this->customer);
         $actual = $this->customerRegistry->retrieve(self::CUSTOMER_ID);
         $this->assertEquals($this->customer, $actual);
         $actualCached = $this->customerRegistry->retrieve(self::CUSTOMER_ID);
@@ -87,25 +87,25 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
         $this->customer->expects($this->once())
             ->method('loadByEmail')
             ->with(self::CUSTOMER_EMAIL)
-            ->will($this->returnValue($this->customer));
+            ->willReturn($this->customer);
         $this->customer->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(self::CUSTOMER_ID));
+            ->willReturn(self::CUSTOMER_ID);
         $this->customer->expects($this->any())
             ->method('getEmail')
-            ->will($this->returnValue(self::CUSTOMER_EMAIL));
+            ->willReturn(self::CUSTOMER_EMAIL);
         $this->customer->expects($this->any())
             ->method('getWebsiteId')
-            ->will($this->returnValue(self::WEBSITE_ID));
+            ->willReturn(self::WEBSITE_ID);
         $this->customer->expects($this->any())
             ->method('setEmail')
-            ->will($this->returnValue($this->customer));
+            ->willReturn($this->customer);
         $this->customer->expects($this->any())
             ->method('setWebsiteId')
-            ->will($this->returnValue($this->customer));
+            ->willReturn($this->customer);
         $this->customerFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->customer));
+            ->willReturn($this->customer);
         $actual = $this->customerRegistry->retrieveByEmail(self::CUSTOMER_EMAIL, self::WEBSITE_ID);
         $this->assertEquals($this->customer, $actual);
         $actualCached = $this->customerRegistry->retrieveByEmail(self::CUSTOMER_EMAIL, self::WEBSITE_ID);
@@ -121,13 +121,13 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
         $this->customer->expects($this->once())
             ->method('load')
             ->with(self::CUSTOMER_ID)
-            ->will($this->returnValue($this->customer));
+            ->willReturn($this->customer);
         $this->customer->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->customerFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->customer));
+            ->willReturn($this->customer);
         $this->customerRegistry->retrieve(self::CUSTOMER_ID);
     }
 
@@ -140,22 +140,22 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
         $this->customer->expects($this->once())
             ->method('loadByEmail')
             ->with(self::CUSTOMER_EMAIL)
-            ->will($this->returnValue($this->customer));
+            ->willReturn($this->customer);
         $this->customer->expects($this->any())
             ->method('getEmail')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->customer->expects($this->any())
             ->method('getWebsiteId')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->customer->expects($this->any())
             ->method('setEmail')
-            ->will($this->returnValue($this->customer));
+            ->willReturn($this->customer);
         $this->customer->expects($this->any())
             ->method('setWebsiteId')
-            ->will($this->returnValue($this->customer));
+            ->willReturn($this->customer);
         $this->customerFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->customer));
+            ->willReturn($this->customer);
         $this->customerRegistry->retrieveByEmail(self::CUSTOMER_EMAIL, self::WEBSITE_ID);
     }
 
@@ -164,13 +164,13 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
         $this->customer->expects($this->exactly(2))
             ->method('load')
             ->with(self::CUSTOMER_ID)
-            ->will($this->returnValue($this->customer));
+            ->willReturn($this->customer);
         $this->customer->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(self::CUSTOMER_ID));
+            ->willReturn(self::CUSTOMER_ID);
         $this->customerFactory->expects($this->exactly(2))
             ->method('create')
-            ->will($this->returnValue($this->customer));
+            ->willReturn($this->customer);
         $actual = $this->customerRegistry->retrieve(self::CUSTOMER_ID);
         $this->assertEquals($this->customer, $actual);
         $this->customerRegistry->remove(self::CUSTOMER_ID);
@@ -183,25 +183,25 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
         $this->customer->expects($this->exactly(2))
             ->method('loadByEmail')
             ->with(self::CUSTOMER_EMAIL)
-            ->will($this->returnValue($this->customer));
+            ->willReturn($this->customer);
         $this->customer->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(self::CUSTOMER_ID));
+            ->willReturn(self::CUSTOMER_ID);
         $this->customer->expects($this->any())
             ->method('getEmail')
-            ->will($this->returnValue(self::CUSTOMER_EMAIL));
+            ->willReturn(self::CUSTOMER_EMAIL);
         $this->customer->expects($this->any())
             ->method('getWebsiteId')
-            ->will($this->returnValue(self::WEBSITE_ID));
+            ->willReturn(self::WEBSITE_ID);
         $this->customer->expects($this->any())
             ->method('setEmail')
-            ->will($this->returnValue($this->customer));
+            ->willReturn($this->customer);
         $this->customer->expects($this->any())
             ->method('setWebsiteId')
-            ->will($this->returnValue($this->customer));
+            ->willReturn($this->customer);
         $this->customerFactory->expects($this->exactly(2))
             ->method('create')
-            ->will($this->returnValue($this->customer));
+            ->willReturn($this->customer);
         $actual = $this->customerRegistry->retrieveByEmail(self::CUSTOMER_EMAIL, self::WEBSITE_ID);
         $this->assertEquals($this->customer, $actual);
         $this->customerRegistry->removeByEmail(self::CUSTOMER_EMAIL, self::WEBSITE_ID);

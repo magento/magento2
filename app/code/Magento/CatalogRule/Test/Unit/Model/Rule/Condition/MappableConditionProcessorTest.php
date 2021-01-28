@@ -102,13 +102,13 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->customConditionProcessorBuilderMock
             ->method('hasProcessorForField')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         [$field1, true],
                         [$field2, false],
                     ]
-                )
+                
             );
 
         $this->eavConfigMock
@@ -171,13 +171,13 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->customConditionProcessorBuilderMock
             ->method('hasProcessorForField')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         [$field1, true],
                         [$field2, false],
                     ]
-                )
+                
             );
 
         $this->eavConfigMock
@@ -232,13 +232,13 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->customConditionProcessorBuilderMock
             ->method('hasProcessorForField')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         [$field1, false],
                         [$field2, false],
                     ]
-                )
+                
             );
 
         $this->eavConfigMock
@@ -368,15 +368,15 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->customConditionProcessorBuilderMock
             ->method('hasProcessorForField')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         [$field1, false],
                         [$field2, true],
                         [$field3, true],
                         [$field4, true],
                     ]
-                )
+                
             );
 
         $this->eavConfigMock
@@ -491,15 +491,15 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->customConditionProcessorBuilderMock
             ->method('hasProcessorForField')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         [$field1, false],
                         [$field2, true],
                         [$field3, true],
                         [$field4, true],
                     ]
-                )
+                
             );
 
         $this->eavConfigMock
@@ -568,15 +568,15 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->customConditionProcessorBuilderMock
             ->method('hasProcessorForField')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         [$field1, true],
                         [$field2, true],
                         [$field3, true],
                         [$field4, true],
                     ]
-                )
+                
             );
 
         $this->eavConfigMock
@@ -768,8 +768,8 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->customConditionProcessorBuilderMock
             ->method('hasProcessorForField')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         [$field1, true],
                         [$field2, true],
@@ -779,7 +779,7 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
                         [$field6, true],
                         [$field7, true],
                     ]
-                )
+                
             );
 
         $this->eavConfigMock
@@ -870,15 +870,15 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->customConditionProcessorBuilderMock
             ->method('hasProcessorForField')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         [$field1, false],
                         [$field2, true],
                         [$field3, true],
                         [$field4, false],
                     ]
-                )
+                
             );
 
         $this->eavConfigMock
@@ -974,8 +974,8 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->customConditionProcessorBuilderMock
             ->method('hasProcessorForField')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         [$field1, false],
                         [$field2, true],
@@ -983,7 +983,7 @@ class MappableConditionProcessorTest extends \PHPUnit\Framework\TestCase
                         [$field4, false],
                         [$field5, true],
                     ]
-                )
+                
             );
 
         $this->eavConfigMock

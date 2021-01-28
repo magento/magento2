@@ -46,7 +46,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
         );
         $contextMock->expects($this->any())->method('getPath')->willReturn('');
         $this->asset = $this->createMock(\Magento\Framework\View\Asset\File::class);
-        $this->asset->expects($this->any())->method('getContentType')->will($this->returnValue('css'));
+        $this->asset->expects($this->any())->method('getContentType')->willReturn('css');
         $this->asset->expects($this->any())->method('getContext')->willReturn($contextMock);
 
         $this->relatedFileGeneratorMock = $this->getMockBuilder(RelatedGenerator::class)
@@ -79,7 +79,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
         $this->notationResolver->expects($invoke)
             ->method('convertModuleNotationToPath')
             ->with($this->asset, $foundPath)
-            ->will($this->returnValue($resolvedPath));
+            ->willReturn($resolvedPath);
         $this->object->process($chain);
         $this->assertEquals($expectedContent, $chain->getContent());
         $this->assertEquals('less', $chain->getContentType());
@@ -187,7 +187,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
         $this->notationResolver->expects($this->once())
             ->method('convertModuleNotationToPath')
             ->with($this->asset, 'Magento_Module::something.css')
-            ->will($this->returnValue('Magento_Module/something.css'));
+            ->willReturn('Magento_Module/something.css');
         $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain(
             $this->asset,
             '@import (type) "Magento_Module::something.css" media;',

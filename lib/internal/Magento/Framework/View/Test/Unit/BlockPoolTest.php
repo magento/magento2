@@ -44,7 +44,7 @@ class BlockPoolTest extends \PHPUnit\Framework\TestCase
         $this->blockFactory->expects($this->atLeastOnce())
             ->method('createBlock')
             ->with($blockClass, $arguments)
-            ->will($this->returnValue($block));
+            ->willReturn($block);
 
         $this->assertEquals($this->blockPool, $this->blockPool->add($blockName, $blockClass, $arguments));
 
@@ -54,11 +54,12 @@ class BlockPoolTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid Block class name: NotExistingBlockClass
      */
     public function testAddWithException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid Block class name: NotExistingBlockClass');
+
         $this->blockPool->add('BlockPoolTestBlock', 'NotExistingBlockClass');
     }
 }

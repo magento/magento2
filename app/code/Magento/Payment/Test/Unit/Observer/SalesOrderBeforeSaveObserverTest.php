@@ -44,8 +44,8 @@ class SalesOrderBeforeSaveObserverTest extends \PHPUnit\Framework\TestCase
             $neverInvokedMethods
         );
         $this->_prepareNeverInvokedOrderMethods($order, $neverInvokedMethods);
-        $this->eventMock->expects($this->once())->method('getOrder')->will(
-            $this->returnValue($order)
+        $this->eventMock->expects($this->once())->method('getOrder')->willReturn(
+            $order
         );
 
         $this->salesOrderBeforeSaveObserver->execute($this->observerMock);
@@ -61,17 +61,17 @@ class SalesOrderBeforeSaveObserverTest extends \PHPUnit\Framework\TestCase
         $paymentMock = $this->getMockBuilder(
             \Magento\Sales\Model\Order\Payment::class
         )->disableOriginalConstructor()->setMethods([])->getMock();
-        $order->method('getPayment')->will($this->returnValue($paymentMock));
+        $order->method('getPayment')->willReturn($paymentMock);
         $methodInstance = $this->getMockBuilder(
             \Magento\Payment\Model\MethodInterface::class
         )->getMockForAbstractClass();
-        $paymentMock->expects($this->once())->method('getMethodInstance')->will($this->returnValue($methodInstance));
-        $methodInstance->expects($this->once())->method('getCode')->will($this->returnValue('free'));
+        $paymentMock->expects($this->once())->method('getMethodInstance')->willReturn($methodInstance);
+        $methodInstance->expects($this->once())->method('getCode')->willReturn('free');
         $this->_prepareNeverInvokedOrderMethods($order, $neverInvokedMethods);
-        $this->eventMock->expects($this->once())->method('getOrder')->will(
-            $this->returnValue($order)
+        $this->eventMock->expects($this->once())->method('getOrder')->willReturn(
+            $order
         );
-        $order->expects($this->once())->method('canUnhold')->will($this->returnValue(true));
+        $order->expects($this->once())->method('canUnhold')->willReturn(true);
         $this->salesOrderBeforeSaveObserver->execute($this->observerMock);
     }
 
@@ -86,19 +86,19 @@ class SalesOrderBeforeSaveObserverTest extends \PHPUnit\Framework\TestCase
         $paymentMock = $this->getMockBuilder(
             \Magento\Sales\Model\Order\Payment::class
         )->disableOriginalConstructor()->setMethods([])->getMock();
-        $order->method('getPayment')->will($this->returnValue($paymentMock));
+        $order->method('getPayment')->willReturn($paymentMock);
         $methodInstance = $this->getMockBuilder(
             \Magento\Payment\Model\MethodInterface::class
         )->getMockForAbstractClass();
-        $paymentMock->expects($this->once())->method('getMethodInstance')->will($this->returnValue($methodInstance));
-        $methodInstance->expects($this->once())->method('getCode')->will($this->returnValue('free'));
+        $paymentMock->expects($this->once())->method('getMethodInstance')->willReturn($methodInstance);
+        $methodInstance->expects($this->once())->method('getCode')->willReturn('free');
         $this->_prepareNeverInvokedOrderMethods($order, $neverInvokedMethods);
-        $this->eventMock->expects($this->once())->method('getOrder')->will(
-            $this->returnValue($order)
+        $this->eventMock->expects($this->once())->method('getOrder')->willReturn(
+            $order
         );
-        $order->expects($this->once())->method('canUnhold')->will($this->returnValue(false));
+        $order->expects($this->once())->method('canUnhold')->willReturn(false);
 
-        $order->expects($this->once())->method('isCanceled')->will($this->returnValue(true));
+        $order->expects($this->once())->method('isCanceled')->willReturn(true);
 
         $this->salesOrderBeforeSaveObserver->execute($this->observerMock);
     }
@@ -114,21 +114,21 @@ class SalesOrderBeforeSaveObserverTest extends \PHPUnit\Framework\TestCase
         $paymentMock = $this->getMockBuilder(
             \Magento\Sales\Model\Order\Payment::class
         )->disableOriginalConstructor()->setMethods([])->getMock();
-        $order->method('getPayment')->will($this->returnValue($paymentMock));
+        $order->method('getPayment')->willReturn($paymentMock);
         $methodInstance = $this->getMockBuilder(
             \Magento\Payment\Model\MethodInterface::class
         )->getMockForAbstractClass();
-        $paymentMock->expects($this->once())->method('getMethodInstance')->will($this->returnValue($methodInstance));
-        $methodInstance->expects($this->once())->method('getCode')->will($this->returnValue('free'));
+        $paymentMock->expects($this->once())->method('getMethodInstance')->willReturn($methodInstance);
+        $methodInstance->expects($this->once())->method('getCode')->willReturn('free');
         $this->_prepareNeverInvokedOrderMethods($order, $neverInvokedMethods);
-        $this->eventMock->expects($this->once())->method('getOrder')->will(
-            $this->returnValue($order)
+        $this->eventMock->expects($this->once())->method('getOrder')->willReturn(
+            $order
         );
-        $order->expects($this->once())->method('canUnhold')->will($this->returnValue(false));
+        $order->expects($this->once())->method('canUnhold')->willReturn(false);
 
-        $order->expects($this->once())->method('isCanceled')->will($this->returnValue(false));
-        $order->expects($this->once())->method('getState')->will(
-            $this->returnValue(\Magento\Sales\Model\Order::STATE_CLOSED)
+        $order->expects($this->once())->method('isCanceled')->willReturn(false);
+        $order->expects($this->once())->method('getState')->willReturn(
+            \Magento\Sales\Model\Order::STATE_CLOSED
         );
         $this->salesOrderBeforeSaveObserver->execute($this->observerMock);
     }
@@ -141,17 +141,17 @@ class SalesOrderBeforeSaveObserverTest extends \PHPUnit\Framework\TestCase
             'free',
             ['canUnhold', 'isCanceled', 'getState', 'setForcedCanCreditmemo', 'hasForcedCanCreditmemo']
         );
-        $this->eventMock->expects($this->once())->method('getOrder')->will(
-            $this->returnValue($order)
+        $this->eventMock->expects($this->once())->method('getOrder')->willReturn(
+            $order
         );
-        $order->expects($this->once())->method('canUnhold')->will($this->returnValue(false));
+        $order->expects($this->once())->method('canUnhold')->willReturn(false);
 
-        $order->expects($this->once())->method('isCanceled')->will($this->returnValue(false));
-        $order->expects($this->once())->method('getState')->will(
-            $this->returnValue('not_closed_state')
+        $order->expects($this->once())->method('isCanceled')->willReturn(false);
+        $order->expects($this->once())->method('getState')->willReturn(
+            'not_closed_state'
         );
-        $order->expects($this->once())->method('hasForcedCanCreditmemo')->will($this->returnValue(false));
-        $order->expects($this->once())->method('setForcedCanCreditmemo')->will($this->returnValue(true));
+        $order->expects($this->once())->method('hasForcedCanCreditmemo')->willReturn(false);
+        $order->expects($this->once())->method('setForcedCanCreditmemo')->willReturn(true);
 
         $this->salesOrderBeforeSaveObserver->execute($this->observerMock);
     }
@@ -171,8 +171,8 @@ class SalesOrderBeforeSaveObserverTest extends \PHPUnit\Framework\TestCase
             array_merge(['__wakeup', 'getPayment'])
         )->getMock();
 
-        $this->eventMock->expects($this->once())->method('getOrder')->will(
-            $this->returnValue($order)
+        $this->eventMock->expects($this->once())->method('getOrder')->willReturn(
+            $order
         );
 
         $order->expects($this->exactly(1))->method('getPayment')->willReturn(null);
@@ -190,7 +190,7 @@ class SalesOrderBeforeSaveObserverTest extends \PHPUnit\Framework\TestCase
         $this->eventMock = $this->getMockBuilder(
             \Magento\Framework\Event::class
         )->disableOriginalConstructor()->setMethods($methodsList)->getMock();
-        $this->observerMock->expects($this->any())->method('getEvent')->will($this->returnValue($this->eventMock));
+        $this->observerMock->expects($this->any())->method('getEvent')->willReturn($this->eventMock);
     }
 
     /**
@@ -208,12 +208,12 @@ class SalesOrderBeforeSaveObserverTest extends \PHPUnit\Framework\TestCase
         $paymentMock = $this->getMockBuilder(
             \Magento\Sales\Model\Order\Payment::class
         )->disableOriginalConstructor()->setMethods([])->getMock();
-        $order->method('getPayment')->will($this->returnValue($paymentMock));
+        $order->method('getPayment')->willReturn($paymentMock);
         $methodInstance = $this->getMockBuilder(
             \Magento\Payment\Model\MethodInterface::class
         )->getMockForAbstractClass();
-        $paymentMock->expects($this->once())->method('getMethodInstance')->will($this->returnValue($methodInstance));
-        $methodInstance->expects($this->once())->method('getCode')->will($this->returnValue($methodCode));
+        $paymentMock->expects($this->once())->method('getMethodInstance')->willReturn($methodInstance);
+        $methodInstance->expects($this->once())->method('getCode')->willReturn($methodCode);
         return $order;
     }
 

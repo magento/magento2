@@ -95,7 +95,7 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
 
         $resource = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class);
         $productId = $resource->getIdBySku(self::TEST_PRODUCT_NAME);
-        $this->assertTrue(is_numeric($productId));
+        $this->assertIsNumeric($productId);
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
         $product->load($productId);
@@ -107,7 +107,7 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
 
         $optionIdList = $resource->getProductsIdsBySkus($this->optionSkuList);
         $bundleOptionCollection = $product->getExtensionAttributes()->getBundleProductOptions();
-        $this->assertEquals(2, count($bundleOptionCollection));
+        $this->assertCount(2, $bundleOptionCollection);
         foreach ($bundleOptionCollection as $optionKey => $option) {
             $this->assertEquals('checkbox', $option->getData('type'));
             $this->assertEquals('Option ' . ($optionKey + 1), $option->getData('title'));
@@ -163,7 +163,7 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
         $this->model->importData();
         $resource = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class);
         $productId = $resource->getIdBySku(self::TEST_PRODUCT_NAME);
-        $this->assertTrue(is_numeric($productId));
+        $this->assertIsNumeric($productId);
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
         $product->load($productId);
@@ -197,7 +197,7 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * teardown
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
     }

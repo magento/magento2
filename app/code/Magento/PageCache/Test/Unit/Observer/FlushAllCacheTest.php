@@ -54,8 +54,8 @@ class FlushAllCacheTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getType'
-        )->will(
-            $this->returnValue(\Magento\PageCache\Model\Config::BUILT_IN)
+        )->willReturn(
+            \Magento\PageCache\Model\Config::BUILT_IN
         );
 
         $this->fullPageCacheMock->expects($this->once())->method('clean');

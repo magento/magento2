@@ -169,13 +169,13 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $typeId = 'simple';
         $status = 1;
         $isChangedWebsites = false;
-        $product->expects($this->once())->method('getId')->will($this->returnValue($productId));
-        $product->expects($this->once())->method('getName')->will($this->returnValue($productName));
-        $product->expects($this->once())->method('getStoreId')->will($this->returnValue($storeId));
-        $product->expects($this->once())->method('getTypeId')->will($this->returnValue($typeId));
+        $product->expects($this->once())->method('getId')->willReturn($productId);
+        $product->expects($this->once())->method('getName')->willReturn($productName);
+        $product->expects($this->once())->method('getStoreId')->willReturn($storeId);
+        $product->expects($this->once())->method('getTypeId')->willReturn($typeId);
         $product->expects($this->once())->method('dataHasChangedFor')
-            ->with($this->equalTo('status'))->will($this->returnValue($status));
-        $product->expects($this->once())->method('getIsChangedWebsites')->will($this->returnValue($isChangedWebsites));
+            ->with($this->equalTo('status'))->willReturn($status);
+        $product->expects($this->once())->method('getIsChangedWebsites')->willReturn($isChangedWebsites);
 
         $this->assertSame($this->item, $this->item->setProduct($product));
         $this->assertSame(
@@ -241,7 +241,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $setValue = 8;
         $this->customerSession->expects($this->once())
             ->method('getCustomerGroupId')
-            ->will($this->returnValue($groupId));
+            ->willReturn($groupId);
 
         $property = new \ReflectionProperty($this->item, 'customerGroupId');
         $property->setAccessible(true);
@@ -279,7 +279,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             $this->stockConfiguration->expects($this->once())
                 ->method('getMinSaleQty')
                 ->with($this->storeId, $this->equalTo($groupId))
-                ->will($this->returnValue($minSaleQty));
+                ->willReturn($minSaleQty);
         } else {
             $this->setDataArrayValue('min_sale_qty', $minSaleQty);
         }
@@ -330,7 +330,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         if ($useConfigMinQty) {
             $this->stockConfiguration->expects($this->any())
                 ->method('getMinQty')
-                ->will($this->returnValue($minQty));
+                ->willReturn($minQty);
         } else {
             $this->setDataArrayValue('min_qty', $minQty);
         }

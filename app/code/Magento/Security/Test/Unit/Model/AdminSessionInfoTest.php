@@ -97,7 +97,7 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
 
         $this->securityConfigMock->expects($this->once())
             ->method('getAdminSessionLifetime')
-            ->will($this->returnValue($sessionLifetime));
+            ->willReturn($sessionLifetime);
 
         $this->dateTimeMock->expects($this->once())
             ->method('gmtTimestamp')

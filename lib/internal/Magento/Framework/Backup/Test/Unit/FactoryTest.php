@@ -23,9 +23,12 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->_model = new \Magento\Framework\Backup\Factory($this->_objectManager);
     }
 
+    /**
+     */
     public function testCreateWrongType()
     {
-        $this->expectException('\Magento\Framework\Exception\LocalizedException');
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->_model->create('WRONG_TYPE');
     }
 
@@ -35,7 +38,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreate($type)
     {
-        $this->_objectManager->expects($this->once())->method('create')->will($this->returnValue('ModelInstance'));
+        $this->_objectManager->expects($this->once())->method('create')->willReturn('ModelInstance');
 
         $this->assertEquals('ModelInstance', $this->_model->create($type));
     }

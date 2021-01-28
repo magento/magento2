@@ -137,7 +137,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->_storeManager->expects($this->any())
             ->method('getWebsites')
-            ->will($this->returnCallback([$this, 'getWebsites']));
+            ->willReturnCallback([$this, 'getWebsites']);
         $this->countryWithWebsites = $this
             ->getMockBuilder(AddressAttribute\Source\CountryWithWebsites::class)
             ->disableOriginalConstructor()
@@ -240,8 +240,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
                 true,
                 ['_construct', 'getBackend', 'getTable']
             );
-            $attribute->expects($this->any())->method('getBackend')->will($this->returnSelf());
-            $attribute->expects($this->any())->method('getTable')->will($this->returnValue($attributeData['table']));
+            $attribute->expects($this->any())->method('getBackend')->willReturnSelf();
+            $attribute->expects($this->any())->method('getTable')->willReturn($attributeData['table']);
             $attributeCollection->addItem($attribute);
         }
         return $attributeCollection;
@@ -284,8 +284,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     protected function _createCustomerEntityMock()
     {
         $customerEntity = $this->createPartialMock(\stdClass::class, ['filterEntityCollection', 'setParameters']);
-        $customerEntity->expects($this->any())->method('filterEntityCollection')->will($this->returnArgument(0));
-        $customerEntity->expects($this->any())->method('setParameters')->will($this->returnSelf());
+        $customerEntity->expects($this->any())->method('filterEntityCollection')->willReturnArgument(0);
+        $customerEntity->expects($this->any())->method('setParameters')->willReturnSelf();
         return $customerEntity;
     }
 

@@ -251,14 +251,14 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $entityTypeCode = 'code';
         $this->_importData->expects($this->any())
                         ->method('getEntityTypeCode')
-                        ->will($this->returnValue($entityTypeCode));
+                        ->willReturn($entityTypeCode);
         $behaviour = 'behaviour';
         $this->_importData->expects($this->once())
                         ->method('getBehavior')
-                        ->will($this->returnValue($behaviour));
+                        ->willReturn($behaviour);
         $this->import->expects($this->any())
                     ->method('getDataSourceModel')
-                    ->will($this->returnValue($this->_importData));
+                    ->willReturn($this->_importData);
 
         $this->import->expects($this->any())->method('setData')->withConsecutive(
             ['entity', $entityTypeCode],
@@ -266,10 +266,10 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         );
         $this->_entityAdapter->expects($this->any())
                     ->method('importData')
-                    ->will($this->returnValue(true));
+                    ->willReturn(true);
         $this->import->expects($this->any())
                     ->method('_getEntityAdapter')
-                    ->will($this->returnValue($this->_entityAdapter));
+                    ->willReturn($this->_entityAdapter);
         $this->_importConfig
             ->expects($this->any())
             ->method('getEntities')
@@ -285,7 +285,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         ];
 
         foreach ($importOnceMethodsReturnNull as $method) {
-            $this->import->expects($this->once())->method($method)->will($this->returnValue(null));
+            $this->import->expects($this->once())->method($method)->willReturn(null);
         }
 
         $this->assertTrue($this->import->importSource());
@@ -305,14 +305,14 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $entityTypeCode = 'code';
         $this->_importData->expects($this->any())
             ->method('getEntityTypeCode')
-            ->will($this->returnValue($entityTypeCode));
+            ->willReturn($entityTypeCode);
         $behaviour = 'behaviour';
         $this->_importData->expects($this->any())
             ->method('getBehavior')
-            ->will($this->returnValue($behaviour));
+            ->willReturn($behaviour);
         $this->import->expects($this->any())
             ->method('getDataSourceModel')
-            ->will($this->returnValue($this->_importData));
+            ->willReturn($this->_importData);
         $this->import->expects($this->any())->method('setData')->withConsecutive(
             ['entity', $entityTypeCode],
             ['behavior', $behaviour]
@@ -323,7 +323,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ->will($this->throwException($exceptionMock));
         $this->import->expects($this->any())
             ->method('_getEntityAdapter')
-            ->will($this->returnValue($this->_entityAdapter));
+            ->willReturn($this->_entityAdapter);
 
         $this->import->importSource();
     }

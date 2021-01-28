@@ -23,13 +23,14 @@ class FormFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage WrongClass doesn't extend \Magento\Framework\Data\Form
      */
     public function testWrongTypeException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('WrongClass doesn\'t extend \\Magento\\Framework\\Data\\Form');
+
         $formMock = $this->getMockBuilder('WrongClass')->getMock();
-        $this->_objectManagerMock->expects($this->once())->method('create')->will($this->returnValue($formMock));
+        $this->_objectManagerMock->expects($this->once())->method('create')->willReturn($formMock);
 
         $formFactory = new FormFactory($this->_objectManagerMock, 'WrongClass');
         $formFactory->create();
@@ -45,8 +46,8 @@ class FormFactoryTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             $className
-        )->will(
-            $this->returnValue($formMock)
+        )->willReturn(
+            $formMock
         );
 
         $formFactory = new FormFactory($this->_objectManagerMock, $className);

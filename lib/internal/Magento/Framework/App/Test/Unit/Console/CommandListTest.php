@@ -40,6 +40,6 @@ class CommandListTest extends \PHPUnit\Framework\TestCase
     {
         $commands = $this->commandList->getCommands();
         $this->assertSame([$this->testCommand], $commands);
-        $this->assertEquals(1, count($commands));
+        $this->assertCount(1, $commands);
     }
 }

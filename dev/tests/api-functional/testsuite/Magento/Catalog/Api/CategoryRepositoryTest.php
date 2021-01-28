@@ -174,10 +174,11 @@ class CategoryRepositoryTest extends WebapiAbstract
 
     /**
      * @dataProvider deleteSystemOrRootDataProvider
-     * @expectedException \Exception
      */
     public function testDeleteSystemOrRoot()
     {
+        $this->expectException(\Exception::class);
+
         $this->deleteCategory($this->modelId);
     }
 

@@ -101,11 +101,12 @@ QUERY;
     }
 
     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testOrdersQueryNotAuthorized()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+
         $query = <<<QUERY
 {
   customerOrders {

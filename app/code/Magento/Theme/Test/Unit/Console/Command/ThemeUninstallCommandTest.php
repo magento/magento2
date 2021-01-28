@@ -159,12 +159,12 @@ class ThemeUninstallCommandTest extends \PHPUnit\Framework\TestCase
     {
         $this->themePackageInfo->expects($this->exactly(4))
             ->method('getPackageName')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['area/vendor/test1', 'dummy1'],
                 ['area/vendor/test2', 'magento/theme-b'],
                 ['area/vendor/test3', ''],
                 ['area/vendor/test4', 'dummy2'],
-            ]));
+            ]);
         $this->collection->expects($this->any())
             ->method('getThemeByFullPath')
             ->willReturn(

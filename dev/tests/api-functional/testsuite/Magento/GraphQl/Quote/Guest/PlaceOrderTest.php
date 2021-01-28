@@ -84,11 +84,12 @@ class PlaceOrderTest extends GraphQlAbstract
     }
 
     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_id" is missing
      */
     public function testPlaceOrderIfCartIdIsEmpty()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Required parameter "cart_id" is missing');
+
         $maskedQuoteId = '';
         $query = $this->getQuery($maskedQuoteId);
 
@@ -112,11 +113,12 @@ class PlaceOrderTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_checkmo_payment_method.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Guest email for cart is missing.
      */
     public function testPlaceOrderWithNoEmail()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Guest email for cart is missing.');
+
         $reservedOrderId = 'test_quote';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
         $query = $this->getQuery($maskedQuoteId);
@@ -295,7 +297,7 @@ QUERY;
     /**
      * @inheritdoc
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->registry->unregister('isSecureArea');
         $this->registry->register('isSecureArea', true);

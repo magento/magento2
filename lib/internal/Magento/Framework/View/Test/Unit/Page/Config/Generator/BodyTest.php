@@ -60,7 +60,7 @@ class BodyTest extends \PHPUnit\Framework\TestCase
         $bodyClasses = ['class_1', 'class--2'];
         $structureMock->expects($this->once())
             ->method('getBodyClasses')
-            ->will($this->returnValue($bodyClasses));
+            ->willReturn($bodyClasses);
         $this->pageConfigMock->expects($this->exactly(2))
             ->method('addBodyClass')
             ->withConsecutive(['class_1'], ['class--2']);

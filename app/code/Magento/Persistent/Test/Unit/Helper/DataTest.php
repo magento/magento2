@@ -36,8 +36,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
         )->with(
             'etc',
             'Magento_Persistent'
-        )->will(
-            $this->returnValue('path123')
+        )->willReturn(
+            'path123'
         );
         $this->assertEquals('path123/persistent.xml', $this->_helper->getPersistentConfigFilePath());
     }

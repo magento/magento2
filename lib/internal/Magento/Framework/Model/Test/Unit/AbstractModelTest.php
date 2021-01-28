@@ -73,7 +73,7 @@ class AbstractModelTest extends \PHPUnit\Framework\TestCase
         $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
     }
 
     public function testDelete()

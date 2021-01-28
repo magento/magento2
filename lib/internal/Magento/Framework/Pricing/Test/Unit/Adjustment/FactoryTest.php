@@ -52,15 +52,16 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $objectManager = $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['create']);
         $objectManager->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->getMockForAbstractClass($adjustmentInterface)));
+            ->willReturn($this->getMockForAbstractClass($adjustmentInterface));
         return $objectManager;
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateWithException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $invalidAdjustmentInterface = \Magento\Framework\DataObject::class;
         $adjustmentFactory = $this->prepareAdjustmentFactory($invalidAdjustmentInterface);
         $adjustmentFactory->create($invalidAdjustmentInterface);

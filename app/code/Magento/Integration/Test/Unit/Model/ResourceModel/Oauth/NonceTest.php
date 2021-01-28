@@ -48,8 +48,8 @@ class NonceTest extends \PHPUnit\Framework\TestCase
     public function testSelectByCompositeKey()
     {
         $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
-        $selectMock->expects($this->once())->method('from')->will($this->returnValue($selectMock));
-        $selectMock->expects($this->exactly(2))->method('where')->will($this->returnValue($selectMock));
+        $selectMock->expects($this->once())->method('from')->willReturn($selectMock);
+        $selectMock->expects($this->exactly(2))->method('where')->willReturn($selectMock);
         $this->connectionMock->expects($this->once())->method('select')->willReturn($selectMock);
         $this->connectionMock->expects($this->once())->method('fetchRow');
         $this->nonceResource->selectByCompositeKey('nonce', 5);

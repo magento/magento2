@@ -180,7 +180,7 @@ class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->envWhitelist->removeHost('example.com');
     }

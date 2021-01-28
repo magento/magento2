@@ -34,7 +34,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->appResourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
         $this->appResourceMock->expects($this->any())->method('getTableName')->willReturnArgument(0);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->taxItem = $objectManager->getObject(

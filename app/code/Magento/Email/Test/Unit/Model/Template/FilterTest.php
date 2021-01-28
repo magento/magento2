@@ -269,7 +269,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
 
         $filter->expects($this->exactly(count($expectedResults)))
             ->method('getCssFilesContent')
-            ->will($this->returnValue($css));
+            ->willReturn($css);
 
         $designParams = [
             'area' => Area::AREA_FRONTEND,

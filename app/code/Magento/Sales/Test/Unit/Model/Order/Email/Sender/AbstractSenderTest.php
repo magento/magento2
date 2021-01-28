@@ -104,11 +104,11 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
         );
         $this->orderMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
         $paymentInfoMock = $this->createMock(\Magento\Payment\Model\Info::class);
         $this->orderMock->expects($this->any())
             ->method('getPayment')
-            ->will($this->returnValue($paymentInfoMock));
+            ->willReturn($paymentInfoMock);
 
         $this->addressRenderer = $this->createMock(\Magento\Sales\Model\Order\Address\Renderer::class);
         $this->addressMock = $this->createMock(\Magento\Sales\Model\Order\Address::class);
@@ -117,7 +117,7 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
         $this->paymentHelper = $this->createPartialMock(\Magento\Payment\Helper\Data::class, ['getInfoBlockHtml']);
         $this->paymentHelper->expects($this->any())
             ->method('getInfoBlockHtml')
-            ->will($this->returnValue('payment'));
+            ->willReturn('payment');
 
         $this->globalConfig = $this->createPartialMock(\Magento\Framework\App\Config::class, ['getValue']);
 
@@ -132,14 +132,14 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
     {
         $this->orderMock->expects($this->any())
             ->method('getBillingAddress')
-            ->will($this->returnValue($billingAddress));
+            ->willReturn($billingAddress);
         if ($isVirtual) {
             $this->orderMock->expects($this->never())
                 ->method('getShippingAddress');
         } else {
             $this->orderMock->expects($this->once())
                 ->method('getShippingAddress')
-                ->will($this->returnValue($billingAddress));
+                ->willReturn($billingAddress);
         }
     }
 
@@ -164,7 +164,7 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
         );
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
     }
 
     /**
@@ -183,6 +183,6 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
 
         $this->senderBuilderFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($senderMock));
+            ->willReturn($senderMock);
     }
 }

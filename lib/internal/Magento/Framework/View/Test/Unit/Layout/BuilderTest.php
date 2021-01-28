@@ -29,7 +29,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
 
         /** @var Http|\PHPUnit\Framework\MockObject\MockObject */
         $request = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $request->expects($this->exactly(3))->method('getFullActionName')->will($this->returnValue($fullActionName));
+        $request->expects($this->exactly(3))->method('getFullActionName')->willReturn($fullActionName);
 
         /** @var ProcessorInterface|\PHPUnit\Framework\MockObject\MockObject $processor */
         $processor = $this->createMock(\Magento\Framework\View\Layout\ProcessorInterface::class);
@@ -40,9 +40,9 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\View\Layout::class,
             $this->getLayoutMockMethods()
         );
-        $layout->expects($this->atLeastOnce())->method('getUpdate')->will($this->returnValue($processor));
-        $layout->expects($this->atLeastOnce())->method('generateXml')->will($this->returnValue($processor));
-        $layout->expects($this->atLeastOnce())->method('generateElements')->will($this->returnValue($processor));
+        $layout->expects($this->atLeastOnce())->method('getUpdate')->willReturn($processor);
+        $layout->expects($this->atLeastOnce())->method('generateXml')->willReturn($processor);
+        $layout->expects($this->atLeastOnce())->method('generateElements')->willReturn($processor);
 
         $data = ['full_action_name' => $fullActionName, 'layout' => $layout];
         /** @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject $eventManager */

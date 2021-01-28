@@ -61,7 +61,7 @@ class RestoreCustomerGroupIdTest extends \PHPUnit\Framework\TestCase
 
         $this->customerAddressHelperMock->expects($this->once())
             ->method('getTaxCalculationAddressType')
-            ->will($this->returnValue($configAddressType));
+            ->willReturn($configAddressType);
 
         $quoteAddress->expects($this->once())->method('hasPrevQuoteCustomerGroupId');
         $id = $quoteAddress->expects($this->any())->method('getPrevQuoteCustomerGroupId');

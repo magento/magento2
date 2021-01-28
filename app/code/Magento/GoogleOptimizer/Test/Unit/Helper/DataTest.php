@@ -54,8 +54,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             \Magento\GoogleOptimizer\Helper\Data::XML_PATH_ENABLED,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
-        )->will(
-            $this->returnValue($isExperimentsEnabled)
+        )->willReturn(
+            $isExperimentsEnabled
         );
 
         $this->assertEquals($isExperimentsEnabled, $this->_helper->isGoogleExperimentEnabled($store));
@@ -86,8 +86,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             \Magento\GoogleOptimizer\Helper\Data::XML_PATH_ENABLED,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
-        )->will(
-            $this->returnValue($isExperimentsEnabled)
+        )->willReturn(
+            $isExperimentsEnabled
         );
 
         $this->_googleAnalyticsHelperMock->expects(
@@ -96,8 +96,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             'isGoogleAnalyticsAvailable'
         )->with(
             $store
-        )->will(
-            $this->returnValue($isAnalyticsAvailable)
+        )->willReturn(
+            $isAnalyticsAvailable
         );
 
         $this->assertEquals($result, $this->_helper->isGoogleExperimentActive($store));

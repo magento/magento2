@@ -44,13 +44,13 @@ class GroupRegistryTest extends \PHPUnit\Framework\TestCase
         $group->expects($this->once())
             ->method('load')
             ->with($groupId)
-            ->will($this->returnValue($group));
+            ->willReturn($group);
         $group->expects($this->exactly(2))
             ->method('getId')
-            ->will($this->returnValue($groupId));
+            ->willReturn($groupId);
         $this->groupFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($group));
+            ->willReturn($group);
         $actual = $this->unit->retrieve($groupId);
         $this->assertEquals($group, $actual);
         $actualCached = $this->unit->retrieve($groupId);
@@ -74,13 +74,13 @@ class GroupRegistryTest extends \PHPUnit\Framework\TestCase
         $group->expects($this->once())
             ->method('load')
             ->with($groupId)
-            ->will($this->returnValue($group));
+            ->willReturn($group);
         $group->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->groupFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($group));
+            ->willReturn($group);
         $this->unit->retrieve($groupId);
     }
 
@@ -99,13 +99,13 @@ class GroupRegistryTest extends \PHPUnit\Framework\TestCase
         $group->expects($this->exactly(2))
             ->method('load')
             ->with($groupId)
-            ->will($this->returnValue($group));
+            ->willReturn($group);
         $group->expects($this->exactly(4))
             ->method('getId')
-            ->will($this->returnValue($groupId));
+            ->willReturn($groupId);
         $this->groupFactory->expects($this->exactly(2))
             ->method('create')
-            ->will($this->returnValue($group));
+            ->willReturn($group);
         $actual = $this->unit->retrieve($groupId);
         $this->assertSame($group, $actual);
         $this->unit->remove($groupId);

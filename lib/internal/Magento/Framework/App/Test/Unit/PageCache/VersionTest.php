@@ -75,34 +75,34 @@ class VersionTest extends \PHPUnit\Framework\TestCase
      */
     public function testProcess($isPost)
     {
-        $this->requestMock->expects($this->once())->method('isPost')->will($this->returnValue($isPost));
+        $this->requestMock->expects($this->once())->method('isPost')->willReturn($isPost);
         if ($isPost) {
             $publicCookieMetadataMock = $this->createMock(\Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class);
             $publicCookieMetadataMock->expects($this->once())
                 ->method('setPath')
                 ->with('/')
-                ->will($this->returnSelf());
+                ->willReturnSelf();
 
             $publicCookieMetadataMock->expects($this->once())
                 ->method('setDuration')
                 ->with(Version::COOKIE_PERIOD)
-                ->will($this->returnSelf());
+                ->willReturnSelf();
 
             $publicCookieMetadataMock->expects($this->once())
                 ->method('setSecure')
                 ->with(false)
-                ->will($this->returnSelf());
+                ->willReturnSelf();
                 
             $publicCookieMetadataMock->expects($this->once())
                 ->method('setHttpOnly')
                 ->with(false)
-                ->will($this->returnSelf());
+                ->willReturnSelf();
 
             $this->cookieMetadataFactoryMock->expects($this->once())
                 ->method('createPublicCookieMetadata')
                 ->with()
-                ->will(
-                    $this->returnValue($publicCookieMetadataMock)
+                ->willReturn(
+                    $publicCookieMetadataMock
                 );
 
             $this->cookieManagerMock->expects($this->once())

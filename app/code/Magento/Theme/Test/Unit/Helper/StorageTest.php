@@ -93,7 +93,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         $this->filesystem->expects($this->any())
             ->method('getDirectoryWrite')
-            ->will($this->returnValue($this->directoryWrite));
+            ->willReturn($this->directoryWrite);
         $this->urlEncoder = $this->getMockBuilder(\Magento\Framework\Url\EncoderInterface::class)->getMock();
         $this->urlDecoder = $this->getMockBuilder(\Magento\Framework\Url\DecoderInterface::class)->getMock();
 
@@ -105,16 +105,16 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         $this->theme->expects($this->any())
             ->method('getCustomization')
-            ->will($this->returnValue($this->customization));
+            ->willReturn($this->customization);
 
         $this->request->expects($this->at(0))
             ->method('getParam')
             ->with(\Magento\Theme\Helper\Storage::PARAM_THEME_ID)
-            ->will($this->returnValue(6));
+            ->willReturn(6);
         $this->request->expects($this->at(1))
             ->method('getParam')
             ->with(\Magento\Theme\Helper\Storage::PARAM_CONTENT_TYPE)
-            ->will($this->returnValue(\Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE));
+            ->willReturn(\Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE);
 
         $this->helper = new \Magento\Theme\Helper\Storage(
             $this->contextHelper,
@@ -180,11 +180,11 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getCustomizationPath'
-        )->will(
-            $this->returnValue($this->customizationPath)
+        )->willReturn(
+            $this->customizationPath
         );
 
-        $this->directoryWrite->expects($this->any())->method('isExist')->will($this->returnValue(true));
+        $this->directoryWrite->expects($this->any())->method('isExist')->willReturn(true);
 
         $this->assertEquals($thumbnailPath, $this->helper->getThumbnailPath($image));
     }
@@ -197,8 +197,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             \Magento\Theme\Helper\Storage::PARAM_THEME_ID
-        )->will(
-            $this->returnValue(6)
+        )->willReturn(
+            6
         );
         $this->request->expects(
             $this->at(1)
@@ -206,8 +206,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             \Magento\Theme\Helper\Storage::PARAM_CONTENT_TYPE
-        )->will(
-            $this->returnValue('image')
+        )->willReturn(
+            'image'
         );
         $this->request->expects(
             $this->at(2)
@@ -215,8 +215,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             \Magento\Theme\Helper\Storage::PARAM_NODE
-        )->will(
-            $this->returnValue('node')
+        )->willReturn(
+            'node'
         );
 
         $expectedResult = [
@@ -235,8 +235,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             \Magento\Theme\Helper\Storage::PARAM_CONTENT_TYPE
-        )->will(
-            $this->returnValue(\Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT)
+        )->willReturn(
+            \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT
         );
 
         $this->request->expects(
@@ -245,8 +245,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             \Magento\Theme\Helper\Storage::PARAM_CONTENT_TYPE
-        )->will(
-            $this->returnValue(\Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE)
+        )->willReturn(
+            \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE
         );
 
         $fontTypes = $this->helper->getAllowedExtensionsByType();

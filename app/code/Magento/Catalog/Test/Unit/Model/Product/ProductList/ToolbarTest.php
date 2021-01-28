@@ -47,7 +47,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with(Toolbar::ORDER_PARAM_NAME)
-            ->will($this->returnValue($param));
+            ->willReturn($param);
         $this->assertEquals($param, $this->toolbarModel->getOrder());
     }
 
@@ -60,7 +60,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with(Toolbar::DIRECTION_PARAM_NAME)
-            ->will($this->returnValue($param));
+            ->willReturn($param);
         $this->assertEquals($param, $this->toolbarModel->getDirection());
     }
 
@@ -73,7 +73,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with(Toolbar::MODE_PARAM_NAME)
-            ->will($this->returnValue($param));
+            ->willReturn($param);
         $this->assertEquals($param, $this->toolbarModel->getMode());
     }
 
@@ -86,7 +86,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with(Toolbar::LIMIT_PARAM_NAME)
-            ->will($this->returnValue($param));
+            ->willReturn($param);
         $this->assertEquals($param, $this->toolbarModel->getLimit());
     }
 
@@ -99,7 +99,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with(Toolbar::PAGE_PARM_NAME)
-            ->will($this->returnValue($param));
+            ->willReturn($param);
         $this->assertEquals($param, $this->toolbarModel->getCurrentPage());
     }
 
@@ -108,7 +108,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with(Toolbar::PAGE_PARM_NAME)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->assertEquals(1, $this->toolbarModel->getCurrentPage());
     }
 

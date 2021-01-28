@@ -51,7 +51,7 @@ class PhpserverTest extends \PHPUnit\Framework\TestCase
         return sprintf('http://%s/%s', self::BASE_URL, ltrim($url, '/'));
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->httpClient = new \Zend\Http\Client(null, ['timeout' => 10]);
     }

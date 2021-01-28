@@ -129,7 +129,7 @@ class CreateProductReviewBackendEntityTest extends Injectable
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->ratingIndex->open();
         if ($this->review instanceof Review) {

@@ -69,12 +69,12 @@ class CountryofmanufactureTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAllOptions($cachedDataSrl, $cachedDataUnsrl)
     {
-        $this->storeMock->expects($this->once())->method('getCode')->will($this->returnValue('store_code'));
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($this->storeMock));
+        $this->storeMock->expects($this->once())->method('getCode')->willReturn('store_code');
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
         $this->cacheConfig->expects($this->once())
             ->method('load')
             ->with($this->equalTo('COUNTRYOFMANUFACTURE_SELECT_STORE_store_code'))
-            ->will($this->returnValue($cachedDataSrl));
+            ->willReturn($cachedDataSrl);
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
             ->willReturn($cachedDataUnsrl);

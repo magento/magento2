@@ -53,7 +53,7 @@ class CalculatorFactoryTest extends \PHPUnit\Framework\TestCase
         $objectManagerMock->expects($this->once())
             ->method('create')
             ->with($expectedInstanceType, ['storeId' => $storeId])
-            ->will($this->returnValue($instanceMock));
+            ->willReturn($instanceMock);
 
         /** @var CalculatorFactory $calculatorFactory */
         $calculatorFactory = $this->objectManager->getObject(

@@ -59,7 +59,7 @@ class AbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstract
             true,
             ['getColNames']
         );
-        $source->expects($this->any())->method('getColNames')->will($this->returnValue($columns));
+        $source->expects($this->any())->method('getColNames')->willReturn($columns);
         $this->_model->setSource($source);
 
         return $source;

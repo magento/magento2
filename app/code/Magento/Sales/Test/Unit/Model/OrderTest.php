@@ -732,10 +732,10 @@ class OrderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $paymentMock->expects($this->any())
             ->method('canReviewPayment')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $paymentMock->expects($this->any())
             ->method('canFetchTransactionInfo')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->preparePaymentMock($paymentMock);
         $this->order->setActionFlag(\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD, false);
         $this->order->setState(\Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW);
@@ -757,17 +757,17 @@ class OrderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $paymentMock->expects($this->any())
             ->method('canReviewPayment')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $paymentMock->expects($this->any())
             ->method('canFetchTransactionInfo')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $collectionMock = $this->createPartialMock(
             \Magento\Sales\Model\ResourceModel\Order\Item\Collection::class,
             ['getItems', 'setOrderFilter']
         );
         $this->orderItemCollectionFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($collectionMock));
+            ->willReturn($collectionMock);
         $collectionMock->expects($this->any())
             ->method('setOrderFilter')
             ->willReturnSelf();
@@ -796,10 +796,10 @@ class OrderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $paymentMock->expects($this->any())
             ->method('canReviewPayment')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $paymentMock->expects($this->any())
             ->method('canFetchTransactionInfo')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->preparePaymentMock($paymentMock);
 
@@ -826,10 +826,10 @@ class OrderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $paymentMock->expects($this->any())
             ->method('canReviewPayment')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $paymentMock->expects($this->any())
             ->method('canFetchTransactionInfo')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->preparePaymentMock($paymentMock);
 
@@ -893,8 +893,8 @@ class OrderTest extends \PHPUnit\Framework\TestCase
                 $this->any()
             )->method(
                 'canVoid'
-            )->will(
-                $this->returnValue($expected)
+            )->willReturn(
+                $expected
             );
         } else {
             $payment->expects($this->never())->method('canVoid');
@@ -915,14 +915,14 @@ class OrderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $collectionMock->expects($this->any())
             ->method('getIterator')
-            ->will($this->returnValue($iterator));
+            ->willReturn($iterator);
         $collectionMock->expects($this->any())
             ->method('setOrderFilter')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->paymentCollectionFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($collectionMock));
+            ->willReturn($collectionMock);
     }
 
     /**
@@ -938,9 +938,9 @@ class OrderTest extends \PHPUnit\Framework\TestCase
             \Magento\Sales\Model\Order\Payment::class
         )->disableOriginalConstructor()->getMock();
         foreach ($mockedMethods as $method => $value) {
-            $payment->expects($this->any())->method($method)->will($this->returnValue($value));
+            $payment->expects($this->any())->method($method)->willReturn($value);
         }
-        $payment->expects($this->any())->method('isDeleted')->will($this->returnValue(false));
+        $payment->expects($this->any())->method('isDeleted')->willReturn(false);
 
         $order->setData(\Magento\Sales\Api\Data\OrderInterface::PAYMENT, $payment);
 
@@ -996,7 +996,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
 
         $itemMock->expects($this->any())
             ->method('getQtyToInvoice')
-            ->will($this->returnValue($qtyInvoiced));
+            ->willReturn($qtyInvoiced);
 
         $iterator = new \ArrayIterator([$itemMock]);
 
@@ -1006,14 +1006,14 @@ class OrderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $itemCollectionMock->expects($this->any())
             ->method('getIterator')
-            ->will($this->returnValue($iterator));
+            ->willReturn($iterator);
         $itemCollectionMock->expects($this->any())
             ->method('setOrderFilter')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->orderItemCollectionFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($itemCollectionMock));
+            ->willReturn($itemCollectionMock);
     }
 
     /**

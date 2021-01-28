@@ -64,7 +64,7 @@ class MultilineTest extends TextTest
      */
     public function testValidateValueLength($value, $expected)
     {
-        $this->attributeMetadataMock->expects($this->any())->method('getMultilineCount')->will($this->returnValue(5));
+        $this->attributeMetadataMock->expects($this->any())->method('getMultilineCount')->willReturn(5);
 
         parent::testValidateValueLength($value, $expected);
     }

@@ -43,8 +43,8 @@ class ServerAddressTest extends \PHPUnit\Framework\TestCase
             'getServer'
         )->with(
             'SERVER_ADDR'
-        )->will(
-            $this->returnValue($serverVar)
+        )->willReturn(
+            $serverVar
         );
         $this->assertEquals($expected, $this->_serverAddress->getServerAddress($ipToLong));
     }

@@ -50,13 +50,13 @@ class CheckoutValidatorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->setMethods([])->getMock();
 
         $this->paypalShortcutHelperMock->expects($this->once())->method('isContextAvailable')
-            ->with($code, $isInCatalog)->will($this->returnValue(true));
+            ->with($code, $isInCatalog)->willReturn(true);
         $this->paypalShortcutHelperMock->expects($this->once())->method('isPriceOrSetAvailable')
-            ->with($isInCatalog)->will($this->returnValue(true));
+            ->with($isInCatalog)->willReturn(true);
         $this->paymentHelperMock->expects($this->once())->method('getMethodInstance')->with($code)
-            ->will($this->returnValue($methodInstanceMock));
+            ->willReturn($methodInstanceMock);
         $methodInstanceMock->expects($this->once())->method('isAvailable')->with(null)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertTrue($this->checkoutValidator->validate($code, $isInCatalog));
     }
@@ -70,9 +70,9 @@ class CheckoutValidatorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->setMethods([])->getMock();
 
         $this->paymentHelperMock->expects($this->once())->method('getMethodInstance')->with($paymentCode)
-            ->will($this->returnValue($methodInstanceMock));
+            ->willReturn($methodInstanceMock);
         $methodInstanceMock->expects($this->once())->method('isAvailable')->with($quote)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->assertFalse($this->checkoutValidator->isMethodQuoteAvailable($paymentCode, $isInCatalog));
     }
@@ -90,11 +90,11 @@ class CheckoutValidatorTest extends \PHPUnit\Framework\TestCase
         $methodInstanceMock = $this->getMockBuilder(\Magento\Payment\Model\Method\AbstractMethod::class)
             ->disableOriginalConstructor()->setMethods([])->getMock();
 
-        $this->sessionMock->expects($this->once())->method('getQuote')->will($this->returnValue($quote));
+        $this->sessionMock->expects($this->once())->method('getQuote')->willReturn($quote);
         $this->paymentHelperMock->expects($this->once())->method('getMethodInstance')->with($paymentCode)
-            ->will($this->returnValue($methodInstanceMock));
+            ->willReturn($methodInstanceMock);
         $methodInstanceMock->expects($this->once())->method('isAvailable')->with($quote)
-            ->will($this->returnValue($availability));
+            ->willReturn($availability);
 
         $this->assertEquals(
             $availability,
@@ -122,8 +122,8 @@ class CheckoutValidatorTest extends \PHPUnit\Framework\TestCase
         $quote = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)->disableOriginalConstructor()->setMethods([])
             ->getMock();
 
-        $this->sessionMock->expects($this->once())->method('getQuote')->will($this->returnValue($quote));
-        $quote->expects($this->once())->method('validateMinimumAmount')->will($this->returnValue(false));
+        $this->sessionMock->expects($this->once())->method('getQuote')->willReturn($quote);
+        $quote->expects($this->once())->method('validateMinimumAmount')->willReturn(false);
 
         $this->assertFalse($this->checkoutValidator->isQuoteSummaryValid($isInCatalog));
     }
@@ -135,9 +135,9 @@ class CheckoutValidatorTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getGrandTotal', 'validateMinimumAmount', '__wakeup'])
             ->getMock();
 
-        $this->sessionMock->expects($this->once())->method('getQuote')->will($this->returnValue($quote));
-        $quote->expects($this->once())->method('validateMinimumAmount')->will($this->returnValue(true));
-        $quote->expects($this->once())->method('getGrandTotal')->will($this->returnValue(0));
+        $this->sessionMock->expects($this->once())->method('getQuote')->willReturn($quote);
+        $quote->expects($this->once())->method('validateMinimumAmount')->willReturn(true);
+        $quote->expects($this->once())->method('getGrandTotal')->willReturn(0);
 
         $this->assertFalse($this->checkoutValidator->isQuoteSummaryValid($isInCatalog));
     }
@@ -149,9 +149,9 @@ class CheckoutValidatorTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getGrandTotal', 'validateMinimumAmount', '__wakeup'])
             ->getMock();
 
-        $this->sessionMock->expects($this->once())->method('getQuote')->will($this->returnValue($quote));
-        $quote->expects($this->once())->method('validateMinimumAmount')->will($this->returnValue(true));
-        $quote->expects($this->once())->method('getGrandTotal')->will($this->returnValue(1));
+        $this->sessionMock->expects($this->once())->method('getQuote')->willReturn($quote);
+        $quote->expects($this->once())->method('validateMinimumAmount')->willReturn(true);
+        $quote->expects($this->once())->method('getGrandTotal')->willReturn(1);
 
         $this->assertTrue($this->checkoutValidator->isQuoteSummaryValid($isInCatalog));
     }

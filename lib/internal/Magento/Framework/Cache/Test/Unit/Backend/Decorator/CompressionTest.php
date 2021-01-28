@@ -108,9 +108,9 @@ class CompressionTest extends \PHPUnit\Framework\TestCase
         $cacheId = 'cacheId' . rand(1, 100);
 
         $backend = $this->createPartialMock(\Zend_Cache_Backend_File::class, ['save', 'load']);
-        $backend->expects($this->once())->method('save')->will($this->returnCallback([__CLASS__, 'mockSave']));
+        $backend->expects($this->once())->method('save')->willReturnCallback([__CLASS__, 'mockSave']);
 
-        $backend->expects($this->once())->method('load')->will($this->returnCallback([__CLASS__, 'mockLoad']));
+        $backend->expects($this->once())->method('load')->willReturnCallback([__CLASS__, 'mockLoad']);
 
         $options = ['concrete_backend' => $backend, 'compression_threshold' => strlen($this->_testString)];
 

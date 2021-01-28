@@ -44,7 +44,7 @@ class IndexerConfigDataTest extends \PHPUnit\Framework\TestCase
      */
     public function testAroundGet($isFlat, $path, $default, $inputData, $outputData)
     {
-        $this->stateMock->expects($this->once())->method('isFlatEnabled')->will($this->returnValue($isFlat));
+        $this->stateMock->expects($this->once())->method('isFlatEnabled')->willReturn($isFlat);
         $this->assertEquals($outputData, $this->model->afterGet($this->subjectMock, $inputData, $path, $default));
     }
 

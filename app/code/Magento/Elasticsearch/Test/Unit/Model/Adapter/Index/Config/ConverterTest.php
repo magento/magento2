@@ -39,8 +39,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $dom->loadXML(file_get_contents($xmlFile));
         $result = $this->converter->convert($dom);
 
-        $this->assertIsArray(
-            $result
+        $this->assertIsArray($result
         );
     }
 }

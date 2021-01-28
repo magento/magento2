@@ -72,13 +72,13 @@ class CompareTest extends \PHPUnit\Framework\TestCase
             );
         $this->context->expects($this->once())
             ->method('getUrlBuilder')
-            ->will($this->returnValue($this->urlBuilder));
+            ->willReturn($this->urlBuilder);
         $this->context->expects($this->once())
             ->method('getRequest')
-            ->will($this->returnValue($this->request));
+            ->willReturn($this->request);
         $this->context->expects($this->once())
             ->method('getUrlEncoder')
-            ->will($this->returnValue($this->urlEncoder));
+            ->willReturn($this->urlEncoder);
         $this->postDataHelper = $this->createPartialMock(
             \Magento\Framework\Data\Helper\PostHelper::class,
             ['getPostData']
@@ -114,17 +114,17 @@ class CompareTest extends \PHPUnit\Framework\TestCase
         $this->urlBuilder->expects($this->once())
             ->method('getUrl')
             ->with($removeUrl)
-            ->will($this->returnValue($removeUrl));
+            ->willReturn($removeUrl);
         $this->postDataHelper->expects($this->once())
             ->method('getPostData')
             ->with($removeUrl, $postParams)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         /** @var \Magento\Catalog\Model\Product | \PHPUnit\Framework\MockObject\MockObject $product */
         $product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getId', '__wakeup']);
         $product->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($productId));
+            ->willReturn($productId);
 
         $this->assertTrue($this->compareHelper->getPostDataRemove($product));
     }
@@ -138,7 +138,7 @@ class CompareTest extends \PHPUnit\Framework\TestCase
         $this->urlBuilder->expects($this->once())
             ->method('getUrl')
             ->with($url)
-            ->will($this->returnValue($url));
+            ->willReturn($url);
 
         $this->assertEquals($url, $this->compareHelper->getClearListUrl());
     }
@@ -157,12 +157,12 @@ class CompareTest extends \PHPUnit\Framework\TestCase
         $this->urlBuilder->expects($this->once())
             ->method('getUrl')
             ->with($clearUrl)
-            ->will($this->returnValue($clearUrl));
+            ->willReturn($clearUrl);
 
         $this->postDataHelper->expects($this->once())
             ->method('getPostData')
             ->with($clearUrl, $postParams)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertTrue($this->compareHelper->getPostDataClearList());
     }

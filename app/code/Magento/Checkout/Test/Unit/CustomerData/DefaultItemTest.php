@@ -85,7 +85,7 @@ class DefaultItemTest extends \PHPUnit\Framework\TestCase
         $this->itemResolver->expects($this->any())
             ->method('getFinalProduct')
             ->with($item)
-            ->will($this->returnValue($product));
+            ->willReturn($product);
 
         $itemData = $this->model->getItemData($item);
         $this->assertArrayHasKey('options', $itemData);

@@ -40,7 +40,7 @@ class ProxyTestingTest extends \PHPUnit\Framework\TestCase
         $object = $this->createPartialMock('stdClass', [$method]);
         $builder = $object->expects($this->once())->method($method);
         call_user_func_array([$builder, 'with'], $params);
-        $builder->will($this->returnCallback($callProxy));
+        $builder->willReturnCallback($callProxy);
 
         // Test it
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ProxyTesting();

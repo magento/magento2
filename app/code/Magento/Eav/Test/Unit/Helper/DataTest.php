@@ -70,7 +70,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         ]);
         $this->eavConfig->expects($this->once())
             ->method('getAttribute')
-            ->will($this->returnValue($attribute));
+            ->willReturn($attribute);
 
         $result = $this->helper->getAttributeMetadata('customer', 'lastname');
         $expected = [
@@ -128,7 +128,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $lockedFields = ['lockedField1', 'lockedField2'];
 
         $this->attributeConfig->expects($this->once())->method('getEntityAttributesLockedFields')
-            ->with('entityTypeCode')->will($this->returnValue($lockedFields));
+            ->with('entityTypeCode')->willReturn($lockedFields);
         $this->assertEquals($lockedFields, $this->helper->getAttributeLockedFields('entityTypeCode'));
     }
 
@@ -140,7 +140,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $lockedFields = ['lockedField1', 'lockedField2'];
 
         $this->attributeConfig->expects($this->once())->method('getEntityAttributesLockedFields')
-            ->with('entityTypeCode')->will($this->returnValue($lockedFields));
+            ->with('entityTypeCode')->willReturn($lockedFields);
 
         $this->helper->getAttributeLockedFields('entityTypeCode');
         $this->assertEquals($lockedFields, $this->helper->getAttributeLockedFields('entityTypeCode'));
@@ -152,7 +152,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function testGetAttributeLockedFieldsNoLockedFields()
     {
         $this->attributeConfig->expects($this->once())->method('getEntityAttributesLockedFields')
-            ->with('entityTypeCode')->will($this->returnValue([]));
+            ->with('entityTypeCode')->willReturn([]);
 
         $this->assertEquals([], $this->helper->getAttributeLockedFields('entityTypeCode'));
     }

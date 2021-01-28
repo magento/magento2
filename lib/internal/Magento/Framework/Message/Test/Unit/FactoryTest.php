@@ -27,11 +27,12 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Wrong message type
      */
     public function testCreateWithWrongTypeException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Wrong message type');
+
         $this->objectManagerMock->expects($this->never())->method('create');
         $this->factory->create('type', 'text');
     }
@@ -49,7 +50,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('create')
             ->with($className, ['text' => 'text'])
-            ->will($this->returnValue($messageMock));
+            ->willReturn($messageMock);
         $this->factory->create($type, 'text');
     }
 
@@ -62,7 +63,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('create')
             ->with($className, ['text' => 'text'])
-            ->will($this->returnValue($messageMock));
+            ->willReturn($messageMock);
         $this->assertEquals($messageMock, $this->factory->create($type, 'text'));
     }
 }

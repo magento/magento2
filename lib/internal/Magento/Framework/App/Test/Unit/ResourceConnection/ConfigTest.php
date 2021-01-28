@@ -95,9 +95,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($connectionName, $this->config->getConnectionName($resourceName));
     }
 
+    /**
+     */
     public function testGetConnectionNameWithException()
     {
-        $this->expectException('\InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
 
         $deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $deploymentConfigMock->expects($this->once())

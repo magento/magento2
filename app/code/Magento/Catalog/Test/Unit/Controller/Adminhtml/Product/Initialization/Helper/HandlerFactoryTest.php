@@ -42,8 +42,8 @@ class HandlerFactoryTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\Composite::class
-        )->will(
-            $this->returnValue('object')
+        )->willReturn(
+            'object'
         );
         $this->assertEquals(
             'object',

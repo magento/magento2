@@ -43,12 +43,12 @@ class DesignLoaderTest extends \PHPUnit\Framework\TestCase
     public function testLoad()
     {
         $area = $this->createMock(\Magento\Framework\App\Area::class);
-        $this->appState->expects($this->once())->method('getAreaCode')->will($this->returnValue('area'));
-        $this->_areaListMock->expects($this->once())->method('getArea')->with('area')->will($this->returnValue($area));
+        $this->appState->expects($this->once())->method('getAreaCode')->willReturn('area');
+        $this->_areaListMock->expects($this->once())->method('getArea')->with('area')->willReturn($area);
         $area->expects($this->at(0))->method('load')
-            ->with(\Magento\Framework\App\Area::PART_DESIGN)->will($this->returnValue($area));
+            ->with(\Magento\Framework\App\Area::PART_DESIGN)->willReturn($area);
         $area->expects($this->at(1))->method('load')
-            ->with(\Magento\Framework\App\Area::PART_TRANSLATE)->will($this->returnValue($area));
+            ->with(\Magento\Framework\App\Area::PART_TRANSLATE)->willReturn($area);
         $this->_model->load($this->_requestMock);
     }
 }

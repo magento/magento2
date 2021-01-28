@@ -77,9 +77,11 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['customOne.php'], $object->getFiles());
     }
 
+    /**
+     */
     public function testWrongFile()
     {
-        $this->expectException('\InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid file name: invalid_name');
 
         new Reader($this->dirList, $this->driverPool, $this->configFilePool, 'invalid_name');
@@ -91,7 +93,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         $this->configFilePool
             ->expects($this->any())
             ->method('getPath')
-            ->will($this->returnValueMap($files));
+            ->willReturnMap($files);
         $object = new Reader($this->dirList, $this->driverPool, $this->configFilePool);
         $this->assertSame(['fooKey' =>'foo', 'barKey' => 'bar', 'envKey' => 'env'], $object->load());
     }
@@ -117,8 +119,8 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testLoadInvalidConfigurationFileWithFileKey()
     {
-        $this->expectException('\Magento\Framework\Exception\RuntimeException');
-        $this->expectExceptionMessageMatches('/Invalid configuration file: \\\'.*\/\_files\/emptyConfig\.php\\\'/');
+        $this->expectException(\Magento\Framework\Exception\RuntimeException::class);
+        $this->expectExceptionMessageRegExp('/Invalid configuration file: \\\'.*\\/\\_files\\/emptyConfig\\.php\\\'/');
 
         $fileDriver = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
@@ -155,8 +157,8 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testLoadInvalidConfigurationFile(): void
     {
-        $this->expectException('\Magento\Framework\Exception\RuntimeException');
-        $this->expectExceptionMessageMatches('/Invalid configuration file: \\\'.*\/\_files\/emptyConfig\.php\\\'/');
+        $this->expectException(\Magento\Framework\Exception\RuntimeException::class);
+        $this->expectExceptionMessageRegExp('/Invalid configuration file: \\\'.*\\/\\_files\\/emptyConfig\\.php\\\'/');
 
         $fileDriver = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()

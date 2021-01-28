@@ -203,12 +203,12 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
         $this->productRepository->expects($this->at(1))->method('get')->with($childSku)->willReturn($simple);
 
         $this->configurableType->expects($this->once())->method('getChildrenIds')->with(666)
-            ->will(
-                $this->returnValue([0 => [1, 2, 3]])
+            ->willReturn(
+                [0 => [1, 2, 3]]
             );
 
-        $configurable->expects($this->any())->method('getId')->will($this->returnValue(666));
-        $simple->expects($this->any())->method('getId')->will($this->returnValue(999));
+        $configurable->expects($this->any())->method('getId')->willReturn(666);
+        $simple->expects($this->any())->method('getId')->willReturn(999);
 
         $configurable->expects($this->any())->method('getExtensionAttributes')->willReturn($extensionAttributesMock);
         $extensionAttributesMock->expects($this->any())
@@ -247,20 +247,20 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $configurable->expects($this->any())->method('getId')->will($this->returnValue(666));
+        $configurable->expects($this->any())->method('getId')->willReturn(666);
 
         $simple = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $simple->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $simple->expects($this->any())->method('getId')->willReturn(1);
 
         $this->productRepository->expects($this->at(0))->method('get')->with($productSku)->willReturn($configurable);
         $this->productRepository->expects($this->at(1))->method('get')->with($childSku)->willReturn($simple);
 
         $this->configurableType->expects($this->once())->method('getChildrenIds')->with(666)
-            ->will(
-                $this->returnValue([0 => [1, 2, 3]])
+            ->willReturn(
+                [0 => [1, 2, 3]]
             );
         $configurable->expects($this->never())->method('save');
         $this->object->addChild($productSku, $childSku);
@@ -284,21 +284,21 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
 
         $product->expects($this->any())
             ->method('getTypeId')
-            ->will($this->returnValue(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE));
+            ->willReturn(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE);
         $this->productRepository->expects($this->any())
             ->method('get')
             ->with($productSku)
-            ->will($this->returnValue($product));
+            ->willReturn($product);
 
         $option = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['getSku', 'getId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
-        $option->expects($this->any())->method('getSku')->will($this->returnValue($childSku));
-        $option->expects($this->any())->method('getId')->will($this->returnValue(10));
+        $option->expects($this->any())->method('getSku')->willReturn($childSku);
+        $option->expects($this->any())->method('getId')->willReturn(10);
 
         $productType->expects($this->once())->method('getUsedProducts')
-            ->will($this->returnValue([$option]));
+            ->willReturn([$option]);
 
         $extensionAttributesMock = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttributesInterface::class)
             ->setMethods(['setConfigurableProductLinks'])
@@ -323,8 +323,8 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
 
         $product->expects($this->any())
             ->method('getTypeId')
-            ->will($this->returnValue(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE));
-        $this->productRepository->expects($this->any())->method('get')->will($this->returnValue($product));
+            ->willReturn(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE);
+        $this->productRepository->expects($this->any())->method('get')->willReturn($product);
         $this->object->removeChild($productSku, $childSku);
     }
 
@@ -343,23 +343,23 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $product->expects($this->any())
             ->method('getTypeId')
-            ->will($this->returnValue(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE));
+            ->willReturn(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE);
         $productType = $this->getMockBuilder(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::class)
             ->setMethods(['getUsedProducts'])
             ->disableOriginalConstructor()
             ->getMock();
         $product->expects($this->once())->method('getTypeInstance')->willReturn($productType);
 
-        $this->productRepository->expects($this->any())->method('get')->will($this->returnValue($product));
+        $this->productRepository->expects($this->any())->method('get')->willReturn($product);
 
         $option = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['getSku', 'getId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
-        $option->expects($this->any())->method('getSku')->will($this->returnValue($childSku . '_invalid'));
-        $option->expects($this->any())->method('getId')->will($this->returnValue(10));
+        $option->expects($this->any())->method('getSku')->willReturn($childSku . '_invalid');
+        $option->expects($this->any())->method('getId')->willReturn(10);
         $productType->expects($this->once())->method('getUsedProducts')
-            ->will($this->returnValue([$option]));
+            ->willReturn([$option]);
 
         $this->object->removeChild($productSku, $childSku);
     }

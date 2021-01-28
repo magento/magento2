@@ -53,7 +53,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
      */
     private $componentRegistrar;
 
-    public function setup(): void
+    protected function setup(): void
     {
         $this->themeDirectoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
             ->getMock();
@@ -64,12 +64,12 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->themeMock->expects($this->once())
             ->method('getFullPath')
-            ->will($this->returnValue($this->themePath));
+            ->willReturn($this->themePath);
 
         $this->readDirFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
         $this->readDirFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->themeDirectoryMock));
+            ->willReturn($this->themeDirectoryMock);
         $this->componentRegistrar = $this->getMockForAbstractClass(
             \Magento\Framework\Component\ComponentRegistrarInterface::class
         );
@@ -84,7 +84,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     {
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
-            ->will($this->returnValue(''));
+            ->willReturn('');
         $this->assertSame([], $this->themeFileCollector->getFiles($this->themeMock, ''));
     }
 
@@ -93,7 +93,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
             ->with(ComponentRegistrar::THEME, $this->themePath)
-            ->will($this->returnValue(self::FULL_THEME_PATH));
+            ->willReturn(self::FULL_THEME_PATH);
         $this->themeDirectoryMock->expects($this->any())
             ->method('search')
             ->with('')
@@ -111,7 +111,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
             ->with(ComponentRegistrar::THEME, $this->themePath)
-            ->will($this->returnValue(self::FULL_THEME_PATH));
+            ->willReturn(self::FULL_THEME_PATH);
         $fileMock = $this->getMockBuilder(\Magento\Framework\View\File::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -141,7 +141,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
             ->with(ComponentRegistrar::THEME, $this->themePath)
-            ->will($this->returnValue(self::FULL_THEME_PATH));
+            ->willReturn(self::FULL_THEME_PATH);
         $fileMock = $this->getMockBuilder(\Magento\Framework\View\File::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -102,8 +102,8 @@ class RequestPreprocessorTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getStore'
-        )->will(
-            $this->returnValue($this->_storeMock)
+        )->willReturn(
+            $this->_storeMock
         );
         $this->_storeMock->expects($this->once())->method('getBaseUrl');
         $this->_requestMock->expects($this->never())->method('getRequestUri');
@@ -121,10 +121,10 @@ class RequestPreprocessorTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getStore'
-        )->will(
-            $this->returnValue($this->_storeMock)
+        )->willReturn(
+            $this->_storeMock
         );
-        $this->_storeMock->expects($this->once())->method('getBaseUrl')->will($this->returnValue(false));
+        $this->_storeMock->expects($this->once())->method('getBaseUrl')->willReturn(false);
         $this->_requestMock->expects($this->never())->method('getRequestUri');
         $this->baseUrlChecker->expects($this->any())->method('isEnabled')->willReturn(true);
         $this->assertEquals(

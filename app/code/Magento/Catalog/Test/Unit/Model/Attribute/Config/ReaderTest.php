@@ -42,13 +42,13 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         )->with(
             'catalog_attributes.xml',
             'scope'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 [
                     file_get_contents(__DIR__ . '/_files/attributes_config_one.xml'),
                     file_get_contents(__DIR__ . '/_files/attributes_config_two.xml'),
                 ]
-            )
+            
         );
 
         $this->_converter = $this->createPartialMock(
@@ -64,8 +64,8 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         )->with(
             'etc',
             'Magento_Catalog'
-        )->will(
-            $this->returnValue('stub')
+        )->willReturn(
+            'stub'
         );
         $this->_schemaLocator = new \Magento\Catalog\Model\Attribute\Config\SchemaLocator($moduleReader);
 
@@ -100,8 +100,8 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             'convert'
         )->with(
             $this->callback($constraint)
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
         $this->assertSame($expectedResult, $this->_model->read('scope'));
     }

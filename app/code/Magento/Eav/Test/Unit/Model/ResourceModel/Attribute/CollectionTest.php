@@ -86,10 +86,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->entityTypeMock->setAdditionalAttributeTable('some_extra_table');
         $this->eavConfigMock->expects($this->any())
             ->method('getEntityType')
-            ->will($this->returnValue($this->entityTypeMock));
+            ->willReturn($this->entityTypeMock);
 
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnSelf());
+        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturnSelf();
 
         $this->connectionMock = $this->createPartialMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
@@ -111,11 +111,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ['__wakeup', 'getConnection', 'getMainTable', 'getTable']
         );
 
-        $this->connectionMock->expects($this->any())->method('select')->will($this->returnValue($this->select));
-        $this->connectionMock->expects($this->any())->method('quoteIdentifier')->will($this->returnArgument(0));
+        $this->connectionMock->expects($this->any())->method('select')->willReturn($this->select);
+        $this->connectionMock->expects($this->any())->method('quoteIdentifier')->willReturnArgument(0);
         $this->connectionMock->expects($this->any())
             ->method('describeTable')
-            ->will($this->returnValueMap(
+            ->willReturnMap(
                 [
                     [
                         'some_main_table',
@@ -143,8 +143,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                         ]
                     ],
                 ]
-            ));
-        $this->connectionMock->expects($this->any())->method('_quote')->will($this->returnArgument(0));
+            );
+        $this->connectionMock->expects($this->any())->method('_quote')->willReturnArgument(0);
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
         $this->resourceMock->expects($this->any())->method('getMainTable')->willReturn('some_main_table');
         $this->resourceMock->expects($this->any())->method('getTable')->willReturn('some_extra_table');

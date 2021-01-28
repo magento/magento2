@@ -63,9 +63,9 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->any())
             ->method('getPost')
             ->with('downloadable')
-            ->will($this->returnValue(['link' => [['is_delete' => '']]]));
+            ->willReturn(['link' => [['is_delete' => '']]]);
         $this->weightResolver->expects($this->any())->method('resolveProductHasWeight')->willReturn(false);
-        $this->productMock->expects($this->once())->method('getTypeId')->will($this->returnValue($currentTypeId));
+        $this->productMock->expects($this->once())->method('getTypeId')->willReturn($currentTypeId);
         $this->productMock->expects($this->once())
             ->method('setTypeId')
             ->with(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE);
@@ -99,9 +99,9 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->any())
             ->method('getPost')
             ->with('downloadable')
-            ->will($this->returnValue($downloadableData));
+            ->willReturn($downloadableData);
         $this->weightResolver->expects($this->any())->method('resolveProductHasWeight')->willReturn($hasWeight);
-        $this->productMock->expects($this->once())->method('getTypeId')->will($this->returnValue($currentTypeId));
+        $this->productMock->expects($this->once())->method('getTypeId')->willReturn($currentTypeId);
         $this->productMock->expects($this->never())->method('setTypeId');
 
         $this->model->aroundProcessProduct($this->subjectMock, $this->closureMock, $this->productMock);

@@ -50,7 +50,7 @@ class FileListTest extends \PHPUnit\Framework\TestCase
         $theme = null;
         if ($themeFullPath !== null) {
             $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
-            $theme->expects($this->any())->method('getFullPath')->will($this->returnValue($themeFullPath));
+            $theme->expects($this->any())->method('getFullPath')->willReturn($themeFullPath);
         }
         return new \Magento\Framework\View\File($filename, $module, $theme);
     }
@@ -75,21 +75,23 @@ class FileListTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage View file 'test/fixture.xml' is indistinguishable from the file 'fixture.xml'
      */
     public function testAddBaseFileException()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('View file \'test/fixture.xml\' is indistinguishable from the file \'fixture.xml\'');
+
         $file = $this->_createViewFile('test/fixture.xml', 'Fixture_TestModule');
         $this->_model->add([$file]);
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage View file 'test/fixture.xml' is indistinguishable from the file 'fixture.xml'
      */
     public function testAddThemeFileException()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('View file \'test/fixture.xml\' is indistinguishable from the file \'fixture.xml\'');
+
         $file = $this->_createViewFile('test/fixture.xml', 'Fixture_TestModule', 'area/theme/path');
         $this->_model->add([$file]);
     }
@@ -110,7 +112,7 @@ class FileListTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             )
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertNull($this->_model->replace($files));
         $this->assertSame($result, $this->_model->getAll());
     }

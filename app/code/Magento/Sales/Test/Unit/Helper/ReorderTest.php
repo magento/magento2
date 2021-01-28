@@ -128,7 +128,7 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $this->storeParam
             )
-            ->will($this->returnValue($returnValue));
+            ->willReturn($returnValue);
     }
 
     /**
@@ -157,7 +157,7 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
 
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->repositoryMock->expects($this->once())
             ->method('get')
             ->with(1)
@@ -178,11 +178,11 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
 
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->orderMock->expects($this->once())
             ->method('canReorder')
-            ->will($this->returnValue($orderCanReorder));
+            ->willReturn($orderCanReorder);
         $this->repositoryMock->expects($this->once())
             ->method('get')
             ->with(1)
@@ -201,7 +201,7 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
         $this->setupScopeConfigMock($storeScopeReturnValue);
         $this->orderMock->expects($this->once())
             ->method('getStore')
-            ->will($this->returnValue($this->storeParam));
+            ->willReturn($this->storeParam);
     }
 
     /**

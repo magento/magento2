@@ -68,15 +68,15 @@ class NvpTest extends \PHPUnit\Framework\TestCase
         );
         $processableExceptionFactory->expects($this->any())
             ->method('create')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($arguments) {
                         $this->processableException = $this->getMockBuilder(
                             \Magento\Paypal\Model\Api\ProcessableException::class
                         )->setConstructorArgs([$arguments['phrase'], null, $arguments['code']])->getMock();
                         return $this->processableException;
                     }
-                )
+                
             );
         $exceptionFactory = $this->createPartialMock(
             \Magento\Framework\Exception\LocalizedExceptionFactory::class,
@@ -84,19 +84,19 @@ class NvpTest extends \PHPUnit\Framework\TestCase
         );
         $exceptionFactory->expects($this->any())
             ->method('create')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($arguments) {
                         $this->exception = $this->getMockBuilder(LocalizedException::class)
                             ->setConstructorArgs([$arguments['phrase']])
                             ->getMock();
                         return $this->exception;
                     }
-                )
+                
             );
         $this->curl = $this->createMock(\Magento\Framework\HTTP\Adapter\Curl::class);
         $curlFactory = $this->createPartialMock(\Magento\Framework\HTTP\Adapter\CurlFactory::class, ['create']);
-        $curlFactory->expects($this->any())->method('create')->will($this->returnValue($this->curl));
+        $curlFactory->expects($this->any())->method('create')->willReturn($this->curl);
         $this->config = $this->createMock(\Magento\Paypal\Model\Config::class);
 
         $helper = new ObjectManagerHelper($this);
@@ -148,7 +148,7 @@ class NvpTest extends \PHPUnit\Framework\TestCase
         }
         $this->curl->expects($this->once())
             ->method('read')
-            ->will($this->returnValue($response));
+            ->willReturn($response);
         $this->model->setProcessableErrors($processableErrors);
         $this->customLoggerMock->expects($this->once())
             ->method('debug');
@@ -205,7 +205,7 @@ class NvpTest extends \PHPUnit\Framework\TestCase
     {
         $this->curl->expects($this->once())
             ->method('read')
-            ->will($this->returnValue($input));
+            ->willReturn($input);
         $this->model->callGetExpressCheckoutDetails();
         $address = $this->model->getExportedShippingAddress();
         $this->assertEquals($expected['firstName'], $address->getData('firstname'));
@@ -303,7 +303,7 @@ class NvpTest extends \PHPUnit\Framework\TestCase
         $processableErrors =[10415];
         $this->curl->expects($this->once())
             ->method('read')
-            ->will($this->returnValue($response));
+            ->willReturn($response);
         $this->model->setProcessableErrors($processableErrors);
         $this->customLoggerMock->expects($this->once())
             ->method('debug');

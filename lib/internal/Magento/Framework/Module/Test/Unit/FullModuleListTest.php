@@ -22,7 +22,7 @@ class FullModuleListTest extends \PHPUnit\Framework\TestCase
             'Vendor_B' => ['data' => 'b'],
             'Vendor_C' => ['data' => 'c'],
         ];
-        $loaderMock->expects($this->once())->method('load')->will($this->returnValue($modules));
+        $loaderMock->expects($this->once())->method('load')->willReturn($modules);
         $this->moduleList = new FullModuleList($loaderMock);
     }
 

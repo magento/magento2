@@ -63,7 +63,7 @@ class PriceModifierTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getData')
             ->with('tier_price')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->productMock->expects($this->never())->method('setData');
         $this->productRepositoryMock->expects($this->never())->method('save');
         $this->priceModifier->removeTierPrice($this->productMock, 1, 3, 1);
@@ -80,7 +80,7 @@ class PriceModifierTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getData')
             ->with('tier_price')
-            ->will($this->returnValue($this->prices));
+            ->willReturn($this->prices);
         $this->productMock->expects($this->never())->method('setData');
         $this->productRepositoryMock->expects($this->never())->method('save');
         $this->priceModifier->removeTierPrice($this->productMock, 10, 5, 1);
@@ -92,7 +92,7 @@ class PriceModifierTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getData')
             ->with('tier_price')
-            ->will($this->returnValue($this->prices));
+            ->willReturn($this->prices);
         $expectedPrices = [$this->prices[0]];
         $this->productMock->expects($this->once())->method('setData')->with('tier_price', $expectedPrices);
         $this->productRepositoryMock->expects($this->once())->method('save')->with($this->productMock);
@@ -105,7 +105,7 @@ class PriceModifierTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getData')
             ->with('tier_price')
-            ->will($this->returnValue($this->prices));
+            ->willReturn($this->prices);
         $expectedPrices = [1 => $this->prices[1]];
         $this->productMock->expects($this->once())->method('setData')->with('tier_price', $expectedPrices);
         $this->productRepositoryMock->expects($this->once())->method('save')->with($this->productMock);

@@ -91,8 +91,9 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGenerateWithoutFromPart()
     {
-        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->expectExceptionMessage('The select object must have the correct "FROM" part. Verify and try again.');
+
         $map = [
             [Select::FROM, []],
             [

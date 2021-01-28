@@ -164,14 +164,14 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('order_id')
-            ->will($this->returnValue($orderId));
+            ->willReturn($orderId);
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')
             ->with($orderId)
             ->willReturn($this->orderMock);
         $this->orderMock->expects($this->atLeastOnce())
             ->method('getEntityId')
-            ->will($this->returnValue($orderId));
+            ->willReturn($orderId);
         $this->orderManagementMock->expects($this->once())
             ->method('notify')
             ->with($orderId)
@@ -199,7 +199,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('order_id')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')
             ->with(null)
@@ -215,7 +215,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $this->actionFlag->expects($this->once())
             ->method('set')
             ->with('', 'no-dispatch', true)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->resultRedirect->expects($this->once())
             ->method('setPath')
             ->with('sales/*/')

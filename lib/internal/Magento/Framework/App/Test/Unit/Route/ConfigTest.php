@@ -123,8 +123,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'read'
         )->with(
             'scope'
-        )->will(
-            $this->returnValue($routers)
+        )->willReturn(
+            $routers
         );
 
         $this->_areaList->expects(
@@ -133,8 +133,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'getDefaultRouter'
         )->with(
             'scope'
-        )->will(
-            $this->returnValue('default_router')
+        )->willReturn(
+            'default_router'
         );
 
         $this->serializerMock->expects($this->once())

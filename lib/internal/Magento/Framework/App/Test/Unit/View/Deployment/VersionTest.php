@@ -97,9 +97,11 @@ class VersionTest extends \PHPUnit\Framework\TestCase
         $this->object->getValue();
     }
 
+    /**
+     */
     public function testGetValueWithProductionModeAndException()
     {
-        $this->expectException('\UnexpectedValueException');
+        $this->expectException(\UnexpectedValueException::class);
 
         $this->versionStorageMock->expects($this->once())
             ->method('load')

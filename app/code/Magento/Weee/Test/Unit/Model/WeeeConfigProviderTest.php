@@ -39,7 +39,7 @@ class WeeeConfigProviderTest extends \PHPUnit\Framework\TestCase
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
 
-        $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($this->storeMock));
+        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
 
         $this->model = new \Magento\Weee\Model\WeeeConfigProvider(
             $this->weeeHelperMock,
@@ -64,16 +64,16 @@ class WeeeConfigProviderTest extends \PHPUnit\Framework\TestCase
         $includeInSubtotal
     ) {
         $storeId = 1;
-        $this->storeMock->expects($this->any())->method('getId')->will($this->returnValue($storeId));
+        $this->storeMock->expects($this->any())->method('getId')->willReturn($storeId);
         $this->weeeHelperMock->expects($this->any())->method('isEnabled')->with($storeId)
-            ->will($this->returnValue($weeeHelperEnabled));
+            ->willReturn($weeeHelperEnabled);
         $this->weeeHelperMock->expects($this->any())->method('typeOfDisplay')
-            ->will($this->returnValue($displayWeeeDetails));
+            ->willReturn($displayWeeeDetails);
 
         $this->weeeConfigMock->expects($this->any())->method('isEnabled')
-            ->will($this->returnValue($weeeConfigEnabled));
+            ->willReturn($weeeConfigEnabled);
         $this->weeeConfigMock->expects($this->any())->method('includeInSubtotal')
-            ->will($this->returnValue($includeInSubtotal));
+            ->willReturn($includeInSubtotal);
 
         $this->assertEquals($expectedResult, $this->model->getConfig());
     }

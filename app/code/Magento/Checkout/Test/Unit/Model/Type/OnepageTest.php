@@ -167,7 +167,7 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
         $this->extensibleDataObjectConverterMock
             ->expects($this->any())
             ->method('toFlatArray')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->totalsCollectorMock = $this->createMock(\Magento\Quote\Model\Quote\TotalsCollector::class);
         $this->onepage = $this->objectManagerHelper->getObject(
@@ -206,7 +206,7 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
     public function testGetQuote()
     {
         $returnValue = 'ababagalamaga';
-        $this->checkoutSessionMock->expects($this->once())->method('getQuote')->will($this->returnValue($returnValue));
+        $this->checkoutSessionMock->expects($this->once())->method('getQuote')->willReturn($returnValue);
         $this->assertEquals($returnValue, $this->onepage->getQuote());
     }
 
@@ -246,7 +246,7 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
                 'getCustomerData',
                 'collectTotals',
             ]);
-        $quoteMock->expects($this->once())->method('isMultipleShippingAddresses')->will($this->returnValue(true));
+        $quoteMock->expects($this->once())->method('isMultipleShippingAddresses')->willReturn(true);
         $quoteMock->expects($this->once())->method('removeAllAddresses');
         $quoteMock->expects($this->once())->method('assignCustomer')->with($customer);
 
@@ -255,10 +255,10 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
         $this->customerSessionMock
             ->expects($this->once())
             ->method('getCustomerDataObject')
-            ->will($this->returnValue($customer));
-        $this->customerSessionMock->expects($this->any())->method('isLoggedIn')->will($this->returnValue($isLoggedIn));
-        $this->checkoutSessionMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
-        $this->checkoutSessionMock->expects($this->any())->method('getStepData')->will($this->returnValue($stepData));
+            ->willReturn($customer);
+        $this->customerSessionMock->expects($this->any())->method('isLoggedIn')->willReturn($isLoggedIn);
+        $this->checkoutSessionMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
+        $this->checkoutSessionMock->expects($this->any())->method('getStepData')->willReturn($stepData);
 
         if ($isSetStepDataCalled) {
             $this->checkoutSessionMock->expects($this->once())
@@ -288,19 +288,19 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCheckoutMethod($isLoggedIn, $quoteCheckoutMethod, $isAllowedGuestCheckout, $expected)
     {
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue($isLoggedIn));
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn($isLoggedIn);
         /** @var \Magento\Quote\Model\Quote|\PHPUnit\Framework\MockObject\MockObject $quoteMock */
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
         $quoteMock->expects($this->any())->method('setCheckoutMethod')->with($expected);
 
         $quoteMock->expects($this->any())
             ->method('getCheckoutMethod')
-            ->will($this->returnValue($quoteCheckoutMethod));
+            ->willReturn($quoteCheckoutMethod);
 
         $this->checkoutHelperMock
             ->expects($this->any())
             ->method('isAllowedGuestCheckout')
-            ->will($this->returnValue($isAllowedGuestCheckout));
+            ->willReturn($isAllowedGuestCheckout);
 
         $this->onepage->setQuote($quoteMock);
         $this->assertEquals($expected, $this->onepage->getCheckoutMethod());
@@ -325,7 +325,7 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['error' => -1, 'message' => 'Invalid data'], $this->onepage->saveCheckoutMethod(null));
         /** @var \Magento\Quote\Model\Quote|\PHPUnit\Framework\MockObject\MockObject $quoteMock */
         $quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['setCheckoutMethod', '__wakeup']);
-        $quoteMock->expects($this->once())->method('setCheckoutMethod')->with('someMethod')->will($this->returnSelf());
+        $quoteMock->expects($this->once())->method('setCheckoutMethod')->with('someMethod')->willReturnSelf();
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quoteMock);
         $this->checkoutSessionMock->expects($this->once())->method('setStepData')->with('billing', 'allow', true);
         $this->onepage->setQuote($quoteMock);
@@ -337,14 +337,14 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
         $orderIncrementId = 100001;
         $orderId = 1;
         $this->checkoutSessionMock->expects($this->once())->method('getLastOrderId')
-            ->will($this->returnValue($orderId));
+            ->willReturn($orderId);
         $orderMock = $this->createPartialMock(
             \Magento\Sales\Model\Order::class,
             ['load', 'getIncrementId', '__wakeup']
         );
-        $orderMock->expects($this->once())->method('load')->with($orderId)->will($this->returnSelf());
-        $orderMock->expects($this->once())->method('getIncrementId')->will($this->returnValue($orderIncrementId));
-        $this->orderFactoryMock->expects($this->once())->method('create')->will($this->returnValue($orderMock));
+        $orderMock->expects($this->once())->method('load')->with($orderId)->willReturnSelf();
+        $orderMock->expects($this->once())->method('getIncrementId')->willReturn($orderIncrementId);
+        $this->orderFactoryMock->expects($this->once())->method('create')->willReturn($orderMock);
         $this->assertEquals($orderIncrementId, $this->onepage->getLastOrderId());
     }
 }

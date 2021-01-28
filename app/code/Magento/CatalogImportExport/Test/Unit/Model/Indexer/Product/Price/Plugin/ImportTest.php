@@ -55,10 +55,10 @@ class ImportTest extends \PHPUnit\Framework\TestCase
         $this->indexerRegistryMock->expects($this->any())
             ->method('get')
             ->with(\Magento\Catalog\Model\Indexer\Product\Price\Processor::INDEXER_ID)
-            ->will($this->returnValue($this->_indexerMock));
+            ->willReturn($this->_indexerMock);
         $this->_indexerMock->expects($this->any())
             ->method('isScheduled')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $importMock = $this->createMock(\Magento\ImportExport\Model\Import::class);
         $this->assertEquals('return_value', $this->_model->afterImportSource($importMock, 'return_value'));

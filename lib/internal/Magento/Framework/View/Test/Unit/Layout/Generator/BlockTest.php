@@ -48,8 +48,8 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $class = 'test_class';
 
         $scheduleStructure = $this->createMock(\Magento\Framework\View\Layout\ScheduledStructure::class);
-        $scheduleStructure->expects($this->once())->method('getElements')->will(
-            $this->returnValue(
+        $scheduleStructure->expects($this->once())->method('getElements')->willReturn(
+            
                 [
                     $elementName => [
                         $literal,
@@ -67,11 +67,11 @@ class BlockTest extends \PHPUnit\Framework\TestCase
                         ],
                     ],
                 ]
-            )
+            
         );
 
-        $scheduleStructure->expects($this->once())->method('getElement')->with($elementName)->will(
-            $this->returnValue(
+        $scheduleStructure->expects($this->once())->method('getElement')->with($elementName)->willReturn(
+            
                 [
                     '',
                     [
@@ -84,7 +84,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
                         'arguments' => $testArgumentData
                     ],
                 ]
-            )
+            
         );
         $scheduleStructure->expects($this->once())->method('unsetElement')->with($elementName);
 
@@ -93,7 +93,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
          */
         $readerContext = $this->createMock(\Magento\Framework\View\Layout\Reader\Context::class);
         $readerContext->expects($this->once())->method('getScheduledStructure')
-            ->will($this->returnValue($scheduleStructure));
+            ->willReturn($scheduleStructure);
 
         $layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
 
@@ -122,8 +122,8 @@ class BlockTest extends \PHPUnit\Framework\TestCase
          * @var \PHPUnit\Framework\MockObject\MockObject $generatorContext
          */
         $generatorContext = $this->createMock(\Magento\Framework\View\Layout\Generator\Context::class);
-        $generatorContext->expects($this->once())->method('getLayout')->will($this->returnValue($layout));
-        $generatorContext->expects($this->once())->method('getStructure')->will($this->returnValue($structure));
+        $generatorContext->expects($this->once())->method('getLayout')->willReturn($layout);
+        $generatorContext->expects($this->once())->method('getStructure')->willReturn($structure);
 
         /**
          * @var \PHPUnit\Framework\MockObject\MockObject $argumentInterpreter
@@ -145,7 +145,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $blockFactory->expects($this->any())
             ->method('createBlock')
             ->with($class, ['data' => $argumentData])
-            ->will($this->returnValue($blockInstance));
+            ->willReturn($blockInstance);
 
         /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject $eventManager */
         $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);

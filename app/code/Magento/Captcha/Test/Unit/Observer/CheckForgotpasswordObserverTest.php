@@ -88,8 +88,8 @@ class CheckForgotpasswordObserverTest extends \PHPUnit\Framework\TestCase
         )->with(
             \Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE,
             null
-        )->will(
-            $this->returnValue([$formId => $captchaValue])
+        )->willReturn(
+            [$formId => $captchaValue]
         );
 
         $this->redirect->expects(
@@ -100,22 +100,22 @@ class CheckForgotpasswordObserverTest extends \PHPUnit\Framework\TestCase
             $response,
             $redirectRoutePath,
             []
-        )->will(
-            $this->returnValue($redirectUrl)
+        )->willReturn(
+            $redirectUrl
         );
 
         $controller = $this->createMock(\Magento\Framework\App\Action\Action::class);
-        $controller->expects($this->any())->method('getRequest')->will($this->returnValue($request));
-        $controller->expects($this->any())->method('getResponse')->will($this->returnValue($response));
-        $this->_captcha->expects($this->any())->method('isRequired')->will($this->returnValue(true));
+        $controller->expects($this->any())->method('getRequest')->willReturn($request);
+        $controller->expects($this->any())->method('getResponse')->willReturn($response);
+        $this->_captcha->expects($this->any())->method('isRequired')->willReturn(true);
         $this->_captcha->expects(
             $this->once()
         )->method(
             'isCorrect'
         )->with(
             $captchaValue
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
 
         $this->captchaStringResolver->expects(
@@ -125,8 +125,8 @@ class CheckForgotpasswordObserverTest extends \PHPUnit\Framework\TestCase
         )->with(
             $request,
             $formId
-        )->will(
-            $this->returnValue($captchaValue)
+        )->willReturn(
+            $captchaValue
         );
 
         $this->_helper->expects(
@@ -135,8 +135,8 @@ class CheckForgotpasswordObserverTest extends \PHPUnit\Framework\TestCase
             'getCaptcha'
         )->with(
             $formId
-        )->will(
-            $this->returnValue($this->_captcha)
+        )->willReturn(
+            $this->_captcha
         );
         $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($warningMessage);
         $this->_actionFlag->expects(

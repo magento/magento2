@@ -40,20 +40,21 @@ class RenderFactoryTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with($this->equalTo(\Magento\Framework\View\Render\RenderInterface::class))
-            ->will($this->returnValue($renderMock));
+            ->willReturn($renderMock);
         $this->assertInstanceOf($instance, $this->renderFactory->get($data));
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Type "RenderInterface" is not instance on Magento\Framework\View\RenderInterface
      */
     public function testGetException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Type "RenderInterface" is not instance on Magento\\Framework\\View\\RenderInterface');
+
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with($this->equalTo(\Magento\Framework\View\Render\RenderInterface::class))
-            ->will($this->returnValue(new \stdClass()));
+            ->willReturn(new \stdClass());
         $this->renderFactory->get('RenderInterface');
     }
 }

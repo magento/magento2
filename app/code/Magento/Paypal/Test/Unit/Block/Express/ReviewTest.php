@@ -45,10 +45,10 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
             ->with(
                 $this->stringContains('advanced/modules_disable_output/'),
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            )->will($this->returnValue(false));
+            )->willReturn(false);
 
         $urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);
-        $urlBuilder->expects($this->any())->method('getUrl')->will($this->returnArgument(0));
+        $urlBuilder->expects($this->any())->method('getUrl')->willReturnArgument(0);
 
         $context = $this->createPartialMock(
             \Magento\Framework\View\Element\Template\Context::class,
@@ -58,12 +58,12 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
         $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $this->assetRepo = $this->createMock(\Magento\Framework\View\Asset\Repository::class);
 
-        $context->expects($this->any())->method('getLayout')->will($this->returnValue($layout));
-        $context->expects($this->any())->method('getEventManager')->will($this->returnValue($eventManager));
-        $context->expects($this->any())->method('getScopeConfig')->will($this->returnValue($scopeConfig));
-        $context->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
-        $context->expects($this->any())->method('getAssetRepository')->will($this->returnValue($this->assetRepo));
-        $context->expects($this->any())->method('getUrlBuilder')->will($this->returnValue($urlBuilder));
+        $context->expects($this->any())->method('getLayout')->willReturn($layout);
+        $context->expects($this->any())->method('getEventManager')->willReturn($eventManager);
+        $context->expects($this->any())->method('getScopeConfig')->willReturn($scopeConfig);
+        $context->expects($this->any())->method('getRequest')->willReturn($this->request);
+        $context->expects($this->any())->method('getAssetRepository')->willReturn($this->assetRepo);
+        $context->expects($this->any())->method('getUrlBuilder')->willReturn($urlBuilder);
 
         $this->model = $helper->getObject(\Magento\Paypal\Block\Express\Review::class, ['context' => $context]);
     }
@@ -74,13 +74,13 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetViewFileUrl($isSecure)
     {
-        $this->request->expects($this->once())->method('isSecure')->will($this->returnValue($isSecure));
+        $this->request->expects($this->once())->method('isSecure')->willReturn($isSecure);
         $this->assetRepo->expects($this->once())
             ->method('getUrlWithParams')
             ->with('some file', $this->callback(function ($value) use ($isSecure) {
                 return isset($value['_secure']) && $value['_secure'] === $isSecure;
             }))
-            ->will($this->returnValue('result url'));
+            ->willReturn('result url');
         $this->assertEquals('result url', $this->model->getViewFileUrl('some file'));
     }
 
@@ -95,7 +95,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
     public function testBeforeToHtmlWhenQuoteIsNotVirtual()
     {
         $quote = $this->_getQuoteMock();
-        $quote->expects($this->any())->method('getIsVirtual')->will($this->returnValue(false));
+        $quote->expects($this->any())->method('getIsVirtual')->willReturn(false);
         $quote->setMayEditShippingMethod('MayEditShippingMethod');
 
         $shippingRate = new \Magento\Framework\DataObject(['code' => 'Rate 1']);
@@ -105,11 +105,11 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
         $quote->getShippingAddress()
             ->expects($this->any())
             ->method('getGroupedAllShippingRates')
-            ->will($this->returnValue($shippingRates));
+            ->willReturn($shippingRates);
         $quote->getShippingAddress()
             ->expects($this->any())
             ->method('getShippingMethod')
-            ->will($this->returnValue($shippingRate->getCode()));
+            ->willReturn($shippingRate->getCode());
 
         $this->model->setQuote($quote);
         $this->model->toHtml();
@@ -131,7 +131,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
     public function testBeforeToHtmlWhenQuoteIsVirtual()
     {
         $quote = $this->_getQuoteMock();
-        $quote->expects($this->any())->method('getIsVirtual')->will($this->returnValue(true));
+        $quote->expects($this->any())->method('getIsVirtual')->willReturn(true);
         $this->model->setQuote($quote);
         $this->model->toHtml();
         $this->assertEquals(
@@ -152,17 +152,17 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
     {
         $methodInstance = new \Magento\Framework\DataObject(['title' => 'Payment Method']);
         $payment = $this->createMock(\Magento\Quote\Model\Quote\Payment::class);
-        $payment->expects($this->any())->method('getMethodInstance')->will($this->returnValue($methodInstance));
+        $payment->expects($this->any())->method('getMethodInstance')->willReturn($methodInstance);
 
         $quote = $this->createMock(\Magento\Quote\Model\Quote::class);
-        $quote->expects($this->any())->method('getPayment')->will($this->returnValue($payment));
+        $quote->expects($this->any())->method('getPayment')->willReturn($payment);
         $quote->setPayment($payment);
 
         $address = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address::class)
             ->disableOriginalConstructor()
             ->setMethods(['getShippingMethod', 'getGroupedAllShippingRates', '__wakeup'])
             ->getMock();
-        $quote->expects($this->any())->method('getShippingAddress')->will($this->returnValue($address));
+        $quote->expects($this->any())->method('getShippingAddress')->willReturn($address);
 
         return $quote;
     }

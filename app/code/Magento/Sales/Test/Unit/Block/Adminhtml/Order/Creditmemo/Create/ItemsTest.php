@@ -58,13 +58,13 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
 
         $this->stockRegistry->expects($this->any())
             ->method('getStockItem')
-            ->will($this->returnValue($this->stockItemMock));
+            ->willReturn($this->stockItemMock);
 
         $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
         $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->contextMock->expects($this->once())
             ->method('getScopeConfig')
-            ->will($this->returnValue($this->scopeConfig));
+            ->willReturn($this->scopeConfig);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->items = $this->objectManagerHelper->getObject(
@@ -92,7 +92,7 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($property->getValue($this->items));
         $this->stockConfiguration->expects($this->once())
             ->method('canSubtractQty')
-            ->will($this->returnValue($canReturnToStock));
+            ->willReturn($canReturnToStock);
 
         if ($canReturnToStock) {
             $orderItem = $this->createPartialMock(
@@ -102,13 +102,13 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
             $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getWebsiteId']);
             $store->expects($this->once())
                 ->method('getWebsiteId')
-                ->will($this->returnValue(10));
+                ->willReturn(10);
             $orderItem->expects($this->any())
                 ->method('getStore')
-                ->will($this->returnValue($store));
+                ->willReturn($store);
             $orderItem->expects($this->once())
                 ->method('getProductId')
-                ->will($this->returnValue($productId));
+                ->willReturn($productId);
 
             $creditMemoItem = $this->createPartialMock(
                 \Magento\Sales\Model\Order\Creditmemo\Item::class,
@@ -118,33 +118,33 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
             $creditMemo = $this->createMock(\Magento\Sales\Model\Order\Creditmemo::class);
             $creditMemo->expects($this->once())
                 ->method('getAllItems')
-                ->will($this->returnValue([$creditMemoItem]));
+                ->willReturn([$creditMemoItem]);
             $creditMemoItem->expects($this->any())
                 ->method('getOrderItem')
-                ->will($this->returnValue($orderItem));
+                ->willReturn($orderItem);
 
             $this->stockItemMock->expects($this->once())
                 ->method('getManageStock')
-                ->will($this->returnValue($manageStock));
+                ->willReturn($manageStock);
 
             $creditMemoItem->expects($this->once())
                 ->method('setCanReturnToStock')
                 ->with($this->equalTo($manageStock))
-                ->will($this->returnSelf());
+                ->willReturnSelf();
 
             $order = $this->createPartialMock(\Magento\Sales\Model\Order::class, ['setCanReturnToStock', '__wakeup']);
             $order->expects($this->once())
                 ->method('setCanReturnToStock')
                 ->with($this->equalTo($manageStock))
-                ->will($this->returnSelf());
+                ->willReturnSelf();
             $creditMemo->expects($this->once())
                 ->method('getOrder')
-                ->will($this->returnValue($order));
+                ->willReturn($order);
 
             $this->registryMock->expects($this->any())
                 ->method('registry')
                 ->with('current_creditmemo')
-                ->will($this->returnValue($creditMemo));
+                ->willReturn($creditMemo);
         }
 
         $this->assertSame($result, $this->items->canReturnItemsToStock());

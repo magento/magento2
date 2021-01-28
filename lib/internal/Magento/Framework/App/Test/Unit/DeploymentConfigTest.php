@@ -120,7 +120,7 @@ class DeploymentConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testKeyCollision(array $data)
     {
-        $this->expectException('\Exception');
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Key collision');
 
         $this->reader->expects($this->once())->method('load')->willReturn($data);

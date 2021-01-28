@@ -33,7 +33,7 @@ class WildcardTopicTest extends QueueTestCaseAbstract
 
         $this->waitForAsynchronousResult(count($matchingQueues), $this->logFilePath);
 
-        $this->assertTrue(file_exists($this->logFilePath), "No handlers invoked (log file was not created).");
+        $this->assertFileExists($this->logFilePath, "No handlers invoked (log file was not created).");
         foreach ($nonMatchingQueues as $queueName) {
             $this->assertNotContains($queueName, file_get_contents($this->logFilePath));
         }
@@ -63,7 +63,7 @@ class WildcardTopicTest extends QueueTestCaseAbstract
         $testObject = $this->generateTestObject();
         $this->publisher->publish('not.matching.wildcard.topic', $testObject);
         sleep(2);
-        $this->assertFalse(file_exists($this->logFilePath), "No log file must be created for non-matching topic.");
+        $this->assertFileNotExists($this->logFilePath, "No log file must be created for non-matching topic.");
     }
 
     /**

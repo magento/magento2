@@ -134,10 +134,10 @@ class EditTest extends \PHPUnit\Framework\TestCase
         );
         $this->resultPageMock->expects($this->any())
             ->method('getConfig')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->resultPageMock->expects($this->any())
             ->method('getTitle')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->resultPageFactoryMock = $this->createPartialMock(
             \Magento\Framework\View\Result\PageFactory::class,
@@ -220,50 +220,50 @@ class EditTest extends \PHPUnit\Framework\TestCase
 
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getParam')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         ['id', false, $categoryId],
                         ['store', null, $storeId],
                     ]
-                )
+                
             );
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getQuery')
             ->with('isAjax')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->mockInitCategoryCall();
 
         $this->sessionMock->expects($this->once())
             ->method('__call')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->storeManagerInterfaceMock->expects($this->any())
             ->method('getStore')
             ->with($storeId)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         if (!$categoryId) {
             if (!$storeId) {
                 $this->storeManagerInterfaceMock->expects($this->once())
                     ->method('getDefaultStoreView')
-                    ->will($this->returnSelf());
+                    ->willReturnSelf();
             }
             $this->storeManagerInterfaceMock->expects($this->once())
                 ->method('getRootCategoryId')
-                ->will($this->returnValue($rootCategoryId));
+                ->willReturn($rootCategoryId);
             $categoryId = $rootCategoryId;
         }
 
         $this->requestMock->expects($this->atLeastOnce())
             ->method('setParam')
             ->with('id', $categoryId)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->categoryMock->expects($this->atLeastOnce())
             ->method('getId')
-            ->will($this->returnValue($categoryId));
+            ->willReturn($categoryId);
 
         $this->edit->execute();
     }
@@ -294,6 +294,6 @@ class EditTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManagerMock->expects($this->atLeastOnce())
             ->method('create')
-            ->will($this->returnValue($this->categoryMock));
+            ->willReturn($this->categoryMock);
     }
 }

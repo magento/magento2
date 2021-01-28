@@ -48,7 +48,8 @@ class DomTest extends \PHPUnit\Framework\TestCase
      */
     public function testConvertWithInvalidDom($xml)
     {
-        $this->expectException('Exception');
+        $this->expectException(\Exception::class);
+
         $dom = new \DOMDocument();
         $dom->loadXML($xml);
         $this->_converter->convert($dom);

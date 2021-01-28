@@ -297,7 +297,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $this->model->load('admin');
         $this->model
             ->expects($this->any())->method('getUrl')
-            ->will($this->returnValue('http://localhost/index.php'));
+            ->willReturn('http://localhost/index.php');
         $this->assertStringEndsWith('default', $this->model->getCurrentUrl());
         $this->assertStringEndsNotWith('default', $this->model->getCurrentUrl(false));
 
@@ -405,10 +405,11 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      * @magentoAppIsolation enabled
      * @magentoAppArea adminhtml
      * @magentoDbIsolation enabled
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testSaveValidation($badStoreData)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $normalStoreData = [
             'code' => 'test',
             'website_id' => 1,
@@ -453,7 +454,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $configMock->expects($this->any())
             ->method('getValue')
             ->with($this->stringContains(Store::XML_PATH_STORE_IN_URL))
-            ->will($this->returnValue($storeInUrl));
+            ->willReturn($storeInUrl);
 
         $params['config'] = $configMock;
         $model = $objectManager->create(\Magento\Store\Model\Store::class, $params);

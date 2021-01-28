@@ -166,7 +166,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with(\Magento\Framework\App\FrontControllerInterface::class)
-            ->will($this->returnValue($this->frontControllerMock));
+            ->willReturn($this->frontControllerMock);
         $this->frontControllerMock->expects($this->once())
             ->method('dispatch')
             ->with($this->requestMock)
@@ -188,9 +188,11 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->responseMock, $this->http->launch());
     }
 
+    /**
+     */
     public function testLaunchException()
     {
-        $this->expectException('\Exception');
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Message');
 
         $this->setUpLaunch();

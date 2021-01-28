@@ -122,7 +122,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('setData')
             ->with($this->mediaGallery)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $result = $this->controller->execute();
 

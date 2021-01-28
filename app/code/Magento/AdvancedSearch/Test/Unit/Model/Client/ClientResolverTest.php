@@ -48,7 +48,7 @@ class ClientResolverTest extends \PHPUnit\Framework\TestCase
     public function testCreate()
     {
         $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
-            ->will($this->returnValue('engineName'));
+            ->willReturn('engineName');
 
         $factoryMock = $this->getMockForAbstractClass(ClientFactoryInterface::class);
 
@@ -68,11 +68,11 @@ class ClientResolverTest extends \PHPUnit\Framework\TestCase
 
         $clientOptionsMock->expects($this->once())->method('prepareClientOptions')
             ->with([])
-            ->will($this->returnValue(['parameters']));
+            ->willReturn(['parameters']);
 
         $factoryMock->expects($this->once())->method('create')
             ->with($this->equalTo(['parameters']))
-            ->will($this->returnValue($clientMock));
+            ->willReturn($clientMock);
 
         $result = $this->model->create();
         $this->assertInstanceOf(ClientInterface::class, $result);
@@ -86,7 +86,7 @@ class ClientResolverTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManager->expects($this->once())->method('create')
             ->with($this->equalTo('engineFactoryClass'))
-            ->will($this->returnValue('t'));
+            ->willReturn('t');
 
         $this->model->create('engineName');
     }
@@ -103,7 +103,7 @@ class ClientResolverTest extends \PHPUnit\Framework\TestCase
     public function testGetCurrentEngine()
     {
         $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
-            ->will($this->returnValue('engineName'));
+            ->willReturn('engineName');
 
         $this->assertEquals('engineName', $this->model->getCurrentEngine());
     }

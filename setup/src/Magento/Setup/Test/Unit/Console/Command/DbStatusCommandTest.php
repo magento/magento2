@@ -66,7 +66,7 @@ class DbStatusCommandTest extends \PHPUnit\Framework\TestCase
 
         $objectManagerProvider->expects($this->any())
             ->method('get')
-            ->will($this->returnValue($objectManager));
+            ->willReturn($objectManager);
         $objectManager->expects(self::exactly(4))
             ->method('get')
             ->willReturnOnConsecutiveCalls(
@@ -94,7 +94,7 @@ class DbStatusCommandTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $tester = new CommandTester($this->command);
         $tester->execute([]);
         $this->assertStringMatchesFormat('All modules are up to date.', $tester->getDisplay());
@@ -105,7 +105,7 @@ class DbStatusCommandTest extends \PHPUnit\Framework\TestCase
     {
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $tester = new CommandTester($this->command);
         $tester->execute([]);
 

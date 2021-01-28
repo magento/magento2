@@ -48,7 +48,7 @@ class FaultTest extends \PHPUnit\Framework\TestCase
         $this->_soapServerMock = $this->getMockBuilder(
             \Magento\Webapi\Model\Soap\Server::class
         )->disableOriginalConstructor()->getMock();
-        $this->_soapServerMock->expects($this->any())->method('generateUri')->will($this->returnValue(self::WSDL_URL));
+        $this->_soapServerMock->expects($this->any())->method('generateUri')->willReturn(self::WSDL_URL);
 
         $this->_localeResolverMock = $this->getMockBuilder(
             \Magento\Framework\Locale\Resolver::class
@@ -57,8 +57,8 @@ class FaultTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getLocale'
-        )->will(
-            $this->returnValue('en_US')
+        )->willReturn(
+            'en_US'
         );
 
         $this->_appStateMock = $this->createMock(\Magento\Framework\App\State::class);
@@ -82,7 +82,7 @@ class FaultTest extends \PHPUnit\Framework\TestCase
 
     public function testToXmlDeveloperModeOff()
     {
-        $this->_appStateMock->expects($this->any())->method('getMode')->will($this->returnValue('production'));
+        $this->_appStateMock->expects($this->any())->method('getMode')->willReturn('production');
         $wsdlUrl = urlencode(self::WSDL_URL);
         $expectedResult = <<<XML
 <?xml version="1.0" encoding="utf-8" ?>
@@ -124,7 +124,7 @@ XML;
 
     public function testToXmlDeveloperModeOn()
     {
-        $this->_appStateMock->expects($this->any())->method('getMode')->will($this->returnValue('developer'));
+        $this->_appStateMock->expects($this->any())->method('getMode')->willReturn('developer');
         $actualXml = $this->_soapFault->toXml();
         $this->assertStringContainsString('<m:Trace>', $actualXml, 'Exception trace is not found in XML.');
     }

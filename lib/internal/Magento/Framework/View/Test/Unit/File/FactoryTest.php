@@ -41,7 +41,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
                     'isBase' => $isBase,
                 ])
             )
-            ->will($this->returnValue($file));
+            ->willReturn($file);
         $this->assertSame($file, $this->_model->create(__FILE__, 'Fixture_Module', $theme, $isBase));
     }
 }

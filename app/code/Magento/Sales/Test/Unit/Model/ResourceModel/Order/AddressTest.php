@@ -60,11 +60,11 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         );
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->connectionMock->expects($this->any())
             ->method('describeTable')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->connectionMock->expects($this->any())
             ->method('insert');
         $this->connectionMock->expects($this->any())
@@ -87,14 +87,14 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->validatorMock->expects($this->once())
             ->method('validate')
             ->with($this->equalTo($this->addressMock))
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->entitySnapshotMock->expects($this->once())
             ->method('isModified')
             ->with($this->addressMock)
             ->willReturn(true);
         $this->addressMock->expects($this->once())
             ->method('getParentId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->addressResource->save($this->addressMock);
     }
@@ -114,11 +114,11 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
         $this->addressMock->expects($this->any())
             ->method('hasDataChanges')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->validatorMock->expects($this->once())
             ->method('validate')
             ->with($this->equalTo($this->addressMock))
-            ->will($this->returnValue(['warning message']));
+            ->willReturn(['warning message']);
         $this->addressResource->save($this->addressMock);
     }
 }

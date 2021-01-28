@@ -94,8 +94,8 @@ class CollectionTest extends \Magento\Widget\Test\Unit\Model\ResourceModel\Layou
         )->with(
             'link.layout_update_id',
             ['null' => true]
-        )->will(
-            $this->returnValue(self::TEST_WHERE_CONDITION)
+        )->willReturn(
+            self::TEST_WHERE_CONDITION
         );
 
         $collection->addNoLinksFilter();

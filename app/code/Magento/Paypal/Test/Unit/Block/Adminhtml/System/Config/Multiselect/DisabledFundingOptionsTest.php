@@ -81,20 +81,22 @@ class DisabledFundingOptionsTest extends TestCase
         $this->request->expects($this->any())
             ->method('getParam')
             ->willReturnCallback(
-                function ($param) use ($requestCountry) {
-                    if ($param == StructurePlugin::REQUEST_PARAM_COUNTRY) {
-                        return $requestCountry;
+
+                    function ($param) use ($requestCountry) {
+                        if ($param == StructurePlugin::REQUEST_PARAM_COUNTRY) {
+                            return $requestCountry;
+                        }
+                        return $param;
                     }
-                    return $param;
-                }
+
             );
         $this->config->expects($this->any())
             ->method('getMerchantCountry')
             ->willReturnCallback(
 
-                function () use ($merchantCountry) {
-                    return $merchantCountry;
-                }
+                    function () use ($merchantCountry) {
+                        return $merchantCountry;
+                    }
 
             );
         $this->model->render($this->element);

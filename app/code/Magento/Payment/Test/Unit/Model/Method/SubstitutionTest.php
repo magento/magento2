@@ -40,10 +40,10 @@ class SubstitutionTest extends \PHPUnit\Framework\TestCase
             'getAdditionalInformation'
         )->with(
             \Magento\Payment\Model\Method\Substitution::INFO_KEY_TITLE
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 $expectedResult
-            )
+            
         );
 
         $this->assertEquals($expectedResult, $this->model->getTitle());

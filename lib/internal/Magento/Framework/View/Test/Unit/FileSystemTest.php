@@ -91,12 +91,12 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
         $this->_fileResolution->expects($this->once())
             ->method('getFile')
             ->with($params['area'], $params['themeModel'], 'some_file.ext', 'Some_Module')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $this->_assetRepo->expects($this->any())
             ->method('extractScope')
             ->with($file, $params)
-            ->will($this->returnValue('some_file.ext'));
+            ->willReturn('some_file.ext');
 
         $actual = $this->_model->getFilename($file, $params);
         $this->assertEquals($expected, $actual);
@@ -116,12 +116,12 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
         $this->_templateFileResolution->expects($this->once())
             ->method('getFile')
             ->with($params['area'], $params['themeModel'], 'some_file.ext', 'Some_Module')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $this->_assetRepo->expects($this->any())
             ->method('extractScope')
             ->with($file, $params)
-            ->will($this->returnValue('some_file.ext'));
+            ->willReturn('some_file.ext');
 
         $actual = $this->_model->getTemplateFileName($file, $params);
         $this->assertEquals($expected, $actual);
@@ -140,7 +140,7 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
         $this->_localeFileResolution->expects($this->once())
             ->method('getFile')
             ->with($params['area'], $params['themeModel'], $params['locale'], 'some_file.ext')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $actual = $this->_model->getLocaleFileName($file, $params);
         $this->assertEquals($expected, $actual);
@@ -160,7 +160,7 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
         $this->_staticFileResolution->expects($this->once())
             ->method('getFile')
             ->with($params['area'], $params['themeModel'], $params['locale'], 'some_file.ext', 'Some_Module')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $actual = $this->_model->getStaticFileName($file, $params);
         $this->assertEquals($expected, $actual);
@@ -251,7 +251,7 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
         $this->_emailTemplateFileResolution->expects($this->once())
             ->method('getFile')
             ->with($params['area'], $params['themeModel'], $locale, $file, 'Some_Module')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $actual = $this->_model->getEmailTemplateFileName($file, $params, 'Some_Module');
         $this->assertEquals($expected, $actual);

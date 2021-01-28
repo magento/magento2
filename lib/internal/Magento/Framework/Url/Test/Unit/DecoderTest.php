@@ -26,7 +26,7 @@ class DecoderTest extends \PHPUnit\Framework\TestCase
         $urlBuilderMock->expects($this->once())
             ->method('sessionUrlVar')
             ->with($this->equalTo($data))
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertNotContains('&', $result);
         $this->assertNotContains('%', $result);
         $this->assertNotContains('+', $result);

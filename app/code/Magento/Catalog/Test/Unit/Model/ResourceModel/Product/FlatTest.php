@@ -32,16 +32,16 @@ class FlatTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getStore'
-        )->will(
-            $this->returnValue($this->_store)
+        )->willReturn(
+            $this->_store
         );
 
         $this->_storeManagerInterface->expects(
             $this->any()
         )->method(
             'getDefaultStoreView'
-        )->will(
-            $this->returnValue($this->_store)
+        )->willReturn(
+            $this->_store
         );
 
         $this->_model = new \Magento\Catalog\Model\ResourceModel\Product\Flat(

@@ -39,8 +39,8 @@ class PhpTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getPhrases'
-        )->will(
-            $this->returnValue([['phrase' => 'phrase1', 'file' => 'file1', 'line' => 15]])
+        )->willReturn(
+            [['phrase' => 'phrase1', 'file' => 'file1', 'line' => 15]]
         );
 
         $this->_adapter->parse('file1');

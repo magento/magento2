@@ -52,10 +52,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'load'
         )->with(
             $this->cacheId
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
-        $this->readerMock->expects($this->any())->method('read')->will($this->returnValue($value));
+        $this->readerMock->expects($this->any())->method('read')->willReturn($value);
         $this->model = new \Magento\ImportExport\Model\Export\Config(
             $this->readerMock,
             $this->cacheMock,
@@ -90,10 +90,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'load'
         )->with(
             $this->cacheId
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
-        $this->readerMock->expects($this->any())->method('read')->will($this->returnValue($configData));
+        $this->readerMock->expects($this->any())->method('read')->willReturn($configData);
         $this->model = new \Magento\ImportExport\Model\Export\Config(
             $this->readerMock,
             $this->cacheMock,
@@ -147,10 +147,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'load'
         )->with(
             $this->cacheId
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
-        $this->readerMock->expects($this->any())->method('read')->will($this->returnValue($value));
+        $this->readerMock->expects($this->any())->method('read')->willReturn($value);
         $this->model = new \Magento\ImportExport\Model\Export\Config(
             $this->readerMock,
             $this->cacheMock,

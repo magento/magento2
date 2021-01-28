@@ -25,7 +25,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
      */
     private $navigation;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->serviceLocatorMock =
             $this->createMock(\Zend\ServiceManager\ServiceLocatorInterface::class);
@@ -33,7 +33,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
             ->expects($this->exactly(2))
             ->method('get')
             ->with('config')
-            ->will($this->returnValue([
+            ->willReturn([
                 'navInstallerTitles' => [
                     'install' => 'SomeTitle'
                  ],
@@ -47,7 +47,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
                     ['main' => ''],
                     ['main' => false],
                 ]
-            ]));
+            ]);
         $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $this->navigation = new Navigation($this->serviceLocatorMock, $this->deploymentConfig);
     }

@@ -39,15 +39,15 @@ class AllowspecificTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getHtmlIdPrefix'
-        )->will(
-            $this->returnValue('test_prefix_')
+        )->willReturn(
+            'test_prefix_'
         );
         $this->_formMock->expects(
             $this->once()
         )->method(
             'getHtmlIdSuffix'
-        )->will(
-            $this->returnValue('_test_suffix')
+        )->willReturn(
+            '_test_suffix'
         );
 
         $afterHtmlCode = 'after html';
@@ -80,8 +80,8 @@ class AllowspecificTest extends \PHPUnit\Framework\TestCase
             'getElement'
         )->with(
             $countryId
-        )->will(
-            $this->returnValue($elementMock)
+        )->willReturn(
+            $elementMock
         );
 
         $this->_object->setValue($value);

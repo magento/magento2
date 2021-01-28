@@ -63,7 +63,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         $this->validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $this->validationStateMock->expects($this->any())
             ->method('isValidationRequired')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->domFactoryMock = $this->createMock(\Magento\Framework\Config\DomFactory::class);
     }
 
@@ -81,7 +81,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         $this->fileResolverMock->expects($this->at(0))
             ->method('get')
             ->with('config.xml', 'global')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->assertEquals([], $this->model->read());
     }
@@ -102,12 +102,12 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         $this->fileResolverMock->expects($this->at(0))
             ->method('get')
             ->with('config.xml', 'global')
-            ->will($this->returnValue($testXmlFilesList));
+            ->willReturn($testXmlFilesList);
 
         $this->converterMock->expects($this->once())
             ->method('convert')
             ->with($this->anything())
-            ->will($this->returnValue($expectedConfig));
+            ->willReturn($expectedConfig);
 
         $this->assertEquals($expectedConfig, $this->model->read());
     }
@@ -135,7 +135,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testReadInvalidConfig()
     {
-        $this->expectException('\Magento\Framework\Exception\LocalizedException');
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->expectExceptionMessage('Verify the XML and try again.');
 
         $this->createModelAndVerifyConstructor();
@@ -149,12 +149,12 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         $this->fileResolverMock->expects($this->at(0))
             ->method('get')
             ->with('config.xml', 'global')
-            ->will($this->returnValue($testXmlFilesList));
+            ->willReturn($testXmlFilesList);
 
         $this->converterMock->expects($this->never())
             ->method('convert')
             ->with($this->anything())
-            ->will($this->returnValue($expectedConfig));
+            ->willReturn($expectedConfig);
 
         $this->model->read();
     }
@@ -162,7 +162,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     private function createModelAndVerifyConstructor()
     {
         $schemaFile = $this->filePath . 'config.xsd';
-        $this->schemaLocatorMock->expects($this->once())->method('getSchema')->will($this->returnValue($schemaFile));
+        $this->schemaLocatorMock->expects($this->once())->method('getSchema')->willReturn($schemaFile);
         $this->model = $this->objectManager->getObject(
             \Magento\Framework\App\Config\Initial\Reader::class,
             [

@@ -62,7 +62,7 @@ class AuthTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('create')
             ->with(\Magento\Backend\Model\Auth\Credential\StorageInterface::class)
-            ->will($this->returnValue($this->_credentialStorage));
+            ->willReturn($this->_credentialStorage);
         $exceptionMock = new \Magento\Framework\Exception\LocalizedException(
             __(
                 'The account sign-in was incorrect or your account is disabled temporarily. '

@@ -29,10 +29,10 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
     protected function initRoles($roleId, $parentRoleId)
     {
         $parentRole = $this->createMock(\Zend_Acl_Role_Interface::class);
-        $parentRole->expects($this->any())->method('getRoleId')->will($this->returnValue($parentRoleId));
+        $parentRole->expects($this->any())->method('getRoleId')->willReturn($parentRoleId);
 
         $role = $this->createMock(\Zend_Acl_Role_Interface::class);
-        $role->expects($this->any())->method('getRoleId')->will($this->returnValue($roleId));
+        $role->expects($this->any())->method('getRoleId')->willReturn($roleId);
 
         $this->model->add($role);
         $this->model->add($parentRole);
@@ -63,10 +63,13 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([$parentRoleId => $parentRole], $this->model->getParents($roleId));
     }
 
+    /**
+     */
     public function testAddParentWrongChildId()
     {
-        $this->expectException('\Zend_Acl_Role_Registry_Exception');
-        $this->expectExceptionMessage("Child Role id '20' does not exist");
+        $this->expectException(\Zend_Acl_Role_Registry_Exception::class);
+        $this->expectExceptionMessage('Child Role id \'20\' does not exist');
+
         $roleId = 1;
         $parentRoleId = 2;
         list(, $parentRole) = $this->initRoles($roleId, $parentRoleId);
@@ -74,13 +77,16 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
         $this->model->addParent(20, $parentRole);
     }
 
+    /**
+     */
     public function testAddParentWrongParentId()
     {
-        $this->expectException('\Zend_Acl_Role_Registry_Exception');
-        $this->expectExceptionMessage("Parent Role id '26' does not exist");
+        $this->expectException(\Zend_Acl_Role_Registry_Exception::class);
+        $this->expectExceptionMessage('Parent Role id \'26\' does not exist');
+
         $roleId = 1;
         $parentRoleId = 2;
-        list($role, ) = $this->initRoles($roleId, $parentRoleId);
+        list($role,) = $this->initRoles($roleId, $parentRoleId);
 
         $this->model->addParent($role, 26);
     }

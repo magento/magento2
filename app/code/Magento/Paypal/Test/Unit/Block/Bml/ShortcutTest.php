@@ -84,7 +84,7 @@ class ShortcutTest extends \PHPUnit\Framework\TestCase
         $this->shortcut->setIsInCatalogProduct($isInCatalog);
 
         $this->paypalShortcutHelperMock->expects($this->once())->method('validate')
-            ->with($paymentMethodCode, $isInCatalog)->will($this->returnValue(false));
+            ->with($paymentMethodCode, $isInCatalog)->willReturn(false);
 
         $this->assertEmpty($this->shortcut->toHtml());
     }
@@ -99,10 +99,10 @@ class ShortcutTest extends \PHPUnit\Framework\TestCase
             ->setMethods([])->getMock();
 
         $this->paypalShortcutHelperMock->expects($this->once())->method('validate')
-            ->with($paymentMethodCode, $isInCatalog)->will($this->returnValue(true));
+            ->with($paymentMethodCode, $isInCatalog)->willReturn(true);
         $this->paymentHelperMock->expects($this->once())->method('getMethodInstance')->with($bmlMethodCode)
-            ->will($this->returnValue($expressMethod));
-        $expressMethod->expects($this->once())->method('isAvailable')->will($this->returnValue(false));
+            ->willReturn($expressMethod);
+        $expressMethod->expects($this->once())->method('isAvailable')->willReturn(false);
 
         $this->assertEmpty($this->shortcut->toHtml());
     }

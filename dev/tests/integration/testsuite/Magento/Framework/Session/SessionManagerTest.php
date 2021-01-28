@@ -251,11 +251,12 @@ namespace Magento\Framework\Session {
         }
 
         /**
-         * @expectedException \Magento\Framework\Exception\SessionException
-         * @expectedExceptionMessage Area code not set: Area code must be set before starting a session.
          */
         public function testStartAreaNotSet()
         {
+            $this->expectException(\Magento\Framework\Exception\SessionException::class);
+            $this->expectExceptionMessage('Area code not set: Area code must be set before starting a session.');
+
             $scope = $this->objectManager->get(\Magento\Framework\Config\ScopeInterface::class);
             $appState = new \Magento\Framework\App\State($scope);
 

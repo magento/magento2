@@ -21,7 +21,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $httpContext->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         /** @var \Magento\Sales\Block\Guest\Link $link */
         $link = $objectManagerHelper->getObject(

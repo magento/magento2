@@ -89,7 +89,7 @@ class SwaggerUiForRestApiTest extends Injectable
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         foreach ($this->endpoints as $endpoint) {
             $this->swaggerPage->closeEndpointContent($this->serviceName, $endpoint);

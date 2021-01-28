@@ -62,16 +62,16 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getWebsites'
-        )->will(
-            $this->returnCallback([$this, 'getWebsites'])
+        )->willReturnCallback(
+            [$this, 'getWebsites']
         );
 
         $storeManager->expects(
             $this->any()
         )->method(
             'getStores'
-        )->will(
-            $this->returnCallback([$this, 'getStores'])
+        )->willReturnCallback(
+            [$this, 'getStores']
         );
 
         $this->_model = new \Magento\CustomerImportExport\Model\Export\Customer(
@@ -202,8 +202,8 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'writeRow'
-        )->will(
-            $this->returnCallback([$this, 'validateWriteRow'])
+        )->willReturnCallback(
+            [$this, 'validateWriteRow']
         );
 
         $this->_model->setWriter($writer);

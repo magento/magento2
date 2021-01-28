@@ -55,10 +55,10 @@ class ShipmentSenderTest extends AbstractSenderTest
         );
         $this->shipmentMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
         $this->shipmentMock->expects($this->any())
             ->method('getOrder')
-            ->will($this->returnValue($this->orderMock));
+            ->willReturn($this->orderMock);
 
         $this->shipmentMock->method('getId')
             ->willReturn(self::SHIPMENT_ID);
@@ -71,7 +71,7 @@ class ShipmentSenderTest extends AbstractSenderTest
         );
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
 
         $this->sender = new ShipmentSender(
             $this->templateContainerMock,

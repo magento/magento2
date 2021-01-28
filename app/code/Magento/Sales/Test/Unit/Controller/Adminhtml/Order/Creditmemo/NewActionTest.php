@@ -140,13 +140,13 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
 
         $this->contextMock->expects($this->once())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
         $this->contextMock->expects($this->once())
             ->method('getResponse')
-            ->will($this->returnValue($this->responseMock));
+            ->willReturn($this->responseMock);
         $this->contextMock->expects($this->once())
             ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManagerMock));
+            ->willReturn($this->objectManagerMock);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->controller = $objectManager->getObject(
@@ -166,12 +166,12 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
     {
         $this->requestMock->expects($this->exactly(4))
             ->method('getParam')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['order_id', null, 'order_id'],
                 ['creditmemo_id', null, 'creditmemo_id'],
                 ['creditmemo', null, 'creditmemo'],
                 ['invoice_id', null, 'invoice_id'],
-            ]));
+            ]);
         $this->creditmemoLoaderMock->expects($this->once())
             ->method('setOrderId')
             ->with($this->equalTo('order_id'));
@@ -186,33 +186,33 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo('invoice_id'));
         $this->creditmemoLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($this->creditmemoMock));
+            ->willReturn($this->creditmemoMock);
         $this->creditmemoMock->expects($this->exactly(2))
             ->method('getInvoice')
-            ->will($this->returnValue($this->invoiceMock));
+            ->willReturn($this->invoiceMock);
         $this->invoiceMock->expects($this->once())
             ->method('getIncrementId')
-            ->will($this->returnValue('invoice-increment-id'));
+            ->willReturn('invoice-increment-id');
         $this->titleMock->expects($this->exactly(2))
             ->method('prepend')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['Credit Memos', null],
                 ['New Memo for #invoice-increment-id', null],
                 ['item-title', null],
-            ]));
+            ]);
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with($this->equalTo(\Magento\Backend\Model\Session::class))
-            ->will($this->returnValue($this->backendSessionMock));
+            ->willReturn($this->backendSessionMock);
         $this->backendSessionMock->expects($this->once())
             ->method('getCommentText')
             ->with($this->equalTo(true))
-            ->will($this->returnValue('comment'));
+            ->willReturn('comment');
         $this->creditmemoMock->expects($this->once())
             ->method('setCommentText')
             ->with($this->equalTo('comment'));
-        $this->resultPageMock->expects($this->any())->method('getConfig')->will(
-            $this->returnValue($this->pageConfigMock)
+        $this->resultPageMock->expects($this->any())->method('getConfig')->willReturn(
+            $this->pageConfigMock
         );
         $this->pageConfigMock->expects($this->any())
             ->method('getTitle')

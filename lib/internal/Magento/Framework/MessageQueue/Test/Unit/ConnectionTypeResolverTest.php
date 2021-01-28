@@ -23,11 +23,12 @@ class ConnectionTypeResolverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Unknown connection name test
      */
     public function testGetConnectionTypeWithException()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Unknown connection name test');
+
         $resolverOne = $this->getMockForAbstractClass(ConnectionTypeResolverInterface::class);
         $resolverOne->expects($this->once())->method('getConnectionType')->with('test')->willReturn(null);
 

@@ -24,19 +24,19 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $adj1 = $this->createMock(\Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class);
         $adj1->expects($this->any())
             ->method('getSortOrder')
-            ->will($this->returnValue(10));
+            ->willReturn(10);
         $adj2 = $this->createMock(\Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class);
         $adj2->expects($this->any())
             ->method('getSortOrder')
-            ->will($this->returnValue(20));
+            ->willReturn(20);
         $adj3 = $this->createMock(\Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class);
         $adj3->expects($this->any())
             ->method('getSortOrder')
-            ->will($this->returnValue(5));
+            ->willReturn(5);
         $adj4 = $this->createMock(\Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class);
         $adj4->expects($this->any())
             ->method('getSortOrder')
-            ->will($this->returnValue(\Magento\Framework\Pricing\Adjustment\Pool::DEFAULT_SORT_ORDER));
+            ->willReturn(\Magento\Framework\Pricing\Adjustment\Pool::DEFAULT_SORT_ORDER);
 
         $adjustmentsData = [
             'adj1' => $adj1,
@@ -50,15 +50,15 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getAdjustmentByCode'])
             ->getMock();
-        $adjustmentPool->expects($this->any())->method('getAdjustmentByCode')->will(
-            $this->returnCallback(
+        $adjustmentPool->expects($this->any())->method('getAdjustmentByCode')->willReturnCallback(
+            
                 function ($code) use ($adjustmentsData) {
                     if (!isset($adjustmentsData[$code])) {
                         $this->fail(sprintf('Adjustment "%s" not found', $code));
                     }
                     return $adjustmentsData[$code];
                 }
-            )
+            
         );
 
         $this->adjustmentPool = $adjustmentPool;
@@ -122,10 +122,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testGetItemByNotExistingCode()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $adjustments = ['adj1'];
         $collection = new Collection($this->adjustmentPool, $adjustments);
         $collection->getItemByCode('not_existing_code');

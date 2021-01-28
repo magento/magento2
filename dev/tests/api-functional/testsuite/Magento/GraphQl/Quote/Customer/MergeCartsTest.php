@@ -107,11 +107,12 @@ class MergeCartsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Current user does not have an active cart.
      */
     public function testGuestCartExpiryAfterMerge()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Current user does not have an active cart.');
+
         $customerQuote = $this->quoteFactory->create();
         $this->quoteResource->load($customerQuote, 'test_quote', 'reserved_order_id');
 
@@ -140,11 +141,12 @@ class MergeCartsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current user cannot perform operations on cart
      */
     public function testMergeTwoCustomerCarts()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current user cannot perform operations on cart');
+
         $firstQuote = $this->quoteFactory->create();
         $this->quoteResource->load($firstQuote, 'test_quote', 'reserved_order_id');
         $firstMaskedId = $this->quoteIdToMaskedId->execute((int)$firstQuote->getId());

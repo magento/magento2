@@ -97,7 +97,7 @@ class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\
 
         $modelMock->expects($this->any())
             ->method('_getCustomerCollection')
-            ->will($this->returnValue($customerCollection));
+            ->willReturn($customerCollection);
 
         return $modelMock;
     }

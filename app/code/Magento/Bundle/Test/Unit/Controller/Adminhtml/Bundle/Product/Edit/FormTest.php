@@ -78,13 +78,13 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $this->context->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->request));
+            ->willReturn($this->request);
         $this->context->expects($this->any())
             ->method('getResponse')
-            ->will($this->returnValue($this->response));
+            ->willReturn($this->response);
         $this->context->expects($this->any())
             ->method('getView')
-            ->will($this->returnValue($this->view));
+            ->willReturn($this->view);
 
         $this->controller = $this->objectManagerHelper->getObject(
             \Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit\Form::class,

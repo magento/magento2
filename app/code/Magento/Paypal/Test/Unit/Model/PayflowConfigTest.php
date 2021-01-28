@@ -173,7 +173,7 @@ class PayflowConfigTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->with('paypal/general/merchant_country')
-            ->will($this->returnValue('US'));
+            ->willReturn('US');
 
         $i = 0;
         foreach ($expectsMethods as $method => $isActive) {

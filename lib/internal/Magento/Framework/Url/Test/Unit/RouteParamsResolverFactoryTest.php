@@ -32,7 +32,7 @@ class RouteParamsResolverFactoryTest extends \PHPUnit\Framework\TestCase
         $this->objectManager->expects($this->once())
             ->method('create')
             ->with(\Magento\Framework\Url\RouteParamsResolverInterface::class)
-            ->will($this->returnValue($producedInstance));
+            ->willReturn($producedInstance);
 
         $this->assertSame($producedInstance, $this->object->create([]));
     }

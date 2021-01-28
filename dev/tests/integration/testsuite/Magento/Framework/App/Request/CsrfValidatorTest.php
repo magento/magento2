@@ -201,11 +201,12 @@ class CsrfValidatorTest extends TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\App\Request\InvalidRequestException
      * @magentoAppArea adminhtml
      */
     public function testValidateWithInvalidKey()
     {
+        $this->expectException(\Magento\Framework\App\Request\InvalidRequestException::class);
+
         $this->request->setPost(
             new Parameters(['form_key' => $this->formKey->getFormKey() .'1'])
         );

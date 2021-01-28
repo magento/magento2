@@ -76,7 +76,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
 
         $resource = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class);
         $productId = $resource->getIdBySku('Test Grouped');
-        $this->assertTrue(is_numeric($productId));
+        $this->assertIsNumeric($productId);
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
         $product->load($productId);

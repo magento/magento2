@@ -86,7 +86,7 @@ class DeleteCompareProductsTest extends AbstractCompareProductsTest
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         if (count($this->products) > 1) {
             $this->cmsIndex->open();

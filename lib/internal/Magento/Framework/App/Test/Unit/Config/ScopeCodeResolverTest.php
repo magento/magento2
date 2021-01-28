@@ -32,7 +32,7 @@ class ScopeCodeResolverTest extends \PHPUnit\Framework\TestCase
      */
     private $scopeCodeResolver;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->scopeResolverPool = $this->getMockBuilder(ScopeResolverPool::class)
             ->disableOriginalConstructor()

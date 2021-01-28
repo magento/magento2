@@ -99,7 +99,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
 
     public function testIsVisibleReturnsTrueInSingleStoreModeForNonHiddenElements()
     {
-        $this->storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
+        $this->storeManagerMock->expects($this->once())->method('isSingleStoreMode')->willReturn(true);
         $this->_model->setData(
             ['showInDefault' => 1, 'showInStore' => 0, 'showInWebsite' => 0],
             ScopeConfigInterface::SCOPE_TYPE_DEFAULT
@@ -109,7 +109,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
 
     public function testIsVisibleReturnsFalseInSingleStoreModeForHiddenElements()
     {
-        $this->storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
+        $this->storeManagerMock->expects($this->once())->method('isSingleStoreMode')->willReturn(true);
         $this->_model->setData(
             ['hide_in_single_store_mode' => 1, 'showInDefault' => 1, 'showInStore' => 0, 'showInWebsite' => 0],
             ScopeConfigInterface::SCOPE_TYPE_DEFAULT
@@ -122,7 +122,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsVisibleReturnsFalseInSingleStoreModeForInvisibleElements()
     {
-        $this->storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
+        $this->storeManagerMock->expects($this->once())->method('isSingleStoreMode')->willReturn(true);
         $this->_model->setData(
             ['showInDefault' => 0, 'showInStore' => 0, 'showInWebsite' => 0],
             ScopeConfigInterface::SCOPE_TYPE_DEFAULT

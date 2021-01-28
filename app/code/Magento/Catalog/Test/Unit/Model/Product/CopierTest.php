@@ -159,7 +159,7 @@ class CopierTest extends \PHPUnit\Framework\TestCase
             ->method('getAttribute')
             ->willReturn($attributeMock);
 
-        $this->productMock->expects($this->any())->method('getResource')->will($this->returnValue($resourceMock));
+        $this->productMock->expects($this->any())->method('getResource')->willReturn($resourceMock);
 
         $duplicateMock = $this->createPartialMock(
             Product::class,
@@ -181,7 +181,7 @@ class CopierTest extends \PHPUnit\Framework\TestCase
                 'getStoreIds',
             ]
         );
-        $this->productFactoryMock->expects($this->once())->method('create')->will($this->returnValue($duplicateMock));
+        $this->productFactoryMock->expects($this->once())->method('create')->willReturn($duplicateMock);
 
         $duplicateMock->expects($this->once())->method('setOptions')->with([]);
         $duplicateMock->expects($this->once())->method('setIsDuplicate')->with(true);

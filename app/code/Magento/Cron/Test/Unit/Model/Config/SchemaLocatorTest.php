@@ -32,8 +32,8 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
         )->with(
             'etc',
             'Magento_Cron'
-        )->will(
-            $this->returnValue('schema_dir')
+        )->willReturn(
+            'schema_dir'
         );
         $this->_locator = new \Magento\Cron\Model\Config\SchemaLocator($this->_moduleReaderMock);
     }

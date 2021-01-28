@@ -52,15 +52,15 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
 
         $userMock = new \Magento\Framework\DataObject();
 
-        $this->_authSession->expects($this->any())->method('getUser')->will($this->returnValue($userMock));
+        $this->_authSession->expects($this->any())->method('getUser')->willReturn($userMock);
 
         $this->_translator = $this->getMockBuilder(\Magento\Framework\TranslateInterface::class)
             ->setMethods(['init', 'setLocale'])
             ->getMockForAbstractClass();
 
-        $this->_translator->expects($this->any())->method('setLocale')->will($this->returnValue($this->_translator));
+        $this->_translator->expects($this->any())->method('setLocale')->willReturn($this->_translator);
 
-        $this->_translator->expects($this->any())->method('init')->will($this->returnValue(false));
+        $this->_translator->expects($this->any())->method('init')->willReturn(false);
 
         $this->_model = new \Magento\Backend\Model\Locale\Manager(
             $this->_session,

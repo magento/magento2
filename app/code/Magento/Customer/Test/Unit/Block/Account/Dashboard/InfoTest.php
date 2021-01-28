@@ -58,25 +58,25 @@ class InfoTest extends \PHPUnit\Framework\TestCase
         $this->currentCustomer = $this->createMock(\Magento\Customer\Helper\Session\CurrentCustomer::class);
 
         $urlBuilder = $this->getMockForAbstractClass(\Magento\Framework\UrlInterface::class, [], '', false);
-        $urlBuilder->expects($this->any())->method('getUrl')->will($this->returnValue(self::CHANGE_PASSWORD_URL));
+        $urlBuilder->expects($this->any())->method('getUrl')->willReturn(self::CHANGE_PASSWORD_URL);
 
         $layout = $this->getMockForAbstractClass(\Magento\Framework\View\LayoutInterface::class, [], '', false);
         $this->_formRegister = $this->createMock(\Magento\Customer\Block\Form\Register::class);
         $layout->expects($this->any())
             ->method('getBlockSingleton')
             ->with(\Magento\Customer\Block\Form\Register::class)
-            ->will($this->returnValue($this->_formRegister));
+            ->willReturn($this->_formRegister);
 
         $this->_context = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
             ->disableOriginalConstructor()->getMock();
-        $this->_context->expects($this->once())->method('getUrlBuilder')->will($this->returnValue($urlBuilder));
-        $this->_context->expects($this->once())->method('getLayout')->will($this->returnValue($layout));
+        $this->_context->expects($this->once())->method('getUrlBuilder')->willReturn($urlBuilder);
+        $this->_context->expects($this->once())->method('getLayout')->willReturn($layout);
 
         $this->_customerSession = $this->createMock(\Magento\Customer\Model\Session::class);
-        $this->_customerSession->expects($this->any())->method('getId')->will($this->returnValue(self::CUSTOMER_ID));
+        $this->_customerSession->expects($this->any())->method('getId')->willReturn(self::CUSTOMER_ID);
 
         $this->_customer = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
-        $this->_customer->expects($this->any())->method('getEmail')->will($this->returnValue(self::EMAIL_ADDRESS));
+        $this->_customer->expects($this->any())->method('getEmail')->willReturn(self::EMAIL_ADDRESS);
         $this->_helperView = $this->getMockBuilder(
             \Magento\Customer\Helper\View::class
         )->disableOriginalConstructor()->getMock();
@@ -85,10 +85,10 @@ class InfoTest extends \PHPUnit\Framework\TestCase
             ['create']
         );
         $this->_subscriber = $this->createMock(\Magento\Newsletter\Model\Subscriber::class);
-        $this->_subscriber->expects($this->any())->method('loadByEmail')->will($this->returnSelf());
+        $this->_subscriber->expects($this->any())->method('loadByEmail')->willReturnSelf();
         $this->_subscriberFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->_subscriber));
+            ->willReturn($this->_subscriber);
 
         $this->_block = new \Magento\Customer\Block\Account\Dashboard\Info(
             $this->_context,
@@ -102,7 +102,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
     {
         $this->currentCustomer->expects($this->once())
             ->method('getCustomer')
-            ->will($this->returnValue($this->_customer));
+            ->willReturn($this->_customer);
 
         $customer = $this->_block->getCustomer();
         $this->assertEquals($customer, $this->_customer);
@@ -130,12 +130,12 @@ class InfoTest extends \PHPUnit\Framework\TestCase
 
         $this->currentCustomer->expects($this->once())
             ->method('getCustomer')
-            ->will($this->returnValue($this->_customer));
+            ->willReturn($this->_customer);
 
         /**
          * Called three times, once for each attribute (i.e. prefix, middlename, and suffix)
          */
-        $this->_helperView->expects($this->any())->method('getCustomerName')->will($this->returnValue($expectedValue));
+        $this->_helperView->expects($this->any())->method('getCustomerName')->willReturn($expectedValue);
 
         $this->assertEquals($expectedValue, $this->_block->getName());
     }
@@ -158,7 +158,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetIsSubscribed($isSubscribed, $expectedValue)
     {
-        $this->_subscriber->expects($this->once())->method('isSubscribed')->will($this->returnValue($isSubscribed));
+        $this->_subscriber->expects($this->once())->method('isSubscribed')->willReturn($isSubscribed);
         $this->assertEquals($expectedValue, $this->_block->getIsSubscribed());
     }
 
@@ -180,7 +180,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
     {
         $this->_formRegister->expects($this->once())
             ->method('isNewsletterEnabled')
-            ->will($this->returnValue($isNewsletterEnabled));
+            ->willReturn($isNewsletterEnabled);
         $this->assertEquals($expectedValue, $this->_block->isNewsletterEnabled());
     }
 

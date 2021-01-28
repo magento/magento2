@@ -102,8 +102,7 @@ class CounterTest extends \PHPUnit\Framework\TestCase
             ->method('getCount')
             ->willReturn(1);
 
-        $this->assertIsInt(
-            $this->model->getAllProductsCount()
+        $this->assertIsInt($this->model->getAllProductsCount()
         );
     }
 
@@ -118,8 +117,7 @@ class CounterTest extends \PHPUnit\Framework\TestCase
             ->method('getCount')
             ->willReturn(1);
 
-        $this->assertIsInt(
-            $this->model->getConfigurableCount()
+        $this->assertIsInt($this->model->getConfigurableCount()
         );
     }
 
@@ -135,8 +133,7 @@ class CounterTest extends \PHPUnit\Framework\TestCase
             ->with(1)
             ->willReturn(1);
 
-        $this->assertIsInt(
-            $this->model->getActiveCatalogSize()
+        $this->assertIsInt($this->model->getActiveCatalogSize()
         );
     }
 
@@ -151,8 +148,7 @@ class CounterTest extends \PHPUnit\Framework\TestCase
             ->method('getCount')
             ->willReturn(1);
 
-        $this->assertIsInt(
-            $this->model->getCategoryCount()
+        $this->assertIsInt($this->model->getCategoryCount()
         );
     }
 
@@ -167,8 +163,7 @@ class CounterTest extends \PHPUnit\Framework\TestCase
             ->method('getCount')
             ->willReturn(1);
 
-        $this->assertIsInt(
-            $this->model->getCustomerCount()
+        $this->assertIsInt($this->model->getCustomerCount()
         );
     }
 
@@ -183,8 +178,7 @@ class CounterTest extends \PHPUnit\Framework\TestCase
             ->method('getCount')
             ->willReturn(1);
 
-        $this->assertIsInt(
-            $this->model->getWebsiteCount()
+        $this->assertIsInt($this->model->getWebsiteCount()
         );
     }
 
@@ -199,8 +193,7 @@ class CounterTest extends \PHPUnit\Framework\TestCase
             ->method('getCount')
             ->willReturn(1);
 
-        $this->assertIsInt(
-            $this->model->getStoreViewsCount()
+        $this->assertIsInt($this->model->getStoreViewsCount()
         );
     }
 }

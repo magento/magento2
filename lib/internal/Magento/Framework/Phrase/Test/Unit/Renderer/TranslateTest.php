@@ -55,7 +55,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
 
         $this->_translator->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue([$translatedTextInDictionary => $translate]));
+            ->willReturn([$translatedTextInDictionary => $translate]);
 
         $this->assertEquals($translate, $this->_renderer->render([$translatedTextInput], []));
     }
@@ -65,7 +65,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
         $translate = "Text with quote \'";
         $this->_translator->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->assertEquals($translate, $this->_renderer->render([$translate], []));
     }
 
@@ -77,7 +77,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
 
         $this->_translator->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue([$translatedTextInDictionary => $translate]));
+            ->willReturn([$translatedTextInDictionary => $translate]);
 
         $this->assertEquals($translate, $this->_renderer->render([$translatedTextInput], []));
     }

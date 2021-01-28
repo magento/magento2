@@ -60,14 +60,14 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
         $similarAsset = $this->createMock(\Magento\Framework\View\Asset\File::class);
         $similarAsset->expects($this->any())
             ->method('getPath')
-            ->will($this->returnValue($similarRelPath));
+            ->willReturn($similarRelPath);
         $this->asset->expects($this->once())
             ->method('getPath')
-            ->will($this->returnValue($assetRelPath));
+            ->willReturn($assetRelPath);
         $this->assetRepo->expects($this->once())
             ->method('createSimilar')
             ->with($relatedFieldId, $this->asset)
-            ->will($this->returnValue($similarAsset));
+            ->willReturn($similarAsset);
         $this->assertEquals(
             $expectedResult,
             $this->object->convertModuleNotationToPath($this->asset, $relatedFieldId)

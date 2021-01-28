@@ -113,8 +113,8 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 'getElement'
             )->with(
                 $data['id']
-            )->will(
-                $this->returnValue($field)
+            )->willReturn(
+                $field
             );
             $dependencyField = $this->_getDependencyField(
                 $isValueSatisfy,
@@ -128,8 +128,8 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 'create'
             )->with(
                 ['fieldData' => $data, 'fieldPrefix' => self::FIELD_PREFIX]
-            )->will(
-                $this->returnValue($dependencyField)
+            )->willReturn(
+                $dependencyField
             );
             $this->_scopeConfigMock->expects(
                 $this->at($i)
@@ -139,8 +139,8 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 $dependentPath,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 self::STORE_CODE
-            )->will(
-                $this->returnValue(self::VALUE_IN_STORE)
+            )->willReturn(
+                self::VALUE_IN_STORE
             );
             if (!$isValueSatisfy) {
                 $expected[$data['id']] = $dependencyField;
@@ -176,8 +176,8 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 'getElement'
             )->with(
                 $data['id']
-            )->will(
-                $this->returnValue($field)
+            )->willReturn(
+                $field
             );
             $dependencyField = $this->_getDependencyField(
                 (bool)$i,
@@ -191,8 +191,8 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 'create'
             )->with(
                 ['fieldData' => $data, 'fieldPrefix' => self::FIELD_PREFIX]
-            )->will(
-                $this->returnValue($dependencyField)
+            )->willReturn(
+                $dependencyField
             );
             $expected[$data['id']] = $dependencyField;
         }
@@ -227,16 +227,16 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 'isValueSatisfy'
             )->with(
                 self::VALUE_IN_STORE
-            )->will(
-                $this->returnValue($isValueSatisfy)
+            )->willReturn(
+                $isValueSatisfy
             );
         }
         $field->expects(
             $isFieldVisible || !$isValueSatisfy ? $this->once() : $this->never()
         )->method(
             'getId'
-        )->will(
-            $this->returnValue($fieldId)
+        )->willReturn(
+            $fieldId
         );
         return $field;
     }
@@ -258,7 +258,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
         )->setMockClassName(
             $mockClassName
         )->disableOriginalConstructor()->getMock();
-        $field->expects($this->once())->method('isVisible')->will($this->returnValue($isVisible));
+        $field->expects($this->once())->method('isVisible')->willReturn($isVisible);
         if ($isVisible) {
             $field->expects($this->never())->method('getPath');
         } else {
@@ -268,8 +268,8 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 'getPath'
             )->with(
                 self::FIELD_PREFIX
-            )->will(
-                $this->returnValue($path)
+            )->willReturn(
+                $path
             );
         }
         return $field;

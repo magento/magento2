@@ -107,14 +107,14 @@ class ResponseFactoryTest extends \PHPUnit\Framework\TestCase
 
         $this->documentFactory->expects($this->at(0))->method('create')
             ->with($this->equalTo($documents[0]))
-            ->will($this->returnValue('document1'));
+            ->willReturn('document1');
         $this->documentFactory->expects($this->at(1))->method('create')
             ->with($documents[1])
-            ->will($this->returnValue('document2'));
+            ->willReturn('document2');
 
         $this->aggregationFactory->expects($this->at(0))->method('create')
             ->with($this->equalTo($exceptedResponse['aggregations']))
-            ->will($this->returnValue('aggregationsData'));
+            ->willReturn('aggregationsData');
 
         $this->objectManager->expects($this->once())->method('create')
             ->with(
@@ -125,7 +125,7 @@ class ResponseFactoryTest extends \PHPUnit\Framework\TestCase
                     'total' => 2
                 ])
             )
-            ->will($this->returnValue('QueryResponseObject'));
+            ->willReturn('QueryResponseObject');
 
         $result = $this->model->create($rawResponse);
         $this->assertEquals('QueryResponseObject', $result);

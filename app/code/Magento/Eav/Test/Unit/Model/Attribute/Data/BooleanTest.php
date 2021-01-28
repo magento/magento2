@@ -32,7 +32,7 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
     public function testOutputValue($format, $value, $expectedResult)
     {
         $entityMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
-        $entityMock->expects($this->once())->method('getData')->will($this->returnValue($value));
+        $entityMock->expects($this->once())->method('getData')->willReturn($value);
 
         $attributeMock = $this->createMock(\Magento\Eav\Model\Attribute::class);
 

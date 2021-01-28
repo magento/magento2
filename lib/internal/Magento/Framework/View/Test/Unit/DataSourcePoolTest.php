@@ -37,11 +37,12 @@ class DataSourcePoolTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid Data Source class name: NotExistingBlockClass
      */
     public function testAddWithException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid Data Source class name: NotExistingBlockClass');
+
         $this->dataSourcePool->add('DataSourcePoolTestBlock', 'NotExistingBlockClass');
     }
 
@@ -56,7 +57,7 @@ class DataSourcePoolTest extends \PHPUnit\Framework\TestCase
         $this->blockFactory->expects($this->once())
             ->method('createBlock')
             ->with($blockClass)
-            ->will($this->returnValue($block));
+            ->willReturn($block);
         return $block;
     }
 

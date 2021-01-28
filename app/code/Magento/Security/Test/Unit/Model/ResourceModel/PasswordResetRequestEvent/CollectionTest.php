@@ -53,7 +53,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($connection));
+            ->willReturn($connection);
 
         $this->resourceMock->expects($this->any())->method('getMainTable')->willReturn('table_test');
         $this->resourceMock->expects($this->any())->method('getTable')->willReturn('test');
@@ -83,7 +83,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->collectionMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($connection));
+            ->willReturn($connection);
 
         $this->collectionMock->expects($this->any())
             ->method('getSelect')

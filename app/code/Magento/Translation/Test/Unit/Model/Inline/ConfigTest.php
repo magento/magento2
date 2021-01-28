@@ -47,8 +47,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $this->equalTo('dev/translate_inline/active'),
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->equalTo($store)
-        )->will(
-            $this->returnValue($result)
+        )->willReturn(
+            $result
         );
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $config = $objectManager->getObject(
@@ -69,8 +69,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'isDevAllowed'
         )->with(
             $store
-        )->will(
-            $this->returnValue($result)
+        )->willReturn(
+            $result
         );
 
         $this->assertEquals($result, $this->model->isDevAllowed($store));

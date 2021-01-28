@@ -39,8 +39,8 @@ class PathTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject $filesystem */
         $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->_directory = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);
-        $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($this->_directory));
-        $this->_directory->expects($this->any())->method('getAbsolutePath')->will($this->returnArgument(0));
+        $filesystem->expects($this->any())->method('getDirectoryRead')->willReturn($this->_directory);
+        $this->_directory->expects($this->any())->method('getAbsolutePath')->willReturnArgument(0);
         $this->componentRegistrar = $this->getMockForAbstractClass(
             \Magento\Framework\Component\ComponentRegistrarInterface::class
         );
@@ -66,7 +66,7 @@ class PathTest extends \PHPUnit\Framework\TestCase
         $expectedPath = implode('/', [\Magento\Framework\View\Design\Theme\Customization\Path::DIR_NAME, '123']);
         $this->_theme->expects($this->exactly(2))
             ->method('getId')
-            ->will($this->returnValue(123));
+            ->willReturn(123);
         $this->assertEquals($expectedPath, $this->_model->getCustomizationPath($this->_theme));
     }
 
@@ -78,7 +78,7 @@ class PathTest extends \PHPUnit\Framework\TestCase
     {
         $this->_theme->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->assertNull($this->_model->getCustomizationPath($this->_theme));
     }
 
@@ -89,12 +89,12 @@ class PathTest extends \PHPUnit\Framework\TestCase
     {
         $this->_theme->expects($this->any())
             ->method('getFullPath')
-            ->will($this->returnValue('frontend/Magento/theme'));
+            ->willReturn('frontend/Magento/theme');
         $expectedPath = '/fill/theme/path';
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
             ->with(ComponentRegistrar::THEME, 'frontend/Magento/theme')
-            ->will($this->returnValue($expectedPath));
+            ->willReturn($expectedPath);
         $this->assertEquals($expectedPath, $this->_model->getThemeFilesPath($this->_theme));
     }
 
@@ -105,7 +105,7 @@ class PathTest extends \PHPUnit\Framework\TestCase
     {
         $this->_theme->expects($this->any())
             ->method('getFullPath')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->componentRegistrar->expects($this->never())
             ->method('getPath');
         $this->assertNull($this->_model->getCustomizationPath($this->_theme));
@@ -126,7 +126,7 @@ class PathTest extends \PHPUnit\Framework\TestCase
         );
         $this->_theme->expects($this->exactly(2))
             ->method('getId')
-            ->will($this->returnValue(123));
+            ->willReturn(123);
         $this->assertEquals($expectedPath, $this->_model->getCustomViewConfigPath($this->_theme));
     }
 
@@ -137,7 +137,7 @@ class PathTest extends \PHPUnit\Framework\TestCase
     {
         $this->_theme->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->assertNull($this->_model->getCustomViewConfigPath($this->_theme));
     }
 }

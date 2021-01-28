@@ -33,7 +33,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->authorization->expects($this->any())
             ->method('isAllowed')
-            ->will($this->returnValue($isAllowed));
+            ->willReturn($isAllowed);
         $model = $this->objectManager->getObject(
             \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Category::class,
             ['authorization' => $this->authorization]
@@ -69,7 +69,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         );
         $this->authorization->expects($this->any())
             ->method('isAllowed')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->assertEmpty($model->getAfterElementHtml());
     }
 }
