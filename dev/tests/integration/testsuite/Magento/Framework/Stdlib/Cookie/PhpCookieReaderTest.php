@@ -22,7 +22,7 @@ class PhpCookieReaderTest extends \PHPUnit\Framework\TestCase
     const VALUE = 'cookie-val';
     const DEFAULT_VAL = 'default-val';
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->preTestCookies = $_COOKIE;
         $_COOKIE = [];
@@ -47,7 +47,7 @@ class PhpCookieReaderTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->model->getCookie(null));
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $_COOKIE = $this->preTestCookies;
     }

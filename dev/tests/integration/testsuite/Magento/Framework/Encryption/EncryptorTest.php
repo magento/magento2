@@ -45,14 +45,15 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Encryption key must be 32 character string without any white space.
      *
      * @param string $key
      * @dataProvider invalidEncryptionKeyDataProvider
      */
     public function testValidateKeyInvalid($key)
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Encryption key must be 32 character string without any white space.');
+
         $this->encryptor->validateKey($key);
     }
 

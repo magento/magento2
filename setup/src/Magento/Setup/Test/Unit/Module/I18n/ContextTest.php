@@ -74,11 +74,12 @@ class ContextTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid path given: "invalid_path".
      */
     public function testGetContextByPathWithInvalidPath()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid path given: "invalid_path".');
+
         $this->componentRegistrar->expects($this->any())
             ->method('getPaths')
             ->willReturnMap([
@@ -140,11 +141,12 @@ class ContextTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid context given: "invalid_type".
      */
     public function testBuildPathToLocaleDirectoryByContextWithInvalidType()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid context given: "invalid_type".');
+
         $this->componentRegistrar->expects($this->never())
             ->method('getPath');
         $this->context = new Context($this->componentRegistrar);

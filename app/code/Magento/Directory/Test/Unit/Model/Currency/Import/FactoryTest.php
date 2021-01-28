@@ -41,8 +41,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             'getServiceClass'
         )->with(
             'test'
-        )->will(
-            $this->returnValue('Test_Class')
+        )->willReturn(
+            'Test_Class'
         );
         $this->_objectManager->expects(
             $this->once()
@@ -51,8 +51,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             'Test_Class',
             ['argument' => 'value']
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
         $actualResult = $this->_model->create('test', ['argument' => 'value']);
         $this->assertSame($expectedResult, $actualResult);
@@ -71,8 +71,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             'getServiceClass'
         )->with(
             'test'
-        )->will(
-            $this->returnValue(null)
+        )->willReturn(
+            null
         );
         $this->_objectManager->expects($this->never())->method('create');
         $this->_model->create('test');
@@ -91,8 +91,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             'getServiceClass'
         )->with(
             'test'
-        )->will(
-            $this->returnValue('stdClass')
+        )->willReturn(
+            'stdClass'
         );
         $this->_objectManager->expects(
             $this->once()
@@ -100,8 +100,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             'stdClass'
-        )->will(
-            $this->returnValue(new \stdClass())
+        )->willReturn(
+            new \stdClass()
         );
         $this->_model->create('test');
     }

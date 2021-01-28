@@ -45,7 +45,7 @@ class AddInventoryDataObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->eventObserver->expects($this->atLeastOnce())
             ->method('getEvent')
-            ->will($this->returnValue($this->event));
+            ->willReturn($this->event);
 
         $this->observer = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
             \Magento\CatalogInventory\Observer\AddInventoryDataObserver::class,
@@ -63,12 +63,12 @@ class AddInventoryDataObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->event->expects($this->once())
             ->method('getProduct')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
 
         $this->stockHelper->expects($this->once())
             ->method('assignStatusToProduct')
             ->with($product)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->observer->execute($this->eventObserver);
     }

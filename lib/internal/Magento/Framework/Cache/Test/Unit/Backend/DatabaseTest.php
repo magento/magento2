@@ -20,11 +20,12 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array $options
      *
-     * @expectedException \Zend_Cache_Exception
      * @dataProvider initializeWithExceptionDataProvider
      */
     public function testInitializeWithException($options)
     {
+        $this->expectException(\Zend_Cache_Exception::class);
+
         $this->objectManager->getObject(
             \Magento\Framework\Cache\Backend\Database::class,
             [
@@ -104,19 +105,19 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
 
         $selectMock->expects($this->any())
             ->method('where')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $selectMock->expects($this->any())
             ->method('from')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $connectionMock->expects($this->any())
             ->method('select')
-            ->will($this->returnValue($selectMock));
+            ->willReturn($selectMock);
 
         $connectionMock->expects($this->any())
             ->method('fetchOne')
-            ->will($this->returnValue('loaded_value'));
+            ->willReturn('loaded_value');
 
         return [
             'with_store_data' => [
@@ -245,15 +246,15 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
 
         $dbStatementMock->expects($this->any())
             ->method('rowCount')
-            ->will($this->returnValue($result));
+            ->willReturn($result);
 
         $connectionMock->expects($this->any())
             ->method('quoteIdentifier')
-            ->will($this->returnValue('data'));
+            ->willReturn('data');
 
         $connectionMock->expects($this->any())
             ->method('query')
-            ->will($this->returnValue($dbStatementMock));
+            ->willReturn($dbStatementMock);
 
         return $connectionMock;
     }
@@ -287,7 +288,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
 
         $connectionMock->expects($this->any())
             ->method('delete')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         return [
             'with_store_data' => [
@@ -332,11 +333,11 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
 
         $connectionMock->expects($this->any())
             ->method('query')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $connectionMock->expects($this->any())
             ->method('delete')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         return [
             'mode_all_with_store_data' => [
@@ -380,10 +381,11 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Zend_Cache_Exception
      */
     public function testCleanException()
     {
+        $this->expectException(\Zend_Cache_Exception::class);
+
         /** @var \Magento\Framework\Cache\Backend\Database $database */
         $database = $this->objectManager->getObject(
             \Magento\Framework\Cache\Backend\Database::class,
@@ -424,15 +426,15 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
 
         $selectMock->expects($this->any())
             ->method('from')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $connectionMock->expects($this->any())
             ->method('select')
-            ->will($this->returnValue($selectMock));
+            ->willReturn($selectMock);
 
         $connectionMock->expects($this->any())
             ->method('fetchCol')
-            ->will($this->returnValue(['value_one', 'value_two']));
+            ->willReturn(['value_one', 'value_two']);
 
         return [
             'with_store_data' => [
@@ -458,19 +460,19 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
 
         $selectMock->expects($this->any())
             ->method('from')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $selectMock->expects($this->any())
             ->method('distinct')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $connectionMock->expects($this->any())
             ->method('select')
-            ->will($this->returnValue($selectMock));
+            ->willReturn($selectMock);
 
         $connectionMock->expects($this->any())
             ->method('fetchCol')
-            ->will($this->returnValue(['value_one', 'value_two']));
+            ->willReturn(['value_one', 'value_two']);
 
         /** @var \Magento\Framework\Cache\Backend\Database $database */
         $database = $this->objectManager->getObject(
@@ -495,31 +497,31 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
 
         $selectMock->expects($this->any())
             ->method('from')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $selectMock->expects($this->any())
             ->method('distinct')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $selectMock->expects($this->any())
             ->method('where')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $selectMock->expects($this->any())
             ->method('group')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $selectMock->expects($this->any())
             ->method('having')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $connectionMock->expects($this->any())
             ->method('select')
-            ->will($this->returnValue($selectMock));
+            ->willReturn($selectMock);
 
         $connectionMock->expects($this->any())
             ->method('fetchCol')
-            ->will($this->returnValue(['value_one', 'value_two']));
+            ->willReturn(['value_one', 'value_two']);
 
         /** @var \Magento\Framework\Cache\Backend\Database $database */
         $database = $this->objectManager->getObject(
@@ -544,35 +546,35 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
 
         $selectMock->expects($this->any())
             ->method('from')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $selectMock->expects($this->any())
             ->method('distinct')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $selectMock->expects($this->any())
             ->method('where')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $selectMock->expects($this->any())
             ->method('group')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $selectMock->expects($this->any())
             ->method('having')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $connectionMock->expects($this->any())
             ->method('select')
-            ->will($this->returnValue($selectMock));
+            ->willReturn($selectMock);
 
         $connectionMock->expects($this->at(1))
             ->method('fetchCol')
-            ->will($this->returnValue(['some_value_one']));
+            ->willReturn(['some_value_one']);
 
         $connectionMock->expects($this->at(3))
             ->method('fetchCol')
-            ->will($this->returnValue(['some_value_two']));
+            ->willReturn(['some_value_two']);
 
         /** @var \Magento\Framework\Cache\Backend\Database $database */
         $database = $this->objectManager->getObject(
@@ -594,19 +596,19 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
 
         $selectMock->expects($this->any())
             ->method('from')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $selectMock->expects($this->any())
             ->method('distinct')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $connectionMock->expects($this->any())
             ->method('select')
-            ->will($this->returnValue($selectMock));
+            ->willReturn($selectMock);
 
         $connectionMock->expects($this->any())
             ->method('fetchCol')
-            ->will($this->returnValue(['some_value_one', 'some_value_two']));
+            ->willReturn(['some_value_one', 'some_value_two']);
 
         /** @var \Magento\Framework\Cache\Backend\Database $database */
         $database = $this->objectManager->getObject(
@@ -628,23 +630,23 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
 
         $selectMock->expects($this->any())
             ->method('from')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $selectMock->expects($this->any())
             ->method('where')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $connectionMock->expects($this->any())
             ->method('select')
-            ->will($this->returnValue($selectMock));
+            ->willReturn($selectMock);
 
         $connectionMock->expects($this->any())
             ->method('fetchCol')
-            ->will($this->returnValue(['some_value_one', 'some_value_two']));
+            ->willReturn(['some_value_one', 'some_value_two']);
 
         $connectionMock->expects($this->any())
             ->method('fetchRow')
-            ->will($this->returnValue(['expire_time' => '3', 'update_time' => 2]));
+            ->willReturn(['expire_time' => '3', 'update_time' => 2]);
 
         /** @var \Magento\Framework\Cache\Backend\Database $database */
         $database = $this->objectManager->getObject(
@@ -691,7 +693,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
 
         $connectionMock->expects($this->any())
             ->method('update')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         return [
             'with_store_data' => [

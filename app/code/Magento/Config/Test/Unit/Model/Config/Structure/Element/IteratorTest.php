@@ -37,7 +37,7 @@ class IteratorTest extends \PHPUnit\Framework\TestCase
         $this->_flyweightMock->expects($this->at(0))->method('setData')->with(['id' => 1], 'scope');
         $this->_flyweightMock->expects($this->at(2))->method('setData')->with(['id' => 2], 'scope');
         $this->_flyweightMock->expects($this->at(4))->method('setData')->with(['id' => 3], 'scope');
-        $this->_flyweightMock->expects($this->any())->method('isVisible')->will($this->returnValue(true));
+        $this->_flyweightMock->expects($this->any())->method('isVisible')->willReturn(true);
         $counter = 0;
         foreach ($this->_model as $item) {
             $this->assertEquals($this->_flyweightMock, $item);
@@ -48,7 +48,7 @@ class IteratorTest extends \PHPUnit\Framework\TestCase
 
     public function testIteratorSkipsNonValidElements()
     {
-        $this->_flyweightMock->expects($this->exactly(3))->method('isVisible')->will($this->returnValue(false));
+        $this->_flyweightMock->expects($this->exactly(3))->method('isVisible')->willReturn(false);
         $this->_flyweightMock->expects($this->exactly(3))->method('setData');
         foreach ($this->_model as $item) {
             unset($item);
@@ -64,7 +64,7 @@ class IteratorTest extends \PHPUnit\Framework\TestCase
     public function testIsLast($elementId, $result)
     {
         $elementMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Field::class);
-        $elementMock->expects($this->once())->method('getId')->will($this->returnValue($elementId));
+        $elementMock->expects($this->once())->method('getId')->willReturn($elementId);
         $this->assertEquals($result, $this->_model->isLast($elementMock));
     }
 

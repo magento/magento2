@@ -44,7 +44,7 @@ class GenderTest extends \PHPUnit\Framework\TestCase
         $this->customerMetadata->expects($this->any())
             ->method('getAttributeMetadata')
             ->with(self::GENDER_ATTRIBUTE_CODE)
-            ->will($this->returnValue($this->attribute));
+            ->willReturn($this->attribute);
 
         $this->customerRepository = $this
             ->getMockBuilder(\Magento\Customer\Api\CustomerRepositoryInterface::class)
@@ -71,7 +71,7 @@ class GenderTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsEnabled($isVisible, $expectedValue)
     {
-        $this->attribute->expects($this->once())->method('isVisible')->will($this->returnValue($isVisible));
+        $this->attribute->expects($this->once())->method('isVisible')->willReturn($isVisible);
         $this->assertSame($expectedValue, $this->block->isEnabled());
     }
 
@@ -112,7 +112,7 @@ class GenderTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsRequired($isRequired, $expectedValue)
     {
-        $this->attribute->expects($this->once())->method('isRequired')->will($this->returnValue($isRequired));
+        $this->attribute->expects($this->once())->method('isRequired')->willReturn($isRequired);
         $this->assertSame($expectedValue, $this->block->isRequired());
     }
 
@@ -150,12 +150,12 @@ class GenderTest extends \PHPUnit\Framework\TestCase
     {
         $customerData = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->getMockForAbstractClass();
-        $this->customerSession->expects($this->once())->method('getCustomerId')->will($this->returnValue(1));
+        $this->customerSession->expects($this->once())->method('getCustomerId')->willReturn(1);
         $this->customerRepository
             ->expects($this->once())
             ->method('getById')
             ->with(1)
-            ->will($this->returnValue($customerData));
+            ->willReturn($customerData);
 
         $customer = $this->block->getCustomer();
         $this->assertSame($customerData, $customer);
@@ -173,7 +173,7 @@ class GenderTest extends \PHPUnit\Framework\TestCase
             ['label' => __('Not Specified'), 'value' => 'NA']
         ];
 
-        $this->attribute->expects($this->once())->method('getOptions')->will($this->returnValue($options));
+        $this->attribute->expects($this->once())->method('getOptions')->willReturn($options);
         $this->assertSame($options, $this->block->getGenderOptions());
     }
 }

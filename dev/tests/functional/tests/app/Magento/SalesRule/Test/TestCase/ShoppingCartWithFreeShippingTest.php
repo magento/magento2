@@ -70,7 +70,7 @@ class ShoppingCartWithFreeShippingTest extends \Magento\Mtf\TestCase\Injectable
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->testStepFactory->create(\Magento\SalesRule\Test\TestStep\DeleteAllSalesRuleStep::class)->run();
     }

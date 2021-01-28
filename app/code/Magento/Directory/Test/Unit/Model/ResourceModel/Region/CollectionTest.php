@@ -57,9 +57,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->allowedCountries = $this->createMock(AllowedCountries::class);
 
         $selectMock = $this->createMock(Select::class);
-        $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
-        $resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
-        $resourceMock->expects($this->any())->method('getTable')->will($this->returnArgument(0));
+        $connectionMock->expects($this->any())->method('select')->willReturn($selectMock);
+        $resourceMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
+        $resourceMock->expects($this->any())->method('getTable')->willReturnArgument(0);
 
         $this->collection = new Collection(
             $entityFactoryMock,

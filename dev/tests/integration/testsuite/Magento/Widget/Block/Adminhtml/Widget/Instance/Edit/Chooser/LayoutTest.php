@@ -33,7 +33,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
             'cms_index_nocookies' => ['label' => 'CMS No-Cookies Page', 'id' => 'cms_index_nocookies'],
             'cms_index_defaultindex' => ['label' => 'CMS Home Default Page', 'id' => 'cms_index_defaultindex'],
         ];
-        $config->expects($this->any())->method('getPageTypes')->will($this->returnValue($pageTypeValues));
+        $config->expects($this->any())->method('getPageTypes')->willReturn($pageTypeValues);
 
         $this->_block = new \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Layout(
             $objectManager->get(\Magento\Framework\View\Element\Template\Context::class),

@@ -47,13 +47,13 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
 
     public function testAroundGetItemQtyWhenProductGrouped()
     {
-        $this->itemMock->expects($this->once())->method('getProduct')->will($this->returnValue($this->productMock));
+        $this->itemMock->expects($this->once())->method('getProduct')->willReturn($this->productMock);
         $this->productMock->expects(
             $this->once()
         )->method(
             'getTypeId'
-        )->will(
-            $this->returnValue(\Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE)
+        )->willReturn(
+            \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE
         );
         $this->assertEquals(
             '',
@@ -63,8 +63,8 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
 
     public function testAroundGetItemQtyWhenProductNotGrouped()
     {
-        $this->itemMock->expects($this->once())->method('getProduct')->will($this->returnValue($this->productMock));
-        $this->productMock->expects($this->once())->method('getTypeId')->will($this->returnValue('one'));
+        $this->itemMock->expects($this->once())->method('getProduct')->willReturn($this->productMock);
+        $this->productMock->expects($this->once())->method('getTypeId')->willReturn('one');
         $this->sidebarMock->aroundGetItemQty($this->subjectMock, $this->closureMock, $this->itemMock);
     }
 

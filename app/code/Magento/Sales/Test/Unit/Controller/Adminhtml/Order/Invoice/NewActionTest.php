@@ -244,11 +244,11 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->at(0))
             ->method('getParam')
             ->with('order_id')
-            ->will($this->returnValue($orderId));
+            ->willReturn($orderId);
         $this->requestMock->expects($this->at(1))
             ->method('getParam')
             ->with('invoice', [])
-            ->will($this->returnValue($invoiceData));
+            ->willReturn($invoiceData);
 
         $invoiceMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
             ->disableOriginalConstructor()
@@ -282,26 +282,26 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $menuBlockMock->expects($this->any())
             ->method('getMenuModel')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $menuBlockMock->expects($this->any())
             ->method('getParentItems')
             ->with('Magento_Sales::sales_order')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->sessionMock->expects($this->once())
             ->method('getCommentText')
             ->with(true)
-            ->will($this->returnValue($commentText));
+            ->willReturn($commentText);
 
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with(\Magento\Backend\Model\Session::class)
-            ->will($this->returnValue($this->sessionMock));
+            ->willReturn($this->sessionMock);
 
         $this->resultPageMock->expects($this->once())->method('setActiveMenu')->with('Magento_Sales::sales_order');
         $this->resultPageFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->resultPageMock));
+            ->willReturn($this->resultPageMock);
 
         $this->assertSame($this->resultPageMock, $this->controller->execute());
     }
@@ -314,11 +314,11 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->at(0))
             ->method('getParam')
             ->with('order_id')
-            ->will($this->returnValue($orderId));
+            ->willReturn($orderId);
         $this->requestMock->expects($this->at(1))
             ->method('getParam')
             ->with('invoice', [])
-            ->will($this->returnValue($invoiceData));
+            ->willReturn($invoiceData);
 
         $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
@@ -338,7 +338,7 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
 
         $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($resultRedirect));
+            ->willReturn($resultRedirect);
 
         $this->assertSame($resultRedirect, $this->controller->execute());
     }

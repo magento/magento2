@@ -131,7 +131,7 @@ class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit\Framework\TestCase
             ->willReturn($this->appliedTaxRate);
         $this->mockAppliedTax = $this->getMockBuilder(\Magento\Tax\Api\Data\AppliedTaxInterface::class)->getMock();
 
-        $this->mockAppliedTax->expects($this->any())->method('getTaxRateKey')->will($this->returnValue('taxKey'));
+        $this->mockAppliedTax->expects($this->any())->method('getTaxRateKey')->willReturn('taxKey');
         $this->addressRateRequest = new \Magento\Framework\DataObject();
     }
 
@@ -284,15 +284,15 @@ class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit\Framework\TestCase
                 $mockObject->expects(
                     $valueMap[self::ONCE] == true ? $this->once() : $this->atLeastOnce()
                 )->method($valueMap[self::MOCK_METHOD_NAME])->with($valueMap[self::WITH_ARGUMENT])
-                    ->will(
-                        $this->returnValue($valueMap[self::MOCK_VALUE])
+                    ->willReturn(
+                        $valueMap[self::MOCK_VALUE]
                     );
             } else {
                 $mockObject->expects(
                     $valueMap[self::ONCE] == true ? $this->once() : $this->atLeastOnce()
                 )->method($valueMap[self::MOCK_METHOD_NAME])->withAnyParameters()
-                    ->will(
-                        $this->returnValue($valueMap[self::MOCK_VALUE])
+                    ->willReturn(
+                        $valueMap[self::MOCK_VALUE]
                     );
             }
         }

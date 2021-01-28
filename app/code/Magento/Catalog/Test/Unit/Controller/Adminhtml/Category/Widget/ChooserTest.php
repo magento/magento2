@@ -95,8 +95,8 @@ class ChooserTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->layoutMock);
 
-        $context->expects($this->once())->method('getRequest')->will($this->returnValue($this->requestMock));
-        $context->expects($this->once())->method('getResponse')->will($this->returnValue($this->responseMock));
+        $context->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
+        $context->expects($this->once())->method('getResponse')->willReturn($this->responseMock);
         $this->controller = new \Magento\Catalog\Controller\Adminhtml\Category\Widget\Chooser(
             $context,
             $layoutFactory,
@@ -108,8 +108,8 @@ class ChooserTest extends \PHPUnit\Framework\TestCase
     {
         $this->chooserBlockMock = $this->createMock(\Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser::class);
 
-        $this->layoutMock->expects($this->once())->method('createBlock')->will(
-            $this->returnValue($this->chooserBlockMock)
+        $this->layoutMock->expects($this->once())->method('createBlock')->willReturn(
+            $this->chooserBlockMock
         );
     }
 
@@ -117,7 +117,7 @@ class ChooserTest extends \PHPUnit\Framework\TestCase
     {
         $this->_getTreeBlock();
         $testHtml = '<div>Some test html</div>';
-        $this->chooserBlockMock->expects($this->once())->method('toHtml')->will($this->returnValue($testHtml));
+        $this->chooserBlockMock->expects($this->once())->method('toHtml')->willReturn($testHtml);
         $this->resultRaw->expects($this->once())->method('setContents')->with($testHtml);
         $this->controller->execute();
     }

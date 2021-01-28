@@ -57,11 +57,11 @@ class CurrentCustomerAddressTest extends \PHPUnit\Framework\TestCase
     {
         $this->currentCustomerMock->expects($this->once())
             ->method('getCustomerId')
-            ->will($this->returnValue($this->customerCurrentId));
+            ->willReturn($this->customerCurrentId);
 
         $this->customerAccountManagementMock->expects($this->once())
             ->method('getDefaultBillingAddress')
-            ->will($this->returnValue($this->customerAddressDataMock));
+            ->willReturn($this->customerAddressDataMock);
         $this->assertEquals(
             $this->customerAddressDataMock,
             $this->currentCustomerAddress->getDefaultBillingAddress()
@@ -75,10 +75,10 @@ class CurrentCustomerAddressTest extends \PHPUnit\Framework\TestCase
     {
         $this->currentCustomerMock->expects($this->once())
             ->method('getCustomerId')
-            ->will($this->returnValue($this->customerCurrentId));
+            ->willReturn($this->customerCurrentId);
         $this->customerAccountManagementMock->expects($this->once())
             ->method('getDefaultShippingAddress')
-            ->will($this->returnValue($this->customerAddressDataMock));
+            ->willReturn($this->customerAddressDataMock);
         $this->assertEquals(
             $this->customerAddressDataMock,
             $this->currentCustomerAddress->getDefaultShippingAddress()

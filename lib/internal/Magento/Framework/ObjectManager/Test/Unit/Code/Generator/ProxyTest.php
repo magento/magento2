@@ -38,11 +38,11 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
 
         $this->ioObjectMock->expects($this->once())->method('generateResultFileName')
             ->with('\\' . \Magento\Framework\ObjectManager\Code\Generator\Sample_Proxy::class)
-            ->will($this->returnValue('sample_file.php'));
+            ->willReturn('sample_file.php');
         $this->ioObjectMock->expects($this->once())->method('writeResultFile')
             ->with('sample_file.php', $sampleProxyCode);
 
-        $model->expects($this->once())->method('_validateData')->will($this->returnValue(true));
+        $model->expects($this->once())->method('_validateData')->willReturn(true);
         $this->assertEquals('sample_file.php', $model->generate());
     }
 }

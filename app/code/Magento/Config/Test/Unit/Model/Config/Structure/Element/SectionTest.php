@@ -73,8 +73,8 @@ class SectionTest extends \PHPUnit\Framework\TestCase
             'isAllowed'
         )->with(
             'someResource'
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $this->_model->setData(['resource' => 'someResource'], 'store');
@@ -89,8 +89,8 @@ class SectionTest extends \PHPUnit\Framework\TestCase
 
     public function testIsVisibleProceedsWithVisibilityCheckIfSectionIsAllowed()
     {
-        $this->_authorizationMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
-        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
+        $this->_authorizationMock->expects($this->any())->method('isAllowed')->willReturn(true);
+        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->willReturn(true);
         $this->_model->setData(['resource' => 'Magento_Backend::all'], 'scope');
         $this->_model->isVisible();
     }

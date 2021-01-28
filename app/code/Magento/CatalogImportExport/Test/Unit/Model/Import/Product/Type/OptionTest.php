@@ -322,37 +322,37 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                     $this->exactly(2)
                 )->method(
                     'quoteInto'
-                )->will(
-                    $this->returnCallback([$this, 'stubQuoteInto'])
+                )->willReturnCallback(
+                    [$this, 'stubQuoteInto']
                 );
                 $connection->expects(
                     $this->exactly(2)
                 )->method(
                     'delete'
-                )->will(
-                    $this->returnCallback([$this, 'verifyDelete'])
+                )->willReturnCallback(
+                    [$this, 'verifyDelete']
                 );
             } else {
                 $connection->expects(
                     $this->once()
                 )->method(
                     'insertMultiple'
-                )->will(
-                    $this->returnCallback([$this, 'verifyInsertMultiple'])
+                )->willReturnCallback(
+                    [$this, 'verifyInsertMultiple']
                 );
                 $connection->expects(
                     $this->exactly(6)
                 )->method(
                     'insertOnDuplicate'
-                )->will(
-                    $this->returnCallback([$this, 'verifyInsertOnDuplicate'])
+                )->willReturnCallback(
+                    [$this, 'verifyInsertOnDuplicate']
                 );
             }
         }
 
         $resourceHelper = $this->createPartialMock(\stdClass::class, ['getNextAutoincrement']);
         if ($addExpectations) {
-            $resourceHelper->expects($this->any())->method('getNextAutoincrement')->will($this->returnValue(2));
+            $resourceHelper->expects($this->any())->method('getNextAutoincrement')->willReturn(2);
         }
 
         $data = [
@@ -386,10 +386,10 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                 $this->at(0)
             )->method(
                 'getNextBunch'
-            )->will(
-                $this->returnValue($csvData['data'])
+            )->willReturn(
+                $csvData['data']
             );
-            $dataSourceModel->expects($this->at(1))->method('getNextBunch')->will($this->returnValue(null));
+            $dataSourceModel->expects($this->at(1))->method('getNextBunch')->willReturn(null);
         }
 
         $products = [];
@@ -423,8 +423,8 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             $this->any()
         )->method(
             'getProductEntitiesInfo'
-        )->will(
-            $this->returnValue($products)
+        )->willReturn(
+            $products
         );
 
         $fetchStrategy = $this->createPartialMock(
@@ -440,19 +440,19 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ->getMockForAbstractClass();
 
         $select = $this->createPartialMock(\Magento\Framework\DB\Select::class, ['join', 'where']);
-        $select->expects($this->any())->method('join')->will($this->returnSelf());
-        $select->expects($this->any())->method('where')->will($this->returnSelf());
+        $select->expects($this->any())->method('join')->willReturnSelf();
+        $select->expects($this->any())->method('where')->willReturnSelf();
 
         $optionCollection->expects(
             $this->any()
         )->method(
             'getNewEmptyItem'
-        )->will(
-            $this->returnCallback([$this, 'getNewOptionMock'])
+        )->willReturnCallback(
+            [$this, 'getNewOptionMock']
         );
-        $optionCollection->expects($this->any())->method('reset')->will($this->returnSelf());
-        $optionCollection->expects($this->any())->method('addProductToFilter')->will($this->returnSelf());
-        $optionCollection->expects($this->any())->method('getSelect')->will($this->returnValue($select));
+        $optionCollection->expects($this->any())->method('reset')->willReturnSelf();
+        $optionCollection->expects($this->any())->method('addProductToFilter')->willReturnSelf();
+        $optionCollection->expects($this->any())->method('getSelect')->willReturn($select);
 
         $optionsData = array_values($products);
         if ($doubleOptions) {
@@ -463,15 +463,15 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             }
         }
 
-        $fetchStrategy->expects($this->any())->method('fetchAll')->will($this->returnValue($optionsData));
+        $fetchStrategy->expects($this->any())->method('fetchAll')->willReturn($optionsData);
 
         $collectionIterator = $this->createPartialMock(\stdClass::class, ['iterate']);
         $collectionIterator->expects(
             $this->any()
         )->method(
             'iterate'
-        )->will(
-            $this->returnCallback([$this, 'iterate'])
+        )->willReturnCallback(
+            [$this, 'iterate']
         );
 
         $data = [
@@ -690,7 +690,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     {
         $this->modelMock->expects($this->any())
                         ->method('_getMultiRowFormat')
-                        ->will($this->returnValue([$rowData]));
+                        ->willReturn([$rowData]);
     }
 
     /**
@@ -985,15 +985,15 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             $this->at(0)
         )->method(
             'getNextBunch'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 [['sku' => 'simple3', '_custom_option_type' => 'field', '_custom_option_title' => 'Title']]
-            )
+            
         );
-        $modelData->expects($this->at(1))->method('getNextBunch')->will($this->returnValue(null));
+        $modelData->expects($this->at(1))->method('getNextBunch')->willReturn(null);
 
         $productModel = $this->createPartialMock(\stdClass::class, ['getProductEntitiesInfo']);
-        $productModel->expects($this->any())->method('getProductEntitiesInfo')->will($this->returnValue([]));
+        $productModel->expects($this->any())->method('getProductEntitiesInfo')->willReturn([]);
 
         /** @var \Magento\CatalogImportExport\Model\Import\Product $productEntityMock */
         $productEntityMock = $this->createMock(\Magento\CatalogImportExport\Model\Import\Product::class);

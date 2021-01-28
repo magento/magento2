@@ -65,7 +65,7 @@ class JobComponentUninstallTest extends \PHPUnit\Framework\TestCase
      */
     private $quence;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->output = $this->getMockForAbstractClass(
             \Symfony\Component\Console\Output\OutputInterface::class,
@@ -204,11 +204,12 @@ class JobComponentUninstallTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Unknown component type
      */
     public function testExecuteUnknownType()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Unknown component type');
+
         $this->setUpUpdater();
         $this->composerInformation->expects($this->once())
             ->method('getInstalledMagentoPackages')
@@ -240,12 +241,13 @@ class JobComponentUninstallTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $params
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Job parameter format is incorrect
      * @dataProvider executeWrongFormatDataProvider
      */
     public function testExecuteWrongFormat(array $params)
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Job parameter format is incorrect');
+
         $this->moduleUninstallHelper->expects($this->never())->method($this->anything());
         $this->themeUninstallHelper->expects($this->never())->method($this->anything());
 
@@ -277,11 +279,12 @@ class JobComponentUninstallTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage error
      */
     public function testExecuteUpdateFails()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('error');
+
         $this->updater->expects($this->once())->method('createUpdaterTask')->willReturn('error');
         $this->composerInformation->expects($this->once())
             ->method('getInstalledMagentoPackages')

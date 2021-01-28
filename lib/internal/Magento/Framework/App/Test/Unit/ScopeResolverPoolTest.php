@@ -34,12 +34,13 @@ class ScopeResolverPoolTest extends \PHPUnit\Framework\TestCase
      * @param string $scope
      *
      * @covers \Magento\Framework\App\ScopeResolverPool::get()
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid scope type
      * @dataProvider testGetExceptionDataProvider
      */
     public function testGetException($scope)
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid scope type');
+
         $scopeResolver = $this->_helper->getObject(
             \Magento\Framework\App\ScopeResolverPool::class,
             [

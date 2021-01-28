@@ -218,18 +218,18 @@ class OrderTest extends \PHPUnit\Framework\TestCase
             ->method('quoteInto');
         $this->connectionMock->expects($this->any())
             ->method('describeTable')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->connectionMock->expects($this->any())
             ->method('update');
         $this->connectionMock->expects($this->any())
             ->method('lastInsertId');
         $this->orderMock->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->entitySnapshotMock->expects($this->once())
             ->method('isModified')
             ->with($this->orderMock)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->resource->save($this->orderMock);
     }
 }

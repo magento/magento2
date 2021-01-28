@@ -39,8 +39,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             $path
-        )->will(
-            $this->returnValue($expectedValue)
+        )->willReturn(
+            $expectedValue
         );
         $actual = $this->_model->getValue($path);
         $this->assertEquals($expectedValue, $actual);

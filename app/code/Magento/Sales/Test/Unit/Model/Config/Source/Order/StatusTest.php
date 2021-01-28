@@ -32,7 +32,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     public function testToOptionArray()
     {
         $this->config->expects($this->once())->method('getStateStatuses')
-            ->will($this->returnValue(['status1', 'status2']));
+            ->willReturn(['status1', 'status2']);
 
         $this->assertEquals(
             [

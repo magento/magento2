@@ -110,14 +110,14 @@ class AbstractFactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             $this->equalTo($this->_invokableList[$alias]),
             $this->equalTo($arguments)
-        )->will(
-            $this->returnValue($filterMock)
+        )->willReturn(
+            $filterMock
         );
 
         $this->assertEquals($filterMock, $this->_factory->createFilter($alias, $arguments));
         if ($isShared) {
             $sharedList = $property->getValue($this->_factory);
-            $this->assertTrue(array_key_exists($alias, $sharedList));
+            $this->assertArrayHasKey($alias, $sharedList);
             $this->assertEquals($filterMock, $sharedList[$alias]);
         } else {
             $this->assertEmpty($property->getValue($this->_factory));

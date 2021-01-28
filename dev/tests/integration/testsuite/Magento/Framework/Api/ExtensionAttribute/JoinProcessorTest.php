@@ -102,7 +102,7 @@ class JoinProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $this->config->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($this->getConfig()));
+            ->willReturn($this->getConfig());
 
         $collection = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
             ->disableOriginalConstructor()

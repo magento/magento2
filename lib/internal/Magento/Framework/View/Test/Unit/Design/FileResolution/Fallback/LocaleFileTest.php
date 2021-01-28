@@ -37,7 +37,7 @@ class LocaleFileTest extends \PHPUnit\Framework\TestCase
         $this->resolver->expects($this->once())
             ->method('resolve')
             ->with(RulePool::TYPE_LOCALE_FILE, 'file.ext', 'frontend', $theme, 'en_US', null)
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
         $actual = $this->object->getFile('frontend', $theme, 'en_US', 'file.ext');
         $this->assertSame($expected, $actual);
     }

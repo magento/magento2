@@ -46,7 +46,7 @@ class SpecialPriceTest extends \PHPUnit\Framework\TestCase
 
         $this->saleable->expects($this->once())
             ->method('getPriceInfo')
-            ->will($this->returnValue($this->priceInfo));
+            ->willReturn($this->priceInfo);
 
         $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
 
@@ -76,19 +76,19 @@ class SpecialPriceTest extends \PHPUnit\Framework\TestCase
 
         $this->saleable->expects($this->once())
             ->method('getSpecialPrice')
-            ->will($this->returnValue($specialPrice));
+            ->willReturn($specialPrice);
 
         $this->saleable->expects($this->once())
             ->method('getSpecialFromDate')
-            ->will($this->returnValue($specialFromDate));
+            ->willReturn($specialFromDate);
         $this->saleable->expects($this->once())
             ->method('getSpecialToDate')
-            ->will($this->returnValue($specialToDate));
+            ->willReturn($specialToDate);
 
         $this->localeDate->expects($this->once())
             ->method('isScopeDateInInterval')
             ->with(WebsiteInterface::ADMIN_CODE, $specialFromDate, $specialToDate)
-            ->will($this->returnValue($isScopeDateInInterval));
+            ->willReturn($isScopeDateInInterval);
 
         $this->priceCurrencyMock->expects($this->never())
             ->method('convertAndRound');
@@ -98,10 +98,10 @@ class SpecialPriceTest extends \PHPUnit\Framework\TestCase
             $this->priceInfo->expects($this->once())
                 ->method('getPrice')
                 ->with(\Magento\Catalog\Pricing\Price\RegularPrice::PRICE_CODE)
-                ->will($this->returnValue($price));
+                ->willReturn($price);
             $price->expects($this->once())
                 ->method('getValue')
-                ->will($this->returnValue($regularPrice));
+                ->willReturn($regularPrice);
         }
 
         $this->assertEquals($value, $this->model->getValue());

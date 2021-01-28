@@ -239,7 +239,7 @@ class LayoutTest extends TestCase
                 Element::TYPE_BLOCK,
                 AbstractBlock::class
             )->willReturn('blockname');
-        $this->generatorBlockMock->expects($this->once())->method('createBlock')->will($this->returnValue($blockMock));
+        $this->generatorBlockMock->expects($this->once())->method('createBlock')->willReturn($blockMock);
 
         $this->model->createBlock(AbstractBlock::class, 'blockname', []);
         $this->assertInstanceOf(
@@ -255,12 +255,12 @@ class LayoutTest extends TestCase
 
         $this->themeResolverMock->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($themeMock));
+            ->willReturn($themeMock);
 
         $this->processorFactoryMock->expects($this->once())
             ->method('create')
             ->with(['theme' => $themeMock])
-            ->will($this->returnValue($this->processorMock));
+            ->willReturn($this->processorMock);
 
         $this->assertEquals($this->processorMock, $this->model->getUpdate());
         $this->assertEquals($this->processorMock, $this->model->getUpdate());
@@ -272,24 +272,24 @@ class LayoutTest extends TestCase
 
         $this->themeResolverMock->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($themeMock));
+            ->willReturn($themeMock);
 
         $this->processorFactoryMock->expects($this->once())
             ->method('create')
             ->with(['theme' => $themeMock])
-            ->will($this->returnValue($this->processorMock));
+            ->willReturn($this->processorMock);
 
         $xmlString = '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
             . '<some_update>123</some_update></layout>';
         $xml = simplexml_load_string($xmlString, Element::class);
         $this->processorMock->expects($this->once())
             ->method('asSimplexml')
-            ->will($this->returnValue($xml));
+            ->willReturn($xml);
 
         $this->structureMock->expects($this->once())
             ->method('importElements')
             ->with($this->equalTo([]))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->assertSame($this->model, $this->model->generateXml());
         $this->assertSame('<some_update>123</some_update>', $this->model->getNode('some_update')->asXML());
     }
@@ -343,7 +343,7 @@ class LayoutTest extends TestCase
         $this->structureMock->expects($this->once())
             ->method('setAsChild')
             ->with($this->equalTo($elementName), $this->equalTo($parentName), $this->equalTo($alias))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->assertSame($this->model, $this->model->setChild($parentName, $elementName, $alias));
     }
 
@@ -354,7 +354,7 @@ class LayoutTest extends TestCase
         $this->structureMock->expects($this->once())
             ->method('unsetChild')
             ->with($this->equalTo($parentName), $this->equalTo($alias))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->assertSame($this->model, $this->model->unsetChild($parentName, $alias));
     }
 
@@ -365,7 +365,7 @@ class LayoutTest extends TestCase
         $this->structureMock->expects($this->once())
             ->method('getChildren')
             ->with($this->equalTo($parentName))
-            ->will($this->returnValue($childrenArray));
+            ->willReturn($childrenArray);
         $this->assertSame(['key1', 'key2'], $this->model->getChildNames($parentName));
     }
 
@@ -376,7 +376,7 @@ class LayoutTest extends TestCase
         $this->structureMock->expects($this->once())
             ->method('getChildren')
             ->with($this->equalTo($parentName))
-            ->will($this->returnValue($childrenArray));
+            ->willReturn($childrenArray);
 
         $blockMock = $this->getMockBuilder(AbstractBlock::class)
             ->disableOriginalConstructor()
@@ -388,7 +388,7 @@ class LayoutTest extends TestCase
                 Element::TYPE_BLOCK,
                 AbstractBlock::class
             )->willReturn('block_name');
-        $this->generatorBlockMock->expects($this->once())->method('createBlock')->will($this->returnValue($blockMock));
+        $this->generatorBlockMock->expects($this->once())->method('createBlock')->willReturn($blockMock);
 
         $this->assertSame(
             $blockMock,
@@ -404,7 +404,7 @@ class LayoutTest extends TestCase
         $this->structureMock->expects($this->once())
             ->method('getChildId')
             ->with($this->equalTo($parentName), $this->equalTo($alias))
-            ->will($this->returnValue('1'));
+            ->willReturn('1');
         $this->assertSame('1', $this->model->getChildName($parentName, $alias));
     }
 
@@ -415,7 +415,7 @@ class LayoutTest extends TestCase
         $this->structureMock->expects($this->once())
             ->method('addToParentGroup')
             ->with($this->equalTo($blockName), $this->equalTo($parentGroup))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->assertSame($this->structureMock, $this->model->addToParentGroup($blockName, $parentGroup));
     }
 
@@ -426,7 +426,7 @@ class LayoutTest extends TestCase
         $this->structureMock->expects($this->once())
             ->method('getGroupChildNames')
             ->with($this->equalTo($blockName), $this->equalTo($groupName))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->assertSame($this->structureMock, $this->model->getGroupChildNames($blockName, $groupName));
     }
 
@@ -436,7 +436,7 @@ class LayoutTest extends TestCase
         $this->structureMock->expects($this->once())
             ->method('hasElement')
             ->with($this->equalTo($elementName))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertTrue($this->model->hasElement($elementName));
     }
 
@@ -448,7 +448,7 @@ class LayoutTest extends TestCase
         $this->structureMock->expects($this->once())
             ->method('getAttribute')
             ->with($this->equalTo($elementName), $this->equalTo($elementAttr))
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertSame($result, $this->model->getElementProperty($elementName, $elementAttr));
     }
 
@@ -464,12 +464,12 @@ class LayoutTest extends TestCase
         $this->structureMock->expects($this->once())
             ->method('hasElement')
             ->with($this->equalTo($elementName))
-            ->will($this->returnValue($hasElement));
+            ->willReturn($hasElement);
         if ($hasElement) {
             $this->structureMock->expects($this->once())
                 ->method('getAttribute')
                 ->with($this->equalTo($elementName), $this->equalTo('type'))
-                ->will($this->returnValue($attribute));
+                ->willReturn($attribute);
         }
         $this->assertSame($result, $this->model->isContainer($elementName));
     }
@@ -499,17 +499,17 @@ class LayoutTest extends TestCase
         $this->structureMock->expects($this->once())
             ->method('getParentId')
             ->with($this->equalTo($elementName))
-            ->will($this->returnValue($parentName));
+            ->willReturn($parentName);
         if ($parentName) {
             $this->structureMock->expects($this->once())
                 ->method('hasElement')
                 ->with($this->equalTo($parentName))
-                ->will($this->returnValue($containerConfig['has_element']));
+                ->willReturn($containerConfig['has_element']);
             if ($containerConfig['has_element']) {
                 $this->structureMock->expects($this->once())
                     ->method('getAttribute')
                     ->with($this->equalTo($parentName), $this->equalTo('type'))
-                    ->will($this->returnValue($containerConfig['attribute']));
+                    ->willReturn($containerConfig['attribute']);
             }
         }
 
@@ -544,7 +544,7 @@ class LayoutTest extends TestCase
         $this->structureMock->expects($this->once())
             ->method('unsetElement')
             ->with($this->equalTo($blockName))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->assertSame($this->model, $this->model->unsetElement($blockName));
         $this->assertSame([], $this->model->getAllBlocks());
     }
@@ -560,7 +560,7 @@ class LayoutTest extends TestCase
         $this->structureMock->expects($this->once())
             ->method('renameElement')
             ->with($this->equalTo($oldName), $this->equalTo($newName))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->assertSame($this->model, $this->model->setBlock($oldName, $blockMock));
         $this->assertSame($this->model, $this->model->renameElement($oldName, $newName));
         $this->assertSame([$newName => $blockMock], $this->model->getAllBlocks());
@@ -573,7 +573,7 @@ class LayoutTest extends TestCase
         $this->structureMock->expects($this->once())
             ->method('getParentId')
             ->with($this->equalTo($childName))
-            ->will($this->returnValue($parentId));
+            ->willReturn($parentId);
         $this->assertSame($parentId, $this->model->getParentName($childName));
     }
 
@@ -585,11 +585,11 @@ class LayoutTest extends TestCase
         $this->structureMock->expects($this->once())
             ->method('getParentId')
             ->with($this->equalTo($name))
-            ->will($this->returnValue($parentId));
+            ->willReturn($parentId);
         $this->structureMock->expects($this->once())
             ->method('getChildAlias')
             ->with($this->equalTo($parentId), $this->equalTo($name))
-            ->will($this->returnValue($alias));
+            ->willReturn($alias);
         $this->assertSame($alias, $this->model->getElementAlias($name));
     }
 
@@ -614,13 +614,13 @@ class LayoutTest extends TestCase
     public function testGetBlockSingleton($type, $blockInstance, $isAbstract)
     {
         $blockMock = $this->createMock($blockInstance);
-        $this->generatorBlockMock->expects($this->once())->method('createBlock')->will($this->returnValue($blockMock));
+        $this->generatorBlockMock->expects($this->once())->method('createBlock')->willReturn($blockMock);
 
         if ($isAbstract) {
             $blockMock->expects($this->any())
                 ->method('setLayout')
                 ->with($this->equalTo($this->model))
-                ->will($this->returnSelf());
+                ->willReturnSelf();
         }
         $this->assertInstanceOf($blockInstance, $this->model->getBlockSingleton($type));
         // singleton test

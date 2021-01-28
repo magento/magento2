@@ -42,7 +42,7 @@ class PageFactoryTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(\Magento\Framework\View\Result\Page::class)
-            ->will($this->returnValue($this->page));
+            ->willReturn($this->page);
         $this->assertSame($this->page, $this->pageFactory->create());
     }
 }

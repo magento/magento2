@@ -135,18 +135,18 @@ class OauthUserContextTest extends \PHPUnit\Framework\TestCase
 
         $this->integrationService->expects($this->any())
             ->method('findActiveIntegrationByConsumerId')
-            ->will($this->returnValue($integration));
+            ->willReturn($integration);
 
         $this->oauthRequestHelper->expects($this->once())
             ->method('prepareRequest')
-            ->will($this->returnValue($oauthRequest));
+            ->willReturn($oauthRequest);
 
         $this->oauthService->expects($this->any())
             ->method('validateAccessTokenRequest')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $integration->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($integrationId));
+            ->willReturn($integrationId);
     }
 }

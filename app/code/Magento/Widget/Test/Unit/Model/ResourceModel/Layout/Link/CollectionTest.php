@@ -61,8 +61,8 @@ class CollectionTest extends \Magento\Widget\Test\Unit\Model\ResourceModel\Layou
         )->with(
             'main_table.is_temporary',
             $flag
-        )->will(
-            $this->returnValue(self::TEST_WHERE_CONDITION)
+        )->willReturn(
+            self::TEST_WHERE_CONDITION
         );
 
         $collection->addTemporaryFilter($flag);
@@ -105,8 +105,8 @@ class CollectionTest extends \Magento\Widget\Test\Unit\Model\ResourceModel\Layou
             'getTable'
         )->with(
             self::TEST_TABLE
-        )->will(
-            $this->returnValue(self::TEST_TABLE)
+        )->willReturn(
+            self::TEST_TABLE
         );
 
         $collection->addUpdatedDaysBeforeFilter(1)->addUpdatedDaysBeforeFilter(2);

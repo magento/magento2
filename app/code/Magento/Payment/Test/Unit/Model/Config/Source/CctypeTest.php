@@ -37,7 +37,7 @@ class CctypeTest extends \PHPUnit\Framework\TestCase
         $expectedArray = [
             ['value' => 'code', 'label' => 'name'],
         ];
-        $this->_paymentConfig->expects($this->once())->method('getCcTypes')->will($this->returnValue($cctypesArray));
+        $this->_paymentConfig->expects($this->once())->method('getCcTypes')->willReturn($cctypesArray);
         $this->assertEquals($expectedArray, $this->_model->toOptionArray());
     }
 }

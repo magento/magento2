@@ -60,11 +60,12 @@ class DataProviderFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage DataProvider not found by config current_provider
      */
     public function testCreateWithoutProviders()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('DataProvider not found by config current_provider');
+
         $dataProvider = 'current_provider';
         $dataProviders = [];
         $data = ['data'];
@@ -83,11 +84,12 @@ class DataProviderFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage DataProvider not instance of interface
      */
     public function testCreateWithWrongProvider()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('DataProvider not instance of interface');
+
         $dataProvider = 'current_provider';
         $dataProviderClass = \stdClass::class;
         $dataProviders = [

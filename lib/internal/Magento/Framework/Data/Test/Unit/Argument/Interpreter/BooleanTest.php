@@ -26,11 +26,12 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Boolean value is missing
      */
     public function testEvaluateException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Boolean value is missing');
+
         $this->_model->evaluate([]);
     }
 
@@ -44,8 +45,8 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
             'toBoolean'
         )->with(
             $this->identicalTo($input)
-        )->will(
-            $this->returnValue($expected)
+        )->willReturn(
+            $expected
         );
         $actual = $this->_model->evaluate(['value' => $input]);
         $this->assertSame($expected, $actual);

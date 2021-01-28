@@ -159,13 +159,13 @@ class TransportBuilderTest extends TestCase
 
         $template = $this->createMock(Template::class);
         $template->expects($this->once())->method('setVars')
-            ->with($this->equalTo($vars))->will($this->returnSelf());
+            ->with($this->equalTo($vars))->willReturnSelf();
         $template->expects($this->once())->method('setOptions')
-            ->with($this->equalTo($options))->will($this->returnSelf());
+            ->with($this->equalTo($options))->willReturnSelf();
         $template->expects($this->once())->method('getSubject')
             ->willReturn('Email Subject');
         $template->expects($this->once())->method('setData')
-            ->with($this->equalTo($data))->will($this->returnSelf());
+            ->with($this->equalTo($data))->willReturnSelf();
         $template->expects($this->once())->method('getProcessedTemplate')
             ->with($vars)->willReturn($bodyText);
         $template->expects($this->once())->method('setTemplateFilter')

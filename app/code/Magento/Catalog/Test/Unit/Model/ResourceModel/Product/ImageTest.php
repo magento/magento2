@@ -206,7 +206,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $fetchResultsCallback = $this->getFetchResultCallbackForBatches($imagesCount, $batchSize);
         $this->connectionMock->expects($this->exactly($batchCount))
             ->method('fetchAll')
-            ->will($this->returnCallback($fetchResultsCallback));
+            ->willReturnCallback($fetchResultsCallback);
 
         /** @var Select | MockObject $selectMock */
         $selectMock = $this->getMockBuilder(Select::class)
@@ -220,10 +220,10 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                 $selectMock,
                 $batchSize,
                 BatchIteratorInterface::NON_UNIQUE_FIELD_ITERATOR
-            )->will(
-                $this->returnCallback(
+            )->willReturnCallback(
+                
                     $this->getBatchIteratorCallback($selectMock, $batchCount)
-                )
+                
             );
 
         $imageModel = $this->objectManager->getObject(
@@ -253,7 +253,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $fetchResultsCallback = $this->getFetchResultCallbackForBatches($imagesCount, $batchSize);
         $this->connectionMock->expects($this->exactly($batchCount))
             ->method('fetchAll')
-            ->will($this->returnCallback($fetchResultsCallback));
+            ->willReturnCallback($fetchResultsCallback);
 
         /** @var Select | MockObject $selectMock */
         $selectMock = $this->getMockBuilder(Select::class)
@@ -267,10 +267,10 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                 $selectMock,
                 $batchSize,
                 BatchIteratorInterface::NON_UNIQUE_FIELD_ITERATOR
-            )->will(
-                $this->returnCallback(
+            )->willReturnCallback(
+                
                     $this->getBatchIteratorCallback($selectMock, $batchCount)
-                )
+                
             );
 
         /** @var Image $imageModel */

@@ -51,11 +51,11 @@ class PathTest extends \PHPUnit\Framework\TestCase
         $this->mediaDirectory->expects($this->any())
             ->method('getRelativePath')
             ->with('/theme/origin')
-            ->will($this->returnValue('/theme/origin'));
+            ->willReturn('/theme/origin');
 
         $this->filesystem->expects($this->any())->method('getDirectoryRead')
             ->with(DirectoryList::MEDIA)
-            ->will($this->returnValue($this->mediaDirectory));
+            ->willReturn($this->mediaDirectory);
 
         $this->model = new Path(
             $this->filesystem,
@@ -75,11 +75,11 @@ class PathTest extends \PHPUnit\Framework\TestCase
         );
         $theme->expects($this->any())
             ->method('getPreviewImage')
-            ->will($this->returnValue('image.png'));
+            ->willReturn('image.png');
 
         $store = $this->createMock(\Magento\Store\Model\Store::class);
-        $store->expects($this->any())->method('getBaseUrl')->will($this->returnValue('http://localhost/'));
-        $this->_storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $store->expects($this->any())->method('getBaseUrl')->willReturn('http://localhost/');
+        $this->_storeManager->expects($this->any())->method('getStore')->willReturn($store);
         $this->assertEquals('http://localhost/theme/preview/image.png', $this->model->getPreviewImageUrl($theme));
     }
 
@@ -101,7 +101,7 @@ class PathTest extends \PHPUnit\Framework\TestCase
 
         $theme->expects($this->once())
             ->method('getPreviewImage')
-            ->will($this->returnValue($previewImage));
+            ->willReturn($previewImage);
 
         $result = $this->model->getPreviewImagePath($theme);
 
@@ -126,7 +126,7 @@ class PathTest extends \PHPUnit\Framework\TestCase
         $this->mediaDirectory->expects($this->any())
             ->method('getAbsolutePath')
             ->with(\Magento\Framework\View\Design\Theme\Image\PathInterface::PREVIEW_DIRECTORY_PATH)
-            ->will($this->returnValue('/theme/preview'));
+            ->willReturn('/theme/preview');
         $this->assertEquals(
             '/theme/preview',
             $this->model->getImagePreviewDirectory()

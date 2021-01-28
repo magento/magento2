@@ -63,12 +63,12 @@ class RowsTest extends \PHPUnit\Framework\TestCase
         $this->_resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->_resource->expects($this->any())->method('getConnection')
             ->with('default')
-            ->will($this->returnValue($this->_connection));
+            ->willReturn($this->_connection);
         $this->_storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->_store = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->_store->expects($this->any())->method('getId')->will($this->returnValue('store_id_1'));
-        $this->_storeManager->expects($this->any())->method('getStores')->will(
-            $this->returnValue([$this->_store])
+        $this->_store->expects($this->any())->method('getId')->willReturn('store_id_1');
+        $this->_storeManager->expects($this->any())->method('getStores')->willReturn(
+            [$this->_store]
         );
         $this->_productIndexerHelper = $this->createMock(\Magento\Catalog\Helper\Product\Flat\Indexer::class);
         $this->_flatItemEraser = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\Action\Eraser::class);
@@ -103,9 +103,9 @@ class RowsTest extends \PHPUnit\Framework\TestCase
     public function testExecuteWithNonExistingFlatTablesCreatesTables()
     {
         $this->_productIndexerHelper->expects($this->any())->method('getFlatTableName')
-            ->will($this->returnValue('store_flat_table'));
+            ->willReturn('store_flat_table');
         $this->_connection->expects($this->any())->method('isTableExists')->with('store_flat_table')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->_flatItemEraser->expects($this->never())->method('removeDeletedProducts');
         $this->_flatTableBuilder->expects($this->once())->method('build')->with('store_id_1', [1, 2]);
         $this->_model->execute([1, 2]);
@@ -114,9 +114,9 @@ class RowsTest extends \PHPUnit\Framework\TestCase
     public function testExecuteWithExistingFlatTablesCreatesTables()
     {
         $this->_productIndexerHelper->expects($this->any())->method('getFlatTableName')
-            ->will($this->returnValue('store_flat_table'));
+            ->willReturn('store_flat_table');
         $this->_connection->expects($this->any())->method('isTableExists')->with('store_flat_table')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->_flatItemEraser->expects($this->once())->method('removeDeletedProducts');
         $this->_flatTableBuilder->expects($this->once())->method('build')->with('store_id_1', [1, 2]);
         $this->_model->execute([1, 2]);

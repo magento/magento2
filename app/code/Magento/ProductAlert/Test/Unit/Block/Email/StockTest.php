@@ -61,7 +61,7 @@ class StockTest extends \PHPUnit\Framework\TestCase
     public function testGetFilteredContent($contentToFilter, $contentFiltered)
     {
         $this->_filter->expects($this->once())->method('filter')->with($contentToFilter)
-            ->will($this->returnValue($contentFiltered));
+            ->willReturn($contentFiltered);
         $this->assertEquals($contentFiltered, $this->_block->getFilteredContent($contentToFilter));
     }
 

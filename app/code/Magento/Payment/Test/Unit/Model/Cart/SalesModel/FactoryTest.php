@@ -34,8 +34,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             $expectedType,
             ['salesModel' => $salesModel]
-        )->will(
-            $this->returnValue('some value')
+        )->willReturn(
+            'some value'
         );
         $this->assertEquals('some value', $this->_model->create($salesModel));
     }

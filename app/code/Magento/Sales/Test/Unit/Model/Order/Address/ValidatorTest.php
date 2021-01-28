@@ -49,7 +49,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
         $eavConfigMock->expects($this->any())
             ->method('getAttribute')
-            ->will($this->returnValue($attributeMock));
+            ->willReturn($attributeMock);
         $this->validator = new \Magento\Sales\Model\Order\Address\Validator(
             $this->directoryHelperMock,
             $this->countryFactoryMock,
@@ -70,13 +70,13 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->addressMock->expects($this->any())
             ->method('hasData')
-            ->will($this->returnValueMap($addressData));
+            ->willReturnMap($addressData);
         $this->addressMock->expects($this->once())
             ->method('getEmail')
-            ->will($this->returnValue($email));
+            ->willReturn($email);
         $this->addressMock->expects($this->once())
             ->method('getAddressType')
-            ->will($this->returnValue($addressType));
+            ->willReturn($addressType);
         $actualWarnings = $this->validator->validate($this->addressMock);
         $this->assertEquals($expectedWarnings, $actualWarnings);
     }

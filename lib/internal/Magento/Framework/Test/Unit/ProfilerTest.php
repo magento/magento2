@@ -68,11 +68,12 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Timer name must not contain a nesting separator.
      */
     public function testStartException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Timer name must not contain a nesting separator.');
+
         \Magento\Framework\Profiler::enable();
         \Magento\Framework\Profiler::start('timer ' . \Magento\Framework\Profiler::NESTING_SEPARATOR . ' name');
     }
@@ -117,11 +118,12 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Timer "unknown" has not been started.
      */
     public function testStopExceptionUnknown()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Timer "unknown" has not been started.');
+
         \Magento\Framework\Profiler::enable();
         \Magento\Framework\Profiler::start('timer');
         \Magento\Framework\Profiler::stop('unknown');
@@ -206,11 +208,12 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Timer name must not contain a nesting separator.
      */
     public function testClearException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Timer name must not contain a nesting separator.');
+
         \Magento\Framework\Profiler::enable();
         \Magento\Framework\Profiler::clear('timer ' . \Magento\Framework\Profiler::NESTING_SEPARATOR . ' name');
     }
@@ -304,8 +307,8 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             $driverConfig
-        )->will(
-            $this->returnValue($mockDriver)
+        )->willReturn(
+            $mockDriver
         );
 
         \Magento\Framework\Profiler::applyConfig($config, '');

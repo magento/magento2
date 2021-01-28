@@ -184,7 +184,7 @@ class ProductOptionProcessorTest extends \PHPUnit\Framework\TestCase
 
         if (!empty($expected)) {
             $this->assertArrayHasKey($expected, $result);
-            $this->assertInternalType('array', $result[$expected]);
+            $this->assertIsArray($result[$expected]);
         } else {
             $this->assertEmpty($result);
         }

@@ -40,8 +40,8 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getDirectoryWrite'
-        )->will(
-            $this->returnValue($this->directoryWriteMock)
+        )->willReturn(
+            $this->directoryWriteMock
         );
         $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)->getMock();
 

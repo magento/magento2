@@ -96,11 +96,12 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \BadMethodCallException
-     * @expectedExceptionMessage Missing required argument $scalar of Magento\Test\Di\Aggregate\AggregateParent
      */
     public function testCreateThrowsExceptionIfRequiredConstructorParameterIsNotProvided()
     {
+        $this->expectException(\BadMethodCallException::class);
+        $this->expectExceptionMessage('Missing required argument $scalar of Magento\\Test\\Di\\Aggregate\\AggregateParent');
+
         $this->_object->configure(
             [
                 'preferences' => [
@@ -164,12 +165,12 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Circular dependency: Magento\Test\Di\Aggregate\AggregateParent depends on
-     * Magento\Test\Di\Child\Circular and vice versa.
      */
     public function testGetDetectsCircularDependency()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Circular dependency: Magento\\Test\\Di\\Aggregate\\AggregateParent depends on Magento\\Test\\Di\\Child\\Circular and vice versa.');
+
         $this->_object->configure(
             [
                 'preferences' => [

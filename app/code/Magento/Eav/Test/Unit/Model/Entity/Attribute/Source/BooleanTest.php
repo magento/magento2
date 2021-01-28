@@ -29,13 +29,13 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
             ['getAttributeCode', '__wakeup']
         );
 
-        $abstractAttributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('code'));
+        $abstractAttributeMock->expects($this->any())->method('getAttributeCode')->willReturn('code');
 
         $this->_model->setAttribute($abstractAttributeMock);
 
         $flatColumns = $this->_model->getFlatColumns();
 
-        $this->assertInternalType('array', $flatColumns, 'FlatColumns must be an array value');
+        $this->assertIsArray($flatColumns, 'FlatColumns must be an array value');
         $this->assertTrue(!empty($flatColumns), 'FlatColumns must be not empty');
         foreach ($flatColumns as $result) {
             $this->assertArrayHasKey('unsigned', $result, 'FlatColumns must have "unsigned" column');
@@ -64,7 +64,7 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
         $expectedOrder
     ) {
         $attributeMock = $this->getAttributeMock();
-        $attributeMock->expects($this->any())->method('isScopeGlobal')->will($this->returnValue($isScopeGlobal));
+        $attributeMock->expects($this->any())->method('isScopeGlobal')->willReturn($isScopeGlobal);
 
         $entity = $this->getMockBuilder(AbstractEntity::class)
             ->disableOriginalConstructor()
@@ -76,11 +76,11 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
         $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
 
         $collectionMock = $this->getCollectionMock();
-        $collectionMock->expects($this->any())->method('getSelect')->will($this->returnValue($selectMock));
+        $collectionMock->expects($this->any())->method('getSelect')->willReturn($selectMock);
 
         foreach ($expectedJoinCondition as $step => $data) {
             $selectMock->expects($this->at($step))->method('joinLeft')
-                ->with($data['requisites'], $data['condition'], [])->will($this->returnSelf());
+                ->with($data['requisites'], $data['condition'], [])->willReturnSelf();
         }
 
         $selectMock->expects($this->once())->method('order')->with($expectedOrder);
@@ -169,8 +169,8 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
 
         $connectionMock = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['method']);
 
-        $collectionMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
-        $collectionMock->expects($this->any())->method('getStoreId')->will($this->returnValue('12'));
+        $collectionMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
+        $collectionMock->expects($this->any())->method('getStoreId')->willReturn('12');
 
         return $collectionMock;
     }
@@ -187,10 +187,10 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
         );
         $backendMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class);
 
-        $attributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('code'));
-        $attributeMock->expects($this->any())->method('getId')->will($this->returnValue('123'));
-        $attributeMock->expects($this->any())->method('getBackend')->will($this->returnValue($backendMock));
-        $backendMock->expects($this->any())->method('getTable')->will($this->returnValue('table'));
+        $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn('code');
+        $attributeMock->expects($this->any())->method('getId')->willReturn('123');
+        $attributeMock->expects($this->any())->method('getBackend')->willReturn($backendMock);
+        $backendMock->expects($this->any())->method('getTable')->willReturn('table');
 
         return $attributeMock;
     }

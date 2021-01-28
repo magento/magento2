@@ -74,8 +74,8 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
             'sample_type' => 'file',
             'sample_file_content' => $sampleFileContentMock,
         ];
-        $this->fileValidatorMock->expects($this->any())->method('isValid')->will($this->returnValue(true));
-        $this->urlValidatorMock->expects($this->any())->method('isValid')->will($this->returnValue(true));
+        $this->fileValidatorMock->expects($this->any())->method('isValid')->willReturn(true);
+        $this->urlValidatorMock->expects($this->any())->method('isValid')->willReturn(true);
         $contentMock = $this->getSampleContentMock($sampleContentData);
         $this->assertTrue($this->validator->isValid($contentMock));
     }
@@ -94,8 +94,8 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
             'sort_order' => $sortOrder,
             'sample_type' => 'file',
         ];
-        $this->fileValidatorMock->expects($this->any())->method('isValid')->will($this->returnValue(true));
-        $this->urlValidatorMock->expects($this->any())->method('isValid')->will($this->returnValue(true));
+        $this->fileValidatorMock->expects($this->any())->method('isValid')->willReturn(true);
+        $this->urlValidatorMock->expects($this->any())->method('isValid')->willReturn(true);
         $this->validator->isValid($this->getSampleContentMock($sampleContentData));
     }
 
@@ -118,27 +118,27 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
     protected function getSampleContentMock(array $sampleContentData)
     {
         $contentMock = $this->createMock(\Magento\Downloadable\Api\Data\SampleInterface::class);
-        $contentMock->expects($this->any())->method('getTitle')->will(
-            $this->returnValue($sampleContentData['title'])
+        $contentMock->expects($this->any())->method('getTitle')->willReturn(
+            $sampleContentData['title']
         );
 
-        $contentMock->expects($this->any())->method('getSortOrder')->will(
-            $this->returnValue($sampleContentData['sort_order'])
+        $contentMock->expects($this->any())->method('getSortOrder')->willReturn(
+            $sampleContentData['sort_order']
         );
-        $contentMock->expects($this->any())->method('getSampleType')->will(
-            $this->returnValue($sampleContentData['sample_type'])
+        $contentMock->expects($this->any())->method('getSampleType')->willReturn(
+            $sampleContentData['sample_type']
         );
         if (isset($sampleContentData['sample_url'])) {
-            $contentMock->expects($this->any())->method('getSampleUrl')->will(
-                $this->returnValue($sampleContentData['sample_url'])
+            $contentMock->expects($this->any())->method('getSampleUrl')->willReturn(
+                $sampleContentData['sample_url']
             );
         }
         if (isset($sampleContentData['sample_file_content'])) {
             $contentMock->expects($this->any())->method('getSampleFileContent')
                 ->willReturn($sampleContentData['sample_file_content']);
         }
-        $contentMock->expects($this->any())->method('getSampleFile')->will(
-            $this->returnValue($this->sampleFileMock)
+        $contentMock->expects($this->any())->method('getSampleFile')->willReturn(
+            $this->sampleFileMock
         );
 
         return $contentMock;

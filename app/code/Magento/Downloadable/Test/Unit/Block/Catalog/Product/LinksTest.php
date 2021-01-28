@@ -47,12 +47,12 @@ class LinksTest extends \PHPUnit\Framework\TestCase
         $contextMock = $this->createMock(\Magento\Catalog\Block\Product\Context::class);
         $contextMock->expects($this->once())
             ->method('getLayout')
-            ->will($this->returnValue($this->layout));
+            ->willReturn($this->layout);
         $this->priceInfoMock = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
         $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $this->productMock->expects($this->any())
             ->method('getPriceInfo')
-            ->will($this->returnValue($this->priceInfoMock));
+            ->willReturn($this->priceInfoMock);
         $this->jsonEncoder = $this->createMock(\Magento\Framework\Json\EncoderInterface::class);
 
         $this->linksBlock = $objectManager->getObject(
@@ -78,27 +78,27 @@ class LinksTest extends \PHPUnit\Framework\TestCase
         $expectedHtml = 'some html';
         $this->productMock->expects($this->any())
             ->method('getPriceInfo')
-            ->will($this->returnValue($this->priceInfoMock));
+            ->willReturn($this->priceInfoMock);
         $this->priceInfoMock->expects($this->any())
             ->method('getPrice')
             ->with($this->equalTo($priceCode))
-            ->will($this->returnValue($linkPriceMock));
+            ->willReturn($linkPriceMock);
         $linkPriceMock->expects($this->any())
             ->method('getLinkAmount')
             ->with($linkMock)
-            ->will($this->returnValue($amountMock));
+            ->willReturn($amountMock);
 
         $priceBoxMock = $this->createPartialMock(\Magento\Framework\Pricing\Render::class, ['renderAmount']);
 
         $this->layout->expects($this->once())
             ->method('getBlock')
             ->with($this->equalTo('product.price.render.default'))
-            ->will($this->returnValue($priceBoxMock));
+            ->willReturn($priceBoxMock);
 
         $priceBoxMock->expects($this->once())
             ->method('renderAmount')
             ->with($amountMock, $linkPriceMock, $this->productMock, $arguments)
-            ->will($this->returnValue($expectedHtml));
+            ->willReturn($expectedHtml);
 
         $result = $this->linksBlock->getLinkPrice($linkMock);
         $this->assertEquals($expectedHtml, $result);
@@ -122,35 +122,35 @@ class LinksTest extends \PHPUnit\Framework\TestCase
         $linkAmountMock = $this->createMock(\Magento\Framework\Pricing\Amount\AmountInterface::class);
         $linkAmountMock->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue($linkPrice));
+            ->willReturn($linkPrice);
         $linkAmountMock->expects($this->once())
             ->method('getBaseAmount')
-            ->will($this->returnValue($linkPrice));
+            ->willReturn($linkPrice);
 
         $typeInstanceMock = $this->createPartialMock(\Magento\Catalog\Model\Product\Type\Simple::class, ['getLinks']);
         $typeInstanceMock->expects($this->once())
             ->method('getLinks')
-            ->will($this->returnValue([$this->getLinkMock($linkPrice, $linkId)]));
+            ->willReturn([$this->getLinkMock($linkPrice, $linkId)]);
         $this->productMock->expects($this->once())
             ->method('getTypeInstance')
-            ->will($this->returnValue($typeInstanceMock));
+            ->willReturn($typeInstanceMock);
 
         $finalPriceMock = $this->createMock(\Magento\Catalog\Pricing\Price\FinalPrice::class);
         $finalPriceMock->expects($this->once())
             ->method('getCustomAmount')
             ->with($linkPrice)
-            ->will($this->returnValue($linkAmountMock));
+            ->willReturn($linkAmountMock);
 
         $this->priceInfoMock->expects($this->once())
             ->method('getPrice')
             ->with(FinalPrice::PRICE_CODE)
-            ->will($this->returnValue($finalPriceMock));
+            ->willReturn($finalPriceMock);
 
         $json = json_encode($config);
         $this->jsonEncoder->expects($this->once())
             ->method('encode')
             ->with($config)
-            ->will($this->returnValue($json));
+            ->willReturn($json);
 
         $encodedJsonConfig = $this->linksBlock->getJsonConfig();
         $this->assertEquals(json_encode($config), $encodedJsonConfig);
@@ -168,10 +168,10 @@ class LinksTest extends \PHPUnit\Framework\TestCase
             '__wakeup']);
         $linkMock->expects($this->any())
             ->method('getPrice')
-            ->will($this->returnValue($linkPrice));
+            ->willReturn($linkPrice);
         $linkMock->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($linkId));
+            ->willReturn($linkId);
 
         return $linkMock;
     }

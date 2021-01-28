@@ -59,7 +59,7 @@ class AbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstract
             true,
             ['getColNames']
         );
-        $source->expects($this->any())->method('getColNames')->will($this->returnValue($columns));
+        $source->expects($this->any())->method('getColNames')->willReturn($columns);
         $this->_model->setSource($source);
 
         return $source;
@@ -203,7 +203,7 @@ class AbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstract
      */
     public function testGetUpdatedItemsCount()
     {
-        $this->assertInternalType('integer', $this->_model->getUpdatedItemsCount());
+        $this->assertIsInt($this->_model->getUpdatedItemsCount());
     }
 
     /**

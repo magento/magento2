@@ -24,7 +24,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
      */
     private $reader;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->directoryRead = $this->getMockForAbstractClass(
@@ -44,11 +44,12 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage must be a valid JSON
      */
     public function testReadException()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('must be a valid JSON');
+
         $this->directoryRead->expects($this->once())->method('isExist')->willReturn(true);
         $this->directoryRead->expects($this->once())->method('readFile')->willReturn('invalid json');
         $this->reader->read();

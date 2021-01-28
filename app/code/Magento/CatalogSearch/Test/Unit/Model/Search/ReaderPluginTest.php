@@ -34,7 +34,7 @@ class ReaderPluginTest extends \PHPUnit\Framework\TestCase
         $readerConfig = ['test' => 'b', 'd' => 'e'];
         $this->requestGenerator->expects($this->once())
             ->method('generate')
-            ->will($this->returnValue(['test' => 'a']));
+            ->willReturn(['test' => 'a']);
 
         $result = $this->object->afterRead(
             $this->getMockBuilder(\Magento\Framework\Config\ReaderInterface::class)

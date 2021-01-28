@@ -76,7 +76,7 @@ class LinkProviderTest extends WebapiAbstract
             $this->fail("Exception 'Operation allowed only in HTTPS' should be thrown");
         } else {
             $response = $this->_webApiCall($serviceInfo);
-            $this->assertEquals(2, count($response));
+            $this->assertCount(2, $response);
             $this->assertEquals(
                 base64_encode($fileInfo->getInitializationVector()),
                 $response['initialization_vector']

@@ -32,13 +32,13 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             'resource'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 [
                     'default_setup' => ['name' => 'default_setup', 'connection' => 'connect1'],
                     'custom_resource' => ['name' => 'custom_resource', 'connection' => 'connect2'],
                 ]
-            )
+            
         );
         $this->mediaDatabase = new Database($this->deploymentConfig);
     }

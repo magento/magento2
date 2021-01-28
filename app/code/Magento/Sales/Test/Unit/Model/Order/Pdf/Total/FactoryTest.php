@@ -42,8 +42,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             $expectedClassName,
             $arguments
-        )->will(
-            $this->returnValue($createdModel)
+        )->willReturn(
+            $createdModel
         );
 
         $actual = $this->_factory->create($class, $arguments);

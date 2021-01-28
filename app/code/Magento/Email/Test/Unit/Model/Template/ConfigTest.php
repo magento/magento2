@@ -53,8 +53,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'get'
-        )->will(
-            $this->returnValue(require __DIR__ . '/Config/_files/email_templates_merged.php')
+        )->willReturn(
+            require __DIR__ . '/Config/_files/email_templates_merged.php'
         );
         $this->_moduleReader = $this->createPartialMock(\Magento\Framework\Module\Dir\Reader::class, ['getModuleDir']);
         $this->viewFileSystem = $this->createPartialMock(
@@ -243,8 +243,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'one.html',
             $this->designParams,
             'Fixture_ModuleOne'
-        )->will(
-            $this->returnValue('_files/Fixture/ModuleOne/view/frontend/email/one.html')
+        )->willReturn(
+            '_files/Fixture/ModuleOne/view/frontend/email/one.html'
         );
 
         $actualResult = $this->model->getTemplateFilename('template_one', $this->designParams);
@@ -267,8 +267,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 'module' => $this->designParams['module'],
             ],
             'Fixture_ModuleOne'
-        )->will(
-            $this->returnValue('_files/Fixture/ModuleOne/view/frontend/email/one.html')
+        )->willReturn(
+            '_files/Fixture/ModuleOne/view/frontend/email/one.html'
         );
 
         $actualResult = $this->model->getTemplateFilename('template_one');
@@ -340,8 +340,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $this->atLeastOnce()
         )->method(
             'get'
-        )->will(
-            $this->returnValue(['fixture' => $fixtureFields])
+        )->willReturn(
+            ['fixture' => $fixtureFields]
         );
         $model = new Config(
             $dataStorage,

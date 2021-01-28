@@ -34,7 +34,7 @@ class RateTest extends \PHPUnit\Framework\TestCase
                 'rollBack'
             ]
         );
-        $this->resourceMock->expects($this->any())->method('beginTransaction')->will($this->returnSelf());
+        $this->resourceMock->expects($this->any())->method('beginTransaction')->willReturnSelf();
     }
 
     /**

@@ -54,7 +54,7 @@ class RowParserTest extends \PHPUnit\Framework\TestCase
     public function testGetColumns()
     {
         $columns = $this->rowParser->getColumns();
-        $this->assertInternalType('array', $columns, 'Columns should be array, ' . gettype($columns) . ' given');
+        $this->assertIsArray($columns, 'Columns should be array, ' . gettype($columns) . ' given');
         $this->assertNotEmpty($columns);
     }
 

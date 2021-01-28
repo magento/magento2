@@ -222,11 +222,11 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $creditmemoMock->expects($this->exactly(4))
             ->method('roundPrice')
-            ->will($this->returnCallback(
+            ->willReturnCallback(
                 function ($arg) {
                     return round($arg, 2);
                 }
-            ));
+            );
 
         $qtyInvoiced = 10;
         $qtyRefunded = 2;

@@ -71,18 +71,18 @@ class LinkPriceTest extends \PHPUnit\Framework\TestCase
 
         $this->linkMock->expects($this->once())
             ->method('getPrice')
-            ->will($this->returnValue($amount));
+            ->willReturn($amount);
         $this->linkMock->expects($this->once())
             ->method('getProduct')
-            ->will($this->returnValue($this->saleableItemMock));
+            ->willReturn($this->saleableItemMock);
         $this->priceCurrencyMock->expects($this->once())
             ->method('convertAndRound')
             ->with($amount)
-            ->will($this->returnValue($convertedAmount));
+            ->willReturn($convertedAmount);
         $this->calculatorMock->expects($this->once())
             ->method('getAmount')
             ->with($convertedAmount, $this->equalTo($this->saleableItemMock))
-            ->will($this->returnValue($convertedAmount));
+            ->willReturn($convertedAmount);
 
         $result = $this->linkPrice->getLinkAmount($this->linkMock);
         $this->assertEquals($convertedAmount, $result);

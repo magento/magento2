@@ -78,19 +78,19 @@ class GridPoolTest extends \PHPUnit\Framework\TestCase
         $this->orderGridMock->expects($this->once())
             ->method('refresh')
             ->with($this->equalTo($orderId), $this->equalTo('sfo.entity_id'))
-            ->will($this->returnValue($this->statementMock));
+            ->willReturn($this->statementMock);
         $this->invoiceGridMock->expects($this->once())
             ->method('refresh')
             ->with($this->equalTo($orderId), $this->equalTo('sfo.entity_id'))
-            ->will($this->returnValue($this->statementMock));
+            ->willReturn($this->statementMock);
         $this->shipmentGridMock->expects($this->once())
             ->method('refresh')
             ->with($this->equalTo($orderId), $this->equalTo('sfo.entity_id'))
-            ->will($this->returnValue($this->statementMock));
+            ->willReturn($this->statementMock);
         $this->creditmemoGridMock->expects($this->once())
             ->method('refresh')
             ->with($this->equalTo($orderId), $this->equalTo('sfo.entity_id'))
-            ->will($this->returnValue($this->statementMock));
+            ->willReturn($this->statementMock);
         $this->assertEquals($this->gridPool, $this->gridPool->refreshByOrderId($orderId));
     }
 }

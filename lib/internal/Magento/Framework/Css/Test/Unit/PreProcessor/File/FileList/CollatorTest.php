@@ -53,7 +53,7 @@ class CollatorTest extends \PHPUnit\Framework\TestCase
         $theme = null;
         if ($themeFullPath !== null) {
             $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
-            $theme->expects($this->any())->method('getFullPath')->will($this->returnValue($themeFullPath));
+            $theme->expects($this->any())->method('getFullPath')->willReturn($themeFullPath);
         }
         return new \Magento\Framework\View\File($filename, $module, $theme);
     }

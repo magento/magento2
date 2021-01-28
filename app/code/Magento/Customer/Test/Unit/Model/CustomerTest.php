@@ -122,7 +122,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
 
         $this->resourceMock->expects($this->any())
             ->method('getIdFieldName')
-            ->will($this->returnValue('id'));
+            ->willReturn('id');
         $this->registryMock = $this->createPartialMock(\Magento\Framework\Registry::class, ['registry']);
         $this->_encryptor = $this->createMock(\Magento\Framework\Encryption\EncryptorInterface::class);
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -171,8 +171,8 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         )->with(
             'password',
             'salt'
-        )->will(
-            $this->returnValue('hash')
+        )->willReturn(
+            'hash'
         );
         $this->assertEquals('hash', $this->_model->hashPassword('password', 'salt'));
     }
@@ -193,23 +193,23 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $website = $this->createMock(\Magento\Store\Model\Website::class);
         $website->expects($this->once())
             ->method('getStoreIds')
-            ->will($this->returnValue([1, 2, 3, 4]));
+            ->willReturn([1, 2, 3, 4]);
         $this->_storeManager->expects($this->once())
             ->method('getWebsite')
             ->with(1)
-            ->will($this->returnValue($website));
+            ->willReturn($website);
         $this->_storeManager->expects($this->once())
             ->method('getStore')
             ->with(1)
-            ->will($this->returnValue($store));
+            ->willReturn($store);
 
         $this->_config->expects($this->exactly(3))
             ->method('getAttribute')
-            ->will($this->returnValue($this->_attribute));
+            ->willReturn($this->_attribute);
 
         $this->_attribute->expects($this->exactly(3))
             ->method('getIsVisible')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $methods = [
             'setTemplateIdentifier',
@@ -221,15 +221,15 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         foreach ($methods as $method) {
             $this->_transportBuilderMock->expects($this->once())
                 ->method($method)
-                ->will($this->returnSelf());
+                ->willReturnSelf();
         }
         $transportMock = $this->createMock(\Magento\Framework\Mail\TransportInterface::class);
         $transportMock->expects($this->once())
             ->method('sendMessage')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->_transportBuilderMock->expects($this->once())
             ->method('getTransport')
-            ->will($this->returnValue($transportMock));
+            ->willReturn($transportMock);
 
         $this->_model->setData(
             [

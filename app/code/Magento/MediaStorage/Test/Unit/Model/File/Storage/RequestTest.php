@@ -26,7 +26,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     {
         $path = '..PathInfo';
         $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $this->_requestMock->expects($this->once())->method('getPathInfo')->will($this->returnValue($path));
+        $this->_requestMock->expects($this->once())->method('getPathInfo')->willReturn($path);
         $this->_model = new \Magento\MediaStorage\Model\File\Storage\Request($this->_requestMock);
     }
 

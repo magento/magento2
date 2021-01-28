@@ -142,9 +142,9 @@ class FullTest extends \PHPUnit\Framework\TestCase
 
         $eavSource->expects($this->once())->method('reindexEntities')->with($ids);
 
-        $this->eavDecimalFactory->expects($this->once())->method('create')->will($this->returnValue($eavSource));
+        $this->eavDecimalFactory->expects($this->once())->method('create')->willReturn($eavSource);
 
-        $this->eavSourceFactory->expects($this->once())->method('create')->will($this->returnValue($eavDecimal));
+        $this->eavSourceFactory->expects($this->once())->method('create')->willReturn($eavDecimal);
 
         $entityMetadataMock = $this->getMockBuilder(EntityMetadataInterface::class)
             ->getMockForAbstractClass();

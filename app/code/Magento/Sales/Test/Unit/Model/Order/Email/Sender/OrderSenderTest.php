@@ -36,7 +36,7 @@ class OrderSenderTest extends AbstractSenderTest
         );
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
 
         $this->orderMock->method('getId')
             ->willReturn(self::ORDER_ID);

@@ -29,7 +29,7 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
         $objectManager->expects($this->once())
             ->method('get')
             ->with(\Magento\Framework\App\Route\ConfigInterface::class)
-            ->will($this->returnValue($this->_object));
+            ->willReturn($this->_object);
 
         $this->_proxy = new \Magento\Framework\App\Route\ConfigInterface\Proxy(
             $objectManager,

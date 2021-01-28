@@ -56,7 +56,7 @@ class CheckoutAllSubmitAfterObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->eventObserver->expects($this->atLeastOnce())
             ->method('getEvent')
-            ->will($this->returnValue($this->event));
+            ->willReturn($this->event);
 
         $this->observer = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
             \Magento\CatalogInventory\Observer\CheckoutAllSubmitAfterObserver::class,
@@ -72,11 +72,11 @@ class CheckoutAllSubmitAfterObserverTest extends \PHPUnit\Framework\TestCase
         $quote = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['getInventoryProcessed']);
         $quote->expects($this->once())
             ->method('getInventoryProcessed')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->event->expects($this->once())
             ->method('getQuote')
-            ->will($this->returnValue($quote));
+            ->willReturn($quote);
 
         $this->subtractQuoteInventoryObserver->expects($this->once())
             ->method('execute')

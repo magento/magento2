@@ -35,12 +35,12 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->serializerMock->expects($this->any())
             ->method('serialize')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($value) {
                         return json_encode($value);
                     }
-                )
+                
             );
         $this->object = $this->objectManager->getObject(
             \Magento\Framework\App\Http\Context::class,

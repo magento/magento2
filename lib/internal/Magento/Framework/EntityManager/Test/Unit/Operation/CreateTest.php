@@ -43,7 +43,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      */
     private $create;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
@@ -67,10 +67,11 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
      */
     public function testDuplicateExceptionProcessingOnExecute()
     {
+        $this->expectException(\Magento\Framework\Exception\AlreadyExistsException::class);
+
         $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
         $this->metadataPool->expects($this->any())->method('getMetadata')->willReturn($metadata);
 

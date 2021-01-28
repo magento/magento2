@@ -102,15 +102,15 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
     public function testGenerationForGlobalScope()
     {
         $categoryId = 1;
-        $this->category->expects($this->any())->method('getStoreId')->will($this->returnValue(null));
-        $this->category->expects($this->any())->method('getStoreIds')->will($this->returnValue([1]));
+        $this->category->expects($this->any())->method('getStoreId')->willReturn(null);
+        $this->category->expects($this->any())->method('getStoreIds')->willReturn([1]);
         $this->storeViewService->expects($this->once())->method('doesEntityHaveOverriddenUrlKeyForStore')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $canonical = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite([], $this->serializer);
         $canonical->setRequestPath('category-1')
             ->setStoreId(1);
         $this->canonicalUrlRewriteGenerator->expects($this->any())->method('generate')
-            ->will($this->returnValue(['category-1' => $canonical]));
+            ->willReturn(['category-1' => $canonical]);
         $children1 = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite([], $this->serializer);
         $children1->setRequestPath('category-2')
             ->setStoreId(2);
@@ -119,13 +119,13 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
             ->setStoreId(2);
         $this->childrenUrlRewriteGenerator->expects($this->any())->method('generate')
             ->with(1, $this->category, $categoryId)
-            ->will($this->returnValue(['category-2' => $children1, 'category-1' => $children2]));
+            ->willReturn(['category-2' => $children1, 'category-1' => $children2]);
         $current = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite([], $this->serializer);
         $current->setRequestPath('category-3')
             ->setStoreId(3);
         $this->currentUrlRewritesRegenerator->expects($this->any())->method('generate')
             ->with(1, $this->category, $categoryId)
-            ->will($this->returnValue(['category-3' => $current]));
+            ->willReturn(['category-3' => $current]);
         $categoryForSpecificStore = $this->createPartialMock(
             \Magento\Catalog\Model\Category::class,
             ['getUrlKey', 'getUrlPath']
@@ -148,17 +148,17 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGenerationForSpecificStore()
     {
-        $this->category->expects($this->any())->method('getStoreId')->will($this->returnValue(1));
+        $this->category->expects($this->any())->method('getStoreId')->willReturn(1);
         $this->category->expects($this->never())->method('getStoreIds');
         $canonical = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite([], $this->serializer);
         $canonical->setRequestPath('category-1')
             ->setStoreId(1);
         $this->canonicalUrlRewriteGenerator->expects($this->any())->method('generate')
-            ->will($this->returnValue([$canonical]));
+            ->willReturn([$canonical]);
         $this->childrenUrlRewriteGenerator->expects($this->any())->method('generate')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->currentUrlRewritesRegenerator->expects($this->any())->method('generate')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->assertEquals(
             ['category-1_1' => $canonical],
@@ -171,9 +171,9 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     public function testSkipGenerationForGlobalScope()
     {
-        $this->category->expects($this->any())->method('getStoreIds')->will($this->returnValue([1, 2]));
+        $this->category->expects($this->any())->method('getStoreIds')->willReturn([1, 2]);
         $this->storeViewService->expects($this->exactly(2))->method('doesEntityHaveOverriddenUrlKeyForStore')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertEquals([], $this->categoryUrlRewriteGenerator->generate($this->category));
     }
@@ -183,11 +183,11 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     public function testSkipGenerationForGlobalScopeWithCategory()
     {
-        $this->category->expects($this->any())->method('getStoreIds')->will($this->returnValue([1, 2]));
-        $this->category->expects($this->any())->method('getEntityId')->will($this->returnValue(1));
-        $this->category->expects($this->any())->method('getStoreId')->will($this->returnValue(false));
+        $this->category->expects($this->any())->method('getStoreIds')->willReturn([1, 2]);
+        $this->category->expects($this->any())->method('getEntityId')->willReturn(1);
+        $this->category->expects($this->any())->method('getStoreId')->willReturn(false);
         $this->storeViewService->expects($this->exactly(2))->method('doesEntityHaveOverriddenUrlKeyForStore')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertEquals([], $this->categoryUrlRewriteGenerator->generate($this->category, false, 1));
     }

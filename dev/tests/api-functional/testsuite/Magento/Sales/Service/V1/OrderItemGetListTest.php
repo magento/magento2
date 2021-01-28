@@ -78,10 +78,10 @@ class OrderItemGetListTest extends WebapiAbstract
 
         $response = $this->_webApiCall($serviceInfo, $requestData);
 
-        $this->assertTrue(is_array($response));
+        $this->assertIsArray($response);
         $this->assertArrayHasKey('items', $response);
         $this->assertCount(3, $response['items']);
-        $this->assertTrue(is_array($response['items'][0]));
+        $this->assertIsArray($response['items'][0]);
         $rowTotals = [];
 
         foreach ($response['items'] as $item) {

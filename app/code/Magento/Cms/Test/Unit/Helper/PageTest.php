@@ -300,7 +300,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
             ->method('getCustomPageLayout')
             ->willReturn($customPageLayout);
         $this->resultPageFactory->expects($this->any())->method('create')
-            ->will($this->returnValue($this->resultPageMock));
+            ->willReturn($this->resultPageMock);
         $this->resultPageMock->expects($this->any())
             ->method('getConfig')
             ->willReturn($this->pageConfigMock);

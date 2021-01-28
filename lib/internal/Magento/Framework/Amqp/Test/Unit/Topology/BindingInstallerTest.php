@@ -31,11 +31,12 @@ class BindingInstallerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Installer type [test] is not configured
      */
     public function testInstallInvalidType()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Installer type [test] is not configured');
+
         $installerOne = $this->getMockForAbstractClass(BindingInstallerInterface::class);
         $installerTwo = $this->getMockForAbstractClass(BindingInstallerInterface::class);
         $model = new BindingInstaller(

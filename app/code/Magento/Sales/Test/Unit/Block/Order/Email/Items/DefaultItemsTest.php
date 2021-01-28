@@ -95,16 +95,16 @@ class DefaultItemsTest extends TestCase
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('item_price')
-            ->will($this->returnValue($this->priceRenderBlock));
+            ->willReturn($this->priceRenderBlock);
         $this->quoteItemMock->expects($this->any())
             ->method('getQty')
-            ->will($this->returnValue($quantity));
+            ->willReturn($quantity);
         $this->itemMock->expects($this->any())
             ->method('setRowTotal')
-            ->will($this->returnValue($price * $quantity));
+            ->willReturn($price * $quantity);
         $this->itemMock->expects($this->any())
             ->method('setBaseRowTotal')
-            ->will($this->returnValue($price * $quantity));
+            ->willReturn($price * $quantity);
 
         $this->priceRenderBlock->expects($this->once())
             ->method('setItem')
@@ -112,7 +112,7 @@ class DefaultItemsTest extends TestCase
 
         $this->priceRenderBlock->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue($html));
+            ->willReturn($html);
 
         $this->assertEquals($html, $this->block->getItemPrice($this->itemMock));
     }

@@ -60,7 +60,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $link = 'http://magento.com/backend/rss/feed/index/type/new_order';
         $this->urlBuilderInterface->expects($this->once())->method('getUrl')
             ->with(['type' => 'new_order'])
-            ->will($this->returnValue($link));
+            ->willReturn($link);
         $this->assertEquals($link, $this->link->getLink());
     }
 

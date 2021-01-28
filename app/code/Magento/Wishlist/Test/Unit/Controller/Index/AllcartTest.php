@@ -98,39 +98,39 @@ class AllcartTest extends \PHPUnit\Framework\TestCase
         $this->context
             ->expects($this->any())
             ->method('getObjectManager')
-            ->will($this->returnValue($om));
+            ->willReturn($om);
         $this->context
             ->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->request));
+            ->willReturn($this->request);
         $this->context
             ->expects($this->any())
             ->method('getResponse')
-            ->will($this->returnValue($this->response));
+            ->willReturn($this->response);
         $this->context
             ->expects($this->any())
             ->method('getEventManager')
-            ->will($this->returnValue($eventManager));
+            ->willReturn($eventManager);
         $this->context
             ->expects($this->any())
             ->method('getUrl')
-            ->will($this->returnValue($url));
+            ->willReturn($url);
         $this->context
             ->expects($this->any())
             ->method('getActionFlag')
-            ->will($this->returnValue($actionFlag));
+            ->willReturn($actionFlag);
         $this->context
             ->expects($this->any())
             ->method('getRedirect')
-            ->will($this->returnValue($redirect));
+            ->willReturn($redirect);
         $this->context
             ->expects($this->any())
             ->method('getView')
-            ->will($this->returnValue($view));
+            ->willReturn($view);
         $this->context
             ->expects($this->any())
             ->method('getMessageManager')
-            ->will($this->returnValue($messageManager));
+            ->willReturn($messageManager);
         $this->context->expects($this->any())
             ->method('getResultFactory')
             ->willReturn($this->resultFactoryMock);
@@ -156,7 +156,7 @@ class AllcartTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('validate')
             ->with($this->request)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->resultForwardMock->expects($this->once())
             ->method('forward')
             ->with('noroute')
@@ -172,11 +172,11 @@ class AllcartTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('validate')
             ->with($this->request)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->wishlistProvider
             ->expects($this->once())
             ->method('getWishlist')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->resultForwardMock->expects($this->once())
             ->method('forward')
             ->with('noroute')
@@ -193,14 +193,14 @@ class AllcartTest extends \PHPUnit\Framework\TestCase
         $this->formKeyValidator->expects($this->once())
             ->method('validate')
             ->with($this->request)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('qty')
-            ->will($this->returnValue(2));
+            ->willReturn(2);
         $this->wishlistProvider->expects($this->once())
             ->method('getWishlist')
-            ->will($this->returnValue($wishlist));
+            ->willReturn($wishlist);
         $this->itemCarrier->expects($this->once())
             ->method('moveAllToCart')
             ->with($wishlist, 2)

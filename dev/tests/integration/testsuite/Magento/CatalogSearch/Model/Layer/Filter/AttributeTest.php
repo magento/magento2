@@ -88,7 +88,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->_model->apply($request);
         $items = $this->_model->getItems();
 
-        $this->assertInternalType('array', $items);
+        $this->assertIsArray($items);
         $this->assertEmpty($items);
     }
 }

@@ -42,8 +42,8 @@ class TermTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->conditionManager->expects($this->any())
             ->method('generateCondition')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($field, $operator, $value) {
                         return sprintf(
                             is_array($value) ? '%s %s (%s)' : '%s %s %s',
@@ -52,7 +52,7 @@ class TermTest extends \PHPUnit\Framework\TestCase
                             is_array($value) ? implode(', ', $value) : $value
                         );
                     }
-                )
+                
             );
 
         $this->filter = $objectManager->getObject(
@@ -74,10 +74,10 @@ class TermTest extends \PHPUnit\Framework\TestCase
     {
         $this->requestFilter->expects($this->once())
             ->method('getField')
-            ->will($this->returnValue($field));
+            ->willReturn($field);
         $this->requestFilter->expects($this->atLeastOnce())
             ->method('getValue')
-            ->will($this->returnValue($value));
+            ->willReturn($value);
 
         $actualResult = $this->filter->buildFilter($this->requestFilter, $isNegation);
         $this->assertEquals($expectedResult, $actualResult);

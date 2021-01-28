@@ -101,6 +101,6 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->indexerRegistryMock->expects($this->once())
             ->method('get')
             ->with(\Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID)
-            ->will($this->returnValue($this->indexerMock));
+            ->willReturn($this->indexerMock);
     }
 }

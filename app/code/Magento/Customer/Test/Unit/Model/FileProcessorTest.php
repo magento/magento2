@@ -102,7 +102,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
         $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
         $result = $model->getStat($fileName);
 
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertArrayHasKey('size', $result);
         $this->assertEquals(1, $result['size']);
     }

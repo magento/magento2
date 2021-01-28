@@ -175,19 +175,19 @@ class QuantityTest extends \PHPUnit\Framework\TestCase
     {
         $this->remoteAddressMock->expects($this->any())
             ->method('getRemoteAddress')
-            ->will($this->returnValue(12345));
+            ->willReturn(12345);
 
         $this->securityConfigMock->expects($this->any())
             ->method('getPasswordResetProtectionType')
-            ->will($this->returnValue($requestsMethod));
+            ->willReturn($requestsMethod);
 
         $this->securityConfigMock->expects($this->once())
             ->method('getMaxNumberPasswordResetRequests')
-            ->will($this->returnValue($limitNumberPasswordResetRequests));
+            ->willReturn($limitNumberPasswordResetRequests);
 
         $this->securityConfigMock->expects($this->any())
             ->method('getCustomerServiceEmail')
-            ->will($this->returnValue('test@host.com'));
+            ->willReturn('test@host.com');
 
         $this->collectionFactoryMock->expects($this->once())
             ->method('create')

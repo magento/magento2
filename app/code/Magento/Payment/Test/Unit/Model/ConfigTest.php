@@ -153,8 +153,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetCcTypes()
     {
         $expected = [];
-        $this->dataStorage->expects($this->once())->method('get')->with('credit_cards')->will(
-            $this->returnValue($expected)
+        $this->dataStorage->expects($this->once())->method('get')->with('credit_cards')->willReturn(
+            $expected
         );
         $this->assertEquals($expected, $this->config->getCcTypes());
     }
@@ -162,8 +162,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetMethodsInfo()
     {
         $expected = [];
-        $this->dataStorage->expects($this->once())->method('get')->with('methods')->will(
-            $this->returnValue($expected)
+        $this->dataStorage->expects($this->once())->method('get')->with('methods')->willReturn(
+            $expected
         );
         $this->assertEquals($expected, $this->config->getMethodsInfo());
     }
@@ -171,8 +171,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetGroups()
     {
         $expected = [];
-        $this->dataStorage->expects($this->once())->method('get')->with('groups')->will(
-            $this->returnValue($expected)
+        $this->dataStorage->expects($this->once())->method('get')->with('groups')->willReturn(
+            $expected
         );
         $this->assertEquals($expected, $this->config->getGroups());
     }
@@ -185,7 +185,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testGetYears()
     {
-        $this->date->expects($this->once())->method('date')->with('Y')->will($this->returnValue(self::CURRENT_YEAR));
+        $this->date->expects($this->once())->method('date')->with('Y')->willReturn(self::CURRENT_YEAR);
         $this->assertEquals($this->_getPreparedYearsList(), $this->config->getYears());
     }
 

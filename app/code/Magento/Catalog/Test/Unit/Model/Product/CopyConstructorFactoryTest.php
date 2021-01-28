@@ -43,8 +43,8 @@ class CopyConstructorFactoryTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             \Magento\Catalog\Model\Product\CopyConstructor\Composite::class
-        )->will(
-            $this->returnValue('object')
+        )->willReturn(
+            'object'
         );
         $this->assertEquals(
             'object',

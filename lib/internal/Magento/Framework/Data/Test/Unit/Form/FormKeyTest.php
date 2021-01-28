@@ -58,12 +58,12 @@ class FormKeyTest extends \PHPUnit\Framework\TestCase
         $this->sessionMock
             ->expects($this->any())
             ->method('getData')
-            ->will($this->returnValueMap($valueMap));
+            ->willReturnMap($valueMap);
         $this->mathRandomMock
             ->expects($this->once())
             ->method('getRandomString')
             ->with(16)
-            ->will($this->returnValue('random_string'));
+            ->willReturn('random_string');
         $this->sessionMock->expects($this->once())->method('setData')->with(FormKey::FORM_KEY, 'random_string');
         $this->formKey->getFormKey();
     }
@@ -74,7 +74,7 @@ class FormKeyTest extends \PHPUnit\Framework\TestCase
             ->expects($this->exactly(2))
             ->method('getData')
             ->with(FormKey::FORM_KEY)
-            ->will($this->returnValue('random_string'));
+            ->willReturn('random_string');
         $this->mathRandomMock
             ->expects($this->never())
             ->method('getRandomString');

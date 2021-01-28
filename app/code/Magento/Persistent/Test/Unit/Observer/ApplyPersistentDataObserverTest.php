@@ -67,7 +67,7 @@ class ApplyPersistentDataObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->configMock->expects($this->never())->method('create');
         $this->model->execute($this->observerMock);
     }
@@ -78,8 +78,8 @@ class ApplyPersistentDataObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
-            ->will($this->returnValue(true));
-        $this->sessionMock->expects($this->once())->method('isPersistent')->will($this->returnValue(false));
+            ->willReturn(true);
+        $this->sessionMock->expects($this->once())->method('isPersistent')->willReturn(false);
         $this->configMock->expects($this->never())->method('create');
         $this->model->execute($this->observerMock);
     }
@@ -90,9 +90,9 @@ class ApplyPersistentDataObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
-            ->will($this->returnValue(true));
-        $this->sessionMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(true));
+            ->willReturn(true);
+        $this->sessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(true);
         $this->configMock->expects($this->never())->method('create');
         $this->model->execute($this->observerMock);
     }
@@ -103,22 +103,22 @@ class ApplyPersistentDataObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
-            ->will($this->returnValue(true));
-        $this->sessionMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
+            ->willReturn(true);
+        $this->sessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
         $this->configMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->persistentConfigMock));
+            ->willReturn($this->persistentConfigMock);
         $this->persistentHelperMock
             ->expects($this->once())
             ->method('getPersistentConfigFilePath')
-            ->will($this->returnValue('path/path1'));
+            ->willReturn('path/path1');
         $this->persistentConfigMock
             ->expects($this->once())
             ->method('setConfigFilePath')
             ->with('path/path1')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->persistentConfigMock->expects($this->once())->method('fire');
         $this->model->execute($this->observerMock);
     }

@@ -40,9 +40,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId']);
-        $store->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $store->expects($this->any())->method('getId')->willReturn(1);
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($store);
         $this->objectManager = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this));
         $this->resourceMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
             ->disableOriginalConstructor()

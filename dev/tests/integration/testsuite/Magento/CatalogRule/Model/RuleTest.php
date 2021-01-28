@@ -22,13 +22,13 @@ class RuleTest extends \PHPUnit\Framework\TestCase
             \Magento\CatalogRule\Model\ResourceModel\Rule::class,
             ['getIdFieldName', 'getRulesFromProduct']
         );
-        $resourceMock->expects($this->any())->method('getIdFieldName')->will($this->returnValue('id'));
+        $resourceMock->expects($this->any())->method('getIdFieldName')->willReturn('id');
         $resourceMock->expects(
             $this->any()
         )->method(
             'getRulesFromProduct'
-        )->will(
-            $this->returnValue($this->_getCatalogRulesFixtures())
+        )->willReturn(
+            $this->_getCatalogRulesFixtures()
         );
 
         $this->_object = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

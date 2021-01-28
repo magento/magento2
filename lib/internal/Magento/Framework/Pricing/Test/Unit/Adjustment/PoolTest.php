@@ -29,12 +29,12 @@ class PoolTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $adjustmentFactory->expects($this->any())->method('create')->will(
-            $this->returnCallback(
+        $adjustmentFactory->expects($this->any())->method('create')->willReturnCallback(
+            
                 function ($className, $data) {
                     return $className . '|' . $data['sortOrder'];
                 }
-            )
+            
         );
 
         $this->model = new Pool($adjustmentFactory, $adjustmentsData);
@@ -80,10 +80,11 @@ class PoolTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testGetAdjustmentByNotExistingCode()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->model->getAdjustmentByCode('not_existing_code');
     }
 }

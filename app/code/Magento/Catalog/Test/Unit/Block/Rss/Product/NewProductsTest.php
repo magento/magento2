@@ -62,7 +62,7 @@ class NewProductsTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
-        $this->request->expects($this->any())->method('getParam')->with('store_id')->will($this->returnValue(null));
+        $this->request->expects($this->any())->method('getParam')->with('store_id')->willReturn(null);
 
         $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $this->imageHelper = $this->createMock(\Magento\Catalog\Helper\Image::class);
@@ -73,9 +73,9 @@ class NewProductsTest extends \PHPUnit\Framework\TestCase
         $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManager::class);
         $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->setMethods(['getId', 'getFrontendName', '__wakeup'])->disableOriginalConstructor()->getMock();
-        $store->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $store->expects($this->any())->method('getFrontendName')->will($this->returnValue('Store 1'));
-        $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $store->expects($this->any())->method('getId')->willReturn(1);
+        $store->expects($this->any())->method('getFrontendName')->willReturn('Store 1');
+        $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $this->objectManagerHelper->getObject(
@@ -107,7 +107,7 @@ class NewProductsTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsAllowed($configValue, $expectedResult)
     {
-        $this->scopeConfig->expects($this->once())->method('isSetFlag')->will($this->returnValue($configValue));
+        $this->scopeConfig->expects($this->once())->method('isSetFlag')->willReturn($configValue);
         $this->assertEquals($expectedResult, $this->block->isAllowed());
     }
 
@@ -129,12 +129,12 @@ class NewProductsTest extends \PHPUnit\Framework\TestCase
         $item = $this->createPartialMock(\Magento\Catalog\Model\Product::class, $methods);
         $item->expects($this->once())->method('setAllowedInRss')->with(true);
         $item->expects($this->once())->method('setAllowedPriceInRss')->with(true);
-        $item->expects($this->once())->method('getAllowedPriceInRss')->will($this->returnValue(true));
-        $item->expects($this->once())->method('getAllowedInRss')->will($this->returnValue(true));
-        $item->expects($this->once())->method('getDescription')->will($this->returnValue('Product Description'));
-        $item->expects($this->once())->method('getName')->will($this->returnValue('Product Name'));
-        $item->expects($this->any())->method('getProductUrl')->will(
-            $this->returnValue('http://magento.com/product-name.html')
+        $item->expects($this->once())->method('getAllowedPriceInRss')->willReturn(true);
+        $item->expects($this->once())->method('getAllowedInRss')->willReturn(true);
+        $item->expects($this->once())->method('getDescription')->willReturn('Product Description');
+        $item->expects($this->once())->method('getName')->willReturn('Product Name');
+        $item->expects($this->any())->method('getProductUrl')->willReturn(
+            'http://magento.com/product-name.html'
         );
         return $item;
     }
@@ -143,14 +143,14 @@ class NewProductsTest extends \PHPUnit\Framework\TestCase
     {
         $this->rssUrlBuilder->expects($this->once())->method('getUrl')
             ->with(['type' => 'new_products', 'store_id' => 1])
-            ->will($this->returnValue('http://magento.com/rss/feed/index/type/new_products/store_id/1'));
+            ->willReturn('http://magento.com/rss/feed/index/type/new_products/store_id/1');
         $item = $this->getItemMock();
         $this->newProducts->expects($this->once())->method('getProductsCollection')
-            ->will($this->returnValue([$item]));
+            ->willReturn([$item]);
         $this->imageHelper->expects($this->once())->method('init')->with($item, 'rss_thumbnail')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->imageHelper->expects($this->once())->method('getUrl')
-            ->will($this->returnValue('image_link'));
+            ->willReturn('image_link');
         $data = [
             'title' => 'New Products from Store 1',
             'description' => 'New Products from Store 1',
@@ -180,11 +180,11 @@ class NewProductsTest extends \PHPUnit\Framework\TestCase
 
     public function testGetFeeds()
     {
-        $this->scopeConfig->expects($this->once())->method('isSetFlag')->will($this->returnValue(true));
+        $this->scopeConfig->expects($this->once())->method('isSetFlag')->willReturn(true);
         $rssUrl = 'http://magento.com/rss/feed/index/type/new_products/store_id/1';
         $this->rssUrlBuilder->expects($this->once())->method('getUrl')
             ->with(['type' => 'new_products'])
-            ->will($this->returnValue($rssUrl));
+            ->willReturn($rssUrl);
         $expected = [
             'label' => 'New Products',
             'link' => $rssUrl,

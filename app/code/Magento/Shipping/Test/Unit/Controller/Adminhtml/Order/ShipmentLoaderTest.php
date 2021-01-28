@@ -145,16 +145,16 @@ class ShipmentLoaderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($orderMock));
+            ->willReturn($orderMock);
         $orderMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($this->loader->getOrderId()));
+            ->willReturn($this->loader->getOrderId());
         $orderMock->expects($this->any())
             ->method('getForcedShipmentWithInvoice')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $orderMock->expects($this->once())
             ->method('canShip')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $shipmentModelMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Shipment::class)
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -165,11 +165,11 @@ class ShipmentLoaderTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->trackFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($trackMock));
+            ->willReturn($trackMock);
         $shipmentModelMock->expects($this->any())
             ->method('addTrack')
             ->with($this->equalTo($trackMock))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->registryMock->expects($this->once())
             ->method('register')
             ->with('current_shipment', $shipmentModelMock);
@@ -178,7 +178,7 @@ class ShipmentLoaderTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->itemFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($itemMock));
+            ->willReturn($itemMock);
         $this->documentFactoryMock->expects($this->once())->method('create')->willReturn($shipmentModelMock);
 
         $this->assertEquals($shipmentModelMock, $this->loader->load());

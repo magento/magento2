@@ -50,8 +50,8 @@ class TableDataTest extends \PHPUnit\Framework\TestCase
             'isTableExists'
         )->with(
             $flatTable
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
 
         $this->_connectionMock->expects(
@@ -66,8 +66,8 @@ class TableDataTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getConnection'
-        )->will(
-            $this->returnValue($this->_connectionMock)
+        )->willReturn(
+            $this->_connectionMock
         );
 
         $model = $this->_objectManager->getObject(
@@ -113,13 +113,13 @@ class TableDataTest extends \PHPUnit\Framework\TestCase
         )->with(
             $flatTable,
             ['column_2', 'column_3']
-        )->will(
-            $this->returnValue($sql)
+        )->willReturn(
+            $sql
         );
 
         $this->_connectionMock->expects($this->once())->method('query')->with($sql);
 
-        $this->_connectionMock->expects($this->once())->method('select')->will($this->returnValue($selectMock));
+        $this->_connectionMock->expects($this->once())->method('select')->willReturn($selectMock);
 
         $this->_connectionMock->expects(
             $this->once()
@@ -127,8 +127,8 @@ class TableDataTest extends \PHPUnit\Framework\TestCase
             'isTableExists'
         )->with(
             $flatTable
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $this->_connectionMock->expects(
@@ -137,16 +137,16 @@ class TableDataTest extends \PHPUnit\Framework\TestCase
             'describeTable'
         )->with(
             $flatTable
-        )->will(
-            $this->returnValue($describedColumns)
+        )->willReturn(
+            $describedColumns
         );
 
         $this->_productIndexerHelper->expects(
             $this->once()
         )->method(
             'getFlatColumns'
-        )->will(
-            $this->returnValue($flatColumns)
+        )->willReturn(
+            $flatColumns
         );
 
         $this->_connectionMock->expects(
@@ -161,8 +161,8 @@ class TableDataTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getConnection'
-        )->will(
-            $this->returnValue($this->_connectionMock)
+        )->willReturn(
+            $this->_connectionMock
         );
 
         $model = $this->_objectManager->getObject(

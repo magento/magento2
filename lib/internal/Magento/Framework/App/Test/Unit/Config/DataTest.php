@@ -20,7 +20,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->_metaDataProcessor = $this->createMock(\Magento\Framework\App\Config\MetadataProcessor::class);
-        $this->_metaDataProcessor->expects($this->any())->method('process')->will($this->returnArgument(0));
+        $this->_metaDataProcessor->expects($this->any())->method('process')->willReturnArgument(0);
         $this->_model = new \Magento\Framework\App\Config\Data($this->_metaDataProcessor, []);
     }
 

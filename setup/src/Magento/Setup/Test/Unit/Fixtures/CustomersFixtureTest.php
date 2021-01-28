@@ -41,7 +41,7 @@ class CustomersFixtureTest extends \PHPUnit\Framework\TestCase
      */
     private $collectionMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->fixtureModelMock = $this->createMock(\Magento\Setup\Fixtures\FixtureModel::class);
 

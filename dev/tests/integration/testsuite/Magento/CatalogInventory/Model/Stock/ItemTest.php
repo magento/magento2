@@ -55,7 +55,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $savedStockItem->setQty(null);
         $savedStockItem->save();
 
-        $this->assertEquals(null, $savedStockItem->load($savedStockItemId)->getQty());
+        $this->assertNull($savedStockItem->load($savedStockItemId)->getQty());
     }
 
     /**

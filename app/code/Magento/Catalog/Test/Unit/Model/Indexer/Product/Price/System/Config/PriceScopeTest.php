@@ -77,6 +77,6 @@ class PriceScopeTest extends \PHPUnit\Framework\TestCase
         $this->indexerRegistryMock->expects($this->exactly($countCall))
             ->method('get')
             ->with(\Magento\Catalog\Model\Indexer\Product\Price\Processor::INDEXER_ID)
-            ->will($this->returnValue($this->_indexerMock));
+            ->willReturn($this->_indexerMock);
     }
 }

@@ -43,8 +43,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $this->equalTo('system'),
             $this->equalTo('default/' . $path),
             $this->isNull()
-        )->will(
-            $this->returnValue($expectedValue)
+        )->willReturn(
+            $expectedValue
         );
         $this->assertEquals($expectedValue, $this->model->getValue($path));
     }
@@ -64,8 +64,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         )->with(
             $this->equalTo('system'),
             $this->equalTo('default/' . $configPath)
-        )->will(
-            $this->returnValue($configValue)
+        )->willReturn(
+            $configValue
         );
         $this->assertEquals($expectedResult, $this->model->isSetFlag($configPath));
     }

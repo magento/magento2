@@ -57,8 +57,8 @@ class FrontendPoolTest extends \PHPUnit\Framework\TestCase
             'getConfigData'
         )->with(
             FrontendPool::KEY_CACHE
-        )->will(
-            $this->returnValue($fixtureConfigData)
+        )->willReturn(
+            $fixtureConfigData
         );
 
         $cacheFrontend = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
@@ -68,8 +68,8 @@ class FrontendPoolTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             $expectedFrontendId
-        )->will(
-            $this->returnValue($cacheFrontend)
+        )->willReturn(
+            $cacheFrontend
         );
 
         $accessProxy = $this->createMock(\Magento\Framework\App\Cache\Type\AccessProxy::class);
@@ -80,8 +80,8 @@ class FrontendPoolTest extends \PHPUnit\Framework\TestCase
         )->with(
             \Magento\Framework\App\Cache\Type\AccessProxy::class,
             $this->identicalTo(['frontend' => $cacheFrontend, 'identifier' => $inputCacheType])
-        )->will(
-            $this->returnValue($accessProxy)
+        )->willReturn(
+            $accessProxy
         );
 
         $this->assertSame($accessProxy, $this->_model->get($inputCacheType));

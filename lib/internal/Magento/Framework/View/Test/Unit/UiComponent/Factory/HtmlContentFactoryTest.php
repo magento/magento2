@@ -33,7 +33,7 @@ class HtmlContentFactoryTest extends \PHPUnit\Framework\TestCase
      */
     private $htmlContentFactory;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->layout = $this->getMockBuilder(Layout::class)
             ->disableOriginalConstructor()

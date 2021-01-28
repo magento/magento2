@@ -79,11 +79,11 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'get'
-        )->will(
-            $this->returnValue([file_get_contents($this->_filePath . 'resources.xml')])
+        )->willReturn(
+            [file_get_contents($this->_filePath . 'resources.xml')]
         );
 
-        $this->_converterMock->expects($this->once())->method('convert')->will($this->returnValue($modulesConfig));
+        $this->_converterMock->expects($this->once())->method('convert')->willReturn($modulesConfig);
 
         $this->assertEquals($expectedResult, $this->_model->read());
     }

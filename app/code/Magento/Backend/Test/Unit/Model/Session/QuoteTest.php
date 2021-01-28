@@ -212,7 +212,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $storeId = 10;
         $customerId = 66;
         $customerGroupId = 77;
-        $this->quote->expects($this->any())->method('getQuoteId')->will($this->returnValue(null));
+        $this->quote->expects($this->any())->method('getQuoteId')->willReturn(null);
         $this->quote->expects($this->any())->method('setQuoteId')->with($quoteId);
         $cartInterfaceMock = $this->createPartialMock(
             \Magento\Quote\Api\Data\CartInterface::class,
@@ -262,11 +262,11 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->quoteFactoryMock->expects($this->once())->method('create')->willReturn($cartInterfaceMock);
-        $this->quote->expects($this->any())->method('getStoreId')->will($this->returnValue($storeId));
-        $this->quote->expects($this->any())->method('getCustomerId')->will($this->returnValue($customerId));
+        $this->quote->expects($this->any())->method('getStoreId')->willReturn($storeId);
+        $this->quote->expects($this->any())->method('getCustomerId')->willReturn($customerId);
         $cartInterfaceMock->expects($this->atLeastOnce())->method('getId')->willReturn($quoteId);
         $defaultGroup = $this->getMockBuilder(\Magento\Customer\Api\Data\GroupInterface::class)->getMock();
-        $defaultGroup->expects($this->any())->method('getId')->will($this->returnValue($customerGroupId));
+        $defaultGroup->expects($this->any())->method('getId')->willReturn($customerGroupId);
         $this->groupManagementMock
             ->method('getDefaultGroup')
             ->with($storeId)
@@ -312,16 +312,16 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
 
         $this->quote->expects($this->any())
             ->method('getQuoteId')
-            ->will($this->returnValue($quoteId));
+            ->willReturn($quoteId);
         $this->quote->expects($this->any())
             ->method('setQuoteId')
             ->with($quoteId);
         $this->quote->expects($this->any())
             ->method('getStoreId')
-            ->will($this->returnValue($storeId));
+            ->willReturn($storeId);
         $this->quote->expects($this->any())
             ->method('getCustomerId')
-            ->will($this->returnValue($customerId));
+            ->willReturn($customerId);
 
         $dataCustomerMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->disableOriginalConstructor()
@@ -356,7 +356,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             ->with(true);
         $quoteMock->expects($this->once())
             ->method('getCustomerId')
-            ->will($this->returnValue($quoteCustomerId));
+            ->willReturn($quoteCustomerId);
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('get')

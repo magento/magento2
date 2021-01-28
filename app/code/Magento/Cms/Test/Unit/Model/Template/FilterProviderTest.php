@@ -26,7 +26,7 @@ class FilterProviderTest extends \PHPUnit\Framework\TestCase
     {
         $this->_filterMock = $this->createMock(\Magento\Cms\Model\Template\Filter::class);
         $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->_objectManagerMock->expects($this->any())->method('get')->will($this->returnValue($this->_filterMock));
+        $this->_objectManagerMock->expects($this->any())->method('get')->willReturn($this->_filterMock);
         $this->_model = new \Magento\Cms\Model\Template\FilterProvider($this->_objectManagerMock);
     }
 
@@ -51,7 +51,7 @@ class FilterProviderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPageFilterInnerCache()
     {
-        $this->_objectManagerMock->expects($this->once())->method('get')->will($this->returnValue($this->_filterMock));
+        $this->_objectManagerMock->expects($this->once())->method('get')->willReturn($this->_filterMock);
         $this->_model->getPageFilter();
         $this->_model->getPageFilter();
     }
@@ -65,7 +65,7 @@ class FilterProviderTest extends \PHPUnit\Framework\TestCase
 
         $someClassMock = $this->createMock('SomeClass');
         $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->once())->method('get')->will($this->returnValue($someClassMock));
+        $objectManagerMock->expects($this->once())->method('get')->willReturn($someClassMock);
         $model = new \Magento\Cms\Model\Template\FilterProvider($objectManagerMock, 'SomeClass', 'SomeClass');
         $model->getPageFilter();
     }

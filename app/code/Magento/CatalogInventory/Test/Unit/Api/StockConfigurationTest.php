@@ -88,7 +88,7 @@ class StockConfigurationTest extends \PHPUnit\Framework\TestCase
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $store
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertTrue($this->stockConfiguration->isShowOutOfStock());
     }
 
@@ -102,7 +102,7 @@ class StockConfigurationTest extends \PHPUnit\Framework\TestCase
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $store
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertTrue($this->stockConfiguration->isAutoReturnEnabled());
     }
 
@@ -116,7 +116,7 @@ class StockConfigurationTest extends \PHPUnit\Framework\TestCase
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $store
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertTrue($this->stockConfiguration->isDisplayProductStockStatus());
     }
 }

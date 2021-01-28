@@ -92,7 +92,7 @@ class OverviewTest extends \PHPUnit\Framework\TestCase
     {
         $rateMock = $this->createMock(\Magento\Quote\Model\Quote\Address\Rate::class);
         $this->addressMock->expects($this->once())
-            ->method('getShippingMethod')->will($this->returnValue('shipping method'));
+            ->method('getShippingMethod')->willReturn('shipping method');
         $this->addressMock->expects($this->once())
             ->method('getShippingRateByCode')
             ->with('shipping method')
@@ -104,7 +104,7 @@ class OverviewTest extends \PHPUnit\Framework\TestCase
     public function testGetShippingRateByCodeWithEmptyRate()
     {
         $this->addressMock->expects($this->once())
-            ->method('getShippingMethod')->will($this->returnValue('shipping method'));
+            ->method('getShippingMethod')->willReturn('shipping method');
         $this->addressMock->expects($this->once())
             ->method('getShippingRateByCode')
             ->with('shipping method')

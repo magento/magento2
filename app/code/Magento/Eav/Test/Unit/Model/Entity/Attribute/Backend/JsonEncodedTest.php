@@ -37,22 +37,22 @@ class JsonEncodedTest extends \PHPUnit\Framework\TestCase
 
         $this->serializerMock->expects($this->any())
             ->method('serialize')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($value) {
                         return json_encode($value);
                     }
-                )
+                
             );
 
         $this->serializerMock->expects($this->any())
             ->method('unserialize')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($value) {
                         return json_decode($value, true);
                     }
-                )
+                
             );
 
         $this->attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
@@ -62,7 +62,7 @@ class JsonEncodedTest extends \PHPUnit\Framework\TestCase
 
         $this->attributeMock->expects($this->any())
             ->method('getAttributeCode')
-            ->will($this->returnValue('json_encoded'));
+            ->willReturn('json_encoded');
 
         $this->model = new JsonEncoded($this->serializerMock);
         $this->model->setAttribute($this->attributeMock);

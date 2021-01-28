@@ -32,10 +32,10 @@ class SalesQuoteSaveAfterObserverTest extends \PHPUnit\Framework\TestCase
     {
         $quoteId = 7;
         $observer = $this->createMock(\Magento\Framework\Event\Observer::class);
-        $observer->expects($this->once())->method('getEvent')->will(
-            $this->returnValue(new \Magento\Framework\DataObject(
+        $observer->expects($this->once())->method('getEvent')->willReturn(
+            new \Magento\Framework\DataObject(
                 ['quote' => new \Magento\Framework\DataObject(['is_checkout_cart' => 1, 'id' => $quoteId])]
-            ))
+            )
         );
         $this->checkoutSession->expects($this->once())->method('setQuoteId')->with($quoteId);
 

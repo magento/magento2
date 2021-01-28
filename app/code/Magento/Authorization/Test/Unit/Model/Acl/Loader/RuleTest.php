@@ -44,22 +44,22 @@ class RuleTest extends \PHPUnit\Framework\TestCase
         );
         $this->serializerMock->expects($this->any())
             ->method('serialize')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($value) {
                         return json_encode($value);
                     }
-                )
+                
             );
 
         $this->serializerMock->expects($this->any())
             ->method('unserialize')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($value) {
                         return json_decode($value, true);
                     }
-                )
+                
             );
 
         $this->aclDataCacheMock = $this->createMock(\Magento\Framework\Acl\Data\CacheInterface::class);
@@ -83,8 +83,8 @@ class RuleTest extends \PHPUnit\Framework\TestCase
         $this->aclDataCacheMock->expects($this->once())
             ->method('load')
             ->with(\Magento\Authorization\Model\Acl\Loader\Rule::ACL_RULE_CACHE_KEY)
-            ->will(
-                $this->returnValue(
+            ->willReturn(
+                
                     json_encode(
                         [
                             ['role_id' => 1, 'resource_id' => 'Magento_Backend::all', 'permission' => 'allow'],
@@ -92,11 +92,11 @@ class RuleTest extends \PHPUnit\Framework\TestCase
                             ['role_id' => 3, 'resource_id' => 1, 'permission' => 'deny'],
                         ]
                     )
-                )
+                
             );
 
         $aclMock = $this->createMock(\Magento\Framework\Acl::class);
-        $aclMock->expects($this->any())->method('has')->will($this->returnValue(true));
+        $aclMock->expects($this->any())->method('has')->willReturn(true);
         $aclMock->expects($this->at(1))->method('allow')->with('1', null, null);
         $aclMock->expects($this->at(2))->method('allow')->with('1', 'Magento_Backend::all', null);
         $aclMock->expects($this->at(4))->method('allow')->with('2', 1, null);

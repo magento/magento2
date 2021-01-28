@@ -56,10 +56,11 @@ class CommentsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testGetCommentsWrongEntityException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $entity = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Product::class
         );

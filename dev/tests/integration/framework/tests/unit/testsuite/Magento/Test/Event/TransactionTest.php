@@ -40,7 +40,7 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
             ->setConstructorArgs([$this->_eventManager])
             ->getMock();
 
-        $this->_object->expects($this->any())->method('_getConnection')->will($this->returnValue($this->_adapter));
+        $this->_object->expects($this->any())->method('_getConnection')->willReturn($this->_adapter);
     }
 
     /**
@@ -61,8 +61,8 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
             'fireEvent'
         )->with(
             $eventName
-        )->will(
-            $this->returnCallback($callback)
+        )->willReturnCallback(
+            $callback
         );
     }
 
@@ -95,8 +95,8 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
             'fireEvent'
         )->with(
             $eventName
-        )->will(
-            $this->returnCallback($callback)
+        )->willReturnCallback(
+            $callback
         );
     }
 

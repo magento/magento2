@@ -63,7 +63,7 @@ abstract class AbstractFactoryTestCase extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($instanceMock));
+            ->willReturn($instanceMock);
         $this->assertSame($instanceMock, $this->factory->create());
     }
 }

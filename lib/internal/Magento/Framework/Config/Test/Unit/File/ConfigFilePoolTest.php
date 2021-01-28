@@ -39,11 +39,12 @@ class ConfigFilePoolTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage File config key does not exist.
      */
     public function testGetPathException()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('File config key does not exist.');
+
         $fileKey = 'not_existing';
         $this->configFilePool->getPath($fileKey);
     }

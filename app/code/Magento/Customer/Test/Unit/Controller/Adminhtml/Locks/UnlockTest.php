@@ -116,7 +116,7 @@ class UnlockTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with($this->equalTo('customer_id'))
-            ->will($this->returnValue($customerId));
+            ->willReturn($customerId);
         $this->authenticationMock->expects($this->once())->method('unlock')->with($customerId);
         $this->messageManagerMock->expects($this->once())->method('addSuccessMessage');
         $this->redirectMock->expects($this->once())
@@ -136,7 +136,7 @@ class UnlockTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with($this->equalTo('customer_id'))
-            ->will($this->returnValue($customerId));
+            ->willReturn($customerId);
         $this->authenticationMock->expects($this->once())
             ->method('unlock')
             ->with($customerId)

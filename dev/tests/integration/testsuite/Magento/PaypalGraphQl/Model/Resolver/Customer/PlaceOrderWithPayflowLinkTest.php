@@ -80,7 +80,7 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
         $this->payflowRequest = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $requestFactory->expects($this->any())->method('create')->will($this->returnValue($this->payflowRequest));
+        $requestFactory->expects($this->any())->method('create')->willReturn($this->payflowRequest);
 
         $this->objectManager->addSharedInstance($this->gateway, Gateway::class);
     }

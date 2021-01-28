@@ -69,7 +69,7 @@ class RouteParamsResolverTest extends \PHPUnit\Framework\TestCase
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeCode
             )
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->storeManagerMock->expects($this->any())->method('hasSingleStore')->willReturn(false);
 
         /** @var \PHPUnit\Framework\MockObject\MockObject $routeParamsResolverMock */
@@ -101,7 +101,7 @@ class RouteParamsResolverTest extends \PHPUnit\Framework\TestCase
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeCode
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->storeManagerMock->expects($this->any())->method('hasSingleStore')->willReturn(false);
 
@@ -134,7 +134,7 @@ class RouteParamsResolverTest extends \PHPUnit\Framework\TestCase
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeCode
             )
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->storeManagerMock->expects($this->any())->method('hasSingleStore')->willReturn(true);
 
         /** @var \PHPUnit\Framework\MockObject\MockObject $routeParamsResolverMock */
@@ -166,7 +166,7 @@ class RouteParamsResolverTest extends \PHPUnit\Framework\TestCase
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeCode
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->storeManagerMock->expects($this->any())->method('hasSingleStore')->willReturn(false);
 

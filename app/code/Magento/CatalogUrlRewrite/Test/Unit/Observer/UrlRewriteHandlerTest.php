@@ -184,7 +184,7 @@ class UrlRewriteHandlerTest extends \PHPUnit\Framework\TestCase
         $productCollection->expects($this->any())->method('addStoreFilter')->willReturnSelf();
         $productCollection->expects($this->any())->method('addAttributeToSelect')->willReturnSelf();
         $iterator = new \ArrayIterator([]);
-        $productCollection->expects($this->any())->method('getIterator')->will($this->returnValue($iterator));
+        $productCollection->expects($this->any())->method('getIterator')->willReturn($iterator);
 
         $this->collectionFactoryMock->expects($this->any())->method('create')->willReturn($productCollection);
 

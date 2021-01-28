@@ -52,7 +52,7 @@ class AmountFactoryTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             )
-            ->will($this->returnValue($this->amountMock));
+            ->willReturn($this->amountMock);
         $this->assertEquals(
             $this->amountMock,
             $this->factory->create('this-is-float-amount', ['this-is-array-of-adjustments'])
@@ -62,10 +62,11 @@ class AmountFactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Test method create
      *
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(
@@ -77,7 +78,7 @@ class AmountFactoryTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             )
-            ->will($this->returnValue(new \stdClass()));
+            ->willReturn(new \stdClass());
         $this->assertEquals(
             $this->amountMock,
             $this->factory->create('this-is-float-amount', ['this-is-array-of-adjustments'])

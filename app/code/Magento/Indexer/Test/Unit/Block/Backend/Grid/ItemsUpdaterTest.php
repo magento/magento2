@@ -21,7 +21,7 @@ class ItemsUpdaterTest extends \PHPUnit\Framework\TestCase
         $auth->expects($this->once())
             ->method('isAllowed')
             ->with('Magento_Indexer::changeMode')
-            ->will($this->returnValue($argument));
+            ->willReturn($argument);
 
         $model = new \Magento\Indexer\Block\Backend\Grid\ItemsUpdater($auth);
         $params = $model->update($params);

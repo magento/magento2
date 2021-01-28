@@ -74,11 +74,12 @@ class CartTotalRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage No such entity
      */
     public function testGetTotalsWithAbsentQuote()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('No such entity');
+
         $cartId = 9999999999;
         $requestData = ['cartId' => $cartId];
         $this->_webApiCall($this->getServiceInfoForTotalsService($cartId), $requestData);

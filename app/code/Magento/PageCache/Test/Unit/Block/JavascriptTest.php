@@ -111,16 +111,16 @@ class JavascriptTest extends \PHPUnit\Framework\TestCase
             ->willReturn($isSecure);
         $this->requestMock->expects($this->once())
             ->method('getRouteName')
-            ->will($this->returnValue('route'));
+            ->willReturn('route');
         $this->requestMock->expects($this->once())
             ->method('getControllerName')
-            ->will($this->returnValue('controller'));
+            ->willReturn('controller');
         $this->requestMock->expects($this->once())
             ->method('getActionName')
-            ->will($this->returnValue('action'));
+            ->willReturn('action');
         $this->requestMock->expects($this->once())
             ->method('getRequestUri')
-            ->will($this->returnValue('uri'));
+            ->willReturn('uri');
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
             ->willReturn($url);
@@ -172,19 +172,19 @@ class JavascriptTest extends \PHPUnit\Framework\TestCase
 
         $this->requestMock->expects($this->once())
             ->method('getRouteName')
-            ->will($this->returnValue($route));
+            ->willReturn($route);
 
         $this->requestMock->expects($this->once())
             ->method('getControllerName')
-            ->will($this->returnValue($controller));
+            ->willReturn($controller);
 
         $this->requestMock->expects($this->once())
             ->method('getActionName')
-            ->will($this->returnValue($action));
+            ->willReturn($action);
 
         $this->requestMock->expects($this->once())
             ->method('getRequestUri')
-            ->will($this->returnValue($uri));
+            ->willReturn($uri);
 
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')

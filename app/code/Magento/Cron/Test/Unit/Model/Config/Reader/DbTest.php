@@ -53,7 +53,7 @@ class DbTest extends \PHPUnit\Framework\TestCase
         $this->config->expects($this->once())
             ->method('get')
             ->with('system', 'default')
-            ->will($this->returnValue($data));
+            ->willReturn($data);
         $expected = [
             'default' => [
                 'job1' => ['schedule' => $job1['schedule']['cron_expr']],

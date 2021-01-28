@@ -243,11 +243,12 @@ class WriterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\FileSystemException
-     * @expectedExceptionMessage The "env.php" deployment config file isn't writable.
      */
     public function testSaveConfigException()
     {
+        $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
+        $this->expectExceptionMessage('The "env.php" deployment config file isn\'t writable.');
+
         $exception = new FileSystemException(new Phrase('error when writing file config file'));
 
         $this->configFilePool->method('getPaths')

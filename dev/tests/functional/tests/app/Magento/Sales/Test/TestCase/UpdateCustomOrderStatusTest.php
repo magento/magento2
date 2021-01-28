@@ -152,7 +152,7 @@ class UpdateCustomOrderStatusTest extends Injectable
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         if ($this->order->hasData('id')) {
             $this->orderIndex->open()->getSalesOrderGrid()->massaction([['id' => $this->order->getId()]], 'Cancel');

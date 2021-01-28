@@ -82,13 +82,13 @@ class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->store->expects($this->any())
             ->method('getFrontendName')
-            ->will($this->returnValue('frontendName'));
+            ->willReturn('frontendName');
         $this->store->expects($this->any())
             ->method('getFrontendName')
-            ->will($this->returnValue('storeId'));
+            ->willReturn('storeId');
         $this->storeManager->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->store));
+            ->willReturn($this->store);
 
         $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->disableOriginalConstructor()
@@ -177,23 +177,23 @@ class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
         $filterTemplate->expects($this->never())
             ->method('setUseSessionInUrl')
             ->with(false)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $filterTemplate->expects($this->once())
             ->method('setPlainTemplateMode')
             ->with($templateType === \Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $filterTemplate->expects($this->once())
             ->method('setIsChildTemplate')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $filterTemplate->expects($this->once())
             ->method('setDesignParams')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $filterTemplate->expects($this->any())
             ->method('setStoreId')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $filterTemplate->expects($this->any())
             ->method('getStoreId')
-            ->will($this->returnValue($storeId));
+            ->willReturn($storeId);
         $filterTemplate->expects($this->exactly(2))
             ->method('setStrictMode')
             ->withConsecutive([$this->equalTo(true)], [$this->equalTo(false)])
@@ -223,21 +223,21 @@ class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
         ];
         $model->expects($this->any())
             ->method('getDesignParams')
-            ->will($this->returnValue($designParams));
+            ->willReturn($designParams);
 
         $model->expects($this->atLeastOnce())
             ->method('isPlain')
-            ->will($this->returnValue($templateType === \Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT));
+            ->willReturn($templateType === \Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT);
 
         $preparedTemplateText = $expectedResult; //'prepared text';
         $model->expects($this->once())
             ->method('getTemplateText')
-            ->will($this->returnValue($preparedTemplateText));
+            ->willReturn($preparedTemplateText);
 
         $filterTemplate->expects($this->once())
             ->method('filter')
             ->with($preparedTemplateText)
-            ->will($this->returnValue($expectedResult));
+            ->willReturn($expectedResult);
 
         $this->assertEquals($expectedResult, $model->getProcessedTemplate($variables));
     }
@@ -267,19 +267,19 @@ class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
 
         $filterTemplate->expects($this->once())
             ->method('setPlainTemplateMode')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $filterTemplate->expects($this->once())
             ->method('setIsChildTemplate')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $filterTemplate->expects($this->once())
             ->method('setDesignParams')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $filterTemplate->expects($this->any())
             ->method('setStoreId')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $filterTemplate->expects($this->any())
             ->method('getStoreId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $filterTemplate->expects($this->exactly(2))
             ->method('setStrictMode')
             ->withConsecutive([$this->equalTo(false)], [$this->equalTo(true)])
@@ -301,7 +301,7 @@ class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
         ];
         $model->expects($this->any())
             ->method('getDesignParams')
-            ->will($this->returnValue($designParams));
+            ->willReturn($designParams);
         $model->setTemplateFilter($filterTemplate);
         $model->setTemplateType(\Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT);
         $model->setTemplateId('abc');
@@ -368,10 +368,10 @@ class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
         ];
         $model->expects($this->once())
             ->method('getDesignParams')
-            ->will($this->returnValue($designParams));
+            ->willReturn($designParams);
         $this->assetRepo->method('getUrlWithParams')
             ->with(\Magento\Email\Model\AbstractTemplate::DEFAULT_LOGO_FILE_ID, $designParams)
-            ->will($this->returnValue($value));
+            ->willReturn($value);
         $this->assertEquals($value, $model->getDefaultEmailLogo());
     }
 

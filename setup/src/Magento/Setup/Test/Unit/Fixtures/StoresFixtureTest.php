@@ -272,14 +272,14 @@ class StoresFixtureTest extends \PHPUnit\Framework\TestCase
         $this->fixtureModelMock
             ->expects($this->exactly(4))
             ->method('getValue')
-            ->will($this->returnValueMap(
+            ->willReturnMap(
                 [
                     ['websites', 1, 3],
                     ['store_groups', 1, 6],
                     ['store_views', 1, 12],
                     ['assign_entities_to_all_websites', false]
                 ]
-            ));
+            );
 
         $this->model = new StoresFixture(
             $this->fixtureModelMock,

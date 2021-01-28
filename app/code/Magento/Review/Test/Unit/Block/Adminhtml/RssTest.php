@@ -95,25 +95,25 @@ class RssTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $storeModel = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->storeManagerInterface->expects($this->once())->method('getStore')->will($this->returnValue($storeModel));
+        $this->storeManagerInterface->expects($this->once())->method('getStore')->willReturn($storeModel);
         $storeModel->expects($this->once())->method('getName')
-            ->will($this->returnValue($rssData['entries']['description']['store']));
-        $this->urlBuilder->expects($this->any())->method('getUrl')->will($this->returnValue($rssUrl));
-        $this->urlBuilder->expects($this->once())->method('setScope')->will($this->returnSelf());
-        $productModel->expects($this->any())->method('getStoreId')->will($this->returnValue(1));
-        $productModel->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $productModel->expects($this->once())->method('getReviewId')->will($this->returnValue(1));
-        $productModel->expects($this->any())->method('getNickName')->will($this->returnValue('Product Nick'));
+            ->willReturn($rssData['entries']['description']['store']);
+        $this->urlBuilder->expects($this->any())->method('getUrl')->willReturn($rssUrl);
+        $this->urlBuilder->expects($this->once())->method('setScope')->willReturnSelf();
+        $productModel->expects($this->any())->method('getStoreId')->willReturn(1);
+        $productModel->expects($this->any())->method('getId')->willReturn(1);
+        $productModel->expects($this->once())->method('getReviewId')->willReturn(1);
+        $productModel->expects($this->any())->method('getNickName')->willReturn('Product Nick');
         $productModel->expects($this->any())->method('getName')
-            ->will($this->returnValue($rssData['entries']['description']['name']));
+            ->willReturn($rssData['entries']['description']['name']);
         $productModel->expects($this->once())->method('getDetail')
-            ->will($this->returnValue($rssData['entries']['description']['review']));
+            ->willReturn($rssData['entries']['description']['review']);
         $productModel->expects($this->once())->method('getTitle')
-            ->will($this->returnValue($rssData['entries']['description']['summary']));
+            ->willReturn($rssData['entries']['description']['summary']);
         $productModel->expects($this->any())->method('getProductUrl')
-            ->will($this->returnValue('http://product.magento.com'));
+            ->willReturn('http://product.magento.com');
         $this->rss->expects($this->once())->method('getProductCollection')
-            ->will($this->returnValue([$productModel]));
+            ->willReturn([$productModel]);
 
         $data = $this->block->getRssData();
 

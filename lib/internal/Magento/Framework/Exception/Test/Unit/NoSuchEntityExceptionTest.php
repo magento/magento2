@@ -39,7 +39,7 @@ class NoSuchEntityExceptionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         \Magento\Framework\Phrase::setRenderer($this->defaultRenderer);
     }
@@ -52,7 +52,7 @@ class NoSuchEntityExceptionTest extends \PHPUnit\Framework\TestCase
         $this->renderedMessage = 'rendered message';
         $this->rendererMock->expects($this->once())
             ->method('render')
-            ->will($this->returnValue($this->renderedMessage));
+            ->willReturn($this->renderedMessage);
         \Magento\Framework\Phrase::setRenderer($this->rendererMock);
         $message = 'message %1 %2';
         $params = [

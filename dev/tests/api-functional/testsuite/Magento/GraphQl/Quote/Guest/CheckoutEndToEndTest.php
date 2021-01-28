@@ -396,7 +396,7 @@ QUERY;
         self::assertNotEmpty($response['placeOrder']['order']['order_number']);
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->deleteQuote();
         $this->deleteOrder();

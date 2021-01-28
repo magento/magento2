@@ -28,11 +28,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->with($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, null)
-            ->will($this->returnValue($configValue));
+            ->willReturn($configValue);
         $scopeConfigMock->expects($this->any())
             ->method('isSetFlag')
             ->with($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, null)
-            ->will($this->returnValue($configValue));
+            ->willReturn($configValue);
 
         $taxData = $this->createMock(\Magento\Tax\Helper\Data::class);
 

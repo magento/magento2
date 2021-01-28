@@ -59,7 +59,7 @@ class SourceTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * teardown
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
     }

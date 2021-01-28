@@ -235,7 +235,7 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(Quote::class)
             ->willReturn($this->quoteSessionMock);
-        $this->quoteSessionMock->expects($this->once())->method('clearStorage')->will($this->returnSelf());
+        $this->quoteSessionMock->expects($this->once())->method('clearStorage')->willReturnSelf();
     }
 
     /**
@@ -326,7 +326,7 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
         $this->quoteSessionMock->expects($this->once())
             ->method('setUseOldShippingMethod')
             ->with(true)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->objectManagerMock->expects($this->at(2))
             ->method('get')
             ->with(Create::class)

@@ -34,8 +34,8 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
         )->with(
             'etc',
             'Magento_Elasticsearch'
-        )->will(
-            $this->returnValue('schema_dir')
+        )->willReturn(
+            'schema_dir'
         );
 
         $objectManager = new ObjectManagerHelper($this);

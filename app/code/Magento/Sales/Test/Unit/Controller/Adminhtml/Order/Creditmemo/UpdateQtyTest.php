@@ -146,31 +146,31 @@ class UpdateQtyTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->contextMock->expects($this->any())
             ->method('getHelper')
-            ->will($this->returnValue($this->helperMock));
+            ->willReturn($this->helperMock);
         $this->actionFlagMock = $this->getMockBuilder(\Magento\Framework\App\ActionFlag::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->any())
             ->method('getSession')
-            ->will($this->returnValue($this->sessionMock));
+            ->willReturn($this->sessionMock);
         $this->contextMock->expects($this->any())
             ->method('getActionFlag')
-            ->will($this->returnValue($this->actionFlagMock));
+            ->willReturn($this->actionFlagMock);
         $this->contextMock->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
         $this->contextMock->expects($this->any())
             ->method('getResponse')
-            ->will($this->returnValue($this->responseMock));
+            ->willReturn($this->responseMock);
         $this->contextMock->expects($this->any())
             ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManagerMock));
+            ->willReturn($this->objectManagerMock);
         $this->contextMock->expects($this->any())
             ->method('getTitle')
-            ->will($this->returnValue($titleMock));
+            ->willReturn($titleMock);
         $this->contextMock->expects($this->any())
             ->method('getMessageManager')
-            ->will($this->returnValue($this->messageManagerMock));
+            ->willReturn($this->messageManagerMock);
         $this->loaderMock = $this->getMockBuilder(\Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader::class)
             ->disableOriginalConstructor()
             ->getMock();

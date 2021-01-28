@@ -40,7 +40,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->dataContainerMock->expects($this->once())
             ->method('get')
             ->with($eventName, $this->equalTo([]))
-            ->will($this->returnValue($observers));
+            ->willReturn($observers);
 
         $result = $this->config->getObservers($eventName);
         $this->assertEquals($observers, $result);

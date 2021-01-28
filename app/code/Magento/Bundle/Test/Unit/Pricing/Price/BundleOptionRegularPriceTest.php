@@ -77,7 +77,7 @@ class BundleOptionRegularPriceTest extends \PHPUnit\Framework\TestCase
         $collection = $this->createMock(Collection::class);
         $this->bundleOptionsMock->expects($this->any())
             ->method('getOptions')
-            ->will($this->returnValue($collection));
+            ->willReturn($collection);
         $this->assertEquals($collection, $this->bundleOptionRegularPrice->getOptions());
     }
 
@@ -93,7 +93,7 @@ class BundleOptionRegularPriceTest extends \PHPUnit\Framework\TestCase
         $selection = $this->createMock(Selection::class);
         $this->bundleOptionsMock->expects($this->any())
             ->method('getOptionSelectionAmount')
-            ->will($this->returnValue($selectionAmount))
+            ->willReturn($selectionAmount)
             ->with($product, $selection, true);
         $this->assertEquals($selectionAmount, $this->bundleOptionRegularPrice->getOptionSelectionAmount($selection));
     }
@@ -109,7 +109,7 @@ class BundleOptionRegularPriceTest extends \PHPUnit\Framework\TestCase
         $this->bundleCalculatorMock->expects($this->once())
             ->method('getOptionsAmount')
             ->with($this->equalTo($this->saleableItemMock))
-            ->will($this->returnValue($amountMock));
+            ->willReturn($amountMock);
         $this->assertSame($amountMock, $this->bundleOptionRegularPrice->getAmount());
     }
 
@@ -121,7 +121,7 @@ class BundleOptionRegularPriceTest extends \PHPUnit\Framework\TestCase
     public function testGetValue()
     {
         $value = 1;
-        $this->bundleOptionsMock->expects($this->any())->method('calculateOptions')->will($this->returnValue($value));
+        $this->bundleOptionsMock->expects($this->any())->method('calculateOptions')->willReturn($value);
         $this->assertEquals($value, $this->bundleOptionRegularPrice->getValue());
     }
 }

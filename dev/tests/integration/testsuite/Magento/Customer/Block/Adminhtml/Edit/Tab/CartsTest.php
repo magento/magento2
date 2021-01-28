@@ -24,7 +24,7 @@ class CartsTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\ObjectManagerInterface */
     private $_objectManager;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_customerRepository = $this->_objectManager->get(

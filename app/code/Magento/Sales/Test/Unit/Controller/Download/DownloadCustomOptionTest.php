@@ -102,13 +102,13 @@ class DownloadCustomOptionTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getParam'])
             ->getMock();
         $requestMock->expects($this->any())->method('getParam')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         ['id', null, self::OPTION_ID],
                         ['key', null, self::SECRET_KEY],
                     ]
-                )
+                
             );
 
         $this->itemOptionMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\Option::class)
@@ -126,13 +126,13 @@ class DownloadCustomOptionTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
         $objectManagerMock->expects($this->any())->method('create')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         [\Magento\Quote\Model\Quote\Item\Option::class, $this->itemOptionMock],
                         [\Magento\Catalog\Model\Product\Option::class, $this->productOptionMock],
                     ]
-                )
+                
             );
 
         $contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)

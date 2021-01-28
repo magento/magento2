@@ -432,8 +432,8 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
             $this->exactly($expectedWrites)
         )->method(
             'write'
-        )->will(
-            $this->returnCallback($streamWriteCallback)
+        )->willReturnCallback(
+            $streamWriteCallback
         );
 
         $checkFileCallback = function ($file) use (&$currentFile) {

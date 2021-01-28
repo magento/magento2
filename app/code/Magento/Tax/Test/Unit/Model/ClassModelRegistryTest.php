@@ -46,7 +46,7 @@ class ClassModelRegistryTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->classModelFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->classModelMock));
+            ->willReturn($this->classModelMock);
     }
 
     /**
@@ -60,12 +60,12 @@ class ClassModelRegistryTest extends \PHPUnit\Framework\TestCase
         $this->classModelMock
             ->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->classModelMock->expects($this->once())
             ->method('load')
             ->with($taxClassId)
-            ->will($this->returnValue($this->classModelMock));
+            ->willReturn($this->classModelMock);
 
         $this->taxRuleRegistry->retrieve($taxClassId);
     }
@@ -77,12 +77,12 @@ class ClassModelRegistryTest extends \PHPUnit\Framework\TestCase
         $this->classModelMock
             ->expects($this->exactly(2))
             ->method('getId')
-            ->will($this->returnValue($taxClassId));
+            ->willReturn($taxClassId);
 
         $this->classModelMock->expects($this->once())
             ->method('load')
             ->with($taxClassId)
-            ->will($this->returnValue($this->classModelMock));
+            ->willReturn($this->classModelMock);
 
         $this->assertEquals($this->classModelMock, $this->taxRuleRegistry->retrieve($taxClassId));
     }

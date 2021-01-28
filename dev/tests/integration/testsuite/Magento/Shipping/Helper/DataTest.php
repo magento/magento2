@@ -109,7 +109,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $order = $objectManager->create(\Magento\Sales\Model\Order::class);
         $order->setProtectCode($code);
         $orderRepository = $this->createMock(\Magento\Sales\Api\OrderRepositoryInterface::class);
-        $orderRepository->expects($this->atLeastOnce())->method('get')->will($this->returnValue($order));
+        $orderRepository->expects($this->atLeastOnce())->method('get')->willReturn($order);
         return $orderRepository;
     }
 

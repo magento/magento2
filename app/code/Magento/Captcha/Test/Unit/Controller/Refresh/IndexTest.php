@@ -69,11 +69,11 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         $this->flagMock = $this->createMock(\Magento\Framework\App\ActionFlag::class);
         $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
 
-        $this->contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
-        $this->contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewMock));
-        $this->contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
-        $this->contextMock->expects($this->any())->method('getActionFlag')->will($this->returnValue($this->flagMock));
-        $this->viewMock->expects($this->any())->method('getLayout')->will($this->returnValue($this->layoutMock));
+        $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
+        $this->contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
+        $this->contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
+        $this->contextMock->expects($this->any())->method('getActionFlag')->willReturn($this->flagMock);
+        $this->viewMock->expects($this->any())->method('getLayout')->willReturn($this->layoutMock);
 
         $this->model = new \Magento\Captcha\Controller\Refresh\Index(
             $this->contextMock,
@@ -95,25 +95,25 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         $blockMethods = ['setFormId', 'setIsAjax', 'toHtml'];
         $blockMock = $this->createPartialMock(\Magento\Captcha\Block\Captcha::class, $blockMethods);
 
-        $this->requestMock->expects($this->any())->method('getPost')->with('formId')->will($this->returnValue($formId));
+        $this->requestMock->expects($this->any())->method('getPost')->with('formId')->willReturn($formId);
         $this->requestMock->expects($this->exactly($callsNumber))->method('getContent')
-            ->will($this->returnValue(json_encode($content)));
+            ->willReturn(json_encode($content));
         $this->captchaHelperMock->expects($this->any())->method('getCaptcha')->with($formId)
-            ->will($this->returnValue($this->captchaMock));
+            ->willReturn($this->captchaMock);
         $this->captchaMock->expects($this->once())->method('generate');
-        $this->captchaMock->expects($this->once())->method('getBlockName')->will($this->returnValue('block'));
-        $this->captchaMock->expects($this->once())->method('getImgSrc')->will($this->returnValue('source'));
+        $this->captchaMock->expects($this->once())->method('getBlockName')->willReturn('block');
+        $this->captchaMock->expects($this->once())->method('getImgSrc')->willReturn('source');
         $this->layoutMock->expects($this->once())->method('createBlock')->with('block')
-            ->will($this->returnValue($blockMock));
-        $blockMock->expects($this->any())->method('setFormId')->with($formId)->will($this->returnValue($blockMock));
-        $blockMock->expects($this->any())->method('setIsAjax')->with(true)->will($this->returnValue($blockMock));
+            ->willReturn($blockMock);
+        $blockMock->expects($this->any())->method('setFormId')->with($formId)->willReturn($blockMock);
+        $blockMock->expects($this->any())->method('setIsAjax')->with(true)->willReturn($blockMock);
         $blockMock->expects($this->once())->method('toHtml');
         $this->responseMock->expects($this->once())->method('representJson')->with(json_encode($imgSource));
         $this->flagMock->expects($this->once())->method('set')->with('', 'no-postDispatch', true);
         $this->serializerMock->expects($this->exactly($callsNumber))
-            ->method('unserialize')->will($this->returnValue($content));
+            ->method('unserialize')->willReturn($content);
         $this->serializerMock->expects($this->once())
-            ->method('serialize')->will($this->returnValue(json_encode($imgSource)));
+            ->method('serialize')->willReturn(json_encode($imgSource));
 
         $this->model->execute();
     }

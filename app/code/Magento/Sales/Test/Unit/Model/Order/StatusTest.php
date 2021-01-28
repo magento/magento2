@@ -44,7 +44,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
         $this->contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
-            ->will($this->returnValue($this->eventManagerMock));
+            ->willReturn($this->eventManagerMock);
 
         $this->model = $objectManager->getObject(
             \Magento\Sales\Model\Order\Status::class,
@@ -68,11 +68,11 @@ class StatusTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock->expects($this->once())
             ->method('checkIsStateLast')
             ->with($this->equalTo($params['state']))
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->resourceMock->expects($this->once())
             ->method('checkIsStatusUsed')
             ->with($this->equalTo($params['status']))
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch')
             ->with($this->equalTo('sales_order_status_unassign'), $this->equalTo($params));
@@ -99,7 +99,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock->expects($this->once())
             ->method('checkIsStateLast')
             ->with($this->equalTo($params['state']))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertEquals($this->model, $this->model->unassignState($params['state']));
     }
 
@@ -119,11 +119,11 @@ class StatusTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock->expects($this->once())
             ->method('checkIsStateLast')
             ->with($this->equalTo($params['state']))
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->resourceMock->expects($this->once())
             ->method('checkIsStatusUsed')
             ->with($this->equalTo($params['status']))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertEquals($this->model, $this->model->unassignState($params['state']));
     }
 

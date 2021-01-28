@@ -46,7 +46,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Product::class,
             ['getCanShowPrice', 'getId', '__wakeup']
         );
-        $this->_product->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $this->_product->expects($this->any())->method('getId')->willReturn(1);
         $this->_registry = $this->getMockBuilder(
             \Magento\Framework\Registry::class
         )->disableOriginalConstructor()->setMethods(
@@ -61,18 +61,18 @@ class PriceTest extends \PHPUnit\Framework\TestCase
 
     public function testSetTemplatePriceAlertAllowed()
     {
-        $this->_helper->expects($this->once())->method('isPriceAlertAllowed')->will($this->returnValue(true));
+        $this->_helper->expects($this->once())->method('isPriceAlertAllowed')->willReturn(true);
         $this->_helper->expects(
             $this->once()
         )->method(
             'getSaveUrl'
         )->with(
             'price'
-        )->will(
-            $this->returnValue('http://url')
+        )->willReturn(
+            'http://url'
         );
 
-        $this->_product->expects($this->once())->method('getCanShowPrice')->will($this->returnValue(true));
+        $this->_product->expects($this->once())->method('getCanShowPrice')->willReturn(true);
 
         $this->_registry->expects(
             $this->any()
@@ -80,8 +80,8 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             'registry'
         )->with(
             'current_product'
-        )->will(
-            $this->returnValue($this->_product)
+        )->willReturn(
+            $this->_product
         );
 
         $this->_block->setLayout($this->_layout);
@@ -99,10 +99,10 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetTemplatePriceAlertNotAllowed($priceAllowed, $showProductPrice)
     {
-        $this->_helper->expects($this->once())->method('isPriceAlertAllowed')->will($this->returnValue($priceAllowed));
+        $this->_helper->expects($this->once())->method('isPriceAlertAllowed')->willReturn($priceAllowed);
         $this->_helper->expects($this->never())->method('getSaveUrl');
 
-        $this->_product->expects($this->any())->method('getCanShowPrice')->will($this->returnValue($showProductPrice));
+        $this->_product->expects($this->any())->method('getCanShowPrice')->willReturn($showProductPrice);
 
         $this->_registry->expects(
             $this->any()
@@ -110,8 +110,8 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             'registry'
         )->with(
             'current_product'
-        )->will(
-            $this->returnValue($this->_product)
+        )->willReturn(
+            $this->_product
         );
 
         $this->_block->setLayout($this->_layout);
@@ -135,7 +135,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
 
     public function testSetTemplateNoProduct()
     {
-        $this->_helper->expects($this->once())->method('isPriceAlertAllowed')->will($this->returnValue(true));
+        $this->_helper->expects($this->once())->method('isPriceAlertAllowed')->willReturn(true);
         $this->_helper->expects($this->never())->method('getSaveUrl');
 
         $this->_registry->expects(
@@ -144,8 +144,8 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             'registry'
         )->with(
             'current_product'
-        )->will(
-            $this->returnValue(null)
+        )->willReturn(
+            null
         );
 
         $this->_block->setLayout($this->_layout);

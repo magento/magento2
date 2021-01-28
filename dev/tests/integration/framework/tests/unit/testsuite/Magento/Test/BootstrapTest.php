@@ -131,7 +131,7 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
         ];
         $this->_settings->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap($settingsMap));
+            ->willReturnMap($settingsMap);
         $memoryBootstrap = $this->createPartialMock(
             \Magento\TestFramework\Bootstrap\Memory::class,
             ['activateStatsDisplaying', 'activateLimitValidation']
@@ -141,7 +141,7 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
         $this->memoryFactory->expects($this->once())
             ->method('create')
             ->with($memUsageLimit, $memLeakLimit)
-            ->will($this->returnValue($memoryBootstrap));
+            ->willReturn($memoryBootstrap);
 
         $this->_docBlockBootstrap->expects($this->once())
             ->method('registerAnnotations')
@@ -163,7 +163,7 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
         $this->memoryFactory->expects($this->once())
             ->method('create')
             ->with(0, 0)
-            ->will($this->returnValue($memoryBootstrap));
+            ->willReturn($memoryBootstrap);
 
         $settingsMap = [
             ['TESTS_PROFILER_FILE', '', 'profiler.csv'],
@@ -172,7 +172,7 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
         ];
         $this->_settings->expects($this->any())
             ->method('getAsFile')
-            ->will($this->returnValueMap($settingsMap));
+            ->willReturnMap($settingsMap);
         $this->_profilerBootstrap
             ->expects($this->once())
             ->method('registerFileProfiler')

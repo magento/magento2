@@ -45,10 +45,10 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->commentModelMock->expects($this->any())
             ->method('hasData')
-            ->will($this->returnValueMap($commentDataMap));
+            ->willReturnMap($commentDataMap);
         $this->commentModelMock->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue($commentData));
+            ->willReturn($commentData);
         $actualWarnings = $this->validator->validate($this->commentModelMock);
         $this->assertEquals($expectedWarnings, $actualWarnings);
     }

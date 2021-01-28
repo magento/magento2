@@ -37,11 +37,11 @@ class SuccessValidatorTest extends \PHPUnit\Framework\TestCase
             '__call'
         )->with(
             'getLastSuccessQuoteId'
-        )->will(
-            $this->returnValue(1)
+        )->willReturn(
+            1
         );
 
-        $checkoutSession->expects($this->at(1))->method('__call')->with('getLastQuoteId')->will($this->returnValue(0));
+        $checkoutSession->expects($this->at(1))->method('__call')->with('getLastQuoteId')->willReturn(0);
 
         $this->assertFalse($this->createSuccessValidator($checkoutSession)->isValid($checkoutSession));
     }
@@ -57,13 +57,13 @@ class SuccessValidatorTest extends \PHPUnit\Framework\TestCase
             '__call'
         )->with(
             'getLastSuccessQuoteId'
-        )->will(
-            $this->returnValue(1)
+        )->willReturn(
+            1
         );
 
-        $checkoutSession->expects($this->at(1))->method('__call')->with('getLastQuoteId')->will($this->returnValue(1));
+        $checkoutSession->expects($this->at(1))->method('__call')->with('getLastQuoteId')->willReturn(1);
 
-        $checkoutSession->expects($this->at(2))->method('__call')->with('getLastOrderId')->will($this->returnValue(0));
+        $checkoutSession->expects($this->at(2))->method('__call')->with('getLastOrderId')->willReturn(0);
 
         $this->assertFalse($this->createSuccessValidator($checkoutSession)->isValid($checkoutSession));
     }
@@ -79,13 +79,13 @@ class SuccessValidatorTest extends \PHPUnit\Framework\TestCase
             '__call'
         )->with(
             'getLastSuccessQuoteId'
-        )->will(
-            $this->returnValue(1)
+        )->willReturn(
+            1
         );
 
-        $checkoutSession->expects($this->at(1))->method('__call')->with('getLastQuoteId')->will($this->returnValue(1));
+        $checkoutSession->expects($this->at(1))->method('__call')->with('getLastQuoteId')->willReturn(1);
 
-        $checkoutSession->expects($this->at(2))->method('__call')->with('getLastOrderId')->will($this->returnValue(1));
+        $checkoutSession->expects($this->at(2))->method('__call')->with('getLastOrderId')->willReturn(1);
 
         $this->assertTrue($this->createSuccessValidator($checkoutSession)->isValid($checkoutSession));
     }

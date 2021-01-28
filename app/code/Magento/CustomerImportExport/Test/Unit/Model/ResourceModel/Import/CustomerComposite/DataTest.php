@@ -42,26 +42,26 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getIterator'
-        )->will(
-            $this->returnValue(new \ArrayIterator($bunchData))
+        )->willReturn(
+            new \ArrayIterator($bunchData)
         );
 
         /** @var $selectMock \Magento\Framework\DB\Select */
         $selectMock = $this->createPartialMock(\Magento\Framework\DB\Select::class, ['from', 'order']);
-        $selectMock->expects($this->any())->method('from')->will($this->returnSelf());
-        $selectMock->expects($this->any())->method('order')->will($this->returnSelf());
+        $selectMock->expects($this->any())->method('from')->willReturnSelf();
+        $selectMock->expects($this->any())->method('order')->willReturnSelf();
 
         /** @var $connectionMock \Magento\Framework\DB\Adapter\AdapterInterface */
         $connectionMock = $this->createPartialMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['select', 'from', 'order', 'query']
         );
-        $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
-        $connectionMock->expects($this->any())->method('query')->will($this->returnValue($statementMock));
+        $connectionMock->expects($this->any())->method('select')->willReturn($selectMock);
+        $connectionMock->expects($this->any())->method('query')->willReturn($statementMock);
 
         /** @var $resourceModelMock \Magento\Framework\App\ResourceConnection */
         $resourceModelMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
-        $resourceModelMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
+        $resourceModelMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
 
         $data = ['resource' => $resourceModelMock, 'entity_type' => $entityType];
 

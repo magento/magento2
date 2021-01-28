@@ -88,21 +88,23 @@ class JsonHexTagTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unable to serialize value.
      */
     public function testSerializeException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unable to serialize value.');
+
         $this->json->serialize(STDOUT);
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unable to unserialize value.
      * @dataProvider unserializeExceptionDataProvider
      */
     public function testUnserializeException($value)
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unable to unserialize value.');
+
         $this->json->unserialize($value);
     }
 

@@ -40,11 +40,11 @@ class OrderIncrementIdCheckerTest extends \PHPUnit\Framework\TestCase
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
-        $this->selectMock->expects($this->any())->method('from')->will($this->returnSelf());
+        $this->selectMock->expects($this->any())->method('from')->willReturnSelf();
         $this->selectMock->expects($this->any())->method('where');
 
         $this->adapterMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
-        $this->adapterMock->expects($this->any())->method('select')->will($this->returnValue($this->selectMock));
+        $this->adapterMock->expects($this->any())->method('select')->willReturn($this->selectMock);
 
         $this->resourceMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Order::class);
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->adapterMock);

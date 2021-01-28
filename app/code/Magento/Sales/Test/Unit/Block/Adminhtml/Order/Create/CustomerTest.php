@@ -11,7 +11,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     {
         $contextMock = $this->createPartialMock(\Magento\Backend\Block\Template\Context::class, ['getAuthorization']);
         $authorizationMock = $this->createMock(\Magento\Framework\AuthorizationInterface::class);
-        $contextMock->expects($this->any())->method('getAuthorization')->will($this->returnValue($authorizationMock));
+        $contextMock->expects($this->any())->method('getAuthorization')->willReturn($authorizationMock);
         $arguments = ['context' => $contextMock];
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -21,7 +21,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $authorizationMock->expects($this->atLeastOnce())
             ->method('isAllowed')
             ->with('Magento_Customer::manage')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->assertEmpty($block->getButtonsHtml());
     }

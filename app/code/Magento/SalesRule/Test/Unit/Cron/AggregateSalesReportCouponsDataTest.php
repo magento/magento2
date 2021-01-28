@@ -57,7 +57,7 @@ class AggregateSalesReportCouponsDataTest extends \PHPUnit\Framework\TestCase
             ->with(0);
         $this->localeDate->expects($this->once())
             ->method('date')
-            ->will($this->returnValue($data));
+            ->willReturn($data);
         $this->reportRule->expects($this->once())
             ->method('aggregate')
             ->with($data);

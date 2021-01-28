@@ -48,7 +48,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->factoryMock = $this->createMock(ReportCollectionFactory::class);
 
         $this->timezoneMock->method('formatDate')
-            ->will($this->returnCallback([$this, 'formatDate']));
+            ->willReturnCallback([$this, 'formatDate']);
 
         $this->collection = new Collection(
             $this->entityFactoryMock,

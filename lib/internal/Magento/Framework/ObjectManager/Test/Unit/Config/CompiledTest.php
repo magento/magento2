@@ -163,7 +163,7 @@ class CompiledTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetArgumentsNotDefined()
     {
-        $this->assertSame(null, $this->compiled->getArguments('class_not_stored_in_config'));
+        $this->assertNull($this->compiled->getArguments('class_not_stored_in_config'));
     }
 
     /**

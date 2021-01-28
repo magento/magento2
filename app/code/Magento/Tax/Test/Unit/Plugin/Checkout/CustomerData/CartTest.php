@@ -104,7 +104,7 @@ class CartTest extends TestCase
         self::assertArrayHasKey('subtotal_incl_tax', $result);
         self::assertArrayHasKey('subtotal_excl_tax', $result);
         self::assertArrayHasKey('items', $result);
-        self::assertInternalType('array', $result['items']);
+        self::assertIsArray($result['items']);
         self::assertCount(2, $result['items']);
         self::assertEquals(1, $result['items'][0]['product_price']);
         self::assertEquals(1, $result['items'][1]['product_price']);

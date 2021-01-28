@@ -25,7 +25,7 @@ class InputtypeTest extends \PHPUnit\Framework\TestCase
 
     public function testToOptionArrayIsArray()
     {
-        $this->assertInternalType('array', $this->_model->toOptionArray());
+        $this->assertIsArray($this->_model->toOptionArray());
     }
 
     public function testToOptionArrayValid()

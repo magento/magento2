@@ -218,7 +218,7 @@ class SwaggerUiPage
                     $url = $_ENV['app_frontend_url'] . $pattern;
                     $browser->open($url);
                     return true;
-                } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
+                } catch (\PHPUnit\Extensions\Selenium2TestCase\WebDriverException $e) {
                     return false;
                 }
             }

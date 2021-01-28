@@ -129,9 +129,7 @@ class CronEventTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->zendClientMock);
 
-        $this->assertInternalType(
-            'bool',
-            $this->model->sendRequest()
+        $this->assertIsBool($this->model->sendRequest()
         );
     }
 
@@ -190,9 +188,7 @@ class CronEventTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->zendClientMock);
 
-        $this->assertInternalType(
-            'bool',
-            $this->model->sendRequest()
+        $this->assertIsBool($this->model->sendRequest()
         );
     }
 

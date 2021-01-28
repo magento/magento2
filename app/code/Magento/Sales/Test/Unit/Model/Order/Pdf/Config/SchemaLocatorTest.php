@@ -32,8 +32,8 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
         )->with(
             'etc',
             'Magento_Sales'
-        )->will(
-            $this->returnValue($this->_xsdDir)
+        )->willReturn(
+            $this->_xsdDir
         );
 
         $this->_model = new \Magento\Sales\Model\Order\Pdf\Config\SchemaLocator($this->_moduleReader);

@@ -112,7 +112,7 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
         $urlFactoryMock = $this->createMock(\Magento\Framework\UrlFactory::class);
         $urlFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->urlMock));
+            ->willReturn($this->urlMock);
 
         $this->customerAccountManagementMock =
             $this->getMockForAbstractClass(\Magento\Customer\Api\AccountManagementInterface::class);
@@ -175,7 +175,7 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->redirectResultMock->expects($this->once())
             ->method('setPath')
@@ -192,16 +192,16 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->requestMock->expects($this->at(0))
             ->method('getParam')
             ->with($this->equalTo('id'), false)
-            ->will($this->returnValue($customerId));
+            ->willReturn($customerId);
         $this->requestMock->expects($this->at(1))
             ->method('getParam')
             ->with($this->equalTo('key'), false)
-            ->will($this->returnValue($key));
+            ->willReturn($key);
 
         $this->messageManagerMock->expects($this->once())
             ->method('addErrorMessage')
@@ -211,12 +211,12 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
         $this->urlMock->expects($this->once())
             ->method('getUrl')
             ->with($this->equalTo('*/*/index'), ['_secure' => true])
-            ->will($this->returnValue($testUrl));
+            ->willReturn($testUrl);
 
         $this->redirectMock->expects($this->once())
             ->method('error')
             ->with($this->equalTo($testUrl))
-            ->will($this->returnValue($testUrl));
+            ->willReturn($testUrl);
 
         $this->redirectResultMock->expects($this->once())
             ->method('setUrl')
@@ -250,7 +250,7 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->requestMock->expects($this->any())
             ->method('getParam')
@@ -264,17 +264,17 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
         $this->customerRepositoryMock->expects($this->any())
             ->method('getById')
             ->with($customerId)
-            ->will($this->returnValue($this->customerDataMock));
+            ->willReturn($this->customerDataMock);
 
         $email = 'test@example.com';
         $this->customerDataMock->expects($this->once())
             ->method('getEmail')
-            ->will($this->returnValue($email));
+            ->willReturn($email);
 
         $this->customerAccountManagementMock->expects($this->once())
             ->method('activate')
             ->with($this->equalTo($email), $this->equalTo($key))
-            ->will($this->returnValue($this->customerDataMock));
+            ->willReturn($this->customerDataMock);
 
         $this->customerSessionMock->expects($this->any())
             ->method('setCustomerDataAsLoggedIn')
@@ -288,17 +288,17 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
 
         $this->addressHelperMock->expects($this->once())
             ->method('isVatValidationEnabled')
-            ->will($this->returnValue($vatValidationEnabled));
+            ->willReturn($vatValidationEnabled);
         $this->addressHelperMock->expects($this->any())
             ->method('getTaxCalculationAddressType')
-            ->will($this->returnValue($addressType));
+            ->willReturn($addressType);
 
         $this->storeMock->expects($this->any())
             ->method('getFrontendName')
-            ->will($this->returnValue('frontend'));
+            ->willReturn('frontend');
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
 
         $cookieMetadataManager = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\PhpCookieManager::class)
             ->disableOriginalConstructor()
@@ -369,7 +369,7 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->requestMock->expects($this->any())
             ->method('getParam')
@@ -384,17 +384,17 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
         $this->customerRepositoryMock->expects($this->any())
             ->method('getById')
             ->with($customerId)
-            ->will($this->returnValue($this->customerDataMock));
+            ->willReturn($this->customerDataMock);
 
         $email = 'test@example.com';
         $this->customerDataMock->expects($this->once())
             ->method('getEmail')
-            ->will($this->returnValue($email));
+            ->willReturn($email);
 
         $this->customerAccountManagementMock->expects($this->once())
             ->method('activate')
             ->with($this->equalTo($email), $this->equalTo($key))
-            ->will($this->returnValue($this->customerDataMock));
+            ->willReturn($this->customerDataMock);
 
         $this->customerSessionMock->expects($this->any())
             ->method('setCustomerDataAsLoggedIn')
@@ -408,15 +408,15 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
 
         $this->storeMock->expects($this->any())
             ->method('getFrontendName')
-            ->will($this->returnValue('frontend'));
+            ->willReturn('frontend');
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
 
         $this->urlMock->expects($this->any())
             ->method('getUrl')
             ->with($this->equalTo('*/*/index'), ['_secure' => true])
-            ->will($this->returnValue($successUrl));
+            ->willReturn($successUrl);
 
         $this->redirectMock->expects($this->once())
             ->method('success')

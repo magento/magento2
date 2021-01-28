@@ -79,23 +79,23 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->fileManager
             ->expects($this->once())
             ->method('createRequireJsConfigAsset')
-            ->will($this->returnValue($requireJsAsset));
+            ->willReturn($requireJsAsset);
         $this->fileManager
             ->expects($this->once())
             ->method('createRequireJsMixinsAsset')
-            ->will($this->returnValue($requireJsAsset));
+            ->willReturn($requireJsAsset);
         $this->fileManager
             ->expects($this->once())
             ->method('createStaticJsAsset')
-            ->will($this->returnValue($requireJsAsset));
+            ->willReturn($requireJsAsset);
         $this->fileManager
             ->expects($this->once())
             ->method('createBundleJsPool')
-            ->will($this->returnValue([$asset]));
+            ->willReturn([$asset]);
         $this->fileManager
             ->expects($this->once())
             ->method('createMinResolverAsset')
-            ->will($this->returnValue($minResolverAsset));
+            ->willReturn($minResolverAsset);
 
         $layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
 

@@ -179,13 +179,13 @@ class ViewedTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\
         $this->objectManagerMock
             ->expects($this->any())
             ->method('get')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         [\Psr\Log\LoggerInterface::class, $logMock],
                         [\Magento\Backend\Model\Auth\Session::class, $sessionMock]
                     ]
-                )
+                
             );
 
         $this->messageManagerMock

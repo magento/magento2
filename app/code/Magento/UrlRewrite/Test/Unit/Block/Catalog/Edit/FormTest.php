@@ -60,23 +60,23 @@ class FormTest extends \PHPUnit\Framework\TestCase
     public function testAddErrorMessageWhenProductWithoutStores()
     {
         $form = $this->createMock(\Magento\Framework\Data\Form::class);
-        $form->expects($this->any())->method('getElement')->will(
-            $this->returnValue(
+        $form->expects($this->any())->method('getElement')->willReturn(
+            
                 $this->getMockForAbstractClass(
                     \Magento\Framework\Data\Form\Element\AbstractElement::class,
                     [],
                     '',
                     false
                 )
-            )
+            
         );
         $this->formFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($form));
+            ->willReturn($form);
         $fieldset = $this->createMock(\Magento\Framework\Data\Form\Element\Fieldset::class);
         $form->expects($this->once())
             ->method('addFieldset')
-            ->will($this->returnValue($fieldset));
+            ->willReturn($fieldset);
         $storeElement = $this->createPartialMock(
             \Magento\Framework\Data\Form\Element\AbstractElement::class,
             ['setAfterElementHtml', 'setValues']

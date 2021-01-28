@@ -39,7 +39,7 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
     {
         /** @var \Magento\Framework\Filesystem\Directory\ReadInterface $dirReadMock */
         $dirReadMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
-        $this->_dirReadFactoryMock->expects($this->once())->method('create')->will($this->returnValue($dirReadMock));
+        $this->_dirReadFactoryMock->expects($this->once())->method('create')->willReturn($dirReadMock);
         $this->assertEquals($dirReadMock, $this->_filesystem->getDirectoryRead(DirectoryList::ROOT));
     }
 
@@ -47,7 +47,7 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
     {
         /** @var \Magento\Framework\Filesystem\Directory\ReadInterface $dirReadMock */
         $dirReadMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
-        $this->_dirReadFactoryMock->expects($this->once())->method('create')->will($this->returnValue($dirReadMock));
+        $this->_dirReadFactoryMock->expects($this->once())->method('create')->willReturn($dirReadMock);
         $this->assertEquals($dirReadMock, $this->_filesystem->getDirectoryReadByPath('path/to/some/file'));
     }
 
@@ -55,7 +55,7 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
     {
         /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $dirWriteMock */
         $dirWriteMock = $this->createMock(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
-        $this->_dirWriteFactoryMock->expects($this->once())->method('create')->will($this->returnValue($dirWriteMock));
+        $this->_dirWriteFactoryMock->expects($this->once())->method('create')->willReturn($dirWriteMock);
         $this->assertEquals($dirWriteMock, $this->_filesystem->getDirectoryWrite(DirectoryList::ROOT));
     }
 

@@ -32,8 +32,8 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
         )->with(
             'etc',
             'Magento_Sales'
-        )->will(
-            $this->returnValue('schema_dir')
+        )->willReturn(
+            'schema_dir'
         );
         $this->_locator = new \Magento\Sales\Model\Config\SchemaLocator($this->_moduleReaderMock);
     }

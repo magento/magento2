@@ -80,7 +80,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetEntityType()
     {
-        $this->assertInternalType('string', $this->model->getEntityType());
+        $this->assertIsString($this->model->getEntityType());
     }
 
     /**

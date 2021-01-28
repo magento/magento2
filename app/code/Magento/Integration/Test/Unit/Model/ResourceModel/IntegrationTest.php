@@ -38,8 +38,8 @@ class IntegrationTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
-        $this->selectMock->expects($this->any())->method('from')->will($this->returnValue($this->selectMock));
-        $this->selectMock->expects($this->any())->method('where')->will($this->returnValue($this->selectMock));
+        $this->selectMock->expects($this->any())->method('from')->willReturn($this->selectMock);
+        $this->selectMock->expects($this->any())->method('where')->willReturn($this->selectMock);
 
         $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
         $this->connectionMock->expects($this->any())->method('select')->willReturn($this->selectMock);

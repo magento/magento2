@@ -77,7 +77,7 @@ class FilterRendererTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $this->layoutMock->expects($this->once())->method('createBlock')->willReturn($this->blockMock);
-        $this->blockMock->expects($this->once())->method('setSwatchFilter')->will($this->returnSelf());
+        $this->blockMock->expects($this->once())->method('setSwatchFilter')->willReturnSelf();
 
         $this->plugin->aroundRender($this->filterRendererMock, $this->closureMock, $this->filterMock);
     }

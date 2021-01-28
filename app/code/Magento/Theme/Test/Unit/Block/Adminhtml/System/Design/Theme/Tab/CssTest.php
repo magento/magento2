@@ -68,8 +68,8 @@ class CssTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             \Magento\Framework\File\Size::class
-        )->will(
-            $this->returnValue($sizeModel)
+        )->willReturn(
+            $sizeModel
         );
 
         $result = $method->invokeArgs($this->_model, []);
@@ -92,8 +92,8 @@ class CssTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             \Magento\Framework\App\Config\ScopeConfigInterface::class
-        )->will(
-            $this->returnValue($configModel)
+        )->willReturn(
+            $configModel
         );
 
         $result = $method->invokeArgs($this->_model, []);
@@ -129,7 +129,7 @@ class CssTest extends \PHPUnit\Framework\TestCase
         $fileId = 1;
         $themeId = 1;
         $this->urlCoder->expects($this->atLeastOnce())->method('encode')->with($fileId)
-            ->will($this->returnValue('encoded'));
+            ->willReturn('encoded');
         $this->urlBuilder->expects($this->atLeastOnce())->method('getUrl')
             ->with($this->anything(), ['theme_id' => $themeId, 'file' => 'encoded']);
         $this->_model->getDownloadUrl($fileId, $themeId);

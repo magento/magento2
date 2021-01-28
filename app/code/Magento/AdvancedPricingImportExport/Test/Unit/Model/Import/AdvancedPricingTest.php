@@ -306,7 +306,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         ];
         $this->dataSourceModel->expects($this->at(0))->method('getNextBunch')->willReturn($testBunch);
         $this->advancedPricing->expects($this->once())->method('validateRow')->willReturn(false);
-        $this->advancedPricing->expects($this->any())->method('saveProductPrices')->will($this->returnSelf());
+        $this->advancedPricing->expects($this->any())->method('saveProductPrices')->willReturnSelf();
 
         $this->advancedPricing
             ->expects($this->once())
@@ -518,7 +518,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                     AdvancedPricing::TABLE_TIER_PRICE
                 ]
             )
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->invokeMethod($this->advancedPricing, 'saveAndReplaceAdvancedPrices');
     }
@@ -547,7 +547,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
             ->method('deleteProductTierPrices')
             ->withConsecutive(
                 [$expectedSkuList, AdvancedPricing::TABLE_TIER_PRICE]
-            )->will($this->returnSelf());
+            )->willReturnSelf();
 
         $this->advancedPricing->deleteAdvancedPricing();
     }

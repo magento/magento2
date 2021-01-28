@@ -35,7 +35,7 @@ class MinsaleqtyTest extends \PHPUnit\Framework\TestCase
         $this->randomMock->expects($this->any())
             ->method('getUniqueHash')
             ->with($this->equalTo('_'))
-            ->will($this->returnValue('unique_hash'));
+            ->willReturn('unique_hash');
 
         $groupManagement = $this->getMockBuilder(\Magento\Customer\Api\GroupManagementInterface::class)
             ->setMethods(['getAllCustomersGroup'])
@@ -47,11 +47,11 @@ class MinsaleqtyTest extends \PHPUnit\Framework\TestCase
 
         $allGroup->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(32000));
+            ->willReturn(32000);
 
         $groupManagement->expects($this->any())
             ->method('getAllCustomersGroup')
-            ->will($this->returnValue($allGroup));
+            ->willReturn($allGroup);
 
         $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
 
@@ -83,7 +83,7 @@ class MinsaleqtyTest extends \PHPUnit\Framework\TestCase
                 $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
                 $this->equalTo($store)
             )
-            ->will($this->returnValue($minSaleQty));
+            ->willReturn($minSaleQty);
 
         $this->serializerMock->expects($this->exactly($minSaleQtyDecoded ? 1 : 0))
             ->method('unserialize')

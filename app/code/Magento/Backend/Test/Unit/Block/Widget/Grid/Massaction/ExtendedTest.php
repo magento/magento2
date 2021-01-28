@@ -47,7 +47,7 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
             \Magento\Backend\Block\Widget\Grid::class,
             ['getId', 'getCollection']
         );
-        $this->_gridMock->expects($this->any())->method('getId')->will($this->returnValue('test_grid'));
+        $this->_gridMock->expects($this->any())->method('getId')->willReturn('test_grid');
 
         $this->_layoutMock = $this->createPartialMock(
             \Magento\Framework\View\Layout::class,
@@ -60,8 +60,8 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
             'getParentName'
         )->with(
             'test_grid_massaction'
-        )->will(
-            $this->returnValue('test_grid')
+        )->willReturn(
+            'test_grid'
         );
         $this->_layoutMock->expects(
             $this->any()
@@ -69,8 +69,8 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
             'getBlock'
         )->with(
             'test_grid'
-        )->will(
-            $this->returnValue($this->_gridMock)
+        )->willReturn(
+            $this->_gridMock
         );
 
         $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);

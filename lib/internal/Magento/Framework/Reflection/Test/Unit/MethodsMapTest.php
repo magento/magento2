@@ -36,7 +36,7 @@ class MethodsMapTest extends \PHPUnit\Framework\TestCase
             ->method('save');
         $cacheMock->expects($this->any())
             ->method('load')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $attributeTypeResolverMock = $this->getMockBuilder(\Magento\Framework\Api\AttributeTypeResolverInterface::class)
             ->getMockForAbstractClass();

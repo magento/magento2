@@ -72,7 +72,7 @@ class SynonymsTest extends \PHPUnit\Framework\TestCase
         $this->synonymAnalyzer->expects($this->once())
             ->method('getSynonymsForPhrase')
             ->with($this->equalTo($query))
-            ->will($this->returnValue($result));
+            ->willReturn($result);
 
         $result = $this->synonymPreprocessor->process($query);
         $this->assertEquals($result, $newQuery);

@@ -55,11 +55,11 @@ class BlockTest extends \PHPUnit\Framework\TestCase
 
         $this->collectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($blockCollectionMock));
+            ->willReturn($blockCollectionMock);
 
         $blockCollectionMock->expects($this->once())
             ->method('toOptionIdArray')
-            ->will($this->returnValue('return-value'));
+            ->willReturn('return-value');
 
         $this->assertEquals('return-value', $this->block->toOptionArray());
     }

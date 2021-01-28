@@ -35,8 +35,8 @@ class MapperTest extends \PHPUnit\Framework\TestCase
         $map['key'] = 'map_value';
         $to['key'] = 'from_value';
         $default['new_key'] = 'default_value';
-        $this->fromMock->expects($this->once())->method('hasData')->with('key')->will($this->returnValue(true));
-        $this->fromMock->expects($this->once())->method('getData')->with('key')->will($this->returnValue('from_value'));
+        $this->fromMock->expects($this->once())->method('hasData')->with('key')->willReturn(true);
+        $this->fromMock->expects($this->once())->method('getData')->with('key')->willReturn('from_value');
         $expected['key'] = 'from_value';
         $expected['map_value'] = 'from_value';
         $expected['new_key'] = 'default_value';
@@ -55,8 +55,8 @@ class MapperTest extends \PHPUnit\Framework\TestCase
         ];
         $default = [0];
         $map['key'] = ['value'];
-        $this->fromMock->expects($this->once())->method('hasData')->with('key')->will($this->returnValue(false));
-        $this->fromMock->expects($this->once())->method('getData')->with('key')->will($this->returnValue(true));
+        $this->fromMock->expects($this->once())->method('hasData')->with('key')->willReturn(false);
+        $this->fromMock->expects($this->once())->method('getData')->with('key')->willReturn(true);
         $this->assertEquals($this->toMock, $this->mapper->accumulateByMap($from, $to, $map, $default));
     }
 

@@ -37,7 +37,7 @@ class StaticFileTest extends \PHPUnit\Framework\TestCase
         $this->resolver->expects($this->once())
             ->method('resolve')
             ->with(RulePool::TYPE_STATIC_FILE, 'file.ext', 'frontend', $theme, 'en_US', 'Magento_Module')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
         $actual = $this->object->getFile('frontend', $theme, 'en_US', 'file.ext', 'Magento_Module');
         $this->assertSame($expected, $actual);
     }

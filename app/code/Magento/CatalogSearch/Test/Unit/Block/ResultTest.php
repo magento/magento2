@@ -46,7 +46,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $layerResolver->expects($this->any())
             ->method($this->anything())
-            ->will($this->returnValue($this->layerMock));
+            ->willReturn($this->layerMock);
         $this->dataMock = $this->createMock(\Magento\CatalogSearch\Helper\Data::class);
         $this->queryMock = $this->getMockBuilder(\Magento\Search\Model\Query::class)
             ->disableOriginalConstructor()
@@ -60,13 +60,13 @@ class ResultTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSearchQueryText()
     {
-        $this->dataMock->expects($this->once())->method('getEscapedQueryText')->will($this->returnValue('query_text'));
+        $this->dataMock->expects($this->once())->method('getEscapedQueryText')->willReturn('query_text');
         $this->assertEquals('Search results for: \'query_text\'', $this->model->getSearchQueryText());
     }
 
     public function testGetNoteMessages()
     {
-        $this->dataMock->expects($this->once())->method('getNoteMessages')->will($this->returnValue('SOME-MESSAGE'));
+        $this->dataMock->expects($this->once())->method('getNoteMessages')->willReturn('SOME-MESSAGE');
         $this->assertEquals('SOME-MESSAGE', $this->model->getNoteMessages());
     }
 
@@ -81,14 +81,14 @@ class ResultTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'isMinQueryLength'
-        )->will(
-            $this->returnValue($isMinQueryLength)
+        )->willReturn(
+            $isMinQueryLength
         );
         if ($isMinQueryLength) {
             $queryMock = $this->createMock(\Magento\Search\Model\Query::class);
-            $queryMock->expects($this->once())->method('getMinQueryLength')->will($this->returnValue('5'));
+            $queryMock->expects($this->once())->method('getMinQueryLength')->willReturn('5');
 
-            $this->queryFactoryMock->expects($this->once())->method('get')->will($this->returnValue($queryMock));
+            $this->queryFactoryMock->expects($this->once())->method('get')->willReturn($queryMock);
         }
         $this->assertEquals($expectedResult, $this->model->getNoResultText());
     }

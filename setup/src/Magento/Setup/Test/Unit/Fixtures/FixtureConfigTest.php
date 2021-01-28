@@ -21,7 +21,7 @@ class FixtureConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $fileParserMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->fileParserMock = $this->createPartialMock(Parser::class, ['getDom', 'xmlToArray']);
 
@@ -29,11 +29,12 @@ class FixtureConfigTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Profile configuration file `exception.file` is not readable or does not exists.
      */
     public function testLoadConfigException()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Profile configuration file `exception.file` is not readable or does not exists.');
+
         $this->model->loadConfig('exception.file');
     }
 
@@ -56,7 +57,7 @@ class FixtureConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testGetValue()
     {
-        $this->assertSame(null, $this->model->getValue('null_key'));
+        $this->assertNull($this->model->getValue('null_key'));
     }
 }
 

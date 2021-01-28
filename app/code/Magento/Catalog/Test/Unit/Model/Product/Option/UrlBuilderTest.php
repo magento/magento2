@@ -40,7 +40,7 @@ class UrlBuilderTest extends \PHPUnit\Framework\TestCase
 
         $mock->expects($this->any())
             ->method('getUrl')
-            ->will($this->returnValue('testResult'));
+            ->willReturn('testResult');
 
         return $mock;
     }

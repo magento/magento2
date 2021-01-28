@@ -23,7 +23,7 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
     {
         $declaredWidgets = $this->_model->getWidgetsArray();
         $this->assertNotEmpty($declaredWidgets);
-        $this->assertInternalType('array', $declaredWidgets);
+        $this->assertIsArray($declaredWidgets);
         foreach ($declaredWidgets as $row) {
             $this->assertArrayHasKey('name', $row);
             $this->assertArrayHasKey('code', $row);

@@ -61,10 +61,10 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     {
         $this->conflictChecker->expects($this->once())
             ->method('checkConflictsWhenEnableModules')
-            ->will($this->returnValue(['Module_Foo' => [], 'Module_Bar' => []]));
+            ->willReturn(['Module_Foo' => [], 'Module_Bar' => []]);
         $this->dependencyChecker->expects($this->once())
             ->method('checkDependenciesWhenEnableModules')
-            ->will($this->returnValue(['Module_Foo' => [], 'Module_Bar' => []]));
+            ->willReturn(['Module_Foo' => [], 'Module_Bar' => []]);
         $result = $this->object->checkConstraints(
             true,
             ['Module_Foo' => '', 'Module_Bar' => ''],
@@ -77,15 +77,15 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     {
         $this->conflictChecker->expects($this->once())
             ->method('checkConflictsWhenEnableModules')
-            ->will($this->returnValue(['Module_Foo' => ['Module_Bar'], 'Module_Bar' => ['Module_Foo']]));
+            ->willReturn(['Module_Foo' => ['Module_Bar'], 'Module_Bar' => ['Module_Foo']]);
         $this->dependencyChecker->expects($this->once())
             ->method('checkDependenciesWhenEnableModules')
-            ->will($this->returnValue(
+            ->willReturn(
                 [
                     'Module_Foo' => ['Module_Baz' => ['Module_Foo', 'Module_Baz']],
                     'Module_Bar' => ['Module_Baz' => ['Module_Bar', 'Module_Baz']],
                 ]
-            ));
+            );
         $result = $this->object->checkConstraints(true, ['Module_Foo' => '', 'Module_Bar' => ''], [], false);
         $expect = [
             'Cannot enable Module_Foo because it depends on disabled modules:',
@@ -104,15 +104,15 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     {
         $this->conflictChecker->expects($this->once())
             ->method('checkConflictsWhenEnableModules')
-            ->will($this->returnValue(['Module_Foo' => ['Module_Bar'], 'Module_Bar' => ['Module_Foo']]));
+            ->willReturn(['Module_Foo' => ['Module_Bar'], 'Module_Bar' => ['Module_Foo']]);
         $this->dependencyChecker->expects($this->once())
             ->method('checkDependenciesWhenEnableModules')
-            ->will($this->returnValue(
+            ->willReturn(
                 [
                     'Module_Foo' => ['Module_Baz' => ['Module_Foo', 'Module_Baz']],
                     'Module_Bar' => ['Module_Baz' => ['Module_Bar', 'Module_Baz']],
                 ]
-            ));
+            );
         $result = $this->object->checkConstraints(true, ['Module_Foo' => '', 'Module_Bar' => ''], [], true);
         $expect = [
             'Cannot enable Module_Foo',
@@ -129,7 +129,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     {
         $this->dependencyChecker->expects($this->once())
             ->method('checkDependenciesWhenDisableModules')
-            ->will($this->returnValue(['Module_Foo' => [], 'Module_Bar' => []]));
+            ->willReturn(['Module_Foo' => [], 'Module_Bar' => []]);
         $result = $this->object->checkConstraints(false, ['Module_Foo' => '', 'Module_Bar' => '']);
         $this->assertEquals([], $result);
     }
@@ -138,12 +138,12 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     {
         $this->dependencyChecker->expects($this->once())
             ->method('checkDependenciesWhenDisableModules')
-            ->will($this->returnValue(
+            ->willReturn(
                 [
                     'Module_Foo' => ['Module_Baz' => ['Module_Baz', 'Module_Foo']],
                     'Module_Bar' => ['Module_Baz' => ['Module_Baz', 'Module_Bar']],
                 ]
-            ));
+            );
         $result = $this->object->checkConstraints(false, ['Module_Foo' => '', 'Module_Bar' => '']);
         $expect = [
             'Cannot disable Module_Foo because modules depend on it:',
@@ -168,11 +168,12 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Unknown module(s): 'Module_Baz'
      */
     public function testSetIsEnabledUnknown()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Unknown module(s): \'Module_Baz\'');
+
         $modules = ['Module_Foo' => '', 'Module_Bar' => ''];
         $this->loader->expects($this->once())->method('load')->willReturn($modules);
         $this->object->setIsEnabled(true, ['Module_Baz']);

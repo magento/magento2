@@ -49,8 +49,8 @@ class AbstractWidgetTest extends \PHPUnit\Framework\TestCase
             'getConfig'
         )->with(
             $key
-        )->will(
-            $this->returnValue($expectedValue)
+        )->willReturn(
+            $expectedValue
         );
         $this->assertEquals($expectedValue, $this->_block->getConfig($key));
     }

@@ -73,35 +73,35 @@ class SetQuotePersistentDataObserverTest extends \PHPUnit\Framework\TestCase
 
     public function testExecuteWhenSessionIsNotPersistent()
     {
-        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->will($this->returnValue(false));
+        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->willReturn(false);
         $this->observerMock->expects($this->never())->method('getEvent');
         $this->model->execute($this->observerMock);
     }
 
     public function testExecuteWhenQuoteNotExist()
     {
-        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
+        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->observerMock
             ->expects($this->once())
             ->method('getEvent')
-            ->will($this->returnValue($this->eventManagerMock));
+            ->willReturn($this->eventManagerMock);
         $this->eventManagerMock->expects($this->once())->method('getQuote');
         $this->model->execute($this->observerMock);
     }
 
     public function testExecuteWhenSessionIsPersistent()
     {
-        $this->sessionHelperMock->expects($this->exactly(2))->method('isPersistent')->will($this->returnValue(true));
+        $this->sessionHelperMock->expects($this->exactly(2))->method('isPersistent')->willReturn(true);
         $this->observerMock
             ->expects($this->once())
             ->method('getEvent')
-            ->will($this->returnValue($this->eventManagerMock));
+            ->willReturn($this->eventManagerMock);
         $this->eventManagerMock
             ->expects($this->once())
             ->method('getQuote')
-            ->will($this->returnValue($this->quoteMock));
-        $this->helperMock->expects($this->once())->method('isShoppingCartPersist')->will($this->returnValue(true));
-        $this->quoteManagerMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
+            ->willReturn($this->quoteMock);
+        $this->helperMock->expects($this->once())->method('isShoppingCartPersist')->willReturn(true);
+        $this->quoteManagerMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->quoteMock->expects($this->once())->method('setIsPersistent')->with(true);
         $this->model->execute($this->observerMock);
     }

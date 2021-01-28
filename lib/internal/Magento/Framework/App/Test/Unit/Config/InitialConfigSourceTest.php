@@ -26,7 +26,7 @@ class InitialConfigSourceTest extends \PHPUnit\Framework\TestCase
      */
     private $source;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->reader = $this->getMockBuilder(Reader::class)
             ->disableOriginalConstructor()

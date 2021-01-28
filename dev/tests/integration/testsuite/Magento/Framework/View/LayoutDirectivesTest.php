@@ -81,11 +81,12 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \OutOfBoundsException
      * @magentoAppIsolation enabled
      */
     public function testRenderNonExistentElementShouldThrowException()
     {
+        $this->expectException(\OutOfBoundsException::class);
+
         $layout = $this->_getLayoutModel('render.xml');
         $this->assertEmpty($layout->renderElement('nonexisting_element'));
 
@@ -240,18 +241,20 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testMoveBroken()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->_getLayoutModel('move_broken.xml');
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testMoveAliasBroken()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->_getLayoutModel('move_alias_broken.xml');
     }
 

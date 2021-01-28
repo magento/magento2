@@ -72,9 +72,9 @@ class ExportVarnishConfigTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\App\View::class
         )->disableOriginalConstructor()->getMock();
 
-        $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
-        $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
-        $contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewMock));
+        $contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
+        $contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
+        $contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
 
         $this->action = new \Magento\PageCache\Controller\Adminhtml\PageCache\ExportVarnishConfig(
             $contextMock,
@@ -91,7 +91,7 @@ class ExportVarnishConfigTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\App\ResponseInterface::class
         )->disableOriginalConstructor()->getMock();
 
-        $this->configMock->expects($this->once())->method('getVclFile')->will($this->returnValue($fileContent));
+        $this->configMock->expects($this->once())->method('getVclFile')->willReturn($fileContent);
         $this->fileFactoryMock->expects(
             $this->once()
         )->method(
@@ -100,8 +100,8 @@ class ExportVarnishConfigTest extends \PHPUnit\Framework\TestCase
             $this->equalTo($filename),
             $this->equalTo($fileContent),
             $this->equalTo(DirectoryList::VAR_DIR)
-        )->will(
-            $this->returnValue($responseMock)
+        )->willReturn(
+            $responseMock
         );
 
         $result = $this->action->execute();

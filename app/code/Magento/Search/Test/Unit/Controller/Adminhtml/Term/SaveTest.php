@@ -49,7 +49,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $redirectFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->redirect));
+            ->willReturn($this->redirect);
         $this->context->expects($this->any())
             ->method('getResultRedirectFactory')
             ->willReturn($redirectFactory);
@@ -99,7 +99,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $queryFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->query));
+            ->willReturn($this->query);
 
         $this->controller = $objectManagerHelper->getObject(
             \Magento\Search\Controller\Adminhtml\Term\Save::class,

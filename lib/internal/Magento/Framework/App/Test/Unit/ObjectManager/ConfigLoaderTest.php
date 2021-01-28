@@ -44,7 +44,7 @@ class ConfigLoaderTest extends \PHPUnit\Framework\TestCase
 
         $this->readerFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->readerMock));
+            ->willReturn($this->readerMock);
 
         $this->cacheMock = $this->createMock(\Magento\Framework\App\Cache\Type\Config::class);
 
@@ -77,7 +77,7 @@ class ConfigLoaderTest extends \PHPUnit\Framework\TestCase
         $this->cacheMock->expects($this->once())
             ->method('load')
             ->with($area . '::DiConfig')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->cacheMock->expects($this->once())
             ->method('save')
@@ -85,7 +85,7 @@ class ConfigLoaderTest extends \PHPUnit\Framework\TestCase
         $this->readerMock->expects($this->once())
             ->method('read')
             ->with($area)
-            ->will($this->returnValue($configData));
+            ->willReturn($configData);
 
         $this->serializerMock->expects($this->once())
             ->method('serialize')

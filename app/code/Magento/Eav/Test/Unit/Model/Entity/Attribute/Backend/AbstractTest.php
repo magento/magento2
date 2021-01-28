@@ -31,11 +31,11 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
             \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
             ['getBackendTable', 'isStatic', 'getAttributeId', '__wakeup']
         );
-        $attribute->expects($this->any())->method('getAttributeId')->will($this->returnValue($attributeId));
+        $attribute->expects($this->any())->method('getAttributeId')->willReturn($attributeId);
 
-        $attribute->expects($this->any())->method('isStatic')->will($this->returnValue(false));
+        $attribute->expects($this->any())->method('isStatic')->willReturn(false);
 
-        $attribute->expects($this->any())->method('getBackendTable')->will($this->returnValue('table'));
+        $attribute->expects($this->any())->method('getBackendTable')->willReturn('table');
 
         $this->_model->setAttribute($attribute);
 

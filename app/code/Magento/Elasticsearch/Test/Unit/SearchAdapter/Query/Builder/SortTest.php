@@ -104,7 +104,7 @@ class SortTest extends \PHPUnit\Framework\TestCase
         $this->fieldNameResolver->expects($this->any())
             ->method('getFieldName')
             ->with($this->anything())
-            ->will($this->returnCallback(
+            ->willReturnCallback(
                 function ($attribute, $context) use ($fieldName) {
                     if (empty($context)) {
                         return $fieldName;
@@ -112,7 +112,7 @@ class SortTest extends \PHPUnit\Framework\TestCase
                         return 'sort_' . $fieldName;
                     }
                 }
-            ));
+            );
 
         $this->assertEquals(
             $expected,

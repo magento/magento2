@@ -80,16 +80,16 @@ class FileTest extends \PHPUnit\Framework\TestCase
             'getDirectoryRead'
         )->with(
             $this->equalTo(DirectoryList::MEDIA)
-        )->will(
-            $this->returnValue($this->directoryReadMock)
+        )->willReturn(
+            $this->directoryReadMock
         );
 
         $this->directoryReadMock->expects(
             $this->any()
         )->method(
             'isDirectory'
-        )->will(
-            $this->returnValueMap(
+        )->willReturnMap(
+            
                 [
                     ['/', true],
                     ['folder_one', true],
@@ -100,7 +100,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
                     ['folder_one/folder_two/.htaccess', false],
                     ['folder_one/folder_two/file_two.txt', false],
                 ]
-            )
+            
         );
 
         $paths = [
@@ -124,7 +124,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getPathInfo'
-        )->will($this->returnValueMap($pathInfos));
+        )->willReturnMap($pathInfos);
 
         sort($paths);
         $this->directoryReadMock->expects(
@@ -133,8 +133,8 @@ class FileTest extends \PHPUnit\Framework\TestCase
             'readRecursively'
         )->with(
             $this->equalTo('/')
-        )->will(
-            $this->returnValue($paths)
+        )->willReturn(
+            $paths
         );
 
         $expected = [

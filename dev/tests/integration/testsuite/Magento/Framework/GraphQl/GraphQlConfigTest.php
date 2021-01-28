@@ -40,7 +40,7 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
             file_get_contents(__DIR__ . '/_files/schemaC.graphqls'),
             file_get_contents(__DIR__ . '/_files/schemaD.graphqls')
         ];
-        $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($fileList));
+        $fileResolverMock->expects($this->any())->method('get')->willReturn($fileList);
         $graphQlReader = $objectManager->create(
             \Magento\Framework\GraphQlSchemaStitching\GraphQlReader::class,
             ['fileResolver' => $fileResolverMock]

@@ -46,11 +46,12 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Connection name is missing
      */
     public function testConvertWithException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Connection name is missing');
+
         $fixtureDir = __DIR__ . '/../../../_files/queue_publisher';
         $xmlFile = $fixtureDir . '/invalid.xml';
         $dom = new \DOMDocument();

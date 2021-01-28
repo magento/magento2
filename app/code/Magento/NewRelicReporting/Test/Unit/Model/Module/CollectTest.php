@@ -162,9 +162,7 @@ class CollectTest extends \PHPUnit\Framework\TestCase
             ->method('getNames')
             ->willReturn($enabledModulesMockArray);
 
-        $this->assertInternalType(
-            'array',
-            $this->model->getModuleData()
+        $this->assertIsArray($this->model->getModuleData()
         );
     }
 
@@ -252,9 +250,7 @@ class CollectTest extends \PHPUnit\Framework\TestCase
             ->method('getNames')
             ->willReturn($enabledModulesMockArray);
 
-        $this->assertInternalType(
-            'array',
-            $this->model->getModuleData()
+        $this->assertIsArray($this->model->getModuleData()
         );
     }
 
@@ -342,9 +338,7 @@ class CollectTest extends \PHPUnit\Framework\TestCase
             ->method('getNames')
             ->willReturn($enabledModulesMockArray);
 
-        $this->assertInternalType(
-            'array',
-            $this->model->getModuleData()
+        $this->assertIsArray($this->model->getModuleData()
         );
     }
 

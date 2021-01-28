@@ -38,7 +38,7 @@ class ListSortTest extends \PHPUnit\Framework\TestCase
             ['label' => 'testLabel', 'value' => 'testAttributeCode'],
         ];
         $this->catalogConfig->expects($this->any())->method('getAttributesUsedForSortBy')
-            ->will($this->returnValue([['frontend_label' => 'testLabel', 'attribute_code' => 'testAttributeCode']]));
+            ->willReturn([['frontend_label' => 'testLabel', 'attribute_code' => 'testAttributeCode']]);
 
         $this->assertEquals($except, $this->model->toOptionArray());
     }

@@ -36,7 +36,7 @@ class TotalsTest extends \PHPUnit\Framework\TestCase
             [['test1' => 3, 'test2' => 2], new \Magento\Framework\DataObject(['test1' => 3, 'test2' => 2])],
             [['test4' => 9, 'test5' => 2], new \Magento\Framework\DataObject(['test4' => 9, 'test5' => 2])],
         ];
-        $this->_factoryMock->expects($this->any())->method('create')->will($this->returnValueMap($createValueMap));
+        $this->_factoryMock->expects($this->any())->method('create')->willReturnMap($createValueMap);
 
         $arguments = ['factory' => $this->_factoryMock, 'parser' => $this->_parserMock];
 

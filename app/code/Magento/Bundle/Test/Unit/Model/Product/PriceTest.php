@@ -148,13 +148,13 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     public function testCalculateSpecialPrice($finalPrice, $specialPrice, $callsNumber, $dateInInterval, $expected)
     {
         $this->localeDateMock->expects($this->exactly($callsNumber))
-            ->method('isScopeDateInInterval')->will($this->returnValue($dateInInterval));
+            ->method('isScopeDateInInterval')->willReturn($dateInInterval);
 
         $this->storeManagerMock->expects($this->any())
-            ->method('getStore')->will($this->returnValue($this->storeMock));
+            ->method('getStore')->willReturn($this->storeMock);
 
         $this->storeMock->expects($this->any())
-            ->method('roundPrice')->will($this->returnArgument(0));
+            ->method('roundPrice')->willReturnArgument(0);
 
         $this->assertEquals(
             $expected,

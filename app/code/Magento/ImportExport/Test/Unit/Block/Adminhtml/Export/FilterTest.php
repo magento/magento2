@@ -142,7 +142,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $this->dataObjectProcessor = $this->createMock(\Magento\Framework\Reflection\DataObjectProcessor::class);
         $this->dataObjectHelper = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
         $this->localeDate = $this->createMock(\Magento\Framework\Stdlib\DateTime\Timezone::class);
-        $this->localeDate->expects($this->any())->method('getDateFormat')->will($this->returnValue('12-12-2012'));
+        $this->localeDate->expects($this->any())->method('getDateFormat')->willReturn('12-12-2012');
         $this->reservedAttributeList = $this->createMock(\Magento\Catalog\Model\Product\ReservedAttributeList::class);
         $this->localeResolver = $this->createMock(\Magento\Framework\Locale\Resolver::class);
         $this->resource = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
@@ -157,24 +157,24 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             ['getFileSystem', 'getEscaper', 'getLocaleDate', 'getLayout']
         );
         $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
-        $this->context->expects($this->any())->method('getFileSystem')->will($this->returnValue($filesystem));
+        $this->context->expects($this->any())->method('getFileSystem')->willReturn($filesystem);
         $escaper = $this->createPartialMock(\Magento\Framework\Escaper::class, ['escapeHtml']);
-        $escaper->expects($this->any())->method('escapeHtml')->will($this->returnValue(''));
-        $this->context->expects($this->any())->method('getEscaper')->will($this->returnValue($escaper));
+        $escaper->expects($this->any())->method('escapeHtml')->willReturn('');
+        $this->context->expects($this->any())->method('getEscaper')->willReturn($escaper);
         $timeZone = $this->createMock(\Magento\Framework\Stdlib\DateTime\Timezone::class);
-        $timeZone->expects($this->any())->method('getDateFormat')->will($this->returnValue('M/d/yy'));
-        $this->context->expects($this->any())->method('getLocaleDate')->will($this->returnValue($timeZone));
+        $timeZone->expects($this->any())->method('getDateFormat')->willReturn('M/d/yy');
+        $this->context->expects($this->any())->method('getLocaleDate')->willReturn($timeZone);
         $dateBlock = $this->createPartialMock(
             \Magento\Framework\View\Element\Html\Date::class,
             ['setValue', 'getHtml', 'setId', 'getId']
         );
-        $dateBlock->expects($this->any())->method('setValue')->will($this->returnSelf());
-        $dateBlock->expects($this->any())->method('getHtml')->will($this->returnValue(''));
-        $dateBlock->expects($this->any())->method('setId')->will($this->returnSelf());
-        $dateBlock->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $dateBlock->expects($this->any())->method('setValue')->willReturnSelf();
+        $dateBlock->expects($this->any())->method('getHtml')->willReturn('');
+        $dateBlock->expects($this->any())->method('setId')->willReturnSelf();
+        $dateBlock->expects($this->any())->method('getId')->willReturn(1);
         $layout = $this->createMock(\Magento\Framework\View\Layout::class);
-        $layout->expects($this->any())->method('createBlock')->will($this->returnValue($dateBlock));
-        $this->context->expects($this->any())->method('getLayout')->will($this->returnValue($layout));
+        $layout->expects($this->any())->method('createBlock')->willReturn($dateBlock);
+        $this->context->expects($this->any())->method('getLayout')->willReturn($layout);
         $this->backendHelper = $this->createMock(\Magento\Backend\Helper\Data::class);
         $this->importExportData = $this->createMock(\Magento\ImportExport\Helper\Data::class);
         $this->dateTimeFormatter = $this->createMock(

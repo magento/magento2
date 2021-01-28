@@ -38,8 +38,8 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
         )->with(
             'etc',
             'Magento_Customer'
-        )->will(
-            $this->returnValue($this->_xsdDir)
+        )->willReturn(
+            $this->_xsdDir
         );
 
         $this->_model = new \Magento\Customer\Model\Address\Config\SchemaLocator($this->_moduleReader);

@@ -396,7 +396,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $fileIterator = $fileIteratorFactory->create(
             [__DIR__ . '/_files/test_system.xml']
         );
-        $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($fileIterator));
+        $fileResolverMock->expects($this->any())->method('get')->willReturn($fileIterator);
 
         $objectManager = Bootstrap::getObjectManager();
 

@@ -55,7 +55,7 @@ class AddStockStatusToCollectionTest extends \PHPUnit\Framework\TestCase
         $this->stockHelper->expects($this->once())
             ->method('addIsInStockFilterToCollection')
             ->with($productCollection)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->plugin->beforeLoad($productCollection);
     }

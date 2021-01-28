@@ -54,7 +54,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $shippingRateMock->expects($this->once())
             ->method('getPrice')
-            ->will($this->returnValue($shippingPrice));
+            ->willReturn($shippingPrice);
 
         $this->priceCurrency->expects($this->once())
             ->method('convertAndFormat')

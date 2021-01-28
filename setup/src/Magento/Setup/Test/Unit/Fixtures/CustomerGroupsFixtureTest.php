@@ -109,7 +109,7 @@ class CustomerGroupsFixtureTest extends \PHPUnit\Framework\TestCase
         $this->fixtureModelMock
             ->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->model = new CustomerGroupsFixture(
             $this->fixtureModelMock,

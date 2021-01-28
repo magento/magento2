@@ -52,7 +52,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->objectManager->expects($this->once())
             ->method('create')
             ->with($routeClass, ['route' => $paramRoute])
-            ->will($this->returnValue($router));
+            ->willReturn($router);
 
         $result = $this->factory->createRoute($routeClass, $paramRoute);
 
@@ -62,14 +62,15 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     * @expectedException \LogicException
      * @return void
      */
     public function testCreateRouteNegative()
     {
+        $this->expectException(\LogicException::class);
+
         $this->objectManager->expects($this->once())
             ->method('create')
-            ->will($this->returnValue(new \StdClass()));
+            ->willReturn(new \StdClass());
 
         $object = new Factory($this->objectManager);
         $object->createRoute(

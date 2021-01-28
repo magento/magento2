@@ -31,7 +31,7 @@ class UrlAlreadyExistsExceptionTest extends \PHPUnit\Framework\TestCase
         $this->renderedMessage = 'rendered message';
         $rendererMock->expects($this->once())
             ->method('render')
-            ->will($this->returnValue($this->renderedMessage));
+            ->willReturn($this->renderedMessage);
         \Magento\Framework\Phrase::setRenderer($rendererMock);
     }
 

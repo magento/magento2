@@ -68,7 +68,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->tempDir, $this->subject->getTempDir(), 'Temp directory is not set in Application');
 
         $initParams = $this->subject->getInitParams();
-        $this->assertInternalType('array', $initParams, 'Wrong initialization parameters type');
+        $this->assertIsArray($initParams, 'Wrong initialization parameters type');
         $this->assertArrayHasKey(
             Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS,
             $initParams,

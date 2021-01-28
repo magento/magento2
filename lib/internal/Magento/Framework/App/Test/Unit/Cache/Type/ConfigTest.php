@@ -75,8 +75,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'test_id',
             ['test_tag_one', 'test_tag_two', \Magento\Framework\App\Cache\Type\Config::CACHE_TAG],
             111
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
         $actualResult = $this->model->save('test_value', 'test_id', ['test_tag_one', 'test_tag_two'], 111);
         $this->assertSame($expectedResult, $actualResult);
@@ -92,8 +92,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         )->with(
             \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
             [\Magento\Framework\App\Cache\Type\Config::CACHE_TAG]
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
         $actualResult = $this->model->clean(
             \Zend_Cache::CLEANING_MODE_ALL,
@@ -112,8 +112,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         )->with(
             \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
             ['test_tag_one', 'test_tag_two', \Magento\Framework\App\Cache\Type\Config::CACHE_TAG]
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
         $actualResult = $this->model->clean(
             \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
@@ -137,8 +137,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         )->with(
             \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
             ['test_tag_one', \Magento\Framework\App\Cache\Type\Config::CACHE_TAG]
-        )->will(
-            $this->returnValue($fixtureResultOne)
+        )->willReturn(
+            $fixtureResultOne
         );
         $this->frontendMock->expects(
             $this->at(1)
@@ -147,8 +147,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         )->with(
             \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
             ['test_tag_two', \Magento\Framework\App\Cache\Type\Config::CACHE_TAG]
-        )->will(
-            $this->returnValue($fixtureResultTwo)
+        )->willReturn(
+            $fixtureResultTwo
         );
         $actualResult = $this->model->clean(
             \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,

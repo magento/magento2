@@ -33,7 +33,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             file_get_contents(__DIR__ . '/_files/payment.xml'),
             file_get_contents(__DIR__ . '/_files/payment2.xml'),
         ];
-        $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($fileList));
+        $fileResolverMock->expects($this->any())->method('get')->willReturn($fileList);
         $reader = $objectManager->create(
             \Magento\Payment\Model\Config\Reader::class,
             ['fileResolver' => $fileResolverMock]

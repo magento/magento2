@@ -182,13 +182,13 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->pageConfigMock
             ->expects($this->once())
             ->method('getMetadata')
-            ->will($this->returnValue($metadata));
+            ->willReturn($metadata);
 
         $this->msApplicationTileImageMock
             ->expects($this->once())
             ->method('getUrl')
             ->with('https://site.domain/ms-tile.jpg')
-            ->will($this->returnValue('https://site.domain/ms-tile.jpg'));
+            ->willReturn('https://site.domain/ms-tile.jpg');
 
         $this->assertEquals($expected, $this->renderer->renderMetadata());
     }
@@ -207,13 +207,13 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->pageConfigMock
             ->expects($this->once())
             ->method('getMetadata')
-            ->will($this->returnValue($metadata));
+            ->willReturn($metadata);
 
         $this->msApplicationTileImageMock
             ->expects($this->once())
             ->method('getUrl')
             ->with('images/ms-tile.jpg')
-            ->will($this->returnValue($expectedMetaUrl));
+            ->willReturn($expectedMetaUrl);
 
         $this->assertEquals($expected, $this->renderer->renderMetadata());
     }

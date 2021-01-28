@@ -75,7 +75,7 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->quoteMock->expects($this->once())
             ->method('getHasError')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->quoteMock->expects($this->never())
             ->method('setHasError');

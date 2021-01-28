@@ -40,9 +40,9 @@ class NewActionTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Prod
         );
         $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)->disableOriginalConstructor()
             ->setMethods(['addData', 'getTypeId', 'getStoreId', '__sleep', '__wakeup'])->getMock();
-        $this->product->expects($this->any())->method('getTypeId')->will($this->returnValue('simple'));
-        $this->product->expects($this->any())->method('getStoreId')->will($this->returnValue('1'));
-        $this->productBuilder->expects($this->any())->method('build')->will($this->returnValue($this->product));
+        $this->product->expects($this->any())->method('getTypeId')->willReturn('simple');
+        $this->product->expects($this->any())->method('getStoreId')->willReturn('1');
+        $this->productBuilder->expects($this->any())->method('build')->willReturn($this->product);
 
         $this->resultPage = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Page::class)
             ->disableOriginalConstructor()

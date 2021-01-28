@@ -47,9 +47,9 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('giftmessage')
-            ->will($this->returnValue('giftMessage'));
+            ->willReturn('giftMessage');
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
-        $subjectMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
+        $subjectMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
         $this->messageMock->expects($this->once())->method('add')->with('giftMessage', $quoteMock);
 
         $this->assertEquals([], $this->plugin->afterSaveShippingMethod($subjectMock, []));

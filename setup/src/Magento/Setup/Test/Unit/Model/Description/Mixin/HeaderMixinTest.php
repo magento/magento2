@@ -12,7 +12,7 @@ class HeaderMixinTest extends \PHPUnit\Framework\TestCase
      */
     private $mixin;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->mixin = new \Magento\Setup\Model\Description\Mixin\HeaderMixin();
     }

@@ -61,15 +61,15 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
             \Magento\MediaStorage\Model\File\UploaderFactory::class,
             ['create']
         );
-        $this->_uploaderFactory->expects($this->any())->method('create')->will($this->returnValue($this->_uploader));
+        $this->_uploaderFactory->expects($this->any())->method('create')->willReturn($this->_uploader);
         $this->_directoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);
         $this->_filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->_filesystemMock->expects(
             $this->any()
         )->method(
             'getDirectoryRead'
-        )->will(
-            $this->returnValue($this->_directoryMock)
+        )->willReturn(
+            $this->_directoryMock
         );
         /** @var $service \Magento\Theme\Model\Uploader\Service */
 
@@ -83,8 +83,8 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getMaxFileSize'
-        )->will(
-            $this->returnValue(600 * self::MB_MULTIPLIER)
+        )->willReturn(
+            600 * self::MB_MULTIPLIER
         );
     }
 
@@ -143,8 +143,8 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
             'getRelativePath'
         )->with(
             $fileName
-        )->will(
-            $this->returnValue($fileName)
+        )->willReturn(
+            $fileName
         );
 
         $this->_directoryMock->expects(
@@ -153,8 +153,8 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
             'readFile'
         )->with(
             $fileName
-        )->will(
-            $this->returnValue('content from my file')
+        )->willReturn(
+            'content from my file'
         );
 
         $this->_service = new \Magento\Theme\Model\Uploader\Service(
@@ -184,8 +184,8 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
             'getRelativePath'
         )->with(
             $fileName
-        )->will(
-            $this->returnValue($fileName)
+        )->willReturn(
+            $fileName
         );
 
         $this->_directoryMock->expects(
@@ -194,16 +194,16 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
             'readFile'
         )->with(
             $fileName
-        )->will(
-            $this->returnValue('content')
+        )->willReturn(
+            'content'
         );
 
         $this->_uploader->expects(
             $this->once()
         )->method(
             'validateFile'
-        )->will(
-            $this->returnValue(['name' => $fileName, 'tmp_name' => $fileName])
+        )->willReturn(
+            ['name' => $fileName, 'tmp_name' => $fileName]
         );
 
         $this->assertEquals(
@@ -224,8 +224,8 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getFileSize'
-        )->will(
-            $this->returnValue(30 * self::MB_MULTIPLIER)
+        )->willReturn(
+            30 * self::MB_MULTIPLIER
         );
 
         $this->_service = new \Magento\Theme\Model\Uploader\Service(
@@ -247,8 +247,8 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getMaxFileSize'
-        )->will(
-            $this->returnValue(600 * self::MB_MULTIPLIER)
+        )->willReturn(
+            600 * self::MB_MULTIPLIER
         );
 
         $this->_service = new \Magento\Theme\Model\Uploader\Service(
@@ -264,8 +264,8 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
             'getRelativePath'
         )->with(
             $fileName
-        )->will(
-            $this->returnValue($fileName)
+        )->willReturn(
+            $fileName
         );
 
         $this->_directoryMock->expects(
@@ -274,19 +274,19 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
             'readFile'
         )->with(
             $fileName
-        )->will(
-            $this->returnValue('content')
+        )->willReturn(
+            'content'
         );
 
         $this->_uploader->expects(
             $this->once()
         )->method(
             'validateFile'
-        )->will(
-            $this->returnValue(['name' => $fileName, 'tmp_name' => $fileName])
+        )->willReturn(
+            ['name' => $fileName, 'tmp_name' => $fileName]
         );
 
-        $this->_uploader->expects($this->once())->method('getFileSize')->will($this->returnValue('499'));
+        $this->_uploader->expects($this->once())->method('getFileSize')->willReturn('499');
 
         $this->assertEquals(
             ['content' => 'content', 'filename' => $fileName],
@@ -313,8 +313,8 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getFileSize'
-        )->will(
-            $this->returnValue(499 * self::MB_MULTIPLIER)
+        )->willReturn(
+            499 * self::MB_MULTIPLIER
         );
 
         $this->_service->uploadJsFile($fileName);

@@ -44,7 +44,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $return = 'some_value';
         $this->scopeConfigMock->expects($this->once())->method('getValue')
             ->with(Media::XML_PATH_PLAY_IF_BASE)
-            ->will($this->returnValue($return));
+            ->willReturn($return);
 
         $this->assertEquals(
             $return,
@@ -60,7 +60,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $return = 'some_value';
         $this->scopeConfigMock->expects($this->once())->method('getValue')
             ->with(Media::XML_PATH_SHOW_RELATED)
-            ->will($this->returnValue($return));
+            ->willReturn($return);
 
         $this->assertEquals(
             $return,
@@ -76,7 +76,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $return = 'some_value';
         $this->scopeConfigMock->expects($this->once())->method('getValue')
             ->with(Media::XML_PATH_VIDEO_AUTO_RESTART)
-            ->will($this->returnValue($return));
+            ->willReturn($return);
 
         $this->assertEquals(
             $return,
@@ -92,7 +92,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $return = 'some_value';
         $this->scopeConfigMock->expects($this->once())->method('getValue')
             ->with(Media::XML_PATH_YOUTUBE_API_KEY)
-            ->will($this->returnValue($return));
+            ->willReturn($return);
 
         $this->assertEquals(
             $return,

@@ -96,10 +96,10 @@ class NewShippingTest extends \PHPUnit\Framework\TestCase
         $contextMock = $this->createMock(\Magento\Framework\App\Action\Context::class);
         $contextMock->expects($this->atLeastOnce())
             ->method('getRequest')
-            ->will($this->returnValue($request));
+            ->willReturn($request);
         $contextMock->expects($this->atLeastOnce())
             ->method('getResponse')
-            ->will($this->returnValue($response));
+            ->willReturn($response);
         $contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
         $contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
         $methods = ['setTitle', 'getTitle', 'setSuccessUrl', 'setBackUrl', 'setErrorUrl', '__wakeUp'];

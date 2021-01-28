@@ -52,7 +52,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     {
         $this->taxHelper->expects($this->once())
             ->method('priceIncludesTax')
-            ->will($this->returnValue($expectedResult));
+            ->willReturn($expectedResult);
         $this->assertEquals($expectedResult, $this->adjustment->isIncludedInBasePrice());
     }
 
@@ -71,11 +71,11 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     {
         $this->taxHelper->expects($this->once())
             ->method('displayPriceIncludingTax')
-            ->will($this->returnValue($displayPriceIncludingTax));
+            ->willReturn($displayPriceIncludingTax);
         if (!$displayPriceIncludingTax) {
             $this->taxHelper->expects($this->once())
                 ->method('displayBothPrices')
-                ->will($this->returnValue($displayBothPrices));
+                ->willReturn($displayBothPrices);
         }
 
         $this->assertEquals($expectedResult, $this->adjustment->isIncludedInDisplayPrice());
@@ -107,11 +107,11 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
 
         $this->taxHelper->expects($this->any())
             ->method('priceIncludesTax')
-            ->will($this->returnValue($isPriceIncludesTax));
+            ->willReturn($isPriceIncludesTax);
         $this->catalogHelper->expects($this->any())
             ->method('getTaxPrice')
             ->with($object, $amount)
-            ->will($this->returnValue($price));
+            ->willReturn($price);
 
         $this->assertEquals($expectedResult, $this->adjustment->extractAdjustment($amount, $object));
     }
@@ -143,7 +143,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
         $this->catalogHelper->expects($this->any())
             ->method('getTaxPrice')
             ->with($object, $amount, true)
-            ->will($this->returnValue($price));
+            ->willReturn($price);
 
         $this->assertEquals($expectedResult, $this->adjustment->applyAdjustment($amount, $object));
     }

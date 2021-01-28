@@ -84,7 +84,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->layerResolverMock->expects($this->any())
             ->method('get')
-            ->will($this->returnValue($this->searchLayerMock));
+            ->willReturn($this->searchLayerMock);
 
         $this->recommendationsFactoryMock = $this->getMockBuilder(RecommendationsFactory::class)
             ->disableOriginalConstructor()

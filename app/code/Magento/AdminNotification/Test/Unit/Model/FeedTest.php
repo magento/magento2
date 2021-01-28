@@ -133,19 +133,19 @@ class FeedTest extends \PHPUnit\Framework\TestCase
 
         $lastUpdate = 0;
         $this->cacheManager->expects($this->once())->method('load')->will(($this->returnValue($lastUpdate)));
-        $this->curlFactory->expects($this->at(0))->method('create')->will($this->returnValue($this->curl));
+        $this->curlFactory->expects($this->at(0))->method('create')->willReturn($this->curl);
         $this->curl->expects($this->once())->method('setConfig')->with($configValues)->willReturnSelf();
-        $this->curl->expects($this->once())->method('read')->will($this->returnValue($curlRequest));
-        $this->backendConfig->expects($this->at(0))->method('getValue')->will($this->returnValue('1'));
-        $this->backendConfig->expects($this->once())->method('isSetFlag')->will($this->returnValue(false));
+        $this->curl->expects($this->once())->method('read')->willReturn($curlRequest);
+        $this->backendConfig->expects($this->at(0))->method('getValue')->willReturn('1');
+        $this->backendConfig->expects($this->once())->method('isSetFlag')->willReturn(false);
         $this->backendConfig->expects($this->at(1))->method('getValue')
-            ->will($this->returnValue('http://feed.magento.com'));
+            ->willReturn('http://feed.magento.com');
         $this->deploymentConfig->expects($this->once())->method('get')
             ->with(ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE)
-            ->will($this->returnValue('Sat, 6 Sep 2014 16:46:11 UTC'));
+            ->willReturn('Sat, 6 Sep 2014 16:46:11 UTC');
         if ($callInbox) {
             $this->inboxFactory->expects($this->once())->method('create')
-                ->will($this->returnValue($this->inboxModel));
+                ->willReturn($this->inboxModel);
             $this->inboxModel->expects($this->once())
                 ->method('parse')
                 ->with(
@@ -165,7 +165,7 @@ class FeedTest extends \PHPUnit\Framework\TestCase
                         }
                     )
                 )
-                ->will($this->returnSelf());
+                ->willReturnSelf();
         } else {
             $this->inboxFactory->expects($this->never())->method('create');
             $this->inboxModel->expects($this->never())->method('parse');

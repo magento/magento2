@@ -56,11 +56,12 @@ class VisibilityFilterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Invalid filter type: Luke, I am your father!
      */
     public function testApplyWithWrongType()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid filter type: Luke, I am your father!');
+
         $select = $this->resource->getConnection()->select();
         $filter = $this->mockFilter();
 

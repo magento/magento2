@@ -33,7 +33,7 @@ class QueryResponseTest extends \PHPUnit\Framework\TestCase
                 ->disableOriginalConstructor()
                 ->getMock();
 
-            $document->expects($this->any())->method('getId')->will($this->returnValue($count));
+            $document->expects($this->any())->method('getId')->willReturn($count);
             $this->documents[] = $document;
         }
 

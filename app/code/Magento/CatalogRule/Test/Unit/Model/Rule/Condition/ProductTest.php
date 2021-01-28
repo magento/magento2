@@ -70,17 +70,17 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->productResource->expects($this->any())->method('loadAllAttributes')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->productResource->expects($this->any())->method('getAttributesByCode')
-            ->will($this->returnValue([$this->eavAttributeResource]));
+            ->willReturn([$this->eavAttributeResource]);
         $this->eavAttributeResource->expects($this->any())->method('isAllowedForRuleCondition')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->eavAttributeResource->expects($this->any())->method('getAttributesByCode')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->eavAttributeResource->expects($this->any())->method('getAttributeCode')
-            ->will($this->returnValue('1'));
+            ->willReturn('1');
         $this->eavAttributeResource->expects($this->any())->method('getFrontendLabel')
-            ->will($this->returnValue('attribute_label'));
+            ->willReturn('attribute_label');
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->product = $this->objectManagerHelper->getObject(
@@ -126,28 +126,28 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->product->setData('operator', $operator);
 
         $this->config->expects($this->any())->method('getAttribute')
-            ->will($this->returnValue($this->eavAttributeResource));
+            ->willReturn($this->eavAttributeResource);
 
         $this->eavAttributeResource->expects($this->any())->method('isScopeGlobal')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->eavAttributeResource->expects($this->any())->method($input['method'])
-            ->will($this->returnValue($input['type']));
+            ->willReturn($input['type']);
 
         $this->productModel->expects($this->any())->method('hasData')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->productModel->expects($this->at(0))->method('getData')
-            ->will($this->returnValue(['1' => ['1' => $attributeValue]]));
+            ->willReturn(['1' => ['1' => $attributeValue]]);
         $this->productModel->expects($this->any())->method('getData')
-            ->will($this->returnValue($newValue));
+            ->willReturn($newValue);
         $this->productModel->expects($this->any())->method('getId')
-            ->will($this->returnValue('1'));
+            ->willReturn('1');
         $this->productModel->expects($this->once())->method('getStoreId')
-            ->will($this->returnValue('1'));
+            ->willReturn('1');
         $this->productModel->expects($this->any())->method('getResource')
-            ->will($this->returnValue($this->productResource));
+            ->willReturn($this->productResource);
 
         $this->productResource->expects($this->any())->method('getAttribute')
-            ->will($this->returnValue($this->eavAttributeResource));
+            ->willReturn($this->eavAttributeResource);
 
         $this->product->collectValidatedAttributes($this->productModel);
         $this->assertTrue($this->product->validate($this->productModel));

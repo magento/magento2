@@ -36,7 +36,7 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with(\Magento\Framework\Mview\Config\Data::class)
-            ->will($this->returnValue($this->dataMock));
+            ->willReturn($this->dataMock);
         $this->dataMock->expects($this->once())
             ->method('merge')
             ->with(['some_config']);
@@ -55,7 +55,7 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(\Magento\Framework\Mview\Config\Data::class)
-            ->will($this->returnValue($this->dataMock));
+            ->willReturn($this->dataMock);
         $this->dataMock->expects($this->once())
             ->method('merge')
             ->with(['some_config']);
@@ -74,11 +74,11 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with(\Magento\Framework\Mview\Config\Data::class)
-            ->will($this->returnValue($this->dataMock));
+            ->willReturn($this->dataMock);
         $this->dataMock->expects($this->once())
             ->method('get')
             ->with('some_path', 'default')
-            ->will($this->returnValue('some_value'));
+            ->willReturn('some_value');
 
         $this->model = new Proxy(
             $this->objectManagerMock,
@@ -94,11 +94,11 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(\Magento\Framework\Mview\Config\Data::class)
-            ->will($this->returnValue($this->dataMock));
+            ->willReturn($this->dataMock);
         $this->dataMock->expects($this->once())
             ->method('get')
             ->with('some_path', 'default')
-            ->will($this->returnValue('some_value'));
+            ->willReturn('some_value');
 
         $this->model = new Proxy(
             $this->objectManagerMock,

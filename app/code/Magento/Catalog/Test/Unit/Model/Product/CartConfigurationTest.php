@@ -17,7 +17,7 @@ class CartConfigurationTest extends \PHPUnit\Framework\TestCase
     {
         $cartConfiguration = new \Magento\Catalog\Model\Product\CartConfiguration();
         $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $productMock->expects($this->once())->method('getTypeId')->will($this->returnValue($productType));
+        $productMock->expects($this->once())->method('getTypeId')->willReturn($productType);
         $this->assertEquals($expected, $cartConfiguration->isProductConfigured($productMock, $config));
     }
 

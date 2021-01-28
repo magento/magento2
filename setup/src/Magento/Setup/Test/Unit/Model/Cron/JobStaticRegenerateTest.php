@@ -14,7 +14,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
      */
     private $jobStaticRegenerate;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->jobStaticRegenerate = $this->getJobStaticRegenerateMock(
             [
@@ -36,7 +36,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
         $modeObjectMock = $this->getModeObjectMock(['getMode']);
         $modeObjectMock->expects($this->once())
             ->method('getMode')
-            ->will($this->returnValue(State::MODE_PRODUCTION));
+            ->willReturn(State::MODE_PRODUCTION);
 
         $filesystemMock = $this->getFilesystemObjectMock(['regenerateStatic']);
         $filesystemMock
@@ -46,17 +46,17 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
         $this->jobStaticRegenerate
             ->expects($this->once())
             ->method('getFilesystem')
-            ->will($this->returnValue($filesystemMock));
+            ->willReturn($filesystemMock);
 
         $this->jobStaticRegenerate
             ->expects($this->once())
             ->method('getModeObject')
-            ->will($this->returnValue($modeObjectMock));
+            ->willReturn($modeObjectMock);
 
         $this->jobStaticRegenerate
             ->expects($this->once())
             ->method('getOutputObject')
-            ->will($this->returnValue($this->getOutputObjectMock()));
+            ->willReturn($this->getOutputObjectMock());
 
         $this->jobStaticRegenerate->execute();
     }
@@ -69,12 +69,12 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
         $modeObjectMock = $this->getModeObjectMock(['getMode']);
         $modeObjectMock->expects($this->once())
             ->method('getMode')
-            ->will($this->returnValue(State::MODE_DEVELOPER));
+            ->willReturn(State::MODE_DEVELOPER);
 
         $this->jobStaticRegenerate
             ->expects($this->once())
             ->method('getModeObject')
-            ->will($this->returnValue($modeObjectMock));
+            ->willReturn($modeObjectMock);
 
         $statusObject = $this->getStatusObjectMock(['add']);
         $statusObject
@@ -83,7 +83,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
         $this->jobStaticRegenerate
             ->expects($this->exactly(3))
             ->method('getStatusObject')
-            ->will($this->returnValue($statusObject));
+            ->willReturn($statusObject);
 
         $cacheObject = $this->getCacheObjectMock(['clean']);
         $cacheObject
@@ -92,7 +92,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
         $this->jobStaticRegenerate
             ->expects($this->once())
             ->method('getCacheObject')
-            ->will($this->returnValue($cacheObject));
+            ->willReturn($cacheObject);
 
         $cleanFilesObject = $this->getCleanFilesObjectMock(['clearMaterializedViewFiles', 'clearCodeGeneratedFiles']);
         $cleanFilesObject
@@ -104,17 +104,18 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
         $this->jobStaticRegenerate
             ->expects($this->exactly(2))
             ->method('getCleanFilesObject')
-            ->will($this->returnValue($cleanFilesObject));
+            ->willReturn($cleanFilesObject);
 
         $this->jobStaticRegenerate->execute();
     }
 
     /**
-     * @expectedException \RuntimeException
      * @covers \Magento\Setup\Model\Cron\JobStaticRegenerate::execute
      */
     public function testExecuteWithException()
     {
+        $this->expectException(\RuntimeException::class);
+
         $modeObjectMock = $this->getModeObjectMock(['getMode']);
         $modeObjectMock->expects($this->once())
             ->method('getMode')
@@ -122,7 +123,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
         $this->jobStaticRegenerate
             ->expects($this->once())
             ->method('getModeObject')
-            ->will($this->returnValue($modeObjectMock));
+            ->willReturn($modeObjectMock);
 
         $statusObject = $this->getStatusObjectMock(['toggleUpdateError']);
         $statusObject
@@ -131,7 +132,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
         $this->jobStaticRegenerate
             ->expects($this->once())
             ->method('getStatusObject')
-            ->will($this->returnValue($statusObject));
+            ->willReturn($statusObject);
 
         $this->jobStaticRegenerate->execute();
     }

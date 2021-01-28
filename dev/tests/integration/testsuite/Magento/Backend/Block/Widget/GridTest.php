@@ -43,8 +43,8 @@ class GridTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getChildName'
-        )->will(
-            $this->returnValueMap($returnValueMap)
+        )->willReturnMap(
+            $returnValueMap
         );
         $this->_layoutMock->expects(
             $this->any()
@@ -52,8 +52,8 @@ class GridTest extends \PHPUnit\Framework\TestCase
             'getBlock'
         )->with(
             'grid.columnSet'
-        )->will(
-            $this->returnValue($this->_columnSetMock)
+        )->willReturn(
+            $this->_columnSetMock
         );
         $this->_layoutMock->expects(
             $this->any()
@@ -61,14 +61,14 @@ class GridTest extends \PHPUnit\Framework\TestCase
             'createBlock'
         )->with(
             \Magento\Backend\Block\Widget\Button::class
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                     \Magento\Framework\View\LayoutInterface::class
                 )->createBlock(
                     \Magento\Backend\Block\Widget\Button::class
                 )
-            )
+            
         );
         $this->_layoutMock->expects(
             $this->any()
@@ -76,12 +76,12 @@ class GridTest extends \PHPUnit\Framework\TestCase
             'helper'
         )->with(
             \Magento\Framework\Json\Helper\Data::class
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                     \Magento\Framework\Json\Helper\Data::class
                 )
-            )
+            
         );
 
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -138,7 +138,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMainButtonsHtmlReturnsEmptyStringIfFiltersArentVisible()
     {
-        $this->_columnSetMock->expects($this->once())->method('isFilterVisible')->will($this->returnValue(false));
+        $this->_columnSetMock->expects($this->once())->method('isFilterVisible')->willReturn(false);
         $this->_block->getMainButtonsHtml();
     }
 

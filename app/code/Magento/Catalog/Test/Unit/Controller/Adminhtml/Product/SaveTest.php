@@ -51,9 +51,9 @@ class SaveTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTe
         );
         $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)->disableOriginalConstructor()
             ->setMethods(['addData', 'getSku', 'getTypeId', 'getStoreId', '__sleep', '__wakeup'])->getMock();
-        $this->product->expects($this->any())->method('getTypeId')->will($this->returnValue('simple'));
-        $this->product->expects($this->any())->method('getStoreId')->will($this->returnValue('1'));
-        $this->productBuilder->expects($this->any())->method('build')->will($this->returnValue($this->product));
+        $this->product->expects($this->any())->method('getTypeId')->willReturn('simple');
+        $this->product->expects($this->any())->method('getStoreId')->willReturn('1');
+        $this->productBuilder->expects($this->any())->method('build')->willReturn($this->product);
 
         $this->messageManagerMock = $this->getMockForAbstractClass(
             \Magento\Framework\Message\ManagerInterface::class
@@ -105,7 +105,7 @@ class SaveTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTe
 
         $storeManagerInterfaceMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->action = (new ObjectManagerHelper($this))->getObject(
             \Magento\Catalog\Controller\Adminhtml\Product\Save::class,

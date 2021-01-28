@@ -44,7 +44,7 @@ class RouterListTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->at(0))
             ->method('create')
             ->with('DefaultClass')
-            ->will($this->returnValue($expectedClass));
+            ->willReturn($expectedClass);
 
         $this->assertEquals($expectedClass, $this->model->current());
     }
@@ -55,7 +55,7 @@ class RouterListTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->at(0))
             ->method('create')
             ->with('FrontClass')
-            ->will($this->returnValue($expectedClass));
+            ->willReturn($expectedClass);
 
         $this->model->next();
         $this->assertEquals($expectedClass, $this->model->current());
@@ -82,12 +82,12 @@ class RouterListTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->at(0))
             ->method('create')
             ->with('DefaultClass')
-            ->will($this->returnValue($defaultClass));
+            ->willReturn($defaultClass);
 
         $this->objectManagerMock->expects($this->at(1))
             ->method('create')
             ->with('FrontClass')
-            ->will($this->returnValue($frontClass));
+            ->willReturn($frontClass);
 
         $this->assertEquals($defaultClass, $this->model->current());
         $this->model->next();

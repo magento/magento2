@@ -52,15 +52,15 @@ class FormTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getExperimentScript'
-        )->will(
-            $this->returnValue($experimentCode)
+        )->willReturn(
+            $experimentCode
         );
         $this->_experimentCodeMock->expects(
             $this->once()
         )->method(
             'getCodeId'
-        )->will(
-            $this->returnValue($experimentCodeId)
+        )->willReturn(
+            $experimentCodeId
         );
         $this->_prepareFormMock($experimentCode, $experimentCodeId);
 
@@ -89,8 +89,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
         )->with(
             'googleoptimizer_fields',
             ['legend' => 'Google Analytics Content Experiments Code']
-        )->will(
-            $this->returnValue($this->_fieldsetMock)
+        )->willReturn(
+            $this->_fieldsetMock
         );
 
         $this->_fieldsetMock->expects(

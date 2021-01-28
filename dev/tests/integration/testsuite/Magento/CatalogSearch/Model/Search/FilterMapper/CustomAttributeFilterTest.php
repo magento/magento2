@@ -68,11 +68,12 @@ class CustomAttributeFilterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid attribute id for field: field1
      */
     public function testApplyWithWrongAttributeFilter()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid attribute id for field: field1');
+
         $select = $this->resource->getConnection()->select();
         $filters = $this->mockFilters();
         $firstFilter = reset($filters);

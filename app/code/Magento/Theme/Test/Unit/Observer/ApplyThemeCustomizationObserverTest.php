@@ -44,12 +44,12 @@ class ApplyThemeCustomizationObserverTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getCustomization'
-        )->will(
-            $this->returnValue($this->themeCustomization)
+        )->willReturn(
+            $this->themeCustomization
         );
 
         $designMock = $this->createMock(\Magento\Framework\View\DesignInterface::class);
-        $designMock->expects($this->any())->method('getDesignTheme')->will($this->returnValue($themeMock));
+        $designMock->expects($this->any())->method('getDesignTheme')->willReturn($themeMock);
 
         $this->assetsMock = $this->createMock(\Magento\Framework\View\Asset\GroupedCollection::class);
 
@@ -76,13 +76,13 @@ class ApplyThemeCustomizationObserverTest extends \PHPUnit\Framework\TestCase
         $fileService = $this->getMockForAbstractClass(
             \Magento\Framework\View\Design\Theme\Customization\FileAssetInterface::class
         );
-        $file->expects($this->any())->method('getCustomizationService')->will($this->returnValue($fileService));
+        $file->expects($this->any())->method('getCustomizationService')->willReturn($fileService);
 
         $this->assetRepo->expects($this->once())
             ->method('createArbitrary')
-            ->will($this->returnValue($asset));
+            ->willReturn($asset);
 
-        $this->themeCustomization->expects($this->once())->method('getFiles')->will($this->returnValue([$file]));
+        $this->themeCustomization->expects($this->once())->method('getFiles')->willReturn([$file]);
         $this->assetsMock->expects($this->once())->method('add')->with($this->anything(), $asset);
 
         $observer = new \Magento\Framework\Event\Observer();
@@ -96,7 +96,7 @@ class ApplyThemeCustomizationObserverTest extends \PHPUnit\Framework\TestCase
             ->method('getCustomizationService')
             ->willThrowException(new \InvalidArgumentException());
 
-        $this->themeCustomization->expects($this->once())->method('getFiles')->will($this->returnValue([$file]));
+        $this->themeCustomization->expects($this->once())->method('getFiles')->willReturn([$file]);
         $this->logger->expects($this->once())->method('critical');
 
         $observer = new \Magento\Framework\Event\Observer();

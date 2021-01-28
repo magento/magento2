@@ -33,11 +33,11 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
         $allGroup->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(32000));
+            ->willReturn(32000);
 
         $groupManagement->expects($this->any())
             ->method('getAllCustomersGroup')
-            ->will($this->returnValue($allGroup));
+            ->willReturn($allGroup);
 
         $this->_model = $objectHelper->getObject(
             \Magento\CatalogInventory\Model\Adminhtml\Stock\Item::class,

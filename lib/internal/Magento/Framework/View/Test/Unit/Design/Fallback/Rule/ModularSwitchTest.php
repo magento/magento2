@@ -52,8 +52,8 @@ class ModularSwitchTest extends \PHPUnit\Framework\TestCase
             'getPatternDirs'
         )->with(
             $inputParams
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
 
         $this->ruleModular->expects($this->never())->method('getPatternDirs');
@@ -73,8 +73,8 @@ class ModularSwitchTest extends \PHPUnit\Framework\TestCase
             'getPatternDirs'
         )->with(
             $inputParams
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
 
         $this->assertSame($expectedResult, $this->object->getPatternDirs($inputParams));

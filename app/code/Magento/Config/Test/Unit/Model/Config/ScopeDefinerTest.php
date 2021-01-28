@@ -41,8 +41,8 @@ class ScopeDefinerTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getParam'
-        )->will(
-            $this->returnValueMap([['website', null, 'someWebsite'], ['store', null, 'someStore']])
+        )->willReturnMap(
+            [['website', null, 'someWebsite'], ['store', null, 'someStore']]
         );
         $this->assertEquals(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $this->_model->getScope());
     }
@@ -53,8 +53,8 @@ class ScopeDefinerTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getParam'
-        )->will(
-            $this->returnValueMap([['website', null, 'someWebsite'], ['store', null, null]])
+        )->willReturnMap(
+            [['website', null, 'someWebsite'], ['store', null, null]]
         );
         $this->assertEquals(\Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE, $this->_model->getScope());
     }

@@ -27,8 +27,8 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
         )->with(
             'etc',
             'Magento_Backend'
-        )->will(
-            $this->returnValue('schema_dir')
+        )->willReturn(
+            'schema_dir'
         );
         $this->_model = new \Magento\Backend\Model\Menu\Config\SchemaLocator($this->_moduleReaderMock);
     }
