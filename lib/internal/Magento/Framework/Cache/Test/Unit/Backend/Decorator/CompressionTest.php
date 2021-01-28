@@ -122,7 +122,7 @@ class CompressionTest extends \PHPUnit\Framework\TestCase
         $decorator->save($this->_testString, $cacheId);
 
         $this->assertArrayHasKey($cacheId, self::$_cacheStorage);
-        $this->assertInternalType('string', self::$_cacheStorage[$cacheId]);
+        $this->assertIsString(self::$_cacheStorage[$cacheId]);
 
         $loadedValue = $decorator->load($cacheId);
 

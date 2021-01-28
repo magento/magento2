@@ -272,7 +272,7 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
         )->method(
             'findOne'
         )->with(
-            $this->logicalAnd($this->arrayHasKey('_id'), $this->contains($cacheId))
+            $this->logicalAnd($this->arrayHasKey('_id'), $this->containsEqual($cacheId))
         )->will(
             $this->returnValue(['mtime' => $time])
         );
@@ -417,6 +417,9 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
      */
     public function testCleanInvalidMode()
     {
+        $this->expectException('\Zend_Cache_Exception');
+        $this->expectExceptionMessage('Unsupported cleaning mode: invalid_mode');
+
         $this->_model->clean('invalid_mode');
     }
 }

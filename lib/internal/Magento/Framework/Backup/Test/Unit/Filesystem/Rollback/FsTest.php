@@ -79,7 +79,7 @@ class FsTest extends \PHPUnit\Framework\TestCase
 
     public function testRunNotEnoughPermissions()
     {
-        $this->expectException('\\Magento\Framework\Backup\Exception\NotEnoughPermissions');
+        $this->expectException('\Magento\Framework\Backup\Exception\NotEnoughPermissions');
         $this->expectExceptionMessage('You need write permissions for: test1, test2');
 
         $fsInfo = [

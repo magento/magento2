@@ -53,10 +53,11 @@ class CoreTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider setBackendExceptionProvider
-     * @expectedException \Zend_Cache_Exception
      */
     public function testSetBackendException($decorators)
     {
+        $this->expectException('\Zend_Cache_Exception');
+
         $core = new \Magento\Framework\Cache\Core(['backend_decorators' => $decorators]);
         $core->setBackend($this->_mockBackend);
     }

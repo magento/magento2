@@ -20,11 +20,12 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array $options
      *
-     * @expectedException \Zend_Cache_Exception
      * @dataProvider initializeWithExceptionDataProvider
      */
     public function testInitializeWithException($options)
     {
+        $this->expectException('\Zend_Cache_Exception');
+
         $this->objectManager->getObject(
             \Magento\Framework\Cache\Backend\Database::class,
             [
@@ -379,11 +380,10 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @expectedException \Zend_Cache_Exception
-     */
     public function testCleanException()
     {
+        $this->expectException('\Zend_Cache_Exception');
+
         /** @var \Magento\Framework\Cache\Backend\Database $database */
         $database = $this->objectManager->getObject(
             \Magento\Framework\Cache\Backend\Database::class,
