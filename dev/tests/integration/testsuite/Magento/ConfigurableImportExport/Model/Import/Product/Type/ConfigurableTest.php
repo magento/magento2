@@ -108,7 +108,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $optionCollection = $product->getTypeInstance()->getConfigurableOptions($product);
         foreach ($optionCollection as $option) {
             foreach ($option as $optionData) {
-                $this->assertStringContainsString($optionData['sku'], $optionSkuList);
+                $this->assertContains($optionData['sku'], $optionSkuList);
             }
         }
 

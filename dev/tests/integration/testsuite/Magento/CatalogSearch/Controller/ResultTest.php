@@ -44,7 +44,7 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $responseBody = $this->getResponse()->getBody();
         $data = '<script>alert(1)</script>';
-        $this->assertNotContains($data, $responseBody);
+        $this->assertStringNotContainsString($data, $responseBody);
         $this->assertStringContainsString($escaper->escapeHtml($data), $responseBody);
     }
 
@@ -134,7 +134,7 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $responseBody = $this->getResponse()->getBody();
         $this->assertStringContainsString('Search results for: &#039;popular_query_text&#039;', $responseBody);
-        $this->assertNotContains('/catalogsearch/searchTermsLog/save/', $responseBody);
+        $this->assertStringNotContainsString('/catalogsearch/searchTermsLog/save/', $responseBody);
 
         $query->loadByQueryText('popular_query_text');
         $this->assertEquals(101, $query->getPopularity());
@@ -158,7 +158,7 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $responseBody = $this->getResponse()->getBody();
         $this->assertStringContainsString('Search results for: &#039;query_text&#039;', $responseBody);
-        $this->assertNotContains('/catalogsearch/searchTermsLog/save/', $responseBody);
+        $this->assertStringNotContainsString('/catalogsearch/searchTermsLog/save/', $responseBody);
 
         $query->loadByQueryText('query_text');
         $this->assertEquals(2, $query->getPopularity());

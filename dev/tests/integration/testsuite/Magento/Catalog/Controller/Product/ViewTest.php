@@ -286,7 +286,7 @@ class ViewTest extends AbstractController
         $pTag = Product::CACHE_TAG . '_' . $product->getId();
         $hTags = $this->getResponse()->getHeader('X-Magento-Tags');
         $tags = $hTags && $hTags->getFieldValue() ? explode(',', $hTags->getFieldValue()) : [];
-        $this->assertStringContainsString(
+        $this->assertContains(
             $pTag,
             $tags,
             "Failed asserting that X-Magento-Tags: {$hTags->getFieldValue()} contains \"$pTag\""

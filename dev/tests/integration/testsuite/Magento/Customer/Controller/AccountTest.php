@@ -129,7 +129,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         /** @var Session $customer */
         $session = Bootstrap::getObjectManager()->get(Session::class);
         $this->assertEquals($token, $session->getRpToken());
-        $this->assertNotContains($token, $response->getHeader('Location')->getFieldValue());
+        $this->assertStringNotContainsString($token, $response->getHeader('Location')->getFieldValue());
         $this->assertCustomerConfirmationEquals(1, null);
     }
 

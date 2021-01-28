@@ -200,7 +200,7 @@ class TopMenuTest extends TestCase
         $this->updateCategories($categories);
         $output = $this->block->getHtml('level-top', 'submenu', 0);
         foreach ($expectedCategories as $data) {
-            $this->assertNotContains(
+            $this->assertStringNotContainsString(
                 $data['name'],
                 $output,
                 'Category ' . $data['name'] . ' should not appear in the menu!'
@@ -435,7 +435,7 @@ class TopMenuTest extends TestCase
             $output,
             'Category "' . $expectedCategory . '" should appear in the menu!'
         );
-        $this->assertNotContains(
+        $this->assertStringNotContainsString(
             $notExpectedCategory,
             $output,
             'Category "' . $notExpectedCategory . '" should not appear in the menu!'
