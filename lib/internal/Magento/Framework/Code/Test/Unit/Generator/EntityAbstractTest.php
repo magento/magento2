@@ -61,6 +61,8 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
 
     public function testConstruct()
     {
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
+
         // without parameters
         $this->assertAttributeEmpty('_sourceClassName', $this->_model);
         $this->assertAttributeEmpty('_resultClassName', $this->_model);
