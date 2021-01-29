@@ -84,17 +84,13 @@
         <constraint xsi:type="foreign" referenceId="OAUTH_NONCE_CONSUMER_ID_OAUTH_CONSUMER_ENTITY_ID" table="oauth_nonce"
                     column="consumer_id" referenceTable="oauth_consumer" referenceColumn="entity_id"
                     onDelete="CASCADE"/>
-        <constraint xsi:type="unique" referenceId="OAUTH_NONCE_NONCE_CONSUMER_ID">
+        <constraint xsi:type="primary" referenceId="OAUTH_NONCE_NONCE_CONSUMER_ID">
             <column name="nonce"/>
             <column name="consumer_id"/>
         </constraint>
         <index referenceId="OAUTH_NONCE_TIMESTAMP" indexType="btree">
             <column name="timestamp"/>
         </index>
-        <constraint xsi:type="primary" referenceId="PRIMARY">
-            <column name="nonce"/>
-            <column name="consumer_id"/>
-        </constraint>
     </table>
     <table name="integration" resource="default" engine="innodb" comment="integration">
         <column xsi:type="int" name="integration_id" unsigned="true" nullable="false" identity="true"
