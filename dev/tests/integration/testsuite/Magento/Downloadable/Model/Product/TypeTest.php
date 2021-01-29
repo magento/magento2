@@ -121,7 +121,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             'link_type' => 'file',
             'link_file' => '/j/e/jellyfish_2_4.jpg',
             'number_of_downloads' => '15',
-            'price' => '15.0000',
+            'price' => '15.000000',
             'sample_type' => 'file',
             'sort_order' => '1',
             'title' => 'Updated downloadable link #1',
