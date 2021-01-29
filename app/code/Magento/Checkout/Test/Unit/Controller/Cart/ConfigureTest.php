@@ -15,51 +15,51 @@ use Magento\Framework\Controller\ResultFactory;
 class ConfigureTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\Controller\ResultFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\ResultFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultFactoryMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Redirect | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\Redirect | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultRedirectMock;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResponseInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseMock;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\ManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageManagerMock;
 
     /**
-     * @var \Magento\Checkout\Controller\Cart\Configure | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Checkout\Controller\Cart\Configure | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $configureController;
 
     /**
-     * @var \Magento\Framework\App\Action\Context | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Action\Context | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Checkout\Model\Cart | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Checkout\Model\Cart | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $cartMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(\Magento\Framework\App\Action\Context::class);
         $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);

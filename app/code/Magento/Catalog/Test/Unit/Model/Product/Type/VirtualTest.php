@@ -12,7 +12,7 @@ class VirtualTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);

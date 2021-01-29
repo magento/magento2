@@ -54,7 +54,7 @@ class CouponUsagesTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->usage = $this->objectManager->get(Usage::class);
@@ -130,7 +130,7 @@ class CouponUsagesTest extends TestCase
         $quote->load($reservedOrderId, 'reserved_order_id');
 
         /** @var OrderManagementInterface|MockObject $orderManagement */
-        $orderManagement = $this->createMock(OrderManagementInterface::class);
+        $orderManagement = $this->getMockForAbstractClass(OrderManagementInterface::class);
         $orderManagement->expects($this->once())
             ->method('place')
             ->willThrowException(new \Exception($exceptionMessage));

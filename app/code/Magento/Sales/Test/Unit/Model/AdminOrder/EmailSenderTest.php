@@ -10,17 +10,17 @@ use \Magento\Sales\Model\AdminOrder\EmailSender;
 class EmailSenderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageManagerMock;
 
@@ -37,7 +37,7 @@ class EmailSenderTest extends \PHPUnit\Framework\TestCase
     /**
      * Test setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\Manager::class);
         $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);

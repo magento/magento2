@@ -33,7 +33,7 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
     /**
      * Model under test
      *
-     * @var \Magento\Framework\Code\Generator\EntityAbstract| \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Code\Generator\EntityAbstract| \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
@@ -47,14 +47,14 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
      */
     private $resultClass;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sourceClass = '\\' . \Magento\Framework\DataObject::class;
         $this->resultClass = '\\' . \Magento\Framework\DataObject_MyResult::class;
         $this->_model = $this->getMockForAbstractClass(\Magento\Framework\Code\Generator\EntityAbstract::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }
@@ -196,7 +196,7 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
         );
         // we need to mock abstract methods to set correct return value type
         foreach ($abstractGetters as $methodName) {
-            $this->_model->expects($this->any())->method($methodName)->will($this->returnValue([]));
+            $this->_model->expects($this->any())->method($methodName)->willReturn([]);
         }
 
         $result = $this->_model->generate();
@@ -276,20 +276,20 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $codeGenerator->expects($this->once())->method('setName')->with($this->resultClass)->will($this->returnSelf());
-        $codeGenerator->expects($this->once())->method('addProperties')->will($this->returnSelf());
-        $codeGenerator->expects($this->once())->method('addMethods')->will($this->returnSelf());
+        $codeGenerator->expects($this->once())->method('setName')->with($this->resultClass)->willReturnSelf();
+        $codeGenerator->expects($this->once())->method('addProperties')->willReturnSelf();
+        $codeGenerator->expects($this->once())->method('addMethods')->willReturnSelf();
         $codeGenerator->expects($this->once())
             ->method('setClassDocBlock')
             ->with($this->isType('array'))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $codeGenerator->expects($this->once())
             ->method('generate')
-            ->will($this->returnValue($willWriteCode ? self::RESULT_CODE : null));
+            ->willReturn($willWriteCode ? self::RESULT_CODE : null);
 
         // Add configuration for the generation step
-        /** @var $ioObject \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $ioObject \PHPUnit\Framework\MockObject\MockObject */
         $ioObject = $mocks['io_object'];
         if ($willWriteCode) {
             $ioObject->expects($this->once())->method('writeResultFile')->with(self::RESULT_FILE, self::RESULT_CODE);

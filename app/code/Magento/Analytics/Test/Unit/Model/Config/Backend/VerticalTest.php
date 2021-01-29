@@ -23,7 +23,7 @@ class VerticalTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper =
             new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -48,10 +48,11 @@ class VerticalTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testBeforeSaveFailedWithLocalizedException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->subject->setValue('');
 
         $this->subject->beforeSave();

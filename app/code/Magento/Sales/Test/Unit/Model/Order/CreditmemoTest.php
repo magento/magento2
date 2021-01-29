@@ -21,7 +21,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 class CreditmemoTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var OrderRepositoryInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderRepositoryInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderRepository;
 
@@ -31,19 +31,19 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
     protected $creditmemo;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cmItemCollectionFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->orderRepository = $this->createMock(OrderRepositoryInterface::class);
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->orderRepository = $this->getMockForAbstractClass(OrderRepositoryInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->cmItemCollectionFactoryMock = $this->getMockBuilder(
@@ -91,7 +91,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
         $order->expects($this->atLeastOnce())
             ->method('setHistoryEntityName')
             ->with($entityName)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->orderRepository->expects($this->atLeastOnce())
             ->method('get')
             ->with($orderId)
@@ -143,7 +143,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
             ->with($this->creditmemo);
         $items[] = $itemMock;
 
-        /** @var ItemCollection|\PHPUnit_Framework_MockObject_MockObject $itemCollectionMock */
+        /** @var ItemCollection|\PHPUnit\Framework\MockObject\MockObject $itemCollectionMock */
         $itemCollectionMock = $this->getMockBuilder(
             \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection::class
         )
@@ -152,11 +152,11 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
         $itemCollectionMock->expects($this->once())
             ->method('setCreditmemoFilter')
             ->with($id)
-            ->will($this->returnValue($items));
+            ->willReturn($items);
 
         $this->cmItemCollectionFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($itemCollectionMock));
+            ->willReturn($itemCollectionMock);
 
         $itemsCollection = $this->creditmemo->getItemsCollection();
         $this->assertEquals($items, $itemsCollection);
@@ -172,7 +172,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
             ->method('setCreditmemo');
         $items[] = $itemMock;
 
-        /** @var ItemCollection|\PHPUnit_Framework_MockObject_MockObject $itemCollectionMock */
+        /** @var ItemCollection|\PHPUnit\Framework\MockObject\MockObject $itemCollectionMock */
         $itemCollectionMock = $this->getMockBuilder(
             \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection::class
         )
@@ -181,11 +181,11 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
         $itemCollectionMock->expects($this->once())
             ->method('setCreditmemoFilter')
             ->with(null)
-            ->will($this->returnValue($items));
+            ->willReturn($items);
 
         $this->cmItemCollectionFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($itemCollectionMock));
+            ->willReturn($itemCollectionMock);
 
         $itemsCollection = $this->creditmemo->getItemsCollection();
         $this->assertEquals($items, $itemsCollection);

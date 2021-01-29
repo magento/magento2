@@ -13,32 +13,32 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_factoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_urlModelMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_aclMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_helperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_appConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_scopeConfigMock;
 
@@ -57,7 +57,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         'toolTip' => 'Item tooltip',
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new \Magento\Backend\Model\Menu\Item\Validator();
     }
@@ -65,11 +65,12 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $requiredParam
      * @throws \BadMethodCallException
-     * @expectedException \BadMethodCallException
      * @dataProvider requiredParamsProvider
      */
     public function testValidateWithMissingRequiredParamThrowsException($requiredParam)
     {
+        $this->expectException(\BadMethodCallException::class);
+
         try {
             unset($this->_params[$requiredParam]);
             $this->_model->validate($this->_params);
@@ -91,11 +92,12 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      * @param string $param
      * @param mixed $invalidValue
      * @throws \InvalidArgumentException
-     * @expectedException \InvalidArgumentException
      * @dataProvider invalidParamsProvider
      */
     public function testValidateWithNonValidPrimitivesThrowsException($param, $invalidValue)
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         try {
             $this->_params[$param] = $invalidValue;
             $this->_model->validate($this->_params);
@@ -134,10 +136,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      * @param $existedItems
      * @param $newItem
      * @dataProvider duplicateIdsProvider
-     * @expectedException \InvalidArgumentException
      */
     public function testValidateWithDuplicateIdsThrowsException($existedItems, $newItem)
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         foreach ($existedItems as $item) {
             $item = array_merge($item, $this->_params);
             $this->_model->validate($item);
@@ -204,10 +207,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testValidateParamWithNullForRequiredParamThrowsException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->_model->validateParam('title', null);
     }
 
@@ -222,10 +226,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testValidateParamValidatesPrimitiveValues()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->_model->validateParam('toolTip', '/:');
     }
 

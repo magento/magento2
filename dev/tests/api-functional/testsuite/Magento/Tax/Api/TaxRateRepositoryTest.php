@@ -56,7 +56,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
     /**
      * Execute per test initialization.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->taxRateService = $objectManager->get(\Magento\Tax\Api\TaxRateRepositoryInterface::class);
@@ -75,7 +75,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
         $this->getFixtureTaxRules();
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $taxRules = $this->getFixtureTaxRules();
         if (count($taxRules)) {

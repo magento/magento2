@@ -14,42 +14,42 @@ use \Magento\Tax\Model\Sales\Total\Quote\Shipping;
 class ShippingTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $taxConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $taxCalculationMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteDetailsDataObjectFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $itemDetailsDataObjectFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $taxClassKeyDataObjectFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $addressFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $regionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteMock;
 
@@ -58,7 +58,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->taxConfigMock = $this->createMock(\Magento\Tax\Model\Config::class);
         $this->taxCalculationMock = $this->createMock(\Magento\Tax\Api\TaxCalculationInterface::class);
@@ -126,7 +126,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
      *
      * @param $className
      * @param array $objectState
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getMockObject($className, array $objectState)
     {
@@ -140,7 +140,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
 
         $mock = $this->createPartialMock($className, $methods);
         foreach ($getterValueMap as $getterName => $value) {
-            $mock->expects($this->any())->method($getterName)->will($this->returnValue($value));
+            $mock->expects($this->any())->method($getterName)->willReturn($value);
         }
 
         return $mock;

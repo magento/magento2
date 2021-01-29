@@ -21,27 +21,27 @@ use Magento\Quote\Model\Quote\Address\Total;
 class ShippingDiscountTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | Validator
+     * @var \PHPUnit\Framework\MockObject\MockObject | Validator
      */
     protected $validatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | Quote
+     * @var \PHPUnit\Framework\MockObject\MockObject | Quote
      */
     private $quoteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | Total
+     * @var \PHPUnit\Framework\MockObject\MockObject | Total
      */
     private $totalMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | Address
+     * @var \PHPUnit\Framework\MockObject\MockObject | Address
      */
     private $addressMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | ShippingAssignmentInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject | ShippingAssignmentInterface
      */
     private $shippingAssignmentMock;
 
@@ -50,7 +50,7 @@ class ShippingDiscountTest extends \PHPUnit\Framework\TestCase
      */
     private $discount;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->validatorMock = $this->getMockBuilder(\Magento\SalesRule\Model\Validator::class)
             ->disableOriginalConstructor()
@@ -97,9 +97,9 @@ class ShippingDiscountTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $shipping = $this->createMock(ShippingInterface::class);
+        $shipping = $this->getMockForAbstractClass(ShippingInterface::class);
         $shipping->expects($this->any())->method('getAddress')->willReturn($this->addressMock);
-        $this->shippingAssignmentMock = $this->createMock(ShippingAssignmentInterface::class);
+        $this->shippingAssignmentMock = $this->getMockForAbstractClass(ShippingAssignmentInterface::class);
         $this->shippingAssignmentMock->expects($this->any())->method('getShipping')->willReturn($shipping);
 
         $this->discount = new ShippingDiscount(

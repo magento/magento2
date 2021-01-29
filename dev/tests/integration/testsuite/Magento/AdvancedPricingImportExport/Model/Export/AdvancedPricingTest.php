@@ -41,7 +41,7 @@ class AdvancedPricingTest extends TestCase
     protected $fileSystem;
 
     // @codingStandardsIgnoreStart
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $db = Bootstrap::getInstance()
             ->getBootstrap()
@@ -56,7 +56,7 @@ class AdvancedPricingTest extends TestCase
     }
     // @codingStandardsIgnoreEnd
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

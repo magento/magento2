@@ -13,21 +13,21 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
     protected $entryPoint;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Indexer\Model\Processor
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Indexer\Model\Processor
      */
     protected $processor;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem
      */
     protected $filesystem;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Console\Response
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Console\Response
      */
     protected $_response;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filesystem = $this->createPartialMock(\Magento\Framework\Filesystem::class, ['getDirectoryWrite']);
         $this->processor = $this->createMock(\Magento\Indexer\Model\Processor::class);
@@ -52,12 +52,12 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
     public function testExecute($isExist, $callCount)
     {
         $this->_response->expects($this->once())->method('setCode')->with(0);
-        $this->_response->expects($this->once())->method('getCode')->will($this->returnValue(0));
+        $this->_response->expects($this->once())->method('getCode')->willReturn(0);
         $dir = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
-        $dir->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
-        $dir->expects($this->once())->method('isExist')->will($this->returnValue($isExist));
-        $dir->expects($this->exactly($callCount))->method('delete')->will($this->returnValue(true));
-        $this->filesystem->expects($this->once())->method('getDirectoryWrite')->will($this->returnValue($dir));
+        $dir->expects($this->any())->method('getRelativePath')->willReturnArgument(0);
+        $dir->expects($this->once())->method('isExist')->willReturn($isExist);
+        $dir->expects($this->exactly($callCount))->method('delete')->willReturn(true);
+        $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($dir);
         $this->processor->expects($this->once())->method('reindexAll');
         $this->assertEquals(0, $this->entryPoint->launch()->getCode());
     }

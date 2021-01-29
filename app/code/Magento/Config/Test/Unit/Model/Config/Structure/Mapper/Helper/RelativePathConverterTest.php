@@ -12,7 +12,7 @@ class RelativePathConverterTest extends \PHPUnit\Framework\TestCase
      */
     protected $_sut;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_sut = new \Magento\Config\Model\Config\Structure\Mapper\Helper\RelativePathConverter();
     }

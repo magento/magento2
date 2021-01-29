@@ -31,7 +31,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
             $mock->setAttributeId($code);
             $mock->setAttributeCode($code);
 
-            $mock->expects($this->once())->method('isInSet')->will($this->returnValue(false));
+            $mock->expects($this->once())->method('isInSet')->willReturn(false);
 
             $attributes[$code] = $mock;
         }
@@ -72,8 +72,8 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
             'isInSet'
         )->with(
             $this->equalTo($set)
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
 
         $attributes[$code] = $attribute;
@@ -87,7 +87,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
             ->setConstructorArgs($arguments)
             ->getMock();
 
-        $model->expects($this->once())->method('getAttributesByCode')->will($this->returnValue($attributes));
+        $model->expects($this->once())->method('getAttributesByCode')->willReturn($attributes);
 
         $model->walkAttributes('backend/afterSave', [$object]);
     }

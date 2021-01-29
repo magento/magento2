@@ -46,7 +46,7 @@ class SampleTest extends \PHPUnit\Framework\TestCase
      */
     protected $downloadHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -105,43 +105,43 @@ class SampleTest extends \PHPUnit\Framework\TestCase
     public function testExecuteFile()
     {
         $this->request->expects($this->at(0))->method('getParam')->with('id', 0)
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->response->expects($this->once())->method('setHttpResponseCode')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->response->expects($this->once())->method('clearBody')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->response->expects($this->any())->method('setHeader')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->response->expects($this->once())->method('sendHeaders')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->objectManager->expects($this->at(1))->method('get')->with(\Magento\Downloadable\Helper\File::class)
-            ->will($this->returnValue($this->fileHelper));
+            ->willReturn($this->fileHelper);
         $this->objectManager->expects($this->at(2))->method('get')->with(\Magento\Downloadable\Model\Sample::class)
-            ->will($this->returnValue($this->sampleModel));
+            ->willReturn($this->sampleModel);
         $this->objectManager->expects($this->at(3))->method('get')->with(\Magento\Downloadable\Helper\Download::class)
-            ->will($this->returnValue($this->downloadHelper));
+            ->willReturn($this->downloadHelper);
         $this->fileHelper->expects($this->once())->method('getFilePath')
-            ->will($this->returnValue('filepath/sample.jpg'));
+            ->willReturn('filepath/sample.jpg');
         $this->downloadHelper->expects($this->once())->method('setResource')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->downloadHelper->expects($this->once())->method('getFilename')
-            ->will($this->returnValue('sample.jpg'));
+            ->willReturn('sample.jpg');
         $this->downloadHelper->expects($this->once())->method('getContentType')
-            ->will($this->returnSelf('file'));
+            ->willReturnSelf('file');
         $this->downloadHelper->expects($this->once())->method('getFileSize')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->downloadHelper->expects($this->once())->method('getContentDisposition')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->downloadHelper->expects($this->once())->method('output')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->sampleModel->expects($this->once())->method('load')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->sampleModel->expects($this->once())->method('getId')
-            ->will($this->returnValue('1'));
+            ->willReturn('1');
         $this->sampleModel->expects($this->any())->method('getSampleType')
-            ->will($this->returnValue('file'));
+            ->willReturn('file');
         $this->objectManager->expects($this->once())->method('create')
-            ->will($this->returnValue($this->sampleModel));
+            ->willReturn($this->sampleModel);
 
         $this->sample->execute();
     }
@@ -152,37 +152,37 @@ class SampleTest extends \PHPUnit\Framework\TestCase
     public function testExecuteUrl()
     {
         $this->request->expects($this->at(0))->method('getParam')->with('id', 0)
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->response->expects($this->once())->method('setHttpResponseCode')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->response->expects($this->once())->method('clearBody')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->response->expects($this->any())->method('setHeader')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->response->expects($this->once())->method('sendHeaders')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->objectManager->expects($this->at(1))->method('get')->with(\Magento\Downloadable\Helper\Download::class)
-            ->will($this->returnValue($this->downloadHelper));
+            ->willReturn($this->downloadHelper);
         $this->downloadHelper->expects($this->once())->method('setResource')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->downloadHelper->expects($this->once())->method('getFilename')
-            ->will($this->returnValue('sample.jpg'));
+            ->willReturn('sample.jpg');
         $this->downloadHelper->expects($this->once())->method('getContentType')
-            ->will($this->returnSelf('url'));
+            ->willReturnSelf('url');
         $this->downloadHelper->expects($this->once())->method('getFileSize')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->downloadHelper->expects($this->once())->method('getContentDisposition')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->downloadHelper->expects($this->once())->method('output')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->sampleModel->expects($this->once())->method('load')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->sampleModel->expects($this->once())->method('getId')
-            ->will($this->returnValue('1'));
+            ->willReturn('1');
         $this->sampleModel->expects($this->any())->method('getSampleType')
-            ->will($this->returnValue('url'));
+            ->willReturn('url');
         $this->objectManager->expects($this->once())->method('create')
-            ->will($this->returnValue($this->sampleModel));
+            ->willReturn($this->sampleModel);
 
         $this->sample->execute();
     }

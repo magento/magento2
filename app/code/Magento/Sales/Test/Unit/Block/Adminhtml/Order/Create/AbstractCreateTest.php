@@ -12,26 +12,26 @@ use Magento\Catalog\Pricing\Price\FinalPrice;
 class AbstractCreateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceInfo\Base|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceInfo\Base|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceInfoMock;
 
     /**
-     * @var \Magento\Downloadable\Pricing\Price\LinkPrice|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Downloadable\Pricing\Price\LinkPrice|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $linkPriceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = $this->getMockBuilder(\Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate::class)
             ->setMethods(['convertPrice'])

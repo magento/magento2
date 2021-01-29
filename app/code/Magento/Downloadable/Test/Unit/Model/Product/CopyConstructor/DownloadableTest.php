@@ -13,41 +13,41 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_duplicateMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_linkMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_sampleMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_linkCollectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $jsonHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_productTypeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->jsonHelperMock = $this->createMock(\Magento\Framework\Json\Helper\Data::class);
         $this->_model = new \Magento\Downloadable\Model\Product\CopyConstructor\Downloadable($this->jsonHelperMock);
@@ -65,12 +65,12 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
 
         $this->_productTypeMock = $this->createMock(\Magento\Downloadable\Model\Product\Type::class);
 
-        $this->jsonHelperMock->expects($this->any())->method('jsonEncode')->will($this->returnArgument(0));
+        $this->jsonHelperMock->expects($this->any())->method('jsonEncode')->willReturnArgument(0);
     }
 
     public function testBuildWithNonDownloadableProductType()
     {
-        $this->_productMock->expects($this->once())->method('getTypeId')->will($this->returnValue('some value'));
+        $this->_productMock->expects($this->once())->method('getTypeId')->willReturn('some value');
 
         $this->_duplicateMock->expects($this->never())->method('setDownloadableData');
 
@@ -85,16 +85,16 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getTypeId'
-        )->will(
-            $this->returnValue(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE)
+        )->willReturn(
+            \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE
         );
 
         $this->_productMock->expects(
             $this->once()
         )->method(
             'getTypeInstance'
-        )->will(
-            $this->returnValue($this->_productTypeMock)
+        )->willReturn(
+            $this->_productTypeMock
         );
 
         $this->_productTypeMock->expects(
@@ -103,8 +103,8 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
             'getLinks'
         )->with(
             $this->_productMock
-        )->will(
-            $this->returnValue([$this->_linkMock])
+        )->willReturn(
+            [$this->_linkMock]
         );
 
         $this->_productTypeMock->expects(
@@ -113,8 +113,8 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
             'getSamples'
         )->with(
             $this->_productMock
-        )->will(
-            $this->returnValue([$this->_sampleMock])
+        )->willReturn(
+            [$this->_sampleMock]
         );
 
         $linkData = [
@@ -139,8 +139,8 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
             'sort_order' => 'sort_order',
         ];
 
-        $this->_linkMock->expects($this->once())->method('getData')->will($this->returnValue($linkData));
-        $this->_sampleMock->expects($this->once())->method('getData')->will($this->returnValue($sampleData));
+        $this->_linkMock->expects($this->once())->method('getData')->willReturn($linkData);
+        $this->_sampleMock->expects($this->once())->method('getData')->willReturn($sampleData);
 
         $this->_duplicateMock->expects($this->once())->method('setDownloadableData')->with($expectedData);
         $this->_model->build($this->_productMock, $this->_duplicateMock);

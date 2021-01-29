@@ -15,16 +15,16 @@ class ConfigCacheTest extends \PHPUnit\Framework\TestCase
     private $configCache;
 
     /**
-     * @var \Magento\Framework\App\ObjectManager\ConfigCache|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ObjectManager\ConfigCache|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheFrontendMock;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->cacheFrontendMock = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
@@ -33,7 +33,7 @@ class ConfigCacheTest extends \PHPUnit\Framework\TestCase
             ['cacheFrontend' => $this->cacheFrontendMock]
         );
 
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->configCache,
             'serializer',
@@ -41,7 +41,7 @@ class ConfigCacheTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->configCache);
     }

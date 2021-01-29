@@ -22,7 +22,7 @@ class MessageStatusProcessorTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->messageStatusProcessor = $objectManagerHelper->getObject(

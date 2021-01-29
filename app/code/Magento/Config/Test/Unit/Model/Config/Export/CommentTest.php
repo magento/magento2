@@ -16,17 +16,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class CommentTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var DumpConfigSourceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DumpConfigSourceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configSourceMock;
 
     /**
-     * @var PlaceholderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PlaceholderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $placeholderMock;
 
     /**
-     * @var TypePool|\PHPUnit_Framework_MockObject_MockObject
+     * @var TypePool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $typePoolMock;
 
@@ -35,7 +35,7 @@ class CommentTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 

@@ -20,29 +20,29 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $selectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $factoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $iteratorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $rangeFactoryMock;
 
     /**
      * Setup test dependencies.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->factoryMock = $this->createMock(BatchIteratorFactory::class);
         $this->rangeFactoryMock = $this->createPartialMock(BatchRangeIteratorFactory::class, ['create']);
@@ -87,12 +87,13 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     /**
      * Test batch generation with invalid select object.
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The select object must have the correct "FROM" part. Verify and try again.
      * @return void
      */
     public function testGenerateWithoutFromPart()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The select object must have the correct "FROM" part. Verify and try again.');
+
         $map = [
             [Select::FROM, []],
             [

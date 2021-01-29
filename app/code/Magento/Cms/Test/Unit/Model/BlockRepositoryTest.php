@@ -21,54 +21,54 @@ class BlockRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $repository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\ResourceModel\Block
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Cms\Model\ResourceModel\Block
      */
     protected $blockResource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\Block
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Cms\Model\Block
      */
     protected $block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Api\Data\BlockInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Cms\Api\Data\BlockInterface
      */
     protected $blockData;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Api\Data\BlockSearchResultsInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Cms\Api\Data\BlockSearchResultsInterface
      */
     protected $blockSearchResult;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\DataObjectHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Api\DataObjectHelper
      */
     protected $dataHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Reflection\DataObjectProcessor
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Reflection\DataObjectProcessor
      */
     protected $dataObjectProcessor;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\ResourceModel\Block\Collection
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Cms\Model\ResourceModel\Block\Collection
      */
     protected $collection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
 
     /**
-     * @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionProcessor;
 
     /**
      * Initialize repository
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->blockResource = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Block::class)
             ->disableOriginalConstructor()
@@ -189,10 +189,11 @@ class BlockRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      *
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSaveException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+
         $this->blockResource->expects($this->once())
             ->method('save')
             ->with($this->block)
@@ -203,10 +204,11 @@ class BlockRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      *
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function testDeleteException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotDeleteException::class);
+
         $this->blockResource->expects($this->once())
             ->method('delete')
             ->with($this->block)
@@ -217,10 +219,11 @@ class BlockRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      *
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testGetByIdException()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $blockId = '123';
 
         $this->block->expects($this->once())

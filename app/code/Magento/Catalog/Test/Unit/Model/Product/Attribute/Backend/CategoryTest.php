@@ -12,7 +12,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $categoryIds = [1, 2, 3, 4, 5];
 
         $product = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getCategoryIds', 'setData']);
-        $product->expects($this->once())->method('getCategoryIds')->will($this->returnValue($categoryIds));
+        $product->expects($this->once())->method('getCategoryIds')->willReturn($categoryIds);
 
         $product->expects($this->once())->method('setData')->with('category_ids', $categoryIds);
 
@@ -21,8 +21,8 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getAttributeCode'
-        )->will(
-            $this->returnValue('category_ids')
+        )->willReturn(
+            'category_ids'
         );
 
         $model = new \Magento\Catalog\Model\Product\Attribute\Backend\Category();

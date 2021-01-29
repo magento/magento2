@@ -12,7 +12,7 @@ class ExportTest extends \PHPUnit\Framework\TestCase
      */
     protected $_object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $backendUrl = $this->createMock(\Magento\Backend\Model\UrlInterface::class);
         $backendUrl->expects($this->once())->method('getUrl')->with("*/*/exportTablerates", ['website' => 1]);
@@ -35,17 +35,17 @@ class ExportTest extends \PHPUnit\Framework\TestCase
         $blockMock = $this->createMock(\Magento\Backend\Block\Widget\Button::class);
 
         $requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
-        $requestMock->expects($this->once())->method('getParam')->with('website')->will($this->returnValue(1));
+        $requestMock->expects($this->once())->method('getParam')->with('website')->willReturn(1);
 
         $mockData = $this->createPartialMock(\stdClass::class, ['toHtml']);
-        $mockData->expects($this->once())->method('toHtml')->will($this->returnValue($expected));
+        $mockData->expects($this->once())->method('toHtml')->willReturn($expected);
 
-        $blockMock->expects($this->once())->method('getRequest')->will($this->returnValue($requestMock));
-        $blockMock->expects($this->any())->method('setData')->will($this->returnValue($mockData));
+        $blockMock->expects($this->once())->method('getRequest')->willReturn($requestMock);
+        $blockMock->expects($this->any())->method('setData')->willReturn($mockData);
 
-        $layoutMock->expects($this->once())->method('createBlock')->will($this->returnValue($blockMock));
-        $parentObjectMock->expects($this->once())->method('getLayout')->will($this->returnValue($layoutMock));
-        $form->expects($this->once())->method('getParent')->will($this->returnValue($parentObjectMock));
+        $layoutMock->expects($this->once())->method('createBlock')->willReturn($blockMock);
+        $parentObjectMock->expects($this->once())->method('getLayout')->willReturn($layoutMock);
+        $form->expects($this->once())->method('getParent')->willReturn($parentObjectMock);
 
         $this->_object->setForm($form);
         $this->assertEquals($expected, $this->_object->getElementHtml());

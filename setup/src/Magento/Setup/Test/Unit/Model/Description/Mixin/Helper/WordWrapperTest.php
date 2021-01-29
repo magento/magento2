@@ -12,7 +12,7 @@ class WordWrapperTest extends \PHPUnit\Framework\TestCase
      */
     private $wrapper;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->wrapper = new \Magento\Setup\Model\Description\Mixin\Helper\WordWrapper();
     }

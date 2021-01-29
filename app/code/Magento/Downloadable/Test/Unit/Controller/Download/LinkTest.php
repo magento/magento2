@@ -19,69 +19,69 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Request\Http
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Request\Http
      */
     protected $request;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResponseInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ResponseInterface
      */
     protected $response;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Downloadable\Model\Link\Purchased\Item
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Downloadable\Model\Link\Purchased\Item
      */
     protected $linkPurchasedItem;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Downloadable\Model\Link\Purchased
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Downloadable\Model\Link\Purchased
      */
     protected $linkPurchased;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManager\ObjectManager
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\ObjectManager\ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Message\ManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Message\ManagerInterface
      */
     protected $messageManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Response\RedirectInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Response\RedirectInterface
      */
     protected $redirect;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Model\Session
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Model\Session
      */
     protected $session;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Downloadable\Helper\Data
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Downloadable\Helper\Data
      */
     protected $helperData;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Downloadable\Helper\Download
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Downloadable\Helper\Download
      */
     protected $downloadHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product
      */
     protected $product;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\UrlInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\UrlInterface
      */
     protected $urlInterface;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

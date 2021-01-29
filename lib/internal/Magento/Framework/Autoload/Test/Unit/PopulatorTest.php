@@ -11,10 +11,10 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 class PopulatorTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\App\Filesystem\DirectoryList | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Filesystem\DirectoryList | \PHPUnit\Framework\MockObject\MockObject */
     protected $mockDirectoryList;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockDirectoryList = $this->getMockBuilder(\Magento\Framework\App\Filesystem\DirectoryList::class)
             ->disableOriginalConstructor()

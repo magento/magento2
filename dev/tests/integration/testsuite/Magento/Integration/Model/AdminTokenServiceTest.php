@@ -34,7 +34,7 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup AdminTokenService
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->tokenService = Bootstrap::getObjectManager()->get(\Magento\Integration\Model\AdminTokenService::class);
         $this->tokenModel = Bootstrap::getObjectManager()->get(\Magento\Integration\Model\Oauth\Token::class);
@@ -72,10 +72,11 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\AuthenticationException
      */
     public function testCreateAdminAccessTokenInvalidCustomer()
     {
+        $this->expectException(\Magento\Framework\Exception\AuthenticationException::class);
+
         $adminUserName = 'invalid';
         $password = 'invalid';
         $this->tokenService->createAdminAccessToken($adminUserName, $password);

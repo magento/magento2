@@ -87,7 +87,7 @@ class UpdateAddressTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->escaper = $this->_objectManager->get(Escaper::class);
@@ -103,7 +103,7 @@ class UpdateAddressTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->customerSession->setCustomerId(null);
         $this->customerRegistry->removeByEmail('customer@example.com');

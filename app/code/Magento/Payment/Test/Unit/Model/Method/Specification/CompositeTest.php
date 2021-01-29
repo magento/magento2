@@ -11,11 +11,11 @@ namespace Magento\Payment\Test\Unit\Model\Method\Specification;
 class CompositeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Payment\Model\Method\Specification\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Model\Method\Specification\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $factoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->factoryMock = $this->createMock(\Magento\Payment\Model\Method\Specification\Factory::class);
     }
@@ -51,8 +51,8 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
             'isSatisfiedBy'
         )->with(
             $method
-        )->will(
-            $this->returnValue($firstSpecificationResult)
+        )->willReturn(
+            $firstSpecificationResult
         );
 
         $specificationSecond = $this->createMock(\Magento\Payment\Model\Method\SpecificationInterface::class);
@@ -62,8 +62,8 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
             'isSatisfiedBy'
         )->with(
             $method
-        )->will(
-            $this->returnValue($secondSpecificationResult)
+        )->willReturn(
+            $secondSpecificationResult
         );
 
         $this->factoryMock->expects(
@@ -72,8 +72,8 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             'SpecificationFirst'
-        )->will(
-            $this->returnValue($specificationFirst)
+        )->willReturn(
+            $specificationFirst
         );
         $this->factoryMock->expects(
             $this->at(1)
@@ -81,8 +81,8 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             'SpecificationSecond'
-        )->will(
-            $this->returnValue($specificationSecond)
+        )->willReturn(
+            $specificationSecond
         );
 
         $composite = $this->createComposite(['SpecificationFirst', 'SpecificationSecond']);

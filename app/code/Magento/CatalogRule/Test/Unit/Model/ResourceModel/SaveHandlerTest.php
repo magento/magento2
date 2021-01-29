@@ -13,16 +13,16 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     protected $subject;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceMock = $this->createMock(\Magento\CatalogRule\Model\ResourceModel\Rule::class);
         $this->metadataMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);

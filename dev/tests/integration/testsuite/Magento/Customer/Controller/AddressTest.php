@@ -22,7 +22,7 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $logger = $this->createMock(\Psr\Log\LoggerInterface::class);

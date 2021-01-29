@@ -20,14 +20,14 @@ class FilterEmulateTest extends \PHPUnit\Framework\TestCase
     protected $filterEmulate;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $appStateMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->appStateMock = $this->createMock(\Magento\Framework\App\State::class);

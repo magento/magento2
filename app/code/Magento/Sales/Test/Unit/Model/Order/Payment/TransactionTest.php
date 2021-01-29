@@ -16,13 +16,13 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Model\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $contextMock;
 
-    /** @var  \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $eventManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
             ->setMethods(['getEventDispatcher'])
@@ -63,6 +63,6 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
         $this->transaction->setData('txn_id', 'test');
 
         $this->assertEquals('test', $this->transaction->getHtmlTxnId());
-        $this->assertEquals(null, $this->transaction->getData('html_txn_id'));
+        $this->assertNull($this->transaction->getData('html_txn_id'));
     }
 }

@@ -49,142 +49,142 @@ use Magento\Framework\Event\ManagerInterface;
 class EavTest extends AbstractModifierTest
 {
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eavConfigMock;
 
     /**
-     * @var EavValidationRules|\PHPUnit_Framework_MockObject_MockObject
+     * @var EavValidationRules|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eavValidationRulesMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
     /**
-     * @var GroupCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupCollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $groupCollectionFactoryMock;
 
     /**
-     * @var GroupCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupCollection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $groupCollectionMock;
 
     /**
-     * @var Group|\PHPUnit_Framework_MockObject_MockObject
+     * @var Group|\PHPUnit\Framework\MockObject\MockObject
      */
     private $groupMock;
 
     /**
-     * @var EavAttribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var EavAttribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeMock;
 
     /**
-     * @var EntityType|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityType|\PHPUnit\Framework\MockObject\MockObject
      */
     private $entityTypeMock;
 
     /**
-     * @var AttributeCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeCollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeCollectionFactoryMock;
 
     /**
-     * @var AttributeCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeCollection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeCollectionMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var FormElementMapper|\PHPUnit_Framework_MockObject_MockObject
+     * @var FormElementMapper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $formElementMapperMock;
 
     /**
-     * @var MetaPropertiesMapper|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetaPropertiesMapper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metaPropertiesMapperMock;
 
     /**
-     * @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $searchCriteriaBuilderMock;
 
     /**
-     * @var ProductAttributeGroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductAttributeGroupRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeGroupRepositoryMock;
 
     /**
-     * @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteria|\PHPUnit\Framework\MockObject\MockObject
      */
     private $searchCriteriaMock;
 
     /**
-     * @var SortOrderBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SortOrderBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sortOrderBuilderMock;
 
     /**
-     * @var ProductAttributeRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductAttributeRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeRepositoryMock;
 
     /**
-     * @var AttributeGroupInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeGroupInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeGroupMock;
 
     /**
-     * @var SearchResultsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchResultsInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $searchResultsMock;
 
     /**
-     * @var Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eavAttributeMock;
 
     /**
-     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
     /**
-     * @var Currency|\PHPUnit_Framework_MockObject_MockObject
+     * @var Currency|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $currencyMock;
 
     /**
-     * @var CurrencyLocale|\PHPUnit_Framework_MockObject_MockObject
+     * @var CurrencyLocale|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $currencyLocaleMock;
 
     /**
-     * @var ProductAttributeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductAttributeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productAttributeMock;
 
     /**
-     * @var ArrayManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ArrayManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $arrayManagerMock;
 
     /**
-     * @var EavAttributeFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var EavAttributeFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eavAttributeFactoryMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
@@ -201,7 +201,7 @@ class EavTest extends AbstractModifierTest
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->objectManager = new ObjectManager($this);
@@ -290,7 +290,7 @@ class EavTest extends AbstractModifierTest
             ->getMock();
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->eavAttributeFactoryMock->expects($this->any())
             ->method('create')

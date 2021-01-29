@@ -14,22 +14,22 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
     protected $total;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $creditmemoMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $creditmemoItemMock;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderItemMock;
 
@@ -38,7 +38,7 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
      */
     private $taxConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderMock = $this->createPartialMock(
             \Magento\Sales\Model\Order::class,
@@ -275,11 +275,12 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage You can not refund shipping if there is no shipping amount.
      */
     public function testCollectNonZeroShipping()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('You can not refund shipping if there is no shipping amount.');
+
         $this->creditmemoMock->expects($this->once())
             ->method('setDiscountAmount')
             ->willReturnSelf();

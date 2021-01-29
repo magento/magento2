@@ -24,37 +24,37 @@ use Magento\Framework\DataObject;
 class StoreTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ScopedFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopedFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionFactory;
 
     /**
-     * @var Converter|\PHPUnit_Framework_MockObject_MockObject
+     * @var Converter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $converter;
 
     /**
-     * @var WebsiteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebsiteFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $websiteFactory;
 
     /**
-     * @var Website|\PHPUnit_Framework_MockObject_MockObject
+     * @var Website|\PHPUnit\Framework\MockObject\MockObject
      */
     private $website;
 
     /**
-     * @var WebsiteSource|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebsiteSource|\PHPUnit\Framework\MockObject\MockObject
      */
     private $websiteSource;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
-     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $store;
 
@@ -63,7 +63,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      */
     private $storeSource;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->collectionFactory = $this->getMockBuilder(ScopedFactory::class)
             ->disableOriginalConstructor()
@@ -84,10 +84,10 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->storeSource = new StoreSource(
             $this->collectionFactory,
             $this->converter,

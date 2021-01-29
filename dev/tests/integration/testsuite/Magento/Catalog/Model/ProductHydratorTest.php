@@ -28,7 +28,7 @@ class ProductHydratorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->hydratorPool = $this->objectManager->create(HydratorPool::class);

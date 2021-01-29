@@ -11,7 +11,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class CacheFlushCommandTest extends AbstractCacheManageCommandTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cacheEventName = 'adminhtml_cache_flush_all';
         parent::setUp();

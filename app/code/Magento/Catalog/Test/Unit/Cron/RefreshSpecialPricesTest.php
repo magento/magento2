@@ -24,46 +24,46 @@ class RefreshSpecialPricesTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_storeManagerMock;
 
     /**
-     * @var Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var Resource|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_resourceMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_dateTimeMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_localeDateMock;
 
     /**
-     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_eavConfigMock;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_priceProcessorMock;
 
     /**
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataPool;
 
     /**
-     * @var \Magento\Framework\EntityManager\EntityMetadata|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\EntityMetadata|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -109,38 +109,38 @@ class RefreshSpecialPricesTest extends \PHPUnit\Framework\TestCase
         $this->metadataMock->expects($this->atLeastOnce())->method('getIdentifierField')->willReturn('entity_id');
 
         $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
-        $selectMock->expects($this->any())->method('from')->will($this->returnSelf());
-        $selectMock->expects($this->any())->method('joinLeft')->will($this->returnSelf());
-        $selectMock->expects($this->any())->method('where')->will($this->returnSelf());
+        $selectMock->expects($this->any())->method('from')->willReturnSelf();
+        $selectMock->expects($this->any())->method('joinLeft')->willReturnSelf();
+        $selectMock->expects($this->any())->method('where')->willReturnSelf();
 
         $connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
-        $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
+        $connectionMock->expects($this->any())->method('select')->willReturn($selectMock);
         $connectionMock->expects(
             $this->any()
         )->method(
             'fetchCol'
-        )->will(
-            $this->returnValue($idsToProcess)
+        )->willReturn(
+            $idsToProcess
         );
 
         $this->_resourceMock->expects(
             $this->once()
         )->method(
             'getConnection'
-        )->will(
-            $this->returnValue($connectionMock)
+        )->willReturn(
+            $connectionMock
         );
 
         $this->_resourceMock->expects(
             $this->any()
         )->method(
             'getTableName'
-        )->will(
-            $this->returnValue('category')
+        )->willReturn(
+            'category'
         );
 
         $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
-        $storeMock->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $storeMock->expects($this->any())->method('getId')->willReturn(1);
 
         $this->_storeManagerMock->expects(
             $this->once()
@@ -148,8 +148,8 @@ class RefreshSpecialPricesTest extends \PHPUnit\Framework\TestCase
             'getStores'
         )->with(
             true
-        )->will(
-            $this->returnValue([$storeMock])
+        )->willReturn(
+            [$storeMock]
         );
 
         $this->_localeDateMock->expects(
@@ -158,8 +158,8 @@ class RefreshSpecialPricesTest extends \PHPUnit\Framework\TestCase
             'scopeTimeStamp'
         )->with(
             $storeMock
-        )->will(
-            $this->returnValue(32000)
+        )->willReturn(
+            32000
         );
 
         $indexerMock = $this->createMock(\Magento\Indexer\Model\Indexer::class);
@@ -169,8 +169,8 @@ class RefreshSpecialPricesTest extends \PHPUnit\Framework\TestCase
             $this->exactly(2)
         )->method(
             'getIndexer'
-        )->will(
-            $this->returnValue($indexerMock)
+        )->willReturn(
+            $indexerMock
         );
 
         $attributeMock = $this->getMockForAbstractClass(
@@ -182,9 +182,9 @@ class RefreshSpecialPricesTest extends \PHPUnit\Framework\TestCase
             true,
             ['__wakeup', 'getAttributeId']
         );
-        $attributeMock->expects($this->any())->method('getAttributeId')->will($this->returnValue(1));
+        $attributeMock->expects($this->any())->method('getAttributeId')->willReturn(1);
 
-        $this->_eavConfigMock->expects($this->any())->method('getAttribute')->will($this->returnValue($attributeMock));
+        $this->_eavConfigMock->expects($this->any())->method('getAttribute')->willReturn($attributeMock);
 
         $this->_model->execute();
     }

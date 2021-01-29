@@ -48,7 +48,7 @@ class FaxTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('required', $block->toHtml());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /** @var \Magento\Eav\Model\Config $eavConfig */
         $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);

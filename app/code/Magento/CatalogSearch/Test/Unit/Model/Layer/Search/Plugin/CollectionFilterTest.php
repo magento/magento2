@@ -21,27 +21,27 @@ class CollectionFilterTest extends \PHPUnit\Framework\TestCase
     private $plugin;
 
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionMock;
 
     /**
-     * @var Category|\PHPUnit_Framework_MockObject_MockObject
+     * @var Category|\PHPUnit\Framework\MockObject\MockObject
      */
     private $categoryMock;
 
     /**
-     * @var QueryFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var QueryFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryFactoryMock;
 
     /**
-     * @var CollectionFilter|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFilter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionFilterMock;
 
     /**
-     * @var Query|\PHPUnit_Framework_MockObject_MockObject
+     * @var Query|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryMock;
 
@@ -50,7 +50,7 @@ class CollectionFilterTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 

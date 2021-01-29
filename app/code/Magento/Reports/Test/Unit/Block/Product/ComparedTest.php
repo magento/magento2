@@ -18,11 +18,11 @@ class ComparedTest extends \PHPUnit\Framework\TestCase
     private $sut;
 
     /**
-     * @var Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $factoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $contextMock = $this->getMockBuilder(\Magento\Catalog\Block\Product\Context::class)
             ->disableOriginalConstructor()
@@ -43,10 +43,11 @@ class ComparedTest extends \PHPUnit\Framework\TestCase
     /**
      * Assert that getModel method throws LocalizedException
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testGetModelException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->factoryMock->expects($this->once())->method('get')->willThrowException(new \InvalidArgumentException);
 
         $this->sut->getModel();

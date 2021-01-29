@@ -14,16 +14,16 @@ class OptionTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $product;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layout;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
@@ -37,7 +37,7 @@ class OptionTest extends \PHPUnit\Framework\TestCase
         $registry->expects($this->once())
             ->method('registry')
             ->with('current_product')
-            ->will($this->returnValue($this->product));
+            ->willReturn($this->product);
 
         $this->layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
 
@@ -46,7 +46,7 @@ class OptionTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $context->expects($this->atLeastOnce())
             ->method('getLayout')
-            ->will($this->returnValue($this->layout));
+            ->willReturn($this->layout);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->block = $objectManagerHelper->getObject(
@@ -60,20 +60,20 @@ class OptionTest extends \PHPUnit\Framework\TestCase
         $selectionId = 315;
         $this->product->expects($this->atLeastOnce())
             ->method('hasPreconfiguredValues')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->product->expects($this->atLeastOnce())
             ->method('getPreconfiguredValues')
-            ->will(
-                $this->returnValue(new \Magento\Framework\DataObject(['bundle_option' => [15 => 315, 16 => 316]]))
+            ->willReturn(
+                new \Magento\Framework\DataObject(['bundle_option' => [15 => 315, 16 => 316]])
             );
 
         $option = $this->createMock(\Magento\Bundle\Model\Option::class);
-        $option->expects($this->any())->method('getId')->will($this->returnValue(15));
+        $option->expects($this->any())->method('getId')->willReturn(15);
 
         $otherOption = $this->getMockBuilder(\Magento\Bundle\Model\Option::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $otherOption->expects($this->any())->method('getId')->will($this->returnValue(16));
+        $otherOption->expects($this->any())->method('getId')->willReturn(16);
 
         $selection = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
@@ -119,27 +119,27 @@ class OptionTest extends \PHPUnit\Framework\TestCase
 
         $this->product->expects($this->atLeastOnce())
             ->method('getPriceInfo')
-            ->will($this->returnValue($priceInfo));
+            ->willReturn($priceInfo);
 
         $priceInfo->expects($this->atLeastOnce())
             ->method('getPrice')
             ->with('bundle_option')
-            ->will($this->returnValue($bundlePrice));
+            ->willReturn($bundlePrice);
 
         $bundlePrice->expects($this->atLeastOnce())
             ->method('getOptionSelectionAmount')
             ->with($selection)
-            ->will($this->returnValue($amount));
+            ->willReturn($amount);
 
         $this->layout->expects($this->atLeastOnce())
             ->method('getBlock')
             ->with('product.price.render.default')
-            ->will($this->returnValue($priceRenderBlock));
+            ->willReturn($priceRenderBlock);
 
         $priceRenderBlock->expects($this->atLeastOnce())
             ->method('renderAmount')
             ->with($amount, $bundlePrice, $selection, ['include_container' => $includeContainer])
-            ->will($this->returnValue($priceHtml));
+            ->willReturn($priceHtml);
 
         $this->assertEquals($priceHtml, $this->block->renderPriceString($selection, $includeContainer));
     }

@@ -18,47 +18,47 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\BundleImportExport\Model\Export\RowCustomizer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\BundleImportExport\Model\Export\RowCustomizer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rowCustomizerMock;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productResourceCollection;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $product;
 
     /**
-     * @var \Magento\Bundle\Model\ResourceModel\Option\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Model\ResourceModel\Option\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $optionsCollection;
 
     /**
-     * @var \Magento\Bundle\Model\Option|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Model\Option|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $option;
 
     /**
-     * @var \Magento\Bundle\Model\ResourceModel\Selection\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Model\ResourceModel\Selection\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $selectionsCollection;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $selection;
 
-    /** @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $scopeResolver;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->scopeResolver = $this->getMockBuilder(\Magento\Framework\App\ScopeResolverInterface::class)
@@ -114,8 +114,8 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
         $this->option->expects($this->any())->method('getTitle')->willReturn('title');
         $this->option->expects($this->any())->method('getType')->willReturn(1);
         $this->option->expects($this->any())->method('getRequired')->willReturn(1);
-        $this->optionsCollection->expects($this->any())->method('getItems')->will(
-            $this->returnValue(new \ArrayIterator([$this->option]))
+        $this->optionsCollection->expects($this->any())->method('getItems')->willReturn(
+            new \ArrayIterator([$this->option])
         );
         $this->selection = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
@@ -137,8 +137,8 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
             \Magento\Bundle\Model\ResourceModel\Selection\Collection::class,
             ['getIterator', 'addAttributeToSort']
         );
-        $this->selectionsCollection->expects($this->any())->method('getIterator')->will(
-            $this->returnValue(new \ArrayIterator([$this->selection]))
+        $this->selectionsCollection->expects($this->any())->method('getIterator')->willReturn(
+            new \ArrayIterator([$this->selection])
         );
         $this->selectionsCollection->expects($this->any())->method('addAttributeToSort')->willReturnSelf();
         $this->product->expects($this->any())->method('getSelectionsCollection')->willReturn(
@@ -146,8 +146,8 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
         );
         $this->product->expects($this->any())->method('getSku')->willReturn(1);
         $this->productResourceCollection->expects($this->any())->method('addAttributeToFilter')->willReturnSelf();
-        $this->productResourceCollection->expects($this->any())->method('getIterator')->will(
-            $this->returnValue(new \ArrayIterator([$this->product]))
+        $this->productResourceCollection->expects($this->any())->method('getIterator')->willReturn(
+            new \ArrayIterator([$this->product])
         );
     }
 

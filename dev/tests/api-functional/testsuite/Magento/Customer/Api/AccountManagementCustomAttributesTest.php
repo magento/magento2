@@ -65,7 +65,7 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
     /**
      * Execute per test initialization.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->accountManagement = Bootstrap::getObjectManager()->get(
             \Magento\Customer\Api\AccountManagementInterface::class
@@ -82,7 +82,7 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
         $this->fileSystem = Bootstrap::getObjectManager()->get(\Magento\Framework\Filesystem::class);
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         if (!empty($this->currentCustomerId)) {
             foreach ($this->currentCustomerId as $customerId) {
@@ -271,6 +271,6 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
         $customerMediaPath = $mediaDirectory->getAbsolutePath(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
         $previousImagePath =
             $previousCustomerData[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES][0][AttributeValue::VALUE];
-        $this->assertFalse(file_exists($customerMediaPath . $previousImagePath));
+        $this->assertFileNotExists($customerMediaPath . $previousImagePath);
     }
 }

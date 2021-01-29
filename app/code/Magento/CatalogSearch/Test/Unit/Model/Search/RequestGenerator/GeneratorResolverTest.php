@@ -14,16 +14,16 @@ class GeneratorResolverTest extends \PHPUnit\Framework\TestCase
     /** @var  GeneratorResolver */
     private $resolver;
 
-    /** @var  GeneratorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  GeneratorInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $defaultGenerator;
 
-    /** @var  GeneratorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  GeneratorInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $datetimeGenerator;
 
-    /** @var  GeneratorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  GeneratorInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $rangeGenerator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->defaultGenerator = $this->getMockBuilder(GeneratorInterface::class)
             ->setMethods([])
@@ -66,10 +66,11 @@ class GeneratorResolverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
      */
     public function testGetInvalidGeneratorType()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->resolver->getGeneratorForType('invalid_type');
     }
 }

@@ -18,7 +18,7 @@ class ExportAccountsExcelTest extends \Magento\Reports\Test\Unit\Controller\Admi
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

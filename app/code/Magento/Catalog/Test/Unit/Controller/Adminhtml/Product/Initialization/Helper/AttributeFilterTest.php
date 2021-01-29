@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization\
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class AttributeFilterTest extends \PHPUnit\Framework\TestCase
 {
@@ -28,7 +28,7 @@ class AttributeFilterTest extends \PHPUnit\Framework\TestCase
      */
     protected $productMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectHelper->getObject(AttributeFilter::class);

@@ -251,7 +251,7 @@ class ExportAdvancedPricingTest extends Injectable
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         if ($this->configData) {
             $this->stepFactory->create(

@@ -19,17 +19,17 @@ class ConsumerFactoryTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    /** @var CommunicationConfig|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CommunicationConfig|\PHPUnit\Framework\MockObject\MockObject */
     protected $communicationConfigMock;
 
-    /** @var ConsumerConfig|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ConsumerConfig|\PHPUnit\Framework\MockObject\MockObject */
     protected $consumerConfigMock;
 
     const TEST_CONSUMER_NAME = "test_consumer_name";
     const TEST_CONSUMER_QUEUE = "test_consumer_queue";
     const TEST_CONSUMER_METHOD = "test_consumer_method";
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->communicationConfigMock = $this->getMockBuilder(CommunicationConfig::class)
@@ -41,11 +41,12 @@ class ConsumerFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage pecified consumer "test_consumer_name" is not declared.
      */
     public function testUndeclaredConsumerName()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('pecified consumer "test_consumer_name" is not declared.');
+
         $consumerFactory = $this->objectManager->getObject(ConsumerFactory::class);
         $this->objectManager->setBackwardCompatibleProperty(
             $consumerFactory,
@@ -86,7 +87,7 @@ class ConsumerFactoryTest extends \PHPUnit\Framework\TestCase
         $handlerTypeValue = \Magento\Framework\DataObject::class;
         $consumerType = 'async';
 
-        /** @var ConsumerConfigItem|\PHPUnit_Framework_MockObject_MockObject $consumerConfigItemMock */
+        /** @var ConsumerConfigItem|\PHPUnit\Framework\MockObject\MockObject $consumerConfigItemMock */
         $consumerConfigItemMock = $this->getMockBuilder(ConsumerConfigItem::class)->disableOriginalConstructor()
             ->getMock();
         $consumerConfigItemMock->expects($this->any())->method('getName')->willReturn(self::TEST_CONSUMER_NAME);

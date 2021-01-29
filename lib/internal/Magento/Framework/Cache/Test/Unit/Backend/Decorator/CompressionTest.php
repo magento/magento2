@@ -26,7 +26,7 @@ class CompressionTest extends \PHPUnit\Framework\TestCase
      */
     protected static $_cacheStorage = [];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $options = [
             'concrete_backend' => $this->createMock(\Zend_Cache_Backend_File::class),
@@ -35,7 +35,7 @@ class CompressionTest extends \PHPUnit\Framework\TestCase
         $this->_decorator = new \Magento\Framework\Cache\Backend\Decorator\Compression($options);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_decorator);
         self::$_cacheStorage = [];
@@ -108,9 +108,9 @@ class CompressionTest extends \PHPUnit\Framework\TestCase
         $cacheId = 'cacheId' . rand(1, 100);
 
         $backend = $this->createPartialMock(\Zend_Cache_Backend_File::class, ['save', 'load']);
-        $backend->expects($this->once())->method('save')->will($this->returnCallback([__CLASS__, 'mockSave']));
+        $backend->expects($this->once())->method('save')->willReturnCallback([__CLASS__, 'mockSave']);
 
-        $backend->expects($this->once())->method('load')->will($this->returnCallback([__CLASS__, 'mockLoad']));
+        $backend->expects($this->once())->method('load')->willReturnCallback([__CLASS__, 'mockLoad']);
 
         $options = ['concrete_backend' => $backend, 'compression_threshold' => strlen($this->_testString)];
 
@@ -122,7 +122,7 @@ class CompressionTest extends \PHPUnit\Framework\TestCase
         $decorator->save($this->_testString, $cacheId);
 
         $this->assertArrayHasKey($cacheId, self::$_cacheStorage);
-        $this->assertInternalType('string', self::$_cacheStorage[$cacheId]);
+        $this->assertIsString(self::$_cacheStorage[$cacheId]);
 
         $loadedValue = $decorator->load($cacheId);
 

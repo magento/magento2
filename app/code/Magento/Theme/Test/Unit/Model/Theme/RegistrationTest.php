@@ -16,16 +16,16 @@ class RegistrationTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactory;
 
     /**
-     * @var \Magento\Theme\Model\Theme\Data\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\Theme\Data\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesystemCollection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->collectionFactory =
             $this->getMockBuilder(\Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory::class)

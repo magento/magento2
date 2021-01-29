@@ -14,8 +14,8 @@ class BindingInstallerTest extends \PHPUnit\Framework\TestCase
 {
     public function testInstall()
     {
-        $installerOne = $this->createMock(BindingInstallerInterface::class);
-        $installerTwo = $this->createMock(BindingInstallerInterface::class);
+        $installerOne = $this->getMockForAbstractClass(BindingInstallerInterface::class);
+        $installerTwo = $this->getMockForAbstractClass(BindingInstallerInterface::class);
         $model = new BindingInstaller(
             [
                 'queue' => $installerOne,
@@ -23,7 +23,7 @@ class BindingInstallerTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $channel = $this->createMock(AMQPChannel::class);
-        $binding = $this->createMock(BindingInterface::class);
+        $binding = $this->getMockForAbstractClass(BindingInterface::class);
         $binding->expects($this->once())->method('getDestinationType')->willReturn('queue');
         $installerOne->expects($this->once())->method('install')->with($channel, $binding, 'magento');
         $installerTwo->expects($this->never())->method('install');
@@ -31,13 +31,14 @@ class BindingInstallerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Installer type [test] is not configured
      */
     public function testInstallInvalidType()
     {
-        $installerOne = $this->createMock(BindingInstallerInterface::class);
-        $installerTwo = $this->createMock(BindingInstallerInterface::class);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Installer type [test] is not configured');
+
+        $installerOne = $this->getMockForAbstractClass(BindingInstallerInterface::class);
+        $installerTwo = $this->getMockForAbstractClass(BindingInstallerInterface::class);
         $model = new BindingInstaller(
             [
                 'queue' => $installerOne,
@@ -45,7 +46,7 @@ class BindingInstallerTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $channel = $this->createMock(AMQPChannel::class);
-        $binding = $this->createMock(BindingInterface::class);
+        $binding = $this->getMockForAbstractClass(BindingInterface::class);
         $binding->expects($this->once())->method('getDestinationType')->willReturn('test');
         $installerOne->expects($this->never())->method('install');
         $installerTwo->expects($this->never())->method('install');

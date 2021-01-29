@@ -10,7 +10,7 @@ use \Magento\Framework\View\Layout\Argument\Interpreter\NamedParams;
 class NamedParamsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Data\Argument\InterpreterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Argument\InterpreterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_interpreter;
 
@@ -19,7 +19,7 @@ class NamedParamsTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_interpreter = $this->getMockForAbstractClass(
             \Magento\Framework\Data\Argument\InterpreterInterface::class
@@ -39,8 +39,8 @@ class NamedParamsTest extends \PHPUnit\Framework\TestCase
             'evaluate'
         )->with(
             ['value' => 'value 1']
-        )->will(
-            $this->returnValue('value 1 (evaluated)')
+        )->willReturn(
+            'value 1 (evaluated)'
         );
         $this->_interpreter->expects(
             $this->at(1)
@@ -48,8 +48,8 @@ class NamedParamsTest extends \PHPUnit\Framework\TestCase
             'evaluate'
         )->with(
             ['value' => 'value 2']
-        )->will(
-            $this->returnValue('value 2 (evaluated)')
+        )->willReturn(
+            'value 2 (evaluated)'
         );
         $expected = ['param1' => 'value 1 (evaluated)', 'param2' => 'value 2 (evaluated)'];
 

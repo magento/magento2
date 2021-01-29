@@ -9,11 +9,11 @@ namespace Magento\Framework\ObjectManager\Test\Unit\Code\Generator;
 class ProxyTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $ioObjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->ioObjectMock = $this->createMock(\Magento\Framework\Code\Generator\Io::class);
     }
@@ -38,11 +38,11 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
 
         $this->ioObjectMock->expects($this->once())->method('generateResultFileName')
             ->with('\\' . \Magento\Framework\ObjectManager\Code\Generator\Sample_Proxy::class)
-            ->will($this->returnValue('sample_file.php'));
+            ->willReturn('sample_file.php');
         $this->ioObjectMock->expects($this->once())->method('writeResultFile')
             ->with('sample_file.php', $sampleProxyCode);
 
-        $model->expects($this->once())->method('_validateData')->will($this->returnValue(true));
+        $model->expects($this->once())->method('_validateData')->willReturn(true);
         $this->assertEquals('sample_file.php', $model->generate());
     }
 }

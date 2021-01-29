@@ -20,7 +20,7 @@ class RealTypesTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     private $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -45,7 +45,7 @@ class RealTypesTest extends \PHPUnit\Framework\TestCase
         $okColumn = new Real('decimal', 'decimal', $table, 10, 5);
         $invalidColumn = new Real('float', 'float', $table, 5, 10);
         $table->addColumns([$okColumn, $invalidColumn]);
-        /** @var Schema|\PHPUnit_Framework_MockObject_MockObject $schemaMock */
+        /** @var Schema|\PHPUnit\Framework\MockObject\MockObject $schemaMock */
         $schemaMock = $this->getMockBuilder(Schema::class)
             ->disableOriginalConstructor()
             ->getMock();

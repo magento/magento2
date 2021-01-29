@@ -11,7 +11,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\App\View\Deployment\Version\StorageInterface;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class VersionTest
@@ -43,12 +43,12 @@ class VersionTest extends \PHPUnit\Framework\TestCase
      */
     private $deploymentConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->appStateMock = $this->createMock(\Magento\Framework\App\State::class);
-        $this->versionStorageMock = $this->createMock(StorageInterface::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->versionStorageMock = $this->getMockForAbstractClass(StorageInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
 
         $this->object = new Version($this->appStateMock, $this->versionStorageMock, $this->deploymentConfigMock);
@@ -98,10 +98,11 @@ class VersionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
      */
     public function testGetValueWithProductionModeAndException()
     {
+        $this->expectException(\UnexpectedValueException::class);
+
         $this->versionStorageMock->expects($this->once())
             ->method('load')
             ->willReturn(false);

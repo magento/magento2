@@ -29,7 +29,7 @@ class CheckoutTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->quote = $this->_objectManager->create(\Magento\Quote\Model\Quote::class);

@@ -27,7 +27,7 @@ class QuickSearchTest extends ConfigurableProductQuickSearchTest
     /**
      * @inheritdoc
      */
-    protected function assertPreConditions()
+    protected function assertPreConditions(): void
     {
         // phpstan:ignore "Class Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker not found."
         $version = Bootstrap::getObjectManager()->get(ElasticsearchVersionChecker::class)->getVersion();

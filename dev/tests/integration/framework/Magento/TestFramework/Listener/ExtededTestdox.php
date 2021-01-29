@@ -5,7 +5,7 @@
  */
 namespace Magento\TestFramework\Listener;
 
-class ExtededTestdox extends \PHPUnit_Util_Printer implements \PHPUnit\Framework\TestListener
+class ExtededTestdox extends \PHPUnit\Util\Printer implements \PHPUnit\Framework\TestListener
 {
     /**
      * @var \PHPUnit_Util_TestDox_NamePrettifier
@@ -76,7 +76,7 @@ class ExtededTestdox extends \PHPUnit_Util_Printer implements \PHPUnit\Framework
     {
         parent::__construct($out);
 
-        $this->prettifier = new \PHPUnit_Util_TestDox_NamePrettifier();
+        $this->prettifier = new \PHPUnit\Util\TestDox\NamePrettifier();
         $this->startRun();
     }
 
@@ -96,16 +96,23 @@ class ExtededTestdox extends \PHPUnit_Util_Printer implements \PHPUnit\Framework
      * An error occurred.
      *
      * @param  \PHPUnit\Framework\Test $test
-     * @param  \Exception $e
+     * @param  \Throwable $e
      * @param  float $time
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addError(\PHPUnit\Framework\Test $test, \Exception $e, $time)
+    public function addError(\PHPUnit\Framework\Test $test, \Throwable $e, float $time) : void
     {
         if ($test instanceof $this->testTypeOfInterest) {
-            $this->testStatus = \PHPUnit_Runner_BaseTestRunner::STATUS_ERROR;
+            $this->testStatus = \PHPUnit\Runner\BaseTestRunner::STATUS_ERROR;
             $this->failed++;
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addWarning(\PHPUnit\Framework\Test $test, \PHPUnit\Framework\Warning $e, float $time):void
+    {
     }
 
     /**
@@ -116,10 +123,10 @@ class ExtededTestdox extends \PHPUnit_Util_Printer implements \PHPUnit\Framework
      * @param  float $time
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addFailure(\PHPUnit\Framework\Test $test, \PHPUnit\Framework\AssertionFailedError $e, $time)
+    public function addFailure(\PHPUnit\Framework\Test $test, \PHPUnit\Framework\AssertionFailedError $e, float $time):void
     {
         if ($test instanceof $this->testTypeOfInterest) {
-            $this->testStatus = \PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE;
+            $this->testStatus = \PHPUnit\Runner\BaseTestRunner::STATUS_FAILURE;
             $this->failed++;
         }
     }
@@ -128,14 +135,14 @@ class ExtededTestdox extends \PHPUnit_Util_Printer implements \PHPUnit\Framework
      * Incomplete test.
      *
      * @param  \PHPUnit\Framework\Test $test
-     * @param  \Exception $e
+     * @param  \Throwable $e
      * @param  float $time
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addIncompleteTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
+    public function addIncompleteTest(\PHPUnit\Framework\Test $test, \Throwable $e, float $time):void
     {
         if ($test instanceof $this->testTypeOfInterest) {
-            $this->testStatus = \PHPUnit_Runner_BaseTestRunner::STATUS_INCOMPLETE;
+            $this->testStatus = \PHPUnit\Runner\BaseTestRunner::STATUS_INCOMPLETE;
             $this->incomplete++;
         }
     }
@@ -144,15 +151,15 @@ class ExtededTestdox extends \PHPUnit_Util_Printer implements \PHPUnit\Framework
      * Skipped test.
      *
      * @param  \PHPUnit\Framework\Test $test
-     * @param  \Exception $e
+     * @param  \Throwable $e
      * @param  float $time
      * @since  Method available since Release 3.0.0
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addSkippedTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
+    public function addSkippedTest(\PHPUnit\Framework\Test $test, \Throwable $e, float $time): void
     {
         if ($test instanceof $this->testTypeOfInterest) {
-            $this->testStatus = \PHPUnit_Runner_BaseTestRunner::STATUS_SKIPPED;
+            $this->testStatus = \PHPUnit\Runner\BaseTestRunner::STATUS_SKIPPED;
             $this->skipped++;
         }
     }
@@ -161,15 +168,15 @@ class ExtededTestdox extends \PHPUnit_Util_Printer implements \PHPUnit\Framework
      * Risky test.
      *
      * @param  \PHPUnit\Framework\Test $test
-     * @param  \Exception $e
+     * @param  \Throwable $e
      * @param  float $time
      * @since  Method available since Release 4.0.0
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addRiskyTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
+    public function addRiskyTest(\PHPUnit\Framework\Test $test, \Throwable $e, float $time): void
     {
         if ($test instanceof $this->testTypeOfInterest) {
-            $this->testStatus = \PHPUnit_Runner_BaseTestRunner::STATUS_RISKY;
+            $this->testStatus = \PHPUnit\Runner\BaseTestRunner::STATUS_RISKY;
             $this->risky++;
         }
     }
@@ -181,7 +188,7 @@ class ExtededTestdox extends \PHPUnit_Util_Printer implements \PHPUnit\Framework
      * @since  Method available since Release 2.2.0
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function startTestSuite(\PHPUnit\Framework\TestSuite $suite)
+    public function startTestSuite(\PHPUnit\Framework\TestSuite $suite): void
     {
     }
 
@@ -192,7 +199,7 @@ class ExtededTestdox extends \PHPUnit_Util_Printer implements \PHPUnit\Framework
      * @since  Method available since Release 2.2.0
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function endTestSuite(\PHPUnit\Framework\TestSuite $suite)
+    public function endTestSuite(\PHPUnit\Framework\TestSuite $suite): void
     {
     }
 
@@ -201,7 +208,7 @@ class ExtededTestdox extends \PHPUnit_Util_Printer implements \PHPUnit\Framework
      *
      * @param  \PHPUnit\Framework\Test $test
      */
-    public function startTest(\PHPUnit\Framework\Test $test)
+    public function startTest(\PHPUnit\Framework\Test $test): void
     {
         if ($test instanceof $this->testTypeOfInterest) {
             $class = get_class($test);
@@ -220,7 +227,7 @@ class ExtededTestdox extends \PHPUnit_Util_Printer implements \PHPUnit\Framework
             $this->write('.');
             $this->currentTestMethodPrettified = $this->prettifier->prettifyTestMethod($test->getName(false));
 
-            $this->testStatus = \PHPUnit_Runner_BaseTestRunner::STATUS_PASSED;
+            $this->testStatus = \PHPUnit\Runner\BaseTestRunner::STATUS_PASSED;
         }
     }
 
@@ -230,20 +237,20 @@ class ExtededTestdox extends \PHPUnit_Util_Printer implements \PHPUnit\Framework
      * @param  \PHPUnit\Framework\Test $test
      * @param  float $time
      */
-    public function endTest(\PHPUnit\Framework\Test $test, $time)
+    public function endTest(\PHPUnit\Framework\Test $test, float $time): void
     {
         if ($test instanceof $this->testTypeOfInterest) {
             if (!isset($this->tests[$this->currentTestMethodPrettified])) {
                 $this->tests[$this->currentTestMethodPrettified] = ['success' => 0, 'failure' => 0, 'time' => 0];
             }
 
-            if ($this->testStatus == \PHPUnit_Runner_BaseTestRunner::STATUS_PASSED) {
+            if ($this->testStatus == \PHPUnit\Runner\BaseTestRunner::STATUS_PASSED) {
                 $this->tests[$this->currentTestMethodPrettified]['success']++;
             }
-            if ($this->testStatus == \PHPUnit_Runner_BaseTestRunner::STATUS_ERROR) {
+            if ($this->testStatus == \PHPUnit\Runner\BaseTestRunner::STATUS_ERROR) {
                 $this->tests[$this->currentTestMethodPrettified]['failure']++;
             }
-            if ($this->testStatus == \PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE) {
+            if ($this->testStatus == \PHPUnit\Runner\BaseTestRunner::STATUS_FAILURE) {
                 $this->tests[$this->currentTestMethodPrettified]['failure']++;
             }
             $this->tests[$this->currentTestMethodPrettified]['time'] += $time;

@@ -15,21 +15,21 @@ class SetManagementTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $attrSetManagementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeSetRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $eavConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attrSetManagementMock = $this->createMock(\Magento\Eav\Api\AttributeSetManagementInterface::class);
         $this->attributeSetRepository = $this->createMock(\Magento\Eav\Api\AttributeSetRepositoryInterface::class);
@@ -71,10 +71,11 @@ class SetManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
      */
     public function testCreateNonProductAttributeSet()
     {
+        $this->expectException(\Magento\Framework\Exception\StateException::class);
+
         $skeletonId = 1;
         $attributeSetMock = $this->createMock(\Magento\Eav\Api\Data\AttributeSetInterface::class);
         $skeletonSetMock = $this->createMock(\Magento\Eav\Api\Data\AttributeSetInterface::class);

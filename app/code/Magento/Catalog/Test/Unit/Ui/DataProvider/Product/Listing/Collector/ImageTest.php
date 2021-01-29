@@ -22,19 +22,19 @@ use Magento\Framework\View\DesignLoader;
  */
 class ImageTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var ImageFactory | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var ImageFactory | \PHPUnit\Framework\MockObject\MockObject */
     private $imageFactory;
 
-    /** @var  \Magento\Framework\App\State | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\App\State | \PHPUnit\Framework\MockObject\MockObject */
     private $state;
 
-    /** @var  StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject */
     private $storeManager;
 
-    /** @var  DesignInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  DesignInterface | \PHPUnit\Framework\MockObject\MockObject */
     private $design;
 
-    /** @var DesignLoader | \PHPUnit_Framework_MockObject_MockObject*/
+    /** @var DesignLoader | \PHPUnit\Framework\MockObject\MockObject*/
     private $designLoader;
 
     /** @var  Image */
@@ -43,10 +43,10 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     /** @var array */
     private $imageCodes = ['widget_recently_viewed'];
 
-    /** @var \Magento\Catalog\Api\Data\ProductRender\ImageInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Api\Data\ProductRender\ImageInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $imageInterfaceFactory;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->imageFactory = $this->getMockBuilder(ImageFactory::class)
             ->disableOriginalConstructor()
@@ -62,8 +62,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->state = $this->getMockBuilder(\Magento\Framework\App\State::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
-        $this->design = $this->createMock(DesignInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->design = $this->getMockForAbstractClass(DesignInterface::class);
         $this->designLoader = $this->createMock(DesignLoader::class);
         $this->model = new Image(
             $this->imageFactory,
@@ -83,10 +83,10 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $image = $this->getMockBuilder(ImageInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $imageCode = 'widget_recently_viewed';
-        $productRenderInfoDto = $this->createMock(ProductRenderInterface::class);
+        $productRenderInfoDto = $this->getMockForAbstractClass(ProductRenderInterface::class);
 
         $productRenderInfoDto->expects($this->once())
             ->method('getStoreId')

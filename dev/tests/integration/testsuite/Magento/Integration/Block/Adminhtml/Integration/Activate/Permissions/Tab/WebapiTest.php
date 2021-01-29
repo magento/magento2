@@ -17,14 +17,14 @@ class WebapiTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Registry */
     protected $registry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->registry = $objectManager->get(\Magento\Framework\Registry::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->registry->unregister(IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION);
         parent::tearDown();

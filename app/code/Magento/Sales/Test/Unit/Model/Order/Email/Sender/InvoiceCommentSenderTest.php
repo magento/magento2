@@ -15,11 +15,11 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
     protected $sender;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $invoiceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stepMockSetup();
         $this->paymentHelper = $this->createPartialMock(\Magento\Payment\Helper\Data::class, ['getInfoBlockHtml']);
@@ -36,10 +36,10 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
         );
         $this->invoiceMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
         $this->invoiceMock->expects($this->any())
             ->method('getOrder')
-            ->will($this->returnValue($this->orderMock));
+            ->willReturn($this->orderMock);
 
         $this->sender = new InvoiceCommentSender(
             $this->templateContainerMock,
@@ -67,7 +67,7 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
         $frontendStatusLabel = 'Processing';
         $this->orderMock->expects($this->once())
             ->method('getCustomerIsGuest')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->orderMock->expects($this->any())
             ->method('getCustomerName')
@@ -79,7 +79,7 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
 
         $this->identityContainerMock->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->templateContainerMock->expects($this->once())
             ->method('setTemplateVars')
             ->with(
@@ -114,7 +114,7 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
         $comment = 'comment_test';
         $this->orderMock->expects($this->once())
             ->method('getCustomerIsGuest')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->orderMock->expects($this->any())
             ->method('getCustomerName')
@@ -126,7 +126,7 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
 
         $this->identityContainerMock->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->templateContainerMock->expects($this->once())
             ->method('setTemplateVars')
             ->with(
@@ -169,7 +169,7 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
 
         $this->identityContainerMock->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->templateContainerMock->expects($this->once())
             ->method('setTemplateVars')
             ->with(

@@ -38,7 +38,7 @@ abstract class AbstractBundleProductSaveTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -51,7 +51,7 @@ abstract class AbstractBundleProductSaveTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if ($this->productToDelete) {
             $this->productRepository->deleteById($this->productToDelete);

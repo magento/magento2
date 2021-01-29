@@ -27,7 +27,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      */
     protected $urlPathGenerator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Product\Url::class

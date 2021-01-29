@@ -13,26 +13,26 @@ class FileFactoryTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_authMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_backendUrl;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_sessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_responseMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_responseMock = $this->createPartialMock(
@@ -43,8 +43,8 @@ class FileFactoryTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'setRedirect'
-        )->will(
-            $this->returnValue($this->_responseMock)
+        )->willReturn(
+            $this->_responseMock
         );
         $this->_sessionMock = $this->createPartialMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice']);
         $this->_backendUrl = $this->createMock(\Magento\Backend\Model\Url::class);
@@ -66,8 +66,8 @@ class FileFactoryTest extends \PHPUnit\Framework\TestCase
             \Magento\Backend\Model\Auth\Session::class,
             ['isFirstPageAfterLogin', 'processLogout', 'processLogin']
         );
-        $this->_authMock->expects($this->once())->method('getAuthStorage')->will($this->returnValue($authStorageMock));
-        $authStorageMock->expects($this->once())->method('isFirstPageAfterLogin')->will($this->returnValue(true));
+        $this->_authMock->expects($this->once())->method('getAuthStorage')->willReturn($authStorageMock);
+        $authStorageMock->expects($this->once())->method('isFirstPageAfterLogin')->willReturn(true);
         $this->_sessionMock->expects($this->once())->method('setIsUrlNotice');
         $this->_model->create('fileName', null);
     }

@@ -41,7 +41,7 @@ class StockTest extends \PHPUnit\Framework\TestCase
     private $resourceCollection;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit\Framework\MockObject\MockObject
      */
     private $eventDispatcher;
 
@@ -50,9 +50,9 @@ class StockTest extends \PHPUnit\Framework\TestCase
      */
     private $stockModel;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        /** @var  PHPUnit_Framework_MockObject_MockObject */
+        /** @var  PHPUnit\Framework\MockObject\MockObject */
         $this->eventDispatcher = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])

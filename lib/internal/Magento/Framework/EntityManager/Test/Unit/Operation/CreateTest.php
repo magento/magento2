@@ -19,22 +19,22 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class CreateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataPool;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnection;
 
     /**
-     * @var CreateMain|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreateMain|\PHPUnit\Framework\MockObject\MockObject
      */
     private $createMain;
 
     /**
-     * @var SequenceApplier|\PHPUnit_Framework_MockObject_MockObject
+     * @var SequenceApplier|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sequenceApplier;
 
@@ -43,7 +43,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      */
     private $create;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
@@ -67,14 +67,15 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
      */
     public function testDuplicateExceptionProcessingOnExecute()
     {
-        $metadata = $this->createMock(EntityMetadataInterface::class);
+        $this->expectException(\Magento\Framework\Exception\AlreadyExistsException::class);
+
+        $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
         $this->metadataPool->expects($this->any())->method('getMetadata')->willReturn($metadata);
 
-        $connection = $this->createMock(AdapterInterface::class);
+        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $connection->expects($this->once())->method('rollback');
         $this->resourceConnection->expects($this->any())->method('getConnectionByName')->willReturn($connection);
 

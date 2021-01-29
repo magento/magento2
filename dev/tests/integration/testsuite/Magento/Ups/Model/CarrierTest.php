@@ -55,7 +55,7 @@ class CarrierTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->logs = [];
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);

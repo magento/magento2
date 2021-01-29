@@ -74,7 +74,7 @@ class SalesEventOrderToQuoteObserverTest extends TestCase
     /**
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->messageFactoryMock = $this->createMock(MessageFactory::class);
         $this->giftMessageMock = $this->createMock(Message::class);

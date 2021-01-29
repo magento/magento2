@@ -62,7 +62,7 @@ class CreatePostTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -147,7 +147,7 @@ class CreatePostTest extends AbstractController
         $this->assertEquals(2, $customer->getDataModel()->getGroupId());
         //Assert customer increment id generation
         $this->assertNotNull($customer->getData('increment_id'));
-        $this->assertRegExp('/\d{8}/', $customer->getData('increment_id'));
+        $this->assertMatchesRegularExpression('/\d{8}/', $customer->getData('increment_id'));
     }
 
     /**

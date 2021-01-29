@@ -18,7 +18,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Phrase;
-use \PHPUnit_Framework_MockObject_MockObject as Mock;
+use \PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -70,7 +70,7 @@ class WriterTest extends \PHPUnit\Framework\TestCase
      */
     private $commentParserMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->commentParserMock = $this->getMockBuilder(CommentParser::class)
             ->disableOriginalConstructor()
@@ -243,11 +243,12 @@ class WriterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\FileSystemException
-     * @expectedExceptionMessage The "env.php" deployment config file isn't writable.
      */
     public function testSaveConfigException()
     {
+        $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
+        $this->expectExceptionMessage('The "env.php" deployment config file isn\'t writable.');
+
         $exception = new FileSystemException(new Phrase('error when writing file config file'));
 
         $this->configFilePool->method('getPaths')

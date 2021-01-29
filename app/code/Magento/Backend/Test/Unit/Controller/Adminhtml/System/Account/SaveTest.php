@@ -15,40 +15,40 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Backend\Controller\Adminhtml\System\Account */
     protected $_controller;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\RequestInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\RequestInterface */
     protected $_requestMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResponseInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ResponseInterface */
     protected $_responseMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManager\ObjectManager */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\ObjectManager\ObjectManager */
     protected $_objectManagerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Message\ManagerInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Message\ManagerInterface */
     protected $_messagesMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Helper\Data */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\Helper\Data */
     protected $_helperMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Model\Auth\Session */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\Model\Auth\Session */
     protected $_authSessionMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\User\Model\User */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\User\Model\User */
     protected $_userMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Validator\locale */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Validator\locale */
     protected $_validatorMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Model\Locale\Manager */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\Model\Locale\Manager */
     protected $_managerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\TranslateInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\TranslateInterface */
     protected $_translatorMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject |\Magento\Framework\Event\ManagerInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject |\Magento\Framework\Event\ManagerInterface */
     protected $eventManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->setMethods(['getOriginalPathInfo'])
@@ -162,17 +162,17 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $testedMessage = 'You saved the account.';
 
-        $this->_authSessionMock->expects($this->any())->method('getUser')->will($this->returnValue($this->_userMock));
+        $this->_authSessionMock->expects($this->any())->method('getUser')->willReturn($this->_userMock);
 
-        $this->_userMock->expects($this->any())->method('load')->will($this->returnSelf());
+        $this->_userMock->expects($this->any())->method('load')->willReturnSelf();
         $this->_validatorMock->expects(
             $this->once()
         )->method(
             'isValid'
         )->with(
             $this->equalTo($requestParams['interface_locale'])
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
         $this->_managerMock->expects($this->any())->method('switchBackendInterfaceLocale');
 
@@ -182,8 +182,8 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             $this->equalTo(\Magento\Backend\Model\Auth\Session::class)
-        )->will(
-            $this->returnValue($this->_authSessionMock)
+        )->willReturn(
+            $this->_authSessionMock
         );
         $this->_objectManagerMock->expects(
             $this->at(1)
@@ -191,8 +191,8 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             $this->equalTo(\Magento\User\Model\User::class)
-        )->will(
-            $this->returnValue($this->_userMock)
+        )->willReturn(
+            $this->_userMock
         );
         $this->_objectManagerMock->expects(
             $this->at(2)
@@ -200,8 +200,8 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             $this->equalTo(\Magento\Framework\Validator\Locale::class)
-        )->will(
-            $this->returnValue($this->_validatorMock)
+        )->willReturn(
+            $this->_validatorMock
         );
         $this->_objectManagerMock->expects(
             $this->at(3)
@@ -209,12 +209,12 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             $this->equalTo(\Magento\Backend\Model\Locale\Manager::class)
-        )->will(
-            $this->returnValue($this->_managerMock)
+        )->willReturn(
+            $this->_managerMock
         );
 
         $this->_userMock->setUserId($userId);
-        $this->_userMock->expects($this->once())->method('performIdentityCheck')->will($this->returnValue(true));
+        $this->_userMock->expects($this->once())->method('performIdentityCheck')->willReturn(true);
         $this->_userMock->expects($this->once())->method('save');
         $this->_userMock->expects($this->once())->method('validate')->willReturn(true);
         $this->_userMock->expects($this->once())->method('sendNotificationEmailsIfRequired');

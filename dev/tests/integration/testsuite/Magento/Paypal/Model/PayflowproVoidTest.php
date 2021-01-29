@@ -39,7 +39,7 @@ class PayflowproVoidTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
     }
@@ -205,7 +205,7 @@ class PayflowproVoidTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        /** @var Payflowpro|\PHPUnit_Framework_MockObject_MockObject $instance */
+        /** @var Payflowpro|\PHPUnit\Framework\MockObject\MockObject $instance */
         $instance = $this->getMockBuilder(Payflowpro::class)
             ->setMethods(['setStore', 'getInfoInstance'])
             ->setConstructorArgs(
@@ -233,7 +233,7 @@ class PayflowproVoidTest extends \PHPUnit\Framework\TestCase
         $instance->expects($this->once())
             ->method('setStore')
             ->willReturnSelf();
-        $paymentInfoInstance = $this->createMock(InfoInterface::class);
+        $paymentInfoInstance = $this->getMockForAbstractClass(InfoInterface::class);
         $instance->method('getInfoInstance')
             ->willReturn($paymentInfoInstance);
 

@@ -18,14 +18,14 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
     /**
      * Catalog helper
      *
-     * @var \Magento\Catalog\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_helper = $this->createPartialMock(\Magento\Catalog\Helper\Data::class, ['isPriceGlobal']);
-        $this->_helper->expects($this->any())->method('isPriceGlobal')->will($this->returnValue(true));
+        $this->_helper->expects($this->any())->method('isPriceGlobal')->willReturn(true);
 
         $currencyFactoryMock = $this->createPartialMock(\Magento\Directory\Model\CurrencyFactory::class, ['create']);
         $storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
@@ -48,9 +48,9 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $resource = $this->createPartialMock(\stdClass::class, ['getMainTable']);
-        $resource->expects($this->any())->method('getMainTable')->will($this->returnValue('table'));
+        $resource->expects($this->any())->method('getMainTable')->willReturn('table');
 
-        $this->_model->expects($this->any())->method('_getResource')->will($this->returnValue($resource));
+        $this->_model->expects($this->any())->method('_getResource')->willReturn($resource);
     }
 
     public function testGetAffectedFields()
@@ -62,10 +62,10 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
             \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
             ['getBackendTable', 'isStatic', 'getAttributeId', 'getName', '__wakeup']
         );
-        $attribute->expects($this->any())->method('getAttributeId')->will($this->returnValue($attributeId));
-        $attribute->expects($this->any())->method('isStatic')->will($this->returnValue(false));
-        $attribute->expects($this->any())->method('getBackendTable')->will($this->returnValue('table'));
-        $attribute->expects($this->any())->method('getName')->will($this->returnValue('tier_price'));
+        $attribute->expects($this->any())->method('getAttributeId')->willReturn($attributeId);
+        $attribute->expects($this->any())->method('isStatic')->willReturn(false);
+        $attribute->expects($this->any())->method('getBackendTable')->willReturn('table');
+        $attribute->expects($this->any())->method('getName')->willReturn('tier_price');
         $this->_model->setAttribute($attribute);
 
         $object = new \Magento\Framework\DataObject();

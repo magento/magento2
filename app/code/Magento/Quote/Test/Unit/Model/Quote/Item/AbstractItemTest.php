@@ -32,13 +32,13 @@ class AbstractItemTest extends \PHPUnit\Framework\TestCase
         );
         $abstractItemMock->expects($this->any())
             ->method('getChildren')
-            ->will($this->returnValue($children));
+            ->willReturn($children);
         $abstractItemMock->expects($this->any())
             ->method('isChildrenCalculated')
-            ->will($this->returnValue($calculated));
+            ->willReturn($calculated);
         $abstractItemMock->expects($this->any())
             ->method('getDiscountAmount')
-            ->will($this->returnValue($myDiscountAmount));
+            ->willReturn($myDiscountAmount);
 
         $totalDiscountAmount = $abstractItemMock->getTotalDiscountAmount();
         $this->assertEquals($expectedDiscountAmount, $totalDiscountAmount);
@@ -61,7 +61,7 @@ class AbstractItemTest extends \PHPUnit\Framework\TestCase
         );
         $childOneItemMock->expects($this->any())
             ->method('getDiscountAmount')
-            ->will($this->returnValue($childOneDiscountAmount));
+            ->willReturn($childOneDiscountAmount);
 
         $childTwoDiscountAmount = 50;
         $childTwoItemMock = $this->getMockForAbstractClass(
@@ -75,7 +75,7 @@ class AbstractItemTest extends \PHPUnit\Framework\TestCase
         );
         $childTwoItemMock->expects($this->any())
             ->method('getDiscountAmount')
-            ->will($this->returnValue($childTwoDiscountAmount));
+            ->willReturn($childTwoDiscountAmount);
 
         $valueHasNoEffect = 0;
 

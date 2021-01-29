@@ -27,7 +27,7 @@ class CookieScopeTest extends \PHPUnit\Framework\TestCase
      */
     protected $request;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->request = $this->objectManager->get(\Magento\Framework\App\RequestInterface::class);

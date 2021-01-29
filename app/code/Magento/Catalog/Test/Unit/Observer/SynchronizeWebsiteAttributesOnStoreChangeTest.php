@@ -90,8 +90,8 @@ class SynchronizeWebsiteAttributesOnStoreChangeTest extends \PHPUnit\Framework\T
 
         $store->expects($this->once())
             ->method('hasDataChanges')
-            ->will(
-                $this->returnValue(false)
+            ->willReturn(
+                false
             );
 
         $store->expects($this->never())
@@ -147,27 +147,27 @@ class SynchronizeWebsiteAttributesOnStoreChangeTest extends \PHPUnit\Framework\T
 
         $store->expects($this->once())
             ->method('hasDataChanges')
-            ->will(
-                $this->returnValue(true)
+            ->willReturn(
+                true
             );
 
         $store->expects($this->once())
             ->method('getOrigData')
             ->with('website_id')
-            ->will(
-                $this->returnValue($sameWebsiteId)
+            ->willReturn(
+                $sameWebsiteId
             );
 
         $store->expects($this->once())
             ->method('getWebsiteId')
-            ->will(
-                $this->returnValue($sameWebsiteId)
+            ->willReturn(
+                $sameWebsiteId
             );
 
         $store->expects($this->once())
             ->method('isObjectNew')
-            ->will(
-                $this->returnValue(false)
+            ->willReturn(
+                false
             );
 
         return [
@@ -220,27 +220,27 @@ class SynchronizeWebsiteAttributesOnStoreChangeTest extends \PHPUnit\Framework\T
 
         $storeNew->expects($this->once())
             ->method('hasDataChanges')
-            ->will(
-                $this->returnValue(true)
+            ->willReturn(
+                true
             );
 
         $storeNew->expects($this->once())
             ->method('getOrigData')
             ->with('website_id')
-            ->will(
-                $this->returnValue($sameWebsiteId)
+            ->willReturn(
+                $sameWebsiteId
             );
 
         $storeNew->expects($this->once())
             ->method('getWebsiteId')
-            ->will(
-                $this->returnValue($sameWebsiteId)
+            ->willReturn(
+                $sameWebsiteId
             );
 
         $storeNew->expects($this->once())
             ->method('isObjectNew')
-            ->will(
-                $this->returnValue(true)
+            ->willReturn(
+                true
             );
 
         $sameWebsiteId = 1;
@@ -257,27 +257,27 @@ class SynchronizeWebsiteAttributesOnStoreChangeTest extends \PHPUnit\Framework\T
 
         $storeChangedWebsite->expects($this->once())
             ->method('hasDataChanges')
-            ->will(
-                $this->returnValue(true)
+            ->willReturn(
+                true
             );
 
         $storeChangedWebsite->expects($this->once())
             ->method('getOrigData')
             ->with('website_id')
-            ->will(
-                $this->returnValue($sameWebsiteId)
+            ->willReturn(
+                $sameWebsiteId
             );
 
         $storeChangedWebsite->expects($this->once())
             ->method('getWebsiteId')
-            ->will(
-                $this->returnValue($newWebsiteId)
+            ->willReturn(
+                $newWebsiteId
             );
 
         $storeChangedWebsite->expects($this->once())
             ->method('isObjectNew')
-            ->will(
-                $this->returnValue(false)
+            ->willReturn(
+                false
             );
 
         return [

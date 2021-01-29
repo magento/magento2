@@ -34,7 +34,7 @@ class LoggerTest extends \PHPUnit\Framework\TestCase
      */
     protected $requestUri = 'customer/account/login';
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->createMock(\Cm\RedisSession\Handler\ConfigInterface::class);
         $this->config->expects($this->once())

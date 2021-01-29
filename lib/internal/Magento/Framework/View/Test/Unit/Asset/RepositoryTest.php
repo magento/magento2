@@ -23,59 +23,59 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     private $repository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlMock;
 
     /**
-     * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\DesignInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $designMock;
 
     /**
-     * @var ThemeProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ThemeProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $themeProvider;
 
     /**
-     * @var \Magento\Framework\View\Asset\Source|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\Source|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sourceMock;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     private $httpMock;
 
     /**
-     * @var \Magento\Framework\View\Asset\FileFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\FileFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\Asset\File\FallbackContextFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\File\FallbackContextFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fallbackFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\Asset\File\ContextFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\File\ContextFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\Asset\RemoteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\RemoteFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $remoteFactoryMock;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->createPartialMock(
             \Magento\Framework\ObjectManager\ObjectManager::class,
@@ -87,7 +87,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->designMock = $this->getMockBuilder(\Magento\Framework\View\DesignInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->themeProvider = $this->createMock(ThemeProviderInterface::class);
+        $this->themeProvider = $this->getMockForAbstractClass(ThemeProviderInterface::class);
         $this->sourceMock = $this->getMockBuilder(\Magento\Framework\View\Asset\Source::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -133,17 +133,18 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Could not find theme 'nonexistent_theme' for area 'area'
      * @return void
      */
     public function testUpdateDesignParamsWrongTheme()
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Could not find theme \'nonexistent_theme\' for area \'area\'');
+
         $params = ['area' => 'area', 'theme' => 'nonexistent_theme'];
         $this->themeProvider->expects($this->once())
             ->method('getThemeByFullPath')
             ->with('area/nonexistent_theme')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->repository->updateDesignParams($params);
     }
 
@@ -480,12 +481,13 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Scope separator "::" cannot be used without scope identifier.
      * @return void
      */
     public function testExtractModuleException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Scope separator "::" cannot be used without scope identifier.');
+
         $this->repository->extractModule('::asdsad');
     }
 }

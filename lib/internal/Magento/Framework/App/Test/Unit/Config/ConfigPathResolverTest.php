@@ -7,7 +7,7 @@ namespace Magento\Framework\App\Test\Unit\Config;
 
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\Config\ConfigPathResolver;
-use \PHPUnit_Framework_MockObject_MockObject as Mock;
+use \PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * {@inheritdoc}
@@ -27,7 +27,7 @@ class ConfigPathResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeCodeResolverMock = $this->getMockBuilder(ScopeCodeResolver::class)
             ->disableOriginalConstructor()

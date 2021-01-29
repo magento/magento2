@@ -32,7 +32,7 @@ class NewActionTest extends AbstractBackendController
     /**
      * @inheridoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

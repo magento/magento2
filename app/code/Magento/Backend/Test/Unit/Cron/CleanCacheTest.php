@@ -26,8 +26,8 @@ class CleanCacheTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getBackend'
-        )->will(
-            $this->returnValue($cacheBackendMock)
+        )->willReturn(
+            $cacheBackendMock
         );
 
         $frontendPoolMock->expects(
@@ -42,8 +42,8 @@ class CleanCacheTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'current'
-        )->will(
-            $this->returnValue($cacheFrontendMock)
+        )->willReturn(
+            $cacheFrontendMock
         );
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

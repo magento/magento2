@@ -16,11 +16,11 @@ class OptionTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $objectManager = new ObjectManager($this);

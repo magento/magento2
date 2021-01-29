@@ -27,12 +27,12 @@ class MediaTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\Storage\ConfigFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Model\File\Storage\ConfigFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configFactoryMock;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\Storage\SynchronizationFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Model\File\Storage\SynchronizationFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $syncFactoryMock;
 
@@ -42,36 +42,36 @@ class MediaTest extends \PHPUnit\Framework\TestCase
     private $closure;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $sync;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\Storage\Response|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Model\File\Storage\Response|\PHPUnit\Framework\MockObject\MockObject
      */
     private $responseMock;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit\Framework\MockObject\MockObject
      */
     private $directoryMediaMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit\Framework\MockObject\MockObject
      */
     private $directoryPubMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->closure = function () {
             return true;
@@ -84,14 +84,14 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         );
         $this->configFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->configMock));
+            ->willReturn($this->configMock);
         $this->syncFactoryMock = $this->createPartialMock(
             \Magento\MediaStorage\Model\File\Storage\SynchronizationFactory::class,
             ['create']
         );
         $this->syncFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->sync));
+            ->willReturn($this->sync);
 
         $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->directoryPubMock = $this->getMockForAbstractClass(
@@ -143,7 +143,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->model);
     }
@@ -168,17 +168,17 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $this->directoryMediaMock->expects($this->once())
             ->method('getAbsolutePath')
             ->with(null)
-            ->will($this->returnValue(self::MEDIA_DIRECTORY));
+            ->willReturn(self::MEDIA_DIRECTORY);
         $this->directoryPubMock->expects($this->once())
             ->method('getAbsolutePath')
             ->with(self::RELATIVE_FILE_PATH)
-            ->will($this->returnValue($filePath));
+            ->willReturn($filePath);
         $this->configMock->expects($this->once())->method('save');
         $this->sync->expects($this->once())->method('synchronize')->with(self::RELATIVE_FILE_PATH);
         $this->directoryPubMock->expects($this->once())
             ->method('isReadable')
             ->with(self::RELATIVE_FILE_PATH)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->responseMock->expects($this->once())->method('setFilePath')->with($filePath);
         $this->model->launch();
     }
@@ -190,15 +190,15 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $this->directoryMediaMock->expects($this->once())
             ->method('getAbsolutePath')
             ->with(null)
-            ->will($this->returnValue(self::MEDIA_DIRECTORY));
+            ->willReturn(self::MEDIA_DIRECTORY);
         $this->directoryPubMock->expects($this->once())
             ->method('isReadable')
             ->with(self::RELATIVE_FILE_PATH)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->directoryPubMock->expects($this->once())
             ->method('getAbsolutePath')
             ->with(self::RELATIVE_FILE_PATH)
-            ->will($this->returnValue($filePath));
+            ->willReturn($filePath);
         $this->responseMock->expects($this->once())->method('setFilePath')->with($filePath);
         $this->assertSame($this->responseMock, $this->model->launch());
     }
@@ -209,11 +209,11 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $this->directoryMediaMock->expects($this->once())
             ->method('getAbsolutePath')
             ->with(null)
-            ->will($this->returnValue(self::MEDIA_DIRECTORY));
+            ->willReturn(self::MEDIA_DIRECTORY);
         $this->directoryPubMock->expects($this->once())
             ->method('isReadable')
             ->with(self::RELATIVE_FILE_PATH)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->assertSame($this->responseMock, $this->model->launch());
     }
 
@@ -232,7 +232,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
             ->with(404);
         $bootstrap->expects($this->once())
             ->method('isDeveloperMode')
-            ->will($this->returnValue($isDeveloper));
+            ->willReturn($isDeveloper);
         $this->responseMock->expects($this->exactly($setBodyCalls))
             ->method('setBody');
         $this->responseMock->expects($this->once())

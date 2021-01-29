@@ -25,37 +25,37 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
     protected $_block;
 
     /**
-     * @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_layoutMock;
 
     /**
-     * @var \Magento\Backend\Block\Widget\Grid|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Block\Widget\Grid|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_gridMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_eventManagerMock;
 
     /**
-     * @var \Magento\Backend\Model\Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Url|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_urlModelMock;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var Authorization|\PHPUnit_Framework_MockObject_MockObject
+     * @var Authorization|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_authorizationMock;
 
     /**
-     * @var VisibilityChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var VisibilityChecker|\PHPUnit\Framework\MockObject\MockObject
      */
     private $visibilityCheckerMock;
 
@@ -74,7 +74,7 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
      */
     private $connectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_gridMock = $this->getMockBuilder(\Magento\Backend\Block\Widget\Grid::class)
             ->disableOriginalConstructor()
@@ -119,7 +119,7 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
 
         $this->gridCollectionMock = $this->createMock(Collection::class);
         $this->gridCollectionSelectMock = $this->createMock(Select::class);
-        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $this->gridCollectionMock->expects($this->any())
             ->method('getSelect')
@@ -145,7 +145,7 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
         $this->_block->setNameInLayout('test_grid_massaction');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_layoutMock);
         unset($this->_eventManagerMock);

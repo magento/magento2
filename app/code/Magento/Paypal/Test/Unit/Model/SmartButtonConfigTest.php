@@ -21,28 +21,28 @@ class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $localeResolverMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject $scopeConfigMock */
+        /** @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject $scopeConfigMock */
         $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $scopeConfigMock->method('isSetFlag')
             ->willReturn(true);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $configFactoryMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $configFactoryMock */
         $configFactoryMock = $this->getMockBuilder(ConfigFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -92,8 +92,8 @@ class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
         array $expected = []
     ) {
         $this->localeResolverMock->method('getLocale')->willReturn($locale);
-        $this->configMock->method('getValue')->will(
-            $this->returnValueMap(
+        $this->configMock->method('getValue')->willReturnMap(
+            
                 [
                     ['merchant_id', null, 'merchant'],
                     [
@@ -115,7 +115,7 @@ class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
                         $installmentPeriodLabel
                     ]
                 ]
-            )
+            
         );
 
         self::assertEquals($expected, $this->model->getConfig($page));

@@ -26,12 +26,12 @@ class InfoTest extends TestCase
         /** @var Context|MockObject|InvocationMocker $contextMock */
         $contextMock = $this->createMock(Context::class);
         /** @var Config|MockObject|InvocationMocker $configMock */
-        $configMock = $this->createMock(ConfigInterface::class);
+        $configMock = $this->getMockForAbstractClass(ConfigInterface::class);
         $block = new Info($contextMock, $configMock);
         /** @var InfoInterface|MockObject|InvocationMocker $payment */
-        $payment = $this->createMock(InfoInterface::class);
+        $payment = $this->getMockForAbstractClass(InfoInterface::class);
         /** @var RendererInterface|MockObject|InvocationMocker $translationRenderer */
-        $translationRenderer = $this->createMock(RendererInterface::class);
+        $translationRenderer = $this->getMockForAbstractClass(RendererInterface::class);
 
         // only foo should be used
         $configMock->method('getValue')

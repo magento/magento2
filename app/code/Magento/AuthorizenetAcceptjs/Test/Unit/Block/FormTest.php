@@ -29,7 +29,7 @@ class FormTest extends TestCase
      */
     private $configMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $contextMock = $this->createMock(Context::class);
         $this->configMock = $this->createMock(Config::class);

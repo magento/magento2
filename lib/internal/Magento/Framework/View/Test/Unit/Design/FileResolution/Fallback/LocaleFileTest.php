@@ -13,7 +13,7 @@ use Magento\Framework\View\Design\Fallback\RulePool;
 class LocaleFileTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resolver;
 
@@ -22,7 +22,7 @@ class LocaleFileTest extends \PHPUnit\Framework\TestCase
      */
     protected $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resolver = $this->createMock(
             \Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface::class
@@ -37,7 +37,7 @@ class LocaleFileTest extends \PHPUnit\Framework\TestCase
         $this->resolver->expects($this->once())
             ->method('resolve')
             ->with(RulePool::TYPE_LOCALE_FILE, 'file.ext', 'frontend', $theme, 'en_US', null)
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
         $actual = $this->object->getFile('frontend', $theme, 'en_US', 'file.ext');
         $this->assertSame($expected, $actual);
     }

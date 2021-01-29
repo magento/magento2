@@ -13,11 +13,11 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_moduleReaderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_moduleReaderMock = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
         $this->_moduleReaderMock->expects(
@@ -27,8 +27,8 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
         )->with(
             'etc',
             'Magento_Catalog'
-        )->will(
-            $this->returnValue('schema_dir')
+        )->willReturn(
+            'schema_dir'
         );
         $this->_model = new \Magento\Catalog\Model\ProductTypes\Config\SchemaLocator($this->_moduleReaderMock);
     }

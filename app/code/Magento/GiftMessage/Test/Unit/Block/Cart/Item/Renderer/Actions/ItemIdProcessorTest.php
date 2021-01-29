@@ -13,7 +13,7 @@ class ItemIdProcessorTest extends \PHPUnit\Framework\TestCase
     /** @var ItemIdProcessor */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = new ItemIdProcessor();
     }
@@ -27,7 +27,7 @@ class ItemIdProcessorTest extends \PHPUnit\Framework\TestCase
     public function testProcess($itemId, array $jsLayout, array $result)
     {
         /**
-         * @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock
+         * @var Item|\PHPUnit\Framework\MockObject\MockObject $itemMock
          */
         $itemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()

@@ -20,16 +20,16 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $priceCurrencyMock;
 
-    /** @var PriceInfoInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var PriceInfoInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $priceInfoFactory;
 
-    /** @var PriceInfoInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var PriceInfoInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $priceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->priceCurrencyMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
             ->getMockForAbstractClass();
@@ -60,7 +60,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $productRenderInfoDto = $this->createMock(ProductRenderInterface::class);
+        $productRenderInfoDto = $this->getMockForAbstractClass(ProductRenderInterface::class);
         $productRenderInfoDto->expects($this->exactly(2))
             ->method('getPriceInfo')
             ->willReturn([]);
@@ -88,7 +88,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $priceInfo->expects($this->atLeastOnce())
             ->method('getPrice')
             ->willReturn($price);
-        $amount = $this->createMock(AmountInterface::class);
+        $amount = $this->getMockForAbstractClass(AmountInterface::class);
 
         $price->expects($this->atLeastOnce())
             ->method('getAmount')

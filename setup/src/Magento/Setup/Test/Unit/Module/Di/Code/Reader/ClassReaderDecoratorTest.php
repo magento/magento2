@@ -15,11 +15,11 @@ class ClassReaderDecoratorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Code\Reader\ClassReader | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Code\Reader\ClassReader | \PHPUnit\Framework\MockObject\MockObject
      */
     private $classReaderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->classReaderMock = $this->getMockBuilder(\Magento\Framework\Code\Reader\ClassReader::class)
             ->disableOriginalConstructor()

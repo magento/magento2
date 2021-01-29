@@ -15,7 +15,7 @@ class XmlTest extends \PHPUnit\Framework\TestCase
     /**
      * Initialize parameters
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_converter = new \Magento\Cron\Model\Config\Converter\Xml();
     }
@@ -77,10 +77,11 @@ class XmlTest extends \PHPUnit\Framework\TestCase
     /**
      * Testing converting not valid cron configuration, expect to get exception
      *
-     * @expectedException \InvalidArgumentException
      */
     public function testConvertWrongConfiguration()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $xmlFile = __DIR__ . '/../_files/crontab_invalid.xml';
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));

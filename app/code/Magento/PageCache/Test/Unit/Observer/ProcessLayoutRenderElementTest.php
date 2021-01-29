@@ -14,19 +14,19 @@ class ProcessLayoutRenderElementTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\PageCache\Observer\ProcessLayoutRenderElement */
     private $_model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|EntitySpecificHandlesList */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|EntitySpecificHandlesList */
     private $entitySpecificHandlesListMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\PageCache\Model\Config */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\PageCache\Model\Config */
     private $_configMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Element\AbstractBlock */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Element\AbstractBlock */
     private $_blockMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Layout */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Layout */
     private $_layoutMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event\Observer */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Event\Observer */
     private $_observerMock;
 
     /** @var \Magento\Framework\DataObject */
@@ -35,7 +35,7 @@ class ProcessLayoutRenderElementTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up all mocks and data for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_configMock = $this->createPartialMock(\Magento\PageCache\Model\Config::class, ['getType', 'isEnabled']);
         $this->entitySpecificHandlesListMock = $this->createMock(EntitySpecificHandlesList::class);
@@ -82,44 +82,44 @@ class ProcessLayoutRenderElementTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Event::class,
             ['getLayout', 'getElementName', 'getTransport']
         );
-        $this->_observerMock->expects($this->once())->method('getEvent')->will($this->returnValue($eventMock));
-        $eventMock->expects($this->once())->method('getLayout')->will($this->returnValue($this->_layoutMock));
-        $this->_configMock->expects($this->any())->method('isEnabled')->will($this->returnValue($cacheState));
+        $this->_observerMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
+        $eventMock->expects($this->once())->method('getLayout')->willReturn($this->_layoutMock);
+        $this->_configMock->expects($this->any())->method('isEnabled')->willReturn($cacheState);
 
         if ($cacheState) {
             $eventMock->expects($this->once())
                 ->method('getElementName')
-                ->will($this->returnValue('blockName'));
+                ->willReturn('blockName');
 
             $eventMock->expects($this->once())
                 ->method('getTransport')
-                ->will($this->returnValue($this->_transport));
+                ->willReturn($this->_transport);
 
             $this->_layoutMock->expects($this->once())
                 ->method('isCacheable')
-                ->will($this->returnValue(true));
+                ->willReturn(true);
 
             $this->_layoutMock->expects($this->any())
                 ->method('getUpdate')
-                ->will($this->returnSelf());
+                ->willReturnSelf();
 
             $this->_layoutMock->expects($this->any())
                 ->method('getHandles')
-                ->will($this->returnValue(['default', 'catalog_product_view', 'catalog_product_view_id_1']));
+                ->willReturn(['default', 'catalog_product_view', 'catalog_product_view_id_1']);
 
             $this->entitySpecificHandlesListMock->expects($this->any())
                 ->method('getHandles')
-                ->will($this->returnValue(['catalog_product_view_id_1']));
+                ->willReturn(['catalog_product_view_id_1']);
 
             $this->_layoutMock->expects($this->once())
                 ->method('getBlock')
-                ->will($this->returnValue($this->_blockMock));
+                ->willReturn($this->_blockMock);
 
             if ($varnishIsEnabled) {
                 $this->_blockMock->expects($this->once())
                     ->method('getData')
                     ->with('ttl')
-                    ->will($this->returnValue($blockTtl));
+                    ->willReturn($blockTtl);
                 $this->_blockMock->expects($this->any())
                     ->method('getUrl')
                     ->with(
@@ -127,21 +127,21 @@ class ProcessLayoutRenderElementTest extends \PHPUnit\Framework\TestCase
                         ['blocks' => '[null]',
                             'handles' => 'WyJkZWZhdWx0IiwiY2F0YWxvZ19wcm9kdWN0X3ZpZXciXQ==']
                     )
-                    ->will(
-                        $this->returnValue(
+                    ->willReturn(
+                        
                             'page_cache/block/wrapesi/with/handles/WyJkZWZhdWx0IiwiY2F0YWxvZ19wcm9kdWN0X3ZpZXciXQ=='
-                        )
+                        
                     );
             }
             if ($scopeIsPrivate) {
                 $this->_blockMock->expects($this->once())
                     ->method('getNameInLayout')
-                    ->will($this->returnValue('testBlockName'));
+                    ->willReturn('testBlockName');
                 $this->_blockMock->expects($this->once())
                     ->method('isScopePrivate')
-                    ->will($this->returnValue($scopeIsPrivate));
+                    ->willReturn($scopeIsPrivate);
             }
-            $this->_configMock->expects($this->any())->method('getType')->will($this->returnValue($varnishIsEnabled));
+            $this->_configMock->expects($this->any())->method('getType')->willReturn($varnishIsEnabled);
         }
         $this->_model->execute($this->_observerMock);
 
@@ -157,51 +157,51 @@ class ProcessLayoutRenderElementTest extends \PHPUnit\Framework\TestCase
         );
         $expectedUrl = 'page_cache/block/wrapesi/with/handles/' . base64_encode('and/other/stuff');
 
-        $this->_observerMock->expects($this->once())->method('getEvent')->will($this->returnValue($eventMock));
-        $eventMock->expects($this->once())->method('getLayout')->will($this->returnValue($this->_layoutMock));
-        $this->_configMock->expects($this->any())->method('isEnabled')->will($this->returnValue(true));
+        $this->_observerMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
+        $eventMock->expects($this->once())->method('getLayout')->willReturn($this->_layoutMock);
+        $this->_configMock->expects($this->any())->method('isEnabled')->willReturn(true);
 
         $eventMock->expects($this->once())
                 ->method('getElementName')
-                ->will($this->returnValue('blockName'));
+                ->willReturn('blockName');
 
         $eventMock->expects($this->once())
                 ->method('getTransport')
-                ->will($this->returnValue($this->_transport));
+                ->willReturn($this->_transport);
 
         $this->_layoutMock->expects($this->once())
                 ->method('isCacheable')
-                ->will($this->returnValue(true));
+                ->willReturn(true);
 
         $this->_layoutMock->expects($this->any())
                 ->method('getUpdate')
-                ->will($this->returnSelf());
+                ->willReturnSelf();
 
         $this->_layoutMock->expects($this->any())
                 ->method('getHandles')
-                ->will($this->returnValue([]));
+                ->willReturn([]);
 
         $this->_layoutMock->expects($this->once())
                 ->method('getBlock')
-                ->will($this->returnValue($this->_blockMock));
+                ->willReturn($this->_blockMock);
 
         $this->entitySpecificHandlesListMock->expects($this->any())
             ->method('getHandles')
-            ->will($this->returnValue(['catalog_product_view_id_1']));
+            ->willReturn(['catalog_product_view_id_1']);
 
         $this->_blockMock->expects($this->once())
             ->method('getData')
             ->with('ttl')
-            ->will($this->returnValue(100));
+            ->willReturn(100);
         $this->_blockMock->expects($this->any())
             ->method('getUrl')
-            ->will($this->returnValue($expectedUrl));
+            ->willReturn($expectedUrl);
 
         $this->_blockMock->expects($this->once())
             ->method('getNameInLayout')
-            ->will($this->returnValue('testBlockName'));
+            ->willReturn('testBlockName');
 
-        $this->_configMock->expects($this->any())->method('getType')->will($this->returnValue(true));
+        $this->_configMock->expects($this->any())->method('getType')->willReturn(true);
 
         $this->_model->execute($this->_observerMock);
 

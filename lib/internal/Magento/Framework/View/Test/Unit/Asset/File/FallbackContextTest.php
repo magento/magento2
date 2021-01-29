@@ -20,7 +20,7 @@ class FallbackContextTest extends \PHPUnit\Framework\TestCase
      */
     protected $fallbackContext;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }

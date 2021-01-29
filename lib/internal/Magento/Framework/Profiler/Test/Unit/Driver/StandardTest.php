@@ -10,7 +10,7 @@ namespace Magento\Framework\Profiler\Test\Unit\Driver;
 class StandardTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Profiler\Driver\Standard\Stat|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Profiler\Driver\Standard\Stat|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_stat;
 
@@ -19,13 +19,13 @@ class StandardTest extends \PHPUnit\Framework\TestCase
      */
     protected $_driver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_stat = $this->createMock(\Magento\Framework\Profiler\Driver\Standard\Stat::class);
         $this->_driver = new \Magento\Framework\Profiler\Driver\Standard(['stat' => $this->_stat]);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         \Magento\Framework\Profiler::reset();
     }
@@ -108,8 +108,8 @@ class StandardTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             ['baseDir' => '/custom/base/dir', 'type' => 'outputTypeOne']
-        )->will(
-            $this->returnValue($outputOne)
+        )->willReturn(
+            $outputOne
         );
 
         $outputFactory->expects(
@@ -118,8 +118,8 @@ class StandardTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             ['type' => 'specificOutputTypeTwo', 'baseDir' => '/base/dir']
-        )->will(
-            $this->returnValue($outputTwo)
+        )->willReturn(
+            $outputTwo
         );
 
         $driver = new \Magento\Framework\Profiler\Driver\Standard($config);

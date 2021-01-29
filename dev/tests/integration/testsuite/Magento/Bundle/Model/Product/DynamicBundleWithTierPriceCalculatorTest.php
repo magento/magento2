@@ -16,7 +16,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceCalculatorAbst
     /** @var ProductTierPriceInterfaceFactory */
     private $tierPriceFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->tierPriceFactory = $this->objectManager->create(ProductTierPriceInterfaceFactory::class);

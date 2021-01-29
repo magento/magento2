@@ -27,23 +27,23 @@ class TopologyInstallerTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var ConfigInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $topologyConfigMock;
 
     /**
-     * @var LoggerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
      * Initialize topology installer.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->topologyConfigMock = $this->createMock(ConfigInterface::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->topologyConfigMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->topologyInstaller = $this->objectManager->getObject(
             TopologyInstaller::class,
             ['topologyConfig' => $this->topologyConfigMock, 'logger' => $this->loggerMock]

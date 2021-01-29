@@ -8,19 +8,19 @@ namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 /** Test Magento\Customer\Model\Metadata\Form\Multiline */
 abstract class AbstractFormTestCase extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Stdlib\DateTime\TimezoneInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Stdlib\DateTime\TimezoneInterface */
     protected $localeMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Locale\ResolverInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Locale\ResolverInterface */
     protected $localeResolverMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Psr\Log\LoggerInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Psr\Log\LoggerInterface */
     protected $loggerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Api\Data\AttributeMetadataInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Api\Data\AttributeMetadataInterface */
     protected $attributeMetadataMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->localeMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
             ->getMock();

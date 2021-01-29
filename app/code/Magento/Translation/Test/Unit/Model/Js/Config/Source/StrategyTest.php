@@ -22,7 +22,7 @@ class StrategyTest extends \PHPUnit\Framework\TestCase
      * Set up
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(\Magento\Translation\Model\Js\Config\Source\Strategy::class);

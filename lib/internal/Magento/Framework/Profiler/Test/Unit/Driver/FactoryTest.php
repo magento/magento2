@@ -24,7 +24,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_defaultDriverType = 'default';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_factory = new \Magento\Framework\Profiler\Driver\Factory(
             $this->_defaultDriverPrefix,
@@ -91,11 +91,12 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Driver class "stdClass" must implement \Magento\Framework\Profiler\DriverInterface.
      */
     public function testCreateInvalidClass()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Driver class "stdClass" must implement \\Magento\\Framework\\Profiler\\DriverInterface.');
+
         $this->_factory->create(['type' => 'stdClass']);
     }
 }

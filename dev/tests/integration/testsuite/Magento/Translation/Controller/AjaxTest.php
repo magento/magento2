@@ -27,7 +27,7 @@ class AjaxTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         /* Called getConfig as workaround for setConfig bug */
         $this->objectManager = Bootstrap::getObjectManager();
@@ -102,7 +102,7 @@ class AjaxTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @inheritdoc
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         try {
             Bootstrap::getObjectManager()->get(StringUtils::class)->deleteTranslate('phrase with &');

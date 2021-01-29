@@ -20,21 +20,21 @@ class CountryTest extends \PHPUnit\Framework\TestCase
     protected $_element;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_request;
 
     /**
-     * @var \Magento\Framework\View\Helper\Js|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Helper\Js|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_jsHelper;
 
     /**
-     * @var \Magento\Backend\Model\Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Url|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_url;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_element = $this->getMockForAbstractClass(
@@ -48,13 +48,13 @@ class CountryTest extends \PHPUnit\Framework\TestCase
         );
         $this->_element->expects($this->any())
             ->method('getHtmlId')
-            ->will($this->returnValue('html id'));
+            ->willReturn('html id');
         $this->_element->expects($this->any())
             ->method('getElementHtml')
-            ->will($this->returnValue('element html'));
+            ->willReturn('element html');
         $this->_element->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('name'));
+            ->willReturn('name');
         $this->_request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
         $this->_jsHelper = $this->createMock(\Magento\Framework\View\Helper\Js::class);
         $this->_url = $this->createMock(\Magento\Backend\Model\Url::class);
@@ -75,7 +75,7 @@ class CountryTest extends \PHPUnit\Framework\TestCase
     {
         $this->_request->expects($this->any())
             ->method('getParam')
-            ->will($this->returnCallback(function ($param) use ($requestCountry, $requestDefaultCountry) {
+            ->willReturnCallback(function ($param) use ($requestCountry, $requestDefaultCountry) {
                 if ($param == \Magento\Paypal\Model\Config\StructurePlugin::REQUEST_PARAM_COUNTRY) {
                     return $requestCountry;
                 }
@@ -83,7 +83,7 @@ class CountryTest extends \PHPUnit\Framework\TestCase
                     return $requestDefaultCountry;
                 }
                 return $param;
-            }));
+            });
         $this->_element->setInherit($inherit);
         $this->_element->setCanUseDefaultValue($canUseDefault);
         $constraints = [

@@ -17,56 +17,56 @@ use Magento\Framework\App\State;
 class BootstrapTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\AppInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\AppInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $application;
 
     /**
-     * @var \Magento\Framework\App\ObjectManagerFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ObjectManagerFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerFactory;
 
     /**
-     * @var \Magento\Framework\ObjectManager\ObjectManager | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManager\ObjectManager | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManager;
 
     /**
-     * @var \Psr\Log\LoggerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $logger;
 
     /**
-     * @var \Magento\Framework\App\Filesystem\DirectoryList | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Filesystem\DirectoryList | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $dirs;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $configDir;
 
     /**
-     * @var MaintenanceMode | \PHPUnit_Framework_MockObject_MockObject
+     * @var MaintenanceMode | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $maintenanceMode;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $deploymentConfig;
 
     /**
-     * @var \Magento\Framework\App\Bootstrap | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Bootstrap | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $bootstrapMock;
 
     /**
-     * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $remoteAddress;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerFactory = $this->createMock(\Magento\Framework\App\ObjectManagerFactory::class);
         $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
@@ -206,8 +206,8 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
     public function testRunNoErrors()
     {
         $responseMock = $this->getMockForAbstractClass(\Magento\Framework\App\ResponseInterface::class);
-        $this->bootstrapMock->expects($this->once())->method('assertMaintenance')->will($this->returnValue(null));
-        $this->bootstrapMock->expects($this->once())->method('assertInstalled')->will($this->returnValue(null));
+        $this->bootstrapMock->expects($this->once())->method('assertMaintenance')->willReturn(null);
+        $this->bootstrapMock->expects($this->once())->method('assertInstalled')->willReturn(null);
         $this->application->expects($this->once())->method('launch')->willReturn($responseMock);
         $this->bootstrapMock->run($this->application);
     }
@@ -225,7 +225,7 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
     public function testRunWithInstallErrors()
     {
         $expectedException = new \Exception('');
-        $this->bootstrapMock->expects($this->once())->method('assertMaintenance')->will($this->returnValue(null));
+        $this->bootstrapMock->expects($this->once())->method('assertMaintenance')->willReturn(null);
         $this->bootstrapMock->expects($this->once())->method('assertInstalled')
             ->will($this->throwException($expectedException));
         $this->bootstrapMock->expects($this->once())->method('terminate')->with($expectedException);
@@ -302,7 +302,7 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
     /**
      * Restore error handler after Bootstrap->run method
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         restore_error_handler();
         setCustomErrorHandler();

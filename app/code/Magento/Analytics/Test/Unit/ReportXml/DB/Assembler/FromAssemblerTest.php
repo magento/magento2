@@ -18,12 +18,12 @@ class FromAssemblerTest extends \PHPUnit\Framework\TestCase
     private $subject;
 
     /**
-     * @var \Magento\Analytics\ReportXml\DB\NameResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Analytics\ReportXml\DB\NameResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $nameResolverMock;
 
     /**
-     * @var \Magento\Analytics\ReportXml\DB\SelectBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Analytics\ReportXml\DB\SelectBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $selectBuilderMock;
 
@@ -33,19 +33,19 @@ class FromAssemblerTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \Magento\Analytics\ReportXml\DB\ColumnsResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Analytics\ReportXml\DB\ColumnsResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $columnsResolverMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnection;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->nameResolverMock = $this->getMockBuilder(
             \Magento\Analytics\ReportXml\DB\NameResolver::class

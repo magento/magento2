@@ -18,21 +18,21 @@ class DataTest extends \PHPUnit\Framework\TestCase
     /**
      * Scope config mock
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
      * Customer session mock
      *
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSessionMock;
 
     /**
      * Customer view helper mock
      *
-     * @var \Magento\Customer\Helper\View|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Helper\View|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerViewHelperMock;
 
@@ -41,7 +41,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $className = \Magento\Contact\Helper\Data::class;
@@ -62,7 +62,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->willReturn('1');
 
-        $this->assertTrue(is_string($this->helper->isEnabled()));
+        $this->assertIsString($this->helper->isEnabled());
     }
 
     public function testIsNotEnabled()

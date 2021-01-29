@@ -8,21 +8,21 @@ namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Plugin;
 class StoreGroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $processorMock;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeGroupMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->processorMock = $this->createPartialMock(
             \Magento\Catalog\Model\Indexer\Product\Flat\Processor::class,
@@ -45,7 +45,7 @@ class StoreGroupTest extends \PHPUnit\Framework\TestCase
     {
         $this->processorMock->expects($this->{$matcherMethod}())->method('markIndexerAsInvalid');
 
-        $this->storeGroupMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
+        $this->storeGroupMock->expects($this->once())->method('getId')->willReturn($storeId);
 
         $model = new \Magento\Catalog\Model\Indexer\Product\Flat\Plugin\StoreGroup($this->processorMock);
         $model->beforeSave($this->subjectMock, $this->storeGroupMock);
@@ -60,7 +60,7 @@ class StoreGroupTest extends \PHPUnit\Framework\TestCase
     {
         $this->processorMock->expects($this->{$matcherMethod}())->method('markIndexerAsInvalid');
 
-        $this->storeGroupMock->expects($this->once())->method('getId')->will($this->returnValue(1));
+        $this->storeGroupMock->expects($this->once())->method('getId')->willReturn(1);
 
         $this->storeGroupMock->expects(
             $this->once()
@@ -68,8 +68,8 @@ class StoreGroupTest extends \PHPUnit\Framework\TestCase
             'dataHasChangedFor'
         )->with(
             'root_category_id'
-        )->will(
-            $this->returnValue($websiteChanged)
+        )->willReturn(
+            $websiteChanged
         );
 
         $model = new \Magento\Catalog\Model\Indexer\Product\Flat\Plugin\StoreGroup($this->processorMock);

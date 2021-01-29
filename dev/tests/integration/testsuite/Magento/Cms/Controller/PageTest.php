@@ -25,7 +25,7 @@ class PageTest extends AbstractController
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_objectManager->configure([

@@ -24,16 +24,16 @@ class SwitcherPluginTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var StoreSwitcherBlock|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreSwitcherBlock|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subjectMock = $this->getMockBuilder(StoreSwitcherBlock::class)
             ->disableOriginalConstructor()

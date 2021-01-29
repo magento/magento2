@@ -37,7 +37,7 @@ class DataAssignObserverTest extends TestCase
             ->willReturn(true);
         $observerContainer = $this->createMock(Observer::class);
         $event = $this->createMock(Event::class);
-        $paymentInfoModel = $this->createMock(InfoInterface::class);
+        $paymentInfoModel = $this->getMockForAbstractClass(InfoInterface::class);
         $dataObject = new DataObject([PaymentInterface::KEY_ADDITIONAL_DATA => $additionalInfo]);
         $observerContainer->method('getEvent')
             ->willReturn($event);
@@ -66,7 +66,7 @@ class DataAssignObserverTest extends TestCase
             ->willReturn(true);
         $observerContainer = $this->createMock(Observer::class);
         $event = $this->createMock(Event::class);
-        $paymentInfoModel = $this->createMock(InfoInterface::class);
+        $paymentInfoModel = $this->getMockForAbstractClass(InfoInterface::class);
         $observerContainer->method('getEvent')
             ->willReturn($event);
         $event->method('getDataByKey')

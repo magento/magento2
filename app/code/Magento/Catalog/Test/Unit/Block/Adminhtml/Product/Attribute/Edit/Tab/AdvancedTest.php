@@ -18,41 +18,41 @@ class AdvancedTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \Magento\Framework\Data\FormFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\FormFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $formFactory;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registry;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeDate;
 
     /**
-     * @var \Magento\Config\Model\Config\Source\Yesno|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Config\Model\Config\Source\Yesno|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $yesNo;
 
     /**
-     * @var \Magento\Eav\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eavData;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesystem;
 
     /**
-     * @var PropertyLocker|\PHPUnit_Framework_MockObject_MockObject
+     * @var PropertyLocker|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $propertyLocker;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->registry = $this->createMock(\Magento\Framework\Registry::class);

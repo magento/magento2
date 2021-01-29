@@ -16,14 +16,14 @@ class RelationTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteMock;
 
     /**
      * Mock class dependencies
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
 

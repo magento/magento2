@@ -20,7 +20,7 @@ class DependenciesShowModulesCircularCommandTest extends \PHPUnit\Framework\Test
      */
     private $commandTester;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $modules = [
             'Magento_A' => __DIR__ . '/_files/root/app/code/Magento/A',
@@ -33,19 +33,19 @@ class DependenciesShowModulesCircularCommandTest extends \PHPUnit\Framework\Test
 
         $themePackageListMock = $this->createMock(\Magento\Framework\View\Design\Theme\ThemePackageList::class);
         $componentRegistrarMock = $this->createMock(\Magento\Framework\Component\ComponentRegistrar::class);
-        $componentRegistrarMock->expects($this->any())->method('getPaths')->will($this->returnValue($modules));
+        $componentRegistrarMock->expects($this->any())->method('getPaths')->willReturn($modules);
         $dirSearchMock = $this->createMock(\Magento\Framework\Component\DirSearch::class);
-        $objectManager->expects($this->any())->method('get')->will($this->returnValueMap([
+        $objectManager->expects($this->any())->method('get')->willReturnMap([
             [\Magento\Framework\View\Design\Theme\ThemePackageList::class, $themePackageListMock],
             [\Magento\Framework\Component\ComponentRegistrar::class, $componentRegistrarMock],
             [\Magento\Framework\Component\DirSearch::class, $dirSearchMock]
-        ]));
+        ]);
 
         $this->command = new DependenciesShowModulesCircularCommand($objectManagerProvider);
         $this->commandTester = new CommandTester($this->command);
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         if (file_exists(__DIR__ . '/_files/output/circular.csv')) {
             unlink(__DIR__ . '/_files/output/circular.csv');

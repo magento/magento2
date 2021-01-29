@@ -20,16 +20,16 @@ class SendFriendTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Stdlib\CookieManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Stdlib\CookieManagerInterface
      */
     protected $cookieManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $sendfriendDataMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->sendfriendDataMock = $this->getMockBuilder(\Magento\SendFriend\Helper\Data::class)
@@ -49,11 +49,11 @@ class SendFriendTest extends \PHPUnit\Framework\TestCase
     public function testGetSentCountWithCheckCookie()
     {
         $cookieName = 'testCookieName';
-        $this->sendfriendDataMock->expects($this->once())->method('getLimitBy')->with()->will(
-            $this->returnValue(\Magento\SendFriend\Helper\Data::CHECK_COOKIE)
+        $this->sendfriendDataMock->expects($this->once())->method('getLimitBy')->with()->willReturn(
+            \Magento\SendFriend\Helper\Data::CHECK_COOKIE
         );
-        $this->sendfriendDataMock->expects($this->once())->method('getCookieName')->with()->will(
-            $this->returnValue($cookieName)
+        $this->sendfriendDataMock->expects($this->once())->method('getCookieName')->with()->willReturn(
+            $cookieName
         );
 
         $this->cookieManagerMock->expects($this->once())->method('getCookie')->with($cookieName);
@@ -63,8 +63,8 @@ class SendFriendTest extends \PHPUnit\Framework\TestCase
     public function testSentCountByCookies()
     {
         $cookieName = 'testCookieName';
-        $this->sendfriendDataMock->expects($this->once())->method('getCookieName')->with()->will(
-            $this->returnValue($cookieName)
+        $this->sendfriendDataMock->expects($this->once())->method('getCookieName')->with()->willReturn(
+            $cookieName
         );
 
         $this->cookieManagerMock->expects($this->once())->method('getCookie')->with($cookieName);

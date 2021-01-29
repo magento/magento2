@@ -15,11 +15,11 @@ class TemplateEnginePoolTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var\PHPUnit_Framework_MockObject_MockObject
+     * @var\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_factory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_factory = $this->createMock(\Magento\Framework\View\TemplateEngineFactory::class);
         $this->_model = new TemplateEnginePool($this->_factory);
@@ -28,7 +28,7 @@ class TemplateEnginePoolTest extends \PHPUnit\Framework\TestCase
     public function testGet()
     {
         $engine = $this->createMock(\Magento\Framework\View\TemplateEngineInterface::class);
-        $this->_factory->expects($this->once())->method('create')->with('test')->will($this->returnValue($engine));
+        $this->_factory->expects($this->once())->method('create')->with('test')->willReturn($engine);
         $this->assertSame($engine, $this->_model->get('test'));
         // Make sure factory is invoked only once and the same instance is returned afterwards
         $this->assertSame($engine, $this->_model->get('test'));

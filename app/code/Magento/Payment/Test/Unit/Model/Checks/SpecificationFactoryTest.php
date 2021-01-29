@@ -16,11 +16,11 @@ class SpecificationFactoryTest extends \PHPUnit\Framework\TestCase
     const SPECIFICATION_KEY = 'specification';
 
     /**
-     * @var \Magento\Payment\Model\Checks\CompositeFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Model\Checks\CompositeFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_compositeFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_compositeFactory = $this->getMockBuilder(
             \Magento\Payment\Model\Checks\CompositeFactory::class
@@ -40,7 +40,7 @@ class SpecificationFactoryTest extends \PHPUnit\Framework\TestCase
         $modelFactory = new SpecificationFactory($this->_compositeFactory, $specificationMapping);
         $this->_compositeFactory->expects($this->once())->method('create')->with(
             ['list' => $specificationMapping]
-        )->will($this->returnValue($expectedComposite));
+        )->willReturn($expectedComposite);
 
         $this->assertEquals($expectedComposite, $modelFactory->create([self::SPECIFICATION_KEY]));
     }

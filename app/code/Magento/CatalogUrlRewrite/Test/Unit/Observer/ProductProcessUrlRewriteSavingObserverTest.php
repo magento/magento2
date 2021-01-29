@@ -19,27 +19,27 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\UrlRewrite\Model\UrlPersistInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\UrlRewrite\Model\UrlPersistInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlPersist;
 
     /**
-     * @var \Magento\Framework\Event|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $event;
 
     /**
-     * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $observer;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $product;
 
     /**
-     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productUrlRewriteGenerator;
 
@@ -56,7 +56,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->urlPersist = $this->createMock(\Magento\UrlRewrite\Model\UrlPersistInterface::class);
         $this->product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
@@ -67,7 +67,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
                 'getIsChangedCategories',
                 'getStoreId'
             ]);
-        $this->product->expects($this->any())->method('getId')->will($this->returnValue(3));
+        $this->product->expects($this->any())->method('getId')->willReturn(3);
         $this->event = $this->createPartialMock(\Magento\Framework\Event::class, ['getProduct']);
         $this->event->expects($this->any())->method('getProduct')->willReturn($this->product);
         $this->observer = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getEvent']);
@@ -78,7 +78,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
         );
         $this->productUrlRewriteGenerator->expects($this->any())
             ->method('generate')
-            ->will($this->returnValue([3 => 'rewrite']));
+            ->willReturn([3 => 'rewrite']);
         $this->objectManager = new ObjectManager($this);
         $this->model = $this->objectManager->getObject(
             \Magento\CatalogUrlRewrite\Observer\ProductProcessUrlRewriteSavingObserver::class,
@@ -167,28 +167,28 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
         $visibilityResult,
         $expectedReplaceCount
     ) {
-        $this->product->expects($this->any())->method('getStoreId')->will($this->returnValue(12));
+        $this->product->expects($this->any())->method('getStoreId')->willReturn(12);
 
         $this->product->expects($this->any())
             ->method('dataHasChangedFor')
-            ->will($this->returnValueMap(
+            ->willReturnMap(
                 [
                     ['visibility', $isChangedVisibility],
                     ['url_key', $isChangedUrlKey]
                 ]
-            ));
+            );
 
         $this->product->expects($this->any())
             ->method('getIsChangedWebsites')
-            ->will($this->returnValue($isChangedWebsites));
+            ->willReturn($isChangedWebsites);
 
         $this->product->expects($this->any())
             ->method('getIsChangedCategories')
-            ->will($this->returnValue($isChangedCategories));
+            ->willReturn($isChangedCategories);
 
         $this->product->expects($this->any())
             ->method('isVisibleInSiteVisibility')
-            ->will($this->returnValue($visibilityResult));
+            ->willReturn($visibilityResult);
 
         $this->urlPersist->expects($this->exactly($expectedReplaceCount))
             ->method('replace')

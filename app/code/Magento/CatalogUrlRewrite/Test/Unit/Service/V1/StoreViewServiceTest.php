@@ -12,19 +12,19 @@ class StoreViewServiceTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService */
     protected $storeViewService;
 
-    /** @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject */
     protected $config;
 
-    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject */
     protected $resource;
 
-    /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $connection;
 
-    /** @var  \Magento\Framework\Db\Select|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\Db\Select|\PHPUnit\Framework\MockObject\MockObject */
     protected $select;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->createMock(\Magento\Eav\Model\Config::class);
         $this->select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
@@ -85,25 +85,25 @@ class StoreViewServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['__wakeup', 'getBackendTable', 'getId', 'getEntity'])
             ->getMockForAbstractClass();
         $this->config->expects($this->once())->method('getAttribute')->with($entityType, 'url_key')
-            ->will($this->returnValue($attribute));
+            ->willReturn($attribute);
         $entity = $this->getMockBuilder(\Magento\Eav\Model\Entity\AbstractEntity::class)
             ->disableOriginalConstructor()
             ->getMock();
         $attribute->expects($this->exactly(2))->method('getEntity')->willReturn($entity);
-        $entity->expects($this->once())->method('getEntityTable')->will($this->returnValue('entity_table'));
+        $entity->expects($this->once())->method('getEntityTable')->willReturn('entity_table');
         $entity->expects($this->once())->method('getLinkField')->willReturn('link_field');
-        $attribute->expects($this->once())->method('getBackendTable')->will($this->returnValue('backend_table'));
-        $attribute->expects($this->once())->method('getId')->will($this->returnValue('attribute-id'));
+        $attribute->expects($this->once())->method('getBackendTable')->willReturn('backend_table');
+        $attribute->expects($this->once())->method('getId')->willReturn('attribute-id');
         $this->select->expects($this->once())->method('from')->with(['e' => 'entity_table'], [])
-            ->will($this->returnSelf());
-        $this->select->expects($this->any())->method('where')->will($this->returnSelf());
+            ->willReturnSelf();
+        $this->select->expects($this->any())->method('where')->willReturnSelf();
         $this->select->expects($this->once())->method('join')->with(
             ['e_attr' => 'backend_table'],
             "e.link_field = e_attr.link_field",
             'store_id'
-        )->will($this->returnSelf());
-        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
-        $this->connection->expects($this->once())->method('fetchCol')->will($this->returnValue($fetchedStoreIds));
+        )->willReturnSelf();
+        $this->connection->expects($this->once())->method('select')->willReturn($this->select);
+        $this->connection->expects($this->once())->method('fetchCol')->willReturn($fetchedStoreIds);
 
         $this->assertEquals(
             $result,
@@ -112,13 +112,14 @@ class StoreViewServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Cannot retrieve attribute for entity type "invalid_type"
      */
     public function testInvalidAttributeRetrieve()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Cannot retrieve attribute for entity type "invalid_type"');
+
         $invalidEntityType = 'invalid_type';
-        $this->config->expects($this->once())->method('getAttribute')->will($this->returnValue(false));
+        $this->config->expects($this->once())->method('getAttribute')->willReturn(false);
 
         $this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore(1, 1, $invalidEntityType);
     }

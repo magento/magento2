@@ -15,7 +15,7 @@ class SenderTest extends \PHPUnit\Framework\TestCase
      */
     protected $sender;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $escaper = $objectManager->getObject(

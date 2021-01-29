@@ -13,16 +13,16 @@ class ReverseResolverTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Module\ModuleListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\ModuleListInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_moduleList;
 
     /**
-     * @var \Magento\Framework\Module\Dir|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_moduleDirs;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_moduleList = $this->createMock(\Magento\Framework\Module\ModuleListInterface::class);
         $this->_moduleDirs = $this->createMock(\Magento\Framework\Module\Dir::class);
@@ -36,20 +36,20 @@ class ReverseResolverTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetModuleName($path, $expectedResult)
     {
-        $this->_moduleList->expects($this->once())->method('getNames')->will(
-            $this->returnValue(['Fixture_ModuleOne', 'Fixture_ModuleTwo'])
+        $this->_moduleList->expects($this->once())->method('getNames')->willReturn(
+            ['Fixture_ModuleOne', 'Fixture_ModuleTwo']
         );
         $this->_moduleDirs->expects(
             $this->atLeastOnce()
         )->method(
             'getDir'
-        )->will(
-            $this->returnValueMap(
+        )->willReturnMap(
+            
                 [
                     ['Fixture_ModuleOne', '', 'app/code/Fixture/ModuleOne'],
                     ['Fixture_ModuleTwo', '', 'app/code/Fixture/ModuleTwo'],
                 ]
-            )
+            
         );
         $this->assertSame($expectedResult, $this->_model->getModuleName($path));
     }

@@ -12,29 +12,29 @@ use Magento\Store\Model\ScopeInterface;
 class DebugHintsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Developer\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Developer\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $devHelperMock;
 
     /**
-     * @var DebugHintsFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var DebugHintsFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $debugHintsFactory;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->getMockForAbstractClass();

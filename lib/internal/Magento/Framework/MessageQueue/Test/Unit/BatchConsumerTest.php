@@ -14,37 +14,37 @@ namespace Magento\Framework\MessageQueue\Test\Unit;
 class BatchConsumerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\MessageQueue\ConsumerConfigurationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\ConsumerConfigurationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configuration;
 
     /**
-     * @var \Magento\Framework\MessageQueue\MessageEncoder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\MessageEncoder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageEncoder;
 
     /**
-     * @var \Magento\Framework\MessageQueue\QueueRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\QueueRepository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queueRepository;
 
     /**
-     * @var \Magento\Framework\MessageQueue\MergerFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\MergerFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mergerFactory;
 
     /**
-     * @var \Magento\Framework\MessageQueue\Consumer\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\Consumer\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $consumerConfig;
 
     /**
-     * @var \Magento\Framework\MessageQueue\MessageController|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\MessageController|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageController;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resource;
 
@@ -59,7 +59,7 @@ class BatchConsumerTest extends \PHPUnit\Framework\TestCase
     private $batchSize = 10;
 
     /**
-     * @var \Magento\Framework\MessageQueue\MessageProcessorLoader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\MessageProcessorLoader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageProcessorLoader;
 
@@ -68,7 +68,7 @@ class BatchConsumerTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configuration = $this
             ->getMockBuilder(\Magento\Framework\MessageQueue\ConsumerConfigurationInterface::class)

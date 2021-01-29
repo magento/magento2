@@ -11,7 +11,7 @@ use Magento\Framework\View\Design\Theme\ThemePackageList;
 class ThemePackageListTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Component\ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Component\ComponentRegistrarInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $registrar;
 
@@ -21,11 +21,11 @@ class ThemePackageListTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\ThemePackageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\Theme\ThemePackageFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $factory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->registrar = $this->getMockForAbstractClass(
             \Magento\Framework\Component\ComponentRegistrarInterface::class
@@ -35,11 +35,12 @@ class ThemePackageListTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage No theme registered with name 'theme'
      */
     public function testGetThemeNonexistent()
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('No theme registered with name \'theme\'');
+
         $themeKey = 'theme';
         $this->registrar->expects($this->once())
             ->method('getPath')

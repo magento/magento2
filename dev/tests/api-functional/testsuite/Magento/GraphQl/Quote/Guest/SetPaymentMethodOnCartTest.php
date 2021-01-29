@@ -28,7 +28,7 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -59,11 +59,12 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
      */
     public function testSetPaymentOnCartWithSimpleProductAndWithoutAddress()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The shipping address is missing. Set the address and try again.');
+
         $methodCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
@@ -96,11 +97,12 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage The requested Payment Method is not available.
      */
     public function testSetNonExistentPaymentMethod()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The requested Payment Method is not available.');
+
         $methodCode = 'noway';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
@@ -109,11 +111,12 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
     }
 
     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testSetPaymentOnNonExistentCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a cart with ID "non_existent_masked_id"');
+
         $maskedQuoteId = 'non_existent_masked_id';
         $methodCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;
 
@@ -222,11 +225,12 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @expectedException Exception
-     * @expectedExceptionMessage The requested Payment Method is not available.
      */
     public function testSetDisabledPaymentOnCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The requested Payment Method is not available.');
+
         $methodCode = Purchaseorder::PAYMENT_METHOD_PURCHASEORDER_CODE;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 

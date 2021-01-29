@@ -31,12 +31,12 @@ class DisabledFundingOptionsTest extends TestCase
     private $element;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $request;
 
     /**
-     * @var \Magento\Framework\View\Helper\Js|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Helper\Js|\PHPUnit\Framework\MockObject\MockObject
      */
     private $jsHelper;
 
@@ -45,7 +45,7 @@ class DisabledFundingOptionsTest extends TestCase
      */
     private $config;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
         $this->element = $this->getMockForAbstractClass(
@@ -80,24 +80,24 @@ class DisabledFundingOptionsTest extends TestCase
     ) {
         $this->request->expects($this->any())
             ->method('getParam')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($param) use ($requestCountry) {
                         if ($param == StructurePlugin::REQUEST_PARAM_COUNTRY) {
                             return $requestCountry;
                         }
                         return $param;
                     }
-                )
+                
             );
         $this->config->expects($this->any())
             ->method('getMerchantCountry')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function () use ($merchantCountry) {
                         return $merchantCountry;
                     }
-                )
+                
             );
         $this->model->render($this->element);
         $payPalCreditOption = [

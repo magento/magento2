@@ -16,7 +16,7 @@ class SenderTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(Sender::class);

@@ -8,22 +8,22 @@ namespace Magento\AdminNotification\Test\Unit\Model\System\Message;
 class SecurityTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_cacheMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_configMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_curlFactoryMock;
 
@@ -32,7 +32,7 @@ class SecurityTest extends \PHPUnit\Framework\TestCase
      */
     protected $_messageModel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         //Prepare objects for constructor
         $this->_cacheMock = $this->createMock(\Magento\Framework\App\CacheInterface::class);
@@ -64,14 +64,14 @@ class SecurityTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsDisplayed($expectedResult, $cached, $response)
     {
-        $this->_cacheMock->expects($this->any())->method('load')->will($this->returnValue($cached));
-        $this->_cacheMock->expects($this->any())->method('save')->will($this->returnValue(null));
+        $this->_cacheMock->expects($this->any())->method('load')->willReturn($cached);
+        $this->_cacheMock->expects($this->any())->method('save')->willReturn(null);
 
         $httpAdapterMock = $this->createMock(\Magento\Framework\HTTP\Adapter\Curl::class);
-        $httpAdapterMock->expects($this->any())->method('read')->will($this->returnValue($response));
-        $this->_curlFactoryMock->expects($this->any())->method('create')->will($this->returnValue($httpAdapterMock));
+        $httpAdapterMock->expects($this->any())->method('read')->willReturn($response);
+        $this->_curlFactoryMock->expects($this->any())->method('create')->willReturn($httpAdapterMock);
 
-        $this->_scopeConfigMock->expects($this->any())->method('getValue')->will($this->returnValue(null));
+        $this->_scopeConfigMock->expects($this->any())->method('getValue')->willReturn(null);
 
         $this->assertEquals($expectedResult, $this->_messageModel->isDisplayed());
     }

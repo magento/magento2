@@ -15,21 +15,21 @@ class ConfigureTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $registryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $wishlistDataMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->wishlistDataMock = $this->getMockBuilder(
             \Magento\Wishlist\Helper\Data::class
@@ -102,7 +102,7 @@ class ConfigureTest extends \PHPUnit\Framework\TestCase
         $layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('product.info')
-            ->will($this->returnValue($blockMock));
+            ->willReturn($blockMock);
 
         $itemMock = $this->createMock(\Magento\Wishlist\Model\Item::class);
 

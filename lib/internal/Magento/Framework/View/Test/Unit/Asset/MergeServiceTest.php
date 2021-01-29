@@ -28,31 +28,31 @@ class MergeServiceTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var Filesystem\Directory\Write|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem\Directory\Write|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryMock;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stateMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMockForAbstractClass();
@@ -80,11 +80,12 @@ class MergeServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Merge for content type 'unknown' is not supported.
      */
     public function testGetMergedAssetsWrongContentType()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Merge for content type \'unknown\' is not supported.');
+
         $this->object->getMergedAssets([], 'unknown');
     }
 
@@ -97,7 +98,7 @@ class MergeServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMergedAssets(array $assets, $contentType, $appMode, $mergeStrategy)
     {
-        $mergedAsset = $this->createMock(AssetInterface::class);
+        $mergedAsset = $this->getMockForAbstractClass(AssetInterface::class);
         $mergeStrategyMock = $this->createMock($mergeStrategy);
 
         $this->configMock->expects($this->once())->method('isMergeCssFiles')->willReturn(true);

@@ -13,17 +13,17 @@ use \Magento\Sales\Model\CronJob\AggregateSalesReportRefundedData;
 class AggregateSalesReportRefundedDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeResolverMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeDateMock;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Report\RefundedFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Report\RefundedFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $refundedFactoryMock;
 
@@ -32,7 +32,7 @@ class AggregateSalesReportRefundedDataTest extends \PHPUnit\Framework\TestCase
      */
     protected $observer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->localeResolverMock = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)
             ->disableOriginalConstructor()
@@ -66,7 +66,7 @@ class AggregateSalesReportRefundedDataTest extends \PHPUnit\Framework\TestCase
             ->with($date);
         $this->refundedFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($refundedMock));
+            ->willReturn($refundedMock);
         $this->observer->execute();
     }
 
@@ -86,7 +86,7 @@ class AggregateSalesReportRefundedDataTest extends \PHPUnit\Framework\TestCase
         $date = (new \DateTime())->sub(new \DateInterval('PT25H'));
         $this->localeDateMock->expects($this->once())
             ->method('date')
-            ->will($this->returnValue($date));
+            ->willReturn($date);
 
         return $date;
     }

@@ -13,11 +13,11 @@ class MultistoreTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_storeManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
 
@@ -33,7 +33,7 @@ class MultistoreTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
         unset($this->_storeManagerMock);
@@ -41,13 +41,13 @@ class MultistoreTest extends \PHPUnit\Framework\TestCase
 
     public function testIsDisplayedReturnsTrueInMultiStoreMode()
     {
-        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(false));
+        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->willReturn(false);
         $this->assertTrue($this->_model->isDisplayed());
     }
 
     public function testIsDisplayedReturnsFalseInSingleStoreMode()
     {
-        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
+        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->willReturn(true);
         $this->assertFalse($this->_model->isDisplayed());
     }
 }

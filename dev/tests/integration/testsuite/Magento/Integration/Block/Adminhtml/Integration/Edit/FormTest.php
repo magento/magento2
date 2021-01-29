@@ -24,7 +24,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -61,7 +61,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $html = $this->block->toHtml();
 
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             "/<input id=\"integration_id\" name=\"id\".*value=\"$id\".*type=\"hidden\".*>/",
             $html
         );

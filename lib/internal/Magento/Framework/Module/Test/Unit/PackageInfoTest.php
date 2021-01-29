@@ -10,12 +10,12 @@ use Magento\Framework\Module\PackageInfo;
 class PackageInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Component\ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Component\ComponentRegistrar|\PHPUnit\Framework\MockObject\MockObject
      */
     private $componentRegistrar;
 
     /**
-     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $reader;
 
@@ -25,17 +25,17 @@ class PackageInfoTest extends \PHPUnit\Framework\TestCase
     private $packageInfo;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->componentRegistrar = $this->createMock(\Magento\Framework\Component\ComponentRegistrar::class);
         $this->reader = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
         $this->componentRegistrar->expects($this->once())
             ->method('getPaths')
-            ->will($this->returnValue(['A' => 'A', 'B' => 'B', 'C' => 'C', 'D' => 'D', 'E' => 'E']));
+            ->willReturn(['A' => 'A', 'B' => 'B', 'C' => 'C', 'D' => 'D', 'E' => 'E']);
 
         $composerData = [
             'A/composer.json' => '{"name":"a", "require":{"b":"0.1"}, "conflict":{"c":"0.1"}, "version":"0.1"}',
@@ -47,10 +47,10 @@ class PackageInfoTest extends \PHPUnit\Framework\TestCase
         $fileIteratorMock = $this->createMock(\Magento\Framework\Config\FileIterator::class);
         $fileIteratorMock->expects($this->once())
             ->method('toArray')
-            ->will($this->returnValue($composerData));
+            ->willReturn($composerData);
         $this->reader->expects($this->once())
             ->method('getComposerJsonFiles')
-            ->will($this->returnValue($fileIteratorMock));
+            ->willReturn($fileIteratorMock);
 
         $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->getMock();

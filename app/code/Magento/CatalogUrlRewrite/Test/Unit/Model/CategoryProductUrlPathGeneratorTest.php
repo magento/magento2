@@ -30,7 +30,7 @@ class CategoryProductUrlPathGeneratorTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->productScopeRewriteGeneratorMock = $this->getMockBuilder(ProductScopeRewriteGenerator::class)
             ->disableOriginalConstructor()

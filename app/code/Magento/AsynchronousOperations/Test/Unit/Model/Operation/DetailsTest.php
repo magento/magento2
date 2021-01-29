@@ -11,7 +11,7 @@ use Magento\Framework\Bulk\OperationInterface;
 class DetailsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $bulkStatusMock;
 
@@ -20,7 +20,7 @@ class DetailsTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->bulkStatusMock = $this->getMockBuilder(\Magento\Framework\Bulk\BulkStatusInterface::class)
             ->getMock();

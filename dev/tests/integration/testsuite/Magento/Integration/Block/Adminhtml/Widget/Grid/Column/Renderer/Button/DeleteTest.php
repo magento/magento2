@@ -19,7 +19,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
      */
     protected $deleteButtonBlock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

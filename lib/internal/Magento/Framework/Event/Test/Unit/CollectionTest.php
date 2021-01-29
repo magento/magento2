@@ -32,11 +32,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     protected $events;
 
     /**
-     * @var \Magento\Framework\Event\Observer\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Observer\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $observers;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->events = [
             'eventName1' => 'someEvent1',
@@ -78,7 +78,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getName']);
         $eventMock->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue($eventName));
+            ->willReturn($eventName);
         $this->collection->addEvent($eventMock);
     }
 

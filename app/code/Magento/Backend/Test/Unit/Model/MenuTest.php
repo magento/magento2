@@ -31,17 +31,17 @@ class MenuTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_items['item1'] = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
-        $this->_items['item1']->expects($this->any())->method('getId')->will($this->returnValue('item1'));
+        $this->_items['item1']->expects($this->any())->method('getId')->willReturn('item1');
 
         $this->_items['item2'] = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
-        $this->_items['item2']->expects($this->any())->method('getId')->will($this->returnValue('item2'));
+        $this->_items['item2']->expects($this->any())->method('getId')->willReturn('item2');
 
         $this->_items['item3'] = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
-        $this->_items['item3']->expects($this->any())->method('getId')->will($this->returnValue('item3'));
+        $this->_items['item3']->expects($this->any())->method('getId')->willReturn('item3');
 
         $this->_logger = $this->createMock(\Psr\Log\LoggerInterface::class);
 
@@ -72,7 +72,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
         $subMenu = $this->getMockBuilder(\Magento\Backend\Model\Menu::class)->disableOriginalConstructor()->getMock();
         $subMenu->expects($this->once())->method("add")->with($this->_items['item2']);
 
-        $this->_items['item1']->expects($this->once())->method("getChildren")->will($this->returnValue($subMenu));
+        $this->_items['item1']->expects($this->once())->method("getChildren")->willReturn($subMenu);
 
         $this->_model->add($this->_items['item1']);
         $this->_model->add($this->_items['item2'], 'item1');
@@ -130,15 +130,15 @@ class MenuTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->_items['item1']->expects($this->any())->method('hasChildren')->will($this->returnValue(true));
-        $this->_items['item1']->expects($this->any())->method('getChildren')->will($this->returnValue($menuOne));
+        $this->_items['item1']->expects($this->any())->method('hasChildren')->willReturn(true);
+        $this->_items['item1']->expects($this->any())->method('getChildren')->willReturn($menuOne);
         $this->_model->add($this->_items['item1']);
 
-        $this->_items['item2']->expects($this->any())->method('hasChildren')->will($this->returnValue(true));
-        $this->_items['item2']->expects($this->any())->method('getChildren')->will($this->returnValue($menuTwo));
+        $this->_items['item2']->expects($this->any())->method('hasChildren')->willReturn(true);
+        $this->_items['item2']->expects($this->any())->method('getChildren')->willReturn($menuTwo);
         $menuOne->add($this->_items['item2']);
 
-        $this->_items['item3']->expects($this->any())->method('hasChildren')->will($this->returnValue(false));
+        $this->_items['item3']->expects($this->any())->method('hasChildren')->willReturn(false);
         $menuTwo->add($this->_items['item3']);
 
         $this->assertEquals($this->_items['item1'], $this->_model->get('item1'));
@@ -155,7 +155,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
         $subMenu = $this->getMockBuilder(\Magento\Backend\Model\Menu::class)->disableOriginalConstructor()->getMock();
         $subMenu->expects($this->once())->method("add")->with($this->_items['item3']);
 
-        $this->_items['item1']->expects($this->once())->method("getChildren")->will($this->returnValue($subMenu));
+        $this->_items['item1']->expects($this->once())->method("getChildren")->willReturn($subMenu);
 
         $this->_model->move('item3', 'item1');
 
@@ -164,10 +164,11 @@ class MenuTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testMoveNonExistentItemThrowsException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->_model->add($this->_items['item1']);
         $this->_model->add($this->_items['item2']);
         $this->_model->add($this->_items['item3']);
@@ -176,10 +177,11 @@ class MenuTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testMoveToNonExistentItemThrowsException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->_model->add($this->_items['item1']);
         $this->_model->add($this->_items['item2']);
         $this->_model->add($this->_items['item3']);
@@ -204,8 +206,8 @@ class MenuTest extends \PHPUnit\Framework\TestCase
         $menuMock = $this->getMockBuilder(\Magento\Backend\Model\Menu::class)->disableOriginalConstructor()->getMock();
         $menuMock->expects($this->once())->method('remove')->with($this->equalTo('item2'));
 
-        $this->_items['item1']->expects($this->any())->method('hasChildren')->will($this->returnValue(true));
-        $this->_items['item1']->expects($this->any())->method('getChildren')->will($this->returnValue($menuMock));
+        $this->_items['item1']->expects($this->any())->method('hasChildren')->willReturn(true);
+        $this->_items['item1']->expects($this->any())->method('getChildren')->willReturn($menuMock);
         $this->_model->add($this->_items['item1']);
 
         $result = $this->_model->remove('item2');
@@ -241,9 +243,9 @@ class MenuTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->_items['item1']->expects($this->any())->method("hasChildren")->will($this->returnValue(true));
+        $this->_items['item1']->expects($this->any())->method("hasChildren")->willReturn(true);
 
-        $this->_items['item1']->expects($this->any())->method("getChildren")->will($this->returnValue($subMenu));
+        $this->_items['item1']->expects($this->any())->method("getChildren")->willReturn($subMenu);
 
         $this->_model->add($this->_items['item1']);
         $this->_model->add($this->_items['item2'], 'item1', 10);
@@ -272,8 +274,8 @@ class MenuTest extends \PHPUnit\Framework\TestCase
         $item->expects($this->never())->method('getFirstAvailable');
         $this->_model->add($item);
 
-        $this->_items['item1']->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
-        $this->_items['item1']->expects($this->once())->method('isDisabled')->will($this->returnValue(false));
+        $this->_items['item1']->expects($this->once())->method('isAllowed')->willReturn(true);
+        $this->_items['item1']->expects($this->once())->method('isDisabled')->willReturn(false);
         $this->_items['item1']->expects($this->once())->method('hasChildren');
         $this->_model->add($this->_items['item1']);
 
@@ -282,15 +284,15 @@ class MenuTest extends \PHPUnit\Framework\TestCase
 
     public function testGetFirstAvailableReturnsOnlyAllowedAndNotDisabledItem()
     {
-        $this->_items['item1']->expects($this->exactly(1))->method('isAllowed')->will($this->returnValue(true));
-        $this->_items['item1']->expects($this->exactly(1))->method('isDisabled')->will($this->returnValue(true));
+        $this->_items['item1']->expects($this->exactly(1))->method('isAllowed')->willReturn(true);
+        $this->_items['item1']->expects($this->exactly(1))->method('isDisabled')->willReturn(true);
         $this->_model->add($this->_items['item1']);
 
-        $this->_items['item2']->expects($this->exactly(1))->method('isAllowed')->will($this->returnValue(false));
+        $this->_items['item2']->expects($this->exactly(1))->method('isAllowed')->willReturn(false);
         $this->_model->add($this->_items['item2']);
 
-        $this->_items['item3']->expects($this->exactly(1))->method('isAllowed')->will($this->returnValue(true));
-        $this->_items['item3']->expects($this->exactly(1))->method('isDisabled')->will($this->returnValue(false));
+        $this->_items['item3']->expects($this->exactly(1))->method('isAllowed')->willReturn(true);
+        $this->_items['item3']->expects($this->exactly(1))->method('isDisabled')->willReturn(false);
         $this->_model->add($this->_items['item3']);
 
         $this->assertEquals($this->_items['item3'], $this->_model->getFirstAvailable());
@@ -343,7 +345,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
 
     public function testSerialize()
     {
-        $serializerMock = $this->createMock(SerializerInterface::class);
+        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $serializerMock->expects($this->once())
             ->method('serialize')
             ->with([['arrayData']])
@@ -356,7 +358,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $itemMock = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
-        $itemMock->expects($this->any())->method('getId')->will($this->returnValue('item1'));
+        $itemMock->expects($this->any())->method('getId')->willReturn('item1');
         $itemMock->expects($this->once())
             ->method('toArray')
             ->willReturn(['arrayData']);
@@ -366,7 +368,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
 
     public function testUnserialize()
     {
-        $serializerMock = $this->createMock(SerializerInterface::class);
+        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $serializerMock->expects($this->once())
             ->method('unserialize')
             ->willReturn([['unserializedData']]);

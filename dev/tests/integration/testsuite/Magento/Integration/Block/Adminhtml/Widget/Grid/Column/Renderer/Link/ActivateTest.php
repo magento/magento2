@@ -19,7 +19,7 @@ class ActivateTest extends \PHPUnit\Framework\TestCase
      */
     protected $activateLinkBlock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

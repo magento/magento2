@@ -15,7 +15,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $history = $this->createPartialMock(\Magento\Sales\Model\Order\Status\History::class, ['hasData']);
         $history->expects($this->any())
             ->method('hasData')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $validator = new Validator();
         $this->assertEmpty($validator->validate($history));
     }
@@ -26,7 +26,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $history->expects($this->any())
             ->method('hasData')
             ->with('parent_id')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $validator = new Validator();
         $this->assertEquals(['"Order Id" is required. Enter and try again.'], $validator->validate($history));
     }

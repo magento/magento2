@@ -13,11 +13,11 @@ class QuoteItemsCleanerTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\ResourceModel\Quote\Item
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Quote\Model\ResourceModel\Quote\Item
      */
     private $itemResourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->itemResourceMock = $this->createMock(\Magento\Quote\Model\ResourceModel\Quote\Item::class);
         $this->model = new \Magento\Quote\Model\Product\QuoteItemsCleaner($this->itemResourceMock);

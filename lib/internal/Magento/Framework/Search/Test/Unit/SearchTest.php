@@ -18,26 +18,26 @@ class SearchTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Search\Request\Builder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Builder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestBuilder;
 
     /**
-     * @var \Magento\Framework\Search\SearchEngineInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\SearchEngineInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchEngine;
 
     /**
-     * @var \Magento\Framework\Search\SearchResponseBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\SearchResponseBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchResponseBuilder;
 
     /**
-     * @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeResolver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -151,7 +151,7 @@ class SearchTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $field
      * @param $value
-     * @return \Magento\Framework\Api\Filter|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Api\Filter|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createFilterMock($field, $value)
     {

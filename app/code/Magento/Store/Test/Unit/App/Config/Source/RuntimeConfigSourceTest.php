@@ -19,7 +19,7 @@ use Magento\Store\App\Config\Source\RuntimeConfigSource;
 class RuntimeConfigSourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $deploymentConfig;
 
@@ -29,18 +29,18 @@ class RuntimeConfigSourceTest extends \PHPUnit\Framework\TestCase
     private $configSource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $connection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnection;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->connection = $this->createMock(AdapterInterface::class);
+        $this->connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceConnection = $this->createMock(ResourceConnection::class);
         $this->deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()

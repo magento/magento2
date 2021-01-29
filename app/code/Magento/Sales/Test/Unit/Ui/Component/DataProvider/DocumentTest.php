@@ -12,7 +12,7 @@ use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Ui\Component\DataProvider\Document;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class DocumentTest
@@ -34,7 +34,7 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
      */
     private $document;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initAttributeValueFactoryMock();
 

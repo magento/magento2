@@ -40,7 +40,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->transportBuilderMock = $this->_objectManager->get(TransportBuilderMock::class);
@@ -81,12 +81,12 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('customer/account/create');
         $body = $this->getResponse()->getBody();
 
-        $this->assertRegExp('~<input type="text"[^>]*id="firstname"~', $body);
-        $this->assertRegExp('~<input type="text"[^>]*id="lastname"~', $body);
-        $this->assertRegExp('~<input type="checkbox"[^>]*id="is_subscribed"~', $body);
-        $this->assertRegExp('~<input type="email"[^>]*id="email_address"~', $body);
-        $this->assertRegExp('~<input type="password"[^>]*id="password"~', $body);
-        $this->assertRegExp('~<input type="password"[^>]*id="password-confirmation"~', $body);
+        $this->assertMatchesRegularExpression('~<input type="text"[^>]*id="firstname"~', $body);
+        $this->assertMatchesRegularExpression('~<input type="text"[^>]*id="lastname"~', $body);
+        $this->assertMatchesRegularExpression('~<input type="checkbox"[^>]*id="is_subscribed"~', $body);
+        $this->assertMatchesRegularExpression('~<input type="email"[^>]*id="email_address"~', $body);
+        $this->assertMatchesRegularExpression('~<input type="password"[^>]*id="password"~', $body);
+        $this->assertMatchesRegularExpression('~<input type="password"[^>]*id="password-confirmation"~', $body);
     }
 
     /**

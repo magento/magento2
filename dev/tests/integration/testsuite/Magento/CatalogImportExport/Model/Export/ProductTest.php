@@ -69,7 +69,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         'is_decimal_divided'
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -160,20 +160,20 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Filesystem\Directory\Write::class,
             ['getParentDirectory', 'isWritable', 'isFile', 'readFile', 'openFile']
         );
-        $directoryMock->expects($this->any())->method('getParentDirectory')->will($this->returnValue('some#path'));
-        $directoryMock->expects($this->any())->method('isWritable')->will($this->returnValue(true));
-        $directoryMock->expects($this->any())->method('isFile')->will($this->returnValue(true));
+        $directoryMock->expects($this->any())->method('getParentDirectory')->willReturn('some#path');
+        $directoryMock->expects($this->any())->method('isWritable')->willReturn(true);
+        $directoryMock->expects($this->any())->method('isFile')->willReturn(true);
         $directoryMock->expects(
             $this->any()
         )->method(
             'readFile'
-        )->will(
-            $this->returnValue('some string read from file')
+        )->willReturn(
+            'some string read from file'
         );
-        $directoryMock->expects($this->once())->method('openFile')->will($this->returnValue($fileWrite));
+        $directoryMock->expects($this->once())->method('openFile')->willReturn($fileWrite);
 
         $filesystemMock = $this->createPartialMock(\Magento\Framework\Filesystem::class, ['getDirectoryWrite']);
-        $filesystemMock->expects($this->once())->method('getDirectoryWrite')->will($this->returnValue($directoryMock));
+        $filesystemMock->expects($this->once())->method('getDirectoryWrite')->willReturn($directoryMock);
 
         $exportAdapter = new \Magento\ImportExport\Model\Export\Adapter\Csv($filesystemMock);
 
@@ -237,11 +237,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Filesystem\Directory\Write::class,
             ['getParentDirectory', 'isWritable']
         );
-        $directoryMock->expects($this->any())->method('getParentDirectory')->will($this->returnValue('some#path'));
-        $directoryMock->expects($this->any())->method('isWritable')->will($this->returnValue(true));
+        $directoryMock->expects($this->any())->method('getParentDirectory')->willReturn('some#path');
+        $directoryMock->expects($this->any())->method('isWritable')->willReturn(true);
 
         $filesystemMock = $this->createPartialMock(\Magento\Framework\Filesystem::class, ['getDirectoryWrite']);
-        $filesystemMock->expects($this->once())->method('getDirectoryWrite')->will($this->returnValue($directoryMock));
+        $filesystemMock->expects($this->once())->method('getDirectoryWrite')->willReturn($directoryMock);
 
         $exportAdapter = new \Magento\ImportExport\Model\Export\Adapter\Csv($filesystemMock);
 

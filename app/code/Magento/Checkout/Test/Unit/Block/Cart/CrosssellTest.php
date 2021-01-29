@@ -66,7 +66,7 @@ class CrosssellTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->storeManager = $this->createMock(
@@ -163,7 +163,7 @@ class CrosssellTest extends TestCase
                     return $this->createProductCollection();
                 }
             );
-        $store = $this->createMock(StoreInterface::class);
+        $store = $this->getMockForAbstractClass(StoreInterface::class);
         $this->storeManager->method('getStore')
             ->willReturn($store);
         $actual = array_map(
@@ -340,7 +340,7 @@ class CrosssellTest extends TestCase
     private function createProductCollection(): MockObject
     {
         $productCollection = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
-        $entityMetadataInterface =$this->createMock(EntityMetadataInterface::class);
+        $entityMetadataInterface =$this->getMockForAbstractClass(EntityMetadataInterface::class);
         $entityMetadataInterface->method('getLinkField')
             ->willReturn('entity_id');
         $productCollection->method('getProductEntityMetadata')

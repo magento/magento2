@@ -90,7 +90,7 @@ class CustomerRepositoryTest extends WebapiAbstract
     /**
      * Execute per test initialization.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->customerRegistry = Bootstrap::getObjectManager()->get(
             \Magento\Customer\Model\CustomerRegistry::class
@@ -122,7 +122,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         );
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         if (!empty($this->currentCustomerId)) {
             foreach ($this->currentCustomerId as $customerId) {
@@ -149,10 +149,11 @@ class CustomerRepositoryTest extends WebapiAbstract
     /**
      * Validate update by invalid customer.
      *
-     * @expectedException \Exception
      */
     public function testInvalidCustomerUpdate()
     {
+        $this->expectException(\Exception::class);
+
         //Create first customer and retrieve customer token.
         $firstCustomerData = $this->_createCustomer();
 

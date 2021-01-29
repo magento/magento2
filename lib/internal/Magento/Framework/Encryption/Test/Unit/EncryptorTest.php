@@ -31,22 +31,22 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
     private $encryptor;
 
     /**
-     * @var Random|\PHPUnit_Framework_MockObject_MockObject
+     * @var Random|\PHPUnit\Framework\MockObject\MockObject
      */
     private $randomGeneratorMock;
 
     /**
-     * @var KeyValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var KeyValidator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $keyValidatorMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->randomGeneratorMock = $this->createMock(Random::class);
-        /** @var DeploymentConfig | \PHPUnit_Framework_MockObject_MockObject $deploymentConfigMock */
+        /** @var DeploymentConfig | \PHPUnit\Framework\MockObject\MockObject $deploymentConfigMock */
         $deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $deploymentConfigMock->expects($this->any())
             ->method('get')
@@ -162,10 +162,11 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
      * @param mixed $key
      *
      * @dataProvider emptyKeyDataProvider
-     * @expectedException \SodiumException
      */
     public function testEncryptWithEmptyKey($key): void
     {
+        $this->expectException(\SodiumException::class);
+
         $deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $deploymentConfigMock->expects($this->any())
             ->method('get')
@@ -293,10 +294,11 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
     /**
      * Checking that encryptor relies on key validator.
      *
-     * @expectedException \Exception
      */
     public function testValidateKeyInvalid(): void
     {
+        $this->expectException(\Exception::class);
+
         $this->keyValidatorMock->method('isValid')->willReturn(false);
         $this->encryptor->validateKey('-----    ');
     }
@@ -349,7 +351,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
     public function testGetHashMustUseSpecifiedHashingAlgo($password, $salt, $hashAlgo, $pattern): void
     {
         $hash = $this->encryptor->getHash($password, $salt, $hashAlgo);
-        $this->assertRegExp($pattern, $hash);
+        $this->assertMatchesRegularExpression($pattern, $hash);
     }
 
     /**

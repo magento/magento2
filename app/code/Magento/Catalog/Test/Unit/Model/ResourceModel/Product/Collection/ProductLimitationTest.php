@@ -18,7 +18,7 @@ class ProductLimitationTest extends \PHPUnit\Framework\TestCase
      */
     protected $productLimitation;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
         $this->productLimitation = $helper->getObject(ProductLimitation::class);

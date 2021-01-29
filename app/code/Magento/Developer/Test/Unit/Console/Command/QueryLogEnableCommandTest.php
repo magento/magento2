@@ -21,19 +21,19 @@ use Symfony\Component\Console\Tester\CommandTester;
 class QueryLogEnableCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig\Writer
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\DeploymentConfig\Writer
      */
     private $configWriter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Developer\Console\Command\QueryLogEnableCommand
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Developer\Console\Command\QueryLogEnableCommand
      */
     private $command;
 
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->configWriter = $this->getMockBuilder(Writer::class)
             ->disableOriginalConstructor()

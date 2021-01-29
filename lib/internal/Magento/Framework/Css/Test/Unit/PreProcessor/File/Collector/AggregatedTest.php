@@ -13,37 +13,37 @@ use \Magento\Framework\Css\PreProcessor\File\Collector\Aggregated;
 class AggregatedTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\View\File\FileList\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\File\FileList\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileListFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\File\FileList|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\File\FileList|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileListMock;
 
     /**
-     * @var \Magento\Framework\View\File\CollectorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\File\CollectorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $libraryFilesMock;
 
     /**
-     * @var \Magento\Framework\View\File\CollectorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\File\CollectorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $baseFilesMock;
 
     /**
-     * @var \Magento\Framework\View\File\CollectorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\File\CollectorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $overriddenBaseFilesMock;
 
     /**
-     * @var \Magento\Framework\View\Design\ThemeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\ThemeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $themeMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
@@ -51,14 +51,14 @@ class AggregatedTest extends \PHPUnit\Framework\TestCase
      * Setup tests
      * @return void
      */
-    public function setup()
+    protected function setup(): void
     {
         $this->fileListFactoryMock = $this->getMockBuilder(\Magento\Framework\View\File\FileList\Factory::class)
             ->disableOriginalConstructor()->getMock();
         $this->fileListMock = $this->getMockBuilder(\Magento\Framework\View\File\FileList::class)
             ->disableOriginalConstructor()->getMock();
         $this->fileListFactoryMock->expects($this->any())->method('create')
-            ->will($this->returnValue($this->fileListMock));
+            ->willReturn($this->fileListMock);
         $this->libraryFilesMock = $this->getMockBuilder(\Magento\Framework\View\File\CollectorInterface::class)
             ->getMock();
         $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
@@ -72,9 +72,9 @@ class AggregatedTest extends \PHPUnit\Framework\TestCase
 
     public function testGetFilesEmpty()
     {
-        $this->libraryFilesMock->expects($this->any())->method('getFiles')->will($this->returnValue([]));
-        $this->baseFilesMock->expects($this->any())->method('getFiles')->will($this->returnValue([]));
-        $this->overriddenBaseFilesMock->expects($this->any())->method('getFiles')->will($this->returnValue([]));
+        $this->libraryFilesMock->expects($this->any())->method('getFiles')->willReturn([]);
+        $this->baseFilesMock->expects($this->any())->method('getFiles')->willReturn([]);
+        $this->overriddenBaseFilesMock->expects($this->any())->method('getFiles')->willReturn([]);
 
         $aggregated = new Aggregated(
             $this->fileListFactoryMock,
@@ -84,8 +84,8 @@ class AggregatedTest extends \PHPUnit\Framework\TestCase
             $this->loggerMock
         );
 
-        $this->themeMock->expects($this->any())->method('getInheritedThemes')->will($this->returnValue([]));
-        $this->themeMock->expects($this->any())->method('getCode')->will($this->returnValue('theme_code'));
+        $this->themeMock->expects($this->any())->method('getInheritedThemes')->willReturn([]);
+        $this->themeMock->expects($this->any())->method('getCode')->willReturn('theme_code');
 
         $this->loggerMock->expects($this->once())
             ->method('notice')
@@ -108,22 +108,22 @@ class AggregatedTest extends \PHPUnit\Framework\TestCase
     {
         $this->fileListMock->expects($this->at(0))->method('add')->with($this->equalTo($libraryFiles));
         $this->fileListMock->expects($this->at(1))->method('add')->with($this->equalTo($baseFiles));
-        $this->fileListMock->expects($this->any())->method('getAll')->will($this->returnValue(['returnedFile']));
+        $this->fileListMock->expects($this->any())->method('getAll')->willReturn(['returnedFile']);
 
         $subPath = '*';
         $this->libraryFilesMock->expects($this->atLeastOnce())
             ->method('getFiles')
             ->with($this->themeMock, $subPath)
-            ->will($this->returnValue($libraryFiles));
+            ->willReturn($libraryFiles);
 
         $this->baseFilesMock->expects($this->atLeastOnce())
             ->method('getFiles')
             ->with($this->themeMock, $subPath)
-            ->will($this->returnValue($baseFiles));
+            ->willReturn($baseFiles);
 
         $this->overriddenBaseFilesMock->expects($this->any())
             ->method('getFiles')
-            ->will($this->returnValue($themeFiles));
+            ->willReturn($themeFiles);
 
         $aggregated = new Aggregated(
             $this->fileListFactoryMock,
@@ -135,7 +135,7 @@ class AggregatedTest extends \PHPUnit\Framework\TestCase
 
         $inheritedThemeMock = $this->getMockBuilder(\Magento\Framework\View\Design\ThemeInterface::class)->getMock();
         $this->themeMock->expects($this->any())->method('getInheritedThemes')
-            ->will($this->returnValue([$inheritedThemeMock]));
+            ->willReturn([$inheritedThemeMock]);
 
         $this->assertEquals(['returnedFile'], $aggregated->getFiles($this->themeMock, $subPath));
     }

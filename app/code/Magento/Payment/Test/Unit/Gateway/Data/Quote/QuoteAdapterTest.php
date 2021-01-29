@@ -18,16 +18,16 @@ class QuoteAdapterTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var CartInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CartInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \Magento\Payment\Gateway\Data\Quote\AddressAdapterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Gateway\Data\Quote\AddressAdapterFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressAdapterFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
 
@@ -75,7 +75,7 @@ class QuoteAdapterTest extends \PHPUnit\Framework\TestCase
     {
         $this->quoteMock->expects($this->once())->method('getBillingAddress')->willReturn(null);
 
-        $this->assertSame(null, $this->model->getBillingAddress());
+        $this->assertNull($this->model->getBillingAddress());
     }
 
     public function testGetBillingAddress()
@@ -99,7 +99,7 @@ class QuoteAdapterTest extends \PHPUnit\Framework\TestCase
     {
         $this->quoteMock->expects($this->once())->method('getShippingAddress')->willReturn(null);
 
-        $this->assertSame(null, $this->model->getShippingAddress());
+        $this->assertNull($this->model->getShippingAddress());
     }
 
     public function testGetShippingAddress()

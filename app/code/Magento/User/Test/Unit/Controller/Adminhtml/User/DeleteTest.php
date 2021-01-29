@@ -20,44 +20,44 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
     private $controller;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\RequestInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\RequestInterface
      */
     private $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResponseInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ResponseInterface
      */
     private $responseMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Session
+     * @var \PHPUnit\Framework\MockObject\MockObject|Session
      */
     private $authSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\ObjectManagerInterface
      */
     private $objectManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\User\Model\UserFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\User\Model\UserFactory
      */
     private $userFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\User\Model\User
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\User\Model\User
      */
     private $userMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Message\ManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Message\ManagerInterface
      */
     private $messageManagerMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManager\ObjectManager::class)
             ->disableOriginalConstructor()
@@ -122,7 +122,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
     public function testExecute($currentUserPassword, $userId, $currentUserId, $resultMethod)
     {
         $currentUserMock = $this->userMock;
-        $this->authSessionMock->expects($this->any())->method('getUser')->will($this->returnValue($currentUserMock));
+        $this->authSessionMock->expects($this->any())->method('getUser')->willReturn($currentUserMock);
 
         $currentUserMock->expects($this->any())->method('getId')->willReturn($currentUserId);
 
@@ -143,7 +143,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
 
         $userMock = clone $currentUserMock;
 
-        $this->userFactoryMock->expects($this->any())->method('create')->will($this->returnValue($userMock));
+        $this->userFactoryMock->expects($this->any())->method('create')->willReturn($userMock);
         $this->responseMock->expects($this->any())->method('setRedirect')->willReturnSelf();
         $this->userMock->expects($this->any())->method('load')->with($userId)->willReturn($this->userFactoryMock);
         $this->userMock->expects($this->any())->method('delete')->willReturnSelf();
@@ -163,7 +163,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $currentUserMock = $this->userMock;
         $this->authSessionMock->expects($this->any())
             ->method('getUser')
-            ->will($this->returnValue($currentUserMock));
+            ->willReturn($currentUserMock);
 
         $currentUserMock->expects($this->any())->method('getId')->willReturn($currentUserId);
 

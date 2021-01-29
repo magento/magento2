@@ -20,7 +20,7 @@ class FingerprintTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $bootstrap = Bootstrap::getInstance();
         $bootstrap->loadArea(Area::AREA_FRONTEND);

@@ -26,7 +26,7 @@ class ResolutionRulesTest extends \PHPUnit\Framework\TestCase
     protected $context;
 
     /**
-     * @var Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $readerMock;
 
@@ -35,7 +35,7 @@ class ResolutionRulesTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 

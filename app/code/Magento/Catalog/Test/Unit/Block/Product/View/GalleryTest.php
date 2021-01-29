@@ -31,44 +31,44 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var ArrayUtils|\PHPUnit_Framework_MockObject_MockObject
+     * @var ArrayUtils|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $arrayUtils;
 
     /**
-     * @var \Magento\Catalog\Helper\Image|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Image|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $imageHelper;
 
     /**
-     * @var Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registry;
 
     /**
-     * @var EncoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EncoderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $jsonEncoderMock;
 
     /**
-     * @var ImagesConfigFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ImagesConfigFactoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $imagesConfigFactoryMock;
 
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $galleryImagesConfigMock;
 
-    /** @var  UrlBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  UrlBuilder|\PHPUnit\Framework\MockObject\MockObject */
     private $urlBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->registry = $this->createMock(Registry::class);
         $this->context = $this->createConfiguredMock(
@@ -77,7 +77,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->arrayUtils = $this->createMock(ArrayUtils::class);
-        $this->jsonEncoderMock = $this->createMock(EncoderInterface::class);
+        $this->jsonEncoderMock = $this->getMockForAbstractClass(EncoderInterface::class);
         $this->imagesConfigFactoryMock = $this->getImagesConfigFactory();
         $this->urlBuilder = $this->createMock(UrlBuilder::class);
 
@@ -101,7 +101,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('product_page_image_large_url', $decodedJson[0]['full']);
         $this->assertEquals('test_label', $decodedJson[0]['caption']);
         $this->assertEquals('2', $decodedJson[0]['position']);
-        $this->assertEquals(false, $decodedJson[0]['isMain']);
+        $this->assertFalse($decodedJson[0]['isMain']);
         $this->assertEquals('test_media_type', $decodedJson[0]['type']);
         $this->assertEquals('test_video_url', $decodedJson[0]['videoUrl']);
     }

@@ -18,12 +18,12 @@ class EditTest extends \PHPUnit\Framework\TestCase
     protected $_block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_configStructureMock;
 
     /**
-     * @var \Magento\Email\Model\Template\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Email\Model\Template\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_emailConfigMock;
 
@@ -37,11 +37,11 @@ class EditTest extends \PHPUnit\Framework\TestCase
     ];
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesystemMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $layoutMock = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['helper']);
@@ -68,8 +68,8 @@ class EditTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getTemplateFileName'
-        )->will(
-            $this->returnValue(DirectoryList::ROOT . '/custom/filename.phtml')
+        )->willReturn(
+            DirectoryList::ROOT . '/custom/filename.phtml'
         );
 
         $params = [
@@ -86,12 +86,12 @@ class EditTest extends \PHPUnit\Framework\TestCase
             $params
         );
 
-        $urlBuilder->expects($this->any())->method('getUrl')->will($this->returnArgument(0));
-        $menuConfigMock->expects($this->any())->method('getMenu')->will($this->returnValue($menuMock));
-        $menuMock->expects($this->any())->method('get')->will($this->returnValue($menuItemMock));
-        $menuItemMock->expects($this->any())->method('getTitle')->will($this->returnValue('Title'));
+        $urlBuilder->expects($this->any())->method('getUrl')->willReturnArgument(0);
+        $menuConfigMock->expects($this->any())->method('getMenu')->willReturn($menuMock);
+        $menuMock->expects($this->any())->method('get')->willReturn($menuItemMock);
+        $menuItemMock->expects($this->any())->method('getTitle')->willReturn('Title');
 
-        $layoutMock->expects($this->any())->method('helper')->will($this->returnValue($helperMock));
+        $layoutMock->expects($this->any())->method('helper')->willReturn($helperMock);
 
         $this->_block = $objectManager->getObject(\Magento\Email\Block\Adminhtml\Template\Edit::class, $arguments);
     }
@@ -130,25 +130,25 @@ class EditTest extends \PHPUnit\Framework\TestCase
             [['section1', 'group1', 'group2', 'field1'], $filedMock],
             [['section1', 'group1', 'group2', 'group3', 'field1'], $filedMock],
         ];
-        $sectionMock->expects($this->any())->method('getLabel')->will($this->returnValue('Section_1_Label'));
-        $groupMock1->expects($this->any())->method('getLabel')->will($this->returnValue('Group_1_Label'));
-        $groupMock2->expects($this->any())->method('getLabel')->will($this->returnValue('Group_2_Label'));
-        $groupMock3->expects($this->any())->method('getLabel')->will($this->returnValue('Group_3_Label'));
-        $filedMock->expects($this->any())->method('getLabel')->will($this->returnValue('Field_1_Label'));
+        $sectionMock->expects($this->any())->method('getLabel')->willReturn('Section_1_Label');
+        $groupMock1->expects($this->any())->method('getLabel')->willReturn('Group_1_Label');
+        $groupMock2->expects($this->any())->method('getLabel')->willReturn('Group_2_Label');
+        $groupMock3->expects($this->any())->method('getLabel')->willReturn('Group_3_Label');
+        $filedMock->expects($this->any())->method('getLabel')->willReturn('Field_1_Label');
 
         $this->_configStructureMock->expects($this->any())
             ->method('getElement')
             ->with('section1')
-            ->will($this->returnValue($sectionMock));
+            ->willReturn($sectionMock);
 
         $this->_configStructureMock->expects($this->any())
             ->method('getElementByPathParts')
-            ->will($this->returnValueMap($map));
+            ->willReturnMap($map);
 
         $templateMock = $this->createMock(\Magento\Email\Model\BackendTemplate::class);
         $templateMock->expects($this->once())
             ->method('getSystemConfigPathsWhereCurrentlyUsed')
-            ->will($this->returnValue($this->_fixtureConfigPath));
+            ->willReturn($this->_fixtureConfigPath);
 
         $this->_block->setEmailTemplate($templateMock);
 
@@ -188,12 +188,12 @@ class EditTest extends \PHPUnit\Framework\TestCase
 
         $this->filesystemMock->expects($this->any())
             ->method('getDirectoryRead')
-            ->will($this->returnValue($directoryMock));
+            ->willReturn($directoryMock);
 
         $this->_emailConfigMock
             ->expects($this->once())
             ->method('getAvailableTemplates')
-            ->will($this->returnValue(
+            ->willReturn(
                 [
                     [
                         'value' => 'template_b2',
@@ -211,7 +211,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
                         'group' => 'Fixture_ModuleB',
                     ],
                 ]
-            ));
+            );
 
         $this->assertEmpty($this->_block->getData('template_options'));
         $this->_block->setTemplate('my/custom\template.phtml');

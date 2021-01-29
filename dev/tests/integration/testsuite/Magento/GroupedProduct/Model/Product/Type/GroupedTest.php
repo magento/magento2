@@ -28,14 +28,14 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
      */
     protected $_productType;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_productType = $this->objectManager->get(\Magento\Catalog\Model\Product\Type::class);
         $this->reinitableConfig = $this->objectManager->get(ReinitableConfigInterface::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->dropConfigValue(Configuration::XML_PATH_SHOW_OUT_OF_STOCK);
     }

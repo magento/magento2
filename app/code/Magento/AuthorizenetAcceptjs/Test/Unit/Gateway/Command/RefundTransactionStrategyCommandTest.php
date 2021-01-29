@@ -43,12 +43,12 @@ class RefundTransactionStrategyCommandTest extends TestCase
      */
     private $transactionResultMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->transactionDetailsCommandMock = $this->createMock(CommandInterface::class);
-        $this->commandMock = $this->createMock(CommandInterface::class);
-        $this->transactionResultMock = $this->createMock(ResultInterface::class);
-        $this->commandPoolMock = $this->createMock(CommandPoolInterface::class);
+        $this->transactionDetailsCommandMock = $this->getMockForAbstractClass(CommandInterface::class);
+        $this->commandMock = $this->getMockForAbstractClass(CommandInterface::class);
+        $this->transactionResultMock = $this->getMockForAbstractClass(ResultInterface::class);
+        $this->commandPoolMock = $this->getMockForAbstractClass(CommandPoolInterface::class);
         $this->command = new RefundTransactionStrategyCommand(
             $this->commandPoolMock,
             new SubjectReader()
@@ -99,11 +99,12 @@ class RefundTransactionStrategyCommandTest extends TestCase
     }
 
     /**
-     * @expectedException \Magento\Payment\Gateway\Command\CommandException
-     * @expectedExceptionMessage The transaction has not been settled, a partial refund is not yet available.
      */
     public function testCommandWillThrowExceptionWhenVoidTransactionIsPartial()
     {
+        $this->expectException(\Magento\Payment\Gateway\Command\CommandException::class);
+        $this->expectExceptionMessage('The transaction has not been settled, a partial refund is not yet available.');
+
         // Assert command is executed
         $this->commandMock->expects($this->never())
             ->method('execute');
@@ -183,11 +184,12 @@ class RefundTransactionStrategyCommandTest extends TestCase
     }
 
     /**
-     * @expectedException \Magento\Payment\Gateway\Command\CommandException
-     * @expectedExceptionMessage This transaction cannot be refunded with its current status.
      */
     public function testCommandWillThrowExceptionWhenTransactionIsInInvalidState()
     {
+        $this->expectException(\Magento\Payment\Gateway\Command\CommandException::class);
+        $this->expectExceptionMessage('This transaction cannot be refunded with its current status.');
+
         // Assert command is never executed
         $this->commandMock->expects($this->never())
             ->method('execute');

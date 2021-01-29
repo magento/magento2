@@ -56,7 +56,7 @@ class ItemsToRenderTest extends \PHPUnit\Framework\TestCase
      */
     private $orderItemParent;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->converter = $this->getMockBuilder(ConvertOrder::class)
             ->setMethods(['itemToCreditmemoItem'])

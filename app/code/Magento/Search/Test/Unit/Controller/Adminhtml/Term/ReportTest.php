@@ -23,27 +23,27 @@ class ReportTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultFactoryMock;
 
     /**
-     * @var Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var Page|\PHPUnit\Framework\MockObject\MockObject
      */
     private $pageMock;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $pageConfigMock;
 
     /**
-     * @var Title|\PHPUnit_Framework_MockObject_MockObject
+     * @var Title|\PHPUnit\Framework\MockObject\MockObject
      */
     private $titleMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManagerMock;
 
@@ -52,7 +52,7 @@ class ReportTest extends \PHPUnit\Framework\TestCase
      */
     private $reportController;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
@@ -69,7 +69,7 @@ class ReportTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -14,11 +14,11 @@ class CollectionUpdaterTest extends \PHPUnit\Framework\TestCase
     protected $collectionUpdater;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $registryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
 
@@ -37,9 +37,9 @@ class CollectionUpdaterTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('registry')
             ->with('current_transaction')
-            ->will($this->returnValue($transactionMock));
-        $transactionMock->expects($this->once())->method('getId')->will($this->returnValue('transactionId'));
-        $collectionMock->expects($this->once())->method('addParentIdFilter')->will($this->returnSelf());
+            ->willReturn($transactionMock);
+        $transactionMock->expects($this->once())->method('getId')->willReturn('transactionId');
+        $collectionMock->expects($this->once())->method('addParentIdFilter')->willReturnSelf();
         $this->assertEquals($collectionMock, $this->collectionUpdater->update($collectionMock));
     }
 }

@@ -17,7 +17,7 @@ use Magento\Store\Model\Store;
 class CategoriesFixtureTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|FixtureModel
+     * @var \PHPUnit\Framework\MockObject\MockObject|FixtureModel
      */
     private $fixtureModelMock;
 
@@ -27,24 +27,24 @@ class CategoriesFixtureTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $categoryFactoryMock;
 
     /**
      * @inhertidoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fixtureModelMock = $this->createMock(FixtureModel::class);
         $this->collectionFactoryMock = $this->createPartialMock(CollectionFactory::class, ['create']);
@@ -83,7 +83,7 @@ class CategoriesFixtureTest extends \PHPUnit\Framework\TestCase
         $this->fixtureModelMock
             ->expects($this->exactly(2))
             ->method('getValue')
-            ->will($this->returnValueMap($valueMap));
+            ->willReturnMap($valueMap);
 
         $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($this->collectionMock);
         $this->collectionMock->expects($this->once())->method('getSize')->willReturn(2);
@@ -113,7 +113,7 @@ class CategoriesFixtureTest extends \PHPUnit\Framework\TestCase
         $categoryMock->expects($this->once())
             ->method('getName')
             ->with('Category 1')
-            ->will($this->returnValue('category_name'));
+            ->willReturn('category_name');
         $categoryMock->expects($this->once())
             ->method('setId')
             ->willReturnSelf();

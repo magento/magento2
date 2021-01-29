@@ -13,16 +13,16 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class LifetimeTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject | CookieLifetimeValidator */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | CookieLifetimeValidator */
     private $validatorMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Module\ModuleResource */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Module\ModuleResource */
     private $resourceMock;
 
     /** @var \Magento\Cookie\Model\Config\Backend\Lifetime */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->validatorMock = $this->getMockBuilder(
             \Magento\Framework\Session\Config\Validator\CookieLifetimeValidator::class
@@ -45,11 +45,12 @@ class LifetimeTest extends \PHPUnit\Framework\TestCase
     /**
      * Method is not publicly accessible, so it must be called through parent
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid cookie lifetime: must be numeric
      */
     public function testBeforeSaveException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Invalid cookie lifetime: must be numeric');
+
         $invalidCookieLifetime = 'invalid lifetime';
         $messages = ['must be numeric'];
         $this->validatorMock->expects($this->once())

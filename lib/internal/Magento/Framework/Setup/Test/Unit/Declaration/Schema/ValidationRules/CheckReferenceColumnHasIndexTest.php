@@ -21,7 +21,7 @@ class CheckReferenceColumnHasIndexTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     private $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -70,7 +70,7 @@ class CheckReferenceColumnHasIndexTest extends \PHPUnit\Framework\TestCase
         $table->addColumns([$column]);
         $refTable->addColumns([$refColumn]);
         $table->addConstraints([$reference]);
-        /** @var Schema|\PHPUnit_Framework_MockObject_MockObject $schemaMock */
+        /** @var Schema|\PHPUnit\Framework\MockObject\MockObject $schemaMock */
         $schemaMock = $this->getMockBuilder(Schema::class)
             ->disableOriginalConstructor()
             ->getMock();

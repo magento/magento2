@@ -30,7 +30,7 @@ class CustomSettingsBuilderTest extends TestCase
      */
     private $configMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->createMock(Config::class);
         /** @var MockObject|SubjectReader subjectReaderMock */

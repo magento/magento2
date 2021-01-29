@@ -12,22 +12,22 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class ResponseFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ResponseFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $model;
 
     /**
-     * @var \Magento\Elasticsearch\SearchAdapter\DocumentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Elasticsearch\SearchAdapter\DocumentFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $documentFactory;
 
     /**
-     * @var \Magento\Elasticsearch\SearchAdapter\AggregationFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Elasticsearch\SearchAdapter\AggregationFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $aggregationFactory;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManager;
 
@@ -36,7 +36,7 @@ class ResponseFactoryTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->documentFactory = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\DocumentFactory::class)
             ->setMethods(['create'])
@@ -107,14 +107,14 @@ class ResponseFactoryTest extends \PHPUnit\Framework\TestCase
 
         $this->documentFactory->expects($this->at(0))->method('create')
             ->with($this->equalTo($documents[0]))
-            ->will($this->returnValue('document1'));
+            ->willReturn('document1');
         $this->documentFactory->expects($this->at(1))->method('create')
             ->with($documents[1])
-            ->will($this->returnValue('document2'));
+            ->willReturn('document2');
 
         $this->aggregationFactory->expects($this->at(0))->method('create')
             ->with($this->equalTo($exceptedResponse['aggregations']))
-            ->will($this->returnValue('aggregationsData'));
+            ->willReturn('aggregationsData');
 
         $this->objectManager->expects($this->once())->method('create')
             ->with(
@@ -125,7 +125,7 @@ class ResponseFactoryTest extends \PHPUnit\Framework\TestCase
                     'total' => 2
                 ])
             )
-            ->will($this->returnValue('QueryResponseObject'));
+            ->willReturn('QueryResponseObject');
 
         $result = $this->model->create($rawResponse);
         $this->assertEquals('QueryResponseObject', $result);

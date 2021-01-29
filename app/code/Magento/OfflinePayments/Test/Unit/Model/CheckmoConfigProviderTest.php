@@ -14,13 +14,13 @@ class CheckmoConfigProviderTest extends \PHPUnit\Framework\TestCase
     /** @var CheckmoConfigProvider */
     protected $model;
 
-    /** @var Checkmo|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Checkmo|\PHPUnit\Framework\MockObject\MockObject */
     protected $methodMock;
 
-    /** @var Escaper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Escaper|\PHPUnit\Framework\MockObject\MockObject */
     protected $escaperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->methodMock = $this->createMock(\Magento\OfflinePayments\Model\Checkmo::class);
 

@@ -24,36 +24,36 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class AttributeMetadataHydratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var AttributeMetadataInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeMetadataInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeMetadataFactoryMock;
 
     /**
-     * @var OptionInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var OptionInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $optionFactoryMock;
 
     /**
-     * @var ValidationRuleInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ValidationRuleInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $validationRuleFactoryMock;
 
     /**
-     * @var AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeMetadataInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeMetadataMock;
 
     /**
-     * @var DataObjectProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataObjectProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataObjectProcessorMock;
 
     /**
-     * @var AttributeMetadataHydrator|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeMetadataHydrator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeMetadataHydrator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->attributeMetadataFactoryMock = $this->createPartialMock(
@@ -62,7 +62,7 @@ class AttributeMetadataHydratorTest extends \PHPUnit\Framework\TestCase
         );
         $this->optionFactoryMock = $this->createPartialMock(OptionInterfaceFactory::class, ['create']);
         $this->validationRuleFactoryMock = $this->createPartialMock(ValidationRuleInterfaceFactory::class, ['create']);
-        $this->attributeMetadataMock = $this->createMock(AttributeMetadataInterface::class);
+        $this->attributeMetadataMock = $this->getMockForAbstractClass(AttributeMetadataInterface::class);
         $this->dataObjectProcessorMock = $this->createMock(DataObjectProcessor::class);
         $this->attributeMetadataHydrator = $objectManager->getObject(
             AttributeMetadataHydrator::class,

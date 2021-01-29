@@ -16,12 +16,12 @@ class ValidatorAbstractTest extends \PHPUnit\Framework\TestCase
      */
     protected $_defaultTranslator = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_defaultTranslator = \Magento\Framework\Validator\AbstractValidator::getDefaultTranslator();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         \Magento\Framework\Validator\AbstractValidator::setDefaultTranslator($this->_defaultTranslator);
     }
@@ -29,7 +29,7 @@ class ValidatorAbstractTest extends \PHPUnit\Framework\TestCase
     /**
      * Get translator object
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Translate\AbstractAdapter
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Translate\AbstractAdapter
      */
     protected function _getTranslator()
     {

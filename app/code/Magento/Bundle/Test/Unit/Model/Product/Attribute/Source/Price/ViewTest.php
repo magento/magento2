@@ -15,21 +15,21 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $option;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $optionFactory;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $attribute;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->option = $this->createMock(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option::class);
         $this->optionFactory = $this->createPartialMock(
@@ -38,7 +38,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         );
         $this->optionFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->option));
+            ->willReturn($this->option);
         $this->attribute = $this->createMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class);
 
         $this->model = (new ObjectManager($this))
@@ -55,7 +55,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     {
         $options = $this->model->getAllOptions();
 
-        $this->assertInternalType('array', $options);
+        $this->assertIsArray($options);
         $this->assertNotEmpty($options);
 
         foreach ($options as $option) {
@@ -89,11 +89,11 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $code = 'attribute-code';
         $this->attribute->expects($this->any())
             ->method('getAttributeCode')
-            ->will($this->returnValue($code));
+            ->willReturn($code);
 
         $columns = $this->model->getFlatColumns();
 
-        $this->assertInternalType('array', $columns);
+        $this->assertIsArray($columns);
         $this->assertArrayHasKey($code, $columns);
 
         foreach ($columns as $column) {
@@ -114,7 +114,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->option->expects($this->once())
             ->method('getFlatUpdateSelect')
             ->with($this->attribute, $store, false)
-            ->will($this->returnValue($select));
+            ->willReturn($select);
 
         $this->assertEquals($select, $this->model->getFlatUpdateSelect($store));
     }

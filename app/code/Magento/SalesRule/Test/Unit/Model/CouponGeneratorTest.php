@@ -25,17 +25,17 @@ class CouponGeneratorTest extends \PHPUnit\Framework\TestCase
     private $couponGenerator;
 
     /**
-     * @var CouponManagementService|\PHPUnit_Framework_MockObject_MockObject
+     * @var CouponManagementService|\PHPUnit\Framework\MockObject\MockObject
      */
     private $couponManagementServiceMock;
 
     /**
-     * @var CouponGenerationSpecInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CouponGenerationSpecInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $generationSpecFactoryMock;
 
     /**
-     * @var CouponGenerationSpecInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CouponGenerationSpecInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $generationSpecMock;
 
@@ -44,12 +44,12 @@ class CouponGeneratorTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->generationSpecFactoryMock = $this->getMockBuilder(CouponGenerationSpecInterfaceFactory::class)
             ->disableOriginalConstructor()->setMethods(['create'])->getMock();
         $this->couponManagementServiceMock = $this->createMock(CouponManagementService::class);
-        $this->generationSpecMock = $this->createMock(CouponGenerationSpecInterface::class);
+        $this->generationSpecMock = $this->getMockForAbstractClass(CouponGenerationSpecInterface::class);
         $this->couponGenerator = new CouponGenerator(
             $this->couponManagementServiceMock,
             $this->generationSpecFactoryMock

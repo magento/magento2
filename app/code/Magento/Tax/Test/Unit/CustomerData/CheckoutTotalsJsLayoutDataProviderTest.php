@@ -25,14 +25,14 @@ class CheckoutTotalsJsLayoutDataProviderTest extends TestCase
     private $dataProvider;
 
     /**
-     * @var TaxConfig|PHPUnit_Framework_MockObject_MockObject
+     * @var TaxConfig|PHPUnit\Framework\MockObject\MockObject
      */
     private $taxConfigMock;
 
     /**
      * Setup environment for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->taxConfigMock = $this->createMock(TaxConfig::class);
         $objectManager = new ObjectManagerHelper($this);

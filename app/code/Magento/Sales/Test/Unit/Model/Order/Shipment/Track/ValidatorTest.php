@@ -16,14 +16,14 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     protected $validator;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment\Track|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Shipment\Track|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $trackModelMock;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->trackModelMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Shipment\Track::class,
@@ -44,10 +44,10 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->trackModelMock->expects($this->any())
             ->method('hasData')
-            ->will($this->returnValueMap($trackDataMap));
+            ->willReturnMap($trackDataMap);
         $this->trackModelMock->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue($trackData));
+            ->willReturn($trackData);
         $actualWarnings = $this->validator->validate($this->trackModelMock);
         $this->assertEquals($expectedWarnings, $actualWarnings);
     }

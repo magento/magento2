@@ -13,11 +13,11 @@ use Magento\Framework\ObjectManagerInterface;
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->setMethods([])
@@ -93,7 +93,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \Magento\Framework\View\Asset\LocalInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\View\Asset\LocalInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private function getAsset()
     {

@@ -21,7 +21,7 @@ class FallbackTest extends \PHPUnit\Framework\TestCase
      */
     private $themeFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Theme\Model\Theme\Registration $registration */
@@ -71,7 +71,7 @@ class FallbackTest extends \PHPUnit\Framework\TestCase
 
         $actualFilename = $model->getFile('frontend', $themeModel, $file, $module);
         if ($expectedFilename) {
-            $this->assertInternalType('string', $actualFilename);
+            $this->assertIsString($actualFilename);
             $this->assertStringMatchesFormat($expectedFilename, $actualFilename);
             $this->assertFileExists($actualFilename);
         } else {
@@ -135,7 +135,7 @@ class FallbackTest extends \PHPUnit\Framework\TestCase
         $actualFilename = $model->getFile('frontend', $themeModel, 'i18n/' . $locale . '.csv');
 
         if ($expectedFilename) {
-            $this->assertInternalType('string', $actualFilename);
+            $this->assertIsString($actualFilename);
             $this->assertStringMatchesFormat($expectedFilename, $actualFilename);
             $this->assertFileExists($actualFilename);
         } else {
@@ -182,7 +182,7 @@ class FallbackTest extends \PHPUnit\Framework\TestCase
 
         $actualFilename = $model->getFile('frontend', $themeModel, $locale, $file, $module);
         if ($expectedFilename) {
-            $this->assertInternalType('string', $actualFilename);
+            $this->assertIsString($actualFilename);
             $this->assertStringMatchesFormat($expectedFilename, $actualFilename);
             $this->assertFileExists($actualFilename);
         } else {
@@ -282,7 +282,7 @@ class FallbackTest extends \PHPUnit\Framework\TestCase
 
         $actualFilename = $model->getFile($area, $themeModel, $locale, $file, $module);
         if ($expectedFilename) {
-            $this->assertInternalType('string', $actualFilename);
+            $this->assertIsString($actualFilename);
             $this->assertStringMatchesFormat($expectedFilename, $actualFilename);
             $this->assertFileExists($actualFilename);
         } else {

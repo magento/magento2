@@ -47,11 +47,11 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Item\Compare|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Item\Compare|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $compareHelper;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $stockItemMock;
 
     /**
@@ -67,7 +67,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     const PRODUCT_TAX_CLASS_ID = 3;
     const PRODUCT_COST = '9.00';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -87,7 +87,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
         $this->modelContext->expects($this->any())
             ->method('getEventDispatcher')
-            ->will($this->returnValue($this->eventDispatcher));
+            ->willReturn($this->eventDispatcher);
 
         $this->errorInfos = $this->getMockBuilder(\Magento\Sales\Model\Status\ListStatus::class)
             ->disableOriginalConstructor()
@@ -101,7 +101,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
         $statusListFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->errorInfos));
+            ->willReturn($this->errorInfos);
 
         $this->itemOptionFactory = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\OptionFactory::class)
             ->disableOriginalConstructor()
@@ -166,10 +166,10 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $quote->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($idValue));
+            ->willReturn($idValue);
         $quote->expects($this->any())
             ->method('getStoreId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->model->setQuote($quote);
 
@@ -191,12 +191,12 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->localeFormat->expects($this->at(0))
             ->method('getNumber')
             ->with($quantityToAdd)
-            ->will($this->returnValue($preparedQuantityToAdd));
+            ->willReturn($preparedQuantityToAdd);
 
         $this->localeFormat->expects($this->at(1))
             ->method('getNumber')
             ->with($preparedQuantityToAdd + $existingQuantity)
-            ->will($this->returnValue($preparedQuantityToAdd + $existingQuantity));
+            ->willReturn($preparedQuantityToAdd + $existingQuantity);
 
         $this->model->addQty($quantityToAdd);
         $this->assertEquals($preparedQuantityToAdd, $this->model->getQtyToAdd());
@@ -234,7 +234,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->localeFormat->expects($this->once())
             ->method('getNumber')
             ->with($quantityToAdd)
-            ->will($this->returnValue($preparedQuantityToAdd));
+            ->willReturn($preparedQuantityToAdd);
 
         $this->model->setData('qty', $existingQuantity);
 
@@ -255,7 +255,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->localeFormat->expects($this->once())
             ->method('getNumber')
             ->with($quantityToAdd)
-            ->will($this->returnValue($preparedQuantityToAdd));
+            ->willReturn($preparedQuantityToAdd);
 
         $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
             ->disableOriginalConstructor()
@@ -263,10 +263,10 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $quoteMock->expects($this->once())
             ->method('getIgnoreOldQty')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $quoteMock->expects($this->any())
             ->method('getStoreId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->model->setQuote($quoteMock);
 
@@ -289,7 +289,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->localeFormat->expects($this->once())
             ->method('getNumber')
             ->with($quantityToAdd)
-            ->will($this->returnValue($preparedQuantityToAdd));
+            ->willReturn($preparedQuantityToAdd);
 
         $this->model->setData('qty', $existingQuantity);
         $this->model->setUseOldQty(true);
@@ -357,7 +357,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $isQtyDecimal = true;
         $this->stockItemMock->expects($this->once())
             ->method('getIsQtyDecimal')
-            ->will($this->returnValue($isQtyDecimal));
+            ->willReturn($isQtyDecimal);
 
         $storeId = 15;
         $customerGroupId = 11;
@@ -367,10 +367,10 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $quoteMock->expects($this->any())
             ->method('getStoreId')
-            ->will($this->returnValue($storeId));
+            ->willReturn($storeId);
         $quoteMock->expects($this->once())
             ->method('getCustomerGroupId')
-            ->will($this->returnValue($customerGroupId));
+            ->willReturn($customerGroupId);
         $this->model->setQuote($quoteMock);
 
         $productMock->expects($this->once())
@@ -403,7 +403,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
      * @param string $productWeight
      * @param int $productTaxClassId
      * @param float $productCost
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function generateProductMock(
         $productId,
@@ -440,40 +440,40 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
         $productMock->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($productId));
+            ->willReturn($productId);
         $productMock->expects($this->any())
             ->method('getTypeId')
-            ->will($this->returnValue($productType));
+            ->willReturn($productType);
         $productMock->expects($this->any())
             ->method('getSku')
-            ->will($this->returnValue($productSku));
+            ->willReturn($productSku);
         $productMock->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue($productName));
+            ->willReturn($productName);
         $productMock->expects($this->any())
             ->method('getWeight')
-            ->will($this->returnValue($productWeight));
+            ->willReturn($productWeight);
         $productMock->expects($this->any())
             ->method('getTaxClassId')
-            ->will($this->returnValue($productTaxClassId));
+            ->willReturn($productTaxClassId);
         $productMock->expects($this->any())
             ->method('getCost')
-            ->will($this->returnValue($productCost));
+            ->willReturn($productCost);
         $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getWebsiteId']);
         $store->expects($this->any())
             ->method('getWebsiteId')
-            ->will($this->returnValue(10));
+            ->willReturn(10);
 
         $productMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($store));
+            ->willReturn($store);
         $extensionAttribute = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductExtensionInterface::class)
             ->setMethods(['getStockItem'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $extensionAttribute->expects($this->atLeastOnce())
             ->method('getStockItem')
-            ->will($this->returnValue($this->stockItemMock));
+            ->willReturn($this->stockItemMock);
         $productMock->expects($this->atLeastOnce())->method('getExtensionAttributes')->willReturn($extensionAttribute);
         return $productMock;
     }
@@ -517,7 +517,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
         $productMock->expects($this->once())
             ->method('getStickWithinParent')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertFalse($this->model->representProduct($productMock));
     }
@@ -546,21 +546,21 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $optionMock1 = $this->createOptionMock($optionCode1);
         $optionMock1->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue(1234));
+            ->willReturn(1234);
 
         $optionCode2 = 7890;
         $optionMock2 = $this->createOptionMock($optionCode2);
         $optionMock2->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue(7890));
+            ->willReturn(7890);
         $this->model->setOptions([$optionMock1, $optionMock2]);
 
         $productMock->expects($this->once())
             ->method('getStickWithinParent')
-            ->will($this->returnValue($parentItemMock));
+            ->willReturn($parentItemMock);
         $productMock->expects($this->once())
             ->method('getCustomOptions')
-            ->will($this->returnValue([$optionCode1 => $optionMock1]));
+            ->willReturn([$optionCode1 => $optionMock1]);
 
         $this->assertFalse($this->model->representProduct($productMock));
     }
@@ -589,21 +589,21 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $optionMock1 = $this->createOptionMock($optionCode1);
         $optionMock1->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue(1234));
+            ->willReturn(1234);
 
         $optionCode2 = 7890;
         $optionMock2 = $this->createOptionMock($optionCode2);
         $optionMock2->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue(7890));
+            ->willReturn(7890);
         $this->model->setOptions([$optionMock1]);
 
         $productMock->expects($this->once())
             ->method('getStickWithinParent')
-            ->will($this->returnValue($parentItemMock));
+            ->willReturn($parentItemMock);
         $productMock->expects($this->once())
             ->method('getCustomOptions')
-            ->will($this->returnValue([$optionCode1 => $optionMock1, $optionCode2 => $optionMock2]));
+            ->willReturn([$optionCode1 => $optionMock1, $optionCode2 => $optionMock2]);
 
         $this->assertFalse($this->model->representProduct($productMock));
     }
@@ -632,21 +632,21 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $optionMock1 = $this->createOptionMock($optionCode1);
         $optionMock1->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue(1234));
+            ->willReturn(1234);
 
         $optionCode2 = 7890;
         $optionMock2 = $this->createOptionMock($optionCode2);
         $optionMock2->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue(7890));
+            ->willReturn(7890);
         $this->model->setOptions([$optionMock1, $optionMock2]);
 
         $productMock->expects($this->once())
             ->method('getStickWithinParent')
-            ->will($this->returnValue($parentItemMock));
+            ->willReturn($parentItemMock);
         $productMock->expects($this->once())
             ->method('getCustomOptions')
-            ->will($this->returnValue([$optionCode1 => $optionMock1, $optionCode2 => $optionMock2]));
+            ->willReturn([$optionCode1 => $optionMock1, $optionCode2 => $optionMock2]);
 
         $this->assertTrue($this->model->representProduct($productMock));
     }
@@ -660,7 +660,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->compareHelper->expects($this->once())
             ->method('compare')
             ->with($this->equalTo($this->model), $this->equalTo($itemMock))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertTrue($this->model->compare($itemMock));
     }
 
@@ -670,7 +670,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $optionMock1 = $this->createOptionMock($optionCode1);
         $optionMock1->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue(1234));
+            ->willReturn(1234);
 
         $this->assertTrue(
             $this->model->compareOptions([$optionCode1 => $optionMock1], [$optionCode1 => $optionMock1])
@@ -683,13 +683,13 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $optionMock1 = $this->createOptionMock($optionCode1);
         $optionMock1->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue(1234));
+            ->willReturn(1234);
 
         $optionCode2 = 1234;
         $optionMock2 = $this->createOptionMock($optionCode1);
         $optionMock2->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue(7890));
+            ->willReturn(7890);
 
         $this->assertFalse(
             $this->model->compareOptions([$optionCode1 => $optionMock1], [$optionCode2 => $optionMock2])
@@ -702,13 +702,13 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $optionMock1 = $this->createOptionMock($optionCode1);
         $optionMock1->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue(1234));
+            ->willReturn(1234);
 
         $optionCode2 = 1234;
         $optionMock2 = $this->createOptionMock($optionCode1);
         $optionMock2->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->assertFalse(
             $this->model->compareOptions([$optionCode1 => $optionMock1], [$optionCode2 => $optionMock2])
@@ -721,13 +721,13 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $optionMock1 = $this->createOptionMock($optionCode1);
         $optionMock1->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue(1234));
+            ->willReturn(1234);
 
         $optionCode2 = 7890;
         $optionMock2 = $this->createOptionMock($optionCode1);
         $optionMock2->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue(7890));
+            ->willReturn(7890);
 
         $this->assertFalse(
             $this->model->compareOptions(
@@ -752,7 +752,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         );
         $optionMock1->expects($this->any())
             ->method('getProduct')
-            ->will($this->returnValue($productMock));
+            ->willReturn($productMock);
 
         $optionCode2 = 'product_qty_' . self::PRODUCT_ID;
         $optionMock2 = $this->createOptionMock($optionCode2);
@@ -791,7 +791,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $toArrayValue = ['a' => 'b'];
         $productMock->expects($this->once())
             ->method('toArray')
-            ->will($this->returnValue($toArrayValue));
+            ->willReturn($toArrayValue);
 
         $data = $this->model->toArray();
         $this->assertEquals($toArrayValue, $data['product']);
@@ -804,7 +804,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $optionMock = $this->createOptionMock($optionProductType);
         $optionMock->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue($optionProductTypeValue));
+            ->willReturn($optionProductTypeValue);
         $this->model->addOption($optionMock);
 
         $this->assertEquals($optionProductTypeValue, $this->model->getProductType());
@@ -847,7 +847,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $optionCode
      * @param array $optionData
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function createOptionMock($optionCode, $optionData = [])
     {
@@ -871,14 +871,14 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $optionMock->expects($this->any())
             ->method('setData')
             ->with($optionData)
-            ->will($this->returnValue($optionMock));
+            ->willReturn($optionMock);
         $optionMock->expects($this->any())
             ->method('setItem')
             ->with($this->model)
-            ->will($this->returnValue($optionMock));
+            ->willReturn($optionMock);
         $optionMock->expects($this->any())
             ->method('getCode')
-            ->will($this->returnValue($optionCode));
+            ->willReturn($optionCode);
 
         return $optionMock;
     }
@@ -895,18 +895,18 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $optionMock->expects($this->once())
             ->method('setData')
             ->with($optionData)
-            ->will($this->returnValue($optionMock));
+            ->willReturn($optionMock);
         $optionMock->expects($this->once())
             ->method('setItem')
             ->with($this->model)
-            ->will($this->returnValue($optionMock));
+            ->willReturn($optionMock);
         $optionMock->expects($this->exactly(3))
             ->method('getCode')
-            ->will($this->returnValue($optionCode));
+            ->willReturn($optionCode);
 
         $this->itemOptionFactory->expects($this->at(0))
             ->method('create')
-            ->will($this->returnValue($optionMock));
+            ->willReturn($optionMock);
 
         $this->model->addOption($optionData);
         $this->assertEquals([$optionMock], $this->model->getOptions());
@@ -937,7 +937,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         );
         $productMock->expects($this->once())
             ->method('getTypeInstance')
-            ->will($this->returnValue($typeInstanceMock));
+            ->willReturn($typeInstanceMock);
 
         $optionMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
@@ -945,7 +945,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $optionMock->expects($this->once())
             ->method('getProduct')
-            ->will($this->returnValue($productMock));
+            ->willReturn($productMock);
 
         $quantityValue = 12;
 
@@ -967,16 +967,16 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $optionMock->expects($this->once())
             ->method('setItem')
             ->with($this->model)
-            ->will($this->returnValue($optionMock));
+            ->willReturn($optionMock);
         $optionMock->expects($this->exactly(3))
             ->method('getCode')
-            ->will($this->returnValue($optionCode));
+            ->willReturn($optionCode);
         $optionMock->expects($this->at(0))
             ->method('isDeleted')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $optionMock->expects($this->at(1))
             ->method('isDeleted')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->model->addOption($optionMock);
 
@@ -1004,13 +1004,13 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $optionMock->expects($this->once())
             ->method('setItem')
             ->with($this->model)
-            ->will($this->returnValue($optionMock));
+            ->willReturn($optionMock);
         $optionMock->expects($this->exactly(3))
             ->method('getCode')
-            ->will($this->returnValue($optionCode));
+            ->willReturn($optionCode);
         $optionMock->expects($this->once())
             ->method('isDeleted')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->model->addOption($optionMock);
 
@@ -1028,13 +1028,13 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $optionMock->expects($this->once())
             ->method('setItem')
             ->with($this->model)
-            ->will($this->returnValue($optionMock));
+            ->willReturn($optionMock);
         $optionMock->expects($this->exactly(3))
             ->method('getCode')
-            ->will($this->returnValue($optionCode));
+            ->willReturn($optionCode);
         $optionMock->expects($this->once())
             ->method('isDeleted')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->model->addOption($optionMock);
 
@@ -1047,7 +1047,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->localeFormat->expects($this->at(0))
             ->method('getNumber')
             ->with($quantity)
-            ->will($this->returnValue($quantity));
+            ->willReturn($quantity);
         $this->model->setQty($quantity);
         $this->assertEquals($quantity, $this->model->getQty());
         $buyRequest = $this->model->getBuyRequest();
@@ -1066,13 +1066,13 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $optionMock->expects($this->once())
             ->method('setItem')
             ->with($this->model)
-            ->will($this->returnValue($optionMock));
+            ->willReturn($optionMock);
         $optionMock->expects($this->exactly(3))
             ->method('getCode')
-            ->will($this->returnValue($optionCode));
+            ->willReturn($optionCode);
         $optionMock->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue('{"qty":23}'));
+            ->willReturn('{"qty":23}');
 
         $this->model->addOption($optionMock);
 
@@ -1080,7 +1080,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->localeFormat->expects($this->at(0))
             ->method('getNumber')
             ->with($quantity)
-            ->will($this->returnValue($quantity));
+            ->willReturn($quantity);
         $this->model->setQty($quantity);
         $this->assertEquals($quantity, $this->model->getQty());
         $this->serializer->expects($this->any())
@@ -1137,7 +1137,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
         $this->errorInfos->expects($this->once())
             ->method('getItems')
-            ->will($this->returnValue($retValue));
+            ->willReturn($retValue);
 
         $this->assertEquals($retValue, $this->model->getErrorInfos());
     }
@@ -1163,11 +1163,11 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->errorInfos->expects($this->once())
             ->method('removeItemsByParams')
             ->with($params)
-            ->will($this->returnValue($removedItems));
+            ->willReturn($removedItems);
 
         $this->errorInfos->expects($this->once())
             ->method('getItems')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertEquals($this->model, $this->model->removeErrorInfosByParams($params));
         $this->assertEquals($message2, $this->model->getMessage());
@@ -1194,11 +1194,11 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->errorInfos->expects($this->once())
             ->method('removeItemsByParams')
             ->with($params)
-            ->will($this->returnValue($removedItems));
+            ->willReturn($removedItems);
 
         $this->errorInfos->expects($this->once())
             ->method('getItems')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->assertEquals($this->model, $this->model->removeErrorInfosByParams($params));
         $this->assertFalse($this->model->getHasError());

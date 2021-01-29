@@ -23,11 +23,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
     protected $dataHelper;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -53,15 +53,15 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $currency = $this->createPartialMock(\Magento\Directory\Model\Currency::class, ['formatTxt', '__wakeup']);
         $currency->expects($this->any())
             ->method('formatTxt')
-            ->will($this->returnValue($amount));
+            ->willReturn($amount);
         $order = $this->createPartialMock(\Magento\Sales\Model\Order::class, ['getBaseCurrency', '__wakeup']);
         $order->expects($this->any())
             ->method('getBaseCurrency')
-            ->will($this->returnValue($currency));
+            ->willReturn($currency);
         $payment = $this->createPartialMock(\Magento\Payment\Model\Info::class, ['getOrder', '__wakeup']);
         $payment->expects($this->any())
             ->method('getOrder')
-            ->will($this->returnValue($order));
+            ->willReturn($order);
         $card = new \Magento\Framework\DataObject(['cc_last_4' => self::LAST4]);
         $message = $this->dataHelper->getTransactionMessage(
             $payment,

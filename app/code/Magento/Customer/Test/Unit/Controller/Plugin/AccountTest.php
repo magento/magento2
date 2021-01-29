@@ -27,31 +27,31 @@ class AccountTest extends \PHPUnit\Framework\TestCase
     protected $plugin;
 
     /**
-     * @var Session | \PHPUnit_Framework_MockObject_MockObject
+     * @var Session | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $session;
 
     /**
-     * @var AbstractAction | \PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractAction | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $subject;
 
     /**
-     * @var Http | \PHPUnit_Framework_MockObject_MockObject
+     * @var Http | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var ActionFlag | \PHPUnit_Framework_MockObject_MockObject
+     * @var ActionFlag | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $actionFlag;
 
     /**
-     * @var ResultInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultInterface;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->session = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()

@@ -192,7 +192,7 @@ class ApplyTaxBasedOnVatIdTest extends AbstractApplyVatIdTest
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->objectManager->create(\Magento\Tax\Test\TestStep\DeleteAllTaxRulesStep::class)->run();

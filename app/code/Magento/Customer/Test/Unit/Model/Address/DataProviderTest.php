@@ -30,47 +30,47 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     private const ATTRIBUTE_CODE = 'street';
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $addressCollectionFactory;
 
     /**
-     * @var AddressCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var AddressCollection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collection;
 
     /**
-     * @var CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerRepository;
 
     /**
-     * @var CustomerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customer;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eavConfig;
 
     /*
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $context;
 
     /**
-     * @var AddressModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var AddressModel|\PHPUnit\Framework\MockObject\MockObject
      */
     private $address;
 
     /**
-     * @var FileUploaderDataResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileUploaderDataResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileUploaderDataResolver;
 
     /**
-     * @var AttributeMetadataResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeMetadataResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeMetadataResolver;
 
@@ -79,7 +79,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->fileUploaderDataResolver = $this->getMockBuilder(FileUploaderDataResolver::class)
@@ -266,7 +266,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
      * Get customer address type mock
      *
      * @param array $customerAttributes
-     * @return Type|\PHPUnit_Framework_MockObject_MockObject
+     * @return Type|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getTypeAddressMock($customerAttributes = [])
     {
@@ -291,7 +291,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
      * Get attribute mock
      *
      * @param array $options
-     * @return AbstractAttribute[]|\PHPUnit_Framework_MockObject_MockObject[]
+     * @return AbstractAttribute[]|\PHPUnit\Framework\MockObject\MockObject[]
      */
     protected function getAttributeMock($options = []): array
     {

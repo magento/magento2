@@ -27,8 +27,8 @@ class GenericTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             $className::TYPE_IDENTIFIER
-        )->will(
-            $this->returnValue($frontendMock)
+        )->willReturn(
+            $frontendMock
         );
 
         $model = new $className($poolMock);

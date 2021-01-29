@@ -24,7 +24,7 @@ class PackageTest extends \PHPUnit\Framework\TestCase
      */
     private $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sampleJson = json_decode(self::SAMPLE_DATA);
         $this->object = new Package($this->sampleJson);

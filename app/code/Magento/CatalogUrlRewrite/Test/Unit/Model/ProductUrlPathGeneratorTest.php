@@ -19,22 +19,22 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator */
     protected $productUrlPathGenerator;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $storeManager;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $scopeConfig;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator|\PHPUnit\Framework\MockObject\MockObject */
     protected $categoryUrlPathGenerator;
 
-    /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject */
     protected $product;
 
-    /** @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $productRepository;
 
-    /** @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\Category|\PHPUnit\Framework\MockObject\MockObject */
     protected $category;
 
     /**
@@ -99,11 +99,11 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     public function testGetUrlPath($urlKey, $productName, $formatterCalled, $result): void
     {
         $this->product->expects($this->once())->method('getData')->with('url_path')
-            ->will($this->returnValue(null));
-        $this->product->expects($this->any())->method('getUrlKey')->will($this->returnValue($urlKey));
-        $this->product->expects($this->any())->method('getName')->will($this->returnValue($productName));
+            ->willReturn(null);
+        $this->product->expects($this->any())->method('getUrlKey')->willReturn($urlKey);
+        $this->product->expects($this->any())->method('getName')->willReturn($productName);
         $this->product->expects($this->exactly($formatterCalled))
-            ->method('formatUrlKey')->will($this->returnArgument(0));
+            ->method('formatUrlKey')->willReturnArgument(0);
 
         $this->assertEquals($result, $this->productUrlPathGenerator->getUrlPath($this->product, null));
     }
@@ -116,8 +116,8 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUrlKey($productUrlKey, $expectedUrlKey): void
     {
-        $this->product->expects($this->any())->method('getUrlKey')->will($this->returnValue($productUrlKey));
-        $this->product->expects($this->any())->method('formatUrlKey')->will($this->returnValue($productUrlKey));
+        $this->product->expects($this->any())->method('getUrlKey')->willReturn($productUrlKey);
+        $this->product->expects($this->any())->method('formatUrlKey')->willReturn($productUrlKey);
         $this->assertSame($expectedUrlKey, $this->productUrlPathGenerator->getUrlKey($this->product));
     }
 
@@ -142,10 +142,10 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     public function testGetUrlPathDefaultUrlKey($storedUrlKey, $productName, $expectedUrlKey): void
     {
         $this->product->expects($this->once())->method('getData')->with('url_path')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->product->expects($this->any())->method('getUrlKey')->willReturnOnConsecutiveCalls(false, $storedUrlKey);
-        $this->product->expects($this->any())->method('getName')->will($this->returnValue($productName));
-        $this->product->expects($this->any())->method('formatUrlKey')->will($this->returnArgument(0));
+        $this->product->expects($this->any())->method('getName')->willReturn($productName);
+        $this->product->expects($this->any())->method('formatUrlKey')->willReturnArgument(0);
         $this->assertEquals($expectedUrlKey, $this->productUrlPathGenerator->getUrlPath($this->product, null));
     }
 
@@ -166,9 +166,9 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     public function testGetUrlPathWithCategory(): void
     {
         $this->product->expects($this->once())->method('getData')->with('url_path')
-            ->will($this->returnValue('product-path'));
+            ->willReturn('product-path');
         $this->categoryUrlPathGenerator->expects($this->once())->method('getUrlPath')
-            ->will($this->returnValue('category-url-path'));
+            ->willReturn('category-url-path');
 
         $this->assertEquals(
             'category-url-path/product-path',
@@ -183,13 +183,13 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     {
         $storeId = 1;
         $this->product->expects($this->once())->method('getData')->with('url_path')
-            ->will($this->returnValue('product-path'));
+            ->willReturn('product-path');
         $store = $this->createMock(\Magento\Store\Model\Store::class);
-        $store->expects($this->once())->method('getId')->will($this->returnValue($storeId));
-        $this->storeManager->expects($this->once())->method('getStore')->will($this->returnValue($store));
+        $store->expects($this->once())->method('getId')->willReturn($storeId);
+        $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
         $this->scopeConfig->expects($this->once())->method('getValue')
             ->with(ProductUrlPathGenerator::XML_PATH_PRODUCT_URL_SUFFIX, ScopeInterface::SCOPE_STORE, $storeId)
-            ->will($this->returnValue('.html'));
+            ->willReturn('.html');
 
         $this->assertEquals(
             'product-path.html',
@@ -204,13 +204,13 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     {
         $storeId = 1;
         $this->product->expects($this->once())->method('getData')->with('url_path')
-            ->will($this->returnValue('product-path'));
+            ->willReturn('product-path');
         $this->categoryUrlPathGenerator->expects($this->once())->method('getUrlPath')
-            ->will($this->returnValue('category-url-path'));
+            ->willReturn('category-url-path');
         $this->storeManager->expects($this->never())->method('getStore');
         $this->scopeConfig->expects($this->once())->method('getValue')
             ->with(ProductUrlPathGenerator::XML_PATH_PRODUCT_URL_SUFFIX, ScopeInterface::SCOPE_STORE, $storeId)
-            ->will($this->returnValue('.html'));
+            ->willReturn('.html');
 
         $this->assertEquals(
             'category-url-path/product-path.html',
@@ -223,7 +223,7 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCanonicalUrlPath(): void
     {
-        $this->product->expects($this->once())->method('getId')->will($this->returnValue(1));
+        $this->product->expects($this->once())->method('getId')->willReturn(1);
 
         $this->assertEquals(
             'catalog/product/view/id/1',
@@ -236,8 +236,8 @@ class ProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCanonicalUrlPathWithCategory(): void
     {
-        $this->product->expects($this->once())->method('getId')->will($this->returnValue(1));
-        $this->category->expects($this->once())->method('getId')->will($this->returnValue(1));
+        $this->product->expects($this->once())->method('getId')->willReturn(1);
+        $this->category->expects($this->once())->method('getId')->willReturn(1);
 
         $this->assertEquals(
             'catalog/product/view/id/1/category/1',

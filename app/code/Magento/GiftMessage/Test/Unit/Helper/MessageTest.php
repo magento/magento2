@@ -8,7 +8,7 @@ namespace Magento\GiftMessage\Test\Unit\Helper;
 class MessageTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutFactoryMock;
 
@@ -17,7 +17,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
      */
     protected $helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->layoutFactoryMock = $this->createMock(\Magento\Framework\View\LayoutFactory::class);
@@ -44,14 +44,14 @@ class MessageTest extends \PHPUnit\Framework\TestCase
             ['setId', 'setDontDisplayContainer', 'setEntity', 'setCheckoutType', 'toHtml']
         );
 
-        $this->layoutFactoryMock->expects($this->once())->method('create')->will($this->returnValue($layoutMock));
-        $layoutMock->expects($this->once())->method('createBlock')->will($this->returnValue($inlineMock));
+        $this->layoutFactoryMock->expects($this->once())->method('create')->willReturn($layoutMock);
+        $layoutMock->expects($this->once())->method('createBlock')->willReturn($inlineMock);
 
-        $inlineMock->expects($this->once())->method('setId')->will($this->returnSelf());
-        $inlineMock->expects($this->once())->method('setDontDisplayContainer')->will($this->returnSelf());
-        $inlineMock->expects($this->once())->method('setEntity')->with($entityMock)->will($this->returnSelf());
-        $inlineMock->expects($this->once())->method('setCheckoutType')->will($this->returnSelf());
-        $inlineMock->expects($this->once())->method('toHtml')->will($this->returnValue($expectedHtml));
+        $inlineMock->expects($this->once())->method('setId')->willReturnSelf();
+        $inlineMock->expects($this->once())->method('setDontDisplayContainer')->willReturnSelf();
+        $inlineMock->expects($this->once())->method('setEntity')->with($entityMock)->willReturnSelf();
+        $inlineMock->expects($this->once())->method('setCheckoutType')->willReturnSelf();
+        $inlineMock->expects($this->once())->method('toHtml')->willReturn($expectedHtml);
 
         $this->assertEquals($expectedHtml, $this->helper->getInline('onepage_checkout', $entityMock));
     }

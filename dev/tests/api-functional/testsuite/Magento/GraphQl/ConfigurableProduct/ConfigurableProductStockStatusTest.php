@@ -24,7 +24,7 @@ class ConfigurableProductStockStatusTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stockRegistry = Bootstrap::getObjectManager()->create(StockRegistryInterface::class);
     }

@@ -13,17 +13,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ConfigurationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Pricing\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     private $pricingHelper;
 
     /**
-     * @var \Magento\Catalog\Helper\Product\Configuration|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Product\Configuration|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productConfiguration;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $escaper;
 
@@ -33,7 +33,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
     private $helper;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $item;
 
@@ -42,7 +42,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
      */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->pricingHelper = $this->createPartialMock(\Magento\Framework\Pricing\Helper\Data::class, ['currency']);
         $this->productConfiguration = $this->createMock(\Magento\Catalog\Helper\Product\Configuration::class);
@@ -98,7 +98,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);
 
         $product->expects($this->once())->method('getCustomOption')->with('selection_qty_' . $selectionId)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->assertEquals(0, $this->helper->getSelectionQty($product, $selectionId));
     }
@@ -112,9 +112,9 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
         $selectionProduct = $this->createMock(\Magento\Catalog\Model\Product::class);
 
         $selectionProduct->expects($this->once())->method('unsetData')->with('final_price');
-        $this->item->expects($this->once())->method('getProduct')->will($this->returnValue($product));
-        $this->item->expects($this->once())->method('getQty')->will($this->returnValue($itemQty));
-        $product->expects($this->once())->method('getPriceModel')->will($this->returnValue($price));
+        $this->item->expects($this->once())->method('getProduct')->willReturn($product);
+        $this->item->expects($this->once())->method('getQty')->willReturn($itemQty);
+        $product->expects($this->once())->method('getPriceModel')->willReturn($price);
         $price->expects($this->once())->method('getSelectionFinalTotalPrice')
             ->with($product, $selectionProduct, $itemQty, 0, false, true);
 
@@ -127,10 +127,10 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
         $product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getTypeInstance',
             '__wakeup']);
 
-        $product->expects($this->once())->method('getTypeInstance')->will($this->returnValue($typeInstance));
-        $this->item->expects($this->once())->method('getProduct')->will($this->returnValue($product));
+        $product->expects($this->once())->method('getTypeInstance')->willReturn($typeInstance);
+        $this->item->expects($this->once())->method('getProduct')->willReturn($product);
         $this->item->expects($this->once())->method('getOptionByCode')->with('bundle_option_ids')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->assertEquals([], $this->helper->getBundleOptions($this->item));
     }
@@ -233,15 +233,15 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
             ->with('name')
             ->willReturn('name');
         $this->pricingHelper->expects($this->once())->method('currency')->with(15)
-            ->will($this->returnValue('<span class="price">$15.00</span>'));
-        $priceModel->expects($this->once())->method('getSelectionFinalTotalPrice')->will($this->returnValue(15));
-        $selectionQty->expects($this->any())->method('getValue')->will($this->returnValue(1));
-        $bundleOption->expects($this->any())->method('getSelections')->will($this->returnValue([$product]));
-        $bundleOption->expects($this->once())->method('getTitle')->will($this->returnValue('title'));
-        $selectionOption->expects($this->once())->method('getValue')->will($this->returnValue($selectionIds));
+            ->willReturn('<span class="price">$15.00</span>');
+        $priceModel->expects($this->once())->method('getSelectionFinalTotalPrice')->willReturn(15);
+        $selectionQty->expects($this->any())->method('getValue')->willReturn(1);
+        $bundleOption->expects($this->any())->method('getSelections')->willReturn([$product]);
+        $bundleOption->expects($this->once())->method('getTitle')->willReturn('title');
+        $selectionOption->expects($this->once())->method('getValue')->willReturn($selectionIds);
         $collection->expects($this->once())->method('appendSelections')->with($collection2, true)
-            ->will($this->returnValue([$bundleOption]));
-        $itemOption->expects($this->once())->method('getValue')->will($this->returnValue($optionIds));
+            ->willReturn([$bundleOption]);
+        $itemOption->expects($this->once())->method('getValue')->willReturn($optionIds);
         $typeInstance->expects($this->once())
             ->method('getOptionsByIds')
             ->with(
@@ -252,20 +252,20 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
         $typeInstance->expects($this->once())
             ->method('getSelectionsByIds')
             ->with(json_decode($selectionIds, true), $product)
-            ->will($this->returnValue($collection2));
-        $product->expects($this->once())->method('getTypeInstance')->will($this->returnValue($typeInstance));
+            ->willReturn($collection2);
+        $product->expects($this->once())->method('getTypeInstance')->willReturn($typeInstance);
         $product->expects($this->any())->method('getCustomOption')->with('selection_qty_' . $selectionId)
-            ->will($this->returnValue($selectionQty));
-        $product->expects($this->any())->method('getSelectionId')->will($this->returnValue($selectionId));
-        $product->expects($this->once())->method('getName')->will($this->returnValue('name'));
-        $product->expects($this->once())->method('getPriceModel')->will($this->returnValue($priceModel));
-        $this->item->expects($this->any())->method('getProduct')->will($this->returnValue($product));
+            ->willReturn($selectionQty);
+        $product->expects($this->any())->method('getSelectionId')->willReturn($selectionId);
+        $product->expects($this->once())->method('getName')->willReturn('name');
+        $product->expects($this->once())->method('getPriceModel')->willReturn($priceModel);
+        $this->item->expects($this->any())->method('getProduct')->willReturn($product);
         $this->item->expects($this->at(1))->method('getOptionByCode')->with('bundle_option_ids')
-            ->will($this->returnValue($itemOption));
+            ->willReturn($itemOption);
         $this->item->expects($this->at(2))->method('getOptionByCode')->with('bundle_selection_ids')
-            ->will($this->returnValue($selectionOption));
+            ->willReturn($selectionOption);
         $this->productConfiguration->expects($this->once())->method('getCustomOptions')->with($this->item)
-            ->will($this->returnValue([0 => ['label' => 'title', 'value' => 'value']]));
+            ->willReturn([0 => ['label' => 'title', 'value' => 'value']]);
 
         $this->assertEquals(
             [

@@ -113,7 +113,7 @@ class AlgorithmBaseTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(array_keys($intervalItems), array_keys($items));
 
         for ($i = 0, $count = count($intervalItems); $i < $count; ++$i) {
-            $this->assertInternalType('array', $items[$i]);
+            $this->assertIsArray($items[$i]);
             $this->assertEquals($intervalItems[$i]['from'], $items[$i]['from']);
             $this->assertEquals($intervalItems[$i]['to'], $items[$i]['to']);
             $this->assertEquals($intervalItems[$i]['count'], $items[$i]['count']);

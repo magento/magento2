@@ -50,22 +50,24 @@ class DirectoryListTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unknown type: foo
      */
     public function testUnknownType()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unknown type: foo');
+
         new DirectoryList('/root/dir', ['foo' => [DirectoryList::PATH => '/foo/dir']]);
     }
 
     /**
      * @param string $method
-     * @expectedException \Magento\Framework\Exception\FileSystemException
-     * @expectedExceptionMessage Unknown directory type: 'foo'
      * @dataProvider assertCodeDataProvider
      */
     public function testAssertCode($method)
     {
+        $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
+        $this->expectExceptionMessage('Unknown directory type: \'foo\'');
+
         $object = new DirectoryList('/root/dir');
         $object->$method('foo');
     }
@@ -114,12 +116,13 @@ class DirectoryListTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $value
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage URL path must be relative directory path in lowercase with '/' directory separator:
      * @dataProvider assertUrlPathDataProvider
      */
     public function testAssertUrlPath($value)
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('URL path must be relative directory path in lowercase with \'/\' directory separator:');
+
         new DirectoryList('/root/dir', [DirectoryList::SYS_TMP => [DirectoryList::URL_PATH => $value]]);
     }
 

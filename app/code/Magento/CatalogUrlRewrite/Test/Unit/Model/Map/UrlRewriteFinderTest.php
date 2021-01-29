@@ -22,29 +22,29 @@ use Magento\Framework\Serialize\Serializer\Json;
  */
 class UrlRewriteFinderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var DatabaseMapPool|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DatabaseMapPool|\PHPUnit\Framework\MockObject\MockObject */
     private $databaseMapPoolMock;
 
-    /** @var UrlRewriteFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UrlRewriteFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $urlRewriteFactoryMock;
 
-    /** @var UrlRewrite|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UrlRewrite|\PHPUnit\Framework\MockObject\MockObject */
     private $urlRewritePrototypeMock;
 
-    /** @var UrlFinderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UrlFinderInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $urlFinderMock;
 
-    /** @var UrlRewriteFinder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UrlRewriteFinder|\PHPUnit\Framework\MockObject\MockObject */
     private $model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->serializerMock = $this->createMock(Json::class);
         $this->databaseMapPoolMock = $this->createMock(DatabaseMapPool::class);
-        $this->urlFinderMock = $this->createMock(UrlFinderInterface::class);
+        $this->urlFinderMock = $this->getMockForAbstractClass(UrlFinderInterface::class);
         $this->urlRewriteFactoryMock = $this->createPartialMock(UrlRewriteFactory::class, ['create']);
         $this->urlRewritePrototypeMock = new UrlRewrite([], $this->serializerMock);
 

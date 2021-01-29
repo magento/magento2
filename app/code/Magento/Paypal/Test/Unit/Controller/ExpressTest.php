@@ -18,46 +18,46 @@ abstract class ExpressTest extends \PHPUnit\Framework\TestCase
 
     protected $name = '';
 
-    /** @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerSession;
 
-    /** @var \Magento\Checkout\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Checkout\Model\Session|\PHPUnit\Framework\MockObject\MockObject */
     protected $checkoutSession;
 
-    /** @var \Magento\Paypal\Model\Express\Checkout\Factory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Paypal\Model\Express\Checkout\Factory|\PHPUnit\Framework\MockObject\MockObject */
     protected $checkoutFactory;
 
-    /** @var \Magento\Framework\Session\Generic|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Session\Generic|\PHPUnit\Framework\MockObject\MockObject */
     protected $session;
 
-    /** @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Quote\Model\Quote|\PHPUnit\Framework\MockObject\MockObject */
     protected $quote;
 
-    /** @var \Magento\Customer\Api\Data\CustomerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\Data\CustomerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerData;
 
-    /** @var \Magento\Paypal\Model\Express\Checkout|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Paypal\Model\Express\Checkout|\PHPUnit\Framework\MockObject\MockObject */
     protected $checkout;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $request;
 
-    /** @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $redirect;
 
-    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $response;
 
-    /** @var \Magento\Paypal\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Paypal\Model\Config|\PHPUnit\Framework\MockObject\MockObject */
     protected $config;
 
-    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $messageManager;
 
     /** @var \Closure */
     protected $objectManagerCallback;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->markTestIncomplete();
         $this->messageManager = $this->getMockForAbstractClass(\Magento\Framework\Message\ManagerInterface::class);
@@ -66,7 +66,7 @@ abstract class ExpressTest extends \PHPUnit\Framework\TestCase
         $this->quote = $this->createMock(\Magento\Quote\Model\Quote::class);
         $this->quote->expects($this->any())
             ->method('hasItems')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->redirect = $this->getMockForAbstractClass(\Magento\Framework\App\Response\RedirectInterface::class);
         $this->response = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $this->customerData = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
@@ -74,15 +74,15 @@ abstract class ExpressTest extends \PHPUnit\Framework\TestCase
         $this->customerSession = $this->createMock(\Magento\Customer\Model\Session::class);
         $this->customerSession->expects($this->any())
             ->method('getCustomerDataObject')
-            ->will($this->returnValue($this->customerData));
+            ->willReturn($this->customerData);
         $this->checkoutSession = $this->createMock(\Magento\Checkout\Model\Session::class);
         $this->checkoutFactory = $this->createMock(\Magento\Paypal\Model\Express\Checkout\Factory::class);
         $this->checkoutFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->checkout));
+            ->willReturn($this->checkout);
         $this->checkoutSession->expects($this->any())
             ->method('getQuote')
-            ->will($this->returnValue($this->quote));
+            ->willReturn($this->quote);
         $this->session = $this->createMock(\Magento\Framework\Session\Generic::class);
         $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->objectManagerCallback = function ($className) {
@@ -93,14 +93,14 @@ abstract class ExpressTest extends \PHPUnit\Framework\TestCase
         };
         $objectManager->expects($this->any())
             ->method('get')
-            ->will($this->returnCallback(function ($className) {
+            ->willReturnCallback(function ($className) {
                 return call_user_func($this->objectManagerCallback, $className);
-            }));
+            });
         $objectManager->expects($this->any())
             ->method('create')
-            ->will($this->returnCallback(function ($className) {
+            ->willReturnCallback(function ($className) {
                 return call_user_func($this->objectManagerCallback, $className);
-            }));
+            });
 
         $helper = new ObjectManagerHelper($this);
         $this->model = $helper->getObject(

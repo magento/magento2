@@ -24,21 +24,21 @@ class ShipmentRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Sales resource metadata.
      *
-     * @var \Magento\Sales\Model\ResourceModel\Metadata|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Metadata|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadata;
 
     /**
-     * @var \Magento\Sales\Api\Data\ShipmentSearchResultInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\Data\ShipmentSearchResultInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchResultFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionProcessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -169,11 +169,12 @@ class ShipmentRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage The shipment couldn't be deleted.
      */
     public function testDeleteWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotDeleteException::class);
+        $this->expectExceptionMessage('The shipment couldn\'t be deleted.');
+
         $shipment = $this->createPartialMock(\Magento\Sales\Model\Order\Shipment::class, ['getEntityId']);
         $shipment->expects($this->never())
             ->method('getEntityId');
@@ -226,11 +227,12 @@ class ShipmentRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The shipment couldn't be saved.
      */
     public function testSaveWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+        $this->expectExceptionMessage('The shipment couldn\'t be saved.');
+
         $shipment = $this->createPartialMock(\Magento\Sales\Model\Order\Shipment::class, ['getEntityId']);
         $shipment->expects($this->never())
             ->method('getEntityId');

@@ -14,11 +14,11 @@ class TypeListTest extends \PHPUnit\Framework\TestCase
     protected $typesArrayModel;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helperMock = $this->createMock(\Magento\Payment\Helper\Data::class);
         $this->typesArrayModel = new \Magento\Payment\Model\ResourceModel\Grid\TypeList($this->helperMock);
@@ -30,7 +30,7 @@ class TypeListTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getPaymentMethodList')
             ->with(true)
-            ->will($this->returnValue(['group data']));
+            ->willReturn(['group data']);
         $this->assertEquals(['group data'], $this->typesArrayModel->toOptionArray());
     }
 }

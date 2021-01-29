@@ -23,32 +23,32 @@ class LinkProviderTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var LinkInterfaceFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var LinkInterfaceFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $linkInterfaceFactoryMock;
 
     /**
-     * @var FileInfoManager | \PHPUnit_Framework_MockObject_MockObject
+     * @var FileInfoManager | \PHPUnit\Framework\MockObject\MockObject
      */
     private $fileInfoManagerMock;
 
     /**
-     * @var StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerInterfaceMock;
 
     /**
-     * @var LinkInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var LinkInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $linkInterfaceMock;
 
     /**
-     * @var FileInfo | \PHPUnit_Framework_MockObject_MockObject
+     * @var FileInfo | \PHPUnit\Framework\MockObject\MockObject
      */
     private $fileInfoMock;
 
     /**
-     * @var Store | \PHPUnit_Framework_MockObject_MockObject
+     * @var Store | \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
@@ -60,7 +60,7 @@ class LinkProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->linkInterfaceFactoryMock = $this->getMockBuilder(LinkInterfaceFactory::class)
             ->disableOriginalConstructor()
@@ -129,11 +129,12 @@ class LinkProviderTest extends \PHPUnit\Framework\TestCase
      * @param string|null $fileInitializationVector
      *
      * @dataProvider fileNotReadyDataProvider
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage File is not ready yet.
      */
     public function testFileNotReady($fileInfoPath, $fileInitializationVector)
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('File is not ready yet.');
+
         $this->fileInfoManagerMock->expects($this->once())
             ->method('load')
             ->willReturn($this->fileInfoMock);

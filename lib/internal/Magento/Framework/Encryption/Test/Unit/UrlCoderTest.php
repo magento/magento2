@@ -13,7 +13,7 @@ class UrlCoderTest extends \PHPUnit\Framework\TestCase
     protected $_urlCoder;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_urlMock;
 
@@ -27,7 +27,7 @@ class UrlCoderTest extends \PHPUnit\Framework\TestCase
      */
     protected $_encodeUrl = 'aHR0cDovL2V4YW1wbGUuY29t';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_urlMock = $this->createMock(\Magento\Framework\UrlInterface::class);
         $this->_urlCoder = new \Magento\Framework\Encryption\UrlCoder($this->_urlMock);
@@ -41,8 +41,8 @@ class UrlCoderTest extends \PHPUnit\Framework\TestCase
             'sessionUrlVar'
         )->with(
             $this->_url
-        )->will(
-            $this->returnValue('expected')
+        )->willReturn(
+            'expected'
         );
         $this->assertEquals('expected', $this->_urlCoder->decode($this->_encodeUrl));
     }

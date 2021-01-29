@@ -17,8 +17,8 @@ class TokensDialogTest extends \Magento\Integration\Test\Unit\Controller\Adminht
             $this->any()
         )->method(
             'getParam'
-        )->will(
-            $this->returnValueMap(
+        )->willReturnMap(
+            
                 [
                     [
                         \Magento\Integration\Controller\Adminhtml\Integration::PARAM_INTEGRATION_ID,
@@ -26,7 +26,7 @@ class TokensDialogTest extends \Magento\Integration\Test\Unit\Controller\Adminht
                         self::INTEGRATION_ID
                     ],[\Magento\Integration\Controller\Adminhtml\Integration::PARAM_REAUTHORIZE, 0, 0],
                 ]
-            )
+            
         );
 
         $this->_integrationSvcMock->expects(
@@ -35,15 +35,15 @@ class TokensDialogTest extends \Magento\Integration\Test\Unit\Controller\Adminht
             'get'
         )->with(
             $this->equalTo(self::INTEGRATION_ID)
-        )->will(
-            $this->returnValue($this->_getIntegrationModelMock())
+        )->willReturn(
+            $this->_getIntegrationModelMock()
         );
 
         $this->_escaper->expects($this->once())
             ->method('escapeHtml')
             ->willReturnArgument(0);
 
-        $this->_oauthSvcMock->expects($this->once())->method('createAccessToken')->will($this->returnValue(true));
+        $this->_oauthSvcMock->expects($this->once())->method('createAccessToken')->willReturn(true);
 
         $this->_viewMock->expects($this->any())->method('loadLayout');
         $this->_viewMock->expects($this->any())->method('renderLayout');

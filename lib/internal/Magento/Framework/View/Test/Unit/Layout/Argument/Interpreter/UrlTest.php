@@ -10,12 +10,12 @@ use \Magento\Framework\View\Layout\Argument\Interpreter\Url;
 class UrlTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_urlResolver;
 
     /**
-     * @var \Magento\Framework\View\Layout\Argument\Interpreter\NamedParams|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout\Argument\Interpreter\NamedParams|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_interpreter;
 
@@ -24,7 +24,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_urlResolver = $this->createMock(\Magento\Framework\UrlInterface::class);
         $this->_interpreter = $this->createMock(\Magento\Framework\View\Layout\Argument\Interpreter\NamedParams::class);
@@ -43,8 +43,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             'evaluate'
         )->with(
             $input
-        )->will(
-            $this->returnValue($urlParams)
+        )->willReturn(
+            $urlParams
         );
 
         $this->_urlResolver->expects(
@@ -54,8 +54,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         )->with(
             'some/path',
             $urlParams
-        )->will(
-            $this->returnValue($expected)
+        )->willReturn(
+            $expected
         );
 
         $actual = $this->_model->evaluate($input);
@@ -63,11 +63,12 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage URL path is missing
      */
     public function testEvaluateWrongPath()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('URL path is missing');
+
         $input = [];
         $this->_model->evaluate($input);
     }

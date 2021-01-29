@@ -18,16 +18,16 @@ class PaymentDataObjectTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var OrderAdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderAdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderMock;
 
     /**
-     * @var InfoInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var InfoInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $paymentMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderMock = $this->getMockBuilder(\Magento\Payment\Gateway\Data\OrderAdapterInterface::class)
             ->getMockForAbstractClass();

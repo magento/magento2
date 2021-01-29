@@ -36,13 +36,13 @@ class MatchTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attributeProvider = $this->createMock(AttributeProvider::class);
         $this->fieldTypeResolver = $this->createMock(TypeResolver::class);
 
         $valueTransformerPoolMock = $this->createMock(ValueTransformerPool::class);
-        $valueTransformerMock = $this->createMock(ValueTransformerInterface::class);
+        $valueTransformerMock = $this->getMockForAbstractClass(ValueTransformerInterface::class);
         $valueTransformerPoolMock->method('get')
             ->willReturn($valueTransformerMock);
         $valueTransformerMock->method('transform')

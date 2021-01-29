@@ -13,7 +13,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableP
 use Magento\ConfigurableProduct\Model\Product\VariationHandler;
 use Magento\ConfigurableProduct\Test\Unit\Model\Product\ProductExtensionAttributes;
 use Magento\Framework\App\Request\Http;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class ConfigurableTest
@@ -53,7 +53,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->variationHandler = $this->getMockBuilder(VariationHandler::class)
             ->disableOriginalConstructor()

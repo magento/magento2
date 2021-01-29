@@ -82,7 +82,7 @@ class EmailMessageTest extends TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->di = Bootstrap::getObjectManager();
         $this->mimePartFactory = $this->di->get(MimePartInterfaceFactory::class);

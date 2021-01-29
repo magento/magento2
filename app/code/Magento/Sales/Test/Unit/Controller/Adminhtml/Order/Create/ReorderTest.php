@@ -39,67 +39,67 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
     private $context;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var Order|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageManagerMock;
 
     /**
-     * @var ForwardFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ForwardFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultForwardFactoryMock;
 
     /**
-     * @var RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var RedirectFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultRedirectFactoryMock;
 
     /**
-     * @var Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var Redirect|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultRedirectMock;
 
     /**
-     * @var Forward|\PHPUnit_Framework_MockObject_MockObject
+     * @var Forward|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultForwardMock;
 
     /**
-     * @var Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteSessionMock;
 
     /**
-     * @var OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderRepositoryMock;
 
     /**
-     * @var ReorderHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReorderHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $reorderHelperMock;
 
     /**
-     * @var UnavailableProductsProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var UnavailableProductsProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $unavailableProductsProviderMock;
 
     /**
-     * @var Create|\PHPUnit_Framework_MockObject_MockObject
+     * @var Create|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderCreateMock;
 
@@ -111,7 +111,7 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderId = 111;
         $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)->getMockForAbstractClass();
@@ -235,7 +235,7 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(Quote::class)
             ->willReturn($this->quoteSessionMock);
-        $this->quoteSessionMock->expects($this->once())->method('clearStorage')->will($this->returnSelf());
+        $this->quoteSessionMock->expects($this->once())->method('clearStorage')->willReturnSelf();
     }
 
     /**
@@ -326,7 +326,7 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
         $this->quoteSessionMock->expects($this->once())
             ->method('setUseOldShippingMethod')
             ->with(true)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->objectManagerMock->expects($this->at(2))
             ->method('get')
             ->with(Create::class)

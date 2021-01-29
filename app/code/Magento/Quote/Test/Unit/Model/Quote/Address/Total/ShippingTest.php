@@ -15,40 +15,40 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
      */
     protected $shippingModel;
 
-    /** @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Quote\Model\Quote|\PHPUnit\Framework\MockObject\MockObject */
     protected $quote;
 
-    /** @var \Magento\Quote\Model\Quote\Address\Total|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Quote\Model\Quote\Address\Total|\PHPUnit\Framework\MockObject\MockObject  */
     protected $total;
 
-    /** @var \Magento\Quote\Api\Data\ShippingAssignmentInterface|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Quote\Api\Data\ShippingAssignmentInterface|\PHPUnit\Framework\MockObject\MockObject  */
     protected $shippingAssignment;
 
-    /** @var \Magento\Quote\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Quote\Model\Quote\Address|\PHPUnit\Framework\MockObject\MockObject  */
     protected $address;
 
-    /** @var \Magento\Quote\Api\Data\ShippingInterface|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Quote\Api\Data\ShippingInterface|\PHPUnit\Framework\MockObject\MockObject  */
     protected $shipping;
 
-    /** @var \Magento\Quote\Model\Quote\Address\FreeShippingInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Quote\Model\Quote\Address\FreeShippingInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $freeShipping;
 
-    /** @var \Magento\Quote\Api\Data\CartItemInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Quote\Api\Data\CartItemInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $cartItem;
 
-    /** @var \Magento\Quote\Model\Quote\Address\Rate|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Quote\Model\Quote\Address\Rate|\PHPUnit\Framework\MockObject\MockObject */
     protected $rate;
 
-    /** @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject */
     protected $store;
 
-    /** @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $priceCurrency;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->freeShipping = $this->getMockForAbstractClass(
             \Magento\Quote\Model\Quote\Address\FreeShippingInterface::class,

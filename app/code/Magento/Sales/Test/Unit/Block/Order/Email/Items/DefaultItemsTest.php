@@ -18,17 +18,17 @@ use PHPUnit\Framework\TestCase;
 class DefaultItemsTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Block\Order\Email\Items\DefaultItem
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Block\Order\Email\Items\DefaultItem
      */
     protected $block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Template
+     * @var \PHPUnit\Framework\MockObject\MockObject|Template
      */
     protected $priceRenderBlock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Layout
+     * @var \PHPUnit\Framework\MockObject\MockObject|Layout
      */
     protected $layoutMock;
 
@@ -37,16 +37,16 @@ class DefaultItemsTest extends TestCase
      */
     protected $objectManager;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|Item */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|Item */
     protected $itemMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|QuoteItem */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|QuoteItem */
     protected $quoteItemMock;
 
     /**
      * Initialize required data
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -95,16 +95,16 @@ class DefaultItemsTest extends TestCase
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('item_price')
-            ->will($this->returnValue($this->priceRenderBlock));
+            ->willReturn($this->priceRenderBlock);
         $this->quoteItemMock->expects($this->any())
             ->method('getQty')
-            ->will($this->returnValue($quantity));
+            ->willReturn($quantity);
         $this->itemMock->expects($this->any())
             ->method('setRowTotal')
-            ->will($this->returnValue($price * $quantity));
+            ->willReturn($price * $quantity);
         $this->itemMock->expects($this->any())
             ->method('setBaseRowTotal')
-            ->will($this->returnValue($price * $quantity));
+            ->willReturn($price * $quantity);
 
         $this->priceRenderBlock->expects($this->once())
             ->method('setItem')
@@ -112,7 +112,7 @@ class DefaultItemsTest extends TestCase
 
         $this->priceRenderBlock->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue($html));
+            ->willReturn($html);
 
         $this->assertEquals($html, $this->block->getItemPrice($this->itemMock));
     }

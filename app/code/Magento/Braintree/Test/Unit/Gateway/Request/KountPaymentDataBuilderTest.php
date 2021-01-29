@@ -12,7 +12,7 @@ use Magento\Braintree\Observer\DataAssignObserver;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Braintree\Gateway\Request\KountPaymentDataBuilder;
 use Magento\Braintree\Gateway\SubjectReader;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Tests \Magento\Braintree\Gateway\Request\KountPaymentDataBuilder.
@@ -42,13 +42,13 @@ class KountPaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
     private $paymentDOMock;
 
     /**
-     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubjectReader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectReaderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
+        $this->paymentDOMock = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -63,10 +63,11 @@ class KountPaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testBuildReadPaymentException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $buildSubject = [];
 
         $this->configMock->expects(self::never())
@@ -91,7 +92,7 @@ class KountPaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
             KountPaymentDataBuilder::DEVICE_DATA => self::DEVICE_DATA,
         ];
 
-        $order = $this->createMock(OrderAdapterInterface::class);
+        $order = $this->getMockForAbstractClass(OrderAdapterInterface::class);
         $this->paymentDOMock->expects(self::once())->method('getOrder')->willReturn($order);
 
         $buildSubject = ['payment' => $this->paymentDOMock];

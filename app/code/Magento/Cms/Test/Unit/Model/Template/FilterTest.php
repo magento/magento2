@@ -13,12 +13,12 @@ namespace Magento\Cms\Test\Unit\Model\Template;
 class FilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
@@ -27,7 +27,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
      */
     protected $filter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
@@ -90,10 +90,11 @@ class FilterTest extends \PHPUnit\Framework\TestCase
      * Test using media directive with relative path to image.
      *
      * @covers \Magento\Cms\Model\Template\Filter::mediaDirective
-     * @expectedException \InvalidArgumentException
      */
     public function testMediaDirectiveRelativePath()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $baseMediaDir = 'pub/media';
         $construction = [
             '{{media url="wysiwyg/images/../image.jpg"}}',
@@ -110,10 +111,11 @@ class FilterTest extends \PHPUnit\Framework\TestCase
      * Test using media directive with a URL path including schema.
      *
      * @covers \Magento\Cms\Model\Template\Filter::mediaDirective
-     * @expectedException \InvalidArgumentException
      */
     public function testMediaDirectiveURL()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $baseMediaDir = 'pub/media';
         $construction = [
             '{{media url="http://wysiwyg/images/image.jpg"}}',

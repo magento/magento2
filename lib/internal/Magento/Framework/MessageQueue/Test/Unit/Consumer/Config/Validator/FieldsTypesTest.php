@@ -17,7 +17,7 @@ class FieldsTypesTest extends \PHPUnit\Framework\TestCase
     /**
      * Initialize parameters
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->validator = $objectManager->getObject(FieldsTypesValidator::class);

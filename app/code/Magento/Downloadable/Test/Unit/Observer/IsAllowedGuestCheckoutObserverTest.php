@@ -20,27 +20,27 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit\Framework\TestCase
     private $isAllowedGuestCheckoutObserver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Config
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\Config
      */
     private $scopeConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\DataObject
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\DataObject
      */
     private $resultMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Event
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Event
      */
     private $eventMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Event\Observer
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Event\Observer
      */
     private $observerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\DataObject
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\DataObject
      */
     private $storeMock;
 
@@ -48,7 +48,7 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit\Framework\TestCase
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config::class)
             ->disableOriginalConstructor()
@@ -126,15 +126,15 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->eventMock->expects($this->once())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
 
         $this->eventMock->expects($this->once())
             ->method('getResult')
-            ->will($this->returnValue($this->resultMock));
+            ->willReturn($this->resultMock);
 
         $this->eventMock->expects($this->once())
             ->method('getQuote')
-            ->will($this->returnValue($quote));
+            ->willReturn($quote);
 
         $this->scopeConfig->expects($this->once())
             ->method('isSetFlag')
@@ -147,7 +147,7 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->observerMock->expects($this->exactly(3))
             ->method('getEvent')
-            ->will($this->returnValue($this->eventMock));
+            ->willReturn($this->eventMock);
 
         $this->assertInstanceOf(
             \Magento\Downloadable\Observer\IsAllowedGuestCheckoutObserver::class,
@@ -170,11 +170,11 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit\Framework\TestCase
     {
         $this->eventMock->expects($this->once())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
 
         $this->eventMock->expects($this->once())
             ->method('getResult')
-            ->will($this->returnValue($this->resultMock));
+            ->willReturn($this->resultMock);
 
         $this->scopeConfig->expects($this->once())
             ->method('isSetFlag')
@@ -187,7 +187,7 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->observerMock->expects($this->exactly(2))
             ->method('getEvent')
-            ->will($this->returnValue($this->eventMock));
+            ->willReturn($this->eventMock);
 
         $this->assertInstanceOf(
             \Magento\Downloadable\Observer\IsAllowedGuestCheckoutObserver::class,

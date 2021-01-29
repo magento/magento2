@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
@@ -17,14 +16,14 @@
     <!-- Test suites definition -->
     <testsuites>
         <testsuite name="Magento Setup/Upgrade Tests">
-            <directory suffix="Test.php">testsuite</directory>
+            <directory>testsuite</directory>
         </testsuite>
     </testsuites>
     <!-- Code coverage filters -->
     <filter>
         <whitelist>
-            <directory suffix=".php">../../../app/code/Magento</directory>
-            <directory suffix=".php">../../../lib/internal/Magento</directory>
+            <directory>../../../app/code/Magento</directory>
+            <directory>../../../lib/internal/Magento</directory>
         </whitelist>
     </filter>
     <!-- PHP INI settings and constants definition -->

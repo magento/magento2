@@ -41,7 +41,7 @@ class ActivityTest extends \PHPUnit\Framework\TestCase
      * Init mocks for tests
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
@@ -50,7 +50,7 @@ class ActivityTest extends \PHPUnit\Framework\TestCase
         $this->viewMock = $this->createMock(\Magento\Framework\App\ViewInterface::class);
         $this->contextMock->expects($this->any())
             ->method('getView')
-            ->will($this->returnValue($this->viewMock));
+            ->willReturn($this->viewMock);
 
         $this->controller = $this->objectManager->getObject(
             \Magento\Security\Controller\Adminhtml\Session\Activity::class,

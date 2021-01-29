@@ -13,21 +13,21 @@ class RendererListTest extends \PHPUnit\Framework\TestCase
     protected $renderList;
 
     /**
-     * @var \Magento\Framework\View\Element\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\Framework\View\Element\AbstractBlock|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\AbstractBlock|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $blockMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -40,14 +40,14 @@ class RendererListTest extends \PHPUnit\Framework\TestCase
 
         $this->layoutMock->expects($this->any())
             ->method('getBlock')
-            ->will($this->returnValue($this->blockMock));
+            ->willReturn($this->blockMock);
 
         $this->contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\Context::class)
             ->setMethods(['getLayout'])->disableOriginalConstructor()->getMock();
 
         $this->contextMock->expects($this->any())
             ->method('getLayout')
-            ->will($this->returnValue($this->layoutMock));
+            ->willReturn($this->layoutMock);
 
         $this->renderList = $objectManagerHelper->getObject(
             \Magento\Framework\View\Element\RendererList::class,
@@ -59,19 +59,19 @@ class RendererListTest extends \PHPUnit\Framework\TestCase
     {
         $this->blockMock->expects($this->any())
             ->method('setRenderedBlock')
-            ->will($this->returnValue($this->blockMock));
+            ->willReturn($this->blockMock);
 
         $this->blockMock->expects($this->any())
             ->method('getTemplate')
-            ->will($this->returnValue('template'));
+            ->willReturn('template');
 
         $this->blockMock->expects($this->any())
             ->method('setTemplate')
-            ->will($this->returnValue($this->blockMock));
+            ->willReturn($this->blockMock);
 
         $this->layoutMock->expects($this->any())
             ->method('getChildName')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         /** During the first call cache will be generated */
         $this->assertInstanceOf(
@@ -86,10 +86,11 @@ class RendererListTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
      */
     public function testGetRendererWithException()
     {
+        $this->expectException(\RuntimeException::class);
+
         $this->assertInstanceOf(
             \Magento\Framework\View\Element\BlockInterface::class,
             $this->renderList->getRenderer(null)

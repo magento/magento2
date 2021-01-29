@@ -11,7 +11,7 @@ use Magento\Sales\Model\OrderFactory;
 use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Signifyd\Model\CommentsHistoryUpdater;
 use Magento\Signifyd\Model\OrderStateService;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class OrderStateServiceTest extends \PHPUnit\Framework\TestCase
 {
@@ -53,7 +53,7 @@ class OrderStateServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderManagement = $this->getMockBuilder(OrderManagementInterface::class)
             ->getMockForAbstractClass();

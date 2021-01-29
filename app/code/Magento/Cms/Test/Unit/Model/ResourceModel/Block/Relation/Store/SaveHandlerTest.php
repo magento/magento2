@@ -18,16 +18,16 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataPool;
 
     /**
-     * @var Block|\PHPUnit_Framework_MockObject_MockObject
+     * @var Block|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceBlock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->metadataPool = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
             ->disableOriginalConstructor()

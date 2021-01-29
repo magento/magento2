@@ -11,21 +11,21 @@ use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as Advanced
 class WebsiteTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Store\Model\WebSite|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\WebSite|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $webSiteModel;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeResolver;
 
     /**
-     * @var  AdvancedPricing\Validator\Website|\PHPUnit_Framework_MockObject_MockObject
+     * @var  AdvancedPricing\Validator\Website|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $website;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->webSiteModel = $this->getMockBuilder(\Magento\Store\Model\Website::class)
             ->setMethods(['getBaseCurrency'])

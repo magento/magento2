@@ -16,7 +16,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
     /** @var Name */
     protected $_block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');

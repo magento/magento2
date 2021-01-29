@@ -20,12 +20,12 @@ class CsvTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new \Magento\Framework\File\Csv(new File());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }
@@ -51,11 +51,12 @@ class CsvTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage File "FileNameThatShouldNotExist" does not exist
      */
     public function testGetDataFileNonExistent()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('File "FileNameThatShouldNotExist" does not exist');
+
         $file = 'FileNameThatShouldNotExist';
         $this->_model->getData($file);
     }

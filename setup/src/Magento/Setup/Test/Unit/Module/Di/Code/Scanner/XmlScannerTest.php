@@ -14,7 +14,7 @@ class XmlScannerTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_logMock;
 
@@ -23,7 +23,7 @@ class XmlScannerTest extends \PHPUnit\Framework\TestCase
      */
     protected $_testFiles = [];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new \Magento\Setup\Module\Di\Code\Scanner\XmlScanner(
             $this->_logMock = $this->createMock(\Magento\Setup\Module\Di\Compiler\Log\Log::class)

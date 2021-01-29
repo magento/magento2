@@ -13,19 +13,19 @@ class FormTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Email\Block\Adminhtml\Template\Edit\Form */
     protected $form;
 
-    /** @var \Magento\Variable\Model\Source\Variables|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Variable\Model\Source\Variables|\PHPUnit\Framework\MockObject\MockObject */
     protected $variablesMock;
 
-    /** @var \Magento\Variable\Model\VariableFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Variable\Model\VariableFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $variableFactoryMock;
 
-    /** @var \Magento\Variable\Model\Variable|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Variable\Model\Variable|\PHPUnit\Framework\MockObject\MockObject */
     protected $variableMock;
 
-    /** @var \Magento\Email\Model\Template|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Email\Model\Template|\PHPUnit\Framework\MockObject\MockObject */
     protected $templateMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->variablesMock = $this->getMockBuilder(\Magento\Variable\Model\Source\Variables::class)
             ->disableOriginalConstructor()
