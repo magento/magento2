@@ -27,10 +27,10 @@ class DecoderTest extends \PHPUnit\Framework\TestCase
             ->method('sessionUrlVar')
             ->with($this->equalTo($data))
             ->willReturn($result);
-        $this->assertNotContains('&', $result);
-        $this->assertNotContains('%', $result);
-        $this->assertNotContains('+', $result);
-        $this->assertNotContains('=', $result);
+        $this->assertStringNotContainsString('&', $result);
+        $this->assertStringNotContainsString('%', $result);
+        $this->assertStringNotContainsString('+', $result);
+        $this->assertStringNotContainsString('=', $result);
         $this->assertEquals($result, $decoder->decode($result));
     }
 }

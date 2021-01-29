@@ -52,7 +52,7 @@ class TextTest extends \PHPUnit\Framework\TestCase
     public function testGetHtml()
     {
         $html = $this->_model->getHtml();
-        $this->assertContains('type="text"', $html);
+        $this->assertStringContainsString('type="text"', $html);
         $this->assertTrue(preg_match('/class=\".*input-text.*\"/i', $html) > 0);
     }
 

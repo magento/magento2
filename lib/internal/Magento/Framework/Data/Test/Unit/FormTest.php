@@ -60,7 +60,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $this->_form->setUseContainer(true);
         $this->_form->setMethod('post');
-        $this->assertContains($formKey, $this->_form->toHtml());
+        $this->assertStringContainsString($formKey, $this->_form->toHtml());
     }
 
     public function testSettersGetters()

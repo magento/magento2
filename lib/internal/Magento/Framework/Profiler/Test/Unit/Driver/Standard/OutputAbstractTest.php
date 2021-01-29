@@ -26,6 +26,7 @@ class OutputAbstractTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetFilterPattern()
     {
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
         $this->assertAttributeEmpty('_filterPattern', $this->_output);
         $filterPattern = '/test/';
         $this->_output->setFilterPattern($filterPattern);
@@ -37,6 +38,7 @@ class OutputAbstractTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetThreshold()
     {
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
         $thresholdKey = \Magento\Framework\Profiler\Driver\Standard\Stat::TIME;
         $this->_output->setThreshold($thresholdKey, 100);
         $thresholds = class_exists('PHPUnit_Util_Class')

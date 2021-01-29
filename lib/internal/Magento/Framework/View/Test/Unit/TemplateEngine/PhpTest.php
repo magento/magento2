@@ -38,6 +38,8 @@ class PhpTest extends \PHPUnit\Framework\TestCase
      */
     public function testRender()
     {
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
+
         $blockMock = $this->getMockBuilder(
             \Magento\Framework\View\Element\Template::class
         )->setMethods(

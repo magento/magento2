@@ -56,12 +56,10 @@ class DefinitionAggregatorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Cannot process object to definition for type text
-     */
     public function testToDefinition()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Cannot process object to definition for type text');
         /** @var ElementInterface|\PHPUnit\Framework\MockObject\MockObject $columnInt */
         $columnInt = $this->getMockBuilder(ElementInterface::class)
             ->disableOriginalConstructor()
@@ -85,11 +83,12 @@ class DefinitionAggregatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      * Cannot process definition to array for type text
      */
     public function testFromDefinition()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $data = [
             'col_int' => [
                 'type' => 'int'

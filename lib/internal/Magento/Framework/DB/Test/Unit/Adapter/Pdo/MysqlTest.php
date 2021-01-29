@@ -188,7 +188,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         try {
             $this->_mockAdapter->query($query);
         } catch (\Exception $e) {
-            $this->assertNotContains(
+            $this->assertStringNotContainsString(
                 $e->getMessage(),
                 AdapterInterface::ERROR_DDL_MESSAGE
             );
@@ -199,7 +199,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         try {
             $this->_mockAdapter->query($select);
         } catch (\Exception $e) {
-            $this->assertNotContains(
+            $this->assertStringNotContainsString(
                 $e->getMessage(),
                 AdapterInterface::ERROR_DDL_MESSAGE
             );

@@ -164,6 +164,8 @@ class StatTest extends \PHPUnit\Framework\TestCase
      */
     public function testClear()
     {
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
+
         $this->_stat->start('timer1', 1, 20, 10);
         $this->_stat->start('timer2', 2, 20, 10);
         $this->_stat->start('timer3', 3, 20, 10);

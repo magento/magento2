@@ -91,7 +91,7 @@ class ExcelTest extends \PHPUnit\Framework\TestCase
             new \ArrayIterator($this->_testData),
             [$this, 'callbackMethod']
         );
-        $this->assertContains('_TRUE_', $convert->convert(), 'Failed asserting that callback method is called.');
+        $this->assertStringContainsString('_TRUE_', $convert->convert(), 'Failed asserting that callback method is called.');
     }
 
     /**
@@ -154,6 +154,6 @@ class ExcelTest extends \PHPUnit\Framework\TestCase
     public function testWriteCallback()
     {
         $file = $this->_writeFile(true);
-        $this->assertContains('_TRUE_', file_get_contents($file), 'Failed asserting that callback method is called.');
+        $this->assertStringContainsString('_TRUE_', file_get_contents($file), 'Failed asserting that callback method is called.');
     }
 }

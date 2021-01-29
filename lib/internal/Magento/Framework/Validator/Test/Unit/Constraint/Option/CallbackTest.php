@@ -103,6 +103,8 @@ class CallbackTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetArguments($value, $expectedValue)
     {
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
+
         $option = new Callback(function () {
         });
         $option->setArguments($value);

@@ -38,6 +38,8 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstructor(array $inputConfig, array $expectedConfig)
     {
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
+
         $object = new Mysql(
             $inputConfig,
             $this->mysqlFactoryMock

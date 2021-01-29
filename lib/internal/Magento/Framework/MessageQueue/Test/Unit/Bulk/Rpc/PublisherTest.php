@@ -121,7 +121,7 @@ class PublisherTest extends \PHPUnit\Framework\TestCase
             $this->logicalAnd(
                 $this->arrayHasKey('body'),
                 $this->arrayHasKey('properties'),
-                $this->contains($encodedMessage)
+                $this->containsEqual($encodedMessage)
             )
         )->willReturn($envelope);
         $publisher = $this

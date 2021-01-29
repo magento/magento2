@@ -72,7 +72,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     {
         $response = new Response();
         $response->appendBody('testContent');
-        $this->assertContains('testContent', $response->getBody());
+        $this->assertStringContainsString('testContent', $response->getBody());
     }
 
     public function testSendResponseWithException()

@@ -166,6 +166,8 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddConfiguration($constraints, $alias, $configuration, $expected)
     {
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
+
         /** @var $builder \Magento\Framework\Validator\Builder */
         $builder = $this->_objectManager->getObject(
             \Magento\Framework\Validator\Builder::class,
@@ -187,6 +189,8 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddConfigurations($constraints, $alias, $configuration, $expected)
     {
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
+
         /** @var $builder \Magento\Framework\Validator\Builder */
         $builder = $this->_objectManager->getObject(
             \Magento\Framework\Validator\Builder::class,
@@ -417,7 +421,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage(
             'Constraint class "StdClass" must implement \Magento\Framework\Validator\ValidatorInterface'
         );
-        
+
         $builder = $this->_objectManager->getObject(
             \Magento\Framework\Validator\Builder::class,
             [

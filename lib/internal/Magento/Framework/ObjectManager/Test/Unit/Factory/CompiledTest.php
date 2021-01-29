@@ -214,7 +214,7 @@ class CompiledTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf($nonSharedType, $result->getNonSharedDependency());
         $this->assertEquals('value', $result->getValue());
         $this->assertEquals(['default_value1', 'default_value2'], $result->getValueArray());
-        $this->assertNull($result->getGlobalValue());
+        $this->assertSame('', $result->getGlobalValue());
         $this->assertNull($result->getNullValue());
     }
 

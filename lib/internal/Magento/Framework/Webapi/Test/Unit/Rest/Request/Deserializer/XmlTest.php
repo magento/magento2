@@ -65,6 +65,8 @@ class XmlTest extends \PHPUnit\Framework\TestCase
 
     public function testHandleErrors()
     {
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
+
         /** Add error message */
         $firstErrorMessage = "No document type declaration. ";
         $this->_xmlDeserializer->handleErrors(null, $firstErrorMessage, null, null);

@@ -235,11 +235,11 @@ class ErrorProcessorTest extends \PHPUnit\Framework\TestCase
         $this->_loggerMock->expects($this->once())
             ->method('critical')
             ->willReturnCallback(
-                
+
                     function (\Exception $loggedException) use ($thrownException) {
                         $this->assertSame($thrownException, $loggedException->getPrevious());
                     }
-                
+
             );
         $this->_errorProcessor->maskException($thrownException);
     }
@@ -328,7 +328,7 @@ class ErrorProcessorTest extends \PHPUnit\Framework\TestCase
             "Masked exception HTTP code is invalid: expected '{$expectedHttpCode}', " .
             "given '{$maskedException->getHttpCode()}'."
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             $expectedMessage,
             $maskedException->getMessage(),
             "Masked exception message is invalid: expected '{$expectedMessage}', " .

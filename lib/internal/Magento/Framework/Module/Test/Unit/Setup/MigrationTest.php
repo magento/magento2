@@ -136,6 +136,8 @@ class MigrationTest extends \PHPUnit\Framework\TestCase
      */
     public function testAppendClassAliasReplace()
     {
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
+
         $setupMock = $this->getMockForAbstractClass(\Magento\Framework\Setup\ModuleDataSetupInterface::class);
         $filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
         $migrationData = $this->createMock(\Magento\Framework\Module\Setup\MigrationData::class);

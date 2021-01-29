@@ -52,7 +52,7 @@ class SubmitTest extends \PHPUnit\Framework\TestCase
     public function testGetHtml()
     {
         $html = $this->_model->getHtml();
-        $this->assertContains('type="submit"', $html);
+        $this->assertStringContainsString('type="submit"', $html);
         $this->assertTrue(preg_match('/class=\".*submit.*\"/i', $html) > 0);
     }
 }

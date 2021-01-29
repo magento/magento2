@@ -41,10 +41,7 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
         $this->_model->setName($fieldName);
         $this->_model->setId($fieldId);
         $elementHtml = $this->_model->getElementHtml();
-        $this->assertContains(
-            '<input type="hidden" id="' . $fieldId . '_hidden" name="' . $fieldName . '"',
-            $elementHtml
-        );
+        $this->assertStringContainsString('<input type="hidden" id="' . $fieldId . '_hidden" name="' . $fieldName . '"', $elementHtml);
     }
 
     /**
@@ -58,7 +55,7 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
         $this->_model->setDisabled(true);
         $this->_model->setName($fieldName);
         $elementHtml = $this->_model->getElementHtml();
-        $this->assertContains('<input type="hidden" name="' . $fieldName . '_disabled"', $elementHtml);
+        $this->assertStringContainsString('<input type="hidden" name="' . $fieldName . '_disabled"', $elementHtml);
     }
 
     /**
@@ -73,7 +70,7 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
         $this->_model->setDisabled(false);
         $this->_model->setName($fieldName);
         $elementHtml = $this->_model->getElementHtml();
-        $this->assertNotContains('<input type="hidden" name="' . $fieldName . '_disabled"', $elementHtml);
+        $this->assertStringNotContainsString('<input type="hidden" name="' . $fieldName . '_disabled"', $elementHtml);
     }
 
     /**
@@ -85,6 +82,6 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->setAfterElementJs('<script language="text/javascript">var website = "website1";</script>');
         $elementHtml = $this->_model->getAfterElementJs();
-        $this->assertContains('var website = "website1";', $elementHtml);
+        $this->assertStringContainsString('var website = "website1";', $elementHtml);
     }
 }
