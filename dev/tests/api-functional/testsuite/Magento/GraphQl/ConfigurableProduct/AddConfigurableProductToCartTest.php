@@ -466,6 +466,7 @@ QUERY;
 
         $quantity = 1;
         $parentSku = $product['sku'];
+        $sku = 'simple_20';
 
         $query = $this->graphQlQueryForVariant(
             $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1'),
@@ -482,13 +483,13 @@ QUERY;
         self::assertArrayHasKey('configured_variant', $cartItem);
 
         $variant = $cartItem['configured_variant'];
-        $expectedThumbnailUrl = 'thumbnail.jpg';
-        $expectedThumbnailLabel = 'Configurable Product';
+        $expectedThumbnailUrl = 'magento_thumbnail.jpg';
+        $expectedThumbnailLabel = 'Thumbnail Image';
         $variantImage = basename($variant['thumbnail']['url']);
 
         self::assertEquals($expectedThumbnailUrl, $variantImage);
         self::assertEquals($expectedThumbnailLabel, $variant['thumbnail']['label']);
-        self::assertEquals($parentSku, $variant['sku']);
+        self::assertEquals($sku, $variant['sku']);
     }
 
     /**
