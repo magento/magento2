@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Api\Data\ProductInterfaceFactory;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
@@ -28,11 +27,10 @@ $productFactory = $objectManager->get(ProductInterfaceFactory::class);
 $websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
 $baseWebsiteId = (int)$websiteRepository->get('base')->getId();
 $product = $productFactory->create();
-/** @var ProductRepositoryInterface $productRepository */
 $product->setTypeId(Type::TYPE_SIMPLE)
     ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([$baseWebsiteId])
-    ->setName('Simple Product2')
+    ->setName('Simple product with disabled image')
     ->setSku('simple_with_disabled_img')
     ->setPrice(10)
     ->setMetaTitle('meta title2')
