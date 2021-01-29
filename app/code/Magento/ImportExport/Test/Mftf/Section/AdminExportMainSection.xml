@@ -8,7 +8,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminExportMainSection">
-        <element name="entityType" type="select" selector="#entity"/>
-        <element name="entityAttributes" type="select" selector="#export_filter_form"/>
+        <element name="entityType" type="select" selector="select[name='entity']"/>
+        <element name="entityAttributes" type="select" selector=".export_form_export_form_attributes_attributes"/>
     </section>
 </sections>

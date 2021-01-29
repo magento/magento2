@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">export_filter_grid.export_filter_grid_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>export_filter_columns</spinner>
+        <deps>
+            <dep>export_filter_grid.export_filter_grid_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="export_filter_grid_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">attribute_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Magento_ImportExport::export</aclResource>
+        <dataProvider class="Magento\ImportExport\Ui\DataProvider\ExportFilterDataProvider"
+                      name="export_filter_grid_data_source">
+            <settings>
+                <primaryFieldName>id</primaryFieldName>
+                <requestFieldName>attribute_id</requestFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top" template="Magento_ImportExport/export/filter-grid/toolbar">
+        <filters name="listing_filter" template="Magento_ImportExport/export/filter-grid/filters/filters"/>
+        <paging name="listing_paging" class="Magento\Ui\Component\Container"/>
+    </listingToolbar>
+    <columns name="export_filter_columns" template="Magento_ImportExport/export/filter-grid/listing">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="modules" xsi:type="array">
+                    <item name="filter" xsi:type="string">ns = ${ $.ns }, index = listing_filter</item>
+                </item>
+            </item>
+        </argument>
+        <settings>
+            <dndConfig>
+                <param name="component" xsi:type="string">Magento_ImportExport/js/export/filter-grid/dnd</param>
+            </dndConfig>
+        </settings>
+        <selectionsColumn name="ids">
+            <settings>
+                <label translate="true">Exclude</label>
+                <headerTmpl>ui/grid/columns/text</headerTmpl>
+                <indexField>attribute_id</indexField>
+                <imports>
+                    <link name="deselectAll">${ $.provider }:params.entity</link>
+                </imports>
+            </settings>
+        </selectionsColumn>
+        <column name="frontend_label">
+            <settings>
+                <label translate="true">Attribute Label</label>
+                <filter>text</filter>
+                <fieldClass>
+                    <class name="frontend_label">true</class>
+                </fieldClass>
+            </settings>
+        </column>
+        <column name="attribute_code">
+            <settings>
+                <label translate="true">Attribute Code</label>
+                <sorting>asc</sorting>
+                <filter>text</filter>
+                <fieldClass>
+                    <class name="attribute_code">true</class>
+                </fieldClass>
+            </settings>
+        </column>
+        <column name="filter" class="Magento\ImportExport\Ui\Component\Columns\ExportFilter"
+                component="Magento_ImportExport/js/export/filter-grid/columns/filter">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="indexField" xsi:type="string">attribute_code</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Filter</label>
+                <sortable>false</sortable>
+                <fieldClass>
+                    <class name="filter">true</class>
+                </fieldClass>
+            </settings>
+        </column>
+    </columns>
+</listing>

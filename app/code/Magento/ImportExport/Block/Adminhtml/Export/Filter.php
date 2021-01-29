@@ -14,6 +14,9 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
+ *
+ * @deprecated Not used since export filter grid has been moved to Ui components.
+ * @see Magento_ImportExport::view/adminhtml/ui_component/export_filter_grid.xml
  */
 class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
 {

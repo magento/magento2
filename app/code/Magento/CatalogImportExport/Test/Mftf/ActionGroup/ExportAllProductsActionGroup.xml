@@ -14,6 +14,7 @@
         </annotations>
 
         <selectOption selector="{{AdminExportMainSection.entityType}}" userInput="Products" stepKey="selectProductsOption"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
         <waitForElementVisible selector="{{AdminExportMainSection.entityAttributes}}" stepKey="waitForElementVisible" time="5"/>
         <scrollTo selector="{{AdminExportAttributeSection.continueBtn}}" stepKey="scrollToContinue"/>
         <wait stepKey="waitForScroll" time="5"/>

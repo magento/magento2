@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">export_form.export_form_data_source</item>
+        </item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>export_form.export_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="export_form_data_source" component="Magento_Ui/js/form/provider">
+        <settings>
+            <submitUrl path="admin/export/export"/>
+        </settings>
+        <aclResource>Magento_ImportExport::export</aclResource>
+        <dataProvider class="Magento\ImportExport\Ui\DataProvider\ExportFormDataProvider"
+                      name="export_form_data_source">
+            <settings>
+                <primaryFieldName>id</primaryFieldName>
+                <requestFieldName>entity_id</requestFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="settings" sortOrder="10" template="Magento_ImportExport/export/form/fieldset">
+        <settings>
+            <label translate="true">Export Settings</label>
+        </settings>
+        <field name="entity" sortOrder="10" formElement="select">
+            <settings>
+                <label translate="true">Entity Type</label>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\ImportExport\Model\Source\Export\Entity"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="file_format" sortOrder="20" formElement="select">
+            <settings>
+                <label translate="true">Export File Format</label>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\ImportExport\Model\Source\Export\Format"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="fields_enclosure" sortOrder="30" formElement="checkbox">
+            <settings>
+                <label translate="true">Fields Enclosure</label>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="false" xsi:type="number">0</map>
+                            <map name="true" xsi:type="number">1</map>
+                        </valueMap>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+    </fieldset>
+    <fieldset name="attributes" sortOrder="20" template="Magento_ImportExport/export/form/fieldset">
+        <settings>
+            <label translate="true">Entity Attributes</label>
+            <imports>
+                <link name="visible">${ $.provider }:data.entity</link>
+            </imports>
+        </settings>
+        <insertListing name="attributes" sortOrder="10">
+            <settings>
+                <autoRender>true</autoRender>
+                <externalProvider>${ $.ns }.export_filter_grid_data_source</externalProvider>
+                <ns>export_filter_grid</ns>
+                <imports>
+                    <link name="entity">${ $.provider }:data.entity</link>
+                    <link name="skip_attr">ns = ${ $.ns }, index = ids:selected</link>
+                    <link name="export_filter">ns = ${ $.ns }, index = filter:filters</link>
+                </imports>
+                <exports>
+                    <link name="entity">${ $.externalProvider }:params.entity</link>
+                    <link name="skip_attr">${ $.provider }:data.skip_attr</link>
+                    <link name="export_filter">${ $.provider }:data.export_filter</link>
+                </exports>
+            </settings>
+        </insertListing>
+        <button name="continue" sortOrder="20" component="Magento_ImportExport/js/export/form/components/button">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="actions" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = export_form</item>
+                            <item name="actionName" xsi:type="string">save</item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+            <settings>
+                <title translate="true">Continue</title>
+            </settings>
+        </button>
+    </fieldset>
+</form>
