@@ -1383,6 +1383,7 @@
             ],
             "description": "Replace zendframework and zfcampus packages with their Laminas Project equivalents.",
             "time": "2020-11-02T18:16:57+00:00"
+        },
         {
             "name": "laminas/laminas-di",
             "version": "2.6.1",
