@@ -400,7 +400,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             ],
             'Non-existent file results in unmodified markup' => [
                 '<html><p></p> {{inlinecss file="css/non-existent-file.css"}}</html>',
-                'Compilation from source',
+                '<html><p></p> </html>',
             ],
             'Plain template mode results in unmodified markup' => [
                 '<html><p></p> {{inlinecss file="css/email-inline-1.css"}}</html>',
@@ -417,12 +417,12 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             ],
             'Production mode - File with compilation error results in structurally unmodified markup' => [
                 '<html><p></p> {{inlinecss file="css/file-with-error.css"}}</html>',
-                'We\'re sorry, an error has occurred while generating this content',
+                '<p></p>',
                 true,
             ],
             'Developer mode - File with compilation error results in error message' => [
                 '<html><p></p> {{inlinecss file="css/file-with-error.css"}}</html>',
-                'Error filtering template',
+                'CSS inlining error:',
                 false,
             ],
         ];

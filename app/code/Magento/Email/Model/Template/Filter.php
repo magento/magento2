@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Email\Model\Template;
 
 use Exception;
@@ -904,19 +906,17 @@ class Filter extends Template
             return '/* ' . __('"file" parameter must be specified') . ' */';
         }
 
-        $css = $this->cssProcessor->process(
-            $this->getCssFilesContent([$params['file']])
-        );
+        try {
+            $css = $this->cssProcessor->process($this->getCssFilesContent([$params['file']]));
+        } catch (ContentProcessorException $exception) {
+            return '/*' . PHP_EOL . $exception->getMessage() . PHP_EOL . '*/';
+        }
 
-        if (strpos($css, ContentProcessorInterface::ERROR_MESSAGE_PREFIX) !== false) {
-            // Return compilation error wrapped in CSS comment
-            return '/*' . PHP_EOL . $css . PHP_EOL . '*/';
-        } elseif (!empty($css)) {
-            return $css;
-        } else {
-            // Return CSS comment for debugging purposes
+        if (empty($css)){
             return '/* ' . __('Contents of the specified CSS file could not be loaded or is empty') . ' */';
         }
+
+        return $css;
     }
 
     /**
@@ -991,6 +991,7 @@ class Filter extends Template
      * @param [] $files
      * @return string
      * @throws MailException
+     * @throws ContentProcessorException
      */
     public function getCssFilesContent(array $files)
     {
@@ -1014,10 +1015,6 @@ class Filter extends Template
                     $css .= $asset->getContent();
                 }
             }
-        } catch (ContentProcessorException $exception) {
-            throw new MailException(
-                __($exception->getMessage())
-            );
         } catch (NotFoundException $exception) {
             $css = '';
         }
@@ -1037,39 +1034,51 @@ class Filter extends Template
      */
     public function applyInlineCss($html)
     {
-        // Check to see if the {{inlinecss file=""}} directive set CSS file(s) to inline and then load those files
-        $cssToInline = $this->getCssFilesContent(
-            $this->getInlineCssFiles()
-        );
+        try {
+            // Check to see if the {{inlinecss file=""}} directive set CSS file(s) to inline and then load those files
+            $cssToInline = $this->getCssFilesContent($this->getInlineCssFiles());
+        } catch (ContentProcessorException $exception) {
+            return $this->getExceptionHtml($html, $exception);
+        }
+
         $cssToInline = $this->cssProcessor->process($cssToInline);
 
         // Only run Emogrify if HTML and CSS contain content
-        if ($html && $cssToInline) {
-            try {
-                // Don't try to compile CSS that has compilation errors
-                if (strpos($cssToInline, ContentProcessorInterface::ERROR_MESSAGE_PREFIX)
-                    !== false
-                ) {
-                    throw new MailException(
-                        __('<pre> %1 </pre>', PHP_EOL . $cssToInline . PHP_EOL)
-                    );
-                }
-                $this->cssInliner->setHtml($html);
-
-                $this->cssInliner->setCss($cssToInline);
-
-                // Don't parse inline <style> tags, since existing tag is intentionally for non-inline styles
-                $this->cssInliner->disableStyleBlocksParsing();
-
-                $processedHtml = $this->cssInliner->process();
-            } catch (Exception $e) {
-                $processedHtml = $html;
-                $this->_logger->error($e);
-            }
-        } else {
-            $processedHtml = $html;
+        if (!$html || !$cssToInline) {
+            return $html;
         }
-        return $processedHtml;
+
+        try {
+            // Don't try to compile CSS that has compilation errors
+            if (strpos($cssToInline, ContentProcessorInterface::ERROR_MESSAGE_PREFIX) !== false) {
+                throw new MailException(__('<pre> %1 </pre>', PHP_EOL . $cssToInline . PHP_EOL));
+            }
+            $this->cssInliner->setHtml($html);
+            $this->cssInliner->setCss($cssToInline);
+            // Don't parse inline <style> tags, since existing tag is intentionally for non-inline styles
+            $this->cssInliner->disableStyleBlocksParsing();
+            return $this->cssInliner->process();
+        } catch (Exception $exception) {
+            return $this->getExceptionHtml($html, $exception);
+        }
+    }
+
+    /**
+     * Handle css inlining exception, log it, add to the content in developer mode
+     *
+     * @param string $html
+     * @param Exception $exception
+     * @return string
+     */
+    private function getExceptionHtml(string $html, Exception $exception): string
+    {
+        $this->_logger->error($exception);
+        if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
+            return __('CSS inlining error:') . PHP_EOL . $exception->getMessage()
+                . PHP_EOL
+                . $html;
+        }
+        return $html;
     }
 
     /**
