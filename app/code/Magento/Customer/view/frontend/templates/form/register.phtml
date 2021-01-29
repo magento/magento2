@@ -131,6 +131,23 @@ $formData = $block->getFormData();
                 </div>
             </div>
 
+            <?php if ($addressHelper->isVatAttributeVisible()): ?>
+                <?php $_vatidValidationClass = $addressHelper->getAttributeValidationClass('vat_id'); ?>
+                <div class="field taxvat">
+                    <label class="label" for="vat_id">
+                        <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('vat_id') ?></span>
+                    </label>
+                    <div class="control">
+                        <input type="text"
+                               name="vat_id"
+                               value="<?= $escaper->escapeHtmlAttr($formData->getVatId()) ?>"
+                               title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('vat_id') ?>"
+                               class="input-text <?= $escaper->escapeHtmlAttr($_vatidValidationClass) ?>"
+                               id="vat_id">
+                    </div>
+                </div>
+            <?php endif; ?>
+
             <div class="field country required">
                 <label for="country" class="label">
                     <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('country_id') ?></span>
