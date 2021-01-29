@@ -78,7 +78,9 @@ class AttributesJoiner
 
                     foreach ($spreadFragmentNode->selectionSet->selections as $spreadNode) {
                         if (isset($spreadNode->selectionSet->selections)) {
-                            $selectedFields[] = $spreadNode->name->value;
+                            if ($spreadNode->kind === NodeKind::FIELD && isset($spreadNode->name)) {
+                                $selectedFields[] = $spreadNode->name->value;
+                            }
                             $fragmentFields[] = $this->getQueryFields($spreadNode, $resolveInfo);
                         } else {
                             $selectedFields[] = $spreadNode->name->value;
@@ -109,19 +111,25 @@ class AttributesJoiner
         ResolveInfo $resolveInfo,
         InlineFragmentNode $inlineFragmentField,
         $inlineFragmentFields = []
-    ): array {
+    ): array{
         $query = $inlineFragmentField->selectionSet->selections;
         /** @var FieldNode $field */
+        $fragmentFields = [];
         foreach ($query as $field) {
             if ($field->kind === NodeKind::INLINE_FRAGMENT) {
                 $this->addInlineFragmentFields($resolveInfo, $field, $inlineFragmentFields);
             } elseif (isset($field->selectionSet->selections)) {
-                continue;
+                if ($field->kind === NodeKind::FIELD && isset($field->name)) {
+                    $inlineFragmentFields[] = $field->name->value;
+                }
+                $fragmentFields[] = $this->getQueryFields($field, $resolveInfo);
             } else {
                 $inlineFragmentFields[] = $field->name->value;
             }
         }
-
+        if ($fragmentFields) {
+            $inlineFragmentFields = array_merge([], $inlineFragmentFields, ...$fragmentFields);
+        }
         return array_unique($inlineFragmentFields);
     }
 

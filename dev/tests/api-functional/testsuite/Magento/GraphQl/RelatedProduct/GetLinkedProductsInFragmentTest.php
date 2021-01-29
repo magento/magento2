@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Magento\GraphQl\RelatedProduct;
 
@@ -17,10 +17,10 @@ class GetLinkedProductsInFragmentTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_all_links.php
      */
-    public function testLinkedProducts()
+    public function testLinkedProductsInlineFragment()
     {
         $productSku = 'simple_with_links';
-        $query = $this->getProductQuery($productSku);
+        $query = $this->getProductQueryWithInlineFragment($productSku);
         $response = $this->graphQlQuery($query);
 
         self::assertArrayHasKey('products', $response);
@@ -36,7 +36,30 @@ class GetLinkedProductsInFragmentTest extends GraphQlAbstract
         $this->assertLinkedProducts('upsell_products', $item, $linkedProductsExpectedData['upsell_products']);
 
         $this->assertLinkedProducts('crosssell_products', $item, $linkedProductsExpectedData['crosssell_products']);
+    }
 
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_with_all_links.php
+     */
+    public function testLinkedProductsNamedFragment()
+    {
+        $productSku = 'simple_with_links';
+        $query = $this->getProductQueryWithNamedFragment($productSku);
+        $response = $this->graphQlQuery($query);
+
+        self::assertArrayHasKey('products', $response);
+        self::assertArrayHasKey('items', $response['products']);
+        self::assertCount(1, $response['products']['items']);
+        self::assertArrayHasKey(0, $response['products']['items']);
+        $item = $response['products']['items'][0];
+
+        $linkedProductsExpectedData = $this->getLinkedProductsExpectedData();
+
+        $this->assertLinkedProducts('related_products', $item, $linkedProductsExpectedData['related_products']);
+
+        $this->assertLinkedProducts('upsell_products', $item, $linkedProductsExpectedData['upsell_products']);
+
+        $this->assertLinkedProducts('crosssell_products', $item, $linkedProductsExpectedData['crosssell_products']);
     }
 
     /**
@@ -110,13 +133,87 @@ class GetLinkedProductsInFragmentTest extends GraphQlAbstract
      * @param string $sku
      * @return string
      */
-    private function getProductQuery(string $sku): string
+    private function getProductQueryWithInlineFragment(string $sku): string
     {
         return <<<QUERY
 query {
   products(search: "$sku") {
     items {
-        ...ProductFragment
+        related_products {
+          ... on ProductInterface {
+            sku
+            name
+            url_key
+            price_range {
+              minimum_price {
+                final_price {
+                  value
+                }
+              }
+              maximum_price {
+                final_price {
+                  value
+                }
+              }
+            }
+          }
+        }
+        upsell_products {
+          ... on ProductInterface {
+            sku
+            name
+            url_key
+            price_range {
+              minimum_price {
+                final_price {
+                  value
+                }
+              }
+              maximum_price {
+                final_price {
+                  value
+                }
+              }
+            }
+          }
+        }
+        crosssell_products {
+          ... on ProductInterface {
+            sku
+            name
+            url_key
+            price_range {
+              minimum_price {
+                final_price {
+                  value
+                }
+              }
+              maximum_price {
+                final_price {
+                  value
+                }
+              }
+            }
+          }
+        }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * Returns GraphQL query for retrieving a product with it's links
+     *
+     * @param string $sku
+     * @return string
+     */
+    private function getProductQueryWithNamedFragment(string $sku): string
+    {
+        return <<<QUERY
+query {
+  products(search: "$sku") {
+    items {
         related_products {
           ...ProductFragment
         }
