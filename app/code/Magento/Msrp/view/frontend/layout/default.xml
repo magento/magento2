@@ -8,7 +8,8 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Msrp\Block\Popup" template="Magento_Msrp::popup.phtml" name="product.tooltip">
+            <block class="Magento\Msrp\Block\Popup" template="Magento_Msrp::popup.phtml" name="product.tooltip"
+                ifconfig="sales/msrp/enabled">
                 <block class="Magento\Catalog\Block\ShortcutButtons\InCatalog\PositionAfter" name="map.shortcut.buttons"/>
             </block>
         </referenceContainer>
