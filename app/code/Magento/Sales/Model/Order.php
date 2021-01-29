@@ -6,6 +6,7 @@
 namespace Magento\Sales\Model;
 
 use Magento\Config\Model\Config\Source\Nooptreq;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Directory\Model\Currency;
 use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\Api\AttributeValueFactory;
@@ -2052,7 +2053,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             new \DateTime($this->getCreatedAt()),
             $format,
             $format,
-            $this->localeResolver->getDefaultLocale(),
+            $this->getLocale(),
             $this->timezone->getConfigTimezone('store', $this->getStore())
         );
     }
@@ -4584,6 +4585,20 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function setShippingMethod($shippingMethod)
     {
         return $this->setData('shipping_method', $shippingMethod);
+    }
+
+    /**
+     * Return the locale for the order's store
+     *
+     * @return string
+     */
+    private function getLocale(): string
+    {
+        return (string) $this->scopeConfig->getValue(
+            DirectoryHelper::XML_PATH_DEFAULT_LOCALE,
+            ScopeInterface::SCOPE_STORES,
+            $this->getStoreId()
+        );
     }
 
     /**
