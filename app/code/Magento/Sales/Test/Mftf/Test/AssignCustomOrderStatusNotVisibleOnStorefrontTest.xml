@@ -47,8 +47,8 @@
         </after>
 
         <!-- Create order status -->
-        <amOnPage url="{{AdminOrderStatusPage.url}}" stepKey="goToOrderStatusPage"/>
-        <waitForPageLoad stepKey="waitForOrderStatusPageLoad"/>
+        <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatusPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderStatusPageLoad"/>
         <click selector="{{AdminMainActionsSection.add}}" stepKey="clickCreateNewStatus"/>
 
         <!-- Fill form and validate message -->
@@ -119,8 +119,8 @@
         <see selector="{{AdminMessagesSection.success}}" userInput="We canceled 1 order(s)." stepKey="seeSuccessMessage"/>
 
         <!-- Unassign order status -->
-        <amOnPage url="{{AdminOrderStatusPage.url}}" stepKey="goToOrderStatus"/>
-        <waitForPageLoad stepKey="waitForStatusPageLoad"/>
+        <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatus"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStatusPageLoad"/>
         <actionGroup ref="FilterOrderStatusByLabelAndCodeActionGroup" stepKey="filterStatusGrid">
             <argument name="statusLabel" value="{{defaultOrderStatus.label}}"/>
             <argument name="statusCode" value="{{defaultOrderStatus.status}}"/>
