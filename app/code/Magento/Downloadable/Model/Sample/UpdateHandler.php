@@ -54,10 +54,9 @@ class UpdateHandler implements ExtensionInterface
      * Update product samples
      *
      * @param ProductInterface $entity
-     * @param array $samples
      * @return void
      */
-    private function updateSamples(ProductInterface $entity, array $samples): void
+    private function updateSamples(ProductInterface $entity): void
     {
         $isGlobalScope = (int) $entity->getStoreId() === self::GLOBAL_SCOPE_ID;
         $samples = $entity->getExtensionAttributes()->getDownloadableProductSamples();
