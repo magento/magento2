@@ -59,20 +59,20 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         )->setMethods(
             ['create']
         )->disableOriginalConstructor()->getMock();
-        $this->swaggerFactoryMock->expects($this->any())->method('create')->will($this->returnValue($swagger));
+        $this->swaggerFactoryMock->expects($this->any())->method('create')->willReturn($swagger);
 
         $this->cacheMock = $this->getMockBuilder(\Magento\Webapi\Model\Cache\Type\Webapi::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->cacheMock->expects($this->any())->method('load')->will($this->returnValue(false));
-        $this->cacheMock->expects($this->any())->method('save')->will($this->returnValue(true));
+        $this->cacheMock->expects($this->any())->method('load')->willReturn(false);
+        $this->cacheMock->expects($this->any())->method('save')->willReturn(true);
 
         $this->typeProcessorMock = $this->getMockBuilder(\Magento\Framework\Reflection\TypeProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->typeProcessorMock->expects($this->any())
             ->method('getOperationName')
-            ->will($this->returnValue(self::OPERATION_NAME));
+            ->willReturn(self::OPERATION_NAME);
 
         $this->customAttributeTypeLocatorMock = $this->getMockBuilder(
             \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface::class
@@ -88,7 +88,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
 
         $storeMock->expects($this->any())
             ->method('getCode')
-            ->will($this->returnValue('store_code'));
+            ->willReturn('store_code');
 
         /** @var \Magento\Framework\Webapi\Authorization|\PHPUnit\Framework\MockObject\MockObject $authorizationMock */
         $authorizationMock = $this->getMockBuilder(\Magento\Framework\Webapi\Authorization::class)
@@ -442,7 +442,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
 
         $this->typeProcessorMock
             ->method('getTypeData')
-            ->will($this->returnCallback($getTypeData));
+            ->willReturnCallback($getTypeData);
 
         $method = new \ReflectionMethod($this->generator, 'generateDefinition');
         $method->setAccessible(true);

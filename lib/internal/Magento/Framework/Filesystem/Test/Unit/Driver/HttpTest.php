@@ -127,20 +127,22 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\FileSystemException
      */
     public function testFilePutContentsFail()
     {
+        $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
+
         self::$filePutContents = false;
         (new Http())->filePutContents('', '');
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\FileSystemException
-     * @expectedExceptionMessage The download URL is incorrect. Verify and try again.
      */
     public function testFileOpenInvalidUrl()
     {
+        $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
+        $this->expectExceptionMessage('The download URL is incorrect. Verify and try again.');
+
         (new Http())->fileOpen('', '');
     }
 

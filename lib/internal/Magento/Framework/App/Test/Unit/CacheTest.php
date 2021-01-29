@@ -43,8 +43,8 @@ class CacheTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'current'
-        )->will(
-            $this->returnValue($this->_cacheFrontendMock)
+        )->willReturn(
+            $this->_cacheFrontendMock
         );
         $frontendPoolMock->expects(
             $this->any()
@@ -52,8 +52,8 @@ class CacheTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             \Magento\Framework\App\Cache\Frontend\Pool::DEFAULT_FRONTEND_ID
-        )->will(
-            $this->returnValue($this->_cacheFrontendMock)
+        )->willReturn(
+            $this->_cacheFrontendMock
         );
 
         $this->_model = new \Magento\Framework\App\Cache($frontendPoolMock);
@@ -118,8 +118,8 @@ class CacheTest extends \PHPUnit\Framework\TestCase
             'load'
         )->with(
             'test_id'
-        )->will(
-            $this->returnValue('test_data')
+        )->willReturn(
+            'test_data'
         );
         $this->assertEquals('test_data', $this->_model->load('test_id'));
     }
@@ -187,8 +187,8 @@ class CacheTest extends \PHPUnit\Framework\TestCase
             'remove'
         )->with(
             'test_id'
-        )->will(
-            $this->returnValue($result)
+        )->willReturn(
+            $result
         );
         $this->assertEquals($result, $this->_model->remove('test_id'));
     }
@@ -211,8 +211,8 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         )->with(
             \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
             $expectedTags
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
         $this->assertTrue($this->_model->clean($expectedTags));
     }
@@ -225,8 +225,8 @@ class CacheTest extends \PHPUnit\Framework\TestCase
             'clean'
         )->with(
             \Zend_Cache::CLEANING_MODE_ALL
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
         $this->assertTrue($this->_model->clean());
     }

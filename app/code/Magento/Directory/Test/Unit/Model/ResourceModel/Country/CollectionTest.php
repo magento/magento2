@@ -32,7 +32,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     {
         $connection = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
         $select = $this->createMock(\Magento\Framework\DB\Select::class);
-        $connection->expects($this->once())->method('select')->will($this->returnValue($select));
+        $connection->expects($this->once())->method('select')->willReturn($select);
 
         $resource = $this->getMockForAbstractClass(
             \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
@@ -43,12 +43,12 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             true,
             ['getConnection', 'getMainTable', 'getTable', '__wakeup']
         );
-        $resource->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
-        $resource->expects($this->any())->method('getTable')->will($this->returnArgument(0));
+        $resource->expects($this->any())->method('getConnection')->willReturn($connection);
+        $resource->expects($this->any())->method('getTable')->willReturnArgument(0);
 
         $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $localeListsMock = $this->createMock(\Magento\Framework\Locale\ListsInterface::class);
-        $localeListsMock->expects($this->any())->method('getCountryTranslation')->will($this->returnArgument(0));
+        $localeListsMock->expects($this->any())->method('getCountryTranslation')->willReturnArgument(0);
 
         $fetchStrategy = $this->getMockForAbstractClass(
             \Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class

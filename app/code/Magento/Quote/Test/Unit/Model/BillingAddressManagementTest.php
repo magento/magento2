@@ -83,10 +83,10 @@ class BillingAddressManagementTest extends \PHPUnit\Framework\TestCase
     {
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
         $this->quoteRepositoryMock->expects($this->once())->method('getActive')
-            ->with('cartId')->will($this->returnValue($quoteMock));
+            ->with('cartId')->willReturn($quoteMock);
 
         $addressMock = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
-        $quoteMock->expects($this->any())->method('getBillingAddress')->will($this->returnValue($addressMock));
+        $quoteMock->expects($this->any())->method('getBillingAddress')->willReturn($addressMock);
 
         $this->assertEquals($addressMock, $this->model->get('cartId'));
     }

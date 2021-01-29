@@ -34,7 +34,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('get')
             ->with($this->equalTo(\Magento\Framework\View\File\FileList\Factory::FILE_LIST_COLLATOR))
-            ->will($this->returnValue($collator));
+            ->willReturn($collator);
 
         $this->objectManager
             ->expects($this->once())
@@ -43,23 +43,24 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
                 $this->equalTo(\Magento\Framework\View\File\FileList::class),
                 $this->equalTo(['collator' => $collator])
             )
-            ->will($this->returnValue($list));
+            ->willReturn($list);
         $this->assertSame($list, $this->model->create());
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Magento\Framework\View\File\FileList\Collator has to implement the collate interface.
      */
     public function testCreateException()
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Magento\\Framework\\View\\File\\FileList\\Collator has to implement the collate interface.');
+
         $collator = new \stdClass();
 
         $this->objectManager
             ->expects($this->once())
             ->method('get')
             ->with($this->equalTo(\Magento\Framework\View\File\FileList\Factory::FILE_LIST_COLLATOR))
-            ->will($this->returnValue($collator));
+            ->willReturn($collator);
 
         $this->model->create();
     }

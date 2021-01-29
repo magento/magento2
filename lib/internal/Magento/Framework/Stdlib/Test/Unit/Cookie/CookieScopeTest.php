@@ -40,13 +40,13 @@ class CookieScopeTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->getMock();
         $cookieMetadataFactory->expects($this->any())
             ->method('createSensitiveCookieMetadata')
-            ->will($this->returnCallback([$this, 'createSensitiveMetadata']));
+            ->willReturnCallback([$this, 'createSensitiveMetadata']);
         $cookieMetadataFactory->expects($this->any())
             ->method('createPublicCookieMetadata')
-            ->will($this->returnCallback([$this, 'createPublicMetadata']));
+            ->willReturnCallback([$this, 'createPublicMetadata']);
         $cookieMetadataFactory->expects($this->any())
             ->method('createCookieMetadata')
-            ->will($this->returnCallback([$this, 'createCookieMetadata']));
+            ->willReturnCallback([$this, 'createCookieMetadata']);
         $this->defaultScopeParams = [
             'cookieMetadataFactory' => $cookieMetadataFactory,
         ];

@@ -120,11 +120,12 @@ class GeneratorTest extends TestCase
     /**
      * @param string $className
      * @param string $entityType
-     * @expectedException RuntimeException
      * @dataProvider generateValidClassDataProvider
      */
     public function testGenerateClass($className, $entityType): void
     {
+        $this->expectException(\RuntimeException::class);
+
         $fullClassName = $className . $entityType;
 
         $entityGeneratorMock = $this->getMockBuilder(EntityAbstract::class)
@@ -180,10 +181,11 @@ class GeneratorTest extends TestCase
     }
 
     /**
-     * @expectedException RuntimeException
      */
     public function testGenerateClassWhenClassIsNotGenerationSuccess(): void
     {
+        $this->expectException(\RuntimeException::class);
+
         $expectedEntities = array_values($this->expectedEntities);
         $resultClassName = self::SOURCE_CLASS . ucfirst(array_shift($expectedEntities));
 

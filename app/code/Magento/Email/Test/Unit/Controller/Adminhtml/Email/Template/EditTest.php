@@ -138,10 +138,10 @@ class EditTest extends \PHPUnit\Framework\TestCase
             );
         $this->menuBlockMock->expects($this->any())
             ->method('getMenuModel')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->menuBlockMock->expects($this->any())
             ->method('getParentItems')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->viewMock->expects($this->any())
             ->method('getPage')
             ->willReturn($this->resultPageMock);

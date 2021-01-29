@@ -20,7 +20,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject $objectManager */
         $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManager->expects($this->once())->method('create')->with($className, $data)
-            ->will($this->returnValue($object));
+            ->willReturn($object);
 
         /** @var \Magento\Framework\View\Layout\ReaderFactory|\PHPUnit\Framework\MockObject\MockObject $factory */
         $factory = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
@@ -44,7 +44,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject $objectManager */
         $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManager->expects($this->once())->method('create')->with($className, $data)
-            ->will($this->returnValue($object));
+            ->willReturn($object);
 
         /** @var \Magento\Framework\View\Layout\ReaderFactory|\PHPUnit\Framework\MockObject\MockObject $factory */
         $factory = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))

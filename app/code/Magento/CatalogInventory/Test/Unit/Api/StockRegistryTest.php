@@ -73,7 +73,7 @@ class StockRegistryTest extends \PHPUnit\Framework\TestCase
         $this->productFactory = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
         $this->productFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->product));
+            ->willReturn($this->product);
 
         $this->stock = $this->getMockForAbstractClass(
             \Magento\CatalogInventory\Api\Data\StockInterface::class,
@@ -100,13 +100,13 @@ class StockRegistryTest extends \PHPUnit\Framework\TestCase
         );
         $this->stockRegistryProvider->expects($this->any())
             ->method('getStock')
-            ->will($this->returnValue($this->stock));
+            ->willReturn($this->stock);
         $this->stockRegistryProvider->expects($this->any())
             ->method('getStockItem')
-            ->will($this->returnValue($this->stockItem));
+            ->willReturn($this->stockItem);
         $this->stockRegistryProvider->expects($this->any())
             ->method('getStockStatus')
-            ->will($this->returnValue($this->stockStatus));
+            ->willReturn($this->stockStatus);
 
         $this->stockItemRepository = $this->getMockForAbstractClass(
             \Magento\CatalogInventory\Api\StockItemRepositoryInterface::class,
@@ -116,7 +116,7 @@ class StockRegistryTest extends \PHPUnit\Framework\TestCase
         );
         $this->stockItemRepository->expects($this->any())
             ->method('save')
-            ->will($this->returnValue($this->stockItem));
+            ->willReturn($this->stockItem);
 
         $this->stockRegistry = $this->objectManagerHelper->getObject(
             \Magento\CatalogInventory\Model\StockRegistry::class,

@@ -28,15 +28,15 @@ class DataTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             'admin/captcha/qwe'
-        )->will(
-            $this->returnValue('1')
+        )->willReturn(
+            '1'
         );
 
         $filesystemMock = $arguments['filesystem'];
         $directoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
 
-        $filesystemMock->expects($this->any())->method('getDirectoryWrite')->will($this->returnValue($directoryMock));
-        $directoryMock->expects($this->any())->method('getAbsolutePath')->will($this->returnArgument(0));
+        $filesystemMock->expects($this->any())->method('getDirectoryWrite')->willReturn($directoryMock);
+        $directoryMock->expects($this->any())->method('getAbsolutePath')->willReturnArgument(0);
 
         $this->_model = $objectManagerHelper->getObject($className, $arguments);
     }

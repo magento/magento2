@@ -33,10 +33,10 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
         );
         $this->creditmemoMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
         $this->creditmemoMock->expects($this->any())
             ->method('getOrder')
-            ->will($this->returnValue($this->orderMock));
+            ->willReturn($this->orderMock);
         $this->sender = new CreditmemoCommentSender(
             $this->templateContainerMock,
             $this->identityContainerMock,
@@ -109,11 +109,11 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
 
         $this->orderMock->expects($this->once())
             ->method('getCustomerIsGuest')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->stepAddressFormat($billingAddress);
         $this->identityContainerMock->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->templateContainerMock->expects($this->once())
             ->method('setTemplateVars')
             ->with(
@@ -154,11 +154,11 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
 
         $this->orderMock->expects($this->once())
             ->method('getCustomerIsGuest')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->stepAddressFormat($billingAddress);
         $this->identityContainerMock->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->templateContainerMock->expects($this->once())
             ->method('setTemplateVars')
             ->with(

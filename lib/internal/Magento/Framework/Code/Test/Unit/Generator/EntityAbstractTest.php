@@ -196,7 +196,7 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
         );
         // we need to mock abstract methods to set correct return value type
         foreach ($abstractGetters as $methodName) {
-            $this->_model->expects($this->any())->method($methodName)->will($this->returnValue([]));
+            $this->_model->expects($this->any())->method($methodName)->willReturn([]);
         }
 
         $result = $this->_model->generate();
@@ -276,17 +276,17 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $codeGenerator->expects($this->once())->method('setName')->with($this->resultClass)->will($this->returnSelf());
-        $codeGenerator->expects($this->once())->method('addProperties')->will($this->returnSelf());
-        $codeGenerator->expects($this->once())->method('addMethods')->will($this->returnSelf());
+        $codeGenerator->expects($this->once())->method('setName')->with($this->resultClass)->willReturnSelf();
+        $codeGenerator->expects($this->once())->method('addProperties')->willReturnSelf();
+        $codeGenerator->expects($this->once())->method('addMethods')->willReturnSelf();
         $codeGenerator->expects($this->once())
             ->method('setClassDocBlock')
             ->with($this->isType('array'))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $codeGenerator->expects($this->once())
             ->method('generate')
-            ->will($this->returnValue($willWriteCode ? self::RESULT_CODE : null));
+            ->willReturn($willWriteCode ? self::RESULT_CODE : null);
 
         // Add configuration for the generation step
         /** @var $ioObject \PHPUnit\Framework\MockObject\MockObject */

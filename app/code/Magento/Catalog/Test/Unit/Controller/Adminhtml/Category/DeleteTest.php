@@ -76,23 +76,23 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $this->categoryRepository = $this->createMock(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
         $context->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->request));
+            ->willReturn($this->request);
         $context->expects($this->any())
             ->method('getResponse')
-            ->will($this->returnValue($response));
+            ->willReturn($response);
         $context->expects($this->any())
             ->method('getMessageManager')
-            ->will($this->returnValue($messageManager));
+            ->willReturn($messageManager);
         $context->expects($this->any())
             ->method('getEventManager')
-            ->will($this->returnValue($eventManager));
+            ->willReturn($eventManager);
         $context->expects($this->any())
             ->method('getAuth')
-            ->will($this->returnValue($auth));
+            ->willReturn($auth);
         $context->expects($this->once())->method('getResultRedirectFactory')->willReturn($resultRedirectFactory);
         $auth->expects($this->any())
             ->method('getAuthStorage')
-            ->will($this->returnValue($this->authStorage));
+            ->willReturn($this->authStorage);
 
         $this->resultRedirect = $this->createMock(\Magento\Backend\Model\View\Result\Redirect::class);
         $resultRedirectFactory->expects($this->any())->method('create')->willReturn($this->resultRedirect);

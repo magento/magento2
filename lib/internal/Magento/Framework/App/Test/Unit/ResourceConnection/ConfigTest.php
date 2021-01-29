@@ -96,10 +96,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testGetConnectionNameWithException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $deploymentConfigMock->expects($this->once())
             ->method('getConfigData')

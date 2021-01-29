@@ -64,7 +64,7 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->will($this->returnValue($this->orderCollectionFactoryInterface));
+            ->willReturn($this->orderCollectionFactoryInterface);
         \Magento\Framework\App\ObjectManager::setInstance($this->objectManager);
 
         $this->customerSession = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
@@ -87,12 +87,12 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
         $customerId = 25;
         $this->customerSession->expects($this->once())
             ->method('getCustomerId')
-            ->will($this->returnValue($customerId));
+            ->willReturn($customerId);
 
         $statuses = ['pending', 'processing', 'comlete'];
         $this->orderConfig->expects($this->once())
             ->method('getVisibleOnFrontStatuses')
-            ->will($this->returnValue($statuses));
+            ->willReturn($statuses);
 
         $orderCollection = $this->createPartialMock(
             \Magento\Sales\Model\ResourceModel\Order\Collection::class,
@@ -106,18 +106,18 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
         $orderCollection->expects($this->at(0))
             ->method('addFieldToSelect')
             ->with($this->equalTo('*'))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $orderCollection->expects($this->at(1))
             ->method('addFieldToFilter')
             ->with('status', $this->equalTo(['in' => $statuses]))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $orderCollection->expects($this->at(2))
             ->method('setOrder')
             ->with('created_at', 'desc')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->orderCollectionFactoryInterface->expects($this->atLeastOnce())
             ->method('create')
-            ->will($this->returnValue($orderCollection));
+            ->willReturn($orderCollection);
         $this->pageConfig->expects($this->atLeastOnce())
             ->method('getTitle')
             ->willReturn($this->pageTitleMock);

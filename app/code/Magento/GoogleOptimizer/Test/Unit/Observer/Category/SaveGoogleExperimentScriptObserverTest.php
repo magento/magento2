@@ -51,13 +51,13 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
             $this->atLeastOnce()
         )->method(
             'getStoreId'
-        )->will(
-            $this->returnValue($this->_storeId)
+        )->willReturn(
+            $this->_storeId
         );
         $event = $this->createPartialMock(\Magento\Framework\Event::class, ['getCategory']);
-        $event->expects($this->once())->method('getCategory')->will($this->returnValue($this->_categoryMock));
+        $event->expects($this->once())->method('getCategory')->willReturn($this->_categoryMock);
         $this->_eventObserverMock = $this->createMock(\Magento\Framework\Event\Observer::class);
-        $this->_eventObserverMock->expects($this->once())->method('getEvent')->will($this->returnValue($event));
+        $this->_eventObserverMock->expects($this->once())->method('getEvent')->willReturn($event);
         $this->_codeMock = $this->createMock(\Magento\GoogleOptimizer\Model\Code::class);
         $this->_requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
 
@@ -73,15 +73,15 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
         $categoryId = 3;
         $experimentScript = 'some string';
 
-        $this->_categoryMock->expects($this->once())->method('getId')->will($this->returnValue($categoryId));
+        $this->_categoryMock->expects($this->once())->method('getId')->willReturn($categoryId);
         $this->_helperMock->expects(
             $this->once()
         )->method(
             'isGoogleExperimentActive'
         )->with(
             $this->_storeId
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $this->_requestMock->expects(
@@ -90,8 +90,8 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             'google_experiment'
-        )->will(
-            $this->returnValue(['code_id' => '', 'experiment_script' => $experimentScript])
+        )->willReturn(
+            ['code_id' => '', 'experiment_script' => $experimentScript]
         );
 
         $this->_codeMock->expects(
@@ -123,8 +123,8 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
             'isGoogleExperimentActive'
         )->with(
             $this->_storeId
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $this->_requestMock->expects(
@@ -133,8 +133,8 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             'google_experiment'
-        )->will(
-            $this->returnValue($params)
+        )->willReturn(
+            $params
         );
 
         $this->_modelObserver->execute($this->_eventObserverMock);
@@ -160,15 +160,15 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
         $experimentScript = 'some string';
         $codeId = 5;
 
-        $this->_categoryMock->expects($this->once())->method('getId')->will($this->returnValue($categoryId));
+        $this->_categoryMock->expects($this->once())->method('getId')->willReturn($categoryId);
         $this->_helperMock->expects(
             $this->once()
         )->method(
             'isGoogleExperimentActive'
         )->with(
             $this->_storeId
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $this->_requestMock->expects(
@@ -177,12 +177,12 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             'google_experiment'
-        )->will(
-            $this->returnValue(['code_id' => $codeId, 'experiment_script' => $experimentScript])
+        )->willReturn(
+            ['code_id' => $codeId, 'experiment_script' => $experimentScript]
         );
 
         $this->_codeMock->expects($this->once())->method('load')->with($codeId);
-        $this->_codeMock->expects($this->once())->method('getId')->will($this->returnValue($codeId));
+        $this->_codeMock->expects($this->once())->method('getId')->willReturn($codeId);
 
         $this->_codeMock->expects(
             $this->once()
@@ -217,8 +217,8 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
             'isGoogleExperimentActive'
         )->with(
             $this->_storeId
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $this->_requestMock->expects(
@@ -227,12 +227,12 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             'google_experiment'
-        )->will(
-            $this->returnValue(['code_id' => $codeId, 'experiment_script' => $experimentScript])
+        )->willReturn(
+            ['code_id' => $codeId, 'experiment_script' => $experimentScript]
         );
 
         $this->_codeMock->expects($this->once())->method('load')->with($codeId);
-        $this->_codeMock->expects($this->atLeastOnce())->method('getId')->will($this->returnValue(false));
+        $this->_codeMock->expects($this->atLeastOnce())->method('getId')->willReturn(false);
         $this->_codeMock->expects($this->never())->method('save');
 
         $this->_modelObserver->execute($this->_eventObserverMock);
@@ -248,8 +248,8 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
             'isGoogleExperimentActive'
         )->with(
             $this->_storeId
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $this->_requestMock->expects(
@@ -258,12 +258,12 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             'google_experiment'
-        )->will(
-            $this->returnValue(['code_id' => $codeId, 'experiment_script' => ''])
+        )->willReturn(
+            ['code_id' => $codeId, 'experiment_script' => '']
         );
 
         $this->_codeMock->expects($this->once())->method('load')->with($codeId);
-        $this->_codeMock->expects($this->once())->method('getId')->will($this->returnValue($codeId));
+        $this->_codeMock->expects($this->once())->method('getId')->willReturn($codeId);
 
         $this->_codeMock->expects($this->never())->method('save');
         $this->_codeMock->expects($this->once())->method('delete');
@@ -279,8 +279,8 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
             'isGoogleExperimentActive'
         )->with(
             $this->_storeId
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
         $this->_codeMock->expects($this->never())->method('load');
         $this->_codeMock->expects($this->never())->method('save');

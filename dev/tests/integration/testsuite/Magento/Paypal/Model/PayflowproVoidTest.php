@@ -39,7 +39,7 @@ class PayflowproVoidTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
     }

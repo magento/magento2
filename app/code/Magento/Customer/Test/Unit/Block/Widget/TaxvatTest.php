@@ -39,8 +39,8 @@ class TaxvatTest extends \PHPUnit\Framework\TestCase
             'getAttributeMetadata'
         )->with(
             self::TAXVAT_ATTRIBUTE_CODE
-        )->will(
-            $this->returnValue($this->attribute)
+        )->willReturn(
+            $this->attribute
         );
 
         $this->_block = new \Magento\Customer\Block\Widget\Taxvat(
@@ -59,7 +59,7 @@ class TaxvatTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsEnabled($isVisible, $expectedValue)
     {
-        $this->attribute->expects($this->once())->method('isVisible')->will($this->returnValue($isVisible));
+        $this->attribute->expects($this->once())->method('isVisible')->willReturn($isVisible);
         $this->assertSame($expectedValue, $this->_block->isEnabled());
     }
 
@@ -97,7 +97,7 @@ class TaxvatTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsRequired($isRequired, $expectedValue)
     {
-        $this->attribute->expects($this->once())->method('isRequired')->will($this->returnValue($isRequired));
+        $this->attribute->expects($this->once())->method('isRequired')->willReturn($isRequired);
         $this->assertSame($expectedValue, $this->_block->isRequired());
     }
 

@@ -66,7 +66,7 @@ class RemovePersistentCookieOnRegisterObserverTest extends \PHPUnit\Framework\Te
     public function testExecuteWithPersistentDataThatCanNotBeProcess()
     {
         $this->persistentDataMock->expects($this->once())
-            ->method('canProcess')->with($this->observerMock)->will($this->returnValue(false));
+            ->method('canProcess')->with($this->observerMock)->willReturn(false);
         $this->persistentSessionMock->expects($this->never())->method('getSession');
 
         $this->model->execute($this->observerMock);
@@ -75,8 +75,8 @@ class RemovePersistentCookieOnRegisterObserverTest extends \PHPUnit\Framework\Te
     public function testExecuteWhenSessionIsNotPersistent()
     {
         $this->persistentDataMock->expects($this->once())
-            ->method('canProcess')->with($this->observerMock)->will($this->returnValue(true));
-        $this->persistentSessionMock->expects($this->once())->method('isPersistent')->will($this->returnValue(false));
+            ->method('canProcess')->with($this->observerMock)->willReturn(true);
+        $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(false);
 
         $this->persistentSessionMock->expects($this->never())->method('getSession');
 
@@ -86,16 +86,16 @@ class RemovePersistentCookieOnRegisterObserverTest extends \PHPUnit\Framework\Te
     public function testExecuteWithNotLoggedInCustomer()
     {
         $this->persistentDataMock->expects($this->once())
-            ->method('canProcess')->with($this->observerMock)->will($this->returnValue(true));
-        $this->persistentSessionMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
+            ->method('canProcess')->with($this->observerMock)->willReturn(true);
+        $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->persistentSessionMock->expects($this->once())
-            ->method('getSession')->will($this->returnValue($this->sessionModelMock));
-        $this->sessionModelMock->expects($this->once())->method('removePersistentCookie')->will($this->returnSelf());
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
+            ->method('getSession')->willReturn($this->sessionModelMock);
+        $this->sessionModelMock->expects($this->once())->method('removePersistentCookie')->willReturnSelf();
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
         $this->customerSessionMock->expects($this->once())
-            ->method('setCustomerId')->with(null)->will($this->returnSelf());
+            ->method('setCustomerId')->with(null)->willReturnSelf();
         $this->customerSessionMock->expects($this->once())
-            ->method('setCustomerGroupId')->with(null)->will($this->returnSelf());
+            ->method('setCustomerGroupId')->with(null)->willReturnSelf();
         $this->quoteManagerMock->expects($this->once())->method('setGuest');
 
         $this->model->execute($this->observerMock);
@@ -104,12 +104,12 @@ class RemovePersistentCookieOnRegisterObserverTest extends \PHPUnit\Framework\Te
     public function testExecute()
     {
         $this->persistentDataMock->expects($this->once())
-            ->method('canProcess')->with($this->observerMock)->will($this->returnValue(true));
-        $this->persistentSessionMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
+            ->method('canProcess')->with($this->observerMock)->willReturn(true);
+        $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->persistentSessionMock->expects($this->once())
-            ->method('getSession')->will($this->returnValue($this->sessionModelMock));
-        $this->sessionModelMock->expects($this->once())->method('removePersistentCookie')->will($this->returnSelf());
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(true));
+            ->method('getSession')->willReturn($this->sessionModelMock);
+        $this->sessionModelMock->expects($this->once())->method('removePersistentCookie')->willReturnSelf();
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(true);
         $this->customerSessionMock->expects($this->never())->method('setCustomerId');
         $this->customerSessionMock->expects($this->never())->method('setCustomerGroupId');
         $this->quoteManagerMock->expects($this->once())->method('setGuest');

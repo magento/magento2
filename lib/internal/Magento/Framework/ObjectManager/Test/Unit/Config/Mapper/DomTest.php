@@ -26,8 +26,8 @@ class DomTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'parse'
-        )->will(
-            $this->returnCallback([$this, 'parserMockCallback'])
+        )->willReturnCallback(
+            [$this, 'parserMockCallback']
         );
 
         $booleanUtils = $this->createMock(\Magento\Framework\Stdlib\BooleanUtils::class);
@@ -35,8 +35,8 @@ class DomTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'toBoolean'
-        )->will(
-            $this->returnValueMap([['true', true], ['false', false]])
+        )->willReturnMap(
+            [['true', true], ['false', false]]
         );
 
         $this->argumentInterpreter = $this->createMock(\Magento\Framework\Data\Argument\InterpreterInterface::class);
@@ -46,8 +46,8 @@ class DomTest extends \PHPUnit\Framework\TestCase
             'evaluate'
         )->with(
             ['xsi:type' => 'string', 'value' => 'test value']
-        )->will(
-            $this->returnValue('test value')
+        )->willReturn(
+            'test value'
         );
         $this->_mapper = new Dom($this->argumentInterpreter, $booleanUtils, $argumentParser);
     }
@@ -79,11 +79,12 @@ class DomTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $xmlData
      * @dataProvider wrongXmlDataProvider
-     * @expectedException \Exception
-     * @expectedExceptionMessage Invalid application config. Unknown node: wrong_node.
      */
     public function testMapThrowsExceptionWhenXmlHasWrongFormat($xmlData)
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Invalid application config. Unknown node: wrong_node.');
+
         $dom = new \DOMDocument();
         $dom->loadXML($xmlData);
         $this->_mapper->convert($dom);

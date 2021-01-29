@@ -34,7 +34,7 @@ class JobDbRollbackTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManagerProvider;
 
-    public function setup(): void
+    protected function setup(): void
     {
         $this->backupRollbackFactory = $this->createMock(\Magento\Framework\Setup\BackupRollbackFactory::class);
         $this->backupRollback = $this->createMock(\Magento\Framework\Setup\BackupRollback::class);
@@ -56,10 +56,10 @@ class JobDbRollbackTest extends \PHPUnit\Framework\TestCase
             $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class, [], '', false);
         $objectManager->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [\Magento\Framework\App\State::class, $appState],
                 [\Magento\Framework\ObjectManager\ConfigLoaderInterface::class, $configLoader],
-            ]));
+            ]);
 
         $this->objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
 
@@ -81,11 +81,12 @@ class JobDbRollbackTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Could not complete
      */
     public function testExceptionOnExecute()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Could not complete');
+
         $this->backupRollbackFactory->expects($this->once())->method('create')->willThrowException(new \Exception);
         $this->jobDbRollback->execute();
     }

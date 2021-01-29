@@ -147,8 +147,8 @@ class IoTest extends \PHPUnit\Framework\TestCase
             'isWritable'
         )->with(
             $this->equalTo($this->_generationDirectory)
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $this->assertTrue($this->_object->makeGenerationDirectory());
@@ -162,8 +162,8 @@ class IoTest extends \PHPUnit\Framework\TestCase
             'isWritable'
         )->with(
             $this->equalTo($this->_generationDirectory)
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
 
         $this->_filesystemDriverMock->expects(
@@ -173,8 +173,8 @@ class IoTest extends \PHPUnit\Framework\TestCase
         )->with(
             $this->equalTo($this->_generationDirectory),
             $this->anything()
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $this->assertTrue($this->_object->makeGenerationDirectory());
@@ -198,8 +198,8 @@ class IoTest extends \PHPUnit\Framework\TestCase
             'isExists'
         )->with(
             $this->equalTo($fileName)
-        )->will(
-            $this->returnValue($exists)
+        )->willReturn(
+            $exists
         );
 
         $this->assertSame($exists, $this->_object->fileExists($fileName));

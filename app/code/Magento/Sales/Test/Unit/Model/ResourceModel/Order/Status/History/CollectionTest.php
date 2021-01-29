@@ -82,29 +82,29 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         );
         $this->entityFactoryMock = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
 
-        $this->resourceMock->expects($this->any())->method('getConnection')->will(
-            $this->returnValue($this->connectionMock)
+        $this->resourceMock->expects($this->any())->method('getConnection')->willReturn(
+            $this->connectionMock
         );
-        $this->resourceMock->expects($this->any())->method('getTable')->will($this->returnArgument(0));
+        $this->resourceMock->expects($this->any())->method('getTable')->willReturnArgument(0);
 
-        $this->connectionMock->expects($this->any())->method('quoteIdentifier')->will($this->returnArgument(0));
+        $this->connectionMock->expects($this->any())->method('quoteIdentifier')->willReturnArgument(0);
         $this->connectionMock->expects($this->atLeastOnce())
             ->method('select')
-            ->will($this->returnValue($this->selectMock));
+            ->willReturn($this->selectMock);
 
         $data = [['data']];
         $this->historyItemMock->expects($this->once())
             ->method('addData')
             ->with($this->equalTo($data[0]))
-            ->will($this->returnValue($this->historyItemMock));
+            ->willReturn($this->historyItemMock);
 
         $this->fetchStrategyMock->expects($this->once())
             ->method('fetchAll')
-            ->will($this->returnValue($data));
+            ->willReturn($data);
 
         $this->entityFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->historyItemMock));
+            ->willReturn($this->historyItemMock);
 
         $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->collection = new \Magento\Sales\Model\ResourceModel\Order\Status\History\Collection(
@@ -128,22 +128,22 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             'getId']);
         $order->expects($this->once())
             ->method('getEntityType')
-            ->will($this->returnValue($entityType));
+            ->willReturn($entityType);
         $order->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($orderId));
+            ->willReturn($orderId);
 
         $this->connectionMock = $this->collection->getResource()->getConnection();
         $this->connectionMock->expects($this->exactly(3))
             ->method('prepareSqlCondition')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         ['entity_name', $entityType, 'sql-string'],
                         ['is_customer_notified', 0, 'sql-string'],
                         ['parent_id', $orderId, 'sql-string'],
                     ]
-                )
+                
             );
         $result = $this->collection->getUnnotifiedForInstance($order);
         $this->assertEquals($this->historyItemMock, $result);

@@ -64,7 +64,7 @@ class AggregateSalesReportOrderDataTest extends \PHPUnit\Framework\TestCase
             ->with($date);
         $this->orderFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($orderMock));
+            ->willReturn($orderMock);
         $this->observer->execute();
     }
 
@@ -84,7 +84,7 @@ class AggregateSalesReportOrderDataTest extends \PHPUnit\Framework\TestCase
         $date = (new \DateTime())->sub(new \DateInterval('PT25H'));
         $this->localeDateMock->expects($this->once())
             ->method('date')
-            ->will($this->returnValue($date));
+            ->willReturn($date);
 
         return $date;
     }

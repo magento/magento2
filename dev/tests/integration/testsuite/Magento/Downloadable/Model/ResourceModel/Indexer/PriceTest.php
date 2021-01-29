@@ -68,7 +68,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($specialPrice, $product->getMinimalPrice());
 
         $resultTiers = $product->getTierPrices();
-        $this->assertTrue(is_array($resultTiers), 'Tiers not found');
+        $this->assertIsArray($resultTiers, 'Tiers not found');
         $this->assertEquals(count($tierData), count($resultTiers), 'Incorrect number of result tiers');
 
         for ($i = 0; $i < count($tierData); $i++) {

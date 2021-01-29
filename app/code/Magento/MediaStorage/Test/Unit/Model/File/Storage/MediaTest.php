@@ -61,8 +61,8 @@ class MediaTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getStorageData'
-        )->will(
-            $this->returnValue(['files' => ['value1', 'value2']])
+        )->willReturn(
+            ['files' => ['value1', 'value2']]
         );
         $this->assertEmpty(array_diff($this->_model->collectData(0, 1), ['value1']));
     }
@@ -73,8 +73,8 @@ class MediaTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getStorageData'
-        )->will(
-            $this->returnValue(['files' => ['value1', 'value2']])
+        )->willReturn(
+            ['files' => ['value1', 'value2']]
         );
         $this->assertFalse($this->_model->collectData(0, 1, 'some-wrong-key'));
     }
@@ -85,8 +85,8 @@ class MediaTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getStorageData'
-        )->will(
-            $this->returnValue(['files' => []])
+        )->willReturn(
+            ['files' => []]
         );
         $this->assertFalse($this->_model->collectData(0, 1));
     }

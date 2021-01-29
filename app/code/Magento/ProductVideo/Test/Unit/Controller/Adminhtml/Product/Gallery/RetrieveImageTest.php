@@ -103,12 +103,12 @@ class RetrieveImageTest extends \PHPUnit\Framework\TestCase
         $this->storageFileMock = $this->createMock(\Magento\MediaStorage\Model\ResourceModel\File\Storage\File::class);
         $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->fileDriverMock = $this->createMock(\Magento\Framework\Filesystem\DriverInterface::class);
-        $this->contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
+        $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->request);
         $managerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['get'])
             ->getMockForAbstractClass();
-        $this->contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
+        $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->request);
         $this->contextMock->expects($this->any())->method('getObjectManager')->willReturn($managerMock);
 
         $this->image = $objectManager->getObject(

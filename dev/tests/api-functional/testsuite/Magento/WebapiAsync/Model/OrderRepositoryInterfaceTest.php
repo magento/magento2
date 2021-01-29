@@ -70,7 +70,7 @@ class OrderRepositoryInterfaceTest extends WebapiAbstract
     /**
      * @inheritDoc
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->publisherConsumerController->stopConsumers();
         parent::tearDown();

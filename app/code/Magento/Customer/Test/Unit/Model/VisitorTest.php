@@ -88,7 +88,7 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
 
     public function testSaveByRequest()
     {
-        $this->session->expects($this->once())->method('setVisitorData')->will($this->returnSelf());
+        $this->session->expects($this->once())->method('setVisitorData')->willReturnSelf();
         $this->assertSame($this->visitor, $this->visitor->saveByRequest(null));
     }
 

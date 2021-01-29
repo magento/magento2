@@ -79,7 +79,7 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
         );
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
-            ->will($this->returnValue($eventManagerMock));
+            ->willReturn($eventManagerMock);
 
         $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
 
@@ -93,7 +93,7 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
         );
         $this->oauthDataMock->expects($this->any())
             ->method('getConsumerExpirationPeriod')
-            ->will($this->returnValue(\Magento\Integration\Helper\Oauth\Data::CONSUMER_EXPIRATION_PERIOD_DEFAULT));
+            ->willReturn(\Magento\Integration\Helper\Oauth\Data::CONSUMER_EXPIRATION_PERIOD_DEFAULT);
 
         $this->resourceMock = $this->createPartialMock(
             \Magento\Integration\Model\ResourceModel\Oauth\Consumer::class,

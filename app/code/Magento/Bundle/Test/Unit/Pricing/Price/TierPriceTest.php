@@ -59,7 +59,7 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
 
         $this->product->expects($this->any())
             ->method('getPriceInfo')
-            ->will($this->returnValue($this->priceInfo));
+            ->willReturn($this->priceInfo);
 
         $this->calculator = $this->createMock(\Magento\Framework\Pricing\Adjustment\Calculator::class);
         $this->groupManagement = $this
@@ -90,15 +90,15 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
         $price = $this->createMock(\Magento\Framework\Pricing\Price\PriceInterface::class);
         $price->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($basePrice));
+            ->willReturn($basePrice);
 
         $this->priceInfo->expects($this->any())
             ->method('getPrice')
-            ->will($this->returnValue($price));
+            ->willReturn($price);
 
         $this->calculator->expects($this->atLeastOnce())
             ->method('getAmount')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->priceCurrencyMock->expects($this->never())->method('convertAndRound');
 
@@ -107,7 +107,7 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn(\Magento\Customer\Model\GroupManagement::CUST_GROUP_ALL);
         $this->groupManagement->expects($this->any())->method('getAllCustomersGroup')
-            ->will($this->returnValue($group));
+            ->willReturn($group);
         $this->assertEquals($expectedResult, $this->model->getTierPriceList());
         $this->assertEquals(count($expectedResult), $this->model->getTierPriceCount());
     }
@@ -186,21 +186,21 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
         $amount = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Amount\AmountInterface::class);
         $amount->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($tierPrice));
+            ->willReturn($tierPrice);
 
         $priceAmount = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Amount\AmountInterface::class);
         $priceAmount->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($baseAmount));
+            ->willReturn($baseAmount);
 
         $price = $this->createMock(\Magento\Framework\Pricing\Price\PriceInterface::class);
         $price->expects($this->any())
             ->method('getAmount')
-            ->will($this->returnValue($priceAmount));
+            ->willReturn($priceAmount);
 
         $this->priceInfo->expects($this->any())
             ->method('getPrice')
-            ->will($this->returnValue($price));
+            ->willReturn($price);
 
         $this->assertEquals($savePercent, $this->model->getSavePercent($amount));
     }

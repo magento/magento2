@@ -33,7 +33,7 @@ class ButtonTest extends \PHPUnit\Framework\TestCase
         $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
         $this->escaperMock->expects($this->any())->method('escapeHtml')->willReturnArgument(0);
         $this->contextMock = $this->createPartialMock(\Magento\Backend\Block\Context::class, ['getEscaper']);
-        $this->contextMock->expects($this->any())->method('getEscaper')->will($this->returnValue($this->escaperMock));
+        $this->contextMock->expects($this->any())->method('getEscaper')->willReturn($this->escaperMock);
 
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->buttonRenderer = $this->objectManagerHelper->getObject(
@@ -54,7 +54,7 @@ class ButtonTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $column->expects($this->any())
             ->method('getType')
-            ->will($this->returnValue('bigButton'));
+            ->willReturn('bigButton');
         $column->expects($this->any())
             ->method('getId')
             ->willReturn('1');

@@ -61,12 +61,12 @@ class FreeTest extends \PHPUnit\Framework\TestCase
     {
         $this->scopeConfig->expects($this->at(0))
             ->method('getValue')
-            ->will($this->returnValue($orderStatus));
+            ->willReturn($orderStatus);
 
         if ($orderStatus != 'pending') {
             $this->scopeConfig->expects($this->at(1))
                 ->method('getValue')
-                ->will($this->returnValue($paymentAction));
+                ->willReturn($paymentAction);
         }
         $this->assertEquals($result, $this->methodFree->getConfigPaymentAction());
     }
@@ -86,7 +86,7 @@ class FreeTest extends \PHPUnit\Framework\TestCase
             $quote->expects($this->any())
                 ->method('__call')
                 ->with($this->equalTo('getGrandTotal'))
-                ->will($this->returnValue($grandTotal));
+                ->willReturn($grandTotal);
         }
 
         $this->currencyPrice->expects($this->any())
@@ -95,7 +95,7 @@ class FreeTest extends \PHPUnit\Framework\TestCase
 
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($isActive));
+            ->willReturn($isActive);
 
         $this->assertEquals($result, $this->methodFree->isAvailable($quote));
     }

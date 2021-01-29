@@ -36,7 +36,7 @@ class ObjectManagerProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->serviceLocatorMock = $this->getMockForAbstractClass(ServiceLocatorInterface::class);
         $this->bootstrapMock = $this->createMock(Bootstrap::class);

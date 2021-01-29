@@ -114,8 +114,8 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
         $this->option->expects($this->any())->method('getTitle')->willReturn('title');
         $this->option->expects($this->any())->method('getType')->willReturn(1);
         $this->option->expects($this->any())->method('getRequired')->willReturn(1);
-        $this->optionsCollection->expects($this->any())->method('getItems')->will(
-            $this->returnValue(new \ArrayIterator([$this->option]))
+        $this->optionsCollection->expects($this->any())->method('getItems')->willReturn(
+            new \ArrayIterator([$this->option])
         );
         $this->selection = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
@@ -137,8 +137,8 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
             \Magento\Bundle\Model\ResourceModel\Selection\Collection::class,
             ['getIterator', 'addAttributeToSort']
         );
-        $this->selectionsCollection->expects($this->any())->method('getIterator')->will(
-            $this->returnValue(new \ArrayIterator([$this->selection]))
+        $this->selectionsCollection->expects($this->any())->method('getIterator')->willReturn(
+            new \ArrayIterator([$this->selection])
         );
         $this->selectionsCollection->expects($this->any())->method('addAttributeToSort')->willReturnSelf();
         $this->product->expects($this->any())->method('getSelectionsCollection')->willReturn(
@@ -146,8 +146,8 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
         );
         $this->product->expects($this->any())->method('getSku')->willReturn(1);
         $this->productResourceCollection->expects($this->any())->method('addAttributeToFilter')->willReturnSelf();
-        $this->productResourceCollection->expects($this->any())->method('getIterator')->will(
-            $this->returnValue(new \ArrayIterator([$this->product]))
+        $this->productResourceCollection->expects($this->any())->method('getIterator')->willReturn(
+            new \ArrayIterator([$this->product])
         );
     }
 

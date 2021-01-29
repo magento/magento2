@@ -15,7 +15,7 @@
     <!-- Test suites definition -->
     <testsuites>
         <testsuite name="Unit Tests for Integration Tests Framework">
-            <directory suffix="Test.php">testsuite</directory>
+            <directory>testsuite</directory>
         </testsuite>
     </testsuites>
     <php>

@@ -66,8 +66,8 @@ class RedirectTest extends TestCase
     {
         $path = 'test/path';
         $params = ['one' => 1, 'two' => 2];
-        $this->redirectInterface->expects($this->once())->method('updatePathParams')->with($params)->will(
-            $this->returnValue($params)
+        $this->redirectInterface->expects($this->once())->method('updatePathParams')->with($params)->willReturn(
+            $params
         );
         $this->assertInstanceOf(
             Redirect::class,

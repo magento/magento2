@@ -38,7 +38,7 @@ class ConfigGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     private $driverOptionsMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

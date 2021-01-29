@@ -117,8 +117,8 @@ class NewsletterTest extends \PHPUnit\Framework\TestCase
             'getHeader'
         )->with(
             $this->equalTo('X-Frame-Options')
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $this->_objectManager = $this->getMockBuilder(
@@ -174,42 +174,42 @@ class NewsletterTest extends \PHPUnit\Framework\TestCase
         )->disableOriginalConstructor()->setMethods(
             $contextArgs
         )->getMock();
-        $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->_request));
-        $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->_response));
+        $contextMock->expects($this->any())->method('getRequest')->willReturn($this->_request);
+        $contextMock->expects($this->any())->method('getResponse')->willReturn($this->_response);
         $contextMock->expects(
             $this->any()
         )->method(
             'getObjectManager'
-        )->will(
-            $this->returnValue($this->_objectManager)
+        )->willReturn(
+            $this->_objectManager
         );
         $contextMock->expects(
             $this->any()
         )->method(
             'getFrontController'
-        )->will(
-            $this->returnValue($frontControllerMock)
+        )->willReturn(
+            $frontControllerMock
         );
-        $contextMock->expects($this->any())->method('getActionFlag')->will($this->returnValue($actionFlagMock));
+        $contextMock->expects($this->any())->method('getActionFlag')->willReturn($actionFlagMock);
 
-        $contextMock->expects($this->any())->method('getHelper')->will($this->returnValue($this->_helper));
-        $contextMock->expects($this->any())->method('getSession')->will($this->returnValue($this->_session));
+        $contextMock->expects($this->any())->method('getHelper')->willReturn($this->_helper);
+        $contextMock->expects($this->any())->method('getSession')->willReturn($this->_session);
         $contextMock->expects(
             $this->any()
         )->method(
             'getMessageManager'
-        )->will(
-            $this->returnValue($this->messageManager)
+        )->willReturn(
+            $this->messageManager
         );
         $this->titleMock =  $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
             ->disableOriginalConstructor()->getMock();
-        $contextMock->expects($this->any())->method('getTitle')->will($this->returnValue($this->titleMock));
+        $contextMock->expects($this->any())->method('getTitle')->willReturn($this->titleMock);
         $this->viewInterfaceMock =  $this->getMockBuilder(\Magento\Framework\App\ViewInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->viewInterfaceMock->expects($this->any())->method('loadLayout')->will($this->returnSelf());
-        $contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewInterfaceMock));
+        $this->viewInterfaceMock->expects($this->any())->method('loadLayout')->willReturnSelf();
+        $contextMock->expects($this->any())->method('getView')->willReturn($this->viewInterfaceMock);
         $this->resultLayoutMock = $this->getMockBuilder(\Magento\Framework\View\Result\Layout::class)
             ->disableOriginalConstructor()
             ->getMock();

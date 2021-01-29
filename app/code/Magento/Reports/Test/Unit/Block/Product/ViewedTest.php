@@ -28,7 +28,7 @@ class ViewedTest extends \PHPUnit\Framework\TestCase
         $productTags = ['catalog_product_1'];
 
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $product->expects($this->once())->method('getIdentities')->will($this->returnValue($productTags));
+        $product->expects($this->once())->method('getIdentities')->willReturn($productTags);
 
         $collection = new \ReflectionProperty(\Magento\Reports\Block\Product\Viewed::class, '_collection');
         $collection->setAccessible(true);

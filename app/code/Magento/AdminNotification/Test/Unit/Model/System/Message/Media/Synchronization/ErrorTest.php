@@ -30,7 +30,7 @@ class ErrorTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->_fileStorage = $this->createMock(\Magento\MediaStorage\Model\File\Storage\Flag::class);
-        $this->_fileStorage->expects($this->any())->method('loadSelf')->will($this->returnValue($this->_syncFlagMock));
+        $this->_fileStorage->expects($this->any())->method('loadSelf')->willReturn($this->_syncFlagMock);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = ['fileStorage' => $this->_fileStorage];
@@ -65,7 +65,7 @@ class ErrorTest extends \PHPUnit\Framework\TestCase
 
         $this->_syncFlagMock->expects($this->any())->method('setState');
         $this->_syncFlagMock->expects($this->any())->method('save');
-        $this->_syncFlagMock->expects($this->any())->method('getFlagData')->will($this->returnValue($data));
+        $this->_syncFlagMock->expects($this->any())->method('getFlagData')->willReturn($data);
         //check first call
         $this->assertEquals($expectedFirstRun, $model->isDisplayed());
         //check second call(another branch of if operator)

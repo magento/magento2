@@ -40,9 +40,9 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     public function testProcessCommand()
     {
         $command = $this->createMock(\Magento\Backend\Model\Menu\Builder\Command\Add::class);
-        $command->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $command->expects($this->any())->method('getId')->willReturn(1);
         $command2 = $this->createMock(\Magento\Backend\Model\Menu\Builder\Command\Update::class);
-        $command2->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $command2->expects($this->any())->method('getId')->willReturn(1);
         $command->expects($this->once())->method('chain')->with($this->equalTo($command2));
         $this->model->processCommand($command);
         $this->model->processCommand($command2);
@@ -51,11 +51,11 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     public function testGetResultBuildsTreeStructure()
     {
         $item1 = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
-        $item1->expects($this->once())->method('getChildren')->will($this->returnValue($this->menuMock));
-        $this->factoryMock->expects($this->any())->method('create')->will($this->returnValue($item1));
+        $item1->expects($this->once())->method('getChildren')->willReturn($this->menuMock);
+        $this->factoryMock->expects($this->any())->method('create')->willReturn($item1);
 
         $item2 = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
-        $this->factoryMock->expects($this->at(1))->method('create')->will($this->returnValue($item2));
+        $this->factoryMock->expects($this->at(1))->method('create')->willReturn($item2);
 
         $this->menuMock->expects(
             $this->at(0)
@@ -130,7 +130,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\OutOfRangeException::class);
 
         $item1 = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
-        $this->factoryMock->expects($this->any())->method('create')->will($this->returnValue($item1));
+        $this->factoryMock->expects($this->any())->method('create')->willReturn($item1);
 
         $this->model->processCommand(
             new \Magento\Backend\Model\Menu\Builder\Command\Add(

@@ -37,7 +37,7 @@ class IndexerResetStateCommandTest extends AbstractIndexerCommandCommonSetup
         $stateMock->expects($this->exactly(1))
             ->method('setStatus')
             ->with(\Magento\Framework\Indexer\StateInterface::STATUS_INVALID)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $stateMock->expects($this->exactly(1))
             ->method('save');

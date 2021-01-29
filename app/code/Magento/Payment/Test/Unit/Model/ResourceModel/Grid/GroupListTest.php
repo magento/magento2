@@ -30,7 +30,7 @@ class GroupListTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getPaymentMethodList')
             ->with(true, true, true)
-            ->will($this->returnValue(['group data']));
+            ->willReturn(['group data']);
         $this->assertEquals(['group data'], $this->groupArrayModel->toOptionArray());
     }
 }

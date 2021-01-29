@@ -44,7 +44,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
             ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->combineFactory->expects($this->once())->method('create')->will($this->returnValue($condition));
+        $this->combineFactory->expects($this->once())->method('create')->willReturn($condition);
         $this->assertSame($condition, $this->rule->getConditionsInstance());
     }
 

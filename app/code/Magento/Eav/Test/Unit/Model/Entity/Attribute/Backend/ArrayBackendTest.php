@@ -33,7 +33,7 @@ class ArrayBackendTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidate($data)
     {
-        $this->_attribute->expects($this->atLeastOnce())->method('getAttributeCode')->will($this->returnValue('code'));
+        $this->_attribute->expects($this->atLeastOnce())->method('getAttributeCode')->willReturn('code');
         $product = new \Magento\Framework\DataObject(['code' => $data, 'empty' => '']);
         $this->_model->validate($product);
         $this->assertEquals('1,2,3', $product->getCode());

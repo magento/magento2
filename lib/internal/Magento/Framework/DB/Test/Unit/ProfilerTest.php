@@ -38,7 +38,7 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
     public function testQueryStart()
     {
         $lastQueryId = $this->_profiler->queryStart('SELECT * FROM table');
-        $this->assertEquals(null, $lastQueryId);
+        $this->assertNull($lastQueryId);
     }
 
     public function testQueryEnd()

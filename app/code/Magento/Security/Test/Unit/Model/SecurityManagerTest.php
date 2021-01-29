@@ -153,7 +153,7 @@ class SecurityManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->remoteAddressMock->expects($this->once())
             ->method('getRemoteAddress')
-            ->will($this->returnValue($longIp));
+            ->willReturn($longIp);
 
         $this->passwordResetRequestEventFactoryMock->expects($this->once())
             ->method('create')

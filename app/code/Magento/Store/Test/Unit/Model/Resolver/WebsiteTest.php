@@ -42,7 +42,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getWebsite')
             ->with(0)
-            ->will($this->returnValue($scopeMock));
+            ->willReturn($scopeMock);
 
         $this->assertEquals($scopeMock, $this->_model->getScope());
     }
@@ -58,7 +58,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getWebsite')
             ->with(0)
-            ->will($this->returnValue($scopeMock));
+            ->willReturn($scopeMock);
 
         $this->assertEquals($scopeMock, $this->_model->getScope());
     }

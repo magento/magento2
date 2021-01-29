@@ -51,7 +51,7 @@ class TablesWhitelistGenerateCommandTest extends SetupTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->command = $this->objectManager->create(

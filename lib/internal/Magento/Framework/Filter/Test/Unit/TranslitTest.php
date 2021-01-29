@@ -77,8 +77,8 @@ class TranslitTest extends \PHPUnit\Framework\TestCase
         )->with(
             'url/convert',
             'default'
-        )->will(
-            $this->returnValue(['char8482' => ['from' => '™', 'to' => 'TM']])
+        )->willReturn(
+            ['char8482' => ['from' => '™', 'to' => 'TM']]
         );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

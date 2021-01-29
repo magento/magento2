@@ -50,7 +50,7 @@ abstract class AbstractCartTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->registry = $this->objectManager->get(Registry::class);
@@ -64,7 +64,7 @@ abstract class AbstractCartTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->registry->unregister(RegistryConstants::CURRENT_CUSTOMER_ID);
     }

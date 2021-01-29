@@ -126,13 +126,13 @@ class OrderStatusTest extends \PHPUnit\Framework\TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->order->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $this->order->expects($this->any())->method('getIncrementId')->will($this->returnValue('100000001'));
-        $this->order->expects($this->any())->method('getCustomerId')->will($this->returnValue(1));
-        $this->order->expects($this->any())->method('getStatusLabel')->will($this->returnValue('Pending'));
-        $this->order->expects($this->any())->method('formatPrice')->will($this->returnValue('15.00'));
-        $this->order->expects($this->any())->method('getGrandTotal')->will($this->returnValue(15));
-        $this->order->expects($this->any())->method('load')->with(1)->will($this->returnSelf());
+        $this->order->expects($this->any())->method('getId')->willReturn(1);
+        $this->order->expects($this->any())->method('getIncrementId')->willReturn('100000001');
+        $this->order->expects($this->any())->method('getCustomerId')->willReturn(1);
+        $this->order->expects($this->any())->method('getStatusLabel')->willReturn('Pending');
+        $this->order->expects($this->any())->method('formatPrice')->willReturn('15.00');
+        $this->order->expects($this->any())->method('getGrandTotal')->willReturn(15);
+        $this->order->expects($this->any())->method('load')->with(1)->willReturnSelf();
         $this->signature = $this->createMock(Signature::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -186,7 +186,7 @@ class OrderStatusTest extends \PHPUnit\Framework\TestCase
         $this->orderStatusFactory->expects($this->once())->method('create')->willReturn($resource);
         $this->urlInterface->expects($this->any())->method('getUrl')
             ->with('sales/order/view', ['order_id' => 1])
-            ->will($this->returnValue('http://magento.com/sales/order/view/order_id/1'));
+            ->willReturn('http://magento.com/sales/order/view/order_id/1');
 
         $this->assertEquals($this->feedData, $this->model->getRssData());
     }
@@ -256,7 +256,7 @@ class OrderStatusTest extends \PHPUnit\Framework\TestCase
     {
         $this->scopeConfigInterface->expects($this->once())->method('getValue')
             ->with('rss/order/status', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertTrue($this->model->isAllowed());
     }
 
@@ -281,7 +281,7 @@ class OrderStatusTest extends \PHPUnit\Framework\TestCase
             ->method('isValid')
             ->with($requestData, 'signature')
             ->willReturn(true);
-        $this->orderFactory->expects($this->once())->method('create')->will($this->returnValue($this->order));
+        $this->orderFactory->expects($this->once())->method('create')->willReturn($this->order);
         $this->assertEquals('rss_order_status_data_' . $result, $this->model->getCacheKey());
     }
 

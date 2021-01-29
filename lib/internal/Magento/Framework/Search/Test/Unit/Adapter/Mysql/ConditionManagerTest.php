@@ -33,21 +33,21 @@ class ConditionManagerTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->connectionMock->expects($this->any())
             ->method('quote')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($value) {
                         return sprintf('\'%s\'', $value);
                     }
-                )
+                
             );
         $this->connectionMock->expects($this->any())
             ->method('quoteIdentifier')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($value) {
                         return sprintf('`%s`', $value);
                     }
-                )
+                
             );
 
         $this->resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
@@ -55,7 +55,7 @@ class ConditionManagerTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->resource->expects($this->once())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
 
         $this->conditionManager = $objectManager->getObject(
             \Magento\Framework\Search\Adapter\Mysql\ConditionManager::class,

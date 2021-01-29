@@ -226,7 +226,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         foreach ($constructorMethods as $method) {
-            $this->advancedPricing->expects($this->once())->method($method)->will($this->returnSelf());
+            $this->advancedPricing->expects($this->once())->method($method)->willReturnSelf();
         }
         $this->advancedPricing->__construct(
             $this->localeDate,

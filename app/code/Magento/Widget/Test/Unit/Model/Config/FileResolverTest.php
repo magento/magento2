@@ -56,7 +56,7 @@ class FileResolverTest extends \PHPUnit\Framework\TestCase
         $this->componentDirSearch->expects($this->once())
             ->method('collectFiles')
             ->with(ComponentRegistrar::THEME, 'etc/file')
-            ->will($this->returnValue(['test']));
+            ->willReturn(['test']);
         $this->factory->expects($this->once())->method('create')->with(['test'])->willReturn($expected);
         $this->assertSame($expected, $this->object->get('file', 'design'));
     }

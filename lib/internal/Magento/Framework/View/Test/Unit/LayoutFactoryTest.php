@@ -40,20 +40,21 @@ class LayoutFactoryTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with($this->equalTo($instance), $this->equalTo($data))
-            ->will($this->returnValue($layoutMock));
+            ->willReturn($layoutMock);
         $this->assertInstanceOf($instance, $this->layoutFactory->create($data));
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage stdClass must be an instance of LayoutInterface.
      */
     public function testCreateException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('stdClass must be an instance of LayoutInterface.');
+
         $data = ['some' => 'other_data'];
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue(new \stdClass()));
+            ->willReturn(new \stdClass());
         $this->layoutFactory->create($data);
     }
 }

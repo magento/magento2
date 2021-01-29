@@ -46,7 +46,7 @@ class ConfigModelTest extends \PHPUnit\Framework\TestCase
      */
     private $configOptionsList;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->collector = $this->createMock(\Magento\Setup\Model\ConfigOptionsListCollector::class);
         $this->writer = $this->createMock(\Magento\Framework\App\DeploymentConfig\Writer::class);
@@ -75,13 +75,13 @@ class ConfigModelTest extends \PHPUnit\Framework\TestCase
             $option
         ];
         $configOption = $this->configOptionsList;
-        $configOption->expects($this->once())->method('getOptions')->will($this->returnValue($optionsSet));
-        $configOption->expects($this->once())->method('validate')->will($this->returnValue([]));
+        $configOption->expects($this->once())->method('getOptions')->willReturn($optionsSet);
+        $configOption->expects($this->once())->method('validate')->willReturn([]);
 
         $this->collector
             ->expects($this->exactly(2))
             ->method('collectOptionsLists')
-            ->will($this->returnValue([$configOption]));
+            ->willReturn([$configOption]);
 
         $this->configModel->validate(['Fake' => null]);
     }
@@ -127,27 +127,27 @@ class ConfigModelTest extends \PHPUnit\Framework\TestCase
 
         $configData1->expects($this->any())
             ->method('getData')
-            ->will($this->returnValue($testSet1[ConfigFilePool::APP_CONFIG]));
-        $configData1->expects($this->any())->method('getFileKey')->will($this->returnValue(ConfigFilePool::APP_CONFIG));
+            ->willReturn($testSet1[ConfigFilePool::APP_CONFIG]);
+        $configData1->expects($this->any())->method('getFileKey')->willReturn(ConfigFilePool::APP_CONFIG);
         $configData1->expects($this->once())->method('isOverrideWhenSave')->willReturn(false);
 
         $configData2->expects($this->any())
             ->method('getData')
-            ->will($this->returnValue($testSet2[ConfigFilePool::APP_CONFIG]));
-        $configData2->expects($this->any())->method('getFileKey')->will($this->returnValue(ConfigFilePool::APP_CONFIG));
+            ->willReturn($testSet2[ConfigFilePool::APP_CONFIG]);
+        $configData2->expects($this->any())->method('getFileKey')->willReturn(ConfigFilePool::APP_CONFIG);
         $configData2->expects($this->once())->method('isOverrideWhenSave')->willReturn(false);
 
         $configOption = $this->configOptionsList;
         $configOption->expects($this->once())
             ->method('createConfig')
-            ->will($this->returnValue([$configData1, $configData2]));
+            ->willReturn([$configData1, $configData2]);
 
         $configOptionsList = [
             'Fake_Module' => $configOption
         ];
         $this->collector->expects($this->once())
             ->method('collectOptionsLists')
-            ->will($this->returnValue($configOptionsList));
+            ->willReturn($configOptionsList);
 
         $this->writer->expects($this->at(0))->method('saveConfig')->with($testSetExpected1);
         $this->writer->expects($this->at(1))->method('saveConfig')->with($testSetExpected2);
@@ -156,31 +156,33 @@ class ConfigModelTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage In module : Fake_ModuleConfigOption::createConfig
      */
     public function testProcessException()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('In module : Fake_ModuleConfigOption::createConfig');
+
         $configOption = $this->configOptionsList;
         $configOption->expects($this->once())
             ->method('createConfig')
-            ->will($this->returnValue([null]));
+            ->willReturn([null]);
 
         $wrongData = [
             'Fake_Module' => $configOption
         ];
 
-        $this->collector->expects($this->once())->method('collectOptionsLists')->will($this->returnValue($wrongData));
+        $this->collector->expects($this->once())->method('collectOptionsLists')->willReturn($wrongData);
 
         $this->configModel->process([]);
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Missing write permissions to the following paths:
      */
     public function testWritePermissionErrors()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Missing write permissions to the following paths:');
+
         $this->filePermissions->expects($this->once())->method('getMissingWritablePathsForInstallation')
             ->willReturn(['/a/ro/dir', '/media']);
         $this->configModel->process([]);

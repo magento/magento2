@@ -195,12 +195,12 @@ class CategoryManagementTest extends \PHPUnit\Framework\TestCase
         $this->categoryRepositoryMock
             ->expects($this->exactly(2))
             ->method('get')
-            ->will($this->returnValueMap(
+            ->willReturnMap(
                 [
                     [$categoryId, null, $categoryMock],
                     [$parentId, null, $parentCategoryMock],
                 ]
-            ));
+            );
         $parentCategoryMock->expects($this->once())->method('hasChildren')->willReturn(true);
         $parentCategoryMock->expects($this->once())->method('getChildren')->willReturn('5,6,7');
         $categoryMock->expects($this->once())->method('getPath');
@@ -231,12 +231,12 @@ class CategoryManagementTest extends \PHPUnit\Framework\TestCase
         $this->categoryRepositoryMock
             ->expects($this->exactly(2))
             ->method('get')
-            ->will($this->returnValueMap(
+            ->willReturnMap(
                 [
                     [$categoryId, null, $categoryMock],
                     [$parentId, null, $parentCategoryMock],
                 ]
-            ));
+            );
         $categoryMock->expects($this->once())->method('getPath')->willReturn('test');
         $parentCategoryMock->expects($this->once())->method('getPath')->willReturn('test');
         $this->model->move($categoryId, $parentId, $afterId);
@@ -264,12 +264,12 @@ class CategoryManagementTest extends \PHPUnit\Framework\TestCase
         $this->categoryRepositoryMock
             ->expects($this->exactly(2))
             ->method('get')
-            ->will($this->returnValueMap(
+            ->willReturnMap(
                 [
                     [$categoryId, null, $categoryMock],
                     [$parentId, null, $parentCategoryMock],
                 ]
-            ));
+            );
         $categoryMock->expects($this->once())
             ->method('move')
             ->with($parentId, $afterId)

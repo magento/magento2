@@ -66,7 +66,7 @@ abstract class ExpressTest extends \PHPUnit\Framework\TestCase
         $this->quote = $this->createMock(\Magento\Quote\Model\Quote::class);
         $this->quote->expects($this->any())
             ->method('hasItems')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->redirect = $this->getMockForAbstractClass(\Magento\Framework\App\Response\RedirectInterface::class);
         $this->response = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $this->customerData = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
@@ -74,15 +74,15 @@ abstract class ExpressTest extends \PHPUnit\Framework\TestCase
         $this->customerSession = $this->createMock(\Magento\Customer\Model\Session::class);
         $this->customerSession->expects($this->any())
             ->method('getCustomerDataObject')
-            ->will($this->returnValue($this->customerData));
+            ->willReturn($this->customerData);
         $this->checkoutSession = $this->createMock(\Magento\Checkout\Model\Session::class);
         $this->checkoutFactory = $this->createMock(\Magento\Paypal\Model\Express\Checkout\Factory::class);
         $this->checkoutFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->checkout));
+            ->willReturn($this->checkout);
         $this->checkoutSession->expects($this->any())
             ->method('getQuote')
-            ->will($this->returnValue($this->quote));
+            ->willReturn($this->quote);
         $this->session = $this->createMock(\Magento\Framework\Session\Generic::class);
         $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->objectManagerCallback = function ($className) {
@@ -93,14 +93,14 @@ abstract class ExpressTest extends \PHPUnit\Framework\TestCase
         };
         $objectManager->expects($this->any())
             ->method('get')
-            ->will($this->returnCallback(function ($className) {
+            ->willReturnCallback(function ($className) {
                 return call_user_func($this->objectManagerCallback, $className);
-            }));
+            });
         $objectManager->expects($this->any())
             ->method('create')
-            ->will($this->returnCallback(function ($className) {
+            ->willReturnCallback(function ($className) {
                 return call_user_func($this->objectManagerCallback, $className);
-            }));
+            });
 
         $helper = new ObjectManagerHelper($this);
         $this->model = $helper->getObject(

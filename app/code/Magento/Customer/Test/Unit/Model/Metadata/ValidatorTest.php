@@ -97,8 +97,8 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         )->disableOriginalConstructor()->setMethods(
             ['__wakeup', 'getAttributeCode', 'getDataModel']
         )->getMock();
-        $attribute->expects($this->any())->method('getAttributeCode')->will($this->returnValue('ATTR_CODE'));
-        $attribute->expects($this->any())->method('getDataModel')->will($this->returnValue('DATA_MODEL'));
+        $attribute->expects($this->any())->method('getAttributeCode')->willReturn('ATTR_CODE');
+        $attribute->expects($this->any())->method('getDataModel')->willReturn('DATA_MODEL');
         return $attribute;
     }
 
@@ -112,7 +112,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $dataModel = $this->getMockBuilder(
             \Magento\Customer\Model\Metadata\Form\Text::class
         )->disableOriginalConstructor()->getMock();
-        $dataModel->expects($this->any())->method('validateValue')->will($this->returnValue($isValid));
+        $dataModel->expects($this->any())->method('validateValue')->willReturn($isValid);
         $this->attrDataFactoryMock->expects(
             $this->any()
         )->method(
@@ -121,8 +121,8 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             $this->equalTo($attribute),
             $this->equalTo(null),
             $this->equalTo('ENTITY_TYPE')
-        )->will(
-            $this->returnValue($dataModel)
+        )->willReturn(
+            $dataModel
         );
     }
 }

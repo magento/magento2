@@ -72,10 +72,10 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
     public function testSuccessUrl($baseUrl, $successUrl)
     {
         $testStoreMock = $this->createMock(\Magento\Store\Model\Store::class);
-        $testStoreMock->expects($this->any())->method('getBaseUrl')->will($this->returnValue($baseUrl));
-        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(null));
+        $testStoreMock->expects($this->any())->method('getBaseUrl')->willReturn($baseUrl);
+        $this->_requestMock->expects($this->any())->method('getParam')->willReturn(null);
         $this->_storeManagerMock->expects($this->any())->method('getStore')
-            ->will($this->returnValue($testStoreMock));
+            ->willReturn($testStoreMock);
         $this->assertEquals($baseUrl, $this->_model->success($successUrl));
     }
 

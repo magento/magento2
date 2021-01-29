@@ -47,7 +47,7 @@ class DisableMultishippingModeTest extends \PHPUnit\Framework\TestCase
         );
         $this->cartMock->expects($this->once())
             ->method('getQuote')
-            ->will($this->returnValue($this->quoteMock));
+            ->willReturn($this->quoteMock);
         $this->object = new DisableMultishippingMode($this->cartMock);
     }
 

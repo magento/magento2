@@ -77,7 +77,7 @@ class OauthTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->_consumerFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->_consumerMock));
+            ->willReturn($this->_consumerMock);
         $this->_nonceFactory = $this->getMockBuilder(\Magento\Integration\Model\Oauth\NonceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -106,7 +106,7 @@ class OauthTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->getMock();
-        $this->_tokenFactory->expects($this->any())->method('create')->will($this->returnValue($this->_tokenMock));
+        $this->_tokenFactory->expects($this->any())->method('create')->willReturn($this->_tokenMock);
         $this->_oauthHelperMock = $this->getMockBuilder(\Magento\Framework\Oauth\Helper\Oauth::class)
             ->setConstructorArgs([new \Magento\Framework\Math\Random()])
             ->getMock();
@@ -214,8 +214,8 @@ class OauthTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'loadByKey'
-        )->will(
-            $this->returnValue(new \Magento\Framework\DataObject())
+        )->willReturn(
+            new \Magento\Framework\DataObject()
         );
 
         $this->_oauth->getRequestToken($this->_getRequestTokenParams(), self::REQUEST_URL);
@@ -234,7 +234,7 @@ class OauthTest extends \PHPUnit\Framework\TestCase
         $this->_consumerMock
             ->expects($this->any())
             ->method('isValidForTokenExchange')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->_oauth->getRequestToken($this->_getRequestTokenParams(), self::REQUEST_URL);
     }
@@ -244,36 +244,36 @@ class OauthTest extends \PHPUnit\Framework\TestCase
      */
     protected function _setupConsumer($isLoadable = true)
     {
-        $this->_consumerMock->expects($this->any())->method('loadByKey')->will($this->returnSelf());
+        $this->_consumerMock->expects($this->any())->method('loadByKey')->willReturnSelf();
 
         $this->_consumerMock->expects(
             $this->any()
         )->method(
             'getCreatedAt'
-        )->will(
-            $this->returnValue(date('c', strtotime('-1 day')))
+        )->willReturn(
+            date('c', strtotime('-1 day'))
         );
 
         if ($isLoadable) {
-            $this->_consumerMock->expects($this->any())->method('load')->will($this->returnSelf());
+            $this->_consumerMock->expects($this->any())->method('load')->willReturnSelf();
         } else {
             $this->_consumerMock->expects(
                 $this->any()
             )->method(
                 'load'
-            )->will(
-                $this->returnValue(new \Magento\Framework\DataObject())
+            )->willReturn(
+                new \Magento\Framework\DataObject()
             );
         }
 
-        $this->_consumerMock->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $this->_consumerMock->expects($this->any())->method('getSecret')->will($this->returnValue('consumer_secret'));
+        $this->_consumerMock->expects($this->any())->method('getId')->willReturn(1);
+        $this->_consumerMock->expects($this->any())->method('getSecret')->willReturn('consumer_secret');
         $this->_consumerMock->expects(
             $this->any()
         )->method(
             'getCallbackUrl'
-        )->will(
-            $this->returnValue('callback_url')
+        )->willReturn(
+            'callback_url'
         );
     }
 
@@ -282,7 +282,7 @@ class OauthTest extends \PHPUnit\Framework\TestCase
         $this->_consumerMock
             ->expects($this->any())
             ->method('isValidForTokenExchange')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
     }
 
     /**
@@ -336,14 +336,14 @@ class OauthTest extends \PHPUnit\Framework\TestCase
             ]
         )->getMock();
 
-        $nonceMock->expects($this->any())->method('getNonce')->will($this->returnValue($isUsed));
-        $nonceMock->expects($this->any())->method('loadByCompositeKey')->will($this->returnSelf());
-        $nonceMock->expects($this->any())->method('getTimestamp')->will($this->returnValue($timestamp));
-        $nonceMock->expects($this->any())->method('setNonce')->will($this->returnSelf());
-        $nonceMock->expects($this->any())->method('setConsumerId')->will($this->returnSelf());
-        $nonceMock->expects($this->any())->method('setTimestamp')->will($this->returnSelf());
-        $nonceMock->expects($this->any())->method('save')->will($this->returnSelf());
-        $this->_nonceFactory->expects($this->any())->method('create')->will($this->returnValue($nonceMock));
+        $nonceMock->expects($this->any())->method('getNonce')->willReturn($isUsed);
+        $nonceMock->expects($this->any())->method('loadByCompositeKey')->willReturnSelf();
+        $nonceMock->expects($this->any())->method('getTimestamp')->willReturn($timestamp);
+        $nonceMock->expects($this->any())->method('setNonce')->willReturnSelf();
+        $nonceMock->expects($this->any())->method('setConsumerId')->willReturnSelf();
+        $nonceMock->expects($this->any())->method('setTimestamp')->willReturnSelf();
+        $nonceMock->expects($this->any())->method('save')->willReturnSelf();
+        $this->_nonceFactory->expects($this->any())->method('create')->willReturn($nonceMock);
     }
 
     /**
@@ -373,8 +373,8 @@ class OauthTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'loadByKey'
-        )->will(
-            $this->returnValue(new \Magento\Framework\DataObject())
+        )->willReturn(
+            new \Magento\Framework\DataObject()
         );
 
         $this->_oauth->getRequestToken($this->_getRequestTokenParams(), self::REQUEST_URL);
@@ -398,22 +398,22 @@ class OauthTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getId'
-        )->will(
-            $this->returnValue($doesExist ? self::CONSUMER_ID : null)
+        )->willReturn(
+            $doesExist ? self::CONSUMER_ID : null
         );
 
         $verifier = $verifier ?: $this->_oauthVerifier;
 
-        $this->_tokenMock->expects($this->any())->method('load')->will($this->returnSelf());
-        $this->_tokenMock->expects($this->any())->method('getType')->will($this->returnValue($type));
-        $this->_tokenMock->expects($this->any())->method('createRequestToken')->will($this->returnSelf());
-        $this->_tokenMock->expects($this->any())->method('getToken')->will($this->returnValue($this->_oauthToken));
-        $this->_tokenMock->expects($this->any())->method('getSecret')->will($this->returnValue($this->_oauthSecret));
-        $this->_tokenMock->expects($this->any())->method('getConsumerId')->will($this->returnValue($consumerId));
-        $this->_tokenMock->expects($this->any())->method('getVerifier')->will($this->returnValue($verifier));
-        $this->_tokenMock->expects($this->any())->method('convertToAccess')->will($this->returnSelf());
-        $this->_tokenMock->expects($this->any())->method('getRevoked')->will($this->returnValue($isRevoked));
-        $this->_tokenMock->expects($this->any())->method('loadByConsumerIdAndUserType')->will($this->returnSelf());
+        $this->_tokenMock->expects($this->any())->method('load')->willReturnSelf();
+        $this->_tokenMock->expects($this->any())->method('getType')->willReturn($type);
+        $this->_tokenMock->expects($this->any())->method('createRequestToken')->willReturnSelf();
+        $this->_tokenMock->expects($this->any())->method('getToken')->willReturn($this->_oauthToken);
+        $this->_tokenMock->expects($this->any())->method('getSecret')->willReturn($this->_oauthSecret);
+        $this->_tokenMock->expects($this->any())->method('getConsumerId')->willReturn($consumerId);
+        $this->_tokenMock->expects($this->any())->method('getVerifier')->willReturn($verifier);
+        $this->_tokenMock->expects($this->any())->method('convertToAccess')->willReturnSelf();
+        $this->_tokenMock->expects($this->any())->method('getRevoked')->willReturn($isRevoked);
+        $this->_tokenMock->expects($this->any())->method('loadByConsumerIdAndUserType')->willReturnSelf();
     }
 
     /**
@@ -430,7 +430,7 @@ class OauthTest extends \PHPUnit\Framework\TestCase
         $this->_setupToken(false);
 
         $signature = 'valid_signature';
-        $this->_httpUtilityMock->expects($this->any())->method('sign')->will($this->returnValue($signature));
+        $this->_httpUtilityMock->expects($this->any())->method('sign')->willReturn($signature);
 
         $this->_oauth->getRequestToken(
             $this->_getRequestTokenParams(['oauth_signature' => $signature]),
@@ -453,7 +453,7 @@ class OauthTest extends \PHPUnit\Framework\TestCase
         // wrong type
 
         $signature = 'valid_signature';
-        $this->_httpUtilityMock->expects($this->any())->method('sign')->will($this->returnValue($signature));
+        $this->_httpUtilityMock->expects($this->any())->method('sign')->willReturn($signature);
 
         $this->_oauth->getRequestToken(
             $this->_getRequestTokenParams(['oauth_signature' => $signature]),
@@ -507,7 +507,7 @@ class OauthTest extends \PHPUnit\Framework\TestCase
         $this->_setupToken();
 
         $signature = 'valid_signature';
-        $this->_httpUtilityMock->expects($this->any())->method('sign')->will($this->returnValue($signature));
+        $this->_httpUtilityMock->expects($this->any())->method('sign')->willReturn($signature);
 
         $requestToken = $this->_oauth->getRequestToken(
             $this->_getRequestTokenParams(['oauth_signature' => $signature]),
@@ -786,15 +786,15 @@ class OauthTest extends \PHPUnit\Framework\TestCase
     public function testBuildAuthorizationHeader()
     {
         $signature = 'valid_signature';
-        $this->_httpUtilityMock->expects($this->any())->method('sign')->will($this->returnValue($signature));
+        $this->_httpUtilityMock->expects($this->any())->method('sign')->willReturn($signature);
 
         $this->_setupConsumer(false);
         $this->_oauthHelperMock->expects(
             $this->any()
         )->method(
             'generateRandomString'
-        )->will(
-            $this->returnValue('tyukmnjhgfdcvxstyuioplkmnhtfvert')
+        )->willReturn(
+            'tyukmnjhgfdcvxstyuioplkmnhtfvert'
         );
 
         $request = [

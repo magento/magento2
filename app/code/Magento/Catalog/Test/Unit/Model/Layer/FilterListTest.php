@@ -69,7 +69,7 @@ class FilterListTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManagerMock->expects($this->at(0))
             ->method('create')
-            ->will($this->returnValue('filter'));
+            ->willReturn('filter');
 
         $this->objectManagerMock->expects($this->at(1))
             ->method('create')
@@ -80,15 +80,15 @@ class FilterListTest extends \PHPUnit\Framework\TestCase
                     'layer' => $this->layerMock
                 ]
             )
-            ->will($this->returnValue('filter'));
+            ->willReturn('filter');
 
         $this->attributeMock->expects($this->once())
             ->method($method)
-            ->will($this->returnValue($value));
+            ->willReturn($value);
 
         $this->attributeListMock->expects($this->once())
             ->method('getList')
-            ->will($this->returnValue([$this->attributeMock]));
+            ->willReturn([$this->attributeMock]);
 
         $this->assertEquals(['filter', 'filter'], $this->model->getFilters($this->layerMock));
     }

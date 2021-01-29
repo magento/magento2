@@ -89,10 +89,11 @@ class JoinProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testProcessWithException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         /** @var \PHPUnit\Framework\MockObject\MockObject $customJoinMock */
         $customJoinMock = $this->getMockBuilder(\stdClass::class)
             ->getMock();

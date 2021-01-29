@@ -29,7 +29,7 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
     public function testGetOptions()
     {
         $options = $this->object->getOptions();
-        $this->assertInternalType('array', $options);
+        $this->assertIsArray($options);
         foreach ($options as $option) {
             $this->assertInstanceOf(\Magento\Framework\Setup\Option\AbstractConfigOption::class, $option);
         }
@@ -50,7 +50,7 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $this->assertInternalType('array', $actualConfig);
+        $this->assertIsArray($actualConfig);
         /** @var \Magento\Framework\Config\Data\ConfigData $config */
         foreach ($actualConfig as $i => $config) {
             $this->assertInstanceOf(\Magento\Framework\Config\Data\ConfigData::class, $config);

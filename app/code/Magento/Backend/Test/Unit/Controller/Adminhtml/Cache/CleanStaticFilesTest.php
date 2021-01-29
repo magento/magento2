@@ -69,7 +69,7 @@ class CleanStaticFilesTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $cleanupFilesMock->expects($this->once())
             ->method('clearMaterializedViewFiles');
-        $this->objectManagerMock->expects($this->once())->method('get')->will($this->returnValue($cleanupFilesMock));
+        $this->objectManagerMock->expects($this->once())->method('get')->willReturn($cleanupFilesMock);
 
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch')

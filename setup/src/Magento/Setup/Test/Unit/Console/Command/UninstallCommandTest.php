@@ -28,7 +28,7 @@ class UninstallCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $command;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->installerFactory = $this->createMock(\Magento\Setup\Model\InstallerFactory::class);
         $this->installer = $this->createMock(\Magento\Setup\Model\Installer::class);
@@ -38,7 +38,7 @@ class UninstallCommandTest extends \PHPUnit\Framework\TestCase
     public function testExecuteInteractionYes()
     {
         $this->installer->expects($this->once())->method('uninstall');
-        $this->installerFactory->expects($this->once())->method('create')->will($this->returnValue($this->installer));
+        $this->installerFactory->expects($this->once())->method('create')->willReturn($this->installer);
 
         $this->checkInteraction(true);
     }
@@ -60,7 +60,7 @@ class UninstallCommandTest extends \PHPUnit\Framework\TestCase
         $question
             ->expects($this->once())
             ->method('ask')
-            ->will($this->returnValue($answer));
+            ->willReturn($answer);
 
         /** @var \Symfony\Component\Console\Helper\HelperSet|\PHPUnit\Framework\MockObject\MockObject $helperSet */
         $helperSet = $this->createMock(\Symfony\Component\Console\Helper\HelperSet::class);
@@ -68,7 +68,7 @@ class UninstallCommandTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('get')
             ->with('question')
-            ->will($this->returnValue($question));
+            ->willReturn($question);
         $this->command->setHelperSet($helperSet);
 
         $tester = new CommandTester($this->command);

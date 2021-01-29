@@ -67,9 +67,9 @@ class AreaTest extends \PHPUnit\Framework\TestCase
 
         $this->classReaderDecoratorMock->expects($this->exactly(count($classes)))
             ->method('getConstructor')
-            ->will($this->returnValueMap(
+            ->willReturnMap(
                 $constructors
-            ));
+            );
 
         $result = $this->model->getList($path);
 

@@ -84,14 +84,14 @@ class CreateLabelTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->loadShipment();
-        $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
-        $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
+        $contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
+        $contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
         $contextMock->expects($this->any())
             ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManagerMock));
+            ->willReturn($this->objectManagerMock);
         $contextMock->expects($this->any())
             ->method('getMessageManager')
-            ->will($this->returnValue($this->messageManagerMock));
+            ->willReturn($this->messageManagerMock);
 
         $this->controller = new \Magento\Shipping\Controller\Adminhtml\Order\Shipment\CreateLabel(
             $contextMock,
@@ -115,19 +115,19 @@ class CreateLabelTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->at(0))
             ->method('getParam')
             ->with('order_id')
-            ->will($this->returnValue($orderId));
+            ->willReturn($orderId);
         $this->requestMock->expects($this->at(1))
             ->method('getParam')
             ->with('shipment_id')
-            ->will($this->returnValue($shipmentId));
+            ->willReturn($shipmentId);
         $this->requestMock->expects($this->at(2))
             ->method('getParam')
             ->with('shipment')
-            ->will($this->returnValue($shipment));
+            ->willReturn($shipment);
         $this->requestMock->expects($this->at(3))
             ->method('getParam')
             ->with('tracking')
-            ->will($this->returnValue($tracking));
+            ->willReturn($tracking);
         $this->shipmentLoaderMock->expects($this->once())
             ->method('setOrderId')
             ->with($orderId);
@@ -149,12 +149,12 @@ class CreateLabelTest extends \PHPUnit\Framework\TestCase
     {
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($this->shipmentMock));
+            ->willReturn($this->shipmentMock);
         $this->labelGenerator->expects($this->once())
             ->method('create')
             ->with($this->shipmentMock, $this->requestMock)
-            ->will($this->returnValue(true));
-        $this->shipmentMock->expects($this->once())->method('save')->will($this->returnSelf());
+            ->willReturn(true);
+        $this->shipmentMock->expects($this->once())->method('save')->willReturnSelf();
         $this->messageManagerMock->expects($this->once())->method('addSuccess');
         $this->responseMock->expects($this->once())->method('representJson');
 
@@ -183,17 +183,17 @@ class CreateLabelTest extends \PHPUnit\Framework\TestCase
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($this->shipmentMock));
+            ->willReturn($this->shipmentMock);
         $this->labelGenerator->expects($this->once())
             ->method('create')
             ->with($this->shipmentMock, $this->requestMock)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->shipmentMock->expects($this->once())->method('save')->will($this->throwException(new \Exception()));
         $loggerMock->expects($this->once())->method('critical');
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with(\Psr\Log\LoggerInterface::class)
-            ->will($this->returnValue($loggerMock));
+            ->willReturn($loggerMock);
         $this->responseMock->expects($this->once())->method('representJson');
 
         $this->assertNull($this->controller->execute());
@@ -206,7 +206,7 @@ class CreateLabelTest extends \PHPUnit\Framework\TestCase
     {
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($this->shipmentMock));
+            ->willReturn($this->shipmentMock);
         $this->labelGenerator->expects($this->once())
             ->method('create')
             ->with($this->shipmentMock, $this->requestMock)

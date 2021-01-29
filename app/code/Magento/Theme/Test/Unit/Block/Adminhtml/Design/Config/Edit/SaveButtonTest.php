@@ -34,7 +34,7 @@ class SaveButtonTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('label', $result);
         $this->assertEquals($result['label'], __('Save Configuration'));
         $this->assertArrayHasKey('data_attribute', $result);
-        $this->assertInternalType('array', $result['data_attribute']);
+        $this->assertIsArray($result['data_attribute']);
     }
 
     protected function initContext()

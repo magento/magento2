@@ -48,7 +48,7 @@ class VariableTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->assetRepo->expects($this->any())
             ->method('getStaticViewFileContext')
-            ->will($this->returnValue($this->context));
+            ->willReturn($this->context);
 
         $this->object = new Variable($this->assetRepo);
     }

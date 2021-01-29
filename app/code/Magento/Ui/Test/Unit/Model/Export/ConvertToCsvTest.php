@@ -139,7 +139,7 @@ class ConvertToCsvTest extends \PHPUnit\Framework\TestCase
             ->with($document, $componentName);
 
         $result = $this->model->getCsvFile();
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertArrayHasKey('type', $result);
         $this->assertArrayHasKey('value', $result);
         $this->assertArrayHasKey('rm', $result);

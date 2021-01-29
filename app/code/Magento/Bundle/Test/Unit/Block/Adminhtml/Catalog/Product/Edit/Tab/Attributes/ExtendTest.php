@@ -45,8 +45,8 @@ class ExtendTest extends \PHPUnit\Framework\TestCase
         $this->registry->expects($this->once())
             ->method('registry')
             ->with('product')
-            ->will(
-                $this->returnValue($product)
+            ->willReturn(
+                $product
             );
         return $product;
     }
@@ -62,10 +62,10 @@ class ExtendTest extends \PHPUnit\Framework\TestCase
             $hasKey
         );
 
-        $this->formFactory->expects($this->once())->method('create')->with()->will($this->returnValue($form));
+        $this->formFactory->expects($this->once())->method('create')->with()->willReturn($form);
         $product = $this->getProduct();
-        $product->expects($this->once())->method('getData')->with($switchAttributeCode)->will(
-            $this->returnValue(123)
+        $product->expects($this->once())->method('getData')->with($switchAttributeCode)->willReturn(
+            123
         );
         $this->object->setIsDisabledField(true);
         $this->object->getExtendedElement($switchAttributeCode);

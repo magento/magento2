@@ -31,8 +31,8 @@ class ParamsOverriderTest extends \PHPUnit\Framework\TestCase
 
         $userContextMock = $this->getMockBuilder(\Magento\Authorization\Model\UserContextInterface::class)
             ->disableOriginalConstructor()->setMethods(['getUserId', 'getUserType'])->getMockForAbstractClass();
-        $userContextMock->expects($this->any())->method('getUserId')->will($this->returnValue($userId));
-        $userContextMock->expects($this->any())->method('getUserType')->will($this->returnValue($userType));
+        $userContextMock->expects($this->any())->method('getUserId')->willReturn($userId);
+        $userContextMock->expects($this->any())->method('getUserType')->willReturn($userType);
 
         $paramOverriderCustomerId = $objectManager->getObject(
             \Magento\Webapi\Controller\Rest\ParamOverriderCustomerId::class,

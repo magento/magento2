@@ -25,7 +25,7 @@ class ConfigSourceAggregatedTest extends \PHPUnit\Framework\TestCase
      */
     private $source;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->sourceMock = $this->getMockBuilder(ConfigSourceInterface::class)
             ->getMockForAbstractClass();

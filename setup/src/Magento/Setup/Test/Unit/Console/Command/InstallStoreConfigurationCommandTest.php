@@ -99,12 +99,12 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit\Framework\TestCase
     {
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->installer->expects($this->once())
             ->method('installUserConfig');
         $this->installerFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->installer));
+            ->willReturn($this->installer);
         $tester = new CommandTester($this->command);
         $tester->execute([]);
     }
@@ -113,7 +113,7 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit\Framework\TestCase
     {
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->installerFactory->expects($this->never())
             ->method('create');
         $tester = new CommandTester($this->command);
@@ -138,7 +138,7 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit\Framework\TestCase
 
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->installerFactory->expects($this->never())
             ->method('create');
         $commandTester = new CommandTester($this->command);

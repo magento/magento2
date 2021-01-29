@@ -58,14 +58,14 @@ abstract class ProductTest extends \PHPUnit\Framework\TestCase
         $this->layout = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
             ->setMethods(['getBlock'])->disableOriginalConstructor()
             ->getMock();
-        $this->layout->expects($this->any())->method('getBlock')->will($this->returnValue($block));
+        $this->layout->expects($this->any())->method('getBlock')->willReturn($block);
 
         $eventManager = $this->getMockBuilder(\Magento\Framework\Event\Manager::class)
             ->setMethods(['dispatch'])->disableOriginalConstructor()->getMock();
-        $eventManager->expects($this->any())->method('dispatch')->will($this->returnSelf());
+        $eventManager->expects($this->any())->method('dispatch')->willReturnSelf();
         $title = $this->getMockBuilder(\Magento\Framework\App\Action\Title::class)
             ->setMethods(['add', 'prepend'])->disableOriginalConstructor()->getMock();
-        $title->expects($this->any())->method('prepend')->withAnyParameters()->will($this->returnSelf());
+        $title->expects($this->any())->method('prepend')->withAnyParameters()->willReturnSelf();
         $requestInterfaceMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)->setMethods(
             ['getParam', 'getPost', 'getFullActionName', 'getPostValue']
         )->disableOriginalConstructor()->getMock();
@@ -96,17 +96,17 @@ abstract class ProductTest extends \PHPUnit\Framework\TestCase
                 'getResultFactory'
             ]);
 
-        $this->context->expects($this->any())->method('getTitle')->will($this->returnValue($title));
-        $this->context->expects($this->any())->method('getEventManager')->will($this->returnValue($eventManager));
-        $this->context->expects($this->any())->method('getRequest')->will($this->returnValue($requestInterfaceMock));
-        $this->context->expects($this->any())->method('getResponse')->will($this->returnValue($responseInterfaceMock));
+        $this->context->expects($this->any())->method('getTitle')->willReturn($title);
+        $this->context->expects($this->any())->method('getEventManager')->willReturn($eventManager);
+        $this->context->expects($this->any())->method('getRequest')->willReturn($requestInterfaceMock);
+        $this->context->expects($this->any())->method('getResponse')->willReturn($responseInterfaceMock);
         $this->context->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
 
         $this->context->expects($this->any())->method('getMessageManager')
-            ->will($this->returnValue($managerInterfaceMock));
-        $this->context->expects($this->any())->method('getSession')->will($this->returnValue($sessionMock));
-        $this->context->expects($this->any())->method('getActionFlag')->will($this->returnValue($actionFlagMock));
-        $this->context->expects($this->any())->method('getHelper')->will($this->returnValue($helperDataMock));
+            ->willReturn($managerInterfaceMock);
+        $this->context->expects($this->any())->method('getSession')->willReturn($sessionMock);
+        $this->context->expects($this->any())->method('getActionFlag')->willReturn($actionFlagMock);
+        $this->context->expects($this->any())->method('getHelper')->willReturn($helperDataMock);
 
         foreach ($additionalParams as $property => $object) {
             $this->context->expects($this->any())->method('get' . ucfirst($property))->willReturn($object);

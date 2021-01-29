@@ -70,11 +70,12 @@ class ViewFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage wrong theme doesn't implement ThemeInterface
      */
     public function testCreateException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('wrong theme doesn\'t implement ThemeInterface');
+
         $this->model->create(
             [
                 'themeModel' => 'wrong theme',

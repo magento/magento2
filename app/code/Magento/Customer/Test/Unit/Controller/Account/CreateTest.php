@@ -94,11 +94,11 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     {
         $this->customerSession->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->registrationMock->expects($this->once())
             ->method('isAllowed')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->redirectFactoryMock->expects($this->once())
             ->method('create')
@@ -122,11 +122,11 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     {
         $this->customerSession->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->registrationMock->expects($this->once())
             ->method('isAllowed')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->redirectMock->expects($this->never())
             ->method('redirect');

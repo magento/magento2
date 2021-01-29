@@ -39,7 +39,7 @@ class ProductLinksTest extends \PHPUnit\Framework\TestCase
     public function testAfterGetProductCollectionShow($status, $callCount)
     {
         list($collectionMock, $subjectMock) = $this->buildMocks();
-        $this->configMock->expects($this->once())->method('isShowOutOfStock')->will($this->returnValue($status));
+        $this->configMock->expects($this->once())->method('isShowOutOfStock')->willReturn($status);
         $this->stockHelperMock
             ->expects($this->exactly($callCount))
             ->method('addInStockFilterToCollection')

@@ -80,11 +80,11 @@ class MatchTest extends \PHPUnit\Framework\TestCase
         $this->preprocessor->expects($this->once())
             ->method('process')
             ->with($this->equalTo('some_value '))
-            ->will($this->returnValue('some_value '));
+            ->willReturn('some_value ');
         $this->fulltextHelper->expects($this->once())
             ->method('getMatchQuery')
             ->with($this->equalTo(['some_field' => 'some_field']), $this->equalTo('-some_value*'))
-            ->will($this->returnValue('matchedQuery'));
+            ->willReturn('matchedQuery');
         $select->expects($this->once())
             ->method('where')
             ->with('matchedQuery')

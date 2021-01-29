@@ -46,8 +46,8 @@ class LockValidatorCompositeTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             \Magento\Catalog\Model\Attribute\LockValidatorComposite::class
-        )->will(
-            $this->returnValue($lockValidatorMock)
+        )->willReturn(
+            $lockValidatorMock
         );
 
         $this->model = new \Magento\Catalog\Model\Attribute\LockValidatorComposite(

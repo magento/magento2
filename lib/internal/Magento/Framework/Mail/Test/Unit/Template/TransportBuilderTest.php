@@ -175,11 +175,12 @@ class TransportBuilderTest extends TestCase
     /**
      * Test get transport with exception
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Unknown template type
      */
     public function testGetTransportWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Unknown template type');
+
         $this->builder->setTemplateModel('Test\Namespace\Template');
 
         $vars = ['reason' => 'Reason', 'customer' => 'Customer'];

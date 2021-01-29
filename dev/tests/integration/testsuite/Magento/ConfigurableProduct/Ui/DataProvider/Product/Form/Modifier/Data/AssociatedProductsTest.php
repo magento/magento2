@@ -32,7 +32,7 @@ class AssociatedProductsTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->registry = $this->objectManager->get(\Magento\Framework\Registry::class);

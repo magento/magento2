@@ -102,7 +102,7 @@ class ConfigureTest extends \PHPUnit\Framework\TestCase
         $layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('product.info')
-            ->will($this->returnValue($blockMock));
+            ->willReturn($blockMock);
 
         $itemMock = $this->createMock(\Magento\Wishlist\Model\Item::class);
 

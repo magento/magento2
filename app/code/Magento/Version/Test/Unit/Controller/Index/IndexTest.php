@@ -91,7 +91,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         $this->productMetadata->expects($this->any())->method('getName')->willReturn('Magento');
         $this->response->expects($this->once())->method('setBody')
             ->with('Magento/2.3 (Community)')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->model->execute();
     }
 }

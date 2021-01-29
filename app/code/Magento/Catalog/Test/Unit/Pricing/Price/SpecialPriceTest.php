@@ -48,7 +48,7 @@ class SpecialPriceTest extends \PHPUnit\Framework\TestCase
             $this->priceCurrencyMock->expects($this->once())
                 ->method('convertAndRound')
                 ->with($specialPriceValue)
-                ->will($this->returnValue($expected));
+                ->willReturn($expected);
         } else {
             $expected = $specialPriceValue;
         }
@@ -69,7 +69,7 @@ class SpecialPriceTest extends \PHPUnit\Framework\TestCase
 
         $saleableItemMock->expects($this->any())
             ->method('getSpecialPrice')
-            ->will($this->returnValue($specialPrice));
+            ->willReturn($specialPrice);
 
         $priceInfo = $this->getMockBuilder(
             \Magento\Framework\Pricing\PriceInfoInterface::class
@@ -77,11 +77,11 @@ class SpecialPriceTest extends \PHPUnit\Framework\TestCase
 
         $priceInfo->expects($this->any())
             ->method('getAdjustments')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $saleableItemMock->expects($this->any())
             ->method('getPriceInfo')
-            ->will($this->returnValue($priceInfo));
+            ->willReturn($priceInfo);
 
         return $saleableItemMock;
     }
@@ -98,7 +98,7 @@ class SpecialPriceTest extends \PHPUnit\Framework\TestCase
 
         $localeDate->expects($this->any())
             ->method('isScopeDateInInterval')
-            ->will($this->returnValue($isValidInterval));
+            ->willReturn($isValidInterval);
 
         return $localeDate;
     }

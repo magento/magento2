@@ -37,7 +37,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $this->resolver->expects($this->once())
             ->method('resolve')
             ->with(RulePool::TYPE_FILE, 'file.ext', 'frontend', $theme, null, 'Magento_Module')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
         $actual = $this->object->getFile('frontend', $theme, 'file.ext', 'Magento_Module');
         $this->assertSame($expected, $actual);
     }

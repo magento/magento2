@@ -79,11 +79,12 @@ class CsvTest extends \PHPUnit\Framework\TestCase
      * @param string $contextType
      * @param array $contextValue
      * @dataProvider writeDictionaryWithRuntimeExceptionDataProvider
-     * @expectedException \RuntimeException
      * @return void
      */
     public function testWriteDictionaryWithRuntimeException($contextType, $contextValue)
     {
+        $this->expectException(\RuntimeException::class);
+
         $this->configureGeneralPhrasesMock($contextType, $contextValue);
 
         $this->object->writeDictionary($this->dictionaryMock, $this->localeMock);
@@ -102,12 +103,13 @@ class CsvTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Some error. Row #1.
      * @return void
      */
     public function testWriteDictionaryWithInvalidArgumentException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Some error. Row #1.');
+
         $contextType = 'module';
         $contextValue = 'Magento_Module';
 

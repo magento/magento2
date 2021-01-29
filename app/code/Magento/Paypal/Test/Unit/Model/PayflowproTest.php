@@ -89,7 +89,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
         $clientFactory = $this->getMockBuilder(ZendClientFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $clientFactory->method('create')->will($this->returnValue($client));
+        $clientFactory->method('create')->willReturn($client);
 
         $this->eventManager = $this->getMockBuilder(ManagerInterface::class)
             ->getMockForAbstractClass();
@@ -162,9 +162,9 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
             ->willReturn($response);
         $this->initStoreMock();
         $this->configMock->expects($this->once())->method('getBuildNotationCode')
-            ->will($this->returnValue('BNCODE'));
+            ->willReturn('BNCODE');
         $payment = $this->createPartialMock(\Magento\Payment\Model\Info::class, ['setTransactionId', '__wakeup']);
-        $payment->expects($this->once())->method('setTransactionId')->will($this->returnSelf());
+        $payment->expects($this->once())->method('setTransactionId')->willReturnSelf();
         $this->payflowpro->fetchTransactionInfo($payment, 'AD49G8N825');
     }
 

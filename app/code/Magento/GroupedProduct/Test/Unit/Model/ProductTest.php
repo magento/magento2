@@ -178,25 +178,25 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $stateMock = $this->createPartialMock(\Magento\Framework\App\State::class, ['getAreaCode']);
         $stateMock->expects($this->any())
             ->method('getAreaCode')
-            ->will($this->returnValue(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE));
+            ->willReturn(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
 
         $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $actionValidatorMock = $this->createMock(\Magento\Framework\Model\ActionValidator\RemoveAction::class);
-        $actionValidatorMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
+        $actionValidatorMock->expects($this->any())->method('isAllowed')->willReturn(true);
         $cacheInterfaceMock = $this->createMock(\Magento\Framework\App\CacheInterface::class);
 
         $contextMock = $this->createPartialMock(
             \Magento\Framework\Model\Context::class,
             ['getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator']
         );
-        $contextMock->expects($this->any())->method('getAppState')->will($this->returnValue($stateMock));
-        $contextMock->expects($this->any())->method('getEventDispatcher')->will($this->returnValue($eventManagerMock));
+        $contextMock->expects($this->any())->method('getAppState')->willReturn($stateMock);
+        $contextMock->expects($this->any())->method('getEventDispatcher')->willReturn($eventManagerMock);
         $contextMock->expects($this->any())
             ->method('getCacheManager')
-            ->will($this->returnValue($cacheInterfaceMock));
+            ->willReturn($cacheInterfaceMock);
         $contextMock->expects($this->any())
             ->method('getActionValidator')
-            ->will($this->returnValue($actionValidatorMock));
+            ->willReturn($actionValidatorMock);
 
         $this->optionInstanceMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option::class)
             ->setMethods(['setProduct', 'saveOptions', '__wakeup', '__sleep'])
@@ -227,10 +227,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $storeManager->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->store));
+            ->willReturn($this->store);
         $storeManager->expects($this->any())
             ->method('getWebsite')
-            ->will($this->returnValue($this->website));
+            ->willReturn($this->website);
         $this->indexerRegistryMock = $this->createPartialMock(
             \Magento\Framework\Indexer\IndexerRegistry::class,
             ['get']

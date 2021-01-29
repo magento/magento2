@@ -11,7 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 class CleanStaticFilesTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->resource = 'Magento_Backend::cache';
         $this->uri = 'backend/admin/cache/cleanStaticFiles';

@@ -131,10 +131,11 @@ class CallbackTest extends \PHPUnit\Framework\TestCase
      * @param mixed $callback
      * @param string $expectedMessage
      * @param bool $createInstance
-     * @expectedException \InvalidArgumentException
      */
     public function testGetValueException($callback, $expectedMessage, $createInstance = false)
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $option = new Callback($callback, null, $createInstance);
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage($expectedMessage);

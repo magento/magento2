@@ -45,11 +45,12 @@ class CompositeValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage test
      */
     public function testValidatorThrowsException()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('test');
+
         $expectedValidationData = include __DIR__ . '/../../_files/queue_publisher/data_to_validate.php';
         $this->validatorOneMock
             ->expects($this->once())

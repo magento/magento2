@@ -92,13 +92,13 @@ class AdminTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->orderMock->expects($this->any())
             ->method('formatBasePrice')
-            ->will($this->returnValue('formattedBasePrice'));
+            ->willReturn('formattedBasePrice');
         $this->orderMock->expects($this->any())
             ->method('formatPrice')
-            ->will($this->returnValue('formattedPrice'));
+            ->willReturn('formattedPrice');
         $this->orderMock->expects($this->any())
             ->method('getData')
-            ->will($this->returnValue('data'));
+            ->willReturn('data');
     }
 
     /**
@@ -120,16 +120,16 @@ class AdminTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->orderMock->expects($this->any())
             ->method('isCurrencyDifferent')
-            ->will($this->returnValue($isCurrencyDifferent));
+            ->willReturn($isCurrencyDifferent);
         $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($storeMock));
+            ->willReturn($storeMock);
         $this->priceCurrency->expects($this->any())
             ->method('format')
-            ->will($this->returnValue('storeFormattedPrice'));
+            ->willReturn('storeFormattedPrice');
         $dataObject = $this->orderMock;
         if (!$dataObjectIsOrder) {
             $returnRes = false;
@@ -138,7 +138,7 @@ class AdminTest extends \PHPUnit\Framework\TestCase
             }
             $this->magentoObjectMock->expects($this->once())
                 ->method('getOrder')
-                ->will($this->returnValue($returnRes));
+                ->willReturn($returnRes);
             $dataObject = $this->magentoObjectMock;
         }
         $basePrice = 10.00;
@@ -168,16 +168,16 @@ class AdminTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->orderMock->expects($this->any())
             ->method('isCurrencyDifferent')
-            ->will($this->returnValue($isCurrencyDifferent));
+            ->willReturn($isCurrencyDifferent);
         $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($storeMock));
+            ->willReturn($storeMock);
         $this->priceCurrency->expects($this->any())
             ->method('format')
-            ->will($this->returnValue('storeFormattedPrice'));
+            ->willReturn('storeFormattedPrice');
         $dataObject = $this->orderMock;
         if (!$dataObjectIsOrder) {
             $returnRes = false;
@@ -186,10 +186,10 @@ class AdminTest extends \PHPUnit\Framework\TestCase
             }
             $this->magentoObjectMock->expects($this->once())
                 ->method('getOrder')
-                ->will($this->returnValue($returnRes));
+                ->willReturn($returnRes);
             $this->magentoObjectMock->expects($this->any())
                 ->method('getData')
-                ->will($this->returnValue('data'));
+                ->willReturn('data');
             $dataObject = $this->magentoObjectMock;
         }
         $this->assertEquals(
@@ -278,20 +278,20 @@ class AdminTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $productMock->expects($this->any())
             ->method('getTypeId')
-            ->will($this->returnValue($type));
+            ->willReturn($type);
         $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['__wakeup', 'getProductType'])
             ->getMock();
         $orderMock->expects($this->any())
             ->method('getProductType')
-            ->will($this->returnValue($type));
+            ->willReturn($type);
         $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
             ->getMock();
         $quoteMock->expects($this->any())
             ->method('getProductType')
-            ->will($this->returnValue($type));
+            ->willReturn($type);
         $items = [
             'product' => $productMock,
             'order' => $orderMock,
@@ -304,12 +304,12 @@ class AdminTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $collectionMock->expects($this->any())
             ->method('getItems')
-            ->will($this->returnValue([$items[$itemKey]]));
+            ->willReturn([$items[$itemKey]]);
         $collectionMock->expects($this->exactly($calledTimes))
             ->method('removeItemByKey');
         $this->salesConfigMock->expects($this->any())
             ->method('getAvailableProductTypes')
-            ->will($this->returnValue(['validProductType']));
+            ->willReturn(['validProductType']);
         $this->adminHelper->applySalableProductTypesFilter($collectionMock);
     }
 
@@ -338,7 +338,7 @@ class AdminTest extends \PHPUnit\Framework\TestCase
         $this->escaperMock
             ->expects($this->any())
             ->method('escapeHtml')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
         $actual = $this->adminHelper->escapeHtmlWithLinks('<a>some text in tags</a>');
         $this->assertEquals($expected, $actual);
     }

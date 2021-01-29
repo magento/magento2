@@ -29,10 +29,11 @@ class DomTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $xmlString
      * @dataProvider convertWithInvalidDomDataProvider
-     * @expectedException \Exception
      */
     public function testConvertWithInvalidDom($xmlString)
     {
+        $this->expectException(\Exception::class);
+
         $dom = new \DOMDocument();
         try {
             $dom->loadXML($xmlString);

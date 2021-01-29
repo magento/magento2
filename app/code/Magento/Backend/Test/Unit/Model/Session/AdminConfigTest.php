@@ -42,17 +42,17 @@ class AdminConfigTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\App\Request\Http::class,
             ['getBasePath', 'isSecure', 'getHttpHost']
         );
-        $this->requestMock->expects($this->atLeastOnce())->method('getBasePath')->will($this->returnValue('/'));
+        $this->requestMock->expects($this->atLeastOnce())->method('getBasePath')->willReturn('/');
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getHttpHost')
-            ->will($this->returnValue('init.host'));
+            ->willReturn('init.host');
         $this->objectManager =  new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->validatorFactory = $this->getMockBuilder(\Magento\Framework\ValidatorFactory::class)
             ->setMethods(['setInstanceName', 'create'])
             ->disableOriginalConstructor()
             ->getMock();
         $backendUrl = $this->createMock(\Magento\Backend\Model\Url::class);
-        $backendUrl->expects($this->once())->method('getBaseUrl')->will($this->returnValue('/'));
+        $backendUrl->expects($this->once())->method('getBaseUrl')->willReturn('/');
         $this->backendUrlFactory = $this->createPartialMock(\Magento\Backend\Model\UrlFactory::class, ['create']);
         $this->backendUrlFactory->expects($this->any())->method('create')->willReturn($backendUrl);
 
@@ -60,7 +60,7 @@ class AdminConfigTest extends \PHPUnit\Framework\TestCase
         $dirMock = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
         $this->filesystemMock->expects($this->any())
             ->method('getDirectoryWrite')
-            ->will($this->returnValue($dirMock));
+            ->willReturn($dirMock);
     }
 
     public function testSetCookiePathNonDefault()
@@ -71,7 +71,7 @@ class AdminConfigTest extends \PHPUnit\Framework\TestCase
 
         $mockFrontNameResolver->expects($this->once())
             ->method('getFrontName')
-            ->will($this->returnValue('backend'));
+            ->willReturn('backend');
 
         $validatorMock = $this->getMockBuilder(\Magento\Framework\Validator\ValidatorInterface::class)
             ->disableOriginalConstructor()

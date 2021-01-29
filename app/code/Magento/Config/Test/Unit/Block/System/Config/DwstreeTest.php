@@ -81,14 +81,14 @@ class DwstreeTest extends \PHPUnit\Framework\TestCase
     {
         $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         ['section', $section],
                         ['website', $website['expected']['code']],
                         ['store', $store['expected']['code']],
                     ]
-                )
+                
             );
         $this->storeManagerMock->expects($this->once())
             ->method('getWebsites')

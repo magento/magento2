@@ -98,10 +98,11 @@ class MoveTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testProcessInvalidData()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $invalidElement = new \Magento\Framework\View\Layout\Element('<move element="product" into="product.info"/>');
         $this->move->interpret($this->contextMock, $invalidElement, $invalidElement);
     }

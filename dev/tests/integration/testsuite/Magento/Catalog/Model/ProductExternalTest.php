@@ -319,7 +319,7 @@ class ProductExternalTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->_model->hasCustomOptions());
 
         $this->_model->setCustomOptions(['test']);
-        $this->assertTrue(is_array($this->_model->getCustomOptions()));
+        $this->assertIsArray($this->_model->getCustomOptions());
     }
 
     public function testCanBeShowInCategory()

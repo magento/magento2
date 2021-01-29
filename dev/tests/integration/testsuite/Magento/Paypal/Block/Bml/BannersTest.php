@@ -32,9 +32,9 @@ class BannersTest extends \PHPUnit\Framework\TestCase
     ) {
         /** @var \Magento\Paypal\Model\Config|\PHPUnit\Framework\MockObject\MockObject $paypalConfig */
         $paypalConfig = $this->createMock(\Magento\Paypal\Model\Config::class);
-        $paypalConfig->expects($this->any())->method('getBmlPublisherId')->will($this->returnValue($publisherId));
-        $paypalConfig->expects($this->any())->method('getBmlDisplay')->will($this->returnValue($display));
-        $paypalConfig->expects($this->any())->method('getBmlPosition')->will($this->returnValue($configPosition));
+        $paypalConfig->expects($this->any())->method('getBmlPublisherId')->willReturn($publisherId);
+        $paypalConfig->expects($this->any())->method('getBmlDisplay')->willReturn($display);
+        $paypalConfig->expects($this->any())->method('getBmlPosition')->willReturn($configPosition);
 
         $paypalConfig->expects($this->any())
             ->method('isMethodAvailable')

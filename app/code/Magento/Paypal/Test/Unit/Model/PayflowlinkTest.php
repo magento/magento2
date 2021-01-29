@@ -71,19 +71,19 @@ class PayflowlinkTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($this->store));
+        $storeManager->expects($this->any())->method('getStore')->willReturn($this->store);
         $configFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->paypalConfig);
         $this->payflowRequest->expects($this->any())
             ->method('__call')
-            ->will($this->returnCallback(function ($method) {
+            ->willReturnCallback(function ($method) {
                 if (strpos($method, 'set') === 0) {
                     return $this->payflowRequest;
                 }
                 return null;
-            }));
-        $requestFactory->expects($this->any())->method('create')->will($this->returnValue($this->payflowRequest));
+            });
+        $requestFactory->expects($this->any())->method('create')->willReturn($this->payflowRequest);
 
         $helper = new ObjectManagerHelper($this);
         $this->model = $helper->getObject(

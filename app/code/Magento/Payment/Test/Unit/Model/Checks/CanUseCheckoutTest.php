@@ -32,8 +32,8 @@ class CanUseCheckoutTest extends \PHPUnit\Framework\TestCase
         $paymentMethod = $this->getMockBuilder(
             \Magento\Payment\Model\MethodInterface::class
         )->disableOriginalConstructor()->setMethods([])->getMock();
-        $paymentMethod->expects($this->once())->method('canUseCheckout')->will(
-            $this->returnValue($expectation)
+        $paymentMethod->expects($this->once())->method('canUseCheckout')->willReturn(
+            $expectation
         );
         $this->assertEquals($expectation, $this->_model->isApplicable($paymentMethod, $quote));
     }

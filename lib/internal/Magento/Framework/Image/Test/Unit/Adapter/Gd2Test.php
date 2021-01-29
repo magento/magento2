@@ -153,10 +153,11 @@ class Gd2Test extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testOpenInvalidURL()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->adapter->open('bar://foo.bar');
     }
 }

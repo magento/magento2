@@ -174,31 +174,31 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $this->context->expects($this->once())
             ->method('getMessageManager')
-            ->will($this->returnValue($this->messageManager));
+            ->willReturn($this->messageManager);
         $this->context->expects($this->once())
             ->method('getRequest')
-            ->will($this->returnValue($this->request));
+            ->willReturn($this->request);
         $this->context->expects($this->once())
             ->method('getResponse')
-            ->will($this->returnValue($this->response));
+            ->willReturn($this->response);
         $this->context->expects($this->once())
             ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManager));
+            ->willReturn($this->objectManager);
         $this->context->expects($this->once())
             ->method('getSession')
-            ->will($this->returnValue($this->session));
+            ->willReturn($this->session);
         $this->context->expects($this->once())
             ->method('getActionFlag')
-            ->will($this->returnValue($this->actionFlag));
+            ->willReturn($this->actionFlag);
         $this->context->expects($this->once())
             ->method('getHelper')
-            ->will($this->returnValue($this->helper));
+            ->willReturn($this->helper);
         $this->context->expects($this->once())
             ->method('getResultRedirectFactory')
-            ->will($this->returnValue($resultRedirectFactory));
+            ->willReturn($resultRedirectFactory);
         $this->context->expects($this->once())
             ->method('getFormKeyValidator')
-            ->will($this->returnValue($this->formKeyValidator));
+            ->willReturn($this->formKeyValidator);
 
         $this->shipmentValidatorMock = $this->getMockBuilder(ShipmentValidatorInterface::class)
             ->disableOriginalConstructor()
@@ -259,15 +259,15 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
             $this->request->expects($this->any())
                 ->method('getParam')
-                ->will(
-                    $this->returnValueMap(
+                ->willReturnMap(
+                    
                         [
                             ['order_id', null, $orderId],
                             ['shipment_id', null, $shipmentId],
                             ['shipment', null, $shipmentData],
                             ['tracking', null, $tracking],
                         ]
-                    )
+                    
                 );
 
             $this->shipmentLoader->expects($this->any())
@@ -284,20 +284,20 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                 ->with($tracking);
             $this->shipmentLoader->expects($this->once())
                 ->method('load')
-                ->will($this->returnValue($shipment));
+                ->willReturn($shipment);
             $shipment->expects($this->once())
                 ->method('register')
-                ->will($this->returnSelf());
+                ->willReturnSelf();
             $shipment->expects($this->any())
                 ->method('getOrder')
-                ->will($this->returnValue($order));
+                ->willReturn($order);
             $order->expects($this->once())
                 ->method('setCustomerNoteNotify')
                 ->with(false);
             $this->labelGenerator->expects($this->any())
                 ->method('create')
                 ->with($shipment, $this->request)
-                ->will($this->returnValue(true));
+                ->willReturn(true);
             $saveTransaction = $this->getMockBuilder(\Magento\Framework\DB\Transaction::class)
                 ->disableOriginalConstructor()
                 ->setMethods([])
@@ -305,11 +305,11 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             $saveTransaction->expects($this->at(0))
                 ->method('addObject')
                 ->with($shipment)
-                ->will($this->returnSelf());
+                ->willReturnSelf();
             $saveTransaction->expects($this->at(1))
                 ->method('addObject')
                 ->with($order)
-                ->will($this->returnSelf());
+                ->willReturnSelf();
             $saveTransaction->expects($this->at(2))
                 ->method('save');
 
@@ -320,15 +320,15 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             $this->objectManager->expects($this->once())
                 ->method('create')
                 ->with(\Magento\Framework\DB\Transaction::class)
-                ->will($this->returnValue($saveTransaction));
+                ->willReturn($saveTransaction);
             $this->objectManager->expects($this->once())
                 ->method('get')
                 ->with(\Magento\Backend\Model\Session::class)
-                ->will($this->returnValue($this->session));
+                ->willReturn($this->session);
             $arguments = ['order_id' => $orderId];
             $shipment->expects($this->once())
                 ->method('getOrderId')
-                ->will($this->returnValue($orderId));
+                ->willReturn($orderId);
             $this->prepareRedirect($arguments);
 
             $this->shipmentValidatorMock->expects($this->once())
@@ -366,7 +366,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->actionFlag->expects($this->any())
             ->method('get')
             ->with('', 'check_url_settings')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->session->expects($this->any())
             ->method('setIsUrlNotice')
             ->with(true);

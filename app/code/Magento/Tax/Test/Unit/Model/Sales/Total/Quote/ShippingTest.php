@@ -140,7 +140,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
 
         $mock = $this->createPartialMock($className, $methods);
         foreach ($getterValueMap as $getterName => $value) {
-            $mock->expects($this->any())->method($getterName)->will($this->returnValue($value));
+            $mock->expects($this->any())->method($getterName)->willReturn($value);
         }
 
         return $mock;

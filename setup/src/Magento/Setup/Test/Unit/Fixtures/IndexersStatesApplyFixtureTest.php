@@ -20,7 +20,7 @@ class IndexersStatesApplyFixtureTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->fixtureModelMock = $this->createMock(\Magento\Setup\Fixtures\FixtureModel::class);
 

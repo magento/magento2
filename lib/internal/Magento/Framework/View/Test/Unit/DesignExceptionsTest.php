@@ -63,13 +63,13 @@ class DesignExceptionsTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getServer')
             ->with($this->equalTo('HTTP_USER_AGENT'))
-            ->will($this->returnValue($userAgent));
+            ->willReturn($userAgent);
 
         if ($userAgent) {
             $this->scopeConfigMock->expects($this->once())
                 ->method('getValue')
                 ->with($this->equalTo($this->exceptionConfigPath), $this->equalTo($this->scopeType))
-                ->will($this->returnValue($configValue));
+                ->willReturn($configValue);
         }
 
         $this->serializerMock->expects($this->exactly($callNum))

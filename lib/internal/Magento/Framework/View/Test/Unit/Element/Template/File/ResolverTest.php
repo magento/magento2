@@ -46,12 +46,12 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->serializerMock->expects($this->any())
             ->method('serialize')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($value) {
                         return json_encode($value);
                     }
-                )
+                
             );
         $this->_resolver = new \Magento\Framework\View\Element\Template\File\Resolver(
             $this->_viewFileSystemMock,
@@ -70,7 +70,7 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
         $this->_viewFileSystemMock->expects($this->once())
             ->method('getTemplateFileName')
             ->with($template)
-            ->will($this->returnValue('path_to' . $template));
+            ->willReturn('path_to' . $template);
         $this->assertEquals('path_to' . $template, $this->_resolver->getTemplateFileName($template));
         $this->assertEquals('path_to' . $template, $this->_resolver->getTemplateFileName($template));
     }

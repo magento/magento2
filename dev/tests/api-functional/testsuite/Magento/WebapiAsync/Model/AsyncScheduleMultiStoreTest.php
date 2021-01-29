@@ -225,7 +225,7 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
         }
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->clearProducts();
         $this->publisherConsumerController->stopConsumers();

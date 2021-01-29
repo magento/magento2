@@ -107,7 +107,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
 
         // Assert that 'save' button is removed for integration of config type
         foreach ($buttonList as $button) {
-            $this->assertFalse(array_key_exists('save', $button));
+            $this->assertArrayNotHasKey('save', $button);
         }
 
         // Tear down

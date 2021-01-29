@@ -86,19 +86,21 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateInvalidArgumentExceptionNotDefined()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->requestBuilder->create();
     }
 
     /**
-     * @expectedException \Magento\Framework\Search\Request\NonExistingRequestNameException
-     * @expectedExceptionMessage Request name 'rn' doesn't exist.
      */
     public function testCreateInvalidArgumentException()
     {
+        $this->expectException(\Magento\Framework\Search\Request\NonExistingRequestNameException::class);
+        $this->expectExceptionMessage('Request name \'rn\' doesn\'t exist.');
+
         $requestName = 'rn';
 
         $this->requestBuilder->setRequestName($requestName);

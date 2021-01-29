@@ -78,7 +78,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getName']);
         $eventMock->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue($eventName));
+            ->willReturn($eventName);
         $this->collection->addEvent($eventMock);
     }
 

@@ -94,7 +94,7 @@ class StoreConfigurationProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->scopeConfigMock
             ->method('getValue')
-            ->will($this->returnValueMap($map));
+            ->willReturnMap($map);
 
         $this->storeManagerMock->expects($this->once())
             ->method('getWebsites')

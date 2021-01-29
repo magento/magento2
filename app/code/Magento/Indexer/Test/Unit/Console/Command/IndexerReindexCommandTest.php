@@ -94,13 +94,13 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     {
         $this->configMock->expects($this->once())
             ->method('getIndexer')
-            ->will(
-                $this->returnValue(
+            ->willReturn(
+                
                     [
                         'title' => 'Title_indexerOne',
                         'shared_index' => null
                     ]
-                )
+                
             );
         $this->configureAdminArea();
         $this->initIndexerCollectionByItems(

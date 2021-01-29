@@ -91,8 +91,8 @@ class ActionTest extends \PHPUnit\Framework\TestCase
 
         $this->pageConfigMock = $this->createPartialMock(\Magento\Framework\View\Page\Config::class, ['getConfig']);
         $this->viewMock = $this->createMock(\Magento\Framework\App\ViewInterface::class);
-        $this->viewMock->expects($this->any())->method('getPage')->will($this->returnValue($this->pageConfigMock));
-        $this->pageConfigMock->expects($this->any())->method('getConfig')->will($this->returnValue(1));
+        $this->viewMock->expects($this->any())->method('getPage')->willReturn($this->pageConfigMock);
+        $this->pageConfigMock->expects($this->any())->method('getConfig')->willReturn(1);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->action = $this->objectManagerHelper->getObject(
@@ -111,11 +111,11 @@ class ActionTest extends \PHPUnit\Framework\TestCase
 
     public function testDispatchPostDispatch()
     {
-        $this->_requestMock->expects($this->exactly(3))->method('getFullActionName')->will(
-            $this->returnValue(self::FULL_ACTION_NAME)
+        $this->_requestMock->expects($this->exactly(3))->method('getFullActionName')->willReturn(
+            self::FULL_ACTION_NAME
         );
-        $this->_requestMock->expects($this->exactly(2))->method('getRouteName')->will(
-            $this->returnValue(self::ROUTE_NAME)
+        $this->_requestMock->expects($this->exactly(2))->method('getRouteName')->willReturn(
+            self::ROUTE_NAME
         );
         $expectedEventParameters = ['controller_action' => $this->action, 'request' => $this->_requestMock];
         $this->_eventManagerMock->expects($this->at(0))->method('dispatch')->with(
@@ -131,9 +131,9 @@ class ActionTest extends \PHPUnit\Framework\TestCase
             $expectedEventParameters
         );
 
-        $this->_requestMock->expects($this->once())->method('isDispatched')->will($this->returnValue(true));
-        $this->_actionFlagMock->expects($this->at(0))->method('get')->with('', Action::FLAG_NO_DISPATCH)->will(
-            $this->returnValue(false)
+        $this->_requestMock->expects($this->once())->method('isDispatched')->willReturn(true);
+        $this->_actionFlagMock->expects($this->at(0))->method('get')->with('', Action::FLAG_NO_DISPATCH)->willReturn(
+            false
         );
 
         // _forward expectations
@@ -151,8 +151,8 @@ class ActionTest extends \PHPUnit\Framework\TestCase
             self::$actionParams
         );
 
-        $this->_actionFlagMock->expects($this->at(1))->method('get')->with('', Action::FLAG_NO_POST_DISPATCH)->will(
-            $this->returnValue(false)
+        $this->_actionFlagMock->expects($this->at(1))->method('get')->with('', Action::FLAG_NO_POST_DISPATCH)->willReturn(
+            false
         );
 
         $this->_eventManagerMock->expects($this->at(3))->method('dispatch')->with(

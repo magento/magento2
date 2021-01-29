@@ -66,15 +66,15 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             ],
             [\Magento\Cms\Helper\Page::class, $this->_cmsHelperMock],
         ];
-        $objectManagerMock->expects($this->any())->method('get')->will($this->returnValueMap($valueMap));
+        $objectManagerMock->expects($this->any())->method('get')->willReturnMap($valueMap);
         $scopeConfigMock->expects(
             $this->once()
         )->method(
             'getValue'
         )->with(
             \Magento\Cms\Helper\Page::XML_PATH_NO_ROUTE_PAGE
-        )->will(
-            $this->returnValue('pageId')
+        )->willReturn(
+            'pageId'
         );
         $this->_controller = $helper->getObject(
             \Magento\Cms\Controller\Noroute\Index::class,
@@ -90,8 +90,8 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             $this->at(0)
         )->method(
             'setStatusHeader'
-        )->with(404, '1.1', 'Not Found')->will(
-            $this->returnSelf()
+        )->with(404, '1.1', 'Not Found')->willReturnSelf(
+            
         );
         $this->resultPageMock->expects(
             $this->at(1)
@@ -100,15 +100,15 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         )->with(
             'Status',
             '404 File not found'
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
+            
         );
         $this->_cmsHelperMock->expects(
             $this->once()
         )->method(
             'prepareResultPage'
-        )->will(
-            $this->returnValue($this->resultPageMock)
+        )->willReturn(
+            $this->resultPageMock
         );
         $this->assertSame(
             $this->resultPageMock,
@@ -124,8 +124,8 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             'setController'
         )->with(
             'index'
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
+            
         );
         $this->forwardMock->expects(
             $this->once()
@@ -133,15 +133,15 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             'forward'
         )->with(
             'defaultNoRoute'
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
+            
         );
         $this->_cmsHelperMock->expects(
             $this->once()
         )->method(
             'prepareResultPage'
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
         $this->assertSame(
             $this->forwardMock,

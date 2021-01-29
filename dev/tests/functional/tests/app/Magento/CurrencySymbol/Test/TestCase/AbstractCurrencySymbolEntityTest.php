@@ -107,7 +107,7 @@ abstract class AbstractCurrencySymbolEntityTest extends Injectable
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->objectManager->getInstance()->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,

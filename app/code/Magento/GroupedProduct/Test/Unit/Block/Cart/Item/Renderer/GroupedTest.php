@@ -31,9 +31,9 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     {
         $productTags = ['catalog_product_1'];
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $product->expects($this->exactly(2))->method('getIdentities')->will($this->returnValue($productTags));
+        $product->expects($this->exactly(2))->method('getIdentities')->willReturn($productTags);
         $item = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
-        $item->expects($this->exactly(2))->method('getProduct')->will($this->returnValue($product));
+        $item->expects($this->exactly(2))->method('getProduct')->willReturn($product);
         $this->renderer->setItem($item);
         $this->assertEquals(array_merge($productTags, $productTags), $this->renderer->getIdentities());
     }

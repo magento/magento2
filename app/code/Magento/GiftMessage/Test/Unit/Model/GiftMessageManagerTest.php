@@ -138,15 +138,15 @@ class GiftMessageManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->messageFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->giftMessageMock));
-        $this->quoteMock->expects($this->once())->method('getGiftMessageId')->will($this->returnValue(null));
+            ->willReturn($this->giftMessageMock);
+        $this->quoteMock->expects($this->once())->method('getGiftMessageId')->willReturn(null);
         $this->giftMessageMock->expects($this->never())->method('load');
-        $this->giftMessageMock->expects($this->once())->method('getId')->will($this->returnValue(1));
+        $this->giftMessageMock->expects($this->once())->method('getId')->willReturn(1);
         $this->giftMessageMock->expects($this->once())->method('delete');
         $this->quoteMock->expects($this->once())
             ->method('setGiftMessageId')
             ->with(0)
-            ->will($this->returnValue($this->quoteMock));
+            ->willReturn($this->quoteMock);
         $exception = new \Exception();
         $this->quoteMock->expects($this->once())->method('save')->will($this->throwException($exception));
 
@@ -169,35 +169,35 @@ class GiftMessageManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->messageFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->giftMessageMock));
+            ->willReturn($this->giftMessageMock);
         $this->quoteMock->expects($this->once())
             ->method('getItemById')
             ->with($entityId)
-            ->will($this->returnValue($this->quoteItemMock));
-        $this->quoteItemMock->expects($this->once())->method('getGiftMessageId')->will($this->returnValue(null));
+            ->willReturn($this->quoteItemMock);
+        $this->quoteItemMock->expects($this->once())->method('getGiftMessageId')->willReturn(null);
         $this->giftMessageMock->expects($this->once())
             ->method('setSender')
             ->with('sender')
-            ->will($this->returnValue($this->giftMessageMock));
+            ->willReturn($this->giftMessageMock);
         $this->giftMessageMock->expects($this->once())
             ->method('setRecipient')
             ->with('recipient')
-            ->will($this->returnValue($this->giftMessageMock));
+            ->willReturn($this->giftMessageMock);
         $this->quoteMock->expects($this->once())->method('getCustomerId')->willReturn($customerId);
         $this->giftMessageMock->expects($this->once())
             ->method('setCustomerId')
             ->with($customerId)
-            ->will($this->returnValue($this->giftMessageMock));
+            ->willReturn($this->giftMessageMock);
         $this->giftMessageMock->expects($this->once())
             ->method('setMessage')
             ->with('message')
-            ->will($this->returnValue($this->giftMessageMock));
+            ->willReturn($this->giftMessageMock);
         $this->giftMessageMock->expects($this->once())->method('save');
-        $this->giftMessageMock->expects($this->once())->method('getId')->will($this->returnValue(33));
+        $this->giftMessageMock->expects($this->once())->method('getId')->willReturn(33);
         $this->quoteItemMock->expects($this->once())
             ->method('setGiftMessageId')
             ->with(33)
-            ->will($this->returnValue($this->quoteItemMock));
+            ->willReturn($this->quoteItemMock);
         $exception = new \Exception();
         $this->quoteItemMock->expects($this->once())->method('save')->will($this->throwException($exception));
 
@@ -220,35 +220,35 @@ class GiftMessageManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->messageFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->giftMessageMock));
+            ->willReturn($this->giftMessageMock);
         $this->quoteMock->expects($this->once())
             ->method('getAddressById')
             ->with($entityId)
-            ->will($this->returnValue($this->quoteAddressMock));
-        $this->quoteAddressMock->expects($this->once())->method('getGiftMessageId')->will($this->returnValue(null));
+            ->willReturn($this->quoteAddressMock);
+        $this->quoteAddressMock->expects($this->once())->method('getGiftMessageId')->willReturn(null);
         $this->giftMessageMock->expects($this->once())
             ->method('setSender')
             ->with('sender')
-            ->will($this->returnValue($this->giftMessageMock));
+            ->willReturn($this->giftMessageMock);
         $this->giftMessageMock->expects($this->once())
             ->method('setRecipient')
             ->with('recipient')
-            ->will($this->returnValue($this->giftMessageMock));
+            ->willReturn($this->giftMessageMock);
         $this->giftMessageMock->expects($this->once())
             ->method('setMessage')
             ->with('message')
-            ->will($this->returnValue($this->giftMessageMock));
+            ->willReturn($this->giftMessageMock);
         $this->quoteMock->expects($this->once())->method('getCustomerId')->willReturn($customerId);
         $this->giftMessageMock->expects($this->once())
             ->method('setCustomerId')
             ->with($customerId)
-            ->will($this->returnValue($this->giftMessageMock));
+            ->willReturn($this->giftMessageMock);
         $this->giftMessageMock->expects($this->once())->method('save');
-        $this->giftMessageMock->expects($this->once())->method('getId')->will($this->returnValue(33));
+        $this->giftMessageMock->expects($this->once())->method('getId')->willReturn(33);
         $this->quoteAddressMock->expects($this->once())
             ->method('setGiftMessageId')
             ->with(33)
-            ->will($this->returnValue($this->quoteAddressMock));
+            ->willReturn($this->quoteAddressMock);
         $this->quoteAddressMock->expects($this->once())->method('save');
         $this->model->add($giftMessages, $this->quoteMock);
     }
@@ -270,42 +270,42 @@ class GiftMessageManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->messageFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->giftMessageMock));
+            ->willReturn($this->giftMessageMock);
         $this->quoteMock->expects($this->once())
             ->method('getAddressById')
             ->with('address')
-            ->will($this->returnValue($this->quoteAddressMock));
+            ->willReturn($this->quoteAddressMock);
         $this->quoteAddressMock->expects($this->once())
             ->method('getItemById')
             ->with($entityId)
-            ->will($this->returnValue($this->quoteAddressItemMock));
-        $this->quoteAddressItemMock->expects($this->once())->method('getGiftMessageId')->will($this->returnValue(0));
+            ->willReturn($this->quoteAddressItemMock);
+        $this->quoteAddressItemMock->expects($this->once())->method('getGiftMessageId')->willReturn(0);
         $this->giftMessageMock->expects($this->once())
             ->method('setSender')
             ->with('sender')
-            ->will($this->returnValue($this->giftMessageMock));
+            ->willReturn($this->giftMessageMock);
         $this->giftMessageMock->expects($this->once())
             ->method('setRecipient')
             ->with('recipient')
-            ->will($this->returnValue($this->giftMessageMock));
+            ->willReturn($this->giftMessageMock);
         $this->giftMessageMock->expects($this->once())
             ->method('setMessage')
             ->with('message')
-            ->will($this->returnValue($this->giftMessageMock));
+            ->willReturn($this->giftMessageMock);
         $this->quoteMock->expects($this->once())->method('getCustomerId')->willReturn($customerId);
         $this->giftMessageMock->expects($this->once())
             ->method('setCustomerId')
             ->with($customerId)
-            ->will($this->returnValue($this->giftMessageMock));
+            ->willReturn($this->giftMessageMock);
         $this->giftMessageMock->expects($this->once())->method('save');
-        $this->giftMessageMock->expects($this->once())->method('getId')->will($this->returnValue(33));
+        $this->giftMessageMock->expects($this->once())->method('getId')->willReturn(33);
         $this->quoteAddressItemMock->expects($this->once())
             ->method('setGiftMessageId')
             ->with(33)
-            ->will($this->returnValue($this->quoteAddressItemMock));
+            ->willReturn($this->quoteAddressItemMock);
         $this->quoteAddressItemMock->expects($this->once())
             ->method('save')
-            ->will($this->returnValue($this->quoteAddressItemMock));
+            ->willReturn($this->quoteAddressItemMock);
 
         $this->model->add($giftMessages, $this->quoteMock);
     }
@@ -317,9 +317,9 @@ class GiftMessageManagerTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
         $this->expectExceptionMessage('The gift message couldn\'t be added to Cart.');
 
-        $this->giftMessageMock->expects($this->once())->method('getSender')->will($this->returnValue('sender'));
-        $this->giftMessageMock->expects($this->once())->method('getRecipient')->will($this->returnValue('recipient'));
-        $this->giftMessageMock->expects($this->once())->method('getMessage')->will($this->returnValue('Message'));
+        $this->giftMessageMock->expects($this->once())->method('getSender')->willReturn('sender');
+        $this->giftMessageMock->expects($this->once())->method('getRecipient')->willReturn('recipient');
+        $this->giftMessageMock->expects($this->once())->method('getMessage')->willReturn('Message');
 
         $this->messageFactoryMock->expects($this->once())
             ->method('create')

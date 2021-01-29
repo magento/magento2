@@ -34,7 +34,7 @@ class AdminUserCreateCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $command;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->installerFactoryMock = $this->createMock(\Magento\Setup\Model\InstallerFactory::class);
         $this->command = new AdminUserCreateCommand($this->installerFactoryMock, new UserValidationRules());
@@ -76,23 +76,23 @@ class AdminUserCreateCommandTest extends \PHPUnit\Framework\TestCase
 
         $this->questionHelperMock->expects($this->at(0))
             ->method('ask')
-            ->will($this->returnValue('admin'));
+            ->willReturn('admin');
 
         $this->questionHelperMock->expects($this->at(1))
             ->method('ask')
-            ->will($this->returnValue('Password123'));
+            ->willReturn('Password123');
 
         $this->questionHelperMock->expects($this->at(2))
             ->method('ask')
-            ->will($this->returnValue('john.doe@example.com'));
+            ->willReturn('john.doe@example.com');
 
         $this->questionHelperMock->expects($this->at(3))
             ->method('ask')
-            ->will($this->returnValue('John'));
+            ->willReturn('John');
 
         $this->questionHelperMock->expects($this->at(4))
             ->method('ask')
-            ->will($this->returnValue('Doe'));
+            ->willReturn('Doe');
 
         // We override the standard helper with our mock
         $this->command->getHelperSet()->set($this->questionHelperMock, 'question');

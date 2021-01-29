@@ -37,8 +37,8 @@ class AbstractEavTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             '_getExportAttributeCodes'
-        )->will(
-            $this->returnValue($this->_expectedAttributes)
+        )->willReturn(
+            $this->_expectedAttributes
         );
     }
 
@@ -91,16 +91,16 @@ class AbstractEavTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getAttributeCollection'
-        )->will(
-            $this->returnValue([$testAttribute])
+        )->willReturn(
+            [$testAttribute]
         );
 
         $this->_model->expects(
             $this->any()
         )->method(
             'getAttributeOptions'
-        )->will(
-            $this->returnValue($testAttributeOptions)
+        )->willReturn(
+            $testAttributeOptions
         );
 
         /** @var $item \Magento\Framework\Model\AbstractModel|\PHPUnit\Framework\MockObject\MockObject */
@@ -113,7 +113,7 @@ class AbstractEavTest extends \PHPUnit\Framework\TestCase
             true,
             ['getData', '__wakeup']
         );
-        $item->expects($this->any())->method('getData')->will($this->returnValue($testAttributeValue));
+        $item->expects($this->any())->method('getData')->willReturn($testAttributeValue);
 
         $method = new \ReflectionMethod($this->_model, '_initAttributeValues');
         $method->setAccessible(true);

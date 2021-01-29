@@ -47,7 +47,7 @@ class NewProductsTest extends \PHPUnit\Framework\TestCase
     {
         $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $this->productFactory = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
-        $this->productFactory->expects($this->any())->method('create')->will($this->returnValue($this->product));
+        $this->productFactory->expects($this->any())->method('create')->willReturn($this->product);
         $this->visibility = $this->createMock(\Magento\Catalog\Model\Product\Visibility::class);
         $this->timezone = $this->createMock(\Magento\Framework\Stdlib\DateTime\Timezone::class);
 
@@ -68,34 +68,34 @@ class NewProductsTest extends \PHPUnit\Framework\TestCase
         $dateObject = $this->createMock(\DateTime::class);
         $dateObject->expects($this->any())
             ->method('setTime')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $dateObject->expects($this->any())
             ->method('format')
-            ->will($this->returnValue(date(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)));
+            ->willReturn(date(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT));
 
         $this->timezone->expects($this->exactly(2))
             ->method('date')
-            ->will($this->returnValue($dateObject));
+            ->willReturn($dateObject);
 
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
         $productCollection =
             $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
-        $this->product->expects($this->once())->method('getResourceCollection')->will(
-            $this->returnValue($productCollection)
+        $this->product->expects($this->once())->method('getResourceCollection')->willReturn(
+            $productCollection
         );
         $storeId = 1;
         $productCollection->expects($this->once())->method('setStoreId')->with($storeId);
-        $productCollection->expects($this->once())->method('addStoreFilter')->will($this->returnSelf());
-        $productCollection->expects($this->any())->method('addAttributeToFilter')->will($this->returnSelf());
-        $productCollection->expects($this->any())->method('addAttributeToSelect')->will($this->returnSelf());
-        $productCollection->expects($this->once())->method('addAttributeToSort')->will($this->returnSelf());
-        $productCollection->expects($this->once())->method('applyFrontendPriceLimitations')->will($this->returnSelf());
+        $productCollection->expects($this->once())->method('addStoreFilter')->willReturnSelf();
+        $productCollection->expects($this->any())->method('addAttributeToFilter')->willReturnSelf();
+        $productCollection->expects($this->any())->method('addAttributeToSelect')->willReturnSelf();
+        $productCollection->expects($this->once())->method('addAttributeToSort')->willReturnSelf();
+        $productCollection->expects($this->once())->method('applyFrontendPriceLimitations')->willReturnSelf();
         $visibleIds = [1, 3];
-        $this->visibility->expects($this->once())->method('getVisibleInCatalogIds')->will(
-            $this->returnValue($visibleIds)
+        $this->visibility->expects($this->once())->method('getVisibleInCatalogIds')->willReturn(
+            $visibleIds
         );
-        $productCollection->expects($this->once())->method('setVisibility')->with($visibleIds)->will(
-            $this->returnSelf()
+        $productCollection->expects($this->once())->method('setVisibility')->with($visibleIds)->willReturnSelf(
+            
         );
 
         $products = $this->newProducts->getProductsCollection($storeId);

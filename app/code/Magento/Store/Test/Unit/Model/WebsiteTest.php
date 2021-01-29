@@ -49,7 +49,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
             \Magento\Store\Model\ResourceModel\Website\Collection::class,
             ['getSize']
         );
-        $websiteCollection->expects($this->any())->method('getSize')->will($this->returnValue(2));
+        $websiteCollection->expects($this->any())->method('getSize')->willReturn(2);
 
         $this->websiteFactory->expects($this->any())
             ->method('create')

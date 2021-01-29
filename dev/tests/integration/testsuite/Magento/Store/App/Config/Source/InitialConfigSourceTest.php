@@ -76,7 +76,7 @@ class InitialConfigSourceTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->clearConfig(ConfigFilePool::APP_CONFIG);
         $this->clearConfig(ConfigFilePool::APP_ENV);

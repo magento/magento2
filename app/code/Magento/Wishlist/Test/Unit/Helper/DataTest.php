@@ -166,12 +166,12 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->store->expects($this->once())
             ->method('getUrl')
             ->with('wishlist/index/cart', ['item' => '%item%'])
-            ->will($this->returnValue($url));
+            ->willReturn($url);
 
         $this->urlBuilder->expects($this->any())
             ->method('getUrl')
             ->with('wishlist/index/index', ['_current' => true, '_use_rewrite' => true, '_scope_to_url' => true])
-            ->will($this->returnValue($url));
+            ->willReturn($url);
 
         $this->assertEquals($url, $this->model->getAddToCartUrl('%item%'));
     }
@@ -188,16 +188,16 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $wishlistItem
             ->expects($this->once())
             ->method('getWishlistItemId')
-            ->will($this->returnValue(4));
+            ->willReturn(4);
         $wishlistItem
             ->expects($this->once())
             ->method('getProductId')
-            ->will($this->returnValue(30));
+            ->willReturn(30);
 
         $this->urlBuilder->expects($this->once())
             ->method('getUrl')
             ->with('wishlist/index/configure', ['id' => 4, 'product_id' => 30])
-            ->will($this->returnValue($url));
+            ->willReturn($url);
 
         $this->assertEquals($url, $this->model->getConfigureUrl($wishlistItem));
     }
@@ -206,7 +206,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $this->wishlistProvider->expects($this->once())
             ->method('getWishlist')
-            ->will($this->returnValue($this->wishlist));
+            ->willReturn($this->wishlist);
 
         $this->assertEquals($this->wishlist, $this->model->getWishlist());
     }

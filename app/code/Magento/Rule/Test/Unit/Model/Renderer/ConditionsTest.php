@@ -45,15 +45,15 @@ class ConditionsTest extends \PHPUnit\Framework\TestCase
 
         $this->_element->expects($this->any())
             ->method('getRule')
-            ->will($this->returnValue($rule));
+            ->willReturn($rule);
 
         $rule->expects($this->any())
             ->method('getConditions')
-            ->will($this->returnValue($conditions));
+            ->willReturn($conditions);
 
         $conditions->expects($this->once())
             ->method('asHtmlRecursive')
-            ->will($this->returnValue('conditions html'));
+            ->willReturn('conditions html');
 
         $this->assertEquals('conditions html', $this->conditions->render($this->_element));
     }

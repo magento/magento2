@@ -37,7 +37,7 @@ class NotificationDismissActionsTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\View\Element\UiComponent\Processor::class,
             ['getProcessor']
         );
-        $this->context->expects($this->never())->method('getProcessor')->will($this->returnValue($processor));
+        $this->context->expects($this->never())->method('getProcessor')->willReturn($processor);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->actionColumn = $objectManager->getObject(
             \Magento\AsynchronousOperations\Ui\Component\Listing\Column\NotificationDismissActions::class,

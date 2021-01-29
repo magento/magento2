@@ -118,11 +118,12 @@ class DateTimeFormatterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The format type is invalid. Verify the format type and try again.
      */
     public function testFormatObjectIfPassedWrongFormat()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The format type is invalid. Verify the format type and try again.');
+
         $dateTimeFormatter = $this->objectManager->getObject(
             \Magento\Framework\Stdlib\DateTime\DateTimeFormatter::class,
             [

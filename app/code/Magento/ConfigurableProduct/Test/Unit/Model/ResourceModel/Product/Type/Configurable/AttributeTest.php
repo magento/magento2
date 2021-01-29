@@ -41,7 +41,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)->getMock();
 
         $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
-        $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($this->connection));
+        $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
         $this->resource->expects($this->any())->method('getTableName')->willReturnArgument(0);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);

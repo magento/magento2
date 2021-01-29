@@ -105,7 +105,7 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
             $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),

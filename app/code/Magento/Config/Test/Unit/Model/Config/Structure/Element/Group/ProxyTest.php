@@ -34,15 +34,15 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
         $groupMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Group::class);
 
         $groupMock->expects($this->once())->method('setData');
-        $groupMock->expects($this->once())->method('getId')->will($this->returnValue('group_id'));
+        $groupMock->expects($this->once())->method('getId')->willReturn('group_id');
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(
             'create'
         )->with(
             \Magento\Config\Model\Config\Structure\Element\Group::class
-        )->will(
-            $this->returnValue($groupMock)
+        )->willReturn(
+            $groupMock
         );
 
         $this->_model->setData([], '');

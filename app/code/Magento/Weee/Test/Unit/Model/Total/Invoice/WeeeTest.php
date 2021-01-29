@@ -75,7 +75,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
                 'getStore',
                 '__wakeup',
             ]);
-        $this->invoice->expects($this->atLeastOnce())->method('getOrder')->will($this->returnValue($this->order));
+        $this->invoice->expects($this->atLeastOnce())->method('getOrder')->willReturn($this->order);
     }
 
     /**
@@ -104,7 +104,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
         //Set up weeeData mock
         $this->weeeData->expects($this->once())
             ->method('includeInSubtotal')
-            ->will($this->returnValue($invoiceData['include_in_subtotal']));
+            ->willReturn($invoiceData['include_in_subtotal']);
 
         //Set up invoice mock
         /** @var \Magento\Sales\Model\Order\Invoice\Item[] $invoiceItems */
@@ -114,16 +114,16 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
         }
         $this->invoice->expects($this->once())
             ->method('getAllItems')
-            ->will($this->returnValue($invoiceItems));
+            ->willReturn($invoiceItems);
         $this->invoice->expects($this->once())
             ->method('isLast')
-            ->will($this->returnValue($invoiceData['is_last']));
+            ->willReturn($invoiceData['is_last']);
         foreach ($invoiceData['data_fields'] as $key => $value) {
             $this->invoice->setData($key, $value);
         }
         $this->invoice->expects($this->any())
             ->method('roundPrice')
-            ->will($this->returnCallback(
+            ->willReturnCallback(
                 function ($price, $type) use (&$roundingDelta) {
                     if (!isset($roundingDelta[$type])) {
                         $roundingDelta[$type] = 0;
@@ -133,7 +133,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
 
                     return $roundedPrice;
                 }
-            ));
+            );
 
         $this->model->collect($this->invoice);
 
@@ -687,28 +687,28 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
         $this->weeeData->expects($this->once())
             ->method('getRowWeeeTaxInclTax')
             ->with($orderItem)
-            ->will($this->returnValue($orderItem->getRowWeeeTaxInclTax()));
+            ->willReturn($orderItem->getRowWeeeTaxInclTax());
         $this->weeeData->expects($this->once())
             ->method('getBaseRowWeeeTaxInclTax')
             ->with($orderItem)
-            ->will($this->returnValue($orderItem->getBaseRowWeeeTaxInclTax()));
+            ->willReturn($orderItem->getBaseRowWeeeTaxInclTax());
         if ($invoiceItemData['is_last']) {
             $this->weeeData->expects($this->once())
                 ->method('getWeeeAmountInvoiced')
                 ->with($orderItem)
-                ->will($this->returnValue($orderItem->getWeeeAmountInvoiced()));
+                ->willReturn($orderItem->getWeeeAmountInvoiced());
             $this->weeeData->expects($this->once())
                 ->method('getBaseWeeeAmountInvoiced')
                 ->with($orderItem)
-                ->will($this->returnValue($orderItem->getBaseWeeeAmountInvoiced()));
+                ->willReturn($orderItem->getBaseWeeeAmountInvoiced());
             $this->weeeData->expects($this->once())
                 ->method('getWeeeTaxAmountInvoiced')
                 ->with($orderItem)
-                ->will($this->returnValue($orderItem->getWeeeTaxAmountInvoiced()));
+                ->willReturn($orderItem->getWeeeTaxAmountInvoiced());
             $this->weeeData->expects($this->once())
                 ->method('getBaseWeeeTaxAmountInvoiced')
                 ->with($orderItem)
-                ->will($this->returnValue($orderItem->getBaseWeeeTaxAmountInvoiced()));
+                ->willReturn($orderItem->getBaseWeeeTaxAmountInvoiced());
         }
         /** @var \Magento\Sales\Model\Order\Invoice\Item|\PHPUnit\Framework\MockObject\MockObject $invoiceItem */
         $invoiceItem = $this->createPartialMock(\Magento\Sales\Model\Order\Invoice\Item::class, [
@@ -716,29 +716,29 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
                 'isLast',
                 '__wakeup'
             ]);
-        $invoiceItem->expects($this->any())->method('getOrderItem')->will($this->returnValue($orderItem));
+        $invoiceItem->expects($this->any())->method('getOrderItem')->willReturn($orderItem);
         $invoiceItem->expects($this->any())
             ->method('isLast')
-            ->will($this->returnValue($invoiceItemData['is_last']));
+            ->willReturn($invoiceItemData['is_last']);
         foreach ($invoiceItemData['data_fields'] as $key => $value) {
             $invoiceItem->setData($key, $value);
         }
 
         $this->weeeData->expects($this->any())
             ->method('getApplied')
-            ->will($this->returnCallback(
+            ->willReturnCallback(
                 function ($item) {
                     return $item->getAppliedWeee();
                 }
-            ));
+            );
 
         $this->weeeData->expects($this->any())
             ->method('setApplied')
-            ->will($this->returnCallback(
+            ->willReturnCallback(
                 function ($item, $weee) {
                     return $item->setAppliedWeee($weee);
                 }
-            ));
+            );
 
         return $invoiceItem;
     }

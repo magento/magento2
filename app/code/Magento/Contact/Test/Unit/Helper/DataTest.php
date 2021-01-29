@@ -62,7 +62,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->willReturn('1');
 
-        $this->assertInternalType('string', $this->helper->isEnabled());
+        $this->assertIsString($this->helper->isEnabled());
     }
 
     public function testIsNotEnabled()

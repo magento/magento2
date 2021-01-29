@@ -107,10 +107,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $collectionMock = $this->createPartialMock(Collection::class, ['create', 'joinStates']);
         $this->orderStatusCollectionFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($collectionMock));
+            ->willReturn($collectionMock);
         $collectionMock->expects($this->once())
             ->method('joinStates')
-            ->will($this->returnValue($statuses));
+            ->willReturn($statuses);
 
         $result = $this->salesConfig->getInvisibleOnFrontStatuses();
         $this->assertSame($expectedResult, $result);
@@ -140,10 +140,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $collectionMock = $this->createPartialMock(Collection::class, ['create', 'joinStates']);
         $this->orderStatusCollectionFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($collectionMock));
+            ->willReturn($collectionMock);
         $collectionMock->expects($this->once())
             ->method('joinStates')
-            ->will($this->returnValue($statuses));
+            ->willReturn($statuses);
         $result = $this->salesConfig->getStateLabelByStateAndStatus('processing', 'fraud');
         $this->assertSame('Suspected Fraud', $result->getText());
     }
@@ -166,19 +166,19 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         );
         $this->orderStatusCollectionFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($collectionMock));
+            ->willReturn($collectionMock);
 
         $collectionMock->expects($this->once())
             ->method('addStateFilter')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $collectionMock->expects($this->once())
             ->method('orderByLabel')
-            ->will($this->returnValue($collectionData));
+            ->willReturn($collectionData);
 
         $collectionMock->expects($this->once())
             ->method('joinStates')
-            ->will($this->returnValue($collectionData));
+            ->willReturn($collectionData);
 
         $this->statusFactoryMock->method('create')
             ->willReturnSelf();

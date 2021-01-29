@@ -25,7 +25,7 @@ class ThemeDependencyCheckerFactoryTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $this->objectManager = $this->getMockForAbstractClass(

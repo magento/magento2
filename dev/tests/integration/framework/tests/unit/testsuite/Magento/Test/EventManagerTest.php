@@ -46,11 +46,11 @@ class EventManagerTest extends \PHPUnit\Framework\TestCase
         $callback = function () use (&$actualSubscribers) {
             $actualSubscribers[] = 'subscriberOne';
         };
-        $this->_subscriberOne->expects($this->once())->method('testEvent')->will($this->returnCallback($callback));
+        $this->_subscriberOne->expects($this->once())->method('testEvent')->willReturnCallback($callback);
         $callback = function () use (&$actualSubscribers) {
             $actualSubscribers[] = 'subscriberTwo';
         };
-        $this->_subscriberTwo->expects($this->once())->method('testEvent')->will($this->returnCallback($callback));
+        $this->_subscriberTwo->expects($this->once())->method('testEvent')->willReturnCallback($callback);
         $this->_eventManager->fireEvent('testEvent', [], $reverseOrder);
         $this->assertEquals($expectedSubscribers, $actualSubscribers);
     }

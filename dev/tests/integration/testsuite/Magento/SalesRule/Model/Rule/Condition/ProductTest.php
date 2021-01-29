@@ -87,7 +87,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $rule = $this->objectManager->get(Registry::class)
             ->registry('_fixture/Magento_SalesRule_Sku_Exclude');
 
-        $this->assertEquals(false, $rule->validate($quote));
+        $this->assertFalse($rule->validate($quote));
     }
 
     /**

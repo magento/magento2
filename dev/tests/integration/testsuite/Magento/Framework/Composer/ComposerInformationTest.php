@@ -34,7 +34,7 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
      */
     private $composerFactory;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
     }

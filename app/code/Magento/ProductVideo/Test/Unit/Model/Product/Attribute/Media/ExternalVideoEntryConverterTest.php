@@ -158,8 +158,8 @@ class ExternalVideoEntryConverterTest extends \PHPUnit\Framework\TestCase
 
         $product->expects($this->once())->method('getMediaAttributeValues')->willReturn($productImages);
 
-        $this->mediaGalleryEntryMock->expects($this->once())->method('setExtensionAttributes')->will(
-            $this->returnSelf()
+        $this->mediaGalleryEntryMock->expects($this->once())->method('setExtensionAttributes')->willReturnSelf(
+            
         );
 
         $this->modelObject->convertTo($product, $rowData);

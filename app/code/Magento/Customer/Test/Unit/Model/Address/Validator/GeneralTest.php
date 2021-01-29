@@ -70,11 +70,11 @@ class GeneralTest extends \PHPUnit\Framework\TestCase
 
         $this->eavConfigMock->expects($this->any())
             ->method('getAttribute')
-            ->will($this->returnValue($attributeMock));
+            ->willReturn($attributeMock);
 
         $this->directoryDataMock->expects($this->once())
             ->method('getCountriesWithOptionalZip')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $addressMock->method('getFirstName')->willReturn($data['firstname']);
         $addressMock->method('getLastname')->willReturn($data['lastname']);

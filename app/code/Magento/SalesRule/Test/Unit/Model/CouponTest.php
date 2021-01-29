@@ -37,7 +37,7 @@ class CouponTest extends \PHPUnit\Framework\TestCase
 
         $context = $this->createPartialMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher']);
 
-        $context->expects($this->once())->method('getEventDispatcher')->will($this->returnValue($this->eventManager));
+        $context->expects($this->once())->method('getEventDispatcher')->willReturn($this->eventManager);
 
         $this->couponModel = $objectManager->getObject(
             \Magento\SalesRule\Model\Coupon::class,

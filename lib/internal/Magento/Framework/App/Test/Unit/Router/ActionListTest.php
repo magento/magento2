@@ -83,7 +83,7 @@ class ActionListTest extends \PHPUnit\Framework\TestCase
     {
         $this->cacheMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->cacheMock->expects($this->once())
             ->method('save');
         $this->readerMock->expects($this->once())

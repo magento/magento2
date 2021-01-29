@@ -91,7 +91,7 @@ class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
             $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),
@@ -179,11 +179,11 @@ class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $consoleLoggerFactoryMock
             ->method('getLogger')
-            ->will($this->returnCallback(
+            ->willReturnCallback(
                 function ($output) use ($objectManager) {
                     return $objectManager->create(ConsoleLogger::class, ['output' => $output]);
                 }
-            ));
+            );
         $objectManagerProviderMock = $this->getMockBuilder(ObjectManagerProvider::class)
             ->setMethods(['get'])
             ->disableOriginalConstructor()

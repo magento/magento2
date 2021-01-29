@@ -90,12 +90,12 @@ class TaxRulesFixtureTest extends \PHPUnit\Framework\TestCase
         $this->fixtureModelMock
             ->expects($this->exactly(2))
             ->method('getValue')
-            ->will($this->returnValueMap(
+            ->willReturnMap(
                 [
                     ['tax_mode', 'VAT'],
                     ['tax_rules', 2]
                 ]
-            ));
+            );
 
         $this->taxRateCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()

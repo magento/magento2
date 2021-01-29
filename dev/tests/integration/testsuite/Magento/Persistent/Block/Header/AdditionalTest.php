@@ -31,7 +31,7 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
      */
     protected $_objectManager;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 

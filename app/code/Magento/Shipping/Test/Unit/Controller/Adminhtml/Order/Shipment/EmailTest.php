@@ -169,15 +169,15 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
         $this->request->expects($this->any())
             ->method('getParam')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         ['order_id', null, $orderId],
                         ['shipment_id', null, $shipmentId],
                         ['shipment', null, $shipment],
                         ['tracking', null, $tracking],
                     ]
-                )
+                
             );
         $this->shipmentLoader->expects($this->once())
             ->method('setShipmentId')
@@ -193,18 +193,18 @@ class EmailTest extends \PHPUnit\Framework\TestCase
             ->with($tracking);
         $this->shipmentLoader->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($orderShipment));
+            ->willReturn($orderShipment);
         $orderShipment->expects($this->once())
             ->method('save')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->objectManager->expects($this->once())
             ->method('create')
             ->with($shipmentNotifierClassName)
-            ->will($this->returnValue($shipmentNotifier));
+            ->willReturn($shipmentNotifier);
         $shipmentNotifier->expects($this->once())
             ->method('notify')
             ->with($orderShipment)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->messageManager->expects($this->once())
             ->method('addSuccess')
             ->with('You sent the shipment.');
@@ -226,7 +226,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $this->actionFlag->expects($this->any())
             ->method('get')
             ->with('', 'check_url_settings')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->session->expects($this->any())
             ->method('setIsUrlNotice')
             ->with(true);

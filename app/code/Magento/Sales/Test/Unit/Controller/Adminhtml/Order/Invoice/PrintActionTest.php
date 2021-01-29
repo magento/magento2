@@ -81,19 +81,19 @@ class PrintActionTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $contextMock->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
         $contextMock->expects($this->any())
             ->method('getResponse')
-            ->will($this->returnValue($this->responseMock));
+            ->willReturn($this->responseMock);
         $contextMock->expects($this->any())
             ->method('getSession')
-            ->will($this->returnValue($this->sessionMock));
+            ->willReturn($this->sessionMock);
         $contextMock->expects($this->any())
             ->method('getActionFlag')
-            ->will($this->returnValue($this->actionFlagMock));
+            ->willReturn($this->actionFlagMock);
         $contextMock->expects($this->any())
             ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManagerMock));
+            ->willReturn($this->objectManagerMock);
 
         $this->fileFactory = $this->getMockBuilder(\Magento\Framework\App\Response\Http\FileFactory::class)
             ->disableOriginalConstructor()
@@ -116,7 +116,7 @@ class PrintActionTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('invoice_id')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
 
         $invoiceMock = $this->createMock(\Magento\Sales\Model\Order\Invoice::class);
 

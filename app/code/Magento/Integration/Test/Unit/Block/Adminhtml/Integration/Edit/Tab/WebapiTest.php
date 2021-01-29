@@ -126,7 +126,7 @@ class WebapiTest extends \PHPUnit\Framework\TestCase
         $this->webapiBlock = $this->getWebapiBlock($integrationData, $selectedResources);
         $this->rootResource->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($rootResourceId));
+            ->willReturn($rootResourceId);
         $this->assertEquals($expectedValue, $this->webapiBlock->isEverythingAllowed());
     }
 
@@ -166,12 +166,12 @@ class WebapiTest extends \PHPUnit\Framework\TestCase
         ];
         $this->aclResourceProvider->expects($this->once())
             ->method('getAclResources')
-            ->will($this->returnValue($resources));
+            ->willReturn($resources);
         $rootArray = "rootArrayValue";
         $this->integrationHelper->expects($this->once())
             ->method('mapResources')
             ->with(['resource1', 'resource2', 'resource3'])
-            ->will($this->returnValue($rootArray));
+            ->willReturn($rootArray);
         $this->assertEquals($rootArray, $this->webapiBlock->getTree());
     }
 
@@ -189,7 +189,7 @@ class WebapiTest extends \PHPUnit\Framework\TestCase
 
         $this->rootResource->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($rootResourceId));
+            ->willReturn($rootResourceId);
 
         $this->webapiBlock = $this->getWebapiBlock();
 
@@ -227,7 +227,7 @@ class WebapiTest extends \PHPUnit\Framework\TestCase
                 $this->integrationService->expects($this->once())
                     ->method('getSelectedResources')
                     ->with($integrationData['integration_id'])
-                    ->will($this->returnValue($selectedResources));
+                    ->willReturn($selectedResources);
             }
         }
 

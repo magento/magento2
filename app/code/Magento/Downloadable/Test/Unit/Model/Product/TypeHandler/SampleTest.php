@@ -57,7 +57,7 @@ class SampleTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $sampleResourceFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->sampleResource));
+            ->willReturn($this->sampleResource);
         $this->metadataPoolMock = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -201,11 +201,11 @@ class SampleTest extends \PHPUnit\Framework\TestCase
         $sample->expects($this->once())
             ->method('setData')
             ->with($modelData)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $sample->expects($this->once())
             ->method('setSampleType')
             ->with($modelData['type'])
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $sample->expects($this->once())
             ->method('setProductId')
             ->with($product->getData('id'))
@@ -213,7 +213,7 @@ class SampleTest extends \PHPUnit\Framework\TestCase
         $sample->expects($this->once())
             ->method('setStoreId')
             ->with($product->getStoreId())
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         return $sample;
     }
@@ -237,20 +237,20 @@ class SampleTest extends \PHPUnit\Framework\TestCase
             ->willReturn($id);
         $product->expects($this->any())
             ->method('getStoreId')
-            ->will($this->returnValue($storeId));
+            ->willReturn($storeId);
         $product->expects($this->any())
             ->method('getWebsiteIds')
-            ->will($this->returnValue($websiteIds));
+            ->willReturn($websiteIds);
         $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->setMethods(['getWebsiteId'])
             ->getMock();
         $store->expects($this->any())
             ->method('getWebsiteId')
-            ->will($this->returnValue($storeWebsiteId));
+            ->willReturn($storeWebsiteId);
         $product->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($store));
+            ->willReturn($store);
         $product->expects($this->any())
             ->method('getData')
             ->with('id')

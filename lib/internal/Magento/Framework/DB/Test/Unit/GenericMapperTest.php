@@ -77,14 +77,14 @@ class GenericMapperTest extends \PHPUnit\Framework\TestCase
 
         $criteriaMock->expects($this->any())
             ->method('getMapperInterfaceName')
-            ->will($this->returnValue('mapper-name'));
+            ->willReturn('mapper-name');
         $this->mapperFactoryMock->expects($this->exactly(4))
             ->method('create')
             ->with('mapper-name', ['select' => $this->selectMock])
-            ->will($this->returnValue($mapperInstanceMock));
+            ->willReturn($mapperInstanceMock);
         $mapperInstanceMock->expects($this->exactly(4))
             ->method('map')
-            ->will($this->returnValue($this->selectMock));
+            ->willReturn($this->selectMock);
 
         $this->geneticMapper->mapCriteriaList(array_fill(0, 4, $criteriaMock));
     }
@@ -135,14 +135,14 @@ class GenericMapperTest extends \PHPUnit\Framework\TestCase
 
         $geneticMapper->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($connectionMock));
+            ->willReturn($connectionMock);
         $geneticMapper->expects($this->exactly(4))
             ->method('getSelect')
-            ->will($this->returnValue($this->selectMock));
+            ->willReturn($this->selectMock);
         $connectionMock->expects($this->exactly(2))
             ->method('quoteInto')
             ->with('test-field=?', 'test-condition')
-            ->will($this->returnValue('test-condition'));
+            ->willReturn('test-condition');
         $this->selectMock->expects($this->once())
             ->method('orWhere')
             ->with('test-condition');
@@ -152,7 +152,7 @@ class GenericMapperTest extends \PHPUnit\Framework\TestCase
         $connectionMock->expects($this->any())
             ->method('prepareSqlCondition')
             ->with('test-field', 'test-condition')
-            ->will($this->returnValue('test-condition'));
+            ->willReturn('test-condition');
 
         $geneticMapper->mapFilters($filters);
     }
@@ -187,7 +187,7 @@ class GenericMapperTest extends \PHPUnit\Framework\TestCase
 
         $geneticMapper->expects($this->any())
             ->method('getSelect')
-            ->will($this->returnValue($this->selectMock));
+            ->willReturn($this->selectMock);
         $this->selectMock->expects($this->once())
             ->method('getPart')
             ->with(\Magento\Framework\DB\Select::COLUMNS)

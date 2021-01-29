@@ -146,7 +146,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $this->updateHandler->execute($product);
         $productImages = $this->galleryResource->loadProductGalleryByAttributeId($product, $this->mediaAttributeId);
         $updatedImage = reset($productImages);
-        $this->assertTrue(is_array($updatedImage));
+        $this->assertIsArray($updatedImage);
         $this->assertEquals('New image', $updatedImage['label']);
         $this->assertEquals('New image', $updatedImage['label_default']);
         $this->assertEquals('1', $updatedImage['disabled']);

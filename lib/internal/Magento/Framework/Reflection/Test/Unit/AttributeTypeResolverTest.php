@@ -36,11 +36,12 @@ class AttributeTypeResolverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Provided value is not object type
      */
     public function testResolveObjectTypeWithNonObjectValue()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Provided value is not object type');
+
         $code = 'some_code';
         $value = 'string';
         $context = 'Some\Class';
@@ -83,10 +84,11 @@ class AttributeTypeResolverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testResolveObjectTypeWithConfiguredAttributeAndNonExistedClass()
     {
+        $this->expectException(\LogicException::class);
+
         $code = 'some_code';
         $value = new \stdClass();
         $context = '\Some\Class';

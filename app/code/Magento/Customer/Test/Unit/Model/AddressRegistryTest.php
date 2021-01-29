@@ -38,13 +38,13 @@ class AddressRegistryTest extends \PHPUnit\Framework\TestCase
         $address->expects($this->once())
             ->method('load')
             ->with($addressId)
-            ->will($this->returnValue($address));
+            ->willReturn($address);
         $address->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($addressId));
+            ->willReturn($addressId);
         $this->addressFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($address));
+            ->willReturn($address);
         $actual = $this->unit->retrieve($addressId);
         $this->assertEquals($address, $actual);
         $actualCached = $this->unit->retrieve($addressId);
@@ -65,13 +65,13 @@ class AddressRegistryTest extends \PHPUnit\Framework\TestCase
         $address->expects($this->once())
             ->method('load')
             ->with($addressId)
-            ->will($this->returnValue($address));
+            ->willReturn($address);
         $address->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->addressFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($address));
+            ->willReturn($address);
         $this->unit->retrieve($addressId);
     }
 
@@ -85,13 +85,13 @@ class AddressRegistryTest extends \PHPUnit\Framework\TestCase
         $address->expects($this->exactly(2))
             ->method('load')
             ->with($addressId)
-            ->will($this->returnValue($address));
+            ->willReturn($address);
         $address->expects($this->exactly(2))
             ->method('getId')
-            ->will($this->returnValue($addressId));
+            ->willReturn($addressId);
         $this->addressFactory->expects($this->exactly(2))
             ->method('create')
-            ->will($this->returnValue($address));
+            ->willReturn($address);
         $actual = $this->unit->retrieve($addressId);
         $this->assertEquals($address, $actual);
         $this->unit->remove($addressId);

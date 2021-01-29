@@ -63,8 +63,8 @@ class ProTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             '_isPaymentReviewRequired'
-        )->will(
-            $this->returnValue($isReviewRequired)
+        )->willReturn(
+            $isReviewRequired
         );
         $payment = $this->getMockBuilder(
             \Magento\Payment\Model\Info::class
@@ -77,8 +77,8 @@ class ProTest extends \PHPUnit\Framework\TestCase
             'getAdditionalInformation'
         )->with(
             $this->equalTo(\Magento\Paypal\Model\Info::PENDING_REASON_GLOBAL)
-        )->will(
-            $this->returnValue($pendingReason)
+        )->willReturn(
+            $pendingReason
         );
 
         $this->assertEquals($expected, $this->pro->canReviewPayment($payment));
@@ -195,9 +195,9 @@ class ProTest extends \PHPUnit\Framework\TestCase
 
         $httpClient->expects(static::any())
             ->method('read')
-            ->will(static::returnValue(
+            ->willReturn(
                 "\r\n" . 'ACK=Success&CORRELATIONID=32342431'
-            ));
+            );
 
         $curlFactory = $this->getMockBuilder(\Magento\Framework\HTTP\Adapter\CurlFactory::class)
             ->disableOriginalConstructor()

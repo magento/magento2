@@ -156,10 +156,10 @@ class ContentTest extends \PHPUnit\Framework\TestCase
 
         $this->readMock->expects($this->any())
             ->method('isFile')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->databaseMock->expects($this->any())
             ->method('checkDbUsage')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->assertSame(json_encode($imagesResult), $this->content->getImagesJson());
     }
@@ -231,10 +231,10 @@ class ContentTest extends \PHPUnit\Framework\TestCase
 
         $this->readMock->expects($this->any())
             ->method('isFile')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->databaseMock->expects($this->any())
             ->method('checkDbUsage')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->readMock->expects($this->any())->method('stat')->willReturnOnConsecutiveCalls(
             $this->throwException(
@@ -428,10 +428,10 @@ class ContentTest extends \PHPUnit\Framework\TestCase
 
         $this->readMock->expects($this->any())
             ->method('isFile')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->databaseMock->expects($this->any())
             ->method('checkDbUsage')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->databaseMock->expects($this->once())
             ->method('saveFileToFilesystem')

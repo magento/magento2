@@ -56,10 +56,10 @@ class BaseTest extends \PHPUnit\Framework\TestCase
                 $file = $this->createMock(\Magento\Framework\Component\ComponentFile::class);
                 $file->expects($this->once())
                     ->method('getFullPath')
-                    ->will($this->returnValue("{$fileType}/module/{$i}/path"));
+                    ->willReturn("{$fileType}/module/{$i}/path");
                 $file->expects($this->once())
                     ->method('getComponentName')
-                    ->will($this->returnValue('Module_' . $i));
+                    ->willReturn('Module_' . $i);
                 $files[$fileType][] = $file;
             }
         }

@@ -125,11 +125,11 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $sensitiveCookieMetadataMock->expects($this->once())
             ->method('setPath')
             ->with('/')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->contextMock->expects($this->once())
             ->method('getVaryString')
-            ->will($this->returnValue($expectedCookieValue));
+            ->willReturn($expectedCookieValue);
 
         $this->sessionConfigMock->expects($this->once())
             ->method('getCookieLifetime')
@@ -153,7 +153,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $cookieMetadataMock->expects($this->once())
             ->method('setPath')
             ->with('/')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->contextMock->expects($this->once())
             ->method('getVaryString')
             ->willReturn(null);
@@ -292,11 +292,12 @@ class HttpTest extends \PHPUnit\Framework\TestCase
 
     /**
      *
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage ObjectManager isn't initialized
      */
     public function testWakeUpWithException()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('ObjectManager isn\'t initialized');
+
         /* ensure that the test preconditions are met */
         $objectManagerClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
         $instanceProperty = $objectManagerClass->getProperty('_instance');
@@ -319,11 +320,11 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $objectManagerMock->expects($this->once())
             ->method('create')
             ->with(\Magento\Framework\Stdlib\CookieManagerInterface::class)
-            ->will($this->returnValue($this->cookieManagerMock));
+            ->willReturn($this->cookieManagerMock);
         $objectManagerMock->expects($this->at(1))
             ->method('get')
             ->with(\Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class)
-            ->will($this->returnValue($this->cookieMetadataFactoryMock));
+            ->willReturn($this->cookieMetadataFactoryMock);
 
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
         $this->model->__wakeup();

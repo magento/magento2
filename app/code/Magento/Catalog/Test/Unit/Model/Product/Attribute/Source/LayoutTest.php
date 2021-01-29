@@ -46,11 +46,11 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $mockPageLayoutConfig->expects($this->any())
             ->method('toOptionArray')
-            ->will($this->returnValue(['0' => $expectedOptions['1']]));
+            ->willReturn(['0' => $expectedOptions['1']]);
 
         $this->pageLayoutBuilder->expects($this->once())
             ->method('getPageLayoutsConfig')
-            ->will($this->returnValue($mockPageLayoutConfig));
+            ->willReturn($mockPageLayoutConfig);
 
         $layoutOptions = $this->layoutModel->getAllOptions();
         $this->assertEquals($expectedOptions, $layoutOptions);

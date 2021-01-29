@@ -116,7 +116,7 @@ class CaptchaOnAdminLoginTest extends Injectable
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->systemConfigEditPage->open();
         $this->systemConfigEditPage->getForm()

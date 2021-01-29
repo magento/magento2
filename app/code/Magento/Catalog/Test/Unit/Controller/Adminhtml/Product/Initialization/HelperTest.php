@@ -751,6 +751,6 @@ class HelperTest extends \PHPUnit\Framework\TestCase
 
         $this->productRepositoryMock->expects($this->any())
             ->method('getById')
-            ->will($this->returnValueMap($repositoryReturnMap));
+            ->willReturnMap($repositoryReturnMap);
     }
 }

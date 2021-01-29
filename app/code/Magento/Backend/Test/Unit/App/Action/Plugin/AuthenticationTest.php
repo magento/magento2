@@ -55,17 +55,17 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
 
         $this->auth->expects($this->any())
             ->method('getUser')
-            ->will($this->returnValue($user));
+            ->willReturn($user);
         $this->auth->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue($loggedIn));
+            ->willReturn($loggedIn);
         $this->auth->expects($this->any())
             ->method('getAuthStorage')
-            ->will($this->returnValue($storage));
+            ->willReturn($storage);
 
         $request->expects($this->once())
             ->method('getActionName')
-            ->will($this->returnValue($action));
+            ->willReturn($action);
 
         $user->expects($this->once())
             ->method('reload');
@@ -101,10 +101,10 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         // Stubs to control the flow of execution in aroundDispatch
-        $this->auth->expects($this->any())->method('getAuthStorage')->will($this->returnValue($storage));
-        $request->expects($this->once())->method('getActionName')->will($this->returnValue('non/open/action/name'));
+        $this->auth->expects($this->any())->method('getAuthStorage')->willReturn($storage);
+        $request->expects($this->once())->method('getActionName')->willReturn('non/open/action/name');
         $this->auth->expects($this->any())->method('getUser')->willReturn(false);
-        $this->auth->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
+        $this->auth->expects($this->once())->method('isLoggedIn')->willReturn(false);
         $request->expects($this->any())->method('getPost')->willReturn(false);
 
         // Test cases and expectations based on provided data

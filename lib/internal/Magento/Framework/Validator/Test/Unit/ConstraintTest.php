@@ -62,8 +62,8 @@ class ConstraintTest extends \PHPUnit\Framework\TestCase
             'isValid'
         )->with(
             $value
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
 
         if ($expectedResult) {
@@ -73,8 +73,8 @@ class ConstraintTest extends \PHPUnit\Framework\TestCase
                 $this->once()
             )->method(
                 'getMessages'
-            )->will(
-                $this->returnValue($expectedMessages)
+            )->willReturn(
+                $expectedMessages
             );
         }
 

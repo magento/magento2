@@ -135,15 +135,15 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
 
         $this->productUrlMock->expects($this->exactly($count))
             ->method('getUrl')
-            ->will($this->returnValueMap($urlMap));
+            ->willReturnMap($urlMap);
 
         $this->outputHelperMock->expects($this->exactly($count))
             ->method('productAttribute')
-            ->will($this->returnValueMap($outputMap));
+            ->willReturnMap($outputMap);
 
         $this->helperMock->expects($this->exactly($count))
             ->method('getPostDataRemove')
-            ->will($this->returnValueMap($helperMap));
+            ->willReturnMap($helperMap);
 
         return $items;
     }

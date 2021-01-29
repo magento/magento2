@@ -103,30 +103,30 @@ class AbstractCompositeTest extends \PHPUnit\Framework\TestCase
 
     public function testHasChildrenReturnsTrueIfThereAreVisibleChildren()
     {
-        $this->_iteratorMock->expects($this->once())->method('current')->will($this->returnValue(true));
-        $this->_iteratorMock->expects($this->once())->method('valid')->will($this->returnValue(true));
+        $this->_iteratorMock->expects($this->once())->method('current')->willReturn(true);
+        $this->_iteratorMock->expects($this->once())->method('valid')->willReturn(true);
         $this->assertTrue($this->_model->hasChildren());
     }
 
     public function testIsVisibleReturnsTrueIfThereAreVisibleChildren()
     {
-        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
-        $this->_iteratorMock->expects($this->once())->method('current')->will($this->returnValue(true));
-        $this->_iteratorMock->expects($this->once())->method('valid')->will($this->returnValue(true));
+        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->willReturn(true);
+        $this->_iteratorMock->expects($this->once())->method('current')->willReturn(true);
+        $this->_iteratorMock->expects($this->once())->method('valid')->willReturn(true);
         $this->_model->setData(['showInDefault' => 'true'], 'default');
         $this->assertTrue($this->_model->isVisible());
     }
 
     public function testIsVisibleReturnsTrueIfElementHasFrontEndModel()
     {
-        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
+        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->willReturn(true);
         $this->_model->setData(['showInDefault' => 'true', 'frontend_model' => 'Model_Name'], 'default');
         $this->assertTrue($this->_model->isVisible());
     }
 
     public function testIsVisibleReturnsFalseIfElementHasNoChildrenAndFrontendModel()
     {
-        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
+        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->willReturn(true);
         $this->_model->setData(['showInDefault' => 'true'], 'default');
         $this->assertFalse($this->_model->isVisible());
     }

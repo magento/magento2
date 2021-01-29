@@ -80,7 +80,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 $this->equalTo('RegularPrice'),
                 $this->quantity
             )
-            ->will($this->returnValue($this->priceMock));
+            ->willReturn($this->priceMock);
         $this->assertEquals($this->priceMock, $this->collection->get('regular_price'));
         //Calling the get method again with the same code, cached copy should be used
         $this->assertEquals($this->priceMock, $this->collection->get('regular_price'));
@@ -98,7 +98,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 $this->equalTo($this->pool->current()),
                 $this->quantity
             )
-            ->will($this->returnValue($this->priceMock));
+            ->willReturn($this->priceMock);
         $this->assertEquals($this->priceMock, $this->collection->current());
     }
 }

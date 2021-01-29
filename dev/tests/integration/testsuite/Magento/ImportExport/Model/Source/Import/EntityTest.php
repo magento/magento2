@@ -38,7 +38,7 @@ class EntityTest extends \PHPUnit\Framework\TestCase
             ['label' => __('entity_label_1'), 'value' => 'entity_name_1'],
             ['label' => __('entity_label_2'), 'value' => 'entity_name_2'],
         ];
-        $this->_importConfigMock->expects($this->any())->method('getEntities')->will($this->returnValue($entities));
+        $this->_importConfigMock->expects($this->any())->method('getEntities')->willReturn($entities);
         $this->assertEquals($expectedResult, $this->_model->toOptionArray());
     }
 }

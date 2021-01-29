@@ -81,24 +81,24 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->coreResourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
         $this->coreResourceMock->expects($this->any())->method('getTableName')->with('eav_attribute_option_value')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
-        $this->connectionMock->expects($this->any())->method('select')->will($this->returnValue($this->selectMock));
-        $this->connectionMock->expects($this->any())->method('quoteIdentifier')->will($this->returnArgument(0));
+        $this->connectionMock->expects($this->any())->method('select')->willReturn($this->selectMock);
+        $this->connectionMock->expects($this->any())->method('quoteIdentifier')->willReturnArgument(0);
 
         $this->resourceMock->expects(
             $this->any()
         )->method(
             'getConnection'
-        )->will(
-            $this->returnValue($this->connectionMock)
+        )->willReturn(
+            $this->connectionMock
         );
         $this->resourceMock->expects(
             $this->any()
         )->method(
             'getMainTable'
-        )->will(
-            $this->returnValue('eav_attribute_option')
+        )->willReturn(
+            'eav_attribute_option'
         );
         $this->resourceMock->expects(
             $this->any()
@@ -106,8 +106,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             'getTable'
         )->with(
             'eav_attribute_option'
-        )->will(
-            $this->returnValue('eav_attribute_option')
+        )->willReturn(
+            'eav_attribute_option'
         );
 
         $this->model = new \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection(
@@ -131,8 +131,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         )->with(
             'main_table.option_id',
             ['in' => 1]
-        )->will(
-            $this->returnValue('main_table.option_id IN (1)')
+        )->willReturn(
+            'main_table.option_id IN (1)'
         );
 
         $this->selectMock->expects(
@@ -143,8 +143,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             'main_table.option_id IN (1)',
             null,
             'TYPE_CONDITION'
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
+            
         );
 
         $this->assertEquals($this->model, $this->model->setIdFilter(1));

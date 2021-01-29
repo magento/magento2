@@ -60,11 +60,12 @@ class IntervalFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Interval not found by config current_interval
      */
     public function testCreateWithoutIntervals()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Interval not found by config current_interval');
+
         $dataProvider = 'current_interval';
         $dataProviders = [];
 
@@ -80,11 +81,12 @@ class IntervalFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Interval not instance of interface
      */
     public function testCreateWithWrongInterval()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Interval not instance of interface');
+
         $dataProvider = 'current_interval';
         $dataProviderClass = \stdClass::class;
         $dataProviders = [

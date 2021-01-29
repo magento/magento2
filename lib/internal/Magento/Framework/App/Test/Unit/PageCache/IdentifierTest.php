@@ -64,12 +64,12 @@ class IdentifierTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->serializerMock->expects($this->any())
             ->method('serialize')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($value) {
                         return json_encode($value);
                     }
-                )
+                
             );
 
         $this->model = $this->objectManager->getObject(
@@ -159,7 +159,7 @@ class IdentifierTest extends \PHPUnit\Framework\TestCase
     {
         $this->requestMock->expects($this->any())
             ->method('isSecure')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->requestMock->expects($this->any())
             ->method('getUriString')
@@ -167,7 +167,7 @@ class IdentifierTest extends \PHPUnit\Framework\TestCase
 
         $this->contextMock->expects($this->any())
             ->method('getVaryString')
-            ->will($this->returnValue(self::VARY));
+            ->willReturn(self::VARY);
 
         $this->assertEquals(
             sha1(

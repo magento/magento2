@@ -138,11 +138,11 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->getData();
 
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertArrayHasKey('totalRecords', $result);
         $this->assertEquals(1, $result['totalRecords']);
         $this->assertArrayHasKey('items', $result);
-        $this->assertInternalType('array', $result['items']);
+        $this->assertIsArray($result['items']);
         $this->assertEquals($result['items'], $expected);
     }
 

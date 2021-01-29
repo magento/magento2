@@ -41,13 +41,13 @@ class MultistoreTest extends \PHPUnit\Framework\TestCase
 
     public function testIsDisplayedReturnsTrueInMultiStoreMode()
     {
-        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(false));
+        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->willReturn(false);
         $this->assertTrue($this->_model->isDisplayed());
     }
 
     public function testIsDisplayedReturnsFalseInSingleStoreMode()
     {
-        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
+        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->willReturn(true);
         $this->assertFalse($this->_model->isDisplayed());
     }
 }

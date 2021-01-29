@@ -169,7 +169,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $resultString = 'some';
 
         $this->filterManager->expects($this->once())->method('translitUrl')->with($strIn)
-            ->will($this->returnValue($resultString));
+            ->willReturn($resultString);
 
         $this->assertEquals($resultString, $this->category->formatUrlKey($strIn));
     }
@@ -188,12 +188,12 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Category::class,
             ['getId', 'setStoreId', 'load']
         );
-        $parentCategory->expects($this->any())->method('setStoreId')->will($this->returnSelf());
-        $parentCategory->expects($this->any())->method('load')->will($this->returnSelf());
-        $this->categoryRepository->expects($this->any())->method('get')->will($this->returnValue($parentCategory));
+        $parentCategory->expects($this->any())->method('setStoreId')->willReturnSelf();
+        $parentCategory->expects($this->any())->method('load')->willReturnSelf();
+        $this->categoryRepository->expects($this->any())->method('get')->willReturn($parentCategory);
 
         $store = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
         $this->category->move(1, 2);
     }
@@ -211,13 +211,13 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Category::class,
             ['getId', 'setStoreId', 'load']
         );
-        $parentCategory->expects($this->any())->method('getId')->will($this->returnValue(5));
-        $parentCategory->expects($this->any())->method('setStoreId')->will($this->returnSelf());
-        $parentCategory->expects($this->any())->method('load')->will($this->returnSelf());
-        $this->categoryRepository->expects($this->any())->method('get')->will($this->returnValue($parentCategory));
+        $parentCategory->expects($this->any())->method('getId')->willReturn(5);
+        $parentCategory->expects($this->any())->method('setStoreId')->willReturnSelf();
+        $parentCategory->expects($this->any())->method('load')->willReturnSelf();
+        $this->categoryRepository->expects($this->any())->method('get')->willReturn($parentCategory);
 
         $store = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
         $this->category->move(1, 2);
     }
@@ -236,13 +236,13 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Category::class,
             ['getId', 'setStoreId', 'load']
         );
-        $parentCategory->expects($this->any())->method('getId')->will($this->returnValue(5));
-        $parentCategory->expects($this->any())->method('setStoreId')->will($this->returnSelf());
-        $parentCategory->expects($this->any())->method('load')->will($this->returnSelf());
-        $this->categoryRepository->expects($this->any())->method('get')->will($this->returnValue($parentCategory));
+        $parentCategory->expects($this->any())->method('getId')->willReturn(5);
+        $parentCategory->expects($this->any())->method('setStoreId')->willReturnSelf();
+        $parentCategory->expects($this->any())->method('load')->willReturnSelf();
+        $this->categoryRepository->expects($this->any())->method('get')->willReturn($parentCategory);
 
         $store = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
         $this->category->setId(5);
         $this->category->move(1, 2);
@@ -251,22 +251,22 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     public function testMovePrimaryWorkflow()
     {
         $indexer = $this->createPartialMock(\stdClass::class, ['isScheduled']);
-        $indexer->expects($this->once())->method('isScheduled')->will($this->returnValue(true));
+        $indexer->expects($this->once())->method('isScheduled')->willReturn(true);
         $this->indexerRegistry->expects($this->once())
             ->method('get')
             ->with('catalog_category_product')
-            ->will($this->returnValue($indexer));
+            ->willReturn($indexer);
         $parentCategory = $this->createPartialMock(
             \Magento\Catalog\Model\Category::class,
             ['getId', 'setStoreId', 'load']
         );
-        $parentCategory->expects($this->any())->method('getId')->will($this->returnValue(5));
-        $parentCategory->expects($this->any())->method('setStoreId')->will($this->returnSelf());
-        $parentCategory->expects($this->any())->method('load')->will($this->returnSelf());
-        $this->categoryRepository->expects($this->any())->method('get')->will($this->returnValue($parentCategory));
+        $parentCategory->expects($this->any())->method('getId')->willReturn(5);
+        $parentCategory->expects($this->any())->method('setStoreId')->willReturnSelf();
+        $parentCategory->expects($this->any())->method('load')->willReturnSelf();
+        $this->categoryRepository->expects($this->any())->method('get')->willReturn($parentCategory);
 
         $store = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
         $this->category->setId(3);
         $this->category->move(5, 7);
@@ -281,7 +281,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->flatState->expects($this->any())
             ->method('isAvailable')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $category = $this->getCategoryModel();
         $this->assertTrue($category->getUseFlatResource());
@@ -353,16 +353,16 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
         $this->flatState->expects($this->any())
             ->method('isFlatEnabled')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->flatIndexer->expects($this->exactly(1))
             ->method('isScheduled')
-            ->will($this->returnValue($flatScheduled));
+            ->willReturn($flatScheduled);
         $this->flatIndexer->expects($this->exactly($expectedFlatReindexCalls))->method('reindexList')->with(['123']);
 
         $this->productIndexer->expects($this->exactly(1))
             ->method('isScheduled')
-            ->will($this->returnValue($productScheduled));
+            ->willReturn($productScheduled);
         $this->productIndexer->expects($this->exactly($expectedProductReindexCall))
             ->method('reindexList')
             ->with($pathIds);
@@ -370,12 +370,12 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->indexerRegistry->expects($this->at(0))
             ->method('get')
             ->with(Indexer\Category\Flat\State::INDEXER_ID)
-            ->will($this->returnValue($this->flatIndexer));
+            ->willReturn($this->flatIndexer);
 
         $this->indexerRegistry->expects($this->at(1))
             ->method('get')
             ->with(Indexer\Category\Product::INDEXER_ID)
-            ->will($this->returnValue($this->productIndexer));
+            ->willReturn($this->productIndexer);
 
         $this->category->reindex();
     }
@@ -431,7 +431,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
         $this->flatState->expects($this->any())
             ->method('isFlatEnabled')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->productIndexer
             ->method('isScheduled')
@@ -443,7 +443,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->indexerRegistry->expects($this->at(0))
             ->method('get')
             ->with(Indexer\Category\Product::INDEXER_ID)
-            ->will($this->returnValue($this->productIndexer));
+            ->willReturn($this->productIndexer);
 
         $this->category->reindex();
     }
@@ -520,12 +520,12 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
         $storeManager->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($store));
+            ->willReturn($store);
 
         $store->expects($this->any())
             ->method('getBaseUrl')
             ->with(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA)
-            ->will($this->returnValue('http://www.example.com/'));
+            ->willReturn('http://www.example.com/');
 
         /** @var \Magento\Catalog\Model\Category $model */
         $model = $this->objectManager->getObject(
@@ -549,12 +549,12 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
         $storeManager->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($store));
+            ->willReturn($store);
 
         $store->expects($this->any())
             ->method('getBaseUrl')
             ->with(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA)
-            ->will($this->returnValue('http://www.example.com/'));
+            ->willReturn('http://www.example.com/');
 
         /** @var \Magento\Catalog\Model\Category $model */
         $model = $this->objectManager->getObject(\Magento\Catalog\Model\Category::class, [

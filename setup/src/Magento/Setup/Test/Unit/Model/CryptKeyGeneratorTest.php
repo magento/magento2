@@ -25,7 +25,7 @@ class CryptKeyGeneratorTest extends TestCase
      */
     private $cryptKeyGenerator;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->randomMock = $this->getMockBuilder(Random::class)
             ->disableOriginalConstructor()

@@ -31,8 +31,8 @@ class CaptchaFactoryTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             $this->equalTo('Magento\Captcha\Model\\' . ucfirst($captchaType))
-        )->will(
-            $this->returnValue($defaultCaptchaMock)
+        )->willReturn(
+            $defaultCaptchaMock
         );
 
         $this->assertEquals($defaultCaptchaMock, $this->_model->create($captchaType, 'form_id'));
@@ -50,8 +50,8 @@ class CaptchaFactoryTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             $this->equalTo('Magento\Captcha\Model\\' . ucfirst($captchaType))
-        )->will(
-            $this->returnValue($defaultCaptchaMock)
+        )->willReturn(
+            $defaultCaptchaMock
         );
 
         $this->expectException('InvalidArgumentException');

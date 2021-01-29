@@ -35,7 +35,7 @@ class JobSetMaintenanceModeTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManagerProviderMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManagerProviderMock = $this->createMock(ObjectManagerProvider::class);
         $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class, [], '', false);
@@ -46,7 +46,7 @@ class JobSetMaintenanceModeTest extends \PHPUnit\Framework\TestCase
             [Cache::class, $cache],
 
         ];
-        $objectManager->expects($this->atLeastOnce())->method('get')->will($this->returnValueMap($valueMap));
+        $objectManager->expects($this->atLeastOnce())->method('get')->willReturnMap($valueMap);
         $this->objectManagerProviderMock->expects($this->once())->method('get')->willReturn($objectManager);
 
         $this->statusMock = $this->createMock(Status::class);
@@ -71,10 +71,11 @@ class JobSetMaintenanceModeTest extends \PHPUnit\Framework\TestCase
     /**
      * Test MaintenanceModeDisable job execution when maintenance mode is set manually by admin
      *
-     * @expectedException \RuntimeException
      */
     public function testExecuteMaintenanceModeDisableExeption()
     {
+        $this->expectException(\RuntimeException::class);
+
         $command = $this->createMock(MaintenanceDisableCommand::class);
         $command->expects($this->once())->method('isSetAddressInfo')->willReturn(true);
         $command->expects($this->never())->method('run');

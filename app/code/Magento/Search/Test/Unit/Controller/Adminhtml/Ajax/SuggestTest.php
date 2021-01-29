@@ -73,10 +73,10 @@ class SuggestTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->context->expects($this->atLeastOnce())
             ->method('getRequest')
-            ->will($this->returnValue($this->request));
+            ->willReturn($this->request);
         $this->context->expects($this->any())
             ->method('getUrl')
-            ->will($this->returnValue($this->url));
+            ->willReturn($this->url);
         $this->context->expects($this->any())
             ->method('getResultFactory')
             ->willReturn($this->resultFactoryMock);
@@ -116,11 +116,11 @@ class SuggestTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('q')
-            ->will($this->returnValue($searchString));
+            ->willReturn($searchString);
 
         $this->autocomplete->expects($this->once())
             ->method('getItems')
-            ->will($this->returnValue([$firstItemMock, $secondItemMock]));
+            ->willReturn([$firstItemMock, $secondItemMock]);
 
         $this->resultJsonMock->expects($this->once())
             ->method('setData')
@@ -137,7 +137,7 @@ class SuggestTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('q')
-            ->will($this->returnValue($searchString));
+            ->willReturn($searchString);
         $this->url->expects($this->once())
             ->method('getBaseUrl')
             ->willReturn($url);

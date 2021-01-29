@@ -32,13 +32,13 @@ class AlternativeTest extends \PHPUnit\Framework\TestCase
         $readFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
         $readFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->directory));
+            ->willReturn($this->directory);
         $this->rule = $this->createMock(\Magento\Framework\View\Design\Fallback\Rule\RuleInterface::class);
         $rulePool = $this->createMock(\Magento\Framework\View\Design\Fallback\RulePool::class);
         $rulePool->expects($this->any())
             ->method('getRule')
             ->with('type')
-            ->will($this->returnValue($this->rule));
+            ->willReturn($this->rule);
         $this->object = new Alternative($readFactory, $rulePool, ['css' => ['less']]);
     }
 
@@ -77,10 +77,10 @@ class AlternativeTest extends \PHPUnit\Framework\TestCase
         $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
         $theme->expects($this->any())
             ->method('getFullPath')
-            ->will($this->returnValue('magento_theme'));
+            ->willReturn('magento_theme');
         $this->rule->expects($this->atLeastOnce())
             ->method('getPatternDirs')
-            ->will($this->returnValue(['some/dir']));
+            ->willReturn(['some/dir']);
 
         $fileExistsMap = [
             ['file.css', false],
@@ -88,7 +88,7 @@ class AlternativeTest extends \PHPUnit\Framework\TestCase
         ];
         $this->directory->expects($this->any())
             ->method('isExist')
-            ->will($this->returnValueMap($fileExistsMap));
+            ->willReturnMap($fileExistsMap);
 
         $actual = $this->object->resolve('type', $requestedFile, 'frontend', $theme, 'en_US', 'Magento_Module');
         $this->assertSame($expected, $actual);

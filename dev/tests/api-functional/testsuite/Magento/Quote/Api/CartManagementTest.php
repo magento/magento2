@@ -36,7 +36,7 @@ class CartManagementTest extends WebapiAbstract
         $appConfig->clean();
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
@@ -182,10 +182,11 @@ class CartManagementTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
-     * @expectedException \Exception
      */
     public function testAssignCustomerThrowsExceptionIfThereIsNoCustomerWithGivenId()
     {
+        $this->expectException(\Exception::class);
+
         /** @var $quote \Magento\Quote\Model\Quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)->load('test01', 'reserved_order_id');
         $cartId = $quote->getId();
@@ -212,10 +213,11 @@ class CartManagementTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
      */
     public function testAssignCustomerThrowsExceptionIfThereIsNoCartWithGivenId()
     {
+        $this->expectException(\Exception::class);
+
         $cartId = 9999;
         $customerId = 1;
         $serviceInfo = [
@@ -240,11 +242,12 @@ class CartManagementTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Sales/_files/quote_with_customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The customer can't be assigned to the cart because the cart isn't anonymous.
      */
     public function testAssignCustomerThrowsExceptionIfTargetCartIsNotAnonymous()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The customer can\'t be assigned to the cart because the cart isn\'t anonymous.');
+
         /** @var $customer \Magento\Customer\Model\Customer */
         $customer = $this->objectManager->create(\Magento\Customer\Model\Customer::class)->load(1);
         $customerId = $customer->getId();
@@ -275,11 +278,12 @@ class CartManagementTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_non_default_website_id.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The customer can't be assigned to the cart. The cart belongs to a different store.
      */
     public function testAssignCustomerThrowsExceptionIfCartIsAssignedToDifferentStore()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The customer can\'t be assigned to the cart. The cart belongs to a different store.');
+
         $repository = $this->objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         /** @var $customer \Magento\Customer\Api\Data\CustomerInterface */
         $customer = $repository->getById(1);
@@ -460,7 +464,7 @@ class CartManagementTest extends WebapiAbstract
         $this->assertEquals($cart->getItemsQty(), $cartData['items_qty']);
 
         $this->assertContains('customer', $cartData);
-        $this->assertEquals(false, $cartData['customer_is_guest']);
+        $this->assertFalse($cartData['customer_is_guest']);
         $this->assertContains('currency', $cartData);
         $this->assertEquals($cart->getGlobalCurrencyCode(), $cartData['currency']['global_currency_code']);
         $this->assertEquals($cart->getBaseCurrencyCode(), $cartData['currency']['base_currency_code']);

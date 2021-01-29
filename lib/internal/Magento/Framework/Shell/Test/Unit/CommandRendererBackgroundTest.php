@@ -35,7 +35,7 @@ class CommandRendererBackgroundTest extends \PHPUnit\Framework\TestCase
     {
         $this->osInfo->expects($this->once())
             ->method('isWindows')
-            ->will($this->returnValue($isWindows));
+            ->willReturn($isWindows);
 
         $commandRenderer = new CommandRendererBackground($this->osInfo);
         $this->assertEquals(

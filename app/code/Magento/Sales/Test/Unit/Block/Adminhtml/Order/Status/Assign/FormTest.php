@@ -70,21 +70,21 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $form->expects($this->once())
             ->method('addFieldset')
-            ->will($this->returnValue($fieldset));
+            ->willReturn($fieldset);
         $this->formFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($form));
+            ->willReturn($form);
 
         $collection->expects($this->once())
             ->method('toOptionArray')
-            ->will($this->returnValue($statuses));
+            ->willReturn($statuses);
         $this->collectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($collection));
+            ->willReturn($collection);
 
         $this->orderConfig->expects($this->once())
             ->method('getStates')
-            ->will($this->returnValue($states));
+            ->willReturn($states);
 
         $fieldset->expects($this->at(0))
             ->method('addField')

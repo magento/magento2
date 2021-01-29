@@ -60,8 +60,8 @@ class HstsTest extends \PHPUnit\Framework\TestCase
      */
     public function testCanApply($configValuesMap, $expected)
     {
-        $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->will(
-            $this->returnValueMap($configValuesMap)
+        $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturnMap(
+            $configValuesMap
         );
         $this->assertEquals($expected, $this->object->canApply(), 'Incorrect canApply result');
     }

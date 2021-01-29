@@ -38,8 +38,8 @@ class TabTest extends \PHPUnit\Framework\TestCase
     public function testIsVisibleOnlyChecksPresenceOfChildren()
     {
         $this->_model->setData(['showInStore' => 0, 'showInWebsite' => 0, 'showInDefault' => 0], 'store');
-        $this->_iteratorMock->expects($this->once())->method('current')->will($this->returnValue(true));
-        $this->_iteratorMock->expects($this->once())->method('valid')->will($this->returnValue(true));
+        $this->_iteratorMock->expects($this->once())->method('current')->willReturn(true);
+        $this->_iteratorMock->expects($this->once())->method('valid')->willReturn(true);
         $this->assertTrue($this->_model->isVisible());
     }
 }

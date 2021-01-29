@@ -46,17 +46,17 @@ class CsvTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'openFile'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 new \Magento\Framework\Filesystem\File\Read($stream, new \Magento\Framework\Filesystem\Driver\Http())
-            )
+            
         );
         $this->_filesystem->expects(
             $this->any()
         )->method(
             'getDirectoryWrite'
-        )->will(
-            $this->returnValue($this->_directoryMock)
+        )->willReturn(
+            $this->_directoryMock
         );
 
         $model = new \Magento\ImportExport\Model\Import\Source\Csv($stream, $this->_filesystem);
@@ -77,13 +77,13 @@ class CsvTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'openFile'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 new \Magento\Framework\Filesystem\File\Read(
                     __DIR__ . '/_files/test.csv',
                     new \Magento\Framework\Filesystem\Driver\File()
                 )
-            )
+            
         );
         $model = new \Magento\ImportExport\Model\Import\Source\Csv(
             __DIR__ . '/_files/test.csv',
@@ -117,13 +117,13 @@ class CsvTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'openFile'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 new \Magento\Framework\Filesystem\File\Read(
                     __DIR__ . '/_files/test.csv',
                     new \Magento\Framework\Filesystem\Driver\File()
                 )
-            )
+            
         );
         $model = new \Magento\ImportExport\Model\Import\Source\Csv(
             __DIR__ . '/_files/test.csv',

@@ -42,13 +42,13 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         )->with(
             'address_formats.xml',
             'scope'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 [
                     file_get_contents(__DIR__ . '/_files/formats_one.xml'),
                     file_get_contents(__DIR__ . '/_files/formats_two.xml'),
                 ]
-            )
+            
         );
 
         $this->_converter = $this->createPartialMock(
@@ -65,8 +65,8 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         )->with(
             'etc',
             'Magento_Customer'
-        )->will(
-            $this->returnValue('stub')
+        )->willReturn(
+            'stub'
         );
 
         $this->_schemaLocator = new \Magento\Customer\Model\Address\Config\SchemaLocator($moduleReader);
@@ -102,8 +102,8 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             'convert'
         )->with(
             $this->callback($constraint)
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
 
         $this->assertSame($expectedResult, $this->_model->read('scope'));

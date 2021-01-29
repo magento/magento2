@@ -65,7 +65,7 @@ class StoreViewTest extends \PHPUnit\Framework\TestCase
             \Magento\Store\Model\Store::class,
             ['isObjectNew', 'dataHasChangedFor', '__wakeup']
         );
-        $storeMock->expects($this->once())->method('isObjectNew')->will($this->returnValue(true));
+        $storeMock->expects($this->once())->method('isObjectNew')->willReturn(true);
         $this->model->beforeSave($this->subjectMock, $storeMock);
         $this->assertSame(
             $this->subjectMock,
@@ -106,12 +106,12 @@ class StoreViewTest extends \PHPUnit\Framework\TestCase
         $this->indexerRegistryMock->expects($this->once())
             ->method('get')
             ->with(\Magento\Catalog\Model\Indexer\Category\Flat\State::INDEXER_ID)
-            ->will($this->returnValue($this->indexerMock));
+            ->willReturn($this->indexerMock);
     }
 
     protected function mockConfigFlatEnabled()
     {
-        $this->stateMock->expects($this->once())->method('isFlatEnabled')->will($this->returnValue(true));
+        $this->stateMock->expects($this->once())->method('isFlatEnabled')->willReturn(true);
     }
 
     protected function mockConfigFlatEnabledNever()

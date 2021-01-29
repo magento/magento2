@@ -70,12 +70,12 @@ class InfoTest extends \PHPUnit\Framework\TestCase
 
         if (isset($storeCode)) {
             $storeMock = $this->_getStoreMock($storeCode);
-            $this->_storeManager->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
+            $this->_storeManager->expects($this->any())->method('getStore')->willReturn($storeMock);
         }
 
         $paymentInfo = $this->getMockBuilder(\Magento\Payment\Model\Info::class)
             ->disableOriginalConstructor()->getMock();
-        $paymentInfo->expects($this->any())->method('getMethodInstance')->will($this->returnValue($methodInstance));
+        $paymentInfo->expects($this->any())->method('getMethodInstance')->willReturn($methodInstance);
 
         $this->_object->setData('info', $paymentInfo);
         $this->_object->setData('is_secure_mode', $isSecureMode);
@@ -109,7 +109,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
         )->setMethods(
             ['getStore']
         )->disableOriginalConstructor()->getMock();
-        $methodInstance->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $methodInstance->expects($this->any())->method('getStore')->willReturn($store);
         return $methodInstance;
     }
 
@@ -120,7 +120,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
     protected function _getStoreMock($storeCode)
     {
         $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)->disableOriginalConstructor()->getMock();
-        $storeMock->expects($this->any())->method('getCode')->will($this->returnValue($storeCode));
+        $storeMock->expects($this->any())->method('getCode')->willReturn($storeCode);
         return $storeMock;
     }
 

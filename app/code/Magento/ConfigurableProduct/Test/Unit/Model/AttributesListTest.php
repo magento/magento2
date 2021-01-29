@@ -44,7 +44,7 @@ class AttributesListTest extends \PHPUnit\Framework\TestCase
         $this->collectionMock
             ->expects($this->once())
             ->method('getItems')
-            ->will($this->returnValue(['id' => $this->attributeMock]));
+            ->willReturn(['id' => $this->attributeMock]);
 
         $this->attributeListModel = new \Magento\ConfigurableProduct\Model\AttributesList(
             $collectionFactoryMock
@@ -68,13 +68,13 @@ class AttributesListTest extends \PHPUnit\Framework\TestCase
             ->method('addFieldToFilter')
             ->with('main_table.attribute_id', $ids);
 
-        $this->attributeMock->expects($this->once())->method('getId')->will($this->returnValue('id'));
-        $this->attributeMock->expects($this->once())->method('getFrontendLabel')->will($this->returnValue('label'));
-        $this->attributeMock->expects($this->once())->method('getAttributeCode')->will($this->returnValue('code'));
+        $this->attributeMock->expects($this->once())->method('getId')->willReturn('id');
+        $this->attributeMock->expects($this->once())->method('getFrontendLabel')->willReturn('label');
+        $this->attributeMock->expects($this->once())->method('getAttributeCode')->willReturn('code');
 
         $source = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class);
-        $source->expects($this->once())->method('getAllOptions')->with(false)->will($this->returnValue(['options']));
-        $this->attributeMock->expects($this->once())->method('getSource')->will($this->returnValue($source));
+        $source->expects($this->once())->method('getAllOptions')->with(false)->willReturn(['options']);
+        $this->attributeMock->expects($this->once())->method('getSource')->willReturn($source);
 
         $this->assertEquals($result, $this->attributeListModel->getAttributes($ids));
     }

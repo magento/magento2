@@ -35,11 +35,12 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage There must be at least one configuration file specified.
      */
     public function testConstructException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('There must be at least one configuration file specified.');
+
         $this->_initConfig([]);
     }
 
@@ -96,21 +97,23 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unknown validation entity "invalid_entity"
      */
     public function testCreateValidatorInvalidEntityName()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unknown validation entity "invalid_entity"');
+
         $this->_initConfig();
         $this->_config->createValidatorBuilder('invalid_entity', null);
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unknown validation group "invalid_group" in entity "test_entity_a"
      */
     public function testCreateValidatorInvalidGroupName()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unknown validation group "invalid_group" in entity "test_entity_a"');
+
         $this->_initConfig();
         $this->_config->createValidatorBuilder('test_entity_a', 'invalid_group');
     }
@@ -126,21 +129,23 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Builder class "UnknownBuilderClass" was not found
      */
     public function testGetValidatorBuilderClassNotFound()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Builder class "UnknownBuilderClass" was not found');
+
         $this->_initConfig([__DIR__ . '/_files/validation/negative/invalid_builder_class.xml']);
         $this->_config->createValidatorBuilder('catalog_product', 'create');
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Builder "stdClass" must extend \Magento\Framework\Validator\Builder
      */
     public function testGetValidatorBuilderInstanceInvalid()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Builder "stdClass" must extend \\Magento\\Framework\\Validator\\Builder');
+
         $this->_initConfig([__DIR__ . '/_files/validation/negative/invalid_builder_instance.xml']);
         $this->_config->createValidatorBuilder('catalog_product', 'create');
     }
@@ -290,12 +295,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      * Check XSD schema validates invalid config files
      *
      * @dataProvider getInvalidXmlFiles
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      *
      * @param array|string $configFile
      */
     public function testValidateInvalidConfigFiles($configFile)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->_initConfig((array)$configFile);
     }
 

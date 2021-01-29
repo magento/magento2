@@ -162,17 +162,17 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $testedMessage = 'You saved the account.';
 
-        $this->_authSessionMock->expects($this->any())->method('getUser')->will($this->returnValue($this->_userMock));
+        $this->_authSessionMock->expects($this->any())->method('getUser')->willReturn($this->_userMock);
 
-        $this->_userMock->expects($this->any())->method('load')->will($this->returnSelf());
+        $this->_userMock->expects($this->any())->method('load')->willReturnSelf();
         $this->_validatorMock->expects(
             $this->once()
         )->method(
             'isValid'
         )->with(
             $this->equalTo($requestParams['interface_locale'])
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
         $this->_managerMock->expects($this->any())->method('switchBackendInterfaceLocale');
 
@@ -182,8 +182,8 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             $this->equalTo(\Magento\Backend\Model\Auth\Session::class)
-        )->will(
-            $this->returnValue($this->_authSessionMock)
+        )->willReturn(
+            $this->_authSessionMock
         );
         $this->_objectManagerMock->expects(
             $this->at(1)
@@ -191,8 +191,8 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             $this->equalTo(\Magento\User\Model\User::class)
-        )->will(
-            $this->returnValue($this->_userMock)
+        )->willReturn(
+            $this->_userMock
         );
         $this->_objectManagerMock->expects(
             $this->at(2)
@@ -200,8 +200,8 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             $this->equalTo(\Magento\Framework\Validator\Locale::class)
-        )->will(
-            $this->returnValue($this->_validatorMock)
+        )->willReturn(
+            $this->_validatorMock
         );
         $this->_objectManagerMock->expects(
             $this->at(3)
@@ -209,12 +209,12 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             $this->equalTo(\Magento\Backend\Model\Locale\Manager::class)
-        )->will(
-            $this->returnValue($this->_managerMock)
+        )->willReturn(
+            $this->_managerMock
         );
 
         $this->_userMock->setUserId($userId);
-        $this->_userMock->expects($this->once())->method('performIdentityCheck')->will($this->returnValue(true));
+        $this->_userMock->expects($this->once())->method('performIdentityCheck')->willReturn(true);
         $this->_userMock->expects($this->once())->method('save');
         $this->_userMock->expects($this->once())->method('validate')->willReturn(true);
         $this->_userMock->expects($this->once())->method('sendNotificationEmailsIfRequired');

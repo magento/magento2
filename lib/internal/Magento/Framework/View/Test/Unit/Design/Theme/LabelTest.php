@@ -43,8 +43,8 @@ class LabelTest extends \PHPUnit\Framework\TestCase
             ->willReturn([$data]);
 
         $result = $this->model->toOptionArray();
-        $this->assertTrue(is_array($result));
-        $this->assertEquals(2, count($result));
+        $this->assertIsArray($result);
+        $this->assertCount(2, $result);
         $this->assertEquals($defaultLabel, $result[0]['label']);
         $this->assertEquals($data['label'], $result[1]['label']);
     }
@@ -62,8 +62,8 @@ class LabelTest extends \PHPUnit\Framework\TestCase
             ->willReturn([$data]);
 
         $result = $this->model->getLabelsCollectionForSystemConfiguration();
-        $this->assertTrue(is_array($result));
-        $this->assertEquals(2, count($result));
+        $this->assertIsArray($result);
+        $this->assertCount(2, $result);
         $this->assertEquals($defaultLabel, $result[0]['label']);
         $this->assertEquals($data['label'], $result[1]['label']);
     }

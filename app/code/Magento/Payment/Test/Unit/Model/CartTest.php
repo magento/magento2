@@ -23,7 +23,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $this->_eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $this->_salesModelMock = $this->createMock(\Magento\Payment\Model\Cart\SalesModel\SalesModelInterface::class);
         $factoryMock = $this->createMock(\Magento\Payment\Model\Cart\SalesModel\Factory::class);
-        $factoryMock->expects($this->once())->method('create')->will($this->returnValue($this->_salesModelMock));
+        $factoryMock->expects($this->once())->method('create')->willReturn($this->_salesModelMock);
 
         $this->_model = new \Magento\Payment\Model\Cart($factoryMock, $this->_eventManagerMock, null);
     }
@@ -45,8 +45,8 @@ class CartTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getAllItems'
-        )->will(
-            $this->returnValue($this->_getSalesModelItems())
+        )->willReturn(
+            $this->_getSalesModelItems()
         );
         $this->_model->getAllItems();
         $this->_model->addCustomItem('test', 10, 10.5, 'some_id');
@@ -258,12 +258,12 @@ class CartTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getAllItems'
-        )->will(
-            $this->returnValue($salesModelItems)
+        )->willReturn(
+            $salesModelItems
         );
 
         foreach ($salesModelAmounts as $key => $value) {
-            $this->_salesModelMock->expects($this->once())->method('get' . $key)->will($this->returnValue($value));
+            $this->_salesModelMock->expects($this->once())->method('get' . $key)->willReturn($value);
         }
 
         return $this->_model->getAmounts();

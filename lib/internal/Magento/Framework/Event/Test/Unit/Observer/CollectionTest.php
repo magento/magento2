@@ -40,7 +40,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $observer = $this->createMock(\Magento\Framework\Event\Observer::class);
         $observer->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue($name));
+            ->willReturn($name);
         if ($event) {
             $observer->expects($this->once())
                 ->method('dispatch')

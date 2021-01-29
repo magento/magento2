@@ -57,7 +57,7 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
     {
         $this->partnersModelMock->expects($this->once())
             ->method('getApiUrl')
-            ->will($this->returnValue($this->apiUrl));
+            ->willReturn($this->apiUrl);
 
         $curlMock = $this->getCurlMock(['post', 'getBody', 'setOptions']);
         $curlMock->expects($this->once())
@@ -66,17 +66,17 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
             ->method('setOptions');
         $curlMock->expects($this->once())
             ->method('getBody')
-            ->will($this->returnValue($this->returnPackages));
+            ->willReturn($this->returnPackages);
         $this->partnersModelMock->expects($this->exactly(3))
             ->method('getCurlClient')
-            ->will($this->returnValue($curlMock));
+            ->willReturn($curlMock);
 
         $cacheMock = $this->getCacheMock(['savePartnersToCache']);
         $cacheMock->expects($this->once())
             ->method('savePartnersToCache');
         $this->partnersModelMock->expects($this->once())
             ->method('getCache')
-            ->will($this->returnValue($cacheMock));
+            ->willReturn($cacheMock);
         $this->partnersModelMock->expects($this->once())
             ->method('getReferer');
 
@@ -90,7 +90,7 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
     {
         $this->partnersModelMock->expects($this->once())
             ->method('getApiUrl')
-            ->will($this->returnValue($this->apiUrl));
+            ->willReturn($this->apiUrl);
 
         $curlMock = $this->getCurlMock(['post', 'getBody', 'setOptions']);
         $curlMock->expects($this->once())
@@ -100,7 +100,7 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
             ->will($this->throwException(new \Exception));
         $this->partnersModelMock->expects($this->exactly(3))
             ->method('getCurlClient')
-            ->will($this->returnValue($curlMock));
+            ->willReturn($curlMock);
 
         $cacheMock = $this->getCacheMock(['savePartnersToCache', 'loadPartnersFromCache']);
         $cacheMock->expects($this->never())
@@ -109,7 +109,7 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
             ->method('loadPartnersFromCache');
         $this->partnersModelMock->expects($this->once())
             ->method('getCache')
-            ->will($this->returnValue($cacheMock));
+            ->willReturn($cacheMock);
         $this->partnersModelMock->expects($this->once())
             ->method('getReferer');
 

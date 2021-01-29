@@ -43,10 +43,10 @@ class ConcatTest extends \PHPUnit\Framework\TestCase
         $column = $this->createPartialMock(\Magento\Backend\Block\Widget\Grid\Column::class, [$method, 'getSeparator']);
         $column->expects($this->any())
             ->method('getSeparator')
-            ->will($this->returnValue('-'));
+            ->willReturn('-');
         $column->expects($this->any())
             ->method($method)
-            ->will($this->returnValue($getters));
+            ->willReturn($getters);
         if ($method == 'getGetter') {
             $column->expects($this->any())
                 ->method('getGetter')

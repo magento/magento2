@@ -87,11 +87,11 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         $xml = '<body>
                     <attribute name="body_attribute_name" value="body_attribute_value" />
                 </body>';
-        $this->processorInterface->expects($this->any())->method('load')->with($data)->will(
-            $this->returnValue($this->processorInterface)
+        $this->processorInterface->expects($this->any())->method('load')->with($data)->willReturn(
+            $this->processorInterface
         );
-        $this->themeResolver->expects($this->atLeastOnce())->method('get')->will(
-            $this->returnValue($this->themeInterface)
+        $this->themeResolver->expects($this->atLeastOnce())->method('get')->willReturn(
+            $this->themeInterface
         );
         $createData = [
             'theme' => $this->themeInterface,
@@ -99,9 +99,9 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             'cacheSuffix' => 'page_layout',
         ];
         $this->processorFactory->expects($this->once())->method('create')
-            ->with($createData)->will($this->returnValue($this->processorInterface));
+            ->with($createData)->willReturn($this->processorInterface);
         $element = new \Magento\Framework\View\Layout\Element($xml);
-        $this->processorInterface->expects($this->once())->method('asSimplexml')->will($this->returnValue($element));
+        $this->processorInterface->expects($this->once())->method('asSimplexml')->willReturn($element);
         $this->readerPool->expects($this->once())->method('interpret')->with($this->readerContext, $element);
         $this->model->read($this->readerContext, $data);
     }

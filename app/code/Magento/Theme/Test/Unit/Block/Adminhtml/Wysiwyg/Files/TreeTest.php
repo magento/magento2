@@ -47,8 +47,8 @@ class TreeTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getRequestParams'
-        )->will(
-            $this->returnValue($requestParams)
+        )->willReturn(
+            $requestParams
         );
 
         $this->_urlBuilder->expects(
@@ -58,8 +58,8 @@ class TreeTest extends \PHPUnit\Framework\TestCase
         )->with(
             'adminhtml/*/treeJson',
             $requestParams
-        )->will(
-            $this->returnValue($expectedUrl)
+        )->willReturn(
+            $expectedUrl
         );
 
         $this->assertEquals($expectedUrl, $this->_filesTree->getTreeLoaderUrl());

@@ -49,7 +49,7 @@ class BillingAgreementTest extends \PHPUnit\Framework\TestCase
         $this->paypalConfig
             ->expects($this->once())
             ->method('setMethod')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->paypalConfig->expects($this->once())
             ->method('setMethod')
@@ -58,7 +58,7 @@ class BillingAgreementTest extends \PHPUnit\Framework\TestCase
         $paypalConfigFactory = $this->createPartialMock(ConfigFactory::class, ['create']);
         $paypalConfigFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->paypalConfig));
+            ->willReturn($this->paypalConfig);
 
         $customerId = 20;
         $this->currentCustomer = $this->createMock(CurrentCustomer::class);

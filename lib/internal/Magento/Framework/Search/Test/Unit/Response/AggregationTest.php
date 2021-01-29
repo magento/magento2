@@ -23,8 +23,8 @@ class AggregationTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $bucket->expects($this->any())->method('getName')->will($this->returnValue('1'));
-        $bucket->expects($this->any())->method('getValues')->will($this->returnValue(1));
+        $bucket->expects($this->any())->method('getName')->willReturn('1');
+        $bucket->expects($this->any())->method('getValues')->willReturn(1);
         $buckets[1] = $bucket;
 
         $this->aggregation = $helper->getObject(

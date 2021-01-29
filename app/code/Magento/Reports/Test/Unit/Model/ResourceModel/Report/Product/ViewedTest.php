@@ -126,12 +126,12 @@ class ViewedTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
-        $this->resourceMock->expects($this->any())->method('getTableName')->will(
-            $this->returnCallback(
+        $this->resourceMock->expects($this->any())->method('getTableName')->willReturnCallback(
+            
                 function ($arg) {
                     return $arg;
                 }
-            )
+            
         );
 
         $this->contextMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\Context::class)

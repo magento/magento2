@@ -88,12 +88,12 @@ class AjaxLoadTest extends \PHPUnit\Framework\TestCase
 
         $this->request->expects($this->any())
             ->method('getParam')
-            ->will($this->returnValue($taxRateId));
+            ->willReturn($taxRateId);
 
         $this->taxRateRepository->expects($this->any())
             ->method('get')
             ->with($taxRateId)
-            ->will($this->returnValue($rateMock));
+            ->willReturn($rateMock);
 
         $taxRateConverter = $this->getMockBuilder(\Magento\Tax\Model\Calculation\Rate\Converter::class)
             ->disableOriginalConstructor()
@@ -147,7 +147,7 @@ class AjaxLoadTest extends \PHPUnit\Framework\TestCase
 
         $this->request->expects($this->any())
             ->method('getParam')
-            ->will($this->returnValue($taxRateId));
+            ->willReturn($taxRateId);
 
         $this->taxRateRepository->expects($this->any())
             ->method('get')
@@ -197,7 +197,7 @@ class AjaxLoadTest extends \PHPUnit\Framework\TestCase
 
         $this->request->expects($this->any())
             ->method('getParam')
-            ->will($this->returnValue($taxRateId));
+            ->willReturn($taxRateId);
 
         $this->taxRateRepository->expects($this->any())
             ->method('get')

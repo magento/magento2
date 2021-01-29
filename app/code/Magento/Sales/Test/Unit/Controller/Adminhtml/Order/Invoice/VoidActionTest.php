@@ -201,7 +201,7 @@ class VoidActionTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('invoice_id')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
 
         $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
@@ -218,13 +218,13 @@ class VoidActionTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $invoiceMock->expects($this->any())
             ->method('getEntityId')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
         $invoiceMock->expects($this->any())
             ->method('getOrder')
-            ->will($this->returnValue($orderMock));
+            ->willReturn($orderMock);
         $invoiceMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
 
         $transactionMock = $this->getMockBuilder(\Magento\Framework\DB\Transaction::class)
             ->disableOriginalConstructor()
@@ -232,11 +232,11 @@ class VoidActionTest extends \PHPUnit\Framework\TestCase
         $transactionMock->expects($this->at(0))
             ->method('addObject')
             ->with($invoiceMock)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $transactionMock->expects($this->at(1))
             ->method('addObject')
             ->with($orderMock)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $transactionMock->expects($this->at(2))
             ->method('save');
 
@@ -247,7 +247,7 @@ class VoidActionTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->at(1))
             ->method('create')
             ->with(\Magento\Framework\DB\Transaction::class)
-            ->will($this->returnValue($transactionMock));
+            ->willReturn($transactionMock);
 
         $this->messageManagerMock->expects($this->once())
             ->method('addSuccessMessage')
@@ -261,7 +261,7 @@ class VoidActionTest extends \PHPUnit\Framework\TestCase
 
         $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($resultRedirect));
+            ->willReturn($resultRedirect);
 
         $this->assertSame($resultRedirect, $this->controller->execute());
     }
@@ -276,7 +276,7 @@ class VoidActionTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('invoice_id')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
 
         $this->invoiceRepository->expects($this->once())
             ->method('get')
@@ -291,11 +291,11 @@ class VoidActionTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $resultForward->expects($this->once())->method('forward')->with(('noroute'))->will($this->returnSelf());
+        $resultForward->expects($this->once())->method('forward')->with(('noroute'))->willReturnSelf();
 
         $this->resultForwardFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($resultForward));
+            ->willReturn($resultForward);
 
         $this->assertSame($resultForward, $this->controller->execute());
     }
@@ -312,7 +312,7 @@ class VoidActionTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('invoice_id')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
 
         $this->invoiceManagement->expects($this->once())
             ->method('setVoid')
@@ -324,10 +324,10 @@ class VoidActionTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $invoiceMock->expects($this->once())
             ->method('getEntityId')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
         $invoiceMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
 
         $this->invoiceRepository->expects($this->once())
             ->method('get')
@@ -344,7 +344,7 @@ class VoidActionTest extends \PHPUnit\Framework\TestCase
 
         $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($resultRedirect));
+            ->willReturn($resultRedirect);
 
         $this->assertSame($resultRedirect, $this->controller->execute());
     }

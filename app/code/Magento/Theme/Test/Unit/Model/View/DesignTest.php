@@ -80,8 +80,8 @@ class DesignTest extends \PHPUnit\Framework\TestCase
     public function testGetThemePath($themePath, $themeId, $expectedResult)
     {
         $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
-        $theme->expects($this->once())->method('getThemePath')->will($this->returnValue($themePath));
-        $theme->expects($this->any())->method('getId')->will($this->returnValue($themeId));
+        $theme->expects($this->once())->method('getThemePath')->willReturn($themePath);
+        $theme->expects($this->any())->method('getId')->willReturn($themeId);
         /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
         $this->assertEquals($expectedResult, $this->model->getThemePath($theme));
     }
@@ -150,10 +150,10 @@ class DesignTest extends \PHPUnit\Framework\TestCase
         $localeMock = $this->getMockForAbstractClass(\Magento\Framework\Locale\ResolverInterface::class);
         $localeMock->expects($this->once())
             ->method('getLocale')
-            ->will($this->returnValue($locale));
+            ->willReturn($locale);
         $this->objectManager->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($localeMock));
+            ->willReturn($localeMock);
         $this->state->expects($this->any())
             ->method('getAreaCode')
             ->willReturn($area);

@@ -36,7 +36,7 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
      */
     private $packageMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->composerMock = $this->getMockBuilder(Composer::class)->disableOriginalConstructor()->getMock();
         $this->lockerMock = $this->getMockBuilder(Locker::class)->disableOriginalConstructor()->getMock();

@@ -73,7 +73,7 @@ class CacheCleanerTest extends \PHPUnit\Framework\TestCase
 
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
 
         $this->unit = (new ObjectManager($this))->getObject(
             CacheCleaner::class,

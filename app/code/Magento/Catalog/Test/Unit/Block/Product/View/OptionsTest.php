@@ -62,11 +62,11 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
             ->setConstructorArgs(['context' => $context, 'option' => $option])
             ->disableOriginalConstructor()
             ->getMock();
-        $dateBlock->expects($this->any())->method('setProduct')->will($this->returnValue($dateBlock));
+        $dateBlock->expects($this->any())->method('setProduct')->willReturn($dateBlock);
 
-        $layout->expects($this->any())->method('getChildName')->will($this->returnValue('date'));
-        $layout->expects($this->any())->method('getBlock')->with('date')->will($this->returnValue($dateBlock));
-        $layout->expects($this->any())->method('renderElement')->with('date', false)->will($this->returnValue('html'));
+        $layout->expects($this->any())->method('getChildName')->willReturn('date');
+        $layout->expects($this->any())->method('getBlock')->with('date')->willReturn($dateBlock);
+        $layout->expects($this->any())->method('renderElement')->with('date', false)->willReturn('html');
 
         $this->_optionsBlock = $this->_objectHelper->getObject(
             \Magento\Catalog\Block\Product\View\Options::class,
@@ -107,8 +107,8 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
             'setOption'
         )->with(
             $this->equalTo($option)
-        )->will(
-            $this->returnValue($dateBlock)
+        )->willReturn(
+            $dateBlock
         );
         $this->assertEquals('html', $this->_optionsBlock->getOptionHtml($option));
     }

@@ -71,7 +71,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $type = 'media';
         $url = 'http://test.example.com/media/';
         $this->urlBuilderMock->expects($this->once())->method('getBaseUrl')
-            ->with(['_type' => $type])->will($this->returnValue($url));
+            ->with(['_type' => $type])->willReturn($url);
 
         $this->image->setValue($this->testData['value']);
         $this->image->setHtmlId($this->testData['html_id']);

@@ -121,7 +121,7 @@ class UpdateAdminUserRoleEntityTest extends Injectable
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         sleep(3);
         $modalMessage = $this->dashboard->getModalMessage();

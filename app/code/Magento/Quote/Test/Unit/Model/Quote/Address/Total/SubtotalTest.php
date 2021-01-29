@@ -115,7 +115,7 @@ class SubtotalTest extends TestCase
 
         /** @var Product|MockObject $product */
         $product = $this->createMock(Product::class);
-        $product->expects($this->any())->method('getPrice')->will($this->returnValue($originalPrice));
+        $product->expects($this->any())->method('getPrice')->willReturn($originalPrice);
 
         /** @var Quote|MockObject $quote */
         $quote = $this->createMock(Quote::class);
@@ -125,22 +125,22 @@ class SubtotalTest extends TestCase
         $store = $this->createPartialMock(Store::class, ['getWebsiteId']);
         $store->expects($this->any())->method('getWebsiteId')->willReturn(10);
         $product->expects($this->any())->method('getStore')->willReturn($store);
-        $product->expects($this->any())->method('isVisibleInCatalog')->will($this->returnValue(true));
+        $product->expects($this->any())->method('isVisibleInCatalog')->willReturn(true);
         $extensionAttribute = $this->getMockBuilder(ProductExtensionInterface::class)
             ->setMethods(['getStockItem'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $extensionAttribute->expects($this->atLeastOnce())
             ->method('getStockItem')
-            ->will($this->returnValue($this->stockItemMock));
+            ->willReturn($this->stockItemMock);
         $product->expects($this->atLeastOnce())->method('getExtensionAttributes')->willReturn($extensionAttribute);
-        $quote->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $quote->expects($this->any())->method('getStore')->willReturn($store);
         $quoteItem->setProduct($product)->setQuote($quote);
 
         $parentQuoteItem = false;
         if ($itemHasParent) {
             $parentQuoteItem = $this->createMock(Item::class);
-            $parentQuoteItem->expects($this->any())->method('getProduct')->will($this->returnValue($product));
+            $parentQuoteItem->expects($this->any())->method('getProduct')->willReturn($product);
         }
         $quoteItem->setParentItem($parentQuoteItem);
         //This value will be overwritten

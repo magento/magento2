@@ -91,7 +91,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
         $order->expects($this->atLeastOnce())
             ->method('setHistoryEntityName')
             ->with($entityName)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->orderRepository->expects($this->atLeastOnce())
             ->method('get')
             ->with($orderId)
@@ -152,11 +152,11 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
         $itemCollectionMock->expects($this->once())
             ->method('setCreditmemoFilter')
             ->with($id)
-            ->will($this->returnValue($items));
+            ->willReturn($items);
 
         $this->cmItemCollectionFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($itemCollectionMock));
+            ->willReturn($itemCollectionMock);
 
         $itemsCollection = $this->creditmemo->getItemsCollection();
         $this->assertEquals($items, $itemsCollection);
@@ -181,11 +181,11 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
         $itemCollectionMock->expects($this->once())
             ->method('setCreditmemoFilter')
             ->with(null)
-            ->will($this->returnValue($items));
+            ->willReturn($items);
 
         $this->cmItemCollectionFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($itemCollectionMock));
+            ->willReturn($itemCollectionMock);
 
         $itemsCollection = $this->creditmemo->getItemsCollection();
         $this->assertEquals($items, $itemsCollection);

@@ -13,11 +13,12 @@ class ThemePackageTest extends \PHPUnit\Framework\TestCase
      * @param string $key
      *
      * @dataProvider constructBadKeyDataProvider
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Theme's key does not correspond to required format: '<area>/<vendor>/<name>'
      */
     public function testConstructBadKey($key)
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Theme\'s key does not correspond to required format: \'<area>/<vendor>/<name>\'');
+
         new ThemePackage($key, 'path');
     }
 

@@ -24,7 +24,7 @@ class StaticCallsTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->tokens = $this->getMockBuilder(
             \Magento\TestFramework\Integrity\Library\PhpParser\Tokens::class
@@ -45,28 +45,28 @@ class StaticCallsTest extends \PHPUnit\Framework\TestCase
             3 => [T_PAAMAYIM_NEKUDOTAYIM, '::'],
         ];
 
-        $this->tokens->expects($this->any())->method('getPreviousToken')->will(
-            $this->returnCallback(
+        $this->tokens->expects($this->any())->method('getPreviousToken')->willReturnCallback(
+            
                 function ($k) use ($tokens) {
                     return $tokens[$k - 1];
                 }
-            )
+            
         );
 
-        $this->tokens->expects($this->any())->method('getTokenCodeByKey')->will(
-            $this->returnCallback(
+        $this->tokens->expects($this->any())->method('getTokenCodeByKey')->willReturnCallback(
+            
                 function ($k) use ($tokens) {
                     return $tokens[$k][0];
                 }
-            )
+            
         );
 
-        $this->tokens->expects($this->any())->method('getTokenValueByKey')->will(
-            $this->returnCallback(
+        $this->tokens->expects($this->any())->method('getTokenValueByKey')->willReturnCallback(
+            
                 function ($k) use ($tokens) {
                     return $tokens[$k][1];
                 }
-            )
+            
         );
 
         $throws = new StaticCalls($this->tokens);
@@ -78,9 +78,9 @@ class StaticCallsTest extends \PHPUnit\Framework\TestCase
             \Magento\TestFramework\Integrity\Library\PhpParser\Uses::class
         )->disableOriginalConstructor()->getMock();
 
-        $uses->expects($this->once())->method('hasUses')->will($this->returnValue(true));
+        $uses->expects($this->once())->method('hasUses')->willReturn(true);
 
-        $uses->expects($this->once())->method('getClassNameWithNamespace')->will($this->returnValue('\Object'));
+        $uses->expects($this->once())->method('getClassNameWithNamespace')->willReturn('\Object');
 
         $this->assertEquals(['\Object'], $throws->getDependencies($uses));
     }

@@ -45,7 +45,7 @@ class StoreGroupTest extends \PHPUnit\Framework\TestCase
     {
         $this->processorMock->expects($this->{$matcherMethod}())->method('markIndexerAsInvalid');
 
-        $this->storeGroupMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
+        $this->storeGroupMock->expects($this->once())->method('getId')->willReturn($storeId);
 
         $model = new \Magento\Catalog\Model\Indexer\Product\Flat\Plugin\StoreGroup($this->processorMock);
         $model->beforeSave($this->subjectMock, $this->storeGroupMock);
@@ -60,7 +60,7 @@ class StoreGroupTest extends \PHPUnit\Framework\TestCase
     {
         $this->processorMock->expects($this->{$matcherMethod}())->method('markIndexerAsInvalid');
 
-        $this->storeGroupMock->expects($this->once())->method('getId')->will($this->returnValue(1));
+        $this->storeGroupMock->expects($this->once())->method('getId')->willReturn(1);
 
         $this->storeGroupMock->expects(
             $this->once()
@@ -68,8 +68,8 @@ class StoreGroupTest extends \PHPUnit\Framework\TestCase
             'dataHasChangedFor'
         )->with(
             'root_category_id'
-        )->will(
-            $this->returnValue($websiteChanged)
+        )->willReturn(
+            $websiteChanged
         );
 
         $model = new \Magento\Catalog\Model\Indexer\Product\Flat\Plugin\StoreGroup($this->processorMock);

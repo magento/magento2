@@ -72,7 +72,7 @@ class TransparentTest extends TestCase
         self::assertEquals(Order::STATE_PAYMENT_REVIEW, $order->getState());
 
         $transactions = $this->getPaymentTransactionList((int) $orderId);
-        self::assertEquals(1, sizeof($transactions), 'Only one transaction should be present.');
+        self::assertCount(1, $transactions, 'Only one transaction should be present.');
 
         /** @var TransactionInterface $transaction */
         $transaction = array_pop($transactions);

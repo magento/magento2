@@ -32,7 +32,7 @@ class CustomerDataGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     private $customerGenerator;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->groupCollectionFactoryMock =
             $this->createPartialMock(
@@ -88,7 +88,7 @@ class CustomerDataGeneratorTest extends \PHPUnit\Framework\TestCase
         $customer = $this->customerGenerator->generate(42);
 
         foreach ($this->customerStructure as $customerField) {
-            $this->assertTrue(array_key_exists($customerField, $customer));
+            $this->assertArrayHasKey($customerField, $customer);
         }
     }
 }

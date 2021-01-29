@@ -99,23 +99,23 @@ class CurrentCustomerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCustomerDepersonalizeCustomerData()
     {
-        $this->requestMock->expects($this->once())->method('isAjax')->will($this->returnValue(false));
-        $this->layoutMock->expects($this->once())->method('isCacheable')->will($this->returnValue(true));
-        $this->viewMock->expects($this->once())->method('isLayoutLoaded')->will($this->returnValue(true));
+        $this->requestMock->expects($this->once())->method('isAjax')->willReturn(false);
+        $this->layoutMock->expects($this->once())->method('isCacheable')->willReturn(true);
+        $this->viewMock->expects($this->once())->method('isLayoutLoaded')->willReturn(true);
         $this->moduleManagerMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->equalTo('Magento_PageCache'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->customerSessionMock->expects($this->once())
             ->method('getCustomerGroupId')
-            ->will($this->returnValue($this->customerGroupId));
+            ->willReturn($this->customerGroupId);
         $this->customerInterfaceFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->customerDataMock));
+            ->willReturn($this->customerDataMock);
         $this->customerDataMock->expects($this->once())
             ->method('setGroupId')
             ->with($this->equalTo($this->customerGroupId))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->assertEquals($this->customerDataMock, $this->currentCustomer->getCustomer());
     }
 
@@ -127,14 +127,14 @@ class CurrentCustomerTest extends \PHPUnit\Framework\TestCase
         $this->moduleManagerMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->equalTo('Magento_PageCache'))
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->customerSessionMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($this->customerId));
+            ->willReturn($this->customerId);
         $this->customerRepositoryMock->expects($this->once())
             ->method('getById')
             ->with($this->equalTo($this->customerId))
-            ->will($this->returnValue($this->customerDataMock));
+            ->willReturn($this->customerDataMock);
         $this->assertEquals($this->customerDataMock, $this->currentCustomer->getCustomer());
     }
 }

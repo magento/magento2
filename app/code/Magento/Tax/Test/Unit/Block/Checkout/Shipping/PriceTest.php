@@ -51,7 +51,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
 
         $this->quote->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->store));
+            ->willReturn($this->store);
 
         $checkoutSession = $this->getMockBuilder(\Magento\Checkout\Model\Session::class)
             ->disableOriginalConstructor()
@@ -60,7 +60,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
 
         $checkoutSession->expects($this->any())
             ->method('getQuote')
-            ->will($this->returnValue($this->quote));
+            ->willReturn($this->quote);
 
         $this->taxHelper = $this->getMockBuilder(\Magento\Tax\Helper\Data::class)
             ->disableOriginalConstructor()
@@ -91,7 +91,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $shippingRateMock->expects($this->once())
             ->method('getPrice')
-            ->will($this->returnValue($shippingPrice));
+            ->willReturn($shippingPrice);
         return $shippingRateMock;
     }
 
@@ -105,7 +105,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
 
         $this->taxHelper->expects($this->once())
             ->method('getShippingPrice')
-            ->will($this->returnValue($shippingPriceExclTax));
+            ->willReturn($shippingPriceExclTax);
 
         $this->priceCurrency->expects($this->once())
             ->method('convertAndFormat')
@@ -126,12 +126,12 @@ class PriceTest extends \PHPUnit\Framework\TestCase
 
         $this->taxHelper->expects($this->once())
             ->method('getShippingPrice')
-            ->will($this->returnValue($shippingPriceInclTax));
+            ->willReturn($shippingPriceInclTax);
 
         $this->priceCurrency->expects($this->once())
             ->method('convertAndFormat')
             ->with($this->logicalOr($shippingPriceInclTax, true, $this->store))
-            ->will($this->returnValue($convertedPrice));
+            ->willReturn($convertedPrice);
 
         $this->priceObj->setShippingRate($shippingRateMock);
         $this->assertEquals($convertedPrice, $this->priceObj->getShippingPriceExclTax());

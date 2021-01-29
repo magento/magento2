@@ -54,7 +54,7 @@ class FrontendActionsFlushTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('from')
             ->with('catalog_product_frontend_action', ['action_id', 'type_id'])
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $selectMock
             ->expects($this->once())
             ->method('group')

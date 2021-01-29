@@ -58,7 +58,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         $this->assertFileEquals($this->fixtureDir . 'expected/without-dependencies.csv', $this->sourceFilename);
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         if (file_exists($this->sourceFilename)) {
             unlink($this->sourceFilename);

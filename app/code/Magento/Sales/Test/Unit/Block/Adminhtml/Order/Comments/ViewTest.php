@@ -42,7 +42,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->adminHelperMock
             ->expects($this->any())
             ->method('escapeHtmlWithLinks')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
         $actual = $this->commentsView->escapeHtml($data, $allowedTags);
         $this->assertEquals($expected, $actual);
     }

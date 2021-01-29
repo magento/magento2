@@ -132,11 +132,11 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ['select', 'fetchAll', 'fetchPairs', 'joinLeft', 'insertOnDuplicate', 'delete', 'quoteInto', 'fetchAssoc']
         );
         $this->select = $this->createMock(\Magento\Framework\DB\Select::class);
-        $this->select->expects($this->any())->method('from')->will($this->returnSelf());
-        $this->select->expects($this->any())->method('where')->will($this->returnSelf());
-        $this->select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
+        $this->select->expects($this->any())->method('from')->willReturnSelf();
+        $this->select->expects($this->any())->method('where')->willReturnSelf();
+        $this->select->expects($this->any())->method('joinLeft')->willReturnSelf();
         $this->select->expects($this->any())->method('getConnection')->willReturn($this->connection);
-        $this->connection->expects($this->any())->method('select')->will($this->returnValue($this->select));
+        $this->connection->expects($this->any())->method('select')->willReturn($this->select);
         $this->initFetchAllCalls();
         $this->connection->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
         $this->connection->expects($this->any())->method('delete')->willReturnSelf();
@@ -145,8 +145,8 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             \Magento\Framework\App\ResourceConnection::class,
             ['getConnection', 'getTableName']
         );
-        $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($this->connection));
-        $this->resource->expects($this->any())->method('getTableName')->will($this->returnValue('tableName'));
+        $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
+        $this->resource->expects($this->any())->method('getTableName')->willReturn('tableName');
         $this->attrSetColFac = $this->createPartialMock(
             \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory::class,
             ['create']
@@ -155,12 +155,12 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection::class,
             ['setEntityTypeFilter']
         );
-        $this->attrSetColFac->expects($this->any())->method('create')->will(
-            $this->returnValue($this->setCollection)
+        $this->attrSetColFac->expects($this->any())->method('create')->willReturn(
+            $this->setCollection
         );
         $this->setCollection->expects($this->any())
             ->method('setEntityTypeFilter')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->prodAttrColFac = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class,
             ['create']
@@ -168,7 +168,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $attrCollection =
             $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class);
         $attrCollection->expects($this->any())->method('addFieldToFilter')->willReturn([]);
-        $this->prodAttrColFac->expects($this->any())->method('create')->will($this->returnValue($attrCollection));
+        $this->prodAttrColFac->expects($this->any())->method('create')->willReturn($attrCollection);
         $this->params = [
             0 => $this->entityModel,
             1 => 'bundle'
@@ -213,17 +213,17 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      */
     public function testSaveData($skus, $bunch, $allowImport)
     {
-        $this->entityModel->expects($this->any())->method('getBehavior')->will($this->returnValue(
+        $this->entityModel->expects($this->any())->method('getBehavior')->willReturn(
             \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND
-        ));
-        $this->entityModel->expects($this->once())->method('getNewSku')->will($this->returnValue($skus['newSku']));
-        $this->entityModel->expects($this->at(2))->method('getNextBunch')->will($this->returnValue([$bunch]));
-        $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->will($this->returnValue(
+        );
+        $this->entityModel->expects($this->once())->method('getNewSku')->willReturn($skus['newSku']);
+        $this->entityModel->expects($this->at(2))->method('getNextBunch')->willReturn([$bunch]);
+        $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->willReturn(
             $allowImport
-        ));
+        );
         $scope = $this->getMockBuilder(\Magento\Framework\App\ScopeInterface::class)->getMockForAbstractClass();
         $this->scopeResolver->expects($this->any())->method('getScope')->willReturn($scope);
-        $this->connection->expects($this->any())->method('fetchAssoc')->with($this->select)->will($this->returnValue([
+        $this->connection->expects($this->any())->method('fetchAssoc')->with($this->select)->willReturn([
             '1' => [
                 'option_id' => '1',
                 'parent_id' => '1',
@@ -269,7 +269,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                         'option_id' => '6']
                 ]
             ]
-        ]));
+        ]);
         $bundle = $this->bundle->saveData();
         $this->assertNotNull($bundle);
     }
@@ -347,24 +347,24 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      */
     public function testSaveDataDelete()
     {
-        $this->entityModel->expects($this->any())->method('getBehavior')->will($this->returnValue(
+        $this->entityModel->expects($this->any())->method('getBehavior')->willReturn(
             \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE
-        ));
-        $this->entityModel->expects($this->once())->method('getNewSku')->will($this->returnValue([
+        );
+        $this->entityModel->expects($this->once())->method('getNewSku')->willReturn([
             'sku' => ['sku' => 'sku', 'entity_id' => 3, 'attr_set_code' => 'Default', 'type_id' => 'bundle']
-        ]));
-        $this->entityModel->expects($this->at(2))->method('getNextBunch')->will($this->returnValue([
+        ]);
+        $this->entityModel->expects($this->at(2))->method('getNextBunch')->willReturn([
             ['bundle_values' => 'value1', 'sku' => 'sku', 'name' => 'name']
-        ]));
-        $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->will($this->returnValue(true));
+        ]);
+        $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->willReturn(true);
         $select = $this->createMock(\Magento\Framework\DB\Select::class);
-        $this->connection->expects($this->any())->method('select')->will($this->returnValue($select));
-        $select->expects($this->any())->method('from')->will($this->returnSelf());
-        $select->expects($this->any())->method('where')->will($this->returnSelf());
-        $select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
-        $this->connection->expects($this->any())->method('fetchAssoc')->with($select)->will($this->returnValue([
+        $this->connection->expects($this->any())->method('select')->willReturn($select);
+        $select->expects($this->any())->method('from')->willReturnSelf();
+        $select->expects($this->any())->method('where')->willReturnSelf();
+        $select->expects($this->any())->method('joinLeft')->willReturnSelf();
+        $this->connection->expects($this->any())->method('fetchAssoc')->with($select)->willReturn([
             ['id1', 'id2', 'id_3']
-        ]));
+        ]);
         $bundle = $this->bundle->saveData();
         $this->assertNotNull($bundle);
     }
@@ -398,7 +398,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      */
     public function testIsRowValid()
     {
-        $this->entityModel->expects($this->any())->method('getRowScope')->will($this->returnValue(-1));
+        $this->entityModel->expects($this->any())->method('getRowScope')->willReturn(-1);
         $rowData = [
             'bundle_price_type' => 'dynamic',
             'bundle_shipment_type' => 'separately',

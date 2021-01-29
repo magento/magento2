@@ -49,19 +49,19 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         );
         $this->_element->expects($this->any())
             ->method('getHtmlId')
-            ->will($this->returnValue('html id'));
+            ->willReturn('html id');
         $this->_element->expects($this->any())
             ->method('getElementHtml')
-            ->will($this->returnValue('element html'));
+            ->willReturn('element html');
         $this->_element->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('name'));
+            ->willReturn('name');
         $this->_element->expects($this->any())
             ->method('getElements')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->_element->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue('id'));
+            ->willReturn('id');
         $this->_backendConfig = $this->createMock(\Magento\Config\Model\Config::class);
         $this->_model = $helper->getObject(
             \Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment::class,
@@ -78,9 +78,9 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         $this->_element->setGroup($groupConfig);
         $this->_backendConfig->expects($this->any())
             ->method('getConfigDataValue')
-            ->will($this->returnValueMap(
+            ->willReturnMap(
                 [[self::CONFIG_PATH_ACTIVE, null, null, '1'], [self::CONFIG_PATH_NOT_ACTIVE, null, null, '0']]
-            ));
+            );
         $html = $this->_model->render($this->_element);
         $this->assertContains($expected, $html);
     }

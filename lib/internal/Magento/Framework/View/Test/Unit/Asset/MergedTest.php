@@ -76,11 +76,12 @@ class MergedTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage At least one asset has to be passed for merging.
      */
     public function testConstructorNothingToMerge()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('At least one asset has to be passed for merging.');
+
         new \Magento\Framework\View\Asset\Merged(
             $this->logger,
             $this->mergeStrategy,
@@ -91,11 +92,12 @@ class MergedTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Asset has to implement \Magento\Framework\View\Asset\MergeableInterface.
      */
     public function testConstructorRequireMergeInterface()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Asset has to implement \\Magento\\Framework\\View\\Asset\\MergeableInterface.');
+
         $assetUrl = new \Magento\Framework\View\Asset\Remote('http://example.com/style.css', 'css');
 
         (new ObjectManager($this))->getObject(Merged::class, [
@@ -108,11 +110,12 @@ class MergedTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Content type 'css' cannot be merged with 'js'.
      */
     public function testConstructorIncompatibleContentTypes()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Content type \'css\' cannot be merged with \'js\'.');
+
         $assetCss = $this->getMockForAbstractClass(MergeableInterface::class);
         $assetCss->expects($this->any())
             ->method('getContentType')

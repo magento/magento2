@@ -59,8 +59,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
         $type->expects($this->once())->method('getSetAttributes')->with($object);
 
-        $object->expects($this->once())->method('getTypeId')->will($this->returnValue(Configurable::TYPE_CODE));
-        $object->expects($this->once())->method('getTypeInstance')->will($this->returnValue($type));
+        $object->expects($this->once())->method('getTypeId')->willReturn(Configurable::TYPE_CODE);
+        $object->expects($this->once())->method('getTypeInstance')->willReturn($type);
 
         $this->model->beforeSave(
             $subject,
@@ -74,7 +74,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $subject = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
         /** @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject $object */
         $object = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getTypeId', 'getTypeInstance']);
-        $object->expects($this->once())->method('getTypeId')->will($this->returnValue(Type::TYPE_SIMPLE));
+        $object->expects($this->once())->method('getTypeId')->willReturn(Type::TYPE_SIMPLE);
         $object->expects($this->never())->method('getTypeInstance');
 
         $this->model->beforeSave(

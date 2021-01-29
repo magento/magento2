@@ -63,7 +63,7 @@ class DataProviderTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         try {
             $this->stringUtils->deleteTranslate('Proceed to Checkout');

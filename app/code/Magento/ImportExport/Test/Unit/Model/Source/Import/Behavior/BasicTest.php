@@ -43,7 +43,7 @@ class BasicTest extends \Magento\ImportExport\Test\Unit\Model\Source\Import\Abst
     public function testToArray()
     {
         $behaviorData = $this->_model->toArray();
-        $this->assertInternalType('array', $behaviorData);
+        $this->assertIsArray($behaviorData);
         $this->assertEquals($this->_expectedBehaviors, array_keys($behaviorData));
     }
 

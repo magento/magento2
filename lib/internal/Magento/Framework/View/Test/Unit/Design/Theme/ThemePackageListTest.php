@@ -35,11 +35,12 @@ class ThemePackageListTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage No theme registered with name 'theme'
      */
     public function testGetThemeNonexistent()
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('No theme registered with name \'theme\'');
+
         $themeKey = 'theme';
         $this->registrar->expects($this->once())
             ->method('getPath')

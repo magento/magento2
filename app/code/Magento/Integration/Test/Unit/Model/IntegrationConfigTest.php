@@ -59,7 +59,7 @@ class IntegrationConfigTest extends \PHPUnit\Framework\TestCase
         $this->configCacheTypeMock->expects($this->once())
             ->method('load')
             ->with(IntegrationConfig::CACHE_ID)
-            ->will($this->returnValue($serializedIntegrations));
+            ->willReturn($serializedIntegrations);
         $this->serializer->expects($this->once())
             ->method('unserialize')
             ->with($serializedIntegrations)
@@ -75,10 +75,10 @@ class IntegrationConfigTest extends \PHPUnit\Framework\TestCase
         $this->configCacheTypeMock->expects($this->once())
             ->method('load')
             ->with(IntegrationConfig::CACHE_ID)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->configReaderMock->expects($this->once())
             ->method('read')
-            ->will($this->returnValue($integrations));
+            ->willReturn($integrations);
         $this->serializer->expects($this->once())
             ->method('serialize')
             ->with($integrations)
@@ -86,7 +86,7 @@ class IntegrationConfigTest extends \PHPUnit\Framework\TestCase
         $this->configCacheTypeMock->expects($this->once())
             ->method('save')
             ->with($serializedIntegrations, IntegrationConfig::CACHE_ID, [TypeIntegration::CACHE_TAG])
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->assertEquals($integrations, $this->integrationConfigModel->getIntegrations());
     }

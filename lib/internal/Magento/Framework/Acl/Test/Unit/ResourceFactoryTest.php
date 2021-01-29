@@ -48,8 +48,8 @@ class ResourceFactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             \Magento\Framework\Acl\AclResource::class,
             $arguments
-        )->will(
-            $this->returnValue($this->_expectedObject)
+        )->willReturn(
+            $this->_expectedObject
         );
         $this->assertEquals($this->_expectedObject, $this->_model->createResource($arguments));
     }

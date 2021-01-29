@@ -122,7 +122,7 @@ class PlaceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->checkoutSessionMock->expects($this->any())
             ->method('getQuote')
-            ->will($this->returnValue($this->quoteMock));
+            ->willReturn($this->quoteMock);
         $this->objectManagerMock = $this
             ->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->getMockForAbstractClass();
@@ -198,20 +198,20 @@ class PlaceTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->at(0))
             ->method('getParam')
             ->with('payment')
-            ->will($this->returnValue($paymentMethod));
+            ->willReturn($paymentMethod);
 
         $this->requestMock->expects($this->at(1))
             ->method('getParam')
             ->with('controller')
-            ->will($this->returnValue($controller));
+            ->willReturn($controller);
 
         $this->quoteMock->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($quoteId));
+            ->willReturn($quoteId);
 
         $this->cartManagementMock->expects($this->any())
             ->method('placeOrder')
-            ->will($this->returnValue($orderId));
+            ->willReturn($orderId);
 
         $this->jsonHelperMock->expects($this->any())
             ->method('jsonEncode')
@@ -238,16 +238,16 @@ class PlaceTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->at(0))
             ->method('getParam')
             ->with('payment')
-            ->will($this->returnValue($paymentMethod));
+            ->willReturn($paymentMethod);
 
         $this->requestMock->expects($this->at(1))
             ->method('getParam')
             ->with('controller')
-            ->will($this->returnValue($controller));
+            ->willReturn($controller);
 
         $this->quoteMock->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($quoteId));
+            ->willReturn($quoteId);
 
         $this->cartManagementMock->expects($this->once())
             ->method('placeOrder')

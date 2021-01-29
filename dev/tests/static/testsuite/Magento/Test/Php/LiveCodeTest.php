@@ -435,9 +435,9 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             }
         }
 
-        $this->assertEquals(
+        $this->assertCount(
             0,
-            count($filesMissingStrictTyping),
+            $filesMissingStrictTyping,
             "Following files are missing strict type declaration:"
             . PHP_EOL
             . implode(PHP_EOL, $filesMissingStrictTyping)

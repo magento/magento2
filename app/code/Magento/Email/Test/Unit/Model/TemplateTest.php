@@ -223,10 +223,10 @@ class TemplateTest extends TestCase
             ->getMock();
         $filterTemplate->expects($this->once())
             ->method('setUseAbsoluteLinks')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $filterTemplate->expects($this->once())
             ->method('setStoreId')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->filterFactory->method('create')
             ->willReturn($filterTemplate);
         $designConfig = $this->getMockBuilder(\Magento\Framework\DataObject::class)
@@ -410,13 +410,13 @@ class TemplateTest extends TestCase
             $model->expects($this->once())
                 ->method('load')
                 ->with($templateId)
-                ->will($this->returnSelf());
+                ->willReturnSelf();
         } else {
             $templateId = 'design_email_header_template';
             $model->expects($this->once())
                 ->method('loadDefault')
                 ->with($templateId)
-                ->will($this->returnSelf());
+                ->willReturnSelf();
         }
 
         $this->scopeConfig->expects($this->once())
@@ -547,7 +547,7 @@ class TemplateTest extends TestCase
         $filterTemplate->expects($this->once())
             ->method('setStoreId')
             ->with($storeId)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $expectedResult = 'expected';
         $filterTemplate->expects($this->once())
             ->method('filter')
@@ -754,7 +754,7 @@ class TemplateTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $emailConfig->expects($this->once())->method('getTemplateType')->will($this->returnValue($templateType));
+        $emailConfig->expects($this->once())->method('getTemplateType')->willReturn($templateType);
 
         /** @var Template $model */
         $model = $this->getMockBuilder(Template::class)

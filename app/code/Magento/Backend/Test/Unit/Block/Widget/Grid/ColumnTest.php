@@ -65,8 +65,8 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             'createBlock'
         )->with(
             \Magento\Backend\Block\Widget\Grid\Column\Filter\Text::class
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->_block->getFilter();
@@ -118,8 +118,8 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             'createBlock'
         )->with(
             \Magento\Backend\Block\Widget\Grid\Column\Filter\Text::class
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->_block->getFilter();
@@ -139,8 +139,8 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             'createBlock'
         )->with(
             'StdClass'
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->_block->getFilter();
@@ -158,8 +158,8 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             'createBlock'
         )->with(
             'StdClass'
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->_block->setFilter('StdClass');
@@ -168,7 +168,7 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
 
     public function testGetFilterHtmlWhenFilterExist()
     {
-        $this->_blockMock->expects($this->once())->method('getHtml')->will($this->returnValue('test'));
+        $this->_blockMock->expects($this->once())->method('getHtml')->willReturn('test');
 
         $this->_layoutMock->expects(
             $this->once()
@@ -176,8 +176,8 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             'createBlock'
         )->with(
             'StdClass'
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->_block->setFilter('StdClass');
@@ -195,7 +195,7 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
     {
         $this->_block->setData('renderer', 'StdClass');
 
-        $this->_blockMock->expects($this->once())->method('setColumn')->will($this->returnSelf());
+        $this->_blockMock->expects($this->once())->method('setColumn')->willReturnSelf();
 
         $this->_layoutMock->expects(
             $this->once()
@@ -203,8 +203,8 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             'createBlock'
         )->with(
             'StdClass'
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->assertNotEmpty($this->_block->getRenderer());
@@ -217,7 +217,7 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
     {
         $this->_block->setData('renderer', false);
 
-        $this->_blockMock->expects($this->once())->method('setColumn')->will($this->returnSelf());
+        $this->_blockMock->expects($this->once())->method('setColumn')->willReturnSelf();
 
         $this->_layoutMock->expects(
             $this->once()
@@ -225,8 +225,8 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             'createBlock'
         )->with(
             \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text::class
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->assertEquals($this->_blockMock, $this->_block->getRenderer());
@@ -241,7 +241,7 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
         $this->_block->setData('type', 'custom_type');
         $this->_block->setRendererType('custom_type', 'StdClass');
 
-        $this->_blockMock->expects($this->once())->method('setColumn')->will($this->returnSelf());
+        $this->_blockMock->expects($this->once())->method('setColumn')->willReturnSelf();
 
         $this->_layoutMock->expects(
             $this->once()
@@ -249,8 +249,8 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             'createBlock'
         )->with(
             'StdClass'
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->assertEquals($this->_blockMock, $this->_block->getRenderer());
@@ -348,8 +348,8 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             'createBlock'
         )->with(
             'StdClass'
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->_block->setFilter('StdClass');

@@ -74,8 +74,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getWebsites'
-        )->will(
-            $this->returnCallback([$this, 'getWebsites'])
+        )->willReturnCallback(
+            [$this, 'getWebsites']
         );
 
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -120,8 +120,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getEntityTypeCode'
-        )->will(
-            $this->returnValue('customer_address')
+        )->willReturn(
+            'customer_address'
         );
         foreach ($this->_attributes as $attributeData) {
             $arguments = $this->_objectManager->getConstructArguments(
@@ -146,8 +146,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'iterate'
-        )->will(
-            $this->returnCallback([$this, 'iterate'])
+        )->willReturnCallback(
+            [$this, 'iterate']
         );
 
         $customerCollection = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
@@ -156,8 +156,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
 
         $customerEntity = $this->createPartialMock(\stdClass::class, ['filterEntityCollection', 'setParameters']);
-        $customerEntity->expects($this->any())->method('filterEntityCollection')->will($this->returnArgument(0));
-        $customerEntity->expects($this->any())->method('setParameters')->will($this->returnSelf());
+        $customerEntity->expects($this->any())->method('filterEntityCollection')->willReturnArgument(0);
+        $customerEntity->expects($this->any())->method('setParameters')->willReturnSelf();
 
         $data = [
             'translator' => $translator,
@@ -208,7 +208,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     public function iterate(\Magento\Framework\Data\Collection\AbstractDb $collection, $pageSize, array $callbacks)
     {
         $resource = $this->createPartialMock(\Magento\Customer\Model\ResourceModel\Customer::class, ['getIdFieldName']);
-        $resource->expects($this->any())->method('getIdFieldName')->will($this->returnValue('id'));
+        $resource->expects($this->any())->method('getIdFieldName')->willReturn('id');
         $arguments = [
             'data' => $this->_customerData,
             'resource' => $resource,
@@ -247,8 +247,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'writeRow'
-        )->will(
-            $this->returnCallback([$this, 'validateWriteRow'])
+        )->willReturnCallback(
+            [$this, 'validateWriteRow']
         );
 
         $this->_model->setWriter($writer);

@@ -204,7 +204,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $this->storeMock
             )
-            ->will($this->returnValue($returnValue));
+            ->willReturn($returnValue);
     }
 
     /**

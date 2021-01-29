@@ -55,12 +55,12 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('create')
             ->with($this->logicalOr($this->equalTo('model'), $this->equalTo('null')), $this->equalTo([]))
-            ->will($this->returnCallback(function ($className) {
+            ->willReturnCallback(function ($className) {
                 $returnValue = null;
                 if ($className == 'model') {
                     $returnValue = $this->model;
                 }
                 return $returnValue;
-            }));
+            });
     }
 }

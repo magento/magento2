@@ -59,9 +59,9 @@ class GetShippingItemsGridTest extends \PHPUnit\Framework\TestCase
             ['getRequest', 'getResponse', 'getView', '__wakeup']
         );
 
-        $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
-        $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
-        $contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewMock));
+        $contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
+        $contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
+        $contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
 
         $this->controller = new \Magento\Shipping\Controller\Adminhtml\Order\Shipment\GetShippingItemsGrid(
             $contextMock,
@@ -89,19 +89,19 @@ class GetShippingItemsGridTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->at(0))
             ->method('getParam')
             ->with('order_id')
-            ->will($this->returnValue($orderId));
+            ->willReturn($orderId);
         $this->requestMock->expects($this->at(1))
             ->method('getParam')
             ->with('shipment_id')
-            ->will($this->returnValue($shipmentId));
+            ->willReturn($shipmentId);
         $this->requestMock->expects($this->at(2))
             ->method('getParam')
             ->with('shipment')
-            ->will($this->returnValue($shipment));
+            ->willReturn($shipment);
         $this->requestMock->expects($this->at(3))
             ->method('getParam')
             ->with('tracking')
-            ->will($this->returnValue($tracking));
+            ->willReturn($tracking);
         $this->shipmentLoaderMock->expects($this->once())->method('setOrderId')->with($orderId);
         $this->shipmentLoaderMock->expects($this->once())->method('setShipmentId')->with($shipmentId);
         $this->shipmentLoaderMock->expects($this->once())->method('setShipment')->with($shipment);
@@ -110,23 +110,23 @@ class GetShippingItemsGridTest extends \PHPUnit\Framework\TestCase
         $layoutMock->expects($this->once())
             ->method('createBlock')
             ->with(\Magento\Shipping\Block\Adminhtml\Order\Packaging\Grid::class)
-            ->will($this->returnValue($gridMock));
+            ->willReturn($gridMock);
         $this->viewMock->expects($this->once())
             ->method('getLayout')
-            ->will($this->returnValue($layoutMock));
+            ->willReturn($layoutMock);
         $this->responseMock->expects($this->once())
             ->method('setBody')
             ->with($result)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->requestMock->expects($this->at(4))
             ->method('getParam')
             ->with('index');
         $gridMock->expects($this->once())
             ->method('setIndex')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $gridMock->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue($result));
+            ->willReturn($result);
 
         $this->assertNotEmpty('result-html', $this->controller->execute());
     }

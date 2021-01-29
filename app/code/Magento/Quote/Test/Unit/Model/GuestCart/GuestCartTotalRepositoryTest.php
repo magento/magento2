@@ -76,7 +76,7 @@ class GuestCartTotalRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->cartTotalRepository->expects($this->once())
             ->method('get')
             ->with($this->cartId)
-            ->will($this->returnValue($retValue));
+            ->willReturn($retValue);
         $this->assertSame($retValue, $this->model->get($this->maskedCartId));
     }
 }

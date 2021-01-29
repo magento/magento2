@@ -35,8 +35,8 @@ class AdminConfigFixtureTest extends \PHPUnit\Framework\TestCase
             '_getConfigValue'
         )->with(
             'any_config'
-        )->will(
-            $this->returnValue('some_value')
+        )->willReturn(
+            'some_value'
         );
         $this->_object->expects($this->at(1))->method('_setConfigValue')->with('any_config', 'some_value');
         $this->_object->startTest($this);
@@ -64,8 +64,8 @@ class AdminConfigFixtureTest extends \PHPUnit\Framework\TestCase
             '_getConfigValue'
         )->with(
             'any_config'
-        )->will(
-            $this->returnValue('some_value')
+        )->willReturn(
+            'some_value'
         );
         $this->_object->expects($this->at(1))->method('_setConfigValue')->with('any_config', 'some_value');
         $this->_object->initStoreAfter();

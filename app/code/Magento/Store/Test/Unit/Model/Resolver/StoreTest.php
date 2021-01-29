@@ -42,7 +42,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getStore')
             ->with(0)
-            ->will($this->returnValue($scopeMock));
+            ->willReturn($scopeMock);
 
         $this->assertEquals($scopeMock, $this->_model->getScope());
     }
@@ -58,7 +58,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getStore')
             ->with(0)
-            ->will($this->returnValue($scopeMock));
+            ->willReturn($scopeMock);
 
         $this->assertEquals($scopeMock, $this->_model->getScope());
     }

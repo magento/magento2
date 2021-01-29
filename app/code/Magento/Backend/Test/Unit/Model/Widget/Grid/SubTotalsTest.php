@@ -33,8 +33,8 @@ class SubTotalsTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             ['sub_test1' => 3, 'sub_test2' => 2]
-        )->will(
-            $this->returnValue(new \Magento\Framework\DataObject(['sub_test1' => 3, 'sub_test2' => 2]))
+        )->willReturn(
+            new \Magento\Framework\DataObject(['sub_test1' => 3, 'sub_test2' => 2])
         );
 
         $arguments = ['factory' => $this->_factoryMock, 'parser' => $this->_parserMock];

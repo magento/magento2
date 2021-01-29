@@ -72,7 +72,7 @@ class DebugTest extends \PHPUnit\Framework\TestCase
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Exception
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->shell = $this->objectManager->get(Shell::class);
@@ -89,7 +89,7 @@ class DebugTest extends \PHPUnit\Framework\TestCase
      * @inheritdoc
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->reinitDeploymentConfig();
         $this->etcDirectory->delete(self::$backupFile);

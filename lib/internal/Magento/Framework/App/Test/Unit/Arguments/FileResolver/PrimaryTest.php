@@ -27,13 +27,13 @@ class PrimaryTest extends \PHPUnit\Framework\TestCase
             'getDirectoryRead'
         )->with(
             DirectoryList::CONFIG
-        )->will(
-            $this->returnValue($directory)
+        )->willReturn(
+            $directory
         );
 
-        $directory->expects($this->once())->method('search')->will($this->returnValue($fileList));
+        $directory->expects($this->once())->method('search')->willReturn($fileList);
 
-        $iteratorFactory->expects($this->once())->method('create')->will($this->returnValue(true));
+        $iteratorFactory->expects($this->once())->method('create')->willReturn(true);
 
         $model = new \Magento\Framework\App\Arguments\FileResolver\Primary($filesystem, $iteratorFactory);
 

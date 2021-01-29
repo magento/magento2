@@ -36,25 +36,25 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     {
         $productTags = ['catalog_product_1'];
         $childProduct = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $childProduct->expects($this->once())->method('getIdentities')->will($this->returnValue($productTags));
+        $childProduct->expects($this->once())->method('getIdentities')->willReturn($productTags);
         $typeInstance = $this->createMock(\Magento\GroupedProduct\Model\Product\Type\Grouped::class);
         $typeInstance->expects(
             $this->once()
         )->method(
             'getAssociatedProducts'
-        )->will(
-            $this->returnValue([$childProduct])
+        )->willReturn(
+            [$childProduct]
         );
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $product->expects($this->once())->method('getTypeInstance')->will($this->returnValue($typeInstance));
+        $product->expects($this->once())->method('getTypeInstance')->willReturn($typeInstance);
         $this->registry->expects(
             $this->any()
         )->method(
             'registry'
         )->with(
             'current_product'
-        )->will(
-            $this->returnValue($product)
+        )->willReturn(
+            $product
         );
         $this->assertEquals($productTags, $this->block->getIdentities());
     }

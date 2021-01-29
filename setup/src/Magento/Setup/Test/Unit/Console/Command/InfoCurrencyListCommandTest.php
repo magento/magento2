@@ -23,11 +23,11 @@ class InfoCurrencyListCommandTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Symfony\Component\Console\Helper\TableFactory|\PHPUnit\Framework\MockObject\MockObject $helperSet */
         $tableFactoryMock = $this->createMock(\Symfony\Component\Console\Helper\TableFactory::class);
-        $tableFactoryMock->expects($this->once())->method('create')->will($this->returnValue($table));
+        $tableFactoryMock->expects($this->once())->method('create')->willReturn($table);
 
         /** @var \Magento\Framework\Setup\Lists|\PHPUnit\Framework\MockObject\MockObject $list */
         $list = $this->createMock(\Magento\Framework\Setup\Lists::class);
-        $list->expects($this->once())->method('getCurrencyList')->will($this->returnValue($currencies));
+        $list->expects($this->once())->method('getCurrencyList')->willReturn($currencies);
         $command = new InfoCurrencyListCommand($list, $tableFactoryMock);
         $commandTester = new CommandTester($command);
         $commandTester->execute([]);

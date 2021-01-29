@@ -47,7 +47,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->subject->expects($this->any())
             ->method('getChangedProductIds')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->productRuleProcessor->expects($this->never())
             ->method('reindexList');
@@ -61,7 +61,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
         $this->subject->expects($this->any())
             ->method('getChangedProductIds')
-            ->will($this->returnValue($productIds));
+            ->willReturn($productIds);
 
         $this->productRuleProcessor->expects($this->once())
             ->method('reindexList')

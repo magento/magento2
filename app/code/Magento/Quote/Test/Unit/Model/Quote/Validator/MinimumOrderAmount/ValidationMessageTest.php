@@ -67,7 +67,7 @@ class ValidationMessageTest extends \PHPUnit\Framework\TestCase
         $this->priceHelperMock->expects($this->once())
             ->method('currency')
             ->with($minimumAmount, true, false)
-            ->will($this->returnValue($minimumAmountCurrency));
+            ->willReturn($minimumAmountCurrency);
 
         $this->assertEquals(__('Minimum order amount is %1', $minimumAmountCurrency), $this->model->getMessage());
     }

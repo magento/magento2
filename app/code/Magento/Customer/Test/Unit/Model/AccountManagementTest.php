@@ -787,8 +787,8 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         [
                             AccountManagement::XML_PATH_MINIMUM_PASSWORD_LENGTH,
@@ -803,7 +803,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
                             $minCharacterSetsNum,
                         ],
                     ]
-                )
+                
             );
 
         $this->string->expects($this->any())

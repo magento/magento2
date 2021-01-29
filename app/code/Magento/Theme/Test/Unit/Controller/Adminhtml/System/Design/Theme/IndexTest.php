@@ -21,12 +21,12 @@ class IndexTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Des
         $menuModel->expects($this->once())
             ->method('getParentItems')
             ->with($this->equalTo('Magento_Theme::system_design_theme'))
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $menuBlock = $this->createMock(\Magento\Backend\Block\Menu::class);
         $menuBlock->expects($this->once())
             ->method('getMenuModel')
-            ->will($this->returnValue($menuModel));
+            ->willReturn($menuModel);
 
         $titleBlock = $this->createMock(\Magento\Theme\Block\Html\Title::class);
         $titleBlock->expects($this->once())->method('setPageTitle');
@@ -41,7 +41,7 @@ class IndexTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Des
 
         $this->view->expects($this->any())
             ->method('getLayout')
-            ->will($this->returnValue($layout));
+            ->willReturn($layout);
 
         $this->_model->execute();
     }

@@ -141,7 +141,7 @@ class CancelTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->contextMock->expects($this->any())
             ->method('getHelper')
-            ->will($this->returnValue($this->helperMock));
+            ->willReturn($this->helperMock);
         $this->actionFlagMock = $this->getMockBuilder(\Magento\Framework\App\ActionFlag::class)
             ->disableOriginalConstructor()
             ->getMock();

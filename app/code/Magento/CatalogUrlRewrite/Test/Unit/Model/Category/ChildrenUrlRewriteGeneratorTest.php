@@ -74,7 +74,7 @@ class ChildrenUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
     public function testNoChildrenCategories()
     {
         $this->childrenCategoriesProvider->expects($this->once())->method('getChildrenIds')->with($this->category, true)
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->assertEquals([], $this->childrenUrlRewriteGenerator->generate('store_id', $this->category));
     }
@@ -90,13 +90,13 @@ class ChildrenUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         $childCategory->expects($this->once())->method('setData')
             ->with('save_rewrites_history', $saveRewritesHistory);
         $this->childrenCategoriesProvider->expects($this->once())->method('getChildrenIds')->with($this->category, true)
-            ->will($this->returnValue([$childId]));
+            ->willReturn([$childId]);
         $this->categoryRepository->expects($this->once())->method('get')
             ->with($childId, $storeId)->willReturn($childCategory);
         $this->category->expects($this->any())->method('getData')->with('save_rewrites_history')
-            ->will($this->returnValue($saveRewritesHistory));
+            ->willReturn($saveRewritesHistory);
         $this->categoryUrlRewriteGeneratorFactory->expects($this->once())->method('create')
-            ->will($this->returnValue($this->categoryUrlRewriteGenerator));
+            ->willReturn($this->categoryUrlRewriteGenerator);
         $url1 = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite([], $this->serializerMock);
         $url1->setRequestPath('category-1')
             ->setStoreId(1);
@@ -108,7 +108,7 @@ class ChildrenUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
             ->setStoreId(1);
         $this->categoryUrlRewriteGenerator->expects($this->once())->method('generate')
             ->with($childCategory, false, 1)
-            ->will($this->returnValue([$url1, $url2, $url3]));
+            ->willReturn([$url1, $url2, $url3]);
 
         $this->assertEquals(
             ['category-1_1'  => $url1, 'category-2_2' => $url2],

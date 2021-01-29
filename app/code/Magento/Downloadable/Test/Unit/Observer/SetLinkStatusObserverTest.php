@@ -149,7 +149,7 @@ class SetLinkStatusObserverTest extends \PHPUnit\Framework\TestCase
     {
         $this->observerMock->expects($this->once())
             ->method('getEvent')
-            ->will($this->returnValue($this->eventMock));
+            ->willReturn($this->eventMock);
 
         $this->eventMock->expects($this->once())
             ->method('getOrder')
@@ -203,7 +203,7 @@ class SetLinkStatusObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->observerMock->expects($this->once())
             ->method('getEvent')
-            ->will($this->returnValue($this->eventMock));
+            ->willReturn($this->eventMock);
 
         $this->eventMock->expects($this->once())
             ->method('getOrder')
@@ -266,7 +266,7 @@ class SetLinkStatusObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->observerMock->expects($this->once())
             ->method('getEvent')
-            ->will($this->returnValue($this->eventMock));
+            ->willReturn($this->eventMock);
 
         $this->eventMock->expects($this->once())
             ->method('getOrder')
@@ -320,7 +320,7 @@ class SetLinkStatusObserverTest extends \PHPUnit\Framework\TestCase
     {
         $this->observerMock->expects($this->once())
             ->method('getEvent')
-            ->will($this->returnValue($this->eventMock));
+            ->willReturn($this->eventMock);
 
         $this->eventMock->expects($this->once())
             ->method('getOrder')

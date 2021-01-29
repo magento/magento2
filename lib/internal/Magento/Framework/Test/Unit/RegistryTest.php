@@ -32,7 +32,7 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
         $this->registry->register($this->data['key'], $this->data['value']);
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         unset($this->registry);
     }
@@ -55,10 +55,11 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
      */
     public function testRegisterKeyExists()
     {
+        $this->expectException(\RuntimeException::class);
+
         $this->registry->register($this->data['key'], $this->data['value']);
     }
 

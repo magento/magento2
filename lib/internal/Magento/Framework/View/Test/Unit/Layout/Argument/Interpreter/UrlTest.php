@@ -43,8 +43,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             'evaluate'
         )->with(
             $input
-        )->will(
-            $this->returnValue($urlParams)
+        )->willReturn(
+            $urlParams
         );
 
         $this->_urlResolver->expects(
@@ -54,8 +54,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         )->with(
             'some/path',
             $urlParams
-        )->will(
-            $this->returnValue($expected)
+        )->willReturn(
+            $expected
         );
 
         $actual = $this->_model->evaluate($input);
@@ -63,11 +63,12 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage URL path is missing
      */
     public function testEvaluateWrongPath()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('URL path is missing');
+
         $input = [];
         $this->_model->evaluate($input);
     }

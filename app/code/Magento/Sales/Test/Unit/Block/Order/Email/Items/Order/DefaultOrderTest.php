@@ -71,7 +71,7 @@ class DefaultOrderTest extends \PHPUnit\Framework\TestCase
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('item_price')
-            ->will($this->returnValue($this->priceRenderBlock));
+            ->willReturn($this->priceRenderBlock);
 
         $this->priceRenderBlock->expects($this->once())
             ->method('setItem')
@@ -79,7 +79,7 @@ class DefaultOrderTest extends \PHPUnit\Framework\TestCase
 
         $this->priceRenderBlock->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue($html));
+            ->willReturn($html);
 
         $this->assertEquals($html, $this->block->getItemPrice($this->itemMock));
     }

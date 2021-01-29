@@ -36,7 +36,7 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         if (!$this->_objectManager) {
             return;
@@ -49,7 +49,7 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
     /**
      * Tear down
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         \Magento\Framework\App\ObjectManager::setInstance($this->applicationObjectManager);
     }
@@ -69,12 +69,12 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'read'
-        )->will(
-            $this->returnValue($pluginConfig)
+        )->willReturn(
+            $pluginConfig
         );
 
         $areaList = $this->createMock(\Magento\Framework\App\AreaList::class);
-        $areaList->expects($this->any())->method('getCodes')->will($this->returnValue([]));
+        $areaList->expects($this->any())->method('getCodes')->willReturn([]);
         $configScope = new \Magento\Framework\Config\Scope($areaList, 'global');
         $cache = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
         $cacheManager = $this->createMock(\Magento\Framework\Interception\Config\CacheManager::class);

@@ -60,7 +60,7 @@ class ClientTest extends TestCase
         $this->httpClientFactory = $this->createMock(ZendClientFactory::class);
         $this->httpClient = $this->createMock(Zend_Http_Client::class);
         $this->httpResponse = $this->createMock(Zend_Http_Response::class);
-        $this->httpClientFactory->method('create')->will($this->returnValue($this->httpClient));
+        $this->httpClientFactory->method('create')->willReturn($this->httpClient);
         $this->httpClient->method('request')
             ->willReturn($this->httpResponse);
         /** @var MockObject $logger */
