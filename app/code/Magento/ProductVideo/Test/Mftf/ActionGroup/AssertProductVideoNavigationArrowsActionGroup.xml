@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Assert the navigation arrows on Storefront Product page -->
+    <actionGroup name="AssertProductVideoNavigationArrowsActionGroup">
+        <annotations>
+            <description>Validates the navigation arrows on the Storefront Product page.</description>
+        </annotations>
+        <arguments>
+            <argument name="videoType" type="string" defaultValue="vimeo"/>
+        </arguments>
+
+        <dontSeeElement selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="dontSeePrevButton"/>
+        <moveMouseOver selector="{{StorefrontProductMediaSection.mainImageForJsActions}}" stepKey="hoverOverImage"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="seeNextButton"/>
+        <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickNextButton"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productVideo(videoType)}}" stepKey="seeProductVideoDataType"/>
+
+        <dontSeeElement selector="{{StorefrontProductInfoMainSection.clickCloseVideo}}" stepKey="dontSeeCloseVideo"/>
+
+        <click selector="{{StorefrontProductInfoMainSection.clickPlayVideo}}" stepKey="clickToPlayVideo"/>
+        <wait stepKey="waitFiveSecondsToPlayVideo" time="5"/>
+
+        <dontSeeElement selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="dontSeePrevButtonSecond"/>
+        <dontSeeElement selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="dontSeeNextButton"/>
+
+        <seeElement selector="{{StorefrontProductInfoMainSection.clickCloseVideo}}" stepKey="seeCloseVideo"/>
+        <click selector="{{StorefrontProductInfoMainSection.clickCloseVideo}}" stepKey="clickToCloseVideo"/>
+        <wait stepKey="waitTwoSecondsToCloseVideo" time="2"/>
+
+        <moveMouseOver selector="{{StorefrontProductMediaSection.mainImageForJsActions}}" stepKey="hoverOverImageSecond"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="seePrevButton"/>
+        <click selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="clickPrevButton"/>
+    </actionGroup>
+</actionGroups>
