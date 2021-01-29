@@ -111,19 +111,19 @@ QUERY;
                         [
                             'title' => 'date option',
                             'values' => [
-                                'type' => 'date'
+                                'type' => 'DATE'
                             ]
                         ],
                         [
                             'title' => 'date_time option',
                             'values' => [
-                                'type' => 'date_time'
+                                'type' => 'DATE_TIME'
                             ]
                         ],
                         [
                             'title' => 'time option',
                             'values' => [
-                                'type' => 'time'
+                                'type' => 'TIME'
                             ]
                         ]
                     ]
