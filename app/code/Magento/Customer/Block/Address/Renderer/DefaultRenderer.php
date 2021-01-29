@@ -174,7 +174,7 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
             if ($attributeCode == 'country_id' && isset($addressAttributes['country_id'])) {
                 $data['country'] = $this->_countryFactory->create()
                     ->loadByCode($addressAttributes['country_id'])
-                    ->getName(isset($addressAttributes['locale']) ? $addressAttributes['locale'] : null);
+                    ->getName($addressAttributes['locale'] ?? null);
             } elseif ($attributeCode == 'region' && isset($addressAttributes['region'])) {
                 $data['region'] = (string)__($addressAttributes['region']);
             } elseif (isset($addressAttributes[$attributeCode])) {
