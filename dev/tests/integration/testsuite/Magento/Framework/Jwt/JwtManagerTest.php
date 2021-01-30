@@ -8,7 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Jwt;
 
+use Magento\Framework\Jwt\Claim\ExpirationTime;
+use Magento\Framework\Jwt\Claim\IssuedAt;
+use Magento\Framework\Jwt\Claim\Issuer;
+use Magento\Framework\Jwt\Claim\JwtId;
 use Magento\Framework\Jwt\Claim\PrivateClaim;
+use Magento\Framework\Jwt\Claim\Subject;
 use Magento\Framework\Jwt\Header\Critical;
 use Magento\Framework\Jwt\Header\PrivateHeaderParameter;
 use Magento\Framework\Jwt\Header\PublicHeaderParameter;
@@ -58,7 +63,9 @@ class JwtManagerTest extends TestCase
         $recreated = $this->manager->read($token, $readEncryption);
 
         //Verifying header
-        $this->verifyHeader($jwt->getHeader(), $recreated->getHeader());
+        if ((!$jwt instanceof JwsInterface && !$jwt instanceof JweInterface) || count($jwt->getProtectedHeaders()) == 1) {
+            $this->verifyAgainstHeaders([$jwt->getHeader()], $recreated->getHeader());
+        }
         //Verifying payload
         $this->assertEquals($jwt->getPayload()->getContent(), $recreated->getPayload()->getContent());
         if ($jwt->getPayload() instanceof ClaimsPayloadInterface) {
@@ -76,9 +83,9 @@ class JwtManagerTest extends TestCase
                 $this->assertNull($recreated->getUnprotectedHeaders());
             } else {
                 $this->assertTrue(count($recreated->getUnprotectedHeaders()) >= 1);
-                $this->verifyHeader($jwt->getUnprotectedHeaders()[0], $recreated->getUnprotectedHeaders()[0]);
+                $this->verifyAgainstHeaders($jwt->getUnprotectedHeaders(), $recreated->getUnprotectedHeaders()[0]);
             }
-            $this->verifyHeader($jwt->getProtectedHeaders()[0], $recreated->getProtectedHeaders()[0]);
+            $this->verifyAgainstHeaders($jwt->getProtectedHeaders(), $recreated->getProtectedHeaders()[0]);
         }
         if ($jwt instanceof JweInterface) {
             $this->assertInstanceOf(JweInterface::class, $recreated);
@@ -107,13 +114,14 @@ class JwtManagerTest extends TestCase
                 [
                     new PrivateClaim('custom-claim', 'value'),
                     new PrivateClaim('custom-claim2', 'value2'),
-                    new PrivateClaim('custom-claim3', 'value3')
+                    new PrivateClaim('custom-claim3', 'value3'),
+                    new IssuedAt(new \DateTimeImmutable()),
+                    new Issuer('magento.com')
                 ]
             ),
             null
         );
-
-        $flatJwsWithUnprotectedHeader = new Jws(
+        $jwsWithUnprotectedHeader = new Jws(
             [
                 new JwsHeader(
                     [
@@ -125,7 +133,8 @@ class JwtManagerTest extends TestCase
             new ClaimsPayload(
                 [
                     new PrivateClaim('custom-claim', 'value'),
-                    new PrivateClaim('custom-claim2', 'value2')
+                    new PrivateClaim('custom-claim2', 'value2'),
+                    new ExpirationTime(new \DateTimeImmutable())
                 ]
             ),
             [
@@ -136,15 +145,42 @@ class JwtManagerTest extends TestCase
                 )
             ]
         );
+        $compactJws = new Jws(
+            [
+                new JwsHeader(
+                    [
+                        new PrivateHeaderParameter('test', true),
+                        new PublicHeaderParameter('test2', 'magento', 'value')
+                    ]
+                ),
+                new JwsHeader(
+                    [
+                        new PrivateHeaderParameter('test3', true),
+                        new PublicHeaderParameter('test4', 'magento', 'value-another')
+                    ]
+                )
+            ],
+            new ClaimsPayload([
+                new Issuer('magento.com'),
+                new JwtId(),
+                new Subject('stuff')
+            ]),
+            [
+                new JwsHeader([new PrivateHeaderParameter('public', 'header1')]),
+                new JwsHeader([new PrivateHeaderParameter('public2', 'header')])
+            ]
+        );
+
         $rsaPrivateResource = openssl_pkey_new(['private_key_bites' => 512, 'private_key_type' => OPENSSL_KEYTYPE_RSA]);
         if ($rsaPrivateResource === false) {
             throw new \RuntimeException('Failed to create RSA keypair');
         }
         $rsaPublic = openssl_pkey_get_details($rsaPrivateResource)['key'];
-        if (!openssl_pkey_export($rsaPrivateResource, $rsaPrivate)) {
+        if (!openssl_pkey_export($rsaPrivateResource, $rsaPrivate, 'pass')) {
             throw new \RuntimeException('Failed to read RSA private key');
         }
         openssl_free_key($rsaPrivateResource);
+        $sharedSecret = random_bytes(128);
 
         return [
             'jws-HS256' => [
@@ -158,29 +194,85 @@ class JwtManagerTest extends TestCase
                 [$enc]
             ],
             'jws-HS512' => [
-                $flatJwsWithUnprotectedHeader,
+                $jwsWithUnprotectedHeader,
                 $enc = new JwsSignatureJwks($jwkFactory->createHs512(random_bytes(128))),
                 [$enc]
             ],
             'jws-RS256' => [
                 $flatJws,
-                new JwsSignatureJwks($jwkFactory->createSignRs256($rsaPrivate, null)),
+                new JwsSignatureJwks($jwkFactory->createSignRs256($rsaPrivate, 'pass')),
+                [new JwsSignatureJwks($jwkFactory->createVerifyRs256($rsaPublic))]
+            ],
+            'jws-RS384' => [
+                $flatJws,
+                new JwsSignatureJwks($jwkFactory->createSignRs384($rsaPrivate, 'pass')),
+                [new JwsSignatureJwks($jwkFactory->createVerifyRs384($rsaPublic))]
+            ],
+            'jws-RS512' => [
+                $jwsWithUnprotectedHeader,
+                new JwsSignatureJwks($jwkFactory->createSignRs512($rsaPrivate, 'pass')),
+                [new JwsSignatureJwks($jwkFactory->createVerifyRs512($rsaPublic))]
+            ],
+            'jws-compact-multiple-signatures' => [
+                $compactJws,
+                new JwsSignatureJwks(
+                    new JwkSet(
+                        [
+                            $jwkFactory->createHs384($sharedSecret),
+                            $jwkFactory->createSignRs256($rsaPrivate, 'pass')
+                        ]
+                    )
+                ),
+                [
+                    new JwsSignatureJwks(
+                        new JwkSet(
+                            [$jwkFactory->createHs384($sharedSecret), $jwkFactory->createVerifyRs256($rsaPublic)]
+                        )
+                    )
+                ]
+            ],
+            'jws-compact-multiple-signatures-one-read' => [
+                $compactJws,
+                new JwsSignatureJwks(
+                    new JwkSet(
+                        [
+                            $jwkFactory->createHs384($sharedSecret),
+                            $jwkFactory->createSignRs256($rsaPrivate, 'pass')
+                        ]
+                    )
+                ),
                 [new JwsSignatureJwks($jwkFactory->createVerifyRs256($rsaPublic))]
             ]
         ];
     }
 
-    private function verifyHeader(HeaderInterface $expected, HeaderInterface $actual): void
+    private function validateHeader(HeaderInterface $expected, HeaderInterface $actual): void
     {
-        $this->assertTrue(
-            count($expected->getParameters()) <= count($actual->getParameters())
-        );
-        foreach ($expected->getParameters() as $parameter) {
-            $this->assertNotNull($actual->getParameter($parameter->getName()));
-            $this->assertEquals(
-                $parameter->getValue(),
-                $actual->getParameter($parameter->getName())->getValue()
-            );
+        if (count($expected->getParameters()) > count($actual->getParameters())) {
+            throw new \InvalidArgumentException('Missing header parameters');
         }
+        foreach ($expected->getParameters() as $parameter) {
+            if ($actual->getParameter($parameter->getName()) === null) {
+                throw new \InvalidArgumentException('Missing header parameters');
+            }
+            if ($actual->getParameter($parameter->getName())->getValue() !== $parameter->getValue()) {
+                throw new \InvalidArgumentException('Invalid header data');
+            }
+        }
+    }
+
+    private function verifyAgainstHeaders(array $expected, HeaderInterface $actual): void
+    {
+        $oneIsValid = false;
+        foreach ($expected as $item) {
+            try {
+                $this->validateHeader($item, $actual);
+                $oneIsValid = true;
+                break;
+            } catch (\InvalidArgumentException $ex) {
+                $oneIsValid = false;
+            }
+        }
+        $this->assertTrue($oneIsValid);
     }
 }

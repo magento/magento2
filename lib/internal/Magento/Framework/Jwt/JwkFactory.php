@@ -69,6 +69,52 @@ class JwkFactory
         return $this->createVerifyRsa(256, $publicKey);
     }
 
+    /**
+     * Create JWK to sign JWS with RSASSA-PKCS1-v1_5 using SHA-384.
+     *
+     * @param string $privateKey
+     * @param string|null $passPhrase
+     * @return Jwk
+     */
+    public function createSignRs384(string $privateKey, ?string $passPhrase): Jwk
+    {
+        return $this->createSignRsa(384, $privateKey, $passPhrase);
+    }
+
+    /**
+     * Create JWK to verify JWS signed with RSASSA-PKCS1-v1_5 using SHA-384.
+     *
+     * @param string $publicKey
+     * @return Jwk
+     */
+    public function createVerifyRs384(string $publicKey): Jwk
+    {
+        return $this->createVerifyRsa(384, $publicKey);
+    }
+
+    /**
+     * Create JWK to sign JWS with RSASSA-PKCS1-v1_5 using SHA-512.
+     *
+     * @param string $privateKey
+     * @param string|null $passPhrase
+     * @return Jwk
+     */
+    public function createSignRs512(string $privateKey, ?string $passPhrase): Jwk
+    {
+        return $this->createSignRsa(512, $privateKey, $passPhrase);
+    }
+
+    /**
+     * Create JWK to verify JWS signed with RSASSA-PKCS1-v1_5 using SHA-512.
+     *
+     * @param string $publicKey
+     * @return Jwk
+     */
+    public function createVerifyRs512(string $publicKey): Jwk
+    {
+        return $this->createVerifyRsa(512, $publicKey);
+    }
+
     private function createHmac(int $bits, string $key): Jwk
     {
         if (strlen($key) < 128) {
