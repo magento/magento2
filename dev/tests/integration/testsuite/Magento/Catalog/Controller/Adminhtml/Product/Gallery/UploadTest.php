@@ -56,7 +56,7 @@ class UploadTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->httpMethod = HttpRequest::METHOD_POST;
@@ -108,7 +108,7 @@ class UploadTest extends AbstractBackendController
                     'name' => 'magento_image.jpg',
                     'type' => 'image/jpeg',
                     'file' => '/m/a/magento_image.jpg.tmp',
-                    'url' => 'http://localhost/pub/media/tmp/catalog/product/m/a/magento_image.jpg',
+                    'url' => 'http://localhost/media/tmp/catalog/product/m/a/magento_image.jpg',
                     'tmp_media_path' => '/m/a/magento_image.jpg',
                 ],
             ],
@@ -122,7 +122,7 @@ class UploadTest extends AbstractBackendController
                     'name' => 'product_image.png',
                     'type' => 'image/png',
                     'file' => '/p/r/product_image.png.tmp',
-                    'url' => 'http://localhost/pub/media/tmp/catalog/product/p/r/product_image.png',
+                    'url' => 'http://localhost/media/tmp/catalog/product/p/r/product_image.png',
                     'tmp_media_path' => '/p/r/product_image.png',
                 ],
             ],
@@ -136,7 +136,7 @@ class UploadTest extends AbstractBackendController
                     'name' => 'magento_image.gif',
                     'type' => 'image/gif',
                     'file' => '/m/a/magento_image.gif.tmp',
-                    'url' => 'http://localhost/pub/media/tmp/catalog/product/m/a/magento_image.gif',
+                    'url' => 'http://localhost/media/tmp/catalog/product/m/a/magento_image.gif',
                     'tmp_media_path' => '/m/a/magento_image.gif',
                 ],
             ],
@@ -167,7 +167,7 @@ class UploadTest extends AbstractBackendController
         $this->assertEquals($expectation['errorcode'], $jsonBody['errorcode']);
 
         if (!empty($expectation['tmp_media_path'])) {
-            $this->assertFileNotExists(
+            $this->assertFileDoesNotExist(
                 $this->getFileAbsolutePath($expectation['tmp_media_path'])
             );
         }
@@ -216,7 +216,7 @@ class UploadTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $_FILES = [];
         $this->mediaDirectory->delete('tmp');

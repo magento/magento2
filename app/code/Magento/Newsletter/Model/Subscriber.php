@@ -382,6 +382,7 @@ class Subscriber extends AbstractModel
      * @param string $email
      * @param int $websiteId
      * @return $this
+     * @since 100.4.0
      */
     public function loadBySubscriberEmail(string $email, int $websiteId): Subscriber
     {
@@ -400,6 +401,7 @@ class Subscriber extends AbstractModel
      * @param int $customerId
      * @param int $websiteId
      * @return $this
+     * @since 100.4.0
      */
     public function loadByCustomer(int $customerId, int $websiteId): Subscriber
     {
@@ -588,6 +590,7 @@ class Subscriber extends AbstractModel
      * Set date of last changed status
      *
      * @return $this
+     * @since 100.2.1
      */
     public function beforeSave()
     {
@@ -603,7 +606,7 @@ class Subscriber extends AbstractModel
      *
      * @param string $subscriberEmail
      * @return $this
-     * @deprecated The subscription should be loaded by website id
+     * @deprecated 100.4.0 The subscription should be loaded by website id
      * @see loadBySubscriberEmail
      */
     public function loadByEmail($subscriberEmail)
@@ -619,7 +622,7 @@ class Subscriber extends AbstractModel
      *
      * @param int $customerId
      * @return $this
-     * @deprecated The subscription should be loaded by website id
+     * @deprecated 100.4.0 The subscription should be loaded by website id
      * @see loadByCustomer
      */
     public function loadByCustomerId($customerId)
@@ -644,7 +647,7 @@ class Subscriber extends AbstractModel
      *
      * @param string $email
      * @return int
-     * @deprecated The subscription should be updated by store id
+     * @deprecated 100.4.0 The subscription should be updated by store id
      * @see \Magento\Newsletter\Model\SubscriptionManager::subscribe
      */
     public function subscribe($email)
@@ -661,7 +664,7 @@ class Subscriber extends AbstractModel
      *
      * @param int $customerId
      * @return $this
-     * @deprecated The subscription should be updated by store id
+     * @deprecated 100.4.0 The subscription should be updated by store id
      * @see \Magento\Newsletter\Model\SubscriptionManager::subscribeCustomer
      */
     public function subscribeCustomerById($customerId)
@@ -674,7 +677,7 @@ class Subscriber extends AbstractModel
      *
      * @param int $customerId
      * @return $this
-     * @deprecated The subscription should be updated by store id
+     * @deprecated 100.4.0 The subscription should be updated by store id
      * @see \Magento\Newsletter\Model\SubscriptionManager::unsubscribeCustomer
      */
     public function unsubscribeCustomerById($customerId)
@@ -687,7 +690,7 @@ class Subscriber extends AbstractModel
      *
      * @param int $customerId
      * @return $this
-     * @deprecated The subscription should be updated by store id
+     * @deprecated 100.4.0 The subscription should be updated by store id
      * @see \Magento\Newsletter\Model\SubscriptionManager::subscribeCustomer
      */
     public function updateSubscription($customerId)
@@ -703,7 +706,7 @@ class Subscriber extends AbstractModel
      * @param int $customerId
      * @param bool $subscribe indicates whether the customer should be subscribed or unsubscribed
      * @return $this
-     * @deprecated The subscription should be updated by store id
+     * @deprecated 100.4.0 The subscription should be updated by store id
      * @see \Magento\Newsletter\Model\SubscriptionManager::subscribeCustomer
      */
     protected function _updateCustomerSubscription($customerId, $subscribe)

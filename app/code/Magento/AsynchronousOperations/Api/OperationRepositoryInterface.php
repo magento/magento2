@@ -13,6 +13,7 @@ namespace Magento\AsynchronousOperations\Api;
  *
  * An bulk is a group of queue messages. An bulk operation item is a queue message.
  * @api
+ * @since 100.3.0
  */
 interface OperationRepositoryInterface
 {
@@ -21,6 +22,7 @@ interface OperationRepositoryInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\AsynchronousOperations\Api\Data\OperationSearchResultsInterface
+     * @since 100.3.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 }

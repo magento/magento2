@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
@@ -15,9 +17,12 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ReindexRuleProductTest extends \PHPUnit\Framework\TestCase
+class ReindexRuleProductTest extends TestCase
 {
+    private const ADMIN_WEBSITE_ID = 0;
+
     /**
      * @var ReindexRuleProduct
      */
@@ -43,18 +48,19 @@ class ReindexRuleProductTest extends \PHPUnit\Framework\TestCase
      */
     private $localeDateMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceMock = $this->createMock(ResourceConnection::class);
         $this->activeTableSwitcherMock = $this->createMock(ActiveTableSwitcher::class);
-        $this->tableSwapperMock = $this->createMock(IndexerTableSwapperInterface::class);
-        $this->localeDateMock = $this->createMock(TimezoneInterface::class);
+        $this->tableSwapperMock = $this->getMockForAbstractClass(IndexerTableSwapperInterface::class);
+        $this->localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
 
         $this->model = new ReindexRuleProduct(
             $this->resourceMock,
             $this->activeTableSwitcherMock,
             $this->tableSwapperMock,
-            $this->localeDateMock
+            $this->localeDateMock,
+            true
         );
     }
 
@@ -82,6 +88,7 @@ class ReindexRuleProductTest extends \PHPUnit\Framework\TestCase
     public function testExecute()
     {
         $websiteId = 3;
+        $adminTimeZone = 'America/Chicago';
         $websiteTz = 'America/Los_Angeles';
         $productIds = [
             4 => [$websiteId => 1],
@@ -94,7 +101,7 @@ class ReindexRuleProductTest extends \PHPUnit\Framework\TestCase
             ->with('catalogrule_product')
             ->willReturn('catalogrule_product_replica');
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceMock->expects($this->at(0))
             ->method('getConnection')
             ->willReturn($connectionMock);
@@ -120,10 +127,11 @@ class ReindexRuleProductTest extends \PHPUnit\Framework\TestCase
         $ruleMock->expects($this->once())->method('getDiscountAmount')->willReturn(43);
         $ruleMock->expects($this->once())->method('getStopRulesProcessing')->willReturn(true);
 
-        $this->localeDateMock->expects($this->once())
-            ->method('getConfigTimezone')
-            ->with(ScopeInterface::SCOPE_WEBSITE, $websiteId)
-            ->willReturn($websiteTz);
+        $this->localeDateMock->method('getConfigTimezone')
+            ->willReturnMap([
+                [ScopeInterface::SCOPE_WEBSITE, self::ADMIN_WEBSITE_ID, $adminTimeZone],
+                [ScopeInterface::SCOPE_WEBSITE, $websiteId, $websiteTz],
+            ]);
 
         $batchRows = [
             [

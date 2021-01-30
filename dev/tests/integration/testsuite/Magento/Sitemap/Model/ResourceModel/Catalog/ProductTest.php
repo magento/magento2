@@ -17,8 +17,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * Base product image path
      */
-    const BASE_IMAGE_PATH = '#http\:\/\/localhost\/pub\/media\/catalog\/product\/cache\/[a-z0-9]{32}:path:#';
-    
+    const BASE_IMAGE_PATH = '#http://localhost/media/catalog/product/cache/[a-z0-9]{32}:path:#';
+
     /**
      * Test getCollection None images
      * 1) Check that image attributes were not loaded
@@ -52,6 +52,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * 3) Check thumbnails when no thumbnail selected
      *
      * @magentoConfigFixture default_store sitemap/product/image_include all
+     * @magentoConfigFixture default/web/url/catalog_media_url_format hash
      */
     public function testGetCollectionAll()
     {
@@ -76,7 +77,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($products[1]->getImages(), 'Images were loaded');
         $this->assertNotEmpty($products[4]->getImages(), 'Images were not loaded');
         $this->assertEquals('Simple Images', $products[4]->getImages()->getTitle(), 'Incorrect title');
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             str_replace(':path:', preg_quote('/m/a/magento_image_sitemap.png'), self::BASE_IMAGE_PATH),
             $products[4]->getImages()->getThumbnail(),
             'Incorrect thumbnail'
@@ -84,12 +85,12 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(2, $products[4]->getImages()->getCollection(), 'Not all images were loaded');
 
         $imagesCollection = $products[4]->getImages()->getCollection();
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             str_replace(':path:', preg_quote('/m/a/magento_image_sitemap.png'), self::BASE_IMAGE_PATH),
             $imagesCollection[0]->getUrl(),
             'Incorrect image url'
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             str_replace(':path:', preg_quote('/s/e/second_image.png'), self::BASE_IMAGE_PATH),
             $imagesCollection[1]->getUrl(),
             'Incorrect image url'
@@ -101,12 +102,12 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('no_selection', $products[5]->getThumbnail(), 'thumbnail is incorrect');
         $imagesCollection = $products[5]->getImages()->getCollection();
         $this->assertCount(1, $imagesCollection);
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             str_replace(':path:', preg_quote('/s/e/second_image_1.png'), self::BASE_IMAGE_PATH),
             $imagesCollection[0]->getUrl(),
             'Image url is incorrect'
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             str_replace(':path:', preg_quote('/s/e/second_image_1.png'), self::BASE_IMAGE_PATH),
             $products[5]->getImages()->getThumbnail(),
             'Product thumbnail is incorrect'
@@ -120,6 +121,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * 3) Check thumbnails when no thumbnail selected
      *
      * @magentoConfigFixture default_store sitemap/product/image_include base
+     * @magentoConfigFixture default/web/url/catalog_media_url_format hash
      */
     public function testGetCollectionBase()
     {
@@ -144,7 +146,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($products[1]->getImages(), 'Images were loaded');
         $this->assertNotEmpty($products[4]->getImages(), 'Images were not loaded');
         $this->assertEquals('Simple Images', $products[4]->getImages()->getTitle(), 'Incorrect title');
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             str_replace(':path:', preg_quote('/s/e/second_image.png'), self::BASE_IMAGE_PATH),
             $products[4]->getImages()->getThumbnail(),
             'Incorrect thumbnail'
@@ -152,7 +154,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $products[4]->getImages()->getCollection(), 'Number of loaded images is incorrect');
 
         $imagesCollection = $products[4]->getImages()->getCollection();
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             str_replace(':path:', preg_quote('/s/e/second_image.png'), self::BASE_IMAGE_PATH),
             $imagesCollection[0]->getUrl(),
             'Incorrect image url'

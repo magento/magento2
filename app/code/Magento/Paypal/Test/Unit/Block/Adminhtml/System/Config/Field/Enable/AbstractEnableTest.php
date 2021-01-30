@@ -3,59 +3,96 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Field\Enable;
 
+use Magento\Framework\Data\Form\Element\CollectionFactory;
+use Magento\Framework\Escaper;
+use Magento\Framework\Math\Random;
+use Magento\Framework\Data\Form;
+use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Field\Enable\AbstractEnable\Stub;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class AbstractEnableTest
  *
  * Test for class \Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\AbstractEnable
  */
-class AbstractEnableTest extends \PHPUnit\Framework\TestCase
+class AbstractEnableTest extends TestCase
 {
     const EXPECTED_ATTRIBUTE = 'data-enable="stub"';
 
     /**
-     * @var \Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Field\Enable\AbstractEnable\Stub
+     * @var Stub
      */
     protected $abstractEnable;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\AbstractElement|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractElement|MockObject
      */
     protected $elementMock;
+
+    /**
+     * Create mock objects.
+     *
+     * @param string[] $classes
+     * @return MockObject[]
+     */
+    private function createMocks(array $classes): array
+    {
+        $mocks = [];
+        foreach ($classes as $class) {
+            $mocks[] = $this->getMockBuilder($class)->disableOriginalConstructor()->getMock();
+        }
+
+        return $mocks;
+    }
 
     /**
      * Set up
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->elementMock = $this->getMockBuilder(\Magento\Framework\Data\Form\Element\AbstractElement::class)
+        $randomMock = $this->getMockBuilder(Random::class)->disableOriginalConstructor()->getMock();
+        $randomMock->method('getRandomString')->willReturn('12345abcdef');
+        $mockArguments = $this->createMocks([
+            \Magento\Framework\Data\Form\Element\Factory::class,
+            CollectionFactory::class,
+            Escaper::class
+        ]);
+        $mockArguments[] = [];
+        $mockArguments[] = $this->createMock(SecureHtmlRenderer::class);
+        $mockArguments[] = $randomMock;
+        $this->elementMock = $this->getMockBuilder(AbstractElement::class)
             ->setMethods(
                 [
                     'getHtmlId',
                     'getTooltip',
-                    'getForm',
+                    'getForm'
                 ]
-            )->disableOriginalConstructor()
+            )->setConstructorArgs($mockArguments)
             ->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);
-        $escaper = $objectManager->getObject(\Magento\Framework\Escaper::class);
+        $escaper = $objectManager->getObject(Escaper::class);
         $reflection = new \ReflectionClass($this->elementMock);
         $reflection_property = $reflection->getProperty('_escaper');
         $reflection_property->setAccessible(true);
         $reflection_property->setValue($this->elementMock, $escaper);
 
         $this->abstractEnable = $objectManager->getObject(
-            \Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Field\Enable\AbstractEnable\Stub::class,
+            Stub::class,
             [
-                '_escaper' => $objectManager->getObject(\Magento\Framework\Escaper::class)
+                '_escaper' => $objectManager->getObject(Escaper::class)
             ]
         );
     }
@@ -67,7 +104,7 @@ class AbstractEnableTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUiId()
     {
-        $this->assertContains(self::EXPECTED_ATTRIBUTE, $this->abstractEnable->getUiId());
+        $this->assertStringContainsString(self::EXPECTED_ATTRIBUTE, $this->abstractEnable->getUiId());
     }
 
     /**
@@ -77,7 +114,7 @@ class AbstractEnableTest extends \PHPUnit\Framework\TestCase
      */
     public function testRender()
     {
-        $formMock = $this->getMockBuilder(\Magento\Framework\Data\Form::class)
+        $formMock = $this->getMockBuilder(Form::class)
             ->setMethods(['getFieldNameSuffix'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -96,6 +133,6 @@ class AbstractEnableTest extends \PHPUnit\Framework\TestCase
             ->method('getFieldNameSuffix')
             ->willReturn('');
 
-        $this->assertContains(self::EXPECTED_ATTRIBUTE, $this->abstractEnable->render($this->elementMock));
+        $this->assertStringContainsString(self::EXPECTED_ATTRIBUTE, $this->abstractEnable->render($this->elementMock));
     }
 }

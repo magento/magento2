@@ -63,7 +63,7 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
      */
     private $productRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connectionManager = Bootstrap::getObjectManager()->create(ConnectionManager::class);
         $this->client = $this->connectionManager->getConnection();
@@ -76,7 +76,7 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
     /**
      * Make sure that correct engine is set
      */
-    protected function assertPreConditions()
+    protected function assertPreConditions(): void
     {
         $currentEngine = Bootstrap::getObjectManager()->get(EngineResolverInterface::class)->getCurrentSearchEngine();
         $this->assertEquals($this->getInstalledSearchEngine(), $currentEngine);
@@ -128,6 +128,45 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
         $firstInSearchResults = (int) $result[0]['_id'];
         $productSimpleId = (int) $productSimple->getId();
         $this->assertEquals($productSimpleId, $firstInSearchResults);
+    }
+
+    /**
+     * Test sorting of products with lower and upper case names after full reindex
+     *
+     * @magentoDbIsolation enabled
+     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
+     * @magentoDataFixture Magento/Elasticsearch/_files/case_sensitive.php
+     */
+    public function testSortCaseSensitive(): void
+    {
+        $productFirst = $this->productRepository->get('fulltext-1');
+        $productSecond = $this->productRepository->get('fulltext-2');
+        $productThird = $this->productRepository->get('fulltext-3');
+        $productFourth = $this->productRepository->get('fulltext-4');
+        $productFifth = $this->productRepository->get('fulltext-5');
+        $correctSortedIds = [
+            $productFirst->getId(),
+            $productFourth->getId(),
+            $productSecond->getId(),
+            $productFifth->getId(),
+            $productThird->getId(),
+        ];
+        $this->reindexAll();
+        $result = $this->sortByName();
+        $firstInSearchResults = (int) $result[0]['_id'];
+        $secondInSearchResults = (int) $result[1]['_id'];
+        $thirdInSearchResults = (int) $result[2]['_id'];
+        $fourthInSearchResults = (int) $result[3]['_id'];
+        $fifthInSearchResults = (int) $result[4]['_id'];
+        $actualSortedIds = [
+            $firstInSearchResults,
+            $secondInSearchResults,
+            $thirdInSearchResults,
+            $fourthInSearchResults,
+            $fifthInSearchResults
+        ];
+        $this->assertCount(5, $result);
+        $this->assertEquals($correctSortedIds, $actualSortedIds);
     }
 
     /**

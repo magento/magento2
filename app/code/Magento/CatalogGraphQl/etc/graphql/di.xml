@@ -91,8 +91,6 @@
             </argument>
         </arguments>
     </virtualType>
-    <preference for="Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match"
-                type="Magento\CatalogGraphQl\Model\Search\Adapter\Mysql\Query\Builder\Match" />
     <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
         <arguments>
             <argument name="extendedConfigData" xsi:type="array">
@@ -180,6 +178,14 @@
     <type name="Magento\Catalog\Helper\Data">
         <arguments>
             <argument name="templateFilterModel" xsi:type="string">Magento\Widget\Model\Template\FilterEmulate</argument>
+        </arguments>
+    </type>
+    <type name="Magento\WishlistGraphQl\Model\Resolver\Type\WishlistItemType">
+        <arguments>
+            <argument name="supportedTypes" xsi:type="array">
+                <item name="simple" xsi:type="string">SimpleWishlistItem</item>
+                <item name="virtual" xsi:type="string">VirtualWishlistItem</item>
+            </argument>
         </arguments>
     </type>
 </config>

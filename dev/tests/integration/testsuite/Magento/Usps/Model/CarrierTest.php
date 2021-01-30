@@ -13,6 +13,9 @@ use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\HTTP\AsyncClientInterfaceMock;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\HTTP\AsyncClient\HttpResponseDeferredInterface;
+use Magento\Framework\HTTP\AsyncClient\HttpException;
+use Magento\Quote\Model\Quote\Address\RateResult\Error;
 
 /**
  * Test for USPS integration.
@@ -32,7 +35,7 @@ class CarrierTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->carrier = Bootstrap::getObjectManager()->get(Carrier::class);
         $this->httpClient = Bootstrap::getObjectManager()->get(AsyncClientInterface::class);
@@ -175,5 +178,73 @@ class CarrierTest extends TestCase
 
         $rates = $this->carrier->collectRates($request);
         $this->assertCount(5, $rates->getAllRates());
+    }
+
+    /**
+     * Test get carriers rates if has HttpException.
+     *
+     * @magentoConfigFixture default_store carriers/usps/allowed_methods 0_FCLE,0_FCL,0_FCP,1,2,3,4,6,7,13,16,17,22,23,25,27,28,33,34,35,36,37,42,43,53,55,56,57,61,INT_1,INT_2,INT_4,INT_6,INT_7,INT_8,INT_9,INT_10,INT_11,INT_12,INT_13,INT_14,INT_15,INT_16,INT_20,INT_26
+     * @magentoConfigFixture default_store carriers/usps/showmethod 1
+     * @magentoConfigFixture default_store carriers/usps/debug 1
+     * @magentoConfigFixture default_store carriers/usps/userid test
+     * @magentoConfigFixture default_store carriers/usps/mode 0
+     * @magentoConfigFixture default_store carriers/usps/active 1
+     * @magentoConfigFixture default_store shipping/origin/country_id US
+     * @magentoConfigFixture default_store shipping/origin/postcode 90034
+     * @magentoConfigFixture default_store carriers/usps/machinable true
+     */
+    public function testGetRatesWithHttpException(): void
+    {
+        $deferredResponse = $this->getMockBuilder(HttpResponseDeferredInterface::class)
+            ->onlyMethods(['get'])
+            ->getMockForAbstractClass();
+        $exception = new HttpException('Exception message');
+        $deferredResponse->method('get')->willThrowException($exception);
+        $this->httpClient->setDeferredResponseMock($deferredResponse);
+        /** @var RateRequest $request */
+        $request = Bootstrap::getObjectManager()->create(
+            RateRequest::class,
+            [
+                'data' => [
+                    'dest_country_id' => 'US',
+                    'dest_region_code' => 'NY',
+                    'dest_street' => 'main st1',
+                    'dest_city' => 'New York',
+                    'dest_postcode' => '10029',
+                    'package_value' => '5',
+                    'package_value_with_discount' => '5',
+                    'package_weight' => '4.2657',
+                    'package_qty' => '1',
+                    'package_physical_value' => '5',
+                    'free_method_weight' => '5',
+                    'store_id' => '1',
+                    'website_id' => '1',
+                    'free_shipping' => '0',
+                    'limit_carrier' => 'null',
+                    'base_subtotal_incl_tax' => '5',
+                    'orig_country_id' => 'US',
+                    'country_id' => 'US',
+                    'region_id' => '12',
+                    'city' => 'Culver City',
+                    'postcode' => '90034',
+                    'usps_userid' => '213MAGEN6752',
+                    'usps_container' => 'VARIABLE',
+                    'usps_size' => 'REGULAR',
+                    'girth' => null,
+                    'height' => null,
+                    'length' => null,
+                    'width' => null,
+                ]
+            ]
+        );
+
+        $rates = $this->carrier->collectRates($request);
+        $resultRate = $rates->getAllRates()[0];
+        $error = Bootstrap::getObjectManager()->get(Error::class);
+        $error->setCarrier('usps');
+        $error->setCarrierTitle($this->carrier->getConfigData('title'));
+        $error->setErrorMessage($this->carrier->getConfigData('specificerrmsg'));
+
+        $this->assertEquals($error, $resultRate);
     }
 }

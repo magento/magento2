@@ -8,7 +8,12 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Quote\Guest;
 
 use Exception;
+use Magento\Config\App\Config\Type\System;
+use Magento\Config\Model\ResourceModel\Config;
+use Magento\Directory\Model\Currency;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -22,7 +27,7 @@ class GetCartTest extends GraphQlAbstract
      */
     private $getMaskedQuoteIdByReservedOrderId;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -74,11 +79,12 @@ class GetCartTest extends GraphQlAbstract
     }
 
     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_id" is missing
      */
     public function testGetCartIfCartIdIsEmpty()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Required parameter "cart_id" is missing');
+
         $maskedQuoteId = '';
         $query = $this->getQuery($maskedQuoteId);
 
@@ -86,11 +92,14 @@ class GetCartTest extends GraphQlAbstract
     }
 
     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Field "cart" argument "cart_id" of type "String!" is required but not provided.
      */
     public function testGetCartIfCartIdIsMissed()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(
+            'Field "cart" argument "cart_id" of type "String!" is required but not provided.'
+        );
+
         $query = <<<QUERY
 {
   cart {
@@ -103,11 +112,12 @@ QUERY;
     }
 
     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testGetNonExistentCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a cart with ID "non_existent_masked_id"');
+
         $maskedQuoteId = 'non_existent_masked_id';
         $query = $this->getQuery($maskedQuoteId);
 
@@ -118,11 +128,12 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/make_cart_inactive.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage The cart isn't active.
      */
     public function testGetInactiveCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The cart isn\'t active.');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId);
 
@@ -147,12 +158,80 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      * @magentoApiDataFixture Magento/Store/_files/second_store.php
-     *
-     * @expectedException Exception
-     * @expectedExceptionMessage Wrong store code specified for cart
      */
     public function testGetCartWithWrongStore()
     {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $query = $this->getQuery($maskedQuoteId);
+
+        $headerMap = ['Store' => 'fixture_second_store'];
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
+
+        self::assertArrayHasKey('cart', $response);
+        self::assertArrayHasKey('items', $response['cart']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @magentoApiDataFixture Magento/Store/_files/second_store_with_second_currency.php
+     */
+    public function testGetCartWithDifferentStoreDifferentCurrency()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute(
+            'test_order_with_simple_product_without_address'
+        );
+        $query = $this->getQuery($maskedQuoteId);
+
+        $headerMap = ['Store' => 'fixture_second_store'];
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
+
+        self::assertArrayHasKey('cart', $response);
+        self::assertArrayHasKey('items', $response['cart']);
+        self::assertArrayHasKey('prices', $response['cart']['items'][0]);
+        $price = $response['cart']['items'][0]['prices']['price'];
+        self::assertEquals(20, $price['value']);
+        self::assertEquals('EUR', $price['currency']);
+
+        // test alternate currency in header
+        $objectManager = Bootstrap::getObjectManager();
+        $store = $objectManager->create(Store::class);
+        $store->load('fixture_second_store', 'code');
+        if ($storeId = $store->load('fixture_second_store', 'code')->getId()) {
+            /** @var \Magento\Config\Model\ResourceModel\Config $configResource */
+            $configResource = $objectManager->get(Config::class);
+            $configResource->saveConfig(
+                Currency::XML_PATH_CURRENCY_ALLOW,
+                'USD',
+                ScopeInterface::SCOPE_STORES,
+                $storeId
+            );
+            /**
+             * Configuration cache clean is required to reload currency setting
+             */
+            /** @var System $config */
+            $config = $objectManager->get(System::class);
+            $config->clean();
+        }
+        $headerMap['Content-Currency'] = 'USD';
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
+
+        self::assertArrayHasKey('cart', $response);
+        self::assertArrayHasKey('items', $response['cart']);
+        self::assertArrayHasKey('prices', $response['cart']['items'][0]);
+        $price = $response['cart']['items'][0]['prices']['price'];
+        self::assertEquals(10, $price['value']);
+        self::assertEquals('USD', $price['currency']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @magentoApiDataFixture Magento/Store/_files/second_website_with_store_group_and_store.php
+     */
+    public function testGetCartWithDifferentStoreDifferentWebsite()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Can\'t assign cart to store in different website.');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
         $query = $this->getQuery($maskedQuoteId);
 
@@ -164,11 +243,12 @@ QUERY;
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote_guest_not_default_store.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage Requested store is not found
      */
     public function testGetCartWithNotExistingStore()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Requested store is not found');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1_not_default_store_guest');
 
         $headerMap['Store'] = 'not_existing_store';
@@ -192,6 +272,12 @@ QUERY;
       quantity
       product {
         sku
+      }
+      prices {
+        price {
+          value
+          currency
+        }
       }
     }
   }

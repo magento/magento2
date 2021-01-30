@@ -24,9 +24,10 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
 
-            <!-- Perform reindex and flush cache -->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
 
             <!-- log in and create the price rule -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -42,7 +43,7 @@
                 <argument name="name" value="{{_defaultCatalogRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
         </after>
@@ -61,8 +62,7 @@
         <see stepKey="seeNewPrice2" selector="{{StorefrontProductInfoMainSection.updatedPrice}}" userInput="$110.70"/>
 
         <!-- Add the product to cart and check that the price is correct there -->
-        <click stepKey="addToCart" selector="{{StorefrontProductActionSection.addToCart}}"/>
-        <waitForPageLoad stepKey="waitForAddedToCart"/>
+        <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckout"/>
         <see stepKey="seeNewPriceInCart" selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$110.70"/>
     </test>

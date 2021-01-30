@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">login_as_customer_log_listing.login_as_customer_log_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>login_as_customer_log_listing_columns</spinner>
+        <deps>
+            <dep>login_as_customer_log_listing.login_as_customer_log_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="login_as_customer_log_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">log_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Magento_LoginAsCustomerLog::login_log</aclResource>
+        <dataProvider class="Magento\LoginAsCustomerLog\Ui\DataProvider\LogDataProvider" name="login_as_customer_log_listing_data_source">
+            <settings>
+                <requestFieldName>log_id</requestFieldName>
+                <primaryFieldName>Id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filters name="listing_filters">
+            <settings>
+                <templates>
+                    <filters>
+                        <select>
+                            <param name="template" xsi:type="string">ui/grid/filters/elements/ui-select</param>
+                            <param name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</param>
+                        </select>
+                    </filters>
+                </templates>
+            </settings>
+        </filters>
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="login_as_customer_log_listing_columns">
+        <column name="log_id" sortOrder="10">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">ID</label>
+            </settings>
+        </column>
+        <column name="customer_id" sortOrder="20">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Customer ID</label>
+            </settings>
+        </column>
+        <column name="customer_email" sortOrder="30">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Customer Email</label>
+            </settings>
+        </column>
+        <column name="user_id" sortOrder="40">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Admin ID</label>
+            </settings>
+        </column>
+        <column name="user_name" sortOrder="50">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Admin Name</label>
+            </settings>
+        </column>
+        <column name="time" sortOrder="60">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Logged In</label>
+            </settings>
+        </column>
+    </columns>
+</listing>

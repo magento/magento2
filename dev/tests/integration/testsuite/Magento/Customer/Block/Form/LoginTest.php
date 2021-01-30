@@ -42,7 +42,7 @@ class LoginTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->layout = $this->objectManager->get(LayoutInterface::class);
@@ -88,5 +88,25 @@ class LoginTest extends TestCase
             Xpath::getElementsCountForXpath(self::FORGOT_PASSWORD_LINK_PATH, $result),
             'Forgot password link does not exist on the page'
         );
+    }
+
+    /**
+     * @magentoConfigFixture current_store customer/password/autocomplete_on_storefront 1
+     *
+     * @return void
+     */
+    public function testAutocompletePasswordEnabled(): void
+    {
+        $this->assertFalse($this->block->isAutocompleteDisabled());
+    }
+
+    /**
+     * @magentoConfigFixture current_store customer/password/autocomplete_on_storefront 0
+     *
+     * @return void
+     */
+    public function testAutocompletePasswordDisabled(): void
+    {
+        $this->assertTrue($this->block->isAutocompleteDisabled());
     }
 }

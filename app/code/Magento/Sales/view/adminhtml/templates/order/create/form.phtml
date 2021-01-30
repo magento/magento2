@@ -5,19 +5,50 @@
  */
 
 /** @var \Magento\Sales\Block\Adminhtml\Order\Create\Form $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<form id="edit_form" data-order-config='<?= $block->escapeHtml($block->getOrderDataJson()) ?>' data-load-base-url="<?= $block->escapeUrl($block->getLoadBlockUrl()) ?>" action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" enctype="multipart/form-data">
+<form id="edit_form" data-order-config='<?= $block->escapeHtml($block->getOrderDataJson()) ?>'
+      data-load-base-url="<?= $block->escapeUrl($block->getLoadBlockUrl()) ?>"
+      action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" enctype="multipart/form-data">
     <?= $block->getBlockHtml('formkey') ?>
     <div id="order-message">
         <?= $block->getChildHtml('message') ?>
     </div>
-    <div id="order-customer-selector" class="fieldset-wrapper order-customer-selector" style="display:<?= /* @noEscape */ $block->getCustomerSelectorDisplay() ?>">
+    <div id="order-customer-selector" class="fieldset-wrapper order-customer-selector no-display">
         <?= $block->getChildHtml('customer.grid.container') ?>
     </div>
-    <div id="order-store-selector" class="fieldset-wrapper" style="display:<?= /* @noEscape */ $block->getStoreSelectorDisplay() ?>">
+    <div id="order-store-selector" class="fieldset-wrapper no-display">
         <?= $block->getChildHtml('store') ?>
     </div>
-    <div id="order-data" style="display:<?= /* @noEscape */ $block->getDataSelectorDisplay() ?>">
+    <div id="order-data" class="no-display">
         <?= $block->getChildHtml('data') ?>
     </div>
 </form>
+<?php $scriptString = <<<Script
+require(['jquery'], function($){
+    'use strict';
+
+Script;
+if ($block->getCustomerSelectorDisplay()) {
+    $scriptString .= <<<Script
+    $('div#order-customer-selector').css('display', '{$block->getCustomerSelectorDisplay()}');
+    $('div#order-customer-selector').removeClass('no-display');
+Script;
+}
+if ($block->getStoreSelectorDisplay()) {
+    $scriptString .= <<<Script
+    $('div#order-store-selector').css('display', '{$block->getStoreSelectorDisplay()}');
+    $('div#order-store-selector').removeClass('no-display');
+Script;
+}
+if ($block->getDataSelectorDisplay()) {
+    $scriptString .= <<<Script
+    $('div#order-data').css('display', '{$block->getDataSelectorDisplay()}');
+    $('div#order-data').removeClass('no-display');
+Script;
+}
+$scriptString .= <<<Script
+});
+Script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

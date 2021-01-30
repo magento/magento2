@@ -7,37 +7,42 @@ declare(strict_types=1);
 
 namespace Magento\Rss\Controller\Feed;
 
-class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendController
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\Session;
+use Magento\TestFramework\TestCase\AbstractBackendController;
+use Magento\Wishlist\Model\Wishlist;
+
+/**
+ * Test for \Magento\Rss\Controller\Feed\Index.
+ */
+class IndexTest extends AbstractBackendController
 {
-    /**
-     * @var \Magento\Rss\Model\UrlBuilder
-     */
-    private $urlBuilder;
+    private const RSS_NEW_PRODUCTS_PATH = 'rss/feed/index/type/new_products/';
 
     /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     * @var CustomerRepositoryInterface
      */
     private $customerRepository;
 
     /**
-     * @var \Magento\Wishlist\Model\Wishlist
+     * @var Wishlist
      */
     private $wishlist;
 
     /**
-     * @var
+     * @var Session
      */
     private $customerSession;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
         parent::setUp();
-        $this->urlBuilder = $this->_objectManager->get(\Magento\Rss\Model\UrlBuilder::class);
-        $this->customerRepository = $this->_objectManager->get(
-            \Magento\Customer\Api\CustomerRepositoryInterface::class
-        );
-        $this->wishlist = $this->_objectManager->get(\Magento\Wishlist\Model\Wishlist::class);
-        $this->customerSession = $this->_objectManager->get(\Magento\Customer\Model\Session::class);
+        $this->customerRepository = $this->_objectManager->get(CustomerRepositoryInterface::class);
+        $this->wishlist = $this->_objectManager->get(Wishlist::class);
+        $this->customerSession = $this->_objectManager->get(Session::class);
     }
 
     /**
@@ -57,7 +62,22 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $wishlistId = $this->wishlist->loadByCustomerId($firstCustomerId)->getId();
         $this->dispatch($this->getLink($firstCustomerId, $customerEmail, $wishlistId));
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<title>John Smith\'s Wishlist</title>', $body);
+        $this->assertStringContainsString('<title>John Smith\'s Wishlist</title>', $body);
+    }
+
+    /**
+     * Check Rss response from `New Products`.
+     *
+     * @magentoConfigFixture current_store rss/catalog/new 1
+     * @magentoConfigFixture current_store rss/config/active 1
+     *
+     * @return void
+     */
+    public function testRssResponseNewProducts(): void
+    {
+        $this->dispatch(self::RSS_NEW_PRODUCTS_PATH);
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<title>New Products from Main Website Store</title>', $body);
     }
 
     /**
@@ -78,12 +98,11 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $wishlistId = $this->wishlist->loadByCustomerId($secondCustomerId, true)->getId();
         $this->dispatch($this->getLink($firstCustomerId, $customerEmail, $wishlistId));
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<title>404 Not Found</title>', $body);
+        $this->assertStringContainsString('<title>404 Not Found</title>', $body);
     }
 
     private function getLink($customerId, $customerEmail, $wishlistId)
     {
-
         return 'rss/feed/index/type/wishlist/data/'
             . base64_encode($customerId . ',' . $customerEmail)
             . '/wishlist_id/' . $wishlistId;

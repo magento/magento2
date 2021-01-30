@@ -108,8 +108,9 @@ class Adminhtml extends \PHPUnit\Framework\TestCase
     protected $_formKey;
 
     /**
+     * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         // These mocks are accessed via context
         $this->_designMock          = $this->_makeMock(\Magento\Framework\View\DesignInterface::class);
@@ -146,10 +147,11 @@ class Adminhtml extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'translate'
-        )->will(
-            $this->returnCallback([$this, 'translateCallback'])
+        )->willReturnCallback(
+            [$this, 'translateCallback']
         );
 
+        /** @phpstan-ignore-next-line */
         $this->_context = new \Magento\Backend\Block\Template\Context(
             $this->_requestMock,
             $this->_layoutMock,
@@ -194,15 +196,14 @@ class Adminhtml extends \PHPUnit\Framework\TestCase
     /**
      * Sets up a stubbed method with specified behavior and expectations
      *
-     * @param \PHPUnit_Framework_MockObject_MockObject                       $object
-     * @param string                                                        $stubName
-     * @param mixed                                                         $return
-     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount|null        $expects
-     *
+     * @param \PHPUnit_Framework_MockObject_MockObject $object
+     * @param string $stubName
+     * @param mixed $return
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount|null $expects
      * @return \PHPUnit\Framework\MockObject\Builder\InvocationMocker
      */
     protected function _setStub(
-        \PHPUnit_Framework_MockObject_MockObject $object,
+        \PHPUnit\Framework\MockObject\MockObject $object,
         $stubName,
         $return = null,
         $expects = null

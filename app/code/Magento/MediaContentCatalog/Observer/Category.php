@@ -12,6 +12,8 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
+use Magento\MediaContentApi\Model\GetEntityContentsInterface;
+use Magento\MediaContentApi\Model\Config;
 
 /**
  * Observe the catalog_category_save_after event and run processing relation between category content and media asset.
@@ -29,6 +31,11 @@ class Category implements ObserverInterface
     private $updateContentAssetLinks;
 
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
      * @var array
      */
     private $fields;
@@ -39,17 +46,30 @@ class Category implements ObserverInterface
     private $contentIdentityFactory;
 
     /**
+     * @var GetEntityContentsInterface
+     */
+    private $getContent;
+
+    /**
+     * Create links for category content
+     *
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
+     * @param GetEntityContentsInterface $getContent
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
+     * @param Config $config
      * @param array $fields
      */
     public function __construct(
         ContentIdentityInterfaceFactory $contentIdentityFactory,
+        GetEntityContentsInterface $getContent,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
+        Config $config,
         array $fields
     ) {
         $this->contentIdentityFactory = $contentIdentityFactory;
+        $this->getContent = $getContent;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
+        $this->config = $config;
         $this->fields = $fields;
     }
 
@@ -57,9 +77,14 @@ class Category implements ObserverInterface
      * Retrieve the saved category and pass it to the model processor to save content - asset relations
      *
      * @param Observer $observer
+     * @throws \Exception
      */
     public function execute(Observer $observer): void
     {
+        if (!$this->config->isEnabled()) {
+            return;
+        }
+
         $model = $observer->getEvent()->getData('category');
 
         if ($model instanceof CatalogCategory) {
@@ -67,16 +92,15 @@ class Category implements ObserverInterface
                 if (!$model->dataHasChangedFor($field)) {
                     continue;
                 }
-                $this->updateContentAssetLinks->execute(
-                    $this->contentIdentityFactory->create(
-                        [
-                            self::TYPE => self::CONTENT_TYPE,
-                            self::FIELD => $field,
-                            self::ENTITY_ID => (string) $model->getId(),
-                        ]
-                    ),
-                    (string) $model->getData($field)
+                $contentIdentity = $this->contentIdentityFactory->create(
+                    [
+                        self::TYPE => self::CONTENT_TYPE,
+                        self::FIELD => $field,
+                        self::ENTITY_ID => (string) $model->getEntityId(),
+                    ]
                 );
+                $concatenatedContent = implode(PHP_EOL, $this->getContent->execute($contentIdentity));
+                $this->updateContentAssetLinks->execute($contentIdentity, $concatenatedContent);
             }
         }
     }

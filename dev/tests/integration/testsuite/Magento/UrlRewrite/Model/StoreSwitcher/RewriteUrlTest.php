@@ -54,7 +54,7 @@ class RewriteUrlTest extends TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->storeSwitcher = $this->objectManager->get(StoreSwitcher::class);
@@ -65,8 +65,8 @@ class RewriteUrlTest extends TestCase
     /**
      * Test switching stores with non-existent cms pages and then redirecting to the homepage
      *
-     * @magentoDataFixture Magento/UrlRewrite/_files/url_rewrite.php
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
+     * @magentoDataFixture Magento/UrlRewrite/_files/url_rewrite.php
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @return void

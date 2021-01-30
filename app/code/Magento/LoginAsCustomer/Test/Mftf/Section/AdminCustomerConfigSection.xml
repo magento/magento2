@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCustomerConfigSection">
+        <element name="loginAsCustomerSettingsSectionLink" type="text" selector="//a/span[contains(text(),'Login as Customer')]" timeout="30"/>
+        <element name="loginAsCustomerSettingsHead" type="text" selector="#login_as_customer_general-head" timeout="30"/>
+        <element name="enableExtensionLabel" type="text" selector="//span[contains(text(),'Enable Extension') and contains(@data-config-scope,'[GLOBAL]')]" timeout="30"/>
+        <element name="disablePageCacheLabel" type="text" selector="//span[contains(text(),'Disable Page Cache For Admin User') and contains(@data-config-scope,'[GLOBAL]')]" timeout="30"/>
+        <element name="storeViewToLoginToLabel" type="text" selector="//span[contains(text(),'Store View To Login To') and contains(@data-config-scope,'[GLOBAL]')]" timeout="30"/>
+    </section>
+</sections>

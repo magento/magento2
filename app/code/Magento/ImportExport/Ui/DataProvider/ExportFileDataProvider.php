@@ -13,6 +13,7 @@ use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Io\File;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 
 /**
  * Data provider for export grid.
@@ -28,6 +29,11 @@ class ExportFileDataProvider extends DataProvider
      * @var DriverInterface
      */
     private $file;
+
+    /**
+     * @var WriteInterface
+     */
+    private $directory;
 
     /**
      * @var Filesystem
@@ -48,6 +54,7 @@ class ExportFileDataProvider extends DataProvider
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
         string $name,
@@ -78,6 +85,7 @@ class ExportFileDataProvider extends DataProvider
         );
 
         $this->fileIO = $fileIO ?: ObjectManager::getInstance()->get(File::class);
+        $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
     }
 
     /**
@@ -88,13 +96,12 @@ class ExportFileDataProvider extends DataProvider
      */
     public function getData()
     {
-        $directory = $this->fileSystem->getDirectoryRead(DirectoryList::VAR_DIR);
         $emptyResponse = ['items' => [], 'totalRecords' => 0];
-        if (!$this->file->isExists($directory->getAbsolutePath() . 'export/')) {
+        if (!$this->directory->isExist($this->directory->getAbsolutePath() . 'export/')) {
             return $emptyResponse;
         }
 
-        $files = $this->getExportFiles($directory->getAbsolutePath() . 'export/');
+        $files = $this->getExportFiles($this->directory->getAbsolutePath() . 'export/');
         if (empty($files)) {
             return $emptyResponse;
         }
@@ -103,8 +110,9 @@ class ExportFileDataProvider extends DataProvider
             $result['items'][]['file_name'] = $this->getPathToExportFile($this->fileIO->getPathInfo($file));
         }
 
-        $pageSize = (int) $this->request->getParam('paging')['pageSize'];
-        $pageCurrent = (int) $this->request->getParam('paging')['current'];
+        $paging = $this->request->getParam('paging');
+        $pageSize = (int) ($paging['pageSize'] ?? 0);
+        $pageCurrent = (int) ($paging['current'] ?? 0);
         $pageOffset = ($pageCurrent - 1) * $pageSize;
         $result['totalRecords'] = count($result['items']);
         $result['items'] = array_slice($result['items'], $pageOffset, $pageSize);
@@ -120,12 +128,12 @@ class ExportFileDataProvider extends DataProvider
      */
     private function getPathToExportFile($file): string
     {
-        $directory = $this->fileSystem->getDirectoryRead(DirectoryList::VAR_DIR);
         $delimiter = '/';
         $cutPath = explode(
             $delimiter,
-            $directory->getAbsolutePath() . 'export'
+            $this->directory->getAbsolutePath() . 'export'
         );
+
         $filePath = explode(
             $delimiter,
             $file['dirname']
@@ -147,14 +155,15 @@ class ExportFileDataProvider extends DataProvider
     private function getExportFiles(string $directoryPath): array
     {
         $sortedFiles = [];
-        $files = $this->file->readDirectoryRecursively($directoryPath);
+        $files = $this->directory->getDriver()->readDirectoryRecursively($directoryPath);
         if (empty($files)) {
             return [];
         }
         foreach ($files as $filePath) {
-            if ($this->file->isFile($filePath)) {
-                //phpcs:ignore Magento2.Functions.DiscouragedFunction
-                $sortedFiles[filemtime($filePath)] = $filePath;
+            $filePath = $this->directory->getAbsolutePath($filePath);
+            if ($this->directory->isFile($filePath)) {
+                $fileModificationTime = $this->directory->stat($filePath)['mtime'];
+                $sortedFiles[$fileModificationTime] = $filePath;
             }
         }
         //sort array elements using key value

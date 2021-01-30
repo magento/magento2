@@ -15,6 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Review\Observer\PredispatchReviewObserver;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -23,27 +24,27 @@ use PHPUnit\Framework\TestCase;
 class PredispatchReviewObserverTest extends TestCase
 {
     /**
-     * @var Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Observer|MockObject
      */
     private $mockObject;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $configMock;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|MockObject
      */
     private $urlMock;
 
     /**
-     * @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RedirectInterface|MockObject
      */
     private $redirectMock;
 
     /**
-     * @var ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseInterface|MockObject
      */
     private $responseMock;
 
@@ -55,20 +56,20 @@ class PredispatchReviewObserverTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
-                                 ->disableOriginalConstructor()
-                                 ->getMock();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->urlMock = $this->getMockBuilder(UrlInterface::class)
-                              ->disableOriginalConstructor()
-                              ->getMock();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
-                                   ->disableOriginalConstructor()
-                                   ->setMethods(['setRedirect'])
-                                   ->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->setMethods(['setRedirect'])
+            ->getMockForAbstractClass();
         $this->redirectMock = $this->getMockBuilder(RedirectInterface::class)
-                                   ->getMock();
+            ->getMock();
         $this->objectManager = new ObjectManager($this);
         $this->mockObject = $this->objectManager->getObject(
             PredispatchReviewObserver::class,

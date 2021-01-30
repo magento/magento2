@@ -30,7 +30,7 @@ class ProductServiceTest extends WebapiAbstract
     /**
      * Execute per test initialization
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->productCollection = $objectManager->get(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
@@ -39,7 +39,7 @@ class ProductServiceTest extends WebapiAbstract
     /**
      * Execute per test cleanup
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->deleteProductBySku(self::BUNDLE_PRODUCT_ID);
         parent::tearDown();
@@ -225,6 +225,7 @@ class ProductServiceTest extends WebapiAbstract
     public function testUpdateBundleAddAndDeleteOption()
     {
         $bundleProduct = $this->createDynamicBundleProduct();
+        $linkedProductPrice = 20;
 
         $bundleProductOptions = $this->getBundleProductOptions($bundleProduct);
 
@@ -238,7 +239,7 @@ class ProductServiceTest extends WebapiAbstract
                 [
                     'sku' => 'simple2',
                     'qty' => 2,
-                    "price" => 20,
+                    "price" => $linkedProductPrice,
                     "price_type" => 1,
                     "is_default" => false,
                 ],
@@ -256,6 +257,7 @@ class ProductServiceTest extends WebapiAbstract
         $this->assertFalse(isset($bundleOptions[1]));
         $this->assertEquals('simple2', $bundleOptions[0]['product_links'][0]['sku']);
         $this->assertEquals(2, $bundleOptions[0]['product_links'][0]['qty']);
+        $this->assertEquals($linkedProductPrice, $bundleOptions[0]['product_links'][0]['price']);
     }
 
     /**

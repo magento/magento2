@@ -12,7 +12,7 @@ class ServerAddressTest extends \PHPUnit\Framework\TestCase
      */
     protected $_helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_helper = $objectManager->get(\Magento\Framework\HTTP\PhpEnvironment\ServerAddress::class);
@@ -20,6 +20,6 @@ class ServerAddressTest extends \PHPUnit\Framework\TestCase
 
     public function testGetServerAddress()
     {
-        $this->assertEquals(false, $this->_helper->getServerAddress());
+        $this->assertFalse($this->_helper->getServerAddress());
     }
 }

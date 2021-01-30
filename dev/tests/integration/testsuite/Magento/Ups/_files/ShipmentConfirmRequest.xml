@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<ShipmentConfirmRequest xml:lang="en-US">
+<Request>
+    <RequestAction>ShipConfirm</RequestAction>
+    <RequestOption>nonvalidate</RequestOption>
+</Request>
+<Shipment>
+    <Description>item_name item2_name</Description>
+    <Shipper>
+        <Name />
+        <AttentionName />
+        <ShipperNumber>12345</ShipperNumber>
+        <PhoneNumber />
+        <Address>
+            <AddressLine1 />
+            <AddressLine2 />
+            <City />
+            <CountryCode />
+            <PostalCode />
+        </Address>
+    </Shipper>
+    <ShipTo>
+        <AttentionName />
+        <CompanyName>N/A</CompanyName>
+        <PhoneNumber />
+        <Address>
+            <AddressLine1 />
+            <AddressLine2 />
+            <City />
+            <CountryCode>UK</CountryCode>
+            <PostalCode />
+            <ResidentialAddress />
+        </Address>
+    </ShipTo>
+    <Service>
+        <Code />
+    </Service>
+    <Package>
+        <Description>item_name</Description>
+        <PackagingType>
+            <Code>Small Express Box</Code>
+        </PackagingType>
+        <PackageWeight>
+            <Weight>0.454000000001</Weight>
+            <UnitOfMeasurement>
+                <Code>LBS</Code>
+            </UnitOfMeasurement>
+        </PackageWeight>
+        <Dimensions>
+            <UnitOfMeasurement>
+                <Code>IN</Code>
+            </UnitOfMeasurement>
+            <Length>3</Length>
+            <Width>3</Width>
+            <Height>3</Height>
+        </Dimensions>
+    </Package>
+    <Package>
+        <Description>item2_name</Description>
+        <PackagingType>
+            <Code>Large Express Box</Code>
+        </PackagingType>
+        <PackageWeight>
+            <Weight>0.55</Weight>
+            <UnitOfMeasurement>
+                <Code>LBS</Code>
+            </UnitOfMeasurement>
+        </PackageWeight>
+        <Dimensions>
+            <UnitOfMeasurement>
+                <Code>IN</Code>
+            </UnitOfMeasurement>
+            <Length>4</Length>
+            <Width>4</Width>
+            <Height>4</Height>
+        </Dimensions>
+    </Package>
+    <PaymentInformation>
+        <Prepaid>
+            <BillShipper>
+                <AccountNumber>12345</AccountNumber>
+            </BillShipper>
+        </Prepaid>
+    </PaymentInformation>
+</Shipment>
+<LabelSpecification>
+    <LabelPrintMethod>
+        <Code>GIF</Code>
+    </LabelPrintMethod>
+    <LabelImageFormat>
+        <Code>GIF</Code>
+    </LabelImageFormat>
+</LabelSpecification>
+</ShipmentConfirmRequest>

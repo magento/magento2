@@ -38,6 +38,8 @@
         <element name="PageSize" type="input" selector="input[name='parameters[page_size]']"/>
         <element name="ProductAttribute" type="multiselect" selector="select[name='parameters[show_attributes][]']"/>
         <element name="ButtonToShow" type="multiselect" selector="select[name='parameters[show_buttons][]']"/>
+        <element name="InputAnchorCustomText" type="input" selector="input[name='parameters[anchor_text]']"/>
+        <element name="InputAnchorCustomTitle" type="input" selector="input[name='parameters[title]']"/>
         <!--Compare on Storefront-->
         <element name="ProductName" type="text" selector=".product.name.product-item-name"/>
         <element name="CompareBtn" type="button" selector=".action.tocompare"/>

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="login_as_customer" translate="label" type="text" sortOrder="1" showInDefault="1">
+            <class>separator-top</class>
+            <label>Login as Customer</label>
+            <tab>customer</tab>
+            <resource>Magento_LoginAsCustomer::config_section</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" canRestore="1">
+                <label>Login as Customer Settings</label>
+                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" canRestore="1">
+                    <label>Enable Extension</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="store_view_manual_choice_enabled" translate="label comment" type="select" sortOrder="40" showInDefault="1" canRestore="1">
+                    <label>Store View To Login To</label>
+                    <source_model>Magento\LoginAsCustomerAdminUi\Model\Config\Source\StoreViewLogin</source_model>
+                    <comment><![CDATA[
+                            Use the "Manual Selection" option on a multi-website setup that has "Share Customer Accounts" enabled globally.
+                            If set to "Manual Selection", the "Login as Customer" admin can select a Store after logging in.
+                        ]]></comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

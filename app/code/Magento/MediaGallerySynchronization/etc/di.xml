@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\MediaGallerySynchronizationApi\Api\SynchronizeInterface" type="Magento\MediaGallerySynchronization\Model\Synchronize"/>
+    <preference for="Magento\MediaGallerySynchronizationApi\Model\FetchBatchesInterface" type="Magento\MediaGallerySynchronization\Model\FetchBatches"/>
+    <preference for="Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface" type="Magento\MediaGallerySynchronization\Model\SynchronizeFiles"/>
+    <preference for="Magento\MediaGallerySynchronizationApi\Model\CreateAssetFromFileInterface" type="Magento\MediaGallerySynchronization\Model\CreateAssetFromFile"/>
+    <type name="Magento\MediaGallerySynchronizationApi\Model\ImportFilesComposite">
+        <arguments>
+            <argument name="importers" xsi:type="array">
+                <item name="10" xsi:type="object">Magento\MediaGallerySynchronization\Model\ImportMediaAsset</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaGallerySynchronizationApi\Model\SynchronizerPool">
+        <arguments>
+            <argument name="synchronizers" xsi:type="array">
+                <item name="media_gallery_asset_synchronizer" xsi:type="object">Magento\MediaGallerySynchronization\Model\SynchronizeFiles</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaGallerySynchronization\Model\FetchMediaStorageFileBatches">
+        <arguments>
+            <argument name="batchSize" xsi:type="number">100</argument>
+            <argument name="fileExtensions" xsi:type="array">
+                <item name="jpg" xsi:type="string">jpg</item>
+                <item name="jpeg" xsi:type="string">jpeg</item>
+                <item name="gif" xsi:type="string">gif</item>
+                <item name="png" xsi:type="string">png</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaGallerySynchronization\Model\FetchBatches">
+        <arguments>
+            <argument name="pageSize" xsi:type="number">100</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="mediaGallerySynchronization" xsi:type="object">Magento\MediaGallerySynchronization\Console\Command\Synchronize</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Config\Value">
+        <plugin name="admin_system_config_adobe_stock_save_plugin" type="Magento\MediaGallerySynchronization\Plugin\MediaGallerySyncTrigger"/>
+    </type>
+</config>

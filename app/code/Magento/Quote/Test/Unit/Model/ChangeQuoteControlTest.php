@@ -7,138 +7,104 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Quote\Model\ChangeQuoteControl;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\ChangeQuoteControl;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for \Magento\Quote\Model\ChangeQuoteControl
- *
- * Class \Magento\Quote\Test\Unit\Model\ChangeQuoteControlTest
  */
-class ChangeQuoteControlTest extends \PHPUnit\Framework\TestCase
+class ChangeQuoteControlTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     */
-    protected $objectManager;
-
-    /**
-     * @var \Magento\Quote\Model\ChangeQuoteControl
+     * @var ChangeQuoteControl
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject|UserContextInterface
      */
     protected $userContextMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject|CartInterface
      */
     protected $quoteMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
-        $this->userContextMock = $this->createMock(UserContextInterface::class);
+        $this->userContextMock = $this->getMockForAbstractClass(UserContextInterface::class);
 
-        $this->model = $this->objectManager->getObject(
-            ChangeQuoteControl::class,
-            [
-                'userContext' => $this->userContextMock
-            ]
-        );
+        $this->model = new ChangeQuoteControl($this->userContextMock);
 
-        $this->quoteMock = $this->getMockForAbstractClass(
-            CartInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getCustomerId']
-        );
+        $this->quoteMock = $this->getMockBuilder(CartInterface::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getCustomerId'])
+            ->getMockForAbstractClass();
     }
 
-    /**
-     * Test if the quote is belonged to customer
-     */
     public function testIsAllowedIfTheQuoteIsBelongedToCustomer()
     {
         $quoteCustomerId = 1;
-        $this->quoteMock->expects($this->any())->method('getCustomerId')
-            ->will($this->returnValue($quoteCustomerId));
-        $this->userContextMock->expects($this->any())->method('getUserType')
-            ->will($this->returnValue(UserContextInterface::USER_TYPE_CUSTOMER));
-        $this->userContextMock->expects($this->any())->method('getUserId')
-            ->will($this->returnValue($quoteCustomerId));
+        $this->quoteMock->method('getCustomerId')
+            ->willReturn($quoteCustomerId);
+        $this->userContextMock->method('getUserType')
+            ->willReturn(UserContextInterface::USER_TYPE_CUSTOMER);
+        $this->userContextMock->method('getUserId')
+            ->willReturn($quoteCustomerId);
 
-        $this->assertEquals(true, $this->model->isAllowed($this->quoteMock));
+        $this->assertTrue($this->model->isAllowed($this->quoteMock));
     }
 
-    /**
-     * Test if the quote is not belonged to customer
-     */
     public function testIsAllowedIfTheQuoteIsNotBelongedToCustomer()
     {
         $currentCustomerId = 1;
         $quoteCustomerId = 2;
 
-        $this->quoteMock->expects($this->any())->method('getCustomerId')
-            ->will($this->returnValue($quoteCustomerId));
-        $this->userContextMock->expects($this->any())->method('getUserType')
-            ->will($this->returnValue(UserContextInterface::USER_TYPE_CUSTOMER));
-        $this->userContextMock->expects($this->any())->method('getUserId')
-            ->will($this->returnValue($currentCustomerId));
+        $this->quoteMock->method('getCustomerId')
+            ->willReturn($quoteCustomerId);
+        $this->userContextMock->method('getUserType')
+            ->willReturn(UserContextInterface::USER_TYPE_CUSTOMER);
+        $this->userContextMock->method('getUserId')
+            ->willReturn($currentCustomerId);
 
-        $this->assertEquals(false, $this->model->isAllowed($this->quoteMock));
+        $this->assertFalse($this->model->isAllowed($this->quoteMock));
     }
 
-    /**
-     * Test if the quote is belonged to guest and the context is guest
-     */
     public function testIsAllowedIfQuoteIsBelongedToGuestAndContextIsGuest()
     {
         $quoteCustomerId = null;
-        $this->quoteMock->expects($this->any())->method('getCustomerId')
-            ->will($this->returnValue($quoteCustomerId));
-        $this->userContextMock->expects($this->any())->method('getUserType')
-            ->will($this->returnValue(UserContextInterface::USER_TYPE_GUEST));
-        $this->assertEquals(true, $this->model->isAllowed($this->quoteMock));
+        $this->quoteMock->method('getCustomerId')
+            ->willReturn($quoteCustomerId);
+        $this->userContextMock->method('getUserType')
+            ->willReturn(UserContextInterface::USER_TYPE_GUEST);
+        $this->assertTrue($this->model->isAllowed($this->quoteMock));
     }
 
-    /**
-     * Test if the quote is belonged to customer and the context is guest
-     */
     public function testIsAllowedIfQuoteIsBelongedToCustomerAndContextIsGuest()
     {
         $quoteCustomerId = 1;
-        $this->quoteMock->expects($this->any())->method('getCustomerId')
-            ->will($this->returnValue($quoteCustomerId));
-        $this->userContextMock->expects($this->any())->method('getUserType')
-            ->will($this->returnValue(UserContextInterface::USER_TYPE_GUEST));
-        $this->assertEquals(false, $this->model->isAllowed($this->quoteMock));
+        $this->quoteMock->method('getCustomerId')
+            ->willReturn($quoteCustomerId);
+        $this->userContextMock->method('getUserType')
+            ->willReturn(UserContextInterface::USER_TYPE_GUEST);
+        $this->assertFalse($this->model->isAllowed($this->quoteMock));
     }
 
-    /**
-     * Test if the context is admin
-     */
     public function testIsAllowedIfContextIsAdmin()
     {
-        $this->userContextMock->expects($this->any())->method('getUserType')
-            ->will($this->returnValue(UserContextInterface::USER_TYPE_ADMIN));
-        $this->assertEquals(true, $this->model->isAllowed($this->quoteMock));
+        $this->userContextMock->method('getUserType')
+            ->willReturn(UserContextInterface::USER_TYPE_ADMIN);
+        $this->assertTrue($this->model->isAllowed($this->quoteMock));
     }
 
-    /**
-     * Test if the context is integration
-     */
     public function testIsAllowedIfContextIsIntegration()
     {
-        $this->userContextMock->expects($this->any())->method('getUserType')
-            ->will($this->returnValue(UserContextInterface::USER_TYPE_INTEGRATION));
-        $this->assertEquals(true, $this->model->isAllowed($this->quoteMock));
+        $this->userContextMock->method('getUserType')
+            ->willReturn(UserContextInterface::USER_TYPE_INTEGRATION);
+        $this->assertTrue($this->model->isAllowed($this->quoteMock));
     }
 }

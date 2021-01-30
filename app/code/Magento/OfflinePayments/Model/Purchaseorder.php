@@ -10,6 +10,7 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Class Purchaseorder
  *
+ * Update additional payments fields and validate the payment data
  * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
  *
  * @api
@@ -62,14 +63,11 @@ class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
      * @return $this
      * @throws LocalizedException
      * @api
+     * @since 100.2.3
      */
     public function validate()
     {
         parent::validate();
-
-        if (empty($this->getInfoInstance()->getPoNumber())) {
-            throw new LocalizedException(__('Purchase order number is a required field.'));
-        }
 
         return $this;
     }

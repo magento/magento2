@@ -14,7 +14,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      */
     protected $validator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->validator = $objectManager->create(\Magento\Directory\Model\Country\Postcode\ValidatorInterface::class);
@@ -34,11 +34,12 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Provided countryId does not exist.
      */
     public function testPostCodesThrowsExceptionIfCountryDoesNotExist()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Provided countryId does not exist.');
+
         $this->validator->validate('12345', 'INVALID-CODE');
     }
 
@@ -103,7 +104,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ['countryId' => 'BY', 'postcode' => '123456'],
             ['countryId' => 'BE', 'postcode' => '1234'],
             ['countryId' => 'BA', 'postcode' => '12345'],
-            ['countryId' => 'BR', 'postcode' => '12345'],
+            ['countryId' => 'BR', 'postcode' => '12345678'],
             ['countryId' => 'BR', 'postcode' => '12345-678'],
             ['countryId' => 'BN', 'postcode' => 'PS1234'],
             ['countryId' => 'BG', 'postcode' => '1234'],

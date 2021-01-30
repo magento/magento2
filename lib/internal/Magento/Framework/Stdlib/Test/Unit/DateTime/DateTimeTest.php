@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Stdlib\Test\Unit\DateTime;
 
 use DateTimeImmutable;
@@ -32,7 +34,8 @@ class DateTimeTest extends TestCase
     public function testGmtTimestamp($input)
     {
         /** @var TimezoneInterface|MockObject $timezone */
-        $timezone = $this->getMockBuilder(TimezoneInterface::class)->getMock();
+        $timezone = $this->getMockBuilder(TimezoneInterface::class)
+            ->getMock();
         $timezone->method('date')->willReturn(new \DateTime($this->testDate));
 
         $expected = gmdate('U', strtotime($this->testDate));
@@ -48,7 +51,8 @@ class DateTimeTest extends TestCase
     public function testTimestamp($input)
     {
         /** @var TimezoneInterface|MockObject $timezone */
-        $timezone = $this->getMockBuilder(TimezoneInterface::class)->getMock();
+        $timezone = $this->getMockBuilder(TimezoneInterface::class)
+            ->getMock();
         $timezone->method('date')->willReturn(new \DateTime($this->testDate));
 
         $expected = gmdate('U', strtotime($this->testDate));
@@ -58,7 +62,8 @@ class DateTimeTest extends TestCase
     public function testGtmOffset()
     {
         /** @var TimezoneInterface|MockObject $timezone */
-        $timezone = $this->getMockBuilder(TimezoneInterface::class)->getMock();
+        $timezone = $this->getMockBuilder(TimezoneInterface::class)
+            ->getMock();
         $timezone->method('getConfigTimezone')->willReturn('Europe/Amsterdam');
 
         /** @var DateTime|MockObject $dateTime */

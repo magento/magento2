@@ -5,10 +5,10 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store;
 
-use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\AbstractPlugin as AbstractIndexerPlugin;
-use Magento\Store\Model\ResourceModel\Group as StoreGroupResourceModel;
-use Magento\Framework\Model\AbstractModel;
 use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
+use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\AbstractPlugin as AbstractIndexerPlugin;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Store\Model\ResourceModel\Group as StoreGroupResourceModel;
 
 /**
  * Plugin for Magento\Store\Model\ResourceModel\Group
@@ -16,36 +16,18 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 class Group extends AbstractIndexerPlugin
 {
     /**
-     * @var bool
-     */
-    private $needInvalidation;
-
-    /**
-     * Check if indexer requires invalidation after store group save
-     *
-     * @param StoreGroupResourceModel $subject
-     * @param AbstractModel $group
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function beforeSave(StoreGroupResourceModel $subject, AbstractModel $group)
-    {
-        $this->needInvalidation = !$group->isObjectNew() && $group->dataHasChangedFor('website_id');
-    }
-
-    /**
      * Invalidate indexer on store group save
      *
      * @param StoreGroupResourceModel $subject
      * @param StoreGroupResourceModel $result
+     * @param AbstractModel $group
      * @return StoreGroupResourceModel
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterSave(StoreGroupResourceModel $subject, StoreGroupResourceModel $result)
+    public function afterSave(StoreGroupResourceModel $subject, StoreGroupResourceModel $result, AbstractModel $group)
     {
-        if ($this->needInvalidation) {
+        if (!$group->isObjectNew() && $group->dataHasChangedFor('website_id')) {
             $this->indexerRegistry->get(FulltextIndexer::INDEXER_ID)->invalidate();
         }
 

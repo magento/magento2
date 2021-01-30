@@ -46,7 +46,7 @@
         <uncheckOption selector="{{AdminCategorySEOSection.UrlKeyDefaultValueCheckbox}}" stepKey="uncheckUseDefaultUrlKey"/>
         <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{_defaultCategory.name_lwr}}-hattest" stepKey="enterURLKey"/>
         <uncheckOption selector="{{AdminCategorySEOSection.UrlKeyRedirectCheckbox}}"  stepKey="uncheckRedirect1"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategoryAfterFirstSeoUpdate"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategoryAfterFirstSeoUpdate"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessage"/>
         <amOnPage url="" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForFrontendLoad"/>
@@ -64,7 +64,7 @@
         <click selector="{{AdminCategorySEOSection.SectionHeader}}"  stepKey="openSeoSection2"/>
         <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{_defaultCategory.name_lwr}}" stepKey="enterOriginalURLKey"/>
         <uncheckOption selector="{{AdminCategorySEOSection.UrlKeyRedirectCheckbox}}"  stepKey="uncheckRedirect2"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategoryAfterOriginalSeoKey"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategoryAfterOriginalSeoKey"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessageAfterOriginalSeoKey"/>
         <amOnPage url="" stepKey="goToStorefrontAfterOriginalSeoKey"/>
         <waitForPageLoad stepKey="waitForFrontendLoadAfterOriginalSeoKey"/>

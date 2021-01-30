@@ -61,9 +61,9 @@ class RemoveItemTest extends TestCase
      */
     private $loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->resultJsonFactoryMock = $this->createPartialMock(
             ResultJsonFactory::class,
             ['create']
@@ -74,7 +74,7 @@ class RemoveItemTest extends TestCase
         );
         $this->sidebarMock = $this->createMock(Sidebar::class);
         $this->formKeyValidatorMock = $this->createMock(Validator::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->action = $objectManager->getObject(
@@ -219,6 +219,57 @@ class RemoveItemTest extends TestCase
             ->willReturn($resultJson);
 
         $this->assertEquals($resultJson, $this->action->execute());
+    }
+
+    /**
+     * Test controller when DB exception is thrown.
+     *
+     * @return void
+     */
+    public function testExecuteWithDbException(): void
+    {
+        $itemId = 1;
+        $dbError = 'Error';
+        $message = __('An unspecified error occurred. Please contact us for assistance.');
+        $responseData = [
+            'success' => false,
+            'error_message' => $message,
+        ];
+
+        $this->formKeyValidatorMock
+            ->expects($this->once())
+            ->method('validate')
+            ->with($this->requestMock)
+            ->willReturn(true);
+        $this->requestMock->expects($this->once())
+            ->method('getParam')
+            ->with('item_id')
+            ->willReturn($itemId);
+
+        $exception = new \Zend_Db_Exception($dbError);
+
+        $this->sidebarMock->expects($this->once())
+            ->method('checkQuoteItem')
+            ->with($itemId)
+            ->willThrowException($exception);
+
+        $this->loggerMock->expects($this->once())->method('critical')->with($exception);
+
+        $this->sidebarMock->expects($this->once())
+            ->method('getResponseData')
+            ->with($message)
+            ->willReturn($responseData);
+
+        $resultJson = $this->createMock(ResultJson::class);
+        $resultJson->expects($this->once())
+            ->method('setData')
+            ->with($responseData)
+            ->willReturnSelf();
+        $this->resultJsonFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($resultJson);
+
+        $this->action->execute();
     }
 
     public function testExecuteWhenFormKeyValidationFailed()

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Block\Html;
 
 use Magento\Framework\App\Config;
@@ -42,10 +44,10 @@ class PagerTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->createMock(Context::class);
-        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->context->expects($this->any())
             ->method('getUrlBuilder')
             ->willReturn($this->urlBuilderMock);
@@ -80,13 +82,67 @@ class PagerTest extends TestCase
         $expectedPages = range(1, 5);
         $collectionMock = $this->createMock(Collection::class);
         $collectionMock->expects($this->exactly(2))
-                       ->method('getCurPage')
-                       ->willReturn(2);
+            ->method('getCurPage')
+            ->willReturn(2);
         $collectionMock->expects($this->any())
             ->method('getLastPageNumber')
             ->willReturn(10);
         $this->setCollectionProperty($collectionMock);
         $this->assertEquals($expectedPages, $this->pager->getPages());
+    }
+
+    /**
+     * Test get limit url.
+     *
+     * @dataProvider limitUrlDataProvider
+     *
+     * @param int $page
+     * @param int $size
+     * @param int $limit
+     * @param array $expectedParams
+     * @return void
+     */
+    public function testGetLimitUrl(int $page, int $size, int $limit, array $expectedParams): void
+    {
+        $expectedArray = [
+            '_current' => true,
+            '_escape' => true,
+            '_use_rewrite' => true,
+            '_fragment' => null,
+            '_query' => $expectedParams,
+        ];
+
+        $collectionMock = $this->createMock(Collection::class);
+        $collectionMock->expects($this->once())
+            ->method('getCurPage')
+            ->willReturn($page);
+        $collectionMock->expects($this->once())
+            ->method('getSize')
+            ->willReturn($size);
+        $this->setCollectionProperty($collectionMock);
+
+        $this->urlBuilderMock->expects($this->once())
+            ->method('getUrl')
+            ->with('*/*/*', $expectedArray);
+
+        $this->pager->getLimitUrl($limit);
+    }
+
+    /**
+     * DataProvider for testGetLimitUrl
+     *
+     * @return array
+     */
+    public function limitUrlDataProvider(): array
+    {
+        return [
+            [2, 21, 10, ['limit' => 10]],
+            [3, 21, 10, ['limit' => 10]],
+            [2, 21, 20, ['limit' => 20]],
+            [3, 21, 50, ['limit' => 50, 'p' => null]],
+            [2, 11, 20, ['limit' => 20, 'p' => null]],
+            [4, 40, 20, ['limit' => 20, 'p' => 2]],
+        ];
     }
 
     /**

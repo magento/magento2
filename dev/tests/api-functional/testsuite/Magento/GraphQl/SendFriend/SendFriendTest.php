@@ -36,7 +36,7 @@ class SendFriendTest extends GraphQlAbstract
      */
     private $customerTokenService;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sendFriendFactory = Bootstrap::getObjectManager()->get(SendFriendFactory::class);
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
@@ -69,11 +69,12 @@ class SendFriendTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoConfigFixture default_store sendfriend/email/enabled 1
      * @magentoConfigFixture default_store sendfriend/email/allow_guest 0
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testSendFriendGuestDisableAsGuest()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+
         $productId = (int)$this->productRepository->get('simple_product')->getId();
         $recipients = '{
                   name: "Recipient Name 1"
@@ -93,11 +94,12 @@ class SendFriendTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoConfigFixture default_store sendfriend/email/enabled 0
-     * @expectedException \Exception
-     * @expectedExceptionMessage "Email to a Friend" is not enabled.
      */
     public function testSendFriendDisableAsCustomer()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('"Email to a Friend" is not enabled.');
+
         $productId = (int)$this->productRepository->get('simple_product')->getId();
         $recipients = '{
                   name: "Recipient Name 1"
@@ -116,11 +118,14 @@ class SendFriendTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoConfigFixture default_store sendfriend/email/enabled 1
-     * @expectedException \Exception
-     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testSendWithoutExistProduct()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(
+            'The product that was requested doesn\'t exist. Verify the product and try again.'
+        );
+
         $productId = 2018;
         $recipients = '{
                   name: "Recipient Name 1"
@@ -287,81 +292,124 @@ QUERY;
     /**
      * @return array
      */
-    public function sendFriendsErrorsDataProvider()
+    public function sendFriendsErrorsDataProvider(): array
+    {
+        return array_merge(
+            $this->getRecipientErrors(),
+            $this->getSenderErrors()
+        );
+    }
+
+    /**
+     * @return array
+     */
+    private function getRecipientErrors(): array
     {
         return [
             [
-          'product_id: 1
-         sender: {
-            name: "Name"
-            email: "e@mail.com"
-            message: "Lorem Ipsum"
-        }
-          recipients: [
-              {
-                  name: ""
-                  email:"recipient1@mail.com"
-               },
-              {
-                  name: ""
-                  email:"recipient2@mail.com"
-              }
-          ]', 'Please provide Name for all of recipients.'
+                'product_id: 1
+                sender: {
+                    name: "Name"
+                    email: "e@mail.com"
+                    message: "Lorem Ipsum"
+                }
+                recipients: [
+                    {
+                        name: ""
+                        email:"recipient1@mail.com"
+                    },
+                    {
+                        name: ""
+                        email:"recipient2@mail.com"
+                    }
+                ]',
+                'Please provide Name for all of recipients.'
             ],
             [
                 'product_id: 1
-          sender: {
-            name: "Name"
-            email: "e@mail.com"
-            message: "Lorem Ipsum"
-        }
-          recipients: [
-              {
-                  name: "Recipient Name 1"
-                  email:""
-               },
-              {
-                  name: "Recipient Name 2"
-                  email:""
-              }
-          ]', 'Please provide Email for all of recipients.'
+                sender: {
+                    name: "Name"
+                    email: "e@mail.com"
+                    message: "Lorem Ipsum"
+                }
+                recipients: [
+                    {
+                        name: "Recipient Name 1"
+                        email:""
+                    },
+                    {
+                       name: "Recipient Name 2"
+                       email:""
+                    }
+                ]',
+                'Please provide Email for all of recipients.'
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getSenderErrors(): array
+    {
+        return [
+            [
+                'product_id: 1
+                sender: {
+                    name: ""
+                    email: "e@mail.com"
+                    message: "Lorem Ipsum"
+                }
+                recipients: [
+                    {
+                        name: "Recipient Name 1"
+                        email:"recipient1@mail.com"
+                    },
+                    {
+                        name: "Recipient Name 2"
+                        email:"recipient2@mail.com"
+                    }
+                ]',
+                'Please provide Name of sender.'
             ],
             [
                 'product_id: 1
-          sender: {
-            name: ""
-            email: "e@mail.com"
-            message: "Lorem Ipsum"
-        }
-          recipients: [
-              {
-                  name: "Recipient Name 1"
-                  email:"recipient1@mail.com"
-               },
-              {
-                  name: "Recipient Name 2"
-                  email:"recipient2@mail.com"
-              }
-          ]', 'Please provide Name of sender.'
+                sender: {
+                    name: "Name"
+                    email: ""
+                    message: "Lorem Ipsum"
+                }
+                recipients: [
+                    {
+                        name: "Recipient Name 1"
+                        email:"recipient1@mail.com"
+                    },
+                    {
+                        name: "Recipient Name 2"
+                        email:"recipient2@mail.com"
+                    }
+                ]',
+                'Please provide Email of sender.'
             ],
             [
                 'product_id: 1
-          sender: {
-            name: "Name"
-            email: "e@mail.com"
-            message: ""
-        }
-          recipients: [
-              {
-                  name: "Recipient Name 1"
-                  email:"recipient1@mail.com"
-               },
-              {
-                  name: "Recipient Name 2"
-                  email:"recipient2@mail.com"
-              }
-          ]', 'Please provide Message.'
-            ]
+                sender: {
+                    name: "Name"
+                    email: "e@mail.com"
+                    message: ""
+                }
+                recipients: [
+                    {
+                        name: "Recipient Name 1"
+                        email:"recipient1@mail.com"
+                    },
+                    {
+                        name: "Recipient Name 2"
+                        email:"recipient2@mail.com"
+                    }
+                ]',
+                'Please provide Message.'
+            ],
         ];
     }
 

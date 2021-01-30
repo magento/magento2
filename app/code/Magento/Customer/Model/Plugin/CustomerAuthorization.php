@@ -6,8 +6,9 @@
 
 namespace Magento\Customer\Model\Plugin;
 
-use Magento\Authorization\Model\UserContextInterface;
-use Magento\Integration\Api\AuthorizationServiceInterface as AuthorizationService;
+use Closure;
+use Magento\Customer\Model\Customer\AuthorizationComposite;
+use Magento\Framework\Authorization;
 
 /**
  * Plugin around \Magento\Framework\Authorization::isAllowed
@@ -17,45 +18,40 @@ use Magento\Integration\Api\AuthorizationServiceInterface as AuthorizationServic
 class CustomerAuthorization
 {
     /**
-     * @var UserContextInterface
+     * @var AuthorizationComposite
      */
-    protected $userContext;
+    private $authorizationComposite;
 
     /**
      * Inject dependencies.
-     *
-     * @param UserContextInterface $userContext
+     * @param AuthorizationComposite $composite
      */
-    public function __construct(UserContextInterface $userContext)
-    {
-        $this->userContext = $userContext;
+    public function __construct(
+        AuthorizationComposite $composite
+    ) {
+        $this->authorizationComposite = $composite;
     }
 
     /**
-     * Check if resource for which access is needed has self permissions defined in webapi config.
+     * Verify if to allow customer users to access resources with self permission
      *
-     * @param \Magento\Framework\Authorization $subject
-     * @param callable $proceed
-     * @param string $resource
-     * @param string $privilege
-     *
-     * @return bool true If resource permission is self, to allow
-     * customer access without further checks in parent method
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param Authorization $subject
+     * @param Closure $proceed
+     * @param string $resource
+     * @param mixed $privilege
+     * @return bool
      */
     public function aroundIsAllowed(
-        \Magento\Framework\Authorization $subject,
-        \Closure $proceed,
-        $resource,
+        Authorization $subject,
+        Closure $proceed,
+        string $resource,
         $privilege = null
     ) {
-        if ($resource == AuthorizationService::PERMISSION_SELF
-            && $this->userContext->getUserId()
-            && $this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER
-        ) {
+        if ($this->authorizationComposite->isAllowed($resource, $privilege)) {
             return true;
-        } else {
-            return $proceed($resource, $privilege);
         }
+
+        return $proceed($resource, $privilege);
     }
 }

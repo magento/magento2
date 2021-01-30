@@ -9,7 +9,7 @@ namespace Magento\Framework\Api;
 
 /**
  * Base Builder Class for simple data Objects
- * @deprecated Every builder should have their own implementation of \Magento\Framework\Api\SimpleBuilderInterface
+ * @deprecated 103.0.0 Every builder should have their own implementation of \Magento\Framework\Api\SimpleBuilderInterface
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractSimpleObjectBuilder implements SimpleBuilderInterface

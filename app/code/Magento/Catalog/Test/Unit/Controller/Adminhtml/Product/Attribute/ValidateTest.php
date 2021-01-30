@@ -3,20 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Attribute;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Validate;
-use Magento\Eav\Model\Validator\Attribute\Code as AttributeCodeValidator;
-use Magento\Framework\Serialize\Serializer\FormData;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\AttributeTest;
 use Magento\Eav\Model\Entity\Attribute\Set as AttributeSet;
+use Magento\Eav\Model\Validator\Attribute\Code as AttributeCodeValidator;
 use Magento\Framework\Controller\Result\Json as ResultJson;
 use Magento\Framework\Controller\Result\JsonFactory as ResultJsonFactory;
 use Magento\Framework\Escaper;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Serialize\Serializer\FormData;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -24,56 +28,56 @@ use Magento\Framework\View\LayoutInterface;
 class ValidateTest extends AttributeTest
 {
     /**
-     * @var ResultJsonFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultJsonFactory|MockObject
      */
     protected $resultJsonFactoryMock;
 
     /**
-     * @var ResultJson|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultJson|MockObject
      */
     protected $resultJson;
 
     /**
-     * @var LayoutFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutFactory|MockObject
      */
     protected $layoutFactoryMock;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var Attribute|MockObject
      */
     protected $attributeMock;
 
     /**
-     * @var AttributeSet|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeSet|MockObject
      */
     protected $attributeSetMock;
 
     /**
-     * @var Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper|MockObject
      */
     protected $escaperMock;
 
     /**
-     * @var LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutInterface|MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var FormData|\PHPUnit_Framework_MockObject_MockObject
+     * @var FormData|MockObject
      */
     private $formDataSerializerMock;
 
     /**
-     * @var AttributeCodeValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeCodeValidator|MockObject
      */
     private $attributeCodeValidatorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->resultJsonFactoryMock = $this->getMockBuilder(ResultJsonFactory::class)
@@ -138,18 +142,18 @@ class ValidateTest extends AttributeTest
             ->method('getParam')
             ->willReturnMap(
                 [
-                ['frontend_label', null, 'test_frontend_label'],
-                ['attribute_code', null, 'test_attribute_code'],
-                ['new_attribute_set_name', null, 'test_attribute_set_name'],
-                ['serialized_options', '[]', $serializedOptions],
+                    ['frontend_label', null, 'test_frontend_label'],
+                    ['attribute_code', null, 'test_attribute_code'],
+                    ['new_attribute_set_name', null, 'test_attribute_set_name'],
+                    ['serialized_options', '[]', $serializedOptions],
                 ]
             );
         $this->objectManagerMock->expects($this->exactly(2))
             ->method('create')
             ->willReturnMap(
                 [
-                [\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, [], $this->attributeMock],
-                [\Magento\Eav\Model\Entity\Attribute\Set::class, [], $this->attributeSetMock]
+                    [Attribute::class, [], $this->attributeMock],
+                    [AttributeSet::class, [], $this->attributeSetMock]
                 ]
             );
         $this->attributeMock->expects($this->once())
@@ -185,10 +189,73 @@ class ValidateTest extends AttributeTest
     }
 
     /**
+     * Test that editing existing attribute loads attribute by id
+     *
+     * @return void
+     * @throws NotFoundException
+     */
+    public function testExecuteEditExisting(): void
+    {
+        $serializedOptions = '{"key":"value"}';
+        $this->requestMock->expects($this->any())
+            ->method('getParam')
+            ->willReturnMap(
+                [
+                    ['frontend_label', null, 'test_frontend_label'],
+                    ['attribute_id', null, 10],
+                    ['attribute_code', null, 'test_attribute_code'],
+                    ['new_attribute_set_name', null, 'test_attribute_set_name'],
+                    ['serialized_options', '[]', $serializedOptions],
+                ]
+            );
+        $this->objectManagerMock->expects($this->exactly(2))
+            ->method('create')
+            ->willReturnMap(
+                [
+                    [Attribute::class, [], $this->attributeMock],
+                    [AttributeSet::class, [], $this->attributeSetMock]
+                ]
+            );
+        $this->attributeMock->expects($this->once())
+            ->method('load')
+            ->willReturnSelf();
+        $this->attributeMock->expects($this->once())
+            ->method('getAttributeCode')
+            ->willReturn('test_attribute_code');
+
+        $this->attributeCodeValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with('test_attribute_code')
+            ->willReturn(true);
+
+        $this->requestMock->expects($this->once())
+            ->method('has')
+            ->with('new_attribute_set_name')
+            ->willReturn(true);
+        $this->attributeSetMock->expects($this->once())
+            ->method('setEntityTypeId')
+            ->willReturnSelf();
+        $this->attributeSetMock->expects($this->once())
+            ->method('load')
+            ->willReturnSelf();
+        $this->attributeSetMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(false);
+        $this->resultJsonFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultJson);
+        $this->resultJson->expects($this->once())
+            ->method('setJsonData')
+            ->willReturnSelf();
+
+        $this->assertInstanceOf(ResultJson::class, $this->getModel()->execute());
+    }
+
+    /**
      * @dataProvider provideUniqueData
      * @param        array   $options
      * @param        boolean $isError
-     * @throws       \Magento\Framework\Exception\NotFoundException
+     * @throws       NotFoundException
      */
     public function testUniqueValidation(array $options, $isError)
     {
@@ -198,11 +265,11 @@ class ValidateTest extends AttributeTest
             ->method('getParam')
             ->willReturnMap(
                 [
-                ['frontend_label', null, null],
-                ['attribute_code', null, "test_attribute_code"],
-                ['new_attribute_set_name', null, 'test_attribute_set_name'],
-                ['message_key', null, Validate::DEFAULT_MESSAGE_KEY],
-                ['serialized_options', '[]', $serializedOptions],
+                    ['frontend_label', null, null],
+                    ['attribute_code', null, "test_attribute_code"],
+                    ['new_attribute_set_name', null, 'test_attribute_set_name'],
+                    ['message_key', null, Validate::DEFAULT_MESSAGE_KEY],
+                    ['serialized_options', '[]', $serializedOptions],
                 ]
             );
 
@@ -330,7 +397,7 @@ class ValidateTest extends AttributeTest
      *
      * @dataProvider provideEmptyOption
      * @param        array $options
-     * @throws       \Magento\Framework\Exception\NotFoundException
+     * @throws       NotFoundException
      */
     public function testEmptyOption(array $options, $result)
     {
@@ -339,12 +406,12 @@ class ValidateTest extends AttributeTest
             ->method('getParam')
             ->willReturnMap(
                 [
-                ['frontend_label', null, null],
-                ['frontend_input', 'select', 'multipleselect'],
-                ['attribute_code', null, "test_attribute_code"],
-                ['new_attribute_set_name', null, 'test_attribute_set_name'],
-                ['message_key', Validate::DEFAULT_MESSAGE_KEY, 'message'],
-                ['serialized_options', '[]', $serializedOptions],
+                    ['frontend_label', null, null],
+                    ['frontend_input', 'select', 'multipleselect'],
+                    ['attribute_code', null, "test_attribute_code"],
+                    ['new_attribute_set_name', null, 'test_attribute_set_name'],
+                    ['message_key', Validate::DEFAULT_MESSAGE_KEY, 'message'],
+                    ['serialized_options', '[]', $serializedOptions],
                 ]
             );
 
@@ -453,7 +520,7 @@ class ValidateTest extends AttributeTest
      * @dataProvider provideWhitespaceOption
      * @param        array  $options
      * @param        $result
-     * @throws       \Magento\Framework\Exception\NotFoundException
+     * @throws       NotFoundException
      */
     public function testWhitespaceOption(array $options, $result)
     {
@@ -462,13 +529,13 @@ class ValidateTest extends AttributeTest
             ->method('getParam')
             ->willReturnMap(
                 [
-                              ['frontend_label', null, null],
-                              ['frontend_input', 'select', 'multipleselect'],
-                              ['attribute_code', null, "test_attribute_code"],
-                              ['new_attribute_set_name', null, 'test_attribute_set_name'],
-                              ['message_key', Validate::DEFAULT_MESSAGE_KEY, 'message'],
-                              ['serialized_options', '[]', $serializedOptions],
-                              ]
+                    ['frontend_label', null, null],
+                    ['frontend_input', 'select', 'multipleselect'],
+                    ['attribute_code', null, "test_attribute_code"],
+                    ['new_attribute_set_name', null, 'test_attribute_set_name'],
+                    ['message_key', Validate::DEFAULT_MESSAGE_KEY, 'message'],
+                    ['serialized_options', '[]', $serializedOptions],
+                ]
             );
 
         $this->formDataSerializerMock
@@ -571,7 +638,7 @@ class ValidateTest extends AttributeTest
     }
 
     /**
-     * @throws \Magento\Framework\Exception\NotFoundException
+     * @throws NotFoundException
      */
     public function testExecuteWithOptionsDataError()
     {
@@ -582,11 +649,11 @@ class ValidateTest extends AttributeTest
             ->method('getParam')
             ->willReturnMap(
                 [
-                ['frontend_label', null, 'test_frontend_label'],
-                ['attribute_code', null, 'test_attribute_code'],
-                ['new_attribute_set_name', null, 'test_attribute_set_name'],
-                ['message_key', Validate::DEFAULT_MESSAGE_KEY, 'message'],
-                ['serialized_options', '[]', $serializedOptions],
+                    ['frontend_label', null, 'test_frontend_label'],
+                    ['attribute_code', null, 'test_attribute_code'],
+                    ['new_attribute_set_name', null, 'test_attribute_set_name'],
+                    ['message_key', Validate::DEFAULT_MESSAGE_KEY, 'message'],
+                    ['serialized_options', '[]', $serializedOptions],
                 ]
             );
 
@@ -600,8 +667,8 @@ class ValidateTest extends AttributeTest
             ->method('create')
             ->willReturnMap(
                 [
-                [\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, [], $this->attributeMock],
-                [\Magento\Eav\Model\Entity\Attribute\Set::class, [], $this->attributeSetMock]
+                    [Attribute::class, [], $this->attributeMock],
+                    [AttributeSet::class, [], $this->attributeSetMock]
                 ]
             );
 
@@ -623,8 +690,8 @@ class ValidateTest extends AttributeTest
             ->with(
                 json_encode(
                     [
-                    'error' => true,
-                    'message' => $message
+                        'error' => true,
+                        'message' => $message
                     ]
                 )
             )
@@ -639,7 +706,7 @@ class ValidateTest extends AttributeTest
      * @dataProvider provideInvalidAttributeCodes
      * @param        string $attributeCode
      * @param        $result
-     * @throws       \Magento\Framework\Exception\NotFoundException
+     * @throws       NotFoundException
      */
     public function testExecuteWithInvalidAttributeCode($attributeCode, $result)
     {
@@ -648,12 +715,12 @@ class ValidateTest extends AttributeTest
             ->method('getParam')
             ->willReturnMap(
                 [
-                ['frontend_label', null, null],
-                ['frontend_input', 'select', 'multipleselect'],
-                ['attribute_code', null, $attributeCode],
-                ['new_attribute_set_name', null, 'test_attribute_set_name'],
-                ['message_key', Validate::DEFAULT_MESSAGE_KEY, 'message'],
-                ['serialized_options', '[]', $serializedOptions],
+                    ['frontend_label', null, null],
+                    ['frontend_input', 'select', 'multipleselect'],
+                    ['attribute_code', null, $attributeCode],
+                    ['new_attribute_set_name', null, 'test_attribute_set_name'],
+                    ['message_key', Validate::DEFAULT_MESSAGE_KEY, 'message'],
+                    ['serialized_options', '[]', $serializedOptions],
                 ]
             );
 

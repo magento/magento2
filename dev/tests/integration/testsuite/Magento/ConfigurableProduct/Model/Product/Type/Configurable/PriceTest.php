@@ -13,14 +13,17 @@ use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Customer\Model\Group;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Catalog\Model\Product\Price\GetPriceIndexDataByProductId;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Store\ExecuteInStoreContext;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Provides tests for configurable product pricing.
  *
  * @magentoDbIsolation disabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PriceTest extends TestCase
 {
@@ -50,9 +53,19 @@ class PriceTest extends TestCase
     private $websiteRepository;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var ExecuteInStoreContext
+     */
+    private $executeInStoreContext;
+
+    /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->priceModel = $this->objectManager->create(Price::class);
@@ -60,6 +73,8 @@ class PriceTest extends TestCase
         $this->productRepository->cleanCache();
         $this->getPriceIndexDataByProductId = $this->objectManager->get(GetPriceIndexDataByProductId::class);
         $this->websiteRepository = $this->objectManager->get(WebsiteRepositoryInterface::class);
+        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $this->executeInStoreContext = $this->objectManager->get(ExecuteInStoreContext::class);
     }
 
     /**
@@ -81,6 +96,46 @@ class PriceTest extends TestCase
         $this->assertIndexTableData(
             'simple_20',
             ['price' => 20, 'final_price' => 20, 'min_price' => 20, 'max_price' => 20, 'tier_price' => null]
+        );
+    }
+
+    /**
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_price_on_second_website.php
+     * @return void
+     */
+    public function testGetFinalPriceOnSecondWebsite(): void
+    {
+        $this->executeInStoreContext->execute('fixture_second_store', [$this, 'assertPrice'], 10);
+        $this->executeInStoreContext->execute(
+            'fixture_second_store',
+            [$this, 'assertIndexTableData'],
+            'configurable',
+            ['price' => 0, 'final_price' => 0, 'min_price' => 10, 'max_price' => 30, 'tier_price' => null]
+        );
+        $this->executeInStoreContext->execute(
+            'fixture_second_store',
+            [$this, 'assertIndexTableData'],
+            'simple_option_1',
+            ['price' => 20, 'final_price' => 10, 'min_price' => 10, 'max_price' => 10, 'tier_price' => null]
+        );
+        $this->executeInStoreContext->execute(
+            'fixture_second_store',
+            [$this, 'assertIndexTableData'],
+            'simple_option_2',
+            ['price' => 40, 'final_price' => 30, 'min_price' => 30, 'max_price' => 30, 'tier_price' => null]
+        );
+        $this->assertPrice(150);
+        $this->assertIndexTableData(
+            'configurable',
+            ['price' => 0, 'final_price' => 0, 'min_price' => 150, 'max_price' => 150, 'tier_price' => null]
+        );
+        $this->assertIndexTableData(
+            'simple_option_1',
+            ['price' => 150, 'final_price' => 150, 'min_price' => 150, 'max_price' => 150, 'tier_price' => null]
+        );
+        $this->assertIndexTableData(
+            'simple_option_2',
+            ['price' => 150, 'final_price' => 150, 'min_price' => 150, 'max_price' => 150, 'tier_price' => null]
         );
     }
 
@@ -127,7 +182,7 @@ class PriceTest extends TestCase
     public function testGetFinalPriceWithSelectedSimpleProduct(): void
     {
         $product = $this->productRepository->get('configurable');
-        $product->addCustomOption('simple_product', 20, $this->productRepository->get('simple_20'));
+        $product->addCustomOption('simple_product', 20, $this->getProduct('simple_20'));
         $this->assertPrice(20, $product);
     }
 
@@ -137,7 +192,7 @@ class PriceTest extends TestCase
      */
     public function testGetFinalPriceWithCustomOptionAndSimpleTierPrice(): void
     {
-        $configurable = $this->productRepository->get('configurable');
+        $configurable = $this->getProduct('configurable');
         $this->assertIndexTableData(
             'configurable',
             ['price' => 0, 'final_price' => 0, 'min_price' => 9, 'max_price' => 30, 'tier_price' => 15]
@@ -167,12 +222,12 @@ class PriceTest extends TestCase
      * @param array $expectedPrices
      * @return void
      */
-    private function assertIndexTableData(string $sku, array $expectedPrices): void
+    public function assertIndexTableData(string $sku, array $expectedPrices): void
     {
         $data = $this->getPriceIndexDataByProductId->execute(
-            (int)$this->productRepository->get($sku)->getId(),
+            (int)$this->getProduct($sku)->getId(),
             Group::NOT_LOGGED_IN_ID,
-            (int)$this->websiteRepository->get('base')->getId()
+            (int)$this->storeManager->getStore()->getWebsiteId()
         );
         $data = reset($data);
         foreach ($expectedPrices as $column => $price) {
@@ -187,13 +242,24 @@ class PriceTest extends TestCase
      * @param ProductInterface|null $product
      * @return void
      */
-    private function assertPrice(float $expectedPrice, ?ProductInterface $product = null): void
+    public function assertPrice(float $expectedPrice, ?ProductInterface $product = null): void
     {
-        $product = $product ?: $this->productRepository->get('configurable');
+        $product = $product ?: $this->getProduct('configurable');
         // final price is the lowest price of configurable variations
         $this->assertEquals(
             round($expectedPrice, 2),
             round($this->priceModel->getFinalPrice(1, $product), 2)
         );
+    }
+
+    /**
+     * Loads product by sku.
+     *
+     * @param string $sku
+     * @return ProductInterface
+     */
+    private function getProduct(string $sku): ProductInterface
+    {
+        return $this->productRepository->get($sku, false, $this->storeManager->getStore()->getId(), true);
     }
 }

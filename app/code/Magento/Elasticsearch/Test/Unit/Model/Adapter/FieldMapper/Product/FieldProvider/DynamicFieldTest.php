@@ -7,32 +7,32 @@ declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldMapper\Product\FieldProvider;
 
-use Magento\Framework\Api\SearchCriteria;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Catalog\Api\CategoryListInterface;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Customer\Api\Data\GroupInterface;
+use Magento\Customer\Api\Data\GroupSearchResultsInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface
-    as FieldTypeConverterInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\DynamicField;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ConverterInterface
     as IndexTypeConverterInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Catalog\Api\Data\CategorySearchResultsInterface;
-use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Customer\Api\Data\GroupSearchResultsInterface;
-use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface
     as FieldNameResolver;
-use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface
+    as FieldTypeConverterInterface;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD)
  */
-class DynamicFieldTest extends \PHPUnit\Framework\TestCase
+class DynamicFieldTest extends TestCase
 {
     /**
-     * @var \Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\DynamicField
+     * @var DynamicField
      */
     private $provider;
 
@@ -81,20 +81,20 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->fieldTypeConverter = $this->getMockBuilder(FieldTypeConverterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->indexTypeConverter = $this->getMockBuilder(IndexTypeConverterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->attributeAdapterProvider = $this->getMockBuilder(AttributeProvider::class)
             ->disableOriginalConstructor()
             ->setMethods(['getByAttributeCode', 'getByAttribute'])
@@ -105,7 +105,7 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->categoryList = $this->getMockBuilder(CategoryListInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->categoryCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAllIds'])
@@ -114,7 +114,7 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
         $objectManager = new ObjectManagerHelper($this);
 
         $this->provider = $objectManager->getObject(
-            \Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\DynamicField::class,
+            DynamicField::class,
             [
                 'groupRepository' => $this->groupRepository,
                 'searchCriteriaBuilder' => $this->searchCriteriaBuilder,
@@ -184,24 +184,22 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
 
         $this->fieldNameResolver->expects($this->any())
             ->method('getFieldName')
-            ->will(
-                $this->returnCallback(
-                    function ($attribute) use ($categoryId) {
-                        static $callCount = [];
-                        $attributeCode = $attribute->getAttributeCode();
-                        $callCount[$attributeCode] = !isset($callCount[$attributeCode])
-                            ? 1
-                            : ++$callCount[$attributeCode];
+            ->willReturnCallback(
+                function ($attribute) use ($categoryId) {
+                    static $callCount = [];
+                    $attributeCode = $attribute->getAttributeCode();
+                    $callCount[$attributeCode] = !isset($callCount[$attributeCode])
+                        ? 1
+                        : ++$callCount[$attributeCode];
 
-                        if ($attributeCode === 'category') {
-                            return 'category_name_' . $categoryId;
-                        } elseif ($attributeCode === 'position') {
-                            return 'position_' . $categoryId;
-                        } elseif ($attributeCode === 'price') {
-                            return 'price_' . $categoryId . '_1';
-                        }
+                    if ($attributeCode === 'category') {
+                        return 'category_name_' . $categoryId;
+                    } elseif ($attributeCode === 'position') {
+                        return 'position_' . $categoryId;
+                    } elseif ($attributeCode === 'price') {
+                        return 'price_' . $categoryId . '_1';
                     }
-                )
+                }
             );
         $priceAttributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
@@ -219,46 +217,42 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
         $this->attributeAdapterProvider->expects($this->any())
             ->method('getByAttributeCode')
             ->with($this->anything())
-            ->will(
-                $this->returnCallback(
-                    function ($code) use (
-                        $categoryAttributeMock,
-                        $positionAttributeMock,
-                        $priceAttributeMock
-                    ) {
-                        static $callCount = [];
-                        $callCount[$code] = !isset($callCount[$code]) ? 1 : ++$callCount[$code];
+            ->willReturnCallback(
+                function ($code) use (
+                    $categoryAttributeMock,
+                    $positionAttributeMock,
+                    $priceAttributeMock
+                ) {
+                    static $callCount = [];
+                    $callCount[$code] = !isset($callCount[$code]) ? 1 : ++$callCount[$code];
 
-                        if ($code === 'position') {
-                            return $positionAttributeMock;
-                        } elseif ($code === 'category_name') {
-                            return $categoryAttributeMock;
-                        } elseif ($code === 'price') {
-                            return $priceAttributeMock;
-                        }
+                    if ($code === 'position') {
+                        return $positionAttributeMock;
+                    } elseif ($code === 'category_name') {
+                        return $categoryAttributeMock;
+                    } elseif ($code === 'price') {
+                        return $priceAttributeMock;
                     }
-                )
+                }
             );
         $this->fieldTypeConverter->expects($this->any())
             ->method('convert')
             ->with($this->anything())
-            ->will(
-                $this->returnCallback(
-                    function ($type) use ($complexType) {
-                        static $callCount = [];
-                        $callCount[$type] = !isset($callCount[$type]) ? 1 : ++$callCount[$type];
+            ->willReturnCallback(
+                function ($type) use ($complexType) {
+                    static $callCount = [];
+                    $callCount[$type] = !isset($callCount[$type]) ? 1 : ++$callCount[$type];
 
-                        if ($type === 'string') {
-                            return 'string';
-                        } elseif ($type === 'float') {
-                            return 'float';
-                        } elseif ($type === 'integer') {
-                            return 'integer';
-                        } else {
-                            return $complexType;
-                        }
+                    if ($type === 'string') {
+                        return 'string';
+                    } elseif ($type === 'float') {
+                        return 'double';
+                    } elseif ($type === 'integer') {
+                        return 'integer';
+                    } else {
+                        return $complexType;
                     }
-                )
+                }
             );
 
         $this->assertEquals(
@@ -287,7 +281,7 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
                         'index' => 'no_index'
                     ],
                     'price_1_1' => [
-                        'type' => 'float',
+                        'type' => 'double',
                         'store' => true
                     ]
                 ]
@@ -306,7 +300,7 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
                         'index' => 'no_index'
                     ],
                     'price_1_1' => [
-                        'type' => 'float',
+                        'type' => 'double',
                         'store' => true
                     ]
                 ],
@@ -325,7 +319,7 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
                         'index' => 'no_index'
                     ],
                     'price_1_1' => [
-                        'type' => 'float',
+                        'type' => 'double',
                         'store' => true
                     ]
                 ]

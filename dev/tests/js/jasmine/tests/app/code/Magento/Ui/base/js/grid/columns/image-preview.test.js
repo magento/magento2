@@ -51,14 +51,18 @@ define([
             imagePreview.visibleRecord = ko.observable(1);
         });
 
-        describe('show method', function () {
-            it('show image', function () {
-                var mockImg = document.createElement('img'),
-                    hide = spyOn(imagePreview, 'hide');
+        describe('verify show && hide record', function () {
 
+            it('show image', function () {
+                var mockImg = document.createElement('img');
+
+                imagePreview.visibleRecord(2);
                 spyOn($.fn, 'get').and.returnValue(mockImg);
                 imagePreview.show(record);
-                expect(hide).toHaveBeenCalledTimes(1);
+                expect(imagePreview.lastOpenedImage()).toBe(record._rowIndex);
+
+                imagePreview.hide();
+                expect(imagePreview.lastOpenedImage()).toBe(false);
             });
 
         });
@@ -70,6 +74,7 @@ define([
                     originMock = $.fn.get;
 
                 spyOn($.fn, 'get').and.returnValue(imageMock);
+                imagePreview.lastOpenedImage = jasmine.createSpy().and.returnValue(2);
                 imagePreview.visibleRecord = jasmine.createSpy().and.returnValue(2);
                 imagePreview.displayedRecord = ko.observable();
                 imagePreview.displayedRecord(recordMock);

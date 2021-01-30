@@ -36,10 +36,8 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Delete created data-->
             <comment userInput="Delete created data" stepKey="commentDeleteCreatedData"/>
-            <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToUserRoleGrid" />
-            <waitForPageLoad stepKey="waitForRolesGridLoad" />
-            <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="deleteUserRole">
-                <argument name="role" value="adminRole"/>
+            <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteUserRole">
+                <argument name="roleName" value="{{adminRole.rolename}}"/>
             </actionGroup>
             <amOnPage url="{{AdminUsersPage.url}}" stepKey="goToAllUsersPage"/>
             <waitForPageLoad stepKey="waitForUsersGridLoad" />
@@ -93,10 +91,10 @@
         <!--Assert that category exist in field-->
         <comment userInput="Assert that category exist in field" stepKey="commentAssertion"/>
         <grabTextFrom selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="grabCategoryName"/>
-        <assertContains stepKey="assertThatCategory">
+        <assertStringContainsString stepKey="assertThatCategory">
             <expectedResult type="variable">$$createCategory.name$$</expectedResult>
             <actualResult type="variable">$grabCategoryName</actualResult>
-        </assertContains>
+        </assertStringContainsString>
         <!--Remove the category from the product and assert that it removed-->
         <comment userInput="Remove the category from the product and assert that it removed" stepKey="assertCategoryRemoved"/>
         <actionGroup ref="RemoveCategoryFromProductActionGroup" stepKey="removeCategoryFromProduct">
@@ -104,9 +102,9 @@
         </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductAfterRemovingCategory"/>
         <grabTextFrom selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="grabCategoryFieldContent"/>
-        <assertNotContains stepKey="assertThatCategoryRemoved">
+        <assertStringNotContainsString stepKey="assertThatCategoryRemoved">
             <expectedResult type="variable">$$createCategory.name$$</expectedResult>
             <actualResult type="variable">$grabCategoryFieldContent</actualResult>
-        </assertNotContains>
+        </assertStringNotContainsString>
     </test>
 </tests>

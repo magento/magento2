@@ -1,0 +1,18 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var $block \Magento\Backend\Block\Template */
+/** @var \Magento\Framework\Escaper $escaper */
+?>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/grid/url-filter-applier": {
+                "listingNamespace": "<?= $escaper->escapeJs($block->getListingNamespace()) ?>"
+            }
+        }
+    }
+</script>

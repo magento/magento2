@@ -3,49 +3,57 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Indexer\Test\Unit;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Indexer\IndexStructure;
+use Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
+use Magento\Framework\Search\Request\Dimension;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\Framework\Indexer\IndexStructure
  */
-class IndexStructureTest extends \PHPUnit\Framework\TestCase
+class IndexStructureTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexScopeResolver|MockObject
      */
     private $indexScopeResolver;
 
     /**
-     * @var \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var FlatScopeResolver|MockObject
      */
     private $flatScopeResolver;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resource;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connectionInterface;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexStructure
+     * @var IndexStructure
      */
     private $target;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->connectionInterface = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $this->connectionInterface = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+        $this->resource = $this->getMockBuilder(ResourceConnection::class)
             ->setMethods(['getConnection'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -53,13 +61,13 @@ class IndexStructureTest extends \PHPUnit\Framework\TestCase
             ->method('getConnection')
             ->willReturn($this->connectionInterface);
         $this->indexScopeResolver = $this->getMockBuilder(
-            \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver::class
+            IndexScopeResolver::class
         )
             ->setMethods(['resolve'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->flatScopeResolver = $this->getMockBuilder(
-            \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver::class
+            FlatScopeResolver::class
         )
             ->setMethods(['resolve'])
             ->disableOriginalConstructor()
@@ -68,7 +76,7 @@ class IndexStructureTest extends \PHPUnit\Framework\TestCase
         $objectManager = new ObjectManager($this);
 
         $this->target = $objectManager->getObject(
-            \Magento\Framework\Indexer\IndexStructure::class,
+            IndexStructure::class,
             [
                 'resource' => $this->resource,
                 'indexScopeResolver' => $this->indexScopeResolver,
@@ -159,7 +167,7 @@ class IndexStructureTest extends \PHPUnit\Framework\TestCase
             ->method('resolve')
             ->with($index, $dimensions)
             ->willReturn($index . '_flat');
-        $position = $this->mockFulltextTable($position, $expectedTable, true);
+        $position = $this->mockFulltextTable($position, $expectedTable);
         $this->mockFlatTable($position, $index . '_flat');
 
         $this->target->create($index, $fields, $dimensions);
@@ -168,11 +176,11 @@ class IndexStructureTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $name
      * @param string $value
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function createDimensionMock($name, $value)
     {
-        $dimension = $this->getMockBuilder(\Magento\Framework\Search\Request\Dimension::class)
+        $dimension = $this->getMockBuilder(Dimension::class)
             ->setMethods(['getName', 'getValue'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -213,7 +221,7 @@ class IndexStructureTest extends \PHPUnit\Framework\TestCase
      */
     private function mockFlatTable($callNumber, $tableName)
     {
-        $table = $this->getMockBuilder(\Magento\Framework\DB\Ddl\Table::class)
+        $table = $this->getMockBuilder(Table::class)
             ->setMethods(['addColumn', 'getColumns'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -240,7 +248,7 @@ class IndexStructureTest extends \PHPUnit\Framework\TestCase
      */
     private function mockFulltextTable($callNumber, $tableName)
     {
-        $table = $this->getMockBuilder(\Magento\Framework\DB\Ddl\Table::class)
+        $table = $this->getMockBuilder(Table::class)
             ->setMethods(['addColumn', 'addIndex'])
             ->disableOriginalConstructor()
             ->getMock();

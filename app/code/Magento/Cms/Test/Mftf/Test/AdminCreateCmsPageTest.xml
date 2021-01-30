@@ -17,15 +17,15 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-25580"/>
             <group value="Cms"/>
-            <group value="WYSIWYGDisabled"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
-        <actionGroup ref="AdminNavigateToPageGridActionGroup" stepKey="navigateToCmsPageGrid" />
+        <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="navigateToCmsPageGrid" />
         <actionGroup ref="CreateNewPageWithBasicValues" stepKey="createNewPageWithBasicValues" />
         <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSaveCmsPageButton" />
         <actionGroup ref="VerifyCreatedCmsPage" stepKey="verifyCmsPage" />

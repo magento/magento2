@@ -11,6 +11,7 @@ namespace Magento\Framework\Oauth;
  * A method for generating a current timestamp is also provided by this interface.
  *
  * @api
+ * @since 100.0.2
  */
 interface NonceGeneratorInterface
 {

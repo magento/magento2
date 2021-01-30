@@ -3,18 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Indexer\Price;
 
-class BatchSizeCalculatorTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Indexer\BatchSizeManagementInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\App\DeploymentConfig;
+
+class BatchSizeCalculatorTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator
+     * @var BatchSizeCalculator
      */
     private $model;
 
     /**
-     * @var \Magento\Framework\Indexer\BatchSizeManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BatchSizeManagementInterface|MockObject
      */
     private $estimatorMock;
 
@@ -23,20 +31,26 @@ class BatchSizeCalculatorTest extends \PHPUnit\Framework\TestCase
      */
     private $batchRowsCount;
 
-    protected function setUp()
+    /**
+     * @var DeploymentConfig|MockObject
+     */
+    private $deploymentConfigMock;
+
+    protected function setUp(): void
     {
-        $this->estimatorMock = $this->createMock(\Magento\Framework\Indexer\BatchSizeManagementInterface::class);
+        $this->estimatorMock = $this->getMockForAbstractClass(BatchSizeManagementInterface::class);
         $this->batchRowsCount = 200;
-        $this->model = new \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator(
+        $this->model = new BatchSizeCalculator(
             ['default' => $this->batchRowsCount],
             ['default' => $this->estimatorMock],
-            []
+            [],
+            $this->createMock(DeploymentConfig::class)
         );
     }
 
     public function testEstimateBatchSize()
     {
-        $connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $typeId = 'default';
         $batchSize = 100500;
 

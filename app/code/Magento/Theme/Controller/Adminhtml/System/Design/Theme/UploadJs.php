@@ -11,7 +11,7 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
 
 /**
  * Class UploadJs
- * @deprecated
+ * @deprecated 101.0.0
  */
 class UploadJs extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme implements HttpGetActionInterface
 {

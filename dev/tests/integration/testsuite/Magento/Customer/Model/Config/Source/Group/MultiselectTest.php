@@ -23,34 +23,36 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
         $optionsToCompare = [];
         foreach ($options as $option) {
             if (is_array($option['value'])) {
-                //phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $optionsToCompare = array_merge($optionsToCompare, $option['value']);
+                $optionsToCompare[] = $option['value'];
             } else {
-                $optionsToCompare[] = $option;
+                $optionsToCompare[] = [$option];
             }
         }
+        $optionsToCompare = array_merge([], ...$optionsToCompare);
         sort($optionsToCompare);
         foreach ($optionsToCompare as $item) {
-            $this->assertContains(
-                $item,
-                [
+            $this->assertTrue(
+                in_array(
+                    $item,
                     [
-                        'value' => 1,
-                        'label' => 'Default (General)',
-                    ],
-                    [
-                        'value' => 1,
-                        'label' => 'General',
-                    ],
-                    [
-                        'value' => 2,
-                        'label' => 'Wholesale',
-                    ],
-                    [
-                        'value' => 3,
-                        'label' => 'Retailer',
-                    ],
-                ]
+                        [
+                            'value' => 1,
+                            'label' => 'Default (General)',
+                        ],
+                        [
+                            'value' => 1,
+                            'label' => 'General',
+                        ],
+                        [
+                            'value' => 2,
+                            'label' => 'Wholesale',
+                        ],
+                        [
+                            'value' => 3,
+                            'label' => 'Retailer',
+                        ],
+                    ]
+                )
             );
         }
     }

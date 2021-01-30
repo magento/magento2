@@ -5,6 +5,8 @@
  */
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
@@ -35,13 +37,18 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
     protected $objectManager;
 
     /**
+     * @var string[]
+     */
+    private $importedProductSkus;
+
+    /**
      * List of Bundle options SKU
      *
      * @var array
      */
     protected $optionSkuList = ['Simple 1', 'Simple 2', 'Simple 3'];
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $db = Bootstrap::getInstance()->getBootstrap()
             ->getApplication()
@@ -54,7 +61,7 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
         parent::setUpBeforeClass();
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->model = $this->objectManager->create(\Magento\CatalogImportExport\Model\Import\Product::class);
@@ -95,7 +102,7 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
 
         $resource = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class);
         $productId = $resource->getIdBySku(self::TEST_PRODUCT_NAME);
-        $this->assertTrue(is_numeric($productId));
+        $this->assertIsNumeric($productId);
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
         $product->load($productId);
@@ -107,7 +114,7 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
 
         $optionIdList = $resource->getProductsIdsBySkus($this->optionSkuList);
         $bundleOptionCollection = $product->getExtensionAttributes()->getBundleProductOptions();
-        $this->assertEquals(2, count($bundleOptionCollection));
+        $this->assertCount(2, $bundleOptionCollection);
         foreach ($bundleOptionCollection as $optionKey => $option) {
             $this->assertEquals('checkbox', $option->getData('type'));
             $this->assertEquals('Option ' . ($optionKey + 1), $option->getData('title'));
@@ -131,6 +138,7 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
                 }
             }
         }
+        $this->importedProductSkus = ['Simple 1', 'Simple 2', 'Simple 3', 'Bundle 1'];
     }
 
     /**
@@ -163,7 +171,7 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
         $this->model->importData();
         $resource = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class);
         $productId = $resource->getIdBySku(self::TEST_PRODUCT_NAME);
-        $this->assertTrue(is_numeric($productId));
+        $this->assertIsNumeric($productId);
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
         $product->load($productId);
@@ -192,13 +200,34 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
                 }
             }
         }
+        $this->importedProductSkus = ['Simple 1', 'Simple 2', 'Simple 3', 'Bundle 1'];
     }
 
     /**
      * teardown
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
+        if (!empty($this->importedProductSkus)) {
+            $objectManager = Bootstrap::getObjectManager();
+            /** @var ProductRepositoryInterface $productRepository */
+            $productRepository = $objectManager->create(ProductRepositoryInterface::class);
+            $registry = $objectManager->get(\Magento\Framework\Registry::class);
+            /** @var ProductRepositoryInterface $productRepository */
+            $registry->unregister('isSecureArea');
+            $registry->register('isSecureArea', true);
+
+            foreach ($this->importedProductSkus as $sku) {
+                try {
+                    $productRepository->deleteById($sku);
+                } catch (NoSuchEntityException $e) {
+                    // product already deleted
+                }
+            }
+            $registry->unregister('isSecureArea');
+            $registry->register('isSecureArea', false);
+        }
+
         parent::tearDown();
     }
 }

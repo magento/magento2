@@ -19,7 +19,7 @@ class PhpStan implements ToolInterface
      *
      * @see https://github.com/phpstan/phpstan#rule-levels
      */
-    private const RULE_LEVEL = 0;
+    private const RULE_LEVEL = 1;
 
     /**
      * Memory limit required by PHPStan for full Magento project scan.

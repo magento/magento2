@@ -6,11 +6,14 @@
 
 namespace Magento\Bundle\Model\Product;
 
+use Magento\Bundle\Model\Option;
+use Magento\Bundle\Model\ResourceModel\Option\Collection;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection as Selections;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection\FilterApplier as SelectionCollectionFilterApplier;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\File\UploaderFactory;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\ArrayUtils;
@@ -188,11 +191,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockStateInterface $stockState
-     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param Json|null $serializer
      * @param MetadataPool|null $metadataPool
      * @param SelectionCollectionFilterApplier|null $selectionCollectionFilterApplier
      * @param ArrayUtils|null $arrayUtility
-     *
+     * @param UploaderFactory $uploaderFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -220,7 +223,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         Json $serializer = null,
         MetadataPool $metadataPool = null,
         SelectionCollectionFilterApplier $selectionCollectionFilterApplier = null,
-        ArrayUtils $arrayUtility = null
+        ArrayUtils $arrayUtility = null,
+        UploaderFactory $uploaderFactory = null
     ) {
         $this->_catalogProduct = $catalogProduct;
         $this->_catalogData = $catalogData;
@@ -252,7 +256,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             $coreRegistry,
             $logger,
             $productRepository,
-            $serializer
+            $serializer,
+            $uploaderFactory
         );
     }
 
@@ -414,16 +419,13 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         if ($product->getCanSaveBundleSelections()) {
             $product->canAffectOptions(true);
             $selections = $product->getBundleSelectionsData();
-            if ($selections && !empty($selections)) {
-                $options = $product->getBundleOptionsData();
-                if ($options) {
-                    foreach ($options as $option) {
-                        if (empty($option['delete']) || 1 != (int)$option['delete']) {
-                            $product->setTypeHasOptions(true);
-                            if (1 == (int)$option['required']) {
-                                $product->setTypeHasRequiredOptions(true);
-                                break;
-                            }
+            if (!empty($selections) && $options = $product->getBundleOptionsData()) {
+                foreach ($options as $option) {
+                    if (empty($option['delete']) || 1 != (int)$option['delete']) {
+                        $product->setTypeHasOptions(true);
+                        if (1 == (int)$option['required']) {
+                            $product->setTypeHasRequiredOptions(true);
+                            break;
                         }
                     }
                 }
@@ -464,7 +466,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     public function getOptionsCollection($product)
     {
         if (!$product->hasData($this->_keyOptionsCollection)) {
-            /** @var \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection */
+            /** @var Collection $optionsCollection */
             $optionsCollection = $this->_bundleOption->create()
                 ->getResourceCollection();
             $optionsCollection->setProductIdFilter($product->getEntityId());
@@ -530,10 +532,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Example: the catalog inventory validation of decimal qty can change qty to int,
      * so need to change quote item qty option value too.
      *
-     * @param   array $options
-     * @param   \Magento\Framework\DataObject $option
-     * @param   mixed $value
-     * @param   \Magento\Catalog\Model\Product $product
+     * @param  array $options
+     * @param  \Magento\Framework\DataObject $option
+     * @param  mixed $value
+     * @param  \Magento\Catalog\Model\Product $product
      * @return $this
      */
     public function updateQtyOption($options, \Magento\Framework\DataObject $option, $value, $product)
@@ -678,6 +680,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $this->checkIsAllRequiredOptions(
                     $product,
                     $isStrictProcessMode,
+                    $optionsCollection,
+                    $options
+                );
+
+                $this->validateRadioAndSelectOptions(
                     $optionsCollection,
                     $options
                 );
@@ -1184,9 +1191,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    // @codingStandardsIgnoreStart
     public function deleteTypeSpecificData(\Magento\Catalog\Model\Product $product)
     {
     }
+    // @codingStandardsIgnoreEnd
 
     /**
      * Return array of specific to type product entities
@@ -1196,18 +1205,19 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function getIdentities(\Magento\Catalog\Model\Product $product)
     {
-        $identities = parent::getIdentities($product);
+        $identities = [];
+        $identities[] = parent::getIdentities($product);
         /** @var \Magento\Bundle\Model\Option $option */
         foreach ($this->getOptions($product) as $option) {
             if ($option->getSelections()) {
                 /** @var \Magento\Catalog\Model\Product $selection */
                 foreach ($option->getSelections() as $selection) {
-                    $identities = array_merge($identities, $selection->getIdentities());
+                    $identities[] = $selection->getIdentities();
                 }
             }
         }
 
-        return $identities;
+        return array_merge([], ...$identities);
     }
 
     /**
@@ -1273,6 +1283,53 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Validate Options for Radio and Select input types
+     *
+     * @param Collection $optionsCollection
+     * @param int[] $options
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function validateRadioAndSelectOptions($optionsCollection, $options): void
+    {
+        $errorTypes = [];
+
+        if (is_array($optionsCollection->getItems())) {
+            foreach ($optionsCollection->getItems() as $option) {
+                if ($this->isSelectedOptionValid($option, $options)) {
+                    $errorTypes[] = $option->getType();
+                }
+            }
+        }
+
+        if (!empty($errorTypes)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __(
+                    'Option type (%types) should have only one element.',
+                    ['types' => implode(", ", $errorTypes)]
+                )
+            );
+        }
+    }
+
+    /**
+     * Check if selected option is valid
+     *
+     * @param Option $option
+     * @param array $options
+     * @return bool
+     */
+    private function isSelectedOptionValid($option, $options): bool
+    {
+        return (
+            ($option->getType() == 'radio' || $option->getType() == 'select') &&
+            isset($options[$option->getOptionId()]) &&
+            is_array($options[$option->getOptionId()]) &&
+            count($options[$option->getOptionId()]) > 1
+        );
+    }
+
+    /**
      * Check if selection is salable
      *
      * @param \Magento\Bundle\Model\ResourceModel\Selection\Collection $selections
@@ -1333,16 +1390,18 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     protected function mergeSelectionsWithOptions($options, $selections)
     {
+        $selections = [];
+
         foreach ($options as $option) {
             $optionSelections = $option->getSelections();
             if ($option->getRequired() && is_array($optionSelections) && count($optionSelections) == 1) {
-                $selections = array_merge($selections, $optionSelections);
+                $selections[] = $optionSelections;
             } else {
                 $selections = [];
                 break;
             }
         }
 
-        return $selections;
+        return array_merge([], ...$selections);
     }
 }

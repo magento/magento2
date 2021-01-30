@@ -13,6 +13,7 @@ use Magento\Framework\Exception\FileSystemException;
  * Class Driver
  *
  * @api
+ * @since 100.0.2
  */
 interface DriverInterface
 {
@@ -275,7 +276,7 @@ interface DriverInterface
      * @return array|bool|null
      * @throws FileSystemException
      */
-    public function fileGetCsv($resource, $length = 0, $delimiter = ',', $enclosure = '"', $escape = '\\');
+    public function fileGetCsv($resource, $length = 0, $delimiter = ',', $enclosure = '"', $escape = "\0");
 
     /**
      * Returns position of read/write pointer

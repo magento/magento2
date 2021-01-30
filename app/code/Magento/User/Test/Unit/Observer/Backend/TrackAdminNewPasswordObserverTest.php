@@ -3,46 +3,60 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\User\Test\Unit\Observer\Backend;
+
+use Magento\Backend\App\ConfigInterface;
+use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Message\Collection;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\User\Model\Backend\Config\ObserverConfig;
+use Magento\User\Model\ResourceModel\User;
+use Magento\User\Observer\Backend\TrackAdminNewPasswordObserver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Magento\User\Observer\Backend\TrackAdminNewPasswordObserver
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TrackAdminNewPasswordObserverTest extends \PHPUnit\Framework\TestCase
+class TrackAdminNewPasswordObserverTest extends TestCase
 {
-    /** @var \Magento\User\Model\Backend\Config\ObserverConfig */
+    /** @var ObserverConfig */
     protected $observerConfig;
 
-    /** @var \Magento\Backend\App\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ConfigInterface|MockObject */
     protected $configInterfaceMock;
 
-    /** @var \Magento\User\Model\ResourceModel\User|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var User|MockObject */
     protected $userMock;
 
-    /** @var \Magento\Backend\Model\Auth\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Session|MockObject */
     protected $authSessionMock;
 
-    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ManagerInterface|MockObject */
     protected $managerInterfaceMock;
 
-    /** @var \Magento\User\Observer\Backend\TrackAdminNewPasswordObserver */
+    /** @var TrackAdminNewPasswordObserver */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->configInterfaceMock = $this->getMockBuilder(\Magento\Backend\App\ConfigInterface::class)
+        $this->configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMockForAbstractClass();
+
+        $this->userMock = $this->getMockBuilder(User::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->userMock = $this->getMockBuilder(\Magento\User\Model\ResourceModel\User::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->authSessionMock = $this->getMockBuilder(\Magento\Backend\Model\Auth\Session::class)
+        $this->authSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -54,22 +68,22 @@ class TrackAdminNewPasswordObserverTest extends \PHPUnit\Framework\TestCase
                 ]
             )->getMock();
 
-        $this->managerInterfaceMock = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
+        $this->managerInterfaceMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
 
         $this->observerConfig = $helper->getObject(
-            \Magento\User\Model\Backend\Config\ObserverConfig::class,
+            ObserverConfig::class,
             [
                 'backendConfig' => $this->configInterfaceMock
             ]
         );
 
         $this->model = $helper->getObject(
-            \Magento\User\Observer\Backend\TrackAdminNewPasswordObserver::class,
+            TrackAdminNewPasswordObserver::class,
             [
                 'observerConfig' => $this->observerConfig,
                 'userResource' => $this->userMock,
@@ -83,32 +97,35 @@ class TrackAdminNewPasswordObserverTest extends \PHPUnit\Framework\TestCase
     {
         $newPW = "mYn3wpassw0rd";
         $uid = 123;
-        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserverMock */
-        $eventObserverMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        /** @var Observer|MockObject $eventObserverMock */
+        $eventObserverMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        /** @var \Magento\Framework\Event|\PHPUnit_Framework_MockObject_MockObject */
-        $eventMock = $this->getMockBuilder(\Magento\Framework\Event::class)
+        /** @var Event|MockObject */
+        $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
             ->setMethods(['getObject'])
             ->getMock();
 
-        /** @var \Magento\User\Model\User|\PHPUnit_Framework_MockObject_MockObject $userMock */
+        /** @var \Magento\User\Model\User|MockObject $userMock */
         $userMock = $this->getMockBuilder(\Magento\User\Model\User::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getPassword', 'getForceNewPassword'])
+            ->setMethods(['getId', 'getPassword', 'dataHasChangedFor'])
             ->getMock();
 
         $eventObserverMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
         $eventMock->expects($this->once())->method('getObject')->willReturn($userMock);
         $userMock->expects($this->once())->method('getId')->willReturn($uid);
         $userMock->expects($this->once())->method('getPassword')->willReturn($newPW);
-        $userMock->expects($this->once())->method('getForceNewPassword')->willReturn(false);
+        $userMock->expects($this->once())
+            ->method('dataHasChangedFor')
+            ->with('password')
+            ->willReturn(true);
 
-        /** @var \Magento\Framework\Message\Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder(\Magento\Framework\Message\Collection::class)
+        /** @var Collection|MockObject $collectionMock */
+        $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();

@@ -7,6 +7,9 @@ namespace Magento\CacheInvalidate\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Clear configured Varnish hosts when triggering a full cache flush (e.g. from the Cache Management admin dashboard)
+ */
 class FlushAllCacheObserver implements ObserverInterface
 {
     /**
@@ -43,7 +46,7 @@ class FlushAllCacheObserver implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         if ($this->config->getType() == \Magento\PageCache\Model\Config::VARNISH && $this->config->isEnabled()) {
-            $this->purgeCache->sendPurgeRequest('.*');
+            $this->purgeCache->sendPurgeRequest(['.*']);
         }
     }
 }

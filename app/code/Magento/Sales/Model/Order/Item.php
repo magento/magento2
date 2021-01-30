@@ -232,7 +232,7 @@ class Item extends AbstractModel implements OrderItemInterface
      */
     public function getSimpleQtyToShip()
     {
-        $qty = $this->getQtyOrdered() - $this->getQtyShipped() - $this->getQtyRefunded() - $this->getQtyCanceled();
+        $qty = $this->getQtyOrdered() - max($this->getQtyShipped(), $this->getQtyRefunded()) - $this->getQtyCanceled();
         return max(round($qty, 8), 0);
     }
 
@@ -2409,7 +2409,7 @@ class Item extends AbstractModel implements OrderItemInterface
      * Check if it is possible to process item after cancellation
      *
      * @return bool
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function isProcessingAvailable()
     {

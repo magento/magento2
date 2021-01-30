@@ -8,7 +8,7 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="cron_schedule" resource="default" engine="innodb" comment="Cron Schedule">
-        <column xsi:type="int" name="schedule_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="schedule_id" unsigned="true" nullable="false" identity="true"
                 comment="Schedule ID"/>
         <column xsi:type="varchar" name="job_code" nullable="false" length="255" default="0" comment="Job Code"/>
         <column xsi:type="varchar" name="status" nullable="false" length="7" default="pending" comment="Status"/>
@@ -21,12 +21,10 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="schedule_id"/>
         </constraint>
-        <index referenceId="CRON_SCHEDULE_JOB_CODE" indexType="btree">
+        <index referenceId="CRON_SCHEDULE_JOB_CODE_STATUS_SCHEDULED_AT" indexType="btree">
             <column name="job_code"/>
-        </index>
-        <index referenceId="CRON_SCHEDULE_SCHEDULED_AT_STATUS" indexType="btree">
-            <column name="scheduled_at"/>
             <column name="status"/>
+            <column name="scheduled_at"/>
         </index>
     </table>
 </schema>

@@ -36,7 +36,7 @@ class PurchaseorderTest extends TestCase
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
-        $eventManager = $this->createMock(EventManagerInterface::class);
+        $eventManager = $this->getMockForAbstractClass(EventManagerInterface::class);
         $paymentDataMock = $this->createMock(PaymentHelper::class);
         $this->scopeConfigMock = $this->createPartialMock(
             ScopeConfigInterface::class,
@@ -66,15 +66,12 @@ class PurchaseorderTest extends TestCase
 
     public function testValidate()
     {
-        $this->expectException(LocalizedException::class);
-        $this->expectExceptionMessage('Purchase order number is a required field.');
-
         $data = new DataObject([]);
 
-        $addressMock = $this->createMock(OrderAddressInterface::class);
+        $addressMock = $this->getMockForAbstractClass(OrderAddressInterface::class);
         $addressMock->expects($this->once())->method('getCountryId')->willReturn('UY');
 
-        $orderMock = $this->createMock(OrderInterface::class);
+        $orderMock = $this->getMockForAbstractClass(OrderInterface::class);
         $orderMock->expects($this->once())->method('getBillingAddress')->willReturn($addressMock);
 
         $instance = $this->createMock(Payment::class);
@@ -84,6 +81,7 @@ class PurchaseorderTest extends TestCase
         $this->object->setData('info_instance', $instance);
         $this->object->assignData($data);
 
-        $this->object->validate();
+        $result = $this->object->validate();
+        $this->assertEquals($result, $this->object);
     }
 }

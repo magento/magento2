@@ -14,7 +14,6 @@
         </annotations>
         <arguments>
             <argument name="product" defaultValue="_defaultProduct"/>
-            <argument name="category" defaultValue="_defaultCategory"/>
             <argument name="label" type="string" defaultValue="mySet"/>
             <argument name="option" type="string" defaultValue="['option1', 'option2', 'option3', 'option4']"/>
         </arguments>

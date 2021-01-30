@@ -33,7 +33,7 @@ define([
             mediaGallerySelector: '[data-gallery-role=gallery-placeholder]',
             mediaGalleryInitial: null,
             slyOldPriceSelector: '.sly-old-price',
-            normalPriceLabelSelector: '.normal-price .price-label',
+            normalPriceLabelSelector: '.product-info-main .normal-price .price-label',
 
             /**
              * Defines the mechanism of how images of a gallery should be
@@ -740,21 +740,19 @@ define([
          * @private
          */
         _displayTierPriceBlock: function (optionId) {
-            var options, tierPriceHtml;
+            var tierPrices = typeof optionId != 'undefined' && this.options.spConfig.optionPrices[optionId].tierPrices;
 
-            if (typeof optionId != 'undefined' &&
-                this.options.spConfig.optionPrices[optionId].tierPrices != [] // eslint-disable-line eqeqeq
-            ) {
-                options = this.options.spConfig.optionPrices[optionId];
+            if (_.isArray(tierPrices) && tierPrices.length > 0) {
 
                 if (this.options.tierPriceTemplate) {
-                    tierPriceHtml = mageTemplate(this.options.tierPriceTemplate, {
-                        'tierPrices': options.tierPrices,
-                        '$t': $t,
-                        'currencyFormat': this.options.spConfig.currencyFormat,
-                        'priceUtils': priceUtils
-                    });
-                    $(this.options.tierPriceBlockSelector).html(tierPriceHtml).show();
+                    $(this.options.tierPriceBlockSelector).html(
+                        mageTemplate(this.options.tierPriceTemplate, {
+                            'tierPrices': tierPrices,
+                            '$t': $t,
+                            'currencyFormat': this.options.spConfig.currencyFormat,
+                            'priceUtils': priceUtils
+                        })
+                    ).show();
                 }
             } else {
                 $(this.options.tierPriceBlockSelector).hide();

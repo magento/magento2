@@ -33,7 +33,7 @@
             </after>
 
             <!--Filter grid and see created store view-->
-            <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="navigateToStoresIndex"/>
+            <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="navigateToStoresIndex"/>
             <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
             <fillField selector="{{AdminStoresGridSection.storeFilterTextField}}" userInput="{{customStore.name}}" stepKey="fillStoreViewFilterField"/>
             <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearch"/>

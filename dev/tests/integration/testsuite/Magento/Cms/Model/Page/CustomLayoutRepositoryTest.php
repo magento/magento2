@@ -21,6 +21,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test the repository.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomLayoutRepositoryTest extends TestCase
 {
@@ -47,9 +49,15 @@ class CustomLayoutRepositoryTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
+        $objectManager->configure([
+            'preferences' => [
+                \Magento\Cms\Model\Page\CustomLayoutManagerInterface::class =>
+                    \Magento\TestFramework\Cms\Model\CustomLayoutManager::class
+            ]
+        ]);
         $this->fakeManager = $objectManager->get(CustomLayoutManager::class);
         $this->repo = $objectManager->create(CustomLayoutRepositoryInterface::class, ['manager' => $this->fakeManager]);
         $this->pageFactory = $objectManager->get(PageFactory::class);

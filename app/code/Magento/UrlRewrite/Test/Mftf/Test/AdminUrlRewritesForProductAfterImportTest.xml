@@ -43,7 +43,7 @@
             <deleteData createDataKey="simpleSubCategory1" stepKey="deleteSimpleSubCategory1"/>
             <comment userInput="Disable config to generate category/product URL Rewrites " stepKey="commentDisableConfig" />
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="disableGenerateUrlRewrite"/>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
         <comment userInput="1. Log in to Admin " stepKey="commentAdminLogin" />

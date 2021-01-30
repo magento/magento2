@@ -11,6 +11,7 @@ namespace Magento\Framework\Phrase;
  * Translated phrase renderer
  *
  * @api
+ * @since 100.0.2
  */
 interface RendererInterface
 {

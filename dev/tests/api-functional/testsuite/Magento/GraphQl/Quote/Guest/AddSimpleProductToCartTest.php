@@ -27,7 +27,7 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -82,6 +82,104 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/Store/_files/second_store.php
+     */
+    public function testAddSimpleProductWithDifferentStoreHeader()
+    {
+        $sku = 'simple_product';
+        $quantity = 2;
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $headerMap = ['Store' => 'fixture_second_store'];
+        $query = $this->getQuery($maskedQuoteId, $sku, $quantity);
+        $response = $this->graphQlMutation($query, [], '', $headerMap);
+        self::assertArrayHasKey('cart', $response['addSimpleProductsToCart']);
+
+        self::assertArrayHasKey('shipping_addresses', $response['addSimpleProductsToCart']['cart']);
+        self::assertEmpty($response['addSimpleProductsToCart']['cart']['shipping_addresses']);
+        self::assertEquals($quantity, $response['addSimpleProductsToCart']['cart']['items'][0]['quantity']);
+        self::assertEquals($sku, $response['addSimpleProductsToCart']['cart']['items'][0]['product']['sku']);
+        self::assertArrayHasKey('prices', $response['addSimpleProductsToCart']['cart']['items'][0]);
+        self::assertArrayHasKey('id', $response['addSimpleProductsToCart']['cart']);
+        self::assertEquals($maskedQuoteId, $response['addSimpleProductsToCart']['cart']['id']);
+
+        self::assertArrayHasKey('price', $response['addSimpleProductsToCart']['cart']['items'][0]['prices']);
+        $price = $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['price'];
+        self::assertArrayHasKey('value', $price);
+        self::assertEquals(10, $price['value']);
+        self::assertArrayHasKey('currency', $price);
+        self::assertEquals('USD', $price['currency']);
+
+        self::assertArrayHasKey('row_total', $response['addSimpleProductsToCart']['cart']['items'][0]['prices']);
+        $rowTotal = $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['row_total'];
+        self::assertArrayHasKey('value', $rowTotal);
+        self::assertEquals(20, $rowTotal['value']);
+        self::assertArrayHasKey('currency', $rowTotal);
+        self::assertEquals('USD', $rowTotal['currency']);
+
+        self::assertArrayHasKey(
+            'row_total_including_tax',
+            $response['addSimpleProductsToCart']['cart']['items'][0]['prices']
+        );
+        $rowTotalIncludingTax =
+            $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['row_total_including_tax'];
+        self::assertArrayHasKey('value', $rowTotalIncludingTax);
+        self::assertEquals(20, $rowTotalIncludingTax['value']);
+        self::assertArrayHasKey('currency', $rowTotalIncludingTax);
+        self::assertEquals('USD', $rowTotalIncludingTax['currency']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_with_image_no_options.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     */
+    public function testAddProductToCartWithImage()
+    {
+        $sku = 'simple-2';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  addSimpleProductsToCart(input: {
+    cart_id: "$maskedQuoteId",
+    cart_items: [{data: {sku: "$sku", quantity: 1}}]
+  }) {
+    cart {
+      items {
+        id
+        prices{
+          price {
+            value
+          }
+        }
+        quantity
+        product {
+          sku
+          name
+          image {
+            label
+            url
+          }
+        }
+      }
+    }
+  }
+}
+QUERY;
+
+        $response = $this->graphQlMutation($query);
+        $this->assertArrayHasKey('cart', $response['addSimpleProductsToCart']);
+        $this->assertCount(1, $response['addSimpleProductsToCart']['cart']['items']);
+        $cartItem = $response['addSimpleProductsToCart']['cart']['items'][0];
+        $this->assertEquals('11', $cartItem['prices']['price']['value']);
+        $this->assertEquals($sku, $cartItem['product']['sku']);
+        $expectedImageRegex = '/^https?:\/\/.+magento_image(_[0-9]+)?.jpg$/';
+        $this->assertMatchesRegularExpression($expectedImageRegex, $cartItem['product']['image']['url']);
+    }
+
+    /**
      * Add disabled product to cart
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
@@ -133,11 +231,12 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     }
 
     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_id" is missing
      */
     public function testAddSimpleProductToCartIfCartIdIsEmpty()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Required parameter "cart_id" is missing');
+
         $query = <<<QUERY
 mutation {
   addSimpleProductsToCart(
@@ -159,11 +258,12 @@ QUERY;
     }
 
     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_items" is missing
      */
     public function testAddSimpleProductToCartIfCartItemsAreEmpty()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Required parameter "cart_items" is missing');
+
         $query = <<<QUERY
 mutation {
   addSimpleProductsToCart(
@@ -187,11 +287,12 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testAddProductToNonExistentCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a cart with ID "non_existent_masked_id"');
+
         $sku = 'simple_product';
         $quantity = 1;
         $maskedQuoteId = 'non_existent_masked_id';
@@ -203,11 +304,12 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage Could not find a product with SKU "simple_product"
      */
     public function testNonExistentProductToCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a product with SKU "simple_product"');
+
         $sku = 'simple_product';
         $quantity = 1;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');

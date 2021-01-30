@@ -15,5 +15,7 @@
         <element name="success" type="text" selector="#system_messages div.message-success"/>
         <element name="warning" type="text" selector="#system_messages div.message-warning"/>
         <element name="notice" type="text" selector="#system_messages div.message-notice"/>
+        <element name="info" type="text" selector="#system_messages div.message-info"/>
+        <element name="viewDetailsLink" type="button" selector="//div[contains(@class, 'message-system-short')]/a[contains(text(), 'View Details')]" timeout="30"/>
     </section>
 </sections>

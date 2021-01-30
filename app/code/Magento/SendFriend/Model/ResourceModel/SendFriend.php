@@ -6,10 +6,6 @@
 namespace Magento\SendFriend\Model\ResourceModel;
 
 /**
- * SendFriend Log Resource Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- *
  * @api
  * @since 100.0.2
  */
@@ -32,6 +28,7 @@ class SendFriend extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $ip
      * @param int $startTime
      * @param int $websiteId
+     *
      * @return int
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -58,6 +55,7 @@ class SendFriend extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $ip
      * @param int $startTime
      * @param int $websiteId
+     *
      * @return $this
      */
     public function addSendItem($ip, $startTime, $websiteId)
@@ -66,6 +64,7 @@ class SendFriend extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->getMainTable(),
             ['ip' => $ip, 'time' => $startTime, 'website_id' => $websiteId]
         );
+
         return $this;
     }
 
@@ -73,6 +72,7 @@ class SendFriend extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Delete Old logs
      *
      * @param int $time
+     *
      * @return $this
      */
     public function deleteLogsBefore($time)

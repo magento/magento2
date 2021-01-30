@@ -27,7 +27,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -175,11 +175,8 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     public function getLargeSwatchesAmountAttributeData() : array
     {
-        $maxInputVars = ini_get('max_input_vars');
-        // Each option is at least 7 variables array for a visual swatch.
-        // Set options count to exceed max_input_vars by 20 options (140 variables).
-        $swatchVisualOptionsCount = (int)floor($maxInputVars / 7) + 20;
-        $swatchTextOptionsCount = (int)floor($maxInputVars / 4) + 80;
+        $swatchVisualOptionsCount = 2000;
+        $swatchTextOptionsCount = 2000;
         return [
             'visual swatches' => $this->getSwatchVisualDataSet($swatchVisualOptionsCount),
             'text swatches' => $this->getSwatchTextDataSet($swatchTextOptionsCount)

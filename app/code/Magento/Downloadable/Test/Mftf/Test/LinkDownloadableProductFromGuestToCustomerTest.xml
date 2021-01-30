@@ -20,11 +20,12 @@
         <before>
             <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add example.com static.magento.com"/>
             <magentoCLI command="config:set {{EnableGuestCheckoutWithDownloadableItems.path}} {{EnableGuestCheckoutWithDownloadableItems.value}}" stepKey="enableGuestCheckoutWithDownloadableItems" />
+            <magentoCLI command="config:set {{EnableShareableDownloadableItems.path}} {{EnableShareableDownloadableItems.value}}" stepKey="enableShareableDownloadableItems" />
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="DownloadableProductWithOneLink" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <createData entity="downloadableLink1" stepKey="addDownloadableLink">
+            <createData entity="downloadableLinkSharable" stepKey="addDownloadableLink">
                 <requiredEntity createDataKey="createProduct"/>
             </createData>
         </before>
@@ -35,7 +36,7 @@
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
         </after>
         <!--Step 1: Go to Storefront as Guest-->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStorefrontPage"/>
         <!--Step 2: Add downloadable product to shopping cart-->
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="amOnStorefrontProductPage"/>
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">

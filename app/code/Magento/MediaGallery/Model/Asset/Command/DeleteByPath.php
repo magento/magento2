@@ -16,7 +16,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Delete media asset by path
  *
- * @deprecated use \Magento\MediaGalleryApi\Api\DeleteAssetsByPathInterface instead
+ * @deprecated 100.4.0 use \Magento\MediaGalleryApi\Api\DeleteAssetsByPathInterface instead
  * @see \Magento\MediaGalleryApi\Api\DeleteAssetsByPathInterface
  */
 class DeleteByPath implements DeleteByPathInterface

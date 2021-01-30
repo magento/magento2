@@ -43,7 +43,9 @@
                 <requiredEntity createDataKey="product"/>
                 <requiredEntity createDataKey="simple3"/>
             </updateData>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="simple1" stepKey="deleteProduct1"/>

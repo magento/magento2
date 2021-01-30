@@ -3,14 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\NewRelicReporting\Test\Unit\Model\Observer;
 
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\NewRelicReporting\Model\Config;
+use Magento\NewRelicReporting\Model\NewRelicWrapper;
 use Magento\NewRelicReporting\Model\Observer\CheckConfig;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class CheckConfigTest
- */
-class CheckConfigTest extends \PHPUnit\Framework\TestCase
+class CheckConfigTest extends TestCase
 {
     /**
      * @var CheckConfig
@@ -18,17 +23,17 @@ class CheckConfigTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     protected $config;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\NewRelicWrapper|\PHPUnit_Framework_MockObject_MockObject
+     * @var NewRelicWrapper|MockObject
      */
     protected $newRelicWrapper;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
     protected $messageManager;
 
@@ -37,19 +42,19 @@ class CheckConfigTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->config = $this->getMockBuilder(\Magento\NewRelicReporting\Model\Config::class)
+        $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['isNewRelicEnabled', 'disableModule'])
             ->getMock();
-        $this->newRelicWrapper = $this->getMockBuilder(\Magento\NewRelicReporting\Model\NewRelicWrapper::class)
+        $this->newRelicWrapper = $this->getMockBuilder(NewRelicWrapper::class)
             ->disableOriginalConstructor()
             ->setMethods(['isExtensionInstalled'])
             ->getMock();
-        $this->messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
+        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->model = new CheckConfig(
             $this->config,
@@ -65,8 +70,8 @@ class CheckConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testCheckConfigModuleDisabledFromConfig()
     {
-        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
-        $eventObserver = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        /** @var Observer|MockObject $eventObserver */
+        $eventObserver = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -84,8 +89,8 @@ class CheckConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testCheckConfigExtensionNotInstalled()
     {
-        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
-        $eventObserver = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        /** @var Observer|MockObject $eventObserver */
+        $eventObserver = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -106,8 +111,8 @@ class CheckConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testCheckConfig()
     {
-        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
-        $eventObserver = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        /** @var Observer|MockObject $eventObserver */
+        $eventObserver = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -120,7 +125,7 @@ class CheckConfigTest extends \PHPUnit\Framework\TestCase
         $this->config->expects($this->once())
             ->method('disableModule');
         $this->messageManager->expects($this->once())
-            ->method('addError');
+            ->method('addErrorMessage');
 
         $this->model->execute($eventObserver);
     }

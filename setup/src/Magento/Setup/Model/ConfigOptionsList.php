@@ -53,6 +53,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         \Magento\Setup\Model\ConfigOptionsList\Cache::class,
         \Magento\Setup\Model\ConfigOptionsList\PageCache::class,
         \Magento\Setup\Model\ConfigOptionsList\Lock::class,
+        \Magento\Setup\Model\ConfigOptionsList\Directory::class,
     ];
 
     /**
@@ -204,12 +205,12 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             ),
         ];
 
+        $options = [$options];
         foreach ($this->configOptionsCollection as $configOptionsList) {
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $options = array_merge($options, $configOptionsList->getOptions());
+            $options[] = $configOptionsList->getOptions();
         }
 
-        return $options;
+        return array_merge([], ...$options);
     }
 
     /**
@@ -244,34 +245,24 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         $errors = [];
 
         if (isset($options[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS])) {
-            $errors = array_merge(
-                $errors,
-                $this->validateHttpCacheHosts($options[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS])
-            );
+            $errors[] = $this->validateHttpCacheHosts($options[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS]);
         }
 
         if (isset($options[ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX])) {
-            $errors = array_merge(
-                $errors,
-                $this->validateDbPrefix($options[ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX])
-            );
+            $errors[] = $this->validateDbPrefix($options[ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX]);
         }
 
         if (!$options[ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION]) {
-            $errors = array_merge($errors, $this->validateDbSettings($options, $deploymentConfig));
+            $errors[] = $this->validateDbSettings($options, $deploymentConfig);
         }
 
         foreach ($this->configOptionsCollection as $configOptionsList) {
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $errors = array_merge($errors, $configOptionsList->validate($options, $deploymentConfig));
+            $errors[] = $configOptionsList->validate($options, $deploymentConfig);
         }
 
-        $errors = array_merge(
-            $errors,
-            $this->validateEncryptionKey($options)
-        );
+        $errors[] = $this->validateEncryptionKey($options);
 
-        return $errors;
+        return array_merge([], ...$errors);
     }
 
     /**

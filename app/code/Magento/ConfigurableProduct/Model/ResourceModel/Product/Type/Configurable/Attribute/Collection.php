@@ -41,8 +41,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Product instance
      *
      * @var \Magento\Catalog\Model\Product
-     * @deprecated Now collection supports fetching options for multiple products. This field will be set to first
-     * element of products array.
+     * @deprecated 100.3.0 Now collection supports fetching options for multiple products.
+     * This field will be set to first element of products array.
      */
     protected $_product;
 
@@ -174,6 +174,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return $this
      * @throws \Exception
+     * @since 100.3.0
      */
     protected function _beforeLoad()
     {
@@ -285,7 +286,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 ['use_default' => $useDefaultCheck, 'label' => $labelCheck]
             )->where(
                 'def.product_super_attribute_id IN (?)',
-                array_keys($this->_items)
+                array_keys($this->_items),
+                \Zend_Db::INT_TYPE
             )->where(
                 'def.store_id = ?',
                 0

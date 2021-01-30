@@ -3,35 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\Customer\Attribute\Backend;
 
 use Magento\Customer\Model\Customer\Attribute\Backend\Billing;
+use Magento\Eav\Model\Entity\AbstractEntity;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\DataObject;
+use PHPUnit\Framework\TestCase;
 
-class BillingTest extends \PHPUnit\Framework\TestCase
+class BillingTest extends TestCase
 {
     /**
      * @var Billing
      */
     protected $testable;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)->getMock();
-        /** @var \Psr\Log\LoggerInterface $logger */
-        $this->testable = new \Magento\Customer\Model\Customer\Attribute\Backend\Billing($logger);
+        $this->testable = new Billing();
     }
 
     public function testBeforeSave()
     {
-        $object = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+        $object = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['getDefaultBilling', 'unsetDefaultBilling'])
             ->getMock();
 
-        $object->expects($this->once())->method('getDefaultBilling')->will($this->returnValue(null));
-        $object->expects($this->once())->method('unsetDefaultBilling')->will($this->returnSelf());
-        /** @var \Magento\Framework\DataObject $object */
-
+        $object->expects($this->once())->method('getDefaultBilling')->willReturn(null);
+        $object->expects($this->once())->method('unsetDefaultBilling')->willReturnSelf();
+        /** @var DataObject $object */
         $this->testable->beforeSave($object);
     }
 
@@ -40,37 +43,36 @@ class BillingTest extends \PHPUnit\Framework\TestCase
         $addressId = 1;
         $attributeCode = 'attribute_code';
         $defaultBilling = 'default billing address';
-        $object = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+        $object = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['getDefaultBilling', 'getAddresses', 'setDefaultBilling'])
             ->getMock();
 
-        $address = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+        $address = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPostIndex', 'getId'])
             ->getMock();
 
-        $attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+        $attribute = $this->getMockBuilder(AbstractAttribute::class)
             ->setMethods(['__wakeup', 'getEntity', 'getAttributeCode'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $entity = $this->getMockBuilder(\Magento\Eav\Model\Entity\AbstractEntity::class)
+        $entity = $this->getMockBuilder(AbstractEntity::class)
             ->setMethods(['saveAttribute'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $attribute->expects($this->once())->method('getEntity')->will($this->returnValue($entity));
-        $attribute->expects($this->once())->method('getAttributeCode')->will($this->returnValue($attributeCode));
+        $attribute->expects($this->once())->method('getEntity')->willReturn($entity);
+        $attribute->expects($this->once())->method('getAttributeCode')->willReturn($attributeCode);
         $entity->expects($this->once())->method('saveAttribute')->with($this->logicalOr($object, $attributeCode));
-        $address->expects($this->once())->method('getPostIndex')->will($this->returnValue($defaultBilling));
-        $address->expects($this->once())->method('getId')->will($this->returnValue($addressId));
-        $object->expects($this->once())->method('getDefaultBilling')->will($this->returnValue($defaultBilling));
-        $object->expects($this->once())->method('setDefaultBilling')->with($addressId)->will($this->returnSelf());
-        $object->expects($this->once())->method('getAddresses')->will($this->returnValue([$address]));
+        $address->expects($this->once())->method('getPostIndex')->willReturn($defaultBilling);
+        $address->expects($this->once())->method('getId')->willReturn($addressId);
+        $object->expects($this->once())->method('getDefaultBilling')->willReturn($defaultBilling);
+        $object->expects($this->once())->method('setDefaultBilling')->with($addressId)->willReturnSelf();
+        $object->expects($this->once())->method('getAddresses')->willReturn([$address]);
         /** @var \Magento\Framework\DataObject $object */
-        /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
-
+        /** @var AbstractAttribute $attribute */
         $this->testable->setAttribute($attribute);
         $this->testable->afterSave($object);
     }

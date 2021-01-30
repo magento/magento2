@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="RemoteStorageAwsS3ConfigData">
+        <data key="driver">{{_ENV.REMOTE_STORAGE_AWSS3_DRIVER}}</data>
+        <data key="region">{{_ENV.REMOTE_STORAGE_AWSS3_REGION}}</data>
+        <data key="prefix">{{_ENV.REMOTE_STORAGE_AWSS3_PREFIX}}</data>
+        <data key="bucket">{{_ENV.REMOTE_STORAGE_AWSS3_BUCKET}}</data>
+        <data key="access_key">{{_ENV.REMOTE_STORAGE_AWSS3_ACCESS_KEY}}</data>
+        <data key="secret_key">{{_ENV.REMOTE_STORAGE_AWSS3_SECRET_KEY}}</data>
+        <data key="enable_options">--remote-storage-driver={{_ENV.REMOTE_STORAGE_AWSS3_DRIVER}} --remote-storage-bucket={{_ENV.REMOTE_STORAGE_AWSS3_BUCKET}} --remote-storage-region={{_ENV.REMOTE_STORAGE_AWSS3_REGION}} --remote-storage-prefix={{_ENV.REMOTE_STORAGE_AWSS3_PREFIX}} --remote-storage-key={{_ENV.REMOTE_STORAGE_AWSS3_ACCESS_KEY}} --remote-storage-secret={{_ENV.REMOTE_STORAGE_AWSS3_SECRET_KEY}} -n</data>
+        <data key="disable_options">--remote-storage-driver=file -n</data>
+    </entity>
+</entities>

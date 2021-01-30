@@ -3,26 +3,39 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\TaxImportExport\Test\Unit\Controller\Adminhtml\Rate;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\DataObject;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Model\ResourceModel\Store\Collection;
+use Magento\Store\Model\Store;
+use Magento\Tax\Model\Calculation\Rate\Title;
+use Magento\TaxImportExport\Controller\Adminhtml\Rate\ExportPost;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ExportPostTest extends \PHPUnit\Framework\TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class ExportPostTest extends TestCase
 {
     /**
-     * @var \Magento\TaxImportExport\Controller\Adminhtml\Rate\ExportPost
+     * @var ExportPost
      */
     private $controller;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $fileFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $objectManagerMock;
 
@@ -31,13 +44,13 @@ class ExportPostTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->fileFactoryMock = $this->createMock(\Magento\Framework\App\Response\Http\FileFactory::class);
-        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->fileFactoryMock = $this->createMock(FileFactory::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->controller = $this->objectManagerHelper->getObject(
-            \Magento\TaxImportExport\Controller\Adminhtml\Rate\ExportPost::class,
+            ExportPost::class,
             [
                 'fileFactory' => $this->fileFactoryMock,
                 'objectManager' => $this->objectManagerMock
@@ -47,7 +60,7 @@ class ExportPostTest extends \PHPUnit\Framework\TestCase
 
     public function testExecute()
     {
-        $headers = new \Magento\Framework\DataObject(
+        $headers = new DataObject(
             [
                 'code' => __('Code'),
                 'country_name' => __('Country'),
@@ -63,9 +76,9 @@ class ExportPostTest extends \PHPUnit\Framework\TestCase
             ',"{{zip_is_range}}","{{zip_from}}","{{zip_to}}"';
         $content = $headers->toString($template);
         $content .= "\n";
-        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $storeMock = $this->createMock(Store::class);
         $storeCollectionMock = $this->objectManagerHelper->getCollectionMock(
-            \Magento\Store\Model\ResourceModel\Store\Collection::class,
+            Collection::class,
             []
         );
         $rateCollectionMock = $this->objectManagerHelper->getCollectionMock(
@@ -78,20 +91,21 @@ class ExportPostTest extends \PHPUnit\Framework\TestCase
             []
         );
         $storeCollectionMock->expects($this->once())->method('setLoadDefault')->willReturnSelf();
-        $rateTitleMock = $this->createMock(\Magento\Tax\Model\Calculation\Rate\Title::class);
+        $rateTitleMock = $this->createMock(Title::class);
         $rateTitleMock->expects($this->once())->method('getCollection')->willReturn($taxCollectionMock);
         $storeMock->expects($this->once())->method('getCollection')->willReturn($storeCollectionMock);
         $this->objectManagerMock->expects($this->any())->method('create')->willReturnMap([
-            [\Magento\Store\Model\Store::class, [], $storeMock],
-            [\Magento\Tax\Model\Calculation\Rate\Title::class, [], $rateTitleMock],
+            [Store::class, [], $storeMock],
+            [Title::class, [], $rateTitleMock],
             [\Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection::class, [], $rateCollectionMock]
         ]);
         $rateCollectionMock->expects($this->once())->method('joinCountryTable')->willReturnSelf();
         $rateCollectionMock->expects($this->once())->method('joinRegionTable')->willReturnSelf();
+        $fileContent = ['type' => 'string', 'value' => $content, 'rm' => true];
         $this->fileFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->with('tax_rates.csv', $content, DirectoryList::VAR_DIR);
+            ->with('tax_rates.csv', $fileContent, DirectoryList::VAR_DIR);
         $this->controller->execute();
     }
 }

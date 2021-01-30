@@ -3,18 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Favicon;
 
-use \Magento\Theme\Model\Favicon\Favicon;
 use Magento\Config\Model\Config\Backend\Image\Favicon as ImageFavicon;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\UrlInterface;
+use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Theme\Model\Favicon\Favicon;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FaviconTest extends \PHPUnit\Framework\TestCase
+class FaviconTest extends TestCase
 {
     /**
      * @var Favicon
@@ -22,56 +32,57 @@ class FaviconTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\Store
+     * @var MockObject|Store
      */
     protected $store;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
+     * @var MockObject|ScopeConfigInterface
      */
     protected $scopeManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\MediaStorage\Helper\File\Storage\Database
+     * @var MockObject|Database
      */
     protected $fileStorageDatabase;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\ReadInterface
+     * @var MockObject|ReadInterface
      */
     protected $mediaDir;
 
     /**
      * Initialize testable object
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)->getMock();
+        $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
+            ->getMock();
         $this->store = $this->getMockBuilder(
-            \Magento\Store\Model\Store::class
-        )->disableOriginalConstructor()->getMock();
+            Store::class
+        )->disableOriginalConstructor()
+            ->getMock();
         $storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($this->store);
-        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+        /** @var StoreManagerInterface $storeManager */
         $this->scopeManager = $this->getMockBuilder(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class
+            ScopeConfigInterface::class
         )->getMock();
-        $this->fileStorageDatabase = $this->getMockBuilder(\Magento\MediaStorage\Helper\File\Storage\Database::class)
+        $this->fileStorageDatabase = $this->getMockBuilder(Database::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+        $filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->mediaDir = $this->getMockBuilder(
-            \Magento\Framework\Filesystem\Directory\ReadInterface::class
+            ReadInterface::class
         )->getMock();
         $filesystem->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::MEDIA)
             ->willReturn($this->mediaDir);
-        /** @var \Magento\Framework\Filesystem $filesystem */
-
+        /** @var Filesystem $filesystem */
         $this->object = new Favicon(
             $storeManager,
             $this->scopeManager,
@@ -94,7 +105,7 @@ class FaviconTest extends \PHPUnit\Framework\TestCase
     public function testGetFaviconFile()
     {
         $scopeConfigValue = 'path';
-        $urlToMediaDir = 'http://magento.url/pub/media/';
+        $urlToMediaDir = 'http://magento.url/media/';
         $expectedFile = ImageFavicon::UPLOAD_DIR . '/' . $scopeConfigValue;
         $expectedUrl = $urlToMediaDir . $expectedFile;
 

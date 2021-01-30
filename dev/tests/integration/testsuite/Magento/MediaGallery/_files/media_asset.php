@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
-use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
+use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
@@ -18,6 +18,7 @@ $mediaAsset = $mediaAssetFactory->create(
     [
         'id' => 2020,
         'path' => 'testDirectory/path.jpg',
+        'description' => 'Description of an image',
         'contentType' => 'image',
         'title' => 'Img',
         'source' => 'Local',
@@ -26,6 +27,6 @@ $mediaAsset = $mediaAssetFactory->create(
         'size' => 12877
     ]
 );
-/** @var SaveInterface $mediaSave */
-$mediaSave = $objectManager->get(SaveInterface::class);
-$mediaId = $mediaSave->execute($mediaAsset);
+/** @var SaveAssetsInterface $mediaSave */
+$mediaSave = $objectManager->get(SaveAssetsInterface::class);
+$mediaId = $mediaSave->execute([$mediaAsset]);

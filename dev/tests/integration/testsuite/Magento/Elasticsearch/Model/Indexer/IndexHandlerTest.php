@@ -19,6 +19,7 @@ use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\Indexer\Model\Indexer;
 use Magento\Framework\Search\EngineResolverInterface;
 use Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Important: Please make sure that each integration test file works with unique elastic search index. In order to
@@ -29,7 +30,7 @@ use Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker;
  * @magentoDataFixture Magento/Elasticsearch/_files/indexer.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class IndexHandlerTest extends \PHPUnit\Framework\TestCase
+class IndexHandlerTest extends TestCase
 {
     /**
      * @var string
@@ -74,7 +75,7 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $connectionManager = Bootstrap::getObjectManager()->create(ConnectionManager::class);
         $this->client = $connectionManager->getConnection();
@@ -96,7 +97,7 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * Make sure that correct engine is set
      */
-    protected function assertPreConditions()
+    protected function assertPreConditions(): void
     {
         $currentEngine = Bootstrap::getObjectManager()->get(EngineResolverInterface::class)->getCurrentSearchEngine();
         $this->assertEquals($this->getInstalledSearchEngine(), $currentEngine);
@@ -116,6 +117,9 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
 
             $products = $this->searchByName('Simple Product', $storeId);
             $this->assertCount(5, $products);
+
+            $this->assertCount(2, $this->searchByBoolAttribute(0, $storeId));
+            $this->assertCount(3, $this->searchByBoolAttribute(1, $storeId));
         }
     }
 
@@ -264,6 +268,32 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
         $products = isset($queryResult['hits']['hits']) ? $queryResult['hits']['hits'] : [];
 
         return $products;
+    }
+
+    /**
+     * Search docs in Elasticsearch by boolean attribute.
+     *
+     * @param int $value
+     * @param int $storeId
+     * @return array
+     */
+    private function searchByBoolAttribute(int $value, int $storeId): array
+    {
+        $index = $this->searchIndexNameResolver->getIndexName($storeId, $this->indexer->getId());
+        $searchQuery = [
+            'index' => $index,
+            'type' => $this->entityType,
+            'body' => [
+                'query' => [
+                    'query_string' => [
+                        'query' => $value,
+                        'default_field' => 'boolean_attribute',
+                    ],
+                ],
+            ],
+        ];
+        $queryResult = $this->client->query($searchQuery);
+        return isset($queryResult['hits']['hits']) ? $queryResult['hits']['hits'] : [];
     }
 
     /**

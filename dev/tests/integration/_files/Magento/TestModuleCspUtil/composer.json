@@ -1,0 +1,21 @@
+{
+  "name": "magento/module-csp-util",
+  "description": "test csp module",
+  "config": {
+    "sort-packages": true
+  },
+  "require": {
+    "php": "~7.1.3||~7.2.0||~7.3.0",
+    "magento/framework": "*",
+    "magento/module-integration": "*"
+  },
+  "type": "magento2-module",
+  "extra": {
+    "map": [
+      [
+        "*",
+        "Magento/TestModuleCspUtil"
+      ]
+    ]
+  }
+}

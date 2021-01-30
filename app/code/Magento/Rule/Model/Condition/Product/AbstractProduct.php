@@ -12,6 +12,7 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Abstract Rule product condition data model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
@@ -661,19 +662,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      */
     protected function _getAvailableInCategories($productId)
     {
-        return $this->_productResource->getConnection()
-            ->fetchCol(
-                $this->_productResource->getConnection()
-                    ->select()
-                    ->distinct()
-                    ->from(
-                        $this->_productResource->getTable('catalog_category_product'),
-                        ['category_id']
-                    )->where(
-                        'product_id = ?',
-                        $productId
-                    )
-            );
+        return $this->productCategoryList->getCategoryIds($productId);
     }
 
     /**

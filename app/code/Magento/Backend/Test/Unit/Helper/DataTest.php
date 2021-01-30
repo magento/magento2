@@ -3,32 +3,45 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Helper;
 
-class DataTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\App\Area\FrontNameResolver;
+use Magento\Backend\Helper\Data;
+use Magento\Backend\Model\Auth;
+use Magento\Backend\Model\Url;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Route\Config;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Math\Random;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class DataTest extends TestCase
 {
     /**
-     * @var \Magento\Backend\Helper\Data
+     * @var Data
      */
     protected $_helper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_frontResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_frontResolverMock = $this->createMock(\Magento\Backend\App\Area\FrontNameResolver::class);
-        $this->_helper = new \Magento\Backend\Helper\Data(
-            $this->createMock(\Magento\Framework\App\Helper\Context::class),
-            $this->createMock(\Magento\Framework\App\Route\Config::class),
-            $this->createMock(\Magento\Framework\Locale\ResolverInterface::class),
-            $this->createMock(\Magento\Backend\Model\Url::class),
-            $this->createMock(\Magento\Backend\Model\Auth::class),
+        $this->_frontResolverMock = $this->createMock(FrontNameResolver::class);
+        $this->_helper = new Data(
+            $this->createMock(Context::class),
+            $this->createMock(Config::class),
+            $this->getMockForAbstractClass(ResolverInterface::class),
+            $this->createMock(Url::class),
+            $this->createMock(Auth::class),
             $this->_frontResolverMock,
-            $this->createMock(\Magento\Framework\Math\Random::class),
-            $this->createMock(\Magento\Framework\App\RequestInterface::class)
+            $this->createMock(Random::class),
         );
     }
 
@@ -38,8 +51,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getFrontName'
-        )->will(
-            $this->returnValue('custom_backend')
+        )->willReturn(
+            'custom_backend'
         );
 
         $this->assertEquals('custom_backend', $this->_helper->getAreaFrontName());

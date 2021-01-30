@@ -12,8 +12,6 @@ namespace Magento\Framework\Session {
 
     use Magento\Framework\App\Filesystem\DirectoryList;
 
-    // @codingStandardsIgnoreEnd
-
     /**
      * Mock ini_get global function
      *
@@ -37,6 +35,8 @@ namespace Magento\Framework\Session {
         return call_user_func_array('\ini_get', func_get_args());
     }
 
+    // @codingStandardsIgnoreEnd
+
     /**
      * @magentoAppIsolation enabled
      */
@@ -51,10 +51,10 @@ namespace Magento\Framework\Session {
         /** @var string Default value for session.save_path setting */
         private $defaultSavePath;
 
-        /** @var \Magento\Framework\App\DeploymentConfig | \PHPUnit_Framework_MockObject_MockObject */
+        /** @var \Magento\Framework\App\DeploymentConfig | \PHPUnit\Framework\MockObject\MockObject */
         private $deploymentConfigMock;
 
-        protected function setUp()
+        protected function setUp(): void
         {
             $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -101,8 +101,8 @@ namespace Magento\Framework\Session {
             $this->assertEquals($this->_cacheLimiter, $model->getCacheLimiter());
             $this->assertEquals('/', $model->getCookiePath());
             $this->assertEquals('localhost', $model->getCookieDomain());
-            $this->assertEquals(false, $model->getCookieSecure());
-            $this->assertEquals(true, $model->getCookieHttpOnly());
+            $this->assertFalse($model->getCookieSecure());
+            $this->assertTrue($model->getCookieHttpOnly());
             $this->assertEquals($model->getSavePath(), $model->getOption('save_path'));
         }
 
@@ -181,7 +181,7 @@ namespace Magento\Framework\Session {
             $model->setCookieLifetime('foobar_bogus');
             $this->assertEquals($preVal, $model->getCookieLifetime());
         }
-      
+
         public function testSettingInvalidCookieLifetime2()
         {
             $model = $this->getModel();
@@ -193,8 +193,8 @@ namespace Magento\Framework\Session {
         public function testWrongMethodCall()
         {
             $model = $this->getModel();
-            $this->expectException(
-                '\BadMethodCallException',
+            $this->expectException(\BadMethodCallException::class);
+            $this->expectExceptionMessage(
                 'Method "methodThatNotExist" does not exist in Magento\Framework\Session\Config'
             );
             $model->methodThatNotExist();

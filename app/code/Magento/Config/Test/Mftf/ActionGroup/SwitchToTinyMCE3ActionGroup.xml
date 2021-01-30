@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="SwitchToTinyMCE3ActionGroup">
+    <actionGroup name="SwitchToTinyMCE3ActionGroup" deprecated="This version of TinyMCE is no longer supported">
         <annotations>
             <description>Goes to the 'Configuration' page for 'Content Management'. Sets 'WYSIWYG Editor' to 'TinyMCE 3'. Clicks on the Save button. PLEASE NOTE: The value is Hardcoded.</description>
         </annotations>

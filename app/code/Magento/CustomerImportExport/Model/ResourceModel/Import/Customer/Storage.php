@@ -130,7 +130,7 @@ class Storage
     /**
      * Add customer to array
      *
-     * @deprecated @see addCustomerByArray
+     * @deprecated 100.3.0 @see addCustomerByArray
      * @param DataObject $customer
      * @return $this
      */

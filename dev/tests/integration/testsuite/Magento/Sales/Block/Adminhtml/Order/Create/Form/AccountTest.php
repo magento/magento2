@@ -9,17 +9,23 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 
+use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Model\Session\Quote as SessionQuote;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterfaceFactory;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Data\Option;
 use Magento\Customer\Model\Metadata\Form;
 use Magento\Customer\Model\Metadata\FormFactory;
+use Magento\Framework\App\RequestInterface as Request;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Quote\Model\Quote;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class for test Account
@@ -27,7 +33,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  * @magentoAppArea adminhtml
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AccountTest extends \PHPUnit\Framework\TestCase
+class AccountTest extends TestCase
 {
     /**
      * @var Account
@@ -47,7 +53,7 @@ class AccountTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         parent::setUp();
@@ -81,35 +87,35 @@ class AccountTest extends \PHPUnit\Framework\TestCase
         );
 
         $fixtureCustomerId = 1;
-        /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
-        $customerRepository = $this->objectManager->get(\Magento\Customer\Api\CustomerRepositoryInterface::class);
-        /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
+        /** @var CustomerRepositoryInterface $customerRepository */
+        $customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
+        /** @var CustomerInterface $customer */
         $customer = $customerRepository->getById($fixtureCustomerId);
         $customer->setGroupId($customerGroup);
         $customerRepository->save($customer);
 
         $expectedFields = ['group_id', 'email'];
         $form = $this->accountBlock->getForm();
-        self::assertEquals(1, $form->getElements()->count(), "Form has invalid number of fieldsets");
+        $this->assertEquals(1, $form->getElements()->count(), "Form has invalid number of fieldsets");
         $fieldset = $form->getElements()[0];
         $content = $form->toHtml();
 
-        self::assertEquals(count($expectedFields), $fieldset->getElements()->count());
+        $this->assertEquals(count($expectedFields), $fieldset->getElements()->count());
 
         foreach ($fieldset->getElements() as $element) {
-            self::assertTrue(
+            $this->assertTrue(
                 in_array($element->getId(), $expectedFields),
                 sprintf('Unexpected field "%s" in form.', $element->getId())
             );
         }
 
-        self::assertContains(
-            '<option value="'.$customerGroup.'" selected="selected">Wholesale</option>',
+        self::assertMatchesRegularExpression(
+            '/<option value="'.$customerGroup.'".*?selected="selected"\>Wholesale\<\/option\>/is',
             $content,
             'The Customer Group specified for the chosen customer should be selected.'
         );
 
-        self::assertContains(
+        self::assertStringContainsString(
             'value="'.$customer->getEmail().'"',
             $content,
             'The Customer Email specified for the chosen customer should be input '
@@ -125,8 +131,8 @@ class AccountTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFormWithUserDefinedAttribute()
     {
-        /** @var \Magento\Store\Model\StoreManagerInterface  $storeManager */
-        $storeManager = Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class);
+        /** @var StoreManagerInterface  $storeManager */
+        $storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
         $secondStore = $storeManager->getStore('secondstore');
 
         $quoteSession = $this->objectManager->get(SessionQuote::class);
@@ -146,17 +152,186 @@ class AccountTest extends \PHPUnit\Framework\TestCase
         $form->setUseContainer(true);
         $content = $form->toHtml();
 
-        self::assertContains(
-            '<option value="1" selected="selected">Yes</option>',
+        self::assertMatchesRegularExpression(
+            '/\<option value="1".*?selected="selected"\>Yes\<\/option\>/is',
             $content,
             'Default value for user defined custom attribute should be selected.'
         );
 
-        self::assertContains(
-            '<option value="3" selected="selected">Retailer</option>',
+        self::assertMatchesRegularExpression(
+            '/<option value="3".*?selected="selected"\>Retailer\<\/option\>/is',
             $content,
             'The Customer Group specified for the chosen store should be selected.'
         );
+    }
+
+    /**
+     * Test for get form with default customer group
+     *
+     */
+    public function testGetFormWithDefaultCustomerGroup()
+    {
+        $customerGroup = 0;
+        $quote = $this->objectManager->create(Quote::class);
+        $quote->setCustomerGroupId($customerGroup);
+
+        $this->session = $this->getMockBuilder(SessionQuote::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getCustomerId', 'getQuote'])
+            ->getMock();
+        $this->session->method('getQuote')
+            ->willReturn($quote);
+        $this->session->method('getCustomerId')
+            ->willReturn(1);
+
+        $formFactory = $this->getFormFactoryMock();
+        $this->objectManager->addSharedInstance($formFactory, FormFactory::class);
+
+        /** @var LayoutInterface $layout */
+        $layout = $this->objectManager->get(LayoutInterface::class);
+        $accountBlock = $layout->createBlock(
+            Account::class,
+            'address_block' . rand(),
+            ['sessionQuote' => $this->session]
+        );
+
+        $expectedGroupId = 1;
+        $form = $accountBlock->getForm();
+
+        self::assertEquals(
+            $expectedGroupId,
+            $form->getElement('group_id')->getValue(),
+            'The Customer Group specified for the chosen customer should be selected.'
+        );
+    }
+
+    /**
+     * Test for get form with customer group based on vat id validation
+     *
+     * @dataProvider getDataForVatValidatedCustomer
+     * @param int $defaultCustomerGroupId
+     * @param int $vatValidatedCustomerGroupId
+     * @param array $customerDetails
+     * @param array $orderDetails
+     * @return void
+     */
+    public function testGetFormWithVatValidatedCustomerGroup(
+        int $defaultCustomerGroupId,
+        int $vatValidatedCustomerGroupId,
+        array $customerDetails,
+        array $orderDetails
+    ): void {
+        $contextMock = $this->getMockBuilder(Context::class)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->getMock();
+        $requestMock = $this->getMockBuilder(Request::class)
+            ->getMockForAbstractClass();
+        $contextMock->expects($this->once())
+            ->method('getRequest')
+            ->willReturn($requestMock);
+        $requestMock->expects($this->any())
+            ->method('getParam')
+            ->willReturn($orderDetails);
+
+        $quote = $this->objectManager->create(Quote::class);
+        $quote->setCustomerGroupId($defaultCustomerGroupId);
+        $quote->setData($customerDetails);
+
+        $this->session = $this->getMockBuilder(SessionQuote::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getCustomerId', 'getQuote'])
+            ->getMock();
+        $this->session->method('getQuote')
+            ->willReturn($quote);
+        $this->session->method('getCustomerId')
+            ->willReturn($customerDetails['customer_id']);
+
+        $formFactory = $this->getFormFactoryMock();
+        $this->objectManager->addSharedInstance($formFactory, FormFactory::class);
+
+        /** @var LayoutInterface $layout */
+        $layout = $this->objectManager->get(LayoutInterface::class);
+        $accountBlock = $layout->createBlock(
+            Account::class,
+            'address_block' . rand(),
+            [
+                'context' => $contextMock,
+                'sessionQuote' => $this->session
+            ]
+        );
+
+        $form = $accountBlock->getForm();
+
+        self::assertEquals(
+            $vatValidatedCustomerGroupId,
+            $form->getElement('group_id')->getValue(),
+            'The Customer Group specified for the chosen customer should be selected.'
+        );
+    }
+
+    /**
+     * Data provider for vat validated customer group id
+     *
+     * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function getDataForVatValidatedCustomer(): array
+    {
+        return [
+            'Validated customer group id when its set in quote' => [
+                'defaultCustomerGroupId' => 0,
+                'vatValidatedCustomerGroupId' => 3,
+                'customerDetails' => [
+                    'entity_id' => '35',
+                    'store_id' => 1,
+                    'created_at' => '2020-11-09 01:03:35',
+                    'updated_at' => '2020-11-09 05:44:07',
+                    'customer_id' => 1,
+                    'customer_tax_class_id' => '3',
+                    'customer_group_id' => 3,
+                    'customer_email' => 'test@test.com',
+                    'customer_prefix' => null,
+                    'customer_firstname' => null,
+                    'customer_middlename' => null,
+                    'customer_lastname' => null,
+                    'customer_suffix' => null,
+                    'customer_dob' => null,
+                ],
+                'orderDetails' => [
+                    'account' => [
+                        'group_id' => 3,
+                        'email' => 'test@test.com'
+                    ]
+                ]
+            ],
+            'Validated customer group id when its set in request' => [
+                'defaultCustomerGroupId' => 0,
+                'vatValidatedCustomerGroupId' => 3,
+                'customerDetails' => [
+                    'entity_id' => '35',
+                    'store_id' => 1,
+                    'created_at' => '2020-11-09 01:03:35',
+                    'updated_at' => '2020-11-09 05:44:07',
+                    'customer_id' => 1,
+                    'customer_tax_class_id' => '3',
+                    'customer_group_id' => null,
+                    'customer_email' => 'test@test.com',
+                    'customer_prefix' => null,
+                    'customer_firstname' => null,
+                    'customer_middlename' => null,
+                    'customer_lastname' => null,
+                    'customer_suffix' => null,
+                    'customer_dob' => null,
+                ],
+                'orderDetails' => [
+                    'account' => [
+                        'group_id' => 3,
+                        'email' => 'test@test.com'
+                    ]
+                ]
+            ]
+        ];
     }
 
     /**

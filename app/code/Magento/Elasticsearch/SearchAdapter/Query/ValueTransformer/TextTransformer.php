@@ -57,7 +57,7 @@ class TextTransformer implements ValueTransformerInterface
      */
     private function escape(string $value): string
     {
-        $pattern = '/(\+|-|&&|\|\||!|\(|\)|\{|}|\[|]|\^|"|~|\*|\?|:|\\\)/';
+        $pattern = '/(\+|-|&&|\|\||!|\(|\)|\{|}|\[|]|\^|"|~|\/|\*|\?|:|\\\)/';
         $replace = '\\\$1';
 
         return preg_replace($pattern, $replace, $value);

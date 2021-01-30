@@ -3,10 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
 use Magento\Framework\Indexer\StateInterface;
+use Magento\Framework\Mview\View;
+use Magento\Framework\Mview\View\Changelog;
 use Magento\Indexer\Console\Command\IndexerStatusCommand;
+use Magento\Indexer\Model\Mview\View\State;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
@@ -19,14 +25,14 @@ class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
     private $command;
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $indexerMock
+     * @param MockObject $indexerMock
      * @param array $data
      * @return mixed
      */
     private function attachViewToIndexerMock($indexerMock, array $data)
     {
-        /** @var \Magento\Framework\Mview\View\Changelog|\PHPUnit_Framework_MockObject_MockObject $changelog */
-        $changelog = $this->getMockBuilder(\Magento\Framework\Mview\View\Changelog::class)
+        /** @var Changelog|MockObject $changelog */
+        $changelog = $this->getMockBuilder(Changelog::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -34,16 +40,13 @@ class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
             ->method('getList')
             ->willReturn(range(0, $data['view']['changelog']['list_size']-1));
 
-        /** @var \Magento\Indexer\Model\Mview\View\State|\PHPUnit_Framework_MockObject_MockObject $stateMock */
-        $stateMock = $this->getMockBuilder(\Magento\Indexer\Model\Mview\View\State::class)
-            ->disableOriginalConstructor()
-            ->setMethods(null)
-            ->getMock();
+        /** @var State|MockObject $stateMock */
+        $stateMock = $this->getStateMock();
 
         $stateMock->addData($data['view']['state']);
 
-        /** @var \Magento\Framework\Mview\View|\PHPUnit_Framework_MockObject_MockObject $viewMock */
-        $viewMock = $this->getMockBuilder(\Magento\Framework\Mview\View::class)
+        /** @var View|MockObject $viewMock */
+        $viewMock = $this->getMockBuilder(View::class)
             ->disableOriginalConstructor()
             ->setMethods(['getChangelog', 'getState'])
             ->getMock();
@@ -59,6 +62,33 @@ class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
             ->willReturn($viewMock);
 
         return $indexerMock;
+    }
+
+    /**
+     * @return State
+     */
+    private function getStateMock()
+    {
+        $contextMock = $this->createPartialMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher']);
+        $eventManagerMock = $this->getMockForAbstractClass(\Magento\Framework\Event\ManagerInterface::class);
+        $contextMock->expects($this->any())->method('getEventDispatcher')->willReturn($eventManagerMock);
+        $registryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $resourceMock = $this->createMock(\Magento\Indexer\Model\ResourceModel\Mview\View\State::class);
+        $resourceCollectionMock = $this->createMock(
+            \Magento\Indexer\Model\ResourceModel\Mview\View\State\Collection::class
+        );
+        $lockManagerMock = $this->createMock(\Magento\Framework\Lock\LockManagerInterface::class);
+        $configReaderMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+
+        return new State(
+            $contextMock,
+            $registryMock,
+            $resourceMock,
+            $resourceCollectionMock,
+            [],
+            $lockManagerMock,
+            $configReaderMock
+        );
     }
 
     /**

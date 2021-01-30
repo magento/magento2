@@ -27,7 +27,7 @@ class AttributeSetFinder implements AttributeSetFinderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function findAttributeSetIdsByProductIds(array $productIds)
     {
@@ -37,7 +37,7 @@ class AttributeSetFinder implements AttributeSetFinderInterface
             ->getSelect()
             ->reset(Select::COLUMNS)
             ->columns(ProductInterface::ATTRIBUTE_SET_ID)
-            ->where('entity_id IN (?)', $productIds)
+            ->where('entity_id IN (?)', $productIds, \Zend_Db::INT_TYPE)
             ->group(ProductInterface::ATTRIBUTE_SET_ID);
         $result = $collection->getConnection()->fetchCol($select);
         return $result;

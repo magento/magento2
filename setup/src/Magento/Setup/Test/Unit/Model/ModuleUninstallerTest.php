@@ -3,33 +3,49 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Model;
 
-use Magento\Setup\Model\ModuleUninstaller;
+use Magento\Framework\Composer\Remove;
+use Magento\Framework\Module\ModuleResource;
+use Magento\Framework\Module\PackageInfo;
+use Magento\Framework\Module\PackageInfoFactory;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Setup\Patch\PatchApplier;
+use Magento\Framework\Setup\UninstallInterface;
+use Magento\Setup\Model\ModuleContext;
+use Magento\Setup\Model\ModuleUninstaller;
+use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Setup\Model\UninstallCollector;
+use Magento\Setup\Module\Setup;
+use Magento\Setup\Module\SetupFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ModuleUninstallerTest extends \PHPUnit\Framework\TestCase
+class ModuleUninstallerTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
+     * @var MockObject|ObjectManagerInterface
      */
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Composer\Remove
+     * @var MockObject|Remove
      */
     private $remove;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\UninstallCollector
+     * @var MockObject|UninstallCollector
      */
     private $collector;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Module\Setup
+     * @var MockObject|Setup
      */
     private $setup;
 
@@ -39,63 +55,55 @@ class ModuleUninstallerTest extends \PHPUnit\Framework\TestCase
     private $uninstaller;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Console\Output\OutputInterface
+     * @var MockObject|OutputInterface
      */
     private $output;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ModuleRegistryUninstaller
-     */
-    private $moduleRegistryUninstaller;
-
-    /**
-     * @var PatchApplier|\PHPUnit_Framework_MockObject_MockObject
+     * @var PatchApplier|MockObject
      */
     private $patchApplierMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->moduleRegistryUninstaller = $this->createMock(\Magento\Setup\Model\ModuleRegistryUninstaller::class);
         $this->objectManager = $this->getMockForAbstractClass(
-            \Magento\Framework\ObjectManagerInterface::class,
+            ObjectManagerInterface::class,
             [],
             '',
             false
         );
-        $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
+        $objectManagerProvider = $this->createMock(ObjectManagerProvider::class);
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($this->objectManager);
 
-        $this->remove = $this->createMock(\Magento\Framework\Composer\Remove::class);
-        $this->collector = $this->createMock(\Magento\Setup\Model\UninstallCollector::class);
+        $this->remove = $this->createMock(Remove::class);
+        $this->collector = $this->createMock(UninstallCollector::class);
 
-        $this->setup = $this->createMock(\Magento\Setup\Module\Setup::class);
+        $this->setup = $this->createMock(Setup::class);
         $this->patchApplierMock = $this->createMock(PatchApplier::class);
-        $setupFactory = $this->createMock(\Magento\Setup\Module\SetupFactory::class);
+        $setupFactory = $this->createMock(SetupFactory::class);
         $setupFactory->expects($this->any())->method('create')->willReturn($this->setup);
 
         $this->uninstaller = new ModuleUninstaller(
             $objectManagerProvider,
             $this->remove,
             $this->collector,
-            $setupFactory,
-            $this->moduleRegistryUninstaller
+            $setupFactory
         );
 
-        $this->output = $this->createMock(\Symfony\Component\Console\Output\OutputInterface::class);
+        $this->output = $this->getMockForAbstractClass(OutputInterface::class);
     }
 
     public function testUninstallRemoveData()
     {
-        $this->moduleRegistryUninstaller->expects($this->never())->method($this->anything());
-        $uninstall = $this->getMockForAbstractClass(\Magento\Framework\Setup\UninstallInterface::class, [], '', false);
+        $uninstall = $this->getMockForAbstractClass(UninstallInterface::class, [], '', false);
         $uninstall->expects($this->atLeastOnce())
             ->method('uninstall')
-            ->with($this->setup, $this->isInstanceOf(\Magento\Setup\Model\ModuleContext::class));
+            ->with($this->setup, $this->isInstanceOf(ModuleContext::class));
         $this->collector->expects($this->once())
             ->method('collectUninstall')
             ->willReturn(['moduleA' => $uninstall, 'moduleB' => $uninstall]);
 
-        $resource = $this->createMock(\Magento\Framework\Module\ModuleResource::class);
+        $resource = $this->createMock(ModuleResource::class);
         $resource->expects($this->atLeastOnce())->method('getDbVersion')->willReturn('1.0');
 
         $this->output->expects($this->atLeastOnce())->method('writeln');
@@ -104,7 +112,7 @@ class ModuleUninstallerTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->willReturnMap(
                 [
-                    [\Magento\Framework\Module\ModuleResource::class, $resource],
+                    [ModuleResource::class, $resource],
                     [PatchApplier::class, $this->patchApplierMock]
                 ]
             );
@@ -119,15 +127,14 @@ class ModuleUninstallerTest extends \PHPUnit\Framework\TestCase
 
     public function testUninstallRemoveCode()
     {
-        $this->moduleRegistryUninstaller->expects($this->never())->method($this->anything());
         $this->output->expects($this->once())->method('writeln');
-        $packageInfoFactory = $this->createMock(\Magento\Framework\Module\PackageInfoFactory::class);
-        $packageInfo = $this->createMock(\Magento\Framework\Module\PackageInfo::class);
+        $packageInfoFactory = $this->createMock(PackageInfoFactory::class);
+        $packageInfo = $this->createMock(PackageInfo::class);
         $packageInfo->expects($this->atLeastOnce())->method('getPackageName');
         $packageInfoFactory->expects($this->once())->method('create')->willReturn($packageInfo);
         $this->objectManager->expects($this->once())
             ->method('get')
-            ->with(\Magento\Framework\Module\PackageInfoFactory::class)
+            ->with(PackageInfoFactory::class)
             ->willReturn($packageInfoFactory);
         $this->remove->expects($this->once())->method('remove');
         $this->uninstaller->uninstallCode($this->output, ['moduleA', 'moduleB']);

@@ -7,6 +7,7 @@
 use Magento\Customer\Block\Widget\Name;
 
 /** @var \Magento\Customer\Block\Form\Edit $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <form class="form form-edit-account"
       action="<?= $block->escapeUrl($block->getUrl('customer/account/editPost')) ?>"
@@ -46,6 +47,7 @@ use Magento\Customer\Block\Widget\Name;
                 <span><?= $block->escapeHtml(__('Change Password')) ?></span>
             </label>
         </div>
+        <?= $block->getChildHtml('fieldset_edit_info_additional') ?>
     </fieldset>
 
     <fieldset class="fieldset password" data-container="change-email-password">
@@ -103,7 +105,11 @@ use Magento\Customer\Block\Widget\Name;
             </div>
         </div>
     </fieldset>
-    <?= $block->getChildHtml('form_additional_info') ?>
+
+    <fieldset class="fieldset additional_info">
+        <?= $block->getChildHtml('form_additional_info') ?>
+    </fieldset>
+
     <div class="actions-toolbar">
         <div class="primary">
             <button type="submit" class="action save primary" title="<?= $block->escapeHtmlAttr(__('Save')) ?>">
@@ -117,16 +123,19 @@ use Magento\Customer\Block\Widget\Name;
         </div>
     </div>
 </form>
-<script>
+<?php $ignore = /* @noEscape */ $_dob->isEnabled() ? '\'input[id$="full"]\'' : 'null';
+$scriptString = <<<script
     require([
         "jquery",
         "mage/mage"
     ], function($){
         var dataForm = $('#form-validate');
-        var ignore = <?= /* @noEscape */ $_dob->isEnabled() ? '\'input[id$="full"]\'' : 'null' ?>;
+        var ignore = {$ignore};
 
         dataForm.mage('validation', {
-        <?php if ($_dob->isEnabled()): ?>
+script;
+if ($_dob->isEnabled()):
+    $scriptString .= <<<script
             errorPlacement: function(error, element) {
                 if (element.prop('id').search('full') !== -1) {
                     var dobElement = $(element).parents('.customer-dob'),
@@ -140,13 +149,19 @@ use Magento\Customer\Block\Widget\Name;
                 }
             },
             ignore: ':hidden:not(' + ignore + ')'
-        <?php else: ?>
+script;
+else:
+    $scriptString .= <<<script
             ignore: ignore ? ':hidden:not(' + ignore + ')' : ':hidden'
-        <?php endif ?>
+script;
+endif;
+$scriptString .= <<<script
         });
 
     });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <?php $changeEmailAndPasswordTitle = $block->escapeHtml(__('Change Email and Password')) ?>
 <script type="text/x-magento-init">
     {
