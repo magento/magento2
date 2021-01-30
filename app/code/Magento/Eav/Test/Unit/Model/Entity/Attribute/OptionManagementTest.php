@@ -367,7 +367,7 @@ class OptionManagementTest extends TestCase
             ->method('get')
             ->with($entityType, $attributeCode)
             ->willReturn($attributeMock);
-        $attributeMock->expects($this->once())->method('getOptions')->willReturn($optionsMock);
+        $attributeMock->expects($this->any())->method('getOptions')->willReturn($optionsMock);
         $this->assertEquals($optionsMock, $this->model->getItems($entityType, $attributeCode));
     }
 

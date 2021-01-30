@@ -13,6 +13,8 @@ use Magento\Eav\Api\Data\AttributeInterface as EavAttributeInterface;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute;
+use Magento\Eav\Model\Service\PopulateOptionsWithAdditionalData;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
@@ -33,16 +35,25 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
     protected $resourceModel;
 
     /**
+     * @var PopulateOptionsWithAdditionalData
+     */
+    private $populateOptions;
+
+    /**
      * @param AttributeRepository $attributeRepository
      * @param Attribute $resourceModel
+     * @param PopulateOptionsWithAdditionalData|null $populateOptions
      * @codeCoverageIgnore
      */
     public function __construct(
         AttributeRepository $attributeRepository,
-        Attribute $resourceModel
+        Attribute $resourceModel,
+        ?PopulateOptionsWithAdditionalData $populateOptions = null
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->resourceModel = $resourceModel;
+        $this->populateOptions = $populateOptions
+            ?? ObjectManager::getInstance()->get(PopulateOptionsWithAdditionalData::class);
     }
 
     /**
@@ -209,12 +220,10 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
         $attribute = $this->attributeRepository->get($entityType, $attributeCode);
 
         try {
-            $options = $attribute->getOptions();
+            return array_values($this->populateOptions->execute($attribute));
         } catch (\Exception $e) {
             throw new StateException(__('The options for "%1" attribute can\'t be loaded.', $attributeCode));
         }
-
-        return $options;
     }
 
     /**

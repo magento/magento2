@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Api;
 
+use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class CategoryAttributeOptionManagementInterfaceTest extends WebapiAbstract
@@ -19,12 +20,14 @@ class CategoryAttributeOptionManagementInterfaceTest extends WebapiAbstract
         $testAttributeCode = 'include_in_menu';
         $expectedOptions = [
             [
-                    'label' => 'Yes',
-                    'value' => '1',
+                AttributeOptionInterface::LABEL => 'Yes',
+                AttributeOptionInterface::VALUE => '1',
+                AttributeOptionInterface::IS_DEFAULT => true,
             ],
             [
-                    'label' => 'No',
-                    'value' => '0',
+                AttributeOptionInterface::LABEL => 'No',
+                AttributeOptionInterface::VALUE => '0',
+                AttributeOptionInterface::IS_DEFAULT => false,
             ],
         ];
 

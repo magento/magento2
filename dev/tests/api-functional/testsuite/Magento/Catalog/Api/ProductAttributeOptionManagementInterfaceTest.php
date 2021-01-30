@@ -5,9 +5,12 @@
  */
 namespace Magento\Catalog\Api;
 
+use Magento\Catalog\Model\Product;
+use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Eav\Api\Data\AttributeOptionLabelInterface;
 use Magento\Framework\Webapi\Rest\Request;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -29,12 +32,61 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
             [
                 AttributeOptionInterface::VALUE => '1',
                 AttributeOptionInterface::LABEL => 'In Stock',
+                AttributeOptionInterface::IS_DEFAULT => true,
             ],
             [
                 AttributeOptionInterface::VALUE => '0',
                 AttributeOptionInterface::LABEL => 'Out of Stock',
+                AttributeOptionInterface::IS_DEFAULT => false,
             ],
         ];
+
+        $response = $this->webApiCallAttributeOptions(
+            $testAttributeCode,
+            Request::HTTP_METHOD_GET,
+            'getItems',
+            ['attributeCode' => $testAttributeCode]
+        );
+
+        $this->assertIsArray($response);
+        $this->assertEquals($expectedOptions, $response);
+    }
+
+    /**
+     * Test to get attribute options with configured store labels
+     *
+     * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/select_attribute_store_labels.php
+     */
+    public function testGetItemsWithStoreLabels()
+    {
+        $testAttributeCode = 'select_attribute';
+        $attributeRepository = Bootstrap::getObjectManager()->get(AttributeRepositoryInterface::class);
+        $attribute = $attributeRepository->get(Product::ENTITY, $testAttributeCode);
+        $expectedOptions = [
+            [
+                AttributeOptionInterface::LABEL => ' ',
+                AttributeOptionInterface::IS_DEFAULT => true,
+            ],
+            [
+                AttributeOptionInterface::LABEL => 'Car',
+                AttributeOptionInterface::IS_DEFAULT => false,
+                AttributeOptionInterface::SORT_ORDER => 1,
+            ],
+            [
+                AttributeOptionInterface::LABEL => 'Ship_default',
+                AttributeOptionInterface::IS_DEFAULT => false,
+                AttributeOptionInterface::SORT_ORDER => 2,
+                AttributeOptionInterface::STORE_LABELS => [
+                    [
+                        AttributeOptionLabelInterface::STORE_ID => 1,
+                        AttributeOptionLabelInterface::LABEL => 'Ship_default',
+                    ],
+                ],
+            ],
+        ];
+        foreach ($attribute->getOptions() as $key => $option) {
+            $expectedOptions[$key][AttributeOptionInterface::VALUE] = $option->getValue();
+        }
 
         $response = $this->webApiCallAttributeOptions(
             $testAttributeCode,
