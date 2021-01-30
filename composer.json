@@ -87,7 +87,7 @@
     },
     "require-dev": {
         "allure-framework/allure-phpunit": "~1.2.0",
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
         "friendsofphp/php-cs-fixer": "~2.18.1",
         "lusitanian/oauth": "~0.8.10",
         "magento/magento-coding-standard": "*",
