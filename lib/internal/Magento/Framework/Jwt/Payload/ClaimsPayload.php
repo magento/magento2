@@ -12,6 +12,8 @@ use Magento\Framework\Jwt\ClaimInterface;
 
 class ClaimsPayload implements ClaimsPayloadInterface
 {
+    public const CONTENT_TYPE = 'json';
+
     /**
      * @var ClaimInterface[]
      */
@@ -44,5 +46,13 @@ class ClaimsPayload implements ClaimsPayloadInterface
         }
 
         return json_encode((object)$data);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getContentType(): ?string
+    {
+        return null;
     }
 }

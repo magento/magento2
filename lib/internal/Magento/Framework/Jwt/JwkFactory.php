@@ -46,6 +46,29 @@ class JwkFactory
         return $this->createHmac(512, $key);
     }
 
+    /**
+     * Create JWK to sign JWS with RSASSA-PKCS1-v1_5 using SHA-256.
+     *
+     * @param string $privateKey
+     * @param string|null $passPhrase
+     * @return Jwk
+     */
+    public function createSignRs256(string $privateKey, ?string $passPhrase): Jwk
+    {
+        return $this->createSignRsa(256, $privateKey, $passPhrase);
+    }
+
+    /**
+     * Create JWK to verify JWS signed with RSASSA-PKCS1-v1_5 using SHA-256.
+     *
+     * @param string $publicKey
+     * @return Jwk
+     */
+    public function createVerifyRs256(string $publicKey): Jwk
+    {
+        return $this->createVerifyRsa(256, $publicKey);
+    }
+
     private function createHmac(int $bits, string $key): Jwk
     {
         if (strlen($key) < 128) {
@@ -58,6 +81,62 @@ class JwkFactory
             Jwk::PUBLIC_KEY_USE_SIGNATURE,
             null,
             'HS' .$bits
+        );
+    }
+
+    private function createSignRsa(int $bits, string $key, ?string $pass): Jwk
+    {
+        $resource = openssl_get_privatekey($key, (string)$pass);
+        $keyData = openssl_pkey_get_details($resource)['rsa'];
+        openssl_free_key($resource);
+        $keysMap = [
+            'n' => 'n',
+            'e' => 'e',
+            'd' => 'd',
+            'p' => 'p',
+            'q' => 'q',
+            'dp' => 'dmp1',
+            'dq' => 'dmq1',
+            'qi' => 'iqmp'
+        ];
+        $jwkData = [];
+        foreach ($keysMap as $jwkKey => $rsaKey) {
+            if (array_key_exists($rsaKey, $keyData)) {
+                $jwkData[$jwkKey] = self::base64Encode($keyData[$rsaKey]);
+            }
+        }
+
+        return new Jwk(
+            Jwk::KEY_TYPE_RSA,
+            $jwkData,
+            Jwk::PUBLIC_KEY_USE_SIGNATURE,
+            null,
+            'RS' .$bits
+        );
+    }
+
+    private function createVerifyRsa(int $bits, string $key): Jwk
+    {
+        $resource = openssl_get_publickey($key);
+        $keyData = openssl_pkey_get_details($resource)['rsa'];
+        openssl_free_key($resource);
+        $keysMap = [
+            'n' => 'n',
+            'e' => 'e'
+        ];
+        $jwkData = [];
+        foreach ($keysMap as $jwkKey => $rsaKey) {
+            if (array_key_exists($rsaKey, $keyData)) {
+                $jwkData[$jwkKey] = self::base64Encode($keyData[$rsaKey]);
+            }
+        }
+
+        return new Jwk(
+            Jwk::KEY_TYPE_RSA,
+            $jwkData,
+            Jwk::PUBLIC_KEY_USE_SIGNATURE,
+            null,
+            'RS' .$bits
         );
     }
 

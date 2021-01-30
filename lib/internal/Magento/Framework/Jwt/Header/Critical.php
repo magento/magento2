@@ -11,26 +11,25 @@ namespace Magento\Framework\Jwt\Header;
 use Magento\Framework\Jwt\Jwe\JweHeaderParameterInterface;
 use Magento\Framework\Jwt\Jws\JwsHeaderParameterInterface;
 
-class PrivateHeaderParameter implements JwsHeaderParameterInterface, JweHeaderParameterInterface
+/**
+ * "crit" header.
+ */
+class Critical implements JwsHeaderParameterInterface, JweHeaderParameterInterface
 {
     /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @var array|bool|int|float|string|null
+     * @var string[]
      */
     private $value;
 
     /**
-     * @param string $name
-     * @param array|bool|float|int|string|null $value
+     * @param string[] $value
      */
-    public function __construct(string $name, $value)
+    public function __construct(array $value)
     {
-        $this->name = $name;
-        $this->value = $value;
+        if (!$value) {
+            throw new \InvalidArgumentException('Critical header cannot be empty');
+        }
+        $this->value = array_values($value);
     }
 
     /**
@@ -38,7 +37,7 @@ class PrivateHeaderParameter implements JwsHeaderParameterInterface, JweHeaderPa
      */
     public function getName(): string
     {
-        return $this->name;
+        return 'crit';
     }
 
     /**
@@ -46,7 +45,7 @@ class PrivateHeaderParameter implements JwsHeaderParameterInterface, JweHeaderPa
      */
     public function getValue()
     {
-        return $this->value;
+        return json_encode($this->value);
     }
 
     /**
@@ -54,6 +53,6 @@ class PrivateHeaderParameter implements JwsHeaderParameterInterface, JweHeaderPa
      */
     public function getClass(): ?int
     {
-        return self::CLASS_PRIVATE;
+        return self::CLASS_REGISTERED;
     }
 }

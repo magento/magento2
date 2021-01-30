@@ -30,4 +30,12 @@ class NestedPayload implements NestedPayloadInterface
     {
         return $this->token;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getContentType(): ?string
+    {
+        return self::CONTENT_TYPE;
+    }
 }

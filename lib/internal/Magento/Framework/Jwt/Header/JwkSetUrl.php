@@ -11,25 +11,21 @@ namespace Magento\Framework\Jwt\Header;
 use Magento\Framework\Jwt\Jwe\JweHeaderParameterInterface;
 use Magento\Framework\Jwt\Jws\JwsHeaderParameterInterface;
 
-class PrivateHeaderParameter implements JwsHeaderParameterInterface, JweHeaderParameterInterface
+/**
+ * "jku" header.
+ */
+class JwkSetUrl implements JwsHeaderParameterInterface, JweHeaderParameterInterface
 {
     /**
      * @var string
      */
-    private $name;
-
-    /**
-     * @var array|bool|int|float|string|null
-     */
     private $value;
 
     /**
-     * @param string $name
-     * @param array|bool|float|int|string|null $value
+     * @param string $value
      */
-    public function __construct(string $name, $value)
+    public function __construct(string $value)
     {
-        $this->name = $name;
         $this->value = $value;
     }
 
@@ -38,7 +34,7 @@ class PrivateHeaderParameter implements JwsHeaderParameterInterface, JweHeaderPa
      */
     public function getName(): string
     {
-        return $this->name;
+        return 'jku';
     }
 
     /**
@@ -54,6 +50,6 @@ class PrivateHeaderParameter implements JwsHeaderParameterInterface, JweHeaderPa
      */
     public function getClass(): ?int
     {
-        return self::CLASS_PRIVATE;
+        return self::CLASS_REGISTERED;
     }
 }

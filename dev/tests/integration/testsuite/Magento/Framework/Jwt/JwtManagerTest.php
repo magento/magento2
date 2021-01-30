@@ -9,7 +9,9 @@ declare(strict_types=1);
 namespace Magento\Framework\Jwt;
 
 use Magento\Framework\Jwt\Claim\PrivateClaim;
+use Magento\Framework\Jwt\Header\Critical;
 use Magento\Framework\Jwt\Header\PrivateHeaderParameter;
+use Magento\Framework\Jwt\Header\PublicHeaderParameter;
 use Magento\Framework\Jwt\Jwe\JweInterface;
 use Magento\Framework\Jwt\Jws\Jws;
 use Magento\Framework\Jwt\Jws\JwsHeader;
@@ -42,14 +44,18 @@ class JwtManagerTest extends TestCase
      *
      * @param JwtInterface $jwt
      * @param EncryptionSettingsInterface $encryption
+     * @param EncryptionSettingsInterface[] $readEncryption
      * @return void
      *
      * @dataProvider getTokenVariants
      */
-    public function testCreateRead(JwtInterface $jwt, EncryptionSettingsInterface $encryption): void
-    {
+    public function testCreateRead(
+        JwtInterface $jwt,
+        EncryptionSettingsInterface $encryption,
+        array $readEncryption
+    ): void {
         $token = $this->manager->create($jwt, $encryption);
-        $recreated = $this->manager->read($token, [$encryption]);
+        $recreated = $this->manager->read($token, $readEncryption);
 
         //Verifying header
         $this->verifyHeader($jwt->getHeader(), $recreated->getHeader());
@@ -88,7 +94,7 @@ class JwtManagerTest extends TestCase
         /** @var JwkFactory $jwkFactory */
         $jwkFactory = Bootstrap::getObjectManager()->get(JwkFactory::class);
 
-        $hmacFlatJws = new Jws(
+        $flatJws = new Jws(
             [
                 new JwsHeader(
                     [
@@ -107,18 +113,59 @@ class JwtManagerTest extends TestCase
             null
         );
 
+        $flatJwsWithUnprotectedHeader = new Jws(
+            [
+                new JwsHeader(
+                    [
+                        new PrivateHeaderParameter('custom-header', 'value'),
+                        new Critical(['magento'])
+                    ]
+                )
+            ],
+            new ClaimsPayload(
+                [
+                    new PrivateClaim('custom-claim', 'value'),
+                    new PrivateClaim('custom-claim2', 'value2')
+                ]
+            ),
+            [
+                new JwsHeader(
+                    [
+                        new PublicHeaderParameter('public-header', 'magento', 'public-value')
+                    ]
+                )
+            ]
+        );
+        $rsaPrivateResource = openssl_pkey_new(['private_key_bites' => 512, 'private_key_type' => OPENSSL_KEYTYPE_RSA]);
+        if ($rsaPrivateResource === false) {
+            throw new \RuntimeException('Failed to create RSA keypair');
+        }
+        $rsaPublic = openssl_pkey_get_details($rsaPrivateResource)['key'];
+        if (!openssl_pkey_export($rsaPrivateResource, $rsaPrivate)) {
+            throw new \RuntimeException('Failed to read RSA private key');
+        }
+        openssl_free_key($rsaPrivateResource);
+
         return [
             'jws-HS256' => [
-                $hmacFlatJws,
-                new JwsSignatureJwks($jwkFactory->createHs256(random_bytes(128)))
+                $flatJws,
+                $enc = new JwsSignatureJwks($jwkFactory->createHs256(random_bytes(128))),
+                [$enc]
             ],
             'jws-HS384' => [
-                $hmacFlatJws,
-                new JwsSignatureJwks($jwkFactory->createHs384(random_bytes(128)))
+                $flatJws,
+                $enc = new JwsSignatureJwks($jwkFactory->createHs384(random_bytes(128))),
+                [$enc]
             ],
             'jws-HS512' => [
-                $hmacFlatJws,
-                new JwsSignatureJwks($jwkFactory->createHs512(random_bytes(128)))
+                $flatJwsWithUnprotectedHeader,
+                $enc = new JwsSignatureJwks($jwkFactory->createHs512(random_bytes(128))),
+                [$enc]
+            ],
+            'jws-RS256' => [
+                $flatJws,
+                new JwsSignatureJwks($jwkFactory->createSignRs256($rsaPrivate, null)),
+                [new JwsSignatureJwks($jwkFactory->createVerifyRs256($rsaPublic))]
             ]
         ];
     }

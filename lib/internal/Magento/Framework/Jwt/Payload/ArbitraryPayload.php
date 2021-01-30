@@ -18,12 +18,18 @@ class ArbitraryPayload implements PayloadInterface
     private $content;
 
     /**
-     * ArbitraryPayload constructor.
-     * @param string $content
+     * @var string|null
      */
-    public function __construct(string $content)
+    private $type;
+
+    /**
+     * @param string $content
+     * @param string|null $type
+     */
+    public function __construct(string $content, ?string $type = null)
     {
         $this->content = $content;
+        $this->type = $type;
     }
 
     /**
@@ -32,5 +38,13 @@ class ArbitraryPayload implements PayloadInterface
     public function getContent(): string
     {
         return $this->content;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getContentType(): ?string
+    {
+        return $this->type;
     }
 }

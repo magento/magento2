@@ -11,7 +11,10 @@ namespace Magento\Framework\Jwt\Header;
 use Magento\Framework\Jwt\Jwe\JweHeaderParameterInterface;
 use Magento\Framework\Jwt\Jws\JwsHeaderParameterInterface;
 
-class PrivateHeaderParameter implements JwsHeaderParameterInterface, JweHeaderParameterInterface
+/**
+ * Public header.
+ */
+class PublicHeaderParameter implements JwsHeaderParameterInterface, JweHeaderParameterInterface
 {
     /**
      * @var string
@@ -19,17 +22,18 @@ class PrivateHeaderParameter implements JwsHeaderParameterInterface, JweHeaderPa
     private $name;
 
     /**
-     * @var array|bool|int|float|string|null
+     * @var mixed
      */
     private $value;
 
     /**
      * @param string $name
-     * @param array|bool|float|int|string|null $value
+     * @param string|null $prefix Prefix for preventing collision.
+     * @param mixed $value
      */
-    public function __construct(string $name, $value)
+    public function __construct(string $name, ?string $prefix, $value)
     {
-        $this->name = $name;
+        $this->name = $prefix ? $prefix .'-' .$name : $name;
         $this->value = $value;
     }
 
@@ -54,6 +58,6 @@ class PrivateHeaderParameter implements JwsHeaderParameterInterface, JweHeaderPa
      */
     public function getClass(): ?int
     {
-        return self::CLASS_PRIVATE;
+        return self::CLASS_PUBLIC;
     }
 }

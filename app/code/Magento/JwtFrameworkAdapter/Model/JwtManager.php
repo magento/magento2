@@ -184,22 +184,7 @@ class JwtManager implements JwtManagerInterface
      */
     private function convertToAdapterJwk(Jwk $jwk): AdapterJwk
     {
-        $data = [
-            'kty' => $jwk->getKeyType(),
-            'use' => $jwk->getPublicKeyUse(),
-            'key_ops' => $jwk->getKeyOperations(),
-            'alg' => $jwk->getAlgorithm(),
-            'x5u' => $jwk->getX509Url(),
-            'x5c' => $jwk->getX509CertificateChain(),
-            'x5t' => $jwk->getX509Sha1Thumbprint(),
-            'x5t#S256' => $jwk->getX509Sha256Thumbprint()
-        ];
-        $data = array_merge($data, $jwk->getAlgoData());
-        $data = array_filter($data, function ($value) {
-            return $value !== null;
-        });
-
-        return new AdapterJwk($data);
+        return new AdapterJwk($jwk->getJsonData());
     }
 
     private function convertToAdapterKeySet(JwkSet $jwkSet): AdapterJwkSet
@@ -256,6 +241,9 @@ class JwtManager implements JwtManagerInterface
                     throw new EncryptionException('Algorithm is required for JWKs');
                 }
                 $protected = [];
+                if ($jws->getPayload()->getContentType()) {
+                    $protected['cty'] = $jws->getPayload()->getContentType();
+                }
                 if ($jws->getProtectedHeaders()) {
                     $protected = $this->extractHeaderData($jws->getProtectedHeaders()[$i]);
                 }
@@ -263,7 +251,6 @@ class JwtManager implements JwtManagerInterface
                 $unprotected = [];
                 if ($jws->getUnprotectedHeaders()) {
                     $unprotected = $this->extractHeaderData($jws->getUnprotectedHeaders()[$i]);
-                    $unprotected['alg'] = $alg;
                 }
                 $builder = $builder->addSignature($this->convertToAdapterJwk($jwk), $protected, $unprotected);
             }

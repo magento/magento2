@@ -19,4 +19,11 @@ interface PayloadInterface
      * @return string
      */
     public function getContent(): string;
+
+    /**
+     * Payload type ("cty" header).
+     *
+     * @return string|null
+     */
+    public function getContentType(): ?string;
 }

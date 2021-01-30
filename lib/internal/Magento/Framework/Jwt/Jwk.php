@@ -235,4 +235,28 @@ class Jwk
     {
         return $this->data;
     }
+
+    /**
+     * JWK data to be represented in JSON.
+     *
+     * @return array
+     */
+    public function getJsonData(): array
+    {
+        $data = [
+            'kty' => $this->getKeyType(),
+            'use' => $this->getPublicKeyUse(),
+            'key_ops' => $this->getKeyOperations(),
+            'alg' => $this->getAlgorithm(),
+            'x5u' => $this->getX509Url(),
+            'x5c' => $this->getX509CertificateChain(),
+            'x5t' => $this->getX509Sha1Thumbprint(),
+            'x5t#S256' => $this->getX509Sha256Thumbprint()
+        ];
+        $data = array_merge($data, $this->getAlgoData());
+
+        return array_filter($data, function ($value) {
+            return $value !== null;
+        });
+    }
 }

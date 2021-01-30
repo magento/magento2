@@ -10,26 +10,23 @@ namespace Magento\Framework\Jwt\Header;
 
 use Magento\Framework\Jwt\Jwe\JweHeaderParameterInterface;
 use Magento\Framework\Jwt\Jws\JwsHeaderParameterInterface;
+use Magento\Framework\Jwt\Jwk as JwkData;
 
-class PrivateHeaderParameter implements JwsHeaderParameterInterface, JweHeaderParameterInterface
+/**
+ * "jwk" header.
+ */
+class Jwk implements JwsHeaderParameterInterface, JweHeaderParameterInterface
 {
     /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @var array|bool|int|float|string|null
+     * @var JwkData
      */
     private $value;
 
     /**
-     * @param string $name
-     * @param array|bool|float|int|string|null $value
+     * @param JwkData $value
      */
-    public function __construct(string $name, $value)
+    public function __construct(JwkData $value)
     {
-        $this->name = $name;
         $this->value = $value;
     }
 
@@ -38,7 +35,7 @@ class PrivateHeaderParameter implements JwsHeaderParameterInterface, JweHeaderPa
      */
     public function getName(): string
     {
-        return $this->name;
+        return 'jwk';
     }
 
     /**
@@ -46,7 +43,7 @@ class PrivateHeaderParameter implements JwsHeaderParameterInterface, JweHeaderPa
      */
     public function getValue()
     {
-        return $this->value;
+        return json_encode($this->value->getJsonData());
     }
 
     /**
@@ -54,6 +51,6 @@ class PrivateHeaderParameter implements JwsHeaderParameterInterface, JweHeaderPa
      */
     public function getClass(): ?int
     {
-        return self::CLASS_PRIVATE;
+        return self::CLASS_REGISTERED;
     }
 }
