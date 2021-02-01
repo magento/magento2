@@ -266,10 +266,10 @@ class ImageResizeTest extends TestCase
                 }
             );
 
-        $this->mediaDirectoryMock->expects($this->any())
+        $this->mediaDirectoryMock->expects($this->exactly(2))
             ->method('isFile')
             ->with($this->testfilepath)
-            ->willReturn(true);
+            ->willReturnOnConsecutiveCalls(true, false);
 
         $this->databaseMock->expects($this->once())
             ->method('saveFileToFilesystem')
@@ -314,10 +314,10 @@ class ImageResizeTest extends TestCase
                 }
             );
 
-        $this->mediaDirectoryMock->expects($this->any())
+        $this->mediaDirectoryMock->expects($this->exactly(2))
             ->method('isFile')
             ->with($this->testfilepath)
-            ->willReturn(true);
+            ->willReturnOnConsecutiveCalls(true, false);
 
         $generator = $this->service->resizeFromThemes(['test-theme']);
         while ($generator->valid()) {
