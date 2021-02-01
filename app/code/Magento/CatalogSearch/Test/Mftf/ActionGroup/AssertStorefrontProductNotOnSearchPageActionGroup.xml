@@ -14,6 +14,6 @@
             <argument name="productSku" type="string"/>
         </arguments>
 
-        <dontSee selector="{{StorefrontCatalogSearchMainSection.searchResults}}" userInput="{productSku}" stepKey="doNotSeeProduct"/>
+        <dontSee selector="{{StorefrontCatalogSearchMainSection.searchResults}}" userInput="{{productSku}}" stepKey="doNotSeeProduct"/>
     </actionGroup>
 </actionGroups>
