@@ -39,26 +39,25 @@ class TestCasePropertiesTest extends \PHPUnit\Framework\TestCase
         /** @var $testClass \Magento\Test\Workaround\Cleanup\TestCasePropertiesTest\DummyTestCase */
         $testClass = $testSuite->testAt(0);
 
-        $propertyObjectMock = $this->createPartialMock(\stdClass::class, ['__destruct']);
-        $propertyObjectMock->expects($this->atLeastOnce())->method('__destruct');
-        $testClass->setPropertyObject($propertyObjectMock);
-
-        foreach ($this->_fixtureProperties as $property) {
-            if ($property['is_static']) {
-                $this->assertAttributeNotEmpty($property['name'], get_class($testClass));
-            } else {
-                $this->assertAttributeNotEmpty($property['name'], $testClass);
+        $reflectionClass = new \ReflectionClass($testClass);
+        $classProperties = $reflectionClass->getProperties();
+        $fixturePropertiesNames = array_keys($this->_fixtureProperties);
+        foreach ($classProperties as $property) {
+            if (in_array($property->getName(), $fixturePropertiesNames)) {
+                $property->setAccessible(true);
+                $value = $property->getValue($testClass);
+                $this->assertNotNull($value);
             }
         }
 
         $clearProperties = new \Magento\TestFramework\Workaround\Cleanup\TestCaseProperties();
         $clearProperties->endTestSuite($testSuite);
 
-        foreach ($this->_fixtureProperties as $property) {
-            if ($property['is_static']) {
-                $this->assertAttributeEmpty($property['name'], get_class($testClass));
-            } else {
-                $this->assertAttributeEmpty($property['name'], $testClass);
+        foreach ($classProperties as $property) {
+            if (in_array($property->getName(), $fixturePropertiesNames)) {
+                $property->setAccessible(true);
+                $value = $property->getValue($testClass);
+                $this->assertNull($value);
             }
         }
     }
