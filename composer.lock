@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "438feb5366e2edd6b88e3c286b637f9b",
+    "content-hash": "413d6009928922f47697cdd4153ce0e3",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -5997,20 +5997,20 @@
         },
         {
             "name": "tedivm/jshrink",
-            "version": "v1.3.3",
+            "version": "v1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tedious/JShrink.git",
-                "reference": "566e0c731ba4e372be2de429ef7d54f4faf4477a"
+                "reference": "0513ba1407b1f235518a939455855e6952a48bbc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tedious/JShrink/zipball/566e0c731ba4e372be2de429ef7d54f4faf4477a",
-                "reference": "566e0c731ba4e372be2de429ef7d54f4faf4477a",
+                "url": "https://api.github.com/repos/tedious/JShrink/zipball/0513ba1407b1f235518a939455855e6952a48bbc",
+                "reference": "0513ba1407b1f235518a939455855e6952a48bbc",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.6|^7.0"
+                "php": "^5.6|^7.0|^8.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^2.8",
@@ -6039,7 +6039,13 @@
                 "javascript",
                 "minifier"
             ],
-            "time": "2019-06-28T18:11:46+00:00"
+            "funding": [
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/tedivm/jshrink",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-11-30T18:10:21+00:00"
         },
         {
             "name": "true/punycode",
