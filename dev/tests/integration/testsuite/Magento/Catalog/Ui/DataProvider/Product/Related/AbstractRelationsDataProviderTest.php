@@ -53,12 +53,12 @@ abstract class AbstractRelationsDataProviderTest extends TestCase
     /**
      * Assert grid result data
      *
-     * @param $expectedCount
+     * @param int $expectedCount
      * @param array $expectedData
      * @param array $actualResult
      * @return void
      */
-    protected function assertResult($expectedCount, array $expectedData, array $actualResult): void
+    protected function assertResult(int $expectedCount, array $expectedData, array $actualResult): void
     {
         $this->assertCount($expectedCount, $actualResult);
         $item = reset($actualResult);
