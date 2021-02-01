@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
+use Magento\Catalog\Helper\DefaultCategory;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
@@ -15,13 +16,14 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
  * @see \Magento\Catalog\Controller\Adminhtml\Category\Add
  *
  * @magentoAppArea adminhtml
+ * @magentoDbIsolation enabled
  */
 class AddTest extends AbstractBackendController
 {
     /**
-     * @var int
+     * @var DefaultCategory
      */
-    const DEFAULT_ROOT_CATEGORY = 2;
+    private $defaultCategoryHelper;
 
     /**
      * @inheritdoc
@@ -30,13 +32,10 @@ class AddTest extends AbstractBackendController
     {
         parent::setUp();
 
-        $this->getRequest()->setParams([]);
+        $this->defaultCategoryHelper = $this->_objectManager->get(DefaultCategory::class);
     }
 
-
     /**
-     * @magentoDbIsolation enabled
-     *
      * @return void
      */
     public function testExecuteWithoutParams(): void
@@ -46,14 +45,12 @@ class AddTest extends AbstractBackendController
     }
 
     /**
-     * @magentoDbIsolation enabled
-     *
      * @return void
      */
     public function testExecuteAsAjax(): void
     {
         $this->getRequest()->setQueryValue('isAjax', true);
-        $this->getRequest()->setParam('parent', self::DEFAULT_ROOT_CATEGORY);
+        $this->getRequest()->setParam('parent', $this->defaultCategoryHelper->getId());
         $this->dispatch('backend/catalog/category/add');
         $this->assertJson($this->getResponse()->getBody());
     }
