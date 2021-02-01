@@ -5,40 +5,30 @@
 
 define([
     'jquery',
-    'ko',
     'uiComponent'
-], function ($, ko, Component) {
+], function ($, Component) {
     'use strict';
 
     return Component.extend({
         passwordSelector: '',
-        showPasswordSelector: '[data-role=show-password]',
         passwordInputType: 'password',
         textInputType: 'text',
 
         defaults: {
-            template: 'Magento_Customer/show-password'
-        },
-
-        /** @inheritdoc */
-        initialize: function () {
-            this._super();
+            template: 'Magento_Customer/show-password',
+            isPasswordVisible: false
         },
 
         /**
          * @return {Object}
          */
         initObservable: function () {
-            var self = this;
-
             this._super()
-                .observe({
-                    isChecked: ko.observable(false)
-                });
+                .observe(['isPasswordVisible']);
 
-            this.isChecked.subscribe(function () {
-                self._showPassword();
-            });
+            this.isPasswordVisible.subscribe(function (isChecked) {
+                this._showPassword(isChecked);
+            }.bind(this));
 
             return this;
         },
@@ -47,12 +37,9 @@ define([
          * Show/Hide password
          * @private
          */
-        _showPassword: function () {
-            var passwordField = this.passwordSelector;
-
-            $(passwordField).attr('type',
-                $(passwordField).attr('type') === this.passwordInputType ?
-                this.textInputType : this.passwordInputType
+        _showPassword: function (isChecked) {
+            $(this.passwordSelector).attr('type',
+                isChecked ? this.textInputType : this.passwordInputType
             );
         }
     });
