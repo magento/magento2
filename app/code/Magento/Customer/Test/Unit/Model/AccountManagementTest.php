@@ -696,42 +696,42 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $testCase = $this;
-        $customer->expects( $this->any() )
-            ->method( 'getId' )
-            ->will( $this->returnCallback( function () use ( $testCase, $customerId) {
-                if ($testCase->getIdCounter > 0 ) {
+        $customer->expects($this->any())
+            ->method('getId')
+            ->will($this->returnCallback(function () use ($testCase, $customerId) {
+                if ($testCase->getIdCounter > 0) {
                     return $customerId;
                 } else {
                     $testCase->getIdCounter += 1;
                     return null;
                 }
-            } ) );
+            }));
         $customer->expects($this->atLeastOnce())
             ->method('getEmail')
             ->willReturn($customerEmail);
-        $customer->expects( $this->any() )
-            ->method( 'getWebsiteId' )
-            ->will( $this->returnCallback( function () use ( $testCase, $websiteId) {
-                if ($testCase->getWebsiteIdCounter > 1 ) {
+        $customer->expects($this->any())
+            ->method('getWebsiteId')
+            ->will($this->returnCallback(function () use ($testCase, $websiteId) {
+                if ($testCase->getWebsiteIdCounter > 1) {
                     return $websiteId;
                 } else {
                     $testCase->getWebsiteIdCounter += 1;
                     return null;
                 }
-            } ) );
+            }));
         $customer->expects($this->once())
             ->method('setWebsiteId')
             ->with($websiteId);
-        $customer->expects( $this->any() )
-            ->method( 'getStoreId' )
-            ->will( $this->returnCallback( function () use ( $testCase, $defaultStoreId) {
-                if ($testCase->getStoreIdCounter > 0 ) {
+        $customer->expects($this->any())
+            ->method('getStoreId')
+            ->will($this->returnCallback(function () use ($testCase, $defaultStoreId) {
+                if ($testCase->getStoreIdCounter > 0) {
                     return $defaultStoreId;
                 } else {
                     $testCase->getStoreIdCounter += 1;
                     return null;
                 }
-            } ) );
+            }));
         $customer->expects($this->once())
             ->method('setStoreId')
             ->with($defaultStoreId);
@@ -979,42 +979,42 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $testCase = $this;
-        $customer->expects( $this->any() )
-            ->method( 'getId' )
-            ->will( $this->returnCallback( function () use ( $testCase, $customerId) {
-                if ($testCase->getIdCounter > 0 ) {
+        $customer->expects($this->any())
+            ->method('getId')
+            ->will($this->returnCallback(function () use ($testCase, $customerId) {
+                if ($testCase->getIdCounter > 0) {
                     return $customerId;
                 } else {
                     $testCase->getIdCounter += 1;
                     return null;
                 }
-            } ) );
+            }));
         $customer->expects($this->atLeastOnce())
             ->method('getEmail')
             ->willReturn($customerEmail);
-        $customer->expects( $this->any() )
-            ->method( 'getWebsiteId' )
-            ->will( $this->returnCallback( function () use ( $testCase, $websiteId) {
-                if ($testCase->getWebsiteIdCounter > 1 ) {
+        $customer->expects($this->any())
+            ->method('getWebsiteId')
+            ->will($this->returnCallback(function () use ($testCase, $websiteId) {
+                if ($testCase->getWebsiteIdCounter > 1) {
                     return $websiteId;
                 } else {
                     $testCase->getWebsiteIdCounter += 1;
                     return null;
                 }
-            } ) );
+            }));
         $customer->expects($this->once())
             ->method('setWebsiteId')
             ->with($websiteId);
-        $customer->expects( $this->any() )
-            ->method( 'getStoreId' )
-            ->will( $this->returnCallback( function () use ( $testCase, $defaultStoreId) {
-                if ($testCase->getStoreIdCounter > 0 ) {
+        $customer->expects($this->any())
+            ->method('getStoreId')
+            ->will($this->returnCallback(function () use ($testCase, $defaultStoreId) {
+                if ($testCase->getStoreIdCounter > 0) {
                     return $defaultStoreId;
                 } else {
                     $testCase->getStoreIdCounter += 1;
                     return null;
                 }
-            } ) );
+            }));
         $customer->expects($this->once())
             ->method('setStoreId')
             ->with($defaultStoreId);
@@ -1161,16 +1161,16 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $testCase = $this;
-        $customer->expects( $this->any() )
-            ->method( 'getId' )
-            ->will( $this->returnCallback( function () use ( $testCase, $customerId) {
-                if ($testCase->getIdCounter > 0 ) {
+        $customer->expects($this->any())
+            ->method('getId')
+            ->will($this->returnCallback(function () use ($testCase, $customerId) {
+                if ($testCase->getIdCounter > 0) {
                     return $customerId;
                 } else {
                     $testCase->getIdCounter += 1;
                     return null;
                 }
-            } ) );
+            }));
         $customer->expects($this->atLeastOnce())
             ->method('getGroupId')
             ->willReturn($requestedGroupId);
@@ -1183,29 +1183,29 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $customer->expects($this->atLeastOnce())
             ->method('getEmail')
             ->willReturn($customerEmail);
-        $customer->expects( $this->any() )
-            ->method( 'getWebsiteId' )
-            ->will( $this->returnCallback( function () use ( $testCase, $websiteId) {
-                if ($testCase->getWebsiteIdCounter > 1 ) {
+        $customer->expects($this->any())
+            ->method('getWebsiteId')
+            ->will($this->returnCallback(function () use ($testCase, $websiteId) {
+                if ($testCase->getWebsiteIdCounter > 1) {
                     return $websiteId;
                 } else {
                     $testCase->getWebsiteIdCounter += 1;
                     return null;
                 }
-            } ) );
+            }));
         $customer->expects($this->once())
             ->method('setWebsiteId')
             ->with($websiteId);
-        $customer->expects( $this->any() )
-            ->method( 'getStoreId' )
-            ->will( $this->returnCallback( function () use ( $testCase, $defaultStoreId) {
-                if ($testCase->getStoreIdCounter > 0 ) {
+        $customer->expects($this->any())
+            ->method('getStoreId')
+            ->will($this->returnCallback(function () use ($testCase, $defaultStoreId) {
+                if ($testCase->getStoreIdCounter > 0) {
                     return $defaultStoreId;
                 } else {
                     $testCase->getStoreIdCounter += 1;
                     return null;
                 }
-            } ) );
+            }));
         $customer->expects($this->once())
             ->method('setStoreId')
             ->with($defaultStoreId);
@@ -2228,6 +2228,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return void
      * @throws LocalizedException
      */
@@ -2258,42 +2259,42 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->willReturn([1, 2, 3]);
         $customer = $this->createMock(Customer::class);
         $testCase = $this;
-        $customer->expects( $this->any() )
-            ->method( 'getId' )
-            ->will( $this->returnCallback( function () use ( $testCase, $customerId) {
-                if ($testCase->getIdCounter > 0 ) {
+        $customer->expects($this->any())
+            ->method('getId')
+            ->will($this->returnCallback(function () use ($testCase, $customerId) {
+                if ($testCase->getIdCounter > 0) {
                     return $customerId;
                 } else {
                     $testCase->getIdCounter += 1;
                     return null;
                 }
-            } ) );
+            }));
         $customer->expects($this->atLeastOnce())
             ->method('getEmail')
             ->willReturn($customerEmail);
-        $customer->expects( $this->any() )
-            ->method( 'getWebsiteId' )
-            ->will( $this->returnCallback( function () use ( $testCase, $websiteId) {
-                if ($testCase->getWebsiteIdCounter > 1 ) {
+        $customer->expects($this->any())
+            ->method('getWebsiteId')
+            ->will($this->returnCallback(function () use ($testCase, $websiteId) {
+                if ($testCase->getWebsiteIdCounter > 1) {
                     return $websiteId;
                 } else {
                     $testCase->getWebsiteIdCounter += 1;
                     return null;
                 }
-            } ) );
+            }));
         $customer->expects($this->once())
             ->method('setWebsiteId')
             ->with($websiteId);
-        $customer->expects( $this->any() )
-            ->method( 'getStoreId' )
-            ->will( $this->returnCallback( function () use ( $testCase, $defaultStoreId) {
-                if ($testCase->getStoreIdCounter > 0 ) {
+        $customer->expects($this->any())
+            ->method('getStoreId')
+            ->will($this->returnCallback(function () use ($testCase, $defaultStoreId) {
+                if ($testCase->getStoreIdCounter > 0) {
                     return $defaultStoreId;
                 } else {
                     $testCase->getStoreIdCounter += 1;
                     return null;
                 }
-            } ) );
+            }));
         $customer->expects($this->once())
             ->method('setStoreId')
             ->with($defaultStoreId);
