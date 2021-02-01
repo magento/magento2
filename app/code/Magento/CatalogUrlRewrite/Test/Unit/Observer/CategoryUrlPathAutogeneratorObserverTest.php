@@ -18,6 +18,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Backend\Model\Validator\UrlKey\CompositeUrlKey;
 
 class CategoryUrlPathAutogeneratorObserverTest extends TestCase
 {
@@ -57,6 +58,11 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
     private $categoryResource;
 
     /**
+     * @var CompositeUrlKey|MockObject
+     */
+    private $compositeUrlValidator;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -88,12 +94,18 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
 
         $this->storeViewService = $this->createMock(StoreViewService::class);
 
+        $this->compositeUrlValidator = $this->getMockBuilder(CompositeUrlKey::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['validate'])
+            ->getMock();
+
         $this->categoryUrlPathAutogeneratorObserver = (new ObjectManagerHelper($this))->getObject(
             CategoryUrlPathAutogeneratorObserver::class,
             [
                 'categoryUrlPathGenerator' => $this->categoryUrlPathGenerator,
                 'childrenCategoriesProvider' => $this->childrenCategoriesProvider,
                 'storeViewService' => $this->storeViewService,
+                'compositeUrlValidator' => $this->compositeUrlValidator,
             ]
         );
     }
@@ -114,6 +126,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
         $this->categoryUrlPathGenerator->expects($this->once())->method('getUrlPath')->willReturn($expectedUrlPath);
         $this->assertEquals($categoryData['url_key'], $this->category->getUrlKey());
         $this->assertEquals($categoryData['url_path'], $this->category->getUrlPath());
+        $this->compositeUrlValidator->expects($this->once())->method('validate')->with('formatted_url_key')->willReturn([]);
         $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
         $this->assertEquals($expectedUrlKey, $this->category->getUrlKey());
         $this->assertEquals($expectedUrlPath, $this->category->getUrlPath());
@@ -206,6 +219,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
         $this->categoryUrlPathGenerator->expects($this->any())->method('getUrlPath')->willReturn($expectedUrlPath);
         $this->categoryResource->expects($this->once())->method('saveAttribute')->with($this->category, 'url_path');
         $this->category->expects($this->once())->method('dataHasChangedFor')->with('url_path')->willReturn(false);
+        $this->compositeUrlValidator->expects($this->once())->method('validate')->with('formatted_url_key')->willReturn([]);
         $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
     }
 
@@ -222,6 +236,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
 
         // break code execution
         $this->category->expects($this->once())->method('dataHasChangedFor')->with('url_path')->willReturn(false);
+        $this->compositeUrlValidator->expects($this->once())->method('validate')->with('url_key')->willReturn([]);
 
         $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
     }
@@ -260,6 +275,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
         $this->childrenCategoriesProvider->expects($this->once())->method('getChildren')->willReturn([$childCategory]);
         $childCategory->expects($this->once())->method('setUrlPath')->with('generated_url_path')->willReturnSelf();
         $childCategoryResource->expects($this->once())->method('saveAttribute')->with($childCategory, 'url_path');
+        $this->compositeUrlValidator->expects($this->once())->method('validate')->with('generated_url_key')->willReturn([]);
 
         $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
     }

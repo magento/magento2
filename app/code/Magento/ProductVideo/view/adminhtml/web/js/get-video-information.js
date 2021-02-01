@@ -289,10 +289,10 @@ define([
              * @private
              */
             destroy: function () {
-                this.stop();
-
                 if (this._player) {
+                    this.stop();
                     this._player.destroy();
+                    this._player = undefined;
                 }
             }
         });
