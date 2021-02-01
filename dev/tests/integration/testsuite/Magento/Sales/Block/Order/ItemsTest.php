@@ -86,12 +86,15 @@ class ItemsTest extends TestCase
      *
      * @return void
      */
-    public function testGetOrderItemsConfigurable(): void
+    public function testGetPagerCountConfigurable(): void
     {
         $order = $this->orderFactory->create()->loadByIncrementId('100000001');
         $this->registerOrder($order);
-        $this->block = $this->layout->createBlock(Items::class);
-        $this->assertCount(1, $this->block->getItems());
+        $this->prepareBlockWithPager();
+
+        /** @var Pager $pagerBlock */
+        $pagerBlock = $this->block->getChildBlock('sales_order_item_pager');
+        $this->assertCount(1, $pagerBlock->getCollection()->getItems());
     }
 
     /**
@@ -104,13 +107,7 @@ class ItemsTest extends TestCase
     {
         $order = $this->orderFactory->create()->loadByIncrementId('100000001');
         $this->registerOrder($order);
-        $this->block = $this->layout->createBlock(Items::class, 'items_block');
-        $this->layout->addBlock(
-            $this->objectManager->get(Pager::class),
-            'sales_order_item_pager',
-            'items_block'
-        );
-        $this->block->setLayout($this->layout);
+        $this->prepareBlockWithPager();
         $this->assertTrue($this->block->isPagerDisplayed());
     }
 
@@ -123,13 +120,7 @@ class ItemsTest extends TestCase
     {
         $order = $this->orderFactory->create()->loadByIncrementId('100000001');
         $this->registerOrder($order);
-        $this->block = $this->layout->createBlock(Items::class, 'items_block');
-        $this->layout->addBlock(
-            $this->objectManager->get(Pager::class),
-            'sales_order_item_pager',
-            'items_block'
-        );
-        $this->block->setLayout($this->layout);
+        $this->prepareBlockWithPager();
         $this->assertFalse($this->block->isPagerDisplayed());
         $this->assertEmpty(preg_replace('/\s+/', '', strip_tags($this->block->getPagerHtml())));
     }
@@ -144,13 +135,7 @@ class ItemsTest extends TestCase
     {
         $order = $this->orderFactory->create()->loadByIncrementId('100000001');
         $this->registerOrder($order);
-        $this->block = $this->layout->createBlock(Items::class, 'items_block');
-        $this->layout->addBlock(
-            $this->objectManager->get(Pager::class),
-            'sales_order_item_pager',
-            'items_block'
-        );
-        $this->block->setLayout($this->layout);
+        $this->prepareBlockWithPager();
         $this->assertNotEmpty(preg_replace('/\s+/', '', strip_tags($this->block->getPagerHtml())));
         $this->assertTrue($this->block->isPagerDisplayed());
     }
@@ -239,5 +224,19 @@ class ItemsTest extends TestCase
     {
         $this->registry->unregister('current_order');
         $this->registry->register('current_order', $order);
+    }
+
+    /**
+     * Create items block with pager
+     */
+    private function prepareBlockWithPager(): void
+    {
+        $this->block = $this->layout->createBlock(Items::class, 'items_block');
+        $this->layout->addBlock(
+            $this->objectManager->get(Pager::class),
+            'sales_order_item_pager',
+            'items_block'
+        );
+        $this->block->setLayout($this->layout);
     }
 }
