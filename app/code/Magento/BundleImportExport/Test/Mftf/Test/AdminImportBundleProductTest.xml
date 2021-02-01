@@ -95,7 +95,7 @@
             <argument name="productPrice" value="{{ImportProductSimple1_Bundle.price}}"/>
             <argument name="productQuantity" value="{{ImportProductSimple1_Bundle.quantity}}"/>
             <argument name="productWeight" value="{{ImportProductSimple1_Bundle.weight}}"/>
-            <argument name="categoryNames" value="{{ImportCategory_Bundle.name}}"/>
+            <argument name="categoryName" value="{{ImportCategory_Bundle.name}}"/>
         </actionGroup>
         <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertSimpleProduct1ImageOnEditPage">
             <argument name="image" value="MagentoLogo"/>
@@ -122,7 +122,7 @@
             <argument name="productPrice" value="{{ImportProductSimple2_Bundle.price}}"/>
             <argument name="productQuantity" value="{{ImportProductSimple2_Bundle.quantity}}"/>
             <argument name="productWeight" value="{{ImportProductSimple2_Bundle.weight}}"/>
-            <argument name="categoryNames" value="{{ImportCategory_Bundle.name}}"/>
+            <argument name="categoryName" value="{{ImportCategory_Bundle.name}}"/>
         </actionGroup>
         <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertSimpleProduct2ImageOnEditPage">
             <argument name="image" value="TestImage"/>
@@ -149,7 +149,7 @@
             <argument name="productPrice" value="{{ImportProductSimple3_Bundle.price}}"/>
             <argument name="productQuantity" value="{{ImportProductSimple3_Bundle.quantity}}"/>
             <argument name="productWeight" value="{{ImportProductSimple3_Bundle.weight}}"/>
-            <argument name="categoryNames" value="{{ImportCategory_Bundle.name}}"/>
+            <argument name="categoryName" value="{{ImportCategory_Bundle.name}}"/>
         </actionGroup>
         <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertSimpleProduct3ImageOnEditPage">
             <argument name="image" value="TestImageAdobe"/>
@@ -164,7 +164,7 @@
         </actionGroup>
         <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(TestImageAdobe.filename, 'thumbnail')}}" stepKey="seeThumbnailImageRoleSimple3"/>
 
-        <!-- Admin: Verify Grouped Product Common Data on Edit Product Page -->
+        <!-- Admin: Verify Bundle Product Common Data on Edit Product Page -->
         <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToBundleProductEditPage">
             <argument name="product" value="ImportProduct_Bundle"/>
         </actionGroup>
@@ -194,7 +194,7 @@
         </actionGroup>
         <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(TestImageAdobe.filename, 'thumbnail')}}" stepKey="seeThumbnailImageRoleBundle"/>
 
-        <!-- Admin: Verify Grouped Product Information on Edit Product Page -->
+        <!-- Admin: Verify Bundle Product Information on Edit Product Page -->
         <seeOptionIsSelected userInput="{{ImportProduct_Bundle.bundleOptionShipmentType}}" selector="{{AdminProductFormBundleSection.shipmentType}}" stepKey="seeShipBundleItemsTogether"/>
         <seeNumberOfElements userInput="{{ImportProduct_Bundle.totalBundleOptions}}" selector="{{AdminProductFormBundleSection.allBundleOptions}}" stepKey="see2BundleOptionsAdmin"/>
         <actionGroup ref="AdminVerifyBundleProductOptionActionGroup" stepKey="verifyBundleProductOption1">

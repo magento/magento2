@@ -22,7 +22,7 @@
             <argument name="productStockStatus" defaultValue="In Stock" type="string"/>
             <argument name="productWeight" defaultValue="{{_defaultProduct.weight}}" type="string"/>
             <argument name="productVisibility" defaultValue="Catalog, Search" type="string"/>
-            <argument name="categoryNames" defaultValue="{{_defaultCategory.name}}" type="string"/>
+            <argument name="categoryName" defaultValue="{{_defaultCategory.name}}" type="string"/>
         </arguments>
         <waitForElementVisible selector="{{AdminProductFormSection.productStatus}}" stepKey="waitForProductStatus"/>
         <seeElement selector="{{AdminProductFormSection.productStatusValue(productStatus)}}" stepKey="seeProductStatus"/>
@@ -34,6 +34,6 @@
         <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{productStockStatus}}" stepKey="seeProductStockStatus"/>
         <seeInField selector="{{AdminProductFormSection.productWeight}}" userInput="{{productWeight}}" stepKey="seeProductWeight"/>
         <seeOptionIsSelected selector="{{AdminProductFormSection.visibility}}" userInput="{{productVisibility}}" stepKey="seeProductVisibility"/>
-        <seeElement selector="{{AdminProductFormSection.categories(categoryNames)}}" stepKey="seeProductCategories"/>
+        <seeElement selector="{{AdminProductFormSection.categories(categoryName)}}" stepKey="seeProductCategories"/>
     </actionGroup>
 </actionGroups>
