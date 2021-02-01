@@ -14,7 +14,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
- * Cheks creating attribute options process.
+ * Checks creating attribute options process.
  *
  * @see \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute\CreateOptions
  * @magentoAppArea adminhtml
@@ -52,13 +52,13 @@ class CreateOptionsTest extends AbstractBackendController
     public function testAddAlreadyAddedOption(): void
     {
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
-        $attr = $this->attributeRepository->get('test_configurable');
+        $attribute = $this->attributeRepository->get('test_configurable');
         $this->getRequest()->setParams([
             'options' => [
                 [
                     'label' => 'Option 1',
                     'is_new' => true,
-                    'attribute_id' => (int)$attr->getAttributeId(),
+                    'attribute_id' => (int)$attribute->getAttributeId(),
                 ],
             ],
         ]);
@@ -66,7 +66,7 @@ class CreateOptionsTest extends AbstractBackendController
         $responseBody = $this->json->unserialize($this->getResponse()->getBody());
         $this->assertNotEmpty($responseBody);
         $this->assertStringContainsString(
-            (string)__('The value of attribute ""%1"" must be unique', $attr->getAttributeCode()),
+            (string)__('The value of attribute ""%1"" must be unique', $attribute->getAttributeCode()),
             $responseBody['message']
         );
     }
