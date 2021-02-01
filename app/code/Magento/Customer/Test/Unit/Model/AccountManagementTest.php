@@ -13,18 +13,19 @@ use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Customer\Model\Data\Customer;
 use Magento\Customer\Model\EmailNotificationInterface;
-use Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Area;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Exception\State\InputMismatchException;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\ScopeInterface;
-use \Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Model\Website;
+use Magento\Store\Model\Store;
+use Magento\Customer\Api\Data\AddressInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -353,7 +354,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException InputMismatchException
+     * @expectedException \Magento\Framework\Exception\State\InputMismatchException
      */
     public function testCreateAccountWithPasswordHashWithCustomerWithoutStoreId()
     {
@@ -426,7 +427,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException LocalizedException
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateAccountWithPasswordHashWithLocalizedException()
     {
@@ -498,7 +499,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException LocalizedException
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateAccountWithPasswordHashWithAddressException()
     {
@@ -589,7 +590,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException LocalizedException
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateAccountWithPasswordHashWithNewCustomerAndLocalizedException()
     {
@@ -824,7 +825,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
      * @param int $minPasswordLength
      * @param int $minCharacterSetsNum
      * @dataProvider dataProviderCheckPasswordStrength
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateAccountWithPasswordInputException(
         $testNumber,
@@ -879,7 +880,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateAccountInputExceptionExtraLongPassword()
     {
@@ -1519,7 +1520,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testInitiatePasswordResetEmailReminder()
     {
@@ -1544,7 +1545,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testInitiatePasswordResetEmailReset()
     {
@@ -1568,7 +1569,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testInitiatePasswordResetNoTemplate()
     {
@@ -1610,7 +1611,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException InputMismatchException
+     * @expectedException \Magento\Framework\Exception\State\InputMismatchException
      * @expectedExceptionMessage The password token is mismatched. Reset and try again.
      */
     public function testValidateResetPasswordTokenTokenMismatch()
@@ -1755,7 +1756,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws InvalidEmailOrPasswordException
      *
      */
@@ -1836,7 +1837,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testResetPassword()
     {
@@ -1893,7 +1894,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      * @throws InvalidEmailOrPasswordException
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testChangePasswordException()
     {
@@ -1918,7 +1919,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testAuthenticate()
     {
@@ -1982,7 +1983,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
      * @param string|null $confirmation
      * @param string $expected
      * @dataProvider dataProviderGetConfirmationStatus
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testGetConfirmationStatus(
         $isConfirmationRequired,
@@ -2037,7 +2038,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException LocalizedException
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Exception message
      */
     public function testCreateAccountWithPasswordHashForGuestException()
@@ -2230,7 +2231,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return void
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateAccountUnexpectedValueException(): void
     {
@@ -2354,9 +2355,8 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws InputException
-     * @throws InputMismatchException
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateAccountWithStoreNotInWebsite()
     {
@@ -2395,7 +2395,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
      * Test for validating customer store id by customer website id.
      *
      * @return void
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateCustomerStoreIdByWebsiteId(): void
     {
@@ -2418,7 +2418,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for validating customer store id by customer website id with Exception
      *
-     * @expectedException LocalizedException
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage The store view is not in the associated website.
      */
     public function testValidateCustomerStoreIdByWebsiteIdException(): void
