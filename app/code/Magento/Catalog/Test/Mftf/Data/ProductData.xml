@@ -586,6 +586,10 @@
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionValueDropdown</requiredEntity>
     </entity>
+    <entity name="productWithFileOption" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionFile</requiredEntity>
+    </entity>
     <entity name="productWithDropdownAndFieldOptions" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionValueDropdown</requiredEntity>

@@ -235,8 +235,8 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
         $this->assertEquals($updatedImage['file'], $targetProduct->getData('image'));
         // No values for default store view were provided
         $this->assertNull($updatedImage['label_default']);
-        $this->assertNull($updatedImage['position_default']);
-        $this->assertNull($updatedImage['disabled_default']);
+        $this->assertEquals(1, $updatedImage['position_default']);
+        $this->assertEquals(0, $updatedImage['disabled_default']);
     }
 
     /**
@@ -483,7 +483,9 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
     public function testCreateThrowsExceptionIfTargetProductDoesNotExist()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The product that was requested doesn\'t exist. Verify the product and try again.');
+        $this->expectExceptionMessage(
+            'The product that was requested doesn\'t exist. Verify the product and try again.'
+        );
 
         $this->createServiceInfo['rest']['resourcePath'] = '/V1/products/wrong_product_sku/media';
 
@@ -538,7 +540,9 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
     public function testUpdateThrowsExceptionIfTargetProductDoesNotExist()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The product that was requested doesn\'t exist. Verify the product and try again.');
+        $this->expectExceptionMessage(
+            'The product that was requested doesn\'t exist. Verify the product and try again.'
+        );
 
         $this->updateServiceInfo['rest']['resourcePath'] = '/V1/products/wrong_product_sku/media'
             . '/' . 'wrong-sku';
@@ -592,7 +596,9 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
     public function testDeleteThrowsExceptionIfTargetProductDoesNotExist()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The product that was requested doesn\'t exist. Verify the product and try again.');
+        $this->expectExceptionMessage(
+            'The product that was requested doesn\'t exist. Verify the product and try again.'
+        );
 
         $this->deleteServiceInfo['rest']['resourcePath'] = '/V1/products/wrong_product_sku/media/9999';
         $requestData = [
@@ -782,6 +788,6 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
         $this->assertEquals(1, $updatedImage['position']);
         $this->assertEquals(0, $updatedImage['disabled']);
         $this->assertStringStartsWith('/t/e/test_image', $updatedImage['file']);
-        $this->assertEquals($videoContent, array_intersect($updatedImage, $videoContent));
+        $this->assertEquals($videoContent, array_intersect_key($updatedImage, $videoContent));
     }
 }

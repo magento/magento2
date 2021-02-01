@@ -737,4 +737,28 @@ class QuoteTest extends TestCase
             CustomerInterface::WEBSITE_ID => 1,
         ];
     }
+
+    /**
+     * @magentoConfigFixture current_store sales/minimum_order/active 1
+     * @magentoConfigFixture current_store sales/minimum_order/amount 5
+     * @magentoConfigFixture current_store sales/minimum_order/tax_including 1
+     * @magentoConfigFixture current_store sales/minimum_order/include_discount_amount 1
+     * @magentoConfigFixture current_store tax/calculation/price_includes_tax 1
+     * @magentoConfigFixture current_store tax/calculation/apply_after_discount 1
+     * @magentoConfigFixture current_store tax/calculation/cross_border_trade_enabled 1
+     * @magentoDataFixture Magento/SalesRule/_files/cart_rule_with_coupon_5_off_no_condition.php
+     * @magentoDataFixture Magento/Tax/_files/tax_rule_region_1_al.php
+     * @magentoDataFixture Magento/Checkout/_files/quote_with_taxable_product_and_customer.php
+     */
+    public function testValidateMinimumAmountWithPriceInclTaxAndDiscount()
+    {
+        /** @var $quote \Magento\Quote\Model\Quote */
+        $quote = $this->getQuoteByReservedOrderId->execute('test_order_with_taxable_product');
+        $quote->setCouponCode('CART_FIXED_DISCOUNT_5');
+        $quote->collectTotals();
+        $this->assertEquals(-5, $quote->getShippingAddress()->getBaseDiscountAmount());
+        $this->assertEquals(9.3, $quote->getShippingAddress()->getBaseSubtotal());
+        $this->assertEquals(5, $quote->getShippingAddress()->getBaseGrandTotal());
+        $this->assertTrue($quote->validateMinimumAmount());
+    }
 }
