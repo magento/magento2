@@ -10,9 +10,6 @@ namespace Magento\Catalog\Model\Product\Option;
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface as OptionRepository;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
-/**
- * Class SaveHandler
- */
 class SaveHandler implements ExtensionInterface
 {
     /**
@@ -39,7 +36,7 @@ class SaveHandler implements ExtensionInterface
      */
     public function execute($entity, $arguments = [])
     {
-        if ($entity->getOptionsSaved()) {
+        if ($entity->getOptionsSaved() || !$entity->getCanSaveCustomOptions()) {
             return $entity;
         }
 

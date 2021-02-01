@@ -17,59 +17,62 @@ use PHPUnit\Framework\TestCase;
 class SaveHandlerTest extends TestCase
 {
     /**
-     * @var SaveHandler|MockObject
+     * @var SaveHandler
      */
-    protected $model;
+    private $model;
 
     /**
      * @var Product|MockObject
      */
-    protected $entity;
+    private $entityMock;
 
     /**
      * @var Option|MockObject
      */
-    protected $optionMock;
+    private $optionMock;
 
     /**
      * @var Repository|MockObject
      */
-    protected $optionRepository;
+    private $optionRepositoryMock;
 
     protected function setUp(): void
     {
-        $this->entity = $this->getMockBuilder(Product::class)
+        $this->entityMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
+            ->setMethods(['getOptionsSaved', 'getCanSaveCustomOptions', 'getOptions', 'dataHasChangedFor', 'getSku'])
             ->getMock();
         $this->optionMock = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->optionRepository = $this->getMockBuilder(Repository::class)
+        $this->optionRepositoryMock = $this->getMockBuilder(Repository::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = new SaveHandler($this->optionRepository);
+        $this->model = new SaveHandler($this->optionRepositoryMock);
     }
 
-    public function testExecute()
+    public function testExecute(): void
     {
+        $this->entityMock->expects($this->once())->method('getOptionsSaved')->willReturn(false);
+        $this->entityMock->expects($this->once())->method('getCanSaveCustomOptions')->willReturn(true);
         $this->optionMock->expects($this->any())->method('getOptionId')->willReturn(5);
-        $this->entity->expects($this->once())->method('getOptions')->willReturn([$this->optionMock]);
+        $this->entityMock->expects($this->once())->method('getOptions')->willReturn([$this->optionMock]);
 
         $secondOptionMock = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
             ->getMock();
         $secondOptionMock->expects($this->once())->method('getOptionId')->willReturn(6);
 
-        $this->optionRepository
+        $this->optionRepositoryMock
             ->expects($this->once())
             ->method('getProductOptions')
-            ->with($this->entity)
+            ->with($this->entityMock)
             ->willReturn([$this->optionMock, $secondOptionMock]);
 
-        $this->optionRepository->expects($this->once())->method('delete');
-        $this->optionRepository->expects($this->once())->method('save')->with($this->optionMock);
+        $this->optionRepositoryMock->expects($this->once())->method('delete');
+        $this->optionRepositoryMock->expects($this->once())->method('save')->with($this->optionMock);
 
-        $this->assertEquals($this->entity, $this->model->execute($this->entity));
+        $this->assertEquals($this->entityMock, $this->model->execute($this->entityMock));
     }
 }

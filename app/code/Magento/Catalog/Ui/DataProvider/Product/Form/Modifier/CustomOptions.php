@@ -199,7 +199,7 @@ class CustomOptions extends AbstractModifier
             [
                 $this->locator->getProduct()->getId() => [
                     static::DATA_SOURCE_DEFAULT => [
-                        static::FIELD_ENABLE => 1,
+                        static::FIELD_ENABLE => 0,
                         static::GRID_OPTIONS_NAME => $options
                     ]
                 ]
@@ -256,6 +256,7 @@ class CustomOptions extends AbstractModifier
                             'config' => [
                                 'label' => __('Customizable Options'),
                                 'componentType' => Fieldset::NAME,
+                                'component' => 'Magento_Catalog/js/product/form/fieldset/custom-options',
                                 'dataScope' => static::GROUP_CUSTOM_OPTIONS_SCOPE,
                                 'collapsible' => true,
                                 'sortOrder' => $this->getNextGroupSortOrder(

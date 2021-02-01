@@ -108,7 +108,7 @@ class CustomOptionsTest extends AbstractModifierTest
             $productId => [
                 CustomOptions::DATA_SOURCE_DEFAULT => [
                     CustomOptions::FIELD_TITLE_NAME => 'original',
-                    CustomOptions::FIELD_ENABLE => 1,
+                    CustomOptions::FIELD_ENABLE => 0,
                     CustomOptions::GRID_OPTIONS_NAME => [
                         [
                             CustomOptions::FIELD_TITLE_NAME => 'option1',

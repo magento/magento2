@@ -97,6 +97,8 @@ class CreateCustomOptionsTest extends AbstractBackendController
             'required_options' => [
                 [
                     'product' => [
+                        //Allow saving custom options
+                        'affect_product_custom_options' => 1,
                         'options' => [
                             'Test option title 1' => [
                                 'record_id' => 0,
@@ -127,6 +129,8 @@ class CreateCustomOptionsTest extends AbstractBackendController
             'not_required_options' => [
                 [
                     'product' => [
+                        //Allow saving custom options
+                        'affect_product_custom_options' => 1,
                         'options' => [
                             'Test option title 1' => [
                                 'record_id' => 0,
@@ -157,6 +161,8 @@ class CreateCustomOptionsTest extends AbstractBackendController
             'options_with_fixed_price' => [
                 [
                     'product' => [
+                        //Allow saving custom options
+                        'affect_product_custom_options' => 1,
                         'options' => [
                             'Test option title 1' => [
                                 'record_id' => 0,
@@ -187,6 +193,8 @@ class CreateCustomOptionsTest extends AbstractBackendController
             'options_with_percent_price' => [
                 [
                     'product' => [
+                        //Allow saving custom options
+                        'affect_product_custom_options' => 1,
                         'options' => [
                             'Test option title 1' => [
                                 'record_id' => 0,
@@ -217,6 +225,8 @@ class CreateCustomOptionsTest extends AbstractBackendController
             'options_with_max_charters_configuration' => [
                 [
                     'product' => [
+                        //Allow saving custom options
+                        'affect_product_custom_options' => 1,
                         'options' => [
                             'Test option title 1' => [
                                 'record_id' => 0,
@@ -247,6 +257,8 @@ class CreateCustomOptionsTest extends AbstractBackendController
             'options_without_max_charters_configuration' => [
                 [
                     'product' => [
+                        //Allow saving custom options
+                        'affect_product_custom_options' => 1,
                         'options' => [
                             'Test option title 1' => [
                                 'record_id' => 0,
