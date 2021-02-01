@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AwsS3AdminImportSimpleAndConfigurableProductsWithAssignedImagesTest" extends="AdminImportSimpleAndConfigurableProductsWithAssignedImagesTest">
+    <test name="AdminAwsS3ImportSimpleAndConfigurableProductsWithAssignedImagesTest" extends="AdminImportSimpleAndConfigurableProductsWithAssignedImagesTest">
         <annotations>
             <features value="AwsS3"/>
             <stories value="Import Products"/>
@@ -18,6 +18,7 @@
             products as expected."/>
             <severity value="MAJOR"/>
             <group value="importExport"/>
+            <group value="ConfigurableProduct"/>
             <group value="remote_storage_aws_s3"/>
             <skip>
                 <issueId value="MC-39280"/>
@@ -26,12 +27,12 @@
 
         <before>
             <!-- Enable AWS S3 Remote Storage -->
-            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage"/>
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage" before="createImportProductAttribute"/>
         </before>
 
         <after>
             <!-- Disable AWS S3 Remote Storage -->
-            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage"/>
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage" after="logoutFromAdmin"/>
         </after>
     </test>
 </tests>
