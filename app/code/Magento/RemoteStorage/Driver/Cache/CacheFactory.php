@@ -8,10 +8,6 @@ declare(strict_types=1);
 namespace Magento\RemoteStorage\Driver\Cache;
 
 use League\Flysystem\Adapter\Local;
-use League\Flysystem\Cached\CacheInterface;
-use League\Flysystem\Cached\Storage\Memory;
-use League\Flysystem\Cached\Storage\Predis;
-use League\Flysystem\Cached\Storage\Adapter;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\RemoteStorage\Driver\DriverException;
@@ -20,6 +16,7 @@ use Predis\Client;
 
 /**
  * Provides cache adapters.
+ * @deprecated
  */
 class CacheFactory
 {

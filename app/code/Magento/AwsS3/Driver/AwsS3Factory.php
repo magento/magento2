@@ -8,10 +8,12 @@ declare(strict_types=1);
 namespace Magento\AwsS3\Driver;
 
 use Aws\S3\S3Client;
-use League\Flysystem\AwsS3v3\AwsS3Adapter;
-use League\Flysystem\Cached\CachedAdapter;
+use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\RemoteStorage\Driver\Adapter\Cache\CacheInterface;
+use Magento\RemoteStorage\Driver\Adapter\CachedAdapter;
+use Magento\RemoteStorage\Driver\Adapter\MetadataProviderInterface;
 use Magento\RemoteStorage\Driver\Cache\CacheFactory;
 use Magento\RemoteStorage\Driver\DriverException;
 use Magento\RemoteStorage\Driver\DriverFactoryInterface;
@@ -40,7 +42,7 @@ class AwsS3Factory implements DriverFactoryInterface
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param CacheFactory $cacheFactory
+     * @param CacheFactory $cacheFactory - deprecated
      * @param Config $config
      */
     public function __construct(ObjectManagerInterface $objectManager, CacheFactory $cacheFactory, Config $config)
@@ -91,16 +93,21 @@ class AwsS3Factory implements DriverFactoryInterface
         }
 
         $client = new S3Client($config);
-        $adapter = new AwsS3Adapter($client, $config['bucket'], $prefix);
+        $adapter = new AwsS3V3Adapter($client, $config['bucket'], $prefix);
+        $cache = $this->objectManager->get(CacheInterface::class);
 
         return $this->objectManager->create(
             AwsS3::class,
             [
                 'adapter' => $this->objectManager->create(CachedAdapter::class, [
                     'adapter' => $adapter,
-                    'cache' => $this->cacheFactory->create($cacheAdapter, $cacheConfig)
+                    'cache' => $cache
                 ]),
-                'objectUrl' => $client->getObjectUrl($adapter->getBucket(), $adapter->applyPathPrefix('.'))
+                'objectUrl' => $client->getObjectUrl($config['bucket'], '.'),
+                'metadataProvider' => $this->objectManager->create(MetadataProviderInterface::class, [
+                    'adapter' => $adapter,
+                    'cache' => $cache
+                ]),
             ]
         );
     }
