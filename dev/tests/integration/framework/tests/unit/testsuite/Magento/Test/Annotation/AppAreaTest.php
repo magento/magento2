@@ -39,8 +39,8 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTestAppArea($annotations, $expectedArea)
     {
-        $this->_testCaseMock->expects($this->once())->method('getAnnotations')->will($this->returnValue($annotations));
-        $this->_applicationMock->expects($this->any())->method('getArea')->will($this->returnValue(null));
+        $this->_testCaseMock->expects($this->once())->method('getAnnotations')->willReturn($annotations);
+        $this->_applicationMock->expects($this->any())->method('getArea')->willReturn(null);
         $this->_applicationMock->expects($this->once())->method('reinitialize');
         $this->_applicationMock->expects($this->once())->method('loadArea')->with($expectedArea);
         $this->_object->startTest($this->_testCaseMock);

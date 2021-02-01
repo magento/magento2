@@ -65,7 +65,6 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
     /**
      * Check that method throw exception when writer was not defined
      *
-     *
      */
     public function testGetWriterThrowsException()
     {

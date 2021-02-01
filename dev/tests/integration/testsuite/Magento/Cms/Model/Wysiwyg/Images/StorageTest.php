@@ -127,7 +127,6 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      *
-     *
      */
     public function testDeleteDirectoryWithExcludedDirPath(): void
     {
@@ -165,7 +164,6 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      *
-     *
      */
     public function testUploadFileWithExcludedDirPath(): void
     {
@@ -198,7 +196,6 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      * @dataProvider testUploadFileWithWrongExtensionDataProvider
-     *
      *
      */
     public function testUploadFileWithWrongExtension(string $fileName, string $fileType, ?string $storageType): void
@@ -244,8 +241,6 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *
-     *
      * @return void
      */
     public function testUploadFileWithWrongFile(): void

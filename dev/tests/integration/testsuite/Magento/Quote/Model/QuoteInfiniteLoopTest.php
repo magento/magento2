@@ -91,9 +91,6 @@ class QuoteInfiniteLoopTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *
-     *
-     *
      * @return void
      */
     public function testLoadQuoteWithTriggerRecollectInfiniteLoop(): void

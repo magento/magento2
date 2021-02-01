@@ -498,10 +498,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture current_store general/country/default CA
      *
      * @magentoDbIsolation enabled
-     *
-     *
-     *
-     * @return void
+     ** @return void
      */
     public function testPaymentValidationWithAllowedSpecificCountryNegative(): void
     {

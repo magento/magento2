@@ -130,7 +130,6 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      *
-     *
      */
     public function testLoginWrongPassword()
     {
@@ -174,10 +173,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
-     *
-     *
-     *
-     */
+     **/
     public function testChangePasswordWrongPassword()
     {
         $this->expectExceptionMessage("The password doesn't match this account. Verify the password and try again.");

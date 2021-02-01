@@ -62,9 +62,6 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *
-     *
-     *
      * @return void
      */
     public function testUploadFileFromNotAllowedFolder(): void

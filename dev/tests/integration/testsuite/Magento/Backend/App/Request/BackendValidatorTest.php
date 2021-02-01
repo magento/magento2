@@ -269,8 +269,6 @@ class BackendValidatorTest extends TestCase
     }
 
     /**
-     *
-     *
      * @magentoConfigFixture admin/security/use_form_key 1
      * @magentoAppArea adminhtml
      */
@@ -294,8 +292,6 @@ class BackendValidatorTest extends TestCase
     }
 
     /**
-     *
-     *
      * @magentoConfigFixture admin/security/use_form_key 0
      * @magentoAppArea adminhtml
      */

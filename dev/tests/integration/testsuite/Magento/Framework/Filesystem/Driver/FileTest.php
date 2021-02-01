@@ -77,7 +77,6 @@ class FileTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests directory reading exception.
      *
-     *
      */
     public function testReadDirectoryRecursivelyFailure()
     {

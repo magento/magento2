@@ -98,8 +98,6 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *
-     *
      * @return void
      */
     public function testSaveFileToTmpDirWithWrongExtension(): void
@@ -126,8 +124,6 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *
-     *
      * @return void
      */
     public function testSaveFileToTmpDirWithWrongFile(): void

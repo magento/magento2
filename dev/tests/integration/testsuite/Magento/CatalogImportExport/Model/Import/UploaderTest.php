@@ -137,8 +137,6 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * @magentoAppIsolation enabled
      * @return void
-     *
-     *
      */
     public function testMoveWithInvalidFile(): void
     {

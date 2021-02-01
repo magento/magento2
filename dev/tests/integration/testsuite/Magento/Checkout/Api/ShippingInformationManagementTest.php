@@ -59,7 +59,6 @@ class ShippingInformationManagementTest extends TestCase
      * @magentoDataFixture Magento/Customer/_files/customer_with_addresses.php
      * @dataProvider getAddressesVariation
      *
-     *
      */
     public function testDifferentAddresses(bool $swapShipping)
     {

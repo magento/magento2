@@ -15,7 +15,6 @@ class DbStatusValidatorTest extends \Magento\TestFramework\TestCase\AbstractCont
     /**
      * @magentoDbIsolation enabled
      *
-     *
      */
     public function testValidationOutdatedDb()
     {

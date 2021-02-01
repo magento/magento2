@@ -49,9 +49,6 @@ class AsyncClientInterfaceTest extends TestCase
 
     /**
      * Test cancelling a request.
-     *
-     *
-     *
      */
     public function testCancel(): void
     {
@@ -66,9 +63,6 @@ class AsyncClientInterfaceTest extends TestCase
 
     /**
      * Test failing cancelling a request.
-     *
-     *
-     *
      */
     public function testCancelFail(): void
     {

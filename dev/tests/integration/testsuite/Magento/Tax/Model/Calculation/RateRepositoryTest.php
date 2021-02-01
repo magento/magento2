@@ -191,8 +191,6 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *
-     *
      * @magentoDbIsolation enabled
      */
     public function testSaveThrowsExceptionIfTargetTaxRateDoesNotExist()
@@ -219,8 +217,6 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *
-     *
      * @magentoDbIsolation enabled
      */
     public function testSaveThrowsExceptionIfTaxRateWithCorrespondingCodeAlreadyExists()
@@ -472,7 +468,6 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     *
      *
      */
     public function testSaveThrowsExceptionIfTargetTaxRateExistsButProvidedDataIsInvalid()

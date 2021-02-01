@@ -67,7 +67,6 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDbIsolation enabled
      *
-     *
      */
     public function testSaveThrowsExceptionIfGivenTaxClassNameIsNotUnique()
     {
@@ -198,7 +197,6 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     *
      *
      */
     public function testSaveThrowsExceptionIfTargetTaxClassHasDifferentClassType()

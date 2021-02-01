@@ -45,9 +45,6 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *
-     *
-     *
      * @param string $key
      * @dataProvider invalidEncryptionKeyDataProvider
      */

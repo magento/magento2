@@ -152,10 +152,7 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test creating an object and passing incorrect type of arguments to the constructor.
-     *
-     *
-     *
-     */
+     **/
     public function testNewInstanceWithTypeError()
     {
         $this->expectExceptionMessage("Error occurred when creating object");

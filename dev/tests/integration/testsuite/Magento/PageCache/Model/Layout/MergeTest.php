@@ -12,7 +12,6 @@ class MergeTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoAppArea frontend
      *
-     *
      */
     public function testLoadEntitySpecificHandleWithEsiBlock()
     {

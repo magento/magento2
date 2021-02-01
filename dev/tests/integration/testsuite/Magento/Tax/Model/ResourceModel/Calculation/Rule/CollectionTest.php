@@ -54,7 +54,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * Test setClassTypeFilter with wrong Class Type
      *
-     *
      */
     public function testSetClassTypeFilterWithWrongType()
     {

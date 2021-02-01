@@ -112,7 +112,6 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture  Magento/Customer/_files/customer_two_addresses.php
      * @magentoAppIsolation enabled
      *
-     *
      */
     public function testSaveAddressesIdSetButNotAlreadyExisting()
     {
@@ -137,7 +136,6 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
-     *
      *
      */
     public function testGetAddressByIdBadAddressId()

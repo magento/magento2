@@ -103,8 +103,6 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $imageFileName
      *
-     *
-     *
      * @dataProvider illegalFilenameDataProvider
      * @return void
      */

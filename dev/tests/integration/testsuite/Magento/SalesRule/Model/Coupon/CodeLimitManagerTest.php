@@ -116,7 +116,6 @@ class CodeLimitManagerTest extends TestCase
      * @magentoConfigFixture default_store customer/captcha/failed_attempts_login 10
      * @magentoConfigFixture default_store customer/captcha/failed_attempts_ip 2
      *
-     *
      */
     public function testAboveLimitNotLoggedIn()
     {
@@ -140,7 +139,6 @@ class CodeLimitManagerTest extends TestCase
      * @magentoConfigFixture default_store customer/captcha/failed_attempts_ip 10
      *
      * @magentoDataFixture Magento/Customer/_files/customer.php
-     *
      *
      */
     public function testAboveLimitLoggedIn()
@@ -168,7 +166,6 @@ class CodeLimitManagerTest extends TestCase
      *
      * @magentoDataFixture Magento/Customer/_files/customer.php
      *
-     *
      */
     public function testCustomerNotAllowedWithoutCode()
     {
@@ -186,7 +183,6 @@ class CodeLimitManagerTest extends TestCase
      * @magentoConfigFixture default_store customer/captcha/failed_attempts_login 10
      * @magentoConfigFixture default_store customer/captcha/failed_attempts_ip 10
      * @magentoConfigFixture default_store customer/captcha/mode always
-     *
      *
      */
     public function testGuestNotAllowedWithoutCode()
@@ -207,7 +203,6 @@ class CodeLimitManagerTest extends TestCase
      * @magentoDataFixture Magento/SalesRule/_files/rules.php
      * @magentoDataFixture Magento/SalesRule/_files/coupons.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
-     *
      *
      */
     public function testLoggingOnlyInvalidCodes()

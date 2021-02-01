@@ -92,7 +92,6 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testSetInstanceFirstAllowed
      *
-     *
      */
     public function testSetInstanceChangeProhibited()
     {

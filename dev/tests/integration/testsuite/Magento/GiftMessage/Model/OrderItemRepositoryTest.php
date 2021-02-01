@@ -61,7 +61,6 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/GiftMessage/_files/order_with_message.php
      * @magentoConfigFixture default_store sales/gift_options/allow_items 1
      *
-     *
      */
     public function testGetNoProvidedItemId()
     {
@@ -108,7 +107,6 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Sales/_files/order.php
      * @magentoConfigFixture default_store sales/gift_options/allow_items 0
      *
-     *
      */
     public function testSaveMessageIsNotAvailable()
     {
@@ -128,7 +126,6 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/GiftMessage/_files/virtual_order.php
      * @magentoConfigFixture default_store sales/gift_options/allow_items 1
      *
-     *
      */
     public function testSaveMessageIsVirtual()
     {
@@ -147,7 +144,6 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/GiftMessage/_files/empty_order.php
      * @magentoConfigFixture default_store sales/gift_options/allow_items 1
-     *
      *
      */
     public function testSaveMessageNoProvidedItemId()

@@ -129,7 +129,6 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDbIsolation enabled
      *
-     *
      */
     public function testUpdateGroupException()
     {

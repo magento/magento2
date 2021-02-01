@@ -24,10 +24,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Get topic configuration by its name
-     *
-     *
-     *
-     */
+     **/
     public function testGetTopicsNumeric()
     {
         $this->expectExceptionMessage("Service method specified in the definition of topic \"customerDeletedNumbers\" is not av");
@@ -38,10 +35,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     // @codingStandardsIgnoreStart
     /**
      * Get topic configuration by its name
-     *
-     *
-     *
-     * Element 'topic', attribute 'schema': [facet 'pattern'] The value '55\Customer\Api\CustomerRepositoryInterface::delete' is not accepted by the pattern '[a-zA-Z]+[a-zA-Z0-9\\]+::[a-zA-Z0-9]+'.
+     ** Element 'topic', attribute 'schema': [facet 'pattern'] The value '55\Customer\Api\CustomerRepositoryInterface::delete' is not accepted by the pattern '[a-zA-Z]+[a-zA-Z0-9\\]+::[a-zA-Z0-9]+'.
     * Line: 9
  *
 * Element 'topic', attribute 'schema': '55\Customer\Api\CustomerRepositoryInterface::delete' is not a valid value of the atomic type 'schemaType'.
@@ -75,10 +69,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Get topic configuration by its name
-     *
-     *
-     *
-     */
+     **/
     public function testGetTopicInvalidName()
     {
         $this->expectExceptionMessage("Topic \"invalidTopic\" is not configured.");

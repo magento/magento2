@@ -83,10 +83,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test validation of images directory against provided base directory.
-     *
-     *
-     *
-     * @return void
+     ** @return void
      */
     public function testImagesDirBase(): void
     {
@@ -202,10 +199,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test getEntityBehaviors with not existing behavior class
-     *
-     *
-     *
-     */
+     **/
     public function testGetEntityBehaviorsWithUnknownBehavior()
     {
         $this->expectExceptionMessage("The behavior token for customer is invalid.");

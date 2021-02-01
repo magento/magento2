@@ -420,10 +420,7 @@ class MergeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test loading invalid layout
-     *
-     *
-     *
-     */
+     **/
     public function testLoadWithInvalidLayout()
     {
         $this->expectExceptionMessage("Layout is invalid.");

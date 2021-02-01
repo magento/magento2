@@ -83,9 +83,6 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *
-     *
-     *
      * @magentoDbIsolation disabled
      */
     public function testExceptionUndefinedRuleOperator()
@@ -114,9 +111,6 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *
-     *
-     *
      * @magentoDbIsolation disabled
      */
     public function testExceptionUndefinedRuleAggregator()

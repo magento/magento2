@@ -68,9 +68,6 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Customer/_files/attribute_user_defined_customer.php
      *
-     *
-     *
-     *
      * @return void
      */
     public function testAttributeSaveWithChangedEntityType(): void

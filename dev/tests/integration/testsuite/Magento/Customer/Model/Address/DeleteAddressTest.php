@@ -79,10 +79,7 @@ class DeleteAddressTest extends TestCase
 
     /**
      * Assert that deleting non-existent address throws exception.
-     *
-     *
-     *
-     *
+     **
      * @return void
      */
     public function testDeleteMissingAddress(): void

@@ -93,7 +93,6 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider evaluateExceptionDataProvider
      *
-     *
      */
     public function testEvaluateException($input)
     {

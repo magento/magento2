@@ -105,8 +105,6 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *
-     *
      * @magentoDbIsolation enabled
      */
     public function testSaveThrowsExceptionIdIfTargetTaxRuleDoesNotExist()
@@ -126,7 +124,6 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     *
      *
      */
     public function testSaveThrowsExceptionIfProvidedTaxClassIdsAreInvalid()
@@ -156,7 +153,6 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     *
      *
      */
     public function testSaveThrowsExceptionIfProvidedPositionIsInvalid()
@@ -228,7 +224,6 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Tax/_files/tax_classes.php
      *
-     *
      */
     public function testDeleteById()
     {
@@ -250,7 +245,6 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Tax/_files/tax_classes.php
-     *
      *
      */
     public function testDeleteByIdThrowsExceptionIfTargetTaxRuleDoesNotExist()
@@ -288,7 +282,6 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDbIsolation enabled
      *
-     *
      */
     public function testSaveThrowsExceptionIsRequiredFieldsAreMissing()
     {
@@ -301,7 +294,6 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *
      * @param Filter[] $filters
      * @param Filter[] $filterGroup
      * @param string[] $expectedRuleCodes The codes of the tax rules that are expected to be found

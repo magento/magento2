@@ -132,10 +132,7 @@ class DataConverterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test that exception with valid text is thrown when data is corrupted
-     *
-     *
-     *
-     */
+     **/
     public function testDataConvertErrorReporting()
     {
         $this->expectExceptionMessage("Error converting field `value` in table `table` where `id`=2 using");

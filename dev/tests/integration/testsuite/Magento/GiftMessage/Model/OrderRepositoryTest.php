@@ -78,7 +78,6 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Sales/_files/order.php
      * @magentoConfigFixture default_store sales/gift_options/allow_order 0
      *
-     *
      */
     public function testSaveMessageIsNotAvailable()
     {
@@ -94,7 +93,6 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/GiftMessage/_files/virtual_order.php
      * @magentoConfigFixture default_store sales/gift_options/allow_order 1
-     *
      *
      */
     public function testSaveMessageIsVirtual()
@@ -130,7 +128,6 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/GiftMessage/_files/empty_order.php
      * @magentoConfigFixture default_store sales/gift_options/allow_order 1
-     *
      *
      */
     public function testSaveMessageNoProvidedItemId()

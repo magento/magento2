@@ -148,7 +148,6 @@ class PriceIndexerDimensionsModeSetCommandTest extends \Magento\TestFramework\In
      * @magentoAppArea adminhtml
      * @magentoAppIsolation enabled
      *
-     *
      */
     public function testSwitchModeWithInvalidArgument()
     {

@@ -85,7 +85,6 @@ class HttpMethodValidatorTest extends TestCase
     /**
      * Test negative case.
      *
-     *
      */
     public function testNotAllowedMethod()
     {

@@ -66,7 +66,6 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider addAttributeThrowExceptionDataProvider
      *
-     *
      */
     public function testAddAttributeThrowException($attributeCode)
     {
@@ -98,7 +97,6 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      * @param string|null $attributeCode
      *
      * @dataProvider addInvalidAttributeThrowExceptionDataProvider
-     *
      *
      */
     public function testAddInvalidAttributeThrowException($attributeCode)

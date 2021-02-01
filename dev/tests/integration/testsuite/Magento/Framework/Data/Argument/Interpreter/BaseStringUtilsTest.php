@@ -84,7 +84,6 @@ class BaseStringUtilsTest extends \PHPUnit\Framework\TestCase
      * @param array $input
      * @dataProvider evaluateExceptionDataProvider
      *
-     *
      */
     public function testEvaluateException($input)
     {

@@ -29,7 +29,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * Assert that filterByProductType method throws LocalizedException if not String or Array is passed to it
      *
-     *
      */
     public function testFilterByProductTypeException()
     {

@@ -11,10 +11,7 @@ class LifetimeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Method is not publicly accessible, so it must be called through parent
-     *
-     *
-     *
-     */
+     **/
     public function testBeforeSaveException()
     {
         $this->expectExceptionMessage("Invalid cookie lifetime: must be numeric");

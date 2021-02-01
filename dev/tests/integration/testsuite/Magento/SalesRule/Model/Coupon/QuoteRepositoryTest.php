@@ -94,7 +94,6 @@ class QuoteRepositoryTest extends TestCase
      * @magentoDataFixture Magento/Sales/_files/quote.php
      * @magentoDataFixture Magento/SalesRule/_files/coupon_cart_fixed_discount.php
      *
-     *
      */
     public function testAboveLimitFail()
     {
