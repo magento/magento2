@@ -134,7 +134,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
             $cookieMetadataFactory,
             $appState
         );
-        if ($this->_storeManager->hasSingleStore()) {
+        if ($this->_storeManager->isSingleStoreMode()) {
             $this->setStoreId($this->_storeManager->getStore(true)->getId());
         }
     }
@@ -154,7 +154,6 @@ class Quote extends \Magento\Framework\Session\SessionManager
                     $this->_quote->setCustomerGroupId($customerGroupId);
                     $this->_quote->setIsActive(false);
                     $this->_quote->setStoreId($this->getStoreId());
-                    
                     $this->quoteRepository->save($this->_quote);
                     $this->setQuoteId($this->_quote->getId());
                     $this->_quote = $this->quoteRepository->get($this->getQuoteId(), [$this->getStoreId()]);
