@@ -591,7 +591,7 @@ class UserTest extends TestCase
             ->get(MutableScopeConfigInterface::class);
         $config->setValue(
             'admin/emails/new_user_notification_template',
-            $this->getCustomEmailTemplateIdForNewUserNotification(
+            $this->getCustomEmailTemplateId(
                 'admin_emails_new_user_notification_template'
             )
         );
@@ -621,17 +621,17 @@ class UserTest extends TestCase
     }
 
     /**
-     * Return email template id for new user notification
+     * Return email template id by origin template code
      *
      * @param string $origTemplateCode
      * @return int|null
      * @throws NotFoundException
      */
-    private function getCustomEmailTemplateIdForNewUserNotification(string $origTemplateCode): ?int
+    private function getCustomEmailTemplateId(string $origTemplateCode): ?int
     {
         $templateId = null;
         $templateCollection = Bootstrap::getObjectManager()
-            ->get(TemplateCollection::class);
+            ->create(TemplateCollection::class);
         foreach ($templateCollection as $template) {
             if ($template->getOrigTemplateCode() == $origTemplateCode) {
                 $templateId = (int) $template->getId();
@@ -659,7 +659,7 @@ class UserTest extends TestCase
             ->get(MutableScopeConfigInterface::class);
         $config->setValue(
             'admin/emails/forgot_email_template',
-            $this->getCustomEmailTemplateIdForNewUserNotification(
+            $this->getCustomEmailTemplateId(
                 'admin_emails_forgot_email_template'
             )
         );
