@@ -10,7 +10,6 @@
 namespace Magento\Sales\Block\Order;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\DataObject;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Template\Context;
@@ -109,7 +108,7 @@ class Items extends AbstractItems
      *
      * To be called from templates(after _prepareLayout()).
      *
-     * @return DataObject[]
+     * @return \Magento\Framework\DataObject[]
      * @since 100.1.7
      */
     public function getItems()
