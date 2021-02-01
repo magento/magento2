@@ -15,17 +15,16 @@ class TestCasePropertiesTest extends \PHPUnit\Framework\TestCase
      * @var array
      */
     protected $_fixtureProperties = [
-        ['name' => 'testPublic', 'is_static' => false],
-        ['name' => '_testPrivate', 'is_static' => false],
-        ['name' => '_testPropertyBoolean', 'is_static' => false],
-        ['name' => '_testPropertyInteger', 'is_static' => false],
-        ['name' => '_testPropertyFloat', 'is_static' => false],
-        ['name' => '_testPropertyString', 'is_static' => false],
-        ['name' => '_testPropertyArray', 'is_static' => false],
-        ['name' => '_testPropertyObject', 'is_static' => false],
-        ['name' => 'testPublicStatic', 'is_static' => true],
-        ['name' => '_testProtectedStatic', 'is_static' => true],
-        ['name' => '_testPrivateStatic', 'is_static' => true],
+        'testPublic' => ['name' => 'testPublic', 'is_static' => false],
+        '_testPrivate' => ['name' => '_testPrivate', 'is_static' => false],
+        '_testPropertyBoolean' => ['name' => '_testPropertyBoolean', 'is_static' => false],
+        '_testPropertyInteger' => ['name' => '_testPropertyInteger', 'is_static' => false],
+        '_testPropertyFloat' => ['name' => '_testPropertyFloat', 'is_static' => false],
+        '_testPropertyString' => ['name' => '_testPropertyString', 'is_static' => false],
+        '_testPropertyArray' => ['name' => '_testPropertyArray', 'is_static' => false],
+        'testPublicStatic' => ['name' => 'testPublicStatic', 'is_static' => true],
+        '_testProtectedStatic' => ['name' => '_testProtectedStatic', 'is_static' => true],
+        '_testPrivateStatic' => ['name' => '_testPrivateStatic', 'is_static' => true],
     ];
 
     public function testEndTestSuiteDestruct()
