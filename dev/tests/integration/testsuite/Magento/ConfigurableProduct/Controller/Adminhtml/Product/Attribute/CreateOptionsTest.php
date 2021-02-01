@@ -7,13 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute;
 
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
- * Test for creates options for product attributes.
+ * Cheks creating attribute options process.
  *
  * @see \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute\CreateOptions
  * @magentoAppArea adminhtml
@@ -27,6 +28,9 @@ class CreateOptionsTest extends AbstractBackendController
     /** @var SerializerInterface */
     private $json;
 
+    /** @var ProductAttributeRepositoryInterface */
+    private $attributeRepository;
+
     /**
      * @inheritdoc
      */
@@ -35,7 +39,9 @@ class CreateOptionsTest extends AbstractBackendController
         parent::setUp();
 
         $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
+        $this->productRepository->cleanCache();
         $this->json = $this->_objectManager->get(SerializerInterface::class);
+        $this->attributeRepository = $this->_objectManager->get(ProductAttributeRepositoryInterface::class);
     }
 
     /**
@@ -43,39 +49,25 @@ class CreateOptionsTest extends AbstractBackendController
      *
      * @return void
      */
-    public function testAddOptionWithUniqueValidationOneMoreTime(): void
+    public function testAddAlreadyAddedOption(): void
     {
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $attr = $this->attributeRepository->get('test_configurable');
         $this->getRequest()->setParams([
-            'options' => [0 => [
+            'options' => [
+                [
                     'label' => 'Option 1',
                     'is_new' => true,
-                    'attribute_id' => $this->getFirstAttributeId()
-                    ]
-                ]
-            ]);
+                    'attribute_id' => (int)$attr->getAttributeId(),
+                ],
+            ],
+        ]);
         $this->dispatch('backend/catalog/product_attribute/createOptions');
         $responseBody = $this->json->unserialize($this->getResponse()->getBody());
-        $this->assertNotEmpty($responseBody['message']);
+        $this->assertNotEmpty($responseBody);
         $this->assertStringContainsString(
-            (string)__('The value of attribute ""test_configurable"" must be unique'),
+            (string)__('The value of attribute ""%1"" must be unique', $attr->getAttributeCode()),
             $responseBody['message']
         );
-    }
-
-    /**
-     * Get first attribute id
-     *
-     * @return int
-     */
-    private function getFirstAttributeId(): int
-    {
-        $configurableProduct = $this->productRepository->get('configurable');
-        $options = $configurableProduct->getExtensionAttributes()->getConfigurableProductOptions();
-        foreach ($options as $option) {
-            $attributeIds[] = $option->getAttributeId();
-        }
-
-        return (int)array_shift($attributeIds);
     }
 }
