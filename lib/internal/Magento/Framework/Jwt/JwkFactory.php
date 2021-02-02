@@ -20,6 +20,50 @@ class JwkFactory
     ];
 
     /**
+     * Create JWK object from key data.
+     *
+     * @param array $data
+     * @return Jwk
+     */
+    public function createFromData(array $data): Jwk
+    {
+        if (!array_key_exists('kty', $data)) {
+            throw new \InvalidArgumentException('Missing key type in JWK data (kty)');
+        }
+        $kty = $data['kty'];
+        unset($data['kty']);
+        $use = array_key_exists('use', $data) ? $data['use'] : null;
+        unset($data['use']);
+        $keyOps = array_key_exists('key_ops', $data) ? $data['key_ops'] : null;
+        unset($data['key_ops']);
+        $alg = array_key_exists('alg', $data) ? $data['alg'] : null;
+        unset($data['alg']);
+        $x5u = array_key_exists('x5u', $data) ? $data['x5u'] : null;
+        unset($data['use']);
+        $x5c = array_key_exists('x5c', $data) ? $data['x5c'] : null;
+        unset($data['x5c']);
+        $x5t = array_key_exists('x5t', $data) ? $data['x5t'] : null;
+        unset($data['x5t']);
+        $x5tS256 = array_key_exists('x5t#S256', $data) ? $data['x5t#S256'] : null;
+        unset($data['x5t#S256']);
+        $kid = array_key_exists('kid', $data) ? $data['kid'] : null;
+        unset($data['kid']);
+
+        return new Jwk(
+            $kty,
+            $data,
+            $use,
+            $keyOps,
+            $alg,
+            $x5u,
+            $x5c,
+            $x5t,
+            $x5tS256,
+            $kid
+        );
+    }
+
+    /**
      * Create JWK for signatures generated with HMAC and SHA256
      *
      * @param string $key
@@ -190,6 +234,75 @@ class JwkFactory
         return $this->createVerifyEs(512, $publicKey);
     }
 
+    /**
+     * Create JWK to sign JWS with RSASSA-PSS using SHA-256 and MGF1 with SHA-256.
+     *
+     * @param string $privateKey
+     * @param string|null $passPhrase
+     * @return Jwk
+     */
+    public function createSignPs256(string $privateKey, ?string $passPhrase): Jwk
+    {
+        return $this->createSignPs(256, $privateKey, $passPhrase);
+    }
+
+    /**
+     * Create JWK to verify JWS signed with RSASSA-PSS using SHA-256 and MGF1 with SHA-256.
+     *
+     * @param string $publicKey
+     * @return Jwk
+     */
+    public function createVerifyPs256(string $publicKey): Jwk
+    {
+        return $this->createVerifyPs(256, $publicKey);
+    }
+
+    /**
+     * Create JWK to sign JWS with RSASSA-PSS using SHA-384 and MGF1 with SHA-384.
+     *
+     * @param string $privateKey
+     * @param string|null $passPhrase
+     * @return Jwk
+     */
+    public function createSignPs384(string $privateKey, ?string $passPhrase): Jwk
+    {
+        return $this->createSignPs(384, $privateKey, $passPhrase);
+    }
+
+    /**
+     * Create JWK to verify JWS signed with RSASSA-PSS using SHA-384 and MGF1 with SHA-384.
+     *
+     * @param string $publicKey
+     * @return Jwk
+     */
+    public function createVerifyPs384(string $publicKey): Jwk
+    {
+        return $this->createVerifyPs(384, $publicKey);
+    }
+
+    /**
+     * Create JWK to sign JWS with RSASSA-PSS using SHA-512 and MGF1 with SHA-512.
+     *
+     * @param string $privateKey
+     * @param string|null $passPhrase
+     * @return Jwk
+     */
+    public function createSignPs512(string $privateKey, ?string $passPhrase): Jwk
+    {
+        return $this->createSignPs(512, $privateKey, $passPhrase);
+    }
+
+    /**
+     * Create JWK to verify JWS signed with RSASSA-PSS using SHA-512 and MGF1 with SHA-512.
+     *
+     * @param string $publicKey
+     * @return Jwk
+     */
+    public function createVerifyPs512(string $publicKey): Jwk
+    {
+        return $this->createVerifyPs(512, $publicKey);
+    }
+
     private function createHmac(int $bits, string $key): Jwk
     {
         if (strlen($key) < 128) {
@@ -259,6 +372,22 @@ class JwkFactory
             null,
             'RS' .$bits
         );
+    }
+
+    private function createSignPs(int $bits, string $key, ?string $pass): Jwk
+    {
+        $data = $this->createSignRsa($bits, $key, $pass)->getJsonData();
+        $data['alg'] = 'PS' .$bits;
+
+        return $this->createFromData($data);
+    }
+
+    private function createVerifyPs(int $bits, string $key): Jwk
+    {
+        $data = $this->createVerifyRsa($bits, $key)->getJsonData();
+        $data['alg'] = 'PS' .$bits;
+
+        return $this->createFromData($data);
     }
 
     private function createSignEs(int $bits, string $key, ?string $pass): Jwk

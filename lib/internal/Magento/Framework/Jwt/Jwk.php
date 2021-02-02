@@ -78,6 +78,11 @@ class Jwk
     private $use;
 
     /**
+     * @var string|null
+     */
+    private $kid;
+
+    /**
      * @var string[]|null
      */
     private $keyOps;
@@ -123,6 +128,7 @@ class Jwk
      * @param string[]|null $x5c
      * @param string|null $x5t
      * @param string|null $x5ts256
+     * @param string|null $kid
      */
     public function __construct(
         string $kty,
@@ -133,7 +139,8 @@ class Jwk
         ?string $x5u = null,
         ?array $x5c = null,
         ?string $x5t = null,
-        ?string $x5ts256 = null
+        ?string $x5ts256 = null,
+        ?string $kid = null
     ) {
         $this->kty = $kty;
         $this->data = $data;
@@ -144,6 +151,7 @@ class Jwk
         $this->x5c = $x5c;
         $this->x5t = $x5t;
         $this->x5ts256 = $x5ts256;
+        $this->kid = $kid;
     }
 
     /**
@@ -227,6 +235,16 @@ class Jwk
     }
 
     /**
+     * "kid" parameter.
+     *
+     * @return string|null
+     */
+    public function getKeyId(): ?string
+    {
+        return $this->kid;
+    }
+
+    /**
      * Map with algorithm (type) specific data.
      *
      * @return string[]
@@ -251,7 +269,8 @@ class Jwk
             'x5u' => $this->getX509Url(),
             'x5c' => $this->getX509CertificateChain(),
             'x5t' => $this->getX509Sha1Thumbprint(),
-            'x5t#S256' => $this->getX509Sha256Thumbprint()
+            'x5t#S256' => $this->getX509Sha256Thumbprint(),
+            'kid' => $this->getKeyId()
         ];
         $data = array_merge($data, $this->getAlgoData());
 
