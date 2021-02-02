@@ -470,6 +470,17 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @return ComponentRegistrar
+     */
+    private static function getComponentRegistrar()
+    {
+        if (!isset(self::$componentRegistrar)) {
+            self::$componentRegistrar = new ComponentRegistrar();
+        }
+        return self::$componentRegistrar;
+    }
+    
+    /**
      * Retrieve dependencies from files
      *
      * @param string $module
