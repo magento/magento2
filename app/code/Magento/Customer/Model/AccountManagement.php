@@ -423,7 +423,6 @@ class AccountManagement implements AccountManagementInterface
      * @param GetCustomerByToken|null $getByToken
      * @param AllowedCountries|null $allowedCountriesReader
      * @param SessionCleanerInterface|null $sessionCleaner
-     * @param AuthorizationInterface|null $authorization
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -464,8 +463,7 @@ class AccountManagement implements AccountManagementInterface
         AddressRegistry $addressRegistry = null,
         GetCustomerByToken $getByToken = null,
         AllowedCountries $allowedCountriesReader = null,
-        SessionCleanerInterface $sessionCleaner = null,
-        AuthorizationInterface $authorization = null
+        SessionCleanerInterface $sessionCleaner = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -505,7 +503,6 @@ class AccountManagement implements AccountManagementInterface
         $this->allowedCountriesReader = $allowedCountriesReader
             ?: $objectManager->get(AllowedCountries::class);
         $this->sessionCleaner = $sessionCleaner ?? $objectManager->get(SessionCleanerInterface::class);
-        $this->authorization = $authorization ?? $objectManager->get(AuthorizationInterface::class);
     }
 
     /**
@@ -522,6 +519,22 @@ class AccountManagement implements AccountManagementInterface
         } else {
             return $this->authentication;
         }
+    }
+
+    /**
+     * Get authorization
+     *
+     * @return AuthorizationInterface
+     */
+    private function getAuthorization()
+    {
+        if (!($this->authorization instanceof AuthorizationInterface)) {
+            $this->authorization = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                AuthorizationInterface::class
+            );
+        }
+
+        return $this->authorization;
     }
 
     /**
@@ -849,8 +862,9 @@ class AccountManagement implements AccountManagementInterface
      */
     public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
     {
+        $auth = $this->getAuthorization();
         $groupId = $customer->getGroupId();
-        if (isset($groupId) && !$this->authorization->isAllowed(self::ADMIN_RESOURCE)) {
+        if (isset($groupId) && !$auth->isAllowed(self::ADMIN_RESOURCE)) {
             $customer->setGroupId(null);
         }
 
