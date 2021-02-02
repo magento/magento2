@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyStoreViewCartShippingNameTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Cart shipping name"/>
+            <title value="Verify cart different shipping names for different store views"/>
+            <description value="Verify cart different shipping names for different store views"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-*"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer_CA" stepKey="createCustomer"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView"/>
+            <magentoCLI command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}" stepKey="enableAddStoreCodeToUrls"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}" stepKey="disableAddStoreCodeToUrls"/>
+        </after>
+        <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchStoreViewAdmin"/>
+        <click selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateTitle}}" stepKey="uncheckUseSystemValueForFlatRateTitle"/>
+        <fillField selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateTitleField}}" userInput="Test carrier title name" stepKey="fillFieldTitle"/>
+        <click selector="{{AdminShippingMethodFlatRateSection.carriersSaveConfig}}" stepKey="saveShippingConfig"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$" />
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontProductPageAddSimpleProductToCartActionGroup" stepKey="addProductToCart"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="openShoppingCart"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="cartSwitchStoreView"/>
+        <grabTextFrom selector="{{CheckoutPaymentSection.orderSummaryShippingMethod}}" stepKey="getShippingName"/>
+        <assertStringContainsString stepKey="assertShippingTitle">
+            <expectedResult type="string">Test carrier title name</expectedResult>
+            <actualResult type="variable">getShippingName</actualResult>
+        </assertStringContainsString>
+    </test>
+</tests>

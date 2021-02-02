@@ -17,5 +17,7 @@
         <element name="carriersFlatRateSpecificErrMsg" type="input" selector="#carriers_flatrate_specificerrmsg_inherit"/>
         <element name="carriersFlatRateAllowSpecific" type="input" selector="#carriers_flatrate_sallowspecific_inherit"/>
         <element name="carriersFlatRateSpecificCountry" type="input" selector="#carriers_flatrate_specificcountry"/>
+        <element name="carriersFlatRateTitleField" type="input" selector="#carriers_flatrate_title"/>
+        <element name="carriersSaveConfig" type="button" selector="#save" timeout="30"/>
     </section>
 </sections>
