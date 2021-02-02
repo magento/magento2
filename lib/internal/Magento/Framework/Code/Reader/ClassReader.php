@@ -33,9 +33,11 @@ class ClassReader implements ClassReaderInterface
             /** @var $parameter ReflectionParameter */
             foreach ($constructor->getParameters() as $parameter) {
                 try {
+                    $parameterClass = $this->getParameterClass($parameter);
+
                     $result[] = [
                         $parameter->getName(),
-                        $this->getParameterClass($parameter),
+                        $parameterClass ? $parameterClass->getName() : null,
                         !$parameter->isOptional() && !$parameter->isDefaultValueAvailable(),
                         $this->getReflectionParameterDefaultValue($parameter),
                         $parameter->isVariadic(),
@@ -56,7 +58,7 @@ class ClassReader implements ClassReaderInterface
 
     /**
      * Get class by reflection parameter
-     * 
+     *
      * @param ReflectionParameter $reflectionParameter
      * @return ReflectionClass|null
      * @throws ReflectionException

@@ -6,6 +6,9 @@
 namespace Magento\Framework\Code\Generator;
 
 use Laminas\Code\Generator\ValueGenerator;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionParameter;
 
 /**
  * Abstract entity
@@ -328,9 +331,9 @@ abstract class EntityAbstract
         if ($parameter->hasType()) {
             if ($parameter->isArray()) {
                 $typeName = 'array';
-            } elseif ($parameter->getClass()) {
+            } elseif ($parameterClass = $this->getParameterClass($parameter)) {
                 $typeName = $this->_getFullyQualifiedClassName(
-                    $parameter->getClass()->getName()
+                    $parameterClass->getName()
                 );
             } elseif ($parameter->isCallable()) {
                 $typeName = 'callable';
@@ -344,6 +347,22 @@ abstract class EntityAbstract
         }
 
         return $typeName;
+    }
+
+    /**
+     * Get class by reflection parameter
+     *
+     * @param ReflectionParameter $reflectionParameter
+     * @return ReflectionClass|null
+     * @throws ReflectionException
+     */
+    private function getParameterClass(ReflectionParameter $reflectionParameter): ?ReflectionClass
+    {
+        $parameterType = $reflectionParameter->getType();
+
+        return $parameterType && !$parameterType->isBuiltin()
+            ? new ReflectionClass($parameterType->getName())
+            : null;
     }
 
     /**
