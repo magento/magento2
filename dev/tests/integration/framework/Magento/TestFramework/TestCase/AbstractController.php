@@ -18,6 +18,8 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\Response\Http as HttpResponse;
 
 /**
+ * Set of methods useful for performing requests to Controllers.
+ *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
