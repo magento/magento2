@@ -17,6 +17,8 @@ use Magento\Catalog\Model\Product\Attribute\Backend\Sku;
  */
 class Validator extends AbstractValidator implements RowValidatorInterface
 {
+    private const DEFAULT_GLOBAL_MULTIPLE_VALUE_SEPARATOR = ',';
+
     /**
      * @var RowValidatorInterface[]|AbstractValidator[]
      */
@@ -229,7 +231,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             case 'multiselect':
                 $separator = $this->context->getMultipleValueSeparator();
                 // added to prevent backward compatibility since before we didn't use separator param value
-                $values = $separator === ','
+                $values = $separator === self::DEFAULT_GLOBAL_MULTIPLE_VALUE_SEPARATOR
                     ? $this->context->parseMultiselectValues($rowData[$attrCode])
                     : $this->context->parseMultiselectValues($rowData[$attrCode], $separator);
 
