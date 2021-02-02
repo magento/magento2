@@ -30,6 +30,9 @@
         <index referenceId="MAGENTO_BULK_USER_ID_ADMIN_USER_USER_ID" indexType="btree">
             <column name="user_id"/>
         </index>
+        <index referenceId="MAGENTO_BULK_START_TIME" indexType="btree">
+            <column name="start_time"/>
+        </index>
     </table>
     <table name="magento_operation" resource="default" engine="innodb" comment="Operation entity">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"
