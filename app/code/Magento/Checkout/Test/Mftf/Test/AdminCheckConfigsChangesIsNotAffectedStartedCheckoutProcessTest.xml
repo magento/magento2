@@ -58,12 +58,17 @@
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>
 
+        <!-- Select Free Shipping -->
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodFreeShipping">
+            <argument name="shippingMethodName" value="Free Shipping"/>
+        </actionGroup>
+
         <!-- Assert Free Shipping checkbox -->
         <seeCheckboxIsChecked selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShipping}}" stepKey="freeShippingMethodCheckboxIsChecked"/>
 
         <!-- Click Next button -->
-        <click selector="{{CheckoutShippingGuestInfoSection.next}}" stepKey="clickNext"/>
-        <waitForPageLoad stepKey="waitForShipmentPageLoad"/>
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForShipmentPageLoad"/>
 
         <!-- Payment step is opened -->
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>

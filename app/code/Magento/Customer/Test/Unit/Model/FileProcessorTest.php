@@ -162,22 +162,22 @@ class FileProcessorTest extends TestCase
     public function testGetViewUrlCustomerAddress()
     {
         $filePath = 'filename.ext1';
+        $encodedFilePath = 'encodedfilenameext1';
 
-        $baseUrl = 'baseUrl';
-        $relativeUrl = 'relativeUrl';
+        $fileUrl = 'fileUrl';
+
+        $this->urlEncoder->expects($this->once())
+            ->method('encode')
+            ->with($filePath)
+            ->willReturn($encodedFilePath);
 
         $this->urlBuilder->expects($this->once())
-            ->method('getBaseUrl')
-            ->with(['_type' => UrlInterface::URL_TYPE_MEDIA])
-            ->willReturn($baseUrl);
-
-        $this->mediaDirectory->expects($this->once())
-            ->method('getRelativePath')
-            ->with(AddressMetadataInterface::ENTITY_TYPE_ADDRESS . '/' . $filePath)
-            ->willReturn($relativeUrl);
+            ->method('getUrl')
+            ->with('customer/address/viewfile', ['image' => $encodedFilePath])
+            ->willReturn($fileUrl);
 
         $model = $this->getModel(AddressMetadataInterface::ENTITY_TYPE_ADDRESS);
-        $this->assertEquals($baseUrl . $relativeUrl, $model->getViewUrl($filePath, 'image'));
+        $this->assertEquals($fileUrl, $model->getViewUrl($filePath, 'image'));
     }
 
     public function testRemoveUploadedFile()
