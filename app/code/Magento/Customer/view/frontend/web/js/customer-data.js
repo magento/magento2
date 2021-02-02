@@ -381,7 +381,7 @@ define([
         if (settings.type.match(/post|put|delete/i)) {
             sections = sectionConfig.getAffectedSections(settings.url);
 
-            if (sections) {
+            if (sections && sections.length) {
                 customerData.invalidate(sections);
                 redirects = ['redirect', 'backUrl'];
 
