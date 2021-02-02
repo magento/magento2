@@ -329,7 +329,7 @@
             <argument name="optionTitle" value="{{ImportProduct_Bundle.bundleOption1Title}}"/>
             <argument name="optionProductName" value="{{ImportProductSimple1_Bundle.bundleDefaultQuantity}} x {{ImportProductSimple1_Bundle.name}} ${{ImportProductSimple1_Bundle.price}}"/>
             <argument name="optionProductSku" value="{{ImportProductSimple1_Bundle.sku}}"/>
-            <argument name="optionProductQuantity" value="Ordered {{ImportProductSimple1_Bundle.bundleDefaultQuantity}}"/>
+            <argument name="optionProductQuantityDescription" value="Ordered {{ImportProductSimple1_Bundle.bundleDefaultQuantity}}"/>
             <argument name="productIndex" value="1"/>
             <argument name="optionIndex" value="1"/>
         </actionGroup>
@@ -337,7 +337,7 @@
             <argument name="optionTitle" value="{{ImportProduct_Bundle.bundleOption2Title}}"/>
             <argument name="optionProductName" value="{{ImportProductSimple3_Bundle.bundleDefaultQuantity}} x {{ImportProductSimple3_Bundle.name}} ${{ImportProductSimple3_Bundle.price}}"/>
             <argument name="optionProductSku" value="{{ImportProductSimple3_Bundle.sku}}"/>
-            <argument name="optionProductQuantity" value="Ordered {{ImportProductSimple3_Bundle.bundleDefaultQuantity}}"/>
+            <argument name="optionProductQuantityDescription" value="Ordered {{ImportProductSimple3_Bundle.bundleDefaultQuantity}}"/>
             <argument name="productIndex" value="1"/>
             <argument name="optionIndex" value="2"/>
         </actionGroup>
