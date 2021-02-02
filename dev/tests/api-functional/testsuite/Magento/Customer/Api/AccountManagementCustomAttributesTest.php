@@ -211,7 +211,7 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
         try {
             $this->createCustomerWithImageAttribute($imageData);
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "Exception message does not match"

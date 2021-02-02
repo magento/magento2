@@ -126,7 +126,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $data);
             $this->fail('Expected exception was not raised');
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 'SoapFault does not contain expected message.'
@@ -164,7 +164,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $data);
             $this->fail('Expected exception was not raised');
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 'SOAP-ERROR: Encoding: object has no \'rate\' property',
                 $e->getMessage(),
                 'SoapFault does not contain expected message.'
