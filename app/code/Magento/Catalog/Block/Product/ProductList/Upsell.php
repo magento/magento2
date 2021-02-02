@@ -117,7 +117,7 @@ class Upsell extends AbstractProduct implements IdentityInterface
          */
         $this->_eventManager->dispatch(
             'catalog_product_upsell',
-            ['product' => $product, 'collection' => $this->_itemCollection, 'limit' => null]
+            ['product' => $product, 'collection' => $this->_itemCollection, 'limit' => $this->getItemLimit()]
         );
 
         foreach ($this->_itemCollection as $product) {
