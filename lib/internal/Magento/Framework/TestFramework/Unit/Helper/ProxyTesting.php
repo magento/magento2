@@ -11,11 +11,14 @@ namespace Magento\Framework\TestFramework\Unit\Helper;
 
 use function PHPUnit\Framework\once;
 
+/**
+ * Class ProxyTesting
+ * @package Magento\Framework\TestFramework\Unit\Helper
+ */
 class ProxyTesting
 {
     /**
-     * Invoke the proxy's method, imposing expectations on proxied object, that it must be invoked as well with
-     * appropriate parameters.
+     * Invoke the proxy's method, imposing expectations on proxied object, that it must be invoked as well with appropriate parameters.
      *
      * @param mixed $object Proxy
      * @param \PHPUnit\Framework\MockObject\MockObject $proxiedObject

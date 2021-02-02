@@ -457,6 +457,16 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
         $searchResult = $this->getMockForAbstractClass(PaymentTokenSearchResultsInterface::class);
         $token = $this->getMockForAbstractClass(PaymentTokenInterface::class);
 
+        $this->createExpectedFilter(PaymentTokenInterface::CUSTOMER_ID, $customerId, 0);
+        $this->createExpectedFilter(PaymentTokenInterface::IS_VISIBLE, true, 1);
+        $this->createExpectedFilter(PaymentTokenInterface::IS_ACTIVE, true, 2);
+
+        // express at expectations
+        $this->createExpectedFilter(
+            PaymentTokenInterface::EXPIRES_AT,
+            '2015-01-01 00:00:00',
+            3
+        );
         $this->filterBuilder->expects(static::once())
             ->method('setConditionType')
             ->with('gt')
@@ -502,9 +512,9 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
      * @param mixed $value
      * @param int $atIndex
      *
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return void
      */
-    private function createExpectedFilter($field, $value, $atIndex)
+    private function createExpectedFilter($field, $value, $atIndex): void
     {
         $filterObject = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
@@ -520,7 +530,5 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
         $this->filterBuilder->expects(new MethodInvokedAtIndex($atIndex))
             ->method('create')
             ->willReturn($filterObject);
-
-        return $filterObject;
     }
 }
