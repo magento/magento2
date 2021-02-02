@@ -457,16 +457,6 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
         $searchResult = $this->getMockForAbstractClass(PaymentTokenSearchResultsInterface::class);
         $token = $this->getMockForAbstractClass(PaymentTokenInterface::class);
 
-        $customerFilter = $this->createExpectedFilter(PaymentTokenInterface::CUSTOMER_ID, $customerId, 0);
-        $visibilityFilter = $this->createExpectedFilter(PaymentTokenInterface::IS_VISIBLE, true, 1);
-        $isActiveFilter = $this->createExpectedFilter(PaymentTokenInterface::IS_ACTIVE, true, 2);
-
-        // express at expectations
-        $expiresAtFilter = $this->createExpectedFilter(
-            PaymentTokenInterface::EXPIRES_AT,
-            '2015-01-01 00:00:00',
-            3
-        );
         $this->filterBuilder->expects(static::once())
             ->method('setConditionType')
             ->with('gt')
