@@ -27,16 +27,16 @@
             <createData entity="CustomerCart" stepKey="createCustomerCart">
                 <requiredEntity createDataKey="createCustomer"/>
             </createData>
-    
+
             <createData entity="CustomerCartItem" stepKey="addCartItem">
                 <requiredEntity createDataKey="createCustomerCart"/>
                 <requiredEntity createDataKey="createSimpleProduct"/>
             </createData>
-    
+
             <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
                 <requiredEntity createDataKey="createCustomerCart"/>
             </createData>
-    
+
             <updateData createDataKey="createCustomerCart" entity="CustomerOrderPaymentMethod" stepKey="sendCustomerPaymentInformation">
                 <requiredEntity createDataKey="createCustomerCart"/>
             </updateData>
@@ -64,9 +64,9 @@
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrdersGridById">
             <argument name="orderId" value="{$getOrderId}"/>
         </actionGroup>
-
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="getOrderIdFromUrl"/>
         <actionGroup ref="StartToCreateCreditMemoActionGroup" stepKey="startToCreateCreditMemo">
-            <argument name="orderId" value="{$getOrderId}"/>
+            <argument name="orderId" value="{$getOrderIdFromUrl}"/>
         </actionGroup>
         <fillField selector="{{AdminCreditMemoTotalSection.refundShipping}}" userInput="0" stepKey="setRefundShipping"/>
         <actionGroup ref="UpdateCreditMemoTotalsActionGroup" stepKey="updateCreditMemoTotals"/>
