@@ -8,15 +8,16 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Api;
 
+use Magento\Catalog\Model\ProductLink\Link;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Class ProductLinkRepositoryInterfaceTest
+ * Class checks product relations functionality
  *
- * @see \Magento\Catalog\Api\ProductLinkRepository
+ * @see \Magento\Catalog\Api\ProductLinkRepositoryInterface
  */
 class ProductLinkRepositoryInterfaceTest extends WebapiAbstract
 {
@@ -86,18 +87,20 @@ class ProductLinkRepositoryInterfaceTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products_related.php
+     *
+     * @return void
      */
-    public function testSave()
+    public function testSave(): void
     {
         $productSku = 'simple_with_cross';
         $linkType = 'related';
         $data = [
             'entity' => [
-                'sku' => 'simple_with_cross',
-                'link_type' => 'related',
-                'linked_product_sku' => 'simple',
-                'linked_product_type' => 'simple',
-                'position' => 1000,
+                Link::KEY_SKU => 'simple_with_cross',
+                Link::KEY_LINK_TYPE => 'related',
+                Link::KEY_LINKED_PRODUCT_SKU => 'simple',
+                Link::KEY_LINKED_PRODUCT_TYPE => 'simple',
+                Link::KEY_POSITION => 1000,
             ],
         ];
         $this->saveApiCall($productSku, $data);
@@ -158,11 +161,11 @@ class ProductLinkRepositoryInterfaceTest extends WebapiAbstract
     /**
      * Make api call to save product link
      *
-     * @param $productSku
-     * @param $data
+     * @param string $productSku
+     * @param array $data
      * @return array|bool|float|int|string
      */
-    private function saveApiCall($productSku, $data)
+    private function saveApiCall(string $productSku, array $data)
     {
         $serviceInfo = $this->getServiceInfo(
             $productSku . '/links',
