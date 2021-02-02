@@ -89,7 +89,6 @@
         <actionGroup ref="AssertAdminProductIsAssignedToCategoryActionGroup" stepKey="selectedCategories">
             <argument name="categoryName" value="$$categoryEntity.name$$"/>
         </actionGroup>
-        
         <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSection1"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection1"/>
         <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{simpleProductRegularPrice32503OutOfStock.urlKey}}" stepKey="seeUrlKey"/>
@@ -100,31 +99,41 @@
         <dontSee selector="{{StorefrontCategoryMainSection.productLink}}" userInput="{{simpleProductRegularPrice32503OutOfStock.name}}" stepKey="dontSeeSimpleProductNameOnCategoryPage"/>
 
         <!-- Verify customer see updated simple product (from the above step) on the storefront page -->
-        <amOnPage url="{{StorefrontProductPage.url(simpleProductRegularPrice32503OutOfStock.urlKey)}}" stepKey="goToProductPage"/>
-        <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{simpleProductRegularPrice32503OutOfStock.name}}" stepKey="seeSimpleProductNameOnStoreFrontPage"/>
-        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{simpleProductRegularPrice32503OutOfStock.price}}" stepKey="seeSimpleProductPriceOnStoreFrontPage"/>
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="goToProductPage">
+            <argument name="productUrlKey" value="{{simpleProductRegularPrice32503OutOfStock.urlKey}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibilityr" stepKey="waitForStorefrontProductPageLoad"/>
+
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeSimpleProductNameOnStoreFrontPage">
+            <argument name="productName" value="{{simpleProductRegularPrice32503OutOfStock.name}}"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeSimpleProductPriceOnStoreFrontPage">
+            <argument name="productPrice" value="{{simpleProductRegularPrice32503OutOfStock.price}}"/>
+        </actionGroup>
+
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeSimpleProductSkuOnStoreFrontPage">
             <argument name="productSku" value="{{simpleProductRegularPrice32503OutOfStock.sku}}"/>
         </actionGroup>
-        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="productStockAvailableStatus"/>
-        <assertEquals stepKey="assertStockAvailableOnProductPage">
-            <expectedResult type="string">{{simpleProductRegularPrice32503OutOfStock.storefrontStatus}}</expectedResult>
-            <actualResult type="variable">productStockAvailableStatus</actualResult>
-        </assertEquals>
-        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="productPriceAmount"/>
-        <assertEquals stepKey="assertOldPriceTextOnProductPage">
-            <expectedResult type="string">${{simpleProductRegularPrice32503OutOfStock.price}}</expectedResult>
-            <actualResult type="variable">productPriceAmount</actualResult>
-        </assertEquals>
+
+        <comment userInput="Comment is added to preserve the step key for backward compatibilityr" stepKey="productStockAvailableStatus"/>
+        <actionGroup ref="AssertStorefrontProductStockStatusOnProductPageActionGroup" stepKey="assertStockAvailableOnProductPage">
+            <argument name="productStockStatus" value="{{simpleProductRegularPrice32503OutOfStock.storefrontStatus}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibilityr" stepKey="productPriceAmount"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibilityr" stepKey="assertOldPriceTextOnProductPage"/>
 
         <!--Verify customer don't see updated simple product link on magento storefront page and is searchable by sku -->
         <amOnPage url="{{StorefrontProductPage.url(simpleProductRegularPrice32503OutOfStock.urlKey)}}" stepKey="goToMagentoStorefrontPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
-        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{simpleProductRegularPrice32503OutOfStock.sku}}" stepKey="fillSimpleProductSkuInSearchTextBox"/>
-        <waitForPageLoad stepKey="waitForSearchTextBox"/>
-        <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextBoxButton"/>
-        <waitForPageLoad stepKey="waitForSearch"/>
-        <dontSee selector="{{StorefrontQuickSearchResultsSection.productLink}}" userInput="{{simpleProductRegularPrice32503OutOfStock.name}}" stepKey="dontSeeProductName"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillSimpleProductSkuInSearchTextBox">
+            <argument name="phrase" value="{{simpleProductRegularPrice32503OutOfStock.sku}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearchTextBox"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchTextBoxButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearch"/>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProductName">
+            <argument name="productName" value="{{simpleProductRegularPrice32503OutOfStock.name}}"/>
+        </actionGroup>
     </test>
 </tests>
