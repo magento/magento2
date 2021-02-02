@@ -19,7 +19,7 @@ use Magento\SalesSequence\Model\EntityPool;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Testing data from the sales_sequence_profile table for default stores
+ * Test default created store views sales sequences prefix.
  */
 class SequenceCreatorTest extends TestCase
 {
@@ -73,7 +73,7 @@ class SequenceCreatorTest extends TestCase
     }
 
     /**
-     * Testing data from the sales_sequence_profile table for default stores
+     * Test prefix for default created store views.
      *
      * @param array $defaultStores
      * @dataProvider defaultStoresDataProvider
@@ -101,7 +101,7 @@ class SequenceCreatorTest extends TestCase
     }
 
     /**
-     * Default stores data provider
+     * Default store codes data provider
      *
      * @return array
      */
