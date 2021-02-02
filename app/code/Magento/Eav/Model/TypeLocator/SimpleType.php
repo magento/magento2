@@ -49,8 +49,13 @@ class SimpleType implements CustomAttributeTypeLocatorInterface
         try {
             $attribute = $this->attributeRepository->get($entityType, $attributeCode);
         } catch (NoSuchEntityException $exception) {
+            $attribute = null;
+        }
+
+        if (!$attribute || $attribute->getFrontendInput() === 'multiselect') {
             return TypeProcessor::NORMALIZED_ANY_TYPE;
         }
+
         $backendType = $attribute->getBackendType();
         $backendTypeMap = [
             'static' => TypeProcessor::NORMALIZED_ANY_TYPE,
@@ -60,6 +65,7 @@ class SimpleType implements CustomAttributeTypeLocatorInterface
             'datetime' => TypeProcessor::NORMALIZED_STRING_TYPE,
             'decimal' => TypeProcessor::NORMALIZED_DOUBLE_TYPE,
         ];
+
         return $backendTypeMap[$backendType] ?? TypeProcessor::NORMALIZED_ANY_TYPE;
     }
 

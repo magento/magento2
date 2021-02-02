@@ -2228,4 +2228,30 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         }
         return $imageRolesPerStore;
     }
+
+    /**
+     * Test saving product with custom attribute with multiselect type when value is array
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/multiselect_attribute.php
+     * @return void
+     */
+    public function testUpdateMultiselectAttributesWithArrayValue(): void
+    {
+        $this->_markTestAsRestOnly();
+        $multiselectAttributeCode = 'multiselect_attribute';
+        $multiselectOptions = $this->getAttributeOptions($multiselectAttributeCode);
+        $optionValues = array_filter(array_column($multiselectOptions, 'value'));
+        $optionValues = array_values($optionValues);
+
+        $productData = $this->getSimpleProductData();
+        $productData['custom_attributes'] = [['attribute_code' => $multiselectAttributeCode, 'value' => $optionValues]];
+        $this->saveProduct($productData);
+
+        $expectedMultiselectValue = implode(',', $optionValues);
+        $this->assertMultiselectValue(
+            $productData[ProductInterface::SKU],
+            $multiselectAttributeCode,
+            $expectedMultiselectValue
+        );
+    }
 }
