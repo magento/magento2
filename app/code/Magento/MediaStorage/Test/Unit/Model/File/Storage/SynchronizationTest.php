@@ -22,10 +22,10 @@ class SynchronizationTest extends \PHPUnit\Framework\TestCase
             \Magento\MediaStorage\Model\File\Storage\Database::class,
             ['getContent', 'getId', 'loadByFilename', '__wakeup']
         );
-        $storageFactoryMock->expects($this->once())->method('create')->will($this->returnValue($storageMock));
+        $storageFactoryMock->expects($this->once())->method('create')->willReturn($storageMock);
 
-        $storageMock->expects($this->once())->method('getContent')->will($this->returnValue($content));
-        $storageMock->expects($this->once())->method('getId')->will($this->returnValue(true));
+        $storageMock->expects($this->once())->method('getContent')->willReturn($content);
+        $storageMock->expects($this->once())->method('getId')->willReturn(true);
         $storageMock->expects($this->once())->method('loadByFilename');
 
         $file = $this->createPartialMock(
@@ -40,7 +40,7 @@ class SynchronizationTest extends \PHPUnit\Framework\TestCase
         $directory->expects($this->once())
             ->method('openFile')
             ->with($relativeFileName)
-            ->will($this->returnValue($file));
+            ->willReturn($file);
 
         $objectManager = new ObjectManager($this);
         $model = $objectManager->getObject(\Magento\MediaStorage\Model\File\Storage\Synchronization::class, [

@@ -124,7 +124,7 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
             ->with('checkout/options/enable_agreements', ScopeInterface::SCOPE_STORE, null)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->factoryMock->expects($this->never())->method('create');
         $this->assertEmpty($this->model->getList());
     }
@@ -134,7 +134,7 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
             ->with('checkout/options/enable_agreements', ScopeInterface::SCOPE_STORE, null)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
         $this->agreementsFilterMock->expects($this->once())

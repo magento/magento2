@@ -94,7 +94,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $customerDto = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
         $customer->expects($this->any())
             ->method('getDataModel')
-            ->will($this->returnValue($customerDto));
+            ->willReturn($customerDto);
 
         $this->_eventManagerMock->expects($this->at(0))
             ->method('dispatch')
@@ -118,11 +118,11 @@ class SessionTest extends \PHPUnit\Framework\TestCase
 
         $this->customerFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($customer));
+            ->willReturn($customer);
         $customer->expects($this->once())
             ->method('updateData')
             ->with($customerDto)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->_eventManagerMock->expects($this->at(0))
             ->method('dispatch')
@@ -174,7 +174,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->customerRepositoryMock->expects($this->once())
             ->method('getById')
             ->with($this->equalTo($customerId))
-            ->will($this->returnValue($customerDataMock));
+            ->willReturn($customerDataMock);
 
         $this->assertTrue($this->_model->loginById($customerId));
     }
@@ -188,7 +188,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $customerDataMock = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
         $customerDataMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($customerId));
+            ->willReturn($customerId);
 
         $customerMock = $this->createPartialMock(
             \Magento\Customer\Model\Customer::class,
@@ -196,18 +196,18 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         );
         $customerMock->expects($this->exactly(3))
             ->method('getId')
-            ->will($this->returnValue($customerId));
+            ->willReturn($customerId);
         $customerMock->expects($this->once())
             ->method('getConfirmation')
-            ->will($this->returnValue($customerId));
+            ->willReturn($customerId);
 
         $this->customerFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($customerMock));
+            ->willReturn($customerMock);
         $customerMock->expects($this->once())
             ->method('updateData')
             ->with($customerDataMock)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->_httpContextMock->expects($this->exactly(3))
             ->method('setValue');
@@ -224,7 +224,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     {
         $customerId = 1;
         $this->_storageMock->expects($this->any())->method('getData')->with('customer_id')
-            ->will($this->returnValue($customerId));
+            ->willReturn($customerId);
 
         if ($isCustomerIdValid) {
             $this->customerRepositoryMock->expects($this->once())
@@ -237,7 +237,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
                 ->will($this->throwException(new \Exception('Customer ID is invalid.')));
         }
         $this->_storageMock->expects($this->any())->method('getIsCustomerEmulated')
-            ->will($this->returnValue($isCustomerEmulated));
+            ->willReturn($isCustomerEmulated);
         $this->assertEquals($expectedResult, $this->_model->isLoggedIn());
     }
 

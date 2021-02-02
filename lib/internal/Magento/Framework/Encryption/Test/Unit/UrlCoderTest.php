@@ -41,8 +41,8 @@ class UrlCoderTest extends \PHPUnit\Framework\TestCase
             'sessionUrlVar'
         )->with(
             $this->_url
-        )->will(
-            $this->returnValue('expected')
+        )->willReturn(
+            'expected'
         );
         $this->assertEquals('expected', $this->_urlCoder->decode($this->_encodeUrl));
     }

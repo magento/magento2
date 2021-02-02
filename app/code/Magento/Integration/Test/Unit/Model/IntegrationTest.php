@@ -49,7 +49,7 @@ class IntegrationTest extends \PHPUnit\Framework\TestCase
         );
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
-            ->will($this->returnValue($eventManagerMock));
+            ->willReturn($eventManagerMock);
         $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
         $this->resourceMock = $this->getMockForAbstractClass(
             \Magento\Framework\Model\ResourceModel\AbstractResource::class,
@@ -91,7 +91,7 @@ class IntegrationTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock->expects($this->once())
             ->method('selectActiveIntegrationByConsumerId')
             ->with($consumerId)
-            ->will($this->returnValue($integrationData));
+            ->willReturn($integrationData);
 
         $this->integrationModel->loadActiveIntegrationByConsumerId($consumerId);
         $this->assertEquals($integrationData, $this->integrationModel->getData());

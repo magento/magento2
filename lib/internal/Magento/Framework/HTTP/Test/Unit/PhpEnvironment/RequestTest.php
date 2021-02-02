@@ -45,7 +45,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $this->serverArray = $_SERVER;
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $_SERVER = $this->serverArray;
     }
@@ -239,7 +239,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getCookie')
             ->with($key, $default)
-            ->will($this->returnValue($default));
+            ->willReturn($default);
 
         $this->assertEquals($default, $this->getModel()->getCookie($key, $default));
     }
@@ -254,7 +254,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getCookie')
             ->with($key, $default)
-            ->will($this->returnValue($value));
+            ->willReturn($value);
 
         $this->assertEquals($value, $this->getModel()->getCookie($key, $default));
     }
@@ -268,7 +268,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getCookie')
             ->with($nullKey, $default)
-            ->will($this->returnValue($default));
+            ->willReturn($default);
 
         $this->assertEquals($default, $this->getModel()->getCookie($nullKey, $default));
     }

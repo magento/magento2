@@ -43,10 +43,10 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         )->with(
             'form_key',
             null
-        )->will(
-            $this->returnValue($formKey)
+        )->willReturn(
+            $formKey
         );
-        $this->_formKeyMock->expects($this->once())->method('getFormKey')->will($this->returnValue('formKey'));
+        $this->_formKeyMock->expects($this->once())->method('getFormKey')->willReturn('formKey');
         $this->assertEquals($expected, $this->_model->validate($this->_requestMock));
     }
 

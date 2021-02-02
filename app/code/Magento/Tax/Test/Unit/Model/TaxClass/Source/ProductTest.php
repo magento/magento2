@@ -76,13 +76,13 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ['getAttributeCode', '__wakeup']
         );
 
-        $abstractAttrMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('code'));
+        $abstractAttrMock->expects($this->any())->method('getAttributeCode')->willReturn('code');
 
         $this->product->setAttribute($abstractAttrMock);
 
         $flatColumns = $this->product->getFlatColumns();
 
-        $this->assertInternalType('array', $flatColumns, 'FlatColumns must be an array value');
+        $this->assertIsArray($flatColumns, 'FlatColumns must be an array value');
         $this->assertTrue(!empty($flatColumns), 'FlatColumns must be not empty');
         foreach ($flatColumns as $result) {
             $this->assertArrayHasKey('unsigned', $result, 'FlatColumns must have "unsigned" column');

@@ -346,7 +346,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
             ->willReturn($priceType);
         $this->jsonEncoder->expects($this->any())
             ->method('encode')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
     }
 
     /**
@@ -418,15 +418,15 @@ class BundleTest extends \PHPUnit\Framework\TestCase
             $amountPrice->expects($this->any())
                 ->method('getOptionSelectionAmount')
                 ->with($selectionAmount['item'])
-                ->will(
-                    $this->returnValue(
+                ->willReturn(
+                    
                         new \Magento\Framework\DataObject(
                             [
                                 'value' => $selectionAmount['value'],
                                 'base_amount' => $selectionAmount['base_amount'],
                             ]
                         )
-                    )
+                    
                 );
         }
 

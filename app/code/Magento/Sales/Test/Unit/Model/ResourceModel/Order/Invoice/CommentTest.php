@@ -54,16 +54,16 @@ class CommentTest extends \PHPUnit\Framework\TestCase
         );
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
         $this->connectionMock->expects($this->any())
             ->method('describeTable')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->connectionMock->expects($this->any())
             ->method('insert');
         $this->connectionMock->expects($this->any())
             ->method('lastInsertId');
-        $this->commentModelMock->expects($this->any())->method('hasDataChanges')->will($this->returnValue(true));
-        $this->commentModelMock->expects($this->any())->method('isSaveAllowed')->will($this->returnValue(true));
+        $this->commentModelMock->expects($this->any())->method('hasDataChanges')->willReturn(true);
+        $this->commentModelMock->expects($this->any())->method('isSaveAllowed')->willReturn(true);
 
         $relationProcessorMock = $this->createMock(
             \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class
@@ -96,7 +96,7 @@ class CommentTest extends \PHPUnit\Framework\TestCase
         $this->validatorMock->expects($this->once())
             ->method('validate')
             ->with($this->equalTo($this->commentModelMock))
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->commentModelMock->expects($this->any())->method('getData')->willReturn([]);
         $this->commentResource->save($this->commentModelMock);
         $this->assertTrue(true);
@@ -118,7 +118,7 @@ class CommentTest extends \PHPUnit\Framework\TestCase
         $this->validatorMock->expects($this->once())
             ->method('validate')
             ->with($this->equalTo($this->commentModelMock))
-            ->will($this->returnValue(['warning message']));
+            ->willReturn(['warning message']);
         $this->commentResource->save($this->commentModelMock);
         $this->assertTrue(true);
     }

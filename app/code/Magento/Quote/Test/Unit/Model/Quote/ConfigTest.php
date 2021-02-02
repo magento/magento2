@@ -32,8 +32,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'getAttributeNames'
         )->with(
             'quote_item'
-        )->will(
-            $this->returnValue($attributes)
+        )->willReturn(
+            $attributes
         );
         $this->assertEquals($attributes, $this->_model->getProductAttributes());
     }

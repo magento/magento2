@@ -96,7 +96,7 @@ class EmailNotificationTest extends TestCase
 
         $this->transportBuilderMock->expects($this->once())
             ->method('setTemplateIdentifier')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
             ->method('setTemplateOptions')
@@ -104,20 +104,20 @@ class EmailNotificationTest extends TestCase
                 'area' => FrontNameResolver::AREA_CODE,
                 'store' => Store::DEFAULT_STORE_ID,
             ])
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
             ->method('setTemplateVars')
             ->with(['warnings' => $exception])
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
             ->method('setFrom')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
             ->method('addTo')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
             ->method('getTransport')

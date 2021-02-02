@@ -165,10 +165,10 @@ class UiComponentTest extends \PHPUnit\Framework\TestCase
 
         $this->argumentInterpreterMock->expects($this->any())
             ->method('evaluate')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [['key_1' => 'value_1'], 'value_1'],
                 [['key_2' => 'value_2'], 'value_2'],
-            ]));
+            ]);
 
         $layoutMock->expects($this->any())
             ->method('setBlock')

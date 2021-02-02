@@ -20,8 +20,8 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             $this->equalTo($identifier)
-        )->will(
-            $this->returnArgument(0)
+        )->willReturnArgument(
+            0
         );
         $model = new \Magento\Framework\App\PageCache\Cache($poolMock);
         $this->assertInstanceOf(\Magento\Framework\App\PageCache\Cache::class, $model);

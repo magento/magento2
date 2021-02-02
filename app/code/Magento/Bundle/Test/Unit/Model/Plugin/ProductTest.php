@@ -60,11 +60,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         ];
         $this->product->expects($this->once())
             ->method('getEntityId')
-            ->will($this->returnValue($id));
+            ->willReturn($id);
         $this->type->expects($this->once())
             ->method('getParentIdsByChild')
             ->with($id)
-            ->will($this->returnValue($parentIds));
+            ->willReturn($parentIds);
         $identities = $this->plugin->afterGetIdentities($this->product, $baseIdentities);
         $this->assertEquals($expectedIdentities, $identities);
     }

@@ -55,15 +55,15 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 \Magento\Developer\Helper\Data::XML_PATH_DEV_ALLOW_IPS,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
-            )->will($this->returnValue($allowedIps));
+            )->willReturn($allowedIps);
 
         $this->remoteAddressMock->expects($this->once())
             ->method('getRemoteAddress')
-            ->will($this->returnValue('remoteAddress'));
+            ->willReturn('remoteAddress');
 
         $this->httpHeaderMock->expects($this->exactly($callNum))
             ->method('getHttpHost')
-            ->will($this->returnValue('httpHost'));
+            ->willReturn('httpHost');
 
         $this->assertEquals($expected, $this->helper->isDevAllowed($storeId));
     }

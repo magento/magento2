@@ -57,7 +57,7 @@ class AbstractCategoryTest extends \PHPUnit\Framework\TestCase
 
         $this->contextMock->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
 
         $this->urlBuilderMock = $this->getMockBuilder(
             \Magento\Framework\UrlInterface::class
@@ -73,7 +73,7 @@ class AbstractCategoryTest extends \PHPUnit\Framework\TestCase
 
         $this->contextMock->expects($this->any())
             ->method('getStoreManager')
-            ->will($this->returnValue($this->storeManagerMock));
+            ->willReturn($this->storeManagerMock);
 
         $this->storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
@@ -81,7 +81,7 @@ class AbstractCategoryTest extends \PHPUnit\Framework\TestCase
 
         $this->contextMock->expects($this->any())
             ->method('getUrlBuilder')
-            ->will($this->returnValue($this->urlBuilderMock));
+            ->willReturn($this->urlBuilderMock);
 
         $this->category = $this->objectManager->getObject(
             \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory::class,

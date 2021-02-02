@@ -44,7 +44,7 @@ class InvalidateCacheTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecute($cacheState)
     {
-        $this->_configMock->expects($this->once())->method('isEnabled')->will($this->returnValue($cacheState));
+        $this->_configMock->expects($this->once())->method('isEnabled')->willReturn($cacheState);
 
         if ($cacheState) {
             $this->_typeListMock->expects($this->once())->method('invalidate')->with($this->equalTo('full_page'));

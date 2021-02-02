@@ -90,9 +90,9 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             ['getHttpHost', 'getScheme', 'getRequestUri']
         );
 
-        $httpRequestMock->expects($this->any())->method('getHttpHost')->will($this->returnValue($host));
-        $httpRequestMock->expects($this->any())->method('getScheme')->will($this->returnValue('http'));
-        $httpRequestMock->expects($this->any())->method('getRequestUri')->will($this->returnValue('/'));
+        $httpRequestMock->expects($this->any())->method('getHttpHost')->willReturn($host);
+        $httpRequestMock->expects($this->any())->method('getScheme')->willReturn('http');
+        $httpRequestMock->expects($this->any())->method('getRequestUri')->willReturn('/');
 
         $this->assertEquals($url, $this->oauthRequestHelper->getRequestUrl($httpRequestMock));
     }

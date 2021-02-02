@@ -95,8 +95,8 @@ class UiComponentTest extends \PHPUnit\Framework\TestCase
         $scheduleStructure = $this->getMockBuilder(ScheduledStructure::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->context->expects($this->any())->method('getScheduledStructure')->will(
-            $this->returnValue($scheduleStructure)
+        $this->context->expects($this->any())->method('getScheduledStructure')->willReturn(
+            $scheduleStructure
         );
         $this->helper->expects($this->any())->method('scheduleStructure')->with(
             $scheduleStructure,

@@ -69,7 +69,7 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
     public function testGetMessages()
     {
         $messages = $this->_model->getMessages();
-        $this->assertInternalType('array', $messages);
+        $this->assertIsArray($messages);
     }
 
     /**

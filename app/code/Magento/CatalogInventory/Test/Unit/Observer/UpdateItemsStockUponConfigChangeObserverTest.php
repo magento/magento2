@@ -45,7 +45,7 @@ class UpdateItemsStockUponConfigChangeObserverTest extends \PHPUnit\Framework\Te
 
         $this->eventObserver->expects($this->atLeastOnce())
             ->method('getEvent')
-            ->will($this->returnValue($this->event));
+            ->willReturn($this->event);
 
         $this->observer = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
             \Magento\CatalogInventory\Observer\UpdateItemsStockUponConfigChangeObserver::class,
@@ -64,10 +64,10 @@ class UpdateItemsStockUponConfigChangeObserverTest extends \PHPUnit\Framework\Te
 
         $this->event->expects($this->once())
             ->method('getWebsite')
-            ->will($this->returnValue($websiteId));
+            ->willReturn($websiteId);
         $this->event->expects($this->once())
             ->method('getChangedPaths')
-            ->will($this->returnValue([\Magento\CatalogInventory\Model\Configuration::XML_PATH_MANAGE_STOCK]));
+            ->willReturn([\Magento\CatalogInventory\Model\Configuration::XML_PATH_MANAGE_STOCK]);
 
         $this->observer->execute($this->eventObserver);
     }

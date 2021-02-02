@@ -18,15 +18,15 @@ class GiftmessageTest extends \PHPUnit\Framework\TestCase
             ['getChildBlock', 'getChildHtml']
         );
         $block->setEntity(new \Magento\Framework\DataObject());
-        $block->expects($this->once())->method('getChildBlock')->with('save_button')->will($this->returnValue($item));
+        $block->expects($this->once())->method('getChildBlock')->with('save_button')->willReturn($item);
         $block->expects(
             $this->once()
         )->method(
             'getChildHtml'
         )->with(
             'save_button'
-        )->will(
-            $this->returnValue($expectedHtml)
+        )->willReturn(
+            $expectedHtml
         );
 
         $this->assertEquals($expectedHtml, $block->getSaveButtonHtml());

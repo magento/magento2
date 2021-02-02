@@ -49,8 +49,8 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getAreaFrontName'
-        )->will(
-            $this->returnValue('storeCode')
+        )->willReturn(
+            'storeCode'
         );
         $this->assertEquals($this->_pathInfo, $this->_model->process($this->_requestMock, $this->_pathInfo));
     }
@@ -61,8 +61,8 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getAreaFrontName'
-        )->will(
-            $this->returnValue('store')
+        )->willReturn(
+            'store'
         );
         $this->_subjectMock->expects(
             $this->once()
@@ -71,8 +71,8 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
         )->with(
             $this->_requestMock,
             $this->_pathInfo
-        )->will(
-            $this->returnValue('Expected')
+        )->willReturn(
+            'Expected'
         );
         $this->assertEquals('Expected', $this->_model->process($this->_requestMock, $this->_pathInfo));
     }

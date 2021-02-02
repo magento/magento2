@@ -114,7 +114,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
             ->with($identifier, $storeId)
             ->willReturn($fetchOneResult);
 
-        $this->assertInternalType('string', $this->model->checkIdentifier($identifier, $storeId));
+        $this->assertIsString($this->model->checkIdentifier($identifier, $storeId));
     }
 
     /**

@@ -176,8 +176,8 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMap($productId, $productData, $storeId, $emptyDate, $type, $frontendInput)
     {
-        $this->attributeContainerMock->expects($this->any())->method('getAttribute')->will(
-            $this->returnValue($this->attribute)
+        $this->attributeContainerMock->expects($this->any())->method('getAttribute')->willReturn(
+            $this->attribute
         );
         $this->resourceIndex->expects($this->any())
             ->method('getPriceIndexData')
@@ -212,38 +212,36 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
         $this->storeInterface->expects($this->any())
             ->method('getWebsiteId')
             ->willReturn(1);
-        $this->attributeContainerMock->expects($this->any())->method('setStoreId')->will(
-            $this->returnValue($this->attributeContainerMock)
+        $this->attributeContainerMock->expects($this->any())->method('setStoreId')->willReturn(
+            $this->attributeContainerMock
         );
-        $this->attribute->expects($this->any())->method('getBackendType')->will(
-            $this->returnValue($type)
+        $this->attribute->expects($this->any())->method('getBackendType')->willReturn(
+            $type
         );
-        $this->attribute->expects($this->any())->method('getFrontendInput')->will(
-            $this->returnValue($frontendInput)
+        $this->attribute->expects($this->any())->method('getFrontendInput')->willReturn(
+            $frontendInput
         );
-        $this->dateTimeMock->expects($this->any())->method('isEmptyDate')->will(
-            $this->returnValue($emptyDate)
+        $this->dateTimeMock->expects($this->any())->method('isEmptyDate')->willReturn(
+            $emptyDate
         );
-        $this->scopeConfigMock->expects($this->any())->method('getValue')->will(
-            $this->returnValue('Europe/London')
+        $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn(
+            'Europe/London'
         );
-        $this->builderMock->expects($this->any())->method('addField')->will(
-            $this->returnValue([])
+        $this->builderMock->expects($this->any())->method('addField')->willReturn(
+            []
         );
-        $this->builderMock->expects($this->any())->method('addFields')->will(
-            $this->returnValue([])
+        $this->builderMock->expects($this->any())->method('addFields')->willReturn(
+            []
         );
-        $this->builderMock->expects($this->any())->method('build')->will(
-            $this->returnValue([])
+        $this->builderMock->expects($this->any())->method('build')->willReturn(
+            []
         );
 
         $this->resourceIndex->expects($this->once())
             ->method('getFullProductIndexData')
             ->willReturn($productData);
 
-        $this->assertInternalType(
-            'array',
-            $this->model->map($productId, $productData, $storeId)
+        $this->assertIsArray($this->model->map($productId, $productData, $storeId)
         );
     }
 

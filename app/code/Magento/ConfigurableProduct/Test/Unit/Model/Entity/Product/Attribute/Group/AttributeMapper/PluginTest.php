@@ -91,20 +91,20 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         };
 
         $this->attributeFactory->expects($this->once())->method('create')
-            ->will($this->returnValue($this->attribute));
+            ->willReturn($this->attribute);
 
         $this->attribute->expects($this->once())->method('getUsedAttributes')
             ->with($this->equalTo($attrSetId))
-            ->will($this->returnValue([$attrSetId]));
+            ->willReturn([$attrSetId]);
 
         $attribute->expects($this->once())->method('getAttributeId')
-            ->will($this->returnValue($attrSetId));
+            ->willReturn($attrSetId);
 
         $this->registry->expects($this->once())->method('registry')
             ->with($this->equalTo('current_attribute_set'))
-            ->will($this->returnValue($this->magentoObject));
+            ->willReturn($this->magentoObject);
 
-        $this->magentoObject->expects($this->once())->method('getId')->will($this->returnValue($attrSetId));
+        $this->magentoObject->expects($this->once())->method('getId')->willReturn($attrSetId);
 
         $result = $this->model->aroundMap($attributeMapper, $proceed, $attribute);
         $this->assertEquals($expected, $result);

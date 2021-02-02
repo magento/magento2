@@ -85,11 +85,11 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $contextMock->expects($this->any())
-            ->method('getRequest')->will($this->returnValue($this->requestMock));
+            ->method('getRequest')->willReturn($this->requestMock);
         $contextMock->expects($this->any())
-            ->method('getResponse')->will($this->returnValue($responseMock));
+            ->method('getResponse')->willReturn($responseMock);
         $contextMock->expects($this->any())
-            ->method('getMessageManager')->will($this->returnValue($this->messageManagerMock));
+            ->method('getMessageManager')->willReturn($this->messageManagerMock);
 
         $this->resultJsonMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
             ->disableOriginalConstructor()
@@ -138,7 +138,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->any())
             ->method('getParam')->willReturnMap($getParamMap);
         $this->requestMock->expects($this->any())
-            ->method('getPost')->with('variable')->will($this->returnValue([]));
+            ->method('getPost')->with('variable')->willReturn([]);
 
         $this->variableMock->expects($this->any())
             ->method('validate')

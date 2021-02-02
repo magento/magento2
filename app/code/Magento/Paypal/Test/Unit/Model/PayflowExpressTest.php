@@ -40,9 +40,9 @@ class PayflowExpressTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getByTransactionType'])
             ->getMockForAbstractClass();
-        $paypalPro->expects($this->any())->method('getApi')->will($this->returnValue($api));
+        $paypalPro->expects($this->any())->method('getApi')->willReturn($api);
 
-        $proFactory->expects($this->once())->method('create')->will($this->returnValue($paypalPro));
+        $proFactory->expects($this->once())->method('create')->willReturn($paypalPro);
 
         $this->_model = $objectManager->getObject(
             \Magento\Paypal\Model\PayflowExpress::class,
@@ -67,7 +67,7 @@ class PayflowExpressTest extends \PHPUnit\Framework\TestCase
         $captureTransaction = $this->_getCaptureTransaction();
         $captureTransaction->expects($this->once())->method('getAdditionalInformation')->with(
             Payflow\Pro::TRANSPORT_PAYFLOW_TXN_ID
-        )->will($this->returnValue(null));
+        )->willReturn(null);
         $paymentInfo->expects($this->once())->method('getOrder')->willReturnSelf();
         $this->transactionRepository->expects($this->once())
             ->method('getByTransactionType')
@@ -82,7 +82,7 @@ class PayflowExpressTest extends \PHPUnit\Framework\TestCase
         $captureTransaction = $this->_getCaptureTransaction();
         $captureTransaction->expects($this->once())->method('getAdditionalInformation')->with(
             Payflow\Pro::TRANSPORT_PAYFLOW_TXN_ID
-        )->will($this->returnValue(self::TRANSPORT_PAYFLOW_TXN_ID));
+        )->willReturn(self::TRANSPORT_PAYFLOW_TXN_ID);
         $paymentInfo->expects($this->once())->method('getOrder')->willReturnSelf();
         $this->transactionRepository->expects($this->once())
             ->method('getByTransactionType')

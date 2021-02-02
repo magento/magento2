@@ -68,11 +68,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
         $this->connectionMock->expects($this->atLeastOnce())
             ->method('select')
-            ->will($this->returnValue($this->selectMock));
+            ->willReturn($this->selectMock);
 
         $this->resourceMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class);
-        $this->resourceMock->expects($this->any())->method('getConnection')->will(
-            $this->returnValue($this->connectionMock)
+        $this->resourceMock->expects($this->any())->method('getConnection')->willReturn(
+            $this->connectionMock
         );
 
         $objectManager = new ObjectManager($this);

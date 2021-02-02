@@ -33,8 +33,8 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
         )->with(
             'etc',
             'Magento_WebapiAsync'
-        )->will(
-            $this->returnValue('schema_dir')
+        )->willReturn(
+            'schema_dir'
         );
 
         $this->model = new \Magento\WebapiAsync\Model\ServiceConfig\SchemaLocator($this->moduleReaderMock);

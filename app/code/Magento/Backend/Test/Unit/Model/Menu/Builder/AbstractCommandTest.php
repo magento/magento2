@@ -52,8 +52,8 @@ class AbstractCommandTest extends \PHPUnit\Framework\TestCase
             '_execute'
         )->with(
             $this->equalTo($itemParams)
-        )->will(
-            $this->returnValue($itemParams)
+        )->willReturn(
+            $itemParams
         );
 
         $command1 = $this->getMockBuilder(\Magento\Backend\Model\Menu\Builder\Command\Update::class)
@@ -66,8 +66,8 @@ class AbstractCommandTest extends \PHPUnit\Framework\TestCase
             'execute'
         )->with(
             $this->equalTo($itemParams)
-        )->will(
-            $this->returnValue($itemParams)
+        )->willReturn(
+            $itemParams
         );
 
         $this->_model->chain($command1);

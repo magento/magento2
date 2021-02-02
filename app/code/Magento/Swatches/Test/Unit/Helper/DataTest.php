@@ -185,7 +185,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->expects($this->at(0))
             ->method('getData')
             ->with('additional_data')
-            ->will($this->returnValue($dataFromDb));
+            ->willReturn($dataFromDb);
 
         $i = 1;
         foreach ($attributeData as $key => $value) {
@@ -293,7 +293,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->productCollectionMock->method('getFirstItem')->willReturn($this->productMock);
         $this->productMock->method('getData')->with('id')->willReturn(95);
         $this->productModelFactoryMock->method('create')->willReturn($this->productMock);
-        $this->productMock->method('load')->with(95)->will($this->returnSelf());
+        $this->productMock->method('load')->with(95)->willReturnSelf();
 
         $this->swatchHelperObject->loadVariationByFallback($this->productMock, ['color' => 31]);
     }
@@ -603,7 +603,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $storeId = 1;
 
-        $this->attributeMock->method('setStoreId')->with($storeId)->will($this->returnSelf());
+        $this->attributeMock->method('setStoreId')->with($storeId)->willReturnSelf();
         $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
         $storeMock->method('getId')->willReturn($storeId);
         $this->storeManagerMock->method('getStore')->willReturn($storeMock);
@@ -707,7 +707,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $swatchCollectionMock = $this->objectManager
             ->getCollectionMock(Collection::class, [$swatchMock, $swatchMock]);
-        $swatchCollectionMock->method('addFilterByOptionsIds')->with([35])->will($this->returnSelf());
+        $swatchCollectionMock->method('addFilterByOptionsIds')->with([35])->willReturnSelf();
         $this->swatchCollectionFactoryMock->method('create')->willReturn($swatchCollectionMock);
 
         $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
@@ -758,7 +758,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         );
         $this->swatchCollectionFactoryMock->method('create')->willReturn($swatchCollectionMock);
 
-        $swatchCollectionMock->method('addFilterByOptionsIds')->with([35])->will($this->returnSelf());
+        $swatchCollectionMock->method('addFilterByOptionsIds')->with([35])->willReturnSelf();
 
         $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
         $this->storeManagerMock->method('getStore')->willReturn($storeMock);
@@ -793,7 +793,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         );
         $this->swatchCollectionFactoryMock->method('create')->willReturn($swatchCollectionMock);
 
-        $swatchCollectionMock->method('addFilterByOptionsIds')->with([35])->will($this->returnSelf());
+        $swatchCollectionMock->method('addFilterByOptionsIds')->with([35])->willReturnSelf();
 
         $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
         $this->storeManagerMock->method('getStore')->willReturn($storeMock);

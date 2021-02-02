@@ -41,7 +41,7 @@ class CronRunCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $status;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $this->queue = $this->createMock(\Magento\Setup\Model\Cron\Queue::class);

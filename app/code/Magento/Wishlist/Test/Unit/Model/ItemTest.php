@@ -183,7 +183,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $optionMock->expects($this->any())
             ->method('getCode')
-            ->will($this->returnValue('second_key'));
+            ->willReturn('second_key');
 
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
@@ -208,9 +208,9 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['__wakeup', 'getValue'])
             ->getMock();
 
-        $optionsOneMock->expects($this->once())->method('getCode')->will($this->returnValue($code));
-        $optionsOneMock->expects($this->once())->method('getValue')->will($this->returnValue($optionValue));
-        $optionsTwoMock->expects($this->once())->method('getValue')->will($this->returnValue($optionValue));
+        $optionsOneMock->expects($this->once())->method('getCode')->willReturn($code);
+        $optionsOneMock->expects($this->once())->method('getValue')->willReturn($optionValue);
+        $optionsTwoMock->expects($this->once())->method('getValue')->willReturn($optionValue);
 
         $result = $this->model->compareOptions(
             [$code => $optionsOneMock],
@@ -234,9 +234,9 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['__wakeup', 'getValue'])
             ->getMock();
 
-        $optionsOneMock->expects($this->once())->method('getCode')->will($this->returnValue($code));
-        $optionsOneMock->expects($this->once())->method('getValue')->will($this->returnValue($optionOneValue));
-        $optionsTwoMock->expects($this->once())->method('getValue')->will($this->returnValue($optionTwoValue));
+        $optionsOneMock->expects($this->once())->method('getCode')->willReturn($code);
+        $optionsOneMock->expects($this->once())->method('getValue')->willReturn($optionOneValue);
+        $optionsTwoMock->expects($this->once())->method('getValue')->willReturn($optionTwoValue);
 
         $result = $this->model->compareOptions(
             [$code => $optionsOneMock],
@@ -258,7 +258,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['__wakeup'])
             ->getMock();
 
-        $optionsOneMock->expects($this->once())->method('getCode')->will($this->returnValue($code));
+        $optionsOneMock->expects($this->once())->method('getCode')->willReturn($code);
 
         $result = $this->model->compareOptions(
             [$code => $optionsOneMock],

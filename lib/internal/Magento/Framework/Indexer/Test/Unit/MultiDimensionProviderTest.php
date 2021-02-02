@@ -150,11 +150,12 @@ class MultiDimensionProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * tests that MultiDimensionProvider will throw exception when all dimension providers has nothing to return
      *
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Can`t multiple dimensions because some of them are empty.
      */
     public function testMultiDimensionProviderWithEmptyDataProvider()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Can`t multiple dimensions because some of them are empty.');
+
         // collect actual dimensions
         $multiDimensionProvider = new MultiDimensionProvider(
             [
@@ -172,11 +173,12 @@ class MultiDimensionProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * tests that MultiDimensionProvider will throw exception when one dimension providers has nothing to return
      *
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Can`t multiple dimensions because some of them are empty.
      */
     public function testMultiDimensionProviderWithMixedDataProvider()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Can`t multiple dimensions because some of them are empty.');
+
 
         // prepare expected dimensions
         $dimensionXData = [
@@ -227,12 +229,12 @@ class MultiDimensionProviderTest extends \PHPUnit\Framework\TestCase
 
         $dimensionProviderMock->expects($this->any())
             ->method('getIterator')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function () use ($dimensions) {
                         return \SplFixedArray::fromArray($dimensions);
                     }
-                )
+                
             );
 
         return $dimensionProviderMock;

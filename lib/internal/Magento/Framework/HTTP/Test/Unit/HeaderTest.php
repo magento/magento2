@@ -47,7 +47,7 @@ class HeaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testHttpMethods($method, $clean, $expectedValue)
     {
-        $this->_request->expects($this->once())->method('getServer')->will($this->returnValue('value'));
+        $this->_request->expects($this->once())->method('getServer')->willReturn('value');
 
         $this->_prepareCleanString($clean);
 
@@ -129,7 +129,7 @@ class HeaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetRequestUri($clean, $expectedValue)
     {
-        $this->_request->expects($this->once())->method('getRequestUri')->will($this->returnValue('value'));
+        $this->_request->expects($this->once())->method('getRequestUri')->willReturn('value');
 
         $this->_prepareCleanString($clean);
 
@@ -166,8 +166,8 @@ class HeaderTest extends \PHPUnit\Framework\TestCase
             $cleanStringExpects
         )->method(
             'cleanString'
-        )->will(
-            $this->returnValue('converted value')
+        )->willReturn(
+            'converted value'
         );
         return $this;
     }

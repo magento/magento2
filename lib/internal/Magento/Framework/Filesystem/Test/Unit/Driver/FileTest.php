@@ -16,7 +16,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
     /** @var bool Result of file_put_contents() function */
     public static $filePutContents;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         self::$fileGetContents = '';
         self::$filePutContents = true;

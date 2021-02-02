@@ -50,7 +50,7 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
         $deploymentConfigMock->expects($this->once())
             ->method('get')
             ->with(ConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME)
-            ->will($this->returnValue($this->_defaultFrontName));
+            ->willReturn($this->_defaultFrontName);
         $this->uri = $this->createMock(\Zend\Uri\Uri::class);
 
         $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
@@ -74,8 +74,8 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             'admin/url/use_custom_path'
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
         $this->configMock->expects(
             $this->at(1)
@@ -83,8 +83,8 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             'admin/url/custom_path'
-        )->will(
-            $this->returnValue('expectedValue')
+        )->willReturn(
+            'expectedValue'
         );
         $this->assertEquals('expectedValue', $this->model->getFrontName());
     }
@@ -97,8 +97,8 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             'admin/url/use_custom_path'
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
         $this->assertEquals($this->_defaultFrontName, $this->model->getFrontName());
     }
@@ -115,8 +115,8 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
     {
         $this->scopeConfigMock->expects($this->exactly(2))
             ->method('getValue')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         [Store::XML_PATH_UNSECURE_BASE_URL, ScopeInterface::SCOPE_STORE, null, $url],
                         [
@@ -132,12 +132,12 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
                             $customAdminUrl
                         ],
                     ]
-                )
+                
             );
 
         $this->request->expects($this->any())
             ->method('getServer')
-            ->will($this->returnValue($host));
+            ->willReturn($host);
 
         $urlParts = [];
         $this->uri->expects($this->once())

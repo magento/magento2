@@ -112,14 +112,14 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->saleableItemMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($typeId));
+            ->willReturn($typeId);
         $this->saleableItemMock->expects($this->once())
             ->method('getQty')
-            ->will($this->returnValue($quantity));
+            ->willReturn($quantity);
 
         $this->objectManagerMock->expects($this->exactly(2))
             ->method('create')
-            ->will($this->returnValueMap(
+            ->willReturnMap(
                 [
                     [
                         $prices,
@@ -139,7 +139,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
                         $this->priceInfoMock
                     ],
                 ]
-            ));
+            );
         $this->assertEquals($this->priceInfoMock, $this->factory->create($this->saleableItemMock, []));
     }
 }

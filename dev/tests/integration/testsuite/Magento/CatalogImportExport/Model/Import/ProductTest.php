@@ -988,9 +988,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $product = $this->getProductBySku('simple_new');
 
         $this->assertEquals('/m/a/magento_image.jpg', $product->getData('image'));
-        $this->assertEquals(null, $product->getData('small_image'));
-        $this->assertEquals(null, $product->getData('thumbnail'));
-        $this->assertEquals(null, $product->getData('swatch_image'));
+        $this->assertNull($product->getData('small_image'));
+        $this->assertNull($product->getData('thumbnail'));
+        $this->assertNull($product->getData('swatch_image'));
     }
 
     /**
@@ -1448,7 +1448,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $resource = $objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class);
         $productId = $resource->getIdBySku('simple1');
-        $this->assertTrue(is_numeric($productId));
+        $this->assertIsNumeric($productId);
         /** @var \Magento\Catalog\Model\Product $product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Product::class
@@ -2645,9 +2645,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         $this->_model->importData();
 
-        $this->assertEquals(
+        $this->assertCount(
             3,
-            count($productRepository->getList($searchCriteria)->getItems())
+            $productRepository->getList($searchCriteria)->getItems()
         );
         foreach ($importedPrices as $sku => $expectedPrice) {
             $this->assertEquals($expectedPrice, $productRepository->get($sku)->getPrice());
@@ -2671,9 +2671,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         $this->_model->importData();
 
-        $this->assertEquals(
+        $this->assertCount(
             3,
-            count($productRepository->getList($searchCriteria)->getItems()),
+            $productRepository->getList($searchCriteria)->getItems(),
             'Ensures that new products were not created'
         );
         foreach ($updatedPrices as $sku => $expectedPrice) {
@@ -3169,13 +3169,13 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         /** @var SearchCriteria $searchCriteria */
         $searchCriteria = $this->searchCriteriaBuilder->create();
 
-        $this->assertEquals(true, $this->importFile('products_with_two_store_views.csv', 2));
+        $this->assertTrue($this->importFile('products_with_two_store_views.csv', 2));
         $productsAfterFirstImport = $this->productRepository->getList($searchCriteria)->getItems();
-        $this->assertEquals(3, count($productsAfterFirstImport));
+        $this->assertCount(3, $productsAfterFirstImport);
 
-        $this->assertEquals(true, $this->importFile('products_with_two_store_views.csv', 2));
+        $this->assertTrue($this->importFile('products_with_two_store_views.csv', 2));
         $productsAfterSecondImport = $this->productRepository->getList($searchCriteria)->getItems();
-        $this->assertEquals(3, count($productsAfterSecondImport));
+        $this->assertCount(3, $productsAfterSecondImport);
     }
 
     /**

@@ -72,8 +72,8 @@ class FileResolverTest extends \PHPUnit\Framework\TestCase
             'search'
         )->with(
             sprintf('{%1$s,*/%1$s}', $filename)
-        )->will(
-            $this->returnValue($fileList)
+        )->willReturn(
+            $fileList
         );
         $i = 1;
         foreach ($fileList as $file) {
@@ -85,8 +85,8 @@ class FileResolverTest extends \PHPUnit\Framework\TestCase
             'getDirectoryRead'
         )->with(
             DirectoryList::CONFIG
-        )->will(
-            $this->returnValue($directory)
+        )->willReturn(
+            $directory
         );
         $this->iteratorFactory->expects(
             $this->once()
@@ -94,8 +94,8 @@ class FileResolverTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             $fileList
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
         $this->assertTrue($this->model->get($filename, $scope));
     }
@@ -116,8 +116,8 @@ class FileResolverTest extends \PHPUnit\Framework\TestCase
             'getConfigurationFiles'
         )->with(
             $filename
-        )->will(
-            $this->returnValue($fileList)
+        )->willReturn(
+            $fileList
         );
         $this->assertEquals($fileList, $this->model->get($filename, $scope));
     }
@@ -138,8 +138,8 @@ class FileResolverTest extends \PHPUnit\Framework\TestCase
             'getConfigurationFiles'
         )->with(
             $scope . '/' . $filename
-        )->will(
-            $this->returnValue($fileList)
+        )->willReturn(
+            $fileList
         );
         $this->assertEquals($fileList, $this->model->get($filename, $scope));
     }

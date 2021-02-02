@@ -219,23 +219,23 @@ abstract class IntegrationTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getUpdate'
-        )->will(
-            $this->returnValue($this->_layoutMergeMock)
+        )->willReturn(
+            $this->_layoutMergeMock
         );
         $testElement = new \Magento\Framework\Simplexml\Element('<test>test</test>');
-        $this->_layoutMock->expects($this->any())->method('getNode')->will($this->returnValue($testElement));
+        $this->_layoutMock->expects($this->any())->method('getNode')->willReturn($testElement);
         // for _setActiveMenu
-        $this->_viewMock->expects($this->any())->method('getLayout')->will($this->returnValue($this->_layoutMock));
+        $this->_viewMock->expects($this->any())->method('getLayout')->willReturn($this->_layoutMock);
         $blockMock = $this->getMockBuilder(\Magento\Backend\Block\Menu::class)->disableOriginalConstructor()->getMock();
         $menuMock = $this->getMockBuilder(\Magento\Backend\Model\Menu::class)
             ->setConstructorArgs([$this->createMock(\Psr\Log\LoggerInterface::class)])
             ->getMock();
         $loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)->getMock();
-        $loggerMock->expects($this->any())->method('critical')->will($this->returnSelf());
-        $menuMock->expects($this->any())->method('getParentItems')->will($this->returnValue([]));
-        $blockMock->expects($this->any())->method('getMenuModel')->will($this->returnValue($menuMock));
-        $this->_layoutMock->expects($this->any())->method('getMessagesBlock')->will($this->returnValue($blockMock));
-        $this->_layoutMock->expects($this->any())->method('getBlock')->will($this->returnValue($blockMock));
+        $loggerMock->expects($this->any())->method('critical')->willReturnSelf();
+        $menuMock->expects($this->any())->method('getParentItems')->willReturn([]);
+        $blockMock->expects($this->any())->method('getMenuModel')->willReturn($menuMock);
+        $this->_layoutMock->expects($this->any())->method('getMessagesBlock')->willReturn($blockMock);
+        $this->_layoutMock->expects($this->any())->method('getBlock')->willReturn($blockMock);
         $this->_viewMock->expects($this->any())
             ->method('getPage')
             ->willReturn($this->resultPageMock);
@@ -260,8 +260,8 @@ abstract class IntegrationTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getUser'
-        )->will(
-            $this->returnValue($this->_userMock)
+        )->willReturn(
+            $this->_userMock
         );
 
         $this->_userMock->expects($this->any())
@@ -298,10 +298,10 @@ abstract class IntegrationTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $integrationCollection->expects($this->any())
             ->method('addUnsecureUrlsFilter')
-            ->will($this->returnValue($integrationCollection));
+            ->willReturn($integrationCollection);
         $integrationCollection->expects($this->any())
             ->method('getSize')
-            ->will($this->returnValue(0));
+            ->willReturn(0);
 
         $subControllerParams = [
             'context' => $this->_backendActionCtxMock,
@@ -341,7 +341,7 @@ abstract class IntegrationTest extends \PHPUnit\Framework\TestCase
             [\Magento\Framework\TranslateInterface::class, $this->_translateModelMock],
             [\Magento\Framework\Config\ScopeInterface::class, $this->_configScopeMock],
         ];
-        $this->_objectManagerMock->expects($this->any())->method('get')->will($this->returnValueMap($map));
+        $this->_objectManagerMock->expects($this->any())->method('get')->willReturnMap($map);
     }
 
     /**
@@ -375,13 +375,13 @@ abstract class IntegrationTest extends \PHPUnit\Framework\TestCase
             ['save', '__wakeup', 'setStatus', 'getData']
         );
 
-        $integrationModelMock->expects($this->any())->method('setStatus')->will($this->returnSelf());
+        $integrationModelMock->expects($this->any())->method('setStatus')->willReturnSelf();
         $integrationModelMock->expects(
             $this->any()
         )->method(
             'getData'
-        )->will(
-            $this->returnValue($this->_getSampleIntegrationData())
+        )->willReturn(
+            $this->_getSampleIntegrationData()
         );
 
         return $integrationModelMock;

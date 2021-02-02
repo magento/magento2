@@ -48,7 +48,7 @@ class AddVatRequestParamsOrderCommentTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->customerAddressHelperMock->expects($this->once())
             ->method('getTaxCalculationAddressType')
-            ->will($this->returnValue($configAddressType));
+            ->willReturn($configAddressType);
 
         $orderAddressMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Address::class,
@@ -56,10 +56,10 @@ class AddVatRequestParamsOrderCommentTest extends \PHPUnit\Framework\TestCase
         );
         $orderAddressMock->expects($this->any())
             ->method('getVatRequestId')
-            ->will($this->returnValue($vatRequestId));
+            ->willReturn($vatRequestId);
         $orderAddressMock->expects($this->any())
             ->method('getVatRequestDate')
-            ->will($this->returnValue($vatRequestDate));
+            ->willReturn($vatRequestDate);
 
         $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
@@ -67,7 +67,7 @@ class AddVatRequestParamsOrderCommentTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $orderMock->expects($this->any())
             ->method('getShippingAddress')
-            ->will($this->returnValue($orderAddressMock));
+            ->willReturn($orderAddressMock);
         if ($orderHistoryComment === null) {
             $orderMock->expects($this->never())
                 ->method('addStatusHistoryComment');
@@ -79,7 +79,7 @@ class AddVatRequestParamsOrderCommentTest extends \PHPUnit\Framework\TestCase
         $observer = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getOrder']);
         $observer->expects($this->once())
             ->method('getOrder')
-            ->will($this->returnValue($orderMock));
+            ->willReturn($orderMock);
 
         $this->assertNull($this->observer->execute($observer));
     }

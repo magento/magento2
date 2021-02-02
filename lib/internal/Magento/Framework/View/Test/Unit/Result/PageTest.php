@@ -78,14 +78,14 @@ class PageTest extends \PHPUnit\Framework\TestCase
         $this->layoutFactory = $this->getMockBuilder(\Magento\Framework\View\LayoutFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->layoutFactory->expects($this->any())->method('create')->will($this->returnValue($this->layout));
+        $this->layoutFactory->expects($this->any())->method('create')->willReturn($this->layout);
         $this->layoutMerge = $this->getMockBuilder(\Magento\Framework\View\Model\Layout\Merge::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->layout->expects($this->any())
             ->method('getUpdate')
-            ->will($this->returnValue($this->layoutMerge));
+            ->willReturn($this->layoutMerge);
 
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
@@ -147,7 +147,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
         $fullActionName = 'full_action_name';
         $this->request->expects($this->any())
             ->method('getFullActionName')
-            ->will($this->returnValue($fullActionName));
+            ->willReturn($fullActionName);
 
         $this->layoutMerge->expects($this->at(0))
             ->method('addHandle')
@@ -170,7 +170,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
         $fullActionName = 'full_action_name';
         $this->request->expects($this->any())
             ->method('getFullActionName')
-            ->will($this->returnValue($fullActionName));
+            ->willReturn($fullActionName);
 
         $this->layoutMerge->expects($this->at(0))
             ->method('addHandle')
@@ -203,7 +203,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
 
         $this->request->expects($this->any())
             ->method('getFullActionName')
-            ->will($this->returnValue($fullActionName));
+            ->willReturn($fullActionName);
 
         $this->assertEquals($expectedFullActionName, $this->page->getDefaultLayoutHandle());
     }
@@ -223,7 +223,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
         ];
         $this->request->expects($this->any())
             ->method('getFullActionName')
-            ->will($this->returnValue($fullActionName));
+            ->willReturn($fullActionName);
 
         $this->layoutMerge->expects($this->any())
             ->method('addHandle')
@@ -253,7 +253,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
         ];
         $this->request->expects($this->any())
             ->method('getFullActionName')
-            ->will($this->returnValue($fullActionName));
+            ->willReturn($fullActionName);
 
         $this->layoutMerge->expects($this->any())
             ->method('addHandle')

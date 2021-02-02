@@ -49,8 +49,8 @@ class AreaListTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             'testValue'
-        )->will(
-            $this->returnValue($resolverMock)
+        )->willReturn(
+            $resolverMock
         );
 
         $actual = $this->_model->getCodeByFrontName('testFrontName');
@@ -170,7 +170,7 @@ class AreaListTest extends \PHPUnit\Framework\TestCase
                 $this->equalTo(\Magento\Framework\App\AreaInterface::class),
                 $this->equalTo(['areaCode' => 'testArea'])
             )
-            ->will($this->returnValue('ok'));
+            ->willReturn('ok');
 
         return $objectManagerMock;
     }

@@ -59,7 +59,7 @@ class FileIteratorTest extends \PHPUnit\Framework\TestCase
                 ->willReturn($this->fileRead);
             $this->fileRead->expects($this->at($index))
                 ->method('readAll')
-                ->will($this->returnValue($contents[$index++]));
+                ->willReturn($contents[$index++]);
         }
         $index = 0;
         foreach ($this->fileIterator as $fileContent) {
@@ -80,7 +80,7 @@ class FileIteratorTest extends \PHPUnit\Framework\TestCase
                 ->willReturn($this->fileRead);
             $this->fileRead->expects($this->at($index))
                 ->method('readAll')
-                ->will($this->returnValue($contents[$index++]));
+                ->willReturn($contents[$index++]);
         }
         $this->assertEquals($expectedArray, $this->fileIterator->toArray());
     }

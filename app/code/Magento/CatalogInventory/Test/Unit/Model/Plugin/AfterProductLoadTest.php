@@ -69,7 +69,7 @@ class AfterProductLoadTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->productMock->expects(($this->once()))
             ->method('getId')
-            ->will($this->returnValue($productId));
+            ->willReturn($productId);
     }
 
     public function testAfterLoad()

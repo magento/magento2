@@ -51,8 +51,8 @@ class AttributesTest extends \PHPUnit\Framework\TestCase
         $urlKeyData = $meta['search_engine_optimization']['children']['url_key']['arguments']['data']['config'];
         $this->assertEquals('text', $urlKeyData['dataType']);
         $this->assertEquals('input', $urlKeyData['formElement']);
-        $this->assertEquals(true, $urlKeyData['visible']);
-        $this->assertEquals(false, $urlKeyData['required']);
+        $this->assertTrue($urlKeyData['visible']);
+        $this->assertFalse($urlKeyData['required']);
         $this->assertEquals('[STORE VIEW]', $urlKeyData['scopeLabel']);
     }
 }

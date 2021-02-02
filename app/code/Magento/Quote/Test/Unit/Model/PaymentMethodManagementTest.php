@@ -64,13 +64,13 @@ class PaymentMethodManagementTest extends \PHPUnit\Framework\TestCase
         $cartId = 11;
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
         $paymentMock = $this->createMock(\Magento\Quote\Model\Quote\Payment::class);
-        $quoteMock->expects($this->once())->method('getPayment')->will($this->returnValue($paymentMock));
-        $paymentMock->expects($this->once())->method('getId')->will($this->returnValue(null));
+        $quoteMock->expects($this->once())->method('getPayment')->willReturn($paymentMock);
+        $paymentMock->expects($this->once())->method('getId')->willReturn(null);
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('get')
             ->with($cartId)
-            ->will($this->returnValue($quoteMock));
+            ->willReturn($quoteMock);
 
         $this->assertNull($this->model->get($cartId));
     }
@@ -80,15 +80,15 @@ class PaymentMethodManagementTest extends \PHPUnit\Framework\TestCase
         $cartId = 11;
 
         $paymentMock = $this->createMock(\Magento\Quote\Model\Quote\Payment::class);
-        $paymentMock->expects($this->once())->method('getId')->will($this->returnValue(1));
+        $paymentMock->expects($this->once())->method('getId')->willReturn(1);
 
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
-        $quoteMock->expects($this->once())->method('getPayment')->will($this->returnValue($paymentMock));
+        $quoteMock->expects($this->once())->method('getPayment')->willReturn($paymentMock);
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('get')
             ->with($cartId)
-            ->will($this->returnValue($quoteMock));
+            ->willReturn($quoteMock);
         $this->assertEquals($paymentMock, $this->model->get($cartId));
     }
 
@@ -99,13 +99,13 @@ class PaymentMethodManagementTest extends \PHPUnit\Framework\TestCase
         $this->quoteRepositoryMock->expects($this->once())
             ->method('get')
             ->with($cartId)
-            ->will($this->returnValue($quoteMock));
+            ->willReturn($quoteMock);
 
         $paymentMethod = $this->createMock(\Magento\Quote\Api\Data\PaymentMethodInterface::class);
         $this->methodListMock->expects($this->once())
             ->method('getAvailableMethods')
             ->with($quoteMock)
-            ->will($this->returnValue([$paymentMethod]));
+            ->willReturn([$paymentMethod]);
         $this->assertEquals([$paymentMethod], $this->model->getList($cartId));
     }
 

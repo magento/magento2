@@ -60,7 +60,7 @@ class AnchorUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
 
     public function testGenerateEmpty()
     {
-        $this->categoryRegistry->expects($this->any())->method('getList')->will($this->returnValue([]));
+        $this->categoryRegistry->expects($this->any())->method('getList')->willReturn([]);
 
         $this->assertEquals(
             [],
@@ -80,14 +80,14 @@ class AnchorUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
             'category1/category2/simple-product.html',
             'category1/category2/category3/simple-product.html'];
 
-        $this->product->expects($this->any())->method('getId')->will($this->returnValue($productId));
+        $this->product->expects($this->any())->method('getId')->willReturn($productId);
         $this->productUrlPathGenerator->expects($this->any())->method('getUrlPathWithSuffix')
-            ->will($this->returnValue($urlPathWithCategory));
+            ->willReturn($urlPathWithCategory);
         $this->productUrlPathGenerator->expects($this->any())->method('getCanonicalUrlPath')
-            ->will($this->returnValue($canonicalUrlPathWithCategory));
+            ->willReturn($canonicalUrlPathWithCategory);
         $category = $this->createMock(\Magento\Catalog\Model\Category::class);
-        $category->expects($this->any())->method('getId')->will($this->returnValue($categoryIds));
-        $category->expects($this->any())->method('getAnchorsAbove')->will($this->returnValue($categoryIds));
+        $category->expects($this->any())->method('getId')->willReturn($categoryIds);
+        $category->expects($this->any())->method('getAnchorsAbove')->willReturn($categoryIds);
         $category->expects($this->any())->method('getParentId')->will(
             $this->onConsecutiveCalls(
                 $categoryIds[0],
@@ -104,22 +104,22 @@ class AnchorUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
                 [ 'category_id' => $categoryIds[1]],
                 [ 'category_id' => $categoryIds[2]]
             )
-            ->will($this->returnValue($category));
+            ->willReturn($category);
         $this->categoryRegistry->expects($this->any())->method('getList')
-            ->will($this->returnValue([$category]));
+            ->willReturn([$category]);
         $this->urlRewrite->expects($this->any())->method('setStoreId')
             ->with($storeId)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setEntityId')
             ->with($productId)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setEntityType')
             ->with(ProductUrlRewriteGenerator::ENTITY_TYPE)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setRequestPath')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setTargetPath')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setMetadata')
             ->will(
                 $this->onConsecutiveCalls(
@@ -128,8 +128,8 @@ class AnchorUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
                     $urls[2]
                 )
             );
-        $this->urlRewriteFactory->expects($this->any())->method('create')->will(
-            $this->returnValue($this->urlRewrite)
+        $this->urlRewriteFactory->expects($this->any())->method('create')->willReturn(
+            $this->urlRewrite
         );
 
         $this->assertEquals(

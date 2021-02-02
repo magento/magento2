@@ -66,7 +66,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $this->fileSystemMock
             ->expects($this->any())
             ->method('getDirectoryWrite')
-            ->will($this->returnValue($this->mediaDirectoryMock));
+            ->willReturn($this->mediaDirectoryMock);
 
         $this->mediaHelperObject = $objectManager->getObject(
             \Magento\Swatches\Helper\Media::class,
@@ -127,15 +127,15 @@ class MediaTest extends \PHPUnit\Framework\TestCase
     {
         $this->fileStorageDbMock->method('checkDbUsage')->willReturn(1);
         $this->fileStorageDbMock->expects($this->atLeastOnce())->method('getUniqueFilename')->willReturn('file___1');
-        $this->fileStorageDbMock->method('renameFile')->will($this->returnSelf());
-        $this->mediaDirectoryMock->expects($this->exactly(2))->method('delete')->will($this->returnSelf());
+        $this->fileStorageDbMock->method('renameFile')->willReturnSelf();
+        $this->mediaDirectoryMock->expects($this->exactly(2))->method('delete')->willReturnSelf();
         $this->mediaHelperObject->moveImageFromTmp('file.tmp');
     }
 
     public function testMoveImageFromTmpNoDb()
     {
         $this->fileStorageDbMock->method('checkDbUsage')->willReturn(false);
-        $this->fileStorageDbMock->method('renameFile')->will($this->returnSelf());
+        $this->fileStorageDbMock->method('renameFile')->willReturnSelf();
         $result = $this->mediaHelperObject->moveImageFromTmp('file.tmp');
         $this->assertNotNull($result);
     }
@@ -160,7 +160,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
 
         $this->imageFactoryMock->expects($this->any())->method('create')->willReturn($image);
         $this->generateImageConfig();
-        $image->expects($this->any())->method('resize')->will($this->returnSelf());
+        $image->expects($this->any())->method('resize')->willReturnSelf();
         $image->expects($this->atLeastOnce())->method('backgroundColor')->with([255, 255, 255])->willReturnSelf();
         $this->mediaHelperObject->generateSwatchVariations('/e/a/earth.png');
     }

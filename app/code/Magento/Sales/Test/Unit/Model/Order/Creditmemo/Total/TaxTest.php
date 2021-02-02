@@ -65,7 +65,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                 '__wakeup',
             ]
         );
-        $this->creditmemo->expects($this->atLeastOnce())->method('getOrder')->will($this->returnValue($this->order));
+        $this->creditmemo->expects($this->atLeastOnce())->method('getOrder')->willReturn($this->order);
     }
 
     /**
@@ -91,17 +91,17 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         }
         $this->creditmemo->expects($this->once())
             ->method('getAllItems')
-            ->will($this->returnValue($creditmemoItems));
+            ->willReturn($creditmemoItems);
         $this->creditmemo->expects($this->any())
             ->method('isLast')
-            ->will($this->returnValue($creditmemoData['is_last']));
+            ->willReturn($creditmemoData['is_last']);
         foreach ($creditmemoData['data_fields'] as $key => $value) {
             $this->creditmemo->setData($key, $value);
         }
         $this->creditmemo->expects($this->any())
             ->method('roundPrice')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($price, $type) use (&$roundingDelta) {
                         if (!isset($roundingDelta[$type])) {
                             $roundingDelta[$type] = 0;
@@ -110,7 +110,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                         $roundingDelta[$type] = $price - $roundedPrice;
                         return $roundedPrice;
                     }
-                )
+                
             );
 
         $this->model->collect($this->creditmemo);
@@ -779,10 +779,10 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                 '__wakeup'
             ]
         );
-        $creditmemoItem->expects($this->any())->method('getOrderItem')->will($this->returnValue($orderItem));
+        $creditmemoItem->expects($this->any())->method('getOrderItem')->willReturn($orderItem);
         $creditmemoItem->expects($this->any())
             ->method('isLast')
-            ->will($this->returnValue($creditmemoItemData['is_last']));
+            ->willReturn($creditmemoItemData['is_last']);
         $creditmemoItem->setData('qty', $creditmemoItemData['qty']);
         return $creditmemoItem;
     }

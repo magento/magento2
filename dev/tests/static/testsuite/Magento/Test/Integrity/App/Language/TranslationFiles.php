@@ -15,7 +15,7 @@ class TranslationFiles extends \PHPUnit\Framework\TestCase
      */
     protected $csvParser;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->csvParser = new \Magento\Framework\File\Csv(new File());
     }

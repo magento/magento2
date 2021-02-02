@@ -289,7 +289,7 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('get')
             ->with(\Magento\Wishlist\Helper\Data::class)
-            ->will($this->returnValue($wishlistHelper));
+            ->willReturn($wishlistHelper);
 
         $item = $this->createMock(\Magento\Wishlist\Model\Item::class);
         $item
@@ -372,7 +372,7 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('get')
             ->with(\Magento\Wishlist\Helper\Data::class)
-            ->will($this->returnValue($wishlistHelper));
+            ->willReturn($wishlistHelper);
 
         $item = $this->createMock(\Magento\Wishlist\Model\Item::class);
         $item

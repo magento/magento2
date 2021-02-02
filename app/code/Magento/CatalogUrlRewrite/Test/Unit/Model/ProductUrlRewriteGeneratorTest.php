@@ -60,7 +60,7 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         )
             ->disableOriginalConstructor()->getMock();
         $this->product->expects($this->any())->method('getCategoryCollection')
-            ->will($this->returnValue($this->categoriesCollection));
+            ->willReturn($this->categoriesCollection);
         $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()->getMock();
         $this->currentUrlRewritesRegenerator = $this->getMockBuilder(

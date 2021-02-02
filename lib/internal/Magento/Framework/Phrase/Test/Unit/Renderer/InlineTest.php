@@ -49,16 +49,16 @@ class InlineTest extends \PHPUnit\Framework\TestCase
 
         $this->translator->expects($this->once())
             ->method('getTheme')
-            ->will($this->returnValue($theme));
+            ->willReturn($theme);
 
         $inlineTranslate = $this->createMock(\Magento\Framework\Translate\InlineInterface::class);
         $inlineTranslate->expects($this->once())
             ->method('isAllowed')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->provider->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($inlineTranslate));
+            ->willReturn($inlineTranslate);
 
         $this->assertEquals($result, $this->renderer->render([$text], []));
     }
@@ -70,11 +70,11 @@ class InlineTest extends \PHPUnit\Framework\TestCase
         $inlineTranslate = $this->createMock(\Magento\Framework\Translate\InlineInterface::class);
         $inlineTranslate->expects($this->once())
             ->method('isAllowed')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->provider->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($inlineTranslate));
+            ->willReturn($inlineTranslate);
 
         $this->assertEquals($text, $this->renderer->render([$text], []));
     }

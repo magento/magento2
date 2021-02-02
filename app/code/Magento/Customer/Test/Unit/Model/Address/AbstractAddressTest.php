@@ -64,14 +64,14 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
         $regionCollectionMock = $this->createMock(\Magento\Directory\Model\ResourceModel\Region\Collection::class);
         $regionCollectionMock->expects($this->any())
             ->method('getSize')
-            ->will($this->returnValue(0));
+            ->willReturn(0);
         $countryMock = $this->createMock(\Magento\Directory\Model\Country::class);
         $countryMock->expects($this->any())
             ->method('getRegionCollection')
-            ->will($this->returnValue($regionCollectionMock));
+            ->willReturn($regionCollectionMock);
         $this->countryFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($countryMock));
+            ->willReturn($countryMock);
 
         $this->resourceMock = $this->createMock(\Magento\Customer\Model\ResourceModel\Customer::class);
         $this->resourceCollectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
@@ -183,13 +183,13 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
         );
         $region->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue($regionName));
+            ->willReturn($regionName);
         $region->expects($this->once())
             ->method('getCountryId')
-            ->will($this->returnValue($countryId));
+            ->willReturn($countryId);
         $this->regionFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($region));
+            ->willReturn($region);
     }
 
     /**
@@ -203,13 +203,13 @@ class AbstractAddressTest extends \PHPUnit\Framework\TestCase
         );
         $region->expects($this->once())
             ->method('getCode')
-            ->will($this->returnValue($regionCode));
+            ->willReturn($regionCode);
         $region->expects($this->once())
             ->method('getCountryId')
-            ->will($this->returnValue($countryId));
+            ->willReturn($countryId);
         $this->regionFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($region));
+            ->willReturn($region);
     }
 
     /**

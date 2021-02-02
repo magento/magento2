@@ -108,8 +108,8 @@ class StandardTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             ['baseDir' => '/custom/base/dir', 'type' => 'outputTypeOne']
-        )->will(
-            $this->returnValue($outputOne)
+        )->willReturn(
+            $outputOne
         );
 
         $outputFactory->expects(
@@ -118,8 +118,8 @@ class StandardTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             ['type' => 'specificOutputTypeTwo', 'baseDir' => '/base/dir']
-        )->will(
-            $this->returnValue($outputTwo)
+        )->willReturn(
+            $outputTwo
         );
 
         $driver = new \Magento\Framework\Profiler\Driver\Standard($config);

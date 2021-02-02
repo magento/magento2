@@ -25,8 +25,8 @@ class JsonTest extends \PHPUnit\Framework\TestCase
          * $translateInline
          */
         $translateInline = $this->createMock(\Magento\Framework\Translate\InlineInterface::class);
-        $translateInline->expects($this->any())->method('processResponseBody')->with($json, true)->will(
-            $this->returnValue($translatedJson)
+        $translateInline->expects($this->any())->method('processResponseBody')->with($json, true)->willReturn(
+            $translatedJson
         );
 
         $response = $this->createMock(\Magento\Framework\App\Response\HttpInterface::class);

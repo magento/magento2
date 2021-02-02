@@ -91,8 +91,8 @@ class RestrictAdminBillingAgreementUsageObserverTest extends \PHPUnit\Framework\
             'isAllowed'
         )->with(
             'Magento_Paypal::use'
-        )->will(
-            $this->returnValue($isAllowed)
+        )->willReturn(
+            $isAllowed
         );
         $result = new DataObject();
         $result->setData('is_available', true);

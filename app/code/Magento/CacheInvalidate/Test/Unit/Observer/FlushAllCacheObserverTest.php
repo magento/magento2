@@ -38,13 +38,13 @@ class FlushAllCacheObserverTest extends \PHPUnit\Framework\TestCase
      */
     public function testFlushAllCache()
     {
-        $this->configMock->expects($this->once())->method('isEnabled')->will($this->returnValue(true));
+        $this->configMock->expects($this->once())->method('isEnabled')->willReturn(true);
         $this->configMock->expects(
             $this->once()
         )->method(
             'getType'
-        )->will(
-            $this->returnValue(\Magento\PageCache\Model\Config::VARNISH)
+        )->willReturn(
+            \Magento\PageCache\Model\Config::VARNISH
         );
 
         $this->purgeCache->expects($this->once())->method('sendPurgeRequest')->with('.*');

@@ -52,15 +52,15 @@ class ProductLinksTest extends \PHPUnit\Framework\TestCase
 
         $mock->expects($this->any())
             ->method('getRelatedReadonly')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $mock->expects($this->any())
             ->method('getUpsellReadonly')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $mock->expects($this->any())
             ->method('getCrosssellReadonly')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $mock->expects($this->any())
             ->method('setCrossSellLinkData');

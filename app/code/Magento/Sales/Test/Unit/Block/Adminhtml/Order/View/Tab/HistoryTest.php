@@ -55,8 +55,8 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
         $this->localeDateMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
             ->getMock();
 
-        $this->contextMock->expects($this->any())->method('getLocaleDate')->will(
-            $this->returnValue($this->localeDateMock)
+        $this->contextMock->expects($this->any())->method('getLocaleDate')->willReturn(
+            $this->localeDateMock
         );
 
         $this->commentsHistory = $this->objectManager->getObject(

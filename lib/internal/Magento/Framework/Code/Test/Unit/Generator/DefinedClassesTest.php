@@ -47,7 +47,7 @@ namespace Magento\Framework\Code\Test\Unit\Generator {
             $this->initAutoloader = AutoloaderRegistry::getAutoloader();
         }
 
-        public function tearDown(): void
+        protected function tearDown(): void
         {
             self::$definedClassesTestActive = false;
             AutoloaderRegistry::registerAutoloader($this->initAutoloader);

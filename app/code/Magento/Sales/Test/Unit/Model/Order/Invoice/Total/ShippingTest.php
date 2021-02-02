@@ -85,7 +85,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $order->expects($this->any())
             ->method('getInvoiceCollection')
-            ->will($this->returnValue($this->getInvoiceCollection($prevInvoicesData)));
+            ->willReturn($this->getInvoiceCollection($prevInvoicesData));
         $order->expects($this->any())
             ->method('getShippingAmount')
             ->willReturn($orderShipping);

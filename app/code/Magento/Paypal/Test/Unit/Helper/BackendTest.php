@@ -115,7 +115,7 @@ class BackendTest extends \PHPUnit\Framework\TestCase
         $this->configurationCountryCodePrepareConfig($config);
         $this->directoryHelperMock->expects($this->once())
             ->method('getDefaultCountry')
-            ->will($this->returnValue($default));
+            ->willReturn($default);
         $this->configurationCountryCodeAssertResult($default);
     }
 

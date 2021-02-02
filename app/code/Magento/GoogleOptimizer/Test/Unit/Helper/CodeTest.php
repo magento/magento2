@@ -35,8 +35,8 @@ class CodeTest extends \PHPUnit\Framework\TestCase
         $categoryId = 1;
         $storeId = 1;
 
-        $categoryMock->expects($this->exactly(2))->method('getId')->will($this->returnValue($categoryId));
-        $categoryMock->expects($this->once())->method('getStoreId')->will($this->returnValue($storeId));
+        $categoryMock->expects($this->exactly(2))->method('getId')->willReturn($categoryId);
+        $categoryMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
         $this->_codeModelMock->expects(
             $this->once()
         )->method(
@@ -63,8 +63,8 @@ class CodeTest extends \PHPUnit\Framework\TestCase
         $categoryId = 1;
         $storeId = 1;
 
-        $productMock->expects($this->exactly(2))->method('getId')->will($this->returnValue($categoryId));
-        $productMock->expects($this->once())->method('getStoreId')->will($this->returnValue($storeId));
+        $productMock->expects($this->exactly(2))->method('getId')->willReturn($categoryId);
+        $productMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
         $this->_codeModelMock->expects(
             $this->once()
         )->method(
@@ -90,7 +90,7 @@ class CodeTest extends \PHPUnit\Framework\TestCase
 
         $categoryId = 1;
 
-        $pageMock->expects($this->exactly(2))->method('getId')->will($this->returnValue($categoryId));
+        $pageMock->expects($this->exactly(2))->method('getId')->willReturn($categoryId);
         $this->_codeModelMock->expects(
             $this->once()
         )->method(
@@ -117,7 +117,7 @@ class CodeTest extends \PHPUnit\Framework\TestCase
 
         $entityId = 1;
 
-        $entity->expects($this->exactly(2))->method('getId')->will($this->returnValue($entityId));
+        $entity->expects($this->exactly(2))->method('getId')->willReturn($entityId);
         $this->_codeModelMock->expects($this->never())->method('loadByEntityIdAndType');
 
         $this->assertEquals(
@@ -137,7 +137,7 @@ class CodeTest extends \PHPUnit\Framework\TestCase
 
         $entityId = 0;
 
-        $entity->expects($this->exactly(1))->method('getId')->will($this->returnValue($entityId));
+        $entity->expects($this->exactly(1))->method('getId')->willReturn($entityId);
         $this->_codeModelMock->expects($this->never())->method('loadByEntityIdAndType');
 
         $this->assertEquals(

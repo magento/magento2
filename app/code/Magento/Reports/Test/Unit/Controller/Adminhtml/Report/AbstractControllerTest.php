@@ -108,14 +108,14 @@ abstract class AbstractControllerTest extends \PHPUnit\Framework\TestCase
         $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
         $this->contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
 
-        $this->layoutMock->expects($this->any())->method('getBlock')->will(
-            $this->returnValueMap(
+        $this->layoutMock->expects($this->any())->method('getBlock')->willReturnMap(
+            
                 [
                     ['breadcrumbs', $this->breadcrumbsBlockMock],
                     ['menu', $this->menuBlockMock],
                     ['store_switcher', $this->switcherBlockMock]
                 ]
-            )
+            
         );
         $this->layoutMock->expects($this->any())->method('getChildBlock')->willReturn($this->abstractBlockMock);
     }

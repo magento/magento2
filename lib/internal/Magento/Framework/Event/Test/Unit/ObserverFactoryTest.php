@@ -41,7 +41,7 @@ class ObserverFactoryTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with($className)
-            ->will($this->returnValue($observerMock));
+            ->willReturn($observerMock);
 
         $result = $this->observerFactory->get($className);
         $this->assertEquals($observerMock, $result);
@@ -56,7 +56,7 @@ class ObserverFactoryTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with($className, $this->equalTo($arguments))
-            ->will($this->returnValue($observerMock));
+            ->willReturn($observerMock);
 
         $result = $this->observerFactory->create($className, $arguments);
         $this->assertEquals($observerMock, $result);

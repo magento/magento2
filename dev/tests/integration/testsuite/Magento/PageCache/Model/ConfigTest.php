@@ -20,15 +20,15 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($modulesDirectoryMock)
+        )->willReturn(
+            $modulesDirectoryMock
         );
         $modulesDirectoryMock->expects(
             $this->any()
         )->method(
             'readFile'
-        )->will(
-            $this->returnValue(file_get_contents(__DIR__ . '/_files/test.vcl'))
+        )->willReturn(
+            file_get_contents(__DIR__ . '/_files/test.vcl')
         );
 
         /** @var \PHPUnit\Framework\MockObject\MockObject $vclTemplateLocator */
@@ -38,7 +38,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $vclTemplateLocator->expects($this->any())
             ->method('getTemplate')
-            ->will($this->returnValue(file_get_contents(__DIR__ . '/_files/test.vcl')));
+            ->willReturn(file_get_contents(__DIR__ . '/_files/test.vcl'));
 
         /** @var \PHPUnit\Framework\MockObject\MockObject $vclTemplateLocator */
         $vclGeneratorFactory = $this->getMockBuilder(\Magento\PageCache\Model\Varnish\VclGeneratorFactory::class)
@@ -56,7 +56,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $vclGeneratorFactory->expects($this->any())
             ->method('create')
             ->with($expectedParams)
-            ->will($this->returnValue(new \Magento\PageCache\Model\Varnish\VclGenerator(
+            ->willReturn(new \Magento\PageCache\Model\Varnish\VclGenerator(
                 $vclTemplateLocator,
                 'example.com',
                 '8080',
@@ -64,7 +64,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 1234,
                 'X-Forwarded-Proto',
                 json_decode('{"_":{"regexp":"\/firefox\/i","value":"Magento\/blank"}}', true)
-            )));
+            ));
         $this->config = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\PageCache\Model\Config::class,
             [

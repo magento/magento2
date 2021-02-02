@@ -30,8 +30,8 @@ class AttributeFactoryTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'create'
-        )->will(
-            $this->returnCallback([$this, 'getModelInstance'])
+        )->willReturnCallback(
+            [$this, 'getModelInstance']
         );
 
         $this->_factory = new \Magento\Eav\Model\AttributeFactory($objectManagerMock);
@@ -57,7 +57,7 @@ class AttributeFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function getModelInstance($className, $arguments)
     {
-        $this->assertInternalType('array', $arguments);
+        $this->assertIsArray($arguments);
         $this->assertArrayHasKey('data', $arguments);
         $this->assertEquals($this->_arguments, $arguments['data']);
 

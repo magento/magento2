@@ -36,15 +36,15 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     {
         $categoryTags = ['catalog_category_1'];
         $category = $this->createMock(\Magento\Catalog\Model\Category::class);
-        $category->expects($this->once())->method('getIdentities')->will($this->returnValue($categoryTags));
+        $category->expects($this->once())->method('getIdentities')->willReturn($categoryTags);
         $this->registry->expects(
             $this->once()
         )->method(
             'registry'
         )->with(
             'current_category'
-        )->will(
-            $this->returnValue($category)
+        )->willReturn(
+            $category
         );
         $this->assertEquals($categoryTags, $this->block->getIdentities());
     }

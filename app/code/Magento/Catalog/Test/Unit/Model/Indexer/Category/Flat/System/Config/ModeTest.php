@@ -79,8 +79,8 @@ class ModeTest extends \PHPUnit\Framework\TestCase
         )->with(
             null,
             'default'
-        )->will(
-            $this->returnValue($oldValue)
+        )->willReturn(
+            $oldValue
         );
 
         $this->model->setValue($value);
@@ -117,8 +117,8 @@ class ModeTest extends \PHPUnit\Framework\TestCase
         )->with(
             null,
             'default'
-        )->will(
-            $this->returnValue($oldValue)
+        )->willReturn(
+            $oldValue
         );
 
         $this->model->setValue($value);
@@ -129,8 +129,8 @@ class ModeTest extends \PHPUnit\Framework\TestCase
             'loadByIndexer'
         )->with(
             'catalog_category_flat'
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
+            
         );
         $this->indexerStateMock->expects(
             $this->once()
@@ -138,10 +138,10 @@ class ModeTest extends \PHPUnit\Framework\TestCase
             'setStatus'
         )->with(
             'invalid'
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
+            
         );
-        $this->indexerStateMock->expects($this->once())->method('save')->will($this->returnSelf());
+        $this->indexerStateMock->expects($this->once())->method('save')->willReturnSelf();
 
         $this->indexerRegistry->expects($this->never())->method('load');
         $this->indexerRegistry->expects($this->never())->method('setScheduled');
@@ -171,8 +171,8 @@ class ModeTest extends \PHPUnit\Framework\TestCase
         )->with(
             null,
             'default'
-        )->will(
-            $this->returnValue($oldValue)
+        )->willReturn(
+            $oldValue
         );
 
         $this->model->setValue($value);

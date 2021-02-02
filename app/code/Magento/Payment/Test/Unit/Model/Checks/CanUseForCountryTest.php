@@ -48,7 +48,7 @@ class CanUseForCountryTest extends \PHPUnit\Framework\TestCase
         )->disableOriginalConstructor()->setMethods([])->getMock();
         $paymentMethod->expects($this->once())->method('canUseForCountry')->with(
             self::EXPECTED_COUNTRY_ID
-        )->will($this->returnValue($expectation));
+        )->willReturn($expectation);
         $this->countryProvider->expects($this->once())->method('getCountry')->willReturn(self::EXPECTED_COUNTRY_ID);
 
         $this->assertEquals($expectation, $this->_model->isApplicable($paymentMethod, $quoteMock));

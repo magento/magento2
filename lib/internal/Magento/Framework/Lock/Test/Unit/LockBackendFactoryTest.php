@@ -46,11 +46,12 @@ class LockBackendFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessage Unknown locks provider: someProvider
      */
     public function testCreateWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\RuntimeException::class);
+        $this->expectExceptionMessage('Unknown locks provider: someProvider');
+
         $this->deploymentConfigMock->expects($this->exactly(2))
             ->method('get')
             ->withConsecutive(['lock/provider', LockBackendFactory::LOCK_DB], ['lock/config', []])

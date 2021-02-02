@@ -47,7 +47,7 @@ class DescriptionGeneratorTest extends \PHPUnit\Framework\TestCase
         ]
     ];
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->descriptionParagraphGeneratorMock =
             $this->createMock(\Magento\Setup\Model\Description\DescriptionParagraphGenerator::class);

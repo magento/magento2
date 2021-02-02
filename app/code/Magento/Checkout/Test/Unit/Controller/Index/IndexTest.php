@@ -172,7 +172,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         ];
         $this->objectManagerMock->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap($objectManagerReturns));
+            ->willReturnMap($objectManagerReturns);
         $this->basicStub($this->objectManagerMock, 'create')
             ->willReturn($this->basicMock(\Magento\Framework\UrlInterface::class));
         // context stubs

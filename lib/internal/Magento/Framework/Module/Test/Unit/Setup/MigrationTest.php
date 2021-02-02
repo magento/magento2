@@ -51,29 +51,29 @@ class MigrationTest extends \PHPUnit\Framework\TestCase
     protected function _getModelDependencies($tableRowsCount = 0, $tableData = [], $aliasesMap = [])
     {
         $this->_selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
-        $this->_selectMock->expects($this->any())->method('from')->will($this->returnSelf());
+        $this->_selectMock->expects($this->any())->method('from')->willReturnSelf();
         $this->_selectMock->expects(
             $this->any()
         )->method(
             'where'
-        )->will(
-            $this->returnCallback([$this, 'whereCallback'])
+        )->willReturnCallback(
+            [$this, 'whereCallback']
         );
 
         $connectionMock = $this->createPartialMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['select', 'update', 'fetchAll', 'fetchOne']
         );
-        $connectionMock->expects($this->any())->method('select')->will($this->returnValue($this->_selectMock));
+        $connectionMock->expects($this->any())->method('select')->willReturn($this->_selectMock);
         $connectionMock->expects(
             $this->any()
         )->method(
             'update'
-        )->will(
-            $this->returnCallback([$this, 'updateCallback'])
+        )->willReturnCallback(
+            [$this, 'updateCallback']
         );
-        $connectionMock->expects($this->any())->method('fetchAll')->will($this->returnValue($tableData));
-        $connectionMock->expects($this->any())->method('fetchOne')->will($this->returnValue($tableRowsCount));
+        $connectionMock->expects($this->any())->method('fetchAll')->willReturn($tableData);
+        $connectionMock->expects($this->any())->method('fetchOne')->willReturn($tableRowsCount);
 
         return [
             'resource_config' => 'not_used',

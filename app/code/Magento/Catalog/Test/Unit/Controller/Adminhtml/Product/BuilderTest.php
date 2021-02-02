@@ -190,7 +190,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
 
         $this->productFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->productMock));
+            ->willReturn($this->productMock);
 
         $this->productMock->expects($this->any())
             ->method('setData')
@@ -262,7 +262,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
 
         $this->productFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->productMock));
+            ->willReturn($this->productMock);
 
         $this->productMock->expects($this->any())
             ->method('setData')

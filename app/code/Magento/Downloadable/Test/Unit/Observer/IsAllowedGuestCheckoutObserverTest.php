@@ -126,15 +126,15 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->eventMock->expects($this->once())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
 
         $this->eventMock->expects($this->once())
             ->method('getResult')
-            ->will($this->returnValue($this->resultMock));
+            ->willReturn($this->resultMock);
 
         $this->eventMock->expects($this->once())
             ->method('getQuote')
-            ->will($this->returnValue($quote));
+            ->willReturn($quote);
 
         $this->scopeConfig->expects($this->once())
             ->method('isSetFlag')
@@ -147,7 +147,7 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->observerMock->expects($this->exactly(3))
             ->method('getEvent')
-            ->will($this->returnValue($this->eventMock));
+            ->willReturn($this->eventMock);
 
         $this->assertInstanceOf(
             \Magento\Downloadable\Observer\IsAllowedGuestCheckoutObserver::class,
@@ -170,11 +170,11 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit\Framework\TestCase
     {
         $this->eventMock->expects($this->once())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
 
         $this->eventMock->expects($this->once())
             ->method('getResult')
-            ->will($this->returnValue($this->resultMock));
+            ->willReturn($this->resultMock);
 
         $this->scopeConfig->expects($this->once())
             ->method('isSetFlag')
@@ -187,7 +187,7 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->observerMock->expects($this->exactly(2))
             ->method('getEvent')
-            ->will($this->returnValue($this->eventMock));
+            ->willReturn($this->eventMock);
 
         $this->assertInstanceOf(
             \Magento\Downloadable\Observer\IsAllowedGuestCheckoutObserver::class,

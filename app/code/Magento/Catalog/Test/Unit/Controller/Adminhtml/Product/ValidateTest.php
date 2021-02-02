@@ -62,10 +62,10 @@ class ValidateTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Produ
                 'setAttributeSetId',
             ])
             ->getMock();
-        $this->product->expects($this->any())->method('getTypeId')->will($this->returnValue('simple'));
-        $this->product->expects($this->any())->method('getStoreId')->will($this->returnValue('1'));
-        $this->product->expects($this->any())->method('getAttributes')->will($this->returnValue([]));
-        $this->productBuilder->expects($this->any())->method('build')->will($this->returnValue($this->product));
+        $this->product->expects($this->any())->method('getTypeId')->willReturn('simple');
+        $this->product->expects($this->any())->method('getStoreId')->willReturn('1');
+        $this->product->expects($this->any())->method('getAttributes')->willReturn([]);
+        $this->productBuilder->expects($this->any())->method('build')->willReturn($this->product);
 
         $this->resultPage = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Page::class)
             ->disableOriginalConstructor()
@@ -124,7 +124,7 @@ class ValidateTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Produ
 
         $storeManagerInterfaceMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $additionalParams = ['resultRedirectFactory' => $this->resultRedirectFactory];
         $this->action = (new ObjectManagerHelper($this))->getObject(

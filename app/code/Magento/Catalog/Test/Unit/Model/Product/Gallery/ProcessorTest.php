@@ -96,10 +96,10 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             \Magento\Eav\Model\Entity\Attribute::class,
             ['getBackendTable', 'isStatic', 'getAttributeId', 'getName', '__wakeup']
         );
-        $attribute->expects($this->any())->method('getName')->will($this->returnValue('image'));
-        $attribute->expects($this->any())->method('getAttributeId')->will($this->returnValue($attributeId));
-        $attribute->expects($this->any())->method('isStatic')->will($this->returnValue(false));
-        $attribute->expects($this->any())->method('getBackendTable')->will($this->returnValue('table'));
+        $attribute->expects($this->any())->method('getName')->willReturn('image');
+        $attribute->expects($this->any())->method('getAttributeId')->willReturn($attributeId);
+        $attribute->expects($this->any())->method('isStatic')->willReturn(false);
+        $attribute->expects($this->any())->method('getBackendTable')->willReturn('table');
 
         $this->attributeRepository->expects($this->once())
             ->method('get')
@@ -135,12 +135,12 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['checkAttributeUniqueValue'])
             ->getMockForAbstractClass();
 
-        $attribute->expects($this->any())->method('getAttributeCode')->will($this->returnValue($attributeCode));
-        $attribute->expects($this->any())->method('getIsRequired')->will($this->returnValue(true));
-        $attribute->expects($this->any())->method('isValueEmpty')->will($this->returnValue($value));
-        $attribute->expects($this->any())->method('getIsUnique')->will($this->returnValue(true));
-        $attribute->expects($this->any())->method('getEntity')->will($this->returnValue($attributeEntity));
-        $attributeEntity->expects($this->any())->method('checkAttributeUniqueValue')->will($this->returnValue(true));
+        $attribute->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
+        $attribute->expects($this->any())->method('getIsRequired')->willReturn(true);
+        $attribute->expects($this->any())->method('isValueEmpty')->willReturn($value);
+        $attribute->expects($this->any())->method('getIsUnique')->willReturn(true);
+        $attribute->expects($this->any())->method('getEntity')->willReturn($attributeEntity);
+        $attributeEntity->expects($this->any())->method('checkAttributeUniqueValue')->willReturn(true);
 
         $this->attributeRepository->expects($this->once())
             ->method('get')

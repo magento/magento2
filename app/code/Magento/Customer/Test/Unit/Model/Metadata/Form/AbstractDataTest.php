@@ -121,7 +121,7 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
     public function testApplyInputFilter($input, $output, $filter)
     {
         if ($input) {
-            $this->_attributeMock->expects($this->once())->method('getInputFilter')->will($this->returnValue($filter));
+            $this->_attributeMock->expects($this->once())->method('getInputFilter')->willReturn($filter);
         }
         $this->assertEquals($output, $this->_model->applyInputFilter($input));
     }
@@ -159,8 +159,8 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
                 'getDateFormat'
             )->with(
                 $this->equalTo(\IntlDateFormatter::SHORT)
-            )->will(
-                $this->returnValue($output)
+            )->willReturn(
+                $output
             );
         }
         $actual = $this->_model->dateFilterFormat($format);
@@ -184,7 +184,7 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
     public function testApplyOutputFilter($input, $output, $filter)
     {
         if ($input) {
-            $this->_attributeMock->expects($this->once())->method('getInputFilter')->will($this->returnValue($filter));
+            $this->_attributeMock->expects($this->once())->method('getInputFilter')->willReturn($filter);
         }
         $this->assertEquals($output, $this->_model->applyOutputFilter($input));
     }
@@ -329,8 +329,8 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getAttributeCode'
-        )->will(
-            $this->returnValue($attributeCode)
+        )->willReturn(
+            $attributeCode
         );
         $this->_model->setRequestScope($requestScope);
         $this->_model->setRequestScopeOnly($requestScopeOnly);
@@ -350,8 +350,8 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             'ATTR_CODE'
-        )->will(
-            $this->returnValue($expectedValue)
+        )->willReturn(
+            $expectedValue
         );
 
         $requestMockTwo = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)->getMock();
@@ -361,8 +361,8 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             'REQUEST_SCOPE'
-        )->will(
-            $this->returnValue(['ATTR_CODE' => $expectedValue])
+        )->willReturn(
+            ['ATTR_CODE' => $expectedValue]
         );
 
         $requestMockFour = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)->getMock();
@@ -372,8 +372,8 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             'REQUEST_SCOPE'
-        )->will(
-            $this->returnValue([])
+        )->willReturn(
+            []
         );
 
         $requestMockThree = $this->getMockBuilder(
@@ -383,8 +383,8 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getParams'
-        )->will(
-            $this->returnValue(['REQUEST' => ['SCOPE' => ['ATTR_CODE' => $expectedValue]]])
+        )->willReturn(
+            ['REQUEST' => ['SCOPE' => ['ATTR_CODE' => $expectedValue]]]
         );
         return [
             [$requestMockOne, 'ATTR_CODE', false, false, $expectedValue],

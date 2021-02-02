@@ -31,7 +31,7 @@ class NotifierPoolTest extends \PHPUnit\Framework\TestCase
         $notifier2 = $this->createMock(\Magento\Framework\Notification\NotifierPool::class);
         $this->notifiers = [$notifier1, $notifier2];
         $this->notifierList = $this->createMock(\Magento\Framework\Notification\NotifierList::class);
-        $this->notifierList->expects($this->any())->method('asArray')->will($this->returnValue($this->notifiers));
+        $this->notifierList->expects($this->any())->method('asArray')->willReturn($this->notifiers);
         $this->notifierPool = $this->objectManagerHelper->getObject(
             \Magento\Framework\Notification\NotifierPool::class,
             [

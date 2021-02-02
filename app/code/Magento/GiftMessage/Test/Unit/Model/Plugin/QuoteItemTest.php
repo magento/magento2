@@ -65,13 +65,13 @@ class QuoteItemTest extends \PHPUnit\Framework\TestCase
         $giftMessageId = 1;
         $isMessageAvailable = true;
 
-        $this->quoteItemMock->expects($this->any())->method('getStoreId')->will($this->returnValue($storeId));
+        $this->quoteItemMock->expects($this->any())->method('getStoreId')->willReturn($storeId);
         $this->quoteItemMock->expects(
             $this->any()
         )->method(
             'getGiftMessageId'
-        )->will(
-            $this->returnValue($giftMessageId)
+        )->willReturn(
+            $giftMessageId
         );
 
         $this->helperMock->expects(
@@ -82,8 +82,8 @@ class QuoteItemTest extends \PHPUnit\Framework\TestCase
             'item',
             $this->quoteItemMock,
             $storeId
-        )->will(
-            $this->returnValue($isMessageAvailable)
+        )->willReturn(
+            $isMessageAvailable
         );
         $this->orderItemMock->expects($this->once())->method('setGiftMessageId')->with($giftMessageId);
         $this->orderItemMock->expects($this->once())->method('setGiftMessageAvailable')->with($isMessageAvailable);

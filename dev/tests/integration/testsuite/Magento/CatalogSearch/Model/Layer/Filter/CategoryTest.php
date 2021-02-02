@@ -118,8 +118,8 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
         $items = $this->_model->getItems();
 
-        $this->assertInternalType('array', $items);
-        $this->assertEquals(2, count($items));
+        $this->assertIsArray($items);
+        $this->assertCount(2, $items);
 
         /** @var $item \Magento\Catalog\Model\Layer\Filter\Item */
         $item = $items[0];

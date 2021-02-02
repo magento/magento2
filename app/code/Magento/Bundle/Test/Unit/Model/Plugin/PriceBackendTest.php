@@ -54,8 +54,8 @@ class PriceBackendTest extends \PHPUnit\Framework\TestCase
      */
     public function testAroundValidate($typeId, $priceType, $expectedResult)
     {
-        $this->productMock->expects($this->any())->method('getTypeId')->will($this->returnValue($typeId));
-        $this->productMock->expects($this->any())->method('getPriceType')->will($this->returnValue($priceType));
+        $this->productMock->expects($this->any())->method('getTypeId')->willReturn($typeId);
+        $this->productMock->expects($this->any())->method('getPriceType')->willReturn($priceType);
         $result = $this->priceBackendPlugin->aroundValidate(
             $this->priceAttributeMock,
             $this->closure,

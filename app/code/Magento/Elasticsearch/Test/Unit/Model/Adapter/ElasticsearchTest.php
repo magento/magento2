@@ -235,9 +235,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                     'name' => 'Product Name',
                 ]
             );
-        $this->assertInternalType(
-            'array',
-            $this->model->prepareDocsPerStore(
+        $this->assertIsArray($this->model->prepareDocsPerStore(
                 [
                     '1' => [
                         'name' => 'Product Name',

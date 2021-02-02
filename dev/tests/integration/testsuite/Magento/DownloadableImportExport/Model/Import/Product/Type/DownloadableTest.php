@@ -116,7 +116,7 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
 
         $resource = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class);
         $productId = $resource->getIdBySku(self::TEST_PRODUCT_NAME);
-        $this->assertTrue(is_numeric($productId));
+        $this->assertIsNumeric($productId);
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->objectManager->create(
             \Magento\Catalog\Model\Product::class

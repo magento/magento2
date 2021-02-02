@@ -26,7 +26,7 @@ class ResourceFactoryTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('get')
             ->with(\Magento\Setup\Module\ConnectionFactory::class)
-            ->will($this->returnValue($connectionFactory));
+            ->willReturn($connectionFactory);
         $this->resourceFactory = new ResourceFactory($serviceLocatorMock);
     }
 

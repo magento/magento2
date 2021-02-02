@@ -55,7 +55,7 @@ class NonceTest extends \PHPUnit\Framework\TestCase
         );
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
-            ->will($this->returnValue($eventManagerMock));
+            ->willReturn($eventManagerMock);
         $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
         $this->oauthDataMock = $this->createMock(\Magento\Integration\Helper\Oauth\Data::class);
         $this->resourceMock = $this->getMockForAbstractClass(
@@ -81,16 +81,16 @@ class NonceTest extends \PHPUnit\Framework\TestCase
     {
         $this->oauthDataMock->expects($this->once())
             ->method('isCleanupProbability')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->oauthDataMock->expects($this->once())
             ->method('getCleanupExpirationPeriod')
-            ->will($this->returnValue(30));
+            ->willReturn(30);
 
         $this->resourceMock->expects($this->once())
             ->method('deleteOldEntries')
             ->with(30)
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->assertEquals($this->nonceModel, $this->nonceModel->afterSave());
     }
@@ -99,7 +99,7 @@ class NonceTest extends \PHPUnit\Framework\TestCase
     {
         $this->oauthDataMock->expects($this->once())
             ->method('isCleanupProbability')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->oauthDataMock->expects($this->never())
             ->method('getCleanupExpirationPeriod');
@@ -119,7 +119,7 @@ class NonceTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock->expects($this->once())
             ->method('selectByCompositeKey')
             ->with($nonce, $consumerId)
-            ->will($this->returnValue($expectedData));
+            ->willReturn($expectedData);
         $this->nonceModel->loadByCompositeKey($nonce, $consumerId);
 
         $this->assertEquals($expectedData, $this->nonceModel->getData());

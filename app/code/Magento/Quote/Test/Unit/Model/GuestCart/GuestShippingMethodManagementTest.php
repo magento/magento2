@@ -89,7 +89,7 @@ class GuestShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
         $this->shippingMethodManagementMock->expects($this->once())
             ->method('set')
             ->with($this->cartId, $carrierCode, $methodCode)
-            ->will($this->returnValue($retValue));
+            ->willReturn($retValue);
 
         $this->assertEquals($retValue, $this->model->set($this->maskedCartId, $carrierCode, $methodCode));
     }
@@ -100,7 +100,7 @@ class GuestShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
         $this->shippingMethodManagementMock->expects($this->once())
             ->method('getList')
             ->with($this->cartId)
-            ->will($this->returnValue($retValue));
+            ->willReturn($retValue);
 
         $this->assertEquals($retValue, $this->model->getList($this->maskedCartId));
     }
@@ -111,7 +111,7 @@ class GuestShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
         $this->shippingMethodManagementMock->expects($this->once())
             ->method('get')
             ->with($this->cartId)
-            ->will($this->returnValue($retValue));
+            ->willReturn($retValue);
 
         $this->assertEquals($retValue, $this->model->get($this->maskedCartId));
     }

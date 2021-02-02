@@ -208,7 +208,7 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
     {
         $this->customerLog->expects($this->once())->method('getLastLoginAt')->willReturn($lastLoginAt);
 
-        $this->localeDate->expects($this->any())->method('scopeDate')->will($this->returnValue($lastLoginAt));
+        $this->localeDate->expects($this->any())->method('scopeDate')->willReturn($lastLoginAt);
         $this->localeDate->expects($this->any())->method('formatDateTime')->willReturn($lastLoginAt);
 
         $this->assertEquals($result, $this->block->getStoreLastLoginDate());

@@ -74,7 +74,7 @@ class PriceCurrencyTest extends \PHPUnit\Framework\TestCase
         $this->storeManager->expects($this->once())
             ->method('getStore')
             ->with($storeCode)
-            ->will($this->returnValue($store));
+            ->willReturn($store);
 
         $this->assertEquals($convertedAmount, $this->priceCurrency->convert($amount, $storeCode, $currency));
     }
@@ -89,17 +89,17 @@ class PriceCurrencyTest extends \PHPUnit\Framework\TestCase
         $currentCurrency->expects($this->once())
             ->method('load')
             ->with($currency)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->currencyFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($currentCurrency));
+            ->willReturn($currentCurrency);
 
         $baseCurrency = $this->getBaseCurrencyMock($amount, $convertedAmount, $currentCurrency);
         $baseCurrency->expects($this->once())
             ->method('getRate')
             ->with($currentCurrency)
-            ->will($this->returnValue(1.2));
+            ->willReturn(1.2);
         $store = $this->getStoreMock($baseCurrency);
 
         $this->assertEquals($convertedAmount, $this->priceCurrency->convert($amount, $store, $currency));
@@ -116,7 +116,7 @@ class PriceCurrencyTest extends \PHPUnit\Framework\TestCase
         $store = $this->getStoreMock($baseCurrency);
         $store->expects($this->atLeastOnce())
             ->method('getCurrentCurrency')
-            ->will($this->returnValue($currentCurrency));
+            ->willReturn($currentCurrency);
 
         $this->assertEquals($convertedAmount, $this->priceCurrency->convert($amount, $store, $currency));
     }
@@ -133,7 +133,7 @@ class PriceCurrencyTest extends \PHPUnit\Framework\TestCase
         $currency->expects($this->once())
             ->method('formatPrecision')
             ->with($amount, $precision, [], $includeContainer)
-            ->will($this->returnValue($formattedAmount));
+            ->willReturn($formattedAmount);
 
         $this->assertEquals($formattedAmount, $this->priceCurrency->format(
             $amount,
@@ -160,7 +160,7 @@ class PriceCurrencyTest extends \PHPUnit\Framework\TestCase
         $currency->expects($this->once())
             ->method('formatPrecision')
             ->with($convertedAmount, $precision, [], $includeContainer)
-            ->will($this->returnValue($formattedAmount));
+            ->willReturn($formattedAmount);
 
         $this->assertEquals($formattedAmount, $this->priceCurrency->convertAndFormat(
             $amount,
@@ -207,7 +207,7 @@ class PriceCurrencyTest extends \PHPUnit\Framework\TestCase
 
         $store->expects($this->atLeastOnce())
             ->method('getBaseCurrency')
-            ->will($this->returnValue($baseCurrency));
+            ->willReturn($baseCurrency);
 
         return $store;
     }
@@ -227,7 +227,7 @@ class PriceCurrencyTest extends \PHPUnit\Framework\TestCase
         $baseCurrency->expects($this->once())
             ->method('convert')
             ->with($amount, $currency)
-            ->will($this->returnValue($convertedAmount));
+            ->willReturn($convertedAmount);
 
         return $baseCurrency;
     }
@@ -246,7 +246,7 @@ class PriceCurrencyTest extends \PHPUnit\Framework\TestCase
         $this->storeManager->expects($this->once())
             ->method('getStore')
             ->with($storeCode)
-            ->will($this->returnValue($store));
+            ->willReturn($store);
 
         $this->assertEquals(
             $roundedConvertedAmount,

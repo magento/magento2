@@ -35,7 +35,7 @@ class JobSetCacheTest extends \PHPUnit\Framework\TestCase
             [ \Magento\Framework\App\State\CleanupFiles::class, $cleanupFiles],
             [ \Magento\Framework\App\Cache::class, $cache],
         ];
-        $objectManager->expects($this->atLeastOnce())->method('get')->will($this->returnValueMap($valueMap));
+        $objectManager->expects($this->atLeastOnce())->method('get')->willReturnMap($valueMap);
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
 
         $output =

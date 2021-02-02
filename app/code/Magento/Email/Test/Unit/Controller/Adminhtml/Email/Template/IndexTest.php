@@ -125,13 +125,13 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         $this->layoutMock->expects($this->at(0))
             ->method('getBlock')
             ->with('menu')
-            ->will($this->returnValue($this->menuBlockMock));
+            ->willReturn($this->menuBlockMock);
         $this->menuBlockMock->expects($this->any())
             ->method('getMenuModel')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->menuBlockMock->expects($this->any())
             ->method('getParentItems')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->viewMock->expects($this->once())
             ->method('getPage')
             ->willReturn($this->resultPageMock);
@@ -147,7 +147,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         $this->layoutMock->expects($this->at(1))
             ->method('getBlock')
             ->with('breadcrumbs')
-            ->will($this->returnValue($this->breadcrumbsBlockMock));
+            ->willReturn($this->breadcrumbsBlockMock);
         $this->breadcrumbsBlockMock->expects($this->any())
             ->method('addLink')
             ->willReturnSelf();
@@ -167,7 +167,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $indexController->expects($this->once())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
         $indexController->expects($this->once())
             ->method('_forward')
             ->with('grid');

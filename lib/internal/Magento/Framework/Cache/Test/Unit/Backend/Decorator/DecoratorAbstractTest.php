@@ -55,11 +55,12 @@ class DecoratorAbstractTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $options
-     * @expectedException \Zend_Cache_Exception
      * @dataProvider constructorExceptionDataProvider
      */
     public function testConstructorException($options)
     {
+        $this->expectException(\Zend_Cache_Exception::class);
+
         $this->getMockForAbstractClass(\Magento\Framework\Cache\Backend\Decorator\AbstractDecorator::class, [$options]);
     }
 

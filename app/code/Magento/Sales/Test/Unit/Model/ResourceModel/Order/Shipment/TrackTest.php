@@ -54,16 +54,16 @@ class TrackTest extends \PHPUnit\Framework\TestCase
         );
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
         $this->connectionMock->expects($this->any())
             ->method('describeTable')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->connectionMock->expects($this->any())
             ->method('insert');
         $this->connectionMock->expects($this->any())
             ->method('lastInsertId');
-        $this->trackModelMock->expects($this->any())->method('hasDataChanges')->will($this->returnValue(true));
-        $this->trackModelMock->expects($this->any())->method('isSaveAllowed')->will($this->returnValue(true));
+        $this->trackModelMock->expects($this->any())->method('hasDataChanges')->willReturn(true);
+        $this->trackModelMock->expects($this->any())->method('isSaveAllowed')->willReturn(true);
 
         $relationProcessorMock = $this->createMock(
             \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class
@@ -96,7 +96,7 @@ class TrackTest extends \PHPUnit\Framework\TestCase
         $this->validatorMock->expects($this->once())
             ->method('validate')
             ->with($this->equalTo($this->trackModelMock))
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->trackModelMock->expects($this->any())->method('getData')->willReturn([]);
         $this->trackResource->save($this->trackModelMock);
         $this->assertTrue(true);
@@ -118,7 +118,7 @@ class TrackTest extends \PHPUnit\Framework\TestCase
         $this->validatorMock->expects($this->once())
             ->method('validate')
             ->with($this->equalTo($this->trackModelMock))
-            ->will($this->returnValue(['warning message']));
+            ->willReturn(['warning message']);
         $this->trackModelMock->expects($this->any())->method('getData')->willReturn([]);
         $this->trackResource->save($this->trackModelMock);
         $this->assertTrue(true);

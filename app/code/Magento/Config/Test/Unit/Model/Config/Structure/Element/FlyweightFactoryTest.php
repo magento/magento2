@@ -37,14 +37,14 @@ class FlyweightFactoryTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'create'
-        )->will(
-            $this->returnValueMap(
+        )->willReturnMap(
+            
                 [
                     [\Magento\Config\Model\Config\Structure\Element\Section::class, [], 'sectionObject'],
                     [\Magento\Config\Model\Config\Structure\Element\Group::class, [], 'groupObject'],
                     [\Magento\Config\Model\Config\Structure\Element\Field::class, [], 'fieldObject'],
                 ]
-            )
+            
         );
         $this->assertEquals('sectionObject', $this->_model->create('section'));
         $this->assertEquals('groupObject', $this->_model->create('group'));

@@ -57,12 +57,12 @@ class FileTest extends \PHPUnit\Framework\TestCase
     public function testOutputValue($format, $value, $callTimes, $expectedResult)
     {
         $entityMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
-        $entityMock->expects($this->once())->method('getData')->will($this->returnValue($value));
+        $entityMock->expects($this->once())->method('getData')->willReturn($value);
 
         $attributeMock = $this->createMock(\Magento\Eav\Model\Attribute::class);
         $this->urlEncoder->expects($this->exactly($callTimes))
             ->method('encode')
-            ->will($this->returnValue('url_key'));
+            ->willReturn('url_key');
 
         $this->model->setEntity($entityMock);
         $this->model->setAttribute($attributeMock);
@@ -120,16 +120,16 @@ class FileTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->markTestSkipped('MAGETWO-34751: Test fails after being moved.  Might have hidden dependency.');
         $entityMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
-        $entityMock->expects($this->any())->method('getData')->will($this->returnValue($originalValue));
+        $entityMock->expects($this->any())->method('getData')->willReturn($originalValue);
 
         $attributeMock = $this->createMock(\Magento\Eav\Model\Attribute::class);
-        $attributeMock->expects($this->any())->method('getStoreLabel')->will($this->returnValue('Label'));
-        $attributeMock->expects($this->any())->method('getIsRequired')->will($this->returnValue($isRequired));
-        $attributeMock->expects($this->any())->method('getIsAjaxRequest')->will($this->returnValue($isAjaxRequest));
-        $attributeMock->expects($this->any())->method('getValidateRules')->will($this->returnValue($rules));
+        $attributeMock->expects($this->any())->method('getStoreLabel')->willReturn('Label');
+        $attributeMock->expects($this->any())->method('getIsRequired')->willReturn($isRequired);
+        $attributeMock->expects($this->any())->method('getIsAjaxRequest')->willReturn($isAjaxRequest);
+        $attributeMock->expects($this->any())->method('getValidateRules')->willReturn($rules);
 
-        $this->fileValidatorMock->expects($this->any())->method('isValid')->will($this->returnValue($fileIsValid));
-        $this->fileValidatorMock->expects($this->any())->method('getMessages')->will($this->returnValue(['m1', 'm2']));
+        $this->fileValidatorMock->expects($this->any())->method('isValid')->willReturn($fileIsValid);
+        $this->fileValidatorMock->expects($this->any())->method('getMessages')->willReturn(['m1', 'm2']);
 
         $this->model->setEntity($entityMock);
         $this->model->setAttribute($attributeMock);

@@ -44,7 +44,7 @@ class LockTest extends TestCase
     public function testGetOptions()
     {
         $options = $this->lockConfigOptionsList->getOptions();
-        $this->assertSame(5, count($options));
+        $this->assertCount(5, $options);
 
         $this->assertArrayHasKey(0, $options);
         $this->assertInstanceOf(SelectConfigOption::class, $options[0]);

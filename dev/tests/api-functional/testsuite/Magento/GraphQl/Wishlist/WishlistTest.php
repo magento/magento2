@@ -94,11 +94,12 @@ QUERY;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current user cannot perform operations on wishlist
      */
     public function testGetGuestWishlist()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current user cannot perform operations on wishlist');
+
         $query =
             <<<QUERY
 {

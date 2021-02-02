@@ -40,7 +40,7 @@ class RssManagerTest extends \PHPUnit\Framework\TestCase
     public function testGetProvider()
     {
         $dataProvider = $this->createMock(\Magento\Framework\App\Rss\DataProviderInterface::class);
-        $this->objectManager->expects($this->once())->method('get')->will($this->returnValue($dataProvider));
+        $this->objectManager->expects($this->once())->method('get')->willReturn($dataProvider);
 
         $this->assertInstanceOf(
             \Magento\Framework\App\Rss\DataProviderInterface::class,

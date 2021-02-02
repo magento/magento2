@@ -49,7 +49,7 @@ class UpdateTest extends AbstractBackendController
     private $baseWebsiteId;
 
     /** @inheritdoc */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->quoteItemCollectionFactory = $this->_objectManager->get(CollectionFactory::class);

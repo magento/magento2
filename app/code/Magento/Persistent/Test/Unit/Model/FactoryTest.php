@@ -42,8 +42,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             $className,
             []
-        )->will(
-            $this->returnValue($classMock)
+        )->willReturn(
+            $classMock
         );
 
         $this->assertEquals($classMock, $this->_factory->create($className));
@@ -62,8 +62,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             $className,
             $data
-        )->will(
-            $this->returnValue($classMock)
+        )->willReturn(
+            $classMock
         );
 
         $this->assertEquals($classMock, $this->_factory->create($className, $data));

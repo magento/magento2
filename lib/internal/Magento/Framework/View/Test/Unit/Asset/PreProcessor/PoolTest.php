@@ -150,11 +150,12 @@ class PoolTest extends \PHPUnit\Framework\TestCase
     /**
      * Run test for process method (exception)
      *
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage "stdClass" has to implement the PreProcessorInterface.
      */
     public function testProcessBadInterface()
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('"stdClass" has to implement the PreProcessorInterface.');
+
         $preprocessors = [
             self::CONTENT_TYPE => [
                 'test' => [

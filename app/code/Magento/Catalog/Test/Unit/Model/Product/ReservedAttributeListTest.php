@@ -34,8 +34,8 @@ class ReservedAttributeListTest extends \PHPUnit\Framework\TestCase
             ['getIsUserDefined', 'getAttributeCode', '__sleep', '__wakeup']
         );
 
-        $attribute->expects($this->once())->method('getIsUserDefined')->will($this->returnValue($isUserDefined));
-        $attribute->expects($this->any())->method('getAttributeCode')->will($this->returnValue($attributeCode));
+        $attribute->expects($this->once())->method('getIsUserDefined')->willReturn($isUserDefined);
+        $attribute->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
 
         $this->assertEquals($expected, $this->model->isReservedAttribute($attribute));
     }

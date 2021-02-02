@@ -153,9 +153,9 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $cartId = 11;
         $itemId = 5;
         $this->quoteRepositoryMock->expects($this->once())
-            ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
+            ->method('getActive')->with($cartId)->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->once())
-            ->method('getItemById')->with($itemId)->will($this->returnValue(false));
+            ->method('getItemById')->with($itemId)->willReturn(false);
         $this->quoteMock->expects($this->never())->method('removeItem');
 
         $this->repository->deleteById($cartId, $itemId);
@@ -202,9 +202,9 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $quoteMock = $this->createMock(Quote::class);
         $this->quoteRepositoryMock->expects($this->once())->method('getActive')
             ->with(33)
-            ->will($this->returnValue($quoteMock));
+            ->willReturn($quoteMock);
         $itemMock = $this->createMock(Item::class);
-        $quoteMock->expects($this->once())->method('getAllVisibleItems')->will($this->returnValue([$itemMock]));
+        $quoteMock->expects($this->once())->method('getAllVisibleItems')->willReturn([$itemMock]);
         $itemMock->expects($this->once())->method('getProductType')->willReturn($productType);
 
         $this->optionsProcessorMock->expects($this->once())

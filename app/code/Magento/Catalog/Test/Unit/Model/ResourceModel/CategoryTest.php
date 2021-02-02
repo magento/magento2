@@ -160,12 +160,12 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->connectionMock->expects($this->once())->method('fetchCol')->willReturn(['result']);
         $this->serializerMock->expects($this->once())
             ->method('serialize')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($value) {
                         return json_encode($value);
                     }
-                )
+                
             );
 
         $result = $this->category->findWhereAttributeIs($entityIdsFilter, $attribute, $expectedValue);

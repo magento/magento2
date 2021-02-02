@@ -23,7 +23,7 @@ class TransactionInterfaceTest extends \PHPUnit\Framework\TestCase
     {
         $connectionMock = $this->_getConnectionMock($class);
         $uniqid = uniqid();
-        $connectionMock->expects($this->once())->method('beginTransaction')->will($this->returnValue($uniqid));
+        $connectionMock->expects($this->once())->method('beginTransaction')->willReturn($uniqid);
         $this->assertSame(0, $connectionMock->getTransactionLevel());
         $this->assertEquals($uniqid, $connectionMock->beginTransparentTransaction());
         $this->assertSame(0, $connectionMock->getTransactionLevel());
@@ -37,7 +37,7 @@ class TransactionInterfaceTest extends \PHPUnit\Framework\TestCase
     {
         $connectionMock = $this->_getConnectionMock($class);
         $uniqid = uniqid();
-        $connectionMock->expects($this->once())->method('rollback')->will($this->returnValue($uniqid));
+        $connectionMock->expects($this->once())->method('rollback')->willReturn($uniqid);
         $connectionMock->beginTransparentTransaction();
         $this->assertEquals($uniqid, $connectionMock->rollbackTransparentTransaction());
         $this->assertSame(0, $connectionMock->getTransactionLevel());
@@ -51,7 +51,7 @@ class TransactionInterfaceTest extends \PHPUnit\Framework\TestCase
     {
         $connectionMock = $this->_getConnectionMock($class);
         $uniqid = uniqid();
-        $connectionMock->expects($this->once())->method('commit')->will($this->returnValue($uniqid));
+        $connectionMock->expects($this->once())->method('commit')->willReturn($uniqid);
         $connectionMock->beginTransparentTransaction();
         $this->assertEquals($uniqid, $connectionMock->commitTransparentTransaction());
         $this->assertSame(0, $connectionMock->getTransactionLevel());

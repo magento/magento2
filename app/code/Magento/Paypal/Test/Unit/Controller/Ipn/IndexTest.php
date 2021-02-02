@@ -70,7 +70,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
 
     public function testIndexActionException()
     {
-        $this->requestMock->expects($this->once())->method('isPost')->will($this->returnValue(true));
+        $this->requestMock->expects($this->once())->method('isPost')->willReturn(true);
         $exception = new \Exception();
         $this->requestMock->expects($this->once())->method('getPostValue')->will($this->throwException($exception));
         $this->loggerMock->expects($this->once())->method('critical')->with($this->identicalTo($exception));
@@ -80,7 +80,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
 
     public function testIndexAction()
     {
-        $this->requestMock->expects($this->once())->method('isPost')->will($this->returnValue(true));
+        $this->requestMock->expects($this->once())->method('isPost')->willReturn(true);
         $incrementId = 'incrementId';
         $data = [
             'invoice' => $incrementId,

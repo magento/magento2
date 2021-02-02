@@ -25,8 +25,8 @@ class DebugHintsTest extends \PHPUnit\Framework\TestCase
             $this->identicalTo($block),
             'template.phtml',
             ['var' => 'val']
-        )->will(
-            $this->returnValue('<div id="fixture"/>')
+        )->willReturn(
+            '<div id="fixture"/>'
         );
         $model = new \Magento\Developer\Model\TemplateEngine\Decorator\DebugHints($subject, $showBlockHints);
         $actualResult = $model->render($block, 'template.phtml', ['var' => 'val']);

@@ -62,10 +62,10 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
     public function testGetTimeInSecondsSinceCreation()
     {
         $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
-        $selectMock->expects($this->any())->method('from')->will($this->returnValue($selectMock));
-        $selectMock->expects($this->any())->method('reset')->will($this->returnValue($selectMock));
-        $selectMock->expects($this->any())->method('columns')->will($this->returnValue($selectMock));
-        $selectMock->expects($this->any())->method('where')->will($this->returnValue($selectMock));
+        $selectMock->expects($this->any())->method('from')->willReturn($selectMock);
+        $selectMock->expects($this->any())->method('reset')->willReturn($selectMock);
+        $selectMock->expects($this->any())->method('columns')->willReturn($selectMock);
+        $selectMock->expects($this->any())->method('where')->willReturn($selectMock);
         $this->connectionMock->expects($this->any())->method('select')->willReturn($selectMock);
         $this->connectionMock->expects($this->once())->method('fetchOne');
         $this->consumerResource->getTimeInSecondsSinceCreation(1);

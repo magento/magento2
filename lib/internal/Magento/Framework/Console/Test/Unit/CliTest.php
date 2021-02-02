@@ -48,11 +48,12 @@ class CliTest extends \PHPUnit\Framework\TestCase
     /**
      * Make sure exception message is displayed and trace is logged.
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Test message
      */
     public function testDoRunExceptionLogging()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Test message');
+
         $e = new \Exception('Test message');
         $this->inputMock->expects($this->once())->method('getFirstArgument')->willThrowException($e);
         $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);

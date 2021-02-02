@@ -49,20 +49,20 @@ class ParamOverriderCartIdTest extends \PHPUnit\Framework\TestCase
 
         $this->userContext->expects($this->once())
             ->method('getUserType')
-            ->will($this->returnValue(UserContextInterface::USER_TYPE_CUSTOMER));
+            ->willReturn(UserContextInterface::USER_TYPE_CUSTOMER);
         $this->userContext->expects($this->once())
             ->method('getUserId')
-            ->will($this->returnValue($customerId));
+            ->willReturn($customerId);
 
         $cart = $this->getMockBuilder(\Magento\Quote\Api\Data\CartInterface::class)
             ->getMockForAbstractClass();
         $this->cartManagement->expects($this->once())
             ->method('getCartForCustomer')
             ->with($customerId)
-            ->will($this->returnValue($cart));
+            ->willReturn($cart);
         $cart->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($retValue));
+            ->willReturn($retValue);
 
         $this->assertSame($retValue, $this->model->getOverriddenValue());
     }
@@ -77,10 +77,10 @@ class ParamOverriderCartIdTest extends \PHPUnit\Framework\TestCase
 
         $this->userContext->expects($this->once())
             ->method('getUserType')
-            ->will($this->returnValue(UserContextInterface::USER_TYPE_CUSTOMER));
+            ->willReturn(UserContextInterface::USER_TYPE_CUSTOMER);
         $this->userContext->expects($this->once())
             ->method('getUserId')
-            ->will($this->returnValue($customerId));
+            ->willReturn($customerId);
 
         $this->cartManagement->expects($this->once())
             ->method('getCartForCustomer')
@@ -96,15 +96,15 @@ class ParamOverriderCartIdTest extends \PHPUnit\Framework\TestCase
 
         $this->userContext->expects($this->once())
             ->method('getUserType')
-            ->will($this->returnValue(UserContextInterface::USER_TYPE_CUSTOMER));
+            ->willReturn(UserContextInterface::USER_TYPE_CUSTOMER);
         $this->userContext->expects($this->once())
             ->method('getUserId')
-            ->will($this->returnValue($customerId));
+            ->willReturn($customerId);
 
         $this->cartManagement->expects($this->once())
             ->method('getCartForCustomer')
             ->with($customerId)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->assertNull($this->model->getOverriddenValue());
     }
@@ -113,7 +113,7 @@ class ParamOverriderCartIdTest extends \PHPUnit\Framework\TestCase
     {
         $this->userContext->expects($this->once())
             ->method('getUserType')
-            ->will($this->returnValue(UserContextInterface::USER_TYPE_ADMIN));
+            ->willReturn(UserContextInterface::USER_TYPE_ADMIN);
 
         $this->assertNull($this->model->getOverriddenValue());
     }

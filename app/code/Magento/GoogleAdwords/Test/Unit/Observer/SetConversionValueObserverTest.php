@@ -78,15 +78,15 @@ class SetConversionValueObserverTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'isGoogleAdwordsActive'
-        )->will(
-            $this->returnValue($isActive)
+        )->willReturn(
+            $isActive
         );
-        $this->_helperMock->expects($this->any())->method('isDynamicConversionValue')->will(
-            $this->returnCallback(
+        $this->_helperMock->expects($this->any())->method('isDynamicConversionValue')->willReturnCallback(
+            
                 function () use ($isDynamic) {
                     return $isDynamic;
                 }
-            )
+            
         );
 
         $this->_eventMock->expects($this->never())->method('getOrderIds');
@@ -108,15 +108,15 @@ class SetConversionValueObserverTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetConversionValueWhenAdwordsActiveWithoutOrdersIds($ordersIds)
     {
-        $this->_helperMock->expects($this->once())->method('isGoogleAdwordsActive')->will($this->returnValue(true));
-        $this->_helperMock->expects($this->once())->method('isDynamicConversionValue')->will($this->returnValue(true));
-        $this->_eventMock->expects($this->once())->method('getOrderIds')->will($this->returnValue($ordersIds));
+        $this->_helperMock->expects($this->once())->method('isGoogleAdwordsActive')->willReturn(true);
+        $this->_helperMock->expects($this->once())->method('isDynamicConversionValue')->willReturn(true);
+        $this->_eventMock->expects($this->once())->method('getOrderIds')->willReturn($ordersIds);
         $this->_eventObserverMock->expects(
             $this->once()
         )->method(
             'getEvent'
-        )->will(
-            $this->returnValue($this->_eventMock)
+        )->willReturn(
+            $this->_eventMock
         );
         $this->_collectionMock->expects($this->never())->method('addFieldToFilter');
 
@@ -131,24 +131,24 @@ class SetConversionValueObserverTest extends \PHPUnit\Framework\TestCase
         $ordersIds = [1, 2, 3];
         $conversionValue = 0;
         $conversionCurrency = 'USD';
-        $this->_helperMock->expects($this->once())->method('isGoogleAdwordsActive')->will($this->returnValue(true));
-        $this->_helperMock->expects($this->once())->method('isDynamicConversionValue')->will($this->returnValue(true));
+        $this->_helperMock->expects($this->once())->method('isGoogleAdwordsActive')->willReturn(true);
+        $this->_helperMock->expects($this->once())->method('isDynamicConversionValue')->willReturn(true);
         $this->_helperMock->expects($this->once())->method('hasSendConversionValueCurrency')
-            ->will($this->returnValue(true));
-        $this->_eventMock->expects($this->once())->method('getOrderIds')->will($this->returnValue($ordersIds));
+            ->willReturn(true);
+        $this->_eventMock->expects($this->once())->method('getOrderIds')->willReturn($ordersIds);
         $this->_eventObserverMock->expects(
             $this->once()
         )->method(
             'getEvent'
-        )->will(
-            $this->returnValue($this->_eventMock)
+        )->willReturn(
+            $this->_eventMock
         );
 
         $orderMock = $this->createMock(\Magento\Sales\Api\Data\OrderInterface::class);
         $orderMock->expects($this->once())->method('getOrderCurrencyCode')->willReturn($conversionCurrency);
 
         $iteratorMock = new \ArrayIterator([$orderMock]);
-        $this->_collectionMock->expects($this->any())->method('getIterator')->will($this->returnValue($iteratorMock));
+        $this->_collectionMock->expects($this->any())->method('getIterator')->willReturn($iteratorMock);
         $this->_collectionMock->expects(
             $this->once()
         )->method(

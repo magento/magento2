@@ -75,8 +75,8 @@ class AbstractIndexerCommandCommonSetup extends \PHPUnit\Framework\TestCase
 
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     array_merge(
                         $this->getObjectManagerReturnValueMap(),
                         [
@@ -84,7 +84,7 @@ class AbstractIndexerCommandCommonSetup extends \PHPUnit\Framework\TestCase
                             [\Magento\Framework\Indexer\IndexerInterfaceFactory::class, $this->indexerFactory],
                         ]
                     )
-                )
+                
             );
     }
 
@@ -107,7 +107,7 @@ class AbstractIndexerCommandCommonSetup extends \PHPUnit\Framework\TestCase
         $this->configLoaderMock->expects($this->once())
             ->method('load')
             ->with(FrontNameResolver::AREA_CODE)
-            ->will($this->returnValue($config));
+            ->willReturn($config);
         $this->objectManager->expects($this->once())
             ->method('configure')
             ->with($config);

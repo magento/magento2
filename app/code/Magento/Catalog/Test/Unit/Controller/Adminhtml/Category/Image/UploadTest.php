@@ -51,7 +51,7 @@ class UploadTest extends \PHPUnit\Framework\TestCase
 
         $resultFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue(new DataObject()));
+            ->willReturn(new DataObject());
 
         $model = $this->objectManager->getObject(Model::class, [
             'request' => $request,
@@ -62,7 +62,7 @@ class UploadTest extends \PHPUnit\Framework\TestCase
         $uploader->expects($this->once())
             ->method('saveFileToTmpDir')
             ->with($savedName)
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $request->setParam('param_name', $name);
 

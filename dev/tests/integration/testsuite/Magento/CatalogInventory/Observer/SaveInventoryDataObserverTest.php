@@ -81,6 +81,6 @@ class SaveInventoryDataObserverTest extends TestCase
         $parentProductStockItem = $this->stockItemRepository->get(
             $parentProduct->getExtensionAttributes()->getStockItem()->getItemId()
         );
-        $this->assertSame(false, $parentProductStockItem->getIsInStock());
+        $this->assertFalse($parentProductStockItem->getIsInStock());
     }
 }

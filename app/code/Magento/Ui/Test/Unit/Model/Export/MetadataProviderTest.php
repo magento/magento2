@@ -86,7 +86,7 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
 
         $component = $this->prepareColumns($componentName, $columnName, $columnLabels[0]);
         $result = $this->model->getHeaders($component);
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertCount(1, $result);
         $this->assertEquals($expected, $result);
     }
@@ -115,7 +115,7 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
         $component = $this->prepareColumns($componentName, $columnName, $columnLabel);
 
         $result = $this->model->getFields($component);
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertCount(1, $result);
         $this->assertEquals($columnName, $result[0]);
     }
@@ -217,7 +217,7 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($key);
 
         $result = $this->model->getRowData($document, $fields, $options);
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertCount(1, $result);
         $this->assertEquals($expected, $result);
     }
@@ -310,7 +310,7 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($options);
 
         $result = $this->model->getOptions();
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertCount(1, $result);
         $this->assertEquals($expected, $result);
     }

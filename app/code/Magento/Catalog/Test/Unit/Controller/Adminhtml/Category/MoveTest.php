@@ -86,7 +86,7 @@ class MoveTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getPost'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->context->expects($this->once())->method('getRequest')->will($this->returnValue($this->request));
+        $this->context->expects($this->once())->method('getRequest')->willReturn($this->request);
         $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->context->expects($this->once())->method('getMessageManager')->willReturn($this->messageManager);
     }

@@ -82,10 +82,10 @@ class CronTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [\Magento\Framework\ObjectManager\ConfigLoaderInterface::class, $configLoader],
                 [\Magento\Framework\Event\ManagerInterface::class, $eventManagerMock]
-            ]));
+            ]);
         $crontabConfig = ['config'];
         $configLoader->expects($this->once())
             ->method('load')

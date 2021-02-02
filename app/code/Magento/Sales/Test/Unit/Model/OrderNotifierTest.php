@@ -81,13 +81,13 @@ class OrderNotifierTest extends \PHPUnit\Framework\TestCase
         $historyCollection->expects($this->once())
             ->method('getUnnotifiedForInstance')
             ->with($this->order)
-            ->will($this->returnValue($historyItem));
+            ->willReturn($historyItem);
         $this->order->expects($this->once())
             ->method('getEmailSent')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->historyCollectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($historyCollection));
+            ->willReturn($historyCollection);
 
         $this->orderSenderMock->expects($this->once())
             ->method('send')
@@ -103,7 +103,7 @@ class OrderNotifierTest extends \PHPUnit\Framework\TestCase
     {
         $this->order->expects($this->once())
             ->method('getEmailSent')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->assertFalse($this->notifier->notify($this->order));
     }
 

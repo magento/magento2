@@ -37,11 +37,12 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Required parameter "module_name" is not specified
      */
     public function testGetPatternDirsException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Required parameter "module_name" is not specified');
+
         $this->model->getPatternDirs([]);
     }
 
@@ -53,11 +54,11 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
             ->with(ComponentRegistrar::MODULE, $module)
-            ->will($this->returnValue($modulePath));
+            ->willReturn($modulePath);
         $this->rule->expects($this->once())
             ->method('getPatternDirs')
             ->with(['module_name' => $module, 'module_dir' => $modulePath])
-            ->will($this->returnValue($expectedResult));
+            ->willReturn($expectedResult);
         $this->assertEquals($expectedResult, $this->model->getPatternDirs(['module_name' => $module]));
     }
 }

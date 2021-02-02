@@ -74,14 +74,14 @@ class FileIteratorTest extends \PHPUnit\Framework\TestCase
             $this->moduleDirResolverMock->expects($this->at($index))
                 ->method('getModuleName')
                 ->with($filePath)
-                ->will($this->returnValue($moduleName));
+                ->willReturn($moduleName);
             $this->fileReadFactory->expects($this->at($dirIndex))
                 ->method('create')
                 ->with($filePath)
                 ->willReturn($this->fileRead);
             $this->fileRead->expects($this->at($dirIndex++))
                 ->method('readAll')
-                ->will($this->returnValue($contents[$index++]));
+                ->willReturn($contents[$index++]);
         }
         $index = 0;
         foreach ($this->fileIterator as $fileContent) {
@@ -99,7 +99,7 @@ class FileIteratorTest extends \PHPUnit\Framework\TestCase
         $this->moduleDirResolverMock->expects($this->at(0))
             ->method('getModuleName')
             ->with($filePath)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->fileReadFactory->expects($this->never())->method('create');
         $this->fileRead->expects($this->never())->method('readAll');
 

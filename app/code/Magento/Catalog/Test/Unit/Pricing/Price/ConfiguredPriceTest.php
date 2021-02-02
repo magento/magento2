@@ -54,20 +54,20 @@ class ConfiguredPriceTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $basePrice = $this->createMock(\Magento\Framework\Pricing\Price\PriceInterface::class);
-        $basePrice->expects($this->any())->method('getValue')->will($this->returnValue($this->basePriceValue));
+        $basePrice->expects($this->any())->method('getValue')->willReturn($this->basePriceValue);
 
         $this->priceInfo = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
-        $this->priceInfo->expects($this->any())->method('getPrice')->will($this->returnValue($basePrice));
+        $this->priceInfo->expects($this->any())->method('getPrice')->willReturn($basePrice);
 
         $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['getPriceInfo', 'getOptionById', 'getResource', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->product->expects($this->once())->method('getPriceInfo')->will($this->returnValue($this->priceInfo));
+        $this->product->expects($this->once())->method('getPriceInfo')->willReturn($this->priceInfo);
 
         $this->item = $this->getMockBuilder(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface::class)
             ->getMock();
-        $this->item->expects($this->any())->method('getProduct')->will($this->returnValue($this->product));
+        $this->item->expects($this->any())->method('getProduct')->willReturn($this->product);
 
         $this->calculator = $this->createMock(\Magento\Framework\Pricing\Adjustment\Calculator::class);
 
@@ -85,7 +85,7 @@ class ConfiguredPriceTest extends \PHPUnit\Framework\TestCase
         $optionCollection = $this->createMock(
             \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface::class
         );
-        $optionCollection->expects($this->any())->method('getValue')->will($this->returnValue('1,2,3'));
+        $optionCollection->expects($this->any())->method('getValue')->willReturn('1,2,3');
 
         $optionCallback = $this->returnCallback(function ($optionId) {
             return $this->createProductOptionStub($optionId);
@@ -116,9 +116,9 @@ class ConfiguredPriceTest extends \PHPUnit\Framework\TestCase
     protected function createProductOptionStub($optionId)
     {
         $option = $this->createMock(\Magento\Catalog\Model\Product\Option::class);
-        $option->expects($this->any())->method('getId')->will($this->returnValue($optionId));
-        $option->expects($this->atLeastOnce())->method('groupFactory')->will(
-            $this->returnValue($this->createOptionTypeStub($option))
+        $option->expects($this->any())->method('getId')->willReturn($optionId);
+        $option->expects($this->atLeastOnce())->method('groupFactory')->willReturn(
+            $this->createOptionTypeStub($option)
         );
         return $option;
     }
@@ -133,12 +133,12 @@ class ConfiguredPriceTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['setOption', 'setConfigurationItem', 'setConfigurationItemOption', 'getOptionPrice'])
             ->disableOriginalConstructor()
             ->getMock();
-        $optionType->expects($this->atLeastOnce())->method('setOption')->with($option)->will($this->returnSelf());
-        $optionType->expects($this->atLeastOnce())->method('setConfigurationItem')->will($this->returnSelf());
-        $optionType->expects($this->atLeastOnce())->method('setConfigurationItemOption')->will($this->returnSelf());
+        $optionType->expects($this->atLeastOnce())->method('setOption')->with($option)->willReturnSelf();
+        $optionType->expects($this->atLeastOnce())->method('setConfigurationItem')->willReturnSelf();
+        $optionType->expects($this->atLeastOnce())->method('setConfigurationItemOption')->willReturnSelf();
         $optionType->expects($this->atLeastOnce())->method('getOptionPrice')
             ->with($this->anything(), $this->basePriceValue)
-            ->will($this->returnValue(10.));
+            ->willReturn(10.);
         return $optionType;
     }
 }

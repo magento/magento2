@@ -28,7 +28,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getDirectoryWrite')
             ->with('fixture_dir')
-            ->will($this->returnValue($this->directory));
+            ->willReturn($this->directory);
         $this->object = new File($filesystem, 'fixture_dir', 'fixture_file.txt');
     }
 

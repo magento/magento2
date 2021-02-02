@@ -65,7 +65,7 @@ class DirectTest extends \PHPUnit\Framework\TestCase
     public function testMergeNoAssets()
     {
         $uniqId = '_b3bf82fa6e140594420fa90982a8e877';
-        $this->resultAsset->expects($this->once())->method('getPath')->will($this->returnValue('foo/result'));
+        $this->resultAsset->expects($this->once())->method('getPath')->willReturn('foo/result');
         $this->staticDir->expects($this->never())->method('writeFile');
         $this->mathRandomMock->expects($this->once())
             ->method('getUniqueHash')
@@ -79,7 +79,7 @@ class DirectTest extends \PHPUnit\Framework\TestCase
     public function testMergeGeneric()
     {
         $uniqId = '_be50ccf992fd81818c1a2645d1a29e92';
-        $this->resultAsset->expects($this->once())->method('getPath')->will($this->returnValue('foo/result'));
+        $this->resultAsset->expects($this->once())->method('getPath')->willReturn('foo/result');
         $assets = $this->prepareAssetsToMerge([' one', 'two']); // note leading space intentionally
         $this->staticDir->expects($this->never())->method('writeFile');
         $this->mathRandomMock->expects($this->once())
@@ -97,7 +97,7 @@ class DirectTest extends \PHPUnit\Framework\TestCase
         $this->resultAsset->expects($this->exactly(3))
             ->method('getPath')
             ->willReturn('foo/result');
-        $this->resultAsset->expects($this->any())->method('getContentType')->will($this->returnValue('css'));
+        $this->resultAsset->expects($this->any())->method('getContentType')->willReturn('css');
         $assets = $this->prepareAssetsToMerge(['one', 'two']);
         $this->cssUrlResolver->expects($this->exactly(2))
             ->method('relocateRelativeUrls')
@@ -127,7 +127,7 @@ class DirectTest extends \PHPUnit\Framework\TestCase
         $result = [];
         foreach ($data as $content) {
             $asset = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\LocalInterface::class);
-            $asset->expects($this->once())->method('getContent')->will($this->returnValue($content));
+            $asset->expects($this->once())->method('getContent')->willReturn($content);
             $result[] = $asset;
         }
         return $result;

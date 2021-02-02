@@ -51,11 +51,11 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
         );
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->connectionMock->expects($this->any())
             ->method('describeTable')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->connectionMock->expects($this->any())
             ->method('insert');
         $this->connectionMock->expects($this->any())
@@ -86,11 +86,11 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
     {
         $historyMock = $this->createMock(\Magento\Sales\Model\Order\Status\History::class);
         $this->entitySnapshotMock->expects($this->once())->method('isModified')->with($historyMock)->willReturn(true);
-        $historyMock->expects($this->any())->method('isSaveAllowed')->will($this->returnValue(true));
+        $historyMock->expects($this->any())->method('isSaveAllowed')->willReturn(true);
         $this->validatorMock->expects($this->once())
             ->method('validate')
             ->with($historyMock)
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $historyMock->expects($this->any())->method('getData')->willReturn([]);
         $this->historyResource->save($historyMock);
     }
@@ -105,11 +105,11 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
 
         $historyMock = $this->createMock(\Magento\Sales\Model\Order\Status\History::class);
         $this->entitySnapshotMock->expects($this->once())->method('isModified')->with($historyMock)->willReturn(true);
-        $historyMock->expects($this->any())->method('isSaveAllowed')->will($this->returnValue(true));
+        $historyMock->expects($this->any())->method('isSaveAllowed')->willReturn(true);
         $this->validatorMock->expects($this->once())
             ->method('validate')
             ->with($historyMock)
-            ->will($this->returnValue(['Some warnings']));
+            ->willReturn(['Some warnings']);
         $this->assertEquals($this->historyResource, $this->historyResource->save($historyMock));
     }
 }

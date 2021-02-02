@@ -466,7 +466,7 @@ QUERY;
         self::assertArrayHasKey('grand_total', $order);
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->deleteCustomer();
         $this->deleteQuote();

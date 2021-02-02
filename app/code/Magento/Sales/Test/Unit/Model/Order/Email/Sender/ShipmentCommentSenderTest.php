@@ -30,10 +30,10 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
         );
         $this->shipmentMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
         $this->shipmentMock->expects($this->any())
             ->method('getOrder')
-            ->will($this->returnValue($this->orderMock));
+            ->willReturn($this->orderMock);
 
         $this->sender = new ShipmentCommentSender(
             $this->templateContainerMock,
@@ -61,12 +61,12 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
 
         $this->orderMock->expects($this->once())
             ->method('getCustomerIsGuest')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->stepAddressFormat($billingAddress);
 
         $this->identityContainerMock->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->orderMock->expects($this->any())
             ->method('getCustomerName')
             ->willReturn($customerName);
@@ -106,12 +106,12 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
 
         $this->orderMock->expects($this->once())
             ->method('getCustomerIsGuest')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->stepAddressFormat($billingAddress);
 
         $this->identityContainerMock->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->orderMock->expects($this->any())
             ->method('getCustomerName')
             ->willReturn($customerName);
@@ -152,7 +152,7 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
 
         $this->identityContainerMock->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->orderMock->expects($this->any())
             ->method('getCustomerName')
             ->willReturn($customerName);

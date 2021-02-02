@@ -54,18 +54,18 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             'registry'
         )->with(
             'product'
-        )->will(
-            $this->returnValue($productMock)
+        )->willReturn(
+            $productMock
         );
-        $productMock->expects($this->once())->method('getTypeId')->will($this->returnValue('id'));
+        $productMock->expects($this->once())->method('getTypeId')->willReturn('id');
         $this->productTypeConfig->expects(
             $this->once()
         )->method(
             'isProductSet'
         )->with(
             'id'
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
         $this->assertFalse($this->view->shouldRenderQuantity());
     }
@@ -80,15 +80,15 @@ class ViewTest extends \PHPUnit\Framework\TestCase
 
         $product->expects($this->once())
             ->method('getIdentities')
-            ->will($this->returnValue($productTags));
+            ->willReturn($productTags);
         $this->registryMock->expects($this->any())
             ->method('registry')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         ['product', $product],
                     ]
-                )
+                
             );
         $this->assertEquals($productTags, $this->view->getIdentities());
     }

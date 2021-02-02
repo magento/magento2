@@ -107,7 +107,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         );
         $method = $connection->expects($this->exactly($callCount))->method('quote');
         if ($callCount > 0) {
-            $method->will($this->returnValue($returnValue));
+            $method->willReturn($returnValue);
         }
         return $connection;
     }

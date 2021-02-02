@@ -93,8 +93,8 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
             'isDirectAccessFrontendName'
         )->with(
             'storeCode'
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
         $this->assertEquals('/node_one/', $this->model->process($this->requestMock, $this->pathInfo));
     }

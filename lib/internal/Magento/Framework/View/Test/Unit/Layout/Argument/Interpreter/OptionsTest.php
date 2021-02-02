@@ -38,10 +38,10 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'toOptionArray'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 ['value1' => 'label 1', 'value2' => 'label 2', ['value' => 'value3', 'label' => 'label 3']]
-            )
+            
         );
         $this->_objectManager->expects(
             $this->once()
@@ -49,8 +49,8 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             $modelClass
-        )->will(
-            $this->returnValue($model)
+        )->willReturn(
+            $model
         );
         $input = ['model' => $modelClass];
         $expected = [

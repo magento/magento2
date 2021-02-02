@@ -67,7 +67,7 @@ class SetupTest extends \PHPUnit\Framework\TestCase
         $this->resourceModel->expects($this->once())
             ->method('getTableName')
             ->with($tableName)
-            ->will($this->returnValue($expectedTableName));
+            ->willReturn($expectedTableName);
 
         $this->assertSame($expectedTableName, $this->object->getTable($tableName));
         // Check that table name is cached
@@ -81,7 +81,7 @@ class SetupTest extends \PHPUnit\Framework\TestCase
         $this->connection->expects($this->once())
             ->method('isTableExists')
             ->with($tableName)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertTrue($this->object->tableExists($tableName));
     }
 

@@ -65,7 +65,7 @@ class AggregateSalesReportBestsellersDataTest extends \PHPUnit\Framework\TestCas
             ->with($date);
         $this->bestsellersFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($bestsellersMock));
+            ->willReturn($bestsellersMock);
         $this->observer->execute();
     }
 
@@ -85,7 +85,7 @@ class AggregateSalesReportBestsellersDataTest extends \PHPUnit\Framework\TestCas
         $date = (new \DateTime())->sub(new \DateInterval('PT25H'));
         $this->localeDateMock->expects($this->once())
             ->method('date')
-            ->will($this->returnValue($date));
+            ->willReturn($date);
 
         return $date;
     }

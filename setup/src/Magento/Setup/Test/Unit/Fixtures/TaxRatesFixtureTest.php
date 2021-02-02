@@ -21,7 +21,7 @@ class TaxRatesFixtureTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->fixtureModelMock = $this->createMock(\Magento\Setup\Fixtures\FixtureModel::class);
 
@@ -48,7 +48,7 @@ class TaxRatesFixtureTest extends \PHPUnit\Framework\TestCase
         $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManager\ObjectManager::class);
         $objectManagerMock->expects($this->exactly(2))
             ->method('get')
-            ->will($this->returnValueMap($valueMap));
+            ->willReturnMap($valueMap);
         $objectManagerMock->expects($this->once())
             ->method('create')
             ->willReturn($csvImportHandlerMock);

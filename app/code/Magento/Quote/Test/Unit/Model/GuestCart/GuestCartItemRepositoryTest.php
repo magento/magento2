@@ -114,7 +114,7 @@ class GuestCartItemRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->cartItemRepositoryMock->expects($this->once())
             ->method('getList')
             ->with($this->cartId)
-            ->will($this->returnValue([$itemMock]));
+            ->willReturn([$itemMock]);
         $this->assertEquals([$itemMock], $this->guestCartItemRepository->getList($this->maskedCartId));
     }
 

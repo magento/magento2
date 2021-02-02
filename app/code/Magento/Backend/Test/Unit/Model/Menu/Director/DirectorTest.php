@@ -52,11 +52,11 @@ class DirectorTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($this->_commandMock)
+        )->willReturn(
+            $this->_commandMock
         );
 
-        $this->_commandMock->expects($this->any())->method('getId')->will($this->returnValue(true));
+        $this->_commandMock->expects($this->any())->method('getId')->willReturn(true);
         $this->_model = new \Magento\Backend\Model\Menu\Director\Director($this->_commandFactoryMock);
     }
 

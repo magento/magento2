@@ -45,11 +45,11 @@ class OrdersUpdaterTest extends \PHPUnit\Framework\TestCase
             'registry'
         )->with(
             'current_billing_agreement'
-        )->will(
-            $this->returnValue($agreement)
+        )->willReturn(
+            $agreement
         );
 
-        $agreement->expects($this->once())->method('getId')->will($this->returnValue('agreement id'));
+        $agreement->expects($this->once())->method('getId')->willReturn('agreement id');
         $this->_agreementResource->expects(
             $this->once()
         )->method(
@@ -74,8 +74,8 @@ class OrdersUpdaterTest extends \PHPUnit\Framework\TestCase
             'registry'
         )->with(
             'current_billing_agreement'
-        )->will(
-            $this->returnValue(null)
+        )->willReturn(
+            null
         );
 
         $this->_model->update('any argument');

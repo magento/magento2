@@ -136,7 +136,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
 
         $this->imageHelper->expects($this->exactly(3))
             ->method('init')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [
                     $this->product,
                     'product_image',
@@ -155,7 +155,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
                     $this->getImageData('product_thumbnail'),
                     $this->imageHelper
                 ],
-            ]));
+            ]);
         $this->imageHelper->expects($this->exactly(3))
             ->method('setImageFile')
             ->with($imageFile)
@@ -184,7 +184,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
 
         $this->imageHelper->expects($this->exactly(3))
             ->method('save')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->model->generate($this->product);
     }

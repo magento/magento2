@@ -99,10 +99,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $connection->expects($this->any())
             ->method('select')
             ->willReturn($select);
-        $entity->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
-        $entity->expects($this->any())->method('getDefaultAttributes')->will($this->returnValue([]));
+        $entity->expects($this->any())->method('getConnection')->willReturn($connection);
+        $entity->expects($this->any())->method('getDefaultAttributes')->willReturn([]);
         $this->universalFactoryMock = $this->createMock(\Magento\Framework\Validator\UniversalFactory::class);
-        $this->universalFactoryMock->expects($this->any())->method('create')->will($this->returnValue($entity));
+        $this->universalFactoryMock->expects($this->any())->method('create')->willReturn($entity);
         $this->storeManagerMock = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
         $this->storeManagerMock
             ->expects($this->any())
@@ -163,9 +163,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     {
         /** @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject $product */
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $product->expects($this->any())->method('getId')->will($this->returnValue('5'));
+        $product->expects($this->any())->method('getId')->willReturn('5');
         $productStore = new \Magento\Framework\DataObject(['id' => 33]);
-        $product->expects($this->any())->method('getStore')->will($this->returnValue($productStore));
+        $product->expects($this->any())->method('getStore')->willReturn($productStore);
         $this->collection->setProduct($product);
         $this->assertEquals(33, $this->collection->getStoreId());
     }

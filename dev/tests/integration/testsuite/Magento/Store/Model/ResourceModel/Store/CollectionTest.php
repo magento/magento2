@@ -80,10 +80,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testToOptionArrayHash()
     {
-        $this->assertTrue(is_array($this->_collection->toOptionArray()));
+        $this->assertIsArray($this->_collection->toOptionArray());
         $this->assertNotEmpty($this->_collection->toOptionArray());
 
-        $this->assertTrue(is_array($this->_collection->toOptionHash()));
+        $this->assertIsArray($this->_collection->toOptionHash());
         $this->assertNotEmpty($this->_collection->toOptionHash());
     }
 

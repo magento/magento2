@@ -65,16 +65,16 @@ class MsrpPriceTest extends \PHPUnit\Framework\TestCase
 
         $this->priceInfo->expects($this->any())
             ->method('getAdjustments')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->saleableItem->expects($this->any())
             ->method('getPriceInfo')
-            ->will($this->returnValue($this->priceInfo));
+            ->willReturn($this->priceInfo);
 
         $this->priceInfo->expects($this->any())
             ->method('getPrice')
             ->with($this->equalTo('base_price'))
-            ->will($this->returnValue($this->price));
+            ->willReturn($this->price);
 
         $this->calculator = $this->getMockBuilder(\Magento\Framework\Pricing\Adjustment\Calculator::class)
             ->disableOriginalConstructor()
@@ -103,7 +103,7 @@ class MsrpPriceTest extends \PHPUnit\Framework\TestCase
         $this->helper->expects($this->once())
             ->method('isShowPriceOnGesture')
             ->with($this->equalTo($this->saleableItem))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertTrue($this->object->isShowPriceOnGesture());
     }
@@ -113,7 +113,7 @@ class MsrpPriceTest extends \PHPUnit\Framework\TestCase
         $this->helper->expects($this->once())
             ->method('isShowPriceOnGesture')
             ->with($this->equalTo($this->saleableItem))
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->assertFalse($this->object->isShowPriceOnGesture());
     }
@@ -124,7 +124,7 @@ class MsrpPriceTest extends \PHPUnit\Framework\TestCase
         $this->helper->expects($this->once())
             ->method('getMsrpPriceMessage')
             ->with($this->equalTo($this->saleableItem))
-            ->will($this->returnValue($expectedMessage));
+            ->willReturn($expectedMessage);
 
         $this->assertEquals($expectedMessage, $this->object->getMsrpPriceMessage());
     }
@@ -133,7 +133,7 @@ class MsrpPriceTest extends \PHPUnit\Framework\TestCase
     {
         $this->config->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertTrue($this->object->isMsrpEnabled());
     }
@@ -143,7 +143,7 @@ class MsrpPriceTest extends \PHPUnit\Framework\TestCase
         $this->helper->expects($this->once())
             ->method('canApplyMsrp')
             ->with($this->equalTo($this->saleableItem))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertTrue($this->object->canApplyMsrp($this->saleableItem));
     }

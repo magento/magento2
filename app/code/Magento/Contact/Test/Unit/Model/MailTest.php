@@ -81,7 +81,7 @@ class MailTest extends \PHPUnit\Framework\TestCase
 
         $this->transportBuilderMock->expects($this->once())
             ->method('setTemplateIdentifier')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
             ->method('setTemplateOptions')
@@ -89,25 +89,25 @@ class MailTest extends \PHPUnit\Framework\TestCase
                 'area' => 'frontend',
                 'store' => 555,
             ])
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
             ->method('setTemplateVars')
             ->with($templateVars)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
             ->method('setFrom')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
             ->method('addTo')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
             ->method('setReplyTo')
             ->with($email)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
             ->method('getTransport')

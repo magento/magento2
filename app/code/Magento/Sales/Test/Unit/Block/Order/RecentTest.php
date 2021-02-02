@@ -70,15 +70,15 @@ class RecentTest extends \PHPUnit\Framework\TestCase
         $layout = $this->createPartialMock(Layout::class, ['getBlock']);
         $this->context->expects($this->once())
             ->method('getLayout')
-            ->will($this->returnValue($layout));
+            ->willReturn($layout);
         $this->customerSession->expects($this->once())
             ->method('getCustomerId')
-            ->will($this->returnValue($customerId));
+            ->willReturn($customerId);
 
         $statuses = ['pending', 'processing', 'complete'];
         $this->orderConfig->expects($this->once())
             ->method('getVisibleOnFrontStatuses')
-            ->will($this->returnValue($statuses));
+            ->willReturn($statuses);
 
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMockForAbstractClass();
@@ -96,11 +96,11 @@ class RecentTest extends \PHPUnit\Framework\TestCase
         ]);
         $this->orderCollectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($orderCollection));
+            ->willReturn($orderCollection);
         $orderCollection->expects($this->at(0))
             ->method('addAttributeToSelect')
             ->with($this->equalTo('*'))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $orderCollection->expects($this->at(1))
             ->method('addAttributeToFilter')
             ->with($attribute[0], $this->equalTo($customerId))
@@ -112,18 +112,18 @@ class RecentTest extends \PHPUnit\Framework\TestCase
         $orderCollection->expects($this->at(3))
             ->method('addAttributeToFilter')
             ->with($attribute[2], $this->equalTo(['in' => $statuses]))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $orderCollection->expects($this->at(4))
             ->method('addAttributeToSort')
             ->with('created_at', 'desc')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $orderCollection->expects($this->at(5))
             ->method('setPageSize')
             ->with('5')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $orderCollection->expects($this->at(6))
             ->method('load')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->block = new \Magento\Sales\Block\Order\Recent(
             $this->context,
             $this->orderCollectionFactory,

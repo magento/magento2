@@ -21,8 +21,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getType'
-        )->will(
-            $this->returnValue(\Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL)
+        )->willReturn(
+            \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL
         );
 
         $newThemeMock = $this->createMock(\Magento\Theme\Model\Theme::class);
@@ -35,8 +35,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             \Magento\Framework\View\Design\Theme\Domain\VirtualInterface::class,
             ['theme' => $themeMock]
-        )->will(
-            $this->returnValue($newThemeMock)
+        )->willReturn(
+            $newThemeMock
         );
 
         $themeDomainFactory = new \Magento\Framework\View\Design\Theme\Domain\Factory($objectManager);
@@ -50,7 +50,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     {
         $wrongThemeType = 'wrong_theme_type';
         $themeMock = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['__wakeup', 'getType']);
-        $themeMock->expects($this->any())->method('getType')->will($this->returnValue($wrongThemeType));
+        $themeMock->expects($this->any())->method('getType')->willReturn($wrongThemeType);
 
         $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 

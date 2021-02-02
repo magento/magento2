@@ -47,10 +47,11 @@ class FilterFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateWithException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $filterClassPrefix = 'Magento\\Framework\\Data\\Form\\Filter\\';
         $filterCode = 'Undefined';
         $data = [];

@@ -51,7 +51,7 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
             ->with('*/*/cleanImages')
-            ->will($this->returnValue($expectedUrl));
+            ->willReturn($expectedUrl);
         $this->assertEquals($expectedUrl, $this->additionalBlock->getCleanImagesUrl());
     }
 
@@ -61,7 +61,7 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
             ->with('*/*/cleanMedia')
-            ->will($this->returnValue($expectedUrl));
+            ->willReturn($expectedUrl);
         $this->assertEquals($expectedUrl, $this->additionalBlock->getCleanMediaUrl());
     }
 
@@ -71,7 +71,7 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
             ->with('*/*/cleanStaticFiles')
-            ->will($this->returnValue($expectedUrl));
+            ->willReturn($expectedUrl);
         $this->assertEquals($expectedUrl, $this->additionalBlock->getCleanStaticFilesUrl());
     }
 

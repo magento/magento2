@@ -47,11 +47,11 @@ class CookieTest extends \PHPUnit\Framework\TestCase
 
         $this->contextMock->expects($this->any())
             ->method('getScopeConfig')
-            ->will($this->returnValue($scopeConfigMock));
+            ->willReturn($scopeConfigMock);
 
         $this->contextMock->expects($this->any())
             ->method('getValidator')
-            ->will($this->returnValue($validtorMock));
+            ->willReturn($validtorMock);
 
         $this->model = new \Magento\Framework\View\Element\Js\Cookie(
             $this->contextMock,
@@ -73,11 +73,11 @@ class CookieTest extends \PHPUnit\Framework\TestCase
     {
         $this->sessionConfigMock->expects($this->once())
             ->method('getCookieDomain')
-            ->will($this->returnValue($domain));
+            ->willReturn($domain);
         $this->ipValidatorMock->expects($this->once())
             ->method('isValid')
             ->with($this->equalTo($domain))
-            ->will($this->returnValue($isIp));
+            ->willReturn($isIp);
 
         $result = $this->model->getDomain($domain);
         $this->assertEquals($expectedResult, $result);
@@ -101,7 +101,7 @@ class CookieTest extends \PHPUnit\Framework\TestCase
 
         $this->sessionConfigMock->expects($this->once())
             ->method('getCookiePath')
-            ->will($this->returnValue($path));
+            ->willReturn($path);
 
         $result = $this->model->getPath();
         $this->assertEquals($path, $result);

@@ -43,10 +43,10 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             \Magento\Backend\Block\Context::class,
             ['getEscaper', 'getUrlBuilder']
         );
-        $this->contextMock->expects($this->any())->method('getEscaper')->will($this->returnValue($this->escaperMock));
+        $this->contextMock->expects($this->any())->method('getEscaper')->willReturn($this->escaperMock);
         $this->contextMock->expects($this->any())
             ->method('getUrlBuilder')
-            ->will($this->returnValue($this->urlBuilderMock));
+            ->willReturn($this->urlBuilderMock);
 
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->linkRenderer = $this->objectManagerHelper->getObject(
@@ -67,7 +67,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $column->expects($this->any())
             ->method('getCaption')
-            ->will($this->returnValue('Link Caption'));
+            ->willReturn('Link Caption');
         $column->expects($this->any())
             ->method('getId')
             ->willReturn('1');

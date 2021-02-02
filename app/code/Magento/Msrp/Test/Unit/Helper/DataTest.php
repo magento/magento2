@@ -66,12 +66,12 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $convertedFinalPrice = 200;
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($arg) {
                         return round(2 * $arg, 2);
                     }
-                )
+                
             );
 
         $finalPriceMock = $this->getMockBuilder(\Magento\Catalog\Pricing\Price\FinalPrice::class)
@@ -79,7 +79,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $finalPriceMock->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($convertedFinalPrice));
+            ->willReturn($convertedFinalPrice);
 
         $priceInfoMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceInfo\Base::class)
             ->disableOriginalConstructor()
@@ -87,7 +87,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $priceInfoMock->expects($this->once())
             ->method('getPrice')
             ->with(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE)
-            ->will($this->returnValue($finalPriceMock));
+            ->willReturn($finalPriceMock);
 
         $this->msrpPriceCalculator
             ->expects($this->any())

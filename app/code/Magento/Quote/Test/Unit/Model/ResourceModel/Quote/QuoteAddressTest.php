@@ -67,11 +67,11 @@ class QuoteAddressTest extends \PHPUnit\Framework\TestCase
         );
         $this->appResourceMock->expects($this->any())
                               ->method('getConnection')
-                              ->will($this->returnValue($this->connectionMock));
+                              ->willReturn($this->connectionMock);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->connectionMock->expects($this->any())
                           ->method('describeTable')
-                          ->will($this->returnValue([]));
+                          ->willReturn([]);
         $this->connectionMock->expects($this->any())
                           ->method('insert');
         $this->connectionMock->expects($this->any())

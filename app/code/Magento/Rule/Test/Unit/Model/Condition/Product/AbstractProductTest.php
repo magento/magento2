@@ -142,7 +142,7 @@ class AbstractProductTest extends \PHPUnit\Framework\TestCase
         $newResource->expects($this->any())
             ->method('getAttribute')
             ->with('someAttribute')
-            ->will($this->returnValue($attribute));
+            ->willReturn($attribute);
         $newResource->_config = $this->createMock(\Magento\Eav\Model\Config::class);
         $product->expects($this->atLeastOnce())
             ->method('getResource')
@@ -158,7 +158,7 @@ class AbstractProductTest extends \PHPUnit\Framework\TestCase
         $newResource->expects($this->any())
             ->method('getAttribute')
             ->with('someAttribute')
-            ->will($this->returnValue($attribute));
+            ->willReturn($attribute);
         $newResource->_config = $this->createMock(\Magento\Eav\Model\Config::class);
 
         $product->setResource($newResource);
@@ -191,7 +191,7 @@ class AbstractProductTest extends \PHPUnit\Framework\TestCase
         $newResource->expects($this->any())
             ->method('getAttribute')
             ->with('someAttribute')
-            ->will($this->returnValue($attribute));
+            ->willReturn($attribute);
         $newResource->_config = $this->createMock(\Magento\Eav\Model\Config::class);
 
         $product->expects($this->atLeastOnce())
@@ -236,7 +236,7 @@ class AbstractProductTest extends \PHPUnit\Framework\TestCase
         $newResource->expects($this->any())
             ->method('getAttribute')
             ->with('someAttribute')
-            ->will($this->returnValue($attribute));
+            ->willReturn($attribute);
         $newResource->_config = $this->createMock(\Magento\Eav\Model\Config::class);
 
         $product->expects($this->atLeastOnce())
@@ -262,7 +262,7 @@ class AbstractProductTest extends \PHPUnit\Framework\TestCase
         $newResource->expects($this->any())
             ->method('getAttribute')
             ->with('someAttribute')
-            ->will($this->returnValue($attribute));
+            ->willReturn($attribute);
         $newResource->_config = $this->createMock(\Magento\Eav\Model\Config::class);
 
         $product->setResource($newResource);
@@ -357,8 +357,8 @@ class AbstractProductTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $attrSetCollectionValueMock->method('setEntityTypeFilter')->will($this->returnSelf());
-        $attrSetCollectionValueMock->method('load')->will($this->returnSelf());
+        $attrSetCollectionValueMock->method('setEntityTypeFilter')->willReturnSelf();
+        $attrSetCollectionValueMock->method('load')->willReturnSelf();
         $attrSetCollectionValueMock
             ->expects((null === $attrSetCollectionOptionsArray) ? $this->never() : $this->once())
             ->method('toOptionArray')

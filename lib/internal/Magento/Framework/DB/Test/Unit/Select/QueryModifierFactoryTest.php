@@ -62,10 +62,11 @@ class QueryModifierFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateUnknownQueryModifierType()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $params = ['foo' => 'bar'];
         $this->queryModifierFactory = $this->objectManager->getObject(
             QueryModifierFactory::class,
@@ -80,10 +81,11 @@ class QueryModifierFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateDoesNotImplementInterface()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $params = ['foo' => 'bar'];
         $this->queryModifierFactory = $this->objectManager->getObject(
             QueryModifierFactory::class,

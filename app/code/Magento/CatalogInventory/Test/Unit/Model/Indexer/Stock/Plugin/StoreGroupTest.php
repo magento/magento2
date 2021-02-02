@@ -40,11 +40,11 @@ class StoreGroupTest extends \PHPUnit\Framework\TestCase
         );
         $objectMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($data['object_id']));
+            ->willReturn($data['object_id']);
         $objectMock->expects($this->any())
             ->method('dataHasChangedFor')
             ->with('website_id')
-            ->will($this->returnValue($data['has_website_id_changed']));
+            ->willReturn($data['has_website_id_changed']);
 
         $this->_indexerMock->expects($this->once())
             ->method('markIndexerAsInvalid');

@@ -24,8 +24,8 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
             'translate'
         )->with(
             $strToTranslate
-        )->will(
-            $this->returnValue($translatedStr)
+        )->willReturn(
+            $translatedStr
         );
         $translator = new \Magento\Framework\Translate\Adapter(
             ['translator' => [$translatorMock, 'translate']]

@@ -56,20 +56,20 @@ class InvalidateVarnishObserverTest extends \PHPUnit\Framework\TestCase
         $tags = ['cache_1', 'cache_group'];
         $pattern = '((^|,)cache_1(,|$))|((^|,)cache_group(,|$))';
 
-        $this->configMock->expects($this->once())->method('isEnabled')->will($this->returnValue(true));
+        $this->configMock->expects($this->once())->method('isEnabled')->willReturn(true);
         $this->configMock->expects(
             $this->once()
         )->method(
             'getType'
-        )->will(
-            $this->returnValue(\Magento\PageCache\Model\Config::VARNISH)
+        )->willReturn(
+            \Magento\PageCache\Model\Config::VARNISH
         );
 
         $eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getObject']);
-        $eventMock->expects($this->once())->method('getObject')->will($this->returnValue($this->observerObject));
-        $this->observerMock->expects($this->once())->method('getEvent')->will($this->returnValue($eventMock));
+        $eventMock->expects($this->once())->method('getObject')->willReturn($this->observerObject);
+        $this->observerMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
         $this->tagResolver->expects($this->once())->method('getTags')->with($this->observerObject)
-            ->will($this->returnValue($tags));
+            ->willReturn($tags);
         $this->purgeCache->expects($this->once())->method('sendPurgeRequest')->with($pattern);
 
         $this->model->execute($this->observerMock);

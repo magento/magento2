@@ -51,11 +51,12 @@ class FlagTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please define flag code.
      */
     public function testLoadSelfException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Please define flag code.');
+
         $flag = $this->createFlagInstance();
         $flag->loadSelf();
     }
@@ -70,11 +71,12 @@ class FlagTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please define flag code.
      */
     public function testBeforeSaveException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Please define flag code.');
+
         $flag = $this->createFlagInstance();
         $flag->setData('block', 'blockNmae');
         $flag->beforeSave();

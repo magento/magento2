@@ -34,11 +34,12 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Provided countryId does not exist.
      */
     public function testPostCodesThrowsExceptionIfCountryDoesNotExist()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Provided countryId does not exist.');
+
         $this->validator->validate('12345', 'INVALID-CODE');
     }
 

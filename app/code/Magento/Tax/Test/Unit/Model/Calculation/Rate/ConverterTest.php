@@ -96,7 +96,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
 
         $this->assertArrayHasKey('title[1]', $this->converter->createArrayFromServiceObject($taxRateMock, true));
         $this->assertArrayHasKey('title', $this->converter->createArrayFromServiceObject($taxRateMock));
-        $this->assertInternalType('array', $this->converter->createArrayFromServiceObject($taxRateMock));
+        $this->assertIsArray($this->converter->createArrayFromServiceObject($taxRateMock));
     }
 
     public function testPopulateTaxRateData()

@@ -53,8 +53,8 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             'attributes'
-        )->will(
-            $this->returnValue('not_empty_attribute_data')
+        )->willReturn(
+            'not_empty_attribute_data'
         );
         $this->productMock->expects(
             $this->once()
@@ -74,8 +74,8 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             'attributes'
-        )->will(
-            $this->returnValue(null)
+        )->willReturn(
+            null
         );
         $this->productMock->expects($this->never())->method('setTypeId');
         $this->model->aroundProcessProduct($this->subjectMock, $this->closureMock, $this->productMock);

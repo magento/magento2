@@ -56,11 +56,11 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->urlEncoder->expects($this->once())
             ->method('encode')
             ->with($value)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
         $this->backendHelperMock->expects($this->once())
             ->method('getUrl')
             ->with('customer/index/viewfile', ['image' => $value])
-            ->will($this->returnValue($url));
+            ->willReturn($url);
 
         $this->assertContains($url, $this->image->getElementHtml());
     }

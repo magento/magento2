@@ -38,7 +38,7 @@ class DomFactoryTest extends \PHPUnit\Framework\TestCase
         $this->_objectManager->expects($this->once())
             ->method('create')
             ->with(\Magento\Framework\ObjectManager\Config\Reader\Dom::class)
-            ->will($this->returnValue($this->_object));
+            ->willReturn($this->_object);
 
         $this->_factory->create([1]);
     }

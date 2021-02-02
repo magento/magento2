@@ -112,7 +112,7 @@ class RulesApplierTest extends TestCase
         $this->discountFactory->expects($this->any())
             ->method('create')
             ->with($this->anything())
-            ->will($this->returnValue($discountData));
+            ->willReturn($discountData);
         /**
          * @var Rule|PHPUnit\Framework\MockObject\MockObject $ruleWithStopFurtherProcessing
          */
@@ -143,7 +143,7 @@ class RulesApplierTest extends TestCase
 
         $this->validatorUtility->expects($this->atLeastOnce())
             ->method('canProcessRule')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $ruleWithStopFurtherProcessing->expects($this->atLeastOnce())
             ->method('getActions')
@@ -168,7 +168,7 @@ class RulesApplierTest extends TestCase
         if (!$isContinue || !$isChildren) {
             $ruleWithStopFurtherProcessing->expects($this->any())
                 ->method('getRuleId')
-                ->will($this->returnValue($ruleId));
+                ->willReturn($ruleId);
 
             $this->applyRule($item, $ruleWithStopFurtherProcessing);
 
@@ -267,11 +267,11 @@ class RulesApplierTest extends TestCase
             ->method('setDiscounts')
             ->willReturn([]);
         $quote = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['getStore', '__wakeUp']);
-        $item->expects($this->any())->method('getAddress')->will($this->returnValue($address));
-        $item->expects($this->any())->method('getExtensionAttributes')->will($this->returnValue($itemExtension));
+        $item->expects($this->any())->method('getAddress')->willReturn($address);
+        $item->expects($this->any())->method('getExtensionAttributes')->willReturn($itemExtension);
         $address->expects($this->any())
             ->method('getQuote')
-            ->will($this->returnValue($quote));
+            ->willReturn($quote);
 
         return $item;
     }
@@ -300,19 +300,19 @@ class RulesApplierTest extends TestCase
         $this->validatorUtility->expects($this->any())
             ->method('getItemQty')
             ->with($this->anything(), $this->anything())
-            ->will($this->returnValue($qty));
+            ->willReturn($qty);
         $discountCalc->expects($this->any())
             ->method('fixQuantity')
             ->with($this->equalTo($qty), $this->equalTo($rule))
-            ->will($this->returnValue($qty));
+            ->willReturn($qty);
 
         $discountCalc->expects($this->any())
             ->method('calculate')
             ->with($this->equalTo($rule), $this->equalTo($item), $this->equalTo($qty))
-            ->will($this->returnValue($discountData));
+            ->willReturn($discountData);
         $this->calculatorFactory->expects($this->any())
             ->method('create')
             ->with($this->anything())
-            ->will($this->returnValue($discountCalc));
+            ->willReturn($discountCalc);
     }
 }

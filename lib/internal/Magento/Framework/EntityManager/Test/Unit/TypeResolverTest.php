@@ -22,7 +22,7 @@ class TypeResolverTest extends \PHPUnit\Framework\TestCase
      */
     private $metadataPoolMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->metadataPoolMock =

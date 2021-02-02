@@ -22,7 +22,7 @@ class GenerateFixturesCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $command;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->fixtureModel = $this->createMock(\Magento\Setup\Fixtures\FixtureModel::class);
         $this->command = new GenerateFixturesCommand($this->fixtureModel);
@@ -39,11 +39,12 @@ class GenerateFixturesCommandTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Not enough arguments
      */
     public function testExecuteInvalidLanguageArgument()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Not enough arguments');
+
 
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);

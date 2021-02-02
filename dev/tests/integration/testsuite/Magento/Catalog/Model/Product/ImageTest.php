@@ -67,7 +67,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $viewFileSystem->expects($this->once())
             ->method('getStaticFileName')
             ->with($inputFile)
-            ->will($this->returnValue($expectedFile));
+            ->willReturn($expectedFile);
 
         /** @var $model \Magento\Catalog\Model\Product\Image */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

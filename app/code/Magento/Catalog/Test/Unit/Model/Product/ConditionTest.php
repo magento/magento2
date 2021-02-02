@@ -72,7 +72,7 @@ class ConditionTest extends \PHPUnit\Framework\TestCase
 
         $mock->expects($this->any())
             ->method('select')
-            ->will($this->returnValue($mockedDbSelect));
+            ->willReturn($mockedDbSelect);
 
         return $mock;
     }
@@ -89,7 +89,7 @@ class ConditionTest extends \PHPUnit\Framework\TestCase
 
         $mock->expects($this->any())
             ->method('from')
-            ->will($this->returnValue($mock));
+            ->willReturn($mock);
 
         return $mock;
     }

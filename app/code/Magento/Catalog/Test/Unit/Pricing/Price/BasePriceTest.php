@@ -66,7 +66,7 @@ class BasePriceTest extends \PHPUnit\Framework\TestCase
 
         $this->saleableItemMock->expects($this->once())
             ->method('getPriceInfo')
-            ->will($this->returnValue($this->priceInfoMock));
+            ->willReturn($this->priceInfoMock);
         $this->prices = [
             'regular_price' => $this->regularPriceMock,
             'tier_price' => $this->tierPriceMock,
@@ -93,16 +93,16 @@ class BasePriceTest extends \PHPUnit\Framework\TestCase
     {
         $this->priceInfoMock->expects($this->once())
             ->method('getPrices')
-            ->will($this->returnValue($this->prices));
+            ->willReturn($this->prices);
         $this->regularPriceMock->expects($this->exactly(3))
             ->method('getValue')
-            ->will($this->returnValue(100));
+            ->willReturn(100);
         $this->tierPriceMock->expects($this->exactly(2))
             ->method('getValue')
-            ->will($this->returnValue(99));
+            ->willReturn(99);
         $this->specialPriceMock->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($specialPriceValue));
+            ->willReturn($specialPriceValue);
         $this->assertSame($expectedResult, $this->basePrice->getValue());
     }
 

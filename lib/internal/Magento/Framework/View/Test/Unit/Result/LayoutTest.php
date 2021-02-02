@@ -45,9 +45,9 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
         $this->translateInline = $this->createMock(\Magento\Framework\Translate\InlineInterface::class);
 
         $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
-        $context->expects($this->any())->method('getLayout')->will($this->returnValue($this->layout));
-        $context->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
-        $context->expects($this->any())->method('getEventManager')->will($this->returnValue($this->eventManager));
+        $context->expects($this->any())->method('getLayout')->willReturn($this->layout);
+        $context->expects($this->any())->method('getRequest')->willReturn($this->request);
+        $context->expects($this->any())->method('getEventManager')->willReturn($this->eventManager);
 
         $this->resultLayout = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
             ->getObject(
@@ -78,7 +78,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
         $processor = $this->createMock(\Magento\Framework\View\Layout\ProcessorInterface::class);
         $processor->expects($this->once())->method('addHandle')->with('module_controller_action');
 
-        $this->layout->expects($this->once())->method('getUpdate')->will($this->returnValue($processor));
+        $this->layout->expects($this->once())->method('getUpdate')->willReturn($processor);
 
         $this->assertSame($this->resultLayout, $this->resultLayout->addHandle('module_controller_action'));
     }
@@ -88,7 +88,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
         $processor = $this->createMock(\Magento\Framework\View\Layout\ProcessorInterface::class);
         $processor->expects($this->once())->method('addUpdate')->with('handle_name');
 
-        $this->layout->expects($this->once())->method('getUpdate')->will($this->returnValue($processor));
+        $this->layout->expects($this->once())->method('getUpdate')->willReturn($processor);
 
         $this->resultLayout->addUpdate('handle_name');
     }
@@ -112,10 +112,10 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
     ) {
         $layoutOutput = 'output';
 
-        $this->layout->expects($this->once())->method('getOutput')->will($this->returnValue($layoutOutput));
+        $this->layout->expects($this->once())->method('getOutput')->willReturn($layoutOutput);
 
         $this->request->expects($this->once())->method('getFullActionName')
-            ->will($this->returnValue('Module_Controller_Action'));
+            ->willReturn('Module_Controller_Action');
 
         $this->eventManager->expects($this->exactly(2))->method('dispatch')->withConsecutive(
             ['layout_render_before'],
@@ -158,10 +158,10 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
         $processor = $this->createMock(\Magento\Framework\View\Layout\ProcessorInterface::class);
         $processor->expects($this->once())->method('addHandle')->with('module_controller_action');
 
-        $this->layout->expects($this->once())->method('getUpdate')->will($this->returnValue($processor));
+        $this->layout->expects($this->once())->method('getUpdate')->willReturn($processor);
 
         $this->request->expects($this->once())->method('getFullActionName')
-            ->will($this->returnValue('Module_Controller_Action'));
+            ->willReturn('Module_Controller_Action');
 
         $this->assertSame($this->resultLayout, $this->resultLayout->addDefaultHandle());
     }

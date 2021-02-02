@@ -57,7 +57,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
         $configMockFactory->expects($this->any())->method('create')->willReturn($this->configMock);
-        $this->configMock->expects($this->any())->method('setMethod')->will($this->returnSelf());
+        $this->configMock->expects($this->any())->method('setMethod')->willReturnSelf();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_helper = $objectManager->getObject(

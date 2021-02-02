@@ -28,7 +28,7 @@ class PriceIndexerDimensionsModeSetCommandTest extends \Magento\TestFramework\In
     /**
      * setUp
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
 
@@ -148,10 +148,11 @@ class PriceIndexerDimensionsModeSetCommandTest extends \Magento\TestFramework\In
      * @magentoAppArea adminhtml
      * @magentoAppIsolation enabled
      *
-     * @expectedException \InvalidArgumentException
      */
     public function testSwitchModeWithInvalidArgument()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->commandTester->execute(
             [
                 'indexer' => 'indexer_not_valid'

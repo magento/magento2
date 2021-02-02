@@ -39,7 +39,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             file_get_contents(realpath(__DIR__ . '/_files/integrationA.xml')),
             file_get_contents(realpath(__DIR__ . '/_files/integrationB.xml'))
         ];
-        $this->fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($configFiles));
+        $this->fileResolverMock->expects($this->any())->method('get')->willReturn($configFiles);
 
         $expectedResult = require __DIR__ . '/_files/integration.php';
         $this->assertEquals($expectedResult, $this->configReader->read(), 'Error happened during config reading.');

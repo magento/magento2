@@ -180,6 +180,6 @@ class SuggestionsTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($query);
 
-        $this->assertInternalType('array', $this->model->getItems($this->query));
+        $this->assertIsArray($this->model->getItems($this->query));
     }
 }

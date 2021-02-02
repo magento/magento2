@@ -105,7 +105,7 @@ class ModuleUninstallCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $this->fullModuleList = $this->createMock(\Magento\Framework\Module\FullModuleList::class);
@@ -142,7 +142,7 @@ class ModuleUninstallCommandTest extends \PHPUnit\Framework\TestCase
         $configLoader->expects($this->any())->method('load')->willReturn([]);
         $objectManager->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [\Magento\Framework\Module\PackageInfoFactory::class, $packageInfoFactory],
                 [\Magento\Framework\Module\DependencyChecker::class, $this->dependencyChecker],
                 [\Magento\Framework\App\Cache::class, $this->cache],
@@ -154,7 +154,7 @@ class ModuleUninstallCommandTest extends \PHPUnit\Framework\TestCase
                 [\Magento\Framework\Setup\BackupRollbackFactory::class, $this->backupRollbackFactory],
                 [PatchApplier::class, $this->patchApplierMock],
                 [\Magento\Framework\ObjectManager\ConfigLoaderInterface::class, $configLoader],
-            ]));
+            ]);
         $composer = $this->createMock(\Magento\Framework\Composer\ComposerInformation::class);
         $composer->expects($this->any())
             ->method('getRootRequiredPackages')
@@ -176,13 +176,13 @@ class ModuleUninstallCommandTest extends \PHPUnit\Framework\TestCase
         $this->question
             ->expects($this->any())
             ->method('ask')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->helperSet = $this->createMock(\Symfony\Component\Console\Helper\HelperSet::class);
         $this->helperSet
             ->expects($this->any())
             ->method('get')
             ->with('question')
-            ->will($this->returnValue($this->question));
+            ->willReturn($this->question);
         $this->command->setHelperSet($this->helperSet);
         $this->tester = new CommandTester($this->command);
     }
@@ -213,10 +213,10 @@ class ModuleUninstallCommandTest extends \PHPUnit\Framework\TestCase
         $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
         $this->packageInfo->expects($this->exactly(count($input['module'])))
             ->method('getPackageName')
-            ->will($this->returnValueMap($packageInfoMap));
+            ->willReturnMap($packageInfoMap);
         $this->fullModuleList->expects($this->exactly(count($input['module'])))
             ->method('has')
-            ->will($this->returnValueMap($fullModuleListMap));
+            ->willReturnMap($fullModuleListMap);
         $this->tester->execute($input);
         foreach ($expect as $message) {
             $this->assertContains($message, $this->tester->getDisplay());
@@ -320,7 +320,7 @@ class ModuleUninstallCommandTest extends \PHPUnit\Framework\TestCase
         ];
         $this->packageInfo->expects($this->any())
             ->method('getPackageName')
-            ->will($this->returnValueMap($packageMap));
+            ->willReturnMap($packageMap);
         $this->fullModuleList->expects($this->any())
             ->method('has')
             ->willReturn(true);
@@ -552,12 +552,12 @@ class ModuleUninstallCommandTest extends \PHPUnit\Framework\TestCase
         $this->question
             ->expects($this->once())
             ->method('ask')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->helperSet
             ->expects($this->once())
             ->method('get')
             ->with('question')
-            ->will($this->returnValue($this->question));
+            ->willReturn($this->question);
         $this->command->setHelperSet($this->helperSet);
         $this->tester = new CommandTester($this->command);
         $this->tester->execute($input);

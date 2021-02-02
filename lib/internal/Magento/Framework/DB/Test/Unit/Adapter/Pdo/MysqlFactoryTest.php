@@ -113,11 +113,12 @@ class MysqlFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid class, stdClass must extend Magento\Framework\DB\Adapter\Pdo\Mysql.
      */
     public function testCreateInvalidClass()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid class, stdClass must extend Magento\\Framework\\DB\\Adapter\\Pdo\\Mysql.');
+
         $this->mysqlFactory->create(
             \stdClass::class,
             []

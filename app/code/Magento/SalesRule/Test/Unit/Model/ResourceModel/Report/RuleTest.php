@@ -52,28 +52,28 @@ class RuleTest extends \PHPUnit\Framework\TestCase
         )->with(
             self::TABLE_NAME,
             $this->isInstanceOf('Zend_Db_Expr')
-        )->will(
-            $this->returnValue($select)
+        )->willReturn(
+            $select
         );
 
         $connectionMock = $this->createPartialMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['select', 'fetchAll']
         );
-        $connectionMock->expects($this->once())->method('select')->will($this->returnValue($select));
+        $connectionMock->expects($this->once())->method('select')->willReturn($select);
         $connectionMock->expects(
             $this->once()
         )->method(
             'fetchAll'
         )->with(
             $select
-        )->will(
-            $this->returnCallback([$this, 'fetchAllCallback'])
+        )->willReturnCallback(
+            [$this, 'fetchAllCallback']
         );
 
         $resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
-        $resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
-        $resourceMock->expects($this->once())->method('getTableName')->will($this->returnValue(self::TABLE_NAME));
+        $resourceMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
+        $resourceMock->expects($this->once())->method('getTableName')->willReturn(self::TABLE_NAME);
 
         $flagFactory = $this->createMock(\Magento\Reports\Model\FlagFactory::class);
         $createdatFactoryMock = $this->createPartialMock(

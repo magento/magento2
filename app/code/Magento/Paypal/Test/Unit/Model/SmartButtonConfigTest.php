@@ -92,8 +92,8 @@ class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
         array $expected = []
     ) {
         $this->localeResolverMock->method('getLocale')->willReturn($locale);
-        $this->configMock->method('getValue')->will(
-            $this->returnValueMap(
+        $this->configMock->method('getValue')->willReturnMap(
+            
                 [
                     ['merchant_id', null, 'merchant'],
                     [
@@ -115,7 +115,7 @@ class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
                         $installmentPeriodLabel
                     ]
                 ]
-            )
+            
         );
 
         self::assertEquals($expected, $this->model->getConfig($page));

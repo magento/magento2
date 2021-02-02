@@ -114,7 +114,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ));
         $itemMock->expects($this->any())
             ->method('toArray')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $this->itemFactory->expects($this->any())->method('create')->willReturn($itemMock);
 
@@ -134,6 +134,6 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         }
         $this->suggestCollection->expects($this->any())
             ->method('getIterator')
-            ->will($this->returnValue(new \ArrayIterator($collectionData)));
+            ->willReturn(new \ArrayIterator($collectionData));
     }
 }

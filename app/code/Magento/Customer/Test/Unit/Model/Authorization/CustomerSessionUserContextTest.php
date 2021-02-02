@@ -70,6 +70,6 @@ class CustomerSessionUserContextTest extends \PHPUnit\Framework\TestCase
     {
         $this->customerSession->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($userId));
+            ->willReturn($userId);
     }
 }

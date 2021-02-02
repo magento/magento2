@@ -62,7 +62,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         );
         $this->connectionMock->expects($this->any())
             ->method('describeTable')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->connectionMock->expects($this->any())
             ->method('insert');
         $this->connectionMock->expects($this->any())
@@ -80,13 +80,13 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     {
         $this->appResourceMock->expects($this->once())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
         $this->modelMock->expects($this->any())
             ->method('getEventPrefix')
-            ->will($this->returnValue('event_prefix'));
+            ->willReturn('event_prefix');
         $this->modelMock->expects($this->any())
             ->method('getEventObject')
-            ->will($this->returnValue('event_object'));
+            ->willReturn('event_object');
         $this->eventManagerMock->expects($this->at(0))
             ->method('dispatch')
             ->with('event_prefix_save_attribute_before', [
@@ -118,13 +118,13 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
 
         $this->modelMock->expects($this->any())
             ->method('getEventPrefix')
-            ->will($this->returnValue('event_prefix'));
+            ->willReturn('event_prefix');
         $this->modelMock->expects($this->any())
             ->method('getEventObject')
-            ->will($this->returnValue('event_object'));
+            ->willReturn('event_object');
         $this->appResourceMock->expects($this->once())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
         $exception  = new \Exception('Expected Exception');
         $this->modelMock->expects($this->any())
             ->method('getId')

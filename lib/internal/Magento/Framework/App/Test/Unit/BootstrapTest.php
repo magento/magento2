@@ -206,8 +206,8 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
     public function testRunNoErrors()
     {
         $responseMock = $this->getMockForAbstractClass(\Magento\Framework\App\ResponseInterface::class);
-        $this->bootstrapMock->expects($this->once())->method('assertMaintenance')->will($this->returnValue(null));
-        $this->bootstrapMock->expects($this->once())->method('assertInstalled')->will($this->returnValue(null));
+        $this->bootstrapMock->expects($this->once())->method('assertMaintenance')->willReturn(null);
+        $this->bootstrapMock->expects($this->once())->method('assertInstalled')->willReturn(null);
         $this->application->expects($this->once())->method('launch')->willReturn($responseMock);
         $this->bootstrapMock->run($this->application);
     }
@@ -225,7 +225,7 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
     public function testRunWithInstallErrors()
     {
         $expectedException = new \Exception('');
-        $this->bootstrapMock->expects($this->once())->method('assertMaintenance')->will($this->returnValue(null));
+        $this->bootstrapMock->expects($this->once())->method('assertMaintenance')->willReturn(null);
         $this->bootstrapMock->expects($this->once())->method('assertInstalled')
             ->will($this->throwException($expectedException));
         $this->bootstrapMock->expects($this->once())->method('terminate')->with($expectedException);
@@ -302,7 +302,7 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
     /**
      * Restore error handler after Bootstrap->run method
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         restore_error_handler();
         setCustomErrorHandler();

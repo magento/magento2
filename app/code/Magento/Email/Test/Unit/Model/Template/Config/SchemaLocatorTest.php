@@ -27,8 +27,8 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
         )->with(
             'etc',
             'Magento_Email'
-        )->will(
-            $this->returnValue('fixture_dir')
+        )->willReturn(
+            'fixture_dir'
         );
         $this->_model = new \Magento\Email\Model\Template\Config\SchemaLocator($this->_moduleReader);
     }

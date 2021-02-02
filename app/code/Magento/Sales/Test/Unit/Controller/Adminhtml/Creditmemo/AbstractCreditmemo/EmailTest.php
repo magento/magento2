@@ -174,7 +174,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('creditmemo_id')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->assertNull($this->creditmemoEmail->execute());
     }

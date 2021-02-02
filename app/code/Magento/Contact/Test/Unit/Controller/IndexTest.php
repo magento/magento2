@@ -39,18 +39,18 @@ class IndexTest extends \PHPUnit\Framework\TestCase
 
         $context->expects($this->any())
             ->method('getRequest')
-            ->will(
-                $this->returnValue(
+            ->willReturn(
+                
                     $this->getMockBuilder(RequestInterface::class)->getMockForAbstractClass()
-                )
+                
             );
 
         $context->expects($this->any())
             ->method('getResponse')
-            ->will(
-                $this->returnValue(
+            ->willReturn(
+                
                     $this->getMockBuilder(ResponseInterface::class)->getMockForAbstractClass()
-                )
+                
             );
 
         $this->controller = new \Magento\Contact\Test\Unit\Controller\Stub\IndexStub(

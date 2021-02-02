@@ -83,13 +83,13 @@ class InvoiceNotifierTest extends \PHPUnit\Framework\TestCase
         $historyCollection->expects($this->once())
             ->method('getUnnotifiedForInstance')
             ->with($this->invoice)
-            ->will($this->returnValue($historyItem));
+            ->willReturn($historyItem);
         $this->invoice->expects($this->once())
             ->method('getEmailSent')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->historyCollectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($historyCollection));
+            ->willReturn($historyCollection);
 
         $this->invoiceSenderMock->expects($this->once())
             ->method('send')
@@ -105,7 +105,7 @@ class InvoiceNotifierTest extends \PHPUnit\Framework\TestCase
     {
         $this->invoice->expects($this->once())
             ->method('getEmailSent')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->assertFalse($this->notifier->notify($this->invoice));
     }
 

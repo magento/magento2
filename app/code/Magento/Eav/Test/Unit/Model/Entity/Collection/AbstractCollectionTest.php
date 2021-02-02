@@ -89,22 +89,22 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'create'
-        )->will(
-            $this->returnCallback([$this, 'getMagentoObject'])
+        )->willReturnCallback(
+            [$this, 'getMagentoObject']
         );
-        $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
+        $connectionMock->expects($this->any())->method('select')->willReturn($selectMock);
         $connectionMock->expects($this->any())->method('query')->willReturn($this->statementMock);
 
         $this->coreResourceMock->expects(
             $this->any()
         )->method(
             'getConnection'
-        )->will(
-            $this->returnValue($connectionMock)
+        )->willReturn(
+            $connectionMock
         );
         $entityMock = $this->createMock(\Magento\Eav\Model\Entity\AbstractEntity::class);
-        $entityMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
-        $entityMock->expects($this->any())->method('getDefaultAttributes')->will($this->returnValue([]));
+        $entityMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
+        $entityMock->expects($this->any())->method('getDefaultAttributes')->willReturn([]);
 
         $this->validatorFactoryMock->expects(
             $this->any()
@@ -112,8 +112,8 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             'test_entity_model' // see \Magento\Eav\Test\Unit\Model\Entity\Collection\AbstractCollectionStub
-        )->will(
-            $this->returnValue($entityMock)
+        )->willReturn(
+            $entityMock
         );
 
         $this->model = new AbstractCollectionStub(
@@ -143,7 +143,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->fetchStrategyMock
             ->expects($this->once())
             ->method('fetchAll')
-            ->will($this->returnValue([['id' => 1, 'data_changes' => true], ['id' => 2]]));
+            ->willReturn([['id' => 1, 'data_changes' => true], ['id' => 2]]);
 
         foreach ($this->model->getItems() as $item) {
             $this->assertFalse($item->getDataChanges());
@@ -155,7 +155,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testClear($values, $count)
     {
-        $this->fetchStrategyMock->expects($this->once())->method('fetchAll')->will($this->returnValue($values));
+        $this->fetchStrategyMock->expects($this->once())->method('fetchAll')->willReturn($values);
 
         $testId = array_pop($values)['id'];
         $this->assertCount($count, $this->model->getItems());
@@ -169,7 +169,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testRemoveAllItems($values, $count)
     {
-        $this->fetchStrategyMock->expects($this->once())->method('fetchAll')->will($this->returnValue($values));
+        $this->fetchStrategyMock->expects($this->once())->method('fetchAll')->willReturn($values);
 
         $testId = array_pop($values)['id'];
         $this->assertCount($count, $this->model->getItems());
@@ -183,7 +183,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testRemoveItemByKey($values, $count)
     {
-        $this->fetchStrategyMock->expects($this->once())->method('fetchAll')->will($this->returnValue($values));
+        $this->fetchStrategyMock->expects($this->once())->method('fetchAll')->willReturn($values);
 
         $testId = array_pop($values)['id'];
         $this->assertCount($count, $this->model->getItems());

@@ -109,11 +109,11 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $translateInline = $this->createMock(\Magento\Framework\Translate\InlineInterface::class);
-        $translateInline->expects($this->any())->method('isAllowed')->will($this->returnValue(false));
+        $translateInline->expects($this->any())->method('isAllowed')->willReturn(false);
 
         $context =
             $this->createPartialMock(\Magento\Framework\App\Helper\Context::class, ['getTranslateInline']);
-        $context->expects($this->any())->method('getTranslateInline')->will($this->returnValue($translateInline));
+        $context->expects($this->any())->method('getTranslateInline')->willReturn($translateInline);
 
         $this->_string = new \Magento\Framework\Stdlib\StringUtils();
 
@@ -136,8 +136,8 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
             ['init']
         );
 
-        $this->errorFactory->expects($this->any())->method('create')->will($this->returnValue($this->error));
-        $this->error->expects($this->any())->method('init')->will($this->returnValue(true));
+        $this->errorFactory->expects($this->any())->method('create')->willReturn($this->error);
+        $this->error->expects($this->any())->method('init')->willReturn(true);
 
         $this->errorAggregator = $this->getMockBuilder(
             \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator::class
@@ -561,7 +561,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
         $directoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
         $directoryMock->expects($this->any())
             ->method('openFile')
-            ->will($this->returnValue(new Read($pathToCsvFile, new File())));
+            ->willReturn(new Read($pathToCsvFile, new File()));
         $source = new Csv($pathToCsvFile, $directoryMock);
         $modelUnderTest->setSource($source);
         $modelUnderTest->validateData();

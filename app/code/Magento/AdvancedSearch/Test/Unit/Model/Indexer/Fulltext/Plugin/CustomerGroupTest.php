@@ -83,17 +83,17 @@ class CustomerGroupTest extends \PHPUnit\Framework\TestCase
     {
         $this->engineResolverMock->expects($this->once())
             ->method('getCurrentSearchEngine')
-            ->will($this->returnValue($searchEngine));
+            ->willReturn($searchEngine);
 
         $groupMock = $this->createPartialMock(
             \Magento\Customer\Model\Group::class,
             ['dataHasChangedFor', 'isObjectNew', '__wakeup']
         );
-        $groupMock->expects($this->any())->method('isObjectNew')->will($this->returnValue($isObjectNew));
+        $groupMock->expects($this->any())->method('isObjectNew')->willReturn($isObjectNew);
         $groupMock->expects($this->any())
             ->method('dataHasChangedFor')
             ->with('tax_class_id')
-            ->will($this->returnValue($isTaxClassIdChanged));
+            ->willReturn($isTaxClassIdChanged);
 
         $closureMock = function (\Magento\Customer\Model\Group $object) use ($groupMock) {
             $this->assertEquals($object, $groupMock);
@@ -104,7 +104,7 @@ class CustomerGroupTest extends \PHPUnit\Framework\TestCase
         $this->indexerRegistryMock->expects($this->exactly($invalidateCounter))
             ->method('get')
             ->with(\Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID)
-            ->will($this->returnValue($this->indexerMock));
+            ->willReturn($this->indexerMock);
 
         $this->assertEquals(
             $this->subjectMock,

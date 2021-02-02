@@ -229,9 +229,9 @@ class SetTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['from', 'joinLeft', 'where'])
             ->getMock();
-        $selectMock->expects($this->once())->method('from')->will($this->returnSelf());
-        $selectMock->expects($this->once())->method('joinLeft')->will($this->returnSelf());
-        $selectMock->expects($this->atLeastOnce())->method('where')->will($this->returnSelf());
+        $selectMock->expects($this->once())->method('from')->willReturnSelf();
+        $selectMock->expects($this->once())->method('joinLeft')->willReturnSelf();
+        $selectMock->expects($this->atLeastOnce())->method('where')->willReturnSelf();
 
         $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
             ->disableOriginalConstructor()

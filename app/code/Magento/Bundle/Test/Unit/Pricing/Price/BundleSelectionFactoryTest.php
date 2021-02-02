@@ -59,7 +59,7 @@ class BundleSelectionFactoryTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             )
-        ->will($this->returnValue($result));
+        ->willReturn($result);
         $this->assertSame(
             $result,
             $this->bundleSelectionFactory

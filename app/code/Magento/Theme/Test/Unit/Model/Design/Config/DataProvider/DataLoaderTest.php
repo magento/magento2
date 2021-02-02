@@ -108,9 +108,9 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->getData();
 
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertArrayHasKey($scope, $result);
-        $this->assertInternalType('array', $result[$scope]);
+        $this->assertIsArray($result[$scope]);
         $this->assertArrayHasKey('scope', $result[$scope]);
         $this->assertArrayHasKey('scope_id', $result[$scope]);
         $this->assertEquals($scope, $result[$scope]['scope']);

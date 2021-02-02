@@ -83,7 +83,7 @@ class CategoriesFixtureTest extends \PHPUnit\Framework\TestCase
         $this->fixtureModelMock
             ->expects($this->exactly(2))
             ->method('getValue')
-            ->will($this->returnValueMap($valueMap));
+            ->willReturnMap($valueMap);
 
         $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($this->collectionMock);
         $this->collectionMock->expects($this->once())->method('getSize')->willReturn(2);
@@ -113,7 +113,7 @@ class CategoriesFixtureTest extends \PHPUnit\Framework\TestCase
         $categoryMock->expects($this->once())
             ->method('getName')
             ->with('Category 1')
-            ->will($this->returnValue('category_name'));
+            ->willReturn('category_name');
         $categoryMock->expects($this->once())
             ->method('setId')
             ->willReturnSelf();

@@ -43,7 +43,7 @@ class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
     public function testCreate()
     {
         $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
-            ->will($this->returnValue('ClassName'));
+            ->willReturn('ClassName');
 
         $adapter = $this->getMockBuilder(\Magento\Framework\Search\AdapterInterface::class)
             ->disableOriginalConstructor()
@@ -51,7 +51,7 @@ class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManager->expects($this->once())->method('create')
             ->with($this->equalTo('ClassName'), $this->equalTo(['input']))
-            ->will($this->returnValue($adapter));
+            ->willReturn($adapter);
 
         $result = $this->adapterFactory->create(['input']);
         $this->assertInstanceOf(\Magento\Framework\Search\AdapterInterface::class, $result);
@@ -64,11 +64,11 @@ class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\InvalidArgumentException::class);
 
         $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
-            ->will($this->returnValue('ClassName'));
+            ->willReturn('ClassName');
 
         $this->objectManager->expects($this->once())->method('create')
             ->with($this->equalTo('ClassName'), $this->equalTo(['input']))
-            ->will($this->returnValue('t'));
+            ->willReturn('t');
 
         $this->adapterFactory->create(['input']);
     }
@@ -80,7 +80,7 @@ class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\LogicException::class);
 
         $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
-            ->will($this->returnValue('Class'));
+            ->willReturn('Class');
 
         $this->adapterFactory->create(['input']);
     }

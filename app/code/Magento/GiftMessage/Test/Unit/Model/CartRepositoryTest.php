@@ -110,13 +110,13 @@ class CartRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with($this->cartId)
-            ->will($this->returnValue($this->quoteMock));
+            ->willReturn($this->quoteMock);
     }
 
     public function testGetWithOutMessageId()
     {
         $messageId = 0;
-        $this->quoteMock->expects($this->once())->method('getGiftMessageId')->will($this->returnValue($messageId));
+        $this->quoteMock->expects($this->once())->method('getGiftMessageId')->willReturn($messageId);
         $this->assertNull($this->cartRepository->get($this->cartId));
     }
 
@@ -124,11 +124,11 @@ class CartRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $messageId = 156;
 
-        $this->quoteMock->expects($this->once())->method('getGiftMessageId')->will($this->returnValue($messageId));
+        $this->quoteMock->expects($this->once())->method('getGiftMessageId')->willReturn($messageId);
         $this->messageFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->messageMock));
-        $this->messageMock->expects($this->once())->method('load')->will($this->returnValue($this->messageMock));
+            ->willReturn($this->messageMock);
+        $this->messageMock->expects($this->once())->method('load')->willReturn($this->messageMock);
 
         $this->assertEquals($this->messageMock, $this->cartRepository->get($this->cartId));
     }
@@ -140,7 +140,7 @@ class CartRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\Magento\Framework\Exception\InputException::class);
         $this->expectExceptionMessage('Gift messages can\'t be used for an empty cart. Add an item and try again.');
 
-        $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(0));
+        $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(0);
         $this->cartRepository->save($this->cartId, $this->messageMock);
     }
 
@@ -151,24 +151,24 @@ class CartRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\Magento\Framework\Exception\State\InvalidTransitionException::class);
         $this->expectExceptionMessage('Gift messages can\'t be used for virtual products.');
 
-        $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
-        $this->quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(true));
+        $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(1);
+        $this->quoteMock->expects($this->once())->method('isVirtual')->willReturn(true);
         $this->cartRepository->save($this->cartId, $this->messageMock);
     }
 
     public function testSave()
     {
-        $this->quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
-        $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($this->storeMock));
+        $this->quoteMock->expects($this->once())->method('isVirtual')->willReturn(false);
+        $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(1);
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
         $this->helperMock->expects($this->once())
             ->method('isMessagesAllowed')
             ->with('quote', $this->quoteMock, $this->storeMock)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->giftMessageManagerMock->expects($this->once())
             ->method('setMessage')
             ->with($this->quoteMock, 'quote', $this->messageMock)
-            ->will($this->returnValue($this->giftMessageManagerMock));
+            ->willReturn($this->giftMessageManagerMock);
         $this->messageMock->expects($this->once())->method('getMessage')->willReturn('message');
 
         $this->assertTrue($this->cartRepository->save($this->cartId, $this->messageMock));

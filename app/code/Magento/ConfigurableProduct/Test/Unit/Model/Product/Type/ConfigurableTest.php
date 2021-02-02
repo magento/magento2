@@ -417,20 +417,20 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $product->expects($this->atLeastOnce())->method('getStoreId')->willReturn($productStore);
         $product->expects($this->atLeastOnce())->method('hasData')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         ['_cache_instance_configurable_attributes', 1],
                     ]
-                )
+                
             );
         $product->expects($this->any())->method('getData')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         ['_cache_instance_configurable_attributes', null, [$attribute]],
                     ]
-                )
+                
             );
 
         $result = $this->model->getConfigurableAttributesAsArray($product);
@@ -586,16 +586,16 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $productCollection->expects($this->any())->method('setFlag')->will($this->returnSelf());
+        $productCollection->expects($this->any())->method('setFlag')->willReturnSelf();
         $productCollection
             ->expects($this->once())
             ->method('setProductFilter')
             ->with($productMock)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $productCollection
             ->expects($this->once())
             ->method('addStoreFilter')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $productCollection
             ->expects($this->once())
             ->method('getSize')
@@ -604,11 +604,11 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('process')
             ->with($productCollection)
-            ->will($this->returnValue($productCollection));
+            ->willReturn($productCollection);
         $this->productCollectionFactory
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($productCollection));
+            ->willReturn($productCollection);
         $this->assertTrue($this->model->isSalable($productMock));
     }
 

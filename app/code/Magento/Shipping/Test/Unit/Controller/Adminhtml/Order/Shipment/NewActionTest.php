@@ -151,26 +151,26 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->context->expects($this->once())
             ->method('getMessageManager')
-            ->will($this->returnValue($this->messageManager));
+            ->willReturn($this->messageManager);
         $this->context->expects($this->once())
             ->method('getRequest')
-            ->will($this->returnValue($this->request));
+            ->willReturn($this->request);
         $this->context->expects($this->once())
             ->method('getResponse')
-            ->will($this->returnValue($this->response));
+            ->willReturn($this->response);
         $this->context->expects($this->once())
             ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManager));
+            ->willReturn($this->objectManager);
         $this->context->expects($this->once())
             ->method('getSession')
-            ->will($this->returnValue($this->session));
+            ->willReturn($this->session);
         $this->context->expects($this->once())
             ->method('getActionFlag')
-            ->will($this->returnValue($this->actionFlag));
+            ->willReturn($this->actionFlag);
         $this->context->expects($this->once())
             ->method('getHelper')
-            ->will($this->returnValue($this->helper));
-        $this->context->expects($this->once())->method('getView')->will($this->returnValue($this->view));
+            ->willReturn($this->helper);
+        $this->context->expects($this->once())->method('getView')->willReturn($this->view);
         $this->newAction = $objectManagerHelper->getObject(
             \Magento\Shipping\Controller\Adminhtml\Order\Shipment\NewAction::class,
             [
@@ -192,14 +192,14 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
         );
         $this->request->expects($this->any())
             ->method('getParam')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         ['order_id', null, $orderId],
                         ['shipment_id', null, $shipmentId],
                         ['tracking', null, $tracking],
                     ]
-                )
+                
             );
         $this->shipmentLoader->expects($this->any())
             ->method('setShipmentId')
@@ -215,21 +215,21 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
             ->with($tracking);
         $this->shipmentLoader->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($shipment));
+            ->willReturn($shipment);
         $this->session->expects($this->once())
             ->method('getCommentText')
             ->with(true)
-            ->will($this->returnValue(''));
+            ->willReturn('');
         $this->objectManager->expects($this->atLeastOnce())
             ->method('get')
             ->with(\Magento\Backend\Model\Session::class)
-            ->will($this->returnValue($this->session));
+            ->willReturn($this->session);
         $this->view->expects($this->once())
             ->method('loadLayout')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->view->expects($this->once())
             ->method('renderLayout')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->view->expects($this->any())
             ->method('getPage')
             ->willReturn($this->resultPageMock);
@@ -255,20 +255,20 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
         $menuModel->expects($this->once())
             ->method('getParentItems')
             ->with($itemId)
-            ->will($this->returnValue($parents));
+            ->willReturn($parents);
         $menuBlock->expects($this->once())
             ->method('setActive')
             ->with($itemId);
         $menuBlock->expects($this->once())
             ->method('getMenuModel')
-            ->will($this->returnValue($menuModel));
+            ->willReturn($menuModel);
         $this->view->expects($this->once())
             ->method('getLayout')
-            ->will($this->returnValue($layout));
+            ->willReturn($layout);
         $layout->expects($this->once())
             ->method('getBlock')
             ->with('menu')
-            ->will($this->returnValue($menuBlock));
+            ->willReturn($menuBlock);
         $this->shipmentProviderMock->expects($this->once())
             ->method('getShipmentData')
             ->willReturn($shipmentData);

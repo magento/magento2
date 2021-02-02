@@ -31,7 +31,7 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
      *
      * @throws \Magento\Framework\Exception\AuthenticationException
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $objectManager = Bootstrap::getObjectManager();
@@ -240,7 +240,7 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
             MessageInterface::TYPE_ERROR
         );
         $this->assertRedirect($this->stringStartsWith(self::BASE_CONTROLLER_URL . 'edit/'));
-        $this->assertEquals(null, $this->session->getCustomerGroupData());
+        $this->assertNull($this->session->getCustomerGroupData());
     }
 
     /**

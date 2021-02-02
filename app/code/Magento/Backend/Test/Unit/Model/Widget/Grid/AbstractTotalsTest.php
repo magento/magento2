@@ -44,8 +44,8 @@ class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
             true,
             []
         );
-        $this->_model->expects($this->any())->method('_countSum')->will($this->returnValue(2));
-        $this->_model->expects($this->any())->method('_countAverage')->will($this->returnValue(2));
+        $this->_model->expects($this->any())->method('_countSum')->willReturn(2);
+        $this->_model->expects($this->any())->method('_countAverage')->willReturn(2);
 
         $this->_setUpColumns();
     }
@@ -115,8 +115,8 @@ class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'parseExpression'
-        )->will(
-            $this->returnValueMap($columnsValueMap)
+        )->willReturnMap(
+            $columnsValueMap
         );
 
         $isOperationValueMap = [
@@ -132,8 +132,8 @@ class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'isOperation'
-        )->will(
-            $this->returnValueMap($isOperationValueMap)
+        )->willReturnMap(
+            $isOperationValueMap
         );
     }
 
@@ -169,7 +169,7 @@ class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
             ],
             [[], new \Magento\Framework\DataObject()],
         ];
-        $this->_factoryMock->expects($this->any())->method('create')->will($this->returnValueMap($createValueMap));
+        $this->_factoryMock->expects($this->any())->method('create')->willReturnMap($createValueMap);
     }
 
     public function testColumns()

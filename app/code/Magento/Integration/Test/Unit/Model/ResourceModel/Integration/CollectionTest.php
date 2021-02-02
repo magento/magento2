@@ -31,7 +31,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $connection->expects($this->any())
             ->method('select')
-            ->will($this->returnValue($this->select));
+            ->willReturn($this->select);
 
         $resource = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
             ->disableOriginalConstructor()
@@ -39,7 +39,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $resource->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($connection));
+            ->willReturn($connection);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = $objectManagerHelper->getConstructArguments(
@@ -59,12 +59,12 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection->expects($this->at(0))
             ->method('_translateCondition')
             ->with('endpoint', ['like' => 'http:%'])
-            ->will($this->returnValue('endpoint like \'http:%\''));
+            ->willReturn('endpoint like \'http:%\'');
 
         $this->collection->expects($this->at(1))
             ->method('_translateCondition')
             ->with('identity_link_url', ['like' => 'http:%'])
-            ->will($this->returnValue('identity_link_url like \'http:%\''));
+            ->willReturn('identity_link_url like \'http:%\'');
 
         $this->select->expects($this->once())
             ->method('where')

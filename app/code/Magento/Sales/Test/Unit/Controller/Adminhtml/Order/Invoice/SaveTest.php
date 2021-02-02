@@ -79,19 +79,19 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $contextMock->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
         $contextMock->expects($this->any())
             ->method('getResponse')
-            ->will($this->returnValue($this->responseMock));
+            ->willReturn($this->responseMock);
         $contextMock->expects($this->any())
             ->method('getResultRedirectFactory')
-            ->will($this->returnValue($this->resultPageFactoryMock));
+            ->willReturn($this->resultPageFactoryMock);
         $contextMock->expects($this->any())
             ->method('getFormKeyValidator')
-            ->will($this->returnValue($this->formKeyValidatorMock));
+            ->willReturn($this->formKeyValidatorMock);
         $contextMock->expects($this->any())
             ->method('getMessageManager')
-            ->will($this->returnValue($this->messageManagerMock));
+            ->willReturn($this->messageManagerMock);
 
         $this->controller = $objectManager->getObject(
             \Magento\Sales\Controller\Adminhtml\Order\Invoice\Save::class,

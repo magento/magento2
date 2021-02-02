@@ -150,7 +150,7 @@ class ShoppingCartWithFreeShippingAndFlatRateTest extends \Magento\Mtf\TestCase\
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->testStepFactory->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,

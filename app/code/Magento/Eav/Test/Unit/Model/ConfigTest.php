@@ -100,7 +100,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $attributeCollectionMock->expects($this->any())
             ->method('setEntityTypeFilter')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $attributeCollectionMock->expects($this->any())
             ->method('getData')
             ->willReturn([$attributeData]);
@@ -153,7 +153,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->universalFactoryMock
             ->expects($this->atLeastOnce())
             ->method('create')
-            ->will($this->returnValueMap($factoryCalls));
+            ->willReturnMap($factoryCalls);
 
         $this->assertInstanceOf(Attribute::class, $this->config->getAttribute($entityType, 'attribute_code_1'));
     }
@@ -207,7 +207,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $attributeCollectionMock
             ->expects($this->any())
             ->method('setEntityTypeFilter')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $attributeCollectionMock
             ->expects($this->any())
             ->method('getData')
@@ -268,7 +268,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->universalFactoryMock
             ->expects($this->atLeastOnce())
             ->method('create')
-            ->will($this->returnValueMap($factoryCalls));
+            ->willReturnMap($factoryCalls);
 
         $this->assertEquals(['attribute_code_1' => $entityAttributeMock], $this->config->getAttributes($entityType));
     }

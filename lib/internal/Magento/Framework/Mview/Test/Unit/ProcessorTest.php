@@ -45,14 +45,14 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     protected function getViewsMock()
     {
         $viewsMock = $this->createMock(\Magento\Framework\Mview\View\Collection::class);
-        $this->viewsFactoryMock->expects($this->once())->method('create')->will($this->returnValue($viewsMock));
+        $this->viewsFactoryMock->expects($this->once())->method('create')->willReturn($viewsMock);
         return $viewsMock;
     }
 
     public function testUpdate()
     {
         $viewsMock = $this->getViewsMock();
-        $viewsMock->expects($this->once())->method('getItems')->will($this->returnValue($this->getViews('update')));
+        $viewsMock->expects($this->once())->method('getItems')->willReturn($this->getViews('update'));
         $viewsMock->expects($this->never())->method('getItemsByColumnValue');
 
         $this->model->update();
@@ -69,8 +69,8 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             'getItemsByColumnValue'
         )->with(
             $group
-        )->will(
-            $this->returnValue($this->getViews('update'))
+        )->willReturn(
+            $this->getViews('update')
         );
 
         $this->model->update($group);
@@ -83,8 +83,8 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getItems'
-        )->will(
-            $this->returnValue($this->getViews('clearChangelog'))
+        )->willReturn(
+            $this->getViews('clearChangelog')
         );
         $viewsMock->expects($this->never())->method('getItemsByColumnValue');
 
@@ -102,8 +102,8 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             'getItemsByColumnValue'
         )->with(
             $group
-        )->will(
-            $this->returnValue($this->getViews('clearChangelog'))
+        )->willReturn(
+            $this->getViews('clearChangelog')
         );
 
         $this->model->clearChangelog($group);

@@ -44,7 +44,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         if ($websiteId * 1) {
             $this->_model->setWebsiteId($websiteId);
             $website = new \Magento\Framework\DataObject(['store_ids' => [$websiteStoreId]]);
-            $this->_storeManager->expects($this->once())->method('getWebsite')->will($this->returnValue($website));
+            $this->_storeManager->expects($this->once())->method('getWebsite')->willReturn($website);
         } else {
             $this->_model->setStoreId($storeId);
             $this->_storeManager->expects($this->never())->method('getWebsite');

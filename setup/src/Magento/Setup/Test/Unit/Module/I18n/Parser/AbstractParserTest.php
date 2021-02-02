@@ -58,6 +58,6 @@ class AbstractParserTest extends \PHPUnit\Framework\TestCase
 
     public function getPhrases()
     {
-        $this->assertInternalType('array', $this->_parserMock->getPhrases());
+        $this->assertIsArray($this->_parserMock->getPhrases());
     }
 }

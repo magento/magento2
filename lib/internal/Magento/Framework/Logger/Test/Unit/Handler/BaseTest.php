@@ -56,11 +56,12 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Filename expected to be a string
      */
     public function testSanitizeFileException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Filename expected to be a string');
+
         $this->sanitizeMethod->invokeArgs($this->model, [['filename' => 'notValid']]);
     }
 }

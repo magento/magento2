@@ -16,21 +16,21 @@ class ModuleStatusCommandTest extends \PHPUnit\Framework\TestCase
         $objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerProvider->expects($this->any())
             ->method('get')
-            ->will($this->returnValue($objectManager));
+            ->willReturn($objectManager);
         $moduleList = $this->createMock(\Magento\Framework\Module\ModuleList::class);
         $fullModuleList = $this->createMock(\Magento\Framework\Module\FullModuleList::class);
         $objectManager->expects($this->any())
             ->method('create')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [\Magento\Framework\Module\ModuleList::class, [], $moduleList],
                 [\Magento\Framework\Module\FullModuleList::class, [], $fullModuleList],
-            ]));
+            ]);
         $moduleList->expects($this->any())
             ->method('getNames')
-            ->will($this->returnValue(['Magento_Module1', 'Magento_Module2']));
+            ->willReturn(['Magento_Module1', 'Magento_Module2']);
         $fullModuleList->expects($this->any())
             ->method('getNames')
-            ->will($this->returnValue(['Magento_Module1', 'Magento_Module2', 'Magento_Module3']));
+            ->willReturn(['Magento_Module1', 'Magento_Module2', 'Magento_Module3']);
         $commandTester = new CommandTester(new ModuleStatusCommand($objectManagerProvider));
         $commandTester->execute([]);
         $this->assertStringMatchesFormat(

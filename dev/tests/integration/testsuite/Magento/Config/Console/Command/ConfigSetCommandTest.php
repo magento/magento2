@@ -253,7 +253,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             $value,
             $this->scopeConfig->getValue($path, $scope, $scopeCode)
         );
-        $this->assertSame(null, $this->arrayManager->get($configPath, $this->loadConfig()));
+        $this->assertNull($this->arrayManager->get($configPath, $this->loadConfig()));
 
         $this->runCommand($arguments, $optionsLock, '<info>Value was saved in app/etc/env.php and locked.</info>');
         $this->runCommand($arguments, $optionsLock, '<info>Value was saved in app/etc/env.php and locked.</info>');

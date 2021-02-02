@@ -60,9 +60,9 @@ class SuccessTest extends \PHPUnit\Framework\TestCase
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->contextMock->expects($this->once())->method('getSession')->will($this->returnValue($this->sessionMock));
+        $this->contextMock->expects($this->once())->method('getSession')->willReturn($this->sessionMock);
         $this->contextMock->expects($this->once())
-            ->method('getStoreManager')->will($this->returnValue($this->storeManagerMock));
+            ->method('getStoreManager')->willReturn($this->storeManagerMock);
         $this->model = $objectManager->getObject(
             \Magento\Multishipping\Block\Checkout\Success::class,
             [
@@ -96,8 +96,8 @@ class SuccessTest extends \PHPUnit\Framework\TestCase
     public function testGetContinueUrl()
     {
         $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
-        $storeMock->expects($this->once())->method('getBaseUrl')->will($this->returnValue('Expected Result'));
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
+        $storeMock->expects($this->once())->method('getBaseUrl')->willReturn('Expected Result');
 
         $this->assertEquals('Expected Result', $this->model->getContinueUrl());
     }

@@ -39,12 +39,12 @@ class QuoteConfigProductAttributesTest extends \PHPUnit\Framework\TestCase
 
         $this->ruleResource->expects($this->once())
             ->method('getActiveAttributes')
-            ->will(
-                $this->returnValue(
+            ->willReturn(
+                
                     [
                         ['attribute_code' => $attributeCode, 'enabled' => true],
                     ]
-                )
+                
             );
 
         $this->assertEquals($expected, $this->plugin->afterGetProductAttributes($subject, []));

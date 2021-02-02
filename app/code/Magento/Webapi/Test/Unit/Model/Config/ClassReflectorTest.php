@@ -29,8 +29,8 @@ class ClassReflectorTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'process'
-        )->will(
-            $this->returnValueMap([['string', 'str'], ['int', 'int']])
+        )->willReturnMap(
+            [['string', 'str'], ['int', 'int']]
         );
         $this->_classReflector = new \Magento\Webapi\Model\Config\ClassReflector($this->_typeProcessor);
     }

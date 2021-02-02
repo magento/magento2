@@ -53,10 +53,11 @@ class LoggerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Zend_Db_Statement_Exception
      */
     public function testLogNonExistUser()
     {
+        $this->expectException(\Zend_Db_Statement_Exception::class);
+
         $this->logger->log(200, '2.2.2');
     }
 }

@@ -96,7 +96,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->groupRepositoryMock->expects($this->once())
             ->method('getList')
             ->with($this->equalTo($expectedSearchCriteria))
-            ->will($this->returnValue($this->searchResults));
+            ->willReturn($this->searchResults);
 
         // Now call service collection to load the data.  This causes it to create the search criteria Data Object
         $this->serviceCollection->addFieldToFilter('name', 'Magento');
@@ -126,7 +126,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->groupRepositoryMock->expects($this->once())
             ->method('getList')
             ->with($this->equalTo($expectedSearchCriteria))
-            ->will($this->returnValue($this->searchResults));
+            ->willReturn($this->searchResults);
 
         // Now call service collection to load the data.  This causes it to create the search criteria Data Object
         $this->serviceCollection->addFieldToFilter($field, [$conditionType => $value]);
@@ -162,7 +162,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->groupRepositoryMock->expects($this->once())
             ->method('getList')
             ->with($this->equalTo($expectedSearchCriteria))
-            ->will($this->returnValue($this->searchResults));
+            ->willReturn($this->searchResults);
 
         // Now call service collection to load the data.  This causes it to create the search criteria Data Object
         $this->serviceCollection->addFieldToFilter([$fieldA, $fieldB], [$value, $value]);
@@ -204,7 +204,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->groupRepositoryMock->expects($this->once())
             ->method('getList')
             ->with($this->equalTo($expectedSearchCriteria))
-            ->will($this->returnValue($this->searchResults));
+            ->willReturn($this->searchResults);
 
         // Now call service collection to load the data.  This causes it to create the search criteria Data Object
         $this->serviceCollection->addFieldToFilter($fieldA, ['gt' => $value]);

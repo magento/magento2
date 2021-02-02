@@ -84,13 +84,13 @@ class CreditmemoNotifierTest extends \PHPUnit\Framework\TestCase
         $historyCollection->expects($this->once())
             ->method('getUnnotifiedForInstance')
             ->with($this->creditmemo)
-            ->will($this->returnValue($historyItem));
+            ->willReturn($historyItem);
         $this->creditmemo->expects($this->once())
             ->method('getEmailSent')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->historyCollectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($historyCollection));
+            ->willReturn($historyCollection);
 
         $this->creditmemoSenderMock->expects($this->once())
             ->method('send')
@@ -106,7 +106,7 @@ class CreditmemoNotifierTest extends \PHPUnit\Framework\TestCase
     {
         $this->creditmemo->expects($this->once())
             ->method('getEmailSent')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->assertFalse($this->notifier->notify($this->creditmemo));
     }
 

@@ -42,7 +42,7 @@ class SignatureTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('getValue')
             ->with(Signature::XML_PATH_STATIC_FILE_SIGNATURE)
-            ->will($this->returnValue($fixtureConfigFlag));
+            ->willReturn($fixtureConfigFlag);
         $this->deploymentVersion->expects($this->never())->method($this->anything());
 
         $url = $this->getMockForAbstractClass(\Magento\Framework\Url\ScopeInterface::class);
@@ -67,8 +67,8 @@ class SignatureTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getValue')
             ->with(Signature::XML_PATH_STATIC_FILE_SIGNATURE)
-            ->will($this->returnValue(1));
-        $this->deploymentVersion->expects($this->once())->method('getValue')->will($this->returnValue('123'));
+            ->willReturn(1);
+        $this->deploymentVersion->expects($this->once())->method('getValue')->willReturn('123');
 
         $url = $this->getMockForAbstractClass(\Magento\Framework\Url\ScopeInterface::class);
         $actualResult = $this->object->afterGetBaseUrl(

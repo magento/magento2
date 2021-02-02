@@ -37,8 +37,8 @@ class NotProtectedExtensionTest extends \PHPUnit\Framework\TestCase
             ),
             $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
             $this->equalTo(null)
-        )->will(
-            $this->returnValue($this->_protectedList)
+        )->willReturn(
+            $this->_protectedList
         );
         $this->_model = new \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension($this->_scopeConfig);
     }

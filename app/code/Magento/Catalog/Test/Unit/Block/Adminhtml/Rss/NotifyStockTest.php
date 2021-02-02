@@ -82,25 +82,25 @@ class NotifyStockTest extends \PHPUnit\Framework\TestCase
     public function testGetRssData()
     {
         $this->rssUrlBuilder->expects($this->once())->method('getUrl')
-            ->will($this->returnValue('http://magento.com/rss/feeds/index/type/notifystock'));
+            ->willReturn('http://magento.com/rss/feeds/index/type/notifystock');
         $item = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['__sleep', '__wakeup', 'getId', 'getQty', 'getName'])
             ->disableOriginalConstructor()
             ->getMock();
-        $item->expects($this->once())->method('getId')->will($this->returnValue(1));
-        $item->expects($this->once())->method('getQty')->will($this->returnValue(1));
-        $item->expects($this->any())->method('getName')->will($this->returnValue('Low Stock Product'));
+        $item->expects($this->once())->method('getId')->willReturn(1);
+        $item->expects($this->once())->method('getQty')->willReturn(1);
+        $item->expects($this->any())->method('getName')->willReturn('Low Stock Product');
 
         $this->rssModel->expects($this->once())->method('getProductsCollection')
-            ->will($this->returnValue([$item]));
+            ->willReturn([$item]);
         $this->urlBuilder->expects($this->once())->method('getUrl')
             ->with('catalog/product/edit', ['id' => 1, '_secure' => true, '_nosecret' => true])
-            ->will($this->returnValue('http://magento.com/catalog/product/edit/id/1'));
+            ->willReturn('http://magento.com/catalog/product/edit/id/1');
 
         $data = $this->block->getRssData();
-        $this->assertInternalType('string', $data['title']);
-        $this->assertInternalType('string', $data['description']);
-        $this->assertInternalType('string', $data['entries'][0]['description']);
+        $this->assertIsString($data['title']);
+        $this->assertIsString($data['description']);
+        $this->assertIsString($data['entries'][0]['description']);
         $this->assertEquals($this->rssFeed, $data);
     }
 

@@ -38,8 +38,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getFrontName'
-        )->will(
-            $this->returnValue('custom_backend')
+        )->willReturn(
+            'custom_backend'
         );
 
         $this->assertEquals('custom_backend', $this->_helper->getAreaFrontName());

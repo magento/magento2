@@ -88,20 +88,20 @@ class HelperTest extends \PHPUnit\Framework\TestCase
 
         $this->scheduledStructureMock->expects($this->once())->method('hasPath')
             ->with($parentNodeName)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->scheduledStructureMock->expects($this->any())->method('hasStructureElement')
             ->with($actualNodeName)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->scheduledStructureMock->expects($this->once())->method('setPathElement')
             ->with($actualNodeName, $testPath . '/' . $actualNodeName)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->scheduledStructureMock->expects($this->once())->method('setStructureElement')
             ->with($actualNodeName, [$block, $currentNodeAs, $parentNodeName, $after, true]);
         $this->scheduledStructureMock->expects($this->once())->method('getPath')
             ->with($parentNodeName)
-            ->will($this->returnValue('test_path'));
+            ->willReturn('test_path');
         $this->scheduledStructureMock->expects($this->once())->method('getPaths')
-            ->will($this->returnValue([$potentialChild => $testPath . '/' . $currentNodeName . '/']));
+            ->willReturn([$potentialChild => $testPath . '/' . $currentNodeName . '/']);
         $this->scheduledStructureMock->expects($this->exactly($unsetPathElementCount))->method('unsetPathElement')
             ->with($potentialChild);
         $this->scheduledStructureMock->expects($this->exactly($unsetStructureElementCount))

@@ -27,7 +27,7 @@ class UpsellTest extends \PHPUnit\Framework\TestCase
     {
         $productTag = ['compare_item_1'];
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $product->expects($this->once())->method('getIdentities')->will($this->returnValue($productTag));
+        $product->expects($this->once())->method('getIdentities')->willReturn($productTag);
 
         $itemsCollection = new \ReflectionProperty(\Magento\Catalog\Block\Product\ProductList\Upsell::class, '_items');
         $itemsCollection->setAccessible(true);

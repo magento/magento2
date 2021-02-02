@@ -99,12 +99,12 @@ class ConfigurableObjectTest extends TestCase
 
         $this->interpreter
             ->method('evaluate')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function (array $arg) {
                         return $arg['value'];
                     }
-                )
+                
             );
 
         $actualResult = $this->configurableObject->evaluate($data);
@@ -144,12 +144,12 @@ class ConfigurableObjectTest extends TestCase
 
         $this->interpreter
             ->method('evaluate')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function (array $arg) {
                         return $arg['value'];
                     }
-                )
+                
             );
 
         $actualResult = $this->configurableObject->evaluate($data);

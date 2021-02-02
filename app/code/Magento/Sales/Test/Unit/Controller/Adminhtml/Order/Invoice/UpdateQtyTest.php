@@ -106,11 +106,11 @@ class UpdateQtyTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->viewMock->expects($this->any())->method('loadLayout')->will($this->returnSelf());
+        $this->viewMock->expects($this->any())->method('loadLayout')->willReturnSelf();
 
         $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
-        $this->pageConfigMock->expects($this->any())->method('getTitle')->will($this->returnValue($this->titleMock));
+        $this->pageConfigMock->expects($this->any())->method('getTitle')->willReturn($this->titleMock);
 
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->disableOriginalConstructor()
@@ -135,19 +135,19 @@ class UpdateQtyTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $contextMock->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
         $contextMock->expects($this->any())
             ->method('getResponse')
-            ->will($this->returnValue($this->responseMock));
+            ->willReturn($this->responseMock);
         $contextMock->expects($this->any())
             ->method('getTitle')
-            ->will($this->returnValue($this->titleMock));
+            ->willReturn($this->titleMock);
         $contextMock->expects($this->any())
             ->method('getView')
-            ->will($this->returnValue($this->viewMock));
+            ->willReturn($this->viewMock);
         $contextMock->expects($this->any())
             ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManagerMock));
+            ->willReturn($this->objectManagerMock);
 
         $this->resultPageFactoryMock = $this->getMockBuilder(\Magento\Framework\View\Result\PageFactory::class)
             ->disableOriginalConstructor()
@@ -194,11 +194,11 @@ class UpdateQtyTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->at(0))
             ->method('getParam')
             ->with('order_id')
-            ->will($this->returnValue($orderId));
+            ->willReturn($orderId);
         $this->requestMock->expects($this->at(1))
             ->method('getParam')
             ->with('invoice', [])
-            ->will($this->returnValue($invoiceData));
+            ->willReturn($invoiceData);
 
         $invoiceMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
             ->disableOriginalConstructor()
@@ -239,7 +239,7 @@ class UpdateQtyTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $blockItemMock->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue($response));
+            ->willReturn($response);
 
         $layoutMock = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
             ->disableOriginalConstructor()
@@ -248,20 +248,20 @@ class UpdateQtyTest extends \PHPUnit\Framework\TestCase
         $layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('order_items')
-            ->will($this->returnValue($blockItemMock));
+            ->willReturn($blockItemMock);
 
         $this->resultPageMock->expects($this->once())
             ->method('getLayout')
-            ->will($this->returnValue($layoutMock));
+            ->willReturn($layoutMock);
         $this->resultPageMock->expects($this->once())
             ->method('getConfig')
-            ->will($this->returnValue($this->pageConfigMock));
+            ->willReturn($this->pageConfigMock);
 
-        $this->pageConfigMock->expects($this->once())->method('getTitle')->will($this->returnValue($this->titleMock));
+        $this->pageConfigMock->expects($this->once())->method('getTitle')->willReturn($this->titleMock);
 
         $this->resultPageFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->resultPageMock));
+            ->willReturn($this->resultPageMock);
 
         $resultRaw = $this->getMockBuilder(\Magento\Framework\Controller\Result\Raw::class)
             ->disableOriginalConstructor()
@@ -269,7 +269,7 @@ class UpdateQtyTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $resultRaw->expects($this->once())->method('setContents')->with($response);
 
-        $this->resultRawFactoryMock->expects($this->once())->method('create')->will($this->returnValue($resultRaw));
+        $this->resultRawFactoryMock->expects($this->once())->method('create')->willReturn($resultRaw);
 
         $this->assertSame($resultRaw, $this->controller->execute());
     }
@@ -290,7 +290,7 @@ class UpdateQtyTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $orderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $orderMock->expects($this->once())
             ->method('getId')
             ->willReturn(null);
@@ -312,7 +312,7 @@ class UpdateQtyTest extends \PHPUnit\Framework\TestCase
 
         $this->resultJsonFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($resultJsonMock));
+            ->willReturn($resultJsonMock);
 
         $this->assertSame($resultJsonMock, $this->controller->execute());
     }
@@ -333,7 +333,7 @@ class UpdateQtyTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $orderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $orderMock->expects($this->once())
             ->method('getId')
             ->willReturn(null);
@@ -355,7 +355,7 @@ class UpdateQtyTest extends \PHPUnit\Framework\TestCase
 
         $this->resultJsonFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($resultJsonMock));
+            ->willReturn($resultJsonMock);
 
         $this->assertSame($resultJsonMock, $this->controller->execute());
     }

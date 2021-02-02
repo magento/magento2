@@ -59,7 +59,7 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
         foreach ($productData as $key => $value) {
             $object->setData($key, $value);
         }
-        $object->expects($this->any())->method('getOrigData')->will($this->returnValue($productOrigData));
+        $object->expects($this->any())->method('getOrigData')->willReturn($productOrigData);
 
         $entityType = new \Magento\Framework\DataObject();
         $entityType->setEntityTypeCode('test');
@@ -86,15 +86,15 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
             $this->once()
         )->method(
             'getAffectedFields'
-        )->will(
-            $this->returnValue(['test_table' => [['value_id' => 0, 'attribute_id' => $attributeCode]]])
+        )->willReturn(
+            ['test_table' => [['value_id' => 0, 'attribute_id' => $attributeCode]]]
         );
 
-        $backendModel->expects($this->any())->method('isStatic')->will($this->returnValue(false));
+        $backendModel->expects($this->any())->method('isStatic')->willReturn(false);
         $backendModel->expects($this->never())->method('getEntityValueId');
         $backendModel->setAttribute($attribute);
 
-        $attribute->expects($this->any())->method('getBackend')->will($this->returnValue($backendModel));
+        $attribute->expects($this->any())->method('getBackend')->willReturn($backendModel);
         $attribute->setId(222);
         $attributes[$attributeCode] = $attribute;
         $eavConfig = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
@@ -128,15 +128,15 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
             ->setMethods(['_getValue', 'beginTransaction', 'commit', 'rollback', 'getConnection'])
             ->getMock();
 
-        $model->expects($this->any())->method('_getValue')->will($this->returnValue($eavConfig));
-        $model->expects($this->any())->method('getConnection')->will($this->returnValue($this->_getConnectionMock()));
+        $model->expects($this->any())->method('_getValue')->willReturn($eavConfig);
+        $model->expects($this->any())->method('getConnection')->willReturn($this->_getConnectionMock());
 
-        $eavConfig->expects($this->any())->method('getAttribute')->will(
-            $this->returnCallback(
+        $eavConfig->expects($this->any())->method('getAttribute')->willReturnCallback(
+            
                 function ($entityType, $attributeCode) use ($attributes) {
                     return $entityType && isset($attributes[$attributeCode]) ? $attributes[$attributeCode] : null;
                 }
-            )
+            
         );
 
         $model->isPartialSave(true);

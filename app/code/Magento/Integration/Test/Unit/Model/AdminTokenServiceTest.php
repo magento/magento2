@@ -41,7 +41,7 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_tokenFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->_tokenMock));
+        $this->_tokenFactoryMock->expects($this->any())->method('create')->willReturn($this->_tokenMock);
 
         $this->_userModelMock = $this->getMockBuilder(\Magento\User\Model\User::class)
             ->disableOriginalConstructor()
@@ -63,7 +63,7 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->_tokenModelCollectionFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->_tokenModelCollectionMock));
+            ->willReturn($this->_tokenModelCollectionMock);
 
         $this->validatorHelperMock = $this->getMockBuilder(
             \Magento\Integration\Model\CredentialsValidator::class
@@ -84,20 +84,20 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
         $this->_tokenModelCollectionMock->expects($this->once())
             ->method('addFilterByAdminId')
             ->with($adminId)
-            ->will($this->returnValue($this->_tokenModelCollectionMock));
+            ->willReturn($this->_tokenModelCollectionMock);
         $this->_tokenModelCollectionMock->expects($this->any())
             ->method('getSize')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->_tokenModelCollectionMock->expects($this->once())
             ->method('getIterator')
-            ->will($this->returnValue(new \ArrayIterator([$this->_tokenMock])));
+            ->willReturn(new \ArrayIterator([$this->_tokenMock]));
         $this->_tokenModelCollectionMock->expects($this->any())
             ->method('_fetchAll')
             ->with(null)
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->_tokenMock->expects($this->once())
             ->method('delete')
-            ->will($this->returnValue($this->_tokenMock));
+            ->willReturn($this->_tokenMock);
 
         $this->assertTrue($this->_tokenService->revokeAdminAccessToken($adminId));
     }
@@ -107,10 +107,10 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
         $this->_tokenModelCollectionMock->expects($this->once())
             ->method('addFilterByAdminId')
             ->with(null)
-            ->will($this->returnValue($this->_tokenModelCollectionMock));
+            ->willReturn($this->_tokenModelCollectionMock);
         $this->_tokenMock->expects($this->never())
             ->method('delete')
-            ->will($this->returnValue($this->_tokenMock));
+            ->willReturn($this->_tokenMock);
         $this->_tokenService->revokeAdminAccessToken(null);
     }
 
@@ -126,13 +126,13 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
         $this->_tokenModelCollectionMock->expects($this->once())
             ->method('addFilterByAdminId')
             ->with($adminId)
-            ->will($this->returnValue($this->_tokenModelCollectionMock));
+            ->willReturn($this->_tokenModelCollectionMock);
         $this->_tokenModelCollectionMock->expects($this->once())
             ->method('getSize')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->_tokenModelCollectionMock->expects($this->once())
             ->method('getIterator')
-            ->will($this->returnValue(new \ArrayIterator([$this->_tokenMock])));
+            ->willReturn(new \ArrayIterator([$this->_tokenMock]));
 
         $this->_tokenMock->expects($this->once())
             ->method('delete')

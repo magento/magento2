@@ -42,11 +42,11 @@ class HelperMethodTest extends \PHPUnit\Framework\TestCase
             'evaluate'
         )->with(
             $input
-        )->will(
-            $this->returnValue($evaluatedValue)
+        )->willReturn(
+            $evaluatedValue
         );
 
-        $this->_objectManager->expects($this->once())->method('get')->with(__CLASS__)->will($this->returnValue($this));
+        $this->_objectManager->expects($this->once())->method('get')->with(__CLASS__)->willReturn($this);
 
         $expected = 'some text (evaluated) (updated)';
         $actual = $this->_model->evaluate($input);
