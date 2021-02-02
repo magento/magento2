@@ -115,7 +115,7 @@ class ShipmentAddTrackTest extends WebapiAbstract
             $exceptionMessage = $errorObj['message'];
         }
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             $exceptionMessage,
             'Could not save the shipment tracking.',
             'SoapFault or CouldNotSaveException does not contain exception message.'

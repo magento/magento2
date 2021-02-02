@@ -233,7 +233,7 @@ class CartRepositoryTest extends WebapiAbstract
         $this->assertEquals($cart->getUpdatedAt(), $cartData['updated_at']);
         $this->assertEquals($cart->getIsActive(), $cartData['is_active']);
 
-        $this->assertContains('customer_is_guest', $cartData);
+        $this->assertArrayHasKey('customer_is_guest', $cartData);
         $this->assertEquals(1, $cartData['customer_is_guest']);
     }
 

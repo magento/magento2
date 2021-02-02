@@ -171,7 +171,7 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
         $imageAttributeFound = false;
         foreach ($customAttributeArray as $customAttribute) {
             if ($customAttribute[AttributeValue::ATTRIBUTE_CODE] == 'customer_image') {
-                $this->assertContains($expectedFileName, $customAttribute[AttributeValue::VALUE]);
+                $this->assertStringContainsString($expectedFileName, $customAttribute[AttributeValue::VALUE]);
                 $mediaDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
                 $customerMediaPath = $mediaDirectory->getAbsolutePath(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
                 $imageAttributeFound = file_exists($customerMediaPath . $customAttribute[AttributeValue::VALUE]);
@@ -271,6 +271,6 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
         $customerMediaPath = $mediaDirectory->getAbsolutePath(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
         $previousImagePath =
             $previousCustomerData[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES][0][AttributeValue::VALUE];
-        $this->assertFileNotExists($customerMediaPath . $previousImagePath);
+        $this->assertFileDoesNotExist($customerMediaPath . $previousImagePath);
     }
 }

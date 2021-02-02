@@ -1059,7 +1059,7 @@ class LinkRepositoryTest extends WebapiAbstract
         foreach ($expectations['fields'] as $index => $value) {
             $this->assertEquals($value, $link[$index]);
         }
-        $this->assertContains('jellyfish_1_3.jpg', $link['sample_file']);
+        $this->assertStringContainsString('jellyfish_1_3.jpg', $link['sample_file']);
     }
 
     public function getListForAbsentProductProvider()
