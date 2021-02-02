@@ -167,6 +167,11 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     private static $routeMapper = null;
 
     /**
+     * @var ComponentRegistrar
+     */
+    private static $componentRegistrar = null;
+
+    /**
      * Sets up data
      *
      * @throws \Exception
@@ -479,7 +484,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         }
         return self::$componentRegistrar;
     }
-    
+
     /**
      * Retrieve dependencies from files
      *
