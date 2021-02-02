@@ -13,7 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\RemoteStorage\Driver\Adapter\Cache\CacheInterface;
 use Magento\RemoteStorage\Driver\Adapter\CachedAdapter;
-use Magento\RemoteStorage\Driver\Adapter\MetadataProviderInterface;
+use Magento\RemoteStorage\Driver\Adapter\MetadataProviderFactoryInterface;
 use Magento\RemoteStorage\Driver\DriverException;
 use Magento\RemoteStorage\Driver\DriverFactoryInterface;
 use Magento\RemoteStorage\Driver\RemoteDriverInterface;
@@ -35,13 +35,23 @@ class AwsS3Factory implements DriverFactoryInterface
     private $config;
 
     /**
+     * @var MetadataProviderFactoryInterface
+     */
+    private $metadataProviderFactory;
+
+    /**
      * @param ObjectManagerInterface $objectManager
      * @param Config $config
+     * @param MetadataProviderFactoryInterface $metadataProviderFactory
      */
-    public function __construct(ObjectManagerInterface $objectManager, Config $config)
-    {
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        Config $config,
+        MetadataProviderFactoryInterface $metadataProviderFactory
+    ) {
         $this->objectManager = $objectManager;
         $this->config = $config;
+        $this->metadataProviderFactory = $metadataProviderFactory;
     }
 
     /**
@@ -96,10 +106,7 @@ class AwsS3Factory implements DriverFactoryInterface
                     'cache' => $cache
                 ]),
                 'objectUrl' => $client->getObjectUrl($config['bucket'], '.'),
-                'metadataProvider' => $this->objectManager->create(MetadataProviderInterface::class, [
-                    'adapter' => $adapter,
-                    'cache' => $cache
-                ]),
+                'metadataProvider' => $this->metadataProviderFactory->create($adapter, $cache),
             ]
         );
     }
