@@ -13,6 +13,12 @@ namespace Magento\Framework\Jwt;
  */
 class JwkFactory
 {
+    private const EC_CURVE_MAP = [
+        '1.2.840.10045.3.1.7' => ['name' => 'P-256', 'bits' => 256],
+        '1.3.132.0.34' => ['name' => 'P-384', 'bits' => 384],
+        '1.3.132.0.35' => ['name' => 'P-521', 'bits' => 512]
+    ];
+
     /**
      * Create JWK for signatures generated with HMAC and SHA256
      *
@@ -115,6 +121,75 @@ class JwkFactory
         return $this->createVerifyRsa(512, $publicKey);
     }
 
+    /**
+     * Create JWK to sign JWS with ECDSA using P-256 and SHA-256.
+     *
+     * @param string $privateKey
+     * @param string|null $passPhrase
+     * @return Jwk
+     */
+    public function createSignEs256(string $privateKey, ?string $passPhrase): Jwk
+    {
+        return $this->createSignEs(256, $privateKey, $passPhrase);
+    }
+
+    /**
+     * Create JWK to verify JWS signed with ECDSA using P-256 and SHA-256.
+     *
+     * @param string $publicKey
+     * @return Jwk
+     */
+    public function createVerifyEs256(string $publicKey): Jwk
+    {
+        return $this->createVerifyEs(256, $publicKey);
+    }
+
+    /**
+     * Create JWK to sign JWS with ECDSA using P-384 and SHA-384 .
+     *
+     * @param string $privateKey
+     * @param string|null $passPhrase
+     * @return Jwk
+     */
+    public function createSignEs384(string $privateKey, ?string $passPhrase): Jwk
+    {
+        return $this->createSignEs(384, $privateKey, $passPhrase);
+    }
+
+    /**
+     * Create JWK to verify JWS signed with ECDSA using P-384 and SHA-384 .
+     *
+     * @param string $publicKey
+     * @return Jwk
+     */
+    public function createVerifyEs384(string $publicKey): Jwk
+    {
+        return $this->createVerifyEs(384, $publicKey);
+    }
+
+    /**
+     * Create JWK to sign JWS with ECDSA using P-521 and SHA-512.
+     *
+     * @param string $privateKey
+     * @param string|null $passPhrase
+     * @return Jwk
+     */
+    public function createSignEs512(string $privateKey, ?string $passPhrase): Jwk
+    {
+        return $this->createSignEs(512, $privateKey, $passPhrase);
+    }
+
+    /**
+     * Create JWK to verify JWS signed with ECDSA using P-521 and SHA-512.
+     *
+     * @param string $publicKey
+     * @return Jwk
+     */
+    public function createVerifyEs512(string $publicKey): Jwk
+    {
+        return $this->createVerifyEs(512, $publicKey);
+    }
+
     private function createHmac(int $bits, string $key): Jwk
     {
         if (strlen($key) < 128) {
@@ -183,6 +258,57 @@ class JwkFactory
             Jwk::PUBLIC_KEY_USE_SIGNATURE,
             null,
             'RS' .$bits
+        );
+    }
+
+    private function createSignEs(int $bits, string $key, ?string $pass): Jwk
+    {
+        $resource = openssl_get_privatekey($key, (string)$pass);
+        $keyData = openssl_pkey_get_details($resource)['ec'];
+        openssl_free_key($resource);
+        if (!array_key_exists($keyData['curve_oid'], self::EC_CURVE_MAP)) {
+            throw new \RuntimeException('Unsupported EC curve');
+        }
+        if ($bits !== self::EC_CURVE_MAP[$keyData['curve_oid']]['bits']) {
+            throw new \RuntimeException('The key cannot be used with SHA-' .$bits .' hashing algorithm');
+        }
+
+        return new Jwk(
+            Jwk::KEY_TYPE_EC,
+            [
+                'd' => self::base64Encode($keyData['d']),
+                'x' => self::base64Encode($keyData['x']),
+                'y' => self::base64Encode($keyData['y']),
+                'crv' => self::EC_CURVE_MAP[$keyData['curve_oid']]['name']
+            ],
+            Jwk::PUBLIC_KEY_USE_SIGNATURE,
+            null,
+            'ES' .$bits
+        );
+    }
+
+    private function createVerifyEs(int $bits, string $key): Jwk
+    {
+        $resource = openssl_get_publickey($key);
+        $keyData = openssl_pkey_get_details($resource)['ec'];
+        openssl_free_key($resource);
+        if (!array_key_exists($keyData['curve_oid'], self::EC_CURVE_MAP)) {
+            throw new \RuntimeException('Unsupported EC curve');
+        }
+        if ($bits !== self::EC_CURVE_MAP[$keyData['curve_oid']]['bits']) {
+            throw new \RuntimeException('The key cannot be used with SHA-' .$bits .' hashing algorithm');
+        }
+
+        return new Jwk(
+            Jwk::KEY_TYPE_EC,
+            [
+                'x' => self::base64Encode($keyData['x']),
+                'y' => self::base64Encode($keyData['y']),
+                'crv' => self::EC_CURVE_MAP[$keyData['curve_oid']]['name']
+            ],
+            Jwk::PUBLIC_KEY_USE_SIGNATURE,
+            null,
+            'ES' .$bits
         );
     }
 

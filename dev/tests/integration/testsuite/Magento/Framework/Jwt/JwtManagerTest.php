@@ -171,6 +171,7 @@ class JwtManagerTest extends TestCase
             ]
         );
 
+        //RSA keys
         $rsaPrivateResource = openssl_pkey_new(['private_key_bites' => 512, 'private_key_type' => OPENSSL_KEYTYPE_RSA]);
         if ($rsaPrivateResource === false) {
             throw new \RuntimeException('Failed to create RSA keypair');
@@ -180,6 +181,29 @@ class JwtManagerTest extends TestCase
             throw new \RuntimeException('Failed to read RSA private key');
         }
         openssl_free_key($rsaPrivateResource);
+
+        //EC Keys
+        $curveNameMap = [
+            256 => 'prime256v1',
+            384 => 'secp384r1',
+            512 => 'secp521r1'
+        ];
+        $ecKeys = [];
+        foreach ($curveNameMap as $bits => $curve) {
+            $privateResource = openssl_pkey_new(['curve_name' => $curve, 'private_key_type' => OPENSSL_KEYTYPE_EC]);
+            if ($privateResource === false) {
+                throw new \RuntimeException('Failed to create EC keypair');
+            }
+            $esPublic = openssl_pkey_get_details($privateResource)['key'];
+            if (!openssl_pkey_export($privateResource, $esPrivate, 'pass')) {
+                throw new \RuntimeException('Failed to read EC private key');
+            }
+            openssl_free_key($privateResource);
+            $ecKeys[$bits] = [$esPrivate, $esPublic];
+            unset($privateResource, $esPublic, $esPrivate);
+        }
+
+        //Shared secret for SHA algorithms
         $sharedSecret = random_bytes(128);
 
         return [
@@ -242,7 +266,22 @@ class JwtManagerTest extends TestCase
                     )
                 ),
                 [new JwsSignatureJwks($jwkFactory->createVerifyRs256($rsaPublic))]
-            ]
+            ],
+            'jws-ES256' => [
+                $flatJws,
+                new JwsSignatureJwks($jwkFactory->createSignEs256($ecKeys[256][0], 'pass')),
+                [new JwsSignatureJwks($jwkFactory->createVerifyEs256($ecKeys[256][1]))]
+            ],
+            'jws-ES384' => [
+                $flatJws,
+                new JwsSignatureJwks($jwkFactory->createSignEs384($ecKeys[384][0], 'pass')),
+                [new JwsSignatureJwks($jwkFactory->createVerifyEs384($ecKeys[384][1]))]
+            ],
+            'jws-ES512' => [
+                $flatJws,
+                new JwsSignatureJwks($jwkFactory->createSignEs512($ecKeys[512][0], 'pass')),
+                [new JwsSignatureJwks($jwkFactory->createVerifyEs512($ecKeys[512][1]))]
+            ],
         ];
     }
 
