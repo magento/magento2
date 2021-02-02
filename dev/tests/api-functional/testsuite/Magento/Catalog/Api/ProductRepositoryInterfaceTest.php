@@ -2241,7 +2241,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $multiselectAttributeCode = 'multiselect_attribute';
         $multiselectOptions = $this->getAttributeOptions($multiselectAttributeCode);
         $optionValues = array_filter(array_column($multiselectOptions, 'value'));
-        $optionValues = array_values($optionValues);
 
         $productData = $this->getSimpleProductData();
         $productData['custom_attributes'] = [['attribute_code' => $multiselectAttributeCode, 'value' => $optionValues]];
