@@ -88,7 +88,7 @@
                         <input type="text"
                                name="customs_value"
                                class="input-text admin__control-text <?= /* @noEscape */ $customsValueValidation ?>"
-                               value="<?= $block->escapeHtmlAttr($block->formatPrice($item->getPrice())) ?>"
+                               value="<?= $block->escapeHtmlAttr($block->formatPrice($_orderItem->getBasePrice())) ?>"
                                size="10">
                     </td>
                     <?php if (!$block->displayCustomsValue()): ?>
