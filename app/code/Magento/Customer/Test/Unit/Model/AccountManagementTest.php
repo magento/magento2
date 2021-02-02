@@ -26,6 +26,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\Store;
 use Magento\Customer\Api\Data\AddressInterface;
+use \Magento\Customer\Model\Data\CustomerSecure;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
