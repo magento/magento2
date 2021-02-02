@@ -1,0 +1,194 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+declare(strict_types=1);
+
+namespace Magento\JwtFrameworkAdapter\Model;
+
+use Jose\Component\Signature\JWSBuilder;
+use Jose\Component\Signature\JWSLoaderFactory as LoaderFactory;
+use Jose\Component\Signature\Serializer\JWSSerializerManagerFactory as JWSSerializerPool;
+use Magento\Framework\Jwt\EncryptionSettingsInterface;
+use Magento\Framework\Jwt\Exception\EncryptionException;
+use Magento\Framework\Jwt\Exception\JwtException;
+use Magento\Framework\Jwt\Exception\MalformedTokenException;
+use Magento\Framework\Jwt\HeaderInterface;
+use Magento\Framework\Jwt\Jwk;
+use Magento\Framework\Jwt\Jws\JwsInterface;
+use Magento\Framework\Jwt\Jws\JwsSignatureJwks;
+use Jose\Component\Core\JWK as AdapterJwk;
+use Jose\Component\Core\JWKSet as AdapterJwkSet;
+
+/**
+ * Works with JWS.
+ */
+class JwsManager
+{
+    /**
+     * @var JWSBuilder
+     */
+    private $jwsBuilder;
+
+    /**
+     * @var LoaderFactory
+     */
+    private $jwsLoaderFactory;
+
+    /**
+     * @var JWSSerializerPool
+     */
+    private $jwsSerializerFactory;
+
+    /**
+     * @var JwsFactory
+     */
+    private $jwsFactory;
+
+    /**
+     * @param JwsBuilderFactory $builderFactory
+     * @param JwsSerializerPoolFactory $serializerPoolFactory
+     * @param JwsLoaderFactory $jwsLoaderFactory
+     * @param JwsFactory $jwsFactory
+     */
+    public function __construct(
+        JwsBuilderFactory $builderFactory,
+        JwsSerializerPoolFactory $serializerPoolFactory,
+        JwsLoaderFactory $jwsLoaderFactory,
+        JwsFactory $jwsFactory
+    ) {
+        $this->jwsBuilder = $builderFactory->create();
+        $this->jwsSerializerFactory = $serializerPoolFactory->create();
+        $this->jwsLoaderFactory = $jwsLoaderFactory->create();
+        $this->jwsFactory = $jwsFactory;
+    }
+
+    /**
+     * Generate JWS token.
+     *
+     * @param JwsInterface $jws
+     * @param EncryptionSettingsInterface|JwsSignatureJwks $encryptionSettings
+     * @return string
+     * @throws JwtException
+     */
+    public function build(JwsInterface $jws, EncryptionSettingsInterface $encryptionSettings): string
+    {
+        if (!$encryptionSettings instanceof JwsSignatureJwks) {
+            throw new JwtException('Can only work with JWK encryption settings for JWS tokens');
+        }
+        $signaturesCount = count($encryptionSettings->getJwkSet()->getKeys());
+        if ($jws->getProtectedHeaders() && count($jws->getProtectedHeaders()) !== $signaturesCount) {
+            throw new MalformedTokenException('Number of headers must equal to number of JWKs');
+        }
+        if ($jws->getUnprotectedHeaders()
+            && count($jws->getUnprotectedHeaders()) !== $signaturesCount
+        ) {
+            throw new MalformedTokenException('There must be an equal number of protected and unprotected headers.');
+        }
+        $builder = $this->jwsBuilder->create();
+        $builder = $builder->withPayload($jws->getPayload()->getContent());
+        for ($i = 0; $i < $signaturesCount; $i++) {
+            $jwk = $encryptionSettings->getJwkSet()->getKeys()[$i];
+            $alg = $jwk->getAlgorithm();
+            if (!$alg) {
+                throw new EncryptionException('Algorithm is required for JWKs');
+            }
+            $protected = [];
+            if ($jws->getPayload()->getContentType()) {
+                $protected['cty'] = $jws->getPayload()->getContentType();
+            }
+            if ($jws->getProtectedHeaders()) {
+                $protected = $this->extractHeaderData($jws->getProtectedHeaders()[$i]);
+            }
+            $protected['alg'] = $alg;
+            $unprotected = [];
+            if ($jws->getUnprotectedHeaders()) {
+                $unprotected = $this->extractHeaderData($jws->getUnprotectedHeaders()[$i]);
+            }
+            $builder = $builder->addSignature(new AdapterJwk($jwk->getJsonData()), $protected, $unprotected);
+        }
+        $jwsCreated = $builder->build();
+
+        if ($signaturesCount > 1) {
+            return $this->jwsSerializerFactory->all()['jws_json_general']->serialize($jwsCreated);
+        }
+        if ($jws->getUnprotectedHeaders()) {
+            return $this->jwsSerializerFactory->all()['jws_json_flattened']->serialize($jwsCreated);
+        }
+        return $this->jwsSerializerFactory->all()['jws_compact']->serialize($jwsCreated);
+    }
+
+    /**
+     * Read and verify JWS token.
+     *
+     * @param string $token
+     * @param EncryptionSettingsInterface|JwsSignatureJwks $encryptionSettings
+     * @return JwsInterface
+     * @throws JwtException
+     */
+    public function read(string $token, EncryptionSettingsInterface $encryptionSettings): JwsInterface
+    {
+        if (!$encryptionSettings instanceof JwsSignatureJwks) {
+            throw new JwtException('Can only work with JWK settings for JWS tokens');
+        }
+
+        $loader = $this->jwsLoaderFactory->create(
+            ['jws_compact', 'jws_json_flattened', 'jws_json_general'],
+            array_map(
+                function (Jwk $jwk) {
+                    return $jwk->getAlgorithm();
+                },
+                $encryptionSettings->getJwkSet()->getKeys()
+            )
+        );
+        $jwkSet = new AdapterJwkSet(
+            array_map(
+                function (Jwk $jwk) {
+                    return new AdapterJwk($jwk->getJsonData());
+                },
+                $encryptionSettings->getJwkSet()->getKeys()
+            )
+        );
+        try {
+            $jws = $loader->loadAndVerifyWithKeySet(
+                $token,
+                $jwkSet,
+                $signature,
+                null
+            );
+        } catch (\Throwable $exception) {
+            throw new MalformedTokenException('Failed to read JWS token', 0, $exception);
+        }
+        if ($signature === null) {
+            throw new EncryptionException('Failed to verify a JWS token');
+        }
+        $headers = $jws->getSignature($signature);
+        if ($jws->isPayloadDetached()) {
+            throw new JwtException('Detached payload is not supported');
+        }
+
+        return $this->jwsFactory->create(
+            $headers->getProtectedHeader(),
+            $jws->getPayload(),
+            $headers->getHeader() ? $headers->getHeader() : null
+        );
+    }
+
+    /**
+     * Extract JOSE header data.
+     *
+     * @param HeaderInterface $header
+     * @return array
+     */
+    private function extractHeaderData(HeaderInterface $header): array
+    {
+        $data = [];
+        foreach ($header->getParameters() as $parameter) {
+            $data[$parameter->getName()] = $parameter->getValue();
+        }
+
+        return $data;
+    }
+}
