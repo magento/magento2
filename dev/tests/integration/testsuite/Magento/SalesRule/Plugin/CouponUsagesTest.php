@@ -114,6 +114,7 @@ class CouponUsagesTest extends TestCase
      */
     public function testSubmitQuoteAndCancelOrder()
     {
+        $this->markTestSkipped('MC-40450: ListProduct\SortingTest failure on 2.4-develop');
         $customerId = 1;
         $couponCode = 'one_usage';
         $reservedOrderId = 'test01';
