@@ -1,9 +1,16 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\RemoteStorage\Driver\Adapter;
 
 use League\Flysystem\FilesystemAdapter;
 use Magento\RemoteStorage\Driver\Adapter\Cache\CacheInterface;
 
+/**
+ * Metadata provider for filesystem storage.
+ */
 class MetadataProvider implements MetadataProviderInterface
 {
     /**
@@ -36,10 +43,10 @@ class MetadataProvider implements MetadataProviderInterface
     public function getMetadata(string $path): array
     {
         $metadata = $this->cache->getMetadata($path);
-        if ($metadata && is_array($metadata)) {
+        if ($metadata && is_array($metadata) && $this->isMetadataComplete($metadata)) {
             return $metadata;
         }
-        $meta = $this->adapter->fileSize($path);
+        $meta = $this->adapter->lastModified($path);
         $object = [
             'type' => $meta->type(),
             'size' => $meta->fileSize(),
@@ -52,5 +59,22 @@ class MetadataProvider implements MetadataProviderInterface
         ];
         $this->cache->updateMetadata($path, $object + compact('path'), true);
         return $object;
+    }
+
+    /**
+     * Check is the metadata structure complete.
+     *
+     * @param array $metadata
+     * @return bool
+     */
+    private function isMetadataComplete($metadata)
+    {
+        $keys = ['type', 'size', 'timestamp', 'visibility', 'mimetype', 'dirname'. 'basename', 'extra'];
+        foreach ($keys as $key) {
+            if (!isset($metadata[$key])) {
+                return false;
+            }
+        }
+        return true;
     }
 }

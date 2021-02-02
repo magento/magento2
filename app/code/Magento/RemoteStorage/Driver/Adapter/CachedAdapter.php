@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\RemoteStorage\Driver\Adapter;
 
 use League\Flysystem\Config;
@@ -8,6 +11,9 @@ use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\UnableToRetrieveMetadata;
 use Magento\RemoteStorage\Driver\Adapter\Cache\CacheInterface;
 
+/**
+ * Cached adapter implementation for filesystem storage.
+ */
 class CachedAdapter implements FilesystemAdapter
 {
     /**
@@ -21,15 +27,30 @@ class CachedAdapter implements FilesystemAdapter
     private $cache;
 
     /**
+     * @var MetadataProviderFactoryInterface
+     */
+    private $metadataProviderFactory;
+
+    /**
+     * @var MetadataProviderInterface
+     */
+    private $metadataProvider;
+
+    /**
      * Constructor.
      *
      * @param FilesystemAdapter $adapter
      * @param CacheInterface $cache
+     * @param MetadataProviderFactoryInterface $metadataProviderFactory
      */
-    public function __construct(FilesystemAdapter $adapter, CacheInterface $cache)
-    {
+    public function __construct(
+        FilesystemAdapter $adapter,
+        CacheInterface $cache,
+        MetadataProviderFactoryInterface $metadataProviderFactory
+    ) {
         $this->adapter = $adapter;
         $this->cache = $cache;
+        $this->metadataProviderFactory = $metadataProviderFactory;
         $this->cache->load();
     }
 
@@ -146,8 +167,8 @@ class CachedAdapter implements FilesystemAdapter
     public function read(string $path): string
     {
         $result = $this->cache->getFileContents($path);
-        if ($result !== false) {
-            return $result;
+        if (isset($result['contents'])) {
+            return $result['contents'];
         }
         $result = $this->adapter->read($path);
         if ($result) {
@@ -192,25 +213,12 @@ class CachedAdapter implements FilesystemAdapter
      * @param string $path
      * @return array
      */
-    public function getMetadata($path)
+    private function getMetadata($path)
     {
-        $metadata = $this->cache->getMetadata($path);
-        if ($metadata && is_array($metadata)) {
-            return $metadata;
+        if (!$this->metadataProvider) {
+            $this->metadataProvider = $this->metadataProviderFactory->create($this->adapter, $this->cache);
         }
-        $metadata = $this->adapter->fileSize($path);
-        $object = [
-            'type' => $metadata->type(),
-            'size' => $metadata->fileSize(),
-            'timestamp' => $metadata->lastModified(),
-            'visibility' => $metadata->visibility(),
-            'mimetype' => $metadata->mimeType(),
-            'dirname' => dirname($metadata->path()),
-            'basename' => basename($metadata->path()),
-            'extra' => $metadata->extraMetadata(),
-        ];
-        $this->cache->updateMetadata($path, $object + compact('path'), true);
-        return $object;
+        return $this->metadataProvider->getMetadata($path);
     }
 
     /**

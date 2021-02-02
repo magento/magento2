@@ -14,7 +14,6 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\RemoteStorage\Driver\Adapter\Cache\CacheInterface;
 use Magento\RemoteStorage\Driver\Adapter\CachedAdapter;
 use Magento\RemoteStorage\Driver\Adapter\MetadataProviderInterface;
-use Magento\RemoteStorage\Driver\Cache\CacheFactory;
 use Magento\RemoteStorage\Driver\DriverException;
 use Magento\RemoteStorage\Driver\DriverFactoryInterface;
 use Magento\RemoteStorage\Driver\RemoteDriverInterface;
@@ -31,24 +30,17 @@ class AwsS3Factory implements DriverFactoryInterface
     private $objectManager;
 
     /**
-     * @var CacheFactory
-     */
-    private $cacheFactory;
-
-    /**
      * @var Config
      */
     private $config;
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param CacheFactory $cacheFactory - deprecated
      * @param Config $config
      */
-    public function __construct(ObjectManagerInterface $objectManager, CacheFactory $cacheFactory, Config $config)
+    public function __construct(ObjectManagerInterface $objectManager, Config $config)
     {
         $this->objectManager = $objectManager;
-        $this->cacheFactory = $cacheFactory;
         $this->config = $config;
     }
 
@@ -61,8 +53,8 @@ class AwsS3Factory implements DriverFactoryInterface
             return $this->createConfigured(
                 $this->config->getConfig(),
                 $this->config->getPrefix(),
-                $this->config->getCacheAdapter(),
-                $this->config->getCacheConfig()
+                '',
+                []
             );
         } catch (LocalizedException $exception) {
             throw new DriverException(__($exception->getMessage()), $exception);

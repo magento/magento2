@@ -12,7 +12,6 @@ use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverPool;
-use Magento\RemoteStorage\Driver\Cache\CacheFactory;
 use Magento\RemoteStorage\Driver\DriverFactoryPool;
 use Magento\RemoteStorage\Driver\DriverPool as RemoteDriverPool;
 use Magento\Framework\Setup\ConfigOptionsListInterface;
@@ -165,7 +164,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 $this->driverFactoryPool->get($driver)->createConfigured(
                     (array)$configData->getData()['remote_storage']['config'],
                     (string)$options[self::OPTION_REMOTE_STORAGE_PREFIX],
-                    CacheFactory::ADAPTER_MEMORY,
+                    '',
                     []
                 )->test();
             } catch (LocalizedException $exception) {

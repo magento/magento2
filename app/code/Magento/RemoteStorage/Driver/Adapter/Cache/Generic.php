@@ -1,11 +1,17 @@
 <?php
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\RemoteStorage\Driver\Adapter\Cache;
 
 use Magento\Framework\App\CacheInterface as MagentoCacheInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\RemoteStorage\Driver\Adapter\PathUtil;
 
+/**
+ * Generic cache implementation for filesystem storage.
+ */
 class Generic implements CacheInterface
 {
     /**

@@ -26,8 +26,8 @@ interface DriverFactoryInterface
      *
      * @param array $config
      * @param string $prefix
-     * @param string $cacheAdapter
-     * @param array $cacheConfig
+     * @param string $cacheAdapter - @deprecated
+     * @param array $cacheConfig - @deprecated
      * @return RemoteDriverInterface
      *
      * @throws DriverException

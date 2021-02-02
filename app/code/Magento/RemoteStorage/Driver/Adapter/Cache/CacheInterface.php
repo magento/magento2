@@ -1,7 +1,13 @@
 <?php
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\RemoteStorage\Driver\Adapter\Cache;
 
+/**
+ * Interface for filesystem adapter cache storage.
+ */
 interface CacheInterface
 {
     /**
