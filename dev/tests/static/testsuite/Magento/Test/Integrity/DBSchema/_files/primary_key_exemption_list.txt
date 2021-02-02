@@ -1,2 +1,1 @@
-catalog_url_rewrite_product_category
 queue_poison_pill
