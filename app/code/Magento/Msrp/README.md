@@ -1,6 +1,6 @@
 # Magento_Msrp module
 
-The Magento_Msrp module is responsible for Manufacturer’s Suggested Retail Price functionality.
+The **Magento_Msrp** module is responsible for Manufacturer’s Suggested Retail Price functionality.
 A current module provides base functional for msrp pricing rendering, configuration and calculation.
 
 ## Installation
@@ -34,6 +34,22 @@ For information about a typical file structure of a module in Magento 2,
  see [Module file structure](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
  
 ## Extensibility
+ 
+ Developers can pass custom `msrpPriceCalculators` for `Magento\Msrp\Pricing\MsrpPriceCalculator` using type configuration using  `di.xml`. 
+ 
+ For example:
+ ```
+    <type name="Magento\Msrp\Pricing\MsrpPriceCalculator">
+        <arguments>
+            <argument name="msrpPriceCalculators" xsi:type="array">
+                <item name="configurable" xsi:type="array">
+                    <item name="productType" xsi:type="const">Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE</item>
+                    <item name="priceCalculator" xsi:type="object">Magento\MsrpConfigurableProduct\Pricing\MsrpPriceCalculator</item>
+                </item>
+            </argument>
+       </arguments>
+   </type>
+``` 
  
  Extension developers can interact with the Magento_Msrp module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/plugins.html).
 
