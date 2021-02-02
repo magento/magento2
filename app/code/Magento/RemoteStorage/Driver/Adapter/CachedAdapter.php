@@ -24,7 +24,7 @@ class CachedAdapter implements FilesystemAdapter
      * Constructor.
      *
      * @param FilesystemAdapter $adapter
-     * @param CacheInterface   $cache
+     * @param CacheInterface $cache
      */
     public function __construct(FilesystemAdapter $adapter, CacheInterface $cache)
     {
@@ -39,8 +39,12 @@ class CachedAdapter implements FilesystemAdapter
     public function write(string $path, string $contents, Config $config): void
     {
         $this->adapter->write($path, $contents, $config);
-        $result['type'] = 'file';
-        $this->cache->updateMetadata($path, $result + compact('path', 'contents'), true);
+        $object = [
+            'type' => 'file',
+            'path' => $path,
+            'contents' => $contents
+        ];
+        $this->cache->updateMetadata($path, $object, true);
     }
 
     /**
@@ -49,9 +53,12 @@ class CachedAdapter implements FilesystemAdapter
     public function writeStream(string $path, $contents, Config $config): void
     {
         $this->adapter->writeStream($path, $contents, $config);
-        $result['type'] = 'file';
-        $contents = false;
-        $this->cache->updateMetadata($path, $result + compact('path', 'contents'), true);
+        $object = [
+            'type' => 'file',
+            'path' => $path,
+            'contents' => false
+        ];
+        $this->cache->updateMetadata($path, $object, true);
     }
 
     /**
@@ -138,7 +145,7 @@ class CachedAdapter implements FilesystemAdapter
      */
     public function read(string $path): string
     {
-        $result = $this->cache->getFileData($path);
+        $result = $this->cache->getFileContents($path);
         if ($result !== false) {
             return $result;
         }
@@ -179,22 +186,28 @@ class CachedAdapter implements FilesystemAdapter
         return false;
     }
 
+    /**
+     * Get metadata.
+     *
+     * @param string $path
+     * @return array
+     */
     public function getMetadata($path)
     {
         $metadata = $this->cache->getMetadata($path);
         if ($metadata && is_array($metadata)) {
             return $metadata;
         }
-        $meta = $this->adapter->fileSize($path);
+        $metadata = $this->adapter->fileSize($path);
         $object = [
-            'type' => $meta->type(),
-            'size' => $meta->fileSize(),
-            'timestamp' => $meta->lastModified(),
-            'visibility' => $meta->visibility(),
-            'mimetype' => $meta->mimeType(),
-            'dirname' => dirname($meta->path()),
-            'basename' => basename($meta->path()),
-            'extra' => $meta->extraMetadata(),
+            'type' => $metadata->type(),
+            'size' => $metadata->fileSize(),
+            'timestamp' => $metadata->lastModified(),
+            'visibility' => $metadata->visibility(),
+            'mimetype' => $metadata->mimeType(),
+            'dirname' => dirname($metadata->path()),
+            'basename' => basename($metadata->path()),
+            'extra' => $metadata->extraMetadata(),
         ];
         $this->cache->updateMetadata($path, $object + compact('path'), true);
         return $object;

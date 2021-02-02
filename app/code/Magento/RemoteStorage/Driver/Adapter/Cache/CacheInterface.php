@@ -18,7 +18,7 @@ interface CacheInterface
      * @param string $path
      * @return array|false
      */
-    public function getFileData($path);
+    public function getFileContents($path);
 
     /**
      * Get metadata for path.

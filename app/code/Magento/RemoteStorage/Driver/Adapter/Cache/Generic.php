@@ -60,6 +60,7 @@ class Generic implements CacheInterface
 
     /**
      * Destructor.
+     * @deprecated
      */
     public function __destruct()
     {
@@ -127,7 +128,7 @@ class Generic implements CacheInterface
     /**
      * @inheritdoc
      */
-    public function getFileData($path)
+    public function getFileContents($path)
     {
         if (isset($this->cacheData[$path]['contents']) && $this->cacheData[$path]['contents'] !== false) {
             return $this->cacheData[$path];
@@ -232,9 +233,14 @@ class Generic implements CacheInterface
     private function filterData(array $objectListing)
     {
         $cachedProperties = array_flip([
-            'path', 'dirname', 'basename', 'extension', 'filename',
-            'size', 'mimetype', 'visibility', 'timestamp', 'type',
-            'md5',
+            'path',
+            'size',
+            'type',
+            'timestamp',
+            'visibility',
+            'mimetype',
+            'basename',
+            'dirname',
         ]);
 
         foreach ($objectListing as $path => $object) {
