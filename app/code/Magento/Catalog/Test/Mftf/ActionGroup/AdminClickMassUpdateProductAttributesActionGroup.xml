@@ -14,6 +14,7 @@
         </annotations>
         <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickDropdown"/>
         <click selector="{{AdminProductGridSection.bulkActionOption('Update attributes')}}" stepKey="clickOption"/>
-        <seeInCurrentUrl url="catalog/product_action_attribute/edit/" stepKey="seeInUrl"/>
+        <waitForPageLoad stepKey="waitForBulkUpdatePage"/>
+        <seeInCurrentUrl url="{{ProductAttributesEditPage.url}}" stepKey="seeInUrl"/>
     </actionGroup>
 </actionGroups>
