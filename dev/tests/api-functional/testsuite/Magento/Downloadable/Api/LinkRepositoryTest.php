@@ -677,7 +677,9 @@ class LinkRepositoryTest extends WebapiAbstract
     public function testCreateThrowsExceptionIfTargetProductTypeIsNotDownloadable()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The product needs to be the downloadable type. Verify the product and try again.');
+        $this->expectExceptionMessage(
+            'The product needs to be the downloadable type. Verify the product and try again.'
+        );
 
         $this->createServiceInfo['rest']['resourcePath'] = '/V1/products/simple/downloadable-links';
         $requestData = [
@@ -703,7 +705,9 @@ class LinkRepositoryTest extends WebapiAbstract
     public function testCreateThrowsExceptionIfTargetProductDoesNotExist()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The product that was requested doesn\'t exist. Verify the product and try again.');
+        $this->expectExceptionMessage(
+            'The product that was requested doesn\'t exist. Verify the product and try again.'
+        );
 
         $this->createServiceInfo['rest']['resourcePath'] = '/V1/products/wrong-sku/downloadable-links';
         $requestData = [
@@ -803,7 +807,9 @@ class LinkRepositoryTest extends WebapiAbstract
     public function testUpdateThrowsExceptionIfTargetProductDoesNotExist()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The product that was requested doesn\'t exist. Verify the product and try again.');
+        $this->expectExceptionMessage(
+            'The product that was requested doesn\'t exist. Verify the product and try again.'
+        );
 
         $this->updateServiceInfo['rest']['resourcePath'] = '/V1/products/wrong-sku/downloadable-links/1';
         $requestData = [
@@ -829,7 +835,9 @@ class LinkRepositoryTest extends WebapiAbstract
     public function testUpdateThrowsExceptionIfThereIsNoDownloadableLinkWithGivenId()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('No downloadable link with the provided ID was found. Verify the ID and try again.');
+        $this->expectExceptionMessage(
+            'No downloadable link with the provided ID was found. Verify the ID and try again.'
+        );
 
         $linkId = 9999;
         $this->updateServiceInfo['rest']['resourcePath']
@@ -961,7 +969,9 @@ class LinkRepositoryTest extends WebapiAbstract
     public function testDeleteThrowsExceptionIfThereIsNoDownloadableLinkWithGivenId()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('No downloadable link with the provided ID was found. Verify the ID and try again.');
+        $this->expectExceptionMessage(
+            'No downloadable link with the provided ID was found. Verify the ID and try again.'
+        );
 
         $linkId = 9999;
         $this->deleteServiceInfo['rest']['resourcePath'] = "/V1/products/downloadable-links/{$linkId}";

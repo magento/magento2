@@ -11,8 +11,7 @@ use Magento\Framework\App\Config;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Class CartManagementTest
- * @package Magento\Quote\Api
+ * Quote Cart Management API test
  * @magentoAppIsolation enabled
  */
 class CartManagementTest extends WebapiAbstract
@@ -282,7 +281,9 @@ class CartManagementTest extends WebapiAbstract
     public function testAssignCustomerThrowsExceptionIfCartIsAssignedToDifferentStore()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The customer can\'t be assigned to the cart. The cart belongs to a different store.');
+        $this->expectExceptionMessage(
+            'The customer can\'t be assigned to the cart. The cart belongs to a different store.'
+        );
 
         $repository = $this->objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         /** @var $customer \Magento\Customer\Api\Data\CustomerInterface */

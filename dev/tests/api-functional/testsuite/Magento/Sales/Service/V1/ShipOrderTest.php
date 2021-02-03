@@ -150,7 +150,9 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     public function testShipOrderWithoutTrackingNumberReturnsError()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessageMatches('/Shipment Document Validation Error\\(s\\):(?:\\n|\\\\n)Please enter a tracking number./');
+        $this->expectExceptionMessageMatches(
+            '/Shipment Document Validation Error\\(s\\):(?:\\n|\\\\n)Please enter a tracking number./'
+        );
 
         $this->_markTestAsRestOnly('SOAP requires an tracking number to be provided so this case is not possible.');
 

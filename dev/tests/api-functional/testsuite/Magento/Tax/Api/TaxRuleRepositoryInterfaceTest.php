@@ -14,8 +14,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Webapi\Model\Rest\Config as HttpConstants;
 
 /**
- * Class TaxRuleRepositoryInterfaceTest
- * @package Magento\Tax\Api
+ * Tax Rule Repository API test
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
@@ -195,9 +194,15 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail('Did not throw expected InputException');
         } catch (\SoapFault $e) {
-            $this->assertStringContainsString('No such entity with customer_tax_class_ids = %fieldValue', $e->getMessage());
+            $this->assertStringContainsString(
+                'No such entity with customer_tax_class_ids = %fieldValue',
+                $e->getMessage()
+            );
         } catch (\Exception $e) {
-            $this->assertStringContainsString('No such entity with customer_tax_class_ids = %fieldValue', $e->getMessage());
+            $this->assertStringContainsString(
+                'No such entity with customer_tax_class_ids = %fieldValue',
+                $e->getMessage()
+            );
         }
     }
 

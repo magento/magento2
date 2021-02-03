@@ -101,7 +101,10 @@ class OrderInvoiceCreateTest extends \Magento\TestFramework\TestCase\WebapiAbstr
     public function testOrderWithBundleInvoicedWithInvalidQuantitiesReturnsError()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessageMatches('/Invoice Document Validation Error\\(s\\):(?:\\n|\\\\n)The invoice can\'t be created without products. Add products and try again./');
+        $this->expectExceptionMessageMatches(
+            '/Invoice Document Validation Error\\(s\\):(?:\\n|\\\\n)'
+            . 'The invoice can\'t be created without products. Add products and try again./'
+        );
 
         /** @var \Magento\Sales\Model\Order $existingOrder */
         $existingOrder = $this->objectManager->create(\Magento\Sales\Model\Order::class)
@@ -148,7 +151,10 @@ class OrderInvoiceCreateTest extends \Magento\TestFramework\TestCase\WebapiAbstr
     public function testOrderWithConfigurableProductInvoicedWithInvalidQuantitiesReturnsError()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessageMatches('/Invoice Document Validation Error\\(s\\):(?:\\n|\\\\n)The invoice can\'t be created without products. Add products and try again./');
+        $this->expectExceptionMessageMatches(
+            '/Invoice Document Validation Error\\(s\\):(?:\\n|\\\\n)'
+            . 'The invoice can\'t be created without products. Add products and try again./'
+        );
 
         /** @var \Magento\Sales\Model\Order $existingOrder */
         $existingOrder = $this->objectManager->create(\Magento\Sales\Model\Order::class)

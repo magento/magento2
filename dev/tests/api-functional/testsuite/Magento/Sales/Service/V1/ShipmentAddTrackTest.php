@@ -15,7 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Class ShipmentAddTrackTest
+ * Sales Shipment Track Repository API test
  */
 class ShipmentAddTrackTest extends WebapiAbstract
 {

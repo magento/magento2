@@ -12,7 +12,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Class CustomerMetadataTest
+ * Customer Metadata API test
  */
 class CustomerMetadataTest extends WebapiAbstract
 {
@@ -274,6 +274,7 @@ class CustomerMetadataTest extends WebapiAbstract
         ];
     }
 
+    // phpcs:disable Generic.Metrics.NestingLevel
     /**
      * Checks that expected and actual attribute metadata validation rules are equal
      * and removes the validation rules entry from expected and actual attribute metadata

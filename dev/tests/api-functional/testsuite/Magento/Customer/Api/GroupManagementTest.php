@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Class GroupManagementTest
+ * Customer Group Management API test
  */
 class GroupManagementTest extends WebapiAbstract
 {
