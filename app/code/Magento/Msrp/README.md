@@ -50,6 +50,7 @@ For information about a typical file structure of a module in Magento 2,
        </arguments>
    </type>
 ``` 
+ More information about [type configuration](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/di-xml-file.html).
  
  Extension developers can interact with the Magento_Msrp module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/plugins.html).
 
@@ -73,7 +74,7 @@ For information about an event in Magento 2, see [Events and observers](https://
 
 ### Layouts
 
-This module introduces the following layouts:
+The module interacts with the following layout handles:
 
 `view/base/layout` directory:
 
@@ -90,12 +91,17 @@ This module introduces the following layouts:
 - `checkout_cart_sidebar_total_renderers`
 - `checkout_onepage_failure`
 - `checkout_onepage_success`
-- `msrp_popup`
 - `review_product_list`
 - `wishlist_index_configure_type_downloadable`
 - `wishlist_index_index`
 - `wishlist_search_view`
 - `wishlist_shared_index`
+
+This module introduces the following layouts and layout handles:
+
+`view/frontend/layout` directory:
+
+- `msrp_popup`
 
 ### UI components
 
