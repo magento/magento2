@@ -145,12 +145,16 @@ class Jwk
     private $x5ts256;
 
     /**
+     * @var string|null
+     */
+    private $contentEncryption;
+
+    /**
      * @var array
      */
     private $data;
 
     /**
-     * Jwk constructor.
      * @param string $kty
      * @param array $data
      * @param string|null $use
@@ -161,6 +165,7 @@ class Jwk
      * @param string|null $x5t
      * @param string|null $x5ts256
      * @param string|null $kid
+     * @param string|null $contentEncryption
      */
     public function __construct(
         string $kty,
@@ -172,7 +177,8 @@ class Jwk
         ?array $x5c = null,
         ?string $x5t = null,
         ?string $x5ts256 = null,
-        ?string $kid = null
+        ?string $kid = null,
+        ?string $contentEncryption = null
     ) {
         $this->kty = $kty;
         $this->data = $data;
@@ -184,6 +190,12 @@ class Jwk
         $this->x5t = $x5t;
         $this->x5ts256 = $x5ts256;
         $this->kid = $kid;
+        if ($contentEncryption && $alg !== self::ALGORITHM_DIR) {
+            throw new \InvalidArgumentException(
+                'Can only specify content encryption algorithm as "alg" for JWEs with "dir" algorithm'
+            );
+        }
+        $this->contentEncryption = $contentEncryption;
     }
 
     /**
@@ -277,6 +289,16 @@ class Jwk
     }
 
     /**
+     * Content encryption algorithm for JWEs with "alg" == "dir".
+     *
+     * @return string|null
+     */
+    public function getContentEncryption(): ?string
+    {
+        return $this->contentEncryption;
+    }
+
+    /**
      * Map with algorithm (type) specific data.
      *
      * @return string[]
@@ -297,14 +319,14 @@ class Jwk
             'kty' => $this->getKeyType(),
             'use' => $this->getPublicKeyUse(),
             'key_ops' => $this->getKeyOperations(),
-            'alg' => $this->getAlgorithm(),
+            'alg' => $this->getContentEncryption() ?? $this->getAlgorithm(),
             'x5u' => $this->getX509Url(),
             'x5c' => $this->getX509CertificateChain(),
             'x5t' => $this->getX509Sha1Thumbprint(),
             'x5t#S256' => $this->getX509Sha256Thumbprint(),
             'kid' => $this->getKeyId()
         ];
-        $data = array_merge($data, $this->getAlgoData());
+        $data = array_merge($this->getAlgoData(), $data);
 
         return array_filter($data, function ($value) {
             return $value !== null;

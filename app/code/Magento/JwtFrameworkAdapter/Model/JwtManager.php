@@ -11,6 +11,7 @@ namespace Magento\JwtFrameworkAdapter\Model;
 use Magento\Framework\Jwt\EncryptionSettingsInterface;
 use Magento\Framework\Jwt\Exception\JwtException;
 use Magento\Framework\Jwt\Exception\MalformedTokenException;
+use Magento\Framework\Jwt\Jwe\JweEncryptionSettingsInterface;
 use Magento\Framework\Jwt\Jwe\JweInterface;
 use Magento\Framework\Jwt\Jwk;
 use Magento\Framework\Jwt\Jws\JwsInterface;
@@ -144,6 +145,9 @@ class JwtManager implements JwtManagerInterface
     {
         if ($encryptionSettings instanceof JwsSignatureSettingsInterface) {
             return self::JWT_TYPE_JWS;
+        }
+        if ($encryptionSettings instanceof JweEncryptionSettingsInterface) {
+            return self::JWT_TYPE_JWE;
         }
 
         if ($encryptionSettings->getAlgorithmName() === Jwk::ALGORITHM_NONE) {

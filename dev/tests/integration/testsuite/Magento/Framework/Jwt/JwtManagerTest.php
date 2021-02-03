@@ -15,6 +15,7 @@ use Magento\Framework\Jwt\Claim\JwtId;
 use Magento\Framework\Jwt\Claim\PrivateClaim;
 use Magento\Framework\Jwt\Claim\Subject;
 use Magento\Framework\Jwt\Header\Critical;
+use Magento\Framework\Jwt\Header\KeyId;
 use Magento\Framework\Jwt\Header\PrivateHeaderParameter;
 use Magento\Framework\Jwt\Header\PublicHeaderParameter;
 use Magento\Framework\Jwt\Jwe\Jwe;
@@ -226,11 +227,106 @@ class JwtManagerTest extends TestCase
                 ]
             )
         );
+        $jsonFlatSharedHeaderJwe = new Jwe(
+            new JweHeader(
+                [
+                    new PrivateHeaderParameter('test', true),
+                    new PublicHeaderParameter('test2', 'magento', 'value')
+                ]
+            ),
+            new JweHeader(
+                [
+                    new PrivateHeaderParameter('mage', 'test')
+                ]
+            ),
+            null,
+            new ClaimsPayload(
+                [
+                    new PrivateClaim('custom-claim', 'value'),
+                    new PrivateClaim('custom-claim2', 'value2', true),
+                    new PrivateClaim('custom-claim3', 'value3'),
+                    new IssuedAt(new \DateTimeImmutable()),
+                    new Issuer('magento.com')
+                ]
+            )
+        );
+        $jsonFlatJwe = new Jwe(
+            new JweHeader(
+                [
+                    new PrivateHeaderParameter('test', true),
+                    new PublicHeaderParameter('test2', 'magento', 'value')
+                ]
+            ),
+            null,
+            [
+                new JweHeader(
+                    [
+                        new PrivateHeaderParameter('mage', 'test')
+                    ]
+                )
+            ],
+            new ClaimsPayload(
+                [
+                    new PrivateClaim('custom-claim', 'value'),
+                    new PrivateClaim('custom-claim2', 'value2', true),
+                    new PrivateClaim('custom-claim3', 'value3'),
+                    new IssuedAt(new \DateTimeImmutable()),
+                    new Issuer('magento.com')
+                ]
+            )
+        );
+        $jsonJwe = new Jwe(
+            new JweHeader(
+                [
+                    new PrivateHeaderParameter('test', true),
+                    new PublicHeaderParameter('test2', 'magento', 'value')
+                ]
+            ),
+            new JweHeader(
+                [
+                    new PrivateHeaderParameter('mage', 'test')
+                ]
+            ),
+            [
+                new JweHeader([new PrivateHeaderParameter('tst', 2)]),
+                new JweHeader([new PrivateHeaderParameter('test2', 3)])
+            ],
+            new ClaimsPayload(
+                [
+                    new PrivateClaim('custom-claim', 'value'),
+                    new PrivateClaim('custom-claim2', 'value2', true),
+                    new PrivateClaim('custom-claim3', 'value3'),
+                    new IssuedAt(new \DateTimeImmutable()),
+                    new Issuer('magento.com')
+                ]
+            )
+        );
+        $jsonJweKids = new Jwe(
+            new JweHeader(
+                [
+                    new PrivateHeaderParameter('test', true),
+                ]
+            ),
+            null,
+            [
+                new JweHeader([new PrivateHeaderParameter('tst', 2), new KeyId('1')]),
+                new JweHeader([new PrivateHeaderParameter('test2', 3), new KeyId('2')])
+            ],
+            new ClaimsPayload(
+                [
+                    new PrivateClaim('custom-claim', 'value'),
+                    new PrivateClaim('custom-claim2', 'value2', true),
+                    new PrivateClaim('custom-claim3', 'value3'),
+                    new IssuedAt(new \DateTimeImmutable()),
+                    new Issuer('magento.com')
+                ]
+            )
+        );
 
         //Keys
         [$rsaPrivate, $rsaPublic] = $this->createRsaKeys();
         $ecKeys = $this->createEcKeys();
-        $sharedSecret = random_bytes(128);
+        $sharedSecret = random_bytes(2048);
 
         return [
             'jws-HS256' => [
@@ -263,7 +359,7 @@ class JwtManagerTest extends TestCase
                 new JwsSignatureJwks($jwkFactory->createSignRs512($rsaPrivate, 'pass')),
                 [new JwsSignatureJwks($jwkFactory->createVerifyRs512($rsaPublic))]
             ],
-            'jws-compact-multiple-signatures' => [
+            'jws-json-multiple-signatures' => [
                 $compactJws,
                 new JwsSignatureJwks(
                     new JwkSet(
@@ -281,7 +377,7 @@ class JwtManagerTest extends TestCase
                     )
                 ]
             ],
-            'jws-compact-multiple-signatures-one-read' => [
+            'jws-json-multiple-signatures-one-read' => [
                 $compactJws,
                 new JwsSignatureJwks(
                     new JwkSet(
@@ -332,6 +428,121 @@ class JwtManagerTest extends TestCase
                 [
                     new JweEncryptionJwks(
                         $jwkFactory->createA128KW($sharedSecret),
+                        JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128_HS256
+                    )
+                ]
+            ],
+            'jwe-A192KW' => [
+                $jsonFlatSharedHeaderJwe,
+                new JweEncryptionJwks(
+                    $jwkFactory->createA192KW($sharedSecret),
+                    JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128_HS256
+                ),
+                [
+                    new JweEncryptionJwks(
+                        $jwkFactory->createA192KW($sharedSecret),
+                        JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128_HS256
+                    )
+                ]
+            ],
+            'jwe-A256KW' => [
+                $jsonFlatJwe,
+                new JweEncryptionJwks(
+                    $jwkFactory->createA256KW($sharedSecret),
+                    JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128_HS256
+                ),
+                [
+                    new JweEncryptionJwks(
+                        $jwkFactory->createA256KW($sharedSecret),
+                        JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128_HS256
+                    )
+                ]
+            ],
+            'jwe-multiple-recipients' => [
+                $jsonJwe,
+                new JweEncryptionJwks(
+                    new JwkSet(
+                        [
+                            $jwkFactory->createA256KW($sharedSecret),
+                            $jwkFactory->createA128KW($sharedSecret)
+                        ]
+                    ),
+                    JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128_HS256
+                ),
+                [
+                    new JweEncryptionJwks(
+                        new JwkSet(
+                            [
+                                $jwkFactory->createA256KW($sharedSecret),
+                            ]
+                        ),
+                        JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128_HS256
+                    )
+                ]
+            ],
+            'jwe-rsa-oaep' => [
+                $flatJwe,
+                new JweEncryptionJwks(
+                    $jwkFactory->createEncryptRsaOaep($rsaPublic),
+                    JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128_HS256
+                ),
+                [
+                    new JweEncryptionJwks(
+                        $jwkFactory->createDecryptRsaOaep($rsaPrivate, 'pass'),
+                        JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128_HS256
+                    )
+                ]
+            ],
+            'jwe-rsa-oaep-256' => [
+                $flatJwe,
+                new JweEncryptionJwks(
+                    $jwkFactory->createEncryptRsaOaep256($rsaPublic),
+                    JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A192GCM
+                ),
+                [
+                    new JweEncryptionJwks(
+                        $jwkFactory->createDecryptRsaOaep256($rsaPrivate, 'pass'),
+                        JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A192GCM
+                    )
+                ]
+            ],
+            'jwe-dir' => [
+                $flatJwe,
+                new JweEncryptionJwks(
+                    $jwkFactory->createDir(
+                        $sharedSecret,
+                        JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A192_HS384
+                    ),
+                    JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A192_HS384
+                ),
+                [
+                    new JweEncryptionJwks(
+                        $jwkFactory->createDir(
+                            $sharedSecret,
+                            JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A192_HS384
+                        ),
+                        JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A192_HS384
+                    )
+                ]
+            ],
+            'jwe-multiple-recipients-kids' => [
+                $jsonJweKids,
+                new JweEncryptionJwks(
+                    new JwkSet(
+                        [
+                            $jwkFactory->createEncryptRsaOaep256($rsaPublic, '2'),
+                            $jwkFactory->createA256KW($sharedSecret, '1')
+                        ]
+                    ),
+                    JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128_HS256
+                ),
+                [
+                    new JweEncryptionJwks(
+                        new JwkSet(
+                            [
+                                $jwkFactory->createDecryptRsaOaep256($rsaPrivate, 'pass', '2')
+                            ]
+                        ),
                         JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128_HS256
                     )
                 ]

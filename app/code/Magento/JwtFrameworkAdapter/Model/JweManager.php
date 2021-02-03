@@ -77,9 +77,7 @@ class JweManager
         $builder = $builder->withPayload($payload->getContent());
 
         $sharedProtected = $this->extractHeaderData($jwe->getProtectedHeader());
-        if (!$jwe->getPerRecipientUnprotectedHeaders()) {
-            $sharedProtected['enc'] = $encryptionSettings->getContentEncryptionAlgorithm();
-        }
+        $sharedProtected['enc'] = $encryptionSettings->getContentEncryptionAlgorithm();
         if (!$jwe->getPerRecipientUnprotectedHeaders()) {
             $sharedProtected['alg'] = $encryptionSettings->getAlgorithmName();
         }
@@ -117,7 +115,10 @@ class JweManager
         }
 
         $built = $builder->build();
-        if ($jwe->getPerRecipientUnprotectedHeaders() && count($jwe->getPerRecipientUnprotectedHeaders()) === 1) {
+        if ($jwe->getPerRecipientUnprotectedHeaders()
+            && count($jwe->getPerRecipientUnprotectedHeaders()) === 1
+            || (!$jwe->getPerRecipientUnprotectedHeaders() && $jwe->getSharedUnprotectedHeader())
+        ) {
             return $this->serializer->serialize('jwe_json_flattened', $built);
         }
         if ($jwe->getPerRecipientUnprotectedHeaders()) {

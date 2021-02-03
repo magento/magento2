@@ -67,33 +67,36 @@ class JwkFactory
      * Create JWK for signatures generated with HMAC and SHA256
      *
      * @param string $key
+     * @param string|null $kid JWK ID.
      * @return Jwk
      */
-    public function createHs256(string $key): Jwk
+    public function createHs256(string $key, ?string $kid = null): Jwk
     {
-        return $this->createOct($key, Jwk::PUBLIC_KEY_USE_SIGNATURE, Jwk::ALGORITHM_HS256);
+        return $this->createOct($key, Jwk::PUBLIC_KEY_USE_SIGNATURE, Jwk::ALGORITHM_HS256, $kid);
     }
 
     /**
      * Create JWK for signatures generated with HMAC and SHA384
      *
      * @param string $key
+     * @param string|null $kid JWK ID.
      * @return Jwk
      */
-    public function createHs384(string $key): Jwk
+    public function createHs384(string $key, ?string $kid = null): Jwk
     {
-        return $this->createOct($key, Jwk::PUBLIC_KEY_USE_SIGNATURE, Jwk::ALGORITHM_HS384);
+        return $this->createOct($key, Jwk::PUBLIC_KEY_USE_SIGNATURE, Jwk::ALGORITHM_HS384, $kid);
     }
 
     /**
      * Create JWK for signatures generated with HMAC and SHA512
      *
      * @param string $key
+     * @param string|null $kid JWK ID.
      * @return Jwk
      */
-    public function createHs512(string $key): Jwk
+    public function createHs512(string $key, ?string $kid = null): Jwk
     {
-        return $this->createOct($key, Jwk::PUBLIC_KEY_USE_SIGNATURE, Jwk::ALGORITHM_HS512);
+        return $this->createOct($key, Jwk::PUBLIC_KEY_USE_SIGNATURE, Jwk::ALGORITHM_HS512, $kid);
     }
 
     /**
@@ -101,22 +104,30 @@ class JwkFactory
      *
      * @param string $privateKey
      * @param string|null $passPhrase
+     * @param string|null $kid JWK ID.
      * @return Jwk
      */
-    public function createSignRs256(string $privateKey, ?string $passPhrase): Jwk
+    public function createSignRs256(string $privateKey, ?string $passPhrase, ?string $kid = null): Jwk
     {
-        return $this->createSignRsa(256, $privateKey, $passPhrase);
+        return $this->createPrivateRsa(
+            $privateKey,
+            $passPhrase,
+            Jwk::PUBLIC_KEY_USE_SIGNATURE,
+            Jwk::ALGORITHM_RS256,
+            $kid
+        );
     }
 
     /**
      * Create JWK to verify JWS signed with RSASSA-PKCS1-v1_5 using SHA-256.
      *
      * @param string $publicKey
+     * @param string|null $kid JWK ID.
      * @return Jwk
      */
-    public function createVerifyRs256(string $publicKey): Jwk
+    public function createVerifyRs256(string $publicKey, ?string $kid = null): Jwk
     {
-        return $this->createVerifyRsa(256, $publicKey);
+        return $this->createPublicRsa($publicKey, Jwk::PUBLIC_KEY_USE_SIGNATURE, Jwk::ALGORITHM_RS256, $kid);
     }
 
     /**
@@ -124,22 +135,30 @@ class JwkFactory
      *
      * @param string $privateKey
      * @param string|null $passPhrase
+     * @param string|null $kid JWK ID.
      * @return Jwk
      */
-    public function createSignRs384(string $privateKey, ?string $passPhrase): Jwk
+    public function createSignRs384(string $privateKey, ?string $passPhrase, ?string $kid = null): Jwk
     {
-        return $this->createSignRsa(384, $privateKey, $passPhrase);
+        return $this->createPrivateRsa(
+            $privateKey,
+            $passPhrase,
+            Jwk::PUBLIC_KEY_USE_SIGNATURE,
+            Jwk::ALGORITHM_RS384,
+            $kid
+        );
     }
 
     /**
      * Create JWK to verify JWS signed with RSASSA-PKCS1-v1_5 using SHA-384.
      *
      * @param string $publicKey
+     * @param string|null $kid JWK ID.
      * @return Jwk
      */
-    public function createVerifyRs384(string $publicKey): Jwk
+    public function createVerifyRs384(string $publicKey, ?string $kid = null): Jwk
     {
-        return $this->createVerifyRsa(384, $publicKey);
+        return $this->createPublicRsa($publicKey, Jwk::PUBLIC_KEY_USE_SIGNATURE, Jwk::ALGORITHM_RS384, $kid);
     }
 
     /**
@@ -147,22 +166,30 @@ class JwkFactory
      *
      * @param string $privateKey
      * @param string|null $passPhrase
+     * @param string|null $kid JWK ID.
      * @return Jwk
      */
-    public function createSignRs512(string $privateKey, ?string $passPhrase): Jwk
+    public function createSignRs512(string $privateKey, ?string $passPhrase, ?string $kid = null): Jwk
     {
-        return $this->createSignRsa(512, $privateKey, $passPhrase);
+        return $this->createPrivateRsa(
+            $privateKey,
+            $passPhrase,
+            Jwk::PUBLIC_KEY_USE_SIGNATURE,
+            Jwk::ALGORITHM_RS512,
+            $kid
+        );
     }
 
     /**
      * Create JWK to verify JWS signed with RSASSA-PKCS1-v1_5 using SHA-512.
      *
      * @param string $publicKey
+     * @param string|null $kid JWK ID.
      * @return Jwk
      */
-    public function createVerifyRs512(string $publicKey): Jwk
+    public function createVerifyRs512(string $publicKey, ?string $kid = null): Jwk
     {
-        return $this->createVerifyRsa(512, $publicKey);
+        return $this->createPublicRsa($publicKey, Jwk::PUBLIC_KEY_USE_SIGNATURE, Jwk::ALGORITHM_RS512, $kid);
     }
 
     /**
@@ -170,22 +197,24 @@ class JwkFactory
      *
      * @param string $privateKey
      * @param string|null $passPhrase
+     * @param string|null $kid JWK ID.
      * @return Jwk
      */
-    public function createSignEs256(string $privateKey, ?string $passPhrase): Jwk
+    public function createSignEs256(string $privateKey, ?string $passPhrase, ?string $kid = null): Jwk
     {
-        return $this->createSignEs(256, $privateKey, $passPhrase);
+        return $this->createSignEs(256, $privateKey, $passPhrase, $kid);
     }
 
     /**
      * Create JWK to verify JWS signed with ECDSA using P-256 and SHA-256.
      *
      * @param string $publicKey
+     * @param string|null $kid JWK ID.
      * @return Jwk
      */
-    public function createVerifyEs256(string $publicKey): Jwk
+    public function createVerifyEs256(string $publicKey, ?string $kid = null): Jwk
     {
-        return $this->createVerifyEs(256, $publicKey);
+        return $this->createVerifyEs(256, $publicKey, $kid);
     }
 
     /**
@@ -193,22 +222,24 @@ class JwkFactory
      *
      * @param string $privateKey
      * @param string|null $passPhrase
+     * @param string|null $kid JWK ID.
      * @return Jwk
      */
-    public function createSignEs384(string $privateKey, ?string $passPhrase): Jwk
+    public function createSignEs384(string $privateKey, ?string $passPhrase, ?string $kid = null): Jwk
     {
-        return $this->createSignEs(384, $privateKey, $passPhrase);
+        return $this->createSignEs(384, $privateKey, $passPhrase, $kid);
     }
 
     /**
      * Create JWK to verify JWS signed with ECDSA using P-384 and SHA-384 .
      *
      * @param string $publicKey
+     * @param string|null $kid JWK ID.
      * @return Jwk
      */
-    public function createVerifyEs384(string $publicKey): Jwk
+    public function createVerifyEs384(string $publicKey, ?string $kid = null): Jwk
     {
-        return $this->createVerifyEs(384, $publicKey);
+        return $this->createVerifyEs(384, $publicKey, $kid);
     }
 
     /**
@@ -216,22 +247,24 @@ class JwkFactory
      *
      * @param string $privateKey
      * @param string|null $passPhrase
+     * @param string|null $kid JWK ID.
      * @return Jwk
      */
-    public function createSignEs512(string $privateKey, ?string $passPhrase): Jwk
+    public function createSignEs512(string $privateKey, ?string $passPhrase, ?string $kid = null): Jwk
     {
-        return $this->createSignEs(512, $privateKey, $passPhrase);
+        return $this->createSignEs(512, $privateKey, $passPhrase, $kid);
     }
 
     /**
      * Create JWK to verify JWS signed with ECDSA using P-521 and SHA-512.
      *
      * @param string $publicKey
+     * @param string|null $kid JWK ID.
      * @return Jwk
      */
-    public function createVerifyEs512(string $publicKey): Jwk
+    public function createVerifyEs512(string $publicKey, ?string $kid = null): Jwk
     {
-        return $this->createVerifyEs(512, $publicKey);
+        return $this->createVerifyEs(512, $publicKey, $kid);
     }
 
     /**
@@ -239,22 +272,30 @@ class JwkFactory
      *
      * @param string $privateKey
      * @param string|null $passPhrase
+     * @param string|null $kid JWK ID.
      * @return Jwk
      */
-    public function createSignPs256(string $privateKey, ?string $passPhrase): Jwk
+    public function createSignPs256(string $privateKey, ?string $passPhrase, ?string $kid = null): Jwk
     {
-        return $this->createSignPs(256, $privateKey, $passPhrase);
+        return $this->createPrivateRsa(
+            $privateKey,
+            $passPhrase,
+            Jwk::PUBLIC_KEY_USE_SIGNATURE,
+            Jwk::ALGORITHM_PS256,
+            $kid
+        );
     }
 
     /**
      * Create JWK to verify JWS signed with RSASSA-PSS using SHA-256 and MGF1 with SHA-256.
      *
      * @param string $publicKey
+     * @param string|null $kid JWK ID.
      * @return Jwk
      */
-    public function createVerifyPs256(string $publicKey): Jwk
+    public function createVerifyPs256(string $publicKey, ?string $kid = null): Jwk
     {
-        return $this->createVerifyPs(256, $publicKey);
+        return $this->createPublicRsa($publicKey, Jwk::PUBLIC_KEY_USE_SIGNATURE, Jwk::ALGORITHM_PS256, $kid);
     }
 
     /**
@@ -262,22 +303,30 @@ class JwkFactory
      *
      * @param string $privateKey
      * @param string|null $passPhrase
+     * @param string|null $kid JWK ID.
      * @return Jwk
      */
-    public function createSignPs384(string $privateKey, ?string $passPhrase): Jwk
+    public function createSignPs384(string $privateKey, ?string $passPhrase, ?string $kid = null): Jwk
     {
-        return $this->createSignPs(384, $privateKey, $passPhrase);
+        return $this->createPrivateRsa(
+            $privateKey,
+            $passPhrase,
+            Jwk::PUBLIC_KEY_USE_SIGNATURE,
+            Jwk::ALGORITHM_PS384,
+            $kid
+        );
     }
 
     /**
      * Create JWK to verify JWS signed with RSASSA-PSS using SHA-384 and MGF1 with SHA-384.
      *
      * @param string $publicKey
+     * @param string|null $kid JWK ID.
      * @return Jwk
      */
-    public function createVerifyPs384(string $publicKey): Jwk
+    public function createVerifyPs384(string $publicKey, ?string $kid = null): Jwk
     {
-        return $this->createVerifyPs(384, $publicKey);
+        return $this->createPublicRsa($publicKey, Jwk::PUBLIC_KEY_USE_SIGNATURE, Jwk::ALGORITHM_PS384, $kid);
     }
 
     /**
@@ -285,39 +334,163 @@ class JwkFactory
      *
      * @param string $privateKey
      * @param string|null $passPhrase
+     * @param string|null $kid JWK ID.
      * @return Jwk
      */
-    public function createSignPs512(string $privateKey, ?string $passPhrase): Jwk
+    public function createSignPs512(string $privateKey, ?string $passPhrase, ?string $kid = null): Jwk
     {
-        return $this->createSignPs(512, $privateKey, $passPhrase);
+        return $this->createPrivateRsa(
+            $privateKey,
+            $passPhrase,
+            Jwk::PUBLIC_KEY_USE_SIGNATURE,
+            Jwk::ALGORITHM_PS512,
+            $kid
+        );
     }
 
     /**
      * Create JWK to verify JWS signed with RSASSA-PSS using SHA-512 and MGF1 with SHA-512.
      *
      * @param string $publicKey
+     * @param string|null $kid JWK ID.
      * @return Jwk
      */
-    public function createVerifyPs512(string $publicKey): Jwk
+    public function createVerifyPs512(string $publicKey, ?string $kid = null): Jwk
     {
-        return $this->createVerifyPs(512, $publicKey);
+        return $this->createPublicRsa($publicKey, Jwk::PUBLIC_KEY_USE_SIGNATURE, Jwk::ALGORITHM_PS512, $kid);
     }
 
     /**
      * Create key to use with A128KW algorithm to encrypt JWE.
      *
      * @param string $key
+     * @param string|null $kid JWK ID.
      * @return Jwk
      */
-    public function createA128KW(string $key): Jwk
+    public function createA128KW(string $key, ?string $kid = null): Jwk
     {
-        return $this->createOct($key, Jwk::PUBLIC_KEY_USE_ENCRYPTION, Jwk::ALGORITHM_A128KW);
+        return $this->createOct($key, Jwk::PUBLIC_KEY_USE_ENCRYPTION, Jwk::ALGORITHM_A128KW, $kid);
     }
 
-    private function createOct(string $key, string $use, string $algo): Jwk
+    /**
+     * Create key to use with A192KW algorithm to encrypt JWE.
+     *
+     * @param string $key
+     * @param string|null $kid JWK ID.
+     * @return Jwk
+     */
+    public function createA192KW(string $key, ?string $kid = null): Jwk
     {
-        if (strlen($key) < 128) {
-            throw new \InvalidArgumentException('Shared secret key must be at least 128 bits.');
+        return $this->createOct($key, Jwk::PUBLIC_KEY_USE_ENCRYPTION, Jwk::ALGORITHM_A192KW, $kid);
+    }
+
+    /**
+     * Create key to use with A256KW algorithm to encrypt JWE.
+     *
+     * @param string $key
+     * @param string|null $kid JWK ID.
+     * @return Jwk
+     */
+    public function createA256KW(string $key, ?string $kid = null): Jwk
+    {
+        return $this->createOct($key, Jwk::PUBLIC_KEY_USE_ENCRYPTION, Jwk::ALGORITHM_A256KW, $kid);
+    }
+
+    /**
+     * Create RSA key to use with RSA-OAEP algorithm to encrypt JWE.
+     *
+     * @param string $publicKey
+     * @param string|null $kid JWK ID.
+     * @return Jwk
+     */
+    public function createEncryptRsaOaep(string $publicKey, ?string $kid = null): Jwk
+    {
+        return $this->createPublicRsa($publicKey, Jwk::PUBLIC_KEY_USE_ENCRYPTION, Jwk::ALGORITHM_RSA_OAEP, $kid);
+    }
+
+    /**
+     * Create RSA key to use with RSA-OAEP algorithm to decrypt JWE.
+     *
+     * @param string $privateKey
+     * @param string|null $passPhrase
+     * @param string|null $kid JWK ID.
+     * @return Jwk
+     */
+    public function createDecryptRsaOaep(string $privateKey, ?string $passPhrase, ?string $kid = null): Jwk
+    {
+        return $this->createPrivateRsa(
+            $privateKey,
+            $passPhrase,
+            Jwk::PUBLIC_KEY_USE_ENCRYPTION,
+            Jwk::ALGORITHM_RSA_OAEP,
+            $kid
+        );
+    }
+
+    /**
+     * Create RSA key to use with RSA-OAEP-256 algorithm to encrypt JWE.
+     *
+     * @param string $publicKey
+     * @param string|null $kid JWK ID.
+     * @return Jwk
+     */
+    public function createEncryptRsaOaep256(string $publicKey, ?string $kid = null): Jwk
+    {
+        return $this->createPublicRsa($publicKey, Jwk::PUBLIC_KEY_USE_ENCRYPTION, Jwk::ALGORITHM_RSA_OAEP_256, $kid);
+    }
+
+    /**
+     * Create RSA key to use with RSA-OAEP-256 algorithm to decrypt JWE.
+     *
+     * @param string $privateKey
+     * @param string|null $passPhrase
+     * @param string|null $kid JWK ID.
+     * @return Jwk
+     */
+    public function createDecryptRsaOaep256(string $privateKey, ?string $passPhrase, ?string $kid = null): Jwk
+    {
+        return $this->createPrivateRsa(
+            $privateKey,
+            $passPhrase,
+            Jwk::PUBLIC_KEY_USE_ENCRYPTION,
+            Jwk::ALGORITHM_RSA_OAEP_256,
+            $kid
+        );
+    }
+
+    /**
+     * Create JWK to use with "dir" algorithm for JWEs.
+     *
+     * @param string $key
+     * @param string $contentEncryptionAlgorithm
+     * @param string|null $kid JWK ID.
+     * @return Jwk
+     */
+    public function createDir(string $key, string $contentEncryptionAlgorithm, ?string $kid = null): Jwk
+    {
+        if (strlen($key) < 2048) {
+            throw new \InvalidArgumentException('Shared secret key must be at least 2048 bits.');
+        }
+
+        return new Jwk(
+            Jwk::KEY_TYPE_OCTET,
+            ['k' => self::base64Encode($key)],
+            Jwk::PUBLIC_KEY_USE_ENCRYPTION,
+            null,
+            Jwk::ALGORITHM_DIR,
+            null,
+            null,
+            null,
+            null,
+            $kid,
+            $contentEncryptionAlgorithm
+        );
+    }
+
+    private function createOct(string $key, string $use, string $algo, ?string $kid): Jwk
+    {
+        if (strlen($key) < 2048) {
+            throw new \InvalidArgumentException('Shared secret key must be at least 2048 bits.');
         }
 
         return new Jwk(
@@ -325,11 +498,16 @@ class JwkFactory
             ['k' => self::base64Encode($key)],
             $use,
             null,
-            $algo
+            $algo,
+            null,
+            null,
+            null,
+            null,
+            $kid
         );
     }
 
-    private function createSignRsa(int $bits, string $key, ?string $pass): Jwk
+    private function createPrivateRsa(string $key, ?string $pass, string $use, string $algorithm, ?string $kid): Jwk
     {
         $resource = openssl_get_privatekey($key, (string)$pass);
         $keyData = openssl_pkey_get_details($resource)['rsa'];
@@ -354,13 +532,18 @@ class JwkFactory
         return new Jwk(
             Jwk::KEY_TYPE_RSA,
             $jwkData,
-            Jwk::PUBLIC_KEY_USE_SIGNATURE,
+            $use,
             null,
-            'RS' .$bits
+            $algorithm,
+            null,
+            null,
+            null,
+            null,
+            $kid
         );
     }
 
-    private function createVerifyRsa(int $bits, string $key): Jwk
+    private function createPublicRsa(string $key, string $use, string $algorithm, ?string $kid): Jwk
     {
         $resource = openssl_get_publickey($key);
         $keyData = openssl_pkey_get_details($resource)['rsa'];
@@ -379,29 +562,18 @@ class JwkFactory
         return new Jwk(
             Jwk::KEY_TYPE_RSA,
             $jwkData,
-            Jwk::PUBLIC_KEY_USE_SIGNATURE,
+            $use,
             null,
-            'RS' .$bits
+            $algorithm,
+            null,
+            null,
+            null,
+            null,
+            $kid
         );
     }
 
-    private function createSignPs(int $bits, string $key, ?string $pass): Jwk
-    {
-        $data = $this->createSignRsa($bits, $key, $pass)->getJsonData();
-        $data['alg'] = 'PS' .$bits;
-
-        return $this->createFromData($data);
-    }
-
-    private function createVerifyPs(int $bits, string $key): Jwk
-    {
-        $data = $this->createVerifyRsa($bits, $key)->getJsonData();
-        $data['alg'] = 'PS' .$bits;
-
-        return $this->createFromData($data);
-    }
-
-    private function createSignEs(int $bits, string $key, ?string $pass): Jwk
+    private function createSignEs(int $bits, string $key, ?string $pass, ?string $kid): Jwk
     {
         $resource = openssl_get_privatekey($key, (string)$pass);
         $keyData = openssl_pkey_get_details($resource)['ec'];
@@ -423,11 +595,16 @@ class JwkFactory
             ],
             Jwk::PUBLIC_KEY_USE_SIGNATURE,
             null,
-            'ES' .$bits
+            'ES' .$bits,
+            null,
+            null,
+            null,
+            null,
+            $kid
         );
     }
 
-    private function createVerifyEs(int $bits, string $key): Jwk
+    private function createVerifyEs(int $bits, string $key, ?string $kid): Jwk
     {
         $resource = openssl_get_publickey($key);
         $keyData = openssl_pkey_get_details($resource)['ec'];
@@ -448,7 +625,12 @@ class JwkFactory
             ],
             Jwk::PUBLIC_KEY_USE_SIGNATURE,
             null,
-            'ES' .$bits
+            'ES' .$bits,
+            null,
+            null,
+            null,
+            null,
+            $kid
         );
     }
 
