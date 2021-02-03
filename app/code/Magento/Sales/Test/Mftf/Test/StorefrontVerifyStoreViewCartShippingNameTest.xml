@@ -38,6 +38,7 @@
         </after>
         <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
         <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchStoreViewAdmin"/>
+        <conditionalClick selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateTab}}" dependentSelector="{{AdminShippingMethodFlatRateSection.carriersFlatRateTitle}}" visible="false" stepKey="expandTab"/>
         <click selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateTitle}}" stepKey="uncheckUseSystemValueForFlatRateTitle"/>
         <fillField selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateTitleField}}" userInput="Test carrier title name" stepKey="fillFieldTitle"/>
         <click selector="{{AdminShippingMethodFlatRateSection.carriersSaveConfig}}" stepKey="saveShippingConfig"/>
