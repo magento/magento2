@@ -114,11 +114,11 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
      *
      * @magentoAppIsolation enabled
      * @return void
+     *
      */
     public function testMoveWithFileOutsideTemp(): void
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
         $tmpDir = $this->uploader->getTmpDir();
         $newTmpDir = $tmpDir . '/test1';
         if (!$this->directory->create($newTmpDir)) {
@@ -140,9 +140,8 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testMoveWithInvalidFile(): void
     {
+        $this->expectExceptionMessage("Disallowed file type");
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Disallowed file type');
-
         $fileName = 'media_import_image.php';
         $filePath = $this->directory->getAbsolutePath($this->uploader->getTmpDir() . '/' . $fileName);
         //phpcs:ignore

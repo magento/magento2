@@ -90,11 +90,11 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      * @param string $locale
      * @param string $expected
      * @dataProvider beforeSaveErrorDataDataProvider
+     *
      */
     public function testBeforeSaveErrorData($defaultValue, $backendType, $locale, $expected)
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
         $this->attribute->setDefaultValue($defaultValue);
         $this->attribute->setBackendType($backendType);
         $this->_localeResolver->setLocale($locale);

@@ -12,7 +12,7 @@ class MultipleStreamOutputTest extends \PHPUnit\Framework\TestCase
      */
     private $multipleStreamOutput;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->multipleStreamOutput = new MultipleStreamOutput(
             [
@@ -22,19 +22,16 @@ class MultipleStreamOutputTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown(): void
+    public function tearDown(): void
     {
         file_put_contents(__DIR__ . '/_files/a.txt', '');
         file_put_contents(__DIR__ . '/_files/b.txt', '');
     }
 
-    /**
-     */
     public function testCreateException()
     {
+        $this->expectExceptionMessage("The StreamOutput class needs a stream as its first argument");
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The StreamOutput class needs a stream as its first argument');
-
         $this->multipleStreamOutput = new MultipleStreamOutput(['a', 'b']);
     }
 

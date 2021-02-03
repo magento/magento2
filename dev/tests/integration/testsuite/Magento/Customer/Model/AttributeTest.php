@@ -68,14 +68,12 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Customer/_files/attribute_user_defined_customer.php
      *
-     *
      * @return void
      */
     public function testAttributeSaveWithChangedEntityType(): void
     {
+        $this->expectExceptionMessage("Do not change entity type.");
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('Do not change entity type.');
-
         $attribute = $this->attributeRepository->get($this->customerEntityType, 'user_attribute');
         $attribute->setEntityTypeId(5);
         $attribute->save();

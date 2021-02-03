@@ -102,9 +102,8 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveFileToTmpDirWithWrongExtension(): void
     {
+        $this->expectExceptionMessage("File validation failed.");
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('File validation failed.');
-
         $fileName = 'text.txt';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
         $filePath = $tmpDirectory->getAbsolutePath($fileName);
@@ -129,9 +128,8 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveFileToTmpDirWithWrongFile(): void
     {
+        $this->expectExceptionMessage("File validation failed.");
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('File validation failed.');
-
         $fileName = 'file.gif';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
         $filePath = $tmpDirectory->getAbsolutePath($fileName);

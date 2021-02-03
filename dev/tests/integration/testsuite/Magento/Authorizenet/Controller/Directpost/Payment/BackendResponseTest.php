@@ -58,6 +58,6 @@ class BackendResponseTest extends AbstractController
         $this->getRequest()->setPostValue($data);
         $this->dispatch(self::$entryPoint);
         self::assertEquals(200, $this->getResponse()->getHttpResponseCode());
-        self::assertContains('/sales/order/view', $this->getResponse()->getBody());
+        self::assertStringContainsString('/sales/order/view', $this->getResponse()->getBody());
     }
 }

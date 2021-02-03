@@ -22,8 +22,8 @@ class CompanyTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Block\Widget\Company::class
         );
 
-        $this->assertContains('title="Company"', $block->toHtml());
-        $this->assertNotContains('required', $block->toHtml());
+        $this->assertStringContainsString('title="Company"', $block->toHtml());
+        $this->assertStringNotContainsString('required', $block->toHtml());
     }
 
     /**
@@ -44,8 +44,8 @@ class CompanyTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Block\Widget\Company::class
         );
 
-        $this->assertContains('title="Company"', $block->toHtml());
-        $this->assertContains('required', $block->toHtml());
+        $this->assertStringContainsString('title="Company"', $block->toHtml());
+        $this->assertStringContainsString('required', $block->toHtml());
     }
 
     protected function tearDown(): void

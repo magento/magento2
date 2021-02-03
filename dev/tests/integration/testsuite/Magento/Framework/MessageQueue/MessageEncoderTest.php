@@ -96,7 +96,7 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
             $addresses[0]
         );
         $this->assertEquals('3468676', $addresses[0]->getTelephone());
-        $this->assertTrue($addresses[0]->isDefaultBilling());
+        $this->assertEquals(true, $addresses[0]->isDefaultBilling());
 
         $this->assertInstanceOf(
             \Magento\Customer\Api\Data\RegionInterface::class,
@@ -105,35 +105,26 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('AL', $addresses[0]->getRegion()->getRegionCode());
     }
 
-    /**
-     */
     public function testDecodeInvalidMessageFormat()
     {
+        $this->expectExceptionMessage("Error occurred during message decoding");
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('Error occurred during message decoding');
-
         $this->encoder->decode('customer.created', "{");
     }
 
-    /**
-     */
     public function testDecodeInvalidMessage()
     {
         $this->expectException(\LogicException::class);
-
         $message = 'Property "NotExistingField" does not have accessor method "getNotExistingField" in class '
             . '"Magento\Customer\Api\Data\CustomerInterface".';
         $this->expectExceptionMessage($message);
         $this->encoder->decode('customer.created', '{"not_existing_field": "value"}');
     }
 
-    /**
-     */
     public function testDecodeIncorrectMessage()
     {
+        $this->expectExceptionMessage("Error occurred during message decoding");
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('Error occurred during message decoding');
-
         $this->encoder->decode('customer.created', "{");
     }
 

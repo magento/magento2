@@ -65,7 +65,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->request->setParams($requestParams);
         $url = $this->_model->getUrl($routePath, $routeParams);
 
-        $this->assertContains($expectedResult, $url);
+        $this->assertStringContainsString($expectedResult, $url);
     }
 
     /**

@@ -34,8 +34,8 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'toBoolean'
-        )->willReturnMap(
-            [['true', true], ['false', false]]
+        )->will(
+            $this->returnValueMap([['true', true], ['false', false]])
         );
 
         $baseStringUtils = new BaseStringUtils($this->booleanUtils);
@@ -44,12 +44,12 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
         $translateRenderer = $this->getMockBuilder(RendererInterface::class)
           ->setMethods(['render'])
           ->getMockForAbstractClass();
-        $translateRenderer->expects($this->any())->method('render')->willReturnCallback(
-            
+        $translateRenderer->expects($this->any())->method('render')->will(
+            $this->returnCallback(
                 function ($input) {
                     return end($input) . ' (translated)';
                 }
-            
+            )
         );
         \Magento\Framework\Phrase::setRenderer($translateRenderer);
     }
@@ -92,12 +92,12 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
      * @param array $input
      *
      * @dataProvider evaluateExceptionDataProvider
+     *
      */
     public function testEvaluateException($input)
     {
+        $this->expectExceptionMessage("String value is expected");
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('String value is expected');
-
         $this->model->evaluate($input);
     }
 

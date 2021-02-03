@@ -26,8 +26,8 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
             'execute'
         )->with(
             $this->stringStartsWith('ps ')
-        )->willReturn(
-            '26321'
+        )->will(
+            $this->returnValue('26321')
         );
         $this->assertEquals(26952704, $object->getRealMemoryUsage());
     }
@@ -49,8 +49,8 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
             'execute'
         )->with(
             $this->stringStartsWith('tasklist.exe ')
-        )->willReturn(
-            '"php.exe","12345","N/A","0","26,321 K"'
+        )->will(
+            $this->returnValue('"php.exe","12345","N/A","0","26,321 K"')
         );
         $object = new \Magento\TestFramework\Helper\Memory($this->_shell);
         $this->assertEquals(26952704, $object->getRealMemoryUsage());
@@ -87,11 +87,11 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $number
      * @dataProvider convertToBytesBadFormatDataProvider
+     *
      */
     public function testConvertToBytesBadFormat($number)
     {
         $this->expectException(\InvalidArgumentException::class);
-
         \Magento\TestFramework\Helper\Memory::convertToBytes($number);
     }
 
@@ -132,21 +132,15 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     */
     public function testConvertToBytesInvalidArgument()
     {
         $this->expectException(\InvalidArgumentException::class);
-
         \Magento\TestFramework\Helper\Memory::convertToBytes('3Z');
     }
 
-    /**
-     */
     public function testConvertToBytesOutOfBounds()
     {
         $this->expectException(\OutOfBoundsException::class);
-
         if (PHP_INT_SIZE > 4) {
             $this->markTestSkipped('A 32-bit system is required to perform this test.');
         }

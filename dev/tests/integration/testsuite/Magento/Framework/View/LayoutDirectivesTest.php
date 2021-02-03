@@ -81,12 +81,12 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     *
      * @magentoAppIsolation enabled
      */
     public function testRenderNonExistentElementShouldThrowException()
     {
         $this->expectException(\OutOfBoundsException::class);
-
         $layout = $this->_getLayoutModel('render.xml');
         $this->assertEmpty($layout->renderElement('nonexisting_element'));
 
@@ -147,9 +147,9 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
     public function testLayoutUrlArgumentsDirective()
     {
         $layout = $this->_getLayoutModel('arguments_url_type.xml');
-        $this->assertContains('customer/account/login', $layout->getBlock('block_with_url_args')->getOne());
-        $this->assertContains('customer/account/logout', $layout->getBlock('block_with_url_args')->getTwo());
-        $this->assertContains('customer_id/3', $layout->getBlock('block_with_url_args')->getTwo());
+        $this->assertStringContainsString('customer/account/login', $layout->getBlock('block_with_url_args')->getOne());
+        $this->assertStringContainsString('customer/account/logout', $layout->getBlock('block_with_url_args')->getTwo());
+        $this->assertStringContainsString('customer_id/3', $layout->getBlock('block_with_url_args')->getTwo());
     }
 
     public function testLayoutObjectArgumentUpdatersDirective()
@@ -240,21 +240,15 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($positionBefore, ++$positionToVerify);
     }
 
-    /**
-     */
     public function testMoveBroken()
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
         $this->_getLayoutModel('move_broken.xml');
     }
 
-    /**
-     */
     public function testMoveAliasBroken()
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
         $this->_getLayoutModel('move_alias_broken.xml');
     }
 

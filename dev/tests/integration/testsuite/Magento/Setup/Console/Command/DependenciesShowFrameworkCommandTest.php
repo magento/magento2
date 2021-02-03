@@ -63,12 +63,9 @@ class DependenciesShowFrameworkCommandTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertEquals('Report successfully processed.' . PHP_EOL, $this->commandTester->getDisplay());
         $fileContents = file_get_contents(__DIR__ . '/_files/output/framework.csv');
-        $this->assertContains(
-            '"Dependencies of framework:","Total number"' . PHP_EOL . ',2' . PHP_EOL,
-            $fileContents
-        );
-        $this->assertContains('"Dependencies for each module:",' . PHP_EOL, $fileContents);
-        $this->assertContains('"Magento\A",1' . PHP_EOL . '" -- Magento\Framework",2' . PHP_EOL, $fileContents);
-        $this->assertContains('"Magento\B",1' . PHP_EOL . '" -- Magento\Framework",2' . PHP_EOL, $fileContents);
+        $this->assertStringContainsString('"Dependencies of framework:","Total number"' . PHP_EOL . ',2' . PHP_EOL, $fileContents);
+        $this->assertStringContainsString('"Dependencies for each module:",' . PHP_EOL, $fileContents);
+        $this->assertStringContainsString('"Magento\A",1' . PHP_EOL . '" -- Magento\Framework",2' . PHP_EOL, $fileContents);
+        $this->assertStringContainsString('"Magento\B",1' . PHP_EOL . '" -- Magento\Framework",2' . PHP_EOL, $fileContents);
     }
 }

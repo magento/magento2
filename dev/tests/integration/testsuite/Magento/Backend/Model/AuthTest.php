@@ -36,11 +36,11 @@ class AuthTest extends \PHPUnit\Framework\TestCase
      * @dataProvider getLoginDataProvider
      * @param string $userName
      * @param string $password
+     *
      */
     public function testLoginFailed($userName, $password)
     {
         $this->expectException(\Magento\Framework\Exception\AuthenticationException::class);
-
         $this->_model->login($userName, $password);
     }
 

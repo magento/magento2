@@ -241,8 +241,8 @@ class ProductExternalTest extends \PHPUnit\Framework\TestCase
         $this->assertStringEndsWith('catalog/product/view/', $this->_model->getUrlInStore());
         $this->_model->setId(999);
         $url = $this->_model->getProductUrl();
-        $this->assertContains('catalog/product/view', $url);
-        $this->assertContains('id/999', $url);
+        $this->assertStringContainsString('catalog/product/view', $url);
+        $this->assertStringContainsString('id/999', $url);
         $storeUrl = $this->_model->getUrlInStore();
         $this->assertEquals($storeUrl, $url);
     }

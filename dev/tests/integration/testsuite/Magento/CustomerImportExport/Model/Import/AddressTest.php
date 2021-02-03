@@ -122,44 +122,11 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstruct()
     {
-        // check entity table
-        $this->assertAttributeInternalType(
-            'string',
-            '_entityTable',
-            $this->_entityAdapter,
-            'Entity table must be a string.'
-        );
-        $this->assertAttributeNotEmpty('_entityTable', $this->_entityAdapter, 'Entity table must not be empty');
-
-        // check message templates
-        $this->assertAttributeInternalType(
-            'array',
-            'errorMessageTemplates',
-            $this->_entityAdapter,
-            'Templates must be an array.'
-        );
-        $this->assertAttributeNotEmpty('errorMessageTemplates', $this->_entityAdapter, 'Templates must not be empty');
-
-        // check attributes
-        $this->assertAttributeInternalType(
-            'array',
-            '_attributes',
-            $this->_entityAdapter,
-            'Attributes must be an array.'
-        );
-        $this->assertAttributeNotEmpty('_attributes', $this->_entityAdapter, 'Attributes must not be empty');
-
-        // check country regions and regions
-        $this->assertAttributeInternalType(
-            'array',
-            '_countryRegions',
-            $this->_entityAdapter,
-            'Country regions must be an array.'
-        );
-        $this->assertAttributeNotEmpty('_countryRegions', $this->_entityAdapter, 'Country regions must not be empty');
-
-        $this->assertAttributeInternalType('array', '_regions', $this->_entityAdapter, 'Regions must be an array.');
-        $this->assertAttributeNotEmpty('_regions', $this->_entityAdapter, 'Regions must not be empty');
+        $this->assertObjectHasAttribute('_entityTable', $this->_entityAdapter, 'Entity table must not be empty');
+        $this->assertObjectHasAttribute('errorMessageTemplates', $this->_entityAdapter, 'Templates must not be empty');
+        $this->assertObjectHasAttribute('_attributes', $this->_entityAdapter, 'Attributes must not be empty');
+        $this->assertObjectHasAttribute('_countryRegions', $this->_entityAdapter, 'Country regions must not be empty');
+        $this->assertObjectHasAttribute('_regions', $this->_entityAdapter, 'Regions must not be empty');
     }
 
     /**

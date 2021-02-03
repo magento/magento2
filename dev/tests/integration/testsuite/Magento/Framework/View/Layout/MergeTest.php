@@ -84,7 +84,7 @@ class MergeTest extends \PHPUnit\Framework\TestCase
             $files[] = new \Magento\Framework\View\File($filename, 'Magento_Widget');
         }
         $fileSource = $this->getMockForAbstractClass(\Magento\Framework\View\File\CollectorInterface::class);
-        $fileSource->expects($this->any())->method('getFiles')->willReturn($files);
+        $fileSource->expects($this->any())->method('getFiles')->will($this->returnValue($files));
 
         $pageLayoutFileSource = $this->getMockForAbstractClass(\Magento\Framework\View\File\CollectorInterface::class);
         $pageLayoutFileSource->expects($this->any())->method('getFiles')->willReturn([]);
@@ -92,9 +92,9 @@ class MergeTest extends \PHPUnit\Framework\TestCase
         $design = $this->getMockForAbstractClass(\Magento\Framework\View\DesignInterface::class);
 
         $this->scope = $this->createMock(\Magento\Framework\Url\ScopeInterface::class);
-        $this->scope->expects($this->any())->method('getId')->willReturn(20);
+        $this->scope->expects($this->any())->method('getId')->will($this->returnValue(20));
         $scopeResolver = $this->getMockForAbstractClass(\Magento\Framework\Url\ScopeResolverInterface::class);
-        $scopeResolver->expects($this->once())->method('getScope')->with(null)->willReturn($this->scope);
+        $scopeResolver->expects($this->once())->method('getScope')->with(null)->will($this->returnValue($this->scope));
 
         $this->_resource = $this->createMock(\Magento\Widget\Model\ResourceModel\Layout\Update::class);
 
@@ -109,9 +109,9 @@ class MergeTest extends \PHPUnit\Framework\TestCase
         $this->_serializer = $this->getMockForAbstractClass(\Magento\Framework\Serialize\SerializerInterface::class);
 
         $this->_theme = $this->createMock(\Magento\Theme\Model\Theme::class);
-        $this->_theme->expects($this->any())->method('isPhysical')->willReturn(true);
-        $this->_theme->expects($this->any())->method('getArea')->willReturn('area');
-        $this->_theme->expects($this->any())->method('getId')->willReturn(100);
+        $this->_theme->expects($this->any())->method('isPhysical')->will($this->returnValue(true));
+        $this->_theme->expects($this->any())->method('getArea')->will($this->returnValue('area'));
+        $this->_theme->expects($this->any())->method('getId')->will($this->returnValue(100));
 
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -125,12 +125,12 @@ class MergeTest extends \PHPUnit\Framework\TestCase
 
         $fileDriver = $objectHelper->getObject(\Magento\Framework\Filesystem\Driver\File::class);
 
-        $fileReader->expects($this->any())->method('readAll')->willReturnCallback(
-            
+        $fileReader->expects($this->any())->method('readAll')->will(
+            $this->returnCallback(
                 function ($filename) use ($fileDriver) {
                     return $fileDriver->fileGetContents(__DIR__ . '/_mergeFiles/layout/' . $filename);
                 }
-            
+            )
         );
 
         $this->layoutCacheKeyMock = $this->getMockForAbstractClass(LayoutCacheKeyInterface::class);
@@ -245,11 +245,11 @@ class MergeTest extends \PHPUnit\Framework\TestCase
         $expectedResult = '
             <root>
                 <body>
-                    <block class="Magento\Framework\View\Element\Template" 
+                    <block class="Magento\Framework\View\Element\Template"
                            template="Magento_Framework::fixture_template_one.phtml"/>
                 </body>
                 <body>
-                    <block class="Magento\Framework\View\Element\Template" 
+                    <block class="Magento\Framework\View\Element\Template"
                            template="Magento_Framework::fixture_template_two.phtml"/>
                 </body>
             </root>
@@ -266,7 +266,7 @@ class MergeTest extends \PHPUnit\Framework\TestCase
             <root>
                 <body>
                     <referenceContainer name="main.container">
-                        <block class="Magento\Framework\View\Element\Template" 
+                        <block class="Magento\Framework\View\Element\Template"
                                template="Magento_Framework::fixture_template_one.phtml"/>
                     </referenceContainer>
                 </body>
@@ -292,7 +292,7 @@ class MergeTest extends \PHPUnit\Framework\TestCase
 
         $this->_cache->expects($this->at(0))->method('load')
             ->with('LAYOUT_area_STORE20_100c6a4ccd050e33acef0553f24ef399961_page_layout_merged')
-            ->willReturn(json_encode($cacheValue));
+            ->will($this->returnValue(json_encode($cacheValue)));
 
         $this->_serializer->expects($this->once())->method('unserialize')->willReturn($cacheValue);
 
@@ -314,8 +314,8 @@ class MergeTest extends \PHPUnit\Framework\TestCase
             'fixture_handle',
             $this->_theme,
             $this->scope
-        )->willReturn(
-            self::FIXTURE_LAYOUT_XML
+        )->will(
+            $this->returnValue(self::FIXTURE_LAYOUT_XML)
         );
         $this->assertEmpty($this->_model->getHandles());
         $this->assertEmpty($this->_model->asString());
@@ -411,25 +411,20 @@ class MergeTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->_model->isCustomerDesignAbstraction($expected['empty_data']));
     }
 
-    /**
-     */
     public function testLoadWithInvalidArgumentThrowsException()
     {
+        $this->expectExceptionMessage("Invalid layout update handle");
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('Invalid layout update handle');
-
         $this->_model->load(123);
     }
 
     /**
      * Test loading invalid layout
-     *
-     */
+     **/
     public function testLoadWithInvalidLayout()
     {
+        $this->expectExceptionMessage("Layout is invalid.");
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Layout is invalid.');
-
         $this->_model->addPageHandles(['default']);
 
         $this->_appState->expects($this->once())->method('getMode')->willReturn(State::MODE_DEVELOPER);
@@ -457,13 +452,10 @@ class MergeTest extends \PHPUnit\Framework\TestCase
         $this->_model->load();
     }
 
-    /**
-     */
     public function testLayoutUpdateFileIsNotValid()
     {
+        $this->expectExceptionMessageMatches("/_mergeFiles\/layout\/file_wrong\.xml\' is not valid/");
         $this->expectException(\Magento\Framework\Config\Dom\ValidationException::class);
-        $this->expectExceptionMessageRegExp('/_mergeFiles\\/layout\\/file_wrong\\.xml\\\' is not valid/');
-
         $this->_appState->expects($this->once())->method('getMode')->willReturn(State::MODE_DEVELOPER);
 
         $this->_model->addPageHandles(['default']);

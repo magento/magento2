@@ -45,12 +45,9 @@ class ModelTest extends \PHPUnit\Framework\TestCase
         $this->_model->validateKey($validKey);
     }
 
-    /**
-     */
     public function testValidateKeyInvalid()
     {
         $this->expectException(\Exception::class);
-
         $invalidKey = '----    ';
         $this->_model->validateKey($invalidKey);
     }

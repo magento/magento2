@@ -45,7 +45,7 @@ class FetchRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
         $this->dispatch('backend/admin/system_currency/fetchRates');
 
         $this->assertSessionMessages(
-            $this->contains('The Import Service is incorrect. Verify the service and try again.'),
+            $this->containsEqual('The Import Service is incorrect. Verify the service and try again.'),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }
@@ -65,7 +65,7 @@ class FetchRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
         $this->dispatch('backend/admin/system_currency/fetchRates');
 
         $this->assertSessionMessages(
-            $this->contains(
+            $this->containsEqual(
                 $this->escaper->escapeHtml(
                     "The import model can't be initialized. Verify the model and try again."
                 )

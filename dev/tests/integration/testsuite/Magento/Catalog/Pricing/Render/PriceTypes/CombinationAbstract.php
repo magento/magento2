@@ -582,7 +582,7 @@ abstract class CombinationAbstract extends TestCase
         $this->addOptionToProduct($product);
         $this->productRepository->save($product);
         $priceHtml = $this->getCustomOptionsPriceHtml($this->getProduct($sku));
-        $this->assertContains(sprintf('data-price-amount="%s"', $optionPrice), $priceHtml);
+        $this->assertStringContainsString(sprintf('data-price-amount="%s"', $optionPrice), $priceHtml);
     }
 
     /**

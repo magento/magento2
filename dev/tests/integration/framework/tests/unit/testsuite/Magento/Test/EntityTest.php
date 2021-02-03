@@ -50,13 +50,10 @@ class EntityTest extends \PHPUnit\Framework\TestCase
         $this->_model->setId(null);
     }
 
-    /**
-     */
     public function testConstructorIrrelevantModelClass()
     {
+        $this->expectExceptionMessage("Class 'stdClass' is irrelevant to the tested model");
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Class \'stdClass\' is irrelevant to the tested model');
-
         new \Magento\TestFramework\Entity($this->_model, [], 'stdClass');
     }
 
@@ -84,24 +81,24 @@ class EntityTest extends \PHPUnit\Framework\TestCase
             ->method('load');
         $this->_model->expects($this->atLeastOnce())
             ->method('save')
-            ->willReturnCallback([$this, $saveCallback]);
+            ->will($this->returnCallback([$this, $saveCallback]));
         /* It's important that 'delete' should be always called to guarantee the cleanup */
         $this->_model->expects(
             $this->atLeastOnce()
         )->method(
             'delete'
-        )->willReturnCallback(
-            [$this, 'deleteModelSuccessfully']
+        )->will(
+            $this->returnCallback([$this, 'deleteModelSuccessfully'])
         );
 
-        $this->_model->expects($this->any())->method('getIdFieldName')->willReturn('id');
+        $this->_model->expects($this->any())->method('getIdFieldName')->will($this->returnValue('id'));
 
         $test = $this->getMockBuilder(\Magento\TestFramework\Entity::class)
             ->setMethods(['_getEmptyModel'])
             ->setConstructorArgs([$this->_model, ['test' => 'test']])
             ->getMock();
 
-        $test->expects($this->any())->method('_getEmptyModel')->willReturn($this->_model);
+        $test->expects($this->any())->method('_getEmptyModel')->will($this->returnValue($this->_model));
         $test->testCrud();
     }
 }

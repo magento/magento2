@@ -28,31 +28,25 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->quoteValidator = Bootstrap::getObjectManager()->create(QuoteValidator::class);
     }
 
-    /**
-     */
     public function testValidateBeforeSubmitShippingAddressInvalid()
     {
+        $this->expectExceptionMessage("Please check the shipping address information.");
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('Please check the shipping address information.');
-
         $quote = $this->getQuote();
         $quote->getShippingAddress()->setPostcode('');
 
         $this->quoteValidator->validateBeforeSubmit($quote);
     }
 
-    /**
-     */
     public function testValidateBeforeSubmitCountryIsNotAllowed()
     {
+        $this->expectExceptionMessage("Some addresses can't be used due to the configurations for specific countries.");
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('Some addresses can\'t be used due to the configurations for specific countries.');
-
         /** @magentoConfigFixture does not allow to change the value for the website scope */
         Bootstrap::getObjectManager()->get(
             \Magento\Framework\App\Config\MutableScopeConfigInterface::class
@@ -67,39 +61,30 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
         $this->quoteValidator->validateBeforeSubmit($quote);
     }
 
-    /**
-     */
     public function testValidateBeforeSubmitShippingMethodInvalid()
     {
+        $this->expectExceptionMessage("The shipping method is missing. Select the shipping method and try again.");
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('The shipping method is missing. Select the shipping method and try again.');
-
         $quote = $this->getQuote();
         $quote->getShippingAddress()->setShippingMethod('NONE');
 
         $this->quoteValidator->validateBeforeSubmit($quote);
     }
 
-    /**
-     */
     public function testValidateBeforeSubmitBillingAddressInvalid()
     {
+        $this->expectExceptionMessage("Please check the billing address information.");
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('Please check the billing address information.');
-
         $quote = $this->getQuote();
         $quote->getBillingAddress()->setTelephone('');
 
         $this->quoteValidator->validateBeforeSubmit($quote);
     }
 
-    /**
-     */
     public function testValidateBeforeSubmitPaymentMethodInvalid()
     {
+        $this->expectExceptionMessage("Enter a valid payment method and try again.");
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('Enter a valid payment method and try again.');
-
         $quote = $this->getQuote();
         $quote->getPayment()->setMethod('');
 
@@ -107,13 +92,13 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     *
      * @magentoConfigFixture current_store sales/minimum_order/active 1
      * @magentoConfigFixture current_store sales/minimum_order/amount 100
      */
     public function testValidateBeforeSubmitMinimumAmountInvalid()
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
         $quote = $this->getQuote();
         $quote->getShippingAddress()
             ->setBaseSubtotal(0);

@@ -89,19 +89,15 @@ class HttpMethodValidatorTest extends TestCase
     public function testNotAllowedMethod()
     {
         $this->expectException(\Magento\Framework\App\Request\InvalidRequestException::class);
-
         $this->request->setMethod('method' .rand(0, 1000));
         $action = $this->getMockForAbstractClass(ActionInterface::class);
 
         $this->validator->validate($this->request, $action);
     }
 
-    /**
-     */
     public function testRestrictedMethod()
     {
         $this->expectException(\Magento\Framework\App\Request\InvalidRequestException::class);
-
         $map = $this->getMap();
 
         $this->request->setMethod($map[1]['method']);

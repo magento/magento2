@@ -13,7 +13,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
     /** @var ServiceCollection */
     protected $collection;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Customer\Model\ResourceModel\Group\Grid\ServiceCollection::class
@@ -25,7 +25,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection->setOrder('code', \Magento\Framework\Data\Collection::SORT_ORDER_ASC);
         $this->collection->loadData();
         $items = $this->collection->getItems();
-        $this->assertCount(4, $items);
+        $this->assertEquals(4, count($items));
 
         $this->assertEquals('General', $items[0]->getCode());
         $this->assertEquals('1', $items[0]->getId());
@@ -49,7 +49,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection->addFieldToFilter(['code'], [['NOT LOGGED IN']]);
         $this->collection->loadData();
         $items = $this->collection->getItems();
-        $this->assertCount(1, $items);
+        $this->assertEquals(1, count($items));
 
         $this->assertEquals('NOT LOGGED IN', $items[0]->getCode());
         $this->assertEquals('0', $items[0]->getId());
@@ -61,7 +61,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection->addFieldToFilter(['code', 'code'], ['General', 'Retailer']);
         $this->collection->loadData();
         $items = $this->collection->getItems();
-        $this->assertCount(2, $items);
+        $this->assertEquals(2, count($items));
 
         $this->assertEquals('General', $items[0]->getCode());
         $this->assertEquals('1', $items[0]->getId());
@@ -77,7 +77,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection->addFieldToFilter('code', 'NOT LOGGED IN');
         $this->collection->loadData();
         $items = $this->collection->getItems();
-        $this->assertCount(1, $items);
+        $this->assertEquals(1, count($items));
 
         $this->assertEquals('NOT LOGGED IN', $items[0]->getCode());
         $this->assertEquals('0', $items[0]->getId());
@@ -89,30 +89,24 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection->addFieldToFilter('code', ['like' => 'NOT%']);
         $this->collection->loadData();
         $items = $this->collection->getItems();
-        $this->assertCount(1, $items);
+        $this->assertEquals(1, count($items));
 
         $this->assertEquals('NOT LOGGED IN', $items[0]->getCode());
         $this->assertEquals('0', $items[0]->getId());
         $this->assertEquals('3', $items[0]->getTaxClassId());
     }
 
-    /**
-     */
     public function testAddToFilterException()
     {
+        $this->expectExceptionMessage("The array of fields failed to pass. The array must include at one field.");
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('The array of fields failed to pass. The array must include at one field.');
-
         $this->collection->addFieldToFilter([], 'not_array');
     }
 
-    /**
-     */
     public function testAddToFilterExceptionArrayNotSymmetric()
     {
+        $this->expectExceptionMessage("The field array failed to pass. The array must have a matching condition array.");
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('The field array failed to pass. The array must have a matching condition array.');
-
         $this->collection->addFieldToFilter(['field2', 'field2'], ['condition1']);
     }
 }

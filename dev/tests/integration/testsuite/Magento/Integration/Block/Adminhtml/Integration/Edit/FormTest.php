@@ -38,10 +38,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     public function testToHtmlNoExistingIntegrationData()
     {
-        $this->assertContains(
-            '<form id="edit_form" action="" method="post">',
-            $this->block->toHtml()
-        );
+        $this->assertStringContainsString('<form id="edit_form" action="" method="post">', $this->block->toHtml());
     }
 
     /**

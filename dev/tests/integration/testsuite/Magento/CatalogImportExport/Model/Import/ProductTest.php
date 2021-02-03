@@ -417,7 +417,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $actualOptions = $actualData['options'];
         sort($expectedOptions);
         sort($actualOptions);
-        $this->assertEquals($expectedOptions, $actualOptions);
+        $this->assertSame($expectedOptions, $actualOptions);
 
         // assert of options data
         $this->assertCount(count($expectedData['data']), $actualData['data']);
@@ -1575,8 +1575,8 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertTrue($errorCount === 1, 'Error expected');
 
         $errorMessage = $errorProcessor->getAllErrors()[0]->getErrorMessage();
-        $this->assertContains('URL key for specified store already exists', $errorMessage);
-        $this->assertContains('Default Category/Category 2', $errorMessage);
+        $this->assertStringContainsString('URL key for specified store already exists', $errorMessage);
+        $this->assertStringContainsString('Default Category/Category 2', $errorMessage);
 
         $categoryAfter = $this->loadCategoryByName('Category 2');
         $this->assertTrue($categoryAfter === null);

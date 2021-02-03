@@ -120,7 +120,6 @@ class CodeLimitManagerTest extends TestCase
     public function testAboveLimitNotLoggedIn()
     {
         $this->expectException(\Magento\SalesRule\Api\Exception\CodeRequestLimitException::class);
-
         try {
             $this->manager->checkRequest('fakeCode7');
             $this->manager->checkRequest('fakeCode8');
@@ -145,7 +144,6 @@ class CodeLimitManagerTest extends TestCase
     public function testAboveLimitLoggedIn()
     {
         $this->expectException(\Magento\SalesRule\Api\Exception\CodeRequestLimitException::class);
-
         try {
             $this->loginCustomer(1);
             $this->manager->checkRequest('fakeCode10');
@@ -172,7 +170,6 @@ class CodeLimitManagerTest extends TestCase
     public function testCustomerNotAllowedWithoutCode()
     {
         $this->expectException(\Magento\SalesRule\Api\Exception\CodeRequestLimitException::class);
-
         $this->loginCustomer(1);
         $this->manager->checkRequest('fakeCode13');
     }
@@ -191,7 +188,6 @@ class CodeLimitManagerTest extends TestCase
     public function testGuestNotAllowedWithoutCode()
     {
         $this->expectException(\Magento\SalesRule\Api\Exception\CodeRequestLimitException::class);
-
         $this->manager->checkRequest('fakeCode14');
     }
 
@@ -212,7 +208,6 @@ class CodeLimitManagerTest extends TestCase
     public function testLoggingOnlyInvalidCodes()
     {
         $this->expectException(\Magento\SalesRule\Api\Exception\CodeRequestLimitException::class);
-
         try {
             $this->loginCustomer(1);
             $this->manager->checkRequest('coupon_code');

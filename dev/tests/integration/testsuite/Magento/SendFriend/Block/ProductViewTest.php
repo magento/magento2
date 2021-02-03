@@ -83,7 +83,7 @@ class ProductViewTest extends TestCase
     {
         $product = $this->registerProduct('simple2');
         $html = $this->block->toHtml();
-        $this->assertContains('sendfriend/product/send/id/' . $product->getId(), $html);
+        $this->assertStringContainsString('sendfriend/product/send/id/' . $product->getId(), $html);
         $this->assertEquals('Email', trim(strip_tags($html)));
     }
 

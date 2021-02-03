@@ -142,7 +142,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $body = $this->getResponse()->getBody();
 
         // verify
-        $this->assertContains('<h1 class="page-title">test firstname test lastname</h1>', $body);
+        $this->assertStringContainsString('<h1 class="page-title">test firstname test lastname</h1>', $body);
     }
 
     /**
@@ -154,7 +154,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $body = $this->getResponse()->getBody();
 
         // verify
-        $this->assertContains('<h1 class="page-title">New Customer</h1>', $body);
+        $this->assertStringContainsString('<h1 class="page-title">New Customer</h1>', $body);
     }
 
     /**
@@ -188,7 +188,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->getRequest()->setParam('id', 1);
         $this->dispatch('backend/customer/index/productReviews');
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<div id="reviwGrid"', $body);
+        $this->assertStringContainsString('<div id="reviwGrid"', $body);
     }
 
     /**

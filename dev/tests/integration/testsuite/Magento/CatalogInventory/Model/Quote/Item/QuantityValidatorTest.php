@@ -149,7 +149,6 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * Set mock of Stock State Result to Quote Item Options.
      *
-     *
      * @param \Magento\Quote\Model\Quote\Item $quoteItem
      * @param \PHPUnit\Framework\MockObject\MockObject $resultMock
      */

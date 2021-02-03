@@ -89,7 +89,7 @@ class ReorderTest extends AbstractController
         $this->dispatchReorderRequest();
         $this->assertRedirect($this->stringContains('sales/guest/form'));
         $this->assertSessionMessages(
-            $this->contains((string)__('You entered incorrect data. Please try again.')),
+            $this->containsEqual((string)__('You entered incorrect data. Please try again.')),
             MessageInterface::TYPE_ERROR
         );
     }
