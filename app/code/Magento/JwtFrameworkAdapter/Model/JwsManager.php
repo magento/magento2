@@ -9,8 +9,8 @@ declare(strict_types=1);
 namespace Magento\JwtFrameworkAdapter\Model;
 
 use Jose\Component\Signature\JWSBuilder;
-use Jose\Component\Signature\JWSLoaderFactory as LoaderFactory;
-use Jose\Component\Signature\Serializer\JWSSerializerManagerFactory as JWSSerializerPool;
+use Jose\Component\Signature\JWSLoader;
+use Jose\Component\Signature\Serializer\JWSSerializerManager;
 use Magento\Framework\Jwt\EncryptionSettingsInterface;
 use Magento\Framework\Jwt\Exception\EncryptionException;
 use Magento\Framework\Jwt\Exception\JwtException;
@@ -33,14 +33,14 @@ class JwsManager
     private $jwsBuilder;
 
     /**
-     * @var LoaderFactory
+     * @var JWSLoader
      */
-    private $jwsLoaderFactory;
+    private $jwsLoader;
 
     /**
-     * @var JWSSerializerPool
+     * @var JWSSerializerManager
      */
-    private $jwsSerializerFactory;
+    private $jwsSerializer;
 
     /**
      * @var JwsFactory
@@ -60,8 +60,8 @@ class JwsManager
         JwsFactory $jwsFactory
     ) {
         $this->jwsBuilder = $builderFactory->create();
-        $this->jwsSerializerFactory = $serializerPoolFactory->create();
-        $this->jwsLoaderFactory = $jwsLoaderFactory->create();
+        $this->jwsSerializer = $serializerPoolFactory->create();
+        $this->jwsLoader = $jwsLoaderFactory->create();
         $this->jwsFactory = $jwsFactory;
     }
 
@@ -112,12 +112,12 @@ class JwsManager
         $jwsCreated = $builder->build();
 
         if ($signaturesCount > 1) {
-            return $this->jwsSerializerFactory->all()['jws_json_general']->serialize($jwsCreated);
+            return $this->jwsSerializer->serialize('jws_json_general', $jwsCreated);
         }
         if ($jws->getUnprotectedHeaders()) {
-            return $this->jwsSerializerFactory->all()['jws_json_flattened']->serialize($jwsCreated);
+            return $this->jwsSerializer->serialize('jws_json_flattened', $jwsCreated);
         }
-        return $this->jwsSerializerFactory->all()['jws_compact']->serialize($jwsCreated);
+        return $this->jwsSerializer->serialize('jws_compact', $jwsCreated);
     }
 
     /**
@@ -134,15 +134,6 @@ class JwsManager
             throw new JwtException('Can only work with JWK settings for JWS tokens');
         }
 
-        $loader = $this->jwsLoaderFactory->create(
-            ['jws_compact', 'jws_json_flattened', 'jws_json_general'],
-            array_map(
-                function (Jwk $jwk) {
-                    return $jwk->getAlgorithm();
-                },
-                $encryptionSettings->getJwkSet()->getKeys()
-            )
-        );
         $jwkSet = new AdapterJwkSet(
             array_map(
                 function (Jwk $jwk) {
@@ -152,7 +143,7 @@ class JwsManager
             )
         );
         try {
-            $jws = $loader->loadAndVerifyWithKeySet(
+            $jws = $this->jwsLoader->loadAndVerifyWithKeySet(
                 $token,
                 $jwkSet,
                 $signature,

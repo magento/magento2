@@ -11,17 +11,18 @@ namespace Magento\JwtFrameworkAdapter\Model;
 use Jose\Component\Signature\Serializer\CompactSerializer;
 use Jose\Component\Signature\Serializer\JSONFlattenedSerializer;
 use Jose\Component\Signature\Serializer\JSONGeneralSerializer;
-use Jose\Component\Signature\Serializer\JWSSerializerManagerFactory;
+use Jose\Component\Signature\Serializer\JWSSerializerManager;
 
 class JwsSerializerPoolFactory
 {
-    public function create(): JWSSerializerManagerFactory
+    public function create(): JWSSerializerManager
     {
-        $jwsSerializerFactory = new JWSSerializerManagerFactory();
-        $jwsSerializerFactory->add(new CompactSerializer());
-        $jwsSerializerFactory->add(new JSONGeneralSerializer());
-        $jwsSerializerFactory->add(new JSONFlattenedSerializer());
-
-        return $jwsSerializerFactory;
+        return new JWSSerializerManager(
+            [
+                new CompactSerializer(),
+                new JSONGeneralSerializer(),
+                new JSONFlattenedSerializer()
+            ]
+        );
     }
 }

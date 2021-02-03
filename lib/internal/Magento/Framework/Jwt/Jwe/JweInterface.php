@@ -37,5 +37,5 @@ interface JweInterface extends JwtInterface
      *
      * @return HeaderInterface[]
      */
-    public function getPerRecipientUnprotectedHeaders(): array;
+    public function getPerRecipientUnprotectedHeaders(): ?array;
 }

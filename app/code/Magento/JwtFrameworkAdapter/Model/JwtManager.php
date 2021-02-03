@@ -45,17 +45,43 @@ class JwtManager implements JwtManagerInterface
         Jwk::ALGORITHM_PS512
     ];
 
+    private const JWE_ALGORITHMS = [
+        Jwk::ALGORITHM_RSA_OAEP,
+        Jwk::ALGORITHM_RSA_OAEP_256,
+        Jwk::ALGORITHM_A128KW,
+        Jwk::ALGORITHM_A192KW,
+        Jwk::ALGORITHM_A256KW,
+        Jwk::ALGORITHM_DIR,
+        Jwk::ALGORITHM_ECDH_ES,
+        Jwk::ALGORITHM_ECDH_ES_A128KW,
+        Jwk::ALGORITHM_ECDH_ES_A192KW,
+        Jwk::ALGORITHM_ECDH_ES_A256KW,
+        Jwk::ALGORITHM_A128GCMKW,
+        Jwk::ALGORITHM_A192GCMKW,
+        Jwk::ALGORITHM_A256GCMKW,
+        Jwk::ALGORITHM_PBES2_HS256_A128KW,
+        Jwk::ALGORITHM_PBES2_HS384_A192KW,
+        Jwk::ALGORITHM_PBES2_HS512_A256KW,
+    ];
+
     /**
      * @var JwsManager
      */
     private $jwsManager;
 
     /**
-     * @param JwsManager $jwsManager
+     * @var JweManager
      */
-    public function __construct(JwsManager $jwsManager)
+    private $jweManager;
+
+    /**
+     * @param JwsManager $jwsManager
+     * @param JweManager $jweManager
+     */
+    public function __construct(JwsManager $jwsManager, JweManager $jweManager)
     {
         $this->jwsManager = $jwsManager;
+        $this->jweManager = $jweManager;
     }
 
     /**
@@ -69,6 +95,9 @@ class JwtManager implements JwtManagerInterface
         try {
             if ($jwt instanceof JwsInterface) {
                 return $this->jwsManager->build($jwt, $encryption);
+            }
+            if ($jwt instanceof JweInterface) {
+                return $this->jweManager->build($jwt, $encryption);
             }
         } catch (\Throwable $exception) {
             if (!$exception instanceof JwtException) {
@@ -88,17 +117,20 @@ class JwtManager implements JwtManagerInterface
         /** @var \Throwable|null $lastException */
         $lastException = null;
         foreach ($acceptableEncryption as $encryptionSettings) {
-            switch ($this->detectJwtType($encryptionSettings)) {
-                case self::JWT_TYPE_JWS:
-                    try {
+            try {
+                switch ($this->detectJwtType($encryptionSettings)) {
+                    case self::JWT_TYPE_JWS:
                         $read = $this->jwsManager->read($token, $encryptionSettings);
-                    } catch (\Throwable $exception) {
-                        if (!$exception instanceof JwtException) {
-                            $exception = new JwtException('Failed to read JWT', 0, $exception);
-                        }
-                        $lastException = $exception;
-                    }
-                    break;
+                        break;
+                    case self::JWT_TYPE_JWE:
+                        $read = $this->jweManager->read($token, $encryptionSettings);
+                        break;
+                }
+            } catch (\Throwable $exception) {
+                if (!$exception instanceof JwtException) {
+                    $exception = new JwtException('Failed to read JWT', 0, $exception);
+                }
+                $lastException = $exception;
             }
         }
 
@@ -119,6 +151,9 @@ class JwtManager implements JwtManagerInterface
         }
         if (in_array($encryptionSettings->getAlgorithmName(), self::JWS_ALGORITHMS, true)) {
             return self::JWT_TYPE_JWS;
+        }
+        if (in_array($encryptionSettings->getAlgorithmName(), self::JWE_ALGORITHMS, true)) {
+            return self::JWT_TYPE_JWE;
         }
 
         throw new \RuntimeException('Failed to determine JWT type');

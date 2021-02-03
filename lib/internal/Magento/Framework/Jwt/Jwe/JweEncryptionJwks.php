@@ -6,16 +6,16 @@
 
 declare(strict_types=1);
 
-namespace Magento\Framework\Jwt\Jws;
+namespace Magento\Framework\Jwt\Jwe;
 
 use Magento\Framework\Jwt\Exception\EncryptionException;
 use Magento\Framework\Jwt\Jwk;
 use Magento\Framework\Jwt\JwkSet;
 
 /**
- * JWK signature settings.
+ * JWK encryption settings.
  */
-class JwsSignatureJwks implements JwsSignatureSettingsInterface
+class JweEncryptionJwks implements JweEncryptionSettingsInterface
 {
     /**
      * @var JwkSet
@@ -23,9 +23,15 @@ class JwsSignatureJwks implements JwsSignatureSettingsInterface
     private $jwkSet;
 
     /**
-     * @param JwkSet|Jwk $jwk
+     * @var string
      */
-    public function __construct($jwk)
+    private $contentAlgo;
+
+    /**
+     * @param JwkSet|Jwk $jwk
+     * @param string $contentEncryptionAlgo
+     */
+    public function __construct($jwk, string $contentEncryptionAlgo)
     {
         if ($jwk instanceof Jwk) {
             $jwk = new JwkSet([$jwk]);
@@ -37,6 +43,7 @@ class JwsSignatureJwks implements JwsSignatureSettingsInterface
         foreach ($this->jwkSet->getKeys() as $jwk) {
             $this->validateJwk($jwk);
         }
+        $this->contentAlgo = $contentEncryptionAlgo;
     }
 
     /**
@@ -45,10 +52,18 @@ class JwsSignatureJwks implements JwsSignatureSettingsInterface
     public function getAlgorithmName(): string
     {
         if (count($this->jwkSet->getKeys()) > 1) {
-            return 'jws-json-serialization';
+            return 'jwe-json-serialization';
         } else {
             return $this->jwkSet->getKeys()[0]->getAlgorithm();
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getContentEncryptionAlgorithm(): string
+    {
+        return $this->contentAlgo;
     }
 
     /**
@@ -69,8 +84,8 @@ class JwsSignatureJwks implements JwsSignatureSettingsInterface
      */
     private function validateJwk(Jwk $jwk): void
     {
-        if ($jwk->getPublicKeyUse() === Jwk::PUBLIC_KEY_USE_ENCRYPTION) {
-            throw new EncryptionException('JWK is not meant for JWSs');
+        if ($jwk->getPublicKeyUse() === Jwk::PUBLIC_KEY_USE_SIGNATURE) {
+            throw new EncryptionException('JWK is not meant for JWEs');
         }
     }
 }

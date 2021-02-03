@@ -17,6 +17,10 @@ use Magento\Framework\Jwt\Claim\Subject;
 use Magento\Framework\Jwt\Header\Critical;
 use Magento\Framework\Jwt\Header\PrivateHeaderParameter;
 use Magento\Framework\Jwt\Header\PublicHeaderParameter;
+use Magento\Framework\Jwt\Jwe\Jwe;
+use Magento\Framework\Jwt\Jwe\JweEncryptionJwks;
+use Magento\Framework\Jwt\Jwe\JweEncryptionSettingsInterface;
+use Magento\Framework\Jwt\Jwe\JweHeader;
 use Magento\Framework\Jwt\Jwe\JweInterface;
 use Magento\Framework\Jwt\Jws\Jws;
 use Magento\Framework\Jwt\Jws\JwsHeader;
@@ -63,7 +67,10 @@ class JwtManagerTest extends TestCase
         $recreated = $this->manager->read($token, $readEncryption);
 
         //Verifying header
-        if ((!$jwt instanceof JwsInterface && !$jwt instanceof JweInterface) || count($jwt->getProtectedHeaders()) == 1) {
+        if ((!$jwt instanceof JwsInterface && !$jwt instanceof JweInterface)
+            || ($jwt instanceof JwsInterface && count($jwt->getProtectedHeaders()) == 1)
+            || ($jwt instanceof JweInterface && !$jwt->getPerRecipientUnprotectedHeaders())
+        ) {
             $this->verifyAgainstHeaders([$jwt->getHeader()], $recreated->getHeader());
         }
         //Verifying payload
@@ -86,9 +93,39 @@ class JwtManagerTest extends TestCase
                 $this->verifyAgainstHeaders($jwt->getUnprotectedHeaders(), $recreated->getUnprotectedHeaders()[0]);
             }
             $this->verifyAgainstHeaders($jwt->getProtectedHeaders(), $recreated->getProtectedHeaders()[0]);
-        }
-        if ($jwt instanceof JweInterface) {
+        } elseif ($jwt instanceof JweInterface) {
             $this->assertInstanceOf(JweInterface::class, $recreated);
+            /** @var JweInterface $recreated */
+            if (!$jwt->getPerRecipientUnprotectedHeaders()) {
+                $this->assertNull($recreated->getPerRecipientUnprotectedHeaders());
+            } else {
+                $this->assertTrue(count($recreated->getPerRecipientUnprotectedHeaders()) >= 1);
+                $this->verifyAgainstHeaders(
+                    $jwt->getPerRecipientUnprotectedHeaders(),
+                    $recreated->getPerRecipientUnprotectedHeaders()[0]
+                );
+            }
+            if (!$jwt->getSharedUnprotectedHeader()) {
+                $this->assertNull($recreated->getSharedUnprotectedHeader());
+            } else {
+                $this->verifyAgainstHeaders(
+                    [$jwt->getSharedUnprotectedHeader()],
+                    $recreated->getSharedUnprotectedHeader()
+                );
+            }
+            $this->verifyAgainstHeaders([$jwt->getProtectedHeader()], $recreated->getProtectedHeader());
+            $payload = $jwt->getPayload();
+            if ($payload instanceof ClaimsPayloadInterface) {
+                foreach ($payload->getClaims() as $claim) {
+                    $header = $recreated->getProtectedHeader()->getParameter($claim->getName());
+                    if ($claim->isHeaderDuplicated()) {
+                        $this->assertNotNull($header);
+                        $this->assertEquals($claim->getValue(), $header->getValue());
+                    } else {
+                        $this->assertNull($header);
+                    }
+                }
+            }
         }
         if ($jwt instanceof UnsecuredJwtInterface) {
             $this->assertInstanceOf(UnsecuredJwtInterface::class, $recreated);
@@ -169,6 +206,25 @@ class JwtManagerTest extends TestCase
                 new JwsHeader([new PrivateHeaderParameter('public', 'header1')]),
                 new JwsHeader([new PrivateHeaderParameter('public2', 'header')])
             ]
+        );
+        $flatJwe = new Jwe(
+            new JweHeader(
+                [
+                    new PrivateHeaderParameter('test', true),
+                    new PublicHeaderParameter('test2', 'magento', 'value')
+                ]
+            ),
+            null,
+            null,
+            new ClaimsPayload(
+                [
+                    new PrivateClaim('custom-claim', 'value'),
+                    new PrivateClaim('custom-claim2', 'value2', true),
+                    new PrivateClaim('custom-claim3', 'value3'),
+                    new IssuedAt(new \DateTimeImmutable()),
+                    new Issuer('magento.com')
+                ]
+            )
         );
 
         //Keys
@@ -267,6 +323,19 @@ class JwtManagerTest extends TestCase
                 new JwsSignatureJwks($jwkFactory->createSignPs512($rsaPrivate, 'pass')),
                 [new JwsSignatureJwks($jwkFactory->createVerifyPs512($rsaPublic))]
             ],
+            'jwe-A128KW' => [
+                $flatJwe,
+                new JweEncryptionJwks(
+                    $jwkFactory->createA128KW($sharedSecret),
+                    JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128_HS256
+                ),
+                [
+                    new JweEncryptionJwks(
+                        $jwkFactory->createA128KW($sharedSecret),
+                        JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128_HS256
+                    )
+                ]
+            ]
         ];
     }
 

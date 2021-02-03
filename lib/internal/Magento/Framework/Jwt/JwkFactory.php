@@ -71,7 +71,7 @@ class JwkFactory
      */
     public function createHs256(string $key): Jwk
     {
-        return $this->createHmac(256, $key);
+        return $this->createOct($key, Jwk::PUBLIC_KEY_USE_SIGNATURE, Jwk::ALGORITHM_HS256);
     }
 
     /**
@@ -82,7 +82,7 @@ class JwkFactory
      */
     public function createHs384(string $key): Jwk
     {
-        return $this->createHmac(384, $key);
+        return $this->createOct($key, Jwk::PUBLIC_KEY_USE_SIGNATURE, Jwk::ALGORITHM_HS384);
     }
 
     /**
@@ -93,7 +93,7 @@ class JwkFactory
      */
     public function createHs512(string $key): Jwk
     {
-        return $this->createHmac(512, $key);
+        return $this->createOct($key, Jwk::PUBLIC_KEY_USE_SIGNATURE, Jwk::ALGORITHM_HS512);
     }
 
     /**
@@ -303,7 +303,18 @@ class JwkFactory
         return $this->createVerifyPs(512, $publicKey);
     }
 
-    private function createHmac(int $bits, string $key): Jwk
+    /**
+     * Create key to use with A128KW algorithm to encrypt JWE.
+     *
+     * @param string $key
+     * @return Jwk
+     */
+    public function createA128KW(string $key): Jwk
+    {
+        return $this->createOct($key, Jwk::PUBLIC_KEY_USE_ENCRYPTION, Jwk::ALGORITHM_A128KW);
+    }
+
+    private function createOct(string $key, string $use, string $algo): Jwk
     {
         if (strlen($key) < 128) {
             throw new \InvalidArgumentException('Shared secret key must be at least 128 bits.');
@@ -312,9 +323,9 @@ class JwkFactory
         return new Jwk(
             Jwk::KEY_TYPE_OCTET,
             ['k' => self::base64Encode($key)],
-            Jwk::PUBLIC_KEY_USE_SIGNATURE,
+            $use,
             null,
-            'HS' .$bits
+            $algo
         );
     }
 

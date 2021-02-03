@@ -8,9 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\JwtFrameworkAdapter\Model\Data;
 
+use Magento\Framework\Jwt\Jwe\JweHeaderParameterInterface;
 use Magento\Framework\Jwt\Jws\JwsHeaderParameterInterface;
 
-class Header implements JwsHeaderParameterInterface
+class Header implements JwsHeaderParameterInterface, JweHeaderParameterInterface
 {
     /**
      * @var string
