@@ -19,28 +19,46 @@
             <testCaseId value="MC-38325"/>
             <group value="importExport"/>
             <group value="Downloadable"/>
-            <skip>
-                <issueId value="B2B-1648">Import needs images in downloadable links in var/import/images directory. MFTF only has access to dev/tests/acceptance/tests/_data</issueId>
-            </skip>
         </annotations>
 
         <before>
-            <!-- Create Product, Upload Images & Create Customer -->
+            <!-- Create Category & Customer -->
             <createData entity="ImportCategory_Downloadable_FileLinks" stepKey="createImportCategory"/>
-            <createData entity="_defaultCategory" stepKey="createCategory"/>
-            <createData entity="ApiSimpleProduct" stepKey="productForImages">
-                <requiredEntity createDataKey="createCategory"/>
-            </createData>
-            <createData entity="ApiProductAttributeMediaGalleryForExportImport" stepKey="productImage1">
-                <requiredEntity createDataKey="productForImages"/>
-            </createData>
-            <createData entity="ApiProductAttributeMediaGalleryForExportImport2" stepKey="productImage2">
-                <requiredEntity createDataKey="productForImages"/>
-            </createData>
-            <createData entity="ApiProductAttributeMediaGalleryForExportImport3" stepKey="productImage3">
-                <requiredEntity createDataKey="productForImages"/>
-            </createData>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <!-- Copy Images to Import Directory for Product Images -->
+            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportImages">
+                <argument name="path">var/import/images/{{ImportProduct_Downloadable_FileLinks.name}}</argument>
+            </helper>
+            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyBaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_FileLinks.baseImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Downloadable_FileLinks.name}}/{{ImportProduct_Downloadable_FileLinks.baseImage}}</argument>
+            </helper>
+            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copySmallImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_FileLinks.smallImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Downloadable_FileLinks.name}}/{{ImportProduct_Downloadable_FileLinks.smallImage}}</argument>
+            </helper>
+            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyThumbnailImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_FileLinks.thumbnailImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Downloadable_FileLinks.name}}/{{ImportProduct_Downloadable_FileLinks.thumbnailImage}}</argument>
+            </helper>
+
+            <!-- Copy Images to Import Directory for Downloadable Links -->
+            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportDownloadableLinkFiles">
+                <argument name="path">pub/media/import/{{ImportProduct_Downloadable_FileLinks.name}}</argument>
+            </helper>
+            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyBaseImage2">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_FileLinks.baseImage}}</argument>
+                <argument name="destination">pub/media/import/{{ImportProduct_Downloadable_FileLinks.name}}/{{ImportProduct_Downloadable_FileLinks.baseImage}}</argument>
+            </helper>
+            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copySmallImage2">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_FileLinks.smallImage}}</argument>
+                <argument name="destination">pub/media/import/{{ImportProduct_Downloadable_FileLinks.name}}/{{ImportProduct_Downloadable_FileLinks.smallImage}}</argument>
+            </helper>
+            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyThumbnailImage3">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_FileLinks.thumbnailImage}}</argument>
+                <argument name="destination">pub/media/import/{{ImportProduct_Downloadable_FileLinks.name}}/{{ImportProduct_Downloadable_FileLinks.thumbnailImage}}</argument>
+            </helper>
 
             <!-- Login as Admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -49,9 +67,13 @@
         <after>
             <!-- Delete Data -->
             <deleteData createDataKey="createImportCategory" stepKey="deleteImportCategory"/>
-            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <deleteData createDataKey="productForImages" stepKey="deleteProductForImages"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
+                <argument name="path">var/import/images/{{ImportProduct_Downloadable_FileLinks.name}}</argument>
+            </helper>
+            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteDownloadableLinkFilesDirectory">
+                <argument name="path">pub/media/import/{{ImportProduct_Downloadable_FileLinks.name}}</argument>
+            </helper>
             <deleteData url="/V1/products/{{ImportProduct_Downloadable_FileLinks.urlKey}}" stepKey="deleteImportedDownloadableProduct"/>
             <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="navigateToAndResetProductGridToDefaultView"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
@@ -61,6 +83,7 @@
         <actionGroup ref="AdminNavigateToImportPageActionGroup" stepKey="navigateToImportPage"/>
         <actionGroup ref="AdminFillImportFormActionGroup" stepKey="fillImportForm">
             <argument name="importFile" value="{{ImportProduct_Downloadable_FileLinks.fileName}}"/>
+            <argument name="imagesFileDirectory" value="{{ImportProduct_Downloadable_FileLinks.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminClickCheckDataImportActionGroup" stepKey="clickCheckData"/>
         <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="{{ImportCommonMessages.validFile}}" stepKey="seeCheckDataResultMessage"/>
@@ -95,20 +118,20 @@
             <argument name="productQuantity" value="{{ImportProduct_Downloadable_FileLinks.quantity}}"/>
             <argument name="productWeight" value="{{ImportProduct_Downloadable_FileLinks.weight}}"/>
             <argument name="productVisibility" value="{{ImportProduct_Downloadable_FileLinks.visibilityText}}"/>
-            <argument name="categoryNames" value="{{ImportProduct_Downloadable_FileLinks.name}}"/>
+            <argument name="categoryName" value="{{ImportCategory_Downloadable_FileLinks.name}}"/>
         </actionGroup>
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertProductBaseImageOnEditPage">
-            <argument name="image" value="MagentoLogo"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProductBaseImageOnEditPage">
+            <argument name="image" value="{{ImportProduct_Downloadable_FileLinks.baseImageName}}"/>
         </actionGroup>
-        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(MagentoLogo.filename, 'image')}}" stepKey="seeBaseImageRole"/>
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertProductSmallImageOnEditPage">
-            <argument name="image" value="TestImage"/>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Downloadable_FileLinks.baseImageName, 'image')}}" stepKey="seeBaseImageRole"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProductSmallImageOnEditPage">
+            <argument name="image" value="{{ImportProduct_Downloadable_FileLinks.smallImageName}}"/>
         </actionGroup>
-        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(TestImage.filename, 'small_image')}}" stepKey="seeSmallImageRole"/>
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertProductThumbnailImageOnEditPage">
-            <argument name="image" value="TestImageAdobe"/>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Downloadable_FileLinks.smallImageName, 'small_image')}}" stepKey="seeSmallImageRole"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProductThumbnailImageOnEditPage">
+            <argument name="image" value="{{ImportProduct_Downloadable_FileLinks.thumbnailImageName}}"/>
         </actionGroup>
-        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(TestImageAdobe.filename, 'thumbnail')}}" stepKey="seeThumbnailImageRole"/>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Downloadable_FileLinks.thumbnailImageName, 'thumbnail')}}" stepKey="seeThumbnailImageRole"/>
 
         <!-- Admin: Verify Downloadable Information -->
         <actionGroup ref="ExpandAdminProductSectionActionGroup" stepKey="expandDownloadableSection">
@@ -153,21 +176,21 @@
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{ImportProduct_Downloadable_FileLinks.name}}" stepKey="seeProductName"/>
         <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Downloadable_FileLinks.sku}}" stepKey="seeSku"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{ImportProduct_Downloadable_FileLinks.price}}" stepKey="seePrice"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(MagentoLogo.filename)}}" stepKey="seeMagentoLogo"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(TestImage.filename)}}" stepKey="seeTestImage"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(TestImageAdobe.filename)}}" stepKey="seeTestImageAdobe"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProduct_Downloadable_FileLinks.baseImageName)}}" stepKey="seeBaseImage"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProduct_Downloadable_FileLinks.smallImageName)}}" stepKey="seeSmallImage"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProduct_Downloadable_FileLinks.thumbnailImageName)}}" stepKey="seeThumbnailImage"/>
 
         <!-- Storefront: Verify Downloadable Product Link Data -->
         <seeElement selector="{{StorefrontDownloadableProductSection.downloadableSampleLabel(ImportProduct_Downloadable_FileLinks.sampleTitle)}}" stepKey="seeDownloadableSampleLink"/>
         <click selector="{{StorefrontDownloadableProductSection.downloadableSampleLabel(ImportProduct_Downloadable_FileLinks.sampleTitle)}}" stepKey="clickDownloadableSampleLink"/>
         <switchToNextTab stepKey="switchToDownloadedLinkTab"/>
-        <waitForElement selector="{{StorefrontDownloadableLinkSection.downloadableLinkTitle(ImportProduct_Downloadable_FileLinks.linkFileName)}}" stepKey="seeImageTitle"/>
+        <waitForElement selector="{{StorefrontDownloadableLinkSection.downloadableLinkImage}}" stepKey="seeImage"/>
         <closeTab stepKey="closeTab"/>
         <seeElement selector="{{StorefrontDownloadableProductSection.downloadableLinkByTitle(ImportProduct_Downloadable_FileLinks.linkTitle)}}" stepKey="seeDownloadableLink"/>
         <seeElement selector="{{StorefrontDownloadableProductSection.downloadableLinkSampleByTitle('sample')}}" stepKey="seeDownloadableLinkSampleLink"/>
         <click selector="{{StorefrontDownloadableProductSection.downloadableLinkSampleByTitle('sample')}}" stepKey="clickDownloadableLinkSampleLink"/>
         <switchToNextTab stepKey="switchToDownloadedLinkTab2"/>
-        <waitForElement selector="{{StorefrontDownloadableLinkSection.downloadableLinkTitle(ImportProduct_Downloadable_FileLinks.linkFileName)}}" stepKey="seeImageTitle2"/>
+        <waitForElement selector="{{StorefrontDownloadableLinkSection.downloadableLinkImage}}" stepKey="seeImage2"/>
         <closeTab stepKey="closeTab2"/>
         <checkOption selector="{{StorefrontDownloadableProductSection.downloadableLinkByTitle(ImportProduct_Downloadable_FileLinks.linkTitle)}}" stepKey="selectDownloadableLink"/>
         <waitForText selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{ImportProduct_Downloadable_FileLinks.totalPriceWithLink}}" stepKey="seeUpdatedPrice"/>
@@ -191,7 +214,7 @@
         <see userInput="{{ImportProduct_Downloadable_FileLinks.linkTitle}}" selector="{{StorefrontCustomerDownloadableProductsSection.downloadableLinkByOrderNumber({$grabOrderNumber})}}" stepKey="seeDownloadableLink2"/>
         <click selector="{{StorefrontCustomerDownloadableProductsSection.downloadableLinkByOrderNumber({$grabOrderNumber})}}" stepKey="clickDownloadableLink"/>
         <switchToNextTab stepKey="switchToDownloadedLinkTab3"/>
-        <waitForElement selector="{{StorefrontDownloadableLinkSection.downloadableLinkTitle(ImportProduct_Downloadable_FileLinks.linkFileName)}}" stepKey="seeImageTitle3"/>
+        <waitForElement selector="{{StorefrontDownloadableLinkSection.downloadableLinkImage}}" stepKey="seeImage3"/>
         <closeTab stepKey="closeTab3"/>
     </test>
 </tests>

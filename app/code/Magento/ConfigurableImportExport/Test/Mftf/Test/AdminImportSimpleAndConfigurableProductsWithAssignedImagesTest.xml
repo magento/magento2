@@ -112,7 +112,7 @@
             <argument name="productQuantity" value="{{ImportProductSimple1_Configurable.quantity}}"/>
             <argument name="productWeight" value="{{ImportProductSimple1_Configurable.weight}}"/>
             <argument name="productVisibility" value="{{ImportProductSimple1_Configurable.visibilityText}}"/>
-            <argument name="categoryNames" value="{{ImportCategory_Configurable.name}}"/>
+            <argument name="categoryName" value="{{ImportCategory_Configurable.name}}"/>
         </actionGroup>
         <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertProduct1ImageOnEditPage">
             <argument name="image" value="MagentoLogo"/>
@@ -130,7 +130,7 @@
             <argument name="productQuantity" value="{{ImportProductSimple2_Configurable.quantity}}"/>
             <argument name="productWeight" value="{{ImportProductSimple2_Configurable.weight}}"/>
             <argument name="productVisibility" value="{{ImportProductSimple1_Configurable.visibilityText}}"/>
-            <argument name="categoryNames" value="{{ImportCategory_Configurable.name}}"/>
+            <argument name="categoryName" value="{{ImportCategory_Configurable.name}}"/>
         </actionGroup>
         <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertProduct2ImageOnEditPage">
             <argument name="image" value="TestImage"/>
@@ -148,7 +148,7 @@
             <argument name="productQuantity" value="{{ImportProductSimple3_Configurable.quantity}}"/>
             <argument name="productWeight" value="{{ImportProductSimple3_Configurable.weight}}"/>
             <argument name="productVisibility" value="{{ImportProductSimple1_Configurable.visibilityText}}"/>
-            <argument name="categoryNames" value="{{ImportCategory_Configurable.name}}"/>
+            <argument name="categoryName" value="{{ImportCategory_Configurable.name}}"/>
         </actionGroup>
         <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertProduct3ImageOnEditPage">
             <argument name="image" value="TestImageAdobe"/>
@@ -166,7 +166,7 @@
             <argument name="productQuantity" value="{{ImportProduct_Configurable.quantity}}"/>
             <argument name="productWeight" value="{{ImportProduct_Configurable.weight}}"/>
             <argument name="productVisibility" value="{{ImportProduct_Configurable.visibilityText}}"/>
-            <argument name="categoryNames" value="{{ImportCategory_Configurable.name}}"/>
+            <argument name="categoryName" value="{{ImportCategory_Configurable.name}}"/>
         </actionGroup>
         <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertConfigurableProductBaseImageOnEditPage">
             <argument name="image" value="TestImageAdobe"/>

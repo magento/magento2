@@ -38,6 +38,12 @@
         <data key="visibilityText">Catalog, Search</data>
         <data key="status">1</data>
         <data key="urlKey">import-product-downloadable-url-links</data>
+        <data key="baseImage">magento-logo.png</data>
+        <data key="baseImageName">magento-logo</data>
+        <data key="smallImage">m-logo.gif</data>
+        <data key="smallImageName">m-logo</data>
+        <data key="thumbnailImage">adobe-base.jpg</data>
+        <data key="thumbnailImageName">adobe-base</data>
         <data key="linksTitle">Links</data>
         <data key="linkTitle">Link1</data>
         <data key="linkPrice">2.00</data>
@@ -69,12 +75,18 @@
         <data key="visibilityText">Catalog, Search</data>
         <data key="status">1</data>
         <data key="urlKey">import-product-downloadable-file-links</data>
+        <data key="baseImage">magento-logo.png</data>
+        <data key="baseImageName">magento-logo</data>
+        <data key="smallImage">m-logo.gif</data>
+        <data key="smallImageName">m-logo</data>
+        <data key="thumbnailImage">adobe-base.jpg</data>
+        <data key="thumbnailImageName">adobe-base</data>
         <data key="linksTitle">Links</data>
         <data key="linkTitle">Link1</data>
         <data key="linkPrice">3.00</data>
-        <data key="totalPriceWithLink">101.00</data>
+        <data key="totalPriceWithLink">103.00</data>
         <data key="linkFileType">Upload File</data>
-        <data key="linkFileName">test_image</data>
+        <data key="linkFileName">m-logo</data>
         <data key="linkSampleFileType">Upload File</data>
         <data key="linkSampleFileName">magento-logo</data>
         <data key="linkShareable">No</data>
@@ -82,6 +94,6 @@
         <data key="samplesTitle">Samples</data>
         <data key="sampleTitle">Sample1</data>
         <data key="sampleFileType">Upload File</data>
-        <data key="sampleFileName">adobe-thumb</data>
+        <data key="sampleFileName">adobe-base</data>
     </entity>
 </entities>

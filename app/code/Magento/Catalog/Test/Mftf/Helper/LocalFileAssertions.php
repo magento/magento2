@@ -70,6 +70,53 @@ class LocalFileAssertions extends Helper
     }
 
     /**
+     * Recursive delete directory
+     *
+     * @param string $path
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function deleteDirectory($path): void
+    {
+        $realPath = $this->expandPath($path);
+        if ($this->driver->isExists($realPath)) {
+            $this->driver->deleteDirectory($realPath);
+        }
+    }
+
+    /**
+     * Copy source into destination
+     *
+     * @param string $source
+     * @param string $destination
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function copy($source, $destination): void
+    {
+        $sourceRealPath = $this->expandPath($source);
+        $destinationRealPath = $this->expandPath($destination);
+        $this->driver->copy($sourceRealPath, $destinationRealPath);
+    }
+
+    /**
+     * Create directory
+     *
+     * @param string $path
+     * @param int $permissions
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function createDirectory($path, $permissions = 0777): void
+    {
+        $sourceRealPath = $this->expandPath($path);
+        $this->driver->createDirectory($sourceRealPath, $permissions);
+    }
+
+    /**
      * Assert a file exists
      *
      * @param string $filePath

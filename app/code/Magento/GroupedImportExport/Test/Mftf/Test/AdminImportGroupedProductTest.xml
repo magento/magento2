@@ -94,7 +94,7 @@
             <argument name="productPrice" value="{{ImportProductSimple1_Grouped.price}}"/>
             <argument name="productQuantity" value="{{ImportProductSimple1_Grouped.quantity}}"/>
             <argument name="productWeight" value="{{ImportProductSimple1_Grouped.weight}}"/>
-            <argument name="categoryNames" value="{{ImportCategory_Grouped.name}}"/>
+            <argument name="categoryName" value="{{ImportCategory_Grouped.name}}"/>
         </actionGroup>
         <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertProduct1ImageOnEditPage">
             <argument name="image" value="MagentoLogo"/>
@@ -111,7 +111,7 @@
             <argument name="productPrice" value="{{ImportProductSimple2_Grouped.price}}"/>
             <argument name="productQuantity" value="{{ImportProductSimple2_Grouped.quantity}}"/>
             <argument name="productWeight" value="{{ImportProductSimple2_Grouped.weight}}"/>
-            <argument name="categoryNames" value="{{ImportCategory_Grouped.name}}"/>
+            <argument name="categoryName" value="{{ImportCategory_Grouped.name}}"/>
         </actionGroup>
         <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertProduct2ImageOnEditPage">
             <argument name="image" value="TestImage"/>
@@ -128,7 +128,7 @@
             <argument name="productPrice" value="{{ImportProductSimple3_Grouped.price}}"/>
             <argument name="productQuantity" value="{{ImportProductSimple3_Grouped.quantity}}"/>
             <argument name="productWeight" value="{{ImportProductSimple3_Grouped.weight}}"/>
-            <argument name="categoryNames" value="{{ImportCategory_Grouped.name}}"/>
+            <argument name="categoryName" value="{{ImportCategory_Grouped.name}}"/>
         </actionGroup>
         <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertProduct3ImageOnEditPage">
             <argument name="image" value="TestImageAdobe"/>
