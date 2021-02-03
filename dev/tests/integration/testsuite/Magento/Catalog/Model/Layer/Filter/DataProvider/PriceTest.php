@@ -133,14 +133,12 @@ class PriceTest extends TestCase
 
     /**
      * @dataProvider getAdditionalRequestDataDataProvider
-     * @magentoDataFixture Magento/Catalog/_files/products_for_search.php
      * @param array $priceFilters
      * @param string $expectedRequest
      * @return void
      */
     public function testGetAdditionalRequestData(array $priceFilters, string $expectedRequest): void
     {
-        $this->layer->setCurrentCategory(333);
         $filter = explode('-', $priceFilters[0]);
         $this->model->setInterval($filter);
         $priorFilters = $this->model->getPriorFilters($priceFilters);
@@ -164,6 +162,10 @@ class PriceTest extends TestCase
             ],
             'without_prior_filters' => [
                 'price_filters' => ['10-11'],
+                'expected_request' => ',10-11',
+            ],
+            'not_valid_prior_filters' => [
+                'price_filters' => ['10-11', '20-21', '31', '40-41'],
                 'expected_request' => ',10-11',
             ],
         ];
