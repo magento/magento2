@@ -30,7 +30,7 @@
                         stepKey="restoreCategoryUrlSuffix"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1"
                         stepKey="restoreCategoryProductRewrites"/>
-            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAftere"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfter"/>
         </after>
 
         <amOnPage url="/$$createCategory.name$$" stepKey="onCategoryPage"/>
