@@ -24,20 +24,24 @@
         <before>
             <!-- Create Product, Upload Images & Create Customer -->
             <createData entity="ImportCategory_Bundle" stepKey="createImportCategory"/>
-            <createData entity="_defaultCategory" stepKey="createCategory"/>
-            <createData entity="ApiSimpleProduct" stepKey="productForImages">
-                <requiredEntity createDataKey="createCategory"/>
-            </createData>
-            <createData entity="ApiProductAttributeMediaGalleryForExportImport" stepKey="productImage1">
-                <requiredEntity createDataKey="productForImages"/>
-            </createData>
-            <createData entity="ApiProductAttributeMediaGalleryForExportImport2" stepKey="productImage2">
-                <requiredEntity createDataKey="productForImages"/>
-            </createData>
-            <createData entity="ApiProductAttributeMediaGalleryForExportImport3" stepKey="productImage3">
-                <requiredEntity createDataKey="productForImages"/>
-            </createData>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <!-- Copy Images to Import Directory for Product Images -->
+            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportImages">
+                <argument name="path">var/import/images/{{ImportProduct_Bundle.name}}</argument>
+            </helper>
+            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct1BaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple1_Bundle.baseImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Bundle.name}}/{{ImportProductSimple1_Bundle.baseImage}}</argument>
+            </helper>
+            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct2BaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple2_Bundle.smallImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Bundle.name}}/{{ImportProductSimple2_Bundle.smallImage}}</argument>
+            </helper>
+            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct3BaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple3_Bundle.thumbnailImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Bundle.name}}/{{ImportProductSimple3_Bundle.thumbnailImage}}</argument>
+            </helper>
 
             <!-- Login as Admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -46,9 +50,10 @@
         <after>
             <!-- Delete Data -->
             <deleteData createDataKey="createImportCategory" stepKey="deleteImportCategory"/>
-            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <deleteData createDataKey="productForImages" stepKey="deleteProductForImages"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
+                <argument name="path">var/import/images/{{ImportProduct_Bundle.name}}</argument>
+            </helper>
             <deleteData url="/V1/products/{{ImportProductSimple1_Bundle.urlKey}}" stepKey="deleteImportedSimpleProduct1"/>
             <deleteData url="/V1/products/{{ImportProductSimple2_Bundle.urlKey}}" stepKey="deleteImportedSimpleProduct2"/>
             <deleteData url="/V1/products/{{ImportProductSimple3_Bundle.urlKey}}" stepKey="deleteImportedSimpleProduct3"/>
@@ -61,6 +66,7 @@
         <actionGroup ref="AdminNavigateToImportPageActionGroup" stepKey="navigateToImportPage"/>
         <actionGroup ref="AdminFillImportFormActionGroup" stepKey="fillImportForm">
             <argument name="importFile" value="{{ImportProduct_Bundle.fileName}}"/>
+            <argument name="imagesFileDirectory" value="{{ImportProduct_Bundle.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminClickCheckDataImportActionGroup" stepKey="clickCheckData"/>
         <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="{{ImportCommonMessages.validFile}}" stepKey="seeCheckDataResultMessage"/>
@@ -97,18 +103,18 @@
             <argument name="productWeight" value="{{ImportProductSimple1_Bundle.weight}}"/>
             <argument name="categoryName" value="{{ImportCategory_Bundle.name}}"/>
         </actionGroup>
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertSimpleProduct1ImageOnEditPage">
-            <argument name="image" value="MagentoLogo"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertSimpleProduct1ImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple1_Bundle.baseImageName}}"/>
         </actionGroup>
-        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(MagentoLogo.filename, 'image')}}" stepKey="seeBaseImageRoleSimple1"/>
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertSimpleProduct1SmallImageOnEditPage">
-            <argument name="image" value="MagentoLogo"/>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple1_Bundle.baseImageName, 'image')}}" stepKey="seeBaseImageRoleSimple1"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertSimpleProduct1SmallImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple1_Bundle.smallImageName}}"/>
         </actionGroup>
-        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(MagentoLogo.filename, 'small_image')}}" stepKey="seeSmallImageRoleSimple1"/>
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertSimpleProduct1ThumbnailImageOnEditPage">
-            <argument name="image" value="MagentoLogo"/>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple1_Bundle.smallImageName, 'small_image')}}" stepKey="seeSmallImageRoleSimple1"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertSimpleProduct1ThumbnailImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple1_Bundle.thumbnailImageName}}"/>
         </actionGroup>
-        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(MagentoLogo.filename, 'thumbnail')}}" stepKey="seeThumbnailImageRoleSimple1"/>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple1_Bundle.thumbnailImageName, 'thumbnail')}}" stepKey="seeThumbnailImageRoleSimple1"/>
 
         <!-- Admin: Verify Simple Product 2 on Edit Product Page -->
         <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToSimpleProduct2EditPage">
@@ -124,18 +130,18 @@
             <argument name="productWeight" value="{{ImportProductSimple2_Bundle.weight}}"/>
             <argument name="categoryName" value="{{ImportCategory_Bundle.name}}"/>
         </actionGroup>
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertSimpleProduct2ImageOnEditPage">
-            <argument name="image" value="TestImage"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertSimpleProduct2ImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple2_Bundle.baseImageName}}"/>
         </actionGroup>
-        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(TestImage.filename, 'image')}}" stepKey="seeBaseImageRoleSimple2"/>
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertSimpleProduct2SmallImageOnEditPage">
-            <argument name="image" value="TestImage"/>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple2_Bundle.baseImageName, 'image')}}" stepKey="seeBaseImageRoleSimple2"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertSimpleProduct2SmallImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple2_Bundle.smallImageName}}"/>
         </actionGroup>
-        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(TestImage.filename, 'small_image')}}" stepKey="seeSmallImageRoleSimple2"/>
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertSimpleProduct2ThumbnailImageOnEditPage">
-            <argument name="image" value="TestImage"/>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple2_Bundle.smallImageName, 'small_image')}}" stepKey="seeSmallImageRoleSimple2"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertSimpleProduct2ThumbnailImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple2_Bundle.thumbnailImageName}}"/>
         </actionGroup>
-        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(TestImage.filename, 'thumbnail')}}" stepKey="seeThumbnailImageRoleSimple2"/>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple2_Bundle.thumbnailImageName, 'thumbnail')}}" stepKey="seeThumbnailImageRoleSimple2"/>
 
         <!-- Admin: Verify Simple Product 3 on Edit Product Page -->
         <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToSimpleProduct3EditPage">
@@ -151,18 +157,18 @@
             <argument name="productWeight" value="{{ImportProductSimple3_Bundle.weight}}"/>
             <argument name="categoryName" value="{{ImportCategory_Bundle.name}}"/>
         </actionGroup>
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertSimpleProduct3ImageOnEditPage">
-            <argument name="image" value="TestImageAdobe"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertSimpleProduct3ImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple3_Bundle.baseImageName}}"/>
         </actionGroup>
-        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(TestImageAdobe.filename, 'image')}}" stepKey="seeBaseImageRoleSimple3"/>
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertSimpleProduct3SmallImageOnEditPage">
-            <argument name="image" value="TestImageAdobe"/>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple3_Bundle.baseImageName, 'image')}}" stepKey="seeBaseImageRoleSimple3"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertSimpleProduct3SmallImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple3_Bundle.smallImageName}}"/>
         </actionGroup>
-        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(TestImageAdobe.filename, 'small_image')}}" stepKey="seeSmallImageRoleSimple3"/>
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertSimpleProduct3ThumbnailImageOnEditPage">
-            <argument name="image" value="TestImageAdobe"/>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple3_Bundle.smallImageName, 'small_image')}}" stepKey="seeSmallImageRoleSimple3"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertSimpleProduct3ThumbnailImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple3_Bundle.thumbnailImageName}}"/>
         </actionGroup>
-        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(TestImageAdobe.filename, 'thumbnail')}}" stepKey="seeThumbnailImageRoleSimple3"/>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple3_Bundle.thumbnailImageName, 'thumbnail')}}" stepKey="seeThumbnailImageRoleSimple3"/>
 
         <!-- Admin: Verify Bundle Product Common Data on Edit Product Page -->
         <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToBundleProductEditPage">
@@ -179,20 +185,20 @@
             <argument name="productQuantity" value="{{ImportProduct_Bundle.quantity}}"/>
             <argument name="productWeight" value="{{ImportProduct_Bundle.weight}}"/>
             <argument name="dynamicWeight" value="{{ImportProduct_Bundle.dynamicWeightCheckedValue}}"/>
-            <argument name="categoryNames" value="{{ImportCategory_Bundle.name}}"/>
+            <argument name="categoryName" value="{{ImportCategory_Bundle.name}}"/>
         </actionGroup>
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertBundleProductBaseImageOnEditPage">
-            <argument name="image" value="MagentoLogo"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertBundleProductBaseImageOnEditPage">
+            <argument name="image" value="{{ImportProduct_Bundle.baseImageName}}"/>
         </actionGroup>
-        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(MagentoLogo.filename, 'image')}}" stepKey="seeBaseImageRoleBundle"/>
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertBundleProductSmallImageOnEditPage">
-            <argument name="image" value="TestImage"/>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Bundle.baseImageName, 'image')}}" stepKey="seeBaseImageRoleBundle"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertBundleProductSmallImageOnEditPage">
+            <argument name="image" value="{{ImportProduct_Bundle.smallImageName}}"/>
         </actionGroup>
-        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(TestImage.filename, 'small_image')}}" stepKey="seeSmallImageRoleBundle"/>
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertBundleProductThumbnailImageOnEditPage">
-            <argument name="image" value="TestImageAdobe"/>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Bundle.smallImageName, 'small_image')}}" stepKey="seeSmallImageRoleBundle"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertBundleProductThumbnailImageOnEditPage">
+            <argument name="image" value="{{ImportProduct_Bundle.thumbnailImageName}}"/>
         </actionGroup>
-        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(TestImageAdobe.filename, 'thumbnail')}}" stepKey="seeThumbnailImageRoleBundle"/>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Bundle.thumbnailImageName, 'thumbnail')}}" stepKey="seeThumbnailImageRoleBundle"/>
 
         <!-- Admin: Verify Bundle Product Information on Edit Product Page -->
         <seeOptionIsSelected userInput="{{ImportProduct_Bundle.bundleOptionShipmentType}}" selector="{{AdminProductFormBundleSection.shipmentType}}" stepKey="seeShipBundleItemsTogether"/>
@@ -259,9 +265,9 @@
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{ImportProduct_Bundle.name}}" stepKey="seeProductName"/>
         <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Bundle.sku}}" stepKey="seeSku"/>
         <see userInput="From $20.00 To $170.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="seePrice"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(MagentoLogo.filename)}}" stepKey="seeMagentoLogo"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(TestImage.filename)}}" stepKey="seeTestImage"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(TestImageAdobe.filename)}}" stepKey="seeTestImageAdobe"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProductSimple1_Bundle.baseImageName)}}" stepKey="seeProduct1BaseImage"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProductSimple2_Bundle.baseImageName)}}" stepKey="seeProduct2BaseImage"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProductSimple3_Bundle.baseImageName)}}" stepKey="seeProduct3BaseImage"/>
 
         <!-- Storefront: Verify Default Customization Summary -->
         <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickCustomizeAndAddToCartButton"/>
