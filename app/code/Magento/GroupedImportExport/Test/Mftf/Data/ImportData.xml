@@ -33,7 +33,12 @@
         <data key="groupedPosition">1</data>
         <data key="urlKey">import-product-simple1-grouped</data>
         <data key="weight">1</data>
-        <data key="thumbnailImage">/m/a/magento-logo</data>
+        <data key="baseImage">magento-logo.png</data>
+        <data key="baseImageName">magento-logo</data>
+        <data key="smallImage">magento-logo.png</data>
+        <data key="smallImageName">magento-logo</data>
+        <data key="thumbnailImage">magento-logo.png</data>
+        <data key="thumbnailImageName">magento-logo</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
@@ -52,7 +57,12 @@
         <data key="groupedPosition">0</data>
         <data key="urlKey">import-product-simple2-grouped</data>
         <data key="weight">2</data>
-        <data key="thumbnailImage">/t/e/test_image</data>
+        <data key="baseImage">m-logo.gif</data>
+        <data key="baseImageName">m-logo</data>
+        <data key="smallImage">m-logo.gif</data>
+        <data key="smallImageName">m-logo</data>
+        <data key="thumbnailImage">m-logo.gif</data>
+        <data key="thumbnailImageName">m-logo</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
@@ -71,7 +81,12 @@
         <data key="groupedPosition">2</data>
         <data key="urlKey">import-product-simple3-grouped</data>
         <data key="weight">3</data>
-        <data key="thumbnailImage">/a/d/adobe-base</data>
+        <data key="baseImage">adobe-base.jpg</data>
+        <data key="baseImageName">adobe-base</data>
+        <data key="smallImage">adobe-base.jpg</data>
+        <data key="smallImageName">adobe-base</data>
+        <data key="thumbnailImage">adobe-base.jpg</data>
+        <data key="thumbnailImageName">adobe-base</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
@@ -88,5 +103,11 @@
         <data key="quantity">0</data>
         <data key="weight">1</data>
         <data key="urlKey">import-product-grouped</data>
+        <data key="baseImage">magento-logo.png</data>
+        <data key="baseImageName">magento-logo</data>
+        <data key="smallImage">m-logo.gif</data>
+        <data key="smallImageName">m-logo</data>
+        <data key="thumbnailImage">adobe-base.jpg</data>
+        <data key="thumbnailImageName">adobe-base</data>
     </entity>
 </entities>

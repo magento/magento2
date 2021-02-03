@@ -22,22 +22,26 @@
         </annotations>
 
         <before>
-            <!-- Create Product, Upload Images & Create Customer -->
+            <!-- Create Category & Customer -->
             <createData entity="ImportCategory_Grouped" stepKey="createImportCategory"/>
-            <createData entity="_defaultCategory" stepKey="createCategory"/>
-            <createData entity="ApiSimpleProduct" stepKey="productForImages">
-                <requiredEntity createDataKey="createCategory"/>
-            </createData>
-            <createData entity="ApiProductAttributeMediaGalleryForExportImport" stepKey="productImage1">
-                <requiredEntity createDataKey="productForImages"/>
-            </createData>
-            <createData entity="ApiProductAttributeMediaGalleryForExportImport2" stepKey="productImage2">
-                <requiredEntity createDataKey="productForImages"/>
-            </createData>
-            <createData entity="ApiProductAttributeMediaGalleryForExportImport3" stepKey="productImage3">
-                <requiredEntity createDataKey="productForImages"/>
-            </createData>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <!-- Copy Images to Import Directory for Product Images -->
+            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportImages">
+                <argument name="path">var/import/images/{{ImportProduct_Grouped.name}}</argument>
+            </helper>
+            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct1BaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple1_Grouped.baseImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Grouped.name}}/{{ImportProductSimple1_Grouped.baseImage}}</argument>
+            </helper>
+            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct2BaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple2_Grouped.smallImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Grouped.name}}/{{ImportProductSimple2_Grouped.smallImage}}</argument>
+            </helper>
+            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct3BaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple3_Grouped.thumbnailImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Grouped.name}}/{{ImportProductSimple3_Grouped.thumbnailImage}}</argument>
+            </helper>
 
             <!-- Login as Admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -46,9 +50,10 @@
         <after>
             <!-- Delete Data -->
             <deleteData createDataKey="createImportCategory" stepKey="deleteImportCategory"/>
-            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <deleteData createDataKey="productForImages" stepKey="deleteProductForImages"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
+                <argument name="path">var/import/images/{{ImportProduct_Grouped.name}}</argument>
+            </helper>
             <deleteData url="/V1/products/{{ImportProductSimple1_Grouped.urlKey}}" stepKey="deleteImportedSimpleProduct1"/>
             <deleteData url="/V1/products/{{ImportProductSimple2_Grouped.urlKey}}" stepKey="deleteImportedSimpleProduct2"/>
             <deleteData url="/V1/products/{{ImportProductSimple3_Grouped.urlKey}}" stepKey="deleteImportedSimpleProduct3"/>
@@ -61,6 +66,7 @@
         <actionGroup ref="AdminNavigateToImportPageActionGroup" stepKey="navigateToImportPage"/>
         <actionGroup ref="AdminFillImportFormActionGroup" stepKey="fillImportForm">
             <argument name="importFile" value="{{ImportProduct_Grouped.fileName}}"/>
+            <argument name="imagesFileDirectory" value="{{ImportProduct_Grouped.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminClickCheckDataImportActionGroup" stepKey="clickCheckData"/>
         <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="{{ImportCommonMessages.validFile}}" stepKey="seeCheckDataResultMessage"/>
@@ -96,9 +102,18 @@
             <argument name="productWeight" value="{{ImportProductSimple1_Grouped.weight}}"/>
             <argument name="categoryName" value="{{ImportCategory_Grouped.name}}"/>
         </actionGroup>
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertProduct1ImageOnEditPage">
-            <argument name="image" value="MagentoLogo"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct1BaseImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple1_Grouped.baseImageName}}"/>
         </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple1_Grouped.baseImageName, 'image')}}" stepKey="seeBaseImageRole1"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct1SmallImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple1_Grouped.smallImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple1_Grouped.smallImageName, 'small_image')}}" stepKey="seeSmallImageRole1"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct1ThumbnailImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple1_Grouped.thumbnailImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple1_Grouped.thumbnailImageName, 'thumbnail')}}" stepKey="seeThumbnailImageRole1"/>
 
         <!-- Admin: Verify Simple Product 2 on Edit Product Page -->
         <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToSimpleProduct2EditPage">
@@ -113,9 +128,18 @@
             <argument name="productWeight" value="{{ImportProductSimple2_Grouped.weight}}"/>
             <argument name="categoryName" value="{{ImportCategory_Grouped.name}}"/>
         </actionGroup>
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertProduct2ImageOnEditPage">
-            <argument name="image" value="TestImage"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct2BaseImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple2_Grouped.baseImageName}}"/>
         </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple2_Grouped.baseImageName, 'image')}}" stepKey="seeBaseImageRole2"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct2SmallImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple2_Grouped.smallImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple2_Grouped.smallImageName, 'small_image')}}" stepKey="seeSmallImageRole2"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct2ThumbnailImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple2_Grouped.thumbnailImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple2_Grouped.thumbnailImageName, 'thumbnail')}}" stepKey="seeThumbnailImageRole2"/>
 
         <!-- Admin: Verify Simple Product 3 on Edit Product Page -->
         <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToSimpleProduct3EditPage">
@@ -130,9 +154,18 @@
             <argument name="productWeight" value="{{ImportProductSimple3_Grouped.weight}}"/>
             <argument name="categoryName" value="{{ImportCategory_Grouped.name}}"/>
         </actionGroup>
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertProduct3ImageOnEditPage">
-            <argument name="image" value="TestImageAdobe"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct3BaseImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple3_Grouped.baseImageName}}"/>
         </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple3_Grouped.baseImageName, 'image')}}" stepKey="seeBaseImageRole3"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct3SmallImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple3_Grouped.smallImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple3_Grouped.smallImageName, 'small_image')}}" stepKey="seeSmallImageRole3"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct3ThumbnailImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple3_Grouped.thumbnailImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple3_Grouped.thumbnailImageName, 'thumbnail')}}" stepKey="seeThumbnailImageRole3"/>
 
         <!-- Admin: Verify Grouped Product Common Data on Edit Product Page -->
         <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToGroupedProductEditPage">
@@ -143,25 +176,25 @@
             <argument name="productName" value="{{ImportProduct_Grouped.name}}"/>
             <argument name="productSku" value="{{ImportProduct_Grouped.sku}}"/>
             <argument name="productQuantity" value="{{ImportProduct_Grouped.quantity}}"/>
-            <argument name="categoryNames" value="{{ImportCategory_Grouped.name}}"/>
+            <argument name="categoryName" value="{{ImportCategory_Grouped.name}}"/>
         </actionGroup>
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertGroupedProductBaseImageOnEditPage">
-            <argument name="image" value="MagentoLogo"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertGroupedProductBaseImageOnEditPage">
+            <argument name="image" value="{{ImportProduct_Grouped.baseImageName}}"/>
         </actionGroup>
-        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(MagentoLogo.filename, 'image')}}" stepKey="seeBaseImageRoleGrouped"/>
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertGroupedProductSmallImageOnEditPage">
-            <argument name="image" value="TestImage"/>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Grouped.baseImageName, 'image')}}" stepKey="seeBaseImageRoleGrouped"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertGroupedProductSmallImageOnEditPage">
+            <argument name="image" value="{{ImportProduct_Grouped.smallImageName}}"/>
         </actionGroup>
-        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(TestImage.filename, 'small_image')}}" stepKey="seeSmallImageRoleGrouped"/>
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertGroupedProductThumbnailImageOnEditPage">
-            <argument name="image" value="TestImageAdobe"/>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Grouped.smallImageName, 'small_image')}}" stepKey="seeSmallImageRoleGrouped"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertGroupedProductThumbnailImageOnEditPage">
+            <argument name="image" value="{{ImportProduct_Grouped.thumbnailImageName}}"/>
         </actionGroup>
-        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(TestImageAdobe.filename, 'thumbnail')}}" stepKey="seeThumbnailImageRoleGrouped"/>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Grouped.thumbnailImageName, 'thumbnail')}}" stepKey="seeThumbnailImageRoleGrouped"/>
 
         <!-- Admin: Verify Grouped Product Information on Edit Product Page -->
         <seeNumberOfElements userInput="3" selector="{{AdminGroupedProductOptionGridSection.allRows}}" stepKey="see3RowsAdmin"/>
         <actionGroup ref="AdminVerifyAssociatedProductForGroupedProductActionGroup" stepKey="verifyAssociatedProduct1Admin">
-            <argument name="image" value="{{ImportProductSimple2_Grouped.thumbnailImage}}"/>
+            <argument name="image" value="{{ImportProductSimple2_Grouped.thumbnailImageName}}"/>
             <argument name="name" value="{{ImportProductSimple2_Grouped.name}}"/>
             <argument name="attributeSet" value="{{ImportProductSimple2_Grouped.attributeSetText}}"/>
             <argument name="status" value="{{ImportProductSimple2_Grouped.statusText}}"/>
@@ -172,7 +205,7 @@
             <argument name="index" value="1"/>
         </actionGroup>
         <actionGroup ref="AdminVerifyAssociatedProductForGroupedProductActionGroup" stepKey="verifyAssociatedProduct2Admin">
-            <argument name="image" value="{{ImportProductSimple1_Grouped.thumbnailImage}}"/>
+            <argument name="image" value="{{ImportProductSimple1_Grouped.thumbnailImageName}}"/>
             <argument name="name" value="{{ImportProductSimple1_Grouped.name}}"/>
             <argument name="attributeSet" value="{{ImportProductSimple1_Grouped.attributeSetText}}"/>
             <argument name="status" value="{{ImportProductSimple1_Grouped.statusText}}"/>
@@ -183,7 +216,7 @@
             <argument name="index" value="2"/>
         </actionGroup>
         <actionGroup ref="AdminVerifyAssociatedProductForGroupedProductActionGroup" stepKey="verifyAssociatedProduct3Admin">
-            <argument name="image" value="{{ImportProductSimple3_Grouped.thumbnailImage}}"/>
+            <argument name="image" value="{{ImportProductSimple3_Grouped.thumbnailImageName}}"/>
             <argument name="name" value="{{ImportProductSimple3_Grouped.name}}"/>
             <argument name="attributeSet" value="{{ImportProductSimple3_Grouped.attributeSetText}}"/>
             <argument name="status" value="{{ImportProductSimple3_Grouped.statusText}}"/>
@@ -213,9 +246,9 @@
         </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{ImportProduct_Grouped.name}}" stepKey="seeProductName"/>
         <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Grouped.sku}}" stepKey="seeSku"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(MagentoLogo.filename)}}" stepKey="seeMagentoLogo"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(TestImage.filename)}}" stepKey="seeTestImage"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(TestImageAdobe.filename)}}" stepKey="seeTestImageAdobe"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProductSimple1_Grouped.baseImageName)}}" stepKey="seeProduct1BaseImage"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProductSimple2_Grouped.baseImageName)}}" stepKey="seeProduct2BaseImage"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProductSimple3_Grouped.baseImageName)}}" stepKey="seeProduct3BaseImage"/>
 
         <!-- Storefront: Verify Associated Grouped Products -->
         <seeNumberOfElements userInput="3" selector="{{StorefrontProductInfoMainSection.groupedProductsTableAllRows}}" stepKey="see3RowsStorefront"/>
