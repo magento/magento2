@@ -77,9 +77,11 @@ class AddToPackageTest extends TestCase
      */
     public function testGetCurrencyCodeCustomValue ()
     {
-        $expectedCurrencyCode = '<span class="customs-value-currency">
-                                        FR                                    </span>';
-        $this->assertStringContainsString($expectedCurrencyCode, $this->getHtml());
+        $template = '/<span class="customs-value-currency">\s*?(?<currency>[A-Za-z]+)\s*?<\/span>/';
+        $matches = [];
+        preg_match($template, $this->getHtml(), $matches);
+        $currency = $matches['currency'] ?? null;
+        $this->assertEquals('FR',$currency );
     }
 
     /**

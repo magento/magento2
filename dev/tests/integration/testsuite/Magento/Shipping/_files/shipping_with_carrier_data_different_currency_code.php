@@ -20,7 +20,7 @@ $objectManager = Bootstrap::getObjectManager();
 /** @var Transaction $transaction */
 $transaction = $objectManager->get(Transaction::class);
 /** @var ProductRepositoryInterface $productRepository */
-$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
 $product = $productRepository->get('simple');
 /** @var Order $order */
 $order = $objectManager->get(OrderInterfaceFactory::class)->create()->loadByIncrementId('100000001');
@@ -42,7 +42,7 @@ foreach ($order->getItems() as $orderItem) {
 $tracking = [
     'carrier_code' => 'ups',
     'title' => 'United Parcel Service',
-    'number' => '987654321'
+    'number' => '987654321',
 ];
 
 $shipment = $objectManager->get(ShipmentFactory::class)->create($order, $shipmentItems, [$tracking]);
