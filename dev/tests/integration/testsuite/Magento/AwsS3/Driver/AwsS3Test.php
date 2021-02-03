@@ -140,7 +140,7 @@ class AwsS3Test extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->awsDriver->isExists(self::TEST_FILE_PATH));
     }
 
-    public function testIss()
+    public function testBoolFunctions()
     {
         $this->assertTrue($this->awsDriver->isDirectory(dirname(self::TEST_FILE_PATH)));
         $this->assertFalse($this->awsDriver->isDirectory(self::TEST_FILE_PATH));
