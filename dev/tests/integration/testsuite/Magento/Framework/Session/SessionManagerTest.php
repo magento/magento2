@@ -250,13 +250,10 @@ namespace Magento\Framework\Session {
             $this->model->destroy();
         }
 
-        /**
-         */
         public function testStartAreaNotSet()
         {
+            $this->expectExceptionMessage("Area code not set: Area code must be set before starting a session.");
             $this->expectException(\Magento\Framework\Exception\SessionException::class);
-            $this->expectExceptionMessage('Area code not set: Area code must be set before starting a session.');
-
             $scope = $this->objectManager->get(\Magento\Framework\Config\ScopeInterface::class);
             $appState = new \Magento\Framework\App\State($scope);
 

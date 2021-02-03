@@ -383,7 +383,7 @@ class CreateAddressTest extends AbstractController
         $this->assertRedirect($this->stringContains('customer/address/edit'));
         foreach ($expectedSessionMessages as $expectedMessage) {
             $this->assertSessionMessages(
-                $this->contains($this->escaper->escapeHtml((string)__($expectedMessage))),
+                $this->containsEqual($this->escaper->escapeHtml((string)__($expectedMessage))),
                 MessageInterface::TYPE_ERROR
             );
         }

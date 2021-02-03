@@ -65,7 +65,7 @@ class ResultTest extends AbstractController
         );
         $this->dispatch('catalogsearch/advanced/result');
         $responseBody = $this->getResponse()->getBody();
-        $this->assertContains('Simple product name', $responseBody);
+        $this->assertStringContainsString('Simple product name', $responseBody);
     }
 
     /**

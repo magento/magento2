@@ -202,7 +202,7 @@ class SaveTest extends AbstractInvoiceControllerTest
     private function assertErrorResponse(string $expectedMessage): void
     {
         $this->assertRedirect($this->stringContains('sales/order_invoice/new'));
-        $this->assertSessionMessages($this->contains($expectedMessage));
+        $this->assertSessionMessages($this->containsEqual($expectedMessage));
     }
 
     /**
@@ -234,6 +234,6 @@ class SaveTest extends AbstractInvoiceControllerTest
         $this->assertRedirect(
             $this->stringContains(sprintf('sales/order/view/order_id/%u', (int)$order->getEntityId()))
         );
-        $this->assertSessionMessages($this->contains((string)__($message)));
+        $this->assertSessionMessages($this->containsEqual((string)__($message)));
     }
 }

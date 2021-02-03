@@ -34,8 +34,8 @@ class BaseStringUtilsTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'toBoolean'
-        )->willReturnMap(
-            [['true', true], ['false', false]]
+        )->will(
+            $this->returnValueMap([['true', true], ['false', false]])
         );
         $this->model = new BaseStringUtils($this->booleanUtils);
         /** @var RendererInterface|\PHPUnit\Framework\MockObject\MockObject $translateRenderer */
@@ -83,12 +83,12 @@ class BaseStringUtilsTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $input
      * @dataProvider evaluateExceptionDataProvider
+     *
      */
     public function testEvaluateException($input)
     {
+        $this->expectExceptionMessage("String value is expected");
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('String value is expected');
-
         $this->model->evaluate($input);
     }
 

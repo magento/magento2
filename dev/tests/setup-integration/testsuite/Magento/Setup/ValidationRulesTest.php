@@ -32,7 +32,7 @@ class ValidationRulesTest extends SetupTestCase
      */
     private $cliCommad;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->schemaConfig = $objectManager->create(SchemaConfig::class);
@@ -41,13 +41,15 @@ class ValidationRulesTest extends SetupTestCase
     }
 
     /**
+     *
+     *
+     * /Primary key can`t be applied on table "test_table". All columns should be not nullable/
      * @moduleName Magento_TestSetupDeclarationModule8
      */
     public function testFailOnInvalidPrimaryKey()
     {
+        $this->expectExceptionMessageMatches("/Primary key can`t be applied on table \"test_table\". All columns should be not nullable/");
         $this->expectException(\Magento\Framework\Setup\Exception::class);
-        $this->expectExceptionMessageRegExp('* /Primary key can`t be applied on table "test_table". All columns should be not nullable/');
-
         $this->cliCommad->install(
             ['Magento_TestSetupDeclarationModule8']
         );
@@ -62,13 +64,16 @@ class ValidationRulesTest extends SetupTestCase
     }
 
     /**
+     *
+     *
+     * /Column definition "page_id_on" and reference column definition "page_id"
+     * are different in tables "dependent" and "test_table"/
      * @moduleName Magento_TestSetupDeclarationModule8
      */
     public function testFailOnIncosistentReferenceDefinition()
     {
+        $this->expectExceptionMessageMatches('/Column definition "page_id_on" and reference column definition "page_id" are different in tables "dependent" and "test_table"/');
         $this->expectException(\Magento\Framework\Setup\Exception::class);
-        $this->expectExceptionMessageRegExp('* /Column definition "page_id_on" and reference column definition "page_id" are different in tables "dependent" and "test_table"/');
-
         $this->cliCommad->install(
             ['Magento_TestSetupDeclarationModule8']
         );
@@ -82,13 +87,14 @@ class ValidationRulesTest extends SetupTestCase
     }
 
     /**
+     *
+     *
      * @moduleName Magento_TestSetupDeclarationModule8
      */
     public function testFailOnInvalidAutoIncrementField()
     {
+        $this->expectExceptionMessageMatches("/Auto Increment column do not have index. Column - \"page_id\"/");
         $this->expectException(\Magento\Framework\Setup\Exception::class);
-        $this->expectExceptionMessageRegExp('/Auto Increment column do not have index. Column - "page_id"/');
-
         $this->cliCommad->install(
             ['Magento_TestSetupDeclarationModule8']
         );

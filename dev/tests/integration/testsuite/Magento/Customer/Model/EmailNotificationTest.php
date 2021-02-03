@@ -182,7 +182,7 @@ class EmailNotificationTest extends TestCase
         $message = $this->transportBuilder->getSentMessage();
         $this->assertNotNull($message);
         $this->assertMessageSender($message, $expectedSender);
-        $this->assertContains(
+        $this->assertStringContainsString(
             'Text specially for check in test.',
             $message->getBody()->getParts()[0]->getRawContent(),
             'Expected text wasn\'t found in message.'

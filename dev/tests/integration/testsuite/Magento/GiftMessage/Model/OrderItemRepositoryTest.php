@@ -60,12 +60,12 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/GiftMessage/_files/order_with_message.php
      * @magentoConfigFixture default_store sales/gift_options/allow_items 1
+     *
      */
     public function testGetNoProvidedItemId()
     {
+        $this->expectExceptionMessage("No item with the provided ID was found in the Order. Verify the ID and try again.");
         $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
-        $this->expectExceptionMessage('No item with the provided ID was found in the Order. Verify the ID and try again.');
-
         /** @var \Magento\Sales\Model\Order $order */
         $order = $this->objectManager->create(\Magento\Sales\Model\Order::class)->loadByIncrementId('100000001');
         /** @var \Magento\Sales\Api\Data\OrderItemInterface $orderItem */
@@ -106,12 +106,12 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Sales/_files/order.php
      * @magentoConfigFixture default_store sales/gift_options/allow_items 0
+     *
      */
     public function testSaveMessageIsNotAvailable()
     {
+        $this->expectExceptionMessage("The gift message isn't available.");
         $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
-        $this->expectExceptionMessage('The gift message isn\'t available.');
-
         /** @var \Magento\Sales\Model\Order $order */
         $order = $this->objectManager->create(\Magento\Sales\Model\Order::class)->loadByIncrementId('100000001');
         /** @var \Magento\Sales\Api\Data\OrderItemInterface $orderItem */
@@ -125,12 +125,12 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/GiftMessage/_files/virtual_order.php
      * @magentoConfigFixture default_store sales/gift_options/allow_items 1
+     *
      */
     public function testSaveMessageIsVirtual()
     {
+        $this->expectExceptionMessage("Gift messages can't be used for virtual products.");
         $this->expectException(\Magento\Framework\Exception\State\InvalidTransitionException::class);
-        $this->expectExceptionMessage('Gift messages can\'t be used for virtual products.');
-
         /** @var \Magento\Sales\Model\Order $order */
         $order = $this->objectManager->create(\Magento\Sales\Model\Order::class)->loadByIncrementId('100000001');
         /** @var \Magento\Sales\Api\Data\OrderItemInterface $orderItem */
@@ -144,12 +144,12 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/GiftMessage/_files/empty_order.php
      * @magentoConfigFixture default_store sales/gift_options/allow_items 1
+     *
      */
     public function testSaveMessageNoProvidedItemId()
     {
+        $this->expectExceptionMessage("No item with the provided ID was found in the Order. Verify the ID and try again.");
         $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
-        $this->expectExceptionMessage('No item with the provided ID was found in the Order. Verify the ID and try again.');
-
         /** @var \Magento\Sales\Model\Order $order */
         $order = $this->objectManager->create(\Magento\Sales\Model\Order::class)->loadByIncrementId('100000001');
         /** @var \Magento\Sales\Api\Data\OrderItemInterface $orderItem */

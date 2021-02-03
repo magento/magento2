@@ -39,7 +39,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         self::assertCount(count($tableDescription), $map['fields']);
 
         foreach ($map['fields'] as $mappedName) {
-            self::assertContains('main_table.', $mappedName);
+            self::assertStringContainsString('main_table.', $mappedName);
         }
     }
 }

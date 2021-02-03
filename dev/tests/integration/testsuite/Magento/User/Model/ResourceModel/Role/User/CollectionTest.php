@@ -25,6 +25,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testSelectQueryInitialized()
     {
-        $this->assertContains('user_id > 0', $this->_collection->getSelect()->__toString());
+        $this->assertStringContainsString('user_id > 0', $this->_collection->getSelect()->__toString());
     }
 }

@@ -109,7 +109,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $output = file_get_contents($this->outputFileName);
         foreach ($expected as $line) {
             if ($line) {
-                $this->assertContains($line, $output);
+                $this->assertStringContainsString($line, $output);
             }
         }
     }

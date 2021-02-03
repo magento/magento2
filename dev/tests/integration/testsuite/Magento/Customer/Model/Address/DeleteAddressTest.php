@@ -79,15 +79,13 @@ class DeleteAddressTest extends TestCase
 
     /**
      * Assert that deleting non-existent address throws exception.
-     *
-     *
+     **
      * @return void
      */
     public function testDeleteMissingAddress(): void
     {
+        $this->expectExceptionMessage("No such entity with addressId = 1");
         $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
-        $this->expectExceptionMessage('No such entity with addressId = 1');
-
         $this->addressRepository->deleteById(1);
     }
 }

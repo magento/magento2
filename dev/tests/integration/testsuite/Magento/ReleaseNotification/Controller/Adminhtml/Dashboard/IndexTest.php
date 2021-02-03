@@ -54,10 +54,10 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
 
         $actual = $this->getResponse()->getBody();
-        $this->assertContains('1-mainContent title', $actual);
-        $this->assertContains('2-mainContent title', $actual);
-        $this->assertContains('3-mainContent title', $actual);
-        $this->assertContains('4-mainContent title', $actual);
+        $this->assertStringContainsString('1-mainContent title', $actual);
+        $this->assertStringContainsString('2-mainContent title', $actual);
+        $this->assertStringContainsString('3-mainContent title', $actual);
+        $this->assertStringContainsString('4-mainContent title', $actual);
     }
 
     public function testExecuteEmptyContent()
@@ -72,7 +72,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
 
         $actual = $this->getResponse()->getBody();
-        $this->assertContains('"autoOpen":false', $actual);
+        $this->assertStringContainsString('"autoOpen":false', $actual);
     }
 
     public function testExecuteFalseContent()
@@ -87,6 +87,6 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
 
         $actual = $this->getResponse()->getBody();
-        $this->assertContains('"autoOpen":false', $actual);
+        $this->assertStringContainsString('"autoOpen":false', $actual);
     }
 }

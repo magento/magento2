@@ -52,7 +52,7 @@ class AsyncMultiTopicsSeparateQueuesTest extends QueueTestCaseAbstract
 
         //assertions
         foreach ($this->topics as $item) {
-            $this->assertContains($this->uniqueID[$item] . "_" . $item, file_get_contents($this->logFilePath));
+            $this->assertStringContainsString($this->uniqueID[$item] . "_" . $item, file_get_contents($this->logFilePath));
         }
     }
 }

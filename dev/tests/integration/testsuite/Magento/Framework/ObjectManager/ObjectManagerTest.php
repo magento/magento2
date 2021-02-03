@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\ObjectManager;
 
+use ReflectionClass;
+
 class ObjectManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**#@+
@@ -136,23 +138,25 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
 
         $testObject = self::$_objectManager->create($actualClassName);
         $this->assertInstanceOf($expectedClassName, $testObject);
-
+        $object = new ReflectionClass($actualClassName);
         if ($properties) {
             foreach ($properties as $propertyName => $propertyClass) {
-                $this->assertAttributeInstanceOf($propertyClass, $propertyName, $testObject);
-            }
+                $this->assertClassHasAttribute($propertyName, $actualClassName);
+                $attribute = $object->getProperty($propertyName);
+                $attribute->setAccessible(true);
+                $propertyObject = $attribute->getValue($testObject);
+                $attribute->setAccessible(false);
+                $this->assertInstanceOf($propertyClass, $propertyObject);            }
         }
     }
 
     /**
      * Test creating an object and passing incorrect type of arguments to the constructor.
-     *
-     */
+     **/
     public function testNewInstanceWithTypeError()
     {
+        $this->expectExceptionMessage("Error occurred when creating object");
         $this->expectException(\Magento\Framework\Exception\RuntimeException::class);
-        $this->expectExceptionMessage('Error occurred when creating object');
-
         self::$_objectManager->create(self::TEST_CLASS_WITH_TYPE_ERROR, [
             'testArgument' => new \stdClass()
         ]);

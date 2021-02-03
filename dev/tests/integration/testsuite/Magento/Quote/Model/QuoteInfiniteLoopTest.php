@@ -91,14 +91,12 @@ class QuoteInfiniteLoopTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *
      * @return void
      */
     public function testLoadQuoteWithTriggerRecollectInfiniteLoop(): void
     {
+        $this->expectExceptionMessage("Infinite loop detected, review the trace for the looping path");
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Infinite loop detected, review the trace for the looping path');
-
         $originalQuote = $this->generateQuote();
         $quoteId = $originalQuote->getId();
 

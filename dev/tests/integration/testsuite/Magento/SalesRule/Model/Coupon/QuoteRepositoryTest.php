@@ -98,7 +98,6 @@ class QuoteRepositoryTest extends TestCase
     public function testAboveLimitFail()
     {
         $this->expectException(\Magento\SalesRule\Api\Exception\CodeRequestLimitException::class);
-
         //Making number of requests above limit.
         try {
             $this->repo->save($this->getCart()->setCouponCode('fake20'));

@@ -33,7 +33,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testFilterByProductTypeException()
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
         $this->collection->filterByProductType(100);
     }
 
@@ -45,7 +44,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     {
         $this->collection->filterByProductType('simple');
         $whereParts = $this->collection->getSelect()->getPart(\Magento\Framework\DB\Select::WHERE);
-        $this->assertContains('simple', $whereParts[0]);
+        $this->assertStringContainsString('simple', $whereParts[0]);
     }
 
     /**

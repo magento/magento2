@@ -28,6 +28,6 @@ class DefaultCaptchaTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetRefreshUrl()
     {
-        $this->assertContains('backend/admin/refresh/refresh', $this->_block->getRefreshUrl());
+        $this->assertStringContainsString('backend/admin/refresh/refresh', $this->_block->getRefreshUrl());
     }
 }

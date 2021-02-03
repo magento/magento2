@@ -26,7 +26,7 @@ class SchemaReaderTest extends SetupTestCase
      */
     private $moduleManager;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->reader = $objectManager->get(ReaderComposite::class);
@@ -61,13 +61,14 @@ class SchemaReaderTest extends SetupTestCase
     }
 
     /**
+     *
+     *
      * @moduleName Magento_TestSetupDeclarationModule1
      */
     public function testFailOnInvalidColumnDeclaration()
     {
+        $this->expectExceptionMessageMatches("/The attribute 'scale' is not allowed./");
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessageRegExp('/The attribute \'scale\' is not allowed./');
-
         $this->updateRevisionTo('fail_on_column_declaration');
         $this->reader->read('all');
     }

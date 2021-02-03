@@ -51,13 +51,11 @@ class StockStatusFilterWithGeneralFilterTest extends TestCase
 
     /**
      * @return void
-     *
-     */
+     **/
     public function testApplyWithWrongType()
     {
+        $this->expectExceptionMessage("Invalid filter type: some_wrong_type");
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid filter type: some_wrong_type');
-
         $select = $this->resource->getConnection()->select();
         $this->stockStatusFilter->apply(
             $select,

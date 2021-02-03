@@ -111,12 +111,12 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture  Magento/Customer/_files/customer_address.php
      * @magentoDataFixture  Magento/Customer/_files/customer_two_addresses.php
      * @magentoAppIsolation enabled
+     *
      */
     public function testSaveAddressesIdSetButNotAlreadyExisting()
     {
+        $this->expectExceptionMessage("No such entity with addressId = 4200");
         $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
-        $this->expectExceptionMessage('No such entity with addressId = 4200');
-
         $proposedAddress = $this->_createSecondAddress()->setId(4200);
         $this->repository->save($proposedAddress);
     }
@@ -136,12 +136,12 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     *
      */
     public function testGetAddressByIdBadAddressId()
     {
+        $this->expectExceptionMessage("No such entity with addressId = 12345");
         $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
-        $this->expectExceptionMessage('No such entity with addressId = 12345');
-
         $this->repository->getById(12345);
     }
 

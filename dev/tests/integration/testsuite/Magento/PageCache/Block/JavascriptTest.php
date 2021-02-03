@@ -35,6 +35,6 @@ class JavascriptTest extends \PHPUnit\Framework\TestCase
     public function testGetScriptOptions()
     {
         $this->request->getQuery()->set('getparameter', 1);
-        $this->assertContains('?getparameter=1', $this->javascript->getScriptOptions());
+        $this->assertStringContainsString('?getparameter=1', $this->javascript->getScriptOptions());
     }
 }

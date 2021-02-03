@@ -34,15 +34,15 @@ class TreeTest extends \PHPUnit\Framework\TestCase
     public function testGetTreeJson()
     {
         $jsonTree = $this->block->getTreeJson();
-        $this->assertContains('Default Category (4)', $jsonTree);
-        $this->assertContains('Category 1.1 (2)', $jsonTree);
-        $this->assertContains('Category 1.1.1 (1)', $jsonTree);
-        $this->assertContains('Category 2 (0)', $jsonTree);
-        $this->assertContains('Movable (0)', $jsonTree);
-        $this->assertContains('Movable Position 1 (0)', $jsonTree);
-        $this->assertContains('Movable Position 2 (2)', $jsonTree);
-        $this->assertContains('Movable Position 3 (2)', $jsonTree);
-        $this->assertContains('Category 12 (2)', $jsonTree);
+        $this->assertStringContainsString('Default Category (4)', $jsonTree);
+        $this->assertStringContainsString('Category 1.1 (2)', $jsonTree);
+        $this->assertStringContainsString('Category 1.1.1 (1)', $jsonTree);
+        $this->assertStringContainsString('Category 2 (0)', $jsonTree);
+        $this->assertStringContainsString('Movable (0)', $jsonTree);
+        $this->assertStringContainsString('Movable Position 1 (0)', $jsonTree);
+        $this->assertStringContainsString('Movable Position 2 (2)', $jsonTree);
+        $this->assertStringContainsString('Movable Position 3 (2)', $jsonTree);
+        $this->assertStringContainsString('Category 12 (2)', $jsonTree);
         $this->assertStringMatchesFormat('%s"path":"1\/2\/%s\/%s\/%s"%s', $jsonTree);
     }
 }

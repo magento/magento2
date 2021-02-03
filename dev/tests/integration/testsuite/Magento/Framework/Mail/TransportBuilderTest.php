@@ -81,7 +81,7 @@ class TransportBuilderTest extends TestCase
         /** @var EmailMessage $emailMessage */
         $emailMessage = $this->builder->getTransport()->getMessage();
 
-        $this->assertContains($templateType, $emailMessage->getHeaders()['Content-Type']);
+        $this->assertStringContainsString($templateType, $emailMessage->getHeaders()['Content-Type']);
 
         $addresses = $emailMessage->getTo();
 

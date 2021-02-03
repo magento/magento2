@@ -58,12 +58,12 @@ class ShippingInformationManagementTest extends TestCase
      * @magentoDataFixture Magento/Sales/_files/quote_with_customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_with_addresses.php
      * @dataProvider getAddressesVariation
+     *
      */
     public function testDifferentAddresses(bool $swapShipping)
     {
+        $this->expectExceptionMessage("The shipping information was unable to be saved. Verify the input data and try again.");
         $this->expectException(\Magento\Framework\Exception\InputException::class);
-        $this->expectExceptionMessage('The shipping information was unable to be saved. Verify the input data and try again.');
-
         $cart = $this->cartRepo->getForCustomer(1);
         $otherCustomer = $this->customerRepo->get('customer_with_addresses@test.com');
         $otherAddresses = $otherCustomer->getAddresses();

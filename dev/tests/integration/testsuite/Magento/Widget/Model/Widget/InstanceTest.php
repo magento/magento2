@@ -45,7 +45,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
     {
         $config = $this->_model->setType(\Magento\Catalog\Block\Product\Widget\NewWidget::class)
             ->getWidgetConfigAsArray();
-        $this->assertIsArray($config);
+        $this->assertTrue(is_array($config));
         $element = null;
         if (isset(
             $config['parameters']
@@ -77,9 +77,9 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
         $this->_model->setType(\Magento\Catalog\Block\Product\Widget\NewWidget::class);
         $containers = $this->_model->getWidgetSupportedContainers();
         $this->assertIsArray($containers);
-        $this->assertContains('sidebar.main', $containers);
-        $this->assertContains('content', $containers);
-        $this->assertContains('sidebar.additional', $containers);
+        $this->assertContains('sidebar.main',$containers);
+        $this->assertContains('content',$containers);
+        $this->assertContains('sidebar.additional',$containers);
         return $this->_model;
     }
 
@@ -128,16 +128,16 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('', $model->generateLayoutUpdateXml('content'));
         $model->setId('test_id')->setPackageTheme('Magento/luma');
         $result = $model->generateLayoutUpdateXml('content');
-        $this->assertContains('<body><referenceContainer name="content">', $result);
-        $this->assertContains('<block class="' . $model->getType() . '"', $result);
+        $this->assertStringContainsString('<body><referenceContainer name="content">', $result);
+        $this->assertStringContainsString('<block class="' . $model->getType() . '"', $result);
         $this->assertEquals(count($params), substr_count($result, '<action method="setData">'));
-        $this->assertContains('<argument name="name" xsi:type="string">display_mode</argument>', $result);
-        $this->assertContains('<argument name="value" xsi:type="string">fixed</argument>', $result);
-        $this->assertContains('<argument name="name" xsi:type="string">types</argument>', $result);
-        $this->assertContains('<argument name="value" xsi:type="string">type_1,type_2</argument>', $result);
-        $this->assertContains('<argument name="name" xsi:type="string">conditions_encoded</argument>', $result);
-        $this->assertContains('`Magento||CatalogWidget||Model||Rule||Condition||Combine`', $result);
-        $this->assertContains('`Magento||CatalogWidget||Model||Rule||Condition||Product`', $result);
+        $this->assertStringContainsString('<argument name="name" xsi:type="string">display_mode</argument>', $result);
+        $this->assertStringContainsString('<argument name="value" xsi:type="string">fixed</argument>', $result);
+        $this->assertStringContainsString('<argument name="name" xsi:type="string">types</argument>', $result);
+        $this->assertStringContainsString('<argument name="value" xsi:type="string">type_1,type_2</argument>', $result);
+        $this->assertStringContainsString('<argument name="name" xsi:type="string">conditions_encoded</argument>', $result);
+        $this->assertStringContainsString('`Magento||CatalogWidget||Model||Rule||Condition||Combine`', $result);
+        $this->assertStringContainsString('`Magento||CatalogWidget||Model||Rule||Condition||Product`', $result);
     }
 
     /**

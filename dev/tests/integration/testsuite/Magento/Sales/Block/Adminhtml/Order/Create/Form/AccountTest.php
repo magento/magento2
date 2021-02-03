@@ -107,13 +107,13 @@ class AccountTest extends TestCase
             );
         }
 
-        self::assertContains(
+        self::assertStringContainsString(
             '<option value="'.$customerGroup.'" selected="selected">Wholesale</option>',
             $content,
             'The Customer Group specified for the chosen customer should be selected.'
         );
 
-        self::assertContains(
+        self::assertStringContainsString(
             'value="'.$customer->getEmail().'"',
             $content,
             'The Customer Email specified for the chosen customer should be input '
@@ -150,13 +150,13 @@ class AccountTest extends TestCase
         $form->setUseContainer(true);
         $content = $form->toHtml();
 
-        self::assertContains(
+        self::assertStringContainsString(
             '<option value="1" selected="selected">Yes</option>',
             $content,
             'Default value for user defined custom attribute should be selected.'
         );
 
-        self::assertContains(
+        self::assertStringContainsString(
             '<option value="3" selected="selected">Retailer</option>',
             $content,
             'The Customer Group specified for the chosen store should be selected.'

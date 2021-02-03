@@ -705,6 +705,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider testValidateUploadFileExceptionDataProvider
+     *
      * @param string $fileName
      * @param string $expectedErrorMsg
      * @param bool $useFixture
@@ -712,7 +713,6 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
     public function testValidateUploadFileException($fileName, $expectedErrorMsg, $useFixture)
     {
         $this->expectException(\InvalidArgumentException::class);
-
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $imageAdapter = $objectManager->get(\Magento\Framework\Image\AdapterFactory::class)->create();
         $filePath = $useFixture ? $this->_getFixture($fileName) : $fileName;

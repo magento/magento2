@@ -20,15 +20,12 @@ class ChangeTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
 
-    /**
-     */
     public function testChangeEncryptionKeyConfigNotWritable()
     {
+        $this->expectExceptionMessage("Deployment configuration file is not writable");
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Deployment configuration file is not writable');
-
         $writerMock = $this->createMock(\Magento\Framework\App\DeploymentConfig\Writer::class);
-        $writerMock->expects($this->once())->method('checkIfWritable')->willReturn(false);
+        $writerMock->expects($this->once())->method('checkIfWritable')->will($this->returnValue(false));
 
         /** @var \Magento\EncryptionKey\Model\ResourceModel\Key\Change $keyChangeModel */
         $keyChangeModel = $this->objectManager->create(
@@ -48,12 +45,12 @@ class ChangeTest extends \PHPUnit\Framework\TestCase
         $testValue = 'test';
 
         $writerMock = $this->createMock(\Magento\Framework\App\DeploymentConfig\Writer::class);
-        $writerMock->expects($this->once())->method('checkIfWritable')->willReturn(true);
+        $writerMock->expects($this->once())->method('checkIfWritable')->will($this->returnValue(true));
 
         $structureMock = $this->createMock(\Magento\Config\Model\Config\Structure::class);
         $structureMock->expects($this->once())
             ->method('getFieldPathsByAttribute')
-            ->willReturn([$testPath]);
+            ->will($this->returnValue([$testPath]));
 
         /** @var \Magento\EncryptionKey\Model\ResourceModel\Key\Change $keyChangeModel */
         $keyChangeModel = $this->objectManager->create(
