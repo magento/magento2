@@ -62,7 +62,6 @@ class StockTest extends AbstractController
 
     /**
      * @magentoAppArea     frontend
-     * @magentoDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/ProductAlert/_files/customer_unsubscribe_stock.php
      */
