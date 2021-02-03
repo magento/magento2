@@ -98,7 +98,7 @@ class DiscountsTest extends \PHPUnit\Framework\TestCase
             \Magento\SalesRule\Block\Rss\Discounts::class,
             [
                 'storeManager' => $this->storeManagerInterface,
-                'rssModel' => $this->discounts,
+                'discounts' => $this->discounts,
                 'rssUrlBuilder' => $this->rssBuilderInterface,
                 'urlBuilder' => $this->urlBuilderInterface,
                 'request' => $this->requestInterface,

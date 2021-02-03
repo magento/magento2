@@ -27,14 +27,14 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
         $this->_profiler->setHost('localhost');
-        $this->assertAttributeEquals('localhost', '_host', $this->_profiler);
+        //$this->assertAttributeEquals('localhost', '_host', $this->_profiler);
     }
 
     public function testSetType()
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
         $this->_profiler->setType('mysql');
-        $this->assertAttributeEquals('mysql', '_type', $this->_profiler);
+       //$this->assertAttributeEquals('mysql', '_type', $this->_profiler);
     }
 
     public function testQueryStart()
@@ -48,7 +48,7 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
         $lastQueryId = $this->_profiler->queryStart('SELECT * FROM table');
         $endResult = $this->_profiler->queryEnd($lastQueryId);
-        $this->assertAttributeEquals(null, '_lastQueryId', $this->_profiler);
+       //$this->assertAttributeEquals(null, '_lastQueryId', $this->_profiler);
         $this->assertEquals(\Magento\Framework\DB\Profiler::STORED, $endResult);
     }
 
@@ -57,7 +57,7 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
         $this->_profiler->queryStart('SELECT * FROM table');
         $endResult = $this->_profiler->queryEndLast();
-        $this->assertAttributeEquals(null, '_lastQueryId', $this->_profiler);
+        //$this->assertAttributeEquals(null, '_lastQueryId', $this->_profiler);
         $this->assertEquals(\Magento\Framework\DB\Profiler::STORED, $endResult);
 
         $endResult = $this->_profiler->queryEndLast();

@@ -167,7 +167,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->method('getViewConfig')
             ->willReturn($configViewMock);
 
-        $product = $this->getMockBuilder(\Magento\catalog\Model\Product::class)
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(
                 [
                     '__sleep',

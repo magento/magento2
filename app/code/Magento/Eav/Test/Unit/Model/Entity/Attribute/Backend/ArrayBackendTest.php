@@ -24,7 +24,7 @@ class ArrayBackendTest extends \PHPUnit\Framework\TestCase
             ['getAttributeCode', '__wakeup']
         );
         $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $this->_model = new \Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend($logger);
+        $this->_model = new \Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend();
         $this->_model->setAttribute($this->_attribute);
     }
 

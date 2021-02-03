@@ -13,6 +13,6 @@ class StdoTest extends \PHPUnit\Framework\TestCase
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
         $writer = new Stdo();
-        $this->assertAttributeEquals(STDOUT, '_fileHandler', $writer);
+        //$this->assertAttributeEquals(STDOUT, '_fileHandler', $writer);
     }
 }

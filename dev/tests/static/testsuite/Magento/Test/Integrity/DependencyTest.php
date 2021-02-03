@@ -172,6 +172,11 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     private static $componentRegistrar = null;
 
     /**
+     * @var array
+     */
+    private $undeclaredDependencyBlacklist;
+
+    /**
      * Sets up data
      *
      * @throws \Exception

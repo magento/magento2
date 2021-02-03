@@ -1003,9 +1003,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * Configure environment for `testSave` and `testSaveAndDuplicate` methods
      *
-     * @return array
+     * @return void
      */
-    protected function configureSaveTest()
+    protected function configureSaveTest(): void
     {
         $productTypeMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Type\Simple::class)
             ->disableOriginalConstructor()->setMethods(['beforeSave', 'save'])->getMock();
