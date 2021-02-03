@@ -258,10 +258,10 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
      *
      * @param \Magento\Framework\Model\AbstractModel $model
      * @param bool $secure
-     * @return \Magento\TestFramework\TestCase\WebapiAbstract
+     * @return void
      * //phpcs:disable
      */
-    public static function callModelDelete($model, $secure = false)
+    public static function callModelDelete($model, $secure = false) : void
     {
         //phpcs:enable
         if ($model instanceof \Magento\Framework\Model\AbstractModel && $model->getId()) {

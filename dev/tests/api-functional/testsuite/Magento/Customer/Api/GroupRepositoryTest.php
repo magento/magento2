@@ -40,7 +40,7 @@ class GroupRepositoryTest extends WebapiAbstract
     private $groupRepository;
 
     /**
-     * @var \Magento\Customer\Api\Data\groupInterfaceFactory
+     * @var \Magento\Customer\Api\Data\GroupInterfaceFactory
      */
     private $customerGroupFactory;
 
