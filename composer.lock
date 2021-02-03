@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c8a0fc366ca5e722597d1b3f396c42c5",
+    "content-hash": "9542d111b827b1d726a9513a64f5fd03",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -4093,25 +4093,20 @@
                 "encryption",
                 "mcrypt"
             ],
-            "support": {
-                "email": "terrafrost@php.net",
-                "issues": "https://github.com/phpseclib/mcrypt_compat/issues",
-                "source": "https://github.com/phpseclib/mcrypt_compat"
-            },
             "time": "2018-08-22T03:11:43+00:00"
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "2.0.27",
+            "version": "2.0.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "34620af4df7d1988d8f0d7e91f6c8a3bf931d8dc"
+                "reference": "136b9ca7eebef78be14abf90d65c5e57b6bc5d36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/34620af4df7d1988d8f0d7e91f6c8a3bf931d8dc",
-                "reference": "34620af4df7d1988d8f0d7e91f6c8a3bf931d8dc",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/136b9ca7eebef78be14abf90d65c5e57b6bc5d36",
+                "reference": "136b9ca7eebef78be14abf90d65c5e57b6bc5d36",
                 "shasum": ""
             },
             "require": {
@@ -4119,8 +4114,7 @@
             },
             "require-dev": {
                 "phing/phing": "~2.7",
-                "phpunit/phpunit": "^4.8.35|^5.7|^6.0",
-                "sami/sami": "~2.0",
+                "phpunit/phpunit": "^4.8.35|^5.7|^6.0|^9.4",
                 "squizlabs/php_codesniffer": "~2.0"
             },
             "suggest": {
@@ -4190,7 +4184,21 @@
                 "x.509",
                 "x509"
             ],
-            "time": "2020-04-04T23:17:33+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/terrafrost",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/phpseclib",
+                    "type": "patreon"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/phpseclib/phpseclib",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-12-17T05:42:04+00:00"
         },
         {
             "name": "psr/container",
@@ -9328,20 +9336,20 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.68",
+            "version": "0.12.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "ddbe01af0706ee094c3f1ce9730b35aebb508d3d"
+                "reference": "71e529efced79e055fa8318b692e7f7d03ea4e75"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/ddbe01af0706ee094c3f1ce9730b35aebb508d3d",
-                "reference": "ddbe01af0706ee094c3f1ce9730b35aebb508d3d",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/71e529efced79e055fa8318b692e7f7d03ea4e75",
+                "reference": "71e529efced79e055fa8318b692e7f7d03ea4e75",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1|^8.0"
+                "php": "^7.1"
             },
             "conflict": {
                 "phpstan/phpstan-shim": "*"
@@ -9380,7 +9388,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-18T12:29:17+00:00"
+            "time": "2020-05-05T12:55:44+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
