@@ -118,7 +118,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
                     __('has been rebuilt successfully in %time', ['time' => gmdate('H:i:s', $resultTime)])
                 );
             } catch (\Throwable $e) {
-                $output->writeln('process unknown error:');
+                $output->writeln('process error during indexation process:');
                 $output->writeln($e->getMessage());
 
                 $output->writeln($e->getTraceAsString(), OutputInterface::VERBOSITY_DEBUG);
