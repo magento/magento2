@@ -3,10 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\RemoteStorage\Driver\Adapter\Cache;
 
 /**
- * Interface for filesystem adapter cache storage.
+ * Interface for filesystem adapter cache storage. Used in Cached adapter implementation to store metadata for
+ * filesystem entities in order to reduce calls to filesystem API.
  */
 interface CacheInterface
 {
@@ -16,23 +19,23 @@ interface CacheInterface
      * @param string $path
      * @return bool
      */
-    public function exists($path);
+    public function exists(string $path): bool;
 
     /**
      * Read file data from cache.
      *
      * @param string $path
-     * @return array|false
+     * @return array|null
      */
-    public function getFileContents($path);
+    public function getFileContents(string $path): ?array;
 
     /**
      * Get metadata for path.
      *
      * @param string $path
-     * @return array|false
+     * @return array|null
      */
-    public function getMetadata($path);
+    public function getMetadata(string $path): ?array;
 
     /**
      * Check is the directory listing complete.
@@ -41,30 +44,30 @@ interface CacheInterface
      * @param bool $recursive
      * @return bool
      */
-    public function isDirListingComplete($dirname, $recursive);
+    public function isDirListingComplete(string $dirname, bool $recursive): bool;
 
     /**
      * Set directory listing complete.
      *
      * @param string $dirname
-     * @param bool   $recursive
+     * @param bool $recursive
      */
-    public function setDirListingComplete($dirname, $recursive);
+    public function setDirListingComplete(string $dirname, bool $recursive): void;
 
     /**
      * Flush the cache.
      */
-    public function flushCache();
+    public function flushCache(): void;
 
     /**
      * Save data to storage.
      */
-    public function persist();
+    public function persist(): void;
 
     /**
      * Load the cache.
      */
-    public function load();
+    public function load(): void;
 
     /**
      * Rename/move a file or directory.
@@ -72,7 +75,7 @@ interface CacheInterface
      * @param string $path
      * @param string $newpath
      */
-    public function moveFile($path, $newpath);
+    public function moveFile(string $path, string $newpath): void;
 
     /**
      * Copy file.
@@ -80,21 +83,21 @@ interface CacheInterface
      * @param string $path
      * @param string $newpath
      */
-    public function copyFile($path, $newpath);
+    public function copyFile(string $path, string $newpath): void;
 
     /**
      * Delete an object from cache by path.
      *
      * @param string $path
      */
-    public function deleteFile($path);
+    public function deleteFile(string $path): void;
 
     /**
      * Delete objects in directory for cache.
      *
      * @param string $dirname
      */
-    public function deleteDir($dirname);
+    public function deleteDir(string $dirname): void;
 
     /**
      * Update metadata for the path.
@@ -103,12 +106,12 @@ interface CacheInterface
      * @param array $objectMetadata
      * @param bool $persist
      */
-    public function updateMetadata($path, array $objectMetadata, $persist = false);
+    public function updateMetadata(string $path, array $objectMetadata, bool $persist = false): void;
 
     /**
      * Reset data in cache for object.
      *
      * @param string $path
      */
-    public function resetData($path);
+    public function resetData(string $path): void;
 }

@@ -62,9 +62,7 @@ class AwsS3Factory implements DriverFactoryInterface
         try {
             return $this->createConfigured(
                 $this->config->getConfig(),
-                $this->config->getPrefix(),
-                '',
-                []
+                $this->config->getPrefix()
             );
         } catch (LocalizedException $exception) {
             throw new DriverException(__($exception->getMessage()), $exception);
@@ -77,8 +75,8 @@ class AwsS3Factory implements DriverFactoryInterface
     public function createConfigured(
         array $config,
         string $prefix,
-        string $cacheAdapter,
-        array $cacheConfig
+        string $cacheAdapter = '',
+        array $cacheConfig = []
     ): RemoteDriverInterface {
         $config['version'] = 'latest';
 

@@ -65,7 +65,7 @@ class AwsS3Test extends \PHPUnit\Framework\TestCase
             $this->objectManager = Bootstrap::getObjectManager();
             /** @var \Magento\AwsS3\Driver\AwsS3Factory $driverFactory */
             $driverFactory = $this->objectManager->get(\Magento\AwsS3\Driver\AwsS3Factory::class);
-            $this->awsDriver = $driverFactory->createConfigured($config, $prefix, '', []);
+            $this->awsDriver = $driverFactory->createConfigured($config, $prefix);
             $this->awsDriver->filePutContents(self::TEST_FILE_PATH, self::TEST_FILE_CONTENTS);
         } else {
             $this->markTestIncomplete(

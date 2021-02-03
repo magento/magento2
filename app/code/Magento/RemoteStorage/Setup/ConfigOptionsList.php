@@ -163,9 +163,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             try {
                 $this->driverFactoryPool->get($driver)->createConfigured(
                     (array)$configData->getData()['remote_storage']['config'],
-                    (string)$options[self::OPTION_REMOTE_STORAGE_PREFIX],
-                    '',
-                    []
+                    (string)$options[self::OPTION_REMOTE_STORAGE_PREFIX]
                 )->test();
             } catch (LocalizedException $exception) {
                 $message = $exception->getMessage();

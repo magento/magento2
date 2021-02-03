@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\RemoteStorage\Driver\Adapter;
 
 use League\Flysystem\FilesystemAdapter;
@@ -47,7 +49,8 @@ class MetadataProvider implements MetadataProviderInterface
             return $metadata;
         }
         $meta = $this->adapter->lastModified($path);
-        $object = [
+        $data = [
+            'path' => $path,
             'type' => $meta->type(),
             'size' => $meta->fileSize(),
             'timestamp' => $meta->lastModified(),
@@ -57,8 +60,8 @@ class MetadataProvider implements MetadataProviderInterface
             'basename' => basename($meta->path()),
             'extra' => $meta->extraMetadata(),
         ];
-        $this->cache->updateMetadata($path, $object + compact('path'), true);
-        return $object;
+        $this->cache->updateMetadata($path, $data, true);
+        return $data;
     }
 
     /**

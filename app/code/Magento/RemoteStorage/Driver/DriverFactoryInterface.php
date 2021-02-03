@@ -26,8 +26,8 @@ interface DriverFactoryInterface
      *
      * @param array $config
      * @param string $prefix
-     * @param string $cacheAdapter - @deprecated
-     * @param array $cacheConfig - @deprecated
+     * @param string $cacheAdapter
+     * @param array $cacheConfig
      * @return RemoteDriverInterface
      *
      * @throws DriverException
@@ -35,7 +35,7 @@ interface DriverFactoryInterface
     public function createConfigured(
         array $config,
         string $prefix,
-        string $cacheAdapter,
-        array $cacheConfig
+        string $cacheAdapter = '',
+        array $cacheConfig = []
     ): RemoteDriverInterface;
 }

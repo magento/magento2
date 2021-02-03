@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\RemoteStorage\Driver\Adapter;
 
 /**
@@ -18,7 +20,7 @@ class PathUtil
      */
     public function pathInfo($path)
     {
-        $pathInfo = compact('path');
+        $pathInfo = ['path' => $path];
         $dirname = dirname($path);
         if ('' !== $dirname) {
             $pathInfo['dirname'] = $dirname === '.' ? '' : $dirname;

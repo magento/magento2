@@ -9,6 +9,7 @@ namespace Magento\AwsS3\Driver;
 
 use Generator;
 use League\Flysystem\Config;
+use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\UnableToRetrieveMetadata;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
@@ -34,7 +35,7 @@ class AwsS3 implements RemoteDriverInterface
     private const CONFIG = ['ACL' => 'private'];
 
     /**
-     * @var \League\Flysystem\FilesystemAdapter
+     * @var FilesystemAdapter
      */
     private $adapter;
 
@@ -59,13 +60,13 @@ class AwsS3 implements RemoteDriverInterface
     private $metadataProvider;
 
     /**
-     * @param \League\Flysystem\FilesystemAdapter $adapter
+     * @param FilesystemAdapter $adapter
      * @param LoggerInterface $logger
      * @param string $objectUrl
      * @param MetadataProviderInterface|null $metadataProvider
      */
     public function __construct(
-        \League\Flysystem\FilesystemAdapter $adapter,
+        FilesystemAdapter $adapter,
         LoggerInterface $logger,
         string $objectUrl,
         MetadataProviderInterface $metadataProvider = null
@@ -416,6 +417,7 @@ class AwsS3 implements RemoteDriverInterface
         } catch (\League\Flysystem\FilesystemException $e) {
             $this->logger->error($e->getMessage());
         }
+        return false;
     }
 
     /**

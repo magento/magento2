@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\RemoteStorage\Driver\Adapter\Cache;
 
 use Magento\Framework\App\CacheInterface as MagentoCacheInterface;
@@ -45,8 +47,6 @@ class Generic implements CacheInterface
     private $pathUtil;
 
     /**
-     * Generic constructor.
-     *
      * @param MagentoCacheInterface $cacheAdapter
      * @param SerializerInterface $serializer
      * @param PathUtil $pathUtil
@@ -76,7 +76,7 @@ class Generic implements CacheInterface
     /**
      * @inheritdoc
      */
-    public function load()
+    public function load(): void
     {
         $contents = $this->cacheAdapter->load($this->prefix);
         if ($contents !== false) {
@@ -87,7 +87,7 @@ class Generic implements CacheInterface
     /**
      * @inheritdoc
      */
-    public function persist()
+    public function persist(): void
     {
         $contents = $this->getForStorage();
         $this->cacheAdapter->save($contents, $this->prefix);
@@ -96,7 +96,7 @@ class Generic implements CacheInterface
     /**
      * @inheritdoc
      */
-    public function updateMetadata($path, array $objectMetadata, $persist = false)
+    public function updateMetadata(string $path, array $objectMetadata, bool $persist = false): void
     {
         if (!$this->exists($path)) {
             $this->cacheData[$path] = $this->pathUtil->pathInfo($path);
@@ -114,7 +114,7 @@ class Generic implements CacheInterface
     /**
      * @inheritdoc
      */
-    public function resetData($path)
+    public function resetData(string $path): void
     {
         $this->cacheData[$path] = false;
         $this->persist();
@@ -123,7 +123,7 @@ class Generic implements CacheInterface
     /**
      * @inheritdoc
      */
-    public function exists($path)
+    public function exists(string $path): bool
     {
         if ($path !== false && isset($this->cacheData[$path])) {
             return $this->cacheData[$path] !== false;
@@ -134,19 +134,19 @@ class Generic implements CacheInterface
     /**
      * @inheritdoc
      */
-    public function getFileContents($path)
+    public function getFileContents(string $path): ?array
     {
         if (isset($this->cacheData[$path]['contents']) && $this->cacheData[$path]['contents'] !== false) {
             return $this->cacheData[$path];
         }
 
-        return false;
+        return null;
     }
 
     /**
      * @inheritdoc
      */
-    public function moveFile($path, $newpath)
+    public function moveFile(string $path, string $newpath): void
     {
         if ($this->exists($path)) {
             $object = $this->cacheData[$path];
@@ -161,7 +161,7 @@ class Generic implements CacheInterface
     /**
      * @inheritdoc
      */
-    public function copyFile($path, $newpath)
+    public function copyFile(string $path, string $newpath): void
     {
         if ($this->exists($path)) {
             $object = $this->cacheData[$path];
@@ -173,7 +173,7 @@ class Generic implements CacheInterface
     /**
      * @inheritdoc
      */
-    public function deleteFile($path)
+    public function deleteFile(string $path): void
     {
         $this->resetData($path);
     }
@@ -181,7 +181,7 @@ class Generic implements CacheInterface
     /**
      * @inheritdoc
      */
-    public function deleteDir($dirname)
+    public function deleteDir(string $dirname): void
     {
         foreach ($this->cacheData as $path => $object) {
             if ($this->pathIsInDirectory($dirname, $path) || $path === $dirname) {
@@ -197,19 +197,19 @@ class Generic implements CacheInterface
     /**
      * @inheritdoc
      */
-    public function getMetadata($path)
+    public function getMetadata(string $path): ?array
     {
         if (isset($this->cacheData[$path]['type'])) {
             return $this->cacheData[$path];
         }
 
-        return false;
+        return null;
     }
 
     /**
      * @inheritdoc
      */
-    public function isDirListingComplete($dirname, $recursive)
+    public function isDirListingComplete(string $dirname, bool $recursive): bool
     {
         if (! isset($this->directoryData[$dirname])) {
             return false;
@@ -225,7 +225,7 @@ class Generic implements CacheInterface
     /**
      * @inheritdoc
      */
-    public function setDirListingComplete($dirname, $recursive)
+    public function setDirListingComplete(string $dirname, bool $recursive): void
     {
         $this->directoryData[$dirname] = $recursive ? 'recursive' : true;
     }
@@ -261,7 +261,7 @@ class Generic implements CacheInterface
     /**
      * @inheritdoc
      */
-    public function flushCache()
+    public function flushCache(): void
     {
         $this->cacheData = [];
         $this->directoryData = [];
