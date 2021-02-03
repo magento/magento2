@@ -147,6 +147,12 @@ class AddToCart implements ResolverInterface
 
         $collection = $this->getWishlistItems($wishlist, $itemIds);
 
+        if (!empty($itemIds)) {
+            $unknownItemIds = array_diff($itemIds, array_keys($collection->getItems()));
+            if (!empty($unknownItemIds)) {
+                throw new GraphQlInputException(__('The wishlist item ids "'.implode(',', $unknownItemIds).'" were not found.'));
+            }
+        }
         $maskedCartId = $this->createEmptyCartForCustomer->execute($customerId);
 
         $cartErrors = [];
@@ -180,6 +186,7 @@ class AddToCart implements ResolverInterface
             $wishlist->save();
         }
         return [
+            'wishlist' => $this->wishlistDataMapper->map($wishlist),
             'status' => empty($cartErrors) ? true : false,
             'add_wishlist_items_to_cart_user_errors' => $cartErrors,
         ];

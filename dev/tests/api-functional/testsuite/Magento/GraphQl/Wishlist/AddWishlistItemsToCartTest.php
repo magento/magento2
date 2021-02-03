@@ -49,6 +49,31 @@ class AddWishlistItemsToCartTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
         $this->assertArrayHasKey('addWishlistItemsToCart', $response);
+        $wishlistAfterAddingToCart = $response['addWishlistItemsToCart']['wishlist'];
+        $wishlistItems = $wishlistAfterAddingToCart['items_v2']['items'];
+        $this->assertEmpty($wishlistItems);
+        $this->assertArrayHasKey('status', $response['addWishlistItemsToCart']);
+        $this->assertEquals($response['addWishlistItemsToCart']['status'], true);
+    }
+
+    /**
+     * @magentoConfigFixture default_store wishlist/general/active 1
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Wishlist/_files/wishlist_with_multiple_products.php
+     */
+    public function testAddAllItemsToCart(): void
+    {
+        $wishlist = $this->getWishlist();
+        $customerWishlist = $wishlist['customer']['wishlists'][0];
+        $wishlistId = $customerWishlist['id'];
+
+        $query = $this->getAddAllItemsToCartQuery($wishlistId);
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+
+        $this->assertArrayHasKey('addWishlistItemsToCart', $response);
+        $wishlistAfterAddingToCart = $response['addWishlistItemsToCart']['wishlist'];
+        $wishlistItems = $wishlistAfterAddingToCart['items_v2']['items'];
+        $this->assertEmpty($wishlistItems);
         $this->assertArrayHasKey('status', $response['addWishlistItemsToCart']);
         $this->assertEquals($response['addWishlistItemsToCart']['status'], true);
     }
@@ -135,6 +160,25 @@ class AddWishlistItemsToCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store wishlist/general/active 1
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Wishlist/_files/wishlist_with_simple_product.php
+     */
+    public function testAddItemsToCartWithInvalidItemId(): void
+    {
+        $itemId = '9999';
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('The wishlist item ids "9999" were not found.');
+
+        $wishlist = $this->getWishlist();
+        $customerWishlist = $wishlist['customer']['wishlists'][0];
+
+        $query = $this->getQuery($customerWishlist['id'], $itemId);
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
      * Authentication header map
      *
      * @param string $username
@@ -170,6 +214,46 @@ mutation {
       wishlistItemIds: ["{$itemId}"]
     ) {
     status
+    wishlist {
+      items_v2 {
+        items {
+          id
+        }
+      }
+    }
+    add_wishlist_items_to_cart_user_errors{
+        message
+        code
+    }
+   }
+}
+MUTATION;
+    }
+
+    /**
+     * Returns GraphQl mutation string
+     *
+     * @param string $wishlistId
+     * @param string $itemId
+     * @return string
+     */
+    private function getAddAllItemsToCartQuery(
+        string $wishlistId
+    ): string {
+        return <<<MUTATION
+mutation {
+    addWishlistItemsToCart
+    (
+      wishlistId: "{$wishlistId}"
+    ) {
+    status
+    wishlist {
+      items_v2 {
+        items {
+          id
+        }
+      }
+    }
     add_wishlist_items_to_cart_user_errors{
         message
         code

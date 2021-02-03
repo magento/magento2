@@ -67,6 +67,7 @@ type Mutation {
 }
 
 type AddWishlistItemsToCartOutput {
+    wishlist: Wishlist! @doc(description: "Contains the wish list with all items that were successfully added")
     status: Boolean! @doc(description: "Indicates whether the attempt to add items to the customer's cart was successful")
     add_wishlist_items_to_cart_user_errors: [CartUserInputError!]! @doc(description: "An array of errors encountered while adding products to the customer's cart")
 }
