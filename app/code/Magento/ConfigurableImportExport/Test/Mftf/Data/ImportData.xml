@@ -24,13 +24,18 @@
         <data key="type_id">simple</data>
         <data key="attribute_set_id">4</data>
         <data key="price">11.00</data>
+        <data key="quantity">101</data>
+        <data key="weight">1</data>
         <data key="visibilityText">Not Visible Individually</data>
         <data key="status">1</data>
         <data key="statusText">Enabled</data>
-        <data key="quantity">101</data>
         <data key="urlKey">import-product-simple1-configurable</data>
-        <data key="weight">1</data>
-        <data key="thumbnailImage">/m/a/magento-logo</data>
+        <data key="baseImage">magento-logo.png</data>
+        <data key="baseImageName">magento-logo</data>
+        <data key="smallImage">magento-logo.png</data>
+        <data key="smallImageName">magento-logo</data>
+        <data key="thumbnailImage">magento-logo.png</data>
+        <data key="thumbnailImageName">magento-logo</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
@@ -40,13 +45,18 @@
         <data key="type_id">simple</data>
         <data key="attribute_set_id">4</data>
         <data key="price">12.00</data>
+        <data key="quantity">102</data>
+        <data key="weight">2</data>
         <data key="visibilityText">Not Visible Individually</data>
         <data key="status">1</data>
         <data key="statusText">Enabled</data>
-        <data key="quantity">102</data>
         <data key="urlKey">import-product-simple2-configurable</data>
-        <data key="weight">2</data>
-        <data key="thumbnailImage">/t/e/test_image</data>
+        <data key="baseImage">m-logo.gif</data>
+        <data key="baseImageName">m-logo</data>
+        <data key="smallImage">m-logo.gif</data>
+        <data key="smallImageName">m-logo</data>
+        <data key="thumbnailImage">m-logo.gif</data>
+        <data key="thumbnailImageName">m-logo</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
@@ -56,13 +66,18 @@
         <data key="type_id">simple</data>
         <data key="attribute_set_id">4</data>
         <data key="price">13.00</data>
+        <data key="quantity">103</data>
+        <data key="weight">3</data>
         <data key="visibilityText">Not Visible Individually</data>
         <data key="status">1</data>
         <data key="statusText">Enabled</data>
-        <data key="quantity">103</data>
         <data key="urlKey">import-product-simple3-configurable</data>
-        <data key="weight">3</data>
-        <data key="thumbnailImage">/a/d/adobe-base</data>
+        <data key="baseImage">adobe-base.jpg</data>
+        <data key="baseImageName">adobe-base</data>
+        <data key="smallImage">adobe-base.jpg</data>
+        <data key="smallImageName">adobe-base</data>
+        <data key="thumbnailImage">adobe-base.jpg</data>
+        <data key="thumbnailImageName">adobe-base</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
@@ -74,11 +89,17 @@
         <data key="type_id">configurable</data>
         <data key="attribute_set_id">4</data>
         <data key="price"/>
+        <data key="quantity"/>
+        <data key="weight"/>
         <data key="visibilityText">Catalog, Search</data>
         <data key="status">1</data>
-        <data key="quantity"/>
         <data key="urlKey">import-product-configurable</data>
-        <data key="weight"/>
+        <data key="baseImage">adobe-base.jpg</data>
+        <data key="baseImageName">adobe-base</data>
+        <data key="smallImage">adobe-base.jpg</data>
+        <data key="smallImageName">adobe-base</data>
+        <data key="thumbnailImage">adobe-base.jpg</data>
+        <data key="thumbnailImageName">adobe-base</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>

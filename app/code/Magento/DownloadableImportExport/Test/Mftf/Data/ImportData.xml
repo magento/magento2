@@ -65,10 +65,10 @@
     <entity name="ImportProduct_Downloadable_FileLinks" type="product">
         <data key="fileName">import_downloadable_product_file_links.csv</data>
         <data key="importSummary">Created: 1, Updated: 0, Deleted: 0</data>
+        <data key="name">import-product-downloadable-file-links</data>
         <data key="sku">import-product-downloadable-file-links</data>
         <data key="type_id">downloadable</data>
         <data key="attribute_set_id">4</data>
-        <data key="name">import-product-downloadable-file-links</data>
         <data key="price">100.00</data>
         <data key="quantity">100</data>
         <data key="weight"/>
