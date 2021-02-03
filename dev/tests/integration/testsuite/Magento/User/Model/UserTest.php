@@ -591,7 +591,9 @@ class UserTest extends TestCase
             ->get(MutableScopeConfigInterface::class);
         $config->setValue(
             'admin/emails/new_user_notification_template',
-            $this->getCustomEmailTemplateIdForNewUserNotification()
+            $this->getCustomEmailTemplateId(
+                'admin_emails_new_user_notification_template'
+            )
         );
         $userModel = Bootstrap::getObjectManager()
             ->create(User::class);
@@ -619,17 +621,17 @@ class UserTest extends TestCase
     }
 
     /**
-     * Return email template id for new user notification
+     * Return email template id by origin template code
      *
+     * @param string $origTemplateCode
      * @return int|null
      * @throws NotFoundException
      */
-    private function getCustomEmailTemplateIdForNewUserNotification(): ?int
+    private function getCustomEmailTemplateId(string $origTemplateCode): ?int
     {
         $templateId = null;
         $templateCollection = Bootstrap::getObjectManager()
-            ->get(TemplateCollection::class);
-        $origTemplateCode = 'admin_emails_new_user_notification_template';
+            ->create(TemplateCollection::class);
         foreach ($templateCollection as $template) {
             if ($template->getOrigTemplateCode() == $origTemplateCode) {
                 $templateId = (int) $template->getId();
@@ -642,5 +644,34 @@ class UserTest extends TestCase
             ));
         }
         return $templateId;
+    }
+
+    /**
+     * Verify custom notification is correctly when reset admin password
+     *
+     * @magentoDataFixture Magento/Email/Model/_files/email_template_reset_password_user_notification.php
+     * @magentoDataFixture Magento/User/_files/user_with_role.php
+     */
+    public function testNotificationEmailsIfResetPassword()
+    {
+        /** @var MutableScopeConfigInterface $config */
+        $config = Bootstrap::getObjectManager()
+            ->get(MutableScopeConfigInterface::class);
+        $config->setValue(
+            'admin/emails/forgot_email_template',
+            $this->getCustomEmailTemplateId(
+                'admin_emails_forgot_email_template'
+            )
+        );
+        $userModel = $this->_model->loadByUsername('adminUser');
+        $notificator = $this->objectManager->get(\Magento\User\Model\Spi\NotificatorInterface::class);
+        $notificator->sendForgotPassword($userModel);
+        /** @var TransportBuilderMock $transportBuilderMock */
+        $transportBuilderMock = $this->objectManager->get(TransportBuilderMock::class);
+        $sentMessage = $transportBuilderMock->getSentMessage();
+        $this->assertStringContainsString(
+            'id='.$userModel->getId(),
+            quoted_printable_decode($sentMessage->getBodyText())
+        );
     }
 }
