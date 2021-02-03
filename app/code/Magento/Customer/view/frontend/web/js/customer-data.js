@@ -32,6 +32,9 @@ define([
     url.setBaseUrl(window.BASE_URL);
     options.sectionLoadUrl = url.build('customer/section/load');
 
+    /**
+     * Storage initialization
+     */
     function initStorage() {
         $.cookieStorage.setConf({
             path: '/',
