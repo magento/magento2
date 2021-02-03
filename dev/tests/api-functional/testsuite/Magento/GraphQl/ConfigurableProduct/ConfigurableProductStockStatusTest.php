@@ -43,7 +43,7 @@ class ConfigurableProductStockStatusTest extends GraphQlAbstract
         $query = $this->getQuery($parentSku);
         $response = $this->graphQlQuery($query);
         $this->assertContainsEquals(
-            [['product' => ['sku' => $childSkuOutOfStock, 'stock_status' => 'OUT_OF_STOCK']]],
+            ['product' => ['sku' => $childSkuOutOfStock, 'stock_status' => 'OUT_OF_STOCK']],
             $response['products']['items'][0]['variants']
         );
     }
