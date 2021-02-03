@@ -239,9 +239,9 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
     {
         $this->_loadCustomer();
         $html = $this->_block->getBillingAddressHtml();
-        $this->assertContains('John Smith<br />', $html);
-        $this->assertContains('Green str, 67<br />', $html);
-        $this->assertContains('CityM,  Alabama, 75477<br />', $html);
+        $this->assertStringContainsString('John Smith<br />', $html);
+        $this->assertStringContainsString('Green str, 67<br />', $html);
+        $this->assertStringContainsString('CityM,  Alabama, 75477<br />', $html);
     }
 
     public function testGetBillingAddressHtmlNoDefaultAddress()

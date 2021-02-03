@@ -67,10 +67,10 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
 
         $return = $connection->fetchAll($select);
 
-        $this->assertEquals('10', $return[0]['price']);
-        $this->assertEquals('10', $return[0]['final_price']);
-        $this->assertEquals('19', $return[0]['min_price']);
-        $this->assertEquals('19', $return[0]['max_price']);
+        $this->assertEquals(10, $return[0]['price']);
+        $this->assertEquals(10, $return[0]['final_price']);
+        $this->assertEquals(19, $return[0]['min_price']);
+        $this->assertEquals(19, $return[0]['max_price']);
     }
 
     /**

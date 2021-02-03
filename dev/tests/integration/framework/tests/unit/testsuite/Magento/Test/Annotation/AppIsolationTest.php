@@ -41,22 +41,22 @@ class AppIsolationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppIsolation invalid
+     *
      */
     public function testEndTestIsolationInvalid()
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
         $this->_object->endTest($this);
     }
 
     /**
      * @magentoAppIsolation enabled
      * @magentoAppIsolation disabled
+     *
      */
     public function testEndTestIsolationAmbiguous()
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
         $this->_object->endTest($this);
     }
 

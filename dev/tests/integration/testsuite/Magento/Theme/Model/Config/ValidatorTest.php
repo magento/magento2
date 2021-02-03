@@ -56,11 +56,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Email/Model/_files/email_template.php
+     *
      */
     public function testValidateHasRecursiveReference()
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
         if (!$this->templateModel->getId()) {
             $this->fail('Cannot load Template model');
         }

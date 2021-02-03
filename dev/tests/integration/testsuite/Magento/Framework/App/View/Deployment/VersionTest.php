@@ -28,7 +28,7 @@ class VersionTest extends \PHPUnit\Framework\TestCase
      */
     private $fileName = 'deployed_version.txt';
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->fileStorage = ObjectManager::getInstance()->create(
             File::class,
@@ -75,12 +75,9 @@ class VersionTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    /**
-     */
     public function testGetValueInProductionModeWithoutVersion()
     {
         $this->expectException(\UnexpectedValueException::class);
-
         $this->assertFalse($this->directoryWrite->isExist($this->fileName));
         $this->getVersionModel(State::MODE_PRODUCTION)->getValue();
     }

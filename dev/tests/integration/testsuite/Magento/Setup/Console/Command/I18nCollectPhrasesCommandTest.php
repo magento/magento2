@@ -19,13 +19,13 @@ class I18nCollectPhrasesCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $tester;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->command = new I18nCollectPhrasesCommand();
         $this->tester = new CommandTester($this->command);
     }
 
-    protected function tearDown(): void
+    public function tearDown(): void
     {
         $property = new \ReflectionProperty(\Magento\Setup\Module\I18n\ServiceLocator::class, '_dictionaryGenerator');
         $property->setAccessible(true);
@@ -63,13 +63,10 @@ class I18nCollectPhrasesCommandTest extends \PHPUnit\Framework\TestCase
         unlink($outputPath);
     }
 
-    /**
-     */
     public function testExecuteNonExistingPath()
     {
+        $this->expectExceptionMessage("Specified path doesn't exist");
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Specified path doesn\'t exist');
-
         $this->tester->execute(
             [
                 'directory' => BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/non_exist',
@@ -77,23 +74,17 @@ class I18nCollectPhrasesCommandTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     */
     public function testExecuteMagentoFlagDirectoryPath()
     {
+        $this->expectExceptionMessage("Directory path is not needed when --magento flag is set.");
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Directory path is not needed when --magento flag is set.');
-
         $this->tester->execute(['directory' => 'a', '--magento' => true]);
     }
 
-    /**
-     */
     public function testExecuteNoMagentoFlagNoDirectoryPath()
     {
+        $this->expectExceptionMessage("Directory path is needed when --magento flag is not set.");
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Directory path is needed when --magento flag is not set.');
-
         $this->tester->execute([]);
     }
 }

@@ -139,7 +139,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Product::class
         );
         $product->setId(100);
-        $this->assertContains('catalog/product/view/id/100/', $this->_model->getUrl($product));
+        $this->assertStringContainsString('catalog/product/view/id/100/', $this->_model->getUrl($product));
     }
 
     /**
@@ -169,7 +169,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $product = $productRepository->get('simple');
         $category = $categoryRepository->get($product->getCategoryIds()[0]);
         $registry->register('current_category', $category);
-        $this->assertNotContains($category->getUrlPath(), $this->_model->getProductUrl($product));
+        $this->assertStringNotContainsString($category->getUrlPath(), $this->_model->getProductUrl($product));
 
         $rewrites = $urlFinder->findAllByData(
             [
@@ -184,6 +184,6 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             }
         }
         $urlPersist->replace($rewrites);
-        $this->assertNotContains($category->getUrlPath(), $this->_model->getProductUrl($product));
+        $this->assertStringNotContainsString($category->getUrlPath(), $this->_model->getProductUrl($product));
     }
 }

@@ -50,7 +50,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function testGetUniqueColumnDataException()
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
         $this->_model->getUniqueColumnData('data');
     }
 

@@ -262,7 +262,7 @@ class AddressTest extends TestCase
         $this->_quote->setOrigData('customer_id', null);
         $shippingAddress = $this->_quote->getShippingAddress();
         $shippingAddress->beforeSave();
-        $this->assertFalse($this->_quote->getShippingAddress()->getSameAsBilling());
+        $this->assertSame(0, $this->_quote->getShippingAddress()->getSameAsBilling());
     }
 
     /**

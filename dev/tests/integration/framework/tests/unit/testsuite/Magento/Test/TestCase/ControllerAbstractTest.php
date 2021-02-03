@@ -59,8 +59,8 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
             $this->createPartialMock(\Magento\TestFramework\ObjectManager::class, ['get', 'create']);
         $this->_objectManager->expects($this->any())
             ->method('get')
-            ->willReturnMap(
-                
+            ->will(
+                $this->returnValueMap(
                     [
                         [\Magento\Framework\App\RequestInterface::class, $request],
                         [\Magento\Framework\App\ResponseInterface::class, $response],
@@ -69,7 +69,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
                         [\Magento\Framework\Serialize\Serializer\Json::class, $this->serializerMock],
                         [InterpretationStrategyInterface::class, $this->interpretationStrategyMock],
                     ]
-                
+                )
             );
     }
 
@@ -119,12 +119,9 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
         $this->fail('Failed response body validation');
     }
 
-    /**
-     */
     public function testAssertRedirectFailure()
     {
         $this->expectException(\PHPUnit\Framework\AssertionFailedError::class);
-
         $this->assertRedirect();
     }
 
@@ -159,7 +156,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
             $this->once()
         )->method('matches')
             ->with($expectedMessages)
-            ->willReturn(true);
+            ->will($this->returnValue(true));
         $this->assertSessionMessages($constraint, $messageTypeFilter);
     }
 
@@ -210,7 +207,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     {
         $messagesCollection =  new \Magento\Framework\Message\Collection();
         $this->messageManager->expects($this->any())->method('getMessages')
-            ->willReturn($messagesCollection);
+            ->will($this->returnValue($messagesCollection));
 
         $this->assertSessionMessages($this->isEmpty());
     }
@@ -226,7 +223,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
             ->addMessage(new \Magento\Framework\Message\Notice('some_notice'))
             ->addMessage(new \Magento\Framework\Message\Success('success!'));
         $this->messageManager->expects($this->any())->method('getMessages')
-            ->willReturn($messagesCollection);
+            ->will($this->returnValue($messagesCollection));
 
         $cookieMessages = [
             [

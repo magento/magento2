@@ -332,7 +332,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $controller = $this->_objectManager->create(\Magento\Checkout\Controller\Cart\Add::class, [$quote]);
         $controller->execute();
 
-        $this->assertContains(json_encode([]), $this->getResponse()->getBody());
+        $this->assertStringContainsString(json_encode([]), $this->getResponse()->getBody());
         $items = $quote->getItems()->getItems();
         $this->assertIsArray($items, 'Quote doesn\'t have any items');
         $this->assertCount(1, $items, 'Expected quote items not equal to 1');

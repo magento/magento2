@@ -234,17 +234,14 @@ class LoadBlockTest extends AbstractBackendController
         $handles = $this->layout->getUpdate()->getHandles();
 
         if ($asJson) {
-            $this->assertContains('sales_order_create_load_block_message', $handles);
-            $this->assertContains('sales_order_create_load_block_json', $handles);
+            $this->assertContains('sales_order_create_load_block_message',$handles);
+            $this->assertContains('sales_order_create_load_block_json',$handles);
         } else {
-            $this->assertContains('sales_order_create_load_block_plain', $handles);
+            $this->assertContains('sales_order_create_load_block_plain',$handles);
         }
 
         foreach ($blocks as $block) {
-            $this->assertContains(
-                'sales_order_create_load_block_' . $block,
-                $handles
-            );
+            $this->assertContains('sales_order_create_load_block_' . $block,$handles);
         }
     }
 

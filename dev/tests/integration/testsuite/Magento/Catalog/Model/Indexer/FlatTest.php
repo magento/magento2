@@ -155,7 +155,7 @@ class FlatTest extends \Magento\TestFramework\Indexer\TestCase
         $result = $category->getAllChildren(true);
         $this->assertNotEmpty($result);
         $this->assertCount(3, $result);
-        $this->assertContains(self::$categoryOne, $result);
+        $this->assertContains(self::$categoryOne,$result);
 
         $categoryOne = $this->getLoadedCategory(self::$categoryOne);
         $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Category\Flat::class, $categoryOne->getResource());
@@ -163,7 +163,7 @@ class FlatTest extends \Magento\TestFramework\Indexer\TestCase
         $result = $categoryOne->getAllChildren(true);
         $this->assertNotEmpty($result);
         $this->assertCount(2, $result);
-        $this->assertContains(self::$categoryTwo, $result);
+        $this->assertContains(self::$categoryTwo,$result);
         $this->checkCategoryData($categoryOne);
 
         $categoryTwo = $this->getLoadedCategory(self::$categoryTwo);

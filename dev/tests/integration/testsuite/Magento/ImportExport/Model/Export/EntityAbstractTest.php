@@ -69,7 +69,6 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
     public function testGetWriterThrowsException()
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
         $this->_model->getWriter();
     }
 

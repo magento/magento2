@@ -72,7 +72,7 @@ class ExportTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         }
         $this->dispatch($url);
 
-        $this->assertContains('<div id="export_filter_grid"', $this->getResponse()->getBody());
+        $this->assertStringContainsString('<div id="export_filter_grid"', $this->getResponse()->getBody());
     }
 
     /**

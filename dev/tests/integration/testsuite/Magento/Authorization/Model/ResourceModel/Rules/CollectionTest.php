@@ -40,6 +40,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->_collection->addSortByLength();
 
         $order = $this->_collection->getSelect()->getPart(\Magento\Framework\DB\Select::ORDER);
-        $this->assertContains(['length', 'DESC'], $order);
+        $this->assertContains(['length', 'DESC'],$order);
     }
 }

@@ -105,12 +105,12 @@ class DataConverterTest extends \PHPUnit\Framework\TestCase
 
         $this->queryGeneratorMock->expects($this->any())
             ->method('generate')
-            ->willReturn($this->iteratorMock);
+            ->will($this->returnValue($this->iteratorMock));
 
         // mocking only current as next() is not supposed to be called
         $this->iteratorMock->expects($this->any())
             ->method('current')
-            ->willReturn($this->selectByRangeMock);
+            ->will($this->returnValue($this->selectByRangeMock));
 
         $this->adapterMock = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
@@ -119,7 +119,7 @@ class DataConverterTest extends \PHPUnit\Framework\TestCase
 
         $this->adapterMock->expects($this->any())
             ->method('quoteInto')
-            ->willReturn('field=value');
+            ->will($this->returnValue('field=value'));
 
         $this->fieldDataConverter = $this->objectManager->create(
             FieldDataConverter::class,
@@ -132,13 +132,11 @@ class DataConverterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test that exception with valid text is thrown when data is corrupted
-     *
-     */
+     **/
     public function testDataConvertErrorReporting()
     {
+        $this->expectExceptionMessage("Error converting field `value` in table `table` where `id`=2 using");
         $this->expectException(\Magento\Framework\DB\FieldDataConversionException::class);
-        $this->expectExceptionMessage('Error converting field `value` in table `table` where `id`=2 using');
-
         $rows = [
             1 => 'N;',
             2 => 'a:2:{s:3:"foo";s:3:"bar";s:3:"bar";s:',
@@ -147,7 +145,7 @@ class DataConverterTest extends \PHPUnit\Framework\TestCase
         $this->adapterMock->expects($this->any())
             ->method('fetchPairs')
             ->with($this->selectByRangeMock)
-            ->willReturn($rows);
+            ->will($this->returnValue($rows));
 
         $this->adapterMock->expects($this->once())
             ->method('update')
@@ -171,7 +169,7 @@ class DataConverterTest extends \PHPUnit\Framework\TestCase
         $this->adapterMock->expects($this->any())
             ->method('fetchPairs')
             ->with($this->selectByRangeMock)
-            ->willReturn($rows);
+            ->will($this->returnValue($rows));
 
         $this->adapterMock->expects($this->once())
             ->method('update')

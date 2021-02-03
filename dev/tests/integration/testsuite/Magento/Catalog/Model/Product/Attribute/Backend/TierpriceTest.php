@@ -78,11 +78,11 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
      * Test that duplicated tier price values issues exception during validation.
      *
      * @dataProvider validateDuplicateDataProvider
+     *
      */
     public function testValidateDuplicate(array $tierPricesData)
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
         $product = new \Magento\Framework\DataObject();
         $product->setTierPrice($tierPricesData);
 
@@ -112,12 +112,9 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     */
     public function testValidateDuplicateWebsite()
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
         $product = new \Magento\Framework\DataObject();
         $product->setTierPrice(
             [
@@ -130,12 +127,9 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
         $this->_model->validate($product);
     }
 
-    /**
-     */
     public function testValidatePercentage()
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
         $product = new \Magento\Framework\DataObject();
         $product->setTierPrice(
             [
@@ -158,7 +152,7 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
         ];
 
         $newData = $this->_model->preparePriceData($data, \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, 1);
-        $this->assertCount(4, $newData);
+        $this->assertEquals(4, count($newData));
         $this->assertArrayHasKey('1-2', $newData);
         $this->assertArrayHasKey('1-5', $newData);
         $this->assertArrayHasKey('1-5.3', $newData);
@@ -178,7 +172,7 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
         $this->_model->afterLoad($product);
         $price = $product->getTierPrice();
         $this->assertNotEmpty($price);
-        $this->assertCount(5, $price);
+        $this->assertEquals(5, count($price));
     }
 
     /**

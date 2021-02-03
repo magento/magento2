@@ -45,7 +45,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             // filter empty values
             $elementPathParts = array_values(array_filter($elementPathParts));
             foreach ($elementPathParts as $elementPathPart) {
-                $this->assertContains($elementPathPart, $searchResults[$itemIndex]['url'], 'Item URL is invalid.');
+                $this->assertStringContainsString($elementPathPart, $searchResults[$itemIndex]['url'], 'Item URL is invalid.');
             }
             unset($searchResults[$itemIndex]['url']);
 

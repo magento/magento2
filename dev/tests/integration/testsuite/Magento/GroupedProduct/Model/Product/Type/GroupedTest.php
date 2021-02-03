@@ -77,14 +77,14 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             1 => [
                 'sku' => 'simple',
                 'name' => 'Simple Product',
-                'price' => '10',
+                'price' => '10.000000',
                 'qty' => '1',
                 'position' => '1'
             ],
             21 => [
                 'sku' => 'virtual-product',
                 'name' => 'Virtual Product',
-                'price' => '10',
+                'price' => '10.000000',
                 'qty' => '2',
                 'position' => '2'
             ]

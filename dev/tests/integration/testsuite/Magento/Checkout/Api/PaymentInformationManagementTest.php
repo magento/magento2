@@ -69,6 +69,7 @@ class PaymentInformationManagementTest extends TestCase
      * @magentoDataFixture Magento/Checkout/_files/quote_with_shipping_method.php
      * @magentoConfigFixture current_store payment/braintree/active 1
      * @dataProvider getErrorPerAreaDataProvider
+     *
      * @param string $area
      * @param array $testErrorCodes
      * @param string $expectedOutput
@@ -80,7 +81,6 @@ class PaymentInformationManagementTest extends TestCase
         string $expectedOutput
     ) {
         $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
-
         /** @var State $state */
         $state = $this->objectManager->get(State::class);
         $state->setAreaCode($area);

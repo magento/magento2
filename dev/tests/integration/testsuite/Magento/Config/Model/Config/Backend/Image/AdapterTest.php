@@ -22,13 +22,14 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
+     *
      * expectedExceptionMessage  The specified image adapter cannot be used because of some missed dependencies.
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      */
     public function testExceptionSave()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);// expectedExceptionMessage  The specified image adapter cannot be used because of some missed dependencies.
         $this->_model->setValue('wrong')->save();
     }
 

@@ -121,7 +121,7 @@ class SalesTest extends \PHPUnit\Framework\TestCase
      */
     public function testToHtml()
     {
-        $this->assertContains('<span class="title">Sales Statistics</span>', $this->html);
-        $this->assertContains('<strong>All Store Views</strong>', $this->html);
+        $this->assertStringContainsString('<span class="title">Sales Statistics</span>', $this->html);
+        $this->assertStringContainsString('<strong>All Store Views</strong>', $this->html);
     }
 }

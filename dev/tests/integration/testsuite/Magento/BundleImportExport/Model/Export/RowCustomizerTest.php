@@ -58,7 +58,7 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('bundle_price_view', $result);
         $this->assertArrayHasKey('bundle_weight_type', $result);
         $this->assertArrayHasKey('bundle_values', $result);
-        $this->assertContains('sku=simple,', $result['bundle_values']);
+        $this->assertStringContainsString('sku=simple,', $result['bundle_values']);
         $this->assertEquals([], $this->model->addData([], $ids['simple']));
         $this->assertEquals($parsedAdditionalAttributes, $result['additional_attributes']);
     }

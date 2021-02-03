@@ -37,12 +37,9 @@ class MemoryLimitTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($object->validateUsage());
     }
 
-    /**
-     */
     public function testValidateUsageException()
     {
         $this->expectException(\LogicException::class);
-
         $object = $this->_createObject('500K', '2M');
         $object->validateUsage();
     }
@@ -55,7 +52,7 @@ class MemoryLimitTest extends \PHPUnit\Framework\TestCase
     protected function _createObject($memCap, $leakCap)
     {
         $helper = $this->createPartialMock(\Magento\TestFramework\Helper\Memory::class, ['getRealMemoryUsage']);
-        $helper->expects($this->any())->method('getRealMemoryUsage')->willReturn(1024 * 1024);
+        $helper->expects($this->any())->method('getRealMemoryUsage')->will($this->returnValue(1024 * 1024));
         return new \Magento\TestFramework\MemoryLimit($memCap, $leakCap, $helper);
     }
 }

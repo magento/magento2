@@ -105,13 +105,13 @@ class ExceptionsTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @var array $value
+     *
      * @dataProvider saveWrongExceptionDataProvider
      * @magentoDbIsolation enabled
      */
     public function testSaveWrongException($value)
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
         $this->exceptions->setValue($value);
         $this->exceptions->save();
     }

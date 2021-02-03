@@ -52,7 +52,7 @@ class CartTest extends AbstractBackendController
             ['delete' => 1]
         );
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<div id="customer_cart_grid"', $body);
+        $this->assertStringContainsString('<div id="customer_cart_grid"', $body);
     }
 
     /**

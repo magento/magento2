@@ -62,14 +62,11 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     */
     public function testGetTestAppAreaWithInvalidArea()
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
         $annotations = ['method' => ['magentoAppArea' => ['some_invalid_area']]];
-        $this->_testCaseMock->expects($this->once())->method('getAnnotations')->willReturn($annotations);
+        $this->_testCaseMock->expects($this->once())->method('getAnnotations')->will($this->returnValue($annotations));
         $this->_object->startTest($this->_testCaseMock);
     }
 
@@ -82,7 +79,7 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
     public function testStartTestWithDifferentAreaCodes(string $areaCode)
     {
         $annotations = ['method' => ['magentoAppArea' => [$areaCode]]];
-        $this->_testCaseMock->expects($this->once())->method('getAnnotations')->willReturn($annotations);
+        $this->_testCaseMock->expects($this->once())->method('getAnnotations')->will($this->returnValue($annotations));
         $this->_applicationMock->expects($this->any())->method('getArea')->willReturn(null);
         $this->_applicationMock->expects($this->once())->method('reinitialize');
         $this->_applicationMock->expects($this->once())->method('loadArea')->with($areaCode);
@@ -92,10 +89,10 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
     public function testStartTestPreventDoubleAreaLoadingAfterReinitialization()
     {
         $annotations = ['method' => ['magentoAppArea' => ['global']]];
-        $this->_testCaseMock->expects($this->once())->method('getAnnotations')->willReturn($annotations);
-        $this->_applicationMock->expects($this->at(0))->method('getArea')->willReturn('adminhtml');
+        $this->_testCaseMock->expects($this->once())->method('getAnnotations')->will($this->returnValue($annotations));
+        $this->_applicationMock->expects($this->at(0))->method('getArea')->will($this->returnValue('adminhtml'));
         $this->_applicationMock->expects($this->once())->method('reinitialize');
-        $this->_applicationMock->expects($this->at(2))->method('getArea')->willReturn('global');
+        $this->_applicationMock->expects($this->at(2))->method('getArea')->will($this->returnValue('global'));
         $this->_applicationMock->expects($this->never())->method('loadArea');
         $this->_object->startTest($this->_testCaseMock);
     }
@@ -103,8 +100,8 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
     public function testStartTestPreventDoubleAreaLoading()
     {
         $annotations = ['method' => ['magentoAppArea' => ['adminhtml']]];
-        $this->_testCaseMock->expects($this->once())->method('getAnnotations')->willReturn($annotations);
-        $this->_applicationMock->expects($this->once())->method('getArea')->willReturn('adminhtml');
+        $this->_testCaseMock->expects($this->once())->method('getAnnotations')->will($this->returnValue($annotations));
+        $this->_applicationMock->expects($this->once())->method('getArea')->will($this->returnValue('adminhtml'));
         $this->_applicationMock->expects($this->never())->method('reinitialize');
         $this->_applicationMock->expects($this->never())->method('loadArea');
         $this->_object->startTest($this->_testCaseMock);

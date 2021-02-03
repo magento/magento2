@@ -35,11 +35,11 @@ class WriteTest extends \PHPUnit\Framework\TestCase
      * @dataProvider fileExistProvider
      * @param $path
      * @param $mode
+     *
      */
     public function testFileExistException($path, $mode)
     {
         $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
-
         $this->getFileInstance($path, $mode);
     }
 
