@@ -196,7 +196,7 @@ class ImageTest extends AbstractFormTestCase
     public function testValidateIsNotValidFile()
     {
         $value = [
-            'tmp_name' => 'tmp_file',
+            'tmp_name' => 'tmp_file.txt',
             'name' => 'realFileName',
         ];
 

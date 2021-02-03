@@ -1,6 +1,7 @@
 {
     "name": "magento/language-pt_br",
     "description": "Portuguese (Brazil) language",
+    "type": "magento2-language",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -8,13 +9,14 @@
     "config": {
         "sort-packages": true
     },
+    "version": "100.3.4",
     "require": {
-        "magento/framework": "*"
+        "magento/framework": "102.0.*"
     },
-    "type": "magento2-language",
     "autoload": {
         "files": [
             "registration.php"
         ]
     }
 }
+

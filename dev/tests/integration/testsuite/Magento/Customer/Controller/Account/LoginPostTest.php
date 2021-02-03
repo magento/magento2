@@ -147,6 +147,24 @@ class LoginPostTest extends AbstractController
     }
 
     /**
+     * @magentoConfigFixture current_store customer/startup/redirect_dashboard 0
+     * @magentoConfigFixture current_store customer/captcha/enable 0
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     *
+     * @return void
+     */
+    public function testLoginToDashboardWithIncorrectReferrer(): void
+    {
+        $redirectUrl = 'https:support.magento.com';
+        $this->prepareRequest('customer@example.com', 'password');
+        $this->getRequest()->setParam(Url::REFERER_QUERY_PARAM_NAME, $this->urlEncoder->encode($redirectUrl));
+        $this->dispatch('customer/account/loginPost');
+        $this->assertTrue($this->session->isLoggedIn());
+        $this->assertRedirect($this->stringContains('customer/account/'));
+    }
+
+    /**
      * @magentoConfigFixture current_store customer/startup/redirect_dashboard 1
      * @magentoConfigFixture current_store customer/captcha/enable 0
      *

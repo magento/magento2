@@ -9,6 +9,7 @@ namespace Magento\QuoteGraphQl\Model\Cart;
 
 use Magento\Checkout\Api\Exception\PaymentProcessingRateLimitExceededException;
 use Magento\Checkout\Api\PaymentProcessingRateLimiterInterface;
+use Magento\Checkout\Api\PaymentSavingRateLimiterInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -43,7 +44,7 @@ class SetPaymentMethodOnCart
     private $additionalDataProviderPool;
 
     /**
-     * @var PaymentProcessingRateLimiterInterface
+     * @var PaymentSavingRateLimiterInterface
      */
     private $paymentRateLimiter;
 
@@ -52,18 +53,22 @@ class SetPaymentMethodOnCart
      * @param PaymentInterfaceFactory $paymentFactory
      * @param AdditionalDataProviderPool $additionalDataProviderPool
      * @param PaymentProcessingRateLimiterInterface|null $paymentRateLimiter
+     * @param PaymentSavingRateLimiterInterface|null $savingRateLimiter
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         PaymentMethodManagementInterface $paymentMethodManagement,
         PaymentInterfaceFactory $paymentFactory,
         AdditionalDataProviderPool $additionalDataProviderPool,
-        ?PaymentProcessingRateLimiterInterface $paymentRateLimiter = null
+        ?PaymentProcessingRateLimiterInterface $paymentRateLimiter = null,
+        ?PaymentSavingRateLimiterInterface $savingRateLimiter = null
     ) {
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->paymentFactory = $paymentFactory;
         $this->additionalDataProviderPool = $additionalDataProviderPool;
-        $this->paymentRateLimiter = $paymentRateLimiter
-            ?? ObjectManager::getInstance()->get(PaymentProcessingRateLimiterInterface::class);
+        $this->paymentRateLimiter = $savingRateLimiter
+            ?? ObjectManager::getInstance()->get(PaymentSavingRateLimiterInterface::class);
     }
 
     /**
@@ -77,7 +82,12 @@ class SetPaymentMethodOnCart
     public function execute(Quote $cart, array $paymentData): void
     {
         try {
-            $this->paymentRateLimiter->limit();
+            try {
+                $this->paymentRateLimiter->limit();
+            } catch (PaymentProcessingRateLimitExceededException $ex) {
+                //Limit reached
+                return;
+            }
         } catch (PaymentProcessingRateLimitExceededException $exception) {
             throw new GraphQlInputException(__($exception->getMessage()), $exception);
         }

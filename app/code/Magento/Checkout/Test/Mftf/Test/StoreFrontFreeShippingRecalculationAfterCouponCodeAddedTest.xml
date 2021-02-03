@@ -82,6 +82,7 @@
         <click selector="{{DiscountSection.ApplyCodeBtn}}" stepKey="applyCode"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <see userInput="Your coupon was successfully applied." stepKey="seeSuccessMessage"/>
+        <wait time="5" stepKey="waitForPlaceOrderButton" />
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder1"/>
         <waitForPageLoad stepKey="waitForError"/>
         <see stepKey="seeShippingMethodError" userInput="The shipping method is missing. Select the shipping method and try again."/>
