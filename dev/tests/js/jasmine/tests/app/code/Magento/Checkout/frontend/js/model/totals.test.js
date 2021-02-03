@@ -46,8 +46,7 @@ define([
                 reload: jasmine.createSpy(),
                 getInitCustomerData: function () {}
             }
-        },
-        totals;
+        };
 
     afterEach(function () {
         try {
@@ -59,8 +58,7 @@ define([
     describe('Test that customer data is reloaded when quote subtotal and cart subtotal are different', function () {
         beforeEach(function (done) {
             injector.mock(mocks);
-            injector.require(['Magento_Checkout/js/model/totals'], function (Totals) {
-                totals = Totals;
+            injector.require(['Magento_Checkout/js/model/totals'], function () {
                 done();
             });
         });
@@ -74,8 +72,7 @@ define([
     describe('Test that customer data is not reloaded when cart subtotal is NaN', function () {
         beforeEach(function (done) {
             injector.mock(mocksTwo);
-            injector.require(['Magento_Checkout/js/model/totals'], function (Totals) {
-                totals = Totals;
+            injector.require(['Magento_Checkout/js/model/totals'], function () {
                 done();
             });
         });
