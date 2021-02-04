@@ -33,6 +33,11 @@ class RefundReferenceTransactionDataBuilderTest extends TestCase
      */
     private $paymentDOMock;
 
+    /**
+     * @var Order|MockObject
+     */
+    private $orderMock;
+
     protected function setUp(): void
     {
         $this->paymentDOMock = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);

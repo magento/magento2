@@ -94,9 +94,6 @@ class MenuTest extends \PHPUnit\Framework\TestCase
         $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->menuItemChecker = $this->getMockBuilder(MenuItemChecker::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->anchorRendererMock = $this->getMockBuilder(AnchorRenderer::class)
             ->disableOriginalConstructor()
             ->getMock();

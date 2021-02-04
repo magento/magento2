@@ -43,6 +43,11 @@ class AnchorRendererTest extends \PHPUnit\Framework\TestCase
      */
     private $anchorRenderer;
 
+    /**
+     * @var Item|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $menuItemWithoutChildrenMock;
+
     protected function setUp(): void
     {
         $this->activeMenuItemMock = $this->getMockBuilder(Item::class)

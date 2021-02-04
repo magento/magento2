@@ -12,7 +12,6 @@ use Magento\AuthorizenetAcceptjs\Gateway\SubjectReader;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use PHPUnit\Framework\TestCase;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
-use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -37,7 +36,6 @@ class TransactionDetailsDataBuilderTest extends TestCase
     {
         $this->paymentDOMock = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
         $this->paymentMock = $this->createMock(Payment::class);
-        $this->orderMock = $this->createMock(Order::class);
         $this->paymentDOMock->method('getPayment')
             ->willReturn($this->paymentMock);
 

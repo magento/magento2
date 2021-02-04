@@ -96,6 +96,11 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
      */
     protected $helperMock;
 
+    /**
+     * @var Redirect
+     */
+    private Redirect $controller;
+
     protected function setUp(): void
     {
         $this->directpostSessionMock = $this->getMockBuilder(\Magento\Authorizenet\Model\Directpost\Session::class)

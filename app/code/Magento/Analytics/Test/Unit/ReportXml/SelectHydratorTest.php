@@ -206,7 +206,7 @@ class SelectHydratorTest extends \PHPUnit\Framework\TestCase
      */
     public function recreateWithExpressionDataProvider()
     {
-        $expressionMock = $this->getMockBuilder(JsonSerializableExpression::class)
+        $expressionMock = $this->getMockBuilder(\JsonSerializable::class)
             ->disableOriginalConstructor()
             ->getMock();
 
