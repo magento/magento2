@@ -54,7 +54,7 @@ class Subject implements ClaimInterface
     /**
      * @inheritDoc
      */
-    public function getClass(): ?string
+    public function getClass(): ?int
     {
         return self::CLASS_REGISTERED;
     }

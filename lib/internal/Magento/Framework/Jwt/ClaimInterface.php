@@ -13,11 +13,11 @@ namespace Magento\Framework\Jwt;
  */
 interface ClaimInterface
 {
-    public const CLASS_REGISTERED = 'registered';
+    public const CLASS_REGISTERED = 1;
 
-    public const CLASS_PUBLIC = 'public';
+    public const CLASS_PUBLIC = 2;
 
-    public const CLASS_PRIVATE = 'private';
+    public const CLASS_PRIVATE = 3;
 
     /**
      * Claim name.
@@ -36,9 +36,9 @@ interface ClaimInterface
     /**
      * Claim class when possible to identify.
      *
-     * @return string|null
+     * @return int|null
      */
-    public function getClass(): ?string;
+    public function getClass(): ?int;
 
     /**
      * Whether to duplicate this claim to JOSE header.
