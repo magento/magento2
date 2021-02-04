@@ -198,18 +198,6 @@ class CachedAdapter implements FilesystemAdapter
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function isFile($path)
-    {
-        $metadata = $this->getMetadata($path);
-        if ($metadata) {
-            return isset($metadata['type']) && $metadata['type'] === 'file';
-        }
-        return false;
-    }
-
-    /**
      * Get metadata.
      *
      * @param string $path

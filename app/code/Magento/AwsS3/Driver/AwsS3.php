@@ -400,6 +400,18 @@ class AwsS3 implements RemoteDriverInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    private function isTypeFile($path)
+    {
+        $metadata = $this->metadataProvider->getMetadata($path);
+        if ($metadata && isset($metadata['type'])) {
+            return $metadata['type'] === 'file';
+        }
+        return false;
+    }
+
+    /**
      * @inheritDoc
      */
     public function isFile($path): bool
@@ -411,7 +423,7 @@ class AwsS3 implements RemoteDriverInterface
         $path = $this->normalizeRelativePath($path, true);
 
         try {
-            return $this->adapter->isFile($path);
+            return $this->isTypeFile($path);
         } catch (UnableToRetrieveMetadata $e) {
             return false;
         } catch (\League\Flysystem\FilesystemException $e) {
@@ -436,7 +448,7 @@ class AwsS3 implements RemoteDriverInterface
         }
 
         try {
-            return !$this->adapter->isFile($path);
+            return !$this->isTypeFile($path);
         } catch (UnableToRetrieveMetadata $e) {
             return $this->adapter->fileExists($path);
         } catch (\League\Flysystem\FilesystemException $e) {
