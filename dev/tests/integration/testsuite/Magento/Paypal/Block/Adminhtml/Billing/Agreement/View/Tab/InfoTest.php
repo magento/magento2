@@ -5,8 +5,6 @@
  */
 namespace Magento\Paypal\Block\Adminhtml\Billing\Agreement\View\Tab;
 
-use Magento\Framework\App\Request\Http as HttpRequest;
-
 /**
  * Testing Info tab
  *
