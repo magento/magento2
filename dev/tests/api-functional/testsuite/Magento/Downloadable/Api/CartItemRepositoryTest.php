@@ -72,7 +72,7 @@ class CartItemRepositoryTest extends WebapiAbstract
             1,
             $response['product_option']['extension_attributes']['downloadable_option']['downloadable_links']
         );
-        $this->assertContains(
+        $this->assertContainsEquals(
             $linkId,
             $response['product_option']['extension_attributes']['downloadable_option']['downloadable_links']
         );
@@ -175,7 +175,7 @@ class CartItemRepositoryTest extends WebapiAbstract
             1,
             $response['product_option']['extension_attributes']['downloadable_option']['downloadable_links']
         );
-        $this->assertContains(
+        $this->assertContainsEquals(
             $linkId,
             $response['product_option']['extension_attributes']['downloadable_option']['downloadable_links']
         );
@@ -321,7 +321,7 @@ class CartItemRepositoryTest extends WebapiAbstract
             1,
             $response['product_option']['extension_attributes']['downloadable_option']['downloadable_links']
         );
-        $this->assertContains(
+        $this->assertContainsEquals(
             $linkId,
             $response['product_option']['extension_attributes']['downloadable_option']['downloadable_links']
         );

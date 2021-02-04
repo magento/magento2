@@ -62,7 +62,7 @@ class CategoryWithDescriptionDirectivesTest extends GraphQlAbstract
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        self::assertNotContains('media url', $response['category']['description']);
-        self::assertContains($storeBaseUrl, $response['category']['description']);
+        self::assertStringNotContainsString('media url', $response['category']['description']);
+        self::assertStringContainsString($storeBaseUrl, $response['category']['description']);
     }
 }
