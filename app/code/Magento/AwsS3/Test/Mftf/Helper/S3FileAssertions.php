@@ -93,6 +93,20 @@ class S3FileAssertions extends Helper
     }
 
     /**
+     * Copy source into destination
+     *
+     * @param string $source
+     * @param string $destination
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function copy($source, $destination): void
+    {
+        $this->driver->copy($source, $destination);
+    }
+
+    /**
      * Create directory in the S3 bucket
      *
      * @param string $path
