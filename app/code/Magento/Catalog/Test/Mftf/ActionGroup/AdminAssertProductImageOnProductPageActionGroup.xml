@@ -17,6 +17,6 @@
         </arguments>
         <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesSection"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <seeElement selector="{{AdminProductImagesSection.imageFile(image)}}" stepKey="seeImage"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.imageFile(image)}}" stepKey="seeImage"/>
     </actionGroup>
 </actionGroups>

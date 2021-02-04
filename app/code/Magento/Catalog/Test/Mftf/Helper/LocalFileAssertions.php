@@ -209,6 +209,21 @@ class LocalFileAssertions extends Helper
     }
 
     /**
+     * Asserts that a directory is empty
+     *
+     * @param string $path
+     * @param string $message
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function assertDirectoryEmpty($path, $message = ""): void
+    {
+        $realPath = $this->expandPath($path);
+        $this->assertEmpty($this->driver->readDirectory($realPath), $message);
+    }
+
+    /**
      * Helper function to construct the real path to the file
      *
      * If the given path isn't an absolute path then assume it's in context of the Magento root
