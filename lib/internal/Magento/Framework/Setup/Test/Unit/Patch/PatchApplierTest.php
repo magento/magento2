@@ -159,8 +159,10 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
         );
 
         $patches = [
-            \SomeDataPatch::class,// @phpstan-ignore-line
-            \OtherDataPatch::class// @phpstan-ignore-line
+            // @phpstan-ignore-next-line
+            \SomeDataPatch::class,
+            // @phpstan-ignore-next-line
+            \OtherDataPatch::class
         ];
         $patchRegistryMock = $this->createAggregateIteratorMock(PatchRegistry::class, $patches, ['registerPatch']);
         $patchRegistryMock->expects($this->exactly(2))
@@ -178,8 +180,10 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
         $patch2->expects($this->once())->method('getAliases')->willReturn([]);
         $this->objectManagerMock->expects($this->any())->method('create')->willReturnMap(
             [
-                ['\\' . \SomeDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch1],// @phpstan-ignore-line
-                ['\\' . \OtherDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch2],// @phpstan-ignore-line
+                // @phpstan-ignore-next-line
+                ['\\' . \SomeDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch1],
+                // @phpstan-ignore-next-line
+                ['\\' . \OtherDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch2],
             ]
         );
         $this->connectionMock->expects($this->exactly(2))->method('beginTransaction');
@@ -257,8 +261,10 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
             'newly installed module' => [
                 'moduleName' => 'Module1',
                 'dataPatches' => [
-                    \SomeDataPatch::class,// @phpstan-ignore-line
-                    \OtherDataPatch::class// @phpstan-ignore-line
+                    // @phpstan-ignore-next-line
+                    \SomeDataPatch::class,
+                    // @phpstan-ignore-next-line
+                    \OtherDataPatch::class
                 ],
                 'moduleVersionInDb' => null,
             ],
@@ -309,8 +315,10 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
         $patch2->expects(self::any())->method('getAliases')->willReturn([]);
         $this->objectManagerMock->expects(self::any())->method('create')->willReturnMap(
             [
-                ['\\' . \SomeDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch1],// @phpstan-ignore-line
-                ['\\' . \OtherDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch2],// @phpstan-ignore-line
+                // @phpstan-ignore-next-line
+                ['\\' . \SomeDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch1],
+                // @phpstan-ignore-next-line
+                ['\\' . \OtherDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch2],
             ]
         );
         $this->connectionMock->expects(self::exactly(1))->method('beginTransaction');
@@ -328,8 +336,10 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
             'upgrade module iwth only OtherDataPatch' => [
                 'moduleName' => 'Module1',
                 'dataPatches' => [
-                    \SomeDataPatch::class,// @phpstan-ignore-line
-                    \OtherDataPatch::class// @phpstan-ignore-line
+                    // @phpstan-ignore-next-line
+                    \SomeDataPatch::class,
+                    // @phpstan-ignore-next-line
+                    \OtherDataPatch::class
                 ],
                 'moduleVersionInDb' => '2.0.0',
             ]
@@ -361,8 +371,10 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
         );
 
         $patches = [
-            \SomeDataPatch::class,// @phpstan-ignore-line
-            \OtherDataPatch::class// @phpstan-ignore-line
+            // @phpstan-ignore-next-line
+            \SomeDataPatch::class,
+            // @phpstan-ignore-next-line
+            \OtherDataPatch::class
         ];
         $patchRegistryMock = $this->createAggregateIteratorMock(PatchRegistry::class, $patches, ['registerPatch']);
         $patchRegistryMock->expects($this->exactly(2))
@@ -379,8 +391,10 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
         $patch2->expects($this->once())->method('apply')->willThrowException($exception);
         $this->objectManagerMock->expects($this->any())->method('create')->willReturnMap(
             [
-                ['\\' . \SomeDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch1],// @phpstan-ignore-line
-                ['\\' . \OtherDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch2],// @phpstan-ignore-line
+                // @phpstan-ignore-next-line
+                ['\\' . \SomeDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch1],
+                // @phpstan-ignore-next-line
+                ['\\' . \OtherDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch2],
             ]
         );
         $this->connectionMock->expects($this->exactly(1))->method('beginTransaction');
@@ -485,8 +499,10 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
         );
 
         $patches = [
-            \SomeSchemaPatch::class,// @phpstan-ignore-line
-            \OtherSchemaPatch::class// @phpstan-ignore-line
+            // @phpstan-ignore-next-line
+            \SomeSchemaPatch::class,
+            // @phpstan-ignore-next-line
+            \OtherSchemaPatch::class
         ];
         $patchRegistryMock = $this->createAggregateIteratorMock(PatchRegistry::class, $patches, ['registerPatch']);
         $patchRegistryMock->expects($this->exactly(2))
@@ -504,8 +520,10 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
         $patch2->expects($this->any())->method('getAliases')->willReturn([]);
         $this->patchFactoryMock->expects($this->any())->method('create')->willReturnMap(
             [
-                [\SomeSchemaPatch::class, ['schemaSetup' => $this->schemaSetupMock], $patch1],// @phpstan-ignore-line
-                [\OtherSchemaPatch::class, ['schemaSetup' => $this->schemaSetupMock], $patch2],// @phpstan-ignore-line
+                // @phpstan-ignore-next-line
+                [\SomeSchemaPatch::class, ['schemaSetup' => $this->schemaSetupMock], $patch1],
+                // @phpstan-ignore-next-line
+                [\OtherSchemaPatch::class, ['schemaSetup' => $this->schemaSetupMock], $patch2],
             ]
         );
         $this->connectionMock->expects($this->never())->method('beginTransaction');
@@ -613,8 +631,10 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
             'upgrade module iwth only OtherSchemaPatch' => [
                 'moduleName' => 'Module1',
                 'schemaPatches' => [
-                    \SomeSchemaPatch::class,// @phpstan-ignore-line
-                    \OtherSchemaPatch::class// @phpstan-ignore-line
+                    // @phpstan-ignore-next-line
+                    \SomeSchemaPatch::class,
+                    // @phpstan-ignore-next-line
+                    \OtherSchemaPatch::class
                 ],
                 'moduleVersionInDb' => '2.0.0',
             ]
