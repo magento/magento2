@@ -5,6 +5,7 @@
  */
 namespace Magento\Multishipping\Controller\Checkout;
 
+use Magento\Checkout\Api\Exception\PaymentProcessingRateLimitExceededException;
 use Magento\Checkout\Api\PaymentProcessingRateLimiterInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
@@ -126,6 +127,9 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout implements
                 $this->_getCheckout()->getCheckoutSession()->setDisplaySuccess(true);
                 $this->_redirect('*/*/success');
             }
+        } catch (PaymentProcessingRateLimitExceededException $ex) {
+            $this->messageManager->addErrorMessage($ex->getMessage());
+            $this->_redirect('*/*/overview');
         } catch (PaymentException $e) {
             $message = $e->getMessage();
             if (!empty($message)) {

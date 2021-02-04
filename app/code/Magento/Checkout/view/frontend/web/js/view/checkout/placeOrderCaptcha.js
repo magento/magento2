@@ -30,7 +30,7 @@ function (defaultCaptcha, captchaList, _, placeOrderHooks) {
                     }
                 });
                 placeOrderHooks.afterRequestListeners.push(function () {
-                    self.refresh();
+                    //self.refresh();
                 });
             }
         }

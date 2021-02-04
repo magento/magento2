@@ -9,10 +9,10 @@ namespace Magento\LoginAsCustomer\Model\ResourceModel;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Encryption\EncryptorInterface;
-use Magento\Framework\Math\Random;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\Math\Random;
 use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
+use Magento\LoginAsCustomerApi\Api\GenerateAuthenticationSecretInterface;
 use Magento\LoginAsCustomerApi\Api\SaveAuthenticationDataInterface;
 
 /**
@@ -20,11 +20,6 @@ use Magento\LoginAsCustomerApi\Api\SaveAuthenticationDataInterface;
  */
 class SaveAuthenticationData implements SaveAuthenticationDataInterface
 {
-    /**
-     * @var EncryptorInterface
-     */
-    private $encryptor;
-
     /**
      * @var ResourceConnection
      */
@@ -41,21 +36,27 @@ class SaveAuthenticationData implements SaveAuthenticationDataInterface
     private $random;
 
     /**
+     * @var GenerateAuthenticationSecretInterface
+     */
+    private $generateAuthenticationSecret;
+
+    /**
      * @param ResourceConnection $resourceConnection
      * @param DateTime $dateTime
      * @param Random $random
-     * @param EncryptorInterface $encryptor
+     * @param GenerateAuthenticationSecretInterface|null $generateAuthenticationSecret
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         DateTime $dateTime,
         Random $random,
-        ?EncryptorInterface $encryptor = null
+        ?GenerateAuthenticationSecretInterface $generateAuthenticationSecret = null
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->dateTime = $dateTime;
         $this->random = $random;
-        $this->encryptor = $encryptor ?? ObjectManager::getInstance()->get(EncryptorInterface::class);
+        $this->generateAuthenticationSecret = $generateAuthenticationSecret
+            ?? ObjectManager::getInstance()->get(GenerateAuthenticationSecretInterface::class);
     }
 
     /**
@@ -66,19 +67,17 @@ class SaveAuthenticationData implements SaveAuthenticationDataInterface
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName('login_as_customer');
 
-        $secret = $this->random->getRandomString(64);
-        $hash = $this->encryptor->hash($secret);
+        $key = $this->random->getRandomString(64);
 
         $connection->insert(
             $tableName,
             [
                 'customer_id' => $authenticationData->getCustomerId(),
                 'admin_id' => $authenticationData->getAdminId(),
-                'secret' => $hash,
+                'secret' => $key,
                 'created_at' => $this->dateTime->gmtDate(),
             ]
         );
-
-        return $secret;
+        return $this->generateAuthenticationSecret->execute($authenticationData);
     }
 }

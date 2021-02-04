@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Controller\Express;
 
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -74,6 +76,11 @@ class GetTokenData extends AbstractExpress implements HttpGetActionInterface
     private $guestCartRepository;
 
     /**
+     * @var UserContextInterface
+     */
+    private $userContext;
+
+    /**
      * @param Context $context
      * @param CustomerSession $customerSession
      * @param CheckoutSession $checkoutSession
@@ -86,6 +93,7 @@ class GetTokenData extends AbstractExpress implements HttpGetActionInterface
      * @param CustomerRepository $customerRepository
      * @param CartRepositoryInterface $cartRepository
      * @param GuestCartRepositoryInterface $guestCartRepository
+     * @param UserContextInterface $userContext
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -100,7 +108,8 @@ class GetTokenData extends AbstractExpress implements HttpGetActionInterface
         LoggerInterface $logger,
         CustomerRepository $customerRepository,
         CartRepositoryInterface $cartRepository,
-        GuestCartRepositoryInterface $guestCartRepository
+        GuestCartRepositoryInterface $guestCartRepository,
+        UserContextInterface $userContext
     ) {
         parent::__construct(
             $context,
@@ -117,6 +126,7 @@ class GetTokenData extends AbstractExpress implements HttpGetActionInterface
         $this->customerRepository = $customerRepository;
         $this->cartRepository = $cartRepository;
         $this->guestCartRepository = $guestCartRepository;
+        $this->userContext = $userContext ?? ObjectManager::getInstance()->get(UserContextInterface::class);
     }
 
     /**
@@ -167,16 +177,7 @@ class GetTokenData extends AbstractExpress implements HttpGetActionInterface
      */
     private function getToken(): ?string
     {
-        $quoteId = $this->getRequest()->getParam('quote_id');
-        $customerId = $this->getRequest()->getParam('customer_id') ?: $this->_customerSession->getId();
-        $hasButton = (bool)$this->getRequest()->getParam(Checkout::PAYMENT_INFO_BUTTON);
-
-        if ($quoteId) {
-            $quote = $customerId ? $this->cartRepository->get($quoteId) : $this->guestCartRepository->get($quoteId);
-        } else {
-            $quote = $this->_getQuote();
-        }
-
+        $quote = $this->_getQuote();
         $this->_initCheckout($quote);
 
         if ($quote->getIsMultiShipping()) {
@@ -184,8 +185,8 @@ class GetTokenData extends AbstractExpress implements HttpGetActionInterface
             $quote->removeAllAddresses();
         }
 
-        if ($customerId) {
-            $customerData = $this->customerRepository->getById((int)$customerId);
+        if ($this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER) {
+            $customerData = $this->customerRepository->getById((int)$this->userContext->getUserId());
 
             $this->_checkout->setCustomerWithAddressChange(
                 $customerData,
@@ -200,6 +201,7 @@ class GetTokenData extends AbstractExpress implements HttpGetActionInterface
             $this->_url->getUrl('paypal/express/cancel'),
             $this->_url->getUrl('checkout/onepage/success')
         );
+        $hasButton = (bool)$this->getRequest()->getParam(Checkout::PAYMENT_INFO_BUTTON);
 
         return $this->_checkout->start(
             $this->_url->getUrl('*/*/return'),

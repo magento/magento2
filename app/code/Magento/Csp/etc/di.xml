@@ -46,6 +46,7 @@
         <arguments>
             <argument name="converter" xsi:type="object">Magento\Csp\Model\Collector\CspWhitelistXml\Converter</argument>
             <argument name="schemaLocator" xsi:type="object">Magento\Csp\Model\Collector\CspWhitelistXml\SchemaLocator</argument>
+            <argument name="fileResolver" xsi:type="object">Magento\Csp\Model\Collector\CspWhitelistXml\FileResolver</argument>
             <argument name="fileName" xsi:type="string">csp_whitelist.xml</argument>
         </arguments>
     </type>
