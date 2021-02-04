@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test cases item collection provider.
+ * Tests for category collection provider.
  *
  * @see \Magento\Catalog\Model\Layer\Category\ItemCollectionProvider
  * @magentoAppArea frontend
@@ -51,8 +51,8 @@ class ItemCollectionProviderTest extends TestCase
     public function testGetCollection(): void
     {
         $category = $this->categoryRepository->get(333);
-        $collectionProduct = $this->itemCollectionProvider->getCollection($category);
-        $this->assertEquals('simple333', $collectionProduct->getFirstItem()->getSku());
-        $this->assertCount(1, $collectionProduct->getItems());
+        $categoryProductsCollection = $this->itemCollectionProvider->getCollection($category);
+        $this->assertCount(1, $categoryProductsCollection);
+        $this->assertEquals('simple333', $categoryProductsCollection->getFirstItem()->getSku());
     }
 }
