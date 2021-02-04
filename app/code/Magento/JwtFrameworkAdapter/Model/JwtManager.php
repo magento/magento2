@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\JwtFrameworkAdapter\Model;
 
 use Magento\Framework\Jwt\EncryptionSettingsInterface;
+use Magento\Framework\Jwt\Exception\EncryptionException;
 use Magento\Framework\Jwt\Exception\JwtException;
 use Magento\Framework\Jwt\Exception\MalformedTokenException;
 use Magento\Framework\Jwt\Jwe\JweEncryptionSettingsInterface;
@@ -18,6 +19,7 @@ use Magento\Framework\Jwt\Jws\JwsInterface;
 use Magento\Framework\Jwt\Jws\JwsSignatureSettingsInterface;
 use Magento\Framework\Jwt\JwtInterface;
 use Magento\Framework\Jwt\JwtManagerInterface;
+use Magento\Framework\Jwt\Unsecured\NoEncryption;
 use Magento\Framework\Jwt\Unsecured\UnsecuredJwtInterface;
 
 /**
@@ -76,13 +78,19 @@ class JwtManager implements JwtManagerInterface
     private $jweManager;
 
     /**
+     * @var UnsecuredJwtManager
+     */
+    private $unsecuredManager;
+
+    /**
      * @param JwsManager $jwsManager
      * @param JweManager $jweManager
      */
-    public function __construct(JwsManager $jwsManager, JweManager $jweManager)
+    public function __construct(JwsManager $jwsManager, JweManager $jweManager, UnsecuredJwtManager $unsecuredManager)
     {
         $this->jwsManager = $jwsManager;
         $this->jweManager = $jweManager;
+        $this->unsecuredManager = $unsecuredManager;
     }
 
     /**
@@ -99,6 +107,13 @@ class JwtManager implements JwtManagerInterface
             }
             if ($jwt instanceof JweInterface) {
                 return $this->jweManager->build($jwt, $encryption);
+            }
+            if ($jwt instanceof UnsecuredJwtInterface) {
+                if (!$encryption instanceof NoEncryption) {
+                    throw new EncryptionException('Unsecured JWTs can only work with no encryption settings');
+                }
+
+                return $this->unsecuredManager->build($jwt);
             }
         } catch (\Throwable $exception) {
             if (!$exception instanceof JwtException) {
@@ -126,6 +141,9 @@ class JwtManager implements JwtManagerInterface
                     case self::JWT_TYPE_JWE:
                         $read = $this->jweManager->read($token, $encryptionSettings);
                         break;
+                    case self::JWT_TYPE_UNSECURED:
+                        $read = $this->unsecuredManager->read($token);
+                        break;
                 }
             } catch (\Throwable $exception) {
                 if (!$exception instanceof JwtException) {
@@ -148,6 +166,9 @@ class JwtManager implements JwtManagerInterface
         }
         if ($encryptionSettings instanceof JweEncryptionSettingsInterface) {
             return self::JWT_TYPE_JWE;
+        }
+        if ($encryptionSettings instanceof NoEncryption) {
+            return self::JWT_TYPE_UNSECURED;
         }
 
         if ($encryptionSettings->getAlgorithmName() === Jwk::ALGORITHM_NONE) {

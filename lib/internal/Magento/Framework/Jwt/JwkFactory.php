@@ -750,6 +750,13 @@ class JwkFactory
         return $this->createOct($password, Jwk::PUBLIC_KEY_USE_ENCRYPTION, Jwk::ALGORITHM_PBES2_HS512_A256KW, $kid);
     }
 
+    public function createNone(): Jwk
+    {
+        return new Jwk(
+
+        );
+    }
+
     private function createOct(string $key, string $use, string $algo, ?string $kid): Jwk
     {
         if (strlen($key) < 2048) {

@@ -27,7 +27,8 @@ class JwsAlgorithmManagerFactory
         \Jose\Component\Signature\Algorithm\ES256::class,
         \Jose\Component\Signature\Algorithm\ES384::class,
         \Jose\Component\Signature\Algorithm\ES512::class,
-        \Jose\Component\Signature\Algorithm\EdDSA::class
+        \Jose\Component\Signature\Algorithm\EdDSA::class,
+        \Jose\Component\Signature\Algorithm\None::class
     ];
 
     public function create(): AlgorithmManager

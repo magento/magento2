@@ -30,6 +30,8 @@ use Magento\Framework\Jwt\Jws\JwsSignatureJwks;
 use Magento\Framework\Jwt\Payload\ClaimsPayload;
 use Magento\Framework\Jwt\Payload\ClaimsPayloadInterface;
 use Magento\Framework\Jwt\Payload\NestedPayloadInterface;
+use Magento\Framework\Jwt\Unsecured\NoEncryption;
+use Magento\Framework\Jwt\Unsecured\UnsecuredJwt;
 use Magento\Framework\Jwt\Unsecured\UnsecuredJwtInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -130,6 +132,14 @@ class JwtManagerTest extends TestCase
         }
         if ($jwt instanceof UnsecuredJwtInterface) {
             $this->assertInstanceOf(UnsecuredJwtInterface::class, $recreated);
+            /** @var UnsecuredJwt $recreated */
+            if (!$jwt->getUnprotectedHeaders()) {
+                $this->assertNull($recreated->getUnprotectedHeaders());
+            } else {
+                $this->assertTrue(count($recreated->getUnprotectedHeaders()) >= 1);
+                $this->verifyAgainstHeaders($jwt->getUnprotectedHeaders(), $recreated->getUnprotectedHeaders()[0]);
+            }
+            $this->verifyAgainstHeaders($jwt->getProtectedHeaders(), $recreated->getProtectedHeaders()[0]);
         }
 
     }
@@ -321,6 +331,26 @@ class JwtManagerTest extends TestCase
                     new Issuer('magento.com')
                 ]
             )
+        );
+        $flatUnsecured = new UnsecuredJwt(
+            [
+                new JwsHeader(
+                    [
+                        new PrivateHeaderParameter('test', true),
+                        new PublicHeaderParameter('test2', 'magento', 'value')
+                    ]
+                )
+            ],
+            new ClaimsPayload(
+                [
+                    new PrivateClaim('custom-claim', 'value'),
+                    new PrivateClaim('custom-claim2', 'value2', true),
+                    new PrivateClaim('custom-claim3', 'value3'),
+                    new IssuedAt(new \DateTimeImmutable()),
+                    new Issuer('magento.com')
+                ]
+            ),
+            null
         );
 
         //Keys
@@ -676,6 +706,11 @@ class JwtManagerTest extends TestCase
                         JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128GCM
                     )
                 ]
+            ],
+            'unsecured-jwt' => [
+                $flatUnsecured,
+                new NoEncryption(),
+                [new NoEncryption()]
             ]
         ];
     }
