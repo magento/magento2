@@ -112,5 +112,6 @@
                 </arguments>
             </block>
         </block>
+        <block class="Magento\Catalog\Block\Adminhtml\Product\Composite\Configure" template="Magento_Catalog::catalog/product/composite/configure.phtml" name="configure.popup"/>
     </container>
 </layout>
