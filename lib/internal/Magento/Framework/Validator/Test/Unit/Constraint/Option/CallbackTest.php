@@ -100,7 +100,7 @@ class CallbackTest extends \PHPUnit\Framework\TestCase
      *
      * @param string|array $value
      * @param string|array $expectedValue
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD)
      */
     public function testSetArguments($value, $expectedValue)
     {

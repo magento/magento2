@@ -50,6 +50,7 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->sourceClass = '\\' . \Magento\Framework\DataObject::class;
+        // @phpstan-ignore-next-line
         $this->resultClass = '\\' . \Magento\Framework\DataObject_MyResult::class;
         $this->_model = $this->getMockForAbstractClass(\Magento\Framework\Code\Generator\EntityAbstract::class);
     }

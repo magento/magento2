@@ -35,7 +35,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
      * @param array $inputConfig
      * @param array $expectedConfig
      * @dataProvider constructorDataProvider
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD)
      */
     public function testConstructor(array $inputConfig, array $expectedConfig)
     {
