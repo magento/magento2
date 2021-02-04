@@ -217,9 +217,6 @@ class CachedAdapter implements FilesystemAdapter
     public function fileSize(string $path): FileAttributes
     {
         $result = $this->getMetadata($path);
-        if (!isset($result['size'])) {
-            throw UnableToRetrieveMetadata::fileSize($path);
-        }
         return new FileAttributes($path, (int)$result['size']);
     }
 
@@ -229,9 +226,6 @@ class CachedAdapter implements FilesystemAdapter
     public function mimeType(string $path): FileAttributes
     {
         $result = $this->getMetadata($path);
-        if (!isset($result['mimetype'])) {
-            throw UnableToRetrieveMetadata::mimeType($path);
-        }
         return new FileAttributes($path, null, null, null, $result['mimetype']);
     }
 
@@ -241,9 +235,6 @@ class CachedAdapter implements FilesystemAdapter
     public function lastModified(string $path): FileAttributes
     {
         $result = $this->getMetadata($path);
-        if (!isset($result['timestamp'])) {
-            throw UnableToRetrieveMetadata::lastModified($path);
-        }
         return new FileAttributes($path, null, null, (int)$result['timestamp']);
     }
 
@@ -253,9 +244,6 @@ class CachedAdapter implements FilesystemAdapter
     public function visibility(string $path): FileAttributes
     {
         $result = $this->getMetadata($path);
-        if (!isset($result['visibility'])) {
-            throw UnableToRetrieveMetadata::visibility($path);
-        }
         return new FileAttributes($path, null, $result['visibility']);
     }
 }
