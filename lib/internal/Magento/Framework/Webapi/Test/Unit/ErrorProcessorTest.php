@@ -79,7 +79,8 @@ class ErrorProcessorTest extends \PHPUnit\Framework\TestCase
         )->method(
             'encode'
         )->willReturnCallback(
-            [$this, 'callbackJsonEncode'], $this->returnArgument(0)
+            [$this, 'callbackJsonEncode'],
+            $this->returnArgument(0)
         );
         /** Init output buffering to catch output via echo function. */
         ob_start();
@@ -119,7 +120,8 @@ class ErrorProcessorTest extends \PHPUnit\Framework\TestCase
         )->method(
             'encode'
         )->willReturnCallback(
-            [$this, 'callbackJsonEncode'], $this->returnArgument(0)
+            [$this, 'callbackJsonEncode'],
+            $this->returnArgument(0)
         );
         ob_start();
         $this->_errorProcessor->renderErrorMessage('Message', 'Message trace.', 401);
@@ -235,11 +237,9 @@ class ErrorProcessorTest extends \PHPUnit\Framework\TestCase
         $this->_loggerMock->expects($this->once())
             ->method('critical')
             ->willReturnCallback(
-
-                    function (\Exception $loggedException) use ($thrownException) {
-                        $this->assertSame($thrownException, $loggedException->getPrevious());
-                    }
-
+                function (\Exception $loggedException) use ($thrownException) {
+                    $this->assertSame($thrownException, $loggedException->getPrevious());
+                }
             );
         $this->_errorProcessor->maskException($thrownException);
     }

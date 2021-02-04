@@ -7,7 +7,7 @@ namespace Magento\Framework\Validator\Test\Unit;
 
 /**
  * Class BuilderTest
- *
+ * Test for Builder
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BuilderTest extends \PHPUnit\Framework\TestCase

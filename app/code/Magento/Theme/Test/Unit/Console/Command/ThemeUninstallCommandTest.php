@@ -282,15 +282,13 @@ class ThemeUninstallCommandTest extends \PHPUnit\Framework\TestCase
         $this->themeUninstaller->expects($this->once())
             ->method('uninstallRegistry')
             ->with(
-                $this->isInstanceOf(
-                    \Symfony\Component\Console\Output\OutputInterface::class),
+                $this->isInstanceOf(\Symfony\Component\Console\Output\OutputInterface::class),
                 $this->anything()
             );
         $this->themeUninstaller->expects($this->once())
             ->method('uninstallCode')
             ->with(
-                $this->isInstanceOf(
-                    \Symfony\Component\Console\Output\OutputInterface::class),
+                $this->isInstanceOf(\Symfony\Component\Console\Output\OutputInterface::class),
                 $this->anything()
             );
     }

@@ -13,13 +13,13 @@ use function PHPUnit\Framework\once;
 
 /**
  * Class ProxyTesting
+ *
  * Test for Proxy
  */
 class ProxyTesting
 {
     /**
-     * Invoke the proxy's method, imposing expectations on proxied object,
-     * that it must be invoked as well with appropriate parameters.
+     * Invoke the proxy's method, imposing expectations on proxied object, that it must be invoked as well.
      *
      * @param mixed $object Proxy
      * @param \PHPUnit\Framework\MockObject\MockObject $proxiedObject

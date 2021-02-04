@@ -102,7 +102,9 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     public function testCreateInvalidClass()
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Driver class "stdClass" must implement \\Magento\\Framework\\Profiler\\DriverInterface.');
+        $this->expectExceptionMessage(
+            'Driver class "stdClass" must implement \\Magento\\Framework\\Profiler\\DriverInterface.'
+        );
 
         $this->_factory->create(['type' => 'stdClass']);
     }
