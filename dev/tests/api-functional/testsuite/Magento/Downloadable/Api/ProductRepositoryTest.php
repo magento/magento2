@@ -525,14 +525,14 @@ class ProductRepositoryTest extends WebapiAbstract
         $this->assertEquals($sample1Id, $resultSamples[0]['id']);
         unset($resultSamples[0]['id']);
         $this->assertTrue(isset($resultSamples[0]['sample_file']));
-        $this->assertContains('sample1', $resultSamples[0]['sample_file']);
+        $this->assertStringContainsString('sample1', $resultSamples[0]['sample_file']);
         $this->assertStringEndsWith('.jpg', $resultSamples[0]['sample_file']);
         unset($resultSamples[0]['sample_file']);
         $this->assertTrue(isset($resultSamples[1]['id']));
         $this->assertEquals($sample2Id, $resultSamples[1]['id']);
         unset($resultSamples[1]['id']);
         $this->assertTrue(isset($resultSamples[1]['sample_file']));
-        $this->assertContains('sample2', $resultSamples[1]['sample_file']);
+        $this->assertStringContainsString('sample2', $resultSamples[1]['sample_file']);
         $this->assertStringEndsWith('.jpg', $resultSamples[1]['sample_file']);
         unset($resultSamples[1]['sample_file']);
 

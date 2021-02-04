@@ -12,7 +12,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Class CustomerMetadataTest
+ * Customer Metadata API test
  */
 class CustomerMetadataTest extends WebapiAbstract
 {
@@ -187,12 +187,12 @@ class CustomerMetadataTest extends WebapiAbstract
         $firstName = $this->getAttributeMetadataDataProvider()[Customer::FIRSTNAME][1];
         $validationResult = $this->checkMultipleAttributesValidationRules($firstName, $attributeMetadata);
         list($firstName, $attributeMetadata) = $validationResult;
-        $this->assertContains($firstName, $attributeMetadata);
+        $this->assertContainsEquals($firstName, $attributeMetadata);
 
         $websiteId = $this->getAttributeMetadataDataProvider()[Customer::WEBSITE_ID][1];
         $validationResult = $this->checkMultipleAttributesValidationRules($websiteId, $attributeMetadata);
         list($websiteId, $attributeMetadata) = $validationResult;
-        $this->assertContains($websiteId, $attributeMetadata);
+        $this->assertContainsEquals($websiteId, $attributeMetadata);
     }
 
     /**
@@ -274,6 +274,7 @@ class CustomerMetadataTest extends WebapiAbstract
         ];
     }
 
+    // phpcs:disable Generic.Metrics.NestingLevel
     /**
      * Checks that expected and actual attribute metadata validation rules are equal
      * and removes the validation rules entry from expected and actual attribute metadata

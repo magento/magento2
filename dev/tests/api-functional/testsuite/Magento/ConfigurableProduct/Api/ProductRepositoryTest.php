@@ -290,7 +290,7 @@ class ProductRepositoryTest extends WebapiAbstract
             $this->saveProduct($response);
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
@@ -333,7 +333,7 @@ class ProductRepositoryTest extends WebapiAbstract
             $this->saveProduct($response);
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
@@ -366,7 +366,7 @@ class ProductRepositoryTest extends WebapiAbstract
             $this->saveProduct($response);
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "SoapFault does not contain expected message."

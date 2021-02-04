@@ -11,8 +11,7 @@ use Magento\Framework\App\Config;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Class CartManagementTest
- * @package Magento\Quote\Api
+ * Quote Cart Management API test
  * @magentoAppIsolation enabled
  */
 class CartManagementTest extends WebapiAbstract
@@ -282,7 +281,9 @@ class CartManagementTest extends WebapiAbstract
     public function testAssignCustomerThrowsExceptionIfCartIsAssignedToDifferentStore()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The customer can\'t be assigned to the cart. The cart belongs to a different store.');
+        $this->expectExceptionMessage(
+            'The customer can\'t be assigned to the cart. The cart belongs to a different store.'
+        );
 
         $repository = $this->objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         /** @var $customer \Magento\Customer\Api\Data\CustomerInterface */
@@ -463,9 +464,9 @@ class CartManagementTest extends WebapiAbstract
         $this->assertEquals($cart->getItemsCount(), $cartData['items_count']);
         $this->assertEquals($cart->getItemsQty(), $cartData['items_qty']);
 
-        $this->assertContains('customer', $cartData);
+        $this->assertArrayHasKey('customer', $cartData);
         $this->assertFalse($cartData['customer_is_guest']);
-        $this->assertContains('currency', $cartData);
+        $this->assertArrayHasKey('currency', $cartData);
         $this->assertEquals($cart->getGlobalCurrencyCode(), $cartData['currency']['global_currency_code']);
         $this->assertEquals($cart->getBaseCurrencyCode(), $cartData['currency']['base_currency_code']);
         $this->assertEquals($cart->getQuoteCurrencyCode(), $cartData['currency']['quote_currency_code']);
