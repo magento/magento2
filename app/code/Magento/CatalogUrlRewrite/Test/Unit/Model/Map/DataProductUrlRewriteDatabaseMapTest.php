@@ -16,6 +16,7 @@ use Magento\Framework\DB\TemporaryTableService;
 
 /**
  * Class DataProductUrlRewriteDatabaseMapTest
+ * Test for DataProductUrlRewriteDatabaseMap
  */
 class DataProductUrlRewriteDatabaseMapTest extends \PHPUnit\Framework\TestCase
 {

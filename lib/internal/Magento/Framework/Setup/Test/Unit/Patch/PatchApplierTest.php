@@ -26,7 +26,8 @@ use Magento\Framework\Setup\Patch\PatchRegistryFactory;
 
 /**
  * Class PatchApplierTest
- * @package Magento\Framework\Setup\Test\Unit\Patch
+ * Test for PatchApplier
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PatchApplierTest extends \PHPUnit\Framework\TestCase
@@ -241,13 +242,11 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
         $this->connectionMock->expects($this->exactly(1))->method('beginTransaction');
         $this->connectionMock->expects($this->never())->method('commit');
         $this->patchHistoryMock->expects($this->any())->method('fixPatch')->willReturnCallback(
-
-                function ($param1) {
-                    if ($param1 == 'PatchAlias') {
-                        throw new \LogicException(sprintf("Patch %s cannot be applied twice", $param1));
-                    }
+            function ($param1) {
+                if ($param1 == 'PatchAlias') {
+                    throw new \LogicException(sprintf("Patch %s cannot be applied twice", $param1));
                 }
-
+            }
         );
         $this->patchApllier->applyDataPatch($moduleName);
     }
@@ -292,8 +291,10 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
         );
 
         $patches = [
-            \SomeDataPatch::class,// @phpstan-ignore-line
-            \OtherDataPatch::class// @phpstan-ignore-line
+            // @phpstan-ignore-next-line
+            \SomeDataPatch::class,
+            // @phpstan-ignore-next-line
+            \OtherDataPatch::class
         ];
         $patchRegistryMock = $this->createAggregateIteratorMock(
             PatchRegistry::class,
@@ -570,13 +571,11 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
 
         $this->patchFactoryMock->expects($this->any())->method('create')->willReturn($patch1);
         $this->patchHistoryMock->expects($this->any())->method('fixPatch')->willReturnCallback(
-
-                function ($param1) {
-                    if ($param1 == 'PatchAlias') {
-                        throw new \LogicException(sprintf("Patch %s cannot be applied twice", $param1));
-                    }
+            function ($param1) {
+                if ($param1 == 'PatchAlias') {
+                    throw new \LogicException(sprintf("Patch %s cannot be applied twice", $param1));
                 }
-
+            }
         );
 
         $this->patchApllier->applySchemaPatch($moduleName);

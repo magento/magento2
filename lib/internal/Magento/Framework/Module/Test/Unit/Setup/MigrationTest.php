@@ -220,10 +220,6 @@ class MigrationTest extends \PHPUnit\Framework\TestCase
         if (isset($expected['where'])) {
             $this->assertEquals($expected['where'], $this->_actualWhere);
         }
-
-        if (isset($expected['aliases_map'])) {
-            //$this->assertAttributeEquals($expected['aliases_map'], '_aliasesMap', $setupModel);
-        }
     }
 
     /**

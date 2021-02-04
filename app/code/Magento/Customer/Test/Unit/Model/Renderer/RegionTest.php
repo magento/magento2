@@ -7,6 +7,10 @@ namespace Magento\Customer\Test\Unit\Model\Renderer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * Class RegionTest
+ * Test for Region
+ */
 class RegionTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -46,19 +50,17 @@ class RegionTest extends \PHPUnit\Framework\TestCase
         )->method(
             'getHtmlAttributes'
         )->willReturn(
-            
-                [
-                    'title',
-                    'class',
-                    'style',
-                    'onclick',
-                    'onchange',
-                    'disabled',
-                    'readonly',
-                    'tabindex',
-                    'placeholder',
-                ]
-            
+            [
+                'title',
+                'class',
+                'style',
+                'onclick',
+                'onchange',
+                'disabled',
+                'readonly',
+                'tabindex',
+                'placeholder',
+            ]
         );
 
         $objectManager = new ObjectManager($this);

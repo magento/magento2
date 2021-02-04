@@ -125,7 +125,10 @@ class ConfigShowCommandTest extends \PHPUnit\Framework\TestCase
             Cli::RETURN_FAILURE,
             $tester->getStatusCode()
         );
-        $this->assertStringContainsString(__('Configuration for path: "%1" doesn\'t exist', $configPath)->render(), $tester->getDisplay());
+        $this->assertStringContainsString(
+            __('Configuration for path: "%1" doesn\'t exist', $configPath)->render(),
+            $tester->getDisplay()
+        );
     }
 
     /**

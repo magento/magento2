@@ -9,7 +9,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 
 /**
  * Class NewProductsTest
- * @package Magento\Catalog\Block\Rss\Product
+ * Test for NewProducts
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class NewProductsTest extends \PHPUnit\Framework\TestCase
@@ -169,7 +169,10 @@ class NewProductsTest extends \PHPUnit\Framework\TestCase
         unset($rssData['entries'][0]['description']);
         $this->assertEquals($data, $rssData);
         $this->assertStringContainsString('<a href="http://magento.com/product-name.html">', $description);
-        $this->assertStringContainsString('<img src="image_link" border="0" align="left" height="75" width="75">', $description);
+        $this->assertStringContainsString(
+            '<img src="image_link" border="0" align="left" height="75" width="75">',
+            $description
+        );
         $this->assertStringContainsString('<td style="text-decoration:none;">Product Description </td>', $description);
     }
 

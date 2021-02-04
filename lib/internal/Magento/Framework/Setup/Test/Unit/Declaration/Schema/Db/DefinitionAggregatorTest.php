@@ -13,7 +13,6 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\ElementInterface;
 /**
  * Test for Definition Aggregator.
  *
- * @package Magento\Framework\Setup\Test\Unit\Declaration\Schema\Db
  */
 class DefinitionAggregatorTest extends \PHPUnit\Framework\TestCase
 {

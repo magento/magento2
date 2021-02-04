@@ -123,7 +123,10 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($shippingRate, $this->model->getCurrentShippingRate());
         $this->assertNotNull($this->model->getCanEditShippingAddress());
         $this->assertEquals($quote->getMayEditShippingMethod(), $this->model->getCanEditShippingMethod());
-        $this->assertStringContainsString('paypal/express/saveShippingMethod', $this->model->getShippingMethodSubmitUrl());
+        $this->assertStringContainsString(
+            'paypal/express/saveShippingMethod',
+            $this->model->getShippingMethodSubmitUrl()
+        );
         $this->assertStringContainsString('paypal/express/edit', $this->model->getEditUrl());
         $this->assertStringContainsString('paypal/express/placeOrder', $this->model->getPlaceOrderUrl());
     }

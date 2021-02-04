@@ -19,8 +19,8 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * AttributeMetadataCache Test
- *
+ * Class AttributeMetadataCacheTest
+ * Test for AttributeMetadataCache
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AttributeMetadataCacheTest extends \PHPUnit\Framework\TestCase

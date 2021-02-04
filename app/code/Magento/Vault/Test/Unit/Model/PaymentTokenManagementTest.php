@@ -23,7 +23,8 @@ use Magento\Vault\Model\ResourceModel\PaymentToken as PaymentTokenResourceModel;
 
 /**
  * Class PaymentTokenManagementTest
- *
+ * Test for PaymentTokenManagement
+ * 
  * @see \Magento\Vault\Model\PaymentTokenManagement
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

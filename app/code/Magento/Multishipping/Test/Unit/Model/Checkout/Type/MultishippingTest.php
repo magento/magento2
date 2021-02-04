@@ -731,7 +731,9 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     public function testCreateOrdersCountryNotPresentInAllowedListException()
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('Some addresses can\'t be used due to the configurations for specific countries.');
+        $this->expectExceptionMessage(
+            'Some addresses can\'t be used due to the configurations for specific countries.'
+        );
 
         $abstractMethod = $this->getMockBuilder(AbstractMethod::class)
             ->disableOriginalConstructor()

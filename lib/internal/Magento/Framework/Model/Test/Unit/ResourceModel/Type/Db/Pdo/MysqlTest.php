@@ -99,7 +99,9 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     public function testGetConnectionInactive()
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Configuration array must have a key for \'dbname\' that names the database instance');
+        $this->expectExceptionMessage(
+            'Configuration array must have a key for \'dbname\' that names the database instance'
+        );
 
         $config = ['host' => 'localhost', 'active' => false];
         $this->mysqlFactoryMock->expects($this->once())

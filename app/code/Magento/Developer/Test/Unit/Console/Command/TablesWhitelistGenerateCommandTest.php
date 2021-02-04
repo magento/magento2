@@ -17,8 +17,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * Class TablesWhitelistGenerateCommandTest
- *
- * @package Magento\Developer\Test\Unit\Console\Command
+ * Test for TablesWhitelistGenerateCommand
  */
 class TablesWhitelistGenerateCommandTest extends TestCase
 {

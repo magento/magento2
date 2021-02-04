@@ -23,8 +23,8 @@ use Symfony\Component\Console\Input\InputArgument;
 
 /**
  * Class InputValidatorTest
- * @package Magento\Deploy\Test\Unit\Console
- *  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Test for InputValidator
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InputValidatorTest extends TestCase
 {
@@ -122,7 +122,10 @@ class InputValidatorTest extends TestCase
                 new ArrayInput([], $inputDefinition)
             );
         } catch (\Exception $e) {
-            $this->assertStringContainsString('--area (-a) and --exclude-area cannot be used at the same time', $e->getMessage());
+            $this->assertStringContainsString(
+                '--area (-a) and --exclude-area cannot be used at the same time',
+                $e->getMessage()
+            );
             $this->assertInstanceOf(InvalidArgumentException::class, $e);
         }
     }
@@ -146,7 +149,10 @@ class InputValidatorTest extends TestCase
                 new ArrayInput([], $inputDefinition)
             );
         } catch (\Exception $e) {
-            $this->assertStringContainsString('--theme (-t) and --exclude-theme cannot be used at the same time', $e->getMessage());
+            $this->assertStringContainsString(
+                '--theme (-t) and --exclude-theme cannot be used at the same time',
+                $e->getMessage()
+            );
             $this->assertInstanceOf(InvalidArgumentException::class, $e);
         }
     }
@@ -169,7 +175,10 @@ class InputValidatorTest extends TestCase
                 new ArrayInput([], $inputDefinition)
             );
         } catch (\Exception $e) {
-            $this->assertStringContainsString('--language (-l) and --exclude-language cannot be used at the same time', $e->getMessage());
+            $this->assertStringContainsString(
+                '--language (-l) and --exclude-language cannot be used at the same time',
+                $e->getMessage()
+            );
 
             $this->assertInstanceOf(InvalidArgumentException::class, $e);
         }
@@ -194,9 +203,11 @@ class InputValidatorTest extends TestCase
                 new ArrayInput([], $inputDefinition)
             );
         } catch (\Exception $e) {
-            $this->assertStringContainsString('Argument "' .
-                Options::CONTENT_VERSION
-                . '" has invalid value, content version should contain only characters, digits and dots', $e->getMessage());
+            $this->assertStringContainsString(
+                'Argument "' . Options::CONTENT_VERSION
+                . '" has invalid value, content version should contain only characters, digits and dots',
+                $e->getMessage()
+            );
 
             $this->assertInstanceOf(InvalidArgumentException::class, $e);
         }

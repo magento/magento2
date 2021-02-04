@@ -117,7 +117,10 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->assertStringContainsString('<input', $html);
         $this->assertStringContainsString('type="file"', $html);
         $this->assertStringContainsString('value="test_value"', $html);
-        $this->assertStringContainsString('<a href="http://localhost/media/test_value" onclick="imagePreview(\'_image\'); return false;"', $html);
+        $this->assertStringContainsString(
+            '<a href="http://localhost/media/test_value" onclick="imagePreview(\'_image\'); return false;"',
+            $html
+        );
         $this->assertStringContainsString('<input type="checkbox"', $html);
     }
 }

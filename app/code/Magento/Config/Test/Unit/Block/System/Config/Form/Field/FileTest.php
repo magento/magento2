@@ -71,6 +71,9 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $this->assertStringContainsString($this->testData['after_element_js'], $html);
         $this->assertStringContainsString('<label class="addafter" for="' . $expectedHtmlId . '"', $html);
         $this->assertStringContainsString($this->testData['after_element_html'], $html);
-        $this->assertStringContainsString('<input type="checkbox" name="' . $this->testData['name'] . '[delete]"', $html);
+        $this->assertStringContainsString(
+            '<input type="checkbox" name="' . $this->testData['name'] . '[delete]"',
+            $html
+        );
     }
 }

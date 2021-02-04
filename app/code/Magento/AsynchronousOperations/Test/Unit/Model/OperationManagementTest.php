@@ -7,6 +7,7 @@ namespace Magento\AsynchronousOperations\Test\Unit\Model;
 
 /**
  * Class OperationManagementTest
+ * Test for OperationManagement
  */
 class OperationManagementTest extends \PHPUnit\Framework\TestCase
 {

@@ -9,6 +9,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 
 /**
  * Class SpecialTest
+ * Test for Special
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SpecialTest extends \PHPUnit\Framework\TestCase
@@ -157,8 +158,14 @@ class SpecialTest extends \PHPUnit\Framework\TestCase
         unset($rssData['entries'][0]['description']);
         $this->assertEquals($data, $rssData);
         $this->assertStringContainsString('<a href="http://magento.com/product-name.html"><', $description);
-        $this->assertStringContainsString(sprintf('<p>Price:  Special Price: 10<br />Special Expires On: %s</p>', date('Y-m-d')), $description);
-        $this->assertStringContainsString('<img src="image_link" alt="" border="0" align="left" height="75" width="75" />', $description);
+        $this->assertStringContainsString(
+            sprintf('<p>Price:  Special Price: 10<br />Special Expires On: %s</p>', date('Y-m-d')),
+            $description
+        );
+        $this->assertStringContainsString(
+            '<img src="image_link" alt="" border="0" align="left" height="75" width="75" />',
+            $description
+        );
     }
 
     /**

@@ -10,7 +10,7 @@ use Magento\Payment\Block\Transparent\Iframe;
 
 /**
  * Class RedirectTest
- *
+ * Test for Redirect
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

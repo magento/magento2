@@ -14,7 +14,7 @@ use Magento\Framework\Setup\Patch\PatchInterface;
 
 /**
  * Class PatchHistoryTest
- * @package Magento\Framework\Setup\Test\Unit\Patch
+ * Test for PatchHistory
  */
 class PatchHistoryTest extends \PHPUnit\Framework\TestCase
 {

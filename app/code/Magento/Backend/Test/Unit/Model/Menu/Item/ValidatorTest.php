@@ -142,7 +142,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\InvalidArgumentException::class);
 
         foreach ($existedItems as $item) {
-            $item = array_merge($item, $this->_params);
+            $item = array_merge($item, $this->_params);//phpcs:ignore
             $this->_model->validate($item);
         }
 

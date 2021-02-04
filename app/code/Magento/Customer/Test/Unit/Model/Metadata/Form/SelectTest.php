@@ -148,13 +148,11 @@ class SelectTest extends AbstractFormTestCase
         )->method(
             'getOptions'
         )->willReturn(
-            
-                [
-                    $option1,
-                    $option2,
-                    $option3,
-                ]
-            
+            [
+                $option1,
+                $option2,
+                $option3,
+            ]
         );
         $select = $this->getClass($value);
         $actual = $select->outputValue();

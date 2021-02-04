@@ -10,7 +10,8 @@ use Magento\Deploy\Console\Command\SetModeCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * @package Magento\Deploy\Test\Unit\Console\Command
+ * Class SetModeCommandTest
+ * Test for SetModeCommandTest
  */
 class SetModeCommandTest extends \PHPUnit\Framework\TestCase
 {

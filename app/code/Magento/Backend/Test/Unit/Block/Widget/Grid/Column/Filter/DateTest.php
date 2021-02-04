@@ -113,7 +113,10 @@ class DateTest extends \PHPUnit\Framework\TestCase
         $this->model->setValue($value);
 
         $output = $this->model->getHtml();
-        $this->assertStringContainsString('id="' . $uniqueHash . '_from" value="' . $yesterday->getTimestamp(), $output);
+        $this->assertStringContainsString(
+            'id="' . $uniqueHash . '_from" value="' . $yesterday->getTimestamp(),
+            $output
+        );
         $this->assertStringContainsString('id="' . $uniqueHash . '_to" value="' . $tomorrow->getTimestamp(), $output);
     }
 

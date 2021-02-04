@@ -21,7 +21,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class GetNonceTest
- *
+ * Test for GetNonce
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GetNonceTest extends \PHPUnit\Framework\TestCase

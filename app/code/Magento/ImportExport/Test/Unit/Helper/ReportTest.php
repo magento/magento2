@@ -9,7 +9,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 
 /**
  * Class ReportTest
- *
+ * Test for Report
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ReportTest extends \PHPUnit\Framework\TestCase

@@ -20,9 +20,6 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  */
 class MysqlTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * Custom error handler message
-     */
     const CUSTOM_ERROR_HANDLER_MESSAGE = 'Custom error handler message';
 
     /**
@@ -268,7 +265,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         try {
             $this->_adapter->rollBack();
             throw new \Exception('Test Failed!');
-        } catch (\Exception $e) {
+        } catch (\Exception $e) {//phpcs:ignore
             $this->assertEquals(
                 AdapterInterface::ERROR_ASYMMETRIC_ROLLBACK_MESSAGE,
                 $e->getMessage()
@@ -284,7 +281,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         try {
             $this->_adapter->commit();
             throw new \Exception('Test Failed!');
-        } catch (\Exception $e) {
+        } catch (\Exception $e) {//phpcs:ignore
             $this->assertEquals(
                 AdapterInterface::ERROR_ASYMMETRIC_COMMIT_MESSAGE,
                 $e->getMessage()
@@ -396,7 +393,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
             $this->_adapter->rollBack();
             $this->_adapter->commit();
             throw new \Exception('Test Failed!');
-        } catch (\Exception $e) {
+        } catch (\Exception $e) {//phpcs:ignore
             $this->assertEquals(
                 AdapterInterface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE,
                 $e->getMessage()
@@ -419,7 +416,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
             $this->_adapter->rollBack();
             $this->_adapter->beginTransaction();
             throw new \Exception('Test Failed!');
-        } catch (\Exception $e) {
+        } catch (\Exception $e) {//phpcs:ignore
             $this->assertEquals(
                 AdapterInterface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE,
                 $e->getMessage()
@@ -567,7 +564,9 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     public function testConfigValidationByPortWithException()
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Port must be configured within host (like \'localhost:33390\') parameter, not within port');
+        $this->expectExceptionMessage(
+            'Port must be configured within host (like \'localhost:33390\') parameter, not within port'
+        );
 
         (new ObjectManager($this))->getObject(
             Mysql::class,
