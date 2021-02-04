@@ -117,22 +117,6 @@ class LocalFileAssertions extends Helper
     }
 
     /**
-     * Copy a file
-     *
-     * @param string $source
-     * @param string $destination
-     * @return void
-     *
-     * @throws \Magento\Framework\Exception\FileSystemException
-     */
-    public function copyFile($source, $destination): void
-    {
-        $sourceRealPath = $this->expandPath($source);
-        $destinationRealPath = $this->expandPath($destination);
-        $this->driver->copy($sourceRealPath, $destinationRealPath);
-    }
-
-    /**
      * Assert a file exists
      *
      * @param string $filePath
