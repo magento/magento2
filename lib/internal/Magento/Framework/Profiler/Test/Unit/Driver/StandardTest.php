@@ -32,6 +32,7 @@ class StandardTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test __construct method with no arguments
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testDefaultConstructor()
     {
@@ -88,6 +89,7 @@ class StandardTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test _initOutputs method
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testInitOutputs()
     {

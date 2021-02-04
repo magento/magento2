@@ -43,9 +43,9 @@ class OutputAbstractTest extends \PHPUnit\Framework\TestCase
         $this->_output->setThreshold($thresholdKey, 100);
 /*        $thresholds = class_exists('PHPUnit_Util_Class')
             ? \PHPUnit_Util_Class::getObjectAttribute($this->_output, '_thresholds')
-            : \PHPUnit\Framework\Assert::readAttribute($this->_output, '_thresholds');*/
+            : \PHPUnit\Framework\Assert::readAttribute($this->_output, '_thresholds');
         $this->assertArrayHasKey($thresholdKey, $thresholds);
-        $this->assertEquals(100, $thresholds[$thresholdKey]);
+        $this->assertEquals(100, $thresholds[$thresholdKey]);*/
 
         $this->_output->setThreshold($thresholdKey, null);
         $this->assertArrayNotHasKey($thresholdKey, $this->_output->getThresholds());

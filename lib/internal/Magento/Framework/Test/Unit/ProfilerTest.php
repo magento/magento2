@@ -35,6 +35,9 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
         //$this->assertAttributeEquals($expected, '_defaultTags', \Magento\Framework\Profiler::class);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function testAddTagFilter()
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
@@ -48,6 +51,9 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
         //$this->assertAttributeEquals(true, '_hasTagFilters', \Magento\Framework\Profiler::class);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function testAdd()
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');

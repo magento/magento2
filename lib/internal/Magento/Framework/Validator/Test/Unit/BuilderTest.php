@@ -163,6 +163,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      * @param string $alias
      * @param array $configuration
      * @param array $expected
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testAddConfiguration($constraints, $alias, $configuration, $expected)
     {
@@ -186,6 +187,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      * @param string $alias
      * @param array $configuration
      * @param array $expected
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testAddConfigurations($constraints, $alias, $configuration, $expected)
     {

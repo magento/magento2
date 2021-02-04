@@ -63,6 +63,9 @@ class XmlTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function testHandleErrors()
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');

@@ -227,6 +227,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Check builder configuration format
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testBuilderConfiguration()
     {

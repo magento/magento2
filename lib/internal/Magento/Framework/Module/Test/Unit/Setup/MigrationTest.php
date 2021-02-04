@@ -133,6 +133,7 @@ class MigrationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Framework\Module\Setup\Migration::appendClassAliasReplace
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testAppendClassAliasReplace()
     {

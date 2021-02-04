@@ -13,6 +13,7 @@ use function PHPUnit\Framework\once;
 
 /**
  * Class ProxyTesting
+ *
  * @package Magento\Framework\TestFramework\Unit\Helper
  */
 class ProxyTesting

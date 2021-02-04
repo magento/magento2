@@ -9,10 +9,7 @@ use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
 use Magento\Framework\DataObject;
 
 /**
- * Class ColumnTest
- * @package Magento\Backend\Test\Unit\Block\Widget\Grid
- *
- * @SuppressWarnings (PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ColumnTest extends \PHPUnit\Framework\TestCase
 {

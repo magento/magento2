@@ -128,6 +128,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test addValidator
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testAddValidator()
     {

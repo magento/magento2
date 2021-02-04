@@ -102,7 +102,7 @@ class ExcelTest extends \PHPUnit\Framework\TestCase
      */
     protected function _writeFile($callback = false)
     {
-        $name = md5(microtime());
+        $name = md5(microtime());//phpcs:ignore
         $file = TESTS_TEMP_DIR . '/' . $name . '.xml';
 
         $stream = new \Magento\Framework\Filesystem\File\Write(

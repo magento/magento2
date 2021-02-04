@@ -40,6 +40,9 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         //$this->assertAttributeEquals($this->_defaultOutputType, '_defaultOutputType', $this->_factory);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function testDefaultConstructor()
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');

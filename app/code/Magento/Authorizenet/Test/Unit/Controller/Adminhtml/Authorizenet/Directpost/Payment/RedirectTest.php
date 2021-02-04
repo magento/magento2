@@ -99,7 +99,7 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
     /**
      * @var Redirect
      */
-    private Redirect $controller;
+    private $controller;
 
     protected function setUp(): void
     {
