@@ -30,8 +30,19 @@ class AbstractType
             $typeInstance = $product->getTypeInstance();
             $typeInstance->setStoreFilter($product->getStoreId(), $product);
 
-            $result = count($typeInstance->getOptionsIds($product)) === 1
-                && $typeInstance->hasRequiredOptions($product);
+            $optionsIds = $typeInstance->getOptionsIds($product);
+            if (count($optionsIds) === 1 && $typeInstance->hasRequiredOptions($product)) {
+                $selectionsCollection = $typeInstance->getSelectionsCollection(
+                    $optionsIds,
+                    $product
+                );
+                $selections = $selectionsCollection->exportToArray();
+                if (count($selections) === 1) {
+                    $selection = array_pop($selections);
+                    $result = (int) $selection['is_default'] === 1
+                        && (int) $selection['selection_can_change_qty'] === 0;
+                }
+            }
         }
         return $result;
     }
