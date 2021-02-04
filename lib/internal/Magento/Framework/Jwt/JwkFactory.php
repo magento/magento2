@@ -202,7 +202,14 @@ class JwkFactory
      */
     public function createSignEs256(string $privateKey, ?string $passPhrase, ?string $kid = null): Jwk
     {
-        return $this->createSignEs(256, $privateKey, $passPhrase, $kid);
+        return $this->createPrivateEc(
+            $privateKey,
+            $passPhrase,
+            256,
+            Jwk::ALGORITHM_ES256,
+            Jwk::PUBLIC_KEY_USE_SIGNATURE,
+            $kid
+        );
     }
 
     /**
@@ -214,7 +221,13 @@ class JwkFactory
      */
     public function createVerifyEs256(string $publicKey, ?string $kid = null): Jwk
     {
-        return $this->createVerifyEs(256, $publicKey, $kid);
+        return $this->createPublicEc(
+            $publicKey,
+            256,
+            Jwk::ALGORITHM_ES256,
+            Jwk::PUBLIC_KEY_USE_SIGNATURE,
+            $kid
+        );
     }
 
     /**
@@ -227,7 +240,14 @@ class JwkFactory
      */
     public function createSignEs384(string $privateKey, ?string $passPhrase, ?string $kid = null): Jwk
     {
-        return $this->createSignEs(384, $privateKey, $passPhrase, $kid);
+        return $this->createPrivateEc(
+            $privateKey,
+            $passPhrase,
+            384,
+            Jwk::ALGORITHM_ES384,
+            Jwk::PUBLIC_KEY_USE_SIGNATURE,
+            $kid
+        );
     }
 
     /**
@@ -239,7 +259,13 @@ class JwkFactory
      */
     public function createVerifyEs384(string $publicKey, ?string $kid = null): Jwk
     {
-        return $this->createVerifyEs(384, $publicKey, $kid);
+        return $this->createPublicEc(
+            $publicKey,
+            384,
+            Jwk::ALGORITHM_ES384,
+            Jwk::PUBLIC_KEY_USE_SIGNATURE,
+            $kid
+        );
     }
 
     /**
@@ -252,7 +278,14 @@ class JwkFactory
      */
     public function createSignEs512(string $privateKey, ?string $passPhrase, ?string $kid = null): Jwk
     {
-        return $this->createSignEs(512, $privateKey, $passPhrase, $kid);
+        return $this->createPrivateEc(
+            $privateKey,
+            $passPhrase,
+            512,
+            Jwk::ALGORITHM_ES512,
+            Jwk::PUBLIC_KEY_USE_SIGNATURE,
+            $kid
+        );
     }
 
     /**
@@ -264,7 +297,13 @@ class JwkFactory
      */
     public function createVerifyEs512(string $publicKey, ?string $kid = null): Jwk
     {
-        return $this->createVerifyEs(512, $publicKey, $kid);
+        return $this->createPublicEc(
+            $publicKey,
+            512,
+            Jwk::ALGORITHM_ES512,
+            Jwk::PUBLIC_KEY_USE_SIGNATURE,
+            $kid
+        );
     }
 
     /**
@@ -487,6 +526,230 @@ class JwkFactory
         );
     }
 
+    /**
+     * Create JWK to use ECDH-ES algorithm with EC key to encrypt JWE.
+     *
+     * @param string $publicEcKey
+     * @param string|null $kid JWK ID.
+     * @return Jwk
+     */
+    public function createEncryptEcdhEsWithEc(string $publicEcKey, ?string $kid = null): Jwk
+    {
+        return $this->createPublicEc(
+            $publicEcKey,
+            null,
+            Jwk::ALGORITHM_ECDH_ES,
+            Jwk::PUBLIC_KEY_USE_ENCRYPTION,
+            $kid
+        );
+    }
+
+    /**
+     * Create JWK to use ECDH-ES algorithm with EC key to decrypt JWE.
+     *
+     * @param string $privateEcKey
+     * @param string|null $passPhrase
+     * @param string|null $kid JWK ID.
+     * @return Jwk
+     */
+    public function createDecryptEcdhEsWithEc(string $privateEcKey, ?string $passPhrase, ?string $kid = null): Jwk
+    {
+        return $this->createPrivateEc(
+            $privateEcKey,
+            $passPhrase,
+            null,
+            Jwk::ALGORITHM_ECDH_ES,
+            Jwk::PUBLIC_KEY_USE_ENCRYPTION,
+            $kid
+        );
+    }
+
+    /**
+     * Create JWK to use ECDH-ES+A128KW algorithm with EC key to encrypt JWE.
+     *
+     * @param string $publicEcKey
+     * @param string|null $kid JWK ID.
+     * @return Jwk
+     */
+    public function createEncryptEcdhEsA128kwWithEc(string $publicEcKey, ?string $kid = null): Jwk
+    {
+        return $this->createPublicEc(
+            $publicEcKey,
+            null,
+            Jwk::ALGORITHM_ECDH_ES_A128KW,
+            Jwk::PUBLIC_KEY_USE_ENCRYPTION,
+            $kid
+        );
+    }
+
+    /**
+     * Create JWK to use ECDH-ES+A128KW algorithm with EC key to decrypt JWE.
+     *
+     * @param string $privateEcKey
+     * @param string|null $passPhrase
+     * @param string|null $kid JWK ID.
+     * @return Jwk
+     */
+    public function createDecryptEcdhEsA128kwWithEc(string $privateEcKey, ?string $passPhrase, ?string $kid = null): Jwk
+    {
+        return $this->createPrivateEc(
+            $privateEcKey,
+            $passPhrase,
+            null,
+            Jwk::ALGORITHM_ECDH_ES_A128KW,
+            Jwk::PUBLIC_KEY_USE_ENCRYPTION,
+            $kid
+        );
+    }
+
+    /**
+     * Create JWK to use ECDH-ES+A192KW algorithm with EC key to encrypt JWE.
+     *
+     * @param string $publicEcKey
+     * @param string|null $kid JWK ID.
+     * @return Jwk
+     */
+    public function createEncryptEcdhEsA192kwWithEc(string $publicEcKey, ?string $kid = null): Jwk
+    {
+        return $this->createPublicEc(
+            $publicEcKey,
+            null,
+            Jwk::ALGORITHM_ECDH_ES_A192KW,
+            Jwk::PUBLIC_KEY_USE_ENCRYPTION,
+            $kid
+        );
+    }
+
+    /**
+     * Create JWK to use ECDH-ES+A192KW algorithm with EC key to decrypt JWE.
+     *
+     * @param string $privateEcKey
+     * @param string|null $passPhrase
+     * @param string|null $kid JWK ID.
+     * @return Jwk
+     */
+    public function createDecryptEcdhEsA192kwWithEc(string $privateEcKey, ?string $passPhrase, ?string $kid = null): Jwk
+    {
+        return $this->createPrivateEc(
+            $privateEcKey,
+            $passPhrase,
+            null,
+            Jwk::ALGORITHM_ECDH_ES_A192KW,
+            Jwk::PUBLIC_KEY_USE_ENCRYPTION,
+            $kid
+        );
+    }
+
+    /**
+     * Create JWK to use ECDH-ES+A256KW algorithm with EC key to encrypt JWE.
+     *
+     * @param string $publicEcKey
+     * @param string|null $kid JWK ID.
+     * @return Jwk
+     */
+    public function createEncryptEcdhEsA256kwWithEc(string $publicEcKey, ?string $kid = null): Jwk
+    {
+        return $this->createPublicEc(
+            $publicEcKey,
+            null,
+            Jwk::ALGORITHM_ECDH_ES_A256KW,
+            Jwk::PUBLIC_KEY_USE_ENCRYPTION,
+            $kid
+        );
+    }
+
+    /**
+     * Create JWK to use ECDH-ES+A256KW algorithm with EC key to decrypt JWE.
+     *
+     * @param string $privateEcKey
+     * @param string|null $passPhrase
+     * @param string|null $kid JWK ID.
+     * @return Jwk
+     */
+    public function createDecryptEcdhEsA256kwWithEc(string $privateEcKey, ?string $passPhrase, ?string $kid = null): Jwk
+    {
+        return $this->createPrivateEc(
+            $privateEcKey,
+            $passPhrase,
+            null,
+            Jwk::ALGORITHM_ECDH_ES_A256KW,
+            Jwk::PUBLIC_KEY_USE_ENCRYPTION,
+            $kid
+        );
+    }
+
+    /**
+     * Create JWK to encrypt/decrypt JWEs with A128GCMKW algorithm.
+     *
+     * @param string $key
+     * @param string|null $kid
+     * @return Jwk
+     */
+    public function createA128Gcmkw(string $key, ?string $kid = null): Jwk
+    {
+        return $this->createOct($key, Jwk::PUBLIC_KEY_USE_ENCRYPTION, Jwk::ALGORITHM_A128GCMKW, $kid);
+    }
+
+    /**
+     * Create JWK to encrypt/decrypt JWEs with A192GCMKW algorithm.
+     *
+     * @param string $key
+     * @param string|null $kid
+     * @return Jwk
+     */
+    public function createA192Gcmkw(string $key, ?string $kid = null): Jwk
+    {
+        return $this->createOct($key, Jwk::PUBLIC_KEY_USE_ENCRYPTION, Jwk::ALGORITHM_A192GCMKW, $kid);
+    }
+
+    /**
+     * Create JWK to encrypt/decrypt JWEs with A256GCMKW algorithm.
+     *
+     * @param string $key
+     * @param string|null $kid
+     * @return Jwk
+     */
+    public function createA256Gcmkw(string $key, ?string $kid = null): Jwk
+    {
+        return $this->createOct($key, Jwk::PUBLIC_KEY_USE_ENCRYPTION, Jwk::ALGORITHM_A256GCMKW, $kid);
+    }
+
+    /**
+     * Create JWK to encrypt/decrypt JWEs with PBES2-HS256+A128KW algorithm.
+     *
+     * @param string $password
+     * @param string|null $kid
+     * @return Jwk
+     */
+    public function createPbes2Hs256A128kw(string $password, ?string $kid = null): Jwk
+    {
+        return $this->createOct($password, Jwk::PUBLIC_KEY_USE_ENCRYPTION, Jwk::ALGORITHM_PBES2_HS256_A128KW, $kid);
+    }
+
+    /**
+     * Create JWK to encrypt/decrypt JWEs with PBES2-HS384+A192KW algorithm.
+     *
+     * @param string $password
+     * @param string|null $kid
+     * @return Jwk
+     */
+    public function createPbes2Hs384A192kw(string $password, ?string $kid = null): Jwk
+    {
+        return $this->createOct($password, Jwk::PUBLIC_KEY_USE_ENCRYPTION, Jwk::ALGORITHM_PBES2_HS384_A192KW, $kid);
+    }
+
+    /**
+     * Create JWK to encrypt/decrypt JWEs with PBES2-HS512+A256KW algorithm.
+     *
+     * @param string $password
+     * @param string|null $kid
+     * @return Jwk
+     */
+    public function createPbes2Hs512A256kw(string $password, ?string $kid = null): Jwk
+    {
+        return $this->createOct($password, Jwk::PUBLIC_KEY_USE_ENCRYPTION, Jwk::ALGORITHM_PBES2_HS512_A256KW, $kid);
+    }
+
     private function createOct(string $key, string $use, string $algo, ?string $kid): Jwk
     {
         if (strlen($key) < 2048) {
@@ -573,16 +836,24 @@ class JwkFactory
         );
     }
 
-    private function createSignEs(int $bits, string $key, ?string $pass, ?string $kid): Jwk
-    {
+    private function createPrivateEc(
+        string $key,
+        ?string $pass,
+        ?int $validateCurveBits,
+        string $algorithm,
+        string $use,
+        ?string $kid
+    ): Jwk {
         $resource = openssl_get_privatekey($key, (string)$pass);
         $keyData = openssl_pkey_get_details($resource)['ec'];
         openssl_free_key($resource);
         if (!array_key_exists($keyData['curve_oid'], self::EC_CURVE_MAP)) {
             throw new \RuntimeException('Unsupported EC curve');
         }
-        if ($bits !== self::EC_CURVE_MAP[$keyData['curve_oid']]['bits']) {
-            throw new \RuntimeException('The key cannot be used with SHA-' .$bits .' hashing algorithm');
+        if ($validateCurveBits && $validateCurveBits !== self::EC_CURVE_MAP[$keyData['curve_oid']]['bits']) {
+            throw new \RuntimeException(
+                'The key cannot be used with SHA-' .$validateCurveBits .' hashing algorithm'
+            );
         }
 
         return new Jwk(
@@ -593,9 +864,9 @@ class JwkFactory
                 'y' => self::base64Encode($keyData['y']),
                 'crv' => self::EC_CURVE_MAP[$keyData['curve_oid']]['name']
             ],
-            Jwk::PUBLIC_KEY_USE_SIGNATURE,
+            $use,
             null,
-            'ES' .$bits,
+            $algorithm,
             null,
             null,
             null,
@@ -604,16 +875,23 @@ class JwkFactory
         );
     }
 
-    private function createVerifyEs(int $bits, string $key, ?string $kid): Jwk
-    {
+    private function createPublicEc(
+        string $key,
+        ?int $validateCurveBits,
+        string $algorithm,
+        string $use,
+        ?string $kid
+    ): Jwk {
         $resource = openssl_get_publickey($key);
         $keyData = openssl_pkey_get_details($resource)['ec'];
         openssl_free_key($resource);
         if (!array_key_exists($keyData['curve_oid'], self::EC_CURVE_MAP)) {
             throw new \RuntimeException('Unsupported EC curve');
         }
-        if ($bits !== self::EC_CURVE_MAP[$keyData['curve_oid']]['bits']) {
-            throw new \RuntimeException('The key cannot be used with SHA-' .$bits .' hashing algorithm');
+        if ($validateCurveBits && $validateCurveBits !== self::EC_CURVE_MAP[$keyData['curve_oid']]['bits']) {
+            throw new \RuntimeException(
+                'The key cannot be used with SHA-' .$validateCurveBits .' hashing algorithm'
+            );
         }
 
         return new Jwk(
@@ -623,9 +901,9 @@ class JwkFactory
                 'y' => self::base64Encode($keyData['y']),
                 'crv' => self::EC_CURVE_MAP[$keyData['curve_oid']]['name']
             ],
-            Jwk::PUBLIC_KEY_USE_SIGNATURE,
+            $use,
             null,
-            'ES' .$bits,
+            $algorithm,
             null,
             null,
             null,

@@ -78,6 +78,9 @@ class JweManager
 
         $sharedProtected = $this->extractHeaderData($jwe->getProtectedHeader());
         $sharedProtected['enc'] = $encryptionSettings->getContentEncryptionAlgorithm();
+        if ($payload->getContentType()) {
+            $sharedProtected['cty'] = $payload->getContentType();
+        }
         if (!$jwe->getPerRecipientUnprotectedHeaders()) {
             $sharedProtected['alg'] = $encryptionSettings->getAlgorithmName();
         }

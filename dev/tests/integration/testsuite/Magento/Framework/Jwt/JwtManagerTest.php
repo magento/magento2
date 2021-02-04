@@ -546,6 +546,136 @@ class JwtManagerTest extends TestCase
                         JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128_HS256
                     )
                 ]
+            ],
+            'jwe-ECDH-ES-with-EC' => [
+                $flatJwe,
+                new JweEncryptionJwks(
+                    $jwkFactory->createEncryptEcdhEsWithEc($ecKeys[256][1]),
+                    JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128_HS256
+                ),
+                [
+                    new JweEncryptionJwks(
+                        $jwkFactory->createDecryptEcdhEsWithEc($ecKeys[256][0], 'pass'),
+                        JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128_HS256
+                    )
+                ]
+            ],
+            'jwe-ECDH-ES-A128-with-EC' => [
+                $flatJwe,
+                new JweEncryptionJwks(
+                    $jwkFactory->createEncryptEcdhEsA128kwWithEc($ecKeys[256][1]),
+                    JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128_HS256
+                ),
+                [
+                    new JweEncryptionJwks(
+                        $jwkFactory->createDecryptEcdhEsA128kwWithEc($ecKeys[256][0], 'pass'),
+                        JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128_HS256
+                    )
+                ]
+            ],
+            'jwe-ECDH-ES-A192-with-EC' => [
+                $flatJwe,
+                new JweEncryptionJwks(
+                    $jwkFactory->createEncryptEcdhEsA192kwWithEc($ecKeys[256][1]),
+                    JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128_HS256
+                ),
+                [
+                    new JweEncryptionJwks(
+                        $jwkFactory->createDecryptEcdhEsA192kwWithEc($ecKeys[256][0], 'pass'),
+                        JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128_HS256
+                    )
+                ]
+            ],
+            'jwe-ECDH-ES-A256-with-EC' => [
+                $flatJwe,
+                new JweEncryptionJwks(
+                    $jwkFactory->createEncryptEcdhEsA256kwWithEc($ecKeys[256][1]),
+                    JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128_HS256
+                ),
+                [
+                    new JweEncryptionJwks(
+                        $jwkFactory->createDecryptEcdhEsA256kwWithEc($ecKeys[256][0], 'pass'),
+                        JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128_HS256
+                    )
+                ]
+            ],
+            'jwe-A128GCMKW' => [
+                $flatJwe,
+                new JweEncryptionJwks(
+                    $jwkFactory->createA128Gcmkw($sharedSecret),
+                    JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128GCM
+                ),
+                [
+                    new JweEncryptionJwks(
+                        $jwkFactory->createA128Gcmkw($sharedSecret),
+                        JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128GCM
+                    )
+                ]
+            ],
+            'jwe-A192GCMKW' => [
+                $flatJwe,
+                new JweEncryptionJwks(
+                    $jwkFactory->createA192Gcmkw($sharedSecret),
+                    JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128GCM
+                ),
+                [
+                    new JweEncryptionJwks(
+                        $jwkFactory->createA192Gcmkw($sharedSecret),
+                        JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128GCM
+                    )
+                ]
+            ],
+            'jwe-A256GCMKW' => [
+                $flatJwe,
+                new JweEncryptionJwks(
+                    $jwkFactory->createA256Gcmkw($sharedSecret),
+                    JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128GCM
+                ),
+                [
+                    new JweEncryptionJwks(
+                        $jwkFactory->createA256Gcmkw($sharedSecret),
+                        JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128GCM
+                    )
+                ]
+            ],
+            'jwe-PBES2-HS256+A128KW' => [
+                $flatJwe,
+                new JweEncryptionJwks(
+                    $jwkFactory->createPbes2Hs256A128kw($sharedSecret),
+                    JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128GCM
+                ),
+                [
+                    new JweEncryptionJwks(
+                        $jwkFactory->createPbes2Hs256A128kw($sharedSecret),
+                        JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128GCM
+                    )
+                ]
+            ],
+            'jwe-PBES2-HS384+A192KW' => [
+                $flatJwe,
+                new JweEncryptionJwks(
+                    $jwkFactory->createPbes2Hs384A192kw($sharedSecret),
+                    JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128GCM
+                ),
+                [
+                    new JweEncryptionJwks(
+                        $jwkFactory->createPbes2Hs384A192kw($sharedSecret),
+                        JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128GCM
+                    )
+                ]
+            ],
+            'jwe-PBES2-HS512+A256KW' => [
+                $flatJwe,
+                new JweEncryptionJwks(
+                    $jwkFactory->createPbes2Hs512A256kw($sharedSecret),
+                    JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128GCM
+                ),
+                [
+                    new JweEncryptionJwks(
+                        $jwkFactory->createPbes2Hs512A256kw($sharedSecret),
+                        JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128GCM
+                    )
+                ]
             ]
         ];
     }
