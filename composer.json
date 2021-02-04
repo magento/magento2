@@ -81,9 +81,8 @@
         "tubalmartin/cssmin": "4.1.1",
         "webonyx/graphql-php": "^0.13.8",
         "wikimedia/less.php": "~1.8.0",
-        "league/flysystem": "^1.0",
-        "league/flysystem-aws-s3-v3": "^1.0",
-        "league/flysystem-cached-adapter": "^1.0"
+        "league/flysystem": "^2.0",
+        "league/flysystem-aws-s3-v3": "^2.0"
     },
     "require-dev": {
         "allure-framework/allure-phpunit": "~1.2.0",
@@ -91,7 +90,7 @@
         "friendsofphp/php-cs-fixer": "~2.16.0",
         "lusitanian/oauth": "~0.8.10",
         "magento/magento-coding-standard": "*",
-        "magento/magento2-functional-testing-framework": "^3.0",
+        "magento/magento2-functional-testing-framework": "dev-develop",
         "pdepend/pdepend": "~2.7.1",
         "phpcompatibility/php-compatibility": "^9.3",
         "phpmd/phpmd": "^2.8.0",
