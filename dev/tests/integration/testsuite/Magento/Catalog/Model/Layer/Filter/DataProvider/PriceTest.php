@@ -142,7 +142,7 @@ class PriceTest extends TestCase
         $filter = explode('-', $priceFilters[0]);
         $this->model->setInterval($filter);
         $priorFilters = $this->model->getPriorFilters($priceFilters);
-        if ($priorFilters) {
+        if (!empty($priorFilters)) {
             $this->model->setPriorIntervals($priorFilters);
         }
 
