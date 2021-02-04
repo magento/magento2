@@ -8,19 +8,19 @@ declare(strict_types=1);
 namespace Magento\Catalog\Ui\DataProvider\Product\Related;
 
 /**
- * Checks up-sell products data provider
+ * Checks cross-sell products data provider
  *
- * @see \Magento\Catalog\Ui\DataProvider\Product\Related\UpSellDataProvider
+ * @see \Magento\Catalog\Ui\DataProvider\Product\Related\CrossSellDataProvider
  *
  * @magentoAppArea adminhtml
  * @magentoDbIsolation disabled
  */
-class UpSellDataProviderTest extends AbstractRelationsDataProviderTest
+class CrossSellDataProviderTest extends AbstractRelationsDataProviderTest
 {
     /**
      * @dataProvider productDataProvider
      *
-     * @magentoDataFixture Magento/Catalog/_files/products_upsell.php
+     * @magentoDataFixture Magento/Catalog/_files/products_crosssell.php
      * @magentoDataFixture Magento/Catalog/_files/product_with_price_on_second_website.php
      *
      * @param string $storeCode
@@ -29,8 +29,8 @@ class UpSellDataProviderTest extends AbstractRelationsDataProviderTest
      */
     public function testGetData(string $storeCode, float $price): void
     {
-        $this->prepareRequest('simple_with_upsell', 'simple', $storeCode);
-        $result = $this->getComponentProvidedData('upsell_product_listing')['items'];
+        $this->prepareRequest('simple_with_cross', 'simple', $storeCode);
+        $result = $this->getComponentProvidedData('crosssell_product_listing')['items'];
         $this->assertResult(1, ['sku' => 'second-website-price-product', 'price' => $price], $result);
     }
 
