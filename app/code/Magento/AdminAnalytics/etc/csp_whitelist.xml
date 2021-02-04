@@ -11,6 +11,29 @@
             <policy id="script-src">
                 <values>
                     <value id="adobedtm" type="host">assets.adobedtm.com</value>
+                    <value id="aptrinsic" type="host">*.aptrinsic.com</value>
+                </values>
+            </policy>
+            <policy id="style-src">
+                <values>
+                    <value id="aptrinsic" type="host">*.aptrinsic.com</value>
+                    <value id="fonts_googleapis" type="host">fonts.googleapis.com</value>
+                </values>
+            </policy>
+            <policy id="img-src">
+                <values>
+                    <value id="aptrinsic" type="host">*.aptrinsic.com</value>
+                    <value id="storage_googleapis" type="host">storage.googleapis.com</value>
+                </values>
+            </policy>
+            <policy id="connect-src">
+                <values>
+                    <value id="aptrinsic" type="host">*.aptrinsic.com</value>
+                </values>
+            </policy>
+            <policy id="font-src">
+                <values>
+                    <value id="fonts_gstatic" type="host">fonts.gstatic.com</value>
                 </values>
             </policy>
         </policies>
