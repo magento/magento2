@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-//@codingStandardsIgnoreFile
+
 /** @var \Magento\Customer\Model\Attribute $model */
 $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Attribute::class);
 /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */

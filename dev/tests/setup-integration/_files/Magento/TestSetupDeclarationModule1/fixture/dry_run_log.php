@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// @codingStandardsIgnoreFile
+
 return ['CREATE TABLE `reference_table` (
 `tinyint_ref` tinyint  NOT NULL  AUTO_INCREMENT , 
 `tinyint_without_padding` tinyint  NOT NULL DEFAULT 0  , 

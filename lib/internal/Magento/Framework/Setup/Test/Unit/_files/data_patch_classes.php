@@ -5,8 +5,6 @@
  */
 declare(strict_types=1);
 
-// @codingStandardsIgnoreFile - as of namespace absence
-
 class OtherDataPatch implements \Magento\Framework\Setup\Patch\DataPatchInterface
 {
     /**
