@@ -184,10 +184,6 @@ class Bundle extends AbstractView
                 $configValue = $preConfiguredValues->getData('bundle_option/' . $optionId);
                 if ($configValue) {
                     $defaultValues[$optionId] = $configValue;
-                    $configQty = $preConfiguredValues->getData('bundle_option_qty/' . $optionId);
-                    if ($configQty) {
-                        $options[$optionId]['selections'][$configValue]['qty'] = $configQty;
-                    }
                 }
                 $options = $this->processOptions($optionId, $options, $preConfiguredValues);
             }
