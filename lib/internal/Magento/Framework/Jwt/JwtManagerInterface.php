@@ -34,4 +34,12 @@ interface JwtManagerInterface
      * @throws JwtException
      */
     public function read(string $token, array $acceptableEncryption): JwtInterface;
+
+    /**
+     * Read unprotected headers.
+     *
+     * @param string $token
+     * @return HeaderInterface[]
+     */
+    public function readHeaders(string $token): array;
 }

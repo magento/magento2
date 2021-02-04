@@ -17,10 +17,12 @@ use Magento\Framework\Jwt\Exception\JwtException;
 use Magento\Framework\Jwt\Exception\MalformedTokenException;
 use Magento\Framework\Jwt\HeaderInterface;
 use Magento\Framework\Jwt\Jwk;
+use Magento\Framework\Jwt\Jws\JwsHeader;
 use Magento\Framework\Jwt\Jws\JwsInterface;
 use Magento\Framework\Jwt\Jws\JwsSignatureJwks;
 use Jose\Component\Core\JWK as AdapterJwk;
 use Jose\Component\Core\JWKSet as AdapterJwkSet;
+use Magento\JwtFrameworkAdapter\Model\Data\Header;
 
 /**
  * Works with JWS.
@@ -165,6 +167,42 @@ class JwsManager
             $jws->getPayload(),
             $headers->getHeader() ? $headers->getHeader() : null
         );
+    }
+
+    /**
+     * Read JWS headers.
+     *
+     * @param string $token
+     * @return HeaderInterface[]
+     */
+    public function readHeaders(string $token): array
+    {
+        try {
+            $jws = $this->jwsSerializer->unserialize($token);
+        } catch (\Throwable $exception) {
+            throw new JwtException('Failed to read JWS headers');
+        }
+        $headers = [];
+        $headersValues = [];
+        foreach ($jws->getSignatures() as $signature) {
+            if ($signature->getProtectedHeader()) {
+                $headersValues[] = $signature->getProtectedHeader();
+            }
+            if ($signature->getHeader()) {
+                $headersValues[] = $signature->getHeader();
+            }
+        }
+        foreach ($headersValues as $headerValues) {
+            $params = [];
+            foreach ($headerValues as $header => $value) {
+                $params[] = new Header($header, $value, null);
+            }
+            if ($params) {
+                $headers[] = new JwsHeader($params);
+            }
+        }
+
+        return $headers;
     }
 
     /**

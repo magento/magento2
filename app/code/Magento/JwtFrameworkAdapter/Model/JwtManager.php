@@ -12,6 +12,7 @@ use Magento\Framework\Jwt\EncryptionSettingsInterface;
 use Magento\Framework\Jwt\Exception\EncryptionException;
 use Magento\Framework\Jwt\Exception\JwtException;
 use Magento\Framework\Jwt\Exception\MalformedTokenException;
+use Magento\Framework\Jwt\HeaderInterface;
 use Magento\Framework\Jwt\Jwe\JweEncryptionSettingsInterface;
 use Magento\Framework\Jwt\Jwe\JweInterface;
 use Magento\Framework\Jwt\Jwk;
@@ -157,6 +158,18 @@ class JwtManager implements JwtManagerInterface
             throw $lastException;
         }
         return $read;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function readHeaders(string $token): array
+    {
+        try {
+            return $this->jwsManager->readHeaders($token);
+        } catch (JwtException $exception) {
+            return $this->jweManager->readHeaders($token);
+        }
     }
 
     private function detectJwtType(EncryptionSettingsInterface $encryptionSettings): int

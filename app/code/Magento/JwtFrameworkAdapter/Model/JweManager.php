@@ -17,11 +17,14 @@ use Magento\Framework\Jwt\Exception\JwtException;
 use Magento\Framework\Jwt\Exception\MalformedTokenException;
 use Magento\Framework\Jwt\HeaderInterface;
 use Magento\Framework\Jwt\Jwe\JweEncryptionJwks;
+use Magento\Framework\Jwt\Jwe\JweHeader;
 use Magento\Framework\Jwt\Jwe\JweInterface;
 use Jose\Component\Core\JWK as AdapterJwk;
 use Jose\Component\Core\JWKSet as AdapterJwkSet;
 use Magento\Framework\Jwt\Jwk;
+use Magento\Framework\Jwt\Jws\JwsHeader;
 use Magento\Framework\Jwt\Payload\ClaimsPayloadInterface;
+use Magento\JwtFrameworkAdapter\Model\Data\Header;
 
 /**
  * Works with JWE
@@ -168,6 +171,45 @@ class JweManager
             $jwe->getSharedHeader() ? $jwe->getSharedHeader() : null,
             $recipientHeader ? $recipientHeader : null
         );
+    }
+
+    /**
+     * Read JWS headers.
+     *
+     * @param string $token
+     * @return HeaderInterface[]
+     */
+    public function readHeaders(string $token): array
+    {
+        try {
+            $jwe = $this->serializer->unserialize($token);
+        } catch (\Throwable $exception) {
+            throw new JwtException('Failed to read JWE headers');
+        }
+        $headers = [];
+        $headersValues = [];
+        if ($jwe->getSharedHeader()) {
+            $headersValues[] = $jwe->getSharedHeader();
+        }
+        if ($jwe->getSharedProtectedHeader()) {
+            $headersValues[] = $jwe->getSharedProtectedHeader();
+        }
+        foreach ($jwe->getRecipients() as $recipient) {
+            if ($recipient->getHeader()) {
+                $headersValues[] = $recipient->getHeader();
+            }
+        }
+        foreach ($headersValues as $headerValues) {
+            $params = [];
+            foreach ($headerValues as $header => $value) {
+                $params[] = new Header($header, $value, null);
+            }
+            if ($params) {
+                $headers[] = new JweHeader($params);
+            }
+        }
+
+        return $headers;
     }
 
     private function validateJweSettings(JweInterface $jwe, EncryptionSettingsInterface $encryptionSettings): void

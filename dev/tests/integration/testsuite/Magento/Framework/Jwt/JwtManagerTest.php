@@ -715,6 +715,237 @@ class JwtManagerTest extends TestCase
         ];
     }
 
+    /**
+     * Test reading headers.
+     *
+     * @param JwtInterface $tokenData
+     * @param EncryptionSettingsInterface $settings
+     * @return void
+     *
+     * @dataProvider getJwtsForHeaders
+     */
+    public function testReadHeaders(JwtInterface $tokenData, EncryptionSettingsInterface $settings): void
+    {
+        $token = $this->manager->create($tokenData, $settings);
+        $headers = $this->manager->readHeaders($token);
+        /** @var HeaderInterface[] $expectedHeaders */
+        $expectedHeaders = [];
+        if ($tokenData instanceof JwsInterface) {
+            $expectedHeaders = $tokenData->getProtectedHeaders();
+            if ($tokenData->getUnprotectedHeaders()) {
+                $expectedHeaders = array_merge($expectedHeaders, $tokenData->getUnprotectedHeaders());
+            }
+        } elseif ($tokenData instanceof JweInterface) {
+            $expectedHeaders[] = $tokenData->getProtectedHeader();
+            if ($tokenData->getSharedUnprotectedHeader()) {
+                $expectedHeaders[] = $tokenData->getSharedUnprotectedHeader();
+            }
+            if ($tokenData->getPerRecipientUnprotectedHeaders()) {
+                $expectedHeaders = array_merge($expectedHeaders, $tokenData->getPerRecipientUnprotectedHeaders());
+            }
+        } elseif ($tokenData instanceof UnsecuredJwtInterface) {
+            $expectedHeaders = $tokenData->getProtectedHeaders();
+            if ($tokenData->getUnprotectedHeaders()) {
+                $expectedHeaders = array_merge($expectedHeaders, $tokenData->getUnprotectedHeaders());
+            }
+        }
+
+        foreach ($headers as $header) {
+            $this->verifyAgainstHeaders($expectedHeaders, $header);
+        }
+    }
+
+    public function getJwtsForHeaders(): array
+    {
+
+        /** @var JwkFactory $jwkFactory */
+        $jwkFactory = Bootstrap::getObjectManager()->get(JwkFactory::class);
+
+        $flatJws = new Jws(
+            [
+                new JwsHeader(
+                    [
+                        new PrivateHeaderParameter('custom-header', 'value'),
+                        new PrivateHeaderParameter('another-custom-header', 'value2')
+                    ]
+                )
+            ],
+            new ClaimsPayload(
+                [
+                    new PrivateClaim('custom-claim', 'value'),
+                    new PrivateClaim('custom-claim2', 'value2'),
+                    new PrivateClaim('custom-claim3', 'value3'),
+                    new IssuedAt(new \DateTimeImmutable()),
+                    new Issuer('magento.com')
+                ]
+            ),
+            null
+        );
+        $flatJsonJws = new Jws(
+            [
+                new JwsHeader(
+                    [
+                        new PrivateHeaderParameter('custom-header', 'value'),
+                        new Critical(['magento'])
+                    ]
+                )
+            ],
+            new ClaimsPayload(
+                [
+                    new PrivateClaim('custom-claim', 'value'),
+                    new PrivateClaim('custom-claim2', 'value2'),
+                    new ExpirationTime(new \DateTimeImmutable())
+                ]
+            ),
+            [
+                new JwsHeader(
+                    [
+                        new PublicHeaderParameter('public-header', 'magento', 'public-value')
+                    ]
+                )
+            ]
+        );
+        $jsonJws = new Jws(
+            [
+                new JwsHeader(
+                    [
+                        new PrivateHeaderParameter('test', true),
+                        new PublicHeaderParameter('test2', 'magento', 'value')
+                    ]
+                ),
+                new JwsHeader(
+                    [
+                        new PrivateHeaderParameter('test3', true),
+                        new PublicHeaderParameter('test4', 'magento', 'value-another')
+                    ]
+                )
+            ],
+            new ClaimsPayload([
+                new Issuer('magento.com'),
+                new JwtId(),
+                new Subject('stuff')
+            ]),
+            [
+                new JwsHeader([new PrivateHeaderParameter('public', 'header1')]),
+                new JwsHeader([new PrivateHeaderParameter('public2', 'header')])
+            ]
+        );
+        $flatJwe = new Jwe(
+            new JweHeader(
+                [
+                    new PrivateHeaderParameter('test', true),
+                    new PublicHeaderParameter('test2', 'magento', 'value')
+                ]
+            ),
+            null,
+            null,
+            new ClaimsPayload(
+                [
+                    new PrivateClaim('custom-claim', 'value'),
+                    new PrivateClaim('custom-claim2', 'value2', true),
+                    new PrivateClaim('custom-claim3', 'value3'),
+                    new IssuedAt(new \DateTimeImmutable()),
+                    new Issuer('magento.com')
+                ]
+            )
+        );
+        $jsonFlatJwe = new Jwe(
+            new JweHeader(
+                [
+                    new PrivateHeaderParameter('test', true),
+                    new PublicHeaderParameter('test2', 'magento', 'value')
+                ]
+            ),
+            null,
+            [
+                new JweHeader(
+                    [
+                        new PrivateHeaderParameter('mage', 'test')
+                    ]
+                )
+            ],
+            new ClaimsPayload(
+                [
+                    new PrivateClaim('custom-claim', 'value'),
+                    new PrivateClaim('custom-claim2', 'value2', true),
+                    new PrivateClaim('custom-claim3', 'value3'),
+                    new IssuedAt(new \DateTimeImmutable()),
+                    new Issuer('magento.com')
+                ]
+            )
+        );
+        $jsonJwe = new Jwe(
+            new JweHeader(
+                [
+                    new PrivateHeaderParameter('test', true),
+                    new PublicHeaderParameter('test2', 'magento', 'value')
+                ]
+            ),
+            new JweHeader(
+                [
+                    new PrivateHeaderParameter('mage', 'test')
+                ]
+            ),
+            [
+                new JweHeader([new PrivateHeaderParameter('tst', 2)]),
+                new JweHeader([new PrivateHeaderParameter('test2', 3)])
+            ],
+            new ClaimsPayload(
+                [
+                    new PrivateClaim('custom-claim', 'value'),
+                    new PrivateClaim('custom-claim2', 'value2', true),
+                    new PrivateClaim('custom-claim3', 'value3'),
+                    new IssuedAt(new \DateTimeImmutable()),
+                    new Issuer('magento.com')
+                ]
+            )
+        );
+        $flatUnsecured = new UnsecuredJwt(
+            [
+                new JwsHeader(
+                    [
+                        new PrivateHeaderParameter('test', true),
+                        new PublicHeaderParameter('test2', 'magento', 'value')
+                    ]
+                )
+            ],
+            new ClaimsPayload(
+                [
+                    new PrivateClaim('custom-claim', 'value'),
+                    new PrivateClaim('custom-claim2', 'value2', true),
+                    new PrivateClaim('custom-claim3', 'value3'),
+                    new IssuedAt(new \DateTimeImmutable()),
+                    new Issuer('magento.com')
+                ]
+            ),
+            null
+        );
+
+        $sharedSecret = random_bytes(2048);
+        $jwsJwk = $jwkFactory->createHs256($sharedSecret);
+        $jweJwk = $jwkFactory->createA128KW($sharedSecret);
+        $jwsSettings = new JwsSignatureJwks($jwsJwk);
+        $jsonJwsSettings = new JwsSignatureJwks(new JwkSet([$jwsJwk, $jwsJwk]));
+        $jweJwkSettings = new JweEncryptionJwks(
+            $jweJwk,
+            JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128GCM
+        );
+        $jsonJweSettings = new JweEncryptionJwks(
+            new JwkSet([$jweJwk, $jweJwk]),
+            JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128GCM
+        );
+
+        return [
+            'jws' => [$flatJws, $jwsSettings],
+            'flat-jws' => [$flatJsonJws, $jwsSettings],
+            'json-jws' => [$jsonJws, $jsonJwsSettings],
+            'jwe' => [$flatJwe, $jweJwkSettings],
+            'flat-jwe' => [$jsonFlatJwe, $jweJwkSettings],
+            'json-jwe' => [$jsonJwe, $jsonJweSettings],
+            'none-jws' => [$flatUnsecured, new NoEncryption()]
+        ];
+    }
+
     private function validateHeader(HeaderInterface $expected, HeaderInterface $actual): void
     {
         if (count($expected->getParameters()) > count($actual->getParameters())) {
