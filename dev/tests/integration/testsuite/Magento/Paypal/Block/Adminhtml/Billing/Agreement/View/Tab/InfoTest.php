@@ -5,11 +5,19 @@
  */
 namespace Magento\Paypal\Block\Adminhtml\Billing\Agreement\View\Tab;
 
+use Magento\Framework\App\Request\Http as HttpRequest;
+
+/**
+ * Testing Info tab
+ *
+ * @magentoAppArea adminhtml
+ */
 class InfoTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Paypal/_files/billing_agreement.php
+     * @magentoAppIsolation enabled
      */
     public function testCustomerGridAction()
     {
