@@ -25,6 +25,7 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
     const INPUT_KEY_IP = 'ip';
     const INPUT_KEY_NONE = 'none';
     const INPUT_KEY_ADD = 'add';
+    const NAME = 'maintenance:allow-ips';
 
     /**
      * @var MaintenanceMode
@@ -76,7 +77,7 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
                 'Add the IP address to existing list'
             ),
         ];
-        $this->setName('maintenance:allow-ips')
+        $this->setName(self::NAME)
             ->setDescription('Sets maintenance mode exempt IPs')
             ->setDefinition(array_merge($arguments, $options));
 

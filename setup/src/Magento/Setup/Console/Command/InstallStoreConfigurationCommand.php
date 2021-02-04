@@ -26,6 +26,7 @@ use Magento\Framework\Validator\Url as UrlValidator;
  */
 class InstallStoreConfigurationCommand extends AbstractSetupCommand
 {
+    const NAME = 'setup:store-config:set';
     /**
      * @var InstallerFactory
      */
@@ -101,7 +102,7 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
      */
     protected function configure()
     {
-        $this->setName('setup:store-config:set')
+        $this->setName(self::NAME)
             ->setDescription('Installs the store configuration. Deprecated since 2.2.0. Use config:set instead')
             ->setDefinition($this->getOptionsList());
         parent::configure();

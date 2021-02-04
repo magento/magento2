@@ -39,7 +39,7 @@ class DependencyTest extends TestCase
             'Framework',
             'SomeModule',
             'ModuleName',
-            'Setup\Console\CommandList',
+            'Setup\Console\CommandLoader',
             'Setup\Console\CompilerPreparation',
             'Setup\Model\ObjectManagerProvider',
             'Setup\Mvc\Bootstrap\InitParamListener',
