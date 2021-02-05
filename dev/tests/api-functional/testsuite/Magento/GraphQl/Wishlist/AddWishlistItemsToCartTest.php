@@ -59,6 +59,35 @@ class AddWishlistItemsToCartTest extends GraphQlAbstract
     /**
      * @magentoConfigFixture default_store wishlist/general/active 1
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Wishlist/_files/wishlist_with_configurable_product.php
+     */
+    public function testAddIncompleteItemsToCart(): void
+    {
+        $wishlist = $this->getWishlist();
+        $customerWishlist = $wishlist['customer']['wishlists'][0];
+        $wishlistId = $customerWishlist['id'];
+        $wishlistItem = $customerWishlist['items_v2']['items'][0];
+        $itemId = $wishlistItem['id'];
+
+        $query = $this->getQuery($wishlistId, $itemId);
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+
+        $this->assertArrayHasKey('addWishlistItemsToCart', $response);
+        $wishlistAfterAddingToCart = $response['addWishlistItemsToCart']['wishlist'];
+        $userErrors = $response['addWishlistItemsToCart']['add_wishlist_items_to_cart_user_errors'];
+        $this->assertEquals($userErrors[0]['message'], 'You need to choose options for your item.');
+        $this->assertEquals($userErrors[0]['code'], 'UNDEFINED');
+        $this->assertEquals($userErrors[0]['wishlistId'], $wishlistId);
+        $this->assertEquals($userErrors[0]['wishlistItemId'], $itemId);
+        $wishlistItems = $wishlistAfterAddingToCart['items_v2']['items'];
+        $this->assertNotEmpty($wishlistItems);
+        $this->assertArrayHasKey('status', $response['addWishlistItemsToCart']);
+        $this->assertEquals($response['addWishlistItemsToCart']['status'], false);
+    }
+
+    /**
+     * @magentoConfigFixture default_store wishlist/general/active 1
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Wishlist/_files/wishlist_with_multiple_products.php
      */
     public function testAddAllItemsToCart(): void
@@ -255,6 +284,8 @@ mutation {
     add_wishlist_items_to_cart_user_errors{
         message
         code
+        wishlistId
+        wishlistItemId
     }
    }
 }

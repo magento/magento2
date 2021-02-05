@@ -69,7 +69,21 @@ type Mutation {
 type AddWishlistItemsToCartOutput {
     wishlist: Wishlist! @doc(description: "Contains the wish list with all items that were successfully added")
     status: Boolean! @doc(description: "Indicates whether the attempt to add items to the customer's cart was successful")
-    add_wishlist_items_to_cart_user_errors: [CartUserInputError!]! @doc(description: "An array of errors encountered while adding products to the customer's cart")
+    add_wishlist_items_to_cart_user_errors: [WishlistCartUserInputError!]! @doc(description: "An array of errors encountered while adding products to the customer's cart")
+}
+
+type WishlistCartUserInputError {
+    message: String! @doc(description: "A localized error message")
+    code: WishlistCartUserInputErrorType! @doc(description: "Wishlist-Cart-specific error code")
+    wishlistId: ID! @doc(description: "The id of the wishlist associated with the error")
+    wishlistItemId: ID! @doc(description: "The id of the wishlist item associated with the error")
+}
+
+enum WishlistCartUserInputErrorType {
+    PRODUCT_NOT_FOUND
+    NOT_SALABLE
+    INSUFFICIENT_STOCK
+    UNDEFINED
 }
 
 input WishlistItemInput @doc(description: "Defines the items to add to a wish list") {

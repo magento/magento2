@@ -168,8 +168,10 @@ class AddToCart implements ResolverInterface
             /** @var AddProductsToCartOutput $addProductsToCartOutput */
             $addProductsToCartOutput = $this->addProductsToCartService->execute($maskedCartId, [$cartItem]);
             $errors = array_map(
-                function (Error $error) {
+                function (Error $error) use ($item, $wishlist) {
                     return [
+                        'wishlistItemId' =>  $item->getID(),
+                        'wishlistId' => $wishlist->getId(),
                         'code' => $error->getCode(),
                         'message' => $error->getMessage(),
                     ];
