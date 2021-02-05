@@ -177,6 +177,37 @@ class AddWishlistItemsToCartTest extends GraphQlAbstract
         $query = $this->getQuery($customerWishlist['id'], $itemId);
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
+     /** Add all items from customer's wishlist to cart
+     *
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoConfigFixture wishlist/general/active 1
+     * @magentoApiDataFixture Magento/Wishlist/_files/wishlist_with_simple_product.php
+     */
+    public function testAddAllWishlistItemsToCart(): void
+    {
+        $wishlist = $this->getWishlist();
+        $this->assertNotEmpty($wishlist['customer']['wishlists'], 'No wishlist found');
+        $customerWishlist = $wishlist['customer']['wishlists'][0];
+        $wishlistId = $customerWishlist['id'];
+
+        $sku2 = 'simple_product';
+        $quantity2 = 2;
+        $addProductsToWishlistQuery = $this->addSecondProductToWishlist($wishlistId, $sku2, $quantity2);
+        $this->graphQlMutation($addProductsToWishlistQuery, [], '', $this->getHeaderMap());
+        $addWishlistToCartQuery = $this->addWishlistItemToCartWithNoItemId($wishlistId);
+
+        $response = $this->graphQlMutation($addWishlistToCartQuery, [], '', $this->getHeaderMap());
+
+        $this->assertArrayHasKey('addWishlistItemsToCart', $response);
+        $this->assertArrayHasKey('status', $response['addWishlistItemsToCart']);
+        $this->assertEquals($response['addWishlistItemsToCart']['status'], true);
+        $wishlistAfterItemsAddedToCart = $this->getWishlist();
+        $this->assertEmpty($wishlistAfterItemsAddedToCart['customer']['wishlists'][0]['items_v2']['items']);
+        $customerCart = $this->getCustomerCart('customer@example.com');
+        $this->assertCount(2, $customerCart['customerCart']['items']);
+        $this->assertEquals('simple-1', $customerCart['customerCart']['items'][0]['product']['sku']);
+        $this->assertEquals($sku2, $customerCart['customerCart']['items'][1]['product']['sku']);
+    }
 
     /**
      * Authentication header map
@@ -276,6 +307,11 @@ MUTATION;
         return $this->graphQlQuery($this->getCustomerWishlistQuery(), [], '', $this->getHeaderMap($username));
     }
 
+    public function getCustomerCart(string $username): array
+    {
+        return $this->graphQlQuery($this->getCustomerCartQuery(), [], '', $this->getHeaderMap($username));
+    }
+
     /**
      * Get customer wishlist query
      *
@@ -306,4 +342,97 @@ query {
 }
 QUERY;
     }
+
+    /**
+     * Returns the GraphQl mutation string for products added to wishlist
+     *
+     * @param string $wishlistId
+     * @param string $sku2
+     * @param int $quantity2
+     * @return string
+     */
+    private function addSecondProductToWishlist(
+        string $wishlistId,
+        string $sku,
+        int $quantity
+    ): string {
+        return <<<MUTATION
+mutation {
+  addProductsToWishlist(
+    wishlistId: "{$wishlistId}",
+    wishlistItems: [
+    {
+      sku: "{$sku}"
+      quantity: {$quantity}
+    }
+    ]
+) {
+    user_errors {
+      code
+      message
+    }
+    wishlist {
+      id
+      items_count
+        items_v2 {
+          items {
+           quantity
+            id
+            product {sku name}
+         }
+        page_info {current_page page_size total_pages}
+      }
+    }
+  }
+}
+MUTATION;
+    }
+
+    /**
+     * Returns GraphQl mutation string to add wishlist items to Cart
+     *
+     * @param string $wishlistId
+     * @return string
+     */
+    private function addWishlistItemToCartWithNoItemId(
+        string $wishlistId
+    ): string {
+        return <<<MUTATION
+mutation {
+    addWishlistItemsToCart
+    (
+      wishlistId: "{$wishlistId}"
+    ) {
+    status
+    add_wishlist_items_to_cart_user_errors{
+        message
+        code
+    }
+   }
+}
+MUTATION;
+    }
+
+    /**
+     * Get customer cart query
+     *
+     * @return string
+     */
+    private function getCustomerCartQuery(): string
+    {
+        return <<<QUERY
+{customerCart {
+  id
+  total_quantity
+  items {
+  uid
+  quantity
+  product{sku}
+   }
+ }
+}
+QUERY;
+    }
+
+
 }
