@@ -9,11 +9,12 @@ namespace Magento\MessageQueue\Test\Integration;
 
 use Magento\Framework\MessageQueue\PoisonPill\PoisonPillCompareInterface;
 use Magento\Framework\MessageQueue\PoisonPill\PoisonPillReadInterface;
-use Magento\Framework\Shell;
+use Magento\MessageQueue\Console\RestartConsumerCommand;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Tester\CommandTester;
 
-class PoisonPillAppyAfterCommandRunTest extends TestCase
+class PoisonPillApplyAfterCommandRunTest extends TestCase
 {
     /**
      * @var PoisonPillReadInterface
@@ -26,9 +27,9 @@ class PoisonPillAppyAfterCommandRunTest extends TestCase
     private $poisonPillCompare;
 
     /**
-     * @var Shell
+     * @var RestartConsumerCommand
      */
-    private $shell;
+    private $restartConsumerCommand;
 
     /**
      * @inheritdoc
@@ -38,19 +39,27 @@ class PoisonPillAppyAfterCommandRunTest extends TestCase
         $objectManager = Bootstrap::getObjectManager();
         $this->poisonPillRead = $objectManager->get(PoisonPillReadInterface::class);
         $this->poisonPillCompare = $objectManager->get(PoisonPillCompareInterface::class);
-        $this->shell = $objectManager->get(Shell::class);
+        $this->restartConsumerCommand = $objectManager->create(RestartConsumerCommand::class);
     }
 
     /**
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @covers \Magento\MessageQueue\Setup\Recurring
      *
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      */
-    public function testChangeVersion()
+    public function testChangeVersion(): void
     {
         $version = $this->poisonPillRead->getLatestVersion();
-        $this->shell->execute(PHP_BINARY . ' -f %s queue:consumers:restart', [BP . '/bin/magento']);
+        $this->runTestRestartConsumerCommand();
         $this->assertEquals(false, $this->poisonPillCompare->isLatestVersion($version));
+    }
+
+    /**
+     * @return void
+     */
+    private function runTestRestartConsumerCommand(): void
+    {
+        $commandTester = new CommandTester($this->restartConsumerCommand);
+        $commandTester->execute([]);
     }
 }
