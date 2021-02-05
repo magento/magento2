@@ -21,7 +21,6 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * @see \Magento\Catalog\Model\Locator\RegistryLocator
  * @magentoAppArea frontend
- * @magentoDbIsolation enabled
  */
 class RegistryLocatorTest extends TestCase
 {
@@ -35,14 +34,14 @@ class RegistryLocatorTest extends TestCase
     private $registryLocator;
 
     /** @var Registry */
-    protected $registry;
+    private $registry;
 
     /** @var ProductRepositoryInterface */
     private $productRepository;
 
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -57,7 +56,7 @@ class RegistryLocatorTest extends TestCase
     }
 
     /**
-     * @inheridoc
+     * @inheritdoc
      */
     protected function tearDown(): void
     {
