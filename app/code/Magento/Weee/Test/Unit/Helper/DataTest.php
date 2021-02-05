@@ -5,6 +5,7 @@
  */
 namespace Magento\Weee\Test\Unit\Helper;
 
+use Magento\Catalog\Model\Product\Type\Simple;
 use Magento\Weee\Helper\Data as WeeeHelper;
 
 /**
@@ -195,7 +196,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $weeeObject1 = new \Magento\Framework\DataObject(
             [
                 'code' => $fptCode1,
-                'amount' => '15',
+                'amount' => '15.00',
                 'amount_excl_tax' => '15.0000',
                 'tax_amount' => '1'
             ]
@@ -203,7 +204,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $weeeObject2 = new \Magento\Framework\DataObject(
             [
                 'code' => $fptCode2,
-                'amount' => '10',
+                'amount' => '10.00',
                 'amount_excl_tax' => '10.0000',
                 'tax_amount' => '5'
             ]
@@ -226,17 +227,20 @@ class DataTest extends \PHPUnit\Framework\TestCase
         );
 
         $expectedArray = [$prodId1 => [$fptCode1 => $expectedObject1], $prodId2 => [$fptCode2 => $expectedObject2]];
-        $this->weeeTax->expects($this->any())
+        $this->weeeTax
             ->method('getProductWeeeAttributes')
             ->willReturn([$weeeObject1, $weeeObject2]);
-        $this->taxData->expects($this->any())
+        $this->taxData
             ->method('getPriceDisplayType')
             ->willReturn($priceDisplay);
-        $this->taxData->expects($this->any())
+        $this->taxData
             ->method('priceIncludesTax')
             ->willReturn($priceIncludesTax);
 
-        $productSimple = $this->createPartialMock(\Magento\Catalog\Model\Product\Type\Simple::class, ['getId']);
+        $productSimple = $this->getMockBuilder(Simple::class)
+            ->addMethods(['getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $productSimple->expects($this->at(0))
             ->method('getId')
             ->willReturn($prodId1);
@@ -245,7 +249,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->willReturn($prodId2);
 
         $productInstance = $this->createMock(\Magento\Bundle\Model\Product\Type::class);
-        $productInstance->expects($this->any())
+        $productInstance
             ->method('getSelectionsCollection')
             ->willReturn([$productSimple]);
 
@@ -255,26 +259,26 @@ class DataTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Product::class,
             ['getTypeInstance', 'getStoreId', 'getStore', 'getTypeId']
         );
-        $product->expects($this->any())
+        $product
             ->method('getTypeInstance')
             ->willReturn($productInstance);
-        $product->expects($this->any())
+        $product
             ->method('getStoreId')
             ->willReturn(1);
-        $product->expects($this->any())
+        $product
             ->method('getStore')
             ->willReturn($store);
-        $product->expects($this->any())
+        $product
             ->method('getTypeId')
             ->willReturn('bundle');
 
         $registry=$this->createMock(\Magento\Framework\Registry::class);
-        $registry->expects($this->any())
+        $registry
             ->method('registry')
             ->with('current_product')
             ->willReturn($product);
 
-        $result =  $this->helperData->getWeeeAttributesForBundle($product);
+        $result = $this->helperData->getWeeeAttributesForBundle($product);
         $this->assertEquals($expectedArray, $result);
     }
 
@@ -287,7 +291,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             [2, false, ["16.00", "15.00"]],
             [2, true, ["15.00", "10.00"]],
             [1, false, ["15.00", "10.00"]],
-            [1, true, ["15.00", "10.00"]],
+            [1, true, ["15.0000", "10.0000"]],
             [3, false, ["16.00", "15.00"]],
             [3, true, ["15.00", "10.00"]],
         ];

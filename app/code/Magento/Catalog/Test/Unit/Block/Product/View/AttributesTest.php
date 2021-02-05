@@ -3,17 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Block\Product\View;
 
-use \PHPUnit\Framework\TestCase;
-use \Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
-use \Magento\Catalog\Model\Product;
-use \Magento\Framework\View\Element\Template\Context;
-use \Magento\Framework\Registry;
-use \Magento\Framework\Pricing\PriceCurrencyInterface;
-use \Magento\Catalog\Block\Product\View\Attributes as AttributesBlock;
+use Magento\Catalog\Block\Product\View\Attributes as AttributesBlock;
+use Magento\Catalog\Model\Product;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
+use Magento\Framework\Phrase;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Element\Template\Context;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Catalog\Block\Product\View\Attributes
@@ -23,37 +26,37 @@ use \Magento\Catalog\Block\Product\View\Attributes as AttributesBlock;
 class AttributesTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Phrase
+     * @var Phrase
      */
     private $phrase;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @var MockObject|AbstractAttribute
      */
     private $attribute;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
+     * @var MockObject|AbstractFrontend
      */
     private $frontendAttribute;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product
+     * @var MockObject|Product
      */
     private $product;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Element\Template\Context
+     * @var MockObject|Context
      */
     private $context;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Registry
+     * @var MockObject|Registry
      */
     private $registry;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Pricing\PriceCurrencyInterface
+     * @var MockObject|PriceCurrencyInterface
      */
     private $priceCurrencyInterface;
 
@@ -134,7 +137,7 @@ class AttributesTest extends TestCase
             ->method('getValue')
             ->willReturn($this->phrase);
         $attributes = $this->attributesBlock->getAdditionalData();
-        $this->assertEmpty($attributes['phrase']);
+        $this->assertEmpty($attributes);
     }
 
     /**
@@ -148,8 +151,8 @@ class AttributesTest extends TestCase
             ->method('getValue')
             ->willReturn($this->phrase);
         $attributes = $this->attributesBlock->getAdditionalData();
-        $this->assertNotTrue(empty($attributes['phrase']));
-        $this->assertNotTrue(empty($attributes['phrase']['value']));
+        $this->assertNotEmpty($attributes['phrase']);
+        $this->assertNotEmpty($attributes['phrase']['value']);
         $this->assertEquals('Yes', $attributes['phrase']['value']);
     }
 }

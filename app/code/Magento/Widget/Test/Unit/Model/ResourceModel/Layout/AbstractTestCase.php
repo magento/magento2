@@ -132,7 +132,7 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey($key, $condition);
 
         if ($key == 'lt') {
-            $this->assertContains($value, $condition[$key]);
+            $this->assertStringContainsString($value, $condition[$key]);
         } else {
             $this->assertContains($value, $condition);
         }

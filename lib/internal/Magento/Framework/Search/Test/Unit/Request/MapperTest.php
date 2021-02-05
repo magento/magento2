@@ -342,11 +342,9 @@ class MapperTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->queryBool, $mapper->getRootQuery());
     }
 
-    /**
-     * #@expectedException \InvalidArgumentException
-     */
     public function testGetQueryInvalidArgumentException()
     {
+        $this->expectException(\InvalidArgumentException::class);
         /** @var \Magento\Framework\Search\Request\Mapper $mapper */
         $mapper = $this->helper->getObject(
             \Magento\Framework\Search\Request\Mapper::class,

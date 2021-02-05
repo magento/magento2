@@ -52,7 +52,7 @@ class MultilineTest extends TextTest
             [
                 'lines' => [['one', 'two'], true],
                 'mixed lines' => [['one', '', ''], true],
-                'empty lines' => [['', '', ''], true]
+                'empty lines' => [['', '', ''], '"" is a required value.']
             ]
         );
     }

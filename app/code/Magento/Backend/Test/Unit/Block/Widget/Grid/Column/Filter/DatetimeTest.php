@@ -113,8 +113,11 @@ class DatetimeTest extends \PHPUnit\Framework\TestCase
         $this->model->setValue($value);
 
         $output = $this->model->getHtml();
-        $this->assertContains('id="' . $uniqueHash . '_from" value="' . $yesterday->getTimestamp(), $output);
-        $this->assertContains('id="' . $uniqueHash . '_to" value="' . $tomorrow->getTimestamp(), $output);
+        $this->assertStringContainsString(
+            'id="' . $uniqueHash . '_from" value="' . $yesterday->getTimestamp(),
+            $output
+        );
+        $this->assertStringContainsString('id="' . $uniqueHash . '_to" value="' . $tomorrow->getTimestamp(), $output);
     }
 
     public function testGetEscapedValueEscapeString()

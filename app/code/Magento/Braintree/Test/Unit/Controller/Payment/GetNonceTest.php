@@ -10,6 +10,7 @@ use Magento\Braintree\Gateway\Command\GetPaymentNonceCommand;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -20,7 +21,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class GetNonceTest
- *
+ * Test for GetNonce
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GetNonceTest extends \PHPUnit\Framework\TestCase

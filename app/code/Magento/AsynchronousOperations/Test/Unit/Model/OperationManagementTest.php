@@ -7,6 +7,7 @@ namespace Magento\AsynchronousOperations\Test\Unit\Model;
 
 /**
  * Class OperationManagementTest
+ * Test for OperationManagement
  */
 class OperationManagementTest extends \PHPUnit\Framework\TestCase
 {
@@ -34,7 +35,12 @@ class OperationManagementTest extends \PHPUnit\Framework\TestCase
      * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
-    
+
+    /**
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $metadataPoolMock;
+
     protected function setUp(): void
     {
         $this->entityManagerMock = $this->createMock(\Magento\Framework\EntityManager\EntityManager::class);

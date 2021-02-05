@@ -40,6 +40,11 @@ class CollectionTimeLabelTest extends \PHPUnit\Framework\TestCase
      */
     private $localeResolver;
 
+    /**
+     * @var Form|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $formMock;
+
     protected function setUp(): void
     {
         $this->abstractElementMock = $this->getMockBuilder(AbstractElement::class)

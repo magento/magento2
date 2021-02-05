@@ -194,6 +194,6 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
         $this->command->getDefinition()->getOption(StartConsumerCommand::OPTION_AREACODE);
         $this->command->getDefinition()->getOption(StartConsumerCommand::PID_FILE_PATH);
         $this->command->getDefinition()->getOption(StartConsumerCommand::OPTION_SINGLE_THREAD);
-        $this->assertContains('To start consumer which will process', $this->command->getHelp());
+        $this->assertStringContainsString('To start consumer which will process', $this->command->getHelp());
     }
 }

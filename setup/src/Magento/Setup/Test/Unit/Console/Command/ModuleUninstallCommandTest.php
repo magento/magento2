@@ -219,7 +219,7 @@ class ModuleUninstallCommandTest extends \PHPUnit\Framework\TestCase
             ->willReturnMap($fullModuleListMap);
         $this->tester->execute($input);
         foreach ($expect as $message) {
-            $this->assertContains($message, $this->tester->getDisplay());
+            $this->assertStringContainsString($message, $this->tester->getDisplay());
         }
     }
 
@@ -343,7 +343,7 @@ class ModuleUninstallCommandTest extends \PHPUnit\Framework\TestCase
             ->willReturn($dependencies);
         $this->tester->execute($input);
         foreach ($expect as $message) {
-            $this->assertContains($message, $this->tester->getDisplay());
+            $this->assertStringContainsString($message, $this->tester->getDisplay());
         }
     }
 

@@ -52,9 +52,9 @@ class ObscureTest extends \PHPUnit\Framework\TestCase
     public function testGetEscapedValue()
     {
         $this->_model->setValue('Obscure Text');
-        $this->assertContains('value="******"', $this->_model->getElementHtml());
+        $this->assertStringContainsString('value="******"', $this->_model->getElementHtml());
         $this->_model->setValue('');
-        $this->assertContains('value=""', $this->_model->getElementHtml());
+        $this->assertStringContainsString('value=""', $this->_model->getElementHtml());
     }
 
     /**

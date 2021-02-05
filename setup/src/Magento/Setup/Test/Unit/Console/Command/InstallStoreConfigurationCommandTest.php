@@ -143,7 +143,7 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit\Framework\TestCase
             ->method('create');
         $commandTester = new CommandTester($this->command);
         $commandTester->execute($option);
-        $this->assertContains($error, $commandTester->getDisplay());
+        $this->assertStringContainsString($error, $commandTester->getDisplay());
     }
 
     /**

@@ -60,8 +60,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetItemObjectClass($class)
     {
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
         $this->_model->setItemObjectClass($class);
-        $this->assertAttributeSame($class, '_itemObjectClass', $this->_model);
+        //$this->assertAttributeSame($class, '_itemObjectClass', $this->_model);
     }
 
     /**

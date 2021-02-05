@@ -32,7 +32,7 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
     public function testDictionaryFileIsEmptyException()
     {
         $this->expectException(\Magento\Setup\Exception::class);
-        $this->expectExceptionMessageRegExp('/Dictionary file .*empty-dictionary\\.csv is empty/');
+        $this->expectExceptionMessageMatches('/Dictionary file .*empty-dictionary\\.csv is empty/');
 
         $filePath = __DIR__ . '/_files/empty-dictionary.csv';
         file_put_contents($filePath, '');

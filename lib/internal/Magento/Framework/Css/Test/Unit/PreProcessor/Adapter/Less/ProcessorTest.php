@@ -14,6 +14,7 @@ use Magento\Framework\Css\PreProcessor\Adapter\Less\Processor;
 
 /**
  * Class ProcessorTest
+ * Test for Processer
  */
 class ProcessorTest extends \PHPUnit\Framework\TestCase
 {
@@ -84,7 +85,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     public function testProcessContentException()
     {
         $this->expectException(\Magento\Framework\View\Asset\ContentProcessorException::class);
-        $this->expectExceptionMessageRegExp('(Test exception)');
+        $this->expectExceptionMessageMatches('(Test exception)');
 
         $assetMock = $this->getAssetMock();
 
@@ -117,7 +118,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     public function testProcessContentEmpty()
     {
         $this->expectException(\Magento\Framework\View\Asset\ContentProcessorException::class);
-        $this->expectExceptionMessageRegExp('(Compilation from source: LESS file is empty: test-path)');
+        $this->expectExceptionMessageMatches('(Compilation from source: LESS file is empty: test-path)');
 
         $assetMock = $this->getAssetMock();
 

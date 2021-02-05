@@ -272,7 +272,7 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
         )->method(
             'findOne'
         )->with(
-            $this->logicalAnd($this->arrayHasKey('_id'), $this->contains($cacheId))
+            $this->logicalAnd($this->arrayHasKey('_id'), $this->containsEqual($cacheId))
         )->willReturn(
             ['mtime' => $time]
         );

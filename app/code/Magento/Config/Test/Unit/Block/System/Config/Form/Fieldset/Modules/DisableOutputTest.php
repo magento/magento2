@@ -214,13 +214,13 @@ class DisableOutputTest extends \PHPUnit\Framework\TestCase
         $this->userMock->expects($this->any())->method('getExtra')->willReturn($extra);
         $actualHtml = $this->object->render($this->elementMock);
 
-        $this->assertContains($this->elementData['htmlId'], $actualHtml);
-        $this->assertContains($this->elementData['legend'], $actualHtml);
-        $this->assertContains($this->elementData['comment'], $actualHtml);
-        $this->assertContains($this->elementData['tooltip'], $actualHtml);
-        $this->assertContains($this->elementData['elementHTML'], $actualHtml);
+        $this->assertStringContainsString($this->elementData['htmlId'], $actualHtml);
+        $this->assertStringContainsString($this->elementData['legend'], $actualHtml);
+        $this->assertStringContainsString($this->elementData['comment'], $actualHtml);
+        $this->assertStringContainsString($this->elementData['tooltip'], $actualHtml);
+        $this->assertStringContainsString($this->elementData['elementHTML'], $actualHtml);
         if ($nested) {
-            $this->assertContains('nested', $actualHtml);
+            $this->assertStringContainsString('nested', $actualHtml);
         }
     }
 

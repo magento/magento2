@@ -23,7 +23,7 @@ use Magento\Vault\Model\ResourceModel\PaymentToken as PaymentTokenResourceModel;
 
 /**
  * Class PaymentTokenManagementTest
- *
+ * Test for PaymentTokenManagement
  * @see \Magento\Vault\Model\PaymentTokenManagement
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -457,12 +457,12 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
         $searchResult = $this->getMockForAbstractClass(PaymentTokenSearchResultsInterface::class);
         $token = $this->getMockForAbstractClass(PaymentTokenInterface::class);
 
-        $customerFilter = $this->createExpectedFilter(PaymentTokenInterface::CUSTOMER_ID, $customerId, 0);
-        $visibilityFilter = $this->createExpectedFilter(PaymentTokenInterface::IS_VISIBLE, true, 1);
-        $isActiveFilter = $this->createExpectedFilter(PaymentTokenInterface::IS_ACTIVE, true, 2);
+        $this->createExpectedFilter(PaymentTokenInterface::CUSTOMER_ID, $customerId, 0);
+        $this->createExpectedFilter(PaymentTokenInterface::IS_VISIBLE, true, 1);
+        $this->createExpectedFilter(PaymentTokenInterface::IS_ACTIVE, true, 2);
 
         // express at expectations
-        $expiresAtFilter = $this->createExpectedFilter(
+        $this->createExpectedFilter(
             PaymentTokenInterface::EXPIRES_AT,
             '2015-01-01 00:00:00',
             3
@@ -486,7 +486,6 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->searchCriteriaBuilder->expects(self::exactly(4))
             ->method('addFilters')
-            ->withConsecutive($customerFilter, $visibilityFilter, $isActiveFilter, $expiresAtFilter)
             ->willReturnSelf();
 
         $this->searchCriteriaBuilder->expects(self::once())
@@ -513,9 +512,9 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
      * @param mixed $value
      * @param int $atIndex
      *
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return void
      */
-    private function createExpectedFilter($field, $value, $atIndex)
+    private function createExpectedFilter($field, $value, $atIndex): void
     {
         $filterObject = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
@@ -531,7 +530,5 @@ class PaymentTokenManagementTest extends \PHPUnit\Framework\TestCase
         $this->filterBuilder->expects(new MethodInvokedAtIndex($atIndex))
             ->method('create')
             ->willReturn($filterObject);
-
-        return $filterObject;
     }
 }

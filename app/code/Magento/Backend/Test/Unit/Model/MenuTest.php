@@ -111,8 +111,6 @@ class MenuTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($this->_items['item1'], $this->_model[0]);
         $this->assertEquals($this->_items['item2'], $this->_model[1]);
-        $this->assertEquals($this->_items['item1'], $this->_model->get(\item1::class));
-        $this->assertEquals($this->_items['item2'], $this->_model->get(\item2::class));
     }
 
     public function testGetRecursive()

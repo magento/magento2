@@ -279,7 +279,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $filter->setDesignParams($designParams);
 
         foreach ($expectedResults as $expectedResult) {
-            $this->assertContains($expectedResult, $filter->applyInlineCss($html));
+            $this->assertStringContainsString($expectedResult, $filter->applyInlineCss($html));
         }
     }
 

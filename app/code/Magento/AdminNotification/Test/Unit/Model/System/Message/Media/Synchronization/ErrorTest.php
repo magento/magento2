@@ -44,7 +44,7 @@ class ErrorTest extends \PHPUnit\Framework\TestCase
     {
         $messageText = 'We were unable to synchronize one or more media files.';
 
-        $this->assertContains($messageText, (string)$this->_model->getText());
+        $this->assertStringContainsString($messageText, (string)$this->_model->getText());
     }
 
     /**

@@ -398,9 +398,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $productMediaGallery = $this->swatchHelperObject->getProductMediaGallery($this->productMock);
         if ($mediaGallery) {
-            $this->assertContains($image, $productMediaGallery['large']);
-            $this->assertContains($image, $productMediaGallery['medium']);
-            $this->assertContains($image, $productMediaGallery['small']);
+            $this->assertStringContainsString($image, $productMediaGallery['large']);
+            $this->assertStringContainsString($image, $productMediaGallery['medium']);
+            $this->assertStringContainsString($image, $productMediaGallery['small']);
         } else {
             $this->assertEmpty($productMediaGallery);
         }

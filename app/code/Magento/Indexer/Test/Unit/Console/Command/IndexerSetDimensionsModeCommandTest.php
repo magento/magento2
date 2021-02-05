@@ -165,7 +165,9 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
     public function testExecuteWithIndxerException()
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('*      Invalid value for "<indexer>" argument. Accepted values for "<indexer>" are \'indexer_title\'');
+        $this->expectExceptionMessage(
+            'Invalid value for "<indexer>" argument. Accepted values for "<indexer>" are \'indexer_title\''
+        );
 
         $commandTester = new CommandTester($this->command);
         $this->indexerMock->method('getTitle')->willReturn('indexer_title');

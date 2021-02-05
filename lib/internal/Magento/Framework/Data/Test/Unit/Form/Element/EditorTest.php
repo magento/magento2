@@ -105,9 +105,9 @@ class EditorTest extends \PHPUnit\Framework\TestCase
     public function testGetElementHtml()
     {
         $html = $this->model->getElementHtml();
-        $this->assertContains('</textarea>', $html);
-        $this->assertContains('rows="2"', $html);
-        $this->assertContains('cols="15"', $html);
+        $this->assertStringContainsString('</textarea>', $html);
+        $this->assertStringContainsString('rows="2"', $html);
+        $this->assertStringContainsString('cols="15"', $html);
         $this->assertMatchesRegularExpression('/class=\".*textarea.*\"/i', $html);
         $this->assertDoesNotMatchRegularExpression('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html);
 

@@ -97,12 +97,10 @@ class RulePoolTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedException Fallback rule 'unsupported_type' is not supported
-     */
     public function testGetRuleUnsupportedType()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Fallback rule \'unsupported_type\' is not supported');
         $this->model->getRule('unsupported_type');
     }
 }

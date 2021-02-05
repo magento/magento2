@@ -77,8 +77,6 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['customOne.php'], $object->getFiles());
     }
 
-    /**
-     */
     public function testWrongFile()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -120,7 +118,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     public function testLoadInvalidConfigurationFileWithFileKey()
     {
         $this->expectException(\Magento\Framework\Exception\RuntimeException::class);
-        $this->expectExceptionMessageRegExp('/Invalid configuration file: \\\'.*\\/\\_files\\/emptyConfig\\.php\\\'/');
+        $this->expectExceptionMessageMatches('/Invalid configuration file: \\\'.*\\/\\_files\\/emptyConfig\\.php\\\'/');
 
         $fileDriver = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
@@ -158,7 +156,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     public function testLoadInvalidConfigurationFile(): void
     {
         $this->expectException(\Magento\Framework\Exception\RuntimeException::class);
-        $this->expectExceptionMessageRegExp('/Invalid configuration file: \\\'.*\\/\\_files\\/emptyConfig\\.php\\\'/');
+        $this->expectExceptionMessageMatches('/Invalid configuration file: \\\'.*\\/\\_files\\/emptyConfig\\.php\\\'/');
 
         $fileDriver = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()

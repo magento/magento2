@@ -10,6 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 
 /**
  * Class CategoryTest
+ * Test for Category
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryTest extends \PHPUnit\Framework\TestCase
@@ -167,7 +168,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->method('getViewConfig')
             ->willReturn($configViewMock);
 
-        $product = $this->getMockBuilder(\Magento\catalog\Model\Product::class)
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(
                 [
                     '__sleep',
@@ -201,13 +202,16 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->rssFeed['description'], $data['description']);
         $this->assertEquals($this->rssFeed['entries'][0]['title'], $data['entries'][0]['title']);
         $this->assertEquals($this->rssFeed['entries'][0]['link'], $data['entries'][0]['link']);
-        $this->assertContains('<a href="http://magento.com/product.html">', $data['entries'][0]['description']);
-        $this->assertContains(
+        $this->assertStringContainsString(
+            '<a href="http://magento.com/product.html">',
+            $data['entries'][0]['description']
+        );
+        $this->assertStringContainsString(
             '<img src="image_link" border="0" align="left" height="75" width="75">',
             $data['entries'][0]['description']
         );
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<td  style="text-decoration:none;">Product Description </td>',
             $data['entries'][0]['description']
         );

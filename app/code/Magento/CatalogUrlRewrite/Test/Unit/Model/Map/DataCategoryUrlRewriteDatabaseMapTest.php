@@ -18,6 +18,7 @@ use Magento\Framework\DB\TemporaryTableService;
 
 /**
  * Class DataCategoryUrlRewriteDatabaseMapTest
+ * Test for DataCategoryUrlRewriteDatabaseMap
  */
 class DataCategoryUrlRewriteDatabaseMapTest extends \PHPUnit\Framework\TestCase
 {
@@ -103,7 +104,7 @@ class DataCategoryUrlRewriteDatabaseMapTest extends \PHPUnit\Framework\TestCase
             ->willReturn([]);
         $this->temporaryTableServiceMock->expects($this->any())
             ->method('createFromSelect')
-            ->withConsecutive(
+            ->with(
                 $selectMock,
                 $connectionMock,
                 [

@@ -57,7 +57,7 @@ class CartTest extends TestCase
 
         $this->checkoutSession->method('getQuote')
             ->willReturn($this->quote);
-        
+
         $this->cart = new Cart(
             $this->checkoutSession,
             $this->checkoutHelper,

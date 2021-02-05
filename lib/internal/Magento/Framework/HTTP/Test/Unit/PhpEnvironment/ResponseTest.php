@@ -72,7 +72,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     {
         $response = new Response();
         $response->appendBody('testContent');
-        $this->assertContains('testContent', $response->getBody());
+        $this->assertStringContainsString('testContent', $response->getBody());
     }
 
     public function testSendResponseWithException()
@@ -182,7 +182,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     public function testHttpResponseCodeWithException()
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessageRegExp('/Invalid HTTP response code/');
+        $this->expectExceptionMessageMatches('/Invalid HTTP response code/');
 
         $this->response->setHttpResponseCode(1);
     }

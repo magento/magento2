@@ -259,7 +259,7 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
     public function testGetParamTypeWithIncorrectAnnotation()
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessageRegExp('/@param annotation is incorrect for the parameter "name" \\w+/');
+        $this->expectExceptionMessageMatches('/@param annotation is incorrect for the parameter "name" \\w+/');
 
         $class = new ClassReflection(DataObject::class);
         $methodReflection = $class->getMethod('setName');

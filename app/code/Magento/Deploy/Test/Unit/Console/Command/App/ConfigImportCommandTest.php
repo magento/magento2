@@ -58,6 +58,6 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new RuntimeException(__('Some error')));
 
         $this->assertSame(Cli::RETURN_FAILURE, $this->commandTester->execute([]));
-        $this->assertContains('Some error', $this->commandTester->getDisplay());
+        $this->assertStringContainsString('Some error', $this->commandTester->getDisplay());
     }
 }

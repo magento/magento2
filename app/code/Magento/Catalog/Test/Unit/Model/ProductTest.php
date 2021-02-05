@@ -16,8 +16,8 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Product Test
- *
+ * Class ProductTest
+ * Test for Product
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -1003,9 +1003,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * Configure environment for `testSave` and `testSaveAndDuplicate` methods
      *
-     * @return array
+     * @return void
      */
-    protected function configureSaveTest()
+    protected function configureSaveTest(): void
     {
         $productTypeMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Type\Simple::class)
             ->disableOriginalConstructor()->setMethods(['beforeSave', 'save'])->getMock();
@@ -1337,8 +1337,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $imagesCollectionMock->expects(self::exactly(2))->method('addItem')->withConsecutive(
-            $expectedImageDataObject,
-            $expectedSmallImageDataObject
+            [$expectedImageDataObject],
+            [$expectedSmallImageDataObject]
         );
         $this->collectionFactoryMock->method('create')->willReturn($imagesCollectionMock);
 

@@ -130,7 +130,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
             $testComment .
             '</span></p></td>';
         $actual = $this->_object->render($this->_elementMock);
-        $this->assertContains($expected, $actual);
+        $this->assertStringContainsString($expected, $actual);
     }
 
     public function testRenderValueWithTooltipBlock()
@@ -143,7 +143,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
             $testTooltip .
             '</div></div></td>';
         $actual = $this->_object->render($this->_elementMock);
-        $this->assertContains($expected, $actual);
+        $this->assertStringContainsString($expected, $actual);
     }
 
     public function testRenderHint()
@@ -152,7 +152,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
         $this->_elementMock->expects($this->any())->method('getHint')->willReturn($testHint);
         $expected = '<td class=""><div class="hint"><div style="display: none;">' . $testHint . '</div></div>';
         $actual = $this->_object->render($this->_elementMock);
-        $this->assertContains($expected, $actual);
+        $this->assertStringContainsString($expected, $actual);
     }
 
     public function testRenderScopeLabel()
@@ -169,7 +169,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
             '</label></td><td class="value">test_html</td><td class=""></td></tr>';
         $actual = $this->_object->render($this->_elementMock);
 
-        $this->assertContains($expected, $actual);
+        $this->assertStringContainsString($expected, $actual);
     }
 
     public function testRenderInheritCheckbox()
@@ -193,6 +193,6 @@ class FieldTest extends \PHPUnit\Framework\TestCase
         $expected .= '<label for="' . $this->_testData['htmlId'] . '_inherit" class="inherit">Use Website</label>';
         $actual = $this->_object->render($this->_elementMock);
 
-        $this->assertContains($expected, $actual);
+        $this->assertStringContainsString($expected, $actual);
     }
 }

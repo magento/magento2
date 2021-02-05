@@ -129,7 +129,7 @@ class JsonTest extends \PHPUnit\Framework\TestCase
             $this->fail("Exception is expected to be raised");
         } catch (\Magento\Framework\Webapi\Exception $e) {
             $this->assertInstanceOf(\Magento\Framework\Webapi\Exception::class, $e, 'Exception type is invalid');
-            $this->assertContains('Decoding error:', $e->getMessage(), 'Exception message is invalid');
+            $this->assertStringContainsString('Decoding error:', $e->getMessage(), 'Exception message is invalid');
             $this->assertEquals(
                 \Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST,
                 $e->getHttpCode(),

@@ -8,6 +8,9 @@ namespace Magento\Backend\Test\Unit\Block\Widget\Grid;
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
 use Magento\Framework\DataObject;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ColumnTest extends \PHPUnit\Framework\TestCase
 {
     /**

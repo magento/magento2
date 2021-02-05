@@ -10,7 +10,7 @@ use Magento\Payment\Block\Transparent\Iframe;
 
 /**
  * Class RedirectTest
- *
+ * Test for Redirect
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -95,6 +95,11 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Authorizenet\Helper\Backend\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperMock;
+
+    /**
+     * @var Redirect
+     */
+    private $controller;
 
     protected function setUp(): void
     {

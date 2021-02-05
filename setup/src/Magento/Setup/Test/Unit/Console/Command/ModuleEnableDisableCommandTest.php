@@ -200,9 +200,9 @@ class ModuleEnableDisableCommandTest extends \PHPUnit\Framework\TestCase
         $output = $commandTester->getDisplay();
         $this->assertStringMatchesFormat($expectedMessage, $output);
         if ($isEnable) {
-            $this->assertContains($setupUpgradeMessage, $output);
+            $this->assertStringContainsString($setupUpgradeMessage, $output);
         } else {
-            $this->assertNotContains($setupUpgradeMessage, $output);
+            $this->assertStringNotContainsString($setupUpgradeMessage, $output);
         }
     }
 

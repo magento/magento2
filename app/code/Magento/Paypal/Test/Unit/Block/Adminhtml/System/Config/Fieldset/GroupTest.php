@@ -87,11 +87,8 @@ class GroupTest extends \PHPUnit\Framework\TestCase
         $this->_user->setExtra(['configState' => []]);
         $this->_element->setGroup(isset($expanded) ? ['expanded' => $expanded] : []);
         $html = $this->_model->render($this->_element);
-        $this->assertContains(
-            '<input id="' . $this->_element->getHtmlId() . '-state" name="config_state['
-            . $this->_element->getId() . ']" type="hidden" value="' . $expected . '" />',
-            $html
-        );
+        $this->assertStringContainsString('<input id="' . $this->_element->getHtmlId() . '-state" name="config_state['
+            . $this->_element->getId() . ']" type="hidden" value="' . $expected . '" />', $html);
     }
 
     /**

@@ -10,6 +10,7 @@ use Magento\Catalog\Block as CatalogBlock;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Paypal\Model\ConfigFactory;
 use Magento\Paypal\Model\Config;
+use Magento\Paypal\Model\Express;
 
 class ShortcutTest extends \PHPUnit\Framework\TestCase
 {
@@ -113,16 +114,18 @@ class ShortcutTest extends \PHPUnit\Framework\TestCase
         $bmlMethodCode = '';
         $hash = 'hash';
         $this->shortcut->setIsInCatalogProduct($isInCatalog);
-        $expressMethod = $this->getMockBuilder(\Magento\Paypal\Model\Express::class)->disableOriginalConstructor()
+        $expressMethod = $this->getMockBuilder(Express::class)
+            ->disableOriginalConstructor()
             ->setMethods([])->getMock();
         $expectedData = [
             'is_in_catalog_product' => $isInCatalog,
+            'module_name' => 'Magento_Paypal',
             'shortcut_html_id' => $hash,
             'checkout_url' => null,
             'image_url' => 'https://www.paypalobjects.com/webstatic/en_US/i/buttons/ppcredit-logo-medium.png',
             'additional_link_image' => [
                 'href' => 'https://www.securecheckout.billmelater.com/paycapture-content/'
-                        . 'fetch?hash=AU826TU8&content=/bmlweb/ppwpsiw.html',
+                    . 'fetch?hash=AU826TU8&content=/bmlweb/ppwpsiw.html',
                 'src' => 'https://www.paypalobjects.com/webstatic/en_US/btn/btn_bml_text.png',
             ],
         ];
@@ -136,6 +139,6 @@ class ShortcutTest extends \PHPUnit\Framework\TestCase
             ->willReturn($hash);
 
         $this->assertEmpty($this->shortcut->toHtml());
-        $this->assertContains($expectedData, $this->shortcut->getData());
+        $this->assertEquals($expectedData, $this->shortcut->getData());
     }
 }

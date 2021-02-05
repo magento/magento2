@@ -66,10 +66,10 @@ class CheckboxTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->setIsChecked(false);
         $html = $this->_model->getElementHtml();
-        $this->assertContains('type="checkbox"', $html);
-        $this->assertNotContains('checked="checked"', $html);
+        $this->assertStringContainsString('type="checkbox"', $html);
+        $this->assertStringNotContainsString('checked="checked"', $html);
         $this->_model->setIsChecked(true);
         $html = $this->_model->getElementHtml();
-        $this->assertContains('checked="checked"', $html);
+        $this->assertStringContainsString('checked="checked"', $html);
     }
 }

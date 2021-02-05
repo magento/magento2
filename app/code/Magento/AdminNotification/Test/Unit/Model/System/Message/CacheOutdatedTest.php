@@ -120,7 +120,7 @@ class CacheOutdatedTest extends \PHPUnit\Framework\TestCase
 
         $this->_cacheTypeListMock->expects($this->any())->method('getInvalidated')->willReturn([]);
         $this->_urlInterfaceMock->expects($this->once())->method('getUrl')->willReturn('someURL');
-        $this->assertContains($messageText, $this->_messageModel->getText());
+        $this->assertStringContainsString($messageText, $this->_messageModel->getText());
     }
 
     public function testGetLink()

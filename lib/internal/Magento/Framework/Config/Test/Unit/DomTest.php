@@ -210,7 +210,7 @@ class DomTest extends \PHPUnit\Framework\TestCase
             ->with($schemaFile)
             ->willReturn(false);
         $this->assertEquals(
-            ["Element 'unknown_node': This element is not expected. Expected is ( node ).\nLine: 1\n"],
+            ["Unknown validation error"],
             $dom->validateDomDocument($domMock, $schemaFile)
         );
     }

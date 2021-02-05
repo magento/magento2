@@ -76,7 +76,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     {
         $this->template->addButton('1', ['title' => 'My Button']);
         $buttons = $this->buttonList->getItems()[0];
-        $this->assertContains('1', array_keys($buttons));
+        $this->assertArrayHasKey('1', $buttons);
     }
 
     public function testUpdateButton()

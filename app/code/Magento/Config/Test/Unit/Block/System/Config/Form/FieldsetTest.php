@@ -161,11 +161,11 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
         $this->_elementMock->expects($this->any())->method('getIsNested')->willReturn($nested);
         $this->_elementMock->expects($this->any())->method('getExpanded')->willReturn($expanded);
         $actualHtml = $this->_object->render($this->_elementMock);
-        $this->assertContains($this->testData['htmlId'], $actualHtml);
-        $this->assertContains($this->testData['legend'], $actualHtml);
-        $this->assertContains($this->testData['comment'], $actualHtml);
+        $this->assertStringContainsString($this->testData['htmlId'], $actualHtml);
+        $this->assertStringContainsString($this->testData['legend'], $actualHtml);
+        $this->assertStringContainsString($this->testData['comment'], $actualHtml);
         if ($nested) {
-            $this->assertContains('nested', $actualHtml);
+            $this->assertStringContainsString('nested', $actualHtml);
         }
     }
 
@@ -220,13 +220,13 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
 
         $actual = $this->_object->render($this->_elementMock);
 
-        $this->assertContains('test_field_toHTML', $actual);
+        $this->assertStringContainsString('test_field_toHTML', $actual);
 
         $expected = '<div id="row_test_field_id_comment" class="system-tooltip-box"' .
             ' style="display:none;">test_field_tootip</div>';
-        $this->assertContains($expected, $actual);
+        $this->assertStringContainsString($expected, $actual);
         if ($nested) {
-            $this->assertContains('nested', $actual);
+            $this->assertStringContainsString('nested', $actual);
         }
     }
 

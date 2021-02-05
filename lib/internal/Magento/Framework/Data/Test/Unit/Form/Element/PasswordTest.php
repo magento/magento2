@@ -52,7 +52,7 @@ class PasswordTest extends \PHPUnit\Framework\TestCase
     public function testGetHtml()
     {
         $html = $this->_model->getHtml();
-        $this->assertContains('type="password"', $html);
+        $this->assertStringContainsString('type="password"', $html);
         $this->assertTrue(preg_match('/class=\".*input-text.*\"/i', $html) > 0);
     }
 }

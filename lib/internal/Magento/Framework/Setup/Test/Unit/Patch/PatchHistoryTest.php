@@ -14,7 +14,7 @@ use Magento\Framework\Setup\Patch\PatchInterface;
 
 /**
  * Class PatchHistoryTest
- * @package Magento\Framework\Setup\Test\Unit\Patch
+ * Test for PatchHistory
  */
 class PatchHistoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -67,7 +67,7 @@ class PatchHistoryTest extends \PHPUnit\Framework\TestCase
     public function testFixAppliedPatch()
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessageRegExp('"Patch [a-zA-Z0-9\\_]+ cannot be applied twice"');
+        $this->expectExceptionMessageMatches('"Patch [a-zA-Z0-9\\_]+ cannot be applied twice"');
 
         /** @var PatchInterface|\PHPUnit\Framework\MockObject\MockObject $patch1 */
         $patch1 = $this->getMockForAbstractClass(PatchInterface::class);
@@ -90,7 +90,7 @@ class PatchHistoryTest extends \PHPUnit\Framework\TestCase
     public function testFixPatchTwice()
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessageRegExp('"Patch [a-zA-Z0-9\\_]+ cannot be applied twice"');
+        $this->expectExceptionMessageMatches('"Patch [a-zA-Z0-9\\_]+ cannot be applied twice"');
 
         /** @var PatchInterface|\PHPUnit\Framework\MockObject\MockObject $patch1 */
         $patch = $this->getMockForAbstractClass(PatchInterface::class);
