@@ -16,7 +16,7 @@ For information about a typical file structure of a module in Magento 2, see [Mo
 
 Extension developers can interact with the Magento_ConfigurableProduct module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/plugins.html).
 
-[The Magento dependency injection mechanism](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/depend-inj.html) enables you to override the functionality of the Magento_WebapiAsync module.
+[The Magento dependency injection mechanism](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/depend-inj.html) enables you to override the functionality of the Magento_ConfigurableProduct module.
 
 ## Additional information
 
@@ -24,7 +24,7 @@ Extension developers can interact with the Magento_ConfigurableProduct module. F
 
 Modify the value of the `gallery_switch_strategy` variable in the theme view.xml file to configure how gallery images should be updated when a user switches between product configurations.
 
-[Learn how to configure variables in view.xml](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/themes/theme-images.html#view_xml_vars)
+Learn how to [configure variables] in the view.xml file(https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/themes/theme-images.html#view_xml_vars).
 
 There are two available values for the `gallery_switch_strategy` variable:
 
@@ -35,9 +35,9 @@ Value | Description
 
 If the `gallery_switch_strategy` variable is not defined, the default value `replace` will be used.
 
-For example, adding these lines of code to the theme view.xml will set the gallery behavior to `replace` mode. 
+For example, adding these lines of code to the theme view.xml file will set the gallery behavior to `replace` mode. 
 
-```
+```xml
 <vars module="Magento_ConfigurableProduct">
     <var name="gallery_switch_strategy">replace</var>
 </vars>
