@@ -26,7 +26,7 @@ There is a way to configure the mechanism of how images of a gallery should be
 updated when user switches between configurations of a product through modifying the value
 of the `gallery_switch_strategy` variable in the theme view.xml file.
 
-[Learn how to configure variables in view.xml](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/themes/theme-images.html#view_xml_vars)
+Learn how to [configure variables] in the view.xml file(https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/themes/theme-images.html#view_xml_vars).
 
 There are two available values for the `gallery_switch_strategy` variable:
 
