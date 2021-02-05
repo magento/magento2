@@ -1,0 +1,5 @@
+app/code/Magento/StorefrontDi/Console
+app/code/Magento/StorefrontDi/Model/Di/App/Task/Operation
+app/code/Magento/StorefrontDi/Model/Di/Code
+app/code/Magento/StorefrontDi/Model/Di/Compiler
+app/code/Magento/StorefrontDeploy/Console
