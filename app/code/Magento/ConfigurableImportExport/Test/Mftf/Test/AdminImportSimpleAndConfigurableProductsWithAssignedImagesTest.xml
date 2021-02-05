@@ -278,7 +278,8 @@
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{ImportProduct_Configurable.name}}" stepKey="seeProductName2"/>
         <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Configurable.sku}}" stepKey="seeSku2"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{ImportProductSimple1_Configurable.price}}" stepKey="seePrice2"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProductSimple1_Configurable.baseImageName)}}" stepKey="seeBaseImage2"/>
+        <waitForPageLoad stepKey="waitForImageLoad1"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProductSimple1_Configurable.baseImageName)}}" stepKey="seeBaseImage2"/>
 
         <!-- Storefront: Verify Configurable Product Option 2 Info & Image -->
         <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectOption2">
@@ -288,7 +289,8 @@
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{ImportProduct_Configurable.name}}" stepKey="seeProductName3"/>
         <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Configurable.sku}}" stepKey="seeSku3"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{ImportProductSimple2_Configurable.price}}" stepKey="seePrice3"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProductSimple2_Configurable.baseImageName)}}" stepKey="seeBaseImage3"/>
+        <waitForPageLoad stepKey="waitForImageLoad2"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProductSimple2_Configurable.baseImageName)}}" stepKey="seeBaseImage3"/>
 
         <!-- Storefront: Verify Configurable Product Option 3 Info & Image -->
         <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectOption3">
@@ -298,7 +300,8 @@
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{ImportProduct_Configurable.name}}" stepKey="seeProductName4"/>
         <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Configurable.sku}}" stepKey="seeSku4"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{ImportProductSimple3_Configurable.price}}" stepKey="seePrice4"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProductSimple3_Configurable.baseImageName)}}" stepKey="seeBaseImage4"/>
+        <waitForPageLoad stepKey="waitForImageLoad3"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProductSimple3_Configurable.baseImageName)}}" stepKey="seeBaseImage4"/>
 
         <!-- Purchase Configurable Product -->
         <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="addProductToCart"/>
