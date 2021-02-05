@@ -120,6 +120,7 @@ class CspWhitelistXmlCollectorTest extends TestCase
                     [
                         'https://admin.magento.com',
                         'https://devdocs.magento.com',
+                        '*.adobe.com',
                         'example.magento.com'
                     ],
                     $policy->getHostSources()

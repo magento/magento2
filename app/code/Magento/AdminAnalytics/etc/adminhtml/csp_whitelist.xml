@@ -11,18 +11,31 @@
             <policy id="script-src">
                 <values>
                     <value id="aptrinsic" type="host">*.aptrinsic.com</value>
+                    <value id="adobe" type="host">*.adobe.com</value>
                 </values>
             </policy>
             <policy id="style-src">
                 <values>
                     <value id="aptrinsic" type="host">*.aptrinsic.com</value>
                     <value id="fonts_googleapis" type="host">fonts.googleapis.com</value>
+                    <value id="adobe" type="host">*.adobe.com</value>
                 </values>
             </policy>
             <policy id="img-src">
                 <values>
                     <value id="aptrinsic" type="host">*.aptrinsic.com</value>
                     <value id="storage_googleapis" type="host">storage.googleapis.com</value>
+                    <value id="adobe" type="host">*.adobe.com</value>
+                </values>
+            </policy>
+            <policy id="media-src">
+                <values>
+                    <value id="adobe" type="host">*.adobe.com</value>
+                </values>
+            </policy>
+            <policy id="frame-src">
+                <values>
+                    <value id="adobe" type="host">*.adobe.com</value>
                 </values>
             </policy>
             <policy id="connect-src">
