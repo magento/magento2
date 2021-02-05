@@ -99,7 +99,7 @@
         <selectOption selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Option One')}}" userInput="$$simpleProduct1.sku$$ +$$$simpleProduct1.price$$.00" stepKey="selectOption0Product0"/>
         <seeOptionIsSelected selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Option One')}}" userInput="$$simpleProduct1.sku$$ +$$$simpleProduct1.price$$.00" stepKey="checkOption0Product0"/>
         <fillField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity('Option One')}}" userInput="3" stepKey="fillQuantity00"/>
-        <seeInField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity('Option One')}}" userInput="3" stepKey="checkQuantity00"/>
+        <seeInField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity('Option One')}}" userInput="03" stepKey="checkQuantity00"/>
 
         <selectOption selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Option One')}}" userInput="$$simpleProduct2.sku$$ +$$$simpleProduct2.price$$.00" stepKey="selectOption0Product1"/>
         <seeOptionIsSelected selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Option One')}}" userInput="$$simpleProduct2.sku$$ +$$$simpleProduct2.price$$.00" stepKey="checkOption0Product1"/>
