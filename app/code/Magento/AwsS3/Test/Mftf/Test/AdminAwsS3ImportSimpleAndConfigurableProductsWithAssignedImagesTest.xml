@@ -84,7 +84,7 @@
             </helper>
         </after>
 
-        <!-- Import Gift Card -->
+        <!-- Import Configurable Product -->
         <actionGroup ref="AdminFillImportFormActionGroup" stepKey="fillImportForm">
             <argument name="importFile" value="{{ImportProduct_Configurable.fileName}}"/>
             <argument name="imagesFileDirectory" value="{{ImportProduct_Configurable.name}}"/>
