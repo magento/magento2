@@ -30,7 +30,6 @@
         </after>
 
         <waitForPageLoad stepKey="waitForPageReloaded"/>
-        <seeInPageSource html="var adminAnalyticsMetadata =" stepKey="seeInPageSource"/>
         <grabPageSource stepKey="pageSource"/>
         <assertRegExp message="adminAnalyticsMetadata object is invalid" stepKey="validateadminAnalyticsMetadata">
             <expectedResult type="string">#var\s+adminAnalyticsMetadata\s+=\s+{\s+("[\w_]+":\s+"[^"]*?",\s+)*?("[\w_]+":\s+"[^"]*?"\s+)};#s</expectedResult>
