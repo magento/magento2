@@ -22,9 +22,7 @@ Extension developers can interact with the Magento_ConfigurableProduct module. F
 
 ### Configurable variables through the theme view.xml
 
-There is a way to configure the mechanism of how images of a gallery should be
-updated when user switches between configurations of a product through modifying the value
-of the `gallery_switch_strategy` variable in the theme view.xml file.
+Modify the value of the `gallery_switch_strategy` variable in the theme view.xml file to configure how gallery images should be updated when a user switches between product configurations.
 
 [Learn how to configure variables in view.xml](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/themes/theme-images.html#view_xml_vars)
 
