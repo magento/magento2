@@ -22,7 +22,7 @@
     <type name="Magento\AdvancedSearch\Model\Client\ClientResolver">
         <arguments>
             <argument name="path" xsi:type="const">Magento\CatalogSearch\Model\ResourceModel\EngineInterface::CONFIG_ENGINE_PATH</argument>
-            <argument name="scopeType" xsi:type="const">\Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\AdvancedSearch\Model\SuggestedQueries">

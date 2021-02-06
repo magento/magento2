@@ -40,10 +40,10 @@
     <type name="Magento\AdvancedSearch\Model\Client\ClientResolver">
         <arguments>
             <argument name="clientFactories" xsi:type="array">
-                <item name="elasticsearch7" xsi:type="string">\Magento\Elasticsearch7\Model\Client\ElasticsearchFactory</item>
+                <item name="elasticsearch7" xsi:type="string">Magento\Elasticsearch7\Model\Client\ElasticsearchFactory</item>
             </argument>
             <argument name="clientOptions" xsi:type="array">
-                <item name="elasticsearch7" xsi:type="string">\Magento\Elasticsearch\Model\Config</item>
+                <item name="elasticsearch7" xsi:type="string">Magento\Elasticsearch\Model\Config</item>
             </argument>
         </arguments>
     </type>
@@ -75,7 +75,7 @@
     <type name="Magento\Search\Model\AdapterFactory">
         <arguments>
             <argument name="adapters" xsi:type="array">
-                <item name="elasticsearch7" xsi:type="string">\Magento\Elasticsearch7\SearchAdapter\Adapter</item>
+                <item name="elasticsearch7" xsi:type="string">Magento\Elasticsearch7\SearchAdapter\Adapter</item>
             </argument>
         </arguments>
     </type>
@@ -131,14 +131,14 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="\Magento\Elasticsearch7\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CompositeResolver" type="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CompositeResolver">
+    <virtualType name="Magento\Elasticsearch7\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CompositeResolver" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CompositeResolver">
         <arguments>
             <argument name="items" xsi:type="array">
-                <item name="notEav" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\NotEavAttribute</item>
-                <item name="special" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\SpecialAttribute</item>
-                <item name="price" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\Price</item>
-                <item name="categoryName" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CategoryName</item>
-                <item name="position" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\Position</item>
+                <item name="notEav" xsi:type="object">Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\NotEavAttribute</item>
+                <item name="special" xsi:type="object">Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\SpecialAttribute</item>
+                <item name="price" xsi:type="object">Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\Price</item>
+                <item name="categoryName" xsi:type="object">Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CategoryName</item>
+                <item name="position" xsi:type="object">Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\Position</item>
                 <item name="default" xsi:type="object">Magento\Elasticsearch7\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolver</item>
             </argument>
         </arguments>
@@ -152,7 +152,7 @@
                  type="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapper">
         <arguments>
             <argument name="fieldProvider" xsi:type="object">elasticsearch5FieldProvider</argument>
-            <argument name="fieldNameResolver" xsi:type="object">\Magento\Elasticsearch7\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CompositeResolver</argument>
+            <argument name="fieldNameResolver" xsi:type="object">Magento\Elasticsearch7\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CompositeResolver</argument>
         </arguments>
     </virtualType>
 

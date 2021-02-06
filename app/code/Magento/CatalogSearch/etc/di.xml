@@ -179,7 +179,7 @@
     </type>
     <type name="Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorResolver">
         <arguments>
-            <argument name="defaultGenerator" xsi:type="object">\Magento\CatalogSearch\Model\Search\RequestGenerator\General</argument>
+            <argument name="defaultGenerator" xsi:type="object">Magento\CatalogSearch\Model\Search\RequestGenerator\General</argument>
             <argument name="generators" xsi:type="array">
                 <item name="decimal" xsi:type="object">Magento\CatalogSearch\Model\Search\RequestGenerator\Decimal</item>
             </argument>
@@ -188,8 +188,8 @@
     <type name="Magento\CatalogSearch\Model\Adapter\Aggregation\RequestCheckerComposite">
         <arguments>
             <argument name="queryCheckers" xsi:type="array">
-                <item name="advanced_search_container" xsi:type="object">\Magento\CatalogSearch\Model\Adapter\Aggregation\Checker\Query\AdvancedSearch</item>
-                <item name="catalog_view_container" xsi:type="object">\Magento\CatalogSearch\Model\Adapter\Aggregation\Checker\Query\CatalogView</item>
+                <item name="advanced_search_container" xsi:type="object">Magento\CatalogSearch\Model\Adapter\Aggregation\Checker\Query\AdvancedSearch</item>
+                <item name="catalog_view_container" xsi:type="object">Magento\CatalogSearch\Model\Adapter\Aggregation\Checker\Query\CatalogView</item>
             </argument>
         </arguments>
     </type>
