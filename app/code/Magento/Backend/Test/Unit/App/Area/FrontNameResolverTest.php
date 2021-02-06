@@ -116,23 +116,21 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigMock->expects($this->exactly(2))
             ->method('getValue')
             ->willReturnMap(
-                
+                [
+                    [Store::XML_PATH_UNSECURE_BASE_URL, ScopeInterface::SCOPE_STORE, null, $url],
                     [
-                        [Store::XML_PATH_UNSECURE_BASE_URL, ScopeInterface::SCOPE_STORE, null, $url],
-                        [
-                            FrontNameResolver::XML_PATH_USE_CUSTOM_ADMIN_URL,
-                            ScopeInterface::SCOPE_STORE,
-                            null,
-                            $useCustomAdminUrl
-                        ],
-                        [
-                            FrontNameResolver::XML_PATH_CUSTOM_ADMIN_URL,
-                            ScopeInterface::SCOPE_STORE,
-                            null,
-                            $customAdminUrl
-                        ],
-                    ]
-                
+                        FrontNameResolver::XML_PATH_USE_CUSTOM_ADMIN_URL,
+                        ScopeInterface::SCOPE_STORE,
+                        null,
+                        $useCustomAdminUrl
+                    ],
+                    [
+                        FrontNameResolver::XML_PATH_CUSTOM_ADMIN_URL,
+                        ScopeInterface::SCOPE_STORE,
+                        null,
+                        $customAdminUrl
+                    ],
+                ]
             );
 
         $this->request->expects($this->any())

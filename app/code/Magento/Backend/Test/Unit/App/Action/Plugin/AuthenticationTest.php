@@ -9,7 +9,7 @@ use Magento\Backend\App\Action\Plugin\Authentication;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Class AuthenticationTest
+ * Test for Authentication
  */
 class AuthenticationTest extends \PHPUnit\Framework\TestCase
 {

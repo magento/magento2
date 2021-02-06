@@ -10,7 +10,7 @@ use Magento\Payment\Gateway\Http\TransferBuilder;
 use Magento\Payment\Gateway\Http\TransferInterface;
 
 /**
- * Class TransferFactoryTest
+ * Test for TransferFactory
  */
 class TransferFactoryTest extends \PHPUnit\Framework\TestCase
 {

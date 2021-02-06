@@ -14,7 +14,7 @@ use Magento\Framework\AuthorizationInterface;
 use Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized;
 
 /**
- * Class PluginTest
+ * Test for Plugin
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

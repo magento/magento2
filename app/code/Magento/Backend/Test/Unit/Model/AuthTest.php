@@ -8,7 +8,7 @@ namespace Magento\Backend\Test\Unit\Model;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Class AuthTest
+ * Test for Auth
  */
 class AuthTest extends \PHPUnit\Framework\TestCase
 {

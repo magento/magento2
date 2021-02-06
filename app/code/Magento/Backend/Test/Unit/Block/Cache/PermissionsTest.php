@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class PermissionsTest
+ * Test for Permissions
  */
 class PermissionsTest extends TestCase
 {

@@ -10,7 +10,7 @@ use Magento\Framework\Bulk\OperationInterface;
 use Magento\Framework\Bulk\BulkSummaryInterface;
 
 /**
- * Class StatusMapperTest
+ * Test for StatusMapper
  */
 class StatusMapperTest extends \PHPUnit\Framework\TestCase
 {

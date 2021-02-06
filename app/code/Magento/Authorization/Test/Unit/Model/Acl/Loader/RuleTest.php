@@ -45,21 +45,17 @@ class RuleTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock->expects($this->any())
             ->method('serialize')
             ->willReturnCallback(
-                
-                    function ($value) {
-                        return json_encode($value);
-                    }
-                
+                function ($value) {
+                    return json_encode($value);
+                }
             );
 
         $this->serializerMock->expects($this->any())
             ->method('unserialize')
             ->willReturnCallback(
-                
-                    function ($value) {
-                        return json_decode($value, true);
-                    }
-                
+                function ($value) {
+                    return json_decode($value, true);
+                }
             );
 
         $this->aclDataCacheMock = $this->createMock(\Magento\Framework\Acl\Data\CacheInterface::class);
@@ -84,15 +80,13 @@ class RuleTest extends \PHPUnit\Framework\TestCase
             ->method('load')
             ->with(\Magento\Authorization\Model\Acl\Loader\Rule::ACL_RULE_CACHE_KEY)
             ->willReturn(
-                
-                    json_encode(
-                        [
-                            ['role_id' => 1, 'resource_id' => 'Magento_Backend::all', 'permission' => 'allow'],
-                            ['role_id' => 2, 'resource_id' => 1, 'permission' => 'allow'],
-                            ['role_id' => 3, 'resource_id' => 1, 'permission' => 'deny'],
-                        ]
-                    )
-                
+                json_encode(
+                    [
+                        ['role_id' => 1, 'resource_id' => 'Magento_Backend::all', 'permission' => 'allow'],
+                        ['role_id' => 2, 'resource_id' => 1, 'permission' => 'allow'],
+                        ['role_id' => 3, 'resource_id' => 1, 'permission' => 'deny'],
+                    ]
+                )
             );
 
         $aclMock = $this->createMock(\Magento\Framework\Acl::class);
