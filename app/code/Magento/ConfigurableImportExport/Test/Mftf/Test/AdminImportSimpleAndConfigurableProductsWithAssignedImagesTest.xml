@@ -23,6 +23,9 @@
         </annotations>
 
         <before>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
             <!-- Create Category, Product Attribute with 3 Options, & Customer -->
             <createData entity="ImportCategory_Configurable" stepKey="createImportCategory"/>
             <createData entity="ProductAttributeWithThreeOptionsForImport" stepKey="createImportProductAttribute"/>
@@ -56,24 +59,32 @@
                 <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple3_Configurable.thumbnailImage}}</argument>
                 <argument name="destination">var/import/images/{{ImportProduct_Configurable.name}}/{{ImportProductSimple3_Configurable.thumbnailImage}}</argument>
             </helper>
-
-            <!-- Login as Admin -->
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
             <!-- Delete Data -->
             <deleteData createDataKey="createImportCategory" stepKey="deleteImportCategory"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
+            <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="filterProductsGrid">
+                <argument name="filterInputName" value="sku"/>
+                <argument name="filterValue" value="{{ImportProduct_Configurable.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterApplyActionGroup" stepKey="applyProductsFilter"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteProducts"/>
+            <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="filterProductsGrid2">
+                <argument name="filterInputName" value="sku"/>
+                <argument name="filterValue" value="import-product"/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterApplyActionGroup" stepKey="applyProductsFilter2"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteProducts2"/>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="resetProductsGrid"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteAttribute">
+                <argument name="productAttributeLabel" value="{{ProductAttributeFrontendLabelImport1.label}}" />
+            </actionGroup>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
                 <argument name="path">var/import/images/{{ImportProduct_Configurable.name}}</argument>
             </helper>
-            <deleteData url="/V1/products/{{ImportProductSimple1_Configurable.urlKey}}" stepKey="deleteImportedSimpleProduct1"/>
-            <deleteData url="/V1/products/{{ImportProductSimple2_Configurable.urlKey}}" stepKey="deleteImportedSimpleProduct2"/>
-            <deleteData url="/V1/products/{{ImportProductSimple3_Configurable.urlKey}}" stepKey="deleteImportedSimpleProduct3"/>
-            <deleteData url="/V1/products/{{ImportProduct_Configurable.urlKey}}" stepKey="deleteImportedConfigurableProduct"/>
-            <deleteData createDataKey="createImportProductAttribute" stepKey="deleteProductAttribute"/>
-            <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="navigateToAndResetProductGridToDefaultView"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
