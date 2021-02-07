@@ -9,9 +9,10 @@ namespace Magento\MessageQueue\Test\Integration;
 
 use Magento\Framework\MessageQueue\PoisonPill\PoisonPillCompareInterface;
 use Magento\Framework\MessageQueue\PoisonPill\PoisonPillReadInterface;
-use Magento\Framework\Shell;
+use Magento\Setup\Console\Command\UpgradeCommand;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Tester\CommandTester;
 
 class PoisonPillApplyDuringSetupUpgradeTest extends TestCase
 {
@@ -26,9 +27,9 @@ class PoisonPillApplyDuringSetupUpgradeTest extends TestCase
     private $poisonPillCompare;
 
     /**
-     * @var Shell
+     * @var UpgradeCommand
      */
-    private $shell;
+    private $upgradeCommand;
 
     /**
      * @inheritdoc
@@ -38,11 +39,10 @@ class PoisonPillApplyDuringSetupUpgradeTest extends TestCase
         $objectManager = Bootstrap::getObjectManager();
         $this->poisonPillRead = $objectManager->get(PoisonPillReadInterface::class);
         $this->poisonPillCompare = $objectManager->get(PoisonPillCompareInterface::class);
-        $this->shell = $objectManager->get(Shell::class);
+        $this->upgradeCommand = $objectManager->get(UpgradeCommand::class);
     }
 
     /**
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @covers \Magento\MessageQueue\Setup\Recurring
      *
      * @magentoDbIsolation disabled
@@ -50,7 +50,16 @@ class PoisonPillApplyDuringSetupUpgradeTest extends TestCase
     public function testChangeVersion()
     {
         $version = $this->poisonPillRead->getLatestVersion();
-        $this->shell->execute(PHP_BINARY . ' -f %s setup:upgrade --keep-generated', [BP . '/bin/magento']);
+        $this->runTestUpgradeCommand();
         $this->assertEquals(false, $this->poisonPillCompare->isLatestVersion($version));
+    }
+
+    /**
+     * @return void
+     */
+    private function runTestUpgradeCommand(): void
+    {
+        $commandTester = new CommandTester($this->upgradeCommand);
+        $commandTester->execute(['--keep-generated']);
     }
 }
