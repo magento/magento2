@@ -19,17 +19,17 @@ class GuestCartTotalRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $cartTotalRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteIdMaskFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteIdMaskMock;
 
@@ -43,7 +43,7 @@ class GuestCartTotalRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $cartId;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -76,7 +76,7 @@ class GuestCartTotalRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->cartTotalRepository->expects($this->once())
             ->method('get')
             ->with($this->cartId)
-            ->will($this->returnValue($retValue));
+            ->willReturn($retValue);
         $this->assertSame($retValue, $this->model->get($this->maskedCartId));
     }
 }

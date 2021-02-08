@@ -14,7 +14,7 @@ class CompiledTest extends \PHPUnit\Framework\TestCase
      */
     protected $_compiled;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $envFactoryMock = $this->createMock(\Magento\Framework\App\EnvironmentFactory::class);
         $this->_compiled = new CompiledTesting($envFactoryMock);

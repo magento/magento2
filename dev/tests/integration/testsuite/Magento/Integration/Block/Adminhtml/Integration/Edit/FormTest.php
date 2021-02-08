@@ -24,7 +24,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -38,10 +38,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     public function testToHtmlNoExistingIntegrationData()
     {
-        $this->assertContains(
-            '<form id="edit_form" action="" method="post">',
-            $this->block->toHtml()
-        );
+        $this->assertStringContainsString('<form id="edit_form" action="" method="post">', $this->block->toHtml());
     }
 
     /**
@@ -61,7 +58,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $html = $this->block->toHtml();
 
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             "/<input id=\"integration_id\" name=\"id\".*value=\"$id\".*type=\"hidden\".*>/",
             $html
         );

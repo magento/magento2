@@ -25,12 +25,12 @@ class CreateGuaranteeAbilityTest extends \PHPUnit\Framework\TestCase
     private $dateTimeFactory;
 
     /**
-     * @var OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderRepository;
 
     /**
-     * @var CaseManagement|\PHPUnit_Framework_MockObject_MockObject
+     * @var CaseManagement|\PHPUnit\Framework\MockObject\MockObject
      */
     private $caseManagement;
 
@@ -42,7 +42,7 @@ class CreateGuaranteeAbilityTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dateTimeFactory = new DateTimeFactory();
         $this->orderRepository = $this->getMockBuilder(OrderRepositoryInterface::class)
@@ -63,10 +63,10 @@ class CreateGuaranteeAbilityTest extends \PHPUnit\Framework\TestCase
         $orderId = 123;
         $orderCreatedAt = $this->getDateAgo(6);
 
-        /** @var CaseInterface|\PHPUnit_Framework_MockObject_MockObject $case */
+        /** @var CaseInterface|\PHPUnit\Framework\MockObject\MockObject $case */
         $case = $this->getMockBuilder(CaseInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $case->expects($this->once())
             ->method('isGuaranteeEligible')
             ->willReturn(true);
@@ -76,7 +76,7 @@ class CreateGuaranteeAbilityTest extends \PHPUnit\Framework\TestCase
             ->with($orderId)
             ->willReturn($case);
 
-        /** @var OrderInterface|\PHPUnit_Framework_MockObject_MockObject $order */
+        /** @var OrderInterface|\PHPUnit\Framework\MockObject\MockObject $order */
         $order = $this->getMockBuilder(OrderInterface::class)
             ->getMockForAbstractClass();
         $order->expects($this->once())
@@ -116,10 +116,10 @@ class CreateGuaranteeAbilityTest extends \PHPUnit\Framework\TestCase
     {
         $orderId = 123;
 
-        /** @var CaseInterface|\PHPUnit_Framework_MockObject_MockObject $case */
+        /** @var CaseInterface|\PHPUnit\Framework\MockObject\MockObject $case */
         $case = $this->getMockBuilder(CaseInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $case->expects($this->once())
             ->method('isGuaranteeEligible')
             ->willReturn(false);
@@ -139,10 +139,10 @@ class CreateGuaranteeAbilityTest extends \PHPUnit\Framework\TestCase
     {
         $orderId = 123;
 
-        /** @var CaseInterface|\PHPUnit_Framework_MockObject_MockObject $case */
+        /** @var CaseInterface|\PHPUnit\Framework\MockObject\MockObject $case */
         $case = $this->getMockBuilder(CaseInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $case->expects($this->once())
             ->method('isGuaranteeEligible')
             ->willReturn(true);
@@ -170,10 +170,10 @@ class CreateGuaranteeAbilityTest extends \PHPUnit\Framework\TestCase
     {
         $orderId = 123;
 
-        /** @var CaseInterface|\PHPUnit_Framework_MockObject_MockObject $case */
+        /** @var CaseInterface|\PHPUnit\Framework\MockObject\MockObject $case */
         $case = $this->getMockBuilder(CaseInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $case->expects($this->once())
             ->method('isGuaranteeEligible')
             ->willReturn(true);
@@ -183,7 +183,7 @@ class CreateGuaranteeAbilityTest extends \PHPUnit\Framework\TestCase
             ->with($orderId)
             ->willReturn($case);
 
-        /** @var OrderInterface|\PHPUnit_Framework_MockObject_MockObject $order */
+        /** @var OrderInterface|\PHPUnit\Framework\MockObject\MockObject $order */
         $order = $this->getMockBuilder(OrderInterface::class)
             ->getMockForAbstractClass();
         $order->expects($this->once())
@@ -213,10 +213,10 @@ class CreateGuaranteeAbilityTest extends \PHPUnit\Framework\TestCase
         $orderId = 123;
         $orderCreatedAt = $this->getDateAgo(8);
 
-        /** @var CaseInterface|\PHPUnit_Framework_MockObject_MockObject $case */
+        /** @var CaseInterface|\PHPUnit\Framework\MockObject\MockObject $case */
         $case = $this->getMockBuilder(CaseInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $case->expects($this->once())
             ->method('isGuaranteeEligible')
             ->willReturn(true);
@@ -226,7 +226,7 @@ class CreateGuaranteeAbilityTest extends \PHPUnit\Framework\TestCase
             ->with($orderId)
             ->willReturn($case);
 
-        /** @var OrderInterface|\PHPUnit_Framework_MockObject_MockObject $order */
+        /** @var OrderInterface|\PHPUnit\Framework\MockObject\MockObject $order */
         $order = $this->getMockBuilder(OrderInterface::class)
             ->getMockForAbstractClass();
         $order->expects($this->once())

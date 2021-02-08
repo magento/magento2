@@ -21,27 +21,27 @@ class MoveTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var ChildrenCategoriesProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var ChildrenCategoriesProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $childrenCategoriesProviderMock;
 
     /**
-     * @var CategoryUrlPathGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryUrlPathGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $categoryUrlPathGeneratorMock;
 
     /**
-     * @var CategoryResourceModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryResourceModel|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectMock;
 
     /**
-     * @var Category|\PHPUnit_Framework_MockObject_MockObject
+     * @var Category|\PHPUnit\Framework\MockObject\MockObject
      */
     private $categoryMock;
 
     /**
-     * @var CategoryFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $categoryFactory;
 
@@ -50,7 +50,7 @@ class MoveTest extends \PHPUnit\Framework\TestCase
      */
     private $plugin;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->categoryUrlPathGeneratorMock = $this->getMockBuilder(CategoryUrlPathGenerator::class)

@@ -10,7 +10,7 @@ use \Magento\Framework\Data\Argument\Interpreter\ArrayType;
 class ArrayTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Data\Argument\InterpreterInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Data\Argument\InterpreterInterface
      */
     protected $_itemInterpreter;
 
@@ -19,7 +19,7 @@ class ArrayTypeTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_itemInterpreter = $this->getMockForAbstractClass(
             \Magento\Framework\Data\Argument\InterpreterInterface::class
@@ -28,13 +28,14 @@ class ArrayTypeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Array items are expected
      *
      * @dataProvider evaluateExceptionDataProvider
      */
     public function testEvaluateException($inputData)
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Array items are expected');
+
         $this->_model->evaluate($inputData);
     }
 
@@ -58,9 +59,9 @@ class ArrayTypeTest extends \PHPUnit\Framework\TestCase
     {
         $this->_itemInterpreter->expects($this->any())
             ->method('evaluate')
-            ->will($this->returnCallback(function ($input) {
+            ->willReturnCallback(function ($input) {
                 return '-' . $input['value'] . '-';
-            }));
+            });
         $actual = $this->_model->evaluate($input);
         $this->assertSame($expected, $actual);
     }

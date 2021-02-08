@@ -12,7 +12,7 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new \Magento\Framework\Validator\DataObject();
 
@@ -44,7 +44,7 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_model = null;
     }
@@ -69,7 +69,7 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
     public function testGetMessages()
     {
         $messages = $this->_model->getMessages();
-        $this->assertInternalType('array', $messages);
+        $this->assertIsArray($messages);
     }
 
     /**

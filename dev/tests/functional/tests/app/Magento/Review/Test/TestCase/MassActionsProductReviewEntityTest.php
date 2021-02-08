@@ -111,7 +111,7 @@ class MassActionsProductReviewEntityTest extends Injectable
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->ratingIndex->open();
         if ($this->review instanceof Review) {

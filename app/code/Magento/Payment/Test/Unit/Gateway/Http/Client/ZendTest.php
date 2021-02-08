@@ -20,31 +20,31 @@ class ZendTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ConverterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConverterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $converterMock;
 
     /**
-     * @var ZendClientFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ZendClientFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $zendClientFactoryMock;
 
     /**
-     * @var ZendClient|\PHPUnit_Framework_MockObject_MockObject
+     * @var ZendClient|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $clientMock;
 
     /**
-     * @var TransferInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TransferInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $transferObjectMock;
 
     /**
-     * @var \Magento\Payment\Model\Method\Logger|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Model\Method\Logger|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->converterMock = $this->getMockBuilder(\Magento\Payment\Gateway\Http\ConverterInterface::class)
             ->getMockForAbstractClass();
@@ -94,10 +94,11 @@ class ZendTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests failing client gateway request
      *
-     * @expectedException  \Magento\Payment\Gateway\Http\ClientException
      */
     public function testPlaceRequestClientFail()
     {
+        $this->expectException(\Magento\Payment\Gateway\Http\ClientException::class);
+
         $this->setClientTransferObjects();
 
         $this->clientMock->expects($this->once())
@@ -116,10 +117,11 @@ class ZendTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests failing response converting
      *
-     * @expectedException  \Magento\Payment\Gateway\Http\ConverterException
      */
     public function testPlaceRequestConvertResponseFail()
     {
+        $this->expectException(\Magento\Payment\Gateway\Http\ConverterException::class);
+
         $this->setClientTransferObjects();
         $responseBody = 'Response body content';
 

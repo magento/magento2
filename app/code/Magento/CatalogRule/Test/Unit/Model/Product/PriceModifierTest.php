@@ -13,21 +13,21 @@ class PriceModifierTest extends \PHPUnit\Framework\TestCase
     protected $priceModifier;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $ruleFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $ruleMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->ruleFactoryMock = $this->createPartialMock(\Magento\CatalogRule\Model\RuleFactory::class, ['create']);
         $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
@@ -42,7 +42,7 @@ class PriceModifierTest extends \PHPUnit\Framework\TestCase
      */
     public function testModifyPriceIfPriceExists($resultPrice, $expectedPrice)
     {
-        $this->ruleFactoryMock->expects($this->once())->method('create')->will($this->returnValue($this->ruleMock));
+        $this->ruleFactoryMock->expects($this->once())->method('create')->willReturn($this->ruleMock);
         $this->ruleMock->expects(
             $this->once()
         )->method(
@@ -50,8 +50,8 @@ class PriceModifierTest extends \PHPUnit\Framework\TestCase
         )->with(
             $this->productMock,
             100
-        )->will(
-            $this->returnValue($resultPrice)
+        )->willReturn(
+            $resultPrice
         );
         $this->assertEquals($expectedPrice, $this->priceModifier->modifyPrice(100, $this->productMock));
     }
@@ -67,6 +67,6 @@ class PriceModifierTest extends \PHPUnit\Framework\TestCase
     public function testModifyPriceIfPriceNotExist()
     {
         $this->ruleFactoryMock->expects($this->never())->method('create');
-        $this->assertEquals(null, $this->priceModifier->modifyPrice(null, $this->productMock));
+        $this->assertNull($this->priceModifier->modifyPrice(null, $this->productMock));
     }
 }

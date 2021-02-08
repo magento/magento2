@@ -22,7 +22,7 @@ class DefaultStockTest extends \PHPUnit\Framework\TestCase
      */
     private $stockConfiguration;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->indexer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock::class

@@ -16,43 +16,43 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  */
 class ProductUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $canonicalUrlRewriteGenerator;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $currentUrlRewritesRegenerator;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $categoriesUrlRewriteGenerator;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $anchorUrlRewriteGenerator;
 
     /** @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator */
     protected $productUrlRewriteGenerator;
 
-    /** @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService|\PHPUnit\Framework\MockObject\MockObject */
     protected $storeViewService;
 
-    /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject */
     protected $product;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $objectRegistryFactory;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $storeManager;
 
-    /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection|\PHPUnit\Framework\MockObject\MockObject */
     protected $categoriesCollection;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \PHPUnit\Framework\MockObject\MockObject  */
     private $productScopeRewriteGenerator;
 
     /**
      * Test method
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $this->categoriesCollection = $this->getMockBuilder(
@@ -60,7 +60,7 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         )
             ->disableOriginalConstructor()->getMock();
         $this->product->expects($this->any())->method('getCategoryCollection')
-            ->will($this->returnValue($this->categoriesCollection));
+            ->willReturn($this->categoriesCollection);
         $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()->getMock();
         $this->currentUrlRewritesRegenerator = $this->getMockBuilder(

@@ -17,26 +17,26 @@ class SetRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $attrSetRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchCriteriaBuilderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $filterBuilderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $eavConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attrSetRepositoryMock = $this->createMock(\Magento\Eav\Api\AttributeSetRepositoryInterface::class);
         $this->searchCriteriaBuilderMock = $this->createMock(\Magento\Framework\Api\SearchCriteriaBuilder::class);
@@ -64,11 +64,12 @@ class SetRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Provided Attribute set non product Attribute set.
      */
     public function testSaveNonProductAttributeSet()
     {
+        $this->expectException(\Magento\Framework\Exception\StateException::class);
+        $this->expectExceptionMessage('Provided Attribute set non product Attribute set.');
+
         $attributeSetMock = $this->createMock(\Magento\Eav\Api\Data\AttributeSetInterface::class);
         $this->setMockForValidation($attributeSetMock, 3);
         $this->attrSetRepositoryMock->expects($this->never())->method('save');
@@ -89,11 +90,12 @@ class SetRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Provided Attribute set non product Attribute set.
      */
     public function testGetNonProductAttributeSet()
     {
+        $this->expectException(\Magento\Framework\Exception\StateException::class);
+        $this->expectExceptionMessage('Provided Attribute set non product Attribute set.');
+
         $attributeSetId = 1;
         $attributeSetMock = $this->createMock(\Magento\Eav\Api\Data\AttributeSetInterface::class);
         $this->setMockForValidation($attributeSetMock, 3);
@@ -117,11 +119,12 @@ class SetRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Provided Attribute set non product Attribute set.
      */
     public function testDeleteNonProductAttributeSet()
     {
+        $this->expectException(\Magento\Framework\Exception\StateException::class);
+        $this->expectExceptionMessage('Provided Attribute set non product Attribute set.');
+
         $attributeSetMock = $this->createMock(\Magento\Eav\Api\Data\AttributeSetInterface::class);
         $this->setMockForValidation($attributeSetMock, 3);
         $this->attrSetRepositoryMock->expects($this->never())
@@ -197,11 +200,11 @@ class SetRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Set mock for attribute set validation
      *
-     * @param \PHPUnit_Framework_MockObject_MockObject $attributeSetMock
+     * @param \PHPUnit\Framework\MockObject\MockObject $attributeSetMock
      * @param $setEntityTypeId
      */
     protected function setMockForValidation(
-        \PHPUnit_Framework_MockObject_MockObject $attributeSetMock,
+        \PHPUnit\Framework\MockObject\MockObject $attributeSetMock,
         $setEntityTypeId
     ) {
         $typeMock = $this->createMock(\Magento\Eav\Model\Entity\Type::class);

@@ -94,7 +94,7 @@ class Content extends Tab
         if ($addWidgetButton->isVisible()) {
             try {
                 $addWidgetButton->click();
-            } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
+            } catch (\PHPUnit\Extensions\Selenium2TestCase\WebDriverException $e) {
                 $this->browser->find($this->header)->hover();
                 $addWidgetButton->click();
             }

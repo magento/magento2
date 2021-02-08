@@ -20,29 +20,29 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var UrlPersistInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlPersistInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlPersistMock;
 
     /**
-     * @var ChildrenCategoriesProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var ChildrenCategoriesProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $childrenCategoriesProviderMock;
 
     /**
-     * @var CategoryResourceModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryResourceModel|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectMock;
 
     /**
-     * @var Category|\PHPUnit_Framework_MockObject_MockObject
+     * @var Category|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectMock;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->urlPersistMock = $this->getMockBuilder(UrlPersistInterface::class)

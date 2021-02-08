@@ -8,17 +8,17 @@ namespace Magento\ConfigurableProduct\Test\Unit\Model\Product\TypeTransitionMana
 class ConfigurableTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $closureMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
@@ -28,11 +28,11 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $this->model = new \Magento\ConfigurableProduct\Model\Product\TypeTransitionManager\Plugin\Configurable(
@@ -53,8 +53,8 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             'attributes'
-        )->will(
-            $this->returnValue('not_empty_attribute_data')
+        )->willReturn(
+            'not_empty_attribute_data'
         );
         $this->productMock->expects(
             $this->once()
@@ -74,8 +74,8 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             'attributes'
-        )->will(
-            $this->returnValue(null)
+        )->willReturn(
+            null
         );
         $this->productMock->expects($this->never())->method('setTypeId');
         $this->model->aroundProcessProduct($this->subjectMock, $this->closureMock, $this->productMock);

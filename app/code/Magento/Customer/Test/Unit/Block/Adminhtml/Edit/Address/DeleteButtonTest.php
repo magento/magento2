@@ -13,27 +13,27 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class DeleteButtonTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Customer\Model\AddressFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\AddressFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $addressFactory;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlBuilder;
 
     /**
-     * @var \Magento\Customer\Model\ResourceModel\Address|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\ResourceModel\Address|\PHPUnit\Framework\MockObject\MockObject
      */
     private $addressResourceModel;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $request;
 
     /**
-     * @var \Magento\Customer\Model\ResourceModel\AddressRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\ResourceModel\AddressRepository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $addressRepository;
 
@@ -45,7 +45,7 @@ class DeleteButtonTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->addressFactory = $this->getMockBuilder(\Magento\Customer\Model\AddressFactory::class)
             ->disableOriginalConstructor()
@@ -82,7 +82,7 @@ class DeleteButtonTest extends \PHPUnit\Framework\TestCase
         $addressId = 1;
         $customerId = 2;
 
-        /** @var \Magento\Customer\Model\Address|\PHPUnit_Framework_MockObject_MockObject $address */
+        /** @var \Magento\Customer\Model\Address|\PHPUnit\Framework\MockObject\MockObject $address */
         $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->disableOriginalConstructor()
             ->getMock();

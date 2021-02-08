@@ -10,7 +10,7 @@ use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use Magento\Framework\Stdlib\ArrayManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 abstract class AbstractModifierTest extends \PHPUnit\Framework\TestCase
 {
@@ -39,7 +39,7 @@ abstract class AbstractModifierTest extends \PHPUnit\Framework\TestCase
      */
     protected $arrayManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->locatorMock = $this->getMockBuilder(LocatorInterface::class)

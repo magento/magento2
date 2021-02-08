@@ -14,7 +14,7 @@ use Magento\Sales\Model\Order;
 class CanShipTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\Validation\CanShip|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Validation\CanShip|\PHPUnit\Framework\MockObject\MockObject
      */
     private $model;
 
@@ -24,16 +24,16 @@ class CanShipTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\Data\OrderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderItemInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\Data\OrderItemInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderItemMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

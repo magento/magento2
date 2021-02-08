@@ -11,12 +11,12 @@ use \Magento\Catalog\Model\Layer\Category\CollectionFilter;
 class CollectionFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $visibilityMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $catalogConfigMock;
 
@@ -25,7 +25,7 @@ class CollectionFilterTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->visibilityMock = $this->createMock(\Magento\Catalog\Model\Product\Visibility::class);
         $this->catalogConfigMock = $this->createMock(\Magento\Catalog\Model\Config::class);
@@ -47,12 +47,12 @@ class CollectionFilterTest extends \PHPUnit\Framework\TestCase
         $this->visibilityMock->expects($this->once())->method('getVisibleInCatalogIds');
 
         $collectionMock->expects($this->once())->method('addAttributeToSelect')
-            ->will($this->returnValue($collectionMock));
-        $collectionMock->expects($this->once())->method('addMinimalPrice')->will($this->returnValue($collectionMock));
-        $collectionMock->expects($this->once())->method('addFinalPrice')->will($this->returnValue($collectionMock));
-        $collectionMock->expects($this->once())->method('addTaxPercents')->will($this->returnValue($collectionMock));
-        $collectionMock->expects($this->once())->method('addUrlRewrite')->will($this->returnValue($collectionMock));
-        $collectionMock->expects($this->once())->method('setVisibility')->will($this->returnValue($collectionMock));
+            ->willReturn($collectionMock);
+        $collectionMock->expects($this->once())->method('addMinimalPrice')->willReturn($collectionMock);
+        $collectionMock->expects($this->once())->method('addFinalPrice')->willReturn($collectionMock);
+        $collectionMock->expects($this->once())->method('addTaxPercents')->willReturn($collectionMock);
+        $collectionMock->expects($this->once())->method('addUrlRewrite')->willReturn($collectionMock);
+        $collectionMock->expects($this->once())->method('setVisibility')->willReturn($collectionMock);
 
         $this->model->filter($collectionMock, $categoryMock);
     }

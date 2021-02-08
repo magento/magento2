@@ -17,21 +17,21 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $readFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $componentRegistrar;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->readFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
         $this->componentRegistrar = $this->createMock(\Magento\Framework\Component\ComponentRegistrar::class);
@@ -53,9 +53,9 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
 
         $file = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\File\ReadInterface::class);
         for ($i = 0, $count = count($data); $i < $count; $i++) {
-            $file->expects($this->at($i))->method('readCsv')->will($this->returnValue($data[$i]));
+            $file->expects($this->at($i))->method('readCsv')->willReturn($data[$i]);
         }
-        $file->expects($this->at($i))->method('readCsv')->will($this->returnValue(false));
+        $file->expects($this->at($i))->method('readCsv')->willReturn(false);
 
         $readMock = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
         $readMock->expects($this->any())->method('readFile')->willReturnMap([
@@ -72,11 +72,11 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
         $this->readFactory->expects($this->any())->method("create")->willReturn($readMock);
 
         $languageConfig = $this->createMock(\Magento\Framework\App\Language\Config::class);
-        $languageConfig->expects($this->any())->method('getCode')->will($this->returnValue('en_US'));
-        $languageConfig->expects($this->any())->method('getVendor')->will($this->returnValue('foo'));
-        $languageConfig->expects($this->any())->method('getPackage')->will($this->returnValue('en_us'));
-        $languageConfig->expects($this->any())->method('getSortOrder')->will($this->returnValue(0));
-        $languageConfig->expects($this->any())->method('getUses')->will($this->returnValue([]));
+        $languageConfig->expects($this->any())->method('getCode')->willReturn('en_US');
+        $languageConfig->expects($this->any())->method('getVendor')->willReturn('foo');
+        $languageConfig->expects($this->any())->method('getPackage')->willReturn('en_us');
+        $languageConfig->expects($this->any())->method('getSortOrder')->willReturn(0);
+        $languageConfig->expects($this->any())->method('getUses')->willReturn([]);
 
         $this->configFactory->expects($this->any())->method('create')->willReturn($languageConfig);
 

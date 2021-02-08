@@ -15,11 +15,11 @@ class ListSortTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Catalog\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $catalogConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->catalogConfig = $this->getMockBuilder(\Magento\Catalog\Model\Config::class)
             ->disableOriginalConstructor()->getMock();
@@ -38,7 +38,7 @@ class ListSortTest extends \PHPUnit\Framework\TestCase
             ['label' => 'testLabel', 'value' => 'testAttributeCode'],
         ];
         $this->catalogConfig->expects($this->any())->method('getAttributesUsedForSortBy')
-            ->will($this->returnValue([['frontend_label' => 'testLabel', 'attribute_code' => 'testAttributeCode']]));
+            ->willReturn([['frontend_label' => 'testLabel', 'attribute_code' => 'testAttributeCode']]);
 
         $this->assertEquals($except, $this->model->toOptionArray());
     }

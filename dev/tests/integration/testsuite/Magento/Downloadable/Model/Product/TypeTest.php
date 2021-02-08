@@ -24,7 +24,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_model = $this->objectManager->create(
@@ -121,7 +121,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             'link_type' => 'file',
             'link_file' => '/j/e/jellyfish_2_4.jpg',
             'number_of_downloads' => '15',
-            'price' => '15.0000',
+            'price' => '15.000000',
             'sample_type' => 'file',
             'sort_order' => '1',
             'title' => 'Updated downloadable link #1',
@@ -213,7 +213,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $samples = $product->getExtensionAttributes()->getDownloadableProductSamples();
         $sample = reset($samples);
         $this->assertNotEmpty($sample->getData());
-        $this->assertEquals(1, count($samples));
+        $this->assertCount(1, $samples);
         /** @var \Magento\Downloadable\Model\Sample $sample */
         $sample = $sample->getData();
         /** @var \Magento\User\Api\Data\UserInterface $testAttribute */

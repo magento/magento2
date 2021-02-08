@@ -159,7 +159,7 @@ class CsrfValidatorTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->request = $objectManager->get(HttpRequest::class);
@@ -201,11 +201,12 @@ class CsrfValidatorTest extends TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\App\Request\InvalidRequestException
+     *
      * @magentoAppArea adminhtml
      */
     public function testValidateWithInvalidKey()
     {
+        $this->expectException(\Magento\Framework\App\Request\InvalidRequestException::class);
         $this->request->setPost(
             new Parameters(['form_key' => $this->formKey->getFormKey() .'1'])
         );
@@ -240,7 +241,7 @@ class CsrfValidatorTest extends TestCase
         /** @var HttpResponse $response */
         $response = $this->httpResponseFactory->create();
         $caught->getReplaceResult()->renderResult($response);
-        $this->assertContains(
+        $this->assertStringContainsString(
             self::AWARE_URL,
             $response->getHeaders()->toString()
         );

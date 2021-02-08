@@ -16,26 +16,26 @@ class IntegrationTest extends \PHPUnit\Framework\TestCase
     protected $integrationModel;
 
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registryMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\Data\Collection\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\AbstractDb|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceCollectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createPartialMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher']);
         $eventManagerMock = $this->getMockForAbstractClass(
@@ -49,7 +49,7 @@ class IntegrationTest extends \PHPUnit\Framework\TestCase
         );
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
-            ->will($this->returnValue($eventManagerMock));
+            ->willReturn($eventManagerMock);
         $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
         $this->resourceMock = $this->getMockForAbstractClass(
             \Magento\Framework\Model\ResourceModel\AbstractResource::class,
@@ -91,7 +91,7 @@ class IntegrationTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock->expects($this->once())
             ->method('selectActiveIntegrationByConsumerId')
             ->with($consumerId)
-            ->will($this->returnValue($integrationData));
+            ->willReturn($integrationData);
 
         $this->integrationModel->loadActiveIntegrationByConsumerId($consumerId);
         $this->assertEquals($integrationData, $this->integrationModel->getData());

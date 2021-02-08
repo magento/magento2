@@ -17,11 +17,11 @@ class AddressAdapterTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var AddressInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AddressInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteAddressMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->quoteAddressMock = $this->getMockBuilder(\Magento\Quote\Api\Data\AddressInterface::class)
             ->getMockForAbstractClass();

@@ -18,17 +18,17 @@ class MemoryLimitTest extends \PHPUnit\Framework\TestCase
     {
         $object = $this->_createObject(0, 0);
         $result = $object->printStats();
-        $this->assertContains('Memory usage (OS):', $result);
-        $this->assertContains('1.00M', $result);
-        $this->assertContains('Estimated memory leak:', $result);
-        $this->assertContains('reported by PHP', $result);
+        $this->assertStringContainsString('Memory usage (OS):', $result);
+        $this->assertStringContainsString('1.00M', $result);
+        $this->assertStringContainsString('Estimated memory leak:', $result);
+        $this->assertStringContainsString('reported by PHP', $result);
         $this->assertStringEndsWith(PHP_EOL, $result);
 
         $object = $this->_createObject('2M', 0);
-        $this->assertContains('50.00% of configured 2.00M limit', $object->printStats());
+        $this->assertStringContainsString('50.00% of configured 2.00M limit', $object->printStats());
 
         $object = $this->_createObject(0, '500K');
-        $this->assertContains('% of configured 0.49M limit', $object->printStats());
+        $this->assertStringContainsString('% of configured 0.49M limit', $object->printStats());
     }
 
     public function testValidateUsage()
@@ -37,11 +37,9 @@ class MemoryLimitTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($object->validateUsage());
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testValidateUsageException()
     {
+        $this->expectException(\LogicException::class);
         $object = $this->_createObject('500K', '2M');
         $object->validateUsage();
     }

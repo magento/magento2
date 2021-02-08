@@ -23,18 +23,18 @@ class SenderResolverTest extends \PHPUnit\Framework\TestCase
     private $senderResolver;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfig;
 
     /**
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->senderResolver = $objectManager->getObject(
             SenderResolver::class,

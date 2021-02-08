@@ -36,7 +36,7 @@ class SendFriendTest extends GraphQlAbstract
      */
     private $customerTokenService;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sendFriendFactory = Bootstrap::getObjectManager()->get(SendFriendFactory::class);
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
@@ -67,11 +67,12 @@ class SendFriendTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoConfigFixture default_store sendfriend/email/allow_guest 0
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testSendFriendGuestDisableAsGuest()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+
         $productId = (int)$this->productRepository->get('simple_product')->getId();
         $recipients = '{
                   name: "Recipient Name 1"

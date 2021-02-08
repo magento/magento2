@@ -82,7 +82,7 @@ abstract class AbstractCreateWidgetEntityTest extends Injectable
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager->create(\Magento\Widget\Test\TestStep\DeleteAllWidgetsStep::class)->run();
     }

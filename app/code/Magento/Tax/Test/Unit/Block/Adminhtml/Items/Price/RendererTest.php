@@ -13,16 +13,16 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     protected $renderer;
 
     /**
-     * @var \Magento\Tax\Block\Item\Price\Renderer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Block\Item\Price\Renderer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemPriceRenderer;
 
     /**
-     * @var \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $defaultColumnRenderer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -59,7 +59,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $flag = false;
         $this->itemPriceRenderer->expects($this->once())
             ->method('displayPriceInclTax')
-            ->will($this->returnValue($flag));
+            ->willReturn($flag);
 
         $this->assertEquals($flag, $this->renderer->displayPriceInclTax());
     }
@@ -69,7 +69,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $flag = true;
         $this->itemPriceRenderer->expects($this->once())
             ->method('displayPriceExclTax')
-            ->will($this->returnValue($flag));
+            ->willReturn($flag);
 
         $this->assertEquals($flag, $this->renderer->displayPriceExclTax());
     }
@@ -79,7 +79,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $flag = true;
         $this->itemPriceRenderer->expects($this->once())
             ->method('displayBothPrices')
-            ->will($this->returnValue($flag));
+            ->willReturn($flag);
 
         $this->assertEquals($flag, $this->renderer->displayBothPrices());
     }
@@ -93,7 +93,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->defaultColumnRenderer->expects($this->once())
             ->method('displayPrices')
             ->with($basePrice, $price)
-            ->will($this->returnValue($display));
+            ->willReturn($display);
 
         $this->assertEquals($display, $this->renderer->displayPrices($basePrice, $price));
     }
@@ -106,7 +106,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->itemPriceRenderer->expects($this->once())
             ->method('formatPrice')
             ->with($price)
-            ->will($this->returnValue($display));
+            ->willReturn($display);
 
         $this->assertEquals($display, $this->renderer->formatPrice($price));
     }
@@ -121,7 +121,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->itemPriceRenderer->expects($this->once())
             ->method('getTotalAmount')
             ->with($itemMock)
-            ->will($this->returnValue($totalAmount));
+            ->willReturn($totalAmount);
 
         $this->assertEquals($totalAmount, $this->renderer->getTotalAmount($itemMock));
     }

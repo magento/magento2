@@ -16,11 +16,11 @@ class SaveButtonTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initContext();
 
@@ -34,7 +34,7 @@ class SaveButtonTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('label', $result);
         $this->assertEquals($result['label'], __('Save Configuration'));
         $this->assertArrayHasKey('data_attribute', $result);
-        $this->assertTrue(is_array($result['data_attribute']));
+        $this->assertIsArray($result['data_attribute']);
     }
 
     protected function initContext()

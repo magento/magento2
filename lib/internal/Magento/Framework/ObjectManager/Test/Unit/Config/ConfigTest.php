@@ -13,7 +13,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     private $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
@@ -45,13 +45,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testExtendWithCacheMock()
     {
         $definitions = $this->createMock(\Magento\Framework\ObjectManager\DefinitionInterface::class);
-        $definitions->expects($this->once())->method('getClasses')->will($this->returnValue(['FooType']));
+        $definitions->expects($this->once())->method('getClasses')->willReturn(['FooType']);
 
         $cache = $this->createMock(\Magento\Framework\ObjectManager\ConfigCacheInterface::class);
-        $cache->expects($this->once())->method('get')->will($this->returnValue(false));
+        $cache->expects($this->once())->method('get')->willReturn(false);
 
         $config = new Config(null, $definitions);
-        $serializerMock = $this->createMock(SerializerInterface::class);
+        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $serializerMock->expects($this->exactly(2))
             ->method('serialize');
         $this->objectManagerHelper->setBackwardCompatibleProperty(

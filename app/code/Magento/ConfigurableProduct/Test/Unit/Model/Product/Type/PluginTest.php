@@ -22,7 +22,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $moduleManagerMock->expects($this->once())
             ->method('isOutputEnabled')
             ->with('Magento_ConfigurableProduct')
-            ->will($this->returnValue($data['is_module_output_enabled']));
+            ->willReturn($data['is_module_output_enabled']);
 
         $model = new \Magento\ConfigurableProduct\Model\Product\Type\Plugin($moduleManagerMock);
         $this->assertEquals(

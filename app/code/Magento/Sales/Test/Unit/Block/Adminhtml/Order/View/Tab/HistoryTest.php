@@ -16,7 +16,7 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Sales\Helper\Admin|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Helper\Admin|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $adminHelperMock;
 
@@ -26,21 +26,21 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
     protected $commentsHistory;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $coreRegistryMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeDateMock;
 
     /**
-     * @var \Magento\Backend\Block\Template\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Block\Template\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -55,8 +55,8 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
         $this->localeDateMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
             ->getMock();
 
-        $this->contextMock->expects($this->any())->method('getLocaleDate')->will(
-            $this->returnValue($this->localeDateMock)
+        $this->contextMock->expects($this->any())->method('getLocaleDate')->willReturn(
+            $this->localeDateMock
         );
 
         $this->commentsHistory = $this->objectManager->getObject(

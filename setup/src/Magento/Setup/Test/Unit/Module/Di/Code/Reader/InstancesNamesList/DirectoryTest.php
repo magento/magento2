@@ -14,12 +14,12 @@ use Magento\Setup\Module\Di\Compiler\Log\Log;
 class DirectoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Setup\Module\Di\Code\Reader\ClassesScanner | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\Di\Code\Reader\ClassesScanner | \PHPUnit\Framework\MockObject\MockObject
      */
     private $classesScanner;
 
     /**
-     * @var \Magento\Framework\Code\Reader\ClassReader | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Code\Reader\ClassReader | \PHPUnit\Framework\MockObject\MockObject
      */
     private $classReaderMock;
 
@@ -29,19 +29,19 @@ class DirectoryTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Code\Validator | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Code\Validator | \PHPUnit\Framework\MockObject\MockObject
      */
     private $validatorMock;
 
     /**
-     * @var \Magento\Setup\Module\Di\Compiler\Log\Log | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\Di\Compiler\Log\Log | \PHPUnit\Framework\MockObject\MockObject
      */
     private $logMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->logMock = $this->getMockBuilder(\Magento\Setup\Module\Di\Compiler\Log\Log::class)
             ->disableOriginalConstructor()
@@ -94,8 +94,8 @@ class DirectoryTest extends \PHPUnit\Framework\TestCase
             )
         )
             ->method('getParents')
-            ->will(
-                $this->returnValueMap($parents)
+            ->willReturnMap(
+                $parents
             );
 
         $this->logMock->expects($this->never())
@@ -133,8 +133,8 @@ class DirectoryTest extends \PHPUnit\Framework\TestCase
 
         $this->classReaderMock->expects($this->exactly(count($classes)))
             ->method('getParents')
-            ->will(
-                $this->returnValueMap($parents)
+            ->willReturnMap(
+                $parents
             );
 
         $this->logMock->expects($this->never())
@@ -203,7 +203,7 @@ class DirectoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         restore_error_handler();
     }

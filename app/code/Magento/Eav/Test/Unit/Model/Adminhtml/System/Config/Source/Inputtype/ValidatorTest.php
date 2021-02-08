@@ -13,11 +13,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $validatorData = ['type'];
         $this->helperMock = $this->createMock(\Magento\Eav\Helper\Data::class);

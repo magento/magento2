@@ -16,21 +16,21 @@ class QueryResolverTest extends \PHPUnit\Framework\TestCase
     private $quoteResolver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheMock;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->createMock(\Magento\Framework\App\ResourceConnection\ConfigInterface::class);
         $this->cacheMock = $this->createMock(\Magento\Framework\Config\CacheInterface::class);

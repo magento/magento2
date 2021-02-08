@@ -31,7 +31,7 @@ class LinkTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -48,7 +48,7 @@ class LinkTest extends TestCase
         $block = $this->page->getLayout()->getBlock('customer-account-navigation-product-reviews-link');
         $this->assertNotFalse($block);
         $html = $block->toHtml();
-        $this->assertContains('/review/customer/', $html);
+        $this->assertStringContainsString('/review/customer/', $html);
         $this->assertEquals((string)__('My Product Reviews'), strip_tags($html));
     }
 

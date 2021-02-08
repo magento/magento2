@@ -20,34 +20,34 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $htmlDirectoryMock;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $appDirectoryMock;
 
     /**
-     * @var Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem\Directory\ReadFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $readFactoryMock;
 
     /**
-     * @var ReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReadInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rootDirectoryMock;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesystemMock;
 
     /**
      * Initialize testable object
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->htmlDirectoryMock = $this->getMockBuilder(Filesystem\Directory\WriteInterface::class)
             ->getMockForAbstractClass();

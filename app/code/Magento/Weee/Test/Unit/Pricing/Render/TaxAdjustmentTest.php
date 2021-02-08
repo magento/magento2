@@ -16,7 +16,7 @@ class TaxAdjustmentTest extends \PHPUnit\Framework\TestCase
     /**
      * Weee helper mock
      *
-     * @var \Magento\Weee\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Weee\Helper\Data | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $weeeHelperMock;
 
@@ -28,7 +28,7 @@ class TaxAdjustmentTest extends \PHPUnit\Framework\TestCase
     /**
      * Init mocks and model
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

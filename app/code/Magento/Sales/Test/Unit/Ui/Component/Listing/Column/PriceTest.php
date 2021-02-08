@@ -22,11 +22,11 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Currency|\PHPUnit_Framework_MockObject_MockObject
+     * @var Currency|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $currencyMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)

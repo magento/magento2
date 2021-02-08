@@ -29,37 +29,37 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ConnectionManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConnectionManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connectionManager;
 
     /**
-     * @var BatchDataMapperInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BatchDataMapperInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $batchDocumentDataMapper;
 
     /**
-     * @var FieldMapperInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FieldMapperInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fieldMapper;
 
     /**
-     * @var ClientOptionsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientOptionsInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $clientConfig;
 
     /**
-     * @var BuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BuilderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexBuilder;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $logger;
 
     /**
-     * @var ElasticsearchClient|\PHPUnit_Framework_MockObject_MockObject
+     * @var ElasticsearchClient|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $client;
 
@@ -69,7 +69,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var IndexNameResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexNameResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexNameResolver;
 
@@ -79,7 +79,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManagerHelper($this);
         $this->connectionManager = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\ConnectionManager::class)
@@ -199,15 +199,16 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
         $this->client->expects($this->once())
             ->method('ping')
             ->willReturn(true);
-        $this->assertEquals(true, $this->model->ping());
+        $this->assertTrue($this->model->ping());
     }
 
     /**
      * Test ping() method
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testPingFailure()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->client->expects($this->once())
             ->method('ping')
             ->willThrowException(new \Exception('Something went wrong'));
@@ -234,9 +235,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                     'name' => 'Product Name',
                 ]
             );
-        $this->assertInternalType(
-            'array',
-            $this->model->prepareDocsPerStore(
+        $this->assertIsArray($this->model->prepareDocsPerStore(
                 [
                     '1' => [
                         'name' => 'Product Name',
@@ -270,10 +269,11 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test addDocs() method
-     * @expectedException \Exception
      */
     public function testAddDocsFailure()
     {
+        $this->expectException(\Exception::class);
+
         $this->client->expects($this->once())
             ->method('bulkQuery')
             ->willThrowException(new \Exception('Something went wrong'));
@@ -325,10 +325,11 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test deleteDocs() method
-     * @expectedException \Exception
      */
     public function testDeleteDocsFailure()
     {
+        $this->expectException(\Exception::class);
+
         $this->client->expects($this->once())
             ->method('bulkQuery')
             ->willThrowException(new \Exception('Something went wrong'));
@@ -361,10 +362,11 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testConnectException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $connectionManager = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\ConnectionManager::class)
             ->disableOriginalConstructor()
             ->setMethods(

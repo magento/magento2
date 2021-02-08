@@ -10,7 +10,7 @@ use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Shipment\Item as ShipmentItem;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\Collection;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\CollectionFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class ShipmentTest extends \PHPUnit\Framework\TestCase
 {
@@ -32,7 +32,7 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $helperManager = new ObjectManager($this);
 
@@ -88,7 +88,7 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
 
         $actual = $this->shipmentModel->getCommentsCollection();
 
-        self::assertTrue(is_object($actual));
+        self::assertIsObject($actual);
         self::assertEquals($this->commentCollection, $actual);
     }
 
@@ -126,7 +126,7 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
             ->willReturn($collection);
 
         $actual = $this->shipmentModel->getComments();
-        self::assertTrue(is_array($actual));
+        self::assertIsArray($actual);
         self::assertEquals($collection, $actual);
     }
 

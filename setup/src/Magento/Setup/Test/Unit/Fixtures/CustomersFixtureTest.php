@@ -12,17 +12,17 @@ use Magento\Setup\Fixtures\CustomersFixture;
 class CustomersFixtureTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Fixtures\FixtureModel
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Fixtures\FixtureModel
      */
     private $fixtureModelMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\FixtureGenerator\CustomerGenerator
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\FixtureGenerator\CustomerGenerator
      */
     private $customerGeneratorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Customer\CustomerDataGeneratorFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Customer\CustomerDataGeneratorFactory
      */
     private $customerDataGeneratorFactoryMock;
 
@@ -32,16 +32,16 @@ class CustomersFixtureTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->fixtureModelMock = $this->createMock(\Magento\Setup\Fixtures\FixtureModel::class);
 

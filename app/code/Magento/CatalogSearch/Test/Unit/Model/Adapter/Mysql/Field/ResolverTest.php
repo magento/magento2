@@ -16,12 +16,12 @@ use Magento\Framework\Search\Adapter\Mysql\Field\FieldInterface;
 class ResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeCollection;
 
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\Field\FieldFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Adapter\Mysql\Field\FieldFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fieldFactory;
 
@@ -33,7 +33,7 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attributeCollection = $this->getMockBuilder(
             \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class
@@ -60,7 +60,7 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $fields
      * @param int|null $attributeId
-     * @param \PHPUnit_Framework_MockObject_MockObject $field
+     * @param \PHPUnit\Framework\MockObject\MockObject $field
      * @param array $expectedResult
      * @return void
      * @dataProvider resolveDataProvider
@@ -68,7 +68,7 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
     public function testResolve(
         array $fields,
         $attributeId,
-        \PHPUnit_Framework_MockObject_MockObject $field,
+        \PHPUnit\Framework\MockObject\MockObject $field,
         array $expectedResult
     ) {
         $item = $this->getMockBuilder(\Magento\Framework\DataObject::class)

@@ -18,7 +18,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
     }
@@ -45,7 +45,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $attributeMock
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('weeeTax'));
+            ->willReturn('weeeTax');
 
         $modelMock = $this->getMockBuilder(\Magento\Weee\Model\Attribute\Backend\Weee\Tax::class)
             ->setMethods(['getAttribute'])
@@ -54,7 +54,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $modelMock
             ->expects($this->any())
             ->method('getAttribute')
-            ->will($this->returnValue($attributeMock));
+            ->willReturn($attributeMock);
 
         $taxes = [reset($data)];
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
@@ -64,7 +64,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $productMock
             ->expects($this->any())
             ->method('getData')
-            ->will($this->returnValue($taxes));
+            ->willReturn($taxes);
 
         // No exception
         $modelMock->validate($productMock);
@@ -77,7 +77,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $productMock
             ->expects($this->any())
             ->method('getData')
-            ->will($this->returnValue($taxes));
+            ->willReturn($taxes);
 
         // Exception caught
         $this->expectException('Exception');
@@ -115,7 +115,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $attributeTaxMock
             ->expects($this->any())
             ->method('loadProductData')
-            ->will($this->returnValue($data));
+            ->willReturn($data);
 
         $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Attribute::class)
             ->setMethods(['getName'])
@@ -124,7 +124,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $attributeMock
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('weeeTax'));
+            ->willReturn('weeeTax');
 
         $model = $this->objectManager->getObject(
             \Magento\Weee\Model\Attribute\Backend\Weee\Tax::class,
@@ -162,11 +162,11 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $productMock
             ->expects($this->once())
             ->method('getOrigData')
-            ->will($this->returnValue($origData));
+            ->willReturn($origData);
         $productMock
             ->expects($this->any())
             ->method('getData')
-            ->will($this->returnValue($currentData));
+            ->willReturn($currentData);
 
         $attributeTaxMock = $this->getMockBuilder(\Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax::class)
             ->setMethods(['deleteProductData', 'insertProductData'])
@@ -175,12 +175,12 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $attributeTaxMock
             ->expects($this->once())
             ->method('deleteProductData')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $attributeTaxMock
             ->expects($this->once())
             ->method('insertProductData')
             ->with($productMock, $expectedData)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Attribute::class)
             ->setMethods(['getName', 'getId'])
@@ -189,11 +189,11 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $attributeMock
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('weeeTax'));
+            ->willReturn('weeeTax');
         $attributeMock
             ->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $model = $this->objectManager->getObject(
             \Magento\Weee\Model\Attribute\Backend\Weee\Tax::class,
@@ -236,7 +236,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('deleteProductData')
             ->with(null, null)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $model = $this->objectManager->getObject(
             \Magento\Weee\Model\Attribute\Backend\Weee\Tax::class,
@@ -258,7 +258,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getTable')
             ->with('weee_tax')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $model = $this->objectManager->getObject(
             \Magento\Weee\Model\Attribute\Backend\Weee\Tax::class,

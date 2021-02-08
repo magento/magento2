@@ -16,7 +16,7 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
      */
     private $pathProcessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->pathProcessor = Bootstrap::getObjectManager()->create(
             \Magento\Store\App\Request\PathInfoProcessor::class
@@ -177,6 +177,6 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
         $config->setValue(Store::XML_PATH_STORE_IN_URL, false);
         $pathInfo = sprintf('/%s/m/c/a', 'whatever');
         $this->assertEquals($pathInfo, $this->pathProcessor->process($request, $pathInfo));
-        $this->assertEquals(null, $request->getActionName());
+        $this->assertNull($request->getActionName());
     }
 }

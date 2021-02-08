@@ -17,7 +17,7 @@ class ArrayScannerTest extends \PHPUnit\Framework\TestCase
      */
     protected $_testDir;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new \Magento\Setup\Module\Di\Code\Scanner\ArrayScanner();
         $this->_testDir = str_replace('\\', '/', realpath(__DIR__ . '/../../') . '/_files');

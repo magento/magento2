@@ -21,22 +21,22 @@ class ConfigurableProductHandlerTest extends \PHPUnit\Framework\TestCase
     private $configurableProductHandler;
 
     /**
-     * @var Configurable|\PHPUnit_Framework_MockObject_MockObject
+     * @var Configurable|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configurableMock;
 
     /**
-     * @var ConfigurableProductsProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigurableProductsProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configurableProductsProviderMock;
 
-    /** @var \Magento\CatalogRule\Model\Rule||\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\CatalogRule\Model\Rule||\PHPUnit\Framework\MockObject\MockObject */
     private $ruleMock;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configurableMock = $this->createPartialMock(
             \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable::class,

@@ -36,47 +36,47 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $eavConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $sessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeResolverMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $adapterMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|SelectBuilderForAttribute
+     * @var \PHPUnit\Framework\MockObject\MockObject|SelectBuilderForAttribute
      */
     private $selectBuilderForAttribute;
 
     /**
-     * @var Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eavConfigMock = $this->createMock(Config::class);
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
-        $this->scopeResolverMock = $this->createMock(ScopeResolverInterface::class);
+        $this->scopeResolverMock = $this->getMockForAbstractClass(ScopeResolverInterface::class);
         $this->sessionMock = $this->createMock(Session::class);
-        $this->adapterMock = $this->createMock(AdapterInterface::class);
+        $this->adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($this->adapterMock);
         $this->selectBuilderForAttribute = $this->createMock(SelectBuilderForAttribute::class);
         $this->eventManager = $this->createMock(Manager::class);
@@ -101,7 +101,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $dimensionMock->expects($this->atLeastOnce())->method('getValue')->willReturn($storeId);
         $this->scopeResolverMock->expects($this->any())->method('getScope')->with($storeId)->willReturn($scopeMock);
 
-        $bucketMock = $this->createMock(BucketInterface::class);
+        $bucketMock = $this->getMockForAbstractClass(BucketInterface::class);
         $bucketMock->expects($this->once())->method('getField')->willReturn($attributeCode);
         $attributeMock = $this->createMock(Attribute::class);
         $this->eavConfigMock->expects($this->once())
@@ -128,7 +128,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $this->scopeResolverMock->expects($this->atLeastOnce())->method('getScope')->with($storeId)
             ->willReturn($scopeMock);
 
-        $bucketMock = $this->createMock(BucketInterface::class);
+        $bucketMock = $this->getMockForAbstractClass(BucketInterface::class);
         $bucketMock->expects($this->once())->method('getField')->willReturn($attributeCode);
         $attributeMock = $this->createMock(Attribute::class);
         $this->eavConfigMock->expects($this->once())

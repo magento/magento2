@@ -11,7 +11,7 @@ use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Locale\Deployed\Codes;
 use Magento\Framework\View\Design\Theme\FlyweightFactory;
 use Magento\Framework\View\Design\ThemeInterface;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use \PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Test for Codes class.
@@ -38,7 +38,7 @@ class CodesTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fileSystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()

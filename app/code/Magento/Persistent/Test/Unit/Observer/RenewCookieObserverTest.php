@@ -15,46 +15,46 @@ class RenewCookieObserverTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $observerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $this->helperMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
@@ -80,30 +80,30 @@ class RenewCookieObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
-            ->will($this->returnValue(true));
-        $this->helperMock->expects($this->once())->method('isEnabled')->will($this->returnValue(true));
-        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
+            ->willReturn(true);
+        $this->helperMock->expects($this->once())->method('isEnabled')->willReturn(true);
+        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->willReturn(true);
 
         $this->observerMock
             ->expects($this->once())
             ->method('getEvent')
-            ->will($this->returnValue($this->eventManagerMock));
+            ->willReturn($this->eventManagerMock);
         $this->eventManagerMock
             ->expects($this->once())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
+            ->willReturn($this->requestMock);
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
         $this->requestMock
             ->expects($this->once())
             ->method('getFullActionName')
-            ->will($this->returnValue('customer_account_logout'));
-        $this->helperMock->expects($this->once())->method('getLifeTime')->will($this->returnValue(60));
+            ->willReturn('customer_account_logout');
+        $this->helperMock->expects($this->once())->method('getLifeTime')->willReturn(60);
         $this->customerSessionMock
-            ->expects($this->once())->method('getCookiePath')->will($this->returnValue('path/cookie'));
+            ->expects($this->once())->method('getCookiePath')->willReturn('path/cookie');
         $this->sessionFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->sessionMock));
+            ->willReturn($this->sessionMock);
         $this->sessionMock->expects($this->once())->method('renewPersistentCookie')->with(60, 'path/cookie');
         $this->model->execute($this->observerMock);
     }
@@ -114,7 +114,7 @@ class RenewCookieObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->helperMock->expects($this->never())->method('isEnabled');
 
         $this->observerMock

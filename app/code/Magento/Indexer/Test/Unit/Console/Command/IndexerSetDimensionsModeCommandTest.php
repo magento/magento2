@@ -20,14 +20,14 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
     /**
      * Command being tested
      *
-     * @var IndexerSetDimensionsModeCommand|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerSetDimensionsModeCommand|\PHPUnit\Framework\MockObject\MockObject
      */
     private $command;
 
     /**
      * ScopeConfigInterface
      *
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configReaderMock;
 
@@ -37,28 +37,28 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
     private $dimensionProviders;
 
     /**
-     * @var \Magento\Indexer\Model\ModeSwitcherInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Indexer\Model\ModeSwitcherInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dimensionModeSwitcherMock;
 
     /**
-     * @var \Magento\Indexer\Model\Indexer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Indexer\Model\Indexer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $indexerMock;
 
     /**
-     * @var \Magento\Indexer\Model\DimensionModes|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Indexer\Model\DimensionModes|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dimensionModes;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->configReaderMock = $this->createMock(ScopeConfigInterface::class);
+        $this->configReaderMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->dimensionModeSwitcherMock =
             $this->createMock(\Magento\Indexer\Model\ModeSwitcherInterface::class);
         $this->dimensionProviders = [
@@ -160,13 +160,15 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
     /**
      * Tests indexer exception of method \Magento\Indexer\Console\Command\IndexerDimensionsModeCommand::execute
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage
-     *      Invalid value for "<indexer>" argument. Accepted values for "<indexer>" are 'indexer_title'
      * @return void
      */
     public function testExecuteWithIndxerException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'Invalid value for "<indexer>" argument. Accepted values for "<indexer>" are \'indexer_title\''
+        );
+
         $commandTester = new CommandTester($this->command);
         $this->indexerMock->method('getTitle')->willReturn('indexer_title');
         $commandTester->execute(['indexer' => 'non_existing_title']);
@@ -175,12 +177,13 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
     /**
      * Tests indexer exception of method \Magento\Indexer\Console\Command\IndexerDimensionsModeCommand::execute
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Missing argument "<mode>". Accepted values for "<mode>" are 'store,website'
      * @return void
      */
     public function testExecuteWithModeException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Missing argument "<mode>". Accepted values for "<mode>" are \'store,website\'');
+
         $commandTester = new CommandTester($this->command);
         $this->dimensionModes->method('getDimensions')->willReturn([
             'store'   => 'dimension1',

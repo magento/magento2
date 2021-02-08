@@ -10,19 +10,19 @@ use Magento\Customer\Model\ResourceModel\Address\Attribute\Backend\Region;
 
 class RegionTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Directory\Model\RegionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Directory\Model\RegionFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $regionFactory;
 
     /** @var Region */
     protected $model;
 
-    /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject */
     protected $object;
 
-    /** @var \Magento\Directory\Model\Region|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Directory\Model\Region|\PHPUnit\Framework\MockObject\MockObject */
     protected $region;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->regionFactory = $this->createPartialMock(\Magento\Directory\Model\RegionFactory::class, ['create']);
         $this->region = $this->createPartialMock(

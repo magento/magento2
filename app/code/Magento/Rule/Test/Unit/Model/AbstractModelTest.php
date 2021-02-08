@@ -17,36 +17,36 @@ class AbstractModelTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @var \Magento\Rule\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Rule\Model\AbstractModel|\PHPUnit\Framework\MockObject\MockObject
      */
     private $model;
 
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $registryMock;
 
     /**
-     * @var \Magento\Framework\Data\FormFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\FormFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $formFactoryMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $localeDateMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->localeDateMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
             ->disableOriginalConstructor()
@@ -71,7 +71,7 @@ class AbstractModelTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->contextMock->expects($this->any())
             ->method('getEventDispatcher')
-            ->will($this->returnValue($this->eventManagerMock));
+            ->willReturn($this->eventManagerMock);
 
         $resourceMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\AbstractResource::class)
             ->disableOriginalConstructor()
@@ -106,7 +106,7 @@ class AbstractModelTest extends \PHPUnit\Framework\TestCase
     /**
      * Get mock for serializer
      *
-     * @return \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getSerializerMock()
     {
@@ -117,22 +117,22 @@ class AbstractModelTest extends \PHPUnit\Framework\TestCase
 
         $serializerMock->expects($this->any())
             ->method('serialize')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($value) {
                         return json_encode($value);
                     }
-                )
+                
             );
 
         $serializerMock->expects($this->any())
             ->method('unserialize')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($value) {
                         return json_decode($value, true);
                     }
-                )
+                
             );
 
         return $serializerMock;
@@ -147,11 +147,11 @@ class AbstractModelTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $conditions->expects($this->once())->method('setRule')->will($this->returnSelf());
-        $conditions->expects($this->once())->method('setId')->will($this->returnSelf());
-        $conditions->expects($this->once())->method('setPrefix')->will($this->returnSelf());
+        $conditions->expects($this->once())->method('setRule')->willReturnSelf();
+        $conditions->expects($this->once())->method('setId')->willReturnSelf();
+        $conditions->expects($this->once())->method('setPrefix')->willReturnSelf();
 
-        $this->model->expects($this->once())->method('getConditionsInstance')->will($this->returnValue($conditions));
+        $this->model->expects($this->once())->method('getConditionsInstance')->willReturn($conditions);
 
         $this->model->setConditionsSerialized($serializedConditions);
 
@@ -169,11 +169,11 @@ class AbstractModelTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $actions->expects($this->once())->method('setRule')->will($this->returnSelf());
-        $actions->expects($this->once())->method('setId')->will($this->returnSelf());
-        $actions->expects($this->once())->method('setPrefix')->will($this->returnSelf());
+        $actions->expects($this->once())->method('setRule')->willReturnSelf();
+        $actions->expects($this->once())->method('setId')->willReturnSelf();
+        $actions->expects($this->once())->method('setPrefix')->willReturnSelf();
 
-        $this->model->expects($this->once())->method('getActionsInstance')->will($this->returnValue($actions));
+        $this->model->expects($this->once())->method('getActionsInstance')->willReturn($actions);
 
         $this->model->setActionsSerialized($actionsSerialized);
 
@@ -197,8 +197,8 @@ class AbstractModelTest extends \PHPUnit\Framework\TestCase
         $this->model->setConditions($conditions);
         $this->model->setActions($actions);
 
-        $conditions->expects($this->any())->method('asArray')->will($this->returnValue(['conditions' => 'array']));
-        $actions->expects($this->any())->method('asArray')->will($this->returnValue(['actions' => 'array']));
+        $conditions->expects($this->any())->method('asArray')->willReturn(['conditions' => 'array']);
+        $actions->expects($this->any())->method('asArray')->willReturn(['actions' => 'array']);
 
         $this->eventManagerMock->expects($this->exactly(2))->method('dispatch');
 

@@ -15,11 +15,11 @@ use Magento\Review\Helper\Data as StatusSource;
 class StatusTest extends AbstractColumnTest
 {
     /**
-     * @var StatusSource|\PHPUnit_Framework_MockObject_MockObject
+     * @var StatusSource|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $sourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->sourceMock = $this->getMockBuilder(StatusSource::class)

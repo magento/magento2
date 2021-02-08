@@ -13,31 +13,31 @@ class CatalogPriceTest extends \PHPUnit\Framework\TestCase
     protected $catalogPrice;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $commonPriceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $coreRegistryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceModelMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->commonPriceMock = $this->createMock(\Magento\Catalog\Model\Product\CatalogPrice::class);
@@ -58,16 +58,16 @@ class CatalogPriceTest extends \PHPUnit\Framework\TestCase
     public function testGetCatalogPriceWithCurrentStore()
     {
         $this->coreRegistryMock->expects($this->once())->method('unregister')->with('rule_data');
-        $this->productMock->expects($this->once())->method('getStoreId')->will($this->returnValue('store_id'));
-        $this->productMock->expects($this->once())->method('getWebsiteId')->will($this->returnValue('website_id'));
-        $this->productMock->expects($this->once())->method('getCustomerGroupId')->will($this->returnValue('group_id'));
+        $this->productMock->expects($this->once())->method('getStoreId')->willReturn('store_id');
+        $this->productMock->expects($this->once())->method('getWebsiteId')->willReturn('website_id');
+        $this->productMock->expects($this->once())->method('getCustomerGroupId')->willReturn('group_id');
         $this->coreRegistryMock->expects($this->once())->method('register');
         $this->productMock->expects(
             $this->once()
         )->method(
             'getPriceModel'
-        )->will(
-            $this->returnValue($this->priceModelMock)
+        )->willReturn(
+            $this->priceModelMock
         );
         $this->priceModelMock->expects(
             $this->once()
@@ -77,8 +77,8 @@ class CatalogPriceTest extends \PHPUnit\Framework\TestCase
             $this->productMock,
             'min',
             false
-        )->will(
-            $this->returnValue(15)
+        )->willReturn(
+            15
         );
         $this->storeManagerMock->expects($this->never())->method('getStore');
         $this->storeManagerMock->expects($this->never())->method('setCurrentStore');
@@ -93,16 +93,16 @@ class CatalogPriceTest extends \PHPUnit\Framework\TestCase
         $currentStoreMock->expects($this->once())->method('getId')->willReturn('current_store_id');
 
         $this->coreRegistryMock->expects($this->once())->method('unregister')->with('rule_data');
-        $this->productMock->expects($this->once())->method('getStoreId')->will($this->returnValue('store_id'));
-        $this->productMock->expects($this->once())->method('getWebsiteId')->will($this->returnValue('website_id'));
-        $this->productMock->expects($this->once())->method('getCustomerGroupId')->will($this->returnValue('group_id'));
+        $this->productMock->expects($this->once())->method('getStoreId')->willReturn('store_id');
+        $this->productMock->expects($this->once())->method('getWebsiteId')->willReturn('website_id');
+        $this->productMock->expects($this->once())->method('getCustomerGroupId')->willReturn('group_id');
         $this->coreRegistryMock->expects($this->once())->method('register');
         $this->productMock->expects(
             $this->once()
         )->method(
             'getPriceModel'
-        )->will(
-            $this->returnValue($this->priceModelMock)
+        )->willReturn(
+            $this->priceModelMock
         );
         $this->priceModelMock->expects(
             $this->once()
@@ -112,8 +112,8 @@ class CatalogPriceTest extends \PHPUnit\Framework\TestCase
             $this->productMock,
             'min',
             true
-        )->will(
-            $this->returnValue(15)
+        )->willReturn(
+            15
         );
 
         $this->storeManagerMock->expects($this->at(0))->method('getStore')->willReturn($currentStoreMock);
@@ -125,6 +125,6 @@ class CatalogPriceTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCatalogRegularPrice()
     {
-        $this->assertEquals(null, $this->catalogPrice->getCatalogRegularPrice($this->productMock));
+        $this->assertNull($this->catalogPrice->getCatalogRegularPrice($this->productMock));
     }
 }

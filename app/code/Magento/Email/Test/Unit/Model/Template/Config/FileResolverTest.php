@@ -17,7 +17,7 @@ class FileResolverTest extends \PHPUnit\Framework\TestCase
         $expected = ['found_file'];
         $fileIteratorFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
         $dirSearch->expects($this->once())
             ->method('collectFiles')
             ->with(ComponentRegistrar::MODULE, 'etc/file');

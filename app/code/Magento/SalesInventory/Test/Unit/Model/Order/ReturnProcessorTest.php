@@ -23,59 +23,59 @@ use Magento\SalesInventory\Model\Order\ReturnProcessor;
 class ReturnProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|OrderInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|OrderInterface
      */
     private $orderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|CreditmemoInterface
      */
     private $creditmemoMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|StockManagementInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|StockManagementInterface
      */
     private $stockManagementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogInventory\Model\Indexer\Stock\Processor
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\CatalogInventory\Model\Indexer\Stock\Processor
      */
     private $stockIndexerProcessorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Indexer\Product\Price\Processor
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Indexer\Product\Price\Processor
      */
     private $priceIndexerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|StoreManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|StoreManagerInterface
      */
     private $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|OrderItemRepositoryInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|OrderItemRepositoryInterface
      */
     private $orderItemRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoItemInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|CreditmemoItemInterface
      */
     private $creditmemoItemMock;
 
     /** @var  ReturnProcessor */
     private $returnProcessor;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|OrderItemInterface */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject|OrderItemInterface */
     private $orderItemMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|StoreInterface */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject|StoreInterface */
     private $storeMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->stockManagementMock = $this->getMockBuilder(StockManagementInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->stockIndexerProcessorMock = $this->getMockBuilder(
             \Magento\CatalogInventory\Model\Indexer\Stock\Processor::class
         )->disableOriginalConstructor()
@@ -85,28 +85,28 @@ class ReturnProcessorTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->orderItemRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->orderItemRepositoryMock = $this->getMockBuilder(OrderItemRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->orderMock = $this->getMockBuilder(OrderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->creditmemoMock = $this->getMockBuilder(CreditmemoInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->creditmemoItemMock = $this->getMockBuilder(CreditmemoItemInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->orderItemMock = $this->getMockBuilder(OrderItemInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->returnProcessor = new ReturnProcessor(
             $this->stockManagementMock,

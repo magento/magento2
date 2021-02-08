@@ -8,14 +8,14 @@ namespace Magento\Captcha\Test\Unit\Helper\Adminhtml;
 class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Captcha\Helper\Adminhtml\Data | |PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Captcha\Helper\Adminhtml\Data | |PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
     /**
      * setUp
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $className = \Magento\Captcha\Helper\Adminhtml\Data::class;
@@ -28,15 +28,15 @@ class DataTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             'admin/captcha/qwe'
-        )->will(
-            $this->returnValue('1')
+        )->willReturn(
+            '1'
         );
 
         $filesystemMock = $arguments['filesystem'];
         $directoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
 
-        $filesystemMock->expects($this->any())->method('getDirectoryWrite')->will($this->returnValue($directoryMock));
-        $directoryMock->expects($this->any())->method('getAbsolutePath')->will($this->returnArgument(0));
+        $filesystemMock->expects($this->any())->method('getDirectoryWrite')->willReturn($directoryMock);
+        $directoryMock->expects($this->any())->method('getAbsolutePath')->willReturnArgument(0);
 
         $this->_model = $objectManagerHelper->getObject($className, $arguments);
     }

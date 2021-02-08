@@ -17,21 +17,21 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Eav\Model\Entity\Collection\AbstractCollection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Eav\Model\Entity\Collection\AbstractCollection|\PHPUnit\Framework\MockObject\MockObject */
     protected $collection;
 
-    /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|\PHPUnit\Framework\MockObject\MockObject */
     protected $attributeModel;
 
-    /** @var \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend|\PHPUnit\Framework\MockObject\MockObject */
     protected $backendAttributeModel;
 
     /**
-     * @var AbstractEntity|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractEntity|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entity;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->collection = $this->createPartialMock(
@@ -67,19 +67,19 @@ class StatusTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->attributeModel->expects($this->any())->method('getAttribute')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->attributeModel->expects($this->any())->method('getAttributeCode')
-            ->will($this->returnValue('attribute_code'));
+            ->willReturn('attribute_code');
         $this->attributeModel->expects($this->any())->method('getId')
-            ->will($this->returnValue('1'));
+            ->willReturn('1');
         $this->attributeModel->expects($this->any())->method('getBackend')
-            ->will($this->returnValue($this->backendAttributeModel));
+            ->willReturn($this->backendAttributeModel);
         $this->collection->expects($this->any())->method('getSelect')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->collection->expects($this->any())->method('joinLeft')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->backendAttributeModel->expects($this->any())->method('getTable')
-            ->will($this->returnValue('table_name'));
+            ->willReturn('table_name');
 
         $this->entity = $this->getMockBuilder(AbstractEntity::class)
             ->disableOriginalConstructor()
@@ -90,9 +90,9 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     public function testAddValueSortToCollectionGlobal()
     {
         $this->attributeModel->expects($this->any())->method('isScopeGlobal')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->collection->expects($this->once())->method('order')->with('attribute_code_t.value asc')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->attributeModel->expects($this->once())->method('getEntity')->willReturn($this->entity);
         $this->entity->expects($this->once())->method('getLinkField')->willReturn('entity_id');
@@ -104,16 +104,16 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     public function testAddValueSortToCollectionNotGlobal()
     {
         $this->attributeModel->expects($this->any())->method('isScopeGlobal')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->collection->expects($this->once())->method('order')->with('check_sql asc')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->collection->expects($this->once())->method('getStoreId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->collection->expects($this->any())->method('getConnection')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->collection->expects($this->any())->method('getCheckSql')
-            ->will($this->returnValue('check_sql'));
+            ->willReturn('check_sql');
 
         $this->attributeModel->expects($this->any())->method('getEntity')->willReturn($this->entity);
         $this->entity->expects($this->once())->method('getLinkField')->willReturn('entity_id');

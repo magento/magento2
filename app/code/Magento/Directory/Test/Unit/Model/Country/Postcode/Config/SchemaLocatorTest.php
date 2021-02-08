@@ -8,7 +8,7 @@ namespace Magento\Directory\Test\Unit\Model\Country\Postcode\Config;
 class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $moduleReaderMock;
 
@@ -17,7 +17,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->moduleReaderMock = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
         $this->moduleReaderMock->expects(
@@ -27,8 +27,8 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
         )->with(
             'etc',
             'Magento_Directory'
-        )->will(
-            $this->returnValue('schema_dir')
+        )->willReturn(
+            'schema_dir'
         );
 
         $this->model = new \Magento\Directory\Model\Country\Postcode\Config\SchemaLocator($this->moduleReaderMock);

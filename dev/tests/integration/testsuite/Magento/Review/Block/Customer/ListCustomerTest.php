@@ -39,7 +39,7 @@ class ListCustomerTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -53,7 +53,7 @@ class ListCustomerTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->customerSession->setCustomerId(null);
 
@@ -127,6 +127,6 @@ class ListCustomerTest extends TestCase
     public function testCustomerWithoutReviews(): void
     {
         $this->customerSession->setCustomerId(1);
-        $this->assertContains((string)__('You have submitted no reviews.'), strip_tags($this->block->toHtml()));
+        $this->assertStringContainsString((string)__('You have submitted no reviews.'), strip_tags($this->block->toHtml()));
     }
 }

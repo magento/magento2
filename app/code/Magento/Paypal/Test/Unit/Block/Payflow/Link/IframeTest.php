@@ -12,47 +12,47 @@ namespace Magento\Paypal\Test\Unit\Block\Payflow\Link;
 class IframeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Checkout\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Checkout\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $checkoutSessionMock;
 
     /**
-     * @var \Magento\Sales\Model\OrderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\OrderFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderFactoryMock;
 
     /**
-     * @var \Magento\Paypal\Helper\Hss|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Paypal\Helper\Hss|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $hssHelperMock;
 
     /**
-     * @var \Magento\Payment\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $paymentDataMock;
 
     /**
-     * @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Payment|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Payment|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $paymentMock;
 
     /**
-     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $reader;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $readFactory;
 
@@ -70,13 +70,13 @@ class IframeTest extends \PHPUnit\Framework\TestCase
 
         $this->checkoutSessionMock->expects($this->any())
             ->method('getQuote')
-            ->will($this->returnValue($this->quoteMock));
+            ->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->any())
             ->method('getPayment')
-            ->will($this->returnValue($this->paymentMock));
+            ->willReturn($this->paymentMock);
         $this->hssHelperMock->expects($this->any())
             ->method('getHssMethods')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
     }
 
     /**

@@ -25,26 +25,26 @@ class StructurePluginTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ConfigScopeDefiner|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigScopeDefiner|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configScopeDefinerMock;
 
     /**
-     * @var BackendHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var BackendHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $backendHelperMock;
 
     /**
-     * @var ConfigStructure|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigStructure|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configStructureMock;
 
     /**
-     * @var ElementConfigStructure|\PHPUnit_Framework_MockObject_MockObject
+     * @var ElementConfigStructure|\PHPUnit\Framework\MockObject\MockObject
      */
     private $elementConfigStructureMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configScopeDefinerMock = $this->getMockBuilder(ConfigScopeDefiner::class)
             ->disableOriginalConstructor()
@@ -132,8 +132,7 @@ class StructurePluginTest extends \PHPUnit\Framework\TestCase
             ->method('getConfigurationCountryCode')
             ->willReturn($countryCode);
 
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $this->plugin->aroundGetElementByPathParts($this->configStructureMock, $proceed, $pathParts)
         );
     }

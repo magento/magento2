@@ -9,7 +9,7 @@ namespace Magento\Framework\Interception\Test\Unit\Code\Generator;
 use Composer\Autoload\ClassLoader;
 use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\Interception\Code\Generator\Interceptor;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use \PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class InterceptorTest extends \PHPUnit\Framework\TestCase
 {
@@ -21,7 +21,7 @@ class InterceptorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->ioGenerator = $this->getMockBuilder(Io::class)
             ->disableOriginalConstructor()

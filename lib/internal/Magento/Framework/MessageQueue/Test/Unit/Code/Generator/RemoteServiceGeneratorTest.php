@@ -39,13 +39,13 @@ class RemoteServiceGeneratorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
         $this->communicationConfig = $this->getMockBuilder(CommunicationConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $loader = new ClassLoader();
         $loader->addPsr4(
@@ -159,13 +159,13 @@ class RemoteServiceGeneratorTest extends \PHPUnit\Framework\TestCase
     {
         $cache = $this->getMockBuilder(FrontendInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $cache->method('load')
             ->willReturn(false);
 
         $serializer = $this->getMockBuilder(SerializerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $typeProcessor = $this->objectManager->getObject(TypeProcessor::class);
 
         /** @var MethodsMap $serviceMethodMap */

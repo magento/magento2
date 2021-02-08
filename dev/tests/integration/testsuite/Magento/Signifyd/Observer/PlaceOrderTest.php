@@ -48,18 +48,18 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
 
         $this->creationService = $this->getMockBuilder(CaseCreationServiceInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['createForOrder'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->placeOrder = $this->objectManager->create(PlaceOrder::class, [
             'caseCreationService' => $this->creationService,

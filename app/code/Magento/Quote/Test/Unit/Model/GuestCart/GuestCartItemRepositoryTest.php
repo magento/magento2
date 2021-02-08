@@ -15,22 +15,22 @@ class GuestCartItemRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $guestCartItemRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $cartItemRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteIdMaskFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteIdMaskMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteItemMock;
 
@@ -47,7 +47,7 @@ class GuestCartItemRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -114,7 +114,7 @@ class GuestCartItemRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->cartItemRepositoryMock->expects($this->once())
             ->method('getList')
             ->with($this->cartId)
-            ->will($this->returnValue([$itemMock]));
+            ->willReturn([$itemMock]);
         $this->assertEquals([$itemMock], $this->guestCartItemRepository->getList($this->maskedCartId));
     }
 

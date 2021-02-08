@@ -18,7 +18,7 @@ use Magento\Catalog\Model\Product\Copier;
 class CopierTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $optionRepositoryMock;
 
@@ -28,31 +28,31 @@ class CopierTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $copyConstructorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadata;
 
     /**
-     * @var ScopeOverriddenValue|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeOverriddenValue|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeOverriddenValue;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->copyConstructorMock = $this->createMock(\Magento\Catalog\Model\Product\CopyConstructorInterface::class);
         $this->productFactoryMock = $this->createPartialMock(
@@ -159,7 +159,7 @@ class CopierTest extends \PHPUnit\Framework\TestCase
             ->method('getAttribute')
             ->willReturn($attributeMock);
 
-        $this->productMock->expects($this->any())->method('getResource')->will($this->returnValue($resourceMock));
+        $this->productMock->expects($this->any())->method('getResource')->willReturn($resourceMock);
 
         $duplicateMock = $this->createPartialMock(
             Product::class,
@@ -181,7 +181,7 @@ class CopierTest extends \PHPUnit\Framework\TestCase
                 'getStoreIds',
             ]
         );
-        $this->productFactoryMock->expects($this->once())->method('create')->will($this->returnValue($duplicateMock));
+        $this->productFactoryMock->expects($this->once())->method('create')->willReturn($duplicateMock);
 
         $duplicateMock->expects($this->once())->method('setOptions')->with([]);
         $duplicateMock->expects($this->once())->method('setIsDuplicate')->with(true);

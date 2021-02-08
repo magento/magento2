@@ -17,7 +17,7 @@ class ShortcutTest extends \PHPUnit\Framework\TestCase
     const ALIAS = 'alias';
 
     /**
-     * @var ConfigFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_paypalConfigFactory;
 

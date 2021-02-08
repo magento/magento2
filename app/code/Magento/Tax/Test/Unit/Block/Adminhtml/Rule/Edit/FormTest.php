@@ -16,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tax\Model\Rate\Source;
 use Magento\Tax\Model\TaxClass\Source\Customer;
 use Magento\Tax\Model\TaxClass\Source\Product;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Test for Tax Rule Edit Form
@@ -75,7 +75,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     private $urlBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
 
@@ -97,11 +97,11 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $this->taxRuleRepository = $this->getMockBuilder(TaxRuleRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->taxClassRepository = $this->getMockBuilder(TaxClassRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->taxClassCustomer = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
@@ -113,7 +113,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->form = $objectManagerHelper->getObject(Form::class, [
             'context' => $this->context,
@@ -138,7 +138,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->urlBuilder->expects($this->once())
             ->method('getUrl')
             ->with('tax/rule/ajaxLoadRates/')
-            ->will($this->returnValue('some_url'));
+            ->willReturn('some_url');
 
         $this->assertEquals('some_url', $this->form->getTaxRatesPageUrl());
     }

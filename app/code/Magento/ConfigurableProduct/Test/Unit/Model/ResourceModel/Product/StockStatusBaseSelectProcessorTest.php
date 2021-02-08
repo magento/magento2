@@ -21,7 +21,7 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
     private $subject;
 
     /**
-     * @var StockConfigurationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StockConfigurationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stockConfigMock;
 
@@ -31,11 +31,11 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
     private $stockStatusTable = 'cataloginventory_stock_status';
 
     /**
-     * @var StockStatusResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var StockStatusResource|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stockStatusResourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stockConfigMock = $this->getMockBuilder(StockConfigurationInterface::class)
             ->disableOriginalConstructor()
@@ -68,7 +68,7 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('isShowOutOfStock')
             ->willReturn($isShowOutOfStock);
 
-        /** @var Select|\PHPUnit_Framework_MockObject_MockObject $selectMock */
+        /** @var Select|\PHPUnit\Framework\MockObject\MockObject $selectMock */
         $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();

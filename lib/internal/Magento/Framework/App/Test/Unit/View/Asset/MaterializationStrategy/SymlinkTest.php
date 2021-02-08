@@ -18,7 +18,7 @@ class SymlinkTest extends \PHPUnit\Framework\TestCase
      */
     private $symlinkPublisher;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->symlinkPublisher = new Symlink;
     }

@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\Layer\Filter;
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManagerMock;
 
@@ -17,7 +17,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_factory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
@@ -40,8 +40,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             $className,
             []
-        )->will(
-            $this->returnValue($filterMock)
+        )->willReturn(
+            $filterMock
         );
 
         $this->assertEquals($filterMock, $this->_factory->create($className));
@@ -60,23 +60,24 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             $className,
             $arguments
-        )->will(
-            $this->returnValue($filterMock)
+        )->willReturn(
+            $filterMock
         );
 
         $this->assertEquals($filterMock, $this->_factory->create($className, $arguments));
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage WrongClass doesn't extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     public function testWrongTypeException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('WrongClass doesn\'t extends \\Magento\\Catalog\\Model\\Layer\\Filter\\AbstractFilter');
+
         $className = 'WrongClass';
 
         $filterMock = $this->getMockBuilder($className)->disableOriginalConstructor()->getMock();
-        $this->_objectManagerMock->expects($this->once())->method('create')->will($this->returnValue($filterMock));
+        $this->_objectManagerMock->expects($this->once())->method('create')->willReturn($filterMock);
 
         $this->_factory->create($className);
     }

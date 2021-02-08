@@ -15,16 +15,16 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     protected $requestFactory;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Authorizenet\Model\Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Authorizenet\Model\Request|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 

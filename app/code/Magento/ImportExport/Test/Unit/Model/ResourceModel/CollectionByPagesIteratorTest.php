@@ -17,12 +17,12 @@ class CollectionByPagesIteratorTest extends \PHPUnit\Framework\TestCase
      */
     protected $_resourceModel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_resourceModel = new \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_resourceModel);
     }
@@ -35,7 +35,7 @@ class CollectionByPagesIteratorTest extends \PHPUnit\Framework\TestCase
         $pageSize = 2;
         $pageCount = 3;
 
-        /** @var $callbackMock \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $callbackMock \PHPUnit\Framework\MockObject\MockObject */
         $callbackMock = $this->createPartialMock(\stdClass::class, ['callback']);
 
         $fetchStrategy = $this->getMockForAbstractClass(
@@ -47,28 +47,28 @@ class CollectionByPagesIteratorTest extends \PHPUnit\Framework\TestCase
         $entityFactory = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
         $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
 
-        /** @var $collectionMock AbstractDb|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $collectionMock AbstractDb|\PHPUnit\Framework\MockObject\MockObject */
         $collectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
             ->setConstructorArgs([$entityFactory, $logger, $fetchStrategy])
             ->setMethods(['clear', 'setPageSize', 'setCurPage', 'count', 'getLastPageNumber', 'getSelect'])
             ->getMockForAbstractClass();
 
-        $collectionMock->expects($this->any())->method('getSelect')->will($this->returnValue($select));
+        $collectionMock->expects($this->any())->method('getSelect')->willReturn($select);
 
-        $collectionMock->expects($this->exactly($pageCount + 1))->method('clear')->will($this->returnSelf());
+        $collectionMock->expects($this->exactly($pageCount + 1))->method('clear')->willReturnSelf();
 
-        $collectionMock->expects($this->exactly($pageCount))->method('setPageSize')->will($this->returnSelf());
+        $collectionMock->expects($this->exactly($pageCount))->method('setPageSize')->willReturnSelf();
 
-        $collectionMock->expects($this->exactly($pageCount))->method('setCurPage')->will($this->returnSelf());
+        $collectionMock->expects($this->exactly($pageCount))->method('setCurPage')->willReturnSelf();
 
-        $collectionMock->expects($this->exactly($pageCount))->method('count')->will($this->returnValue($pageSize));
+        $collectionMock->expects($this->exactly($pageCount))->method('count')->willReturn($pageSize);
 
         $collectionMock->expects(
             $this->exactly($pageCount)
         )->method(
             'getLastPageNumber'
-        )->will(
-            $this->returnValue($pageCount)
+        )->willReturn(
+            $pageCount
         );
 
         for ($pageNumber = 1; $pageNumber <= $pageCount; $pageNumber++) {

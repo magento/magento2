@@ -17,7 +17,7 @@ class ConfigurationPoolTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->instancesType = ['simple' => 'simple', 'default' => 'default'];
 

@@ -12,7 +12,7 @@ class AdapterAbstractTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = $this->getMockBuilder(\Magento\Framework\Translate\AbstractAdapter::class)
             ->getMockForAbstractClass();

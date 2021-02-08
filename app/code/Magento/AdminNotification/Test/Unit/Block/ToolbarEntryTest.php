@@ -25,7 +25,7 @@ class ToolbarEntryTest extends \PHPUnit\Framework\TestCase
             \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread::class,
             ['getSize', 'setCurPage', 'setPageSize']
         );
-        $notificationList->expects($this->any())->method('getSize')->will($this->returnValue($unreadNotifications));
+        $notificationList->expects($this->any())->method('getSize')->willReturn($unreadNotifications);
 
         $block = $objectManagerHelper->getObject(
             \Magento\AdminNotification\Block\ToolbarEntry::class,
@@ -63,7 +63,7 @@ class ToolbarEntryTest extends \PHPUnit\Framework\TestCase
         $notificationList->expects($this->atLeastOnce())
             ->method('setPageSize')
             ->with(\Magento\AdminNotification\Block\ToolbarEntry::NOTIFICATIONS_NUMBER)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         // 3. Run tested method
         $result = $model->getLatestUnreadNotifications();

@@ -34,9 +34,9 @@ class CustomerLoginSuccessObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->authenticationMock = $this->createMock(AuthenticationInterface::class);
+        $this->authenticationMock = $this->getMockForAbstractClass(AuthenticationInterface::class);
 
         $this->customerModelMock = $this->createPartialMock(\Magento\Customer\Model\Customer::class, ['getId']);
         $this->customerLoginSuccessObserver = new CustomerLoginSuccessObserver(

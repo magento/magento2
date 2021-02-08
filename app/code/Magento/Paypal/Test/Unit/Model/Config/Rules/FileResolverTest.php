@@ -18,7 +18,7 @@ class FileResolverTest extends \PHPUnit\Framework\TestCase
     protected $fileResolver;
 
     /**
-     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $readerMock;
 
@@ -27,7 +27,7 @@ class FileResolverTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->readerMock = $this->getMockBuilder(\Magento\Framework\Module\Dir\Reader::class)
             ->disableOriginalConstructor()

@@ -31,48 +31,48 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var Session|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sessionMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var Range|\PHPUnit_Framework_MockObject_MockObject
+     * @var Range|\PHPUnit\Framework\MockObject\MockObject
      */
     private $rangeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $adapterMock;
 
     /**
-     * @var DataProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mysqlDataProviderMock;
 
     /**
-     * @var IntervalFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var IntervalFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $intervalFactoryMock;
 
     /**
-     * @var StoreManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
         $this->sessionMock = $this->createMock(Session::class);
-        $this->adapterMock = $this->createMock(AdapterInterface::class);
+        $this->adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($this->adapterMock);
         $this->rangeMock = $this->createMock(Range::class);
-        $this->mysqlDataProviderMock = $this->createMock(DataProviderInterface::class);
+        $this->mysqlDataProviderMock = $this->getMockForAbstractClass(DataProviderInterface::class);
         $this->intervalFactoryMock = $this->createMock(IntervalFactory::class);
         $this->storeManagerMock = $this->createMock(StoreManager::class);
         $this->indexScopeResolverMock = $this->createMock(

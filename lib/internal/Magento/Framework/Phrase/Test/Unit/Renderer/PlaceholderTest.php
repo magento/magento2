@@ -12,7 +12,7 @@ class PlaceholderTest extends \PHPUnit\Framework\TestCase
     /** @var Placeholder */
     protected $_renderer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_renderer = $objectManager->getObject(\Magento\Framework\Phrase\Renderer\Placeholder::class);

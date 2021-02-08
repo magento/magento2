@@ -76,7 +76,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->requestMock = $this->createMock(Http::class);
@@ -86,7 +86,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->productMock = $this->createMock(Product::class);
         $this->contextMock = $this->createMock(Context::class);
         $this->customerSessionMock = $this->createMock(Session::class);
-        $this->productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
+        $this->productRepositoryMock = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
         $this->resultFactoryMock->expects($this->any())
             ->method('create')
             ->with(ResultFactory::TYPE_REDIRECT)

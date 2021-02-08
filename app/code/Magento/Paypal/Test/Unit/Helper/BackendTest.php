@@ -19,27 +19,27 @@ class BackendTest extends \PHPUnit\Framework\TestCase
     const SCOPE_ID = 1;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $context;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $request;
 
     /**
-     * @var Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|\PHPUnit\Framework\MockObject\MockObject
      */
     private $directoryHelperMock;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $backendConfig;
 
     /**
-     * @var ScopeDefiner|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeDefiner|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeDefiner;
 
@@ -48,7 +48,7 @@ class BackendTest extends \PHPUnit\Framework\TestCase
      */
     private $helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->getMockBuilder(\Magento\Framework\App\Helper\Context::class)
             ->disableOriginalConstructor()
@@ -115,7 +115,7 @@ class BackendTest extends \PHPUnit\Framework\TestCase
         $this->configurationCountryCodePrepareConfig($config);
         $this->directoryHelperMock->expects($this->once())
             ->method('getDefaultCountry')
-            ->will($this->returnValue($default));
+            ->willReturn($default);
         $this->configurationCountryCodeAssertResult($default);
     }
 

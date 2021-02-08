@@ -32,7 +32,7 @@ class RedirectTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);

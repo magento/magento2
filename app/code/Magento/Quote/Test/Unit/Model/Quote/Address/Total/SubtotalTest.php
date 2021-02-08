@@ -22,7 +22,6 @@ use Magento\Quote\Model\Quote\Item;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 
 /**
  * Test address total collector model.
@@ -49,7 +48,7 @@ class SubtotalTest extends TestCase
      */
     protected $stockRegistry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->subtotalModel = $this->objectManager->getObject(
@@ -100,7 +99,7 @@ class SubtotalTest extends TestCase
         // @TODO this is a wrong test and it does not check methods. Any digital value will be correct
         $priceCurrency->expects($this->any())->method('convert')->willReturn(1231313);
 
-        /** @var Item|PHPUnit_Framework_MockObject_MockObject $quoteItem */
+        /** @var Item|PHPUnit\Framework\MockObject\MockObject $quoteItem */
         $quoteItem = $this->objectManager->getObject(
             Item::class,
             [
@@ -116,7 +115,7 @@ class SubtotalTest extends TestCase
 
         /** @var Product|MockObject $product */
         $product = $this->createMock(Product::class);
-        $product->expects($this->any())->method('getPrice')->will($this->returnValue($originalPrice));
+        $product->expects($this->any())->method('getPrice')->willReturn($originalPrice);
 
         /** @var Quote|MockObject $quote */
         $quote = $this->createMock(Quote::class);
@@ -126,22 +125,22 @@ class SubtotalTest extends TestCase
         $store = $this->createPartialMock(Store::class, ['getWebsiteId']);
         $store->expects($this->any())->method('getWebsiteId')->willReturn(10);
         $product->expects($this->any())->method('getStore')->willReturn($store);
-        $product->expects($this->any())->method('isVisibleInCatalog')->will($this->returnValue(true));
+        $product->expects($this->any())->method('isVisibleInCatalog')->willReturn(true);
         $extensionAttribute = $this->getMockBuilder(ProductExtensionInterface::class)
             ->setMethods(['getStockItem'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $extensionAttribute->expects($this->atLeastOnce())
             ->method('getStockItem')
-            ->will($this->returnValue($this->stockItemMock));
+            ->willReturn($this->stockItemMock);
         $product->expects($this->atLeastOnce())->method('getExtensionAttributes')->willReturn($extensionAttribute);
-        $quote->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $quote->expects($this->any())->method('getStore')->willReturn($store);
         $quoteItem->setProduct($product)->setQuote($quote);
 
         $parentQuoteItem = false;
         if ($itemHasParent) {
             $parentQuoteItem = $this->createMock(Item::class);
-            $parentQuoteItem->expects($this->any())->method('getProduct')->will($this->returnValue($product));
+            $parentQuoteItem->expects($this->any())->method('getProduct')->willReturn($product);
         }
         $quoteItem->setParentItem($parentQuoteItem);
         //This value will be overwritten
@@ -152,11 +151,11 @@ class SubtotalTest extends TestCase
         $product->expects($this->any())->method('getPriceModel')->willReturn($priceModel);
         $product->expects($this->any())->method('getFinalPrice')->willReturn($price);
 
-        $shipping = $this->createMock(ShippingInterface::class);
+        $shipping = $this->getMockForAbstractClass(ShippingInterface::class);
         $shipping->expects($this->exactly(2))->method('getAddress')->willReturn($address);
         $address->expects($this->at(0))->method('setTotalQty')->with(0);
         $address->expects($this->any())->method('getTotalQty')->willReturn(0);
-        $shippingAssignmentMock = $this->createMock(ShippingAssignmentInterface::class);
+        $shippingAssignmentMock = $this->getMockForAbstractClass(ShippingAssignmentInterface::class);
         $shippingAssignmentMock->expects($this->exactly(2))->method('getShipping')->willReturn($shipping);
         $shippingAssignmentMock->expects($this->once())->method('getItems')->willReturn([$quoteItem]);
 
@@ -240,10 +239,10 @@ class SubtotalTest extends TestCase
             ->willReturn($addressItemId);
         $addressItem->method('getQuoteItemId')
             ->willReturn($addressQuoteItemId);
-        $shipping = $this->createMock(ShippingInterface::class);
+        $shipping = $this->getMockForAbstractClass(ShippingInterface::class);
         $shipping->method('getAddress')
             ->willReturn($address);
-        $shippingAssignmentMock = $this->createMock(ShippingAssignmentInterface::class);
+        $shippingAssignmentMock = $this->getMockForAbstractClass(ShippingAssignmentInterface::class);
         $shippingAssignmentMock->method('getShipping')
             ->willReturn($shipping);
         $shippingAssignmentMock->method('getItems')

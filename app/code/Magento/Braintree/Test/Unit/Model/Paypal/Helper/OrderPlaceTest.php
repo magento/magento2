@@ -68,7 +68,7 @@ class OrderPlaceTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cartManagement = $this->getMockBuilder(CartManagementInterface::class)
             ->getMockForAbstractClass();

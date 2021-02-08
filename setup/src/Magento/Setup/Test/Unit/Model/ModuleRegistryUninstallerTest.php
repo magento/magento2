@@ -12,27 +12,27 @@ use Magento\Setup\Model\ModuleRegistryUninstaller;
 class ModuleRegistryUninstallerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\DeploymentConfig
      */
     private $deploymentConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig\Writer
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\DeploymentConfig\Writer
      */
     private $writer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Module\ModuleList\Loader
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Module\ModuleList\Loader
      */
     private $loader;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Module\DataSetup
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Module\DataSetup
      */
     private $dataSetup;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Console\Output\OutputInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\Console\Output\OutputInterface
      */
     private $output;
 
@@ -41,7 +41,7 @@ class ModuleRegistryUninstallerTest extends \PHPUnit\Framework\TestCase
      */
     private $moduleRegistryUninstaller;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $this->writer = $this->createMock(\Magento\Framework\App\DeploymentConfig\Writer::class);

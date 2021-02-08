@@ -15,16 +15,16 @@ class AttributeSetManagementTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $repositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $eavConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->repositoryMock = $this->createMock(\Magento\Eav\Api\AttributeSetRepositoryInterface::class);
         $this->eavConfigMock = $this->createPartialMock(\Magento\Eav\Model\Config::class, ['getEntityType']);
@@ -41,11 +41,11 @@ class AttributeSetManagementTest extends \PHPUnit\Framework\TestCase
         $entityTypeCode = 'catalog_product';
         $entityTypeId = 4;
         $entityTypeMock = $this->createMock(\Magento\Eav\Model\Entity\Type::class);
-        $entityTypeMock->expects($this->any())->method('getId')->will($this->returnValue($entityTypeId));
+        $entityTypeMock->expects($this->any())->method('getId')->willReturn($entityTypeId);
         $this->eavConfigMock->expects($this->once())
             ->method('getEntityType')
             ->with($entityTypeCode)
-            ->will($this->returnValue($entityTypeMock));
+            ->willReturn($entityTypeMock);
         $attributeSetMock = $this->createPartialMock(
             \Magento\Eav\Model\Entity\Attribute\Set::class,
             ['validate', 'getId', 'setEntityTypeId', 'initFromSkeleton']
@@ -55,35 +55,37 @@ class AttributeSetManagementTest extends \PHPUnit\Framework\TestCase
         $this->repositoryMock->expects($this->exactly(2))
             ->method('save')
             ->with($attributeSetMock)
-            ->will($this->returnValue($attributeSetMock));
+            ->willReturn($attributeSetMock);
         $attributeSetMock->expects($this->once())->method('initFromSkeleton')->with($skeletonId);
         $this->assertEquals($attributeSetMock, $this->model->create($entityTypeCode, $attributeSetMock, $skeletonId));
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Invalid value of "1" provided for the id field.
      */
     public function testCreateThrowsExceptionIfGivenAttributeSetAlreadyHasId()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Invalid value of "1" provided for the id field.');
+
         $skeletonId = 1;
         $entityTypeCode = 'catalog_product';
         $attributeSetMock = $this->createPartialMock(
             \Magento\Eav\Model\Entity\Attribute\Set::class,
             ['validate', 'getId', 'setEntityTypeId', 'initFromSkeleton']
         );
-        $attributeSetMock->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $attributeSetMock->expects($this->any())->method('getId')->willReturn(1);
         $this->repositoryMock->expects($this->never())->method('save')->with($attributeSetMock);
         $attributeSetMock->expects($this->never())->method('initFromSkeleton')->with($skeletonId);
         $this->model->create($entityTypeCode, $attributeSetMock, $skeletonId);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Invalid value of "0" provided for the skeletonId field.
      */
     public function testCreateThrowsExceptionIfGivenSkeletonIdIsInvalid()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Invalid value of "0" provided for the skeletonId field.');
+
         $skeletonId = 0;
         $entityTypeCode = 'catalog_product';
         $attributeSetMock = $this->createPartialMock(
@@ -96,11 +98,12 @@ class AttributeSetManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Wrong attribute properties
      */
     public function testCreateThrowsExceptionIfAttributeSetNotValid()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Wrong attribute properties');
+
         $entityTypeId = 4;
         $skeletonId = 5;
         $entityTypeCode = 'catalog_product';
@@ -110,11 +113,11 @@ class AttributeSetManagementTest extends \PHPUnit\Framework\TestCase
         );
 
         $entityTypeMock = $this->createMock(\Magento\Eav\Model\Entity\Type::class);
-        $entityTypeMock->expects($this->any())->method('getId')->will($this->returnValue($entityTypeId));
+        $entityTypeMock->expects($this->any())->method('getId')->willReturn($entityTypeId);
         $this->eavConfigMock->expects($this->once())
             ->method('getEntityType')
             ->with($entityTypeCode)
-            ->will($this->returnValue($entityTypeMock));
+            ->willReturn($entityTypeMock);
         $attributeSetMock->expects($this->once())->method('setEntityTypeId')->with($entityTypeId);
         $attributeSetMock->expects($this->once())
             ->method('validate')

@@ -14,17 +14,17 @@ use Magento\Framework\View\Layout;
 class HtmlContentFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var Layout|\PHPUnit\Framework\MockObject\MockObject
      */
     private $layout;
 
     /**
-     * @var AbstractBlock|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractBlock|\PHPUnit\Framework\MockObject\MockObject
      */
     private $block;
 
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $context;
 
@@ -33,7 +33,7 @@ class HtmlContentFactoryTest extends \PHPUnit\Framework\TestCase
      */
     private $htmlContentFactory;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->layout = $this->getMockBuilder(Layout::class)
             ->disableOriginalConstructor()

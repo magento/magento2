@@ -26,37 +26,37 @@ class CustomerExtractorTest extends \PHPUnit\Framework\TestCase
     /** @var CustomerExtractor */
     protected $customerExtractor;
 
-    /** @var FormFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var FormFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $formFactory;
 
-    /** @var CustomerInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CustomerInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerFactory;
 
-    /** @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $storeManager;
 
-    /** @var GroupManagementInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var GroupManagementInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerGroupManagement;
 
-    /** @var DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataObjectHelper|\PHPUnit\Framework\MockObject\MockObject */
     protected $dataObjectHelper;
 
-    /** @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $request;
 
-    /** @var Form|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Form|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerForm;
 
-    /** @var CustomerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CustomerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerData;
 
-    /** @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var StoreInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $store;
 
-    /** @var GroupInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var GroupInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerGroup;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->formFactory = $this->getMockForAbstractClass(
             FormFactory::class,

@@ -8,21 +8,21 @@ namespace Magento\Directory\Test\Unit\Model\Country\Postcode\Config;
 class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Directory\Model\Country\Postcode\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\Country\Postcode\Config\Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $readerMock;
 
     /**
-     * @var \Magento\Framework\App\Cache\Type\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Cache\Type\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheMock;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->readerMock = $this->createMock(\Magento\Directory\Model\Country\Postcode\Config\Reader::class);
         $this->cacheMock = $this->createMock(\Magento\Framework\App\Cache\Type\Config::class);

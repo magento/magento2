@@ -11,7 +11,7 @@ namespace Magento\Catalog\Test\Unit\Helper\Product\Edit\Action;
 class AttributeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
@@ -25,7 +25,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -58,10 +58,10 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->storeManagerMock->expects($this->once())
             ->method('getStore')
             ->with($storeId)
-            ->will($this->returnValue($storeMock));
+            ->willReturn($storeMock);
         $storeMock->expects($this->once())
             ->method('getWebsiteId')
-            ->will($this->returnValue('return-value'));
+            ->willReturn('return-value');
 
         $this->assertEquals('return-value', $this->attribute->getStoreWebsiteId($storeId));
     }

@@ -13,7 +13,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
@@ -22,15 +22,15 @@ class RequestTest extends \PHPUnit\Framework\TestCase
      */
     protected $_pathInfo = 'PathInfo';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $path = '..PathInfo';
         $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $this->_requestMock->expects($this->once())->method('getPathInfo')->will($this->returnValue($path));
+        $this->_requestMock->expects($this->once())->method('getPathInfo')->willReturn($path);
         $this->_model = new \Magento\MediaStorage\Model\File\Storage\Request($this->_requestMock);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
         unset($this->_requestMock);

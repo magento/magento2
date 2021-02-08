@@ -15,10 +15,10 @@ class UnsetAllObserverTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $objectManager;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $checkoutSession;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->checkoutSession = $this->createMock(\Magento\Checkout\Model\Session::class);
@@ -30,8 +30,8 @@ class UnsetAllObserverTest extends \PHPUnit\Framework\TestCase
 
     public function testUnsetAll()
     {
-        $this->checkoutSession->expects($this->once())->method('clearQuote')->will($this->returnSelf());
-        $this->checkoutSession->expects($this->once())->method('clearStorage')->will($this->returnSelf());
+        $this->checkoutSession->expects($this->once())->method('clearQuote')->willReturnSelf();
+        $this->checkoutSession->expects($this->once())->method('clearStorage')->willReturnSelf();
 
         $observerMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()

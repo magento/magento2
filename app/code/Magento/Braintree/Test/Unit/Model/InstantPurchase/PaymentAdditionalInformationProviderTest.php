@@ -25,17 +25,17 @@ class PaymentAdditionalInformationProviderTest extends \PHPUnit\Framework\TestCa
     private $paymentAdditionalInformationProvider;
 
     /**
-     * @var GetPaymentNonceCommand|\PHPUnit_Framework_MockObject_MockObject
+     * @var GetPaymentNonceCommand|\PHPUnit\Framework\MockObject\MockObject
      */
     private $getPaymentNonceCommandMock;
 
     /**
-     * @var PaymentTokenInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentTokenInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentTokenMock;
 
     /**
-     * @var ArrayResult|\PHPUnit_Framework_MockObject_MockObject
+     * @var ArrayResult|\PHPUnit\Framework\MockObject\MockObject
      */
     private $arrayResultMock;
 
@@ -44,10 +44,10 @@ class PaymentAdditionalInformationProviderTest extends \PHPUnit\Framework\TestCa
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->getPaymentNonceCommandMock = $this->createMock(GetPaymentNonceCommand::class);
-        $this->paymentTokenMock = $this->createMock(PaymentTokenInterface::class);
+        $this->paymentTokenMock = $this->getMockForAbstractClass(PaymentTokenInterface::class);
         $this->arrayResultMock = $this->createMock(ArrayResult::class);
         $this->paymentAdditionalInformationProvider = new PaymentAdditionalInformationProvider(
             $this->getPaymentNonceCommandMock

@@ -14,7 +14,7 @@ class JsonValidatorTest extends \PHPUnit\Framework\TestCase
      */
     private $jsonValidator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->jsonValidator = new JsonValidator();
     }

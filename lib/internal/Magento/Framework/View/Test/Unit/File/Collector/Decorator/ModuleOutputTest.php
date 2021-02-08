@@ -14,26 +14,26 @@ class ModuleOutputTest extends \PHPUnit\Framework\TestCase
     private $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $_fileSource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $_moduleManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_fileSource = $this->getMockForAbstractClass(\Magento\Framework\View\File\CollectorInterface::class);
         $this->_moduleManager = $this->createMock(\Magento\Framework\Module\Manager::class);
         $this->_moduleManager
             ->expects($this->any())
             ->method('isOutputEnabled')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['Module_OutputEnabled', true],
                 ['Module_OutputDisabled', false],
-            ]));
+            ]);
         $this->_model = new \Magento\Framework\View\File\Collector\Decorator\ModuleOutput(
             $this->_fileSource,
             $this->_moduleManager
@@ -50,7 +50,7 @@ class ModuleOutputTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getFiles')
             ->with($theme, '*.xml')
-            ->will($this->returnValue([$fileOne, $fileTwo, $fileThree]));
+            ->willReturn([$fileOne, $fileTwo, $fileThree]);
         $this->assertSame([$fileOne, $fileThree], $this->_model->getFiles($theme, '*.xml'));
     }
 }

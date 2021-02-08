@@ -22,11 +22,11 @@ class ContextTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->serializerMock = $this->getMockBuilder(Json::class)
@@ -35,12 +35,12 @@ class ContextTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->serializerMock->expects($this->any())
             ->method('serialize')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($value) {
                         return json_encode($value);
                     }
-                )
+                
             );
         $this->object = $this->objectManager->getObject(
             \Magento\Framework\App\Http\Context::class,

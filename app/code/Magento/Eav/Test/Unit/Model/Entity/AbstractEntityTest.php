@@ -19,14 +19,14 @@ class AbstractEntityTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Entity model to be tested
-     * @var AbstractEntity|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractEntity|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
     /** @var  \Magento\Eav\Model\Config */
     protected $eavConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->eavConfig = $this->createMock(\Magento\Eav\Model\Config::class);
@@ -40,7 +40,7 @@ class AbstractEntityTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_model = null;
     }
@@ -109,9 +109,9 @@ class AbstractEntityTest extends \PHPUnit\Framework\TestCase
 
             $backendModel->setAttribute($mock);
 
-            $mock->expects($this->any())->method('getBackend')->will($this->returnValue($backendModel));
+            $mock->expects($this->any())->method('getBackend')->willReturn($backendModel);
 
-            $mock->expects($this->any())->method('getBackendTable')->will($this->returnValue($code . '_table'));
+            $mock->expects($this->any())->method('getBackendTable')->willReturn($code . '_table');
 
             $attributes[$code] = $mock;
         }
@@ -121,7 +121,7 @@ class AbstractEntityTest extends \PHPUnit\Framework\TestCase
     /**
      * Get adapter mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Adapter\Pdo\Mysql
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DB\Adapter\Pdo\Mysql
      */
     protected function _getConnectionMock()
     {
@@ -145,17 +145,17 @@ class AbstractEntityTest extends \PHPUnit\Framework\TestCase
             ->method('from')
             ->willReturnSelf();
 
-        $connection->expects($this->any())->method('query')->will($this->returnValue($statement));
+        $connection->expects($this->any())->method('query')->willReturn($statement);
 
         $connection->expects(
             $this->any()
         )->method(
             'describeTable'
-        )->will(
-            $this->returnValue(['value' => ['test']])
+        )->willReturn(
+            ['value' => ['test']]
         );
 
-        $connection->expects($this->any())->method('prepareColumnValue')->will($this->returnArgument(2));
+        $connection->expects($this->any())->method('prepareColumnValue')->willReturnArgument(2);
 
         $connection->expects(
             $this->once()
@@ -163,8 +163,8 @@ class AbstractEntityTest extends \PHPUnit\Framework\TestCase
             'delete'
         )->with(
             $this->equalTo('test_table')
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $connection->expects($this->any())
@@ -191,7 +191,7 @@ class AbstractEntityTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $attributeCode
      * @param int $attributeSetId
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Eav\Model\Entity\Attribute\AbstractAttribute
      */
     protected function _getAttributeMock($attributeCode, $attributeSetId)
     {
@@ -205,8 +205,8 @@ class AbstractEntityTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getBackendTable'
-        )->will(
-            $this->returnValue($attributeCode . '_table')
+        )->willReturn(
+            $attributeCode . '_table'
         );
 
         $attribute->expects(
@@ -215,11 +215,11 @@ class AbstractEntityTest extends \PHPUnit\Framework\TestCase
             'isInSet'
         )->with(
             $this->equalTo($attributeSetId)
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
 
-        $attribute->expects($this->any())->method('getAttributeCode')->will($this->returnValue($attributeCode));
+        $attribute->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
 
         return $attribute;
     }
@@ -242,7 +242,7 @@ class AbstractEntityTest extends \PHPUnit\Framework\TestCase
         foreach ($productData as $key => $value) {
             $object->setData($key, $value);
         }
-        $object->expects($this->any())->method('getOrigData')->will($this->returnValue($productOrigData));
+        $object->expects($this->any())->method('getOrigData')->willReturn($productOrigData);
 
         $entityType = new \Magento\Framework\DataObject();
         $entityType->setEntityTypeCode('test');
@@ -269,16 +269,16 @@ class AbstractEntityTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getAffectedFields'
-        )->will(
-            $this->returnValue(['test_table' => [['value_id' => 0, 'attribute_id' => $attributeCode]]])
+        )->willReturn(
+            ['test_table' => [['value_id' => 0, 'attribute_id' => $attributeCode]]]
         );
 
-        $backendModel->expects($this->any())->method('isStatic')->will($this->returnValue(false));
+        $backendModel->expects($this->any())->method('isStatic')->willReturn(false);
 
         $backendModel->expects($this->never())->method('getEntityValueId');
 
         $backendModel->setAttribute($attribute);
-        $attribute->expects($this->any())->method('getBackend')->will($this->returnValue($backendModel));
+        $attribute->expects($this->any())->method('getBackend')->willReturn($backendModel);
         $attribute->setId(222);
         $attributes[$attributeCode] = $attribute;
         $eavConfig = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
@@ -297,20 +297,20 @@ class AbstractEntityTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         );
-        /** @var $model AbstractEntity|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $model AbstractEntity|\PHPUnit\Framework\MockObject\MockObject */
         $model = $this->getMockBuilder(AbstractEntity::class)
             ->setConstructorArgs($arguments)
             ->setMethods(['_getValue', 'beginTransaction', 'commit', 'rollback', 'getConnection'])
             ->getMock();
-        $model->expects($this->any())->method('_getValue')->will($this->returnValue($eavConfig));
-        $model->expects($this->any())->method('getConnection')->will($this->returnValue($this->_getConnectionMock()));
+        $model->expects($this->any())->method('_getValue')->willReturn($eavConfig);
+        $model->expects($this->any())->method('getConnection')->willReturn($this->_getConnectionMock());
 
-        $eavConfig->expects($this->any())->method('getAttribute')->will(
-            $this->returnCallback(
+        $eavConfig->expects($this->any())->method('getAttribute')->willReturnCallback(
+            
                 function ($entityType, $attributeCode) use ($attributes) {
                     return $entityType && isset($attributes[$attributeCode]) ? $attributes[$attributeCode] : null;
                 }
-            )
+            
         );
         $model->isPartialSave(true);
         $model->save($object);
@@ -355,21 +355,22 @@ class AbstractEntityTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
      */
     public function testDuplicateExceptionProcessingOnSave()
     {
-        $connection = $this->createMock(AdapterInterface::class);
+        $this->expectException(\Magento\Framework\Exception\AlreadyExistsException::class);
+
+        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $connection->expects($this->once())->method('rollback');
 
-        /** @var AbstractEntity|\PHPUnit_Framework_MockObject_MockObject $model */
+        /** @var AbstractEntity|\PHPUnit\Framework\MockObject\MockObject $model */
         $model = $this->getMockBuilder(AbstractEntity::class)
             ->disableOriginalConstructor()
             ->setMethods(['getConnection'])
             ->getMockForAbstractClass();
         $model->expects($this->any())->method('getConnection')->willReturn($connection);
 
-        /** @var AbstractModel|\PHPUnit_Framework_MockObject_MockObject $object */
+        /** @var AbstractModel|\PHPUnit\Framework\MockObject\MockObject $object */
         $object = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
             ->getMock();

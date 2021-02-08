@@ -17,12 +17,12 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
         $object = (new ObjectManager($this))->getObject(\Magento\Framework\DataObject::class);
 
-        /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManager */
+        /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject $objectManager */
         $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManager->expects($this->once())->method('create')->with($className, $data)
-            ->will($this->returnValue($object));
+            ->willReturn($object);
 
-        /** @var \Magento\Framework\View\Layout\ReaderFactory|\PHPUnit_Framework_MockObject_MockObject $factory */
+        /** @var \Magento\Framework\View\Layout\ReaderFactory|\PHPUnit\Framework\MockObject\MockObject $factory */
         $factory = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
             ->getObject(\Magento\Framework\View\Layout\ReaderFactory::class, ['objectManager' => $objectManager]);
 
@@ -38,15 +38,15 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $className = 'class_name';
         $data = ['data'];
 
-        /** @var \Magento\Framework\View\Layout\ReaderInterface|\PHPUnit_Framework_MockObject_MockObject $object */
+        /** @var \Magento\Framework\View\Layout\ReaderInterface|\PHPUnit\Framework\MockObject\MockObject $object */
         $object = $this->createMock(\Magento\Framework\View\Layout\ReaderInterface::class);
 
-        /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManager */
+        /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject $objectManager */
         $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManager->expects($this->once())->method('create')->with($className, $data)
-            ->will($this->returnValue($object));
+            ->willReturn($object);
 
-        /** @var \Magento\Framework\View\Layout\ReaderFactory|\PHPUnit_Framework_MockObject_MockObject $factory */
+        /** @var \Magento\Framework\View\Layout\ReaderFactory|\PHPUnit\Framework\MockObject\MockObject $factory */
         $factory = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
             ->getObject(\Magento\Framework\View\Layout\ReaderFactory::class, ['objectManager' => $objectManager]);
 

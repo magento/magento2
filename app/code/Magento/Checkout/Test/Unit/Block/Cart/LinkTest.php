@@ -12,7 +12,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
      */
     protected $_objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
@@ -23,7 +23,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $url = 'http://example.com/';
 
         $urlBuilder = $this->getMockForAbstractClass(\Magento\Framework\UrlInterface::class);
-        $urlBuilder->expects($this->once())->method('getUrl')->with($path)->will($this->returnValue($url . $path));
+        $urlBuilder->expects($this->once())->method('getUrl')->with($path)->willReturn($url . $path);
 
         $context = $this->_objectManagerHelper->getObject(
             \Magento\Framework\View\Element\Template\Context::class,
@@ -56,8 +56,8 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             'isOutputEnabled'
         )->with(
             'Magento_Checkout'
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
         $this->assertSame('', $block->toHtml());
     }
@@ -78,7 +78,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             \Magento\Checkout\Block\Cart\Link::class,
             ['cartHelper' => $helper]
         );
-        $helper->expects($this->any())->method('getSummaryCount')->will($this->returnValue($productCount));
+        $helper->expects($this->any())->method('getSummaryCount')->willReturn($productCount);
         $this->assertSame($label, (string)$block->getLabel());
     }
 

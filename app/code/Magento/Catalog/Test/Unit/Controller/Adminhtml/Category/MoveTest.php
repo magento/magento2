@@ -17,27 +17,27 @@ use Magento\Framework\Registry;
 class MoveTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Controller\Result\JsonFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\JsonFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $resultJsonFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\LayoutFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $layoutFactoryMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $context;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $request;
 
@@ -47,16 +47,16 @@ class MoveTest extends \PHPUnit\Framework\TestCase
     private $moveController;
 
     /**
-     * @var ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManager;
 
     /**
-     * @var ManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $messageManager;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->resultJsonFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\JsonFactory::class)
             ->setMethods(['create'])
@@ -86,14 +86,14 @@ class MoveTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getPost'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->context->expects($this->once())->method('getRequest')->will($this->returnValue($this->request));
-        $this->messageManager = $this->createMock(ManagerInterface::class);
+        $this->context->expects($this->once())->method('getRequest')->willReturn($this->request);
+        $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->context->expects($this->once())->method('getMessageManager')->willReturn($this->messageManager);
     }
 
     private function initObjectManager()
     {
-        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $moveController = new \ReflectionClass($this->moveController);
         $objectManagerProp = $moveController->getProperty('_objectManager');
         $objectManagerProp->setAccessible(true);

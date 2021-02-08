@@ -10,22 +10,22 @@ use Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable as Rendere
 
 class ConfigurableTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\View\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $configManager;
 
-    /** @var \Magento\Catalog\Helper\Image|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Helper\Image|\PHPUnit\Framework\MockObject\MockObject */
     private $imageHelper;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $scopeConfig;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $productConfigMock;
 
     /** @var Renderer */
     private $renderer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -59,9 +59,9 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     {
         $productTags = ['catalog_product_1'];
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $product->expects($this->exactly(2))->method('getIdentities')->will($this->returnValue($productTags));
+        $product->expects($this->exactly(2))->method('getIdentities')->willReturn($productTags);
         $item = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
-        $item->expects($this->exactly(2))->method('getProduct')->will($this->returnValue($product));
+        $item->expects($this->exactly(2))->method('getProduct')->willReturn($product);
         $this->renderer->setItem($item);
         $this->assertEquals(array_merge($productTags, $productTags), $this->renderer->getIdentities());
     }

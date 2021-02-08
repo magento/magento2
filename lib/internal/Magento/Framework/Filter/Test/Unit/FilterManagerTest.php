@@ -38,8 +38,8 @@ class FilterManagerTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             $this->equalTo($factoryName)
-        )->will(
-            $this->returnValue($this->_factoryMock)
+        )->willReturn(
+            $this->_factoryMock
         );
         $this->_config =
             $this->createPartialMock(\Magento\Framework\Filter\FilterManager\Config::class, ['getFactories']);
@@ -47,8 +47,8 @@ class FilterManagerTest extends \PHPUnit\Framework\TestCase
             $this->atLeastOnce()
         )->method(
             'getFactories'
-        )->will(
-            $this->returnValue([$factoryName])
+        )->willReturn(
+            [$factoryName]
         );
         $this->_filterManager = new \Magento\Framework\Filter\FilterManager($this->_objectManager, $this->_config);
     }
@@ -63,11 +63,12 @@ class FilterManagerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Filter factory must implement FilterFactoryInterface interface, stdClass was given.
      */
     public function testGetFilterFactoriesWrongInstance()
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Filter factory must implement FilterFactoryInterface interface, stdClass was given.');
+
         $factoryName = \Magento\Framework\Filter\Factory::class;
         $this->_factoryMock = new \stdClass();
         $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
@@ -77,8 +78,8 @@ class FilterManagerTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             $this->equalTo($factoryName)
-        )->will(
-            $this->returnValue($this->_factoryMock)
+        )->willReturn(
+            $this->_factoryMock
         );
         $this->_config =
             $this->createPartialMock(\Magento\Framework\Filter\FilterManager\Config::class, ['getFactories']);
@@ -86,8 +87,8 @@ class FilterManagerTest extends \PHPUnit\Framework\TestCase
             $this->atLeastOnce()
         )->method(
             'getFactories'
-        )->will(
-            $this->returnValue([$factoryName])
+        )->willReturn(
+            [$factoryName]
         );
         $this->_filterManager = new \Magento\Framework\Filter\FilterManager($this->_objectManager, $this->_config);
 
@@ -108,11 +109,12 @@ class FilterManagerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Filter was not found by given alias wrongAlias
      */
     public function testCreateFilterInstanceWrongAlias()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Filter was not found by given alias wrongAlias');
+
         $this->initMocks();
         $filterAlias = 'wrongAlias';
         $this->_factoryMock->expects(
@@ -121,8 +123,8 @@ class FilterManagerTest extends \PHPUnit\Framework\TestCase
             'canCreateFilter'
         )->with(
             $this->equalTo($filterAlias)
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
 
         $method = new \ReflectionMethod(\Magento\Framework\Filter\FilterManager::class, 'createFilterInstance');
@@ -143,8 +145,8 @@ class FilterManagerTest extends \PHPUnit\Framework\TestCase
             'canCreateFilter'
         )->with(
             $this->equalTo($alias)
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $this->_factoryMock->expects(
@@ -154,8 +156,8 @@ class FilterManagerTest extends \PHPUnit\Framework\TestCase
         )->with(
             $this->equalTo($alias),
             $this->equalTo($arguments)
-        )->will(
-            $this->returnValue($filter)
+        )->willReturn(
+            $filter
         );
     }
 
@@ -170,8 +172,8 @@ class FilterManagerTest extends \PHPUnit\Framework\TestCase
             'filter'
         )->with(
             $this->equalTo($value)
-        )->will(
-            $this->returnValue($value)
+        )->willReturn(
+            $value
         );
         $this->configureFactoryMock($filterMock, 'alias', ['123']);
         $this->assertEquals($value, $this->_filterManager->alias($value, ['123']));

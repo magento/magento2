@@ -24,7 +24,7 @@ class SalableResolverTest extends TestCase
      */
     private $salableResolver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->typeConfigurable = $this->createMock(TypeConfigurable::class);
         $this->salableResolver = new SalableResolverPlugin($this->typeConfigurable);
@@ -54,12 +54,12 @@ class SalableResolverTest extends TestCase
      */
     public function afterIsSalableDataProvider(): array
     {
-        $simpleSalableItem = $this->createMock(SaleableInterface::class);
+        $simpleSalableItem = $this->getMockForAbstractClass(SaleableInterface::class);
         $simpleSalableItem->expects($this->once())
             ->method('getTypeId')
             ->willReturn('simple');
 
-        $configurableSalableItem = $this->createMock(SaleableInterface::class);
+        $configurableSalableItem = $this->getMockForAbstractClass(SaleableInterface::class);
         $configurableSalableItem->expects($this->once())
             ->method('getTypeId')
             ->willReturn('configurable');

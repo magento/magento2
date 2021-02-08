@@ -85,7 +85,7 @@ class MassChangelogTest extends \PHPUnit\Framework\TestCase
      * Set up test
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createPartialMock(\Magento\Backend\App\Action\Context::class, [
                 'getAuthorization',
@@ -177,16 +177,16 @@ class MassChangelogTest extends \PHPUnit\Framework\TestCase
         $this->model = new \Magento\Indexer\Controller\Adminhtml\Indexer\MassChangelog($this->contextMock);
         $this->request->expects($this->any())
             ->method('getParam')->with('indexer_ids')
-            ->will($this->returnValue($indexerIds));
+            ->willReturn($indexerIds);
 
         if (!is_array($indexerIds)) {
             $this->messageManager->expects($this->once())
                 ->method('addError')->with(__('Please select indexers.'))
-                ->will($this->returnValue(1));
+                ->willReturn(1);
         } else {
             $this->objectManager->expects($this->any())
                 ->method('get')->with(\Magento\Framework\Indexer\IndexerRegistry::class)
-                ->will($this->returnValue($this->indexReg));
+                ->willReturn($this->indexReg);
             $indexerInterface = $this->getMockForAbstractClass(
                 \Magento\Framework\Indexer\IndexerInterface::class,
                 ['setScheduled'],
@@ -195,17 +195,17 @@ class MassChangelogTest extends \PHPUnit\Framework\TestCase
             );
             $this->indexReg->expects($this->any())
                 ->method('get')->with(1)
-                ->will($this->returnValue($indexerInterface));
+                ->willReturn($indexerInterface);
 
             if ($exception !== null) {
                 $indexerInterface->expects($this->any())
                     ->method('setScheduled')->with(true)->will($this->throwException($exception));
             } else {
                 $indexerInterface->expects($this->any())
-                    ->method('setScheduled')->with(true)->will($this->returnValue(1));
+                    ->method('setScheduled')->with(true)->willReturn(1);
             }
 
-            $this->messageManager->expects($this->any())->method('addSuccess')->will($this->returnValue(1));
+            $this->messageManager->expects($this->any())->method('addSuccess')->willReturn(1);
 
             if ($exception !== null) {
                 $this->messageManager

@@ -11,14 +11,14 @@ namespace Magento\ProductVideo\Test\Unit\Model\Product\Attribute\Media;
 class VideoEntryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\ProductVideo\Model\Product\Attribute\Media\VideoEntry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ProductVideo\Model\Product\Attribute\Media\VideoEntry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $modelObject;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->modelObject =
             $this->createPartialMock(

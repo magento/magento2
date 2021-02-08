@@ -8,7 +8,7 @@ namespace Magento\Checkout\Test\Unit\CustomerData;
 class ItemPoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
@@ -27,7 +27,7 @@ class ItemPoolTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -90,12 +90,10 @@ class ItemPoolTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($itemData, $this->model->getItemData($quoteItemMock));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * #@expectedExceptionMessage product_type doesn't extend \Magento\Checkout\CustomerData\ItemInterface
-     */
     public function testGetItemDataIfItemNotValid()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('product_type doesn\'t extend \Magento\Checkout\CustomerData\ItemInterface');
         $itemData = ['key' => 'value'];
         $productType = 'product_type';
         $quoteItemMock = $this->createMock(\Magento\Quote\Model\Quote\Item::class);

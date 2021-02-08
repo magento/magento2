@@ -12,13 +12,13 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $factoryMock = $this->createMock(\Magento\Config\Model\Config\Structure\Mapper\Factory::class);
 
         $mapperMock = $this->createMock(\Magento\Config\Model\Config\Structure\Mapper\Dependencies::class);
-        $mapperMock->expects($this->any())->method('map')->will($this->returnArgument(0));
-        $factoryMock->expects($this->any())->method('create')->will($this->returnValue($mapperMock));
+        $mapperMock->expects($this->any())->method('map')->willReturnArgument(0);
+        $factoryMock->expects($this->any())->method('create')->willReturn($mapperMock);
 
         $this->_model = new \Magento\Config\Model\Config\Structure\Converter($factoryMock);
     }

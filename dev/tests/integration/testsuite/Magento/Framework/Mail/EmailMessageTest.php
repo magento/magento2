@@ -82,7 +82,7 @@ class EmailMessageTest extends TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->di = Bootstrap::getObjectManager();
         $this->mimePartFactory = $this->di->get(MimePartInterfaceFactory::class);
@@ -169,43 +169,43 @@ class EmailMessageTest extends TestCase
         ];
         $message = $this->messageFactory->create($data);
 
-        $this->assertContains($content, $message->toString());
-        $this->assertContains('Content-Type: ' . $type, $message->toString());
+        $this->assertStringContainsString($content, $message->toString());
+        $this->assertStringContainsString('Content-Type: ' . $type, $message->toString());
         $senderString = 'Sender: =?utf-8?Q?'
             . str_replace(' ', '=20', $sender->getName())
             . '?= <'
             . $sender->getEmail()
             . '>';
-        $this->assertContains($senderString, $message->toString());
-        $this->assertContains('From: ' . $from[0]->getEmail(), $message->toString());
+        $this->assertStringContainsString($senderString, $message->toString());
+        $this->assertStringContainsString('From: ' . $from[0]->getEmail(), $message->toString());
         $replyToString = 'Reply-To: =?utf-8?Q?'
             . str_replace(' ', '=20', $replyTo[0]->getName())
             . '?= <'
             . $replyTo[0]->getEmail()
             . '>';
-        $this->assertContains($replyToString, $message->toString());
+        $this->assertStringContainsString($replyToString, $message->toString());
         $toString = 'To: =?utf-8?Q?'
             . str_replace(' ', '=20', $to[0]->getName())
             . '?= <'
             . $to[0]->getEmail()
             . '>';
-        $this->assertContains($toString, $message->toString());
+        $this->assertStringContainsString($toString, $message->toString());
         $ccString = 'Cc: =?utf-8?Q?'
             . str_replace(' ', '=20', $cc[0]->getName())
             . '?= <'
             . $cc[0]->getEmail()
             . '>';
-        $this->assertContains($ccString, $message->toString());
-        $this->assertContains('Bcc: ' . $bcc[0]->getEmail(), $message->toString());
+        $this->assertStringContainsString($ccString, $message->toString());
+        $this->assertStringContainsString('Bcc: ' . $bcc[0]->getEmail(), $message->toString());
         $contentDescription = 'Content-Description: =?UTF-8?Q?'
             . str_replace(' ', '=20', $this->description)
             . '?=';
-        $this->assertContains($contentDescription, $message->toString());
+        $this->assertStringContainsString($contentDescription, $message->toString());
         $subject = 'Subject: =?UTF-8?Q?'
             . str_replace(' ', '=20', $this->subject)
             . '?=';
-        $this->assertContains($subject, $message->toString());
-        $this->assertContains($content, $message->toString());
+        $this->assertStringContainsString($subject, $message->toString());
+        $this->assertStringContainsString($content, $message->toString());
         //tests address factory
         $this->assertInstanceOf(Address::class, $message->getTo()[0]);
         //tests address converter convert method
@@ -262,11 +262,11 @@ class EmailMessageTest extends TestCase
         ];
         $message = $this->messageFactory->create($data);
 
-        $this->assertContains($this->getXmlContent(), $message->toString());
-        $this->assertContains('Content-Type: ' . self::XML_TYPE, $message->toString());
+        $this->assertStringContainsString($this->getXmlContent(), $message->toString());
+        $this->assertStringContainsString('Content-Type: ' . self::XML_TYPE, $message->toString());
         $contentDisposition = 'Content-Disposition: ' . MimeInterface::DISPOSITION_ATTACHMENT
             . '; filename="' . self::ATTACHMENT_FILE_NAME . '"';
-        $this->assertContains($contentDisposition, $message->toString());
+        $this->assertStringContainsString($contentDisposition, $message->toString());
     }
 
     /**
@@ -277,7 +277,7 @@ class EmailMessageTest extends TestCase
     private function getXmlContent(): string
     {
         return '<?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Framework\Console\CommandList">
         <arguments>

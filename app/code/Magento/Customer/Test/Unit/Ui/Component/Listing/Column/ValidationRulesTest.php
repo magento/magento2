@@ -13,10 +13,10 @@ class ValidationRulesTest extends \PHPUnit\Framework\TestCase
     /** @var ValidationRules */
     protected $validationRules;
 
-    /** @var ValidationRuleInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ValidationRuleInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $validationRule;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->validationRule = $this->getMockBuilder(\Magento\Customer\Api\Data\ValidationRuleInterface::class)
             ->disableOriginalConstructor()

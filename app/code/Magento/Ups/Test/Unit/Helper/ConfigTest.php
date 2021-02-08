@@ -17,7 +17,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     protected $helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->helper = $objectManagerHelper->getObject(\Magento\Ups\Helper\Config::class);

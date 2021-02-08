@@ -150,7 +150,7 @@ class CartTest extends TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->wishlistProviderMock = $this->getMockBuilder(
             WishlistProviderInterface::class
@@ -229,16 +229,16 @@ class CartTest extends TestCase
             ->getMock();
         $this->contextMock->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
         $this->contextMock->expects($this->any())
             ->method('getRedirect')
-            ->will($this->returnValue($this->redirectMock));
+            ->willReturn($this->redirectMock);
         $this->contextMock->expects($this->any())
             ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManagerMock));
+            ->willReturn($this->objectManagerMock);
         $this->contextMock->expects($this->any())
             ->method('getMessageManager')
-            ->will($this->returnValue($this->messageManagerMock));
+            ->willReturn($this->messageManagerMock);
         $this->contextMock->expects($this->any())
             ->method('getUrl')
             ->willReturn($this->urlMock);
@@ -258,7 +258,7 @@ class CartTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->cookieManagerMock = $this->createMock(CookieManagerInterface::class);
+        $this->cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
 
         $this->cookieMetadataFactoryMock = $this->getMockBuilder(CookieMetadataFactory::class)
             ->disableOriginalConstructor()

@@ -8,17 +8,17 @@ namespace Magento\Backend\Test\Unit\App\Router;
 class NoRouteHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_helperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_routeConfigMock;
 
@@ -27,12 +27,12 @@ class NoRouteHandlerTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $this->_routeConfigMock = $this->createMock(\Magento\Framework\App\Route\ConfigInterface::class);
         $this->_helperMock = $this->createMock(\Magento\Backend\Helper\Data::class);
-        $this->_helperMock->expects($this->any())->method('getAreaFrontName')->will($this->returnValue('backend'));
+        $this->_helperMock->expects($this->any())->method('getAreaFrontName')->willReturn('backend');
         $this->_model = new \Magento\Backend\App\Router\NoRouteHandler($this->_helperMock, $this->_routeConfigMock);
     }
 
@@ -45,12 +45,12 @@ class NoRouteHandlerTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getRouteFrontName')
             ->with('adminhtml')
-            ->will($this->returnValue('admin'));
+            ->willReturn('admin');
 
         $this->_requestMock
             ->expects($this->once())
             ->method('getPathInfo')
-            ->will($this->returnValue('backend/admin/custom'));
+            ->willReturn('backend/admin/custom');
 
         $this->_requestMock->expects(
             $this->once()
@@ -58,8 +58,8 @@ class NoRouteHandlerTest extends \PHPUnit\Framework\TestCase
             'setModuleName'
         )->with(
             'admin'
-        )->will(
-            $this->returnValue($this->_requestMock)
+        )->willReturn(
+            $this->_requestMock
         );
 
         $this->_requestMock->expects(
@@ -68,8 +68,8 @@ class NoRouteHandlerTest extends \PHPUnit\Framework\TestCase
             'setControllerName'
         )->with(
             'noroute'
-        )->will(
-            $this->returnValue($this->_requestMock)
+        )->willReturn(
+            $this->_requestMock
         );
 
         $this->_requestMock->expects(
@@ -78,11 +78,11 @@ class NoRouteHandlerTest extends \PHPUnit\Framework\TestCase
             'setActionName'
         )->with(
             'index'
-        )->will(
-            $this->returnValue($this->_requestMock)
+        )->willReturn(
+            $this->_requestMock
         );
 
-        $this->assertEquals(true, $this->_model->process($this->_requestMock));
+        $this->assertTrue($this->_model->process($this->_requestMock));
     }
 
     /**
@@ -94,8 +94,8 @@ class NoRouteHandlerTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getPathInfo'
-        )->will(
-            $this->returnValue('module/controller/action')
+        )->willReturn(
+            'module/controller/action'
         );
 
         $this->_requestMock->expects($this->never())->method('setModuleName');
@@ -104,6 +104,6 @@ class NoRouteHandlerTest extends \PHPUnit\Framework\TestCase
 
         $this->_requestMock->expects($this->never())->method('setActionName');
 
-        $this->assertEquals(false, $this->_model->process($this->_requestMock));
+        $this->assertFalse($this->_model->process($this->_requestMock));
     }
 }

@@ -8,7 +8,7 @@ namespace Magento\Framework\Phrase\Test\Unit\Renderer;
 class TranslateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Translate|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Translate|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_translator;
 
@@ -18,11 +18,11 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
     protected $_renderer;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_translator = $this->createMock(\Magento\Framework\TranslateInterface::class);
         $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
@@ -55,7 +55,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
 
         $this->_translator->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue([$translatedTextInDictionary => $translate]));
+            ->willReturn([$translatedTextInDictionary => $translate]);
 
         $this->assertEquals($translate, $this->_renderer->render([$translatedTextInput], []));
     }
@@ -65,7 +65,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
         $translate = "Text with quote \'";
         $this->_translator->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->assertEquals($translate, $this->_renderer->render([$translate], []));
     }
 
@@ -77,7 +77,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
 
         $this->_translator->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue([$translatedTextInDictionary => $translate]));
+            ->willReturn([$translatedTextInDictionary => $translate]);
 
         $this->assertEquals($translate, $this->_renderer->render([$translatedTextInput], []));
     }

@@ -43,7 +43,7 @@ class ReorderTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -56,7 +56,7 @@ class ReorderTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if ($this->quote instanceof CartInterface) {
             $this->quoteRepository->delete($this->quote);
@@ -97,7 +97,7 @@ class ReorderTest extends AbstractController
         $this->customerSession->setCustomerId($order->getCustomerId());
         $this->dispatchReorderRequest((int)$order->getId());
         $this->assertSessionMessages(
-            $this->contains((string)__('The requested qty is not available')),
+            $this->containsEqual((string)__('The requested qty is not available')),
             MessageInterface::TYPE_ERROR
         );
         $this->quote = $this->checkoutSession->getQuote();

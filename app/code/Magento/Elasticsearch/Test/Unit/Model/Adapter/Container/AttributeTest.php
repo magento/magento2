@@ -19,14 +19,14 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     private $attribute;
 
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionMock;
 
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
@@ -153,7 +153,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             $this->createAttributeMock(120, 'attribute_code')
         ];
         $this->mockAttributes($attributes);
-        $this->assertEquals(null, $this->attribute->getAttribute($attributeCode));
+        $this->assertNull($this->attribute->getAttribute($attributeCode));
     }
 
     /**
@@ -189,7 +189,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      * @param int $attributeId
      * @param string $attributeCode
      * @param int $sequence
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function mockAttributeById($attributeId, $attributeCode, $sequence = 0)
     {
@@ -205,7 +205,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      * @param int $attributeId
      * @param string $attributeCode
      * @param int $sequence
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function mockAttributeByCode($attributeId, $attributeCode, $sequence = 0)
     {
@@ -220,7 +220,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     /**
      * @param int $attributeId
      * @param string $attributeCode
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function createAttributeMock($attributeId, $attributeCode)
     {

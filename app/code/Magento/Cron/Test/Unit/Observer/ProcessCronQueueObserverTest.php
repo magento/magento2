@@ -26,41 +26,41 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
     protected $_observer;
 
     /**
-     * @var \Magento\Framework\App\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ObjectManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_cache;
 
     /**
-     * @var \Magento\Cron\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cron\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_config;
 
     /**
-     * @var \Magento\Cron\Model\ScheduleFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cron\Model\ScheduleFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_scheduleFactory;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\App\Console\Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Console\Request|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_request;
 
     /**
-     * @var \Magento\Framework\ShellInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ShellInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_shell;
 
-    /** @var \Magento\Cron\Model\ResourceModel\Schedule\Collection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Cron\Model\ResourceModel\Schedule\Collection|\PHPUnit\Framework\MockObject\MockObject */
     protected $_collection;
 
     /**
@@ -79,42 +79,42 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
     protected $observer;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $appStateMock;
 
     /**
-     * @var \Magento\Framework\Lock\LockManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Lock\LockManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $lockManagerMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManager;
 
     /**
-     * @var DeadlockRetrierInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeadlockRetrierInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $retrierMock;
 
     /**
-     * @var \Magento\Cron\Model\ResourceModel\Schedule|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cron\Model\ResourceModel\Schedule|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scheduleResource;
 
     /**
-     * @var StatFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var StatFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $statFactory;
 
     /**
-     * @var Stat|\PHPUnit_Framework_MockObject_MockObject
+     * @var Stat|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stat;
 
@@ -126,7 +126,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * Prepare parameters
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = $this->getMockBuilder(
             \Magento\Framework\App\ObjectManager::class
@@ -201,7 +201,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->statFactory->expects($this->any())->method('create')->willReturn($this->stat);
 
-        $this->retrierMock = $this->createMock(DeadlockRetrierInterface::class);
+        $this->retrierMock = $this->getMockForAbstractClass(DeadlockRetrierInterface::class);
 
         $this->_observer = new ProcessCronQueueObserver(
             $this->_objectManager,
@@ -275,7 +275,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         $schedule->expects($this->never())->method('setFinishedAt');
         $schedule->expects($this->once())->method('getResource')->willReturn($this->scheduleResource);
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $this->scheduleResource->expects($this->once())
             ->method('getConnection')
@@ -359,7 +359,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         $schedule->expects($this->once())->method('save');
         $schedule->expects($this->once())->method('getResource')->willReturn($this->scheduleResource);
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $this->scheduleResource->expects($this->once())
             ->method('getConnection')
@@ -439,7 +439,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         $schedule->expects($this->once())->method('save');
         $schedule->expects($this->once())->method('getResource')->willReturn($this->scheduleResource);
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $this->scheduleResource->expects($this->once())
             ->method('getConnection')
@@ -539,7 +539,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         $schedule->expects($this->exactly($saveCalls))->method('save');
         $schedule->expects($this->exactly($saveCalls))->method('getResource')->willReturn($this->scheduleResource);
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $this->scheduleResource->expects($this->exactly($saveCalls))
             ->method('getConnection')
@@ -647,7 +647,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
             '__wakeup',
             'getResource',
         ];
-        /** @var \Magento\Cron\Model\Schedule|\PHPUnit_Framework_MockObject_MockObject $schedule */
+        /** @var \Magento\Cron\Model\Schedule|\PHPUnit\Framework\MockObject\MockObject $schedule */
         $schedule = $this->getMockBuilder(
             \Magento\Cron\Model\Schedule::class
         )->setMethods(
@@ -659,7 +659,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         $schedule->expects($this->any())->method('setFinishedAt')->willReturnSelf();
         $schedule->expects($this->exactly(2))->method('getResource')->willReturn($this->scheduleResource);
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $this->scheduleResource->expects($this->exactly(2))
             ->method('getConnection')
@@ -957,7 +957,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         $scheduleMock->expects($this->exactly(9))->method('getResource')->willReturn($this->scheduleResource);
         $this->_scheduleFactory->expects($this->exactly(10))->method('create')->willReturn($scheduleMock);
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $connectionMock->expects($this->exactly(5))
             ->method('delete')

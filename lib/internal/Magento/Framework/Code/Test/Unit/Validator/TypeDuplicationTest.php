@@ -18,7 +18,7 @@ class TypeDuplicationTest extends \PHPUnit\Framework\TestCase
      */
     protected $_fixturePath;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $path = realpath(__DIR__) . '/' . '_files' . '/' . 'ClassesForTypeDuplication.php';
         $this->_fixturePath = str_replace('\\', '/', $path);

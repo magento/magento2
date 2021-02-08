@@ -59,7 +59,7 @@ class InitialConfigSourceTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->reader = $objectManager->get(FileReader::class);
@@ -76,7 +76,7 @@ class InitialConfigSourceTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->clearConfig(ConfigFilePool::APP_CONFIG);
         $this->clearConfig(ConfigFilePool::APP_ENV);
@@ -101,8 +101,8 @@ class InitialConfigSourceTest extends TestCase
             $this->clearConfig(ConfigFilePool::APP_ENV);
         }
         $this->assertEquals($defaultWebsite, $this->storeManager->getWebsite()->getCode());
-        $this->assertEquals($websites, array_keys($this->storeManager->getWebsites(true, true)), '', 0.0, 10, true);
-    }
+        $actualWebsites = array_keys($this->storeManager->getWebsites(true, true));
+        $this->assertEmpty(array_diff($websites, $actualWebsites));    }
 
     /**
      * @return array

@@ -48,7 +48,7 @@ class AllowedQuantityTest extends TestCase
     /**
      * Set Up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stockRegistryMock = $this->createMock(StockRegistry::class);
         $this->itemMock = $this->getMockForAbstractClass(
@@ -104,7 +104,7 @@ class AllowedQuantityTest extends TestCase
             ->willReturn($maxSaleQty);
         $this->stockRegistryMock->expects($this->any())
             ->method('getStockItem')
-            ->will($this->returnValue($this->itemMock));
+            ->willReturn($this->itemMock);
 
         $result = $this->sut->getMinMaxQty();
 

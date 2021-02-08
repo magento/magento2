@@ -41,64 +41,64 @@ class GroupedTest extends AbstractModifierTest
     const LINKED_PRODUCT_PRICE = '1';
 
     /**
-     * @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $linkedProductMock;
 
     /**
-     * @var ProductLinkRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductLinkRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $linkRepositoryMock;
 
     /**
-     * @var ProductLinkInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductLinkInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $linkMock;
 
     /**
-     * @var ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productRepositoryMock;
 
     /**
-     * @var ProductLinkExtensionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductLinkExtensionInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $linkExtensionMock;
 
     /**
-     * @var CurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $currencyMock;
 
     /**
-     * @var ImageHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var ImageHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $imageHelperMock;
 
     /**
-     * @var AttributeSetRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeSetRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeSetRepositoryMock;
 
     /**
-     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
     /**
-     * @var GroupedProducts|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupedProducts|\PHPUnit\Framework\MockObject\MockObject
      */
     private $groupedProductsMock;
 
     /**
-     * @var ProductLinkInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductLinkInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productLinkFactoryMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->locatorMock = $this->getMockBuilder(LocatorInterface::class)

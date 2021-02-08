@@ -21,22 +21,22 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
     /** @var CanViewNotification */
     private $canViewNotification;
 
-    /** @var  Logger|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Logger|\PHPUnit\Framework\MockObject\MockObject */
     private $viewerLoggerMock;
 
-    /** @var ProductMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ProductMetadataInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $productMetadataMock;
 
-    /** @var Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Session|\PHPUnit\Framework\MockObject\MockObject */
     private $sessionMock;
 
-    /** @var  Log|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Log|\PHPUnit\Framework\MockObject\MockObject */
     private $logMock;
 
-    /** @var  $cacheStorageMock \PHPUnit_Framework_MockObject_MockObject|CacheInterface */
+    /** @var  $cacheStorageMock \PHPUnit\Framework\MockObject\MockObject|CacheInterface */
     private $cacheStorageMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->cacheStorageMock = $this->getMockBuilder(CacheInterface::class)
             ->getMockForAbstractClass();
@@ -51,7 +51,7 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $objectManager = new ObjectManager($this);
         $this->canViewNotification = $objectManager->getObject(
             CanViewNotification::class,
@@ -76,7 +76,7 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
             ->method('load')
             ->with('release-notification-popup-1')
             ->willReturn("0");
-        $this->assertEquals(false, $this->canViewNotification->isVisible([]));
+        $this->assertFalse($this->canViewNotification->isVisible([]));
     }
 
     /**

@@ -18,31 +18,31 @@ class AbstractSearchResultTest extends \PHPUnit\Framework\TestCase
     protected $searchResult;
 
     /**
-     * @var \Magento\Framework\DB\QueryInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\QueryInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $query;
 
     /**
-     * @var \Magento\Framework\Data\Collection\EntityFactoryInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\EntityFactoryInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $entityFactory;
 
     /**
-     * @var \Magento\Framework\Api\CriteriaInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\CriteriaInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $criteria;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchResultIteratorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

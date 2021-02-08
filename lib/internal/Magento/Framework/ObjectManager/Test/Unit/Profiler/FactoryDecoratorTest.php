@@ -23,13 +23,13 @@ class FactoryDecoratorTest extends \PHPUnit\Framework\TestCase
      */
     const GENERATOR_NAME = \Magento\Framework\ObjectManager\Profiler\Code\Generator\Logger::class;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\ObjectManager\FactoryInterface*/
+    /** @var  \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\ObjectManager\FactoryInterface*/
     private $objectManagerMock;
 
     /** @var  \Magento\Framework\ObjectManager\Profiler\FactoryDecorator */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         require_once __DIR__ . '/../_files/logger_classes.php';
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

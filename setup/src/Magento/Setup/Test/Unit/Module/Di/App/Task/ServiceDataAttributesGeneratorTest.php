@@ -14,12 +14,12 @@ use Magento\Setup\Module\Di\Code\Scanner;
 class ServiceDataAttributesGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Setup\Module\Di\Code\Scanner\ConfigurationScanner | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\Di\Code\Scanner\ConfigurationScanner | \PHPUnit\Framework\MockObject\MockObject
      */
     private $configurationScannerMock;
 
     /**
-     * @var \Magento\Setup\Module\Di\Code\Scanner\ServiceDataAttributesScanner|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\Di\Code\Scanner\ServiceDataAttributesScanner|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serviceDataAttributesScannerMock;
 
@@ -28,7 +28,7 @@ class ServiceDataAttributesGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configurationScannerMock = $this->getMockBuilder(
             \Magento\Setup\Module\Di\Code\Scanner\ConfigurationScanner::class

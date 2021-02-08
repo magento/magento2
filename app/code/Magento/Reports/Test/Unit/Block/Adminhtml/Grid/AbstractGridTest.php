@@ -14,16 +14,16 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class AbstractGridTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid|\PHPUnit\Framework\MockObject\MockObject
      */
     private $model;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 

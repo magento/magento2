@@ -25,31 +25,31 @@ class AttributeSetTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Processor|\PHPUnit_Framework_MockObject_MockObject
+     * @var Processor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eavProcessorMock;
 
     /**
-     * @var IndexableAttributeFilter|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexableAttributeFilter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filterMock;
 
     /**
-     * @var EavAttributeSet|\PHPUnit_Framework_MockObject_MockObject
+     * @var EavAttributeSet|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectMock;
 
     /**
-     * @var SetFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var SetFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $setFactoryMock;
 
     /**
-     * @var EavAttributeSet|\PHPUnit_Framework_MockObject_MockObject
+     * @var EavAttributeSet|\PHPUnit\Framework\MockObject\MockObject
      */
     private $originalSetMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->filterMock = $this->createMock(IndexableAttributeFilter::class);
         $this->subjectMock = $this->createMock(EavAttributeSet::class);

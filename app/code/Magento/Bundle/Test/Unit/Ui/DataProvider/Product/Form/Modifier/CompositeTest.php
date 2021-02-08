@@ -7,7 +7,7 @@ namespace Magento\Bundle\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Bundle\Model\Product\Type;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class CompositeTest extends \PHPUnit\Framework\TestCase
 {
@@ -54,7 +54,7 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->meta = ['some_meta'];
         $this->modifiedMeta = ['modified_meta'];
@@ -144,12 +144,12 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Type "SomeClass" is not an instance of
-     * Magento\Ui\DataProvider\Modifier\ModifierInterface
      */
     public function testModifyMetaWithException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Type "SomeClass" is not an instance of Magento\\Ui\\DataProvider\\Modifier\\ModifierInterface');
+
         /** @var \Exception|MockObject $modifierMock */
         $modifierMock = $this->createPartialMock(\Exception::class, ['modifyMeta']);
         $modifierMock->expects($this->never())

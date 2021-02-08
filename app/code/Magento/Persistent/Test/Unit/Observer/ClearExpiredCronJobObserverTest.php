@@ -15,31 +15,31 @@ class ClearExpiredCronJobObserverTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $scheduleMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $websiteCollectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->collectionFactoryMock =
             $this->createPartialMock(\Magento\Store\Model\ResourceModel\Website\CollectionFactory::class, ['create']);
@@ -63,12 +63,12 @@ class ClearExpiredCronJobObserverTest extends \PHPUnit\Framework\TestCase
         $this->collectionFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->websiteCollectionMock));
-        $this->websiteCollectionMock->expects($this->once())->method('getAllIds')->will($this->returnValue([1]));
+            ->willReturn($this->websiteCollectionMock);
+        $this->websiteCollectionMock->expects($this->once())->method('getAllIds')->willReturn([1]);
         $this->sessionFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->sessionMock));
+            ->willReturn($this->sessionMock);
         $this->sessionMock->expects($this->once())->method('deleteExpired')->with(1);
         $this->model->execute($this->scheduleMock);
     }
@@ -78,7 +78,7 @@ class ClearExpiredCronJobObserverTest extends \PHPUnit\Framework\TestCase
         $this->collectionFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->websiteCollectionMock));
+            ->willReturn($this->websiteCollectionMock);
         $this->websiteCollectionMock->expects($this->once())->method('getAllIds');
         $this->sessionFactoryMock
             ->expects($this->never())

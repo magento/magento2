@@ -74,11 +74,12 @@ class BaseurlTest extends \PHPUnit\Framework\TestCase
      * @param string $path
      * @param string $value
      * @magentoDbIsolation enabled
-     * @expectedException \Magento\Framework\Exception\LocalizedException
+     *
      * @dataProvider validationExceptionDataProvider
      */
     public function testValidationException($path, $value)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         /** @var $model \Magento\Config\Model\Config\Backend\Baseurl */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Config\Model\Config\Backend\Baseurl::class

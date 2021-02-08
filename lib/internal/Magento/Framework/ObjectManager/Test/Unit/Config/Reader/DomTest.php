@@ -11,22 +11,22 @@ require_once __DIR__ . '/_files/ConfigDomMock.php';
 class DomTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileResolverMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $converterMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $schemaLocatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $validationStateMock;
 
@@ -35,7 +35,7 @@ class DomTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fileResolverMock = $this->createMock(\Magento\Framework\Config\FileResolverInterface::class);
         $this->converterMock = $this->createMock(\Magento\Framework\ObjectManager\Config\Mapper\Dom::class);
@@ -59,7 +59,7 @@ class DomTest extends \PHPUnit\Framework\TestCase
     public function testRead()
     {
         $fileList = ['first content item'];
-        $this->fileResolverMock->expects($this->once())->method('get')->will($this->returnValue($fileList));
+        $this->fileResolverMock->expects($this->once())->method('get')->willReturn($fileList);
         $this->converterMock->expects($this->once())->method('convert')->with('reader dom result');
         $this->model->read();
     }

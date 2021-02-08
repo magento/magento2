@@ -13,11 +13,11 @@ class AllowspecificTest extends \PHPUnit\Framework\TestCase
     protected $_object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_formMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_object = $testHelper->getObject(
@@ -39,15 +39,15 @@ class AllowspecificTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getHtmlIdPrefix'
-        )->will(
-            $this->returnValue('test_prefix_')
+        )->willReturn(
+            'test_prefix_'
         );
         $this->_formMock->expects(
             $this->once()
         )->method(
             'getHtmlIdSuffix'
-        )->will(
-            $this->returnValue('_test_suffix')
+        )->willReturn(
+            '_test_suffix'
         );
 
         $afterHtmlCode = 'after html';
@@ -58,7 +58,7 @@ class AllowspecificTest extends \PHPUnit\Framework\TestCase
 
         $this->assertStringEndsWith('</script>' . $afterHtmlCode, $actual);
         $this->assertStringStartsWith('<script type="text/javascript">', trim($actual));
-        $this->assertContains('test_prefix_spec_element_test_suffix', $actual);
+        $this->assertStringContainsString('test_prefix_spec_element_test_suffix', $actual);
     }
 
     /**
@@ -80,8 +80,8 @@ class AllowspecificTest extends \PHPUnit\Framework\TestCase
             'getElement'
         )->with(
             $countryId
-        )->will(
-            $this->returnValue($elementMock)
+        )->willReturn(
+            $elementMock
         );
 
         $this->_object->setValue($value);

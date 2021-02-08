@@ -13,7 +13,7 @@ use Magento\Ui\Component\Form\Element\Input;
 use Magento\Ui\Component\Form\Element\Textarea;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Form\Fieldset;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class GoogleOptimizerTest
@@ -55,7 +55,7 @@ class GoogleOptimizerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

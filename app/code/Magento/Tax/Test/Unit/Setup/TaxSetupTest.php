@@ -13,17 +13,17 @@ class TaxSetupTest extends \PHPUnit\Framework\TestCase
     protected $taxSetup;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $typeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->typeConfigMock = $this->createMock(\Magento\Catalog\Model\ProductTypes\ConfigInterface::class);
 
         $salesSetup = $this->createMock(\Magento\Sales\Setup\SalesSetup::class);
         $salesSetupFactory = $this->createPartialMock(\Magento\Sales\Setup\SalesSetupFactory::class, ['create']);
-        $salesSetupFactory->expects($this->any())->method('create')->will($this->returnValue($salesSetup));
+        $salesSetupFactory->expects($this->any())->method('create')->willReturn($salesSetup);
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->taxSetup = $helper->getObject(
@@ -44,8 +44,8 @@ class TaxSetupTest extends \PHPUnit\Framework\TestCase
             'filter'
         )->with(
             'taxable'
-        )->will(
-            $this->returnValue($refundable)
+        )->willReturn(
+            $refundable
         );
         $this->assertEquals($refundable, $this->taxSetup->getTaxableItems());
     }

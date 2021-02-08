@@ -17,10 +17,10 @@ class DesignExceptionsTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     private $objectManagerHelper;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $scopeConfigMock;
 
-    /** @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject */
     private $requestMock;
 
     /** @var string */
@@ -29,10 +29,10 @@ class DesignExceptionsTest extends \PHPUnit\Framework\TestCase
     /** @var string */
     private $scopeType = 'scope_type';
 
-    /** @var Json|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Json|\PHPUnit\Framework\MockObject\MockObject */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
@@ -63,13 +63,13 @@ class DesignExceptionsTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getServer')
             ->with($this->equalTo('HTTP_USER_AGENT'))
-            ->will($this->returnValue($userAgent));
+            ->willReturn($userAgent);
 
         if ($userAgent) {
             $this->scopeConfigMock->expects($this->once())
                 ->method('getValue')
                 ->with($this->equalTo($this->exceptionConfigPath), $this->equalTo($this->scopeType))
-                ->will($this->returnValue($configValue));
+                ->willReturn($configValue);
         }
 
         $this->serializerMock->expects($this->exactly($callNum))

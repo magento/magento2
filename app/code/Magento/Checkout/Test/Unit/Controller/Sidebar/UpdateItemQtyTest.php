@@ -16,22 +16,22 @@ class UpdateItemQtyTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Checkout\Model\Sidebar|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Checkout\Model\Sidebar|\PHPUnit\Framework\MockObject\MockObject */
     protected $sidebarMock;
 
-    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $loggerMock;
 
-    /** @var \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Json\Helper\Data|\PHPUnit\Framework\MockObject\MockObject */
     protected $jsonHelperMock;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $requestMock;
 
-    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $responseMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sidebarMock = $this->createMock(\Magento\Checkout\Model\Sidebar::class);
         $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);

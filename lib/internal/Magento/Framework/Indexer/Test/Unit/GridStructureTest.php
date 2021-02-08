@@ -12,17 +12,17 @@ use Magento\Framework\DB\Ddl\Table;
 class GridStructureTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $flatScopeResolver;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connection;
 
@@ -31,7 +31,7 @@ class GridStructureTest extends \PHPUnit\Framework\TestCase
      */
     protected $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->getMock();

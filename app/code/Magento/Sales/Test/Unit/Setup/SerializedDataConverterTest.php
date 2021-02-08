@@ -13,12 +13,12 @@ use Magento\Sales\Setup\SerializedDataConverter;
 class SerializedDataConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Serialize|\PHPUnit_Framework_MockObject_MockObject
+     * @var Serialize|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializeMock;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $jsonMock;
 
@@ -27,7 +27,7 @@ class SerializedDataConverterTest extends \PHPUnit\Framework\TestCase
      */
     private $serializedDataConverter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->serializeMock = $this->createMock(Serialize::class);
@@ -170,10 +170,11 @@ class SerializedDataConverterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\DB\DataConverter\DataConversionException
      */
     public function testConvertCorruptedData()
     {
+        $this->expectException(\Magento\Framework\DB\DataConverter\DataConversionException::class);
+
         $this->serializeMock->expects($this->once())
             ->method('unserialize')
             ->willReturnCallback(

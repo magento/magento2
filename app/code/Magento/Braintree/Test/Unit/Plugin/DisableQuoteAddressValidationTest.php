@@ -25,7 +25,7 @@ class DisableQuoteAddressValidationTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->model = new DisableQuoteAddressValidation();
@@ -48,7 +48,7 @@ class DisableQuoteAddressValidationTest extends TestCase
         $subject = $this->createMock(QuoteManagement::class);
         $quote = $this->createMock(Quote::class);
         $payment = $this->createMock(Payment::class);
-        $customer = $this->createMock(CustomerInterface::class);
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
         $billingAddress = $this->createPartialMock(Address::class, ['setShouldIgnoreValidation']);
         $quote->method('getPayment')->willReturn($payment);
         $quote->method('getCustomer')->willReturn($isGuest ? null : $customer);

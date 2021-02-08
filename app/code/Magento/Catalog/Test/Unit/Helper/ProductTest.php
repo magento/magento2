@@ -12,7 +12,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     protected $_productHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $arguments = [
             'reindexPriceIndexerData' => [
@@ -55,8 +55,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             'getData'
         )->with(
             $this->equalTo('attribute')
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $product3 = $this->getMockBuilder(
@@ -68,8 +68,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             'dataHasChangedFor'
         )->with(
             $this->equalTo('attribute')
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         return [

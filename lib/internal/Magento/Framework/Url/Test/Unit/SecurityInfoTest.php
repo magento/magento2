@@ -8,7 +8,7 @@ namespace Magento\Framework\Url\Test\Unit;
 class SecurityInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_scopeConfigMock;
 
@@ -17,7 +17,7 @@ class SecurityInfoTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new \Magento\Framework\Url\SecurityInfo(['/account', '/cart'], ['/cart/remove', 'customer']);
     }

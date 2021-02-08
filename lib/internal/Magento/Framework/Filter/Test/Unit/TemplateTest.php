@@ -23,7 +23,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      */
     private $store;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->templateFilter = $objectManager->getObject(\Magento\Framework\Filter\Template::class);
@@ -47,7 +47,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $callbackObject->expects($this->once())
             ->method('afterFilterCallbackMethod')
             ->with($value)
-            ->will($this->returnValue($expectedResult));
+            ->willReturn($expectedResult);
 
         // Add callback twice to ensure that the check in addAfterFilterCallback prevents the callback from being called
         // more than once
@@ -75,7 +75,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $callbackObject->expects($this->once())
             ->method('afterFilterCallbackMethod')
             ->with($value)
-            ->will($this->returnValue($expectedResult));
+            ->willReturn($expectedResult);
 
         $this->templateFilter->addAfterFilterCallback([$callbackObject, 'afterFilterCallbackMethod']);
 

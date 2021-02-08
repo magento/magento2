@@ -21,10 +21,10 @@ class FormTest extends \PHPUnit\Framework\TestCase
     /** @var Form */
     protected $form;
 
-    /** @var  Http|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var  Http|\PHPUnit\Framework\MockObject\MockObject  */
     protected $requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->createPartialMock(
             Http::class,
@@ -67,13 +67,14 @@ class FormTest extends \PHPUnit\Framework\TestCase
      * Tests that an exception is thrown when a required parameter is missing for the request type.
      *
      * @dataProvider getFormFieldsInvalidDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Missing expected parameter
      * @param string $httpMethod
      * @param array $httpParams
      */
     public function testGetFormFieldsMissingParameter(string $httpMethod, array $httpParams)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Missing expected parameter');
+
         $this->requestMock->expects($this->once())
             ->method('getMethod')
             ->willReturn($httpMethod);

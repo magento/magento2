@@ -20,7 +20,7 @@ class InvalidTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $collectionMock = $this->createPartialMock(\Magento\Indexer\Model\Indexer\Collection::class, ['getItems']);
 

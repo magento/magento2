@@ -12,34 +12,34 @@ namespace Magento\Persistent\Test\Unit\Block\Header;
 class AdditionalTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Customer\Helper\View|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Helper\View|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerViewHelperMock;
 
     /**
-     * @var \Magento\Persistent\Helper\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Persistent\Helper\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $persistentSessionHelperMock;
 
     /**
      * Customer repository
      *
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerRepositoryMock;
 
     /**
-     * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $jsonSerializerMock;
 
     /**
-     * @var \Magento\Persistent\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Persistent\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     private $persistentHelperMock;
 
@@ -59,7 +59,7 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -108,7 +108,7 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
     public function testGetCustomerId(): void
     {
         $customerId = 1;
-        /** @var \Magento\Persistent\Model\Session|\PHPUnit_Framework_MockObject_MockObject $sessionMock */
+        /** @var \Magento\Persistent\Model\Session|\PHPUnit\Framework\MockObject\MockObject $sessionMock */
         $sessionMock = $this->createPartialMock(\Magento\Persistent\Model\Session::class, ['getCustomerId']);
         $sessionMock->expects($this->once())
             ->method('getCustomerId')

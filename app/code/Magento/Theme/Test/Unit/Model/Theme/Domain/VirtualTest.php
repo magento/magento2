@@ -22,7 +22,7 @@ class VirtualTest extends \PHPUnit\Framework\TestCase
         $themeStaging = $this->createMock(\Magento\Theme\Model\Theme::class);
 
         $theme = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['__wakeup', 'getStagingVersion']);
-        $theme->expects($this->once())->method('getStagingVersion')->will($this->returnValue($themeStaging));
+        $theme->expects($this->once())->method('getStagingVersion')->willReturn($themeStaging);
 
         $themeFactory = $this->createPartialMock(\Magento\Theme\Model\ThemeFactory::class, ['create']);
         $themeFactory->expects($this->never())->method('create');
@@ -51,9 +51,9 @@ class VirtualTest extends \PHPUnit\Framework\TestCase
     public function testGetStagingThemeNew()
     {
         $theme = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['__wakeup', 'getStagingVersion']);
-        $theme->expects($this->once())->method('getStagingVersion')->will($this->returnValue(null));
+        $theme->expects($this->once())->method('getStagingVersion')->willReturn(null);
         $appState = $this->createPartialMock(\Magento\Framework\App\State::class, ['getAreaCode']);
-        $appState->expects($this->any())->method('getAreaCode')->will($this->returnValue('fixture_area'));
+        $appState->expects($this->any())->method('getAreaCode')->willReturn('fixture_area');
         $appStateProperty = new \ReflectionProperty(\Magento\Theme\Model\Theme::class, '_appState');
         $appStateProperty->setAccessible(true);
         /** @var $theme \Magento\Framework\DataObject */
@@ -87,7 +87,7 @@ class VirtualTest extends \PHPUnit\Framework\TestCase
         $themeStaging->expects($this->at(1))->method('save');
 
         $themeFactory = $this->createPartialMock(\Magento\Theme\Model\ThemeFactory::class, ['create']);
-        $themeFactory->expects($this->once())->method('create')->will($this->returnValue($themeStaging));
+        $themeFactory->expects($this->once())->method('create')->willReturn($themeStaging);
 
         $themeCopyService = $this->createPartialMock(\Magento\Theme\Model\CopyService::class, ['copy']);
         $themeCopyService->expects($this->once())->method('copy')->with($theme, $themeStaging);
@@ -126,8 +126,8 @@ class VirtualTest extends \PHPUnit\Framework\TestCase
             'isThemeAssignedToStore'
         )->with(
             $themeMock
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $constructArguments = $objectManagerHelper->getConstructArguments(
@@ -136,7 +136,7 @@ class VirtualTest extends \PHPUnit\Framework\TestCase
         );
         /** @var $model \Magento\Theme\Model\Theme\Domain\Virtual */
         $model = $objectManagerHelper->getObject(\Magento\Theme\Model\Theme\Domain\Virtual::class, $constructArguments);
-        $this->assertEquals(true, $model->isAssigned());
+        $this->assertTrue($model->isAssigned());
     }
 
     /**

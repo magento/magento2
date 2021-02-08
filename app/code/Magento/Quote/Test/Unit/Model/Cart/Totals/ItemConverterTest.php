@@ -9,22 +9,22 @@ namespace Magento\Quote\Test\Unit\Model\Cart\Totals;
 class ItemConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $configPoolMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $totalsFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataObjectHelperMock;
 
@@ -33,10 +33,10 @@ class ItemConverterTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configPoolMock = $this->createMock(\Magento\Catalog\Helper\Product\ConfigurationPool::class);
         $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
@@ -62,21 +62,21 @@ class ItemConverterTest extends \PHPUnit\Framework\TestCase
         $productType = 'simple';
 
         $itemMock = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
-        $itemMock->expects($this->once())->method('toArray')->will($this->returnValue(['options' => []]));
-        $itemMock->expects($this->any())->method('getProductType')->will($this->returnValue($productType));
+        $itemMock->expects($this->once())->method('toArray')->willReturn(['options' => []]);
+        $itemMock->expects($this->any())->method('getProductType')->willReturn($productType);
 
         $simpleConfigMock = $this->createMock(\Magento\Catalog\Helper\Product\Configuration::class);
         $defaultConfigMock = $this->createMock(\Magento\Catalog\Helper\Product\Configuration::class);
 
         $this->configPoolMock->expects($this->any())->method('getByProductType')
-            ->will($this->returnValueMap([['simple', $simpleConfigMock], ['default', $defaultConfigMock]]));
+            ->willReturnMap([['simple', $simpleConfigMock], ['default', $defaultConfigMock]]);
 
         $options = ['1' => ['label' => 'option1'], '2' => ['label' => 'option2']];
         $simpleConfigMock->expects($this->once())->method('getOptions')->with($itemMock)
-            ->will($this->returnValue($options));
+            ->willReturn($options);
 
         $option = ['data' => 'optionsData', 'label' => ''];
-        $defaultConfigMock->expects($this->any())->method('getFormattedOptionValue')->will($this->returnValue($option));
+        $defaultConfigMock->expects($this->any())->method('getFormattedOptionValue')->willReturn($option);
 
         $this->eventManagerMock->expects($this->once())->method('dispatch')
             ->with('items_additional_data', ['item' => $itemMock]);
@@ -100,7 +100,7 @@ class ItemConverterTest extends \PHPUnit\Framework\TestCase
             ]
         ];
         $this->serializerMock->expects($this->once())->method('serialize')
-            ->will($this->returnValue(json_encode($optionData)));
+            ->willReturn(json_encode($optionData));
 
         $this->model->modelToDataObject($itemMock);
     }

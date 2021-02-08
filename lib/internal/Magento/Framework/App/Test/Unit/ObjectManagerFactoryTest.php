@@ -18,7 +18,7 @@ class ObjectManagerFactoryTest extends \PHPUnit\Framework\TestCase
     /** @var string */
     protected static $originalIncludePath;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$originalAutoloadFunctions = spl_autoload_functions();
         self::$originalIncludePath = get_include_path();
@@ -27,7 +27,7 @@ class ObjectManagerFactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Avoid impact of initialized \Magento\Framework\Code\Generator\Autoloader on other tests
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         foreach (spl_autoload_functions() as $autoloadFunction) {
             spl_autoload_unregister($autoloadFunction);
@@ -40,11 +40,12 @@ class ObjectManagerFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \BadMethodCallException
-     * @expectedExceptionMessage Magento\Framework\App\Test\Unit\ObjectManager\FactoryStub::__construct
      */
     public function testCreateObjectManagerFactoryCouldBeOverridden()
     {
+        $this->expectException(\BadMethodCallException::class);
+        $this->expectExceptionMessage('Magento\\Framework\\App\\Test\\Unit\\ObjectManager\\FactoryStub::__construct');
+
         $rootPath = __DIR__ . '/_files/';
         $factory = Bootstrap::createObjectManagerFactory($rootPath, []);
         $factory->create([], false);

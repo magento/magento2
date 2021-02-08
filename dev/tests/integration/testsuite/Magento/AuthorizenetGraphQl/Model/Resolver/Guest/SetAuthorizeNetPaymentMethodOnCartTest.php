@@ -34,7 +34,7 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends TestCase
     /** @var GraphQlRequest */
     private $graphQlRequest;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->jsonSerializer = $this->objectManager->get(SerializerInterface::class);

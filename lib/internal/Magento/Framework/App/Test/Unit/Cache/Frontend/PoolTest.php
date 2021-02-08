@@ -21,11 +21,11 @@ class PoolTest extends \PHPUnit\Framework\TestCase
     /**
      * Array of frontend cache instances stubs, used to verify, what is stored inside the pool
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject[]
+     * @var \PHPUnit\Framework\MockObject\MockObject[]
      */
     protected $_frontendInstances = [];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_frontendInstances = [
             Pool::DEFAULT_FRONTEND_ID => $this->createMock(\Magento\Framework\Cache\FrontendInterface::class),
@@ -42,7 +42,7 @@ class PoolTest extends \PHPUnit\Framework\TestCase
             [['r2d1' => 'value1', 'r2d2' => 'value2'], $this->_frontendInstances['resource2']],
         ];
         $frontendFactory = $this->createMock(\Magento\Framework\App\Cache\Frontend\Factory::class);
-        $frontendFactory->expects($this->any())->method('create')->will($this->returnValueMap($frontendFactoryMap));
+        $frontendFactory->expects($this->any())->method('create')->willReturnMap($frontendFactoryMap);
 
         $deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $deploymentConfig->expects(
@@ -51,8 +51,8 @@ class PoolTest extends \PHPUnit\Framework\TestCase
             'getConfigData'
         )->with(
             FrontendPool::KEY_CACHE
-        )->will(
-            $this->returnValue(['frontend' => ['resource2' => ['r2d1' => 'value1', 'r2d2' => 'value2']]])
+        )->willReturn(
+            ['frontend' => ['resource2' => ['r2d1' => 'value1', 'r2d2' => 'value2']]]
         );
 
         $frontendSettings = [
@@ -97,8 +97,8 @@ class PoolTest extends \PHPUnit\Framework\TestCase
             'getConfigData'
         )->with(
             FrontendPool::KEY_CACHE
-        )->will(
-            $this->returnValue($fixtureCacheConfig)
+        )->willReturn(
+            $fixtureCacheConfig
         );
 
         $frontendFactory = $this->createMock(\Magento\Framework\App\Cache\Frontend\Factory::class);

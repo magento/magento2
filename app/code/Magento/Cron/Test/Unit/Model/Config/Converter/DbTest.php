@@ -15,7 +15,7 @@ class DbTest extends \PHPUnit\Framework\TestCase
     /**
      * Prepare parameters
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_converter = new \Magento\Cron\Model\Config\Converter\Db();
     }

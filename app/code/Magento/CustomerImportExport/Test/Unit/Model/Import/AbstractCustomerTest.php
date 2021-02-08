@@ -16,7 +16,7 @@ class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\
     /**
      * Abstract customer export model
      *
-     * @var \Magento\CustomerImportExport\Model\Import\AbstractCustomer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CustomerImportExport\Model\Import\AbstractCustomer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
@@ -47,14 +47,14 @@ class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\
         \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->_model = $this->_getModelMock();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
 
@@ -64,7 +64,7 @@ class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\
     /**
      * Create mock for abstract customer model class
      *
-     * @return \Magento\CustomerImportExport\Model\Import\AbstractCustomer|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\CustomerImportExport\Model\Import\AbstractCustomer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getModelMock()
     {
@@ -97,7 +97,7 @@ class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\
 
         $modelMock->expects($this->any())
             ->method('_getCustomerCollection')
-            ->will($this->returnValue($customerCollection));
+            ->willReturn($customerCollection);
 
         return $modelMock;
     }
@@ -194,16 +194,14 @@ class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\
         // _validateRowForUpdate should be called only once
         $this->_model->expects($this->once())->method('_validateRowForUpdate');
 
-        $this->assertAttributeEquals(0, '_processedEntitiesCount', $this->_model);
+        $this->assertEquals(0, $this->_model->getProcessedEntitiesCount());
 
         // update action
         $this->_model->setParameters(['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE]);
         $this->_clearValidatedRows();
 
-        $this->assertAttributeEquals([], '_validatedRows', $this->_model);
         $this->assertTrue($this->_model->validateRow([], 1));
-        $this->assertAttributeEquals([1 => true], '_validatedRows', $this->_model);
-        $this->assertAttributeEquals(1, '_processedEntitiesCount', $this->_model);
+        $this->assertEquals(1, $this->_model->getProcessedEntitiesCount());
         $this->assertTrue($this->_model->validateRow([], 1));
     }
 
@@ -216,10 +214,8 @@ class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\
         $this->_model->setParameters(['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE]);
         $this->_clearValidatedRows();
 
-        $this->assertAttributeEquals([], '_validatedRows', $this->_model);
         $this->assertTrue($this->_model->validateRow([], 2));
-        $this->assertAttributeEquals([2 => true], '_validatedRows', $this->_model);
-        $this->assertAttributeEquals(1, '_processedEntitiesCount', $this->_model);
+        $this->assertEquals(1, $this->_model->getProcessedEntitiesCount());
         $this->assertTrue($this->_model->validateRow([], 2));
     }
 

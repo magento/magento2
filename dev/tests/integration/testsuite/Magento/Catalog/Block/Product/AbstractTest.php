@@ -71,7 +71,7 @@ class AbstractTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!self::$isStubClass) {
             $this->getMockForAbstractClass(
@@ -113,7 +113,7 @@ class AbstractTest extends TestCase
         $product = $this->productRepository->get('simple-1');
         $url = $this->block->getAddToCartUrl($product);
         $this->assertStringEndsWith(sprintf('product/%s/', $product->getId()), $url);
-        $this->assertContains('checkout/cart/add', $url);
+        $this->assertStringContainsString('checkout/cart/add', $url);
     }
 
     /**
@@ -170,7 +170,7 @@ class AbstractTest extends TestCase
         $this->product = $this->productRepository->get('simple');
         $html = $this->block->getReviewsSummaryHtml($this->product, false, true);
         $this->assertNotEmpty($html);
-        $this->assertContains('review', $html);
+        $this->assertStringContainsString('review', $html);
     }
 
     /**
@@ -246,7 +246,7 @@ class AbstractTest extends TestCase
             ]
         );
         $finalPriceHtml = $this->block->getProductPriceHtml($product, FinalPrice::PRICE_CODE);
-        $this->assertContains('price-' . FinalPrice::PRICE_CODE, $finalPriceHtml);
-        $this->assertContains('product-price-' . $product->getId(), $finalPriceHtml);
+        $this->assertStringContainsString('price-' . FinalPrice::PRICE_CODE, $finalPriceHtml);
+        $this->assertStringContainsString('product-price-' . $product->getId(), $finalPriceHtml);
     }
 }

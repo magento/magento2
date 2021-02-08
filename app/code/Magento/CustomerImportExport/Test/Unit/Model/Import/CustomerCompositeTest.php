@@ -32,7 +32,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
     protected $_addressAttributes = ['city', 'country', 'street'];
 
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_string;
 
@@ -67,13 +67,13 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
     protected $_addressFactory;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_scopeConfigMock;
 
     /**
      * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $errorAggregator;
 
@@ -84,7 +84,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $errorFactory;
 
@@ -106,14 +106,14 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
         Address::COLUMN_ADDRESS_ID => null,
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $translateInline = $this->createMock(\Magento\Framework\Translate\InlineInterface::class);
-        $translateInline->expects($this->any())->method('isAllowed')->will($this->returnValue(false));
+        $translateInline->expects($this->any())->method('isAllowed')->willReturn(false);
 
         $context =
             $this->createPartialMock(\Magento\Framework\App\Helper\Context::class, ['getTranslateInline']);
-        $context->expects($this->any())->method('getTranslateInline')->will($this->returnValue($translateInline));
+        $context->expects($this->any())->method('getTranslateInline')->willReturn($translateInline);
 
         $this->_string = new \Magento\Framework\Stdlib\StringUtils();
 
@@ -136,8 +136,8 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
             ['init']
         );
 
-        $this->errorFactory->expects($this->any())->method('create')->will($this->returnValue($this->error));
-        $this->error->expects($this->any())->method('init')->will($this->returnValue(true));
+        $this->errorFactory->expects($this->any())->method('create')->willReturn($this->error);
+        $this->error->expects($this->any())->method('init')->willReturn(true);
 
         $this->errorAggregator = $this->getMockBuilder(
             \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator::class
@@ -252,7 +252,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Customer|\PHPUnit_Framework_MockObject_MockObject
+     * @return Customer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getCustomerEntityMock()
     {
@@ -271,7 +271,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Address|\PHPUnit_Framework_MockObject_MockObject
+     * @return Address|\PHPUnit\Framework\MockObject\MockObject
      */
     private function _getAddressEntityMock()
     {
@@ -561,7 +561,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
         $directoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
         $directoryMock->expects($this->any())
             ->method('openFile')
-            ->will($this->returnValue(new Read($pathToCsvFile, new File())));
+            ->willReturn(new Read($pathToCsvFile, new File()));
         $source = new Csv($pathToCsvFile, $directoryMock);
         $modelUnderTest->setSource($source);
         $modelUnderTest->validateData();

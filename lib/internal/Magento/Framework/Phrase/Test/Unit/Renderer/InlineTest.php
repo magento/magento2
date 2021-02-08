@@ -8,7 +8,7 @@ namespace Magento\Framework\Phrase\Test\Unit\Renderer;
 class InlineTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\TranslateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\TranslateInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $translator;
 
@@ -18,16 +18,16 @@ class InlineTest extends \PHPUnit\Framework\TestCase
     protected $renderer;
 
     /**
-     * @var \Magento\Framework\Translate\Inline\ProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Translate\Inline\ProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $provider;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->translator = $this->createMock(\Magento\Framework\TranslateInterface::class);
         $this->provider = $this->createMock(\Magento\Framework\Translate\Inline\ProviderInterface::class);
@@ -49,16 +49,16 @@ class InlineTest extends \PHPUnit\Framework\TestCase
 
         $this->translator->expects($this->once())
             ->method('getTheme')
-            ->will($this->returnValue($theme));
+            ->willReturn($theme);
 
         $inlineTranslate = $this->createMock(\Magento\Framework\Translate\InlineInterface::class);
         $inlineTranslate->expects($this->once())
             ->method('isAllowed')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->provider->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($inlineTranslate));
+            ->willReturn($inlineTranslate);
 
         $this->assertEquals($result, $this->renderer->render([$text], []));
     }
@@ -70,11 +70,11 @@ class InlineTest extends \PHPUnit\Framework\TestCase
         $inlineTranslate = $this->createMock(\Magento\Framework\Translate\InlineInterface::class);
         $inlineTranslate->expects($this->once())
             ->method('isAllowed')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->provider->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($inlineTranslate));
+            ->willReturn($inlineTranslate);
 
         $this->assertEquals($text, $this->renderer->render([$text], []));
     }

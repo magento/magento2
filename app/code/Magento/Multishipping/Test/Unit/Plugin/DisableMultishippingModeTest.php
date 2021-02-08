@@ -21,12 +21,12 @@ use Magento\Quote\Model\Quote;
 class DisableMultishippingModeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $cartMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteMock;
 
@@ -38,7 +38,7 @@ class DisableMultishippingModeTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cartMock = $this->createMock(Cart::class);
         $this->quoteMock = $this->createPartialMock(
@@ -47,7 +47,7 @@ class DisableMultishippingModeTest extends \PHPUnit\Framework\TestCase
         );
         $this->cartMock->expects($this->once())
             ->method('getQuote')
-            ->will($this->returnValue($this->quoteMock));
+            ->willReturn($this->quoteMock);
         $this->object = new DisableMultishippingMode($this->cartMock);
     }
 
@@ -65,7 +65,7 @@ class DisableMultishippingModeTest extends \PHPUnit\Framework\TestCase
         );
         $extensionAttributes->method('getShippingAssignments')
             ->willReturn(
-                $this->createMock(ShippingAssignmentInterface::class)
+                $this->getMockForAbstractClass(ShippingAssignmentInterface::class)
             );
         $extensionAttributes->expects($this->once())
             ->method('setShippingAssignments')

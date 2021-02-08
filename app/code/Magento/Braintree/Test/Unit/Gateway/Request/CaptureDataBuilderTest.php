@@ -9,7 +9,7 @@ use Magento\Braintree\Gateway\Request\CaptureDataBuilder;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Braintree\Gateway\SubjectReader;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Tests \Magento\Braintree\Gateway\Request\CaptureDataBuilder.
@@ -36,9 +36,9 @@ class CaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $subjectReaderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
+        $this->paymentDOMock = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
         $this->paymentMock = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -51,11 +51,12 @@ class CaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Braintree\Gateway\Request\CaptureDataBuilder::build
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage No authorization transaction to proceed capture.
      */
     public function testBuildWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('No authorization transaction to proceed capture.');
+
         $amount = 10.00;
         $buildSubject = [
             'payment' => $this->paymentDOMock,

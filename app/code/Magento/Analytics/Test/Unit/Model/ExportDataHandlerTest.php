@@ -19,37 +19,37 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class ExportDataHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var Archive|\PHPUnit_Framework_MockObject_MockObject
+     * @var Archive|\PHPUnit\Framework\MockObject\MockObject
      */
     private $archiveMock;
 
     /**
-     * @var ReportWriterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReportWriterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $reportWriterMock;
 
     /**
-     * @var Cryptographer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Cryptographer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cryptographerMock;
 
     /**
-     * @var FileRecorder|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileRecorder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileRecorderMock;
 
     /**
-     * @var WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $directoryMock;
 
     /**
-     * @var EncodedContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var EncodedContext|\PHPUnit\Framework\MockObject\MockObject
      */
     private $encodedContextMock;
 
@@ -76,7 +76,7 @@ class ExportDataHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
@@ -88,7 +88,7 @@ class ExportDataHandlerTest extends \PHPUnit\Framework\TestCase
 
         $this->reportWriterMock = $this->getMockBuilder(ReportWriterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->cryptographerMock = $this->getMockBuilder(Cryptographer::class)
             ->disableOriginalConstructor()
@@ -100,7 +100,7 @@ class ExportDataHandlerTest extends \PHPUnit\Framework\TestCase
 
         $this->directoryMock = $this->getMockBuilder(WriteInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->encodedContextMock = $this->getMockBuilder(EncodedContext::class)
             ->disableOriginalConstructor()
@@ -228,10 +228,11 @@ class ExportDataHandlerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testPrepareExportDataWithLocalizedException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $tmpFilesDirectoryPath = $this->subdirectoryPath . 'tmp/';
         $archivePath = $this->subdirectoryPath . $this->archiveName;
 

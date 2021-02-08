@@ -16,7 +16,7 @@ class ConnectionTypeResolverTest extends \PHPUnit\Framework\TestCase
         $config->expects($this->once())
             ->method('getConfigData')
             ->with('queue')
-            ->will($this->returnValue(
+            ->willReturn(
                 [
                     'amqp' => [
                         'host' => '127.0.01',
@@ -39,7 +39,7 @@ class ConnectionTypeResolverTest extends \PHPUnit\Framework\TestCase
                         ]
                     ]
                 ]
-            ));
+            );
 
         $model = new ConnectionTypeResolver($config);
         $this->assertEquals('amqp', $model->getConnectionType('connection-01'));

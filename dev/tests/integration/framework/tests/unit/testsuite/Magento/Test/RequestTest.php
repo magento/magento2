@@ -14,7 +14,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new \Magento\TestFramework\Request(
             $this->createMock(\Magento\Framework\Stdlib\Cookie\CookieReaderInterface::class),
@@ -41,8 +41,8 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertSame(['test' => 'value', 'null' => null], $this->_model->getServer()->toArray());
         $this->assertEquals('value', $this->_model->getServer('test'));
-        $this->assertSame(null, $this->_model->getServer('non-existing'));
+        $this->assertNull($this->_model->getServer('non-existing'));
         $this->assertSame('default', $this->_model->getServer('non-existing', 'default'));
-        $this->assertSame(null, $this->_model->getServer('null'));
+        $this->assertNull($this->_model->getServer('null'));
     }
 }

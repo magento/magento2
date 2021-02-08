@@ -17,11 +17,11 @@ class InfoTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $multiShippingMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->multiShippingMock =
             $this->createMock(\Magento\Multishipping\Model\Checkout\Type\Multishipping::class);

@@ -12,7 +12,7 @@ namespace Magento\Framework\Data\Test\Unit\Form\Element;
 class CollectionFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManagerMock;
 
@@ -21,12 +21,12 @@ class CollectionFactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerMock =
             $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['create']);
         $collectionMock = $this->createMock(\Magento\Framework\Data\Form\Element\Collection::class);
-        $objectManagerMock->expects($this->once())->method('create')->will($this->returnValue($collectionMock));
+        $objectManagerMock->expects($this->once())->method('create')->willReturn($collectionMock);
         $this->_model = new \Magento\Framework\Data\Form\Element\CollectionFactory($objectManagerMock);
     }
 

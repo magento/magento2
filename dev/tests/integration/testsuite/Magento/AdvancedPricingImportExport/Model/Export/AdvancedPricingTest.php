@@ -41,7 +41,7 @@ class AdvancedPricingTest extends TestCase
     protected $fileSystem;
 
     // @codingStandardsIgnoreStart
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $db = Bootstrap::getInstance()
             ->getBootstrap()
@@ -56,7 +56,7 @@ class AdvancedPricingTest extends TestCase
     }
     // @codingStandardsIgnoreEnd
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -112,14 +112,8 @@ class AdvancedPricingTest extends TestCase
      */
     private function assertDiscountTypes($exportContent)
     {
-        $this->assertContains(
-            '2.0000,8.000000,Fixed',
-            $exportContent
-        );
-        $this->assertContains(
-            '10.0000,50.00,Discount',
-            $exportContent
-        );
+        $this->assertStringContainsString('2.0000,8.000000,Fixed', $exportContent);
+        $this->assertStringContainsString('10.0000,50.00,Discount', $exportContent);
     }
 
     /**
@@ -148,10 +142,7 @@ class AdvancedPricingTest extends TestCase
         $csvfile = uniqid('importexport_') . '.csv';
 
         $exportContent = $this->exportData($csvfile);
-        $this->assertContains(
-            '"AdvancedPricingSimple 2",test,"ALL GROUPS",3.0000,5.0000',
-            $exportContent
-        );
+        $this->assertStringContainsString('"AdvancedPricingSimple 2",test,"ALL GROUPS",3.0000,5.0000', $exportContent);
         $this->importData($csvfile);
 
         while ($index > 0) {
@@ -174,14 +165,8 @@ class AdvancedPricingTest extends TestCase
     {
         $csvfile = uniqid('importexport_') . '.csv';
         $exportContent = $this->exportData($csvfile);
-        $this->assertContains(
-            'second_simple,"All Websites [USD]","ALL GROUPS",10.0000,3.00,Discount',
-            $exportContent
-        );
-        $this->assertContains(
-            'simple,"All Websites [USD]",General,5.0000,95.000000,Fixed',
-            $exportContent
-        );
+        $this->assertStringContainsString('second_simple,"All Websites [USD]","ALL GROUPS",10.0000,3.00,Discount', $exportContent);
+        $this->assertStringContainsString('simple,"All Websites [USD]",General,5.0000,95.000000,Fixed', $exportContent);
         $this->updateTierPriceDataInCsv($csvfile);
         $this->importData($csvfile);
 

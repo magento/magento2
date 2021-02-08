@@ -12,7 +12,7 @@ class Base64JsonTest extends \PHPUnit\Framework\TestCase
      */
     private $base64json;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->base64json = $objectManager->getObject(\Magento\Framework\Serialize\Serializer\Base64Json::class, [

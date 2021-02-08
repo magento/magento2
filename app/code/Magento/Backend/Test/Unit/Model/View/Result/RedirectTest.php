@@ -15,21 +15,21 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Model\Session|\PHPUnit\Framework\MockObject\MockObject */
     protected $session;
 
-    /** @var \Magento\Framework\App\ActionFlag|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ActionFlag|\PHPUnit\Framework\MockObject\MockObject */
     protected $actionFlag;
 
-    /** @var \Magento\Backend\Model\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Model\UrlInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $urlBuilder;
 
-    /** @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $redirect;
 
     protected $url = 'adminhtml/index';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->session = $this->createMock(\Magento\Backend\Model\Session::class);
         $this->actionFlag = $this->createMock(\Magento\Framework\App\ActionFlag::class);

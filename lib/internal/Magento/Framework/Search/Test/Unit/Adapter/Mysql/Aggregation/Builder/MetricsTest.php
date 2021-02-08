@@ -16,16 +16,16 @@ class MetricsTest extends \PHPUnit\Framework\TestCase
     private $metrics;
 
     /**
-     * @var RequestBucketInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestBucketInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestBucket;
 
     /**
-     * @var \Magento\Framework\Search\Request\Aggregation\Metric|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Aggregation\Metric|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metric;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 

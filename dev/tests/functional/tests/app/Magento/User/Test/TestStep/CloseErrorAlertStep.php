@@ -50,7 +50,7 @@ class CloseErrorAlertStep implements TestStepInterface
                 }
             );
             $modalMessage->acceptAlert();
-        } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
+        } catch (\PHPUnit\Extensions\Selenium2TestCase\WebDriverException $e) {
             //There is no modal to accept.
         }
     }

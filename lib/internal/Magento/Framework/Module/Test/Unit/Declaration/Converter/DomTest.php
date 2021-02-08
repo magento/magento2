@@ -12,7 +12,7 @@ class DomTest extends \PHPUnit\Framework\TestCase
      */
     protected $_converter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_converter = new \Magento\Framework\Module\Declaration\Converter\Dom();
     }
@@ -29,10 +29,11 @@ class DomTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $xmlString
      * @dataProvider convertWithInvalidDomDataProvider
-     * @expectedException \Exception
      */
     public function testConvertWithInvalidDom($xmlString)
     {
+        $this->expectException(\Exception::class);
+
         $dom = new \DOMDocument();
         try {
             $dom->loadXML($xmlString);

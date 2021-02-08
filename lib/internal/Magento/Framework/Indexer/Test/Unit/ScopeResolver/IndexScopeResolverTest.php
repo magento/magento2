@@ -15,12 +15,12 @@ use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class IndexScopeResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeResolver;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resource;
 
@@ -29,7 +29,7 @@ class IndexScopeResolverTest extends \PHPUnit\Framework\TestCase
      */
     private $target;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->setMethods(['getTableName'])
@@ -123,7 +123,7 @@ class IndexScopeResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $name
      * @param $value
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function createDimension($name, $value)
     {

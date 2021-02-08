@@ -12,7 +12,7 @@ namespace Magento\MysqlMq\Test\Unit\Model\ResourceModel;
 class QueueTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resources;
 
@@ -26,7 +26,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resources = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()->getMock();

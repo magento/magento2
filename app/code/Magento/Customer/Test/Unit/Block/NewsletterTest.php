@@ -10,7 +10,7 @@ use Magento\Customer\Block\Newsletter;
 class NewsletterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilder;
 
@@ -19,7 +19,7 @@ class NewsletterTest extends \PHPUnit\Framework\TestCase
      */
     protected $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

@@ -13,11 +13,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_attributeConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_attributeConfig = $this->createMock(\Magento\Catalog\Model\Attribute\Config::class);
         $this->_model = new \Magento\Quote\Model\Quote\Config($this->_attributeConfig);
@@ -32,8 +32,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'getAttributeNames'
         )->with(
             'quote_item'
-        )->will(
-            $this->returnValue($attributes)
+        )->willReturn(
+            $attributes
         );
         $this->assertEquals($attributes, $this->_model->getProductAttributes());
     }

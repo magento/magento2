@@ -19,7 +19,7 @@ class InformationTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManager\ConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\ObjectManager\ConfigInterface
      */
     private $objectManagerConfig;
 
@@ -33,15 +33,15 @@ class InformationTest extends \PHPUnit\Framework\TestCase
      */
     private $pluginList;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerConfig = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->definitions = $this->getMockBuilder(DefinitionInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->pluginList = $this->getMockBuilder(PluginList::class)
             ->disableOriginalConstructor()

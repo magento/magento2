@@ -12,13 +12,13 @@ class AgreementsValidatorTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = new \Magento\Checkout\Model\AgreementsValidator();
     }
 
     public function testIsValid()
     {
-        $this->assertEquals(true, $this->model->isValid());
+        $this->assertTrue($this->model->isValid());
     }
 }

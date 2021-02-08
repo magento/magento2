@@ -62,10 +62,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $scopeConfigMock = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $scopeConfigMock->expects($this->at(0))
             ->method('getValue')
-            ->will($this->returnValue($applyTaxAfterDiscount));
+            ->willReturn($applyTaxAfterDiscount);
         $scopeConfigMock->expects($this->at(1))
             ->method('getValue')
-            ->will($this->returnValue($discountTaxIncl));
+            ->willReturn($discountTaxIncl);
 
         /** @var \Magento\Tax\Model\Config */
         $model = new Config($scopeConfigMock);
@@ -100,7 +100,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, null)
-            ->will($this->returnValue($configValue));
+            ->willReturn($configValue);
 
         /** @var \Magento\Tax\Model\Config */
         $model = new Config($scopeConfigMock);

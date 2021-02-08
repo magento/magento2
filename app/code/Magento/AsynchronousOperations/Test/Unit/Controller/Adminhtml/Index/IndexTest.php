@@ -11,12 +11,12 @@ namespace Magento\AsynchronousOperations\Test\Unit\Controller\Adminhtml\Index;
 class IndexTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $viewMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
@@ -26,11 +26,11 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $resultFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager =  new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->viewMock = $this->createMock(\Magento\Framework\App\ViewInterface::class);

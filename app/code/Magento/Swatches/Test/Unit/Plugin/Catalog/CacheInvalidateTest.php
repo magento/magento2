@@ -8,17 +8,17 @@ namespace Magento\Swatches\Test\Unit\Plugin\Catalog;
 class CacheInvalidateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\Cache\TypeListInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Cache\TypeListInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $typeList;
 
     /**
-     * @var \Magento\Swatches\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Swatches\Helper\Data | \PHPUnit\Framework\MockObject\MockObject
      */
     private $swatchHelper;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute | \PHPUnit\Framework\MockObject\MockObject
      */
     private $attribute;
 
@@ -27,7 +27,7 @@ class CacheInvalidateTest extends \PHPUnit\Framework\TestCase
      */
     private $cacheInvalidate;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->typeList = $this->createMock(\Magento\Framework\App\Cache\TypeListInterface::class);
         $this->swatchHelper = $this->createMock(\Magento\Swatches\Helper\Data::class);

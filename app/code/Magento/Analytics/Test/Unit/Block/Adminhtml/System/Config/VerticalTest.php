@@ -19,21 +19,21 @@ class VerticalTest extends \PHPUnit\Framework\TestCase
     private $vertical;
 
     /**
-     * @var AbstractElement|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractElement|\PHPUnit\Framework\MockObject\MockObject
      */
     private $abstractElementMock;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var Form|\PHPUnit_Framework_MockObject_MockObject
+     * @var Form|\PHPUnit\Framework\MockObject\MockObject
      */
     private $formMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->abstractElementMock = $this->getMockBuilder(AbstractElement::class)
             ->setMethods(['getComment', 'getLabel', 'getHint'])
@@ -73,11 +73,11 @@ class VerticalTest extends \PHPUnit\Framework\TestCase
             ->method('getHint')
             ->willReturn('New hint');
         $html = $this->vertical->render($this->abstractElementMock);
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             "/New comment/",
             $html
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             "/New hint/",
             $html
         );

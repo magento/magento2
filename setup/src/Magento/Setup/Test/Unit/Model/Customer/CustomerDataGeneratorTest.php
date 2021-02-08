@@ -23,7 +23,7 @@ class CustomerDataGeneratorTest extends \PHPUnit\Framework\TestCase
     ];
 
     /**
-     * @var \Magento\Setup\Model\Address\AddressDataGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Model\Address\AddressDataGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $addressGeneratorMock;
 
@@ -32,7 +32,7 @@ class CustomerDataGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     private $customerGenerator;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->groupCollectionFactoryMock =
             $this->createPartialMock(
@@ -88,7 +88,7 @@ class CustomerDataGeneratorTest extends \PHPUnit\Framework\TestCase
         $customer = $this->customerGenerator->generate(42);
 
         foreach ($this->customerStructure as $customerField) {
-            $this->assertTrue(array_key_exists($customerField, $customer));
+            $this->assertArrayHasKey($customerField, $customer);
         }
     }
 }

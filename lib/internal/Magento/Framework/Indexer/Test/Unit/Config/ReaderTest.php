@@ -13,16 +13,16 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Indexer\Config\Converter|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\Config\Converter|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_converter;
 
     /**
-     * @var \Magento\Framework\App\Config\FileResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\FileResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_fileResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_fileResolverMock = $this->createPartialMock(\Magento\Framework\App\Config\FileResolver::class, ['get']);
 
@@ -54,8 +54,8 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         )->with(
             'indexer.xml',
             'scope'
-        )->will(
-            $this->returnValue($files)
+        )->willReturn(
+            $files
         );
 
         $constraint = function (\DOMDocument $actual) use ($expectedFile) {
@@ -74,8 +74,8 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             'convert'
         )->with(
             $this->callback($constraint)
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
 
         $this->assertSame($expectedResult, $this->_model->read('scope'));

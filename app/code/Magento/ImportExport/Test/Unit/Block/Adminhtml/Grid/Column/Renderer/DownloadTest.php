@@ -27,7 +27,7 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $urlModel = $this->createPartialMock(\Magento\Backend\Model\Url::class, ['getUrl']);
         $urlModel->expects($this->any())->method('getUrl')->willReturn('url');

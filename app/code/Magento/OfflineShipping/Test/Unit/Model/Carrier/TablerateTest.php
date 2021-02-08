@@ -20,32 +20,32 @@ class TablerateTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $errorFactoryMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var \Magento\Shipping\Model\Rate\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Shipping\Model\Rate\ResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultFactoryMock;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $methodFactoryMock;
 
     /**
-     * @var TablerateFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var TablerateFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $tablerateFactoryMock;
 
@@ -54,7 +54,7 @@ class TablerateTest extends \PHPUnit\Framework\TestCase
      */
     private $helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
 
         $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)

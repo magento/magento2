@@ -22,16 +22,16 @@ class CreditmemoSenderTest extends AbstractSenderTest
     protected $sender;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $creditmemoMock;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\EntityAbstract|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\EntityAbstract|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $creditmemoResourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stepMockSetup();
 
@@ -55,10 +55,10 @@ class CreditmemoSenderTest extends AbstractSenderTest
         );
         $this->creditmemoMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
         $this->creditmemoMock->expects($this->any())
             ->method('getOrder')
-            ->will($this->returnValue($this->orderMock));
+            ->willReturn($this->orderMock);
         $this->creditmemoMock->method('getId')
             ->willReturn(self::CREDITMEMO_ID);
         $this->orderMock->method('getId')
@@ -70,7 +70,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
         );
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
 
         $this->sender = new CreditmemoSender(
             $this->templateContainerMock,

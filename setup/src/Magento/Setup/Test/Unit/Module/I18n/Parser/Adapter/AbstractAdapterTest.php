@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Module\I18n\Parser\Adapter;
 class AbstractAdapterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Setup\Module\I18n\Parser\Adapter\AbstractAdapter|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\I18n\Parser\Adapter\AbstractAdapter|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_adapterMock;
 
@@ -17,7 +17,7 @@ class AbstractAdapterTest extends \PHPUnit\Framework\TestCase
      */
     protected $_adapterReflection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_adapterMock = $this->getMockForAbstractClass(
             \Magento\Setup\Module\I18n\Parser\Adapter\AbstractAdapter::class,
@@ -44,7 +44,7 @@ class AbstractAdapterTest extends \PHPUnit\Framework\TestCase
 
     public function getPhrases()
     {
-        $this->assertInternalType('array', $this->_adapterMock->getPhrases());
+        $this->assertIsArray($this->_adapterMock->getPhrases());
     }
 
     public function testAddPhrase()

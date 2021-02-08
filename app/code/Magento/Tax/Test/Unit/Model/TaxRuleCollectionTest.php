@@ -14,7 +14,7 @@ use Magento\Tax\Api\Data\TaxRateSearchResultsInterface;
 use Magento\Tax\Api\TaxRuleRepositoryInterface;
 use Magento\Tax\Model\Calculation\Rule;
 use \Magento\Tax\Model\TaxRuleCollection;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class TaxRuleCollectionTest extends \PHPUnit\Framework\TestCase
 {
@@ -63,7 +63,7 @@ class TaxRuleCollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected $taxRuleMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->entityFactoryMock = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
         $this->filterBuilderMock = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);

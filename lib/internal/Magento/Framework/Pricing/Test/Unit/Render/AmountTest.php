@@ -23,36 +23,36 @@ class AmountTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrency;
 
     /**
-     * @var RendererPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var RendererPool|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rendererPool;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $layout;
 
     /**
-     * @var SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SaleableInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $saleableItemMock;
 
     /**
-     * @var \Magento\Framework\Pricing\Amount\AmountInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Amount\AmountInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $amount;
 
     /**
-     * @var PriceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->priceCurrency = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
         $data = [
@@ -83,13 +83,13 @@ class AmountTest extends \PHPUnit\Framework\TestCase
         $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $context->expects($this->any())
             ->method('getEventManager')
-            ->will($this->returnValue($eventManager));
+            ->willReturn($eventManager);
         $context->expects($this->any())
             ->method('getLayout')
-            ->will($this->returnValue($this->layout));
+            ->willReturn($this->layout);
         $context->expects($this->any())
             ->method('getScopeConfig')
-            ->will($this->returnValue($scopeConfigMock));
+            ->willReturn($scopeConfigMock);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -116,7 +116,7 @@ class AmountTest extends \PHPUnit\Framework\TestCase
         $this->priceCurrency->expects($this->once())
             ->method('format')
             ->with($amount, $includeContainer, $precision)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
 
         $this->assertEquals($result, $this->model->formatCurrency($amount, $includeContainer, $precision));
     }
@@ -166,7 +166,7 @@ class AmountTest extends \PHPUnit\Framework\TestCase
         $adjustmentRenders = ['render1' => $adjustmentRender1, 'render2' => $adjustmentRender2];
         $this->rendererPool->expects($this->once())
             ->method('getAdjustmentRenders')
-            ->will($this->returnValue($adjustmentRenders));
+            ->willReturn($adjustmentRenders);
 
         $this->model->toHtml();
         $this->assertEquals($expected, $this->model->getAdjustmentsHtml());
@@ -205,7 +205,7 @@ class AmountTest extends \PHPUnit\Framework\TestCase
         $adjustmentRenders = ['render1' => $adjustmentRender1, 'render2' => $adjustmentRender2];
         $this->rendererPool->expects($this->once())
             ->method('getAdjustmentRenders')
-            ->will($this->returnValue($adjustmentRenders));
+            ->willReturn($adjustmentRenders);
         $this->amount->expects($this->atLeastOnce())
             ->method('getAdjustmentAmount')
             ->willReturn(true);
@@ -225,7 +225,7 @@ class AmountTest extends \PHPUnit\Framework\TestCase
         $amountValue = 100.99;
         $this->amount->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue($amountValue));
+            ->willReturn($amountValue);
         $this->assertEquals($amountValue, $this->model->getDisplayValue());
     }
 
@@ -265,7 +265,7 @@ class AmountTest extends \PHPUnit\Framework\TestCase
         $adjustmentRenders = ['render1' => $adjustmentRender1, 'render2' => $adjustmentRender2];
         $this->rendererPool->expects($this->once())
             ->method('getAdjustmentRenders')
-            ->will($this->returnValue($adjustmentRenders));
+            ->willReturn($adjustmentRenders);
         $this->amount->expects($this->atLeastOnce())
             ->method('getAdjustmentAmount')
             ->willReturn(true);
@@ -281,7 +281,7 @@ class AmountTest extends \PHPUnit\Framework\TestCase
      * @param array $data
      * @param string $html
      * @param string $code
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getAdjustmentRenderMock($data = [], $html = '', $code = 'adjustment_code')
     {
@@ -291,10 +291,10 @@ class AmountTest extends \PHPUnit\Framework\TestCase
         $adjustmentRender->expects($this->once())
             ->method('render')
             ->with($this->model, $data)
-            ->will($this->returnValue($html));
+            ->willReturn($html);
         $adjustmentRender->expects($this->any())
             ->method('getAdjustmentCode')
-            ->will($this->returnValue($code));
+            ->willReturn($code);
         return $adjustmentRender;
     }
 }

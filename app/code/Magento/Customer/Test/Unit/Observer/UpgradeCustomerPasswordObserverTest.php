@@ -18,24 +18,24 @@ class UpgradeCustomerPasswordObserverTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Encryption\Encryptor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Encryption\Encryptor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $encryptorMock;
 
     /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerRepository;
 
     /**
-     * @var \Magento\Customer\Model\CustomerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\CustomerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerRegistry;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerRepository = $this
             ->getMockBuilder(\Magento\Customer\Api\CustomerRepositoryInterface::class)

@@ -11,12 +11,12 @@ use Magento\Customer\CustomerData\SectionPool;
 class SectionPoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $identifierMock;
 
@@ -30,7 +30,7 @@ class SectionPoolTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->identifierMock = $this->createMock(\Magento\Customer\CustomerData\Section\Identifier::class);
@@ -71,11 +71,12 @@ class SectionPoolTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage b doesn't extend \Magento\Customer\CustomerData\SectionSourceInterface
      */
     public function testGetSectionsDataAllSectionsException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('b doesn\'t extend \\Magento\\Customer\\CustomerData\\SectionSourceInterface');
+
         $sectionNames = [];
         $identifierResult = [1, 2, 3];
         $this->objectManagerMock->expects($this->once())

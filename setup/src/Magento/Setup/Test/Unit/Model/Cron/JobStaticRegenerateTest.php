@@ -10,11 +10,11 @@ use Magento\Framework\App\State;
 class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\JobStaticRegenerate
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Cron\JobStaticRegenerate
      */
     private $jobStaticRegenerate;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->jobStaticRegenerate = $this->getJobStaticRegenerateMock(
             [
@@ -36,7 +36,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
         $modeObjectMock = $this->getModeObjectMock(['getMode']);
         $modeObjectMock->expects($this->once())
             ->method('getMode')
-            ->will($this->returnValue(State::MODE_PRODUCTION));
+            ->willReturn(State::MODE_PRODUCTION);
 
         $filesystemMock = $this->getFilesystemObjectMock(['regenerateStatic']);
         $filesystemMock
@@ -46,17 +46,17 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
         $this->jobStaticRegenerate
             ->expects($this->once())
             ->method('getFilesystem')
-            ->will($this->returnValue($filesystemMock));
+            ->willReturn($filesystemMock);
 
         $this->jobStaticRegenerate
             ->expects($this->once())
             ->method('getModeObject')
-            ->will($this->returnValue($modeObjectMock));
+            ->willReturn($modeObjectMock);
 
         $this->jobStaticRegenerate
             ->expects($this->once())
             ->method('getOutputObject')
-            ->will($this->returnValue($this->getOutputObjectMock()));
+            ->willReturn($this->getOutputObjectMock());
 
         $this->jobStaticRegenerate->execute();
     }
@@ -69,12 +69,12 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
         $modeObjectMock = $this->getModeObjectMock(['getMode']);
         $modeObjectMock->expects($this->once())
             ->method('getMode')
-            ->will($this->returnValue(State::MODE_DEVELOPER));
+            ->willReturn(State::MODE_DEVELOPER);
 
         $this->jobStaticRegenerate
             ->expects($this->once())
             ->method('getModeObject')
-            ->will($this->returnValue($modeObjectMock));
+            ->willReturn($modeObjectMock);
 
         $statusObject = $this->getStatusObjectMock(['add']);
         $statusObject
@@ -83,7 +83,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
         $this->jobStaticRegenerate
             ->expects($this->exactly(3))
             ->method('getStatusObject')
-            ->will($this->returnValue($statusObject));
+            ->willReturn($statusObject);
 
         $cacheObject = $this->getCacheObjectMock(['clean']);
         $cacheObject
@@ -92,7 +92,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
         $this->jobStaticRegenerate
             ->expects($this->once())
             ->method('getCacheObject')
-            ->will($this->returnValue($cacheObject));
+            ->willReturn($cacheObject);
 
         $cleanFilesObject = $this->getCleanFilesObjectMock(['clearMaterializedViewFiles', 'clearCodeGeneratedFiles']);
         $cleanFilesObject
@@ -104,17 +104,18 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
         $this->jobStaticRegenerate
             ->expects($this->exactly(2))
             ->method('getCleanFilesObject')
-            ->will($this->returnValue($cleanFilesObject));
+            ->willReturn($cleanFilesObject);
 
         $this->jobStaticRegenerate->execute();
     }
 
     /**
-     * @expectedException \RuntimeException
      * @covers \Magento\Setup\Model\Cron\JobStaticRegenerate::execute
      */
     public function testExecuteWithException()
     {
+        $this->expectException(\RuntimeException::class);
+
         $modeObjectMock = $this->getModeObjectMock(['getMode']);
         $modeObjectMock->expects($this->once())
             ->method('getMode')
@@ -122,7 +123,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
         $this->jobStaticRegenerate
             ->expects($this->once())
             ->method('getModeObject')
-            ->will($this->returnValue($modeObjectMock));
+            ->willReturn($modeObjectMock);
 
         $statusObject = $this->getStatusObjectMock(['toggleUpdateError']);
         $statusObject
@@ -131,7 +132,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
         $this->jobStaticRegenerate
             ->expects($this->once())
             ->method('getStatusObject')
-            ->will($this->returnValue($statusObject));
+            ->willReturn($statusObject);
 
         $this->jobStaticRegenerate->execute();
     }
@@ -139,7 +140,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets JobStaticRegenerate mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\JobStaticRegenerate
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Cron\JobStaticRegenerate
      */
     protected function getJobStaticRegenerateMock($methods = null)
     {
@@ -149,7 +150,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets ObjectManagerProvider mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Deploy\Model\Filesystem
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Deploy\Model\Filesystem
      */
     protected function getFilesystemObjectMock($methods = null)
     {
@@ -159,7 +160,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets status object mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\Status
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Cron\Status
      */
     protected function getStatusObjectMock($methods = null)
     {
@@ -169,7 +170,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets clean files object mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\State\CleanupFiles
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\State\CleanupFiles
      */
     protected function getCleanFilesObjectMock($methods = null)
     {
@@ -179,7 +180,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets cache object mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\State\CleanupFiles
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\State\CleanupFiles
      */
     protected function getCacheObjectMock($methods = null)
     {
@@ -189,7 +190,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets output object mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Console\Output\OutputInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\Console\Output\OutputInterface
      */
     protected function getOutputObjectMock()
     {
@@ -199,7 +200,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets mode mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Deploy\Model\Mode
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Deploy\Model\Mode
      */
     protected function getModeObjectMock($methods = null)
     {

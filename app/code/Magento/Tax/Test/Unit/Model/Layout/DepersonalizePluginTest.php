@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 class DepersonalizePluginTest extends TestCase
 {
     /**
-     * @var CustomerSession|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerSession|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerSessionMock;
 
@@ -30,19 +30,19 @@ class DepersonalizePluginTest extends TestCase
     private $plugin;
 
     /**
-     * @var DepersonalizeChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var DepersonalizeChecker|\PHPUnit\Framework\MockObject\MockObject
      */
     private $depersonalizeCheckerMock;
 
     /**
-     * @var LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $layoutMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerSessionMock = $this->createPartialMock(
             CustomerSession::class,

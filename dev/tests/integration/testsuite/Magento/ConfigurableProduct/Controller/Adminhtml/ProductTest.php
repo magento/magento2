@@ -60,7 +60,7 @@ class ProductTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
@@ -120,7 +120,7 @@ class ProductTest extends AbstractBackendController
                     'simple_1' => [
                         'name' => 'simple_1',
                         'sku' => 'simple_1',
-                        'price' => '200',
+                        'price' => 200,
                         'weight' => '1',
                         'qty' => '100',
                         'attributes' => ['test_configurable' => 'Option 1'],
@@ -128,7 +128,7 @@ class ProductTest extends AbstractBackendController
                     'simple_2' => [
                         'name' => 'simple_2',
                         'sku' => 'simple_2',
-                        'price' => '100',
+                        'price' => 100,
                         'weight' => '1',
                         'qty' => '200',
                         'attributes' => ['test_configurable' => 'Option 2'],
@@ -140,14 +140,14 @@ class ProductTest extends AbstractBackendController
                     'simple_1' => [
                         'name' => 'simple_1',
                         'sku' => 'simple_1',
-                        'price' => '100',
+                        'price' => 100,
                         'qty' => '100',
                         'attributes' => ['test_configurable' => 'Option 1'],
                     ],
                     'simple_2' => [
                         'name' => 'simple_2',
                         'sku' => 'simple_2',
-                        'price' => '100',
+                        'price' => 100,
                         'qty' => '100',
                         'attributes' => ['test_configurable' => 'Option 2'],
                     ],
@@ -189,7 +189,7 @@ class ProductTest extends AbstractBackendController
                     'simple_2' => [
                         'name' => 'simple_2',
                         'sku' => 'simple_2',
-                        'price' => '100',
+                        'price' => 100,
                         'weight' => '1',
                         'qty' => '200',
                         'attributes' => ['test_configurable' => 'Option 2'],
@@ -202,7 +202,7 @@ class ProductTest extends AbstractBackendController
                     'simple_2' => [
                         'name' => 'simple_2',
                         'sku' => 'simple_2',
-                        'price' => '100',
+                        'price' => 100,
                         'qty' => '100',
                         'attributes' => ['test_configurable' => 'Option 2'],
                     ],
@@ -218,7 +218,7 @@ class ProductTest extends AbstractBackendController
                     'simple_1_1' => [
                         'name' => 'simple_1_1',
                         'sku' => 'simple_1_1',
-                        'price' => '100',
+                        'price' => 100,
                         'weight' => '1',
                         'qty' => '200',
                         'attributes' => [
@@ -229,7 +229,7 @@ class ProductTest extends AbstractBackendController
                     'simple_1_2' => [
                         'name' => 'simple_1_2',
                         'sku' => 'simple_1_2',
-                        'price' => '100',
+                        'price' => 100,
                         'weight' => '1',
                         'qty' => '200',
                         'attributes' => [
@@ -245,14 +245,14 @@ class ProductTest extends AbstractBackendController
                     'simple_2_1' => [
                         'name' => 'simple_2_1',
                         'sku' => 'simple_2_1',
-                        'price' => '100',
+                        'price' => 100,
                         'qty' => '100',
                         'attributes' => ['test_configurable_2' => 'Option 1'],
                     ],
                     'simple_2_2' => [
                         'name' => 'simple_2_2',
                         'sku' => 'simple_2_2',
-                        'price' => '100',
+                        'price' => 100,
                         'qty' => '100',
                         'attributes' => ['test_configurable_2' => 'Option 2'],
                     ],
@@ -370,7 +370,7 @@ class ProductTest extends AbstractBackendController
             foreach ($options as $option) {
                 $attribute = $this->getAttribute($option->getAttributeId());
                 foreach ($childProducts as $childProduct) {
-                    $this->assertContains($attribute->getAttributeCode(), array_keys($childProduct['attributes']));
+                    $this->assertContains($attribute->getAttributeCode(),array_keys($childProduct['attributes']));
                 }
             }
         }

@@ -51,8 +51,8 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
         $expectedString = "{$controllerModule}/{$controllerName}/redirect/x_invoice_num/{$params['x_invoice_num']}/"
             . "success/0/error_msg/{$errorMsg}/controller_action_name/{$controllerName}/";
 
-        $this->assertContains('window.location', $output);
-        $this->assertContains($expectedString, $output);
+        $this->assertStringContainsString('window.location', $output);
+        $this->assertStringContainsString($expectedString, $output);
     }
 
     /**
@@ -120,8 +120,8 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
         $expectedString = "{$controllerModule}/{$controllerName}/redirect/x_invoice_num/{$params['x_invoice_num']}/"
             . "success/1/controller_action_name/{$controllerName}/";
 
-        $this->assertContains('window.location', $output);
-        $this->assertContains($expectedString, $output);
+        $this->assertStringContainsString('window.location', $output);
+        $this->assertStringContainsString($expectedString, $output);
     }
 
     /**

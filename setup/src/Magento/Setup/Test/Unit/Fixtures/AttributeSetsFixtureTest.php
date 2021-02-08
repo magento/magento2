@@ -15,7 +15,7 @@ use Magento\Setup\Fixtures\AttributeSetsFixture;
 class AttributeSetsFixtureTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Fixtures\FixtureModel
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Fixtures\FixtureModel
      */
     private $fixtureModelMock;
 
@@ -25,16 +25,16 @@ class AttributeSetsFixtureTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeSetsFixtureMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $patternMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->fixtureModelMock = $this->getMockBuilder(\Magento\Setup\Fixtures\FixtureModel::class)
             ->disableOriginalConstructor()
@@ -66,7 +66,7 @@ class AttributeSetsFixtureTest extends \PHPUnit\Framework\TestCase
         $this->fixtureModelMock
             ->expects($this->exactly(2))
             ->method('getValue')
-            ->will($this->returnValueMap($valueMap));
+            ->willReturnMap($valueMap);
 
         $this->model->execute();
     }
@@ -92,7 +92,7 @@ class AttributeSetsFixtureTest extends \PHPUnit\Framework\TestCase
         $this->fixtureModelMock
             ->expects($this->exactly(4))
             ->method('getValue')
-            ->will($this->returnValueMap($valueMap));
+            ->willReturnMap($valueMap);
 
         $this->model->execute();
     }

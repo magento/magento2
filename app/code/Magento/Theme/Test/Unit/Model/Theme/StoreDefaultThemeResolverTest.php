@@ -35,11 +35,11 @@ class StoreDefaultThemeResolverTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $themeCollectionFactory = $this->createMock(CollectionFactory::class);
-        $this->design = $this->createMock(DesignInterface::class);
+        $this->design = $this->getMockForAbstractClass(DesignInterface::class);
         $this->model = new StoreDefaultThemeResolver(
             $themeCollectionFactory,
             $this->design
@@ -77,7 +77,7 @@ class StoreDefaultThemeResolverTest extends TestCase
      */
     public function testGetThemes(?string $defaultTheme, array $expected)
     {
-        $store = $this->createMock(StoreInterface::class);
+        $store = $this->getMockForAbstractClass(StoreInterface::class);
         $this->design->expects($this->once())
             ->method('getConfigurationDesignTheme')
             ->with(
@@ -99,7 +99,7 @@ class StoreDefaultThemeResolverTest extends TestCase
                 []
             ],
             [
-                1,
+                '1',
                 [1]
             ],
             [

@@ -16,22 +16,22 @@ class CheckContactUsFormObserverTest extends \PHPUnit\Framework\TestCase
     protected $checkContactUsFormObserver;
 
     /**
-     * @var \Magento\Captcha\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Captcha\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \Magento\Framework\App\ActionFlag|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ActionFlag|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $actionFlagMock;
 
     /*
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageManagerMock;
 
     /**
-     * @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $redirectMock;
 
@@ -41,26 +41,26 @@ class CheckContactUsFormObserverTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Captcha\Observer\CaptchaStringResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Captcha\Observer\CaptchaStringResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $captchaStringResolverMock;
 
     /**
-     * @var \Magento\Framework\Session\SessionManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Session\SessionManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionMock;
 
     /**
-     * @var \Magento\Captcha\Model\DefaultModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Captcha\Model\DefaultModel|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $captchaMock;
 
     /**
-     * @var \Magento\Framework\App\Request\DataPersistorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\DataPersistorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataPersistorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

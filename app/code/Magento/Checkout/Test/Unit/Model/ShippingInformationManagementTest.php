@@ -18,32 +18,32 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $paymentMethodManagementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $paymentDetailsFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $cartTotalsRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $shippingAddressMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteMock;
 
@@ -53,41 +53,41 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $shippingAssignmentFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $cartExtensionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $shippingFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $cartExtensionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $shippingAssignmentMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $shippingMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $addressValidatorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->paymentMethodManagementMock = $this->createMock(
@@ -166,11 +166,12 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The shipping method can't be set for an empty cart. Add an item to cart and try again.
      */
     public function testSaveAddressInformationIfCartIsEmpty()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('The shipping method can\'t be set for an empty cart. Add an item to cart and try again.');
+
         $cartId = 100;
         $addressInformationMock = $this->createMock(\Magento\Checkout\Api\Data\ShippingInformationInterface::class);
 
@@ -233,11 +234,12 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
      */
     public function testSaveAddressInformationIfShippingAddressNotSet()
     {
+        $this->expectException(\Magento\Framework\Exception\StateException::class);
+        $this->expectExceptionMessage('The shipping address is missing. Set the address and try again.');
+
         $cartId = 100;
         $addressInformationMock = $this->createMock(\Magento\Checkout\Api\Data\ShippingInformationInterface::class);
         $addressInformationMock->expects($this->once())
@@ -256,11 +258,12 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The shipping information was unable to be saved. Verify the input data and try again.
      */
     public function testSaveAddressInformationIfCanNotSaveQuote()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('The shipping information was unable to be saved. Verify the input data and try again.');
+
         $cartId = 100;
         $carrierCode = 'carrier_code';
         $shippingMethod = 'shipping_method';
@@ -300,11 +303,12 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Carrier with such method not found: carrier_code, shipping_method
      */
     public function testSaveAddressInformationIfCarrierCodeIsInvalid()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('Carrier with such method not found: carrier_code, shipping_method');
+
         $cartId = 100;
         $carrierCode = 'carrier_code';
         $shippingMethod = 'shipping_method';

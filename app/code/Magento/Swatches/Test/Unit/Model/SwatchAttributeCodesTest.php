@@ -26,12 +26,12 @@ class SwatchAttributeCodesTest extends \PHPUnit\Framework\TestCase
     private $swatchAttributeCodesModel;
 
     /**
-     * @var CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cache;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnection;
 
@@ -43,7 +43,7 @@ class SwatchAttributeCodesTest extends \PHPUnit\Framework\TestCase
         11 => 'image_swatch',
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cache = $this->createPartialMock(CacheInterface::class, [
                 'getFrontend',

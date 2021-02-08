@@ -17,26 +17,26 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $optionRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $optionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->optionRepositoryMock =
             $this->createMock(\Magento\Bundle\Api\ProductOptionRepositoryInterface::class);
@@ -66,11 +66,12 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage This is implemented for bundle products only.
      */
     public function testSaveWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('This is implemented for bundle products only.');
+
         $this->optionMock->expects($this->once())->method('getSku')->willReturn('bundle_product_sku');
         $this->productRepositoryMock->expects($this->once())
             ->method('get')

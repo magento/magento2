@@ -20,31 +20,31 @@ class ProductOptionProcessorTest extends \PHPUnit\Framework\TestCase
     protected $processor;
 
     /**
-     * @var DataObject | \PHPUnit_Framework_MockObject_MockObject
+     * @var DataObject | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataObject;
 
     /**
-     * @var DataObjectFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var DataObjectFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataObjectFactory;
 
     /**
-     * @var DataObjectHelper | \PHPUnit_Framework_MockObject_MockObject
+     * @var DataObjectHelper | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataObjectHelper;
 
     /**
-     * @var DownloadableOptionFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var DownloadableOptionFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $downloadableOptionFactory;
 
     /**
-     * @var DownloadableOptionInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var DownloadableOptionInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $downloadableOption;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dataObject = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods([

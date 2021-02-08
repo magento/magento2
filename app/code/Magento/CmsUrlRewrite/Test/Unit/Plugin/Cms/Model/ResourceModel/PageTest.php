@@ -16,21 +16,21 @@ class PageTest extends \PHPUnit\Framework\TestCase
     protected $pageObject;
 
     /**
-     * @var \Magento\UrlRewrite\Model\UrlPersistInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\UrlRewrite\Model\UrlPersistInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlPersistMock;
 
     /**
-     * @var \Magento\Cms\Model\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cms\Model\Page|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cmsPageMock;
 
     /**
-     * @var \Magento\Cms\Model\ResourceModel\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cms\Model\ResourceModel\Page|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cmsPageResourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

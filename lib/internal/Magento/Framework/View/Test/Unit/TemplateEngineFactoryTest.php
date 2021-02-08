@@ -9,7 +9,7 @@ use \Magento\Framework\View\TemplateEngineFactory;
 
 class TemplateEngineFactoryTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_objectManagerMock;
 
     /** @var  \Magento\Framework\View\TemplateEngineFactory */
@@ -18,7 +18,7 @@ class TemplateEngineFactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup a factory to test with an mocked object manager.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_factory = new TemplateEngineFactory(
@@ -36,36 +36,38 @@ class TemplateEngineFactoryTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             \Fixture\Module\Model\TemplateEngine::class
-        )->will(
-            $this->returnValue($engine)
+        )->willReturn(
+            $engine
         );
         $this->assertSame($engine, $this->_factory->create('test'));
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unknown template engine type: 'non_existing'
      */
     public function testCreateUnknownEngine()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unknown template engine type: \'non_existing\'');
+
         $this->_objectManagerMock->expects($this->never())->method('create');
         $this->_factory->create('non_existing');
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Fixture\Module\Model\TemplateEngine has to implement the template engine interface
      */
     public function testCreateInvalidEngine()
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Fixture\\Module\\Model\\TemplateEngine has to implement the template engine interface');
+
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(
             'create'
         )->with(
             \Fixture\Module\Model\TemplateEngine::class
-        )->will(
-            $this->returnValue(new \stdClass())
+        )->willReturn(
+            new \stdClass()
         );
         $this->_factory->create('test');
     }

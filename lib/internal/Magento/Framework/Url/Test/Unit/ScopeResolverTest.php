@@ -9,16 +9,16 @@ namespace Magento\Framework\Url\Test\Unit;
 class ScopeResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeResolverMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->scopeResolverMock = $this->getMockBuilder(
@@ -43,18 +43,19 @@ class ScopeResolverTest extends \PHPUnit\Framework\TestCase
             'getScope'
         )->with(
             $scopeId
-        )->will(
-            $this->returnValue($scopeMock)
+        )->willReturn(
+            $scopeMock
         );
         $this->_object->getScope($scopeId);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The scope object is invalid. Verify the scope object and try again.
      */
     public function testGetScopeException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The scope object is invalid. Verify the scope object and try again.');
+
         $this->_object->getScope();
     }
 

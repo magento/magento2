@@ -20,7 +20,7 @@ class CredentialsValidatorTest extends \PHPUnit\Framework\TestCase
      */
     private $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -29,10 +29,11 @@ class CredentialsValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testCheckPasswordDifferentFromEmail()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+
         $email = 'test1@example.com';
         $password = strtoupper($email); // for case-insensitive check
 

@@ -18,27 +18,27 @@ class RequestValidatorTest extends \PHPUnit\Framework\TestCase
     private $requestValidator;
 
     /**
-     * @var \Magento\Framework\Webapi\Rest\Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Webapi\Rest\Request|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface |\PHPUnit\Framework\MockObject\MockObject */
     private $storeManagerMock;
 
-    /** @var \Magento\Store\Api\Data\StoreInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Api\Data\StoreInterface |\PHPUnit\Framework\MockObject\MockObject */
     private $storeMock;
 
     /**
-     * @var \Magento\Framework\Webapi\Authorization|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Webapi\Authorization|\PHPUnit\Framework\MockObject\MockObject
      */
     private $authorizationMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Webapi\Controller\Rest\Router\Route
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Webapi\Controller\Rest\Router\Route
      */
     private $routeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\Webapi\Rest\Request::class)
             ->setMethods(
@@ -80,10 +80,10 @@ class RequestValidatorTest extends \PHPUnit\Framework\TestCase
             );
 
         // Set default expectations used by all tests
-        $this->routeMock->expects($this->any())->method('getServiceClass')->will($this->returnValue(self::SERVICE_ID));
+        $this->routeMock->expects($this->any())->method('getServiceClass')->willReturn(self::SERVICE_ID);
         $this->routeMock->expects($this->any())->method('getServiceMethod')
-            ->will($this->returnValue(self::SERVICE_METHOD));
-        $routerMock->expects($this->any())->method('match')->will($this->returnValue($this->routeMock));
+            ->willReturn(self::SERVICE_METHOD);
+        $routerMock->expects($this->any())->method('match')->willReturn($this->routeMock);
 
         parent::setUp();
     }
@@ -95,11 +95,11 @@ class RequestValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testSecureRouteAndRequest($isSecureRoute, $isSecureRequest)
     {
-        $this->routeMock->expects($this->any())->method('isSecure')->will($this->returnValue($isSecureRoute));
-        $this->routeMock->expects($this->any())->method('getAclResources')->will($this->returnValue(['1']));
-        $this->requestMock->expects($this->any())->method('getRequestData')->will($this->returnValue([]));
-        $this->requestMock->expects($this->any())->method('isSecure')->will($this->returnValue($isSecureRequest));
-        $this->authorizationMock->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
+        $this->routeMock->expects($this->any())->method('isSecure')->willReturn($isSecureRoute);
+        $this->routeMock->expects($this->any())->method('getAclResources')->willReturn(['1']);
+        $this->requestMock->expects($this->any())->method('getRequestData')->willReturn([]);
+        $this->requestMock->expects($this->any())->method('isSecure')->willReturn($isSecureRequest);
+        $this->authorizationMock->expects($this->once())->method('isAllowed')->willReturn(true);
         $this->requestValidator->validate();
     }
 
@@ -117,27 +117,29 @@ class RequestValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * Test insecure request for a secure route
      *
-     * @expectedException \Magento\Framework\Webapi\Exception
-     * @expectedExceptionMessage Operation allowed only in HTTPS
      */
     public function testInSecureRequestOverSecureRoute()
     {
-        $this->routeMock->expects($this->any())->method('isSecure')->will($this->returnValue(true));
-        $this->routeMock->expects($this->any())->method('getAclResources')->will($this->returnValue(['1']));
-        $this->requestMock->expects($this->any())->method('isSecure')->will($this->returnValue(false));
-        $this->authorizationMock->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
+        $this->expectException(\Magento\Framework\Webapi\Exception::class);
+        $this->expectExceptionMessage('Operation allowed only in HTTPS');
+
+        $this->routeMock->expects($this->any())->method('isSecure')->willReturn(true);
+        $this->routeMock->expects($this->any())->method('getAclResources')->willReturn(['1']);
+        $this->requestMock->expects($this->any())->method('isSecure')->willReturn(false);
+        $this->authorizationMock->expects($this->once())->method('isAllowed')->willReturn(true);
 
         $this->requestValidator->validate();
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\AuthorizationException
-     * @expectedExceptionMessage The consumer isn't authorized to access 5, 6.
      */
     public function testAuthorizationFailed()
     {
-        $this->authorizationMock->expects($this->once())->method('isAllowed')->will($this->returnValue(false));
-        $this->routeMock->expects($this->any())->method('getAclResources')->will($this->returnValue(['5', '6']));
+        $this->expectException(\Magento\Framework\Exception\AuthorizationException::class);
+        $this->expectExceptionMessage('The consumer isn\'t authorized to access 5, 6.');
+
+        $this->authorizationMock->expects($this->once())->method('isAllowed')->willReturn(false);
+        $this->routeMock->expects($this->any())->method('getAclResources')->willReturn(['5', '6']);
         $this->requestValidator->validate();
     }
 }

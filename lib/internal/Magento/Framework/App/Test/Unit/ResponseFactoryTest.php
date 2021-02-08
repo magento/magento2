@@ -13,7 +13,7 @@ class ResponseFactoryTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManagerMock;
 
@@ -22,7 +22,7 @@ class ResponseFactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_expectedObject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new \Magento\Framework\App\ResponseFactory($this->_objectManagerMock);
@@ -39,8 +39,8 @@ class ResponseFactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             \Magento\Framework\App\ResponseInterface::class,
             $arguments
-        )->will(
-            $this->returnValue($this->_expectedObject)
+        )->willReturn(
+            $this->_expectedObject
         );
 
         $this->assertEquals($this->_expectedObject, $this->_model->create($arguments));

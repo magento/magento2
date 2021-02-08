@@ -13,11 +13,11 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $eavOptionManagementMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eavOptionManagementMock = $this->createMock(\Magento\Eav\Api\AttributeOptionManagementInterface::class);
         $this->model = new \Magento\Catalog\Model\Product\Attribute\OptionManagement(
@@ -60,11 +60,12 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Invalid option id
      */
     public function testDeleteWithInvalidOption()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Invalid option id');
+
         $attributeCode = 'atrCde';
         $optionId = '';
         $this->eavOptionManagementMock->expects($this->never())->method('delete');

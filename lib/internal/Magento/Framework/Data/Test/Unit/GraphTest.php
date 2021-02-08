@@ -10,11 +10,12 @@ class GraphTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array $nodes
      * @param array $relations
-     * @expectedException \InvalidArgumentException
      * @dataProvider constructorErrorDataProvider
      */
     public function testConstructorError($nodes, $relations)
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         new \Magento\Framework\Data\Graph($nodes, $relations);
     }
 

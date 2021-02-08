@@ -12,7 +12,7 @@ namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field;
 class ImageTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderMock;
 
@@ -34,7 +34,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->urlBuilderMock = $this->createMock(\Magento\Framework\Url::class);
@@ -71,7 +71,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $type = 'media';
         $url = 'http://test.example.com/media/';
         $this->urlBuilderMock->expects($this->once())->method('getBaseUrl')
-            ->with(['_type' => $type])->will($this->returnValue($url));
+            ->with(['_type' => $type])->willReturn($url);
 
         $this->image->setValue($this->testData['value']);
         $this->image->setHtmlId($this->testData['html_id']);
@@ -115,19 +115,16 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->escaperMock->expects($this->atLeastOnce())->method('escapeHtml')->willReturn($expectedHtmlId);
         $html = $this->image->getElementHtml();
 
-        $this->assertContains('class="input-file"', $html);
-        $this->assertContains('<input', $html);
-        $this->assertContains('type="file"', $html);
-        $this->assertContains('value="test_value"', $html);
-        $this->assertContains(
-            '<a href="'
+        $this->assertStringContainsString('class="input-file"', $html);
+        $this->assertStringContainsString('<input', $html);
+        $this->assertStringContainsString('type="file"', $html);
+        $this->assertStringContainsString('value="test_value"', $html);
+        $this->assertStringContainsString('<a href="'
             . $url
             . $this->testData['path']
             . '/'
             . $this->testData['value']
-            . '" onclick="imagePreview(\'' . $expectedHtmlId . '_image\'); return false;"',
-            $html
-        );
-        $this->assertContains('<input type="checkbox"', $html);
+            . '" onclick="imagePreview(\'' . $expectedHtmlId . '_image\'); return false;"', $html);
+        $this->assertStringContainsString('<input type="checkbox"', $html);
     }
 }

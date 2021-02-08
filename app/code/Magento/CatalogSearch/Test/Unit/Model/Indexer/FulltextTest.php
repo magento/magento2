@@ -20,36 +20,36 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fullAction;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Indexer\IndexerHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogSearch\Model\Indexer\IndexerHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $saveHandler;
 
     /**
-     * @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fulltextResource;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Indexer\Scope\IndexSwitcher|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogSearch\Model\Indexer\Scope\IndexSwitcher|\PHPUnit\Framework\MockObject\MockObject
      */
     private $indexSwitcher;
 
     /**
-     * @var DimensionProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DimensionProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dimensionProviderMock;
 
     /**
-     * @var \Magento\Indexer\Model\ProcessManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Indexer\Model\ProcessManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $processManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fullAction = $this->getClassMock(\Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::class);
         $fullActionFactory = $this->createPartialMock(
@@ -97,7 +97,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $className
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getClassMock($className)
     {

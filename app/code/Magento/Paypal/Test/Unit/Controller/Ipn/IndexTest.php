@@ -21,38 +21,38 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     /** @var Index */
     private $model;
 
-    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $loggerMock;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $requestMock;
 
-    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $responseMock;
 
     /**
-     * @var IpnFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var IpnFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $ipnFactoryMock;
 
     /**
-     * @var OrderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderFactoryMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $this->ipnFactoryMock = $this->createMock(IpnFactory::class);
         $this->orderFactoryMock = $this->createMock(OrderFactory::class);
-        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
@@ -70,7 +70,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
 
     public function testIndexActionException()
     {
-        $this->requestMock->expects($this->once())->method('isPost')->will($this->returnValue(true));
+        $this->requestMock->expects($this->once())->method('isPost')->willReturn(true);
         $exception = new \Exception();
         $this->requestMock->expects($this->once())->method('getPostValue')->will($this->throwException($exception));
         $this->loggerMock->expects($this->once())->method('critical')->with($this->identicalTo($exception));
@@ -80,14 +80,14 @@ class IndexTest extends \PHPUnit\Framework\TestCase
 
     public function testIndexAction()
     {
-        $this->requestMock->expects($this->once())->method('isPost')->will($this->returnValue(true));
+        $this->requestMock->expects($this->once())->method('isPost')->willReturn(true);
         $incrementId = 'incrementId';
         $data = [
             'invoice' => $incrementId,
             'other' => 'other data'
         ];
         $this->requestMock->expects($this->exactly(2))->method('getPostValue')->willReturn($data);
-        $ipnMock = $this->createMock(IpnInterface::class);
+        $ipnMock = $this->getMockForAbstractClass(IpnInterface::class);
         $this->ipnFactoryMock->expects($this->once())
             ->method('create')
             ->with(['data' => $data])

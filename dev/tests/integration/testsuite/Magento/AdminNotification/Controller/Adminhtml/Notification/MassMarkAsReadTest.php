@@ -7,7 +7,7 @@ namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 
 class MassMarkAsReadTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
-    public function setUp()
+    protected function setUp(): void
     {
         $this->resource = 'Magento_AdminNotification::mark_as_read';
         $this->uri = 'backend/admin/notification/massmarkasread';

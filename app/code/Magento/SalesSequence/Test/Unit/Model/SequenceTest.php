@@ -14,22 +14,22 @@ use Magento\SalesSequence\Model\Sequence;
 class SequenceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection | \PHPUnit\Framework\MockObject\MockObject
      */
     private $resource;
 
     /**
-     * @var \Magento\SalesSequence\Model\Profile | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\Profile | \PHPUnit\Framework\MockObject\MockObject
      */
     private $profile;
 
     /**
-     * @var \Magento\SalesSequence\Model\Meta | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\Meta | \PHPUnit\Framework\MockObject\MockObject
      */
     private $meta;
 
@@ -38,7 +38,7 @@ class SequenceTest extends \PHPUnit\Framework\TestCase
      */
     private $sequence;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->meta = $this->createPartialMock(
             \Magento\SalesSequence\Model\Meta::class,

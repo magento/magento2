@@ -16,11 +16,11 @@ class SelectTest extends \PHPUnit\Framework\TestCase
     protected $select;
 
     /**
-     * @var Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $escaper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
 
@@ -35,13 +35,13 @@ class SelectTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $context->expects($this->once())
             ->method('getEscaper')
-            ->will($this->returnValue($this->escaper));
+            ->willReturn($this->escaper);
         $context->expects($this->once())
             ->method('getEventManager')
-            ->will($this->returnValue($eventManager));
+            ->willReturn($eventManager);
         $context->expects($this->once())
             ->method('getScopeConfig')
-            ->will($this->returnValue($scopeConfig));
+            ->willReturn($scopeConfig);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->select = $objectManagerHelper->getObject(
@@ -99,10 +99,10 @@ class SelectTest extends \PHPUnit\Framework\TestCase
     {
         $this->escaper->expects($this->any())
             ->method('escapeHtml')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
         $this->escaper->expects($this->any())
             ->method('escapeHtmlAttr')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $selectId = 'testId';
         $selectClass = 'testClass';
@@ -136,10 +136,10 @@ class SelectTest extends \PHPUnit\Framework\TestCase
     {
         $this->escaper->expects($this->any())
             ->method('escapeHtml')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
         $this->escaper->expects($this->any())
             ->method('escapeHtmlAttr')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $selectId = 'testId';
         $selectClass = 'testClass';
@@ -188,10 +188,10 @@ class SelectTest extends \PHPUnit\Framework\TestCase
     {
         $this->escaper->expects($this->any())
             ->method('escapeHtml')
-            ->will($this->returnValue('ESCAPED'));
+            ->willReturn('ESCAPED');
         $this->escaper->expects($this->any())
             ->method('escapeHtmlAttr')
-            ->will($this->returnValue('ESCAPED_ATTR'));
+            ->willReturn('ESCAPED_ATTR');
 
         $optionsSets = [
             $this->getOptionsWithSingleQuotes(),

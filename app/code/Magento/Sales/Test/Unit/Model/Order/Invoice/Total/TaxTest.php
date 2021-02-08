@@ -13,7 +13,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $order;
 
@@ -23,11 +23,11 @@ class TaxTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Sales\Model\Order\Invoice|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Invoice|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $invoice;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var \Magento\Sales\Model\Order\Invoice\Total\Tax $model */
@@ -45,7 +45,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                 'isLast',
                 '__wakeup',
             ]);
-        $this->invoice->expects($this->atLeastOnce())->method('getOrder')->will($this->returnValue($this->order));
+        $this->invoice->expects($this->atLeastOnce())->method('getOrder')->willReturn($this->order);
     }
 
     /**
@@ -75,7 +75,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
 
         $this->order->expects($this->once())
             ->method('getInvoiceCollection')
-            ->will($this->returnValue($previousInvoices));
+            ->willReturn($previousInvoices);
 
         //Set up invoice mock
         /** @var \Magento\Sales\Model\Order\Invoice\Item[] $invoiceItems */
@@ -85,16 +85,16 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         }
         $this->invoice->expects($this->once())
             ->method('getAllItems')
-            ->will($this->returnValue($invoiceItems));
+            ->willReturn($invoiceItems);
         $this->invoice->expects($this->once())
             ->method('isLast')
-            ->will($this->returnValue($invoiceData['is_last']));
+            ->willReturn($invoiceData['is_last']);
         foreach ($invoiceData['data_fields'] as $key => $value) {
             $this->invoice->setData($key, $value);
         }
         $this->invoice->expects($this->any())
             ->method('roundPrice')
-            ->will($this->returnCallback(
+            ->willReturnCallback(
                 function ($price, $type) use (&$roundingDelta) {
                     if (!isset($roundingDelta[$type])) {
                         $roundingDelta[$type] = 0;
@@ -103,7 +103,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                     $roundingDelta[$type] = $price - $roundedPrice;
                     return $roundedPrice;
                 }
-            ));
+            );
 
         $this->model->collect($this->invoice);
 
@@ -349,11 +349,11 @@ class TaxTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $invoiceItemData array
-     * @return \Magento\Sales\Model\Order\Invoice\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Sales\Model\Order\Invoice\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getInvoiceItem($invoiceItemData)
     {
-        /** @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject $orderItem */
+        /** @var \Magento\Sales\Model\Order\Item|\PHPUnit\Framework\MockObject\MockObject $orderItem */
         $orderItem = $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, [
                 'isDummy',
                 '__wakeup'
@@ -362,16 +362,16 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             $orderItem->setData($key, $value);
         }
 
-        /** @var \Magento\Sales\Model\Order\Invoice\Item|\PHPUnit_Framework_MockObject_MockObject $invoiceItem */
+        /** @var \Magento\Sales\Model\Order\Invoice\Item|\PHPUnit\Framework\MockObject\MockObject $invoiceItem */
         $invoiceItem = $this->createPartialMock(\Magento\Sales\Model\Order\Invoice\Item::class, [
                 'getOrderItem',
                 'isLast',
                 '__wakeup'
             ]);
-        $invoiceItem->expects($this->any())->method('getOrderItem')->will($this->returnValue($orderItem));
+        $invoiceItem->expects($this->any())->method('getOrderItem')->willReturn($orderItem);
         $invoiceItem->expects($this->any())
             ->method('isLast')
-            ->will($this->returnValue($invoiceItemData['is_last']));
+            ->willReturn($invoiceItemData['is_last']);
         $invoiceItem->setData('qty', $invoiceItemData['qty']);
         return $invoiceItem;
     }

@@ -13,12 +13,12 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Config\FileResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\FileResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_fileResolverMock;
 
     /**
-     * @var \Magento\Catalog\Model\Attribute\Config\Converter|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Attribute\Config\Converter|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_converter;
 
@@ -28,11 +28,11 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     protected $_schemaLocator;
 
     /**
-     * @var \Magento\Framework\Config\ValidationStateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\ValidationStateInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_validationState;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_fileResolverMock = $this->createMock(\Magento\Framework\Config\FileResolverInterface::class);
         $this->_fileResolverMock->expects(
@@ -42,13 +42,13 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         )->with(
             'catalog_attributes.xml',
             'scope'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 [
                     file_get_contents(__DIR__ . '/_files/attributes_config_one.xml'),
                     file_get_contents(__DIR__ . '/_files/attributes_config_two.xml'),
                 ]
-            )
+            
         );
 
         $this->_converter = $this->createPartialMock(
@@ -64,8 +64,8 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         )->with(
             'etc',
             'Magento_Catalog'
-        )->will(
-            $this->returnValue('stub')
+        )->willReturn(
+            'stub'
         );
         $this->_schemaLocator = new \Magento\Catalog\Model\Attribute\Config\SchemaLocator($moduleReader);
 
@@ -100,8 +100,8 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             'convert'
         )->with(
             $this->callback($constraint)
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
         $this->assertSame($expectedResult, $this->_model->read('scope'));
     }

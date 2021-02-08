@@ -21,18 +21,18 @@ class TaxRuleRegistryTest extends \PHPUnit\Framework\TestCase
     private $taxRuleRegistry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Tax\Model\Calculation\RuleFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Tax\Model\Calculation\RuleFactory
      */
     private $taxRuleModelFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Tax\Model\Calculation\Rule
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Tax\Model\Calculation\Rule
      */
     private $taxRuleModelMock;
 
     const TAX_RULE_ID = 1;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->taxRuleModelFactoryMock = $this->getMockBuilder(\Magento\Tax\Model\Calculation\RuleFactory::class)
@@ -53,7 +53,7 @@ class TaxRuleRegistryTest extends \PHPUnit\Framework\TestCase
         $this->taxRuleModelMock->expects($this->any())
             ->method('load')
             ->with(self::TAX_RULE_ID)
-            ->will($this->returnValue($this->taxRuleModelMock));
+            ->willReturn($this->taxRuleModelMock);
 
         $this->taxRuleModelMock->expects($this->any())
             ->method('getId')
@@ -61,7 +61,7 @@ class TaxRuleRegistryTest extends \PHPUnit\Framework\TestCase
 
         $this->taxRuleModelFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->taxRuleModelMock));
+            ->willReturn($this->taxRuleModelMock);
         $this->taxRuleRegistry->registerTaxRule($this->taxRuleModelMock);
         $expected = $this->taxRuleRegistry->retrieveTaxRule(self::TAX_RULE_ID);
         $this->assertEquals($this->taxRuleModelMock, $expected);
