@@ -153,9 +153,6 @@
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>
             </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
         </before>
         <after>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
@@ -249,38 +246,22 @@
             <argument name="quantity" value="1"/>
         </actionGroup>
         <!-- Place the order -->
-        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="onCheckout"/>
-        <see userInput="22" selector="{{CheckoutOrderSummarySection.itemsQtyInCart}}" stepKey="see21Products"/>
-        <click selector="{{CheckoutShippingSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
-        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextButton"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
-        <waitForPageLoad stepKey="waitForSuccess"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openCart"/>
+        <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
-        <!-- Go to My Account > My Orders page -->
-        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="onMyAccount"/>
-        <click selector="{{StorefrontCustomerSidebarSection.sidebarTab('My Orders')}}" stepKey="clickOnMyOrders"/>
-        <waitForPageLoad stepKey="waitForOrdersLoad"/>
-        <!-- Click 'View Order' link on order from preconditions -->
-        <actionGroup ref="StorefrontCustomerOrdersViewOrderActionGroup" stepKey="clickOrderView">
+        <!-- Go to My Account > My Orders page > view created order-->
+        <actionGroup ref="StorefrontCustomerOrdersViewOrderActionGroup" stepKey="openOrderView">
             <argument name="orderNumber" value="{$grabOrderNumber}"/>
         </actionGroup>
-        <!-- Assert that Pager displays 20 order items correctly -->
-        <grabTextFrom selector="{{StorefrontCustomerOrderViewSection.pager}}" stepKey="productsCount"/>
-        <assertStringContainsString stepKey="assertProductsCount">
-            <actualResult type="const">$productsCount</actualResult>
-            <expectedResult type="string">Items 1 to 20 of 22 total</expectedResult>
-        </assertStringContainsString>
+        <!-- Assert that Pager displays 20 items on the first page -->
+        <actionGroup ref="StorefrontCustomerOrderPaginationAssertActionGroup" stepKey="checkFirstPagePaginationMessage">
+            <argument name="itemsFromToOfTotal" value="Items 1 to 20 of 22 total"/>
+        </actionGroup>
         <!-- Assert that Pager displays 2nd page order items correctly -->
         <click selector="a.action.next" stepKey="clickNextPage"/>
-        <grabTextFrom selector="{{StorefrontCustomerOrderViewSection.productName}}" stepKey="configOptionValue"/>
-        <assertStringContainsString stepKey="assertConfigurableChildProduct">
-            <actualResult type="variable">configOptionValue</actualResult>
-            <expectedResult type="string">$$getConfigAttributeSecondOption.label$$</expectedResult>
-        </assertStringContainsString>
-        <grabMultiple selector="{{StorefrontCustomerOrderViewSection.productName}}" stepKey="bundleOptionValue"/>
-        <assertContains stepKey="assertBundleChildProduct">
-            <actualResult type="variable">bundleOptionValue</actualResult>
-            <expectedResult type="string">1 x $$simpleProduct2.name$$ $200.00</expectedResult>
-        </assertContains>
+        <!-- Assert that Pager displays 2 items on the second page -->
+        <actionGroup ref="StorefrontCustomerOrderPaginationAssertActionGroup" stepKey="checkSecondPagePaginationMessage">
+            <argument name="itemsFromToOfTotal" value="Items 21 to 22 of 22 total"/>
+        </actionGroup>
     </test>
 </tests>

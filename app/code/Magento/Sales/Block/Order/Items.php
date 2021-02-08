@@ -83,7 +83,11 @@ class Items extends AbstractItems
         /** @var Pager $pagerBlock */
         $pagerBlock = $this->getChildBlock('sales_order_item_pager');
         if ($pagerBlock) {
-            $this->preparePager($pagerBlock);
+            $pagerBlock->setLimit($this->itemsPerPage);
+            //here pager updates collection parameters
+            $pagerBlock->setCollection($this->itemCollection);
+            $pagerBlock->setAvailableLimit([$this->itemsPerPage]);
+            $pagerBlock->setShowAmounts($this->isPagerDisplayed());
         }
 
         return parent::_prepareLayout();
@@ -142,22 +146,6 @@ class Items extends AbstractItems
     }
 
     /**
-     * Prepare pager block
-     *
-     * @param AbstractBlock $pagerBlock
-     */
-    private function preparePager(AbstractBlock $pagerBlock): void
-    {
-        $collectionToPager = $this->createItemsCollection();
-        $collectionToPager->addFieldToFilter('parent_item_id', ['null' => true]);
-        $pagerBlock->setCollection($collectionToPager);
-
-        $pagerBlock->setLimit($this->itemsPerPage);
-        $pagerBlock->setAvailableLimit([$this->itemsPerPage]);
-        $pagerBlock->setShowAmounts($this->isPagerDisplayed());
-    }
-
-    /**
      * Create items collection
      *
      * @return Collection
@@ -165,7 +153,8 @@ class Items extends AbstractItems
     private function createItemsCollection(): Collection
     {
         $collection = $this->itemCollectionFactory->create();
-        $collection->setOrderFilter($this->getOrder());
+        $collection->addFieldToFilter('parent_item_id', ['null' => true])
+                   ->setOrderFilter($this->getOrder());
 
         return $collection;
     }
