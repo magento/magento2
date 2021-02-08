@@ -214,6 +214,8 @@ class BundleTest extends TestCase
 
     public function testGetJsonConfigFixedPriceBundle()
     {
+        $optionId = 1;
+        $optionQty = 2;
         $baseAmount = 123;
         $basePriceValue = 123123;
         $selections = [
@@ -230,7 +232,6 @@ class BundleTest extends TestCase
                 true
             )
         ];
-
         $bundleProductPrice = $this->getMockBuilder(Price::class)
             ->disableOriginalConstructor()
             ->setMethods(['getLowestPrice'])
@@ -246,10 +247,8 @@ class BundleTest extends TestCase
         $this->bundleProductPriceFactory->expects($this->once())
             ->method('create')
             ->willReturn($bundleProductPrice);
+        $options = [$this->createOption($optionId, 'Title `1', $selections)];
 
-        $options = [
-            $this->createOption(1, 'Title `1', $selections),
-        ];
         $finalPriceMock = $this->getPriceMock(
             [
                 'getPriceWithoutOption' => new DataObject(
@@ -289,7 +288,10 @@ class BundleTest extends TestCase
         $preconfiguredValues = new DataObject(
             [
                 'bundle_option' => [
-                    1 => 123123111,
+                    $optionId => [123123111],
+                ],
+                'bundle_option_qty' => [
+                    $optionId => $optionQty,
                 ],
             ]
         );
@@ -306,7 +308,8 @@ class BundleTest extends TestCase
         $this->assertEquals(110, $jsonConfig['prices']['oldPrice']['amount']);
         $this->assertEquals(100, $jsonConfig['prices']['basePrice']['amount']);
         $this->assertEquals(100, $jsonConfig['prices']['finalPrice']['amount']);
-        $this->assertEquals([1], $jsonConfig['positions']);
+        $this->assertEquals([$optionId], $jsonConfig['positions']);
+        $this->assertEquals($optionQty, $jsonConfig['options'][$optionId]['selections'][1123]['qty']);
     }
 
     /**

@@ -310,7 +310,7 @@ class Data
      * Method getting full media gallery for current Product
      *
      * Array structure: [
-     *  ['image'] => 'http://url/pub/media/catalog/product/2/0/blabla.jpg',
+     *  ['image'] => 'http://url/media/catalog/product/2/0/blabla.jpg',
      *  ['mediaGallery'] => [
      *      galleryImageId1 => simpleProductImage1.jpg,
      *      galleryImageId2 => simpleProductImage2.jpg,

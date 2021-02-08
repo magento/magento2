@@ -172,7 +172,8 @@ class ProductTest extends TestCase
 
         $this->productFactory = $this->getMockBuilder(
             \Magento\Catalog\Model\ResourceModel\ProductFactory::class
-        )->addMethods(['getTypeId'])
+        )->disableOriginalConstructor()
+            ->addMethods(['getTypeId'])
             ->onlyMethods(['create'])
             ->getMock();
 

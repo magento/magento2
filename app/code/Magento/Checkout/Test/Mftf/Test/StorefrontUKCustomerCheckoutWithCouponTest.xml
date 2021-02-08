@@ -75,18 +75,20 @@
         </actionGroup>
 
         <!-- Assert Discount and proceed to checkout -->
-        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
-        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$15.00" stepKey="seeDiscountTotal"/>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForDiscountElement"/>
+        <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="seeDiscountTotal">
+            <argument name="discount" value="15.00"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForPageToLoad1 action for preserving Backward Compatibility" stepKey="waitForPageToLoad1"/>
 
         <!--Fill the pop up sign form -->
         <actionGroup ref="StorefrontCustomerSignInPopUpActionGroup" stepKey="customerSignIn">
             <argument name="customerEmail" value="$$createCustomer.email$$"/>
             <argument name="customerPwd" value="$$createCustomer.password$$"/>
         </actionGroup>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout1"/>
-        <waitForPageLoad stepKey="waitForShippingMethodSectionToLoad"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout1"/>
+        <comment userInput="Adding the comment to replace waitForShippingMethodSectionToLoad action for preserving Backward Compatibility" stepKey="waitForShippingMethodSectionToLoad"/>
 
         <!-- Click and open order summary tab-->
         <conditionalClick selector="{{CheckoutOrderSummarySection.miniCartTab}}" dependentSelector="{{CheckoutOrderSummarySection.miniCartTabClosed}}" visible="true" stepKey="clickOnOrderSummaryTab"/>
