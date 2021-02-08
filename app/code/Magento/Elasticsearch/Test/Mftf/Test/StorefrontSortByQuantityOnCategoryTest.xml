@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontSortByQuantityOnCategoryTest">
+        <annotations>
+            <features value="Search"/>
+            <stories value="Elasticsearch"/>
+            <title value="Sort by quantity"/>
+            <description value="User should be able to sort products by quantity attribute using ElasticSearch"/>
+            <severity value="MAJOR"/>
+            <group value="SearchEngineElasticsearch" />
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openProductAttributeFromSearchResultInGrid">
+                <argument name="productAttributeCode" value="quantity_and_stock_status"/>
+            </actionGroup>
+            <actionGroup ref="AdminAttributeUsedForSortingInProductListingActionGroup" stepKey="setUsedInProductListing">
+                <argument name="value" value="Yes"/>
+            </actionGroup>
+            <click selector="{{AttributePropertiesSection.Save}}" stepKey="saveAttribute" />
+
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="defaultVirtualProduct" stepKey="product1">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="name">Product with qty 100</field>
+            </createData>
+            <createData entity="ApiSimplePrice10Qty10" stepKey="product2">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="name">Product with qty 10</field>
+                <field key="price">10.00</field>
+            </createData>
+        </before>
+        <after>
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openProductAttributeFromSearchResultInGrid">
+                <argument name="productAttributeCode" value="quantity_and_stock_status"/>
+            </actionGroup>
+            <actionGroup ref="AdminAttributeUsedForSortingInProductListingActionGroup" stepKey="setUsedInProductListingNo">
+                <argument name="value" value="No"/>
+            </actionGroup>
+            <click selector="{{AttributePropertiesSection.Save}}" stepKey="saveAttribute"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+
+            <deleteData createDataKey="product1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="product2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <actionGroup ref="GoToStorefrontCategoryPageByParametersActionGroup" stepKey="goToStorefrontCategoryPageSortByQtyDesc">
+            <argument name="category" value="$$createCategory.custom_attributes[url_key]$$"/>
+            <argument name="mode" value="grid"/>
+            <argument name="numOfProductsPerPage" value="25"/>
+            <argument name="sortBy" value="quantity_and_stock_status"/>
+            <argument name="sort" value="desc"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckProductPositionActionGroup" stepKey="seeProductQty100FirstInList">
+            <argument name="position" value="1"/>
+            <argument name="productName" value="$$product1.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckProductPositionActionGroup" stepKey="seeProductQty10SecondInList">
+            <argument name="position" value="2"/>
+            <argument name="productName" value="$$product2.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPageToResetFilter">
+            <argument name="category" value="$createCategory$"/>
+        </actionGroup>
+        <actionGroup ref="GoToStorefrontCategoryPageByParametersActionGroup" stepKey="goToStorefrontCategoryPageSortByQtyAsc">
+            <argument name="category" value="$$createCategory.custom_attributes[url_key]$$"/>
+            <argument name="mode" value="grid"/>
+            <argument name="numOfProductsPerPage" value="25"/>
+            <argument name="sortBy" value="quantity_and_stock_status"/>
+            <argument name="sort" value="asc"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckProductPositionActionGroup" stepKey="seeProductQty10FirstInList">
+            <argument name="position" value="1"/>
+            <argument name="productName" value="$$product2.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckProductPositionActionGroup" stepKey="seeProductQty100SecondInList">
+            <argument name="position" value="2"/>
+            <argument name="productName" value="$$product1.name$$"/>
+        </actionGroup>
+    </test>
+</tests>

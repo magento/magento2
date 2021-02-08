@@ -22,5 +22,6 @@
         <element name="UseInProductListing" type="select" selector="#used_in_product_listing"/>
         <element name="UseInSearch" type="select" selector="#is_searchable"/>
         <element name="VisibleInAdvancedSearch" type="select" selector="#is_visible_in_advanced_search"/>
+        <element name="UsedForSortBy" type="select" selector="#used_for_sort_by"/>
     </section>
 </sections>
