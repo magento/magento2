@@ -13,6 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\TestFramework\Application;
 use Magento\TestFramework\TestCase\AbstractController;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Util\Test;
 
 class AppIsolation
 {
@@ -114,7 +115,10 @@ class AppIsolation
      */
     private function getAnnotations(TestCase $test): array
     {
-        $annotations = $test->getAnnotations();
+        $annotations = Test::parseTestMethodAnnotations(
+            \get_class($test),
+            $test->getName(false)
+        );
         return array_replace((array)$annotations['class'], (array)$annotations['method']);
     }
 }
