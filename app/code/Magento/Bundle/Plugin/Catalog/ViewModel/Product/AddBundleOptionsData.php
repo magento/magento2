@@ -45,19 +45,16 @@ class AddBundleOptionsData
                         $product
                     );
                     $selections = $selectionsCollection->exportToArray();
-                    if (count($selections) === 1) {
-                        $selection = array_pop($selections);
-                        $result[] = [
-                            'name' => 'bundle_option[' . $optionId . ']',
-                            'value' => $selection['id']
-                        ];
-                    } else {
-                        foreach ($selections as $selection) {
-                            $result[] = [
-                                'name' => 'bundle_option[' . $optionId . '][]',
-                                'value' => $selection['id']
-                            ];
+                    $countSelections = count($selections);
+                    foreach ($selections as $id => $selection) {
+                        $name = 'bundle_option[' . $optionId . ']';
+                        if ($countSelections > 1) {
+                            $name .= '[]';
                         }
+                        $result[] = [
+                            'name' => $name,
+                            'value' => $id
+                        ];
                     }
                 }
             }
