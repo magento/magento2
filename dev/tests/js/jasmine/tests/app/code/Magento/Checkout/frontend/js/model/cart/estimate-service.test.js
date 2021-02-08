@@ -25,8 +25,8 @@ define([
                 shippingAddress: ko.observable(),
                 isVirtual: function () {},
                 billingAddress: ko.observable(),
-                shippingMethod: ko.observable()
-
+                shippingMethod: ko.observable(),
+                getStoreCode: function () {}
             },
             'Magento_Checkout/js/model/shipping-rate-processor/new-address': {
                 getRates: jasmine.createSpy()

@@ -33,6 +33,7 @@ define([
             totals: result,
             address: address,
             cartVersion: 1,
+            storeCode: 'US',
             shippingMethodCode: null,
             shippingCarrierCode: null
         },
@@ -50,7 +51,8 @@ define([
                 totals: ko.observable({
                     'subtotal': 4
                 }),
-                setTotals: jasmine.createSpy()
+                setTotals: jasmine.createSpy(),
+                getStoreCode: function () {}
             },
             'mage/storage': {
                 post: function () {}
