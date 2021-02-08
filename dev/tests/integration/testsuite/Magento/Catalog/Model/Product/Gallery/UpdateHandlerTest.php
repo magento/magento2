@@ -596,6 +596,102 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests that images are added correctly
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
+     * @magentoDataFixture Magento/Store/_files/second_store.php
+     * @dataProvider addImagesDataProvider
+     * @param string $addFromStore
+     * @param array $newImages
+     * @param string $viewFromStore
+     * @param array $expectedImages
+     * @param array $select
+     * @return void
+     */
+    public function testAddImages(
+        string $addFromStore,
+        array $newImages,
+        string $viewFromStore,
+        array $expectedImages,
+        array $select = ['file', 'label', 'position']
+    ): void {
+        $storeId = (int)$this->storeRepository->get($addFromStore)->getId();
+        $product = $this->getProduct($storeId);
+        $images = $product->getData('media_gallery')['images'];
+        $images = array_merge($images, $newImages);
+        $product->setData('media_gallery', ['images' => $images]);
+        $this->updateHandler->execute($product);
+        $storeId = (int)$this->storeRepository->get($viewFromStore)->getId();
+        $product = $this->getProduct($storeId);
+        $actualImages = array_map(
+            function (\Magento\Framework\DataObject $item) use ($select) {
+                return $item->toArray($select);
+            },
+            $product->getMediaGalleryImages()->getItems()
+        );
+        $this->assertEquals($expectedImages, array_values($actualImages));
+    }
+
+    /**
+     * @return array[]
+     */
+    public function addImagesDataProvider(): array
+    {
+        return [
+            [
+                'fixture_second_store',
+                [
+                    [
+                        'file' => '/m/a/magento_small_image.jpg',
+                        'position' => 2,
+                        'label' => 'New Image Alt Text',
+                        'disabled' => 0,
+                        'media_type' => 'image'
+                    ]
+                ],
+                'default',
+                [
+                    [
+                        'file' => '/m/a/magento_image.jpg',
+                        'label' => 'Image Alt Text',
+                        'position' => 1,
+                    ],
+                    [
+                        'file' => '/m/a/magento_small_image.jpg',
+                        'label' => null,
+                        'position' => 2,
+                    ],
+                ]
+            ],
+            [
+                'fixture_second_store',
+                [
+                    [
+                        'file' => '/m/a/magento_small_image.jpg',
+                        'position' => 2,
+                        'label' => 'New Image Alt Text',
+                        'disabled' => 0,
+                        'media_type' => 'image'
+                    ]
+                ],
+                'fixture_second_store',
+                [
+                    [
+                        'file' => '/m/a/magento_image.jpg',
+                        'label' => 'Image Alt Text',
+                        'position' => 1,
+                    ],
+                    [
+                        'file' => '/m/a/magento_small_image.jpg',
+                        'label' => 'New Image Alt Text',
+                        'position' => 2,
+                    ],
+                ]
+            ]
+        ];
+    }
+
+    /**
      * Check product image link and product image exist
      *
      * @param ProductInterface $product
