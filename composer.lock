@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3fdb315405cd51cc0fc5c424e46798b3",
+    "content-hash": "b12b1d108c49bc882c18e70abd4c243b",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -336,6 +336,16 @@
                 "autoload",
                 "dependency",
                 "package"
+            ],
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
             ],
             "time": "2020-04-10T09:44:22+00:00"
         },
@@ -1178,14 +1188,6 @@
                 "config",
                 "laminas"
             ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-config/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-config/issues",
-                "rss": "https://github.com/laminas/laminas-config/releases.atom",
-                "source": "https://github.com/laminas/laminas-config"
-            },
             "time": "2019-12-31T16:30:04+00:00"
         },
         {
@@ -1243,14 +1245,6 @@
                 "console",
                 "laminas"
             ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-console/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-console/issues",
-                "rss": "https://github.com/laminas/laminas-console/releases.atom",
-                "source": "https://github.com/laminas/laminas-console"
-            },
             "time": "2019-12-31T16:31:45+00:00"
         },
         {
@@ -1563,14 +1557,6 @@
                 "psr",
                 "psr-7"
             ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-diactoros/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-diactoros/issues",
-                "rss": "https://github.com/laminas/laminas-diactoros/releases.atom",
-                "source": "https://github.com/laminas/laminas-diactoros"
-            },
             "time": "2020-03-23T15:28:28+00:00"
         },
         {
@@ -1814,14 +1800,6 @@
                 "filter",
                 "laminas"
             ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-filter/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-filter/issues",
-                "rss": "https://github.com/laminas/laminas-filter/releases.atom",
-                "source": "https://github.com/laminas/laminas-filter"
-            },
             "time": "2020-03-29T12:41:29+00:00"
         },
         {
@@ -2026,14 +2004,6 @@
                 "hydrator",
                 "laminas"
             ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-hydrator/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-hydrator/issues",
-                "rss": "https://github.com/laminas/laminas-hydrator/releases.atom",
-                "source": "https://github.com/laminas/laminas-hydrator"
-            },
             "time": "2019-12-31T17:06:38+00:00"
         },
         {
@@ -2170,14 +2140,6 @@
                 "inputfilter",
                 "laminas"
             ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-inputfilter/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-inputfilter/issues",
-                "rss": "https://github.com/laminas/laminas-inputfilter/releases.atom",
-                "source": "https://github.com/laminas/laminas-inputfilter"
-            },
             "time": "2019-12-31T17:11:54+00:00"
         },
         {
@@ -2237,14 +2199,6 @@
                 "json",
                 "laminas"
             ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-json/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-json/issues",
-                "rss": "https://github.com/laminas/laminas-json/releases.atom",
-                "source": "https://github.com/laminas/laminas-json"
-            },
             "time": "2019-12-31T17:15:00+00:00"
         },
         {
@@ -2294,14 +2248,6 @@
                 "laminas",
                 "loader"
             ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-loader/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-loader/issues",
-                "rss": "https://github.com/laminas/laminas-loader/releases.atom",
-                "source": "https://github.com/laminas/laminas-loader"
-            },
             "time": "2019-12-31T17:18:27+00:00"
         },
         {
@@ -2376,14 +2322,6 @@
                 "log",
                 "logging"
             ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-log/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-log/issues",
-                "rss": "https://github.com/laminas/laminas-log/releases.atom",
-                "source": "https://github.com/laminas/laminas-log"
-            },
             "time": "2019-12-31T17:18:59+00:00"
         },
         {
@@ -2449,6 +2387,12 @@
             "keywords": [
                 "laminas",
                 "mail"
+            ],
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
             ],
             "time": "2020-04-21T16:42:19+00:00"
         },
@@ -2566,14 +2510,6 @@
                 "laminas",
                 "mime"
             ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-mime/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-mime/issues",
-                "rss": "https://github.com/laminas/laminas-mime/releases.atom",
-                "source": "https://github.com/laminas/laminas-mime"
-            },
             "time": "2020-03-29T13:12:07+00:00"
         },
         {
@@ -2733,14 +2669,6 @@
                 "laminas",
                 "mvc"
             ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-mvc/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-mvc/issues",
-                "rss": "https://github.com/laminas/laminas-mvc/releases.atom",
-                "source": "https://github.com/laminas/laminas-mvc"
-            },
             "time": "2019-12-31T17:32:15+00:00"
         },
         {
@@ -2795,14 +2723,6 @@
                 "psr",
                 "psr-7"
             ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-psr7bridge/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-psr7bridge/issues",
-                "rss": "https://github.com/laminas/laminas-psr7bridge/releases.atom",
-                "source": "https://github.com/laminas/laminas-psr7bridge"
-            },
             "time": "2019-12-31T17:38:47+00:00"
         },
         {
@@ -2864,14 +2784,6 @@
                 "laminas",
                 "serializer"
             ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-serializer/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-serializer/issues",
-                "rss": "https://github.com/laminas/laminas-serializer/releases.atom",
-                "source": "https://github.com/laminas/laminas-serializer"
-            },
             "time": "2019-12-31T17:42:11+00:00"
         },
         {
@@ -2979,14 +2891,6 @@
                 "laminas",
                 "servicemanager"
             ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-servicemanager/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-servicemanager/issues",
-                "rss": "https://github.com/laminas/laminas-servicemanager/releases.atom",
-                "source": "https://github.com/laminas/laminas-servicemanager"
-            },
             "time": "2019-12-31T17:44:16+00:00"
         },
         {
@@ -3115,14 +3019,6 @@
                 "laminas",
                 "soap"
             ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-soap/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-soap/issues",
-                "rss": "https://github.com/laminas/laminas-soap/releases.atom",
-                "source": "https://github.com/laminas/laminas-soap"
-            },
             "time": "2019-12-31T17:48:49+00:00"
         },
         {
@@ -3225,14 +3121,6 @@
                 "laminas",
                 "text"
             ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-text/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-text/issues",
-                "rss": "https://github.com/laminas/laminas-text/releases.atom",
-                "source": "https://github.com/laminas/laminas-text"
-            },
             "time": "2019-12-31T17:54:52+00:00"
         },
         {
@@ -3363,14 +3251,6 @@
                 "laminas",
                 "validator"
             ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-validator/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-validator/issues",
-                "rss": "https://github.com/laminas/laminas-validator/releases.atom",
-                "source": "https://github.com/laminas/laminas-validator"
-            },
             "time": "2020-03-31T18:57:01+00:00"
         },
         {
@@ -3462,14 +3342,6 @@
                 "laminas",
                 "view"
             ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-view/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-view/issues",
-                "rss": "https://github.com/laminas/laminas-view/releases.atom",
-                "source": "https://github.com/laminas/laminas-view"
-            },
             "time": "2019-12-31T18:03:30+00:00"
         },
         {
@@ -3526,25 +3398,25 @@
         },
         {
             "name": "magento/composer",
-            "version": "1.5.1",
+            "version": "1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/composer.git",
-                "reference": "b2dcb2194629bc2eb03fd81cb9f4586ffe4b65b0"
+                "reference": "fcc66f535d631788f2ba160ff547357086d9b2c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/composer/zipball/b2dcb2194629bc2eb03fd81cb9f4586ffe4b65b0",
-                "reference": "b2dcb2194629bc2eb03fd81cb9f4586ffe4b65b0",
+                "url": "https://api.github.com/repos/magento/composer/zipball/fcc66f535d631788f2ba160ff547357086d9b2c9",
+                "reference": "fcc66f535d631788f2ba160ff547357086d9b2c9",
                 "shasum": ""
             },
             "require": {
-                "composer/composer": "^1.6",
-                "php": "~7.1.3||~7.2.0||~7.3.0",
-                "symfony/console": "~4.0.0||~4.1.0||~4.2.0||~4.3.0||~4.4.0"
+                "composer/composer": "^1.9",
+                "php": "~7.3.0||~7.4.0",
+                "symfony/console": "~4.4.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~7.0.0"
+                "phpunit/phpunit": "^9"
             },
             "type": "library",
             "autoload": {
@@ -3558,7 +3430,7 @@
                 "AFL-3.0"
             ],
             "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
-            "time": "2020-01-07T22:16:08+00:00"
+            "time": "2020-06-15T17:52:31+00:00"
         },
         {
             "name": "magento/magento-composer-installer",
@@ -3889,42 +3761,38 @@
                 "secret-key cryptography",
                 "side-channel resistant"
             ],
-            "support": {
-                "issues": "https://github.com/paragonie/sodium_compat/issues",
-                "source": "https://github.com/paragonie/sodium_compat/tree/v1.13.0"
-            },
             "time": "2020-03-20T21:48:09+00:00"
         },
         {
             "name": "pelago/emogrifier",
-            "version": "v2.2.0",
+            "version": "v3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/MyIntervals/emogrifier.git",
-                "reference": "2472bc1c3a2dee8915ecc2256139c6100024332f"
+                "reference": "f6a5c7d44612d86c3901c93f1592f5440e6b2cd8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MyIntervals/emogrifier/zipball/2472bc1c3a2dee8915ecc2256139c6100024332f",
-                "reference": "2472bc1c3a2dee8915ecc2256139c6100024332f",
+                "url": "https://api.github.com/repos/MyIntervals/emogrifier/zipball/f6a5c7d44612d86c3901c93f1592f5440e6b2cd8",
+                "reference": "f6a5c7d44612d86c3901c93f1592f5440e6b2cd8",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "ext-libxml": "*",
-                "php": "^5.5.0 || ~7.0.0 || ~7.1.0 || ~7.2.0 || ~7.3.0",
-                "symfony/css-selector": "^3.4.0 || ^4.0.0"
+                "php": "^5.6 || ~7.0 || ~7.1 || ~7.2 || ~7.3 || ~7.4",
+                "symfony/css-selector": "^2.8 || ^3.0 || ^4.0 || ^5.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.2.0",
-                "phpmd/phpmd": "^2.6.0",
-                "phpunit/phpunit": "^4.8.0",
-                "squizlabs/php_codesniffer": "^3.3.2"
+                "friendsofphp/php-cs-fixer": "^2.15.3",
+                "phpmd/phpmd": "^2.7.0",
+                "phpunit/phpunit": "^5.7.27",
+                "squizlabs/php_codesniffer": "^3.5.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0.x-dev"
+                    "dev-master": "4.0.x-dev"
                 }
             },
             "autoload": {
@@ -3967,7 +3835,7 @@
                 "email",
                 "pre-processing"
             ],
-            "time": "2019-09-04T16:07:59+00:00"
+            "time": "2019-12-26T19:37:31+00:00"
         },
         {
             "name": "php-amqplib/php-amqplib",
@@ -4040,10 +3908,6 @@
                 "queue",
                 "rabbitmq"
             ],
-            "support": {
-                "issues": "https://github.com/php-amqplib/php-amqplib/issues",
-                "source": "https://github.com/php-amqplib/php-amqplib/tree/v2.10.1"
-            },
             "time": "2019-10-10T13:23:40+00:00"
         },
         {
@@ -4467,10 +4331,6 @@
                 "identifier",
                 "uuid"
             ],
-            "support": {
-                "issues": "https://github.com/ramsey/uuid/issues",
-                "source": "https://github.com/ramsey/uuid"
-            },
             "time": "2018-07-19T23:38:55+00:00"
         },
         {
@@ -4686,6 +4546,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-03-30T11:41:10+00:00"
         },
         {
@@ -4818,6 +4692,20 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-03-27T16:54:36+00:00"
         },
         {
@@ -5442,6 +5330,20 @@
                 "portable",
                 "shim"
             ],
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-02-27T09:26:54+00:00"
         },
         {
@@ -5491,6 +5393,20 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-04-15T15:56:18+00:00"
         },
         {
@@ -5613,10 +5529,6 @@
                 "javascript",
                 "minifier"
             ],
-            "support": {
-                "issues": "https://github.com/tedious/JShrink/issues",
-                "source": "https://github.com/tedious/JShrink/tree/master"
-            },
             "time": "2019-06-28T18:11:46+00:00"
         },
         {
@@ -5663,10 +5575,6 @@
                 "idna",
                 "punycode"
             ],
-            "support": {
-                "issues": "https://github.com/true/php-punycode/issues",
-                "source": "https://github.com/true/php-punycode/tree/master"
-            },
             "time": "2016-11-16T10:37:54+00:00"
         },
         {
@@ -5720,10 +5628,6 @@
                 "minify",
                 "yui"
             ],
-            "support": {
-                "issues": "https://github.com/tubalmartin/YUI-CSS-compressor-PHP-port/issues",
-                "source": "https://github.com/tubalmartin/YUI-CSS-compressor-PHP-port"
-            },
             "time": "2018-01-15T15:26:51+00:00"
         },
         {
@@ -5837,9 +5741,6 @@
                 "php",
                 "stylesheet"
             ],
-            "support": {
-                "source": "https://github.com/wikimedia/less.php/tree/1.8.2"
-            },
             "time": "2019-11-06T18:30:11+00:00"
         }
     ],
@@ -12101,7 +12002,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "~7.3.0",
+        "php": "~7.3.0||~7.4.0",
         "ext-bcmath": "*",
         "ext-ctype": "*",
         "ext-curl": "*",
