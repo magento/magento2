@@ -57,7 +57,7 @@ define([
                 ];
 
             menuItems.forEach(function (item) {
-                expect($(item.id).attr('href')).toBe(item.link)
+                expect($(item.id).attr('href')).toBe(item.link);
             });
         });
     });
