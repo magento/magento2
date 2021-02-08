@@ -62,5 +62,6 @@ class AddBundleOptionsData
                 }
             }
         }
+        return $result;
     }
 }
