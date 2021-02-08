@@ -137,7 +137,12 @@ class HttpTest extends \PHPUnit\Framework\TestCase
 
         $this->cookieMetadataFactoryMock->expects($this->once())
             ->method('createSensitiveCookieMetadata')
-            ->with([CookieMetadata::KEY_DURATION => $this->cookieLifeTime])
+            ->with(
+                [
+                    CookieMetadata::KEY_DURATION => $this->cookieLifeTime,
+                    CookieMetadata::KEY_SAME_SITE => 'Lax'
+                ]
+            )
             ->willReturn($sensitiveCookieMetadataMock);
 
         $this->cookieManagerMock->expects($this->once())
