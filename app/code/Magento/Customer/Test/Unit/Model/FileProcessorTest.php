@@ -92,10 +92,16 @@ class FileProcessorTest extends TestCase
     /**
      * @param $entityTypeCode
      * @param array $allowedExtensions
+     * @param string|null $customerFileUrlPath
+     * @param string|null $customerAddressFileUrlPath
      * @return FileProcessor
      */
-    private function getModel($entityTypeCode, array $allowedExtensions = [])
-    {
+    private function getModel(
+        $entityTypeCode,
+        array $allowedExtensions = [],
+        string $customerFileUrlPath = null,
+        string $customerAddressFileUrlPath = null
+    ) {
         $model = new FileProcessor(
             $this->filesystem,
             $this->uploaderFactory,
@@ -103,7 +109,9 @@ class FileProcessorTest extends TestCase
             $this->urlEncoder,
             $entityTypeCode,
             $this->mime,
-            $allowedExtensions
+            $allowedExtensions,
+            $customerFileUrlPath ?? 'customer/index/viewfile',
+            $customerAddressFileUrlPath ?? 'customer/address/viewfile'
         );
         return $model;
     }
@@ -138,46 +146,85 @@ class FileProcessorTest extends TestCase
         $this->assertTrue($model->isExist($fileName));
     }
 
-    public function testGetViewUrlCustomer()
-    {
-        $filePath = 'filename.ext1';
-        $encodedFilePath = 'encodedfilenameext1';
-
-        $fileUrl = 'fileUrl';
-
+    /**
+     * @param array $params
+     * @param string $filePath
+     * @param string $expectedUrl
+     * @dataProvider getViewUrlDataProvider
+     */
+    public function testGetViewUrlTest(
+        array $params,
+        string $filePath,
+        string $expectedUrl
+    ): void {
         $this->urlEncoder->expects($this->once())
             ->method('encode')
-            ->with($filePath)
-            ->willReturn($encodedFilePath);
+            ->willReturnCallback('md5');
 
         $this->urlBuilder->expects($this->once())
             ->method('getUrl')
-            ->with('customer/index/viewfile', ['image' => $encodedFilePath])
-            ->willReturn($fileUrl);
+            ->willReturnCallback(
+                function (string $path, array $params) {
+                    $url = 'http://example.com/' . trim($path, '/');
+                    foreach ($params as $key => $value) {
+                        $url .= "/$key/$value";
+                    }
+                    return $url;
+                }
+            );
 
-        $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
-        $this->assertEquals($fileUrl, $model->getViewUrl($filePath, 'image'));
+        $model = $this->getModel(
+            $params['entityTypeCode'],
+            [],
+            $params['customerFileUrlPath'],
+            $params['addressFileUrlPath']
+        );
+        $this->assertEquals($expectedUrl, $model->getViewUrl($filePath, 'file'));
     }
 
-    public function testGetViewUrlCustomerAddress()
+    /**
+     * @return array[]
+     */
+    public function getViewUrlDataProvider(): array
     {
-        $filePath = 'filename.ext1';
-        $encodedFilePath = 'encodedfilenameext1';
-
-        $fileUrl = 'fileUrl';
-
-        $this->urlEncoder->expects($this->once())
-            ->method('encode')
-            ->with($filePath)
-            ->willReturn($encodedFilePath);
-
-        $this->urlBuilder->expects($this->once())
-            ->method('getUrl')
-            ->with('customer/address/viewfile', ['image' => $encodedFilePath])
-            ->willReturn($fileUrl);
-
-        $model = $this->getModel(AddressMetadataInterface::ENTITY_TYPE_ADDRESS);
-        $this->assertEquals($fileUrl, $model->getViewUrl($filePath, 'image'));
+        return [
+            [
+                [
+                    'entityTypeCode' => CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
+                    'customerFileUrlPath' => 'customer/index/viewfile',
+                    'addressFileUrlPath' => 'customer/address/viewfile',
+                ],
+                '/i/m/image1.jpeg',
+                'http://example.com/customer/index/viewfile/file/57523c876842c97ab9d5fd92f8d8d9ec'
+            ],
+            [
+                [
+                    'entityTypeCode' => AddressMetadataInterface::ENTITY_TYPE_ADDRESS,
+                    'customerFileUrlPath' => 'customer/index/viewfile',
+                    'addressFileUrlPath' => 'customer/address/viewfile',
+                ],
+                '/i/m/image2.png',
+                'http://example.com/customer/address/viewfile/file/4498819248a7f824893bd3dac4babdfc'
+            ],
+            [
+                [
+                    'entityTypeCode' => CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
+                    'customerFileUrlPath' => 'custom_module/customer/preview',
+                    'addressFileUrlPath' => 'custom_module/address/preview',
+                ],
+                '/i/m/image1.jpeg',
+                'http://example.com/custom_module/customer/preview/file/57523c876842c97ab9d5fd92f8d8d9ec'
+            ],
+            [
+                [
+                    'entityTypeCode' => AddressMetadataInterface::ENTITY_TYPE_ADDRESS,
+                    'customerFileUrlPath' => 'custom_module/customer/preview',
+                    'addressFileUrlPath' => 'custom_module/address/preview',
+                ],
+                '/i/m/image2.png',
+                'http://example.com/custom_module/address/preview/file/4498819248a7f824893bd3dac4babdfc'
+            ]
+        ];
     }
 
     public function testRemoveUploadedFile()
@@ -370,7 +417,6 @@ class FileProcessorTest extends TestCase
             ->with($path, $newPath)
             ->willReturn(true);
 
-
         $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
         $this->assertEquals('/f/i' . $filePath, $model->moveTemporaryFile($filePath));
     }
@@ -405,7 +451,6 @@ class FileProcessorTest extends TestCase
             ->method('renameFile')
             ->with($path, 'customer/f/i/filename_2.ext1')
             ->willReturn(true);
-
 
         $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
         $this->assertEquals('/f/i/filename_2.ext1', $model->moveTemporaryFile($filePath));

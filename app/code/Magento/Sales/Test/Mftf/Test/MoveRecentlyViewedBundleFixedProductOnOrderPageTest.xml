@@ -57,9 +57,7 @@
             <!-- Change configuration -->
             <magentoCLI command="config:set reports/options/enabled 1" stepKey="enableReportModule"/>
 
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
         </before>
         <after>
             <!-- Admin logout -->
