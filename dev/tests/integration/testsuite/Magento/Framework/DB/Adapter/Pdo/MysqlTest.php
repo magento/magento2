@@ -254,7 +254,6 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
 
         //clean up database from test table
         $adapter->dropTable($tableName);
-
     }
 
     public function getAutoIncrementFieldDataProvider()
