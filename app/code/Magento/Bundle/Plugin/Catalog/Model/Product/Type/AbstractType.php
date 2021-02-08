@@ -9,7 +9,7 @@ namespace Magento\Bundle\Plugin\Catalog\Model\Product\Type;
 
 use Magento\Catalog\Model\Product\Type\AbstractType as Subject;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Type as BundleType;
+use Magento\Catalog\Model\Product\Type;
 use Magento\Bundle\Model\Product\SingleChoiceProvider;
 
 /**
@@ -42,7 +42,7 @@ class AbstractType
      */
     public function afterIsPossibleBuyFromList(Subject $subject, $result, $product)
     {
-        if ($product->getTypeId() === BundleType::TYPE_BUNDLE) {
+        if ($product->getTypeId() === Type::TYPE_BUNDLE) {
             $isSingleChoice = $this->singleChoiceProvider->isSingleChoiceAvailable($product);
             if ($isSingleChoice === true) {
                 $result = $isSingleChoice;
