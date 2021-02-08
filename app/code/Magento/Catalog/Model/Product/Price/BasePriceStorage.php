@@ -18,7 +18,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Base prices storage.
@@ -78,11 +77,6 @@ class BasePriceStorage implements BasePriceStorageInterface
     private $productAttributeRepository;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * Price type allowed.
      *
      * @var int
@@ -105,7 +99,6 @@ class BasePriceStorage implements BasePriceStorageInterface
      * @param Result $validationResult
      * @param InvalidSkuProcessor $invalidSkuProcessor
      * @param ProductAttributeRepositoryInterface|null $productAttributeRepository
-     * @param StoreManagerInterface|null $storeManager
      * @param array $allowedProductTypes [optional]
      */
     public function __construct(
@@ -117,8 +110,7 @@ class BasePriceStorage implements BasePriceStorageInterface
         Result $validationResult,
         InvalidSkuProcessor $invalidSkuProcessor,
         array $allowedProductTypes = [],
-        ProductAttributeRepositoryInterface $productAttributeRepository = null,
-        StoreManagerInterface $storeManager = null
+        ProductAttributeRepositoryInterface $productAttributeRepository = null
     ) {
         $this->pricePersistenceFactory = $pricePersistenceFactory;
         $this->basePriceInterfaceFactory = $basePriceInterfaceFactory;
@@ -130,7 +122,6 @@ class BasePriceStorage implements BasePriceStorageInterface
         $this->invalidSkuProcessor = $invalidSkuProcessor;
         $this->productAttributeRepository = $productAttributeRepository ?: ObjectManager::getInstance()
             ->get(ProductAttributeRepositoryInterface::class);
-        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -277,7 +268,7 @@ class BasePriceStorage implements BasePriceStorageInterface
                 continue;
             }
 
-            $storeIds = $this->storeManager->getStore($price['store_id'])->getWebsite()->getStoreIds();
+            $storeIds = $this->storeRepository->getById($price['store_id'])->getWebsite()->getStoreIds();
 
             // Unset origin store view to get rid of duplicate
             unset($storeIds[$price['store_id']]);
