@@ -87,7 +87,7 @@ class DbSchemaWriterTest extends \PHPUnit\Framework\TestCase
                 255,
                 ['default' => 'default test text']
             )
-            ->setComment('Test table column with expression as column default value');
+            ->setComment('Test table with auto increment column');
         $adapter->createTable($table);
 
         $dbStatement = $this->dbSchemaWriter->resetAutoIncrement($tableName, 'default');

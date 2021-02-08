@@ -247,7 +247,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
                 255,
                 ['default' => 'default test text']
             )
-            ->setComment('Test table column with expression as column default value');
+            ->setComment('Test table with auto increment column');
         $adapter->createTable($table);
         $autoIncrementField = $adapter->getAutoIncrementField($tableName);
         $this->assertEquals($expected, $autoIncrementField);
