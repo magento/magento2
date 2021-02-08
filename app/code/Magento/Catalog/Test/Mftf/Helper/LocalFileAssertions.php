@@ -112,8 +112,11 @@ class LocalFileAssertions extends Helper
      */
     public function createDirectory($path, $permissions = 0777): void
     {
+        $permissions = $this->convertToOctal($permissions);
         $sourceRealPath = $this->expandPath($path);
+        $oldUmask = umask(0);
         $this->driver->createDirectory($sourceRealPath, $permissions);
+        umask($oldUmask);
     }
 
     /**
@@ -221,6 +224,21 @@ class LocalFileAssertions extends Helper
     {
         $realPath = $this->expandPath($path);
         $this->assertEmpty($this->driver->readDirectory($realPath), $message);
+    }
+
+    /**
+     * Helper function to convert a string to an octal
+     *
+     * @param string $string
+     * @return int
+     *
+     */
+    private function convertToOctal($string): int
+    {
+        if (is_string($string)) {
+            $string = octdec($string);
+        }
+        return $string;
     }
 
     /**

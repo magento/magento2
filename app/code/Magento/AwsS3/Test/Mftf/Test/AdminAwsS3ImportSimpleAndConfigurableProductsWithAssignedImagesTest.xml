@@ -26,7 +26,6 @@
             <!-- Locally Copy Import Files to Unique Media Import Directory -->
             <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportFiles" after="createCustomer">
                 <argument name="path">pub/media/import/{{ImportProduct_Configurable.name}}</argument>
-                <argument name="permissions">0777</argument>
             </helper>
             <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyImportFile" after="createDirectoryForImportFiles">
                 <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Configurable.fileName}}</argument>
