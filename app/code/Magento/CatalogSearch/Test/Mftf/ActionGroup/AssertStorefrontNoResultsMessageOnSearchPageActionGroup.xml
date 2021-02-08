@@ -8,9 +8,13 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-
     <actionGroup name="AssertStorefrontNoResultsMessageOnSearchPageActionGroup">
-
-        <see selector="{{StorefrontMessagesSection.noticeMessage}}" userInput="Your search returned no results." stepKey="seeNoSearchResultsMessage"/>
+        <annotations>
+            <description>Check if search returned no results</description>
+        </annotations>
+        <arguments>
+            <argument name="message" type="string" defaultValue="Your search returned no results."/>
+        </arguments>
+        <see selector="{{StorefrontMessagesSection.noticeMessage}}" userInput="{{message}}" stepKey="seeNoSearchResultsMessage"/>
     </actionGroup>
 </actionGroups>

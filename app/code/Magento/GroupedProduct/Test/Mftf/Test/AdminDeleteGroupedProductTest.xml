@@ -37,7 +37,6 @@
             <argument name="product" value="$$createGroupedProduct$$"/>
         </actionGroup>
         <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-        <!--<see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="A total of 1 record(s) have been deleted." stepKey="deleteMessage"/>-->
         <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="deleteMessage">
             <argument name="message" value="A total of 1 record(s) have been deleted."/>
         </actionGroup>
