@@ -54,6 +54,7 @@
                 <block class="Magento\Theme\Block\Html\Header\Logo" name="logo">
                     <arguments>
                         <argument name="logoPathResolver" xsi:type="object">Magento\Theme\ViewModel\Block\Html\Header\LogoPathResolver</argument>
+                        <argument name="logo_size_resolver" xsi:type="object">Magento\Theme\ViewModel\Block\Html\Header\LogoSizeResolver</argument>
                     </arguments>
                 </block>
             </container>
