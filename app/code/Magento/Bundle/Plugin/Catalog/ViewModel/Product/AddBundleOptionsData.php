@@ -46,14 +46,14 @@ class AddBundleOptionsData
                     );
                     $selections = $selectionsCollection->exportToArray();
                     $countSelections = count($selections);
-                    foreach ($selections as $id => $selection) {
+                    foreach ($selections as $selection) {
                         $name = 'bundle_option[' . $optionId . ']';
                         if ($countSelections > 1) {
                             $name .= '[]';
                         }
                         $result[] = [
                             'name' => $name,
-                            'value' => $id
+                            'value' => $selection['selection_id']
                         ];
                     }
                 }
