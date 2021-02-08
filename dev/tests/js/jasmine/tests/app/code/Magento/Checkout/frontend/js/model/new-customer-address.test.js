@@ -71,5 +71,22 @@ define([
 
             expect(JSON.stringify(result)).toEqual(JSON.stringify(expected));
         });
+        it('Check that extensionAttributes property exists if defined', function () {
+            var result = newCustomerAddress({
+                    'extension_attributes': {
+                        'attr_code': 'val'
+                    }
+                }),
+                expected = {
+                    countryId: 'US',
+                    regionCode: null,
+                    region: null,
+                    extensionAttributes: {
+                        'attr_code': 'val'
+                    }
+                };
+
+            expect(JSON.stringify(result)).toEqual(JSON.stringify(expected));
+        });
     });
 });
