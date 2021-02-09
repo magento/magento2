@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCustomerClickAddToCartAndBundleCheckboxesActionGroup">
+        <annotations>
+            <description>Customer clicks to Customize and Add to Cart Button, and then checks and unchecks some checkboxes of bundle product.</description>
+        </annotations>
+
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomize"/>
+        <click stepKey="selectProduct1" selector="{{StorefrontBundledSection.productCheckbox('1','1')}}"/>
+        <click stepKey="selectProduct2" selector="{{StorefrontBundledSection.productCheckbox('1','2')}}"/>
+        <click stepKey="selectProduct3" selector="{{StorefrontBundledSection.productCheckbox('1','3')}}"/>
+        <click stepKey="unselectProduct2" selector="{{StorefrontBundledSection.productCheckbox('1','2')}}"/>
+        <click stepKey="unselectProduct3" selector="{{StorefrontBundledSection.productCheckbox('1','3')}}"/>
+    </actionGroup>
+</actionGroups>

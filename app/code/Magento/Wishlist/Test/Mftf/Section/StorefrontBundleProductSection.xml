@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontBundleProductSection">
+        <element name="CustomizeAndAddToCartButton" type="button" selector="#bundle-slide"/>
+        <element name="addToWishList" type="button" selector="a.action.towishlist"/>
+        <element name="fieldsetBundleOptions" type="button" selector=".fieldset-bundle-options"/>
+        <element name="checkOptionOfBundleProduct1" type="button" selector="input[name='bundle_option[5][1]']"/>
+        <element name="checkOptionOfBundleProduct2" type="button" selector="input[name='bundle_option[5][2]']"/>
+        <element name="checkOptionOfBundleProduct3" type="button" selector="input[name='bundle_option[5][3]']"/>
+    </section>
+</sections>
