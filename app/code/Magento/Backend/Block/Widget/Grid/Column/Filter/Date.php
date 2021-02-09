@@ -117,7 +117,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
                     dateFormat: "' .
             $format .
             '",
-                        buttonText: "' . $this->escapeHtml(__('Date selector')) .
+                        buttonText: "' . $this->_escaper->escapeHtml(__('Date selector')) .
             '",
                     from: {
                         id: "' .
@@ -153,7 +153,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
         }
 
         if (is_string($value)) {
-            return $this->escapeHtml($value);
+            return $this->_escaper->escapeHtml($value);
         }
 
         return $value;

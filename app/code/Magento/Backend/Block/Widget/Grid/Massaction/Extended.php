@@ -72,7 +72,7 @@ class Extended extends \Magento\Backend\Block\Widget
     public function _construct()
     {
         parent::_construct();
-        $this->setErrorText($this->escapeHtml(__('An item needs to be selected. Select and try again.')));
+        $this->setErrorText($this->_escaper->escapeHtml(__('An item needs to be selected. Select and try again.')));
     }
 
     /**

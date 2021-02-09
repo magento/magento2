@@ -48,16 +48,16 @@ class Options extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
                 $res = [];
                 foreach ($value as $item) {
                     if (isset($output[$item])) {
-                        $res[] = $this->escapeHtml($output[$item]);
+                        $res[] = $this->_escaper->escapeHtml($output[$item]);
                     } elseif ($showMissingOptionValues) {
-                        $res[] = $this->escapeHtml($item);
+                        $res[] = $this->_escaper->escapeHtml($item);
                     }
                 }
                 return implode(', ', $res);
             } elseif (isset($output[$value])) {
-                return $this->escapeHtml($output[$value]);
+                return $this->_escaper->escapeHtml($output[$value]);
             } elseif (in_array($value, $output)) {
-                return $this->escapeHtml($value);
+                return $this->_escaper->escapeHtml($value);
             }
         }
     }

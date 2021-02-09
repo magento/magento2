@@ -68,7 +68,7 @@ abstract class AbstractMassaction extends Widget
     {
         parent::_construct();
 
-        $this->setErrorText($this->escapeHtml(__('An item needs to be selected. Select and try again.')));
+        $this->setErrorText($this->_escaper->escapeHtml(__('An item needs to be selected. Select and try again.')));
 
         if (null !== $this->getOptions()) {
             foreach ($this->getOptions() as $optionId => $option) {

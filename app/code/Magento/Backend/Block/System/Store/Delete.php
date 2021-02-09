@@ -56,7 +56,7 @@ class Delete extends \Magento\Backend\Block\Widget\Form\Container
         return __(
             "Delete %1 '%2'",
             $this->getStoreTypeTitle(),
-            $this->escapeHtml($this->getChildBlock('form')->getDataObject()->getName())
+            $this->_escaper->escapeHtml($this->getChildBlock('form')->getDataObject()->getName())
         );
     }
 

@@ -586,7 +586,7 @@ class Switcher extends \Magento\Backend\Block\Template
         $html = '';
         $url = $this->getHintUrl();
         if ($url) {
-            $html = '<div class="admin__field-tooltip tooltip">' . '<a' . ' href="' . $this->escapeUrl(
+            $html = '<div class="admin__field-tooltip tooltip">' . '<a' . ' href="' . $this->_escaper->escapeUrl(
                 $url
             ) . '"' . ' onclick="this.target=\'_blank\'"' . ' title="' . __(
                 'What is this?'

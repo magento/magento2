@@ -7,10 +7,11 @@
 <?php
 /**
  * @var $block \Magento\Backend\Block\Widget\Button
+ * @var \Magento\Framework\Escaper $escaper
  */
 ?>
 <?= $block->getBeforeHtml() ?>
 <button <?= /* @noEscape */ $block->getAttributesHtml(), $block->getUiId() ?>>
-    <span><?= $block->escapeHtml($block->getLabel()) ?></span>
+    <span><?= $escaper->escapeHtml($block->getLabel()) ?></span>
 </button>
 <?= $block->getAfterHtml() ?>

@@ -51,12 +51,13 @@ class Select extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     public function render(\Magento\Framework\DataObject $row)
     {
         $name = $this->getColumn()->getName() ? $this->getColumn()->getName() : $this->getColumn()->getId();
-        $html = '<select name="' . $this->escapeHtml($name) . '" ' . $this->getColumn()->getValidateClass() . '>';
+        $validateClass = $this->getColumn()->getValidateClass();
+        $html = '<select name="' . $this->_escaper->escapeHtml($name) . '" ' . $validateClass . '>';
         $value = $row->getData($this->getColumn()->getIndex());
         foreach ($this->_getOptions() as $val => $label) {
             $selected = $val == $value && $value !== null ? ' selected="selected"' : '';
-            $html .= '<option value="' . $this->escapeHtml($val) . '"' . $selected . '>';
-            $html .= $this->escapeHtml($label) . '</option>';
+            $html .= '<option value="' . $this->_escaper->escapeHtml($val) . '"' . $selected . '>';
+            $html .= $this->_escaper->escapeHtml($label) . '</option>';
         }
         $html .= '</select>';
         return $html;

@@ -4,8 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 
-<a class="link-report" href="<?= $block->escapeUrl($block->getPrivacypolicyUrl()) ?>" id="footer_privacy" target="_blank">
-    <?= $block->escapeHtml(__('Privacy Policy')) ?>
+<a class="link-report" href="<?= $escaper->escapeUrl($block->getPrivacypolicyUrl()) ?>" id="footer_privacy" target="_blank">
+    <?= $escaper->escapeHtml(__('Privacy Policy')) ?>
 </a> |

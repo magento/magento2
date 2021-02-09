@@ -53,9 +53,9 @@ class Select extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFi
     protected function _renderOption($option, $value)
     {
         $selected = $option['value'] == $value && $value !== null ? ' selected="selected"' : '';
-        return '<option value="' . $this->escapeHtml(
+        return '<option value="' . $this->_escaper->escapeHtml(
             $option['value']
-        ) . '"' . $selected . '>' . $this->escapeHtml(
+        ) . '"' . $selected . '>' . $this->_escaper->escapeHtml(
             $option['label']
         ) . '</option>';
     }
@@ -72,7 +72,7 @@ class Select extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFi
         $value = $this->getValue();
         foreach ($this->_getOptions() as $option) {
             if (is_array($option['value'])) {
-                $html .= '<optgroup label="' . $this->escapeHtml($option['label']) . '">';
+                $html .= '<optgroup label="' . $this->_escaper->escapeHtml($option['label']) . '">';
                 foreach ($option['value'] as $subOption) {
                     $html .= $this->_renderOption($subOption, $value);
                 }
