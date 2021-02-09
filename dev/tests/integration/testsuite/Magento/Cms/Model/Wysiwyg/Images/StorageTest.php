@@ -121,7 +121,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->storage->createDirectory($dir, $path);
         $this->assertFileExists($fullPath);
         $this->storage->deleteDirectory($fullPath);
-        $this->assertFileNotExists($fullPath);
+        $this->assertFileDoesNotExist($fullPath);
     }
 
     /**
