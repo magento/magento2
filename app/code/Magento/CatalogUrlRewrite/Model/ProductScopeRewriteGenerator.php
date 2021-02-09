@@ -16,10 +16,13 @@ use Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Collection;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\UrlRewrite\Model\MergeDataProvider;
 use Magento\UrlRewrite\Model\MergeDataProviderFactory;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
  * Generates Product/Category URLs for different scopes
@@ -54,22 +57,22 @@ class ProductScopeRewriteGenerator
     private $anchorUrlRewriteGenerator;
 
     /**
-     * @var \Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator
+     * @var CurrentUrlRewritesRegenerator
      */
     private $currentUrlRewritesRegenerator;
 
     /**
-     * @var \Magento\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator
+     * @var CategoriesUrlRewriteGenerator
      */
     private $categoriesUrlRewriteGenerator;
 
     /**
-     * @var \Magento\CatalogUrlRewrite\Model\Product\CanonicalUrlRewriteGenerator
+     * @var CanonicalUrlRewriteGenerator
      */
     private $canonicalUrlRewriteGenerator;
 
     /**
-     * @var \Magento\UrlRewrite\Model\MergeDataProvider
+     * @var MergeDataProvider
      */
     private $mergeDataProviderPrototype;
 
@@ -86,7 +89,7 @@ class ProductScopeRewriteGenerator
      * @param CategoriesUrlRewriteGenerator $categoriesUrlRewriteGenerator
      * @param CurrentUrlRewritesRegenerator $currentUrlRewritesRegenerator
      * @param AnchorUrlRewriteGenerator $anchorUrlRewriteGenerator
-     * @param \Magento\UrlRewrite\Model\MergeDataProviderFactory|null $mergeDataProviderFactory
+     * @param MergeDataProviderFactory|null $mergeDataProviderFactory
      * @param CategoryRepositoryInterface|null $categoryRepository
      * @param ScopeConfigInterface|null $config
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -133,7 +136,7 @@ class ProductScopeRewriteGenerator
     /**
      * Generate url rewrites for global scope
      *
-     * @param \Magento\Framework\Data\Collection|\Magento\Catalog\Model\Category[] $productCategories
+     * @param Collection|Category[] $productCategories
      * @param Product $product
      * @param int|null $rootCategoryId
      * @return array
@@ -143,13 +146,20 @@ class ProductScopeRewriteGenerator
         $productId = $product->getEntityId();
         $mergeDataProvider = clone $this->mergeDataProviderPrototype;
 
+        $categoriesRemoved = false;
+        $assignedCategoriesStoreIds = [];
+        if ($this->isCategoryRewritesEnabled()) {
+            $oldCategoryIds = $product->getOrigData('category_ids');
+            $categoriesRemoved = $oldCategoryIds !== null && array_diff($oldCategoryIds, $product->getCategoryIds());
+            $assignedCategoriesStoreIds = $this->getAddedCategoriesStoreIds($product);
+        }
         foreach ($product->getStoreIds() as $id) {
-            if (!$this->isGlobalScope($id) &&
-                !$this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore(
+            if ($categoriesRemoved || in_array((int)$id, $assignedCategoriesStoreIds)
+                || (!$this->isGlobalScope($id) && !$this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore(
                     $id,
                     $productId,
                     Product::ENTITY
-                )) {
+                ))) {
                 $mergeDataProvider->merge(
                     $this->generateForSpecificStoreView($id, $productCategories, $product, $rootCategoryId)
                 );
@@ -163,10 +173,10 @@ class ProductScopeRewriteGenerator
      * Generate list of urls for specific store view
      *
      * @param int $storeId
-     * @param \Magento\Framework\Data\Collection|Category[] $productCategories
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Collection|Category[] $productCategories
+     * @param Product $product
      * @param int|null $rootCategoryId
-     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
+     * @return UrlRewrite[]
      */
     public function generateForSpecificStoreView($storeId, $productCategories, Product $product, $rootCategoryId = null)
     {
@@ -222,7 +232,7 @@ class ProductScopeRewriteGenerator
     /**
      * Check possibility for url rewrite generation
      *
-     * @param \Magento\Catalog\Model\Category $category
+     * @param Category $category
      * @param int $storeId
      * @return bool
      */
@@ -275,5 +285,47 @@ class ProductScopeRewriteGenerator
     private function isCategoryRewritesEnabled()
     {
         return (bool)$this->config->getValue('catalog/seo/generate_category_product_rewrites');
+    }
+
+    /**
+     * Retrieve affected store ids for added categories
+     *
+     * @param Product $product
+     * @return int[]
+     */
+    private function getAddedCategoriesStoreIds(Product $product): array
+    {
+        $result = [];
+        $addedCategoryIds = $product->getOrigData('category_ids') === null
+            ? $product->getCategoryIds()
+            : array_diff($product->getCategoryIds(), $product->getOrigData('category_ids'));
+        if ($addedCategoryIds) {
+            $storeIds = [];
+            foreach ($this->getNewCategories($product) as $category) {
+                $storeIds[] = $category->getStoreIds();
+            }
+            $result = array_merge([], ...$storeIds);
+        }
+
+        return array_map('intval', array_unique($result));
+    }
+
+    /**
+     * Return new category items from product category collection
+     *
+     * @param Product $product
+     * @return Category[]
+     */
+    private function getNewCategories(Product $product): array
+    {
+        if ($product->getOrigData('category_ids') === null) {
+            return $product->getCategoryCollection()->getItems();
+        }
+        return array_filter(
+            $product->getCategoryCollection()->getItems(),
+            function (CategoryInterface $category) use ($product) {
+                return !in_array($category->getId(), $product->getOrigData('category_ids'));
+            }
+        );
     }
 }
