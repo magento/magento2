@@ -17,6 +17,7 @@ use Magento\TestFramework\App\Config;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Model\Indexer\Product\Price\DimensionModeConfiguration;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Util\Test;
 
 /**
  * Implementation of the @magentoIndexerDimensionMode DocBlock annotation
@@ -88,7 +89,10 @@ class IndexerDimensionMode
      */
     public function startTest(TestCase $test)
     {
-        $source = $test->getAnnotations();
+        $source = Test::parseTestMethodAnnotations(
+            \get_class($test),
+            $test->getName(false)
+        );
 
         if (isset($source['method']['magentoIndexerDimensionMode'])) {
             $annotations = $source['method']['magentoIndexerDimensionMode'];

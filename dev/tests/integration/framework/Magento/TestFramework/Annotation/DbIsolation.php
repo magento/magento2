@@ -8,6 +8,7 @@ namespace Magento\TestFramework\Annotation;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\TestFramework\Event\Param\Transaction;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Util\Test;
 
 /**
  * Implementation of the @magentoDbIsolation DocBlock annotation
@@ -108,7 +109,10 @@ class DbIsolation
      */
     private function getAnnotations(TestCase $test)
     {
-        $annotations = $test->getAnnotations();
+        $annotations = Test::parseTestMethodAnnotations(
+            \get_class($test),
+            $test->getName(false)
+        );
         return array_replace((array)$annotations['class'], (array)$annotations['method']);
     }
 }

@@ -5,6 +5,8 @@
  */
 namespace Magento\TestFramework\Annotation;
 
+use PHPUnit\Util\Test;
+
 class AppArea
 {
     const ANNOTATION_NAME = 'magentoAppArea';
@@ -75,7 +77,11 @@ class AppArea
      */
     public function startTest(\PHPUnit\Framework\TestCase $test)
     {
-        $area = $this->_getTestAppArea($test->getAnnotations());
+        $annotations = Test::parseTestMethodAnnotations(
+            \get_class($test),
+            $test->getName(false)
+        );
+        $area = $this->_getTestAppArea($annotations);
         if ($this->_application->getArea() !== $area) {
             $this->_application->reinitialize();
 

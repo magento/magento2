@@ -10,6 +10,7 @@ namespace Magento\TestFramework\Annotation;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Util\Test;
 
 /**
  * Class consist of dataFixtures base logic
@@ -45,7 +46,10 @@ abstract class AbstractDataFixture
 
         $resolver = Resolver::getInstance();
         $resolver->setCurrentFixtureType($annotationKey);
-        $annotations = $scope === null ? $this->getAnnotations($test) : $test->getAnnotations()[$scope];
+        $annotations = $scope === null ? $this->getAnnotations($test) : Test::parseTestMethodAnnotations(
+            \get_class($test),
+            $test->getName(false)
+        )[$scope];
         $existingFixtures = $annotations[$annotationKey] ?? [];
         /* Need to be applied even test does not have added fixtures because fixture can be added via config */
         $this->fixtures[$annotationKey][$this->getTestKey($test)] = $resolver->applyDataFixtures(
@@ -67,7 +71,10 @@ abstract class AbstractDataFixture
      */
     protected function getAnnotations(TestCase $test): array
     {
-        $annotations = $test->getAnnotations();
+        $annotations = Test::parseTestMethodAnnotations(
+            \get_class($test),
+            $test->getName(false)
+        );
         return array_replace((array)$annotations['class'], (array)$annotations['method']);
     }
 

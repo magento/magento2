@@ -7,6 +7,7 @@
 namespace Magento\TestFramework\Annotation;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Util\Test;
 
 /**
  * Implementation of the @magentoCache DocBlock annotation
@@ -28,7 +29,10 @@ class Cache
      */
     public function startTest(\PHPUnit\Framework\TestCase $test)
     {
-        $source = $test->getAnnotations();
+        $source = Test::parseTestMethodAnnotations(
+            \get_class($test),
+            $test->getName(false)
+        );
         if (isset($source['method']['magentoCache'])) {
             $annotations = $source['method']['magentoCache'];
         } elseif (isset($source['class']['magentoCache'])) {

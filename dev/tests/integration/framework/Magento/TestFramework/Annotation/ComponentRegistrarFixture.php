@@ -6,6 +6,7 @@
 
 namespace Magento\TestFramework\Annotation;
 
+use PHPUnit\Util\Test;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RegexIterator;
@@ -82,7 +83,10 @@ class ComponentRegistrarFixture
      */
     private function registerComponents(\PHPUnit\Framework\TestCase $test)
     {
-        $annotations = $test->getAnnotations();
+        $annotations = Test::parseTestMethodAnnotations(
+            \get_class($test),
+            $test->getName(false)
+        );
         $componentAnnotations = [];
         if (isset($annotations['class'][self::ANNOTATION_NAME])) {
             $componentAnnotations = array_merge($componentAnnotations, $annotations['class'][self::ANNOTATION_NAME]);
