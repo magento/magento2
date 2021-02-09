@@ -112,7 +112,7 @@ class LocalFileAssertions extends Helper
      */
     public function createDirectory($path, $permissions = 0777): void
     {
-        $permissions = $this->convertToOctal($permissions);
+        $permissions = $this->convertOctalStringToDecimalInt($permissions);
         $sourceRealPath = $this->expandPath($path);
         $oldUmask = umask(0);
         $this->driver->createDirectory($sourceRealPath, $permissions);
@@ -227,13 +227,13 @@ class LocalFileAssertions extends Helper
     }
 
     /**
-     * Helper function to convert a string to an octal
+     * Helper function to convert an octal string to its decimal equivalent
      *
      * @param string $string
      * @return int
      *
      */
-    private function convertToOctal($string): int
+    private function convertOctalStringToDecimalInt($string): int
     {
         if (is_string($string)) {
             $string = octdec($string);
