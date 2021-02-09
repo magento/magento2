@@ -74,9 +74,9 @@ type AddWishlistItemsToCartOutput {
 
 type WishlistCartUserInputError {
     message: String! @doc(description: "A localized error message")
-    code: WishlistCartUserInputErrorType! @doc(description: "Wishlist-Cart-specific error code")
-    wishlistId: ID! @doc(description: "The id of the wishlist associated with the error")
-    wishlistItemId: ID! @doc(description: "The id of the wishlist item associated with the error")
+    code: WishlistCartUserInputErrorType! @doc(description: "An error code that describes the error encountered")
+    wishlistId: ID! @doc(description: "The unique ID of the `Wishlist` object containing an error")
+    wishlistItemId: ID! @doc(description: "The unique ID of the wish list item containing an error")
 }
 
 enum WishlistCartUserInputErrorType {

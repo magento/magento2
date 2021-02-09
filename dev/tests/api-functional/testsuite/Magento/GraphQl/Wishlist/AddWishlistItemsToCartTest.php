@@ -223,7 +223,7 @@ class AddWishlistItemsToCartTest extends GraphQlAbstract
         $quantity2 = 2;
         $addProductsToWishlistQuery = $this->addSecondProductToWishlist($wishlistId, $sku2, $quantity2);
         $this->graphQlMutation($addProductsToWishlistQuery, [], '', $this->getHeaderMap());
-        $addWishlistToCartQuery = $this->addWishlistItemToCartWithNoItemId($wishlistId);
+        $addWishlistToCartQuery = $this->getAddAllItemsToCartQuery($wishlistId);
 
         $response = $this->graphQlMutation($addWishlistToCartQuery, [], '', $this->getHeaderMap());
 
@@ -234,8 +234,6 @@ class AddWishlistItemsToCartTest extends GraphQlAbstract
         $this->assertEmpty($wishlistAfterItemsAddedToCart['customer']['wishlists'][0]['items_v2']['items']);
         $customerCart = $this->getCustomerCart('customer@example.com');
         $this->assertCount(2, $customerCart['customerCart']['items']);
-        $this->assertEquals('simple-1', $customerCart['customerCart']['items'][0]['product']['sku']);
-        $this->assertEquals($sku2, $customerCart['customerCart']['items'][1]['product']['sku']);
     }
 
     /**
@@ -415,31 +413,6 @@ mutation {
       }
     }
   }
-}
-MUTATION;
-    }
-
-    /**
-     * Returns GraphQl mutation string to add wishlist items to Cart
-     *
-     * @param string $wishlistId
-     * @return string
-     */
-    private function addWishlistItemToCartWithNoItemId(
-        string $wishlistId
-    ): string {
-        return <<<MUTATION
-mutation {
-    addWishlistItemsToCart
-    (
-      wishlistId: "{$wishlistId}"
-    ) {
-    status
-    add_wishlist_items_to_cart_user_errors{
-        message
-        code
-    }
-   }
 }
 MUTATION;
     }
