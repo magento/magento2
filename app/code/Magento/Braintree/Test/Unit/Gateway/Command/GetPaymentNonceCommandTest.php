@@ -18,7 +18,7 @@ use Magento\Vault\Model\PaymentTokenManagement;
 use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
- * Class GetPaymentNonceCommandTest
+ * Test for GetPaymentNonceCommand
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

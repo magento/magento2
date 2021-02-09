@@ -6,7 +6,7 @@
 namespace Magento\Authorizenet\Test\Unit\Helper\Backend;
 
 /**
- * Class DataTest
+ * Test for Data
  */
 class DataTest extends \PHPUnit\Framework\TestCase
 {

@@ -21,7 +21,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class PlaceOrderTest
+ * Test for PlaceOrder
  *
  * @see \Magento\Braintree\Controller\Paypal\PlaceOrder
  *

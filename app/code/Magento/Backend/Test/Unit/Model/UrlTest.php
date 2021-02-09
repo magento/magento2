@@ -154,11 +154,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock->expects($this->any())
             ->method('serialize')
             ->willReturnCallback(
-                
-                    function ($value) {
-                        return json_encode($value);
-                    }
-                
+                function ($value) {
+                    return json_encode($value);
+                }
             );
         $this->_model = $objectManager->getObject(
             \Magento\Backend\Model\Url::class,

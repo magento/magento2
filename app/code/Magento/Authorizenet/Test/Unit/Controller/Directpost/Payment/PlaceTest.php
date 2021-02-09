@@ -24,7 +24,7 @@ use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Model\Quote;
 
 /**
- * Class PlaceTest
+ * Test for Place
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

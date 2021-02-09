@@ -14,7 +14,7 @@ use Magento\Payment\Block\Transparent\Iframe;
 use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
- * Class RedirectTest
+ * Test for Redirect
  */
 class RedirectTest extends \PHPUnit\Framework\TestCase
 {

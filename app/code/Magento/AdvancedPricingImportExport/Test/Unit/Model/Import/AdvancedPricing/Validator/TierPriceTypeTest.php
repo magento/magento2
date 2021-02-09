@@ -9,7 +9,7 @@ namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import\AdvancedPri
 use \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
 
 /**
- * Class TierPriceTypeTest.
+ * Test of TierPriceType.
  */
 class TierPriceTypeTest extends \PHPUnit\Framework\TestCase
 {

@@ -11,7 +11,6 @@ use Magento\Backend\App\Config;
  * Test reading by path and reading flag from config
  *
  * @see \Magento\Backend\App\Config
- * @package Magento\Backend\Test\Unit\App
  */
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {

@@ -10,7 +10,7 @@ use Magento\AdvancedSearch\Model\Client\ClientResolver;
 use Magento\AdvancedSearch\Model\Client\ClientInterface;
 
 /**
- * Class TestConnectionTest
+ * Test of TestConnection
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

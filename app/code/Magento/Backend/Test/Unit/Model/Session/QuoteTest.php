@@ -6,7 +6,7 @@
 namespace Magento\Backend\Test\Unit\Model\Session;
 
 /**
- * Class QuoteTest
+ * Test for Quote
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
