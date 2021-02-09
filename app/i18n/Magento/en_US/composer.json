@@ -1,7 +1,6 @@
 {
     "name": "magento/language-en_us",
     "description": "English (United States) language",
-    "type": "magento2-language",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -9,14 +8,13 @@
     "config": {
         "sort-packages": true
     },
-    "version": "100.4.0",
     "require": {
-        "magento/framework": "103.0.*"
+        "magento/framework": "*"
     },
+    "type": "magento2-language",
     "autoload": {
         "files": [
             "registration.php"
         ]
     }
 }
-
