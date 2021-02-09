@@ -153,7 +153,7 @@ define([
             if (productListWrapper.length) {
                 return productListWrapper.find(this.options.actionElement);
             }
-
+            
             return $(this.options.actionElement);
         },
 
