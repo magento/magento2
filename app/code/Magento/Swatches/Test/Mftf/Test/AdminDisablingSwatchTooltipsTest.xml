@@ -147,7 +147,9 @@
 
         <!-- Disable swatch tooltips -->
         <magentoCLI command="config:set catalog/frontend/show_swatch_tooltip 0" stepKey="disableTooltips"/>
-        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfterDisabling"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterDisabling">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
 
         <!-- Verify swatch tooltips are not visible -->
         <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
