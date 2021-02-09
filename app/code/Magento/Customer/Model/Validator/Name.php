@@ -47,7 +47,7 @@ class Name extends AbstractValidator
     private function isValidName($nameValue)
     {
         if ($nameValue != null) {
-            $pattern = '/(?:[\p{L}\p{M}\,\-\.\'\"\s\d]){1,255}+/u';
+            $pattern = '/(?:[\p{L}\p{M}\,\-\_\.\'\"\s\d]){1,255}+/u';
             if (preg_match($pattern, $nameValue, $matches)) {
                 return $matches[0] == $nameValue;
             }
