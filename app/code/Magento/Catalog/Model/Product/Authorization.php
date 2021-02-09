@@ -37,7 +37,7 @@ class Authorization
     /**
      * @var RequestInterface
      */
-    protected $request;
+    private $request;
 
     /**
      * @param AuthorizationInterface $authorization
