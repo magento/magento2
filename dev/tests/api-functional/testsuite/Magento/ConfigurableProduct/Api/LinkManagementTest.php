@@ -460,7 +460,7 @@ class LinkManagementTest extends WebapiAbstract
                 'parent_sku' => 'configurable',
                 'child_sku' => 'simple2',
                 'error_message' => (string)__(
-                    'The child product doesn\'t have the \"%1\" attribute value. Verify the value and try again.'
+                    'The child product doesn\'t have the "%1" attribute value. Verify the value and try again.'
                 ),
             ]
         ];
