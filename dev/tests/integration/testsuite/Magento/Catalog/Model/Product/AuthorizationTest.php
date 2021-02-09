@@ -92,8 +92,8 @@ class AuthorizationTest extends TestCase
                         'page_layout' => '',
                         'options_container' => 'container2',
                         'custom_layout_update' => '',
-                        'custom_design_from' => '',
-                        'custom_design_to' => '',
+                        'custom_design_from' => '2021-02-19 00:00:00',
+                        'custom_design_to' => '2021-02-09 00:00:00',
                         'custom_layout_update_file' => '',
                     ],
                     'use_default' => [

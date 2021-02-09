@@ -12,6 +12,8 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product as ProductModel;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -33,13 +35,23 @@ class Authorization
     private $productFactory;
 
     /**
+     * @var RequestInterface
+     */
+    protected $request;
+
+    /**
      * @param AuthorizationInterface $authorization
      * @param ProductFactory $factory
+     * @param RequestInterface|null $request
      */
-    public function __construct(AuthorizationInterface $authorization, ProductFactory $factory)
-    {
+    public function __construct(
+        AuthorizationInterface $authorization,
+        ProductFactory $factory,
+        ?RequestInterface $request = null
+    ) {
         $this->authorization = $authorization;
         $this->productFactory = $factory;
+        $this->request = $request ?: ObjectManager::getInstance()->get(RequestInterface::class);;
     }
 
     /**
@@ -119,6 +131,10 @@ class Authorization
 
         foreach ($designAttributes as $designAttribute) {
             if (!array_key_exists($designAttribute, $attributes)) {
+                continue;
+            }
+            $useDefaults = (array) $this->request->getPost('use_default', []);
+            if (isset($useDefaults[$designAttribute]) && $useDefaults[$designAttribute]) {
                 continue;
             }
             $attribute = $attributes[$designAttribute];
