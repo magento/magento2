@@ -113,13 +113,13 @@
 
     <xs:simpleType name="htmlIdentifierType">
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z][a-zA-Z\d\-_:]*"/>
+            <xs:pattern value='[^"=]*'/>
         </xs:restriction>
     </xs:simpleType>
 
     <xs:simpleType name="htmlClassType">
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z][a-zA-Z\d\-_:]*(\s[a-zA-Z][a-zA-Z\d\-_:]*)*"/>
+            <xs:pattern value='[^"=]*'/>
         </xs:restriction>
     </xs:simpleType>
 
