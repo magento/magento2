@@ -70,10 +70,6 @@ class DesignTest extends TestCase
         array $expectedSetting
     ): void {
         $product = $this->productRepository->get('simple_with_custom_design', false, null, true);
-        //Verify initial design settings.
-        $settings = $this->model->getDesignSettings($product);
-        self::assertEquals('3columns', $settings->getData('page_layout'));
-        //Verify settings after adding schedule design to product.
         $this->applyScheduleDesignUpdate($product, $designSettings);
         $settings = $this->model->getDesignSettings($product);
         self::assertEquals($expectedSetting['page_layout'], $settings->getData('page_layout'));

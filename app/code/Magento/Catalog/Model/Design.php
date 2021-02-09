@@ -153,12 +153,25 @@ class Design extends \Magento\Framework\Model\AbstractModel
         $settings->setPageLayout($object->getPageLayout());
 
         $date = $object->getCustomDesignDate();
-        $dateFrom = $date['from'] ?? null;
-        $dateTo = $date['to'] ?? null;
-        if ($dateFrom && $dateTo && $this->_localeDate->isScopeDateInInterval(null, $dateFrom, $dateTo)) {
-            $settings->setCustomDesign($object->getCustomDesign())
-                ->setPageLayout($object->getCustomLayout())
-                ->setLayoutUpdates((array)$object->getCustomLayoutUpdate());
+        if (array_key_exists(
+            'from',
+            $date
+        ) && array_key_exists(
+            'to',
+            $date
+        ) && $this->_localeDate->isScopeDateInInterval(
+            null,
+            $date['from'],
+            $date['to']
+        )
+        ) {
+            $settings->setCustomDesign(
+                $object->getCustomDesign()
+            )->setPageLayout(
+                $object->getCustomLayout()
+            )->setLayoutUpdates(
+                (array)$object->getCustomLayoutUpdate()
+            );
             if ($object instanceof Category) {
                 $this->categoryLayoutUpdates->extractCustomSettings($object, $settings);
             } elseif ($object instanceof Product) {
