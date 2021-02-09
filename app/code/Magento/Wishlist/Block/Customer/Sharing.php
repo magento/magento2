@@ -107,7 +107,7 @@ class Sharing extends \Magento\Framework\View\Element\Template
         if (!$this->_enteredData || !isset($this->_enteredData[$key])) {
             return null;
         } else {
-            return $this->escapeHtml($this->_enteredData[$key]);
+            return $this->_escaper->escapeHtml($this->_enteredData[$key]);
         }
     }
 

@@ -211,7 +211,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     public function getEscapedDescription($item)
     {
         if ($item->getDescription()) {
-            return $this->escapeHtml($item->getDescription());
+            return $this->_escaper->escapeHtml($item->getDescription());
         }
         return '&nbsp;';
     }
