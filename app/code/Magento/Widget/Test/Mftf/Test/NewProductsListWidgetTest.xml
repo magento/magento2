@@ -34,7 +34,7 @@
 
         <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnCmsList"/>
         <waitForPageLoad stepKey="waitForCmsList"/>
-        <click selector="{{CmsPagesPageActionsSection.addNewPageButton}}" stepKey="clickAddNewPageButton"/>
+        <actionGroup ref="AdminClickAddNewPageOnPagesGridActionGroup" stepKey="clickAddNewPageButton"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_newDefaultCmsPage.title}}" stepKey="fillPageTitle"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="expandContentSection"/>
         <waitForPageLoad stepKey="waitForContentSection"/>
@@ -44,7 +44,7 @@
         <waitForPageLoad stepKey="waitForWidgetOptions"/>
         <selectOption selector="{{WidgetSection.DisplayType}}" userInput="New products" stepKey="selectDisplayType"/>
         <fillField selector="{{WidgetSection.NoOfProductToDisplay}}" userInput="100" stepKey="fillNoOfProductToDisplay"/>
-        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget"/>
+        <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidget"/>
         <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="expandSeoSection"/>
         <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_newDefaultCmsPage.identifier}}" stepKey="fillPageUrlKey"/>
         <click selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="clickSaveCmsPage"/>
