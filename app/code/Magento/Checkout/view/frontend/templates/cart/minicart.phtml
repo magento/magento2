@@ -4,14 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block \Magento\Checkout\Block\Cart\Sidebar */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/**
+ * @var \Magento\Checkout\Block\Cart\Sidebar $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 ?>
 
 <div data-block="minicart" class="minicart-wrapper">
-    <a class="action showcart" href="<?= $block->escapeUrl($block->getShoppingCartUrl()) ?>"
+    <a class="action showcart" href="<?= $escaper->escapeUrl($block->getShoppingCartUrl()) ?>"
        data-bind="scope: 'minicart_content'">
-        <span class="text"><?= $block->escapeHtml(__('My Cart')) ?></span>
+        <span class="text"><?= $escaper->escapeHtml(__('My Cart')) ?></span>
         <span class="counter qty empty"
               data-bind="css: { empty: !!getCartParam('summary_count') == false && !isLoading() },
                blockLoader: isLoading">
@@ -60,8 +63,8 @@ script;
             "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
         },
         "*": {
-            "Magento_Ui/js/block-loader": "<?= $block->escapeJs(
-                $block->escapeUrl($block->getViewFileUrl('images/loader-1.gif'))
+            "Magento_Ui/js/block-loader": "<?= $escaper->escapeJs(
+                $escaper->escapeUrl($block->getViewFileUrl('images/loader-1.gif'))
             ) ?>"
         }
     }

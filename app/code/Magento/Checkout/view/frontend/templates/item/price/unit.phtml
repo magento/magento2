@@ -6,13 +6,16 @@
 
 // phpcs:disable Magento2.Templates.ThisInTemplate
 
-/** @var $block \Magento\Checkout\Block\Item\Price\Renderer */
+/**
+ * @var \Magento\Checkout\Block\Item\Price\Renderer $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 
 $_item = $block->getItem();
 ?>
-<span class="price-including-tax" data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?>">
+<span class="price-including-tax" data-label="<?= $escaper->escapeHtml(__('Excl. Tax')) ?>">
     <span class="cart-price">
-        <?= $block->escapeHtml(
+        <?= $escaper->escapeHtml(
             $this->helper(Magento\Checkout\Helper\Data::class)->formatPrice($_item->getCalculationPrice()),
             ['span']
         ) ?>
