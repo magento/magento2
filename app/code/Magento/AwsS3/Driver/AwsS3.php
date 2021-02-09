@@ -519,9 +519,9 @@ class AwsS3 implements RemoteDriverInterface
     public function stat($path): array
     {
         $path = $this->normalizeRelativePath($path, true);
-        $metaInfo = $this->metadataProvider->getMetadata($path);
-
-        if (!$metaInfo) {
+        try {
+            $metaInfo = $this->metadataProvider->getMetadata($path);
+        } catch (UnableToRetrieveMetadata $exception) {
             throw new FileSystemException(__('Cannot gather stats! %1', [$this->getWarningMessage()]));
         }
 
@@ -901,7 +901,7 @@ class AwsS3 implements RemoteDriverInterface
             if (isset($item['path'])
                 && $item['path'] !== $relativePath
                 && (!$relativePath || strpos($item['path'], $relativePath) === 0)) {
-                $itemsList[] = $this->getAbsolutePath($item['dirname'], $item['path']);
+                $itemsList[] = $this->getAbsolutePath(dirname($item['path']), $item['path']);
             }
         }
 
