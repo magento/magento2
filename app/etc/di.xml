@@ -98,9 +98,6 @@
     <preference for="Magento\Framework\App\ProductMetadataInterface" type="Magento\Framework\App\ProductMetadata"/>
     <preference for="Magento\Framework\Acl\Data\CacheInterface" type="Magento\Framework\Acl\Data\Cache" />
     <preference for="Magento\Framework\App\AreaInterface" type="Magento\Framework\App\Area" />
-    <preference for="Magento\Framework\AuthorizationInterface" type="Magento\Framework\Authorization" />
-    <preference for="Magento\Framework\Authorization\PolicyInterface" type="Magento\Framework\Authorization\Policy\DefaultPolicy" />
-    <preference for="Magento\Framework\Authorization\RoleLocatorInterface" type="Magento\Framework\Authorization\RoleLocator\DefaultRoleLocator" />
     <preference for="Magento\Framework\Session\SessionManagerInterface" type="Magento\Framework\Session\Generic" />
     <preference for="Magento\Framework\App\Config\ScopeConfigInterface" type="Magento\Framework\App\Config" />
     <preference for="Magento\Framework\App\Config\ReinitableConfigInterface" type="Magento\Framework\App\ReinitableConfig" />
@@ -133,6 +130,8 @@
     <preference for="Magento\Framework\Communication\ConfigInterface" type="Magento\Framework\Communication\Config" />
     <preference for="Magento\Framework\Module\ResourceInterface" type="Magento\Framework\Module\ModuleResource" />
     <preference for="Magento\Framework\Pricing\Amount\AmountInterface" type="Magento\Framework\Pricing\Amount\Base" />
+    <preference for="Magento\Framework\Pricing\PriceInfoInterface" type="Magento\Framework\Pricing\PriceInfo\Base" />
+    <preference for="Magento\Framework\Pricing\Adjustment\CalculatorInterface" type="Magento\Framework\Pricing\Adjustment\Calculator" />
     <preference for="Magento\Framework\Api\SearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Framework\Api\AttributeInterface" type="Magento\Framework\Api\AttributeValue" />
     <preference for="Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface" type="Magento\Framework\Model\ResourceModel\Db\TransactionManager" />
@@ -162,6 +161,8 @@
     <preference for="Magento\Framework\View\Element\Message\InterpretationStrategyInterface" type="Magento\Framework\View\Element\Message\InterpretationMediator" />
     <preference for="Magento\Framework\App\FeedInterface" type="Magento\Framework\App\Feed" />
     <preference for="Magento\Framework\App\FeedFactoryInterface" type="Magento\Framework\App\FeedFactory" />
+    <preference for="Magento\Framework\Indexer\BatchProviderInterface" type="Magento\Framework\Indexer\BatchProvider" />
+    <preference for="Magento\Framework\Indexer\BatchSizeManagementInterface" type="Magento\Framework\Indexer\BatchSizeManagement" />
     <preference for="Magento\Framework\Indexer\Config\DependencyInfoProviderInterface" type="Magento\Framework\Indexer\Config\DependencyInfoProvider" />
     <preference for="Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaReaderInterface" type="Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DbSchemaReader" />
     <preference for="Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaWriterInterface" type="Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DbSchemaWriter" />
@@ -194,6 +195,50 @@
     <preference for="Magento\Framework\HTTP\ClientInterface" type="Magento\Framework\HTTP\Client\Curl" />
     <preference for="Magento\Framework\Interception\ConfigLoaderInterface" type="Magento\Framework\Interception\PluginListGenerator" />
     <preference for="Magento\Framework\Interception\ConfigWriterInterface" type="Magento\Framework\Interception\PluginListGenerator" />
+    <preference for="Magento\Framework\Shell\CommandRendererInterface" type="Magento\Framework\Shell\CommandRenderer" />
+    <preference for="Magento\Framework\Crontab\CrontabManagerInterface" type="Magento\Framework\Crontab\CrontabManager" />
+    <preference for="Magento\Framework\Crontab\TasksProviderInterface" type="Magento\Framework\Crontab\TasksProvider" />
+    <preference for="Magento\Framework\AuthorizationInterface" type="Magento\Framework\Authorization" />
+    <preference for="Magento\Framework\Authorization\PolicyInterface" type="Magento\Framework\Authorization\Policy\DefaultPolicy" />
+    <preference for="Magento\Framework\Authorization\RoleLocatorInterface" type="Magento\Framework\Authorization\RoleLocator\DefaultRoleLocator" />
+    <preference for="Magento\Framework\Acl\AclResource\ProviderInterface" type="Magento\Framework\Acl\AclResource\Provider"/>
+    <type name="Magento\Framework\Acl\AclResource\Config\Reader\Filesystem">
+        <arguments>
+            <argument name="converter" xsi:type="object">Magento\Framework\Acl\AclResource\Config\Converter\Dom</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Acl\AclResource\Provider">
+        <arguments>
+            <argument name="configReader" xsi:type="object">Magento\Framework\Acl\AclResource\Config\Reader\Filesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Acl\Builder">
+        <arguments>
+            <argument name="resourceLoader" xsi:type="object">Magento\Framework\Acl\Loader\ResourceLoader</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\AreaList">
+        <arguments>
+            <argument name="areas" xsi:type="array">
+                <item name="crontab" xsi:type="null" />
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Crontab\CrontabManagerInterface">
+        <arguments>
+            <argument name="shell" xsi:type="object">Magento\Framework\App\Shell</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Crontab\TasksProviderInterface">
+        <arguments>
+            <argument name="tasks" xsi:type="array">
+                <item name="cronMagento" xsi:type="array">
+                    <item name="command" xsi:type="string">{magentoRoot}bin/magento cron:run | grep -v "Ran jobs by schedule" >> {magentoLog}magento.cron.log</item>
+                    <item name="optional" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
         <arguments>
@@ -1756,6 +1801,8 @@
     <preference for="Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface" type="Magento\Framework\MessageQueue\PoisonPill\PoisonPillPut"/>
     <preference for="Magento\Framework\MessageQueue\PoisonPill\PoisonPillReadInterface" type="Magento\Framework\MessageQueue\PoisonPill\PoisonPillRead"/>
     <preference for="Magento\Framework\MessageQueue\CallbackInvokerInterface" type="Magento\Framework\MessageQueue\CallbackInvoker"/>
+    <preference for="Magento\Framework\Mail\Template\FactoryInterface" type="Magento\Framework\Mail\Template\Factory" />
+    <preference for="Magento\Framework\Mail\MessageInterface" type="Magento\Framework\Mail\Message" />
     <preference for="Magento\Framework\Mail\EmailMessageInterface" type="Magento\Framework\Mail\EmailMessage" />
     <preference for="Magento\Framework\Mail\MimeMessageInterface" type="Magento\Framework\Mail\MimeMessage" />
     <preference for="Magento\Framework\Mail\MimePartInterface" type="Magento\Framework\Mail\MimePart" />
@@ -1764,6 +1811,31 @@
     </type>
     <preference for="Magento\Framework\GraphQl\Query\ErrorHandlerInterface" type="Magento\Framework\GraphQl\Query\ErrorHandler"/>
     <preference for="Magento\Framework\Filter\VariableResolverInterface" type="Magento\Framework\Filter\VariableResolver\StrictResolver"/>
+    <type name="Magento\Framework\Filter\Template">
+        <arguments>
+            <argument name="directiveProcessors" xsi:type="array">
+                <item name="depend" sortOrder="100" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\DependDirective</item>
+                <item name="if" sortOrder="200" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\IfDirective</item>
+                <item name="template" sortOrder="300" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\TemplateDirective</item>
+                <item name="legacy" sortOrder="400" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\LegacyDirective</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Filter\DirectiveProcessor\Filter\FilterPool">
+        <arguments>
+            <argument name="filters" xsi:type="array">
+                <item name="nl2br" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\Filter\NewlineToBreakFilter</item>
+                <item name="escape" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\Filter\EscapeFilter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="emailTemplateCheck" xsi:type="object">Magento\Email\Console\Command\DatabaseTemplateCompatibilityCommand</item>
+            </argument>
+        </arguments>
+    </type>
     <virtualType name="configured_block_cache" type="Magento\Framework\App\Cache">
         <arguments>
             <argument name="cacheIdentifier" xsi:type="string">block_html</argument>

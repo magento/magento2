@@ -9,6 +9,8 @@
     <preference for="Magento\Framework\View\Element\UiComponent\ContainerInterface" type="Magento\Ui\Component\Wrapper\UiComponent" />
     <preference for="Magento\Framework\View\Element\UiComponent\Control\ActionPoolInterface" type="Magento\Ui\Component\Control\ActionPool" />
     <preference for="Magento\Framework\Data\Argument\InterpreterInterface" type="Magento\Framework\Data\Argument\Interpreter\Composite" />
+    <!-- ToDo: this preference override existing preference in app/etc/di.xml : -->
+    <!-- <preference for="Magento\Framework\Config\ConverterInterface" type="Magento\Framework\Config\Converter\Dom"/> -->
     <preference for="Magento\Framework\Config\ConverterInterface" type="Magento\Framework\View\Element\UiComponent\Config\Converter" />
     <preference for="Magento\Framework\View\Element\UiComponent\Config\ManagerInterface" type="Magento\Ui\Model\Manager" />
     <preference for="Magento\Framework\View\Element\UiComponent\ContextInterface" type="Magento\Framework\View\Element\UiComponent\Context" />

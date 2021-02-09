@@ -17,9 +17,7 @@
     <preference for="Magento\Catalog\Model\Attribute\LockValidatorInterface" type="Magento\Catalog\Model\Attribute\LockValidatorComposite" />
     <preference for="Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface" type="Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapper" />
     <preference for="Magento\Catalog\Block\Product\ReviewRendererInterface" type="Magento\Catalog\Block\Product\ReviewRenderer\DefaultProvider" />
-    <preference for="Magento\Framework\Pricing\PriceInfoInterface" type="Magento\Framework\Pricing\PriceInfo\Base" />
     <preference for="Magento\Framework\Pricing\PriceCurrencyInterface" type="Magento\Directory\Model\PriceCurrency" />
-    <preference for="Magento\Framework\Pricing\Adjustment\CalculatorInterface" type="Magento\Framework\Pricing\Adjustment\Calculator" />
     <preference for="Magento\Catalog\Api\Data\CategoryInterface" type="Magento\Catalog\Model\Category" />
     <preference for="Magento\Catalog\Api\CategoryManagementInterface" type="Magento\Catalog\Model\CategoryManagement" />
     <preference for="Magento\Catalog\Api\CategoryRepositoryInterface" type="Magento\Catalog\Model\CategoryRepository" />
@@ -69,7 +67,6 @@
     <preference for="Magento\Catalog\Api\Data\ProductRender\ImageInterface" type="Magento\Catalog\Model\ProductRender\Image" />
     <preference for="Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface" type="Magento\Catalog\Model\ProductRender\PriceInfo" />
     <preference for="Magento\Catalog\Api\Data\ProductRender\FormattedPriceInfoInterface" type="Magento\Catalog\Model\ProductRender\FormattedPriceInfo" />
-    <preference for="Magento\Framework\Indexer\BatchProviderInterface" type="Magento\Framework\Indexer\BatchProvider" />
     <preference for="Magento\Catalog\Model\Indexer\Product\Price\UpdateIndexInterface" type="Magento\Catalog\Model\Indexer\Product\Price\InvalidateIndex" />
     <preference for="Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface" type="Magento\Catalog\Model\Product\Gallery\ImagesConfigFactory" />
     <preference for="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface" type="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite" />
@@ -356,8 +353,6 @@
                 <item name="catalogProduct" xsi:type="string">Magento\Catalog\Model\Product</item>
             </argument>
         </arguments>
-    </type>
-    <type name="Magento\Framework\Pricing\Adjustment\Collection">
     </type>
     <type name="Magento\Catalog\Model\Product\ReservedAttributeList">
         <arguments>
@@ -1098,6 +1093,7 @@
             </argument>
         </arguments>
     </type>
+    <!-- ToDo: Should be a virtual type of Magento\Framework\Data\CollectionModifier -->
     <type name="Magento\Framework\Data\CollectionModifier">
         <arguments>
             <argument name="conditions" xsi:type="array">
@@ -1136,7 +1132,7 @@
             <argument name="priceTableResolver" xsi:type="object">Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver\Proxy</argument>
             <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
             <argument name="context" xsi:type="object">Magento\Framework\App\Http\Context\Proxy</argument>
-            <!-- Unccomment after fix issue with Proxy generation -->
+            <!-- ToDo: Unccomment after fix issue with Proxy generation -->
             <!--<argument name="dimensionModeConfiguration" xsi:type="object">-->
                 <!--Magento\Catalog\Model\Indexer\Product\Price\DimensionModeConfiguration\Proxy-->
             <!--</argument>-->

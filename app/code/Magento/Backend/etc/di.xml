@@ -77,22 +77,6 @@
         </arguments>
     </type>
     <preference for="Magento\Framework\Authorization\PolicyInterface" type="Magento\Framework\Authorization\Policy\Acl"/>
-    <preference for="Magento\Framework\Acl\AclResource\ProviderInterface" type="Magento\Framework\Acl\AclResource\Provider"/>
-    <type name="Magento\Framework\Acl\AclResource\Config\Reader\Filesystem">
-        <arguments>
-            <argument name="converter" xsi:type="object">Magento\Framework\Acl\AclResource\Config\Converter\Dom</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Acl\AclResource\Provider">
-        <arguments>
-            <argument name="configReader" xsi:type="object">Magento\Framework\Acl\AclResource\Config\Reader\Filesystem</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Acl\Builder">
-        <arguments>
-            <argument name="resourceLoader" xsi:type="object">Magento\Framework\Acl\Loader\ResourceLoader</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Acl\RootResource">
         <arguments>
             <argument name="identifier" xsi:type="string">Magento_Backend::all</argument>

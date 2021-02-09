@@ -14,11 +14,6 @@
     <preference for="Magento\Framework\Indexer\StateInterface" type="Magento\Indexer\Model\Indexer\State" />
     <preference for="Magento\Framework\Indexer\IndexMutexInterface" type="Magento\Indexer\Model\IndexMutex" />
     <type name="Magento\Framework\Indexer\Table\StrategyInterface" shared="false" />
-    <type name="Magento\Indexer\Model\Indexer">
-        <arguments>
-            <argument name="view" xsi:type="object" shared="false">Magento\Framework\Mview\View</argument>
-        </arguments>
-    </type>
     <type name="Magento\Indexer\Model\Config">
         <arguments>
             <argument name="configData" xsi:type="object">Magento\Indexer\Model\Config\Data\Proxy</argument>
@@ -40,8 +35,7 @@
         </arguments>
     </type>
     <type name="Magento\Indexer\Model\Processor">
-        <plugin name="page-cache-indexer-reindex-clean-cache"
-                type="Magento\Indexer\Model\Processor\CleanCache" sortOrder="10"/>
+        <plugin name="page-cache-indexer-reindex-clean-cache" type="Magento\Indexer\Model\Processor\CleanCache" sortOrder="10"/>
     </type>
     <type name="Magento\Indexer\Model\ProcessManager">
         <arguments>
@@ -62,7 +56,6 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Framework\Indexer\BatchSizeManagementInterface" type="Magento\Framework\Indexer\BatchSizeManagement" />
     <type name="Magento\Indexer\Model\Indexer\DependencyDecorator">
         <arguments>
             <argument name="indexer" xsi:type="object" shared="false">Magento\Indexer\Model\Indexer</argument>
