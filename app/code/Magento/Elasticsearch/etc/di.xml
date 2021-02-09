@@ -373,7 +373,7 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="elasticsearch5FieldNameResolver" type="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CompositeResolver">
+    <virtualType name="elasticsearch5FieldNameResolver" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CompositeResolver">
         <arguments>
             <argument name="items" xsi:type="array">
                 <item name="notEav" xsi:type="object" sortOrder="10">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\NotEavAttribute</item>
@@ -428,7 +428,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="elasticsearch5StaticFieldProvider" type="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\StaticField">
+    <virtualType name="elasticsearch5StaticFieldProvider" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\StaticField">
         <arguments>
             <argument name="fieldTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter</argument>
             <argument name="indexTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\Converter</argument>
@@ -437,7 +437,7 @@
             <argument name="fieldNameResolver" xsi:type="object">elasticsearch5FieldNameResolver</argument>
         </arguments>
     </virtualType>
-    <virtualType name="elasticsearch5DynamicFieldProvider" type="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\DynamicField">
+    <virtualType name="elasticsearch5DynamicFieldProvider" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\DynamicField">
         <arguments>
             <argument name="fieldTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter</argument>
             <argument name="indexTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\Converter</argument>
@@ -453,17 +453,17 @@
             <argument name="fieldTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter</argument>
         </arguments>
     </type>
-    <virtualType name="elasticsearch5FieldTypeDateTimeResolver" type="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\DateTimeType">
+    <virtualType name="elasticsearch5FieldTypeDateTimeResolver" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\DateTimeType">
         <arguments>
             <argument name="fieldTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter</argument>
         </arguments>
     </virtualType>
-    <virtualType name="elasticsearch5FieldTypeFloatResolver" type="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\FloatType">
+    <virtualType name="elasticsearch5FieldTypeFloatResolver" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\FloatType">
         <arguments>
             <argument name="fieldTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter</argument>
         </arguments>
     </virtualType>
-    <virtualType name="elasticsearch5FieldTypeDefaultResolver" type="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\DefaultResolver">
+    <virtualType name="elasticsearch5FieldTypeDefaultResolver" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\DefaultResolver">
         <arguments>
             <argument name="fieldTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter</argument>
         </arguments>

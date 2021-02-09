@@ -250,7 +250,7 @@
     </type>
     <type name="Magento\Store\Model\ResourceModel\Website">
         <plugin name="invalidatePriceIndexerOnWebsite" type="Magento\Catalog\Model\Indexer\Product\Price\Plugin\Website"/>
-        <plugin name="categoryProductWebsiteAfterDelete" type="\Magento\Catalog\Model\Indexer\Category\Product\Plugin\Website"/>
+        <plugin name="categoryProductWebsiteAfterDelete" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\Website"/>
     </type>
     <type name="Magento\Store\Model\ResourceModel\Store">
         <plugin name="storeViewResourceAroundSave" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreView"/>
