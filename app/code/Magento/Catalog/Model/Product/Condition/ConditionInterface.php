@@ -12,6 +12,7 @@ use Magento\Framework\DB\Select;
 /**
  * Interface \Magento\Catalog\Model\Product\Condition\ConditionInterface
  *
+ * @api
  */
 interface ConditionInterface
 {

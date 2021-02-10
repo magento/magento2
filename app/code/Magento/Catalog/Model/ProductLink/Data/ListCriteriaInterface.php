@@ -9,6 +9,8 @@ namespace Magento\Catalog\Model\ProductLink\Data;
 
 /**
  * Criteria for finding lists.
+ *
+ * @api
  */
 interface ListCriteriaInterface
 {
