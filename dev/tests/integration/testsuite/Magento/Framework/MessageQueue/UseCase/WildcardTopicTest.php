@@ -71,7 +71,7 @@ class WildcardTopicTest extends QueueTestCaseAbstract
      */
     private function generateTestObject()
     {
-        $testObject = $this->objectManager->create(AsyncTestData::class);
+        $testObject = $this->objectManager->create(AsyncTestData::class); // @phpstan-ignore-line
         $testObject->setValue('||Message Contents||');
         $testObject->setTextFilePath($this->logFilePath);
         return $testObject;
