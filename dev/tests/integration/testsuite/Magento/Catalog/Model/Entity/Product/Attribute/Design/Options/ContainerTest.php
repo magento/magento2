@@ -38,13 +38,13 @@ class ContainerTest extends TestCase
     /**
      * @dataProvider getOptionTextDataProvider
      * @param string $value
-     * @param array $expectedValue
+     * @param string|bool $expectedValue
      * @return void
      */
-    public function testGetOptionText(string $value, array $expectedValue): void
+    public function testGetOptionText(string $value, $expectedValue): void
     {
         $actualValue = $this->container->getOptionText($value);
-        $this->assertEquals($expectedValue[0], $actualValue);
+        $this->assertEquals($expectedValue, $actualValue);
     }
 
     /**
@@ -55,11 +55,11 @@ class ContainerTest extends TestCase
         return [
             'with_value' => [
                 'value' => 'container2',
-                'expected_value' => [__('Block after Info Column')],
+                'expected_value' => __('Block after Info Column'),
             ],
             'with_not_valid_value' => [
                 'value' => 'container3',
-                'expected_value' => [false],
+                'expected_value' => false,
             ],
         ];
     }
