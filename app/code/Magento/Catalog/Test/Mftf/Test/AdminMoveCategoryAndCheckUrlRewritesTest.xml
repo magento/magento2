@@ -16,6 +16,9 @@
             <features value="Catalog"/>
             <severity value="BLOCKER"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-40816"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>

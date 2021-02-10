@@ -134,6 +134,7 @@ class MessagePlugin
             $publicCookieMetadata->setDurationOneYear();
             $publicCookieMetadata->setPath('/');
             $publicCookieMetadata->setHttpOnly(false);
+            $publicCookieMetadata->setSameSite('Strict');
 
             $this->cookieManager->setPublicCookie(
                 self::MESSAGES_COOKIES_NAME,

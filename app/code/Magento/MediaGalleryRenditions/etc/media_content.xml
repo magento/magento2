@@ -9,7 +9,7 @@
     <search>
         <patterns>
             <pattern name="media_gallery_renditions">/{{media url=(?:"|&amp;quot;)(?:.renditions)?(.*?)(?:"|&amp;quot;)}}/</pattern>
-            <pattern name="media_gallery">/{{media url="?((?!.*.renditions).*?)"?}}/</pattern>
+            <pattern name="media_gallery">/{{media url="?(?:.*?\.renditions\/)(.*?)"?}}/</pattern>
             <pattern name="wysiwyg">/src=".*\/media\/(?:.renditions\/)*(.*?)"/</pattern>
             <pattern name="catalog_image">/^\/?media\/(?:.renditions\/)?(.*)/</pattern>
             <pattern name="catalog_image_with_pub">/^\/pub\/?media\/(?:.renditions\/)?(.*)/</pattern>

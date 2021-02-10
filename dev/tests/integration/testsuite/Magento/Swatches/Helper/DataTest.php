@@ -44,11 +44,23 @@ class DataTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
+     *
      * @return void
      */
     public function testGetSwatchAttributesAsArray(): void
     {
         $product = $this->productRepository->get('simple2');
         $this->assertEmpty($this->helper->getSwatchAttributesAsArray($product));
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_with_disabled_image.php
+     *
+     * @return void
+     */
+    public function testGetProductMediaGalleryWithHiddenImage(): void
+    {
+        $result = $this->helper->getProductMediaGallery($this->productRepository->get('simple_with_disabled_img'));
+        $this->assertEmpty($result);
     }
 }
