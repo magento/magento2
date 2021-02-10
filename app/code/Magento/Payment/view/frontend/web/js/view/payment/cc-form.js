@@ -185,7 +185,7 @@ define([
          * Get image for CVV
          * @returns {String}
          */
-        getCvvImageHtml: function () {
+        getCvvImageUnsanitizedHtml: function () {
             return '<img src="' + this.getCvvImageUrl() +
                 '" alt="' + $t('Card Verification Number Visual Reference') +
                 '" title="' + $t('Card Verification Number Visual Reference') +
