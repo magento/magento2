@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CustomerGraphQl\Api;
+namespace Magento\CustomerGraphQl\Model\Customer;
 
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 

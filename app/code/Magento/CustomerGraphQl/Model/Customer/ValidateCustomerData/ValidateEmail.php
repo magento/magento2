@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Customer\ValidateCustomerData;
 
-use Magento\CustomerGraphQl\Api\ValidateCustomerDataInterface;
+use Magento\CustomerGraphQl\Model\Customer\ValidateCustomerDataInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\Validator\EmailAddress as EmailAddressValidator;
 

@@ -7,6 +7,9 @@ namespace Magento\Analytics\Model\Connector\Http;
 
 /**
  * Represents an interface for response handler which process response body.
+ *
+ * @deprecated 103.0.2
+ * @see \Psr\Http\Client\ClientInterface
  */
 interface ResponseHandlerInterface
 {

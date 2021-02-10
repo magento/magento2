@@ -10,7 +10,7 @@ use Magento\Sales\Model\ResourceModel\Report\Bestsellers as BestsellersReport;
 /**
  * Sales Mysql resource helper model
  */
-class Helper extends \Magento\Framework\DB\Helper implements HelperInterface
+class Helper extends \Magento\Framework\DB\Helper
 {
     /**
      * @var \Magento\Reports\Model\ResourceModel\Helper

@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Customer;
 
-use Magento\CustomerGraphQl\Api\ValidateCustomerDataInterface;
+use Magento\CustomerGraphQl\Model\Customer\ValidateCustomerDataInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;

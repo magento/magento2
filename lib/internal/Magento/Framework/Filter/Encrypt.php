@@ -5,15 +5,17 @@
  */
 namespace Magento\Framework\Filter;
 
+use Magento\Framework\Filter\Encrypt\Basic as Adapter;
+
 /**
  * Encrypt filter
  */
 class Encrypt extends \Zend_Filter_Encrypt
 {
     /**
-     * @param \Magento\Framework\Filter\Encrypt\AdapterInterface $adapter
+     * @param Adapter $adapter
      */
-    public function __construct(\Magento\Framework\Filter\Encrypt\AdapterInterface $adapter)
+    public function __construct(Adapter $adapter)
     {
         $this->setAdapter($adapter);
     }

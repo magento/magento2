@@ -7,8 +7,10 @@ namespace Magento\Analytics\Model\Connector\Http;
 
 /**
  * An interface for an HTTP client.
- *
  * Sends requests via a proper adapter.
+ *
+ * @deprecated 103.0.2
+ * @see \Psr\Http\Client\ClientInterface
  */
 interface ClientInterface
 {
