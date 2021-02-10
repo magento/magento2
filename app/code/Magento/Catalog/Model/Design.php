@@ -151,6 +151,7 @@ class Design extends \Magento\Framework\Model\AbstractModel
             return $settings;
         }
         $settings->setPageLayout($object->getPageLayout());
+        $settings->setLayoutUpdates((array)$object->getCustomLayoutUpdate());
 
         $date = $object->getCustomDesignDate();
         if (array_key_exists(
@@ -165,13 +166,12 @@ class Design extends \Magento\Framework\Model\AbstractModel
             $date['to']
         )
         ) {
-            $settings->setCustomDesign(
-                $object->getCustomDesign()
-            )->setPageLayout(
-                $object->getCustomLayout()
-            )->setLayoutUpdates(
-                (array)$object->getCustomLayoutUpdate()
-            );
+            if ($object->getCustomDesign()) {
+                $settings->setCustomDesign($object->getCustomDesign());
+            }
+            if ($object->getCustomLayout()) {
+                $settings->setPageLayout($object->getCustomLayout());
+            }
             if ($object instanceof Category) {
                 $this->categoryLayoutUpdates->extractCustomSettings($object, $settings);
             } elseif ($object instanceof Product) {

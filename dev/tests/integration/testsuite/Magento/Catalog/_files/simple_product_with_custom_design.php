@@ -3,14 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-use Magento\Catalog\Model\Product;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $product = Bootstrap::getObjectManager()->create(ProductFactory::class)->create();
+$productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
 $product->setTypeId('simple')
     ->setPageLayout('3columns')
     ->setAttributeSetId(4)
@@ -20,18 +22,6 @@ $product->setTypeId('simple')
     ->setPrice(10)
     ->setVisibility(Visibility::VISIBILITY_BOTH)
     ->setStatus(Status::STATUS_ENABLED)
-    ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_in_stock' => 1])
-    ->save();
+    ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_in_stock' => 1]);
 
-$customDesignProduct = Bootstrap::getObjectManager()
-    ->create(Product::class, ['data' => $product->getData()]);
-
-$customDesignProduct->setUrlKey('custom-design-simple-product')
-    ->setId(2)
-    ->setRowId(2)
-    ->setName('Custom Design Simple Product')
-    ->setSku('custom-design-simple-product')
-    ->setCustomDesign('Magento/blank')
-    ->setStockData(['use_config_manage_stock' => 1, 'qty' => 24, 'is_in_stock' => 1])
-    ->setQty(24)
-    ->save();
+$productRepository->save($product);
