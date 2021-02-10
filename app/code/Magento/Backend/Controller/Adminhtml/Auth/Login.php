@@ -1,13 +1,15 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\Auth;
 
+use Magento\Backend\App\Area\FrontNameResolver;
+use Magento\Backend\Model\UrlFactory;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGet;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPost;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * @api
@@ -21,17 +23,33 @@ class Login extends \Magento\Backend\Controller\Adminhtml\Auth implements HttpGe
     protected $resultPageFactory;
 
     /**
+     * @var FrontNameResolver
+     */
+    private $frontNameResolver;
+
+    /**
+     * @var UrlFactory
+     */
+    private $backendUrlFactory;
+
+    /**
      * Constructor
      *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param FrontNameResolver $frontNameResolver
+     * @param UrlFactory $backendUrlFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        FrontNameResolver $frontNameResolver = null,
+        UrlFactory $backendUrlFactory = null
     ) {
         $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context);
+        $this->frontNameResolver = $frontNameResolver ?? ObjectManager::getInstance()->get(FrontNameResolver::class);
+        $this->backendUrlFactory = $backendUrlFactory ?? ObjectManager::getInstance()->get(UrlFactory::class);
     }
 
     /**
@@ -49,7 +67,8 @@ class Login extends \Magento\Backend\Controller\Adminhtml\Auth implements HttpGe
         }
 
         $requestUrl = $this->getRequest()->getUri();
-        if (!$requestUrl->isValid()) {
+
+        if (!$requestUrl->isValid() || !$this->isValidBackendUri()) {
             return $this->getRedirect($this->getUrl('*'));
         }
 
@@ -68,5 +87,19 @@ class Login extends \Magento\Backend\Controller\Adminhtml\Auth implements HttpGe
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath($path);
         return $resultRedirect;
+    }
+
+    /**
+     * Verify if correct backend uri requested.
+     *
+     * @return bool
+     */
+    private function isValidBackendUri(): bool
+    {
+        $backendFrontName = $this->frontNameResolver->getFrontName();
+        $requestUri = $this->getRequest()->getRequestUri();
+        $baseUrl = parse_url($this->backendUrlFactory->create()->getBaseUrl(), PHP_URL_PATH);
+
+        return strpos($requestUri, $baseUrl . $backendFrontName) === 0;
     }
 }
