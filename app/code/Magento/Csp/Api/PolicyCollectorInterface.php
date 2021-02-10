@@ -11,6 +11,8 @@ use Magento\Csp\Api\Data\PolicyInterface;
 
 /**
  * Collects CSPs from a source.
+ *
+ * @api
  */
 interface PolicyCollectorInterface
 {
