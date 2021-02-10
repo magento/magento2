@@ -8,6 +8,9 @@ namespace Magento\Elasticsearch\Model\Adapter\Index;
 use Magento\Framework\Locale\Resolver as LocaleResolver;
 use Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface;
 
+/**
+ * Index Builder
+ */
 class Builder implements BuilderInterface
 {
     /**
@@ -40,7 +43,7 @@ class Builder implements BuilderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function build()
     {
@@ -59,6 +62,14 @@ class Builder implements BuilderInterface
                             array_keys($filter)
                         ),
                         'char_filter' => array_keys($charFilter)
+                    ],
+                    'sku' => [
+                        'type' => 'custom',
+                        'tokenizer' => 'keyword',
+                        'filter' => array_merge(
+                            ['lowercase', 'keyword_repeat'],
+                            array_keys($filter)
+                        ),
                     ]
                 ],
                 'tokenizer' => $tokenizer,
@@ -71,7 +82,10 @@ class Builder implements BuilderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Setter for storeId property
+     *
+     * @param int $storeId
+     * @return void
      */
     public function setStoreId($storeId)
     {
@@ -79,47 +93,52 @@ class Builder implements BuilderInterface
     }
 
     /**
+     * Return tokenizer configuration
+     *
      * @return array
      */
     protected function getTokenizer()
     {
-        $tokenizer = [
+        return [
             'default_tokenizer' => [
-                'type' => 'standard',
-            ],
+                'type' => 'standard'
+            ]
         ];
-        return $tokenizer;
     }
 
     /**
+     * Return filter configuration
+     *
      * @return array
      */
     protected function getFilter()
     {
-        $filter = [
+        return [
             'default_stemmer' => $this->getStemmerConfig(),
             'unique_stem' => [
                 'type' => 'unique',
                 'only_on_same_position' => true
             ]
         ];
-        return $filter;
     }
 
     /**
+     * Return char filter configuration
+     *
      * @return array
      */
     protected function getCharFilter()
     {
-        $charFilter = [
+        return [
             'default_char_filter' => [
                 'type' => 'html_strip',
             ],
         ];
-        return $charFilter;
     }
 
     /**
+     * Return stemmer configuration
+     *
      * @return array
      */
     protected function getStemmerConfig()

@@ -102,9 +102,7 @@
                 <requiredEntity createDataKey="createDownloadableProduct1"/>
             </createData>
 
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
             <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
                 <argument name="tags" value=""/>
             </actionGroup>
@@ -186,8 +184,7 @@
             <argument name="productVar" value="$$createDownloadableProduct1$$"/>
         </actionGroup>
 
-        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="amOnMyAccountDashboard1"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="amOnMyAccountDashboard1"/>
 
         <actionGroup ref="StorefrontClearCompareActionGroup" stepKey="clearComparedProducts1"/>
     </test>

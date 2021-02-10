@@ -367,7 +367,7 @@ class CommonTaxCollector extends AbstractTotal
                     $priceIncludesTax,
                     $useBaseCurrency
                 );
-                $itemDataObjects[] = $parentItemDataObject;
+                $itemDataObjects[] = [$parentItemDataObject];
                 foreach ($item->getChildren() as $child) {
                     $childItemDataObject = $this->mapItem(
                         $itemDataObjectFactory,
@@ -376,31 +376,29 @@ class CommonTaxCollector extends AbstractTotal
                         $useBaseCurrency,
                         $parentItemDataObject->getCode()
                     );
-                    $itemDataObjects[] = $childItemDataObject;
+                    $itemDataObjects[] = [$childItemDataObject];
                     $extraTaxableItems = $this->mapItemExtraTaxables(
                         $itemDataObjectFactory,
                         $item,
                         $priceIncludesTax,
                         $useBaseCurrency
                     );
-                    //phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                    $itemDataObjects = array_merge($itemDataObjects, $extraTaxableItems);
+                    $itemDataObjects[] = $extraTaxableItems;
                 }
             } else {
                 $itemDataObject = $this->mapItem($itemDataObjectFactory, $item, $priceIncludesTax, $useBaseCurrency);
-                $itemDataObjects[] = $itemDataObject;
+                $itemDataObjects[] = [$itemDataObject];
                 $extraTaxableItems = $this->mapItemExtraTaxables(
                     $itemDataObjectFactory,
                     $item,
                     $priceIncludesTax,
                     $useBaseCurrency
                 );
-                //phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $itemDataObjects = array_merge($itemDataObjects, $extraTaxableItems);
+                $itemDataObjects[] = $extraTaxableItems;
             }
         }
 
-        return $itemDataObjects;
+        return array_merge([], ...$itemDataObjects);
     }
 
     /**

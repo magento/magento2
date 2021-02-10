@@ -215,7 +215,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function setOptionIdsFilter($optionIds)
     {
         if (!empty($optionIds)) {
-            $this->getSelect()->where('selection.option_id IN (?)', $optionIds);
+            $this->getSelect()->where('selection.option_id IN (?)', $optionIds, \Zend_Db::INT_TYPE);
         }
         return $this;
     }
@@ -229,7 +229,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function setSelectionIdsFilter($selectionIds)
     {
         if (!empty($selectionIds)) {
-            $this->getSelect()->where('selection.selection_id IN (?)', $selectionIds);
+            $this->getSelect()->where('selection.selection_id IN (?)', $selectionIds, \Zend_Db::INT_TYPE);
         }
         return $this;
     }

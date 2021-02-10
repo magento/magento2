@@ -25,8 +25,7 @@
             <actionGroup ref="RestoreLayoutSetting" stepKey="sampleActionGroup"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <amOnPage url="{{WebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminOpenWebConfigurationPageActionGroup" stepKey="navigateToWebConfigurationPage"/>
         <conditionalClick stepKey="expandDefaultLayouts" selector="{{WebSection.DefaultLayoutsTab}}" dependentSelector="{{WebSection.CheckIfTabExpand}}" visible="true" />
         <waitForElementVisible selector="{{DefaultLayoutsSection.pageLayout}}" stepKey="DefaultProductLayout" />
         <seeOptionIsSelected selector="{{DefaultLayoutsSection.pageLayout}}" userInput="1 column" stepKey="seeOneColumnSelected" />
@@ -34,8 +33,7 @@
         <seeOptionIsSelected selector="{{DefaultLayoutsSection.categoryLayout}}" userInput="No layout updates" stepKey="seeNoLayoutUpdatesSelected2" />
         <selectOption selector="{{DefaultLayoutsSection.pageLayout}}" userInput="2 columns with right bar" stepKey="selectColumnsWithRightBar"/>
         <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig" />
-        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="amOnPagePagesGrid"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="amOnPagePagesGrid"/>
         <waitForLoadingMaskToDisappear stepKey="wait2" />
         <click selector="{{CmsDesignSection.DesignTab}}" stepKey="clickOnDesignTab"/>
         <waitForElementVisible selector="{{CmsDesignSection.LayoutDropdown}}" stepKey="waitForLayoutDropDown" />

@@ -23,10 +23,7 @@
             <!-- Create product with description -->
             <createData entity="SimpleProductWithDescription" stepKey="simpleProduct"/>
 
-            <!-- Perform reindex and flush cache -->
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
             <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
                 <argument name="tags" value=""/>
             </actionGroup>
@@ -35,8 +32,7 @@
             <!-- Delete created product -->
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <!-- Go to the catalog search term page -->
-            <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="openAdminCatalogSearchTermIndexPage"/>
-            <waitForPageLoad stepKey="waitForAdminCatalogSearchTermIndexPageLoad"/>
+            <actionGroup ref="AdminOpenCatalogSearchTermIndexPageActionGroup" stepKey="openAdminCatalogSearchTermIndexPage"/>
             <!-- Filter the search term -->
             <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="filterByThirdSearchQuery">
                 <argument name="searchQuery" value="{{ApiProductDescription.value}}"/>
@@ -60,8 +56,7 @@
             <argument name="productName" value="$$simpleProduct.name$$"/>
         </actionGroup>
         <!-- Go to the catalog search term page -->
-        <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="openAdminCatalogSearchTermIndexPage"/>
-        <waitForPageLoad stepKey="waitForAdminCatalogSearchTermIndexPageLoad"/>
+        <actionGroup ref="AdminOpenCatalogSearchTermIndexPageActionGroup" stepKey="openAdminCatalogSearchTermIndexPage"/>
         <!-- Filter the search term -->
         <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="filterByThirdSearchQuery">
             <argument name="searchQuery" value="{{ApiProductDescription.value}}"/>

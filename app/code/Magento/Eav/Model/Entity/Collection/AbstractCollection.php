@@ -679,6 +679,9 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             throw new LocalizedException(__('The foreign key is invalid. Verify the foreign key and try again.'));
         }
 
+        $entity = null;
+        $attrArr = [];
+
         // try to explode combined entity/attribute if supplied
         if (is_string($attribute)) {
             $attrArr = explode('/', $attribute);
@@ -1121,12 +1124,13 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
 
         $this->printLogQuery($printQuery, $logQuery);
 
+        /**
+         * Prepare select query
+         * @var string|\Magento\Framework\DB\Select $query
+         */
+        $query = $this->getSelect();
+
         try {
-            /**
-             * Prepare select query
-             * @var string $query
-             */
-            $query = $this->getSelect();
             $rows = $this->_fetchAll($query);
         } catch (\Exception $e) {
             $this->printLogQuery(false, true, $query);
@@ -1192,12 +1196,12 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         $selectGroups = $this->_resourceHelper->getLoadAttributesSelectGroups($selects);
         foreach ($selectGroups as $selects) {
             if (!empty($selects)) {
+                if (is_array($selects)) {
+                    $select = implode(' UNION ALL ', $selects);
+                } else {
+                    $select = $selects;
+                }
                 try {
-                    if (is_array($selects)) {
-                        $select = implode(' UNION ALL ', $selects);
-                    } else {
-                        $select = $selects;
-                    }
                     $values = $this->getConnection()->fetchAll($select);
                 } catch (\Exception $e) {
                     $this->printLogQuery(true, true, $select);
@@ -1238,10 +1242,12 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
                 ['t_d.attribute_id']
             )->where(
                 " e.entity_id IN (?)",
-                array_keys($this->_itemsById)
+                array_keys($this->_itemsById),
+                \Zend_Db::INT_TYPE
             )->where(
                 't_d.attribute_id IN (?)',
-                $attributeIds
+                $attributeIds,
+                \Zend_Db::INT_TYPE
             );
 
         if ($entity->getEntityTable() == \Magento\Eav\Model\Entity::DEFAULT_ENTITY_TABLE && $entity->getTypeId()) {

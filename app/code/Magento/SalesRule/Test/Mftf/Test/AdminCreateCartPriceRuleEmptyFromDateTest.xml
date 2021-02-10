@@ -39,8 +39,7 @@
 
         <!--Set timezone-->
         <!--Set timezone so we need compare with the same timezone used in "generateDate" action-->
-        <amOnPage url="{{GeneralConfigurationPage.url}}" stepKey="goToGeneralConfig"/>
-        <waitForPageLoad stepKey="waitForConfigPage"/>
+        <actionGroup ref="AdminOpenGeneralConfigurationPageActionGroup" stepKey="goToGeneralConfig"/>
         <wait stepKey="wait" time="10"/>
         <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.timezone}}" visible="false" stepKey="openLocaleSection"/>
         <grabValueFrom selector="{{LocaleOptionsSection.timezone}}" stepKey="originalTimezone"/>
@@ -48,8 +47,7 @@
         <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfig"/>
 
         <!-- Create a cart price rule based on a coupon code  -->
-        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
-        <waitForPageLoad stepKey="waitForPriceList"/>
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{_defaultCoupon.code}}" stepKey="fillRuleName"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
@@ -89,12 +87,13 @@
             <argument name="coupon" value="_defaultCoupon"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad2"/>
-        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
-        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$5.00" stepKey="seeDiscountTotal"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForDiscountElement"/>
+        <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="seeDiscountTotal">
+            <argument name="discount" value="5.00"/>
+        </actionGroup>
 
         <!--Reset timezone-->
-        <amOnPage url="{{GeneralConfigurationPage.url}}" stepKey="goToGeneralConfigReset"/>
-        <waitForPageLoad stepKey="waitForConfigPageReset"/>
+        <actionGroup ref="AdminOpenGeneralConfigurationPageActionGroup" stepKey="goToGeneralConfigReset"/>
         <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.timezone}}" visible="false" stepKey="openLocaleSectionReset"/>
         <selectOption selector="{{LocaleOptionsSection.timezone}}" userInput="$originalTimezone" stepKey="resetTimezone"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfigReset"/>

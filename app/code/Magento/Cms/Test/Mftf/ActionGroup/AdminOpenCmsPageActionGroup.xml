@@ -8,6 +8,9 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminOpenCmsPageActionGroup">
+        <annotations>
+            <description>Open CMS edit page.</description>
+        </annotations>
         <arguments>
             <argument name="page_id" type="string"/>
         </arguments>

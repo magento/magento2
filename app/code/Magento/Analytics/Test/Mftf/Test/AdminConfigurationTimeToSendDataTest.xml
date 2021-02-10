@@ -18,11 +18,13 @@
             <testCaseId value="MAGETWO-66464"/>
             <group value="analytics"/>
         </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
-        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-        <amOnPage url="{{AdminConfigGeneralAnalyticsPage.url}}" stepKey="amOnAdminConfig"/>
+        <actionGroup ref="AdminOpenConfigGeneralAnalyticsPageActionGroup" stepKey="amOnAdminConfig"/>
         <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingService}}" userInput="Enable" stepKey="selectAdvancedReportingServiceEnabled"/>
         <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingIndustry}}" userInput="Apps and Games" stepKey="selectAdvancedReportingIndustry"/>
         <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingHour}}" userInput="23" stepKey="selectAdvancedReportingHour"/>

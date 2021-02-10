@@ -21,25 +21,24 @@ define([
          * @param {String} deleteImageUrl
          */
         deleteImageAction: function (recordsIds, imageDetailsUrl, deleteImageUrl) {
-            var confirmationContent = $t('%1 Are you sure you want to delete "%2" image(s)?')
+            var confirmationContent = $t('%1Are you sure you want to delete "%2" image(s)?')
                 .replace('%2', Object.keys(recordsIds).length),
                 deferred = $.Deferred();
 
-            getDetails(imageDetailsUrl, recordsIds)
-                .then(function (imageDetails) {
+            getDetails(imageDetailsUrl, recordsIds).then(function (images) {
                         confirmationContent = confirmationContent.replace(
                             '%1',
-                            this.getRecordRelatedContentMessage(imageDetails)
+                            this.getRecordRelatedContentMessage(images) + ' '
                         );
                     }.bind(this)).fail(function () {
-                confirmationContent = confirmationContent.replace('%1', '');
-            }).always(function () {
-                deleteImages(recordsIds, deleteImageUrl, confirmationContent).then(function (status) {
-                    deferred.resolve(status);
-                }).fail(function (error) {
-                    deferred.reject(error);
-                });
-            });
+                        confirmationContent = confirmationContent.replace('%1', '');
+                    }).always(function () {
+                        deleteImages(recordsIds, deleteImageUrl, confirmationContent).then(function (status) {
+                            deferred.resolve(status);
+                        }).fail(function (error) {
+                            deferred.reject(error);
+                        });
+                    });
 
             return deferred.promise();
         },

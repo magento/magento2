@@ -17,11 +17,13 @@
             <testCaseId value="MAGETWO-66465"/>
             <group value="analytics"/>
         </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
-        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-        <amOnPage url="{{AdminConfigGeneralAnalyticsPage.url}}" stepKey="amOnAdminConfig"/>
+        <actionGroup ref="AdminOpenConfigGeneralAnalyticsPageActionGroup" stepKey="amOnAdminConfig"/>
         <see selector="{{AdminConfigAdvancedReportingSection.advancedReportingServiceLabel}}" userInput="Advanced Reporting Service" stepKey="seeAdvancedReportingServiceLabelEnabled"/>
         <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingService}}" userInput="Enable" stepKey="selectAdvancedReportingServiceEnabled"/>
         <see selector="{{AdminConfigAdvancedReportingSection.advancedReportingIndustryLabel}}" userInput="Industry" stepKey="seeAdvancedReportingIndustryLabel"/>

@@ -6,8 +6,9 @@
 namespace Magento\Swatches\Helper;
 
 use Magento\Catalog\Helper\Image;
-use Magento\Framework\App\Area;
+use Magento\Catalog\Model\Config\CatalogMediaConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Helper to move images from tmp to catalog directory
@@ -73,6 +74,11 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     private $imageConfig;
 
     /**
+     * @var string
+     */
+    private $mediaUrlFormat;
+
+    /**
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
@@ -80,6 +86,8 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Image\Factory $imageFactory
      * @param \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection
      * @param \Magento\Framework\View\ConfigInterface $configInterface
+     * @param CatalogMediaConfig $catalogMediaConfig
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
@@ -88,7 +96,8 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Image\Factory $imageFactory,
         \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection,
-        \Magento\Framework\View\ConfigInterface $configInterface
+        \Magento\Framework\View\ConfigInterface $configInterface,
+        CatalogMediaConfig $catalogMediaConfig = null
     ) {
         $this->mediaConfig = $mediaConfig;
         $this->fileStorageDb = $fileStorageDb;
@@ -97,6 +106,9 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         $this->imageFactory = $imageFactory;
         $this->themeCollection = $themeCollection;
         $this->viewConfig = $configInterface;
+
+        $catalogMediaConfig = $catalogMediaConfig ?: ObjectManager::getInstance()->get(CatalogMediaConfig::class);
+        $this->mediaUrlFormat = $catalogMediaConfig->getMediaUrlFormat();
     }
 
     /**
@@ -106,17 +118,35 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getSwatchAttributeImage($swatchType, $file)
     {
-        $generationPath = $swatchType . '/' . $this->getFolderNameSize($swatchType) . $file;
-        $absoluteImagePath = $this->mediaDirectory
-            ->getAbsolutePath($this->getSwatchMediaPath() . '/' . $generationPath);
-        if (!file_exists($absoluteImagePath)) {
-            try {
-                $this->generateSwatchVariations($file);
-            } catch (\Exception $e) {
-                return '';
+        $basePath = $this->getSwatchMediaUrl();
+
+        if ($this->mediaUrlFormat === CatalogMediaConfig::HASH) {
+            $generationPath = $swatchType . '/' . $this->getFolderNameSize($swatchType) . $file;
+            $absoluteImagePath = $this->mediaDirectory
+                ->getAbsolutePath($this->getSwatchMediaPath() . '/' . $generationPath);
+            if (!$this->mediaDirectory->isExist(($absoluteImagePath))) {
+                try {
+                    $this->generateSwatchVariations($file);
+                } catch (\Exception $e) {
+                    return '';
+                }
             }
+
+            return $basePath . '/' . $generationPath;
         }
-        return $this->getSwatchMediaUrl() . '/' . $generationPath;
+
+        return $basePath . '/' . $this->getRelativeTransformationParametersPath($swatchType, $file);
+    }
+
+    private function getRelativeTransformationParametersPath($swatchType, $file)
+    {
+        $imageConfig = $this->getImageConfig();
+        return  $this->prepareFile($file) . '?' . http_build_query([
+            'width' => $imageConfig[$swatchType]['width'],
+            'height' => $imageConfig[$swatchType]['height'],
+            'store' => $this->storeManager->getStore()->getCode(),
+            'image-type' => $swatchType
+        ]);
     }
 
     /**
@@ -146,7 +176,9 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         } else {
             $this->mediaDirectory->renameFile(
                 $this->mediaConfig->getTmpMediaPath($file),
-                $this->getAttributeSwatchPath($destinationFile)
+                $this->mediaDirectory->getDriver()->getRealPathSafety(
+                    $this->getAttributeSwatchPath($destinationFile)
+                )
             );
         }
 
@@ -156,7 +188,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Check whether file to move exists. Getting unique name
      *
-     * @param <type> $file
+     * @param string $file
      * @return string
      */
     protected function getUniqueFileName($file)
@@ -168,11 +200,16 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
             );
         } else {
             $destFile = dirname($file) . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
-                $this->mediaDirectory->getAbsolutePath($this->getAttributeSwatchPath($file))
+                $this->getOriginalFilePath($file)
             );
         }
 
         return $destFile;
+    }
+
+    private function getOriginalFilePath($file)
+    {
+        return $this->mediaDirectory->getAbsolutePath($this->getAttributeSwatchPath($file));
     }
 
     /**
@@ -183,16 +220,19 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function generateSwatchVariations($imageUrl)
     {
-        $absoluteImagePath = $this->mediaDirectory->getAbsolutePath($this->getAttributeSwatchPath($imageUrl));
-        foreach ($this->swatchImageTypes as $swatchType) {
-            $imageConfig = $this->getImageConfig();
-            $swatchNamePath = $this->generateNamePath($imageConfig, $imageUrl, $swatchType);
-            $image = $this->imageFactory->create($absoluteImagePath);
-            $this->setupImageProperties($image);
-            $image->resize($imageConfig[$swatchType]['width'], $imageConfig[$swatchType]['height']);
-            $this->setupImageProperties($image, true);
-            $image->save($swatchNamePath['path_for_save'], $swatchNamePath['name']);
+        if ($this->mediaUrlFormat === CatalogMediaConfig::HASH) {
+            $absoluteImagePath = $this->getOriginalFilePath($imageUrl);
+            foreach ($this->swatchImageTypes as $swatchType) {
+                $imageConfig = $this->getImageConfig();
+                $swatchNamePath = $this->generateNamePath($imageConfig, $imageUrl, $swatchType);
+                $image = $this->imageFactory->create($absoluteImagePath);
+                $this->setupImageProperties($image);
+                $image->resize($imageConfig[$swatchType]['width'], $imageConfig[$swatchType]['height']);
+                $this->setupImageProperties($image, true);
+                $image->save($swatchNamePath['path_for_save'], $swatchNamePath['name']);
+            }
         }
+
         return $this;
     }
 
@@ -281,7 +321,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Url type http://url/pub/media/attribute/swatch/
+     * Url type http://url/media/attribute/swatch/
      *
      * @return string
      */

@@ -21,6 +21,7 @@ use Magento\Framework\DB\Profiler;
 use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\SelectFactory;
+use Magento\Framework\DB\Sql\Expression;
 use Magento\Framework\DB\Statement\Parameter;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
@@ -47,30 +48,31 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 {
     // @codingStandardsIgnoreEnd
 
-    const TIMESTAMP_FORMAT      = 'Y-m-d H:i:s';
-    const DATETIME_FORMAT       = 'Y-m-d H:i:s';
-    const DATE_FORMAT           = 'Y-m-d';
+    public const TIMESTAMP_FORMAT      = 'Y-m-d H:i:s';
+    public const DATETIME_FORMAT       = 'Y-m-d H:i:s';
+    public const DATE_FORMAT           = 'Y-m-d';
 
-    const DDL_DESCRIBE          = 1;
-    const DDL_CREATE            = 2;
-    const DDL_INDEX             = 3;
-    const DDL_FOREIGN_KEY       = 4;
-    const DDL_CACHE_PREFIX      = 'DB_PDO_MYSQL_DDL';
-    const DDL_CACHE_TAG         = 'DB_PDO_MYSQL_DDL';
+    public const DDL_DESCRIBE          = 1;
+    public const DDL_CREATE            = 2;
+    public const DDL_INDEX             = 3;
+    public const DDL_FOREIGN_KEY       = 4;
+    private const DDL_EXISTS           = 5;
+    public const DDL_CACHE_PREFIX      = 'DB_PDO_MYSQL_DDL';
+    public const DDL_CACHE_TAG         = 'DB_PDO_MYSQL_DDL';
 
-    const LENGTH_TABLE_NAME     = 64;
-    const LENGTH_INDEX_NAME     = 64;
-    const LENGTH_FOREIGN_NAME   = 64;
+    public const LENGTH_TABLE_NAME     = 64;
+    public const LENGTH_INDEX_NAME     = 64;
+    public const LENGTH_FOREIGN_NAME   = 64;
 
     /**
      * MEMORY engine type for MySQL tables
      */
-    const ENGINE_MEMORY = 'MEMORY';
+    public const ENGINE_MEMORY = 'MEMORY';
 
     /**
      * Maximum number of connection retries
      */
-    const MAX_CONNECTION_RETRIES = 10;
+    public const MAX_CONNECTION_RETRIES = 10;
 
     /**
      * Default class name for a DB statement.
@@ -663,11 +665,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         }
 
         // Mixed bind is not supported - so remember whether it is named bind, to normalize later if required
-        $isNamedBind = false;
         if ($bind) {
             foreach ($bind as $k => $v) {
                 if (!is_int($k)) {
-                    $isNamedBind = true;
                     if ($k[0] != ':') {
                         $bind[":{$k}"] = $v;
                         unset($bind[$k]);
@@ -1511,10 +1511,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Method revrited for handle empty arrays in value param
      *
      * @param string $text The text with a placeholder.
-     * @param mixed $value The value to quote.
-     * @param string $type OPTIONAL SQL datatype
+     * @param array|null|int|string|float|Expression|Select|\DateTimeInterface $value The value to quote.
+     * @param int|string|null $type OPTIONAL SQL datatype of the given value e.g. Zend_Db::FLOAT_TYPE or "INT"
      * @param integer $count OPTIONAL count of placeholders to replace
-     * @return string An SQL-safe quoted value placed into the orignal text.
+     * @return string An SQL-safe quoted value placed into the original text.
      */
     public function quoteInto($text, $value, $type = null, $count = null)
     {
@@ -1630,7 +1630,13 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         } else {
             $cacheKey = $this->_getTableName($tableName, $schemaName);
 
-            $ddlTypes = [self::DDL_DESCRIBE, self::DDL_CREATE, self::DDL_INDEX, self::DDL_FOREIGN_KEY];
+            $ddlTypes = [
+                self::DDL_DESCRIBE,
+                self::DDL_CREATE,
+                self::DDL_INDEX,
+                self::DDL_FOREIGN_KEY,
+                self::DDL_EXISTS
+            ];
             foreach ($ddlTypes as $ddlType) {
                 unset($this->_ddlCache[$ddlType][$cacheKey]);
             }
@@ -2657,7 +2663,30 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function isTableExists($tableName, $schemaName = null)
     {
-        return $this->showTableStatus($tableName, $schemaName) !== false;
+        $cacheKey = $this->_getTableName($tableName, $schemaName);
+
+        $ddl = $this->loadDdlCache($cacheKey, self::DDL_EXISTS);
+        if ($ddl !== false) {
+            return true;
+        }
+
+        $fromDbName = 'DATABASE()';
+        if ($schemaName !== null) {
+            $fromDbName = $this->quote($schemaName);
+        }
+
+        $sql = sprintf(
+            'SELECT COUNT(1) AS tbl_exists FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = %s AND TABLE_SCHEMA = %s',
+            $this->quote($tableName),
+            $fromDbName
+        );
+        $ddl = $this->rawFetchRow($sql, 'tbl_exists');
+        if ($ddl) {
+            $this->saveDdlCache($cacheKey, self::DDL_EXISTS, $ddl);
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -3043,8 +3072,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     protected function _prepareQuotedSqlCondition($text, $value, $fieldName)
     {
+        $text = str_replace('{{fieldName}}', $fieldName, $text);
         $sql = $this->quoteInto($text, $value);
-        $sql = str_replace('{{fieldName}}', $fieldName, $sql);
         return $sql;
     }
 

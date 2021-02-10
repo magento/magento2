@@ -7,6 +7,7 @@ namespace Magento\Framework\DB;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Sql\Expression;
 
 /**
  * Class for SQL SELECT generation and results.
@@ -108,19 +109,19 @@ class Select extends \Zend_Db_Select
      * </code>
      *
      * @param string $cond The WHERE condition.
-     * @param string|array|null $value OPTIONAL An optional single or array value to quote into the condition.
-     * @param string|int|null $type OPTIONAL The type of the given value
+     * @param array|null|int|string|float|Expression|Select|\DateTimeInterface $value The value to quote.
+     * @param int|string|null $type OPTIONAL SQL datatype of the given value e.g. Zend_Db::FLOAT_TYPE or "INT"
      * @return \Magento\Framework\DB\Select
      */
     public function where($cond, $value = null, $type = null)
     {
         if ($value === null && $type === null) {
             $value = '';
-        } elseif ($type == self::TYPE_CONDITION) {
+        } elseif ((string)$type === self::TYPE_CONDITION) {
             $type = null;
         }
         if (is_array($value)) {
-            $cond = $this->getConnection()->quoteInto($cond, $value);
+            $cond = $this->getConnection()->quoteInto($cond, $value, $type);
             $value = null;
         }
         return parent::where($cond, $value, $type);

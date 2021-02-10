@@ -198,6 +198,7 @@ System,System
 "All Stores","All Stores"
 "You saved the website.","You saved the website."
 "The default store cannot be disabled","The default store cannot be disabled"
+"Please enable your Store View before using this Web Site as Default","Please enable your Store View before using this Web Site as Default"
 "You saved the store view.","You saved the store view."
 "An inactive store view cannot be saved as default store view","An inactive store view cannot be saved as default store view"
 "You saved the store.","You saved the store."
@@ -465,3 +466,4 @@ Pagination,Pagination
 "Theme Name","Theme Name"
 "Use URL parameter to enable template path hints for Storefront","Use URL parameter to enable template path hints for Storefront"
 "Add the following parameter to the URL to show template hints ?templatehints=[parameter_value]","Add the following parameter to the URL to show template hints ?templatehints=[parameter_value]"
+"URL key "%1" matches a reserved endpoint name (%2). Use another URL key.","URL key "%1" matches a reserved endpoint name (%2). Use another URL key."
