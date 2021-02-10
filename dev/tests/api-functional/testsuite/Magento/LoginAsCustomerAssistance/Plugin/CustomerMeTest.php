@@ -94,7 +94,7 @@ class CustomerMeTest extends WebapiAbstract
                 Customer::EMAIL => $customerData['email'],
                 Customer::FIRSTNAME => $customerData['firstname'],
                 Customer::LASTNAME => $updatedLastname,
-                Customer::EXTENSION_ATTRIBUTES_KEY => ['assistance_allowed' => $state]
+                Customer::EXTENSION_ATTRIBUTES_KEY => ['assistance_allowed' => $state],
             ];
 
         $serviceInfo = $this->getServiceInfo('SaveSelf', $customerToken);
@@ -138,6 +138,7 @@ class CustomerMeTest extends WebapiAbstract
     {
         $customerData = $this->customerRepository->getById($customerId);
         $this->customerRegistry->remove($customerId);
+
         return $customerData;
     }
 

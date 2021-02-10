@@ -10,6 +10,7 @@ namespace Magento\LoginAsCustomerAssistance\Plugin;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\AuthorizationInterface;
 use Magento\LoginAsCustomerAssistance\Api\SetAssistanceInterface;
 use Magento\LoginAsCustomerAssistance\Model\IsAssistanceEnabled;
@@ -36,17 +37,17 @@ class CustomerPlugin
 
     /**
      * @param SetAssistanceInterface $setAssistance
-     * @param AuthorizationInterface $authorization
-     * @param UserContextInterface $userContext
+     * @param AuthorizationInterface|null $authorization
+     * @param UserContextInterface|null $userContext
      */
     public function __construct(
         SetAssistanceInterface $setAssistance,
-        AuthorizationInterface $authorization,
-        UserContextInterface $userContext
+        ?AuthorizationInterface $authorization = null,
+        ?UserContextInterface $userContext = null
     ) {
         $this->setAssistance = $setAssistance;
-        $this->authorization = $authorization;
-        $this->userContext = $userContext;
+        $this->authorization = $authorization ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
+        $this->userContext = $userContext ?? ObjectManager::getInstance()->get(UserContextInterface::class);
     }
 
     /**
@@ -64,8 +65,9 @@ class CustomerPlugin
         CustomerInterface $customer
     ): CustomerInterface {
         $enoughPermission = true;
-        if ($this->userContext->getUserType() === UserContextInterface::USER_TYPE_ADMIN ||
-            $this->userContext->getUserType() === UserContextInterface::USER_TYPE_INTEGRATION) {
+        if ($this->userContext->getUserType() === UserContextInterface::USER_TYPE_ADMIN
+            || $this->userContext->getUserType() === UserContextInterface::USER_TYPE_INTEGRATION
+        ) {
             $enoughPermission = $this->authorization->isAllowed('Magento_LoginAsCustomer::allow_shopping_assistance');
         }
         $customerId = (int)$result->getId();

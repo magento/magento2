@@ -128,8 +128,7 @@ class CustomerPluginTest extends WebapiAbstract
             ];
 
         $serviceInfo = $this->getServiceInfo($customerId, 'Save');
-        OauthHelper::clearApiAccessCredentials();
-        $apiCredentials = OauthHelper::getApiAccessCredentials($resources);
+        OauthHelper::getApiAccessCredentials($resources);
         $response = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertNotNull($response);
 
@@ -168,6 +167,7 @@ class CustomerPluginTest extends WebapiAbstract
     {
         $customerData = $this->customerRepository->getById($customerId);
         $this->customerRegistry->remove($customerId);
+
         return $customerData;
     }
 
@@ -180,5 +180,14 @@ class CustomerPluginTest extends WebapiAbstract
             'Assistance Allowed' => [IsAssistanceEnabledInterface::ALLOWED, true],
             'Assistance Denied' => [IsAssistanceEnabledInterface::DENIED, false],
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        OauthHelper::clearApiAccessCredentials();
+        parent::tearDown();
     }
 }
