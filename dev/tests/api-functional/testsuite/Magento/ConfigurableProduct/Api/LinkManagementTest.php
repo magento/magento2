@@ -178,7 +178,7 @@ class LinkManagementTest extends WebapiAbstract
 
             $valueIndexesData = [];
             foreach ($options as $option) {
-                $valueIndexesData []['value_index'] = $option->getValue();
+                $valueIndexesData[]['value_index'] = $option->getValue();
             }
             $this->addOptionToConfigurableProduct(
                 $productSku,
@@ -466,7 +466,7 @@ class LinkManagementTest extends WebapiAbstract
                     : (string)__(
                         'The child product doesn\'t have the \\"%1\\" attribute value. Verify the value and try again.'
                     ),
-            ]
+            ],
         ];
     }
 
@@ -496,7 +496,7 @@ class LinkManagementTest extends WebapiAbstract
     }
 
     /**
-     * get child products
+     * Get child products
      *
      * @param string $productSku
      * @return string[]
