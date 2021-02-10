@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b393e22aa06d113d272cce5fa1e7bf33",
+    "content-hash": "946841436bef43ba167501ba0ff0121f",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.173.2",
+            "version": "3.173.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "1ab4f565744aea8e9560ee8aaffb19b87238c7d5"
+                "reference": "439a161e46895cd1f7b93b4c0295f95d6a17385e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/1ab4f565744aea8e9560ee8aaffb19b87238c7d5",
-                "reference": "1ab4f565744aea8e9560ee8aaffb19b87238c7d5",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/439a161e46895cd1f7b93b4c0295f95d6a17385e",
+                "reference": "439a161e46895cd1f7b93b4c0295f95d6a17385e",
                 "shasum": ""
             },
             "require": {
@@ -89,7 +89,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2021-02-03T21:12:51+00:00"
+            "time": "2021-02-09T19:14:22+00:00"
         },
         {
             "name": "colinmollenhour/cache-backend-file",
@@ -1348,37 +1348,30 @@
         },
         {
             "name": "laminas/laminas-dependency-plugin",
-            "version": "1.0.4",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-dependency-plugin.git",
-                "reference": "38bf91861f5b4d49f9a1c530327c997f7a7fb2db"
+                "reference": "1cedcd1590225fcaa3d4d580ab3adf318779ac28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-dependency-plugin/zipball/38bf91861f5b4d49f9a1c530327c997f7a7fb2db",
-                "reference": "38bf91861f5b4d49f9a1c530327c997f7a7fb2db",
+                "url": "https://api.github.com/repos/laminas/laminas-dependency-plugin/zipball/1cedcd1590225fcaa3d4d580ab3adf318779ac28",
+                "reference": "1cedcd1590225fcaa3d4d580ab3adf318779ac28",
                 "shasum": ""
             },
             "require": {
-                "composer-plugin-api": "^1.1",
-                "php": "^5.6 || ^7.0"
+                "composer-plugin-api": "^1.1 || ^2.0",
+                "php": "^7.3 || ~8.0.0"
             },
             "require-dev": {
-                "composer/composer": "^1.9",
-                "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
-                "phpcompatibility/php-compatibility": "^9.3",
-                "phpunit/phpunit": "^8.4",
-                "roave/security-advisories": "dev-master",
-                "webimpress/coding-standard": "^1.0"
+                "composer/composer": "^1.9 || ^2.0",
+                "mikey179/vfsstream": "^1.6",
+                "roave/security-advisories": "dev-master"
             },
             "type": "composer-plugin",
             "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev",
-                    "dev-develop": "1.1.x-dev"
-                },
-                "class": "Laminas\\DependencyPlugin\\DependencyRewriterPlugin"
+                "class": "Laminas\\DependencyPlugin\\DependencyRewriterPluginDelegator"
             },
             "autoload": {
                 "psr-4": {
@@ -1390,7 +1383,13 @@
                 "BSD-3-Clause"
             ],
             "description": "Replace zendframework and zfcampus packages with their Laminas Project equivalents.",
-            "time": "2020-05-20T13:45:39+00:00"
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2020-11-02T18:16:57+00:00"
         },
         {
             "name": "laminas/laminas-di",
@@ -1623,6 +1622,12 @@
                 "events",
                 "laminas"
             ],
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
             "time": "2020-08-25T11:10:44+00:00"
         },
         {
@@ -1689,6 +1694,12 @@
             "keywords": [
                 "feed",
                 "laminas"
+            ],
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
             ],
             "time": "2020-08-18T13:45:04+00:00"
         },
@@ -1837,6 +1848,12 @@
             "keywords": [
                 "form",
                 "laminas"
+            ],
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
             ],
             "time": "2020-07-14T13:53:27+00:00"
         },
@@ -2024,6 +2041,12 @@
             "keywords": [
                 "i18n",
                 "laminas"
+            ],
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
             ],
             "time": "2020-10-24T13:14:32+00:00"
         },
@@ -2502,6 +2525,12 @@
                 "laminas",
                 "modulemanager"
             ],
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
             "time": "2020-08-25T09:29:22+00:00"
         },
         {
@@ -2884,6 +2913,12 @@
                 "laminas",
                 "session"
             ],
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
             "time": "2020-10-31T15:33:31+00:00"
         },
         {
@@ -3081,6 +3116,12 @@
             "keywords": [
                 "laminas",
                 "uri"
+            ],
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
             ],
             "time": "2020-10-31T20:20:07+00:00"
         },
@@ -3293,20 +3334,26 @@
                 "laminas",
                 "zf"
             ],
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
             "time": "2020-09-14T14:23:00+00:00"
         },
         {
             "name": "league/flysystem",
-            "version": "2.0.2",
+            "version": "2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "1d68c2325a56b6b847f3a40b9564cabfa7bb2594"
+                "reference": "e2755df0ae790769729ff877197862fbac020c7d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/1d68c2325a56b6b847f3a40b9564cabfa7bb2594",
-                "reference": "1d68c2325a56b6b847f3a40b9564cabfa7bb2594",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/e2755df0ae790769729ff877197862fbac020c7d",
+                "reference": "e2755df0ae790769729ff877197862fbac020c7d",
                 "shasum": ""
             },
             "require": {
@@ -3359,20 +3406,34 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2020-12-28T17:02:23+00:00"
+            "funding": [
+                {
+                    "url": "https://offset.earth/frankdejonge",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/frankdejonge",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/league/flysystem",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-02-09T21:10:56+00:00"
         },
         {
             "name": "league/flysystem-aws-s3-v3",
-            "version": "2.0.2",
+            "version": "2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem-aws-s3-v3.git",
-                "reference": "ac4a9a30c55adfcfa90b800407ead2eb09ce8376"
+                "reference": "c89931e9c4b294493234798564cc814ef478fbc6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem-aws-s3-v3/zipball/ac4a9a30c55adfcfa90b800407ead2eb09ce8376",
-                "reference": "ac4a9a30c55adfcfa90b800407ead2eb09ce8376",
+                "url": "https://api.github.com/repos/thephpleague/flysystem-aws-s3-v3/zipball/c89931e9c4b294493234798564cc814ef478fbc6",
+                "reference": "c89931e9c4b294493234798564cc814ef478fbc6",
                 "shasum": ""
             },
             "require": {
@@ -3410,7 +3471,7 @@
                 "s3",
                 "storage"
             ],
-            "time": "2020-12-02T13:23:21+00:00"
+            "time": "2021-02-09T21:10:56+00:00"
         },
         {
             "name": "league/mime-type-detection",
@@ -4812,6 +4873,20 @@
                 "interoperability",
                 "standards"
             ],
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-07-06T13:19:58+00:00"
         },
         {
@@ -5456,6 +5531,20 @@
                 "interoperability",
                 "standards"
             ],
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-09-07T11:33:47+00:00"
         },
         {
@@ -5650,6 +5739,12 @@
                 "safe writer",
                 "webimpress"
             ],
+            "funding": [
+                {
+                    "url": "https://github.com/michalbundyra",
+                    "type": "github"
+                }
+            ],
             "time": "2020-08-25T07:21:11+00:00"
         },
         {
@@ -5701,6 +5796,12 @@
             "keywords": [
                 "api",
                 "graphql"
+            ],
+            "funding": [
+                {
+                    "url": "https://opencollective.com/webonyx-graphql-php",
+                    "type": "open_collective"
+                }
             ],
             "time": "2020-07-02T05:49:25+00:00"
         },
@@ -6489,22 +6590,22 @@
         },
         {
             "name": "dealerdirect/phpcodesniffer-composer-installer",
-            "version": "v0.5.0",
+            "version": "v0.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Dealerdirect/phpcodesniffer-composer-installer.git",
-                "reference": "e749410375ff6fb7a040a68878c656c2e610b132"
+                "reference": "fe390591e0241955f22eb9ba327d137e501c771c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Dealerdirect/phpcodesniffer-composer-installer/zipball/e749410375ff6fb7a040a68878c656c2e610b132",
-                "reference": "e749410375ff6fb7a040a68878c656c2e610b132",
+                "url": "https://api.github.com/repos/Dealerdirect/phpcodesniffer-composer-installer/zipball/fe390591e0241955f22eb9ba327d137e501c771c",
+                "reference": "fe390591e0241955f22eb9ba327d137e501c771c",
                 "shasum": ""
             },
             "require": {
-                "composer-plugin-api": "^1.0",
-                "php": "^5.3|^7",
-                "squizlabs/php_codesniffer": "^2|^3"
+                "composer-plugin-api": "^1.0 || ^2.0",
+                "php": ">=5.3",
+                "squizlabs/php_codesniffer": "^2.0 || ^3.0 || ^4.0"
             },
             "require-dev": {
                 "composer/composer": "*",
@@ -6551,7 +6652,7 @@
                 "stylecheck",
                 "tests"
             ],
-            "time": "2018-10-26T13:21:45+00:00"
+            "time": "2020-12-07T18:04:37+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -7666,12 +7767,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "7f0cf87cd954ef98fbf8fd9b073ab1b0ba6dd6f0"
+                "reference": "4f76bdae7bd0cbf15adf0ecc596dcd2e90f2b697"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/7f0cf87cd954ef98fbf8fd9b073ab1b0ba6dd6f0",
-                "reference": "7f0cf87cd954ef98fbf8fd9b073ab1b0ba6dd6f0",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/4f76bdae7bd0cbf15adf0ecc596dcd2e90f2b697",
+                "reference": "4f76bdae7bd0cbf15adf0ecc596dcd2e90f2b697",
                 "shasum": ""
             },
             "require": {
@@ -7750,7 +7851,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2021-02-04T14:09:44+00:00"
+            "time": "2021-02-10T17:41:57+00:00"
         },
         {
             "name": "mikey179/vfsstream",
@@ -8593,6 +8694,12 @@
                 "phpmd",
                 "pmd"
             ],
+            "funding": [
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/phpmd/phpmd",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-09-23T22:06:32+00:00"
         },
         {
@@ -8647,6 +8754,16 @@
                 "option",
                 "php",
                 "type"
+            ],
+            "funding": [
+                {
+                    "url": "https://github.com/GrahamCampbell",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/phpoption/phpoption",
+                    "type": "tidelift"
+                }
             ],
             "time": "2020-07-20T17:29:33+00:00"
         },
@@ -8817,6 +8934,12 @@
                 "testing",
                 "xunit"
             ],
+            "funding": [
+                {
+                    "url": "https://github.com/sebastianbergmann",
+                    "type": "github"
+                }
+            ],
             "time": "2020-05-23T08:02:54+00:00"
         },
         {
@@ -8866,6 +8989,12 @@
             "keywords": [
                 "filesystem",
                 "iterator"
+            ],
+            "funding": [
+                {
+                    "url": "https://github.com/sebastianbergmann",
+                    "type": "github"
+                }
             ],
             "time": "2020-09-28T05:57:25+00:00"
         },
@@ -8920,6 +9049,12 @@
             "keywords": [
                 "process"
             ],
+            "funding": [
+                {
+                    "url": "https://github.com/sebastianbergmann",
+                    "type": "github"
+                }
+            ],
             "time": "2020-09-28T05:58:55+00:00"
         },
         {
@@ -8968,6 +9103,12 @@
             "homepage": "https://github.com/sebastianbergmann/php-text-template/",
             "keywords": [
                 "template"
+            ],
+            "funding": [
+                {
+                    "url": "https://github.com/sebastianbergmann",
+                    "type": "github"
+                }
             ],
             "time": "2020-10-26T05:33:50+00:00"
         },
@@ -9066,6 +9207,12 @@
             "homepage": "https://github.com/sebastianbergmann/php-token-stream/",
             "keywords": [
                 "tokenizer"
+            ],
+            "funding": [
+                {
+                    "url": "https://github.com/sebastianbergmann",
+                    "type": "github"
+                }
             ],
             "abandoned": true,
             "time": "2020-08-04T08:28:15+00:00"
@@ -9349,6 +9496,12 @@
             ],
             "description": "Collection of value objects that represent the PHP code units",
             "homepage": "https://github.com/sebastianbergmann/code-unit",
+            "funding": [
+                {
+                    "url": "https://github.com/sebastianbergmann",
+                    "type": "github"
+                }
+            ],
             "time": "2020-10-26T13:08:54+00:00"
         },
         {
@@ -9394,6 +9547,12 @@
             ],
             "description": "Looks up which function or method a line of code belongs to",
             "homepage": "https://github.com/sebastianbergmann/code-unit-reverse-lookup/",
+            "funding": [
+                {
+                    "url": "https://github.com/sebastianbergmann",
+                    "type": "github"
+                }
+            ],
             "time": "2020-09-28T05:30:19+00:00"
         },
         {
@@ -9458,6 +9617,12 @@
                 "compare",
                 "equality"
             ],
+            "funding": [
+                {
+                    "url": "https://github.com/sebastianbergmann",
+                    "type": "github"
+                }
+            ],
             "time": "2020-10-26T15:49:45+00:00"
         },
         {
@@ -9514,6 +9679,12 @@
                 "unidiff",
                 "unified diff"
             ],
+            "funding": [
+                {
+                    "url": "https://github.com/sebastianbergmann",
+                    "type": "github"
+                }
+            ],
             "time": "2020-10-26T13:10:38+00:00"
         },
         {
@@ -9566,6 +9737,12 @@
                 "Xdebug",
                 "environment",
                 "hhvm"
+            ],
+            "funding": [
+                {
+                    "url": "https://github.com/sebastianbergmann",
+                    "type": "github"
+                }
             ],
             "time": "2020-09-28T05:52:38+00:00"
         },
@@ -9633,6 +9810,12 @@
             "keywords": [
                 "export",
                 "exporter"
+            ],
+            "funding": [
+                {
+                    "url": "https://github.com/sebastianbergmann",
+                    "type": "github"
+                }
             ],
             "time": "2020-09-28T05:24:23+00:00"
         },
@@ -9782,6 +9965,12 @@
             ],
             "description": "Traverses array structures and object graphs to enumerate all referenced objects",
             "homepage": "https://github.com/sebastianbergmann/object-enumerator/",
+            "funding": [
+                {
+                    "url": "https://github.com/sebastianbergmann",
+                    "type": "github"
+                }
+            ],
             "time": "2020-10-26T13:12:34+00:00"
         },
         {
@@ -9827,6 +10016,12 @@
             ],
             "description": "Allows reflection of object attributes, including inherited and non-public ones",
             "homepage": "https://github.com/sebastianbergmann/object-reflector/",
+            "funding": [
+                {
+                    "url": "https://github.com/sebastianbergmann",
+                    "type": "github"
+                }
+            ],
             "time": "2020-10-26T13:14:26+00:00"
         },
         {
@@ -9931,6 +10126,12 @@
             ],
             "description": "Provides functionality to recursively process PHP variables",
             "homepage": "http://www.github.com/sebastianbergmann/recursion-context",
+            "funding": [
+                {
+                    "url": "https://github.com/sebastianbergmann",
+                    "type": "github"
+                }
+            ],
             "time": "2020-10-26T13:17:30+00:00"
         },
         {
@@ -9976,6 +10177,12 @@
             ],
             "description": "Provides a list of PHP built-in functions that operate on resources",
             "homepage": "https://www.github.com/sebastianbergmann/resource-operations",
+            "funding": [
+                {
+                    "url": "https://github.com/sebastianbergmann",
+                    "type": "github"
+                }
+            ],
             "time": "2020-09-28T06:45:17+00:00"
         },
         {
@@ -10022,6 +10229,12 @@
             ],
             "description": "Collection of value objects that represent the types of the PHP type system",
             "homepage": "https://github.com/sebastianbergmann/type",
+            "funding": [
+                {
+                    "url": "https://github.com/sebastianbergmann",
+                    "type": "github"
+                }
+            ],
             "time": "2020-10-26T13:18:59+00:00"
         },
         {
@@ -10065,6 +10278,12 @@
             ],
             "description": "Library that helps with managing the version number of Git-hosted PHP projects",
             "homepage": "https://github.com/sebastianbergmann/version",
+            "funding": [
+                {
+                    "url": "https://github.com/sebastianbergmann",
+                    "type": "github"
+                }
+            ],
             "time": "2020-09-28T06:39:44+00:00"
         },
         {
@@ -10368,6 +10587,20 @@
             ],
             "description": "A generic function and convention to trigger deprecation notices",
             "homepage": "https://symfony.com",
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-09-07T11:33:47+00:00"
         },
         {
@@ -10546,6 +10779,17 @@
         {
             "name": "symfony/polyfill-php70",
             "version": "v1.20.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-php70.git",
+                "reference": "5f03a781d984aae42cebd18e7912fa80f02ee644"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-php70/zipball/5f03a781d984aae42cebd18e7912fa80f02ee644",
+                "reference": "5f03a781d984aae42cebd18e7912fa80f02ee644",
+                "shasum": ""
+            },
             "require": {
                 "php": ">=7.1"
             },
@@ -10580,6 +10824,20 @@
                 "polyfill",
                 "portable",
                 "shim"
+            ],
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
             ],
             "time": "2020-10-23T14:02:19+00:00"
         },
@@ -10899,6 +11157,12 @@
                 }
             ],
             "description": "A small library for converting tokenized PHP source code into XML and potentially other formats",
+            "funding": [
+                {
+                    "url": "https://github.com/theseer",
+                    "type": "github"
+                }
+            ],
             "time": "2020-07-12T23:59:07+00:00"
         },
         {
@@ -10968,12 +11232,12 @@
             "version": "1.9.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/webmozarts/assert.git",
+                "url": "https://github.com/webmozart/assert.git",
                 "reference": "bafc69caeb4d49c39fd0779086c03a3738cbb389"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozarts/assert/zipball/bafc69caeb4d49c39fd0779086c03a3738cbb389",
+                "url": "https://api.github.com/repos/webmozart/assert/zipball/bafc69caeb4d49c39fd0779086c03a3738cbb389",
                 "reference": "bafc69caeb4d49c39fd0779086c03a3738cbb389",
                 "shasum": ""
             },
@@ -11076,5 +11340,6 @@
         "ext-zip": "*",
         "lib-libxml": "*"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }
