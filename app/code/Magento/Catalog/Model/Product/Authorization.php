@@ -12,8 +12,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product as ProductModel;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Eav\Api\Data\AttributeInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\RequestInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -35,23 +33,13 @@ class Authorization
     private $productFactory;
 
     /**
-     * @var RequestInterface
-     */
-    private $request;
-
-    /**
      * @param AuthorizationInterface $authorization
      * @param ProductFactory $factory
-     * @param RequestInterface|null $request
      */
-    public function __construct(
-        AuthorizationInterface $authorization,
-        ProductFactory $factory,
-        ?RequestInterface $request = null
-    ) {
+    public function __construct(AuthorizationInterface $authorization, ProductFactory $factory)
+    {
         $this->authorization = $authorization;
         $this->productFactory = $factory;
-        $this->request = $request ?: ObjectManager::getInstance()->get(RequestInterface::class);;
     }
 
     /**
@@ -133,16 +121,15 @@ class Authorization
             if (!array_key_exists($designAttribute, $attributes)) {
                 continue;
             }
-            $useDefaults = (array) $this->request->getPost('use_default', []);
-            if (isset($useDefaults[$designAttribute]) && $useDefaults[$designAttribute]) {
-                continue;
-            }
             $attribute = $attributes[$designAttribute];
             $oldValues = $this->fetchOldValues($attribute, $oldProduct);
             try {
                 $newValue = $this->extractAttributeValue($product, $attribute);
             } catch (\RuntimeException $exception) {
                 //No new value
+                continue;
+            }
+            if ($attribute->getBackendType() == 'datetime' && empty($newValue)) {
                 continue;
             }
             if (!in_array($newValue, $oldValues, true)) {

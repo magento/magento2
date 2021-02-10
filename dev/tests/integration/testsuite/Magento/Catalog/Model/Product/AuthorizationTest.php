@@ -58,7 +58,7 @@ class AuthorizationTest extends TestCase
     /**
      * Verify AuthorizedSavingOf
      *
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_design_attributes.php
      * @param array $data
      *
      * @dataProvider postRequestData
@@ -114,8 +114,8 @@ class AuthorizationTest extends TestCase
                         'page_layout' => '',
                         'options_container' => 'container2',
                         'custom_design' => '',
-                        'custom_design_from' => '',
-                        'custom_design_to' => '',
+                        'custom_design_from' => '2020-01-02',
+                        'custom_design_to' => '2020-01-03',
                         'custom_layout' => '',
                         'custom_layout_update_file' => '__no_update__',
                     ],
