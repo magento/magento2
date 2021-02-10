@@ -37,7 +37,7 @@
         <seeElement selector="{{TinyMCESection.InsertImageBtn}}" stepKey="insertImage"/>
         <dontSee selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="insertWidget" />
         <dontSee selector="{{TinyMCESection.InsertVariableBtn}}" stepKey="insertVariable" />
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCatalog"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCatalog"/>
         <!-- Go to storefront product page, assert product content -->
         <amOnPage url="/{{SimpleSubCategory.name_lwr}}.html" stepKey="goToCategoryFrontPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>

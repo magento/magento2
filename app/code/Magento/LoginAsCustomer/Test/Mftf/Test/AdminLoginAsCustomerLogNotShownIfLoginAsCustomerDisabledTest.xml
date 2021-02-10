@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLoginAsCustomerLogNotShownIfLoginAsCustomerDisabledTest">
+        <annotations>
+            <features value="Login as Customer"/>
+            <stories value="Availability of UI elements if module enable/disable"/>
+            <title value="'Login as Customer Log' not shown if 'Login as customer' functionality is disabled"/>
+            <description value="Verify that 'Login as Customer Log' not shown if 'Login as customer' functionality is disabled"/>
+            <severity value="CRITICAL"/>
+            <group value="login_as_customer"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0" stepKey="disableLoginAsCustomer"/>
+            <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Verify Login as Customer Log is absent in admin menu -->
+        <actionGroup ref="AdminLoginAsCustomerLogAbsentInMenuActionGroup" stepKey="verifyLoginAsCustomerLogAbsentInMenu"/>
+
+        <!-- Verify Login as Customer Log is not available by direct url -->
+        <actionGroup ref="AdminLoginAsCustomerLogPageNotAvailableActionGroup" stepKey="verifyLoginAsCustomerLogNotAvailable"/>
+    </test>
+</tests>

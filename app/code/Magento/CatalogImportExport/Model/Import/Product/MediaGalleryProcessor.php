@@ -384,7 +384,9 @@ class MediaGalleryProcessor
         foreach ($this->connection->fetchAll($select) as $image) {
             $storeId = $image['store_id'];
             unset($image['store_id']);
-            $result[$storeId][$image['sku']][$image['value']] = $image;
+            $sku = mb_strtolower($image['sku']);
+            $value = ltrim($image['value'], '/\\');
+            $result[$storeId][$sku][$value] = $image;
         }
 
         return $result;

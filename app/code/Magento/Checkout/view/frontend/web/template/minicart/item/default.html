@@ -44,11 +44,11 @@
                             <!-- ko if: Array.isArray(option.value) -->
                                 <span data-bind="html: option.value.join('<br>')"></span>
                             <!-- /ko -->
-                            <!-- ko if: (!Array.isArray(option.value) && option.option_type == 'file') -->
+                            <!-- ko if: (!Array.isArray(option.value) && ['file', 'html'].includes(option.option_type)) -->
                                 <span data-bind="html: option.value"></span>
                             <!-- /ko -->
-                            <!-- ko if: (!Array.isArray(option.value) && option.option_type != 'file') -->
-                                <span data-bind="text: option.value"></span>
+                            <!-- ko if: (!Array.isArray(option.value) && !['file', 'html'].includes(option.option_type)) -->
+                            <span data-bind="text: option.value"></span>
                             <!-- /ko -->
                         </dd>
                         <!-- /ko -->
@@ -111,5 +111,8 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="message notice" if="$data.message">
+        <div data-bind="text: $data.message"></div>
     </div>
 </li>

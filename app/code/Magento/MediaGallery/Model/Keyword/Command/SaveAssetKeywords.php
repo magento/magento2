@@ -7,16 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Model\Keyword\Command;
 
-use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
-use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\MediaGallery\Model\ResourceModel\Keyword\SaveAssetLinks;
+use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
+use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class SaveAssetKeywords
+ * Save media asset keywords to database
+ * @deprecated 100.4.0 use \Magento\MediaGalleryApi\Api\SaveAssetKeywordsInterface instead
  */
 class SaveAssetKeywords implements SaveAssetKeywordsInterface
 {
@@ -40,8 +42,6 @@ class SaveAssetKeywords implements SaveAssetKeywordsInterface
     private $logger;
 
     /**
-     * SaveAssetKeywords constructor.
-     *
      * @param ResourceConnection $resourceConnection
      * @param SaveAssetLinks $saveAssetLinks
      * @param LoggerInterface $logger

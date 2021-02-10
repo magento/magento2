@@ -67,8 +67,7 @@
 
         <!--Close Popup and click next-->
         <click selector="{{StorefrontCheckoutAddressPopupSection.closeAddressModalPopup}}" stepKey="closePopup"/>
-        <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" stepKey="waitForNextButton"/>
-        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
 
         <!--Refresh Page and Place Order-->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>

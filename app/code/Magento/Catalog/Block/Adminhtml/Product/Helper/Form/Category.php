@@ -7,7 +7,9 @@
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /**
  * Product form category field helper
@@ -42,6 +44,11 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
     protected $authorization;
 
     /**
+     * @var SecureHtmlRenderer
+     */
+    private $secureRenderer;
+
+    /**
      * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Framework\Escaper $escaper
@@ -51,6 +58,8 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param AuthorizationInterface $authorization
      * @param array $data
+     * @param SecureHtmlRenderer|null $secureRenderer
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,
@@ -61,7 +70,8 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         AuthorizationInterface $authorization,
-        array $data = []
+        array $data = [],
+        ?SecureHtmlRenderer $secureRenderer = null
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_collectionFactory = $collectionFactory;
@@ -69,6 +79,7 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
         $this->authorization = $authorization;
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
         $this->_layout = $layout;
+        $this->secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
         if (!$this->isAllowed()) {
             $this->setType('hidden');
             $this->addClass('hidden');
@@ -136,13 +147,15 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
         );
         $return = <<<HTML
     <input id="{$htmlId}-suggest" placeholder="$suggestPlaceholder" />
-    <script>
+HTML;
+        $scriptString = <<<script
         require(["jquery", "mage/mage"], function($){
             $('#{$htmlId}-suggest').mage('treeSuggest', {$selectorOptions});
         });
-    </script>
-HTML;
-        return $return . $button->toHtml();
+script;
+
+        return $return . $button->toHtml() .
+            /* @noEscape */ $this->secureRenderer->renderTag('script', [], $scriptString, false);
     }
 
     /**

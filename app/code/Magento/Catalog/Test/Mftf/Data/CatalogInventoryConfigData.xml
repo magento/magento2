@@ -30,4 +30,9 @@
         <data key="label">No</data>
         <data key="value">0</data>
     </entity>
+    <entity name="CatalogInventoryOptionsOnlyXleftThreshold">
+        <!-- Magento default value -->
+        <data key="path">cataloginventory/options/stock_threshold_qty</data>
+        <data key="value">0</data>
+    </entity>
 </entities>

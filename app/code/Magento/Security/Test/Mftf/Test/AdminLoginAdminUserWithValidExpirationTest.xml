@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+
+    <test name="AdminLoginAdminUserWithValidExpirationTest">
+        <annotations>
+            <features value="Security"/>
+            <stories value="Login as a user with a valid expiration date."/>
+            <title value="Login as a user with a valid expiration date"/>
+            <description value="Login as a user with a valid expiration date."/>
+            <testCaseId value=""/>
+            <severity value="CRITICAL"/>
+            <group value="security"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminOpenNewUserPageActionGroup" stepKey="openNewUserPage" />
+        <generateDate date="+5 day" format="M d, Y g:i:s A" stepKey="expiresDateTime"/>
+        <actionGroup ref="AdminFillInUserWithExpirationActionGroup" stepKey="fillInNewUserWithValidExpiration">
+            <argument name="expires_at" value="{$expiresDateTime}"/>
+        </actionGroup>
+        <grabValueFrom selector="{{AdminNewUserFormSection.username}}" stepKey="grabUsername"/>
+        <grabValueFrom selector="{{AdminNewUserFormSection.password}}" stepKey="grabPassword"/>
+        <actionGroup ref="AdminSaveUserSuccessActionGroup" stepKey="saveNewUserWithValidExpirationSuccess"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewAdmin">
+            <argument name="username" value="{$grabUsername}"/>
+            <argument name="password" value="{$grabPassword}"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminDashboardPageIsVisibleActionGroup" stepKey="seeDashboardPage"/>
+
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsUserWithValidExpiration"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteUser">
+            <argument name="user" value="NewAdminUser"/>
+        </actionGroup>
+    </test>
+</tests>

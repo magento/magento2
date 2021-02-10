@@ -65,8 +65,14 @@ class CategoryTest extends AbstractBackendController
      *
      * @throws \Magento\Framework\Exception\AuthenticationException
      */
-    protected function setUp()
+    protected function setUp(): void
     {
+        Bootstrap::getObjectManager()->configure([
+            'preferences' => [
+                \Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager::class
+                => \Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager::class
+            ]
+        ]);
         parent::setUp();
 
         /** @var ProductResource $productResource */

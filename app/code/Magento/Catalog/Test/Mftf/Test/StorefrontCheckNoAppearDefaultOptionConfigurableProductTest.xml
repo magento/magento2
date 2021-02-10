@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckNoAppearDefaultOptionConfigurableProductTest">
+        <annotations>
+            <stories value="Configurable Product"/>
+            <title value="Check for Configurable Product the default option doesn't appear."/>
+            <description value="Check for Configurable Product the default option doesn't appear on the list options product when an option use."/>
+            <testCaseId value="MC-35074"/>
+            <severity value="CRITICAL"/>
+        </annotations>
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}" />
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <actionGroup ref="AdminFillBasicValueConfigurableProductActionGroup" stepKey="fillBasicValue">
+            <argument name="product" value="_defaultProduct"/>
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddOptionsToAttributeWithDefaultLayeredNavigationActionGroup" stepKey="createOptions"/>
+        <actionGroup ref="AdminGotoSelectValueAttributePageActionGroup" stepKey="gotoSelectValuePage">
+            <argument name="defaultLabelAttribute" value="{{colorProductAttribute.default_label}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectValueFromAttributeActionGroup" stepKey="selectColorProductAttribute2">
+            <argument name="option" value="colorProductAttribute2"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectValueFromAttributeActionGroup" stepKey="selectColorProductAttribute3">
+            <argument name="option" value="colorProductAttribute3"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetQuantityToEachSkusConfigurableProductActionGroup" stepKey="saveConfigurable"/>
+        <grabValueFrom selector="{{NewProductPageSection.sku}}" stepKey="grabSkuProduct"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+
+        <actionGroup ref="SelectStorefrontSideBarAttributeOption" stepKey="expandOption">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+            <argument name="attributeDefaultLabel" value="{{colorProductAttribute.default_label}}"/>
+        </actionGroup>
+        <dontSeeElement selector="{{LayeredNavigationSection.filterOptionContent(colorProductAttribute.default_label,colorProductAttribute1.name)}}" stepKey="dontSeeCaptchaField"/>
+        <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct">
+            <argument name="sku" value="$grabSkuProduct"/>
+        </actionGroup>
+    </test>
+</tests>

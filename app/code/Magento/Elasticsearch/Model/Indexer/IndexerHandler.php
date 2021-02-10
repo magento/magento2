@@ -5,12 +5,13 @@
  */
 namespace Magento\Elasticsearch\Model\Indexer;
 
-use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
-use Magento\Framework\Indexer\SaveHandler\Batch;
-use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Elasticsearch\Model\Adapter\Elasticsearch as ElasticsearchAdapter;
 use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
 use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\Indexer\IndexStructureInterface;
+use Magento\Framework\Indexer\SaveHandler\Batch;
+use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
+use Magento\Framework\Search\Request\Dimension;
 
 /**
  * Indexer Handler for Elasticsearch engine.
@@ -18,7 +19,7 @@ use Magento\Framework\App\ScopeResolverInterface;
 class IndexerHandler implements IndexerInterface
 {
     /**
-     * Default batch size
+     * Size of default batch
      */
     const DEFAULT_BATCH_SIZE = 500;
 
@@ -130,6 +131,22 @@ class IndexerHandler implements IndexerInterface
     public function isAvailable($dimensions = [])
     {
         return $this->adapter->ping();
+    }
+
+    /**
+     * Update mapping data for index.
+     *
+     * @param Dimension[] $dimensions
+     * @param string $attributeCode
+     * @return IndexerInterface
+     */
+    public function updateIndex(array $dimensions, string $attributeCode): IndexerInterface
+    {
+        $dimension = current($dimensions);
+        $scopeId = (int)$this->scopeResolver->getScope($dimension->getValue())->getId();
+        $this->adapter->updateIndexMapping($scopeId, $this->getIndexerId(), $attributeCode);
+
+        return $this;
     }
 
     /**

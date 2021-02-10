@@ -39,8 +39,7 @@
             <deleteData stepKey="deleteProductTaxClass" createDataKey="createProductTaxClass"/>
         </after>
 
-        <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRuleIndex1"/>
-        <waitForPageLoad stepKey="waitForTaxRuleIndex1"/>
+        <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRuleIndex1"/>
         <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters1"/>
         <fillField selector="{{AdminTaxRuleGridSection.code}}" userInput="$$initialTaxRule.code$$" stepKey="fillTaxCodeSearch"/>
         <click selector="{{AdminTaxRuleGridSection.search}}" stepKey="clickSearch1"/>

@@ -26,7 +26,7 @@ class ProductViewTest extends GraphQlAbstract
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -271,7 +271,7 @@ QUERY;
         $product = $productRepository->get($productSku, false, null, true);
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
-        $this->assertEquals(1, count($response['products']['items']));
+        $this->assertCount(1, $response['products']['items']);
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertBaseFields($product, $response['products']['items'][0]);
         $this->assertEavAttributes($product, $response['products']['items'][0]);
@@ -498,7 +498,7 @@ QUERY;
         $product = $productRepository->get($productSku, false, null, true);
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
-        $this->assertEquals(1, count($response['products']['items']));
+        $this->assertCount(1, $response['products']['items']);
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertMediaGalleryEntries($product, $response['products']['items'][0]);
         $this->assertArrayHasKey('websites', $response['products']['items'][0]);
@@ -531,7 +531,7 @@ QUERY;
 
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
-        $this->assertEquals(1, count($response['products']['items']));
+        $this->assertCount(1, $response['products']['items']);
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertCustomAttribute($response['products']['items'][0]);
     }
@@ -653,8 +653,10 @@ QUERY;
         $secondProduct = $productRepository->get($secondProductSku, false, null, true);
         self::assertNotNull($response['products']['items'][0]['price'], "price must be not null");
         self::assertCount(2, $response['products']['items']);
-        $this->assertBaseFields($firstProduct, $response['products']['items'][0]);
-        $this->assertBaseFields($secondProduct, $response['products']['items'][1]);
+
+        // by default sort order is: "newest id first"
+        $this->assertBaseFields($secondProduct, $response['products']['items'][0]);
+        $this->assertBaseFields($firstProduct, $response['products']['items'][1]);
     }
 
     /**
@@ -665,8 +667,8 @@ QUERY;
     {
         $mediaGalleryEntries = $product->getMediaGalleryEntries();
         $this->assertCount(1, $mediaGalleryEntries, "Precondition failed, incorrect number of media gallery entries.");
-        $this->assertTrue(
-            is_array([$actualResponse['media_gallery_entries']]),
+        $this->assertIsArray(
+            [$actualResponse['media_gallery_entries']],
             "Media galleries field must be of an array type."
         );
         $this->assertCount(1, $actualResponse['media_gallery_entries'], "There must be 1 record in media gallery.");
@@ -702,10 +704,10 @@ QUERY;
      */
     private function assertCustomAttribute($actualResponse)
     {
-        $customAttribute = null;
+        $customAttribute = 'customAttributeValue';
         $this->assertEquals($customAttribute, $actualResponse['attribute_code_custom']);
     }
-    
+
     /**
      * @param ProductInterface $product
      * @param $actualResponse
@@ -968,7 +970,7 @@ QUERY;
         $categoryIds  = [3, 4, 5];
 
         $productItemsInResponse = $response['products']['items'];
-        $this->assertEquals(1, count($productItemsInResponse));
+        $this->assertCount(1, $productItemsInResponse);
         $this->assertCount(3, $productItemsInResponse[0]['categories']);
         $categoriesInResponse = array_map(null, $categoryIds, $productItemsInResponse[0]['categories']);
         foreach ($categoriesInResponse as $key => $categoryData) {
@@ -1023,7 +1025,7 @@ QUERY;
         $this->assertNotEmpty($response['products']['items'][0]['categories'], "Categories must not be empty");
 
         $productItemsInResponse = $response['products']['items'];
-        $this->assertEquals(1, count($productItemsInResponse));
+        $this->assertCount(1, $productItemsInResponse);
         $this->assertCount(3, $productItemsInResponse[0]['categories']);
         $categoriesInResponse = array_map(null, $categoryIds, $productItemsInResponse[0]['categories']);
         foreach ($categoriesInResponse as $key => $categoryData) {
@@ -1048,6 +1050,8 @@ QUERY;
      */
     public function testProductInNonAnchoredSubCategories()
     {
+        $this->markTestSkipped('MC-30965: Product contains invalid categories');
+
         $query = <<<QUERY
 {
     products(filter: 
@@ -1082,7 +1086,7 @@ QUERY;
         $this->assertNotEmpty($response['products']['items'][0]['categories'], "Categories must not be empty");
 
         $productItemsInResponse = $response['products']['items'];
-        $this->assertEquals(1, count($productItemsInResponse));
+        $this->assertCount(1, $productItemsInResponse);
         $this->assertCount(2, $productItemsInResponse[0]['categories']);
         $categoriesInResponse = array_map(null, $categoryIds, $productItemsInResponse[0]['categories']);
         foreach ($categoriesInResponse as $key => $categoryData) {

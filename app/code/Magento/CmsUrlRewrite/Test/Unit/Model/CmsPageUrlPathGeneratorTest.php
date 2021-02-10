@@ -8,15 +8,14 @@ declare(strict_types=1);
 
 namespace Magento\CmsUrlRewrite\Test\Unit\Model;
 
-use Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\Filter\FilterManager;
 use Magento\Cms\Api\Data\PageInterface;
+use Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator;
+use Magento\Framework\Filter\FilterManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class \Magento\CmsUrlRewrite\Test\Unit\Model\CmsPageUrlPathGeneratorTest
- */
-class CmsPageUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
+class CmsPageUrlPathGeneratorTest extends TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -24,7 +23,7 @@ class CmsPageUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|FilterManager
+     * @var MockObject|FilterManager
      */
     private $filterManagerMock;
 
@@ -36,7 +35,7 @@ class CmsPageUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup environment for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManagerHelper($this);
         $this->filterManagerMock = $this->getMockBuilder(FilterManager::class)
@@ -60,7 +59,7 @@ class CmsPageUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
         /* @var PageInterface $cmsPageMock*/
         $cmsPageMock = $this->getMockBuilder(PageInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $cmsPageMock->expects($this->any())
             ->method('getIdentifier')
@@ -77,7 +76,7 @@ class CmsPageUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
         /* @var PageInterface $cmsPageMock*/
         $cmsPageMock = $this->getMockBuilder(PageInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $cmsPageMock->expects($this->any())
             ->method('getId')
@@ -102,7 +101,7 @@ class CmsPageUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
         /* @var PageInterface $cmsPageMock*/
         $cmsPageMock = $this->getMockBuilder(PageInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $cmsPageMock->expects($this->any())
             ->method('getIdentifier')
@@ -136,7 +135,7 @@ class CmsPageUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
         /* @var PageInterface $cmsPageMock*/
         $cmsPageMock = $this->getMockBuilder(PageInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $cmsPageMock->expects($this->any())
             ->method('getIdentifier')

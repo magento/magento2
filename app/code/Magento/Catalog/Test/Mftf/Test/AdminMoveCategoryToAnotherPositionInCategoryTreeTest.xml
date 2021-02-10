@@ -33,20 +33,17 @@
 
         <!-- Open Category Page -->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickExpandTree"/>
-        <waitForPageLoad stepKey="waitForCategoryToLoad"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickExpandTree"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCategory"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <!-- Create three level deep sub Category -->
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickAddSubCategoryButton"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{FirstLevelSubCat.name}}" stepKey="fillSubCategoryName"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveFirstLevelSubCategory"/>
-        <waitForPageLoad stepKey="waitForFirstLevelCategoryToSave"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveFirstLevelSubCategory"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButtonAgain"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SecondLevelSubCat.name}}" stepKey="fillSecondLevelSubCategoryName"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSecondLevelSubCategory"/>
-        <waitForPageLoad stepKey="waitForSecondLevelCategoryToSave"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSecondLevelSubCategory"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSaveSuccessMessage"/>
         <grabFromCurrentUrl stepKey="categoryId" regex="#\/([0-9]*)?\/$#" />
 
@@ -68,8 +65,7 @@
 
         <!-- Move Category to another position in category tree and click ok button-->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openTheAdminCategoryIndexPage"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
         <dragAndDrop selector1="{{AdminCategorySidebarTreeSection.categoryInTree(SecondLevelSubCat.name)}}" selector2="{{AdminCategorySidebarTreeSection.categoryInTree('Default Category')}}" stepKey="DragCategory"/>
         <see selector="{{AdminCategoryModalSection.message}}" userInput="This operation can take a long time" stepKey="seeWarningMessageForOneMoreTime"/>
         <click selector="{{AdminCategoryModalSection.ok}}" stepKey="clickOkButtonOnWarningPopup"/>

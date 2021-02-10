@@ -1,0 +1,495 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+//
+//  Variables
+//  _____________________________________________
+
+@color-folders-background: #a6a6a6;
+@color-folders-background-selected: #cdecf6;
+@color-folders-border: #7185f5;
+@color-masonry-overlay: #d9631c;
+@color-masonry-grey: #9e9e9e;
+@color-masonry-white: #e1e1e1;
+@color-masonry-steelblue: #4682b4;
+@color-media-gallery-buttons-background: #e3e3e3;
+@color-media-gallery-buttons-border: #adadad;
+@color-media-gallery-buttons-text: #514943;
+@color-media-gallery-checkbox-background: #eee;
+@color-media-gallery-scrollbar-background: #fff;
+& when (@media-common = true) {
+
+    .media-gallery-delete-image-action,
+    .delete-folder-confirmation-popup {
+
+        .modal-content {
+            word-wrap: anywhere;
+        }
+    }
+
+    .media-gallery-asset-ui-select-filter,
+    .edit-image-details {
+
+        .admin__action-multiselect-crumb {
+            max-width: 70%;
+            overflow: hidden;
+            text-overflow: ellipsis
+        }
+
+        .admin__action-multiselect-label > span {
+            display: block;
+            margin-top: -2px;
+            max-height: 18px;
+            max-width: 70%;
+            overflow: hidden;
+            padding-left: 23px;
+            position: absolute;
+            text-overflow: ellipsis;
+        }
+    }
+
+    .media-gallery-asset-ui-select-filter,
+    .edit-image-details {
+        .admin__action-multiselect-item-path {
+            float: right;
+            max-height: 70px;
+            max-width: 70px;
+        }
+
+        .admin__action-multiselect-label {
+            display: inline-block;
+            width: 100%;
+        }
+    }
+
+    .page-actions-buttons > button.no-display {
+        display: none;
+    }
+
+    .page-actions-buttons > button.media-gallery-actions-buttons,
+    .page-actions .page-actions-buttons > button.media-gallery-actions-buttons:focus,
+    .page-actions-buttons > button.media-gallery-actions-buttons:hover {
+        background-color: @color-media-gallery-buttons-background;
+        border-color: @color-media-gallery-buttons-border;
+        color: @color-media-gallery-buttons-text;
+    }
+
+    .mediagallery-massaction-checkbox {
+        background-color: @color-media-gallery-checkbox-background;
+        border-radius: 4px;
+        height: 40px;
+        input[type='checkbox'] {
+            margin-left: 10px;
+            margin-top: 11px;
+        }
+        margin-left: 15px;
+        margin-top: 10px;
+        position: absolute;
+        width: 40px;
+        z-index: 10;
+    }
+
+    .mediagallery-massaction-items-count {
+        display: inline-block;
+        margin-left: -15px;
+        padding-right: 20px;
+    }
+
+    .media-gallery-container {
+
+        .masonry-image-grid .no-data-message-container,
+        .masonry-image-grid .error-message-container {
+            left: 50%;
+            margin-right: -50%;
+            position: sticky;
+            top: 50%;
+        }
+
+        .admin__action-dropdown-wrap._active .admin__action-dropdown-text::after {
+            margin-right: 6px;
+        }
+
+        .admin__data-grid-action-bookmarks .admin__action-dropdown-menu {
+            left: auto;
+            right: 0;
+        }
+
+        .page-main-actions {
+            .page-actions {
+                .media-gallery-add-selected {
+                    order: unset;
+                }
+            }
+
+            & > .page-actions {
+                & > button.no-display {
+                    display: none;
+                }
+            }
+        }
+        .jstree-default .jstree-hovered {
+            background: @color-folders-background;
+            border-color: @color-folders-border;
+            border-radius: 6px;
+            padding-top: 6px;
+        }
+
+        .jstree-default .jstree-leaf a .jstree-icon {
+            background-position: -52px -16px;
+        }
+
+
+        .jstree-default a .jstree-icon {
+            background-position: -52px -16px;
+        }
+
+        .jstree-default .jstree-no-dots .jstree-open > a > ins {
+            background-position: -52px -38px;
+            height: 20px;
+            width: 29px;
+        }
+
+        .jstree a > ins {
+            float: left;
+            height: 22px;
+            margin-top: -3px;
+            width: 20px;
+        }
+
+        .jstree-default .jstree-no-dots .jstree-leaf > ins {
+            background-image: none;
+        }
+
+        .jstree-default ins {
+            background-image: url("@{baseDir}Magento_MediaGalleryUi/images/d.png");
+        }
+
+        .jstree a {
+            height: 30px;
+            margin: 1px;
+            padding-left: 6px;
+            padding-right: 10px;
+            padding-top: 6px;
+            width: max-content;
+        }
+
+        .jstree-default .jstree-clicked {
+            background: @color-folders-background-selected;
+            border: .14em solid @color-folders-border;
+            border-radius: 6px;
+            padding-top: 6px;
+        }
+
+        .masonry-image-overlay {
+            background-color: @color-masonry-overlay;
+            float: right;
+            font-size: 11px;
+            margin-left: 120px;
+            margin-top: 170px;
+            padding: .3rem;
+            pointer-events: none;
+            position: relative;
+        }
+
+        .media-gallery-image-details {
+            float: left;
+            list-style: none;
+            margin-bottom: 0;
+            position: absolute;
+            width: 89%;
+
+            .name {
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+                display: -webkit-box;
+                font-size: 15px;
+                font-weight: bold;
+                line-height: 20px;
+                max-height: 50px;
+                overflow: hidden;
+                padding-bottom: 2px;
+                text-overflow: ellipsis;
+                white-space: pre-line;
+                word-wrap: anywhere;
+                word-wrap: break-word;
+                @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+                    white-space: nowrap;
+                }
+            }
+
+            .type {
+                display: inline-block;
+                font-size: 12px;
+                padding-bottom: 5px;
+            }
+
+            .dimensions {
+                display: inline-block;
+            }
+
+            .source {
+                display: inline-block;
+            }
+        }
+
+        .media-gallery-image-actions {
+            float: right;
+            position: absolute;
+            right: 0;
+            width: 10%;
+
+            .action-select-wrap {
+                cursor: pointer;
+            }
+
+            .three-dots {
+                &:before {
+                    content: url("@{baseDir}Magento_MediaGalleryUi/images/3-dots.png");
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .media-gallery-image {
+            height: 200px;
+            margin: 0 auto;
+            position: relative;
+            text-align: center;
+            width: 200px;
+        }
+
+        .masonry-image-description {
+            background-color: @color-white;
+            min-height: 90px;
+            padding-top: 10px;
+            position: relative;
+        }
+
+        .masonry-image-column {
+            background-color: @color-masonry-white;
+            width: 200px;
+        }
+
+        .media-directory-container {
+            &::-webkit-scrollbar {
+                background-color: @color-media-gallery-scrollbar-background;
+            }
+            &::-webkit-scrollbar-thumb {
+                background-color: @color-masonry-grey;
+            }
+            float: left;
+            max-width: 50%;
+            overflow-x: scroll;
+            overflow-y: hidden;
+            padding-right: 40px;
+            scrollbar-color: @color-masonry-grey @color-media-gallery-scrollbar-background;
+        }
+
+        .media-gallery-image-block {
+            cursor: pointer;
+            height: 200px;
+            margin: 0 auto;
+            position: relative;
+
+            &.selected {
+                border: 5px solid @color-masonry-steelblue;
+            }
+        }
+
+        .media-gallery-image {
+            img {
+                bottom: 0;
+                height: auto;
+                left: 0;
+                margin: auto;
+                max-height: 100%;
+                max-width: 100%;
+                padding: 5px;
+                position: absolute;
+                right: 0;
+                top: 0;
+                width: auto;
+            }
+
+            .action-menu {
+                bottom: 0;
+                float: right;
+                left: auto;
+                top: auto;
+                z-index: 100;
+            }
+        }
+
+        .media-gallery-source-icon {
+            margin-bottom: -6px;
+            width: 29px;
+        }
+
+        .masonry-image-grid {
+            align-items: first baseline;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 210px);
+            justify-content: end;
+            margin: 10px 0;
+            position: relative;
+        }
+
+        .admin__data-grid-filters .admin__form-field {
+            .action-select-wrap {
+                .action-menu {
+                    width: 110%;
+                }
+                .admin__action-multiselect-search-label {
+                    right: 1.5rem;
+                }
+            }
+
+            .action-close {
+                padding: 0;
+                &:before {
+                    font-size: 6px;
+                }
+            }
+        }
+    }
+
+    .media-gallery-image-details-modal,
+    .media-gallery-edit-image-details-modal {
+
+        .admin__action-multiselect-crumb {
+            .action-close {
+                padding: 0;
+
+                &:before {
+                    font-size: .5em;
+                }
+            }
+        }
+
+        .edit-image-details {
+            padding: 50px;
+        }
+
+        .path-display {
+            margin-top: 8px;
+        }
+
+        .page-action-buttons {
+            float: right;
+        }
+
+        .image-type {
+            .media-gallery-source-icon {
+                margin-bottom: -6px;
+                width: 29px;
+            }
+
+            .type {
+                color: @color-very-dark-gray;
+            }
+        }
+
+        .image-details {
+            .lib-vendor-prefix-display();
+
+            .image-details-image {
+                img {
+                    max-height: 650px;
+                }
+            }
+
+            .image-details-sidebar {
+                .lib-vendor-prefix-flex-grow(1);
+                margin-top: 0;
+                padding-left: 40px;
+
+                .image-details-section {
+                    margin-bottom: 40px;
+                    max-width: 400px;
+                    min-width: 290px;
+                    word-wrap: anywhere;
+                    .lib-clearfix();
+                }
+
+                h3.image-title {
+                    font-weight: bold;
+                    line-height: 1.5;
+                }
+
+                .attributes {
+                    .attribute {
+                        &:not(:last-child) {
+                            margin-bottom: 20px;
+                            padding-bottom: 20px;
+                        }
+
+                        & > * {
+                            float: left;
+                            margin-left: -1px;
+                            width: 50%;
+                        }
+
+                        .value {
+                            display: inline;
+                            float: right;
+                            margin-left: 1px;
+                        }
+
+                        .title {
+                            color: @color-very-dark-gray;
+                        }
+                    }
+                }
+
+                .tags {
+                    .tags-list {
+                        margin-bottom: 10px;
+
+                        .show-more-item {
+                            display: none;
+                        }
+
+                        &.show-all-tags {
+                            margin-bottom: 0;
+
+                            .show-more-item {
+                                display: inline;
+                            }
+
+                            & + .show-more-link-container {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .masonry-image-sortby {
+        display: inline-block;
+    }
+
+    .masonry-results-number {
+        display: inline-block;
+        margin-right: 1.4rem;
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .media-gallery-image-details-modal {
+        .image-details {
+            display: block;
+
+            .image-details-sidebar {
+                margin-top: 20px;
+                padding-left: 0;
+            }
+
+            .image-details-image img {
+                max-height: 450px;
+            }
+        }
+    }
+}

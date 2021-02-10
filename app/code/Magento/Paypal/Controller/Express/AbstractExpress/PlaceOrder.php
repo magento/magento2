@@ -11,7 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Paypal\Model\Api\ProcessableException as ApiProcessableException;
 
 /**
- * Class PlaceOrder
+ * Creates order on backend and prepares session to show appropriate next step in flow
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
@@ -127,6 +127,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
                 return;
             }
             $this->_initToken(false); // no need in token anymore
+            $this->_getSession()->unsQuoteId(); // clean quote from session that was set in OnAuthorization
             $this->_redirect('checkout/onepage/success');
             return;
         } catch (ApiProcessableException $e) {

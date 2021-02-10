@@ -51,7 +51,10 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
         $shippingAddressInput = current($shippingAddressesInput) ?? [];
         $customerAddressId = $shippingAddressInput['customer_address_id'] ?? null;
 
-        if (!$customerAddressId && !isset($shippingAddressInput['address']['save_in_address_book'])) {
+        if (!$customerAddressId
+            && isset($shippingAddressInput['address'])
+            && !isset($shippingAddressInput['address']['save_in_address_book'])
+        ) {
             $shippingAddressInput['address']['save_in_address_book'] = true;
         }
 

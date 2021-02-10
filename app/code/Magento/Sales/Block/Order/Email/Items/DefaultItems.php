@@ -3,8 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Block\Order\Email\Items;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\View\Element\Template;
 use Magento\Sales\Model\Order\Creditmemo\Item as CreditmemoItem;
 use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
 use Magento\Sales\Model\Order\Item as OrderItem;
@@ -16,7 +20,7 @@ use Magento\Sales\Model\Order\Item as OrderItem;
  * @author     Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
-class DefaultItems extends \Magento\Framework\View\Element\Template
+class DefaultItems extends Template
 {
     /**
      * Retrieve current order model instance
@@ -92,6 +96,7 @@ class DefaultItems extends \Magento\Framework\View\Element\Template
      * Return product additional information block
      *
      * @return \Magento\Framework\View\Element\AbstractBlock
+     * @throws LocalizedException
      */
     public function getProductAdditionalInformationBlock()
     {
@@ -103,10 +108,13 @@ class DefaultItems extends \Magento\Framework\View\Element\Template
      *
      * @param OrderItem|InvoiceItem|CreditmemoItem $item
      * @return string
+     * @throws LocalizedException
      */
     public function getItemPrice($item)
     {
         $block = $this->getLayout()->getBlock('item_price');
+        $item->setRowTotal((float) $item->getPrice() * (float) $this->getItem()->getQty());
+        $item->setBaseRowTotal((float) $item->getBasePrice() * (float) $this->getItem()->getQty());
         $block->setItem($item);
         return $block->toHtml();
     }

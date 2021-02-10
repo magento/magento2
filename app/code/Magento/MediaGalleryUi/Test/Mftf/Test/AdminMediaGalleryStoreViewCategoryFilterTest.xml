@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMediaGalleryStoreViewCategoryFilterTest">
+        <annotations>
+            <features value="MediaGallery"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1464"/>
+            <title value="User filter asset by category store view"/>
+            <stories value="Story 57: User filters images by the area they used in"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/4970870"/>
+            <description value="User filter asset by category store view"/>
+            <severity value="CRITICAL"/>
+            <group value="media_gallery_ui"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+        </after>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
+            <argument name="category" value="$$category$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
+            <argument name="image" value="ImageUpload3"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="selectImageInGrid">
+            <argument name="imageName" value="{{ImageMetadata.title}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedImage"/>
+        <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMce4ActionGroup" stepKey="clickOkButton"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
+        <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryExpandFilterActionGroup" stepKey="expandFilters"/>
+        <actionGroup ref="AdminMediaGalleryApplySelectFilterActionGroup" stepKey="selectFilterOption">
+            <argument name="filterLabel" value="Store View"/>
+            <argument name="optionLabel" value="Main Website/Main Website Store/Default Store View"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryApplyFiltersActionGroup" stepKey="applyFilters"/>
+        <actionGroup ref="AdminMediaGalleryAssertImageInGridActionGroup" stepKey="assertImageInGrid">
+            <argument name="title" value="ImageMetadata.title"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryEnableMassActionModeActionGroup" stepKey="enableMassActionToDeleteImages"/>
+        <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectFirstImageToDelete">
+            <argument name="imageName" value="{{ImageMetadata.title}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clikDeleteSelectedButton"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryConfirmDeleteImagesActionGroup" stepKey="deleteImages"/>
+    </test>
+</tests>

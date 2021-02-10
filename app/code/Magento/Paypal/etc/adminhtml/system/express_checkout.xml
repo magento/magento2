@@ -155,10 +155,10 @@
                 <tooltip>You can look up your merchant ID by logging into https://www.paypal.com/. Click the profile icon on the top right side of the page and then select Profile and settings in the Business Profile menu. (If you do not see the profile icon at the top of the page, click Profile, which appears in the top menu when the My Account tab is selected.) Click My business info on the left, and the Merchant account ID is displayed in the list of profile items on the right.</tooltip>
                 <config_path>payment/paypal_express/merchant_id</config_path>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Depends\MerchantId</frontend_model>
+                <validate>required-entry</validate>
                 <depends>
                     <field id="enable_in_context_checkout">1</field>
                 </depends>
-                <validate>required-entry</validate>
             </field>
             <field id="enable_express_checkout_bml" translate="label comment" type="select" sortOrder="23" showInDefault="0" showInWebsite="0">
                 <label>Enable PayPal Credit</label>
@@ -623,7 +623,7 @@
                         <label>Header Image URL</label>
                         <config_path>paypal/style/paypal_hdrimg</config_path>
                         <tooltip>
-                            <![CDATA[The image at the top left of the checkout page. Max size is 750x90-pixel. <strong style="color:red">https</strong> is highly encouraged.]]>
+                            <![CDATA[The image at the top left of the checkout page. Max size is 750x90-pixel. <strong class="colorRed">https</strong> is highly encouraged.]]>
                         </tooltip>
                         <attribute type="shared">1</attribute>
                     </field>
@@ -703,16 +703,6 @@
                             </depends>
                             <attribute type="shared">1</attribute>
                         </field>
-                        <field id="checkout_page_button_size" translate="label tooltip" type="select" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="40">
-                            <label>Size</label>
-                            <config_path>paypal/style/checkout_page_button_size</config_path>
-                            <source_model>Magento\Paypal\Model\System\Config\Source\ButtonStyles::getSize</source_model>
-                            <tooltip>Select Responsive to ensure the PayPal button renders correctly on mobile devices.</tooltip>
-                            <depends>
-                                <field id="checkout_page_button_customize">1</field>
-                            </depends>
-                            <attribute type="shared">1</attribute>
-                        </field>
                         <field id="checkout_page_button_shape" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="50">
                             <label>Shape</label>
                             <config_path>paypal/style/checkout_page_button_shape</config_path>
@@ -765,12 +755,6 @@
                                 <field id="product_page_button_label" negative="1">credit</field>
                             </depends>
                         </field>
-                        <field id="product_page_button_size"  extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_size">
-                            <config_path>paypal/style/product_page_button_size</config_path>
-                            <depends>
-                                <field id="product_page_button_customize">1</field>
-                            </depends>
-                        </field>
                         <field id="product_page_button_shape" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_shape">
                             <config_path>paypal/style/product_page_button_shape</config_path>
                             <depends>
@@ -817,12 +801,6 @@
                                 <field id="cart_page_button_label" negative="1">credit</field>
                             </depends>
                         </field>
-                        <field id="cart_page_button_size"  extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_size">
-                            <config_path>paypal/style/cart_page_button_size</config_path>
-                            <depends>
-                                <field id="cart_page_button_customize">1</field>
-                            </depends>
-                        </field>
                         <field id="cart_page_button_shape" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_shape">
                             <config_path>paypal/style/cart_page_button_shape</config_path>
                             <depends>
@@ -867,12 +845,6 @@
                             <depends>
                                 <field id="mini_cart_page_button_customize">1</field>
                                 <field id="mini_cart_page_button_label" negative="1">credit</field>
-                            </depends>
-                        </field>
-                        <field id="mini_cart_page_button_size"  extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_size">
-                            <config_path>paypal/style/mini_cart_page_button_size</config_path>
-                            <depends>
-                                <field id="mini_cart_page_button_customize">1</field>
                             </depends>
                         </field>
                         <field id="mini_cart_page_button_shape" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_frontend/checkout_page_button/checkout_page_button_shape">

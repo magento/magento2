@@ -49,7 +49,7 @@
         </after>
 
         <!-- 1. Go to storefront and click the Create an Account link-->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnHomePage"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnHomePage"/>
         <click selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}" stepKey="clickCreateAnAccountLink" />
         <actionGroup ref="StorefrontAssertPersistentRegistrationPageFields" stepKey="assertPersistentRegistrationPageFields"/>
 

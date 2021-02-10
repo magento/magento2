@@ -21,7 +21,12 @@
             id="btn-minicart-close"
             class="action close"
             data-action="close"
-            data-bind="attr: { title: $t('Close') }">
+            data-bind="
+                attr: {
+                    title: $t('Close')
+                },
+                click: closeMinicart()
+            ">
         <span translate="'Close'"/>
     </button>
 
@@ -74,7 +79,6 @@
 
     <ifnot args="getCartParam('summary_count')">
         <strong class="subtitle empty"
-                data-bind="visible: closeSidebar()"
                 translate="'You have no items in your shopping cart.'"
         />
         <if args="getCartParam('cart_empty_message')">

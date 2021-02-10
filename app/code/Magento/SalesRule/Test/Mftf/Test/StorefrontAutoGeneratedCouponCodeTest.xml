@@ -59,9 +59,11 @@
         <see selector="{{AdminCartPriceRulesFormSection.successMessage}}" userInput="Message is added to queue, wait to get your coupons soon"
              stepKey="seeSuccessMessage"/>
 
-        <!-- Run cron twice -->
-        <magentoCLI command="cron:run" stepKey="runCron1"/>
-        <magentoCLI command="cron:run" stepKey="runCron2"/>
+        <!-- Start message queue for export consumer -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
+            <argument name="consumerName" value="{{AdminCodeGeneratorMessageConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminCodeGeneratorMessageConsumerData.messageLimit}}"/>
+        </actionGroup>
         <reloadPage stepKey="refreshPage"/>
         <waitForPageLoad stepKey="waitFormToReload1"/>
         <conditionalClick selector="{{AdminCartPriceRulesFormSection.manageCouponCodesHeader}}"
@@ -95,8 +97,7 @@
         <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}"
                stepKey="selectFlatShippingMethod"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
-        <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" stepKey="waitForNextButton"/>
-        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>

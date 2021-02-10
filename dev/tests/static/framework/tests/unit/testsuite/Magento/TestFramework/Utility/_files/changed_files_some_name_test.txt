@@ -1,0 +1,3 @@
+app/code/Magento/Cms/Block/Block.php
+app/code/Magento/Cms/Api/BlockRepositoryInterface.php
+app/code/Magento/Cms/Observer/NoCookiesObserver.php

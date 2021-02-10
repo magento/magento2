@@ -30,7 +30,7 @@ class CategoryUrlRewriteGenerator
 
     /**
      * @var \Magento\Catalog\Model\Category
-     * @deprecated 100.1.4
+     * @deprecated 100.1.0
      */
     protected $category;
 

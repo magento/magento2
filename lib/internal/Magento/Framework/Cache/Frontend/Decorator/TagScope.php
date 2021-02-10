@@ -10,6 +10,7 @@ namespace Magento\Framework\Cache\Frontend\Decorator;
  * Cache frontend decorator that limits the cleaning scope within a tag
  *
  * @api
+ * @since 100.0.2
  */
 class TagScope extends \Magento\Framework\Cache\Frontend\Decorator\Bare
 {

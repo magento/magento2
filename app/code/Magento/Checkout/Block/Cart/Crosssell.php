@@ -5,15 +5,30 @@
  */
 namespace Magento\Checkout\Block\Cart;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Block\Product\AbstractProduct;
+use Magento\Catalog\Block\Product\Context;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\LinkFactory;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogInventory\Helper\Stock as StockHelper;
+use Magento\Checkout\Model\Session;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Model\Quote\Item\RelatedProducts;
 
 /**
  * Cart crosssell list
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
+class Crosssell extends AbstractProduct
 {
     /**
      * Items quantity will be capped to this value
@@ -23,12 +38,12 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
     protected $_maxItemCount = 4;
 
     /**
-     * @var \Magento\Checkout\Model\Session
+     * @var Session
      */
     protected $_checkoutSession;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Visibility
+     * @var Visibility
      */
     protected $_productVisibility;
 
@@ -38,35 +53,53 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
     protected $stockHelper;
 
     /**
-     * @var \Magento\Catalog\Model\Product\LinkFactory
+     * @var LinkFactory
      */
     protected $_productLinkFactory;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Item\RelatedProducts
+     * @var RelatedProducts
      */
     protected $_itemRelationsList;
 
     /**
-     * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
-     * @param \Magento\Catalog\Model\Product\LinkFactory $productLinkFactory
-     * @param \Magento\Quote\Model\Quote\Item\RelatedProducts $itemRelationsList
+     * @var CollectionFactory|null
+     */
+    private $productCollectionFactory;
+
+    /**
+     * @var ProductRepositoryInterface|null
+     */
+    private $productRepository;
+
+    /**
+     * @var Product[]
+     */
+    private $cartProducts;
+
+    /**
+     * @param Context $context
+     * @param Session $checkoutSession
+     * @param Visibility $productVisibility
+     * @param LinkFactory $productLinkFactory
+     * @param RelatedProducts $itemRelationsList
      * @param StockHelper $stockHelper
      * @param array $data
-     *
+     * @param CollectionFactory|null $productCollectionFactory
+     * @param ProductRepositoryInterface|null $productRepository
      * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Catalog\Model\Product\Visibility $productVisibility,
-        \Magento\Catalog\Model\Product\LinkFactory $productLinkFactory,
-        \Magento\Quote\Model\Quote\Item\RelatedProducts $itemRelationsList,
+        Context $context,
+        Session $checkoutSession,
+        Visibility $productVisibility,
+        LinkFactory $productLinkFactory,
+        RelatedProducts $itemRelationsList,
         StockHelper $stockHelper,
-        array $data = []
+        array $data = [],
+        ?CollectionFactory $productCollectionFactory = null,
+        ?ProductRepositoryInterface $productRepository = null
     ) {
         $this->_checkoutSession = $checkoutSession;
         $this->_productVisibility = $productVisibility;
@@ -78,6 +111,10 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
             $data
         );
         $this->_isScopePrivate = true;
+        $this->productCollectionFactory = $productCollectionFactory
+            ?? ObjectManager::getInstance()->get(CollectionFactory::class);
+        $this->productRepository = $productRepository
+            ?? ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
     }
 
     /**
@@ -92,9 +129,10 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
             $items = [];
             $ninProductIds = $this->_getCartProductIds();
             if ($ninProductIds) {
-                $lastAdded = (int)$this->_getLastAddedProductId();
-                if ($lastAdded) {
-                    $collection = $this->_getCollection()->addProductFilter($lastAdded);
+                $lastAddedProduct = $this->getLastAddedProduct();
+                if ($lastAddedProduct) {
+                    $collection = $this->_getCollection()
+                        ->addProductFilter($lastAddedProduct->getData($this->getProductLinkField()));
                     if (!empty($ninProductIds)) {
                         $collection->addExcludeProductFilter($ninProductIds);
                     }
@@ -108,8 +146,8 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
 
                 if (count($items) < $this->_maxItemCount) {
                     $filterProductIds = array_merge(
-                        $this->_getCartProductIds(),
-                        $this->_itemRelationsList->getRelatedProductIds($this->getQuote()->getAllItems())
+                        $this->getCartProductLinkIds(),
+                        $this->getCartRelatedProductLinkIds()
                     );
                     $collection = $this->_getCollection()->addProductFilter(
                         $filterProductIds
@@ -150,11 +188,8 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
         $ids = $this->getData('_cart_product_ids');
         if ($ids === null) {
             $ids = [];
-            foreach ($this->getQuote()->getAllItems() as $item) {
-                $product = $item->getProduct();
-                if ($product) {
-                    $ids[] = $product->getId();
-                }
+            foreach ($this->getCartProducts() as $product) {
+                $ids[] = $product->getId();
             }
             $this->setData('_cart_product_ids', $ids);
         }
@@ -201,5 +236,94 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
         $this->_addProductAttributesAndPrices($collection);
 
         return $collection;
+    }
+
+    /**
+     * Get product link ID field
+     *
+     * @return string
+     */
+    private function getProductLinkField(): string
+    {
+        /* @var $collection Collection */
+        $collection = $this->productCollectionFactory->create();
+        return $collection->getProductEntityMetadata()->getLinkField();
+    }
+
+    /**
+     * Get cart products link IDs
+     *
+     * @return array
+     */
+    private function getCartProductLinkIds(): array
+    {
+        $linkField = $this->getProductLinkField();
+        $linkIds = [];
+        foreach ($this->getCartProducts() as $product) {
+            /** * @var Product $product */
+            $linkIds[] = $product->getData($linkField);
+        }
+        return $linkIds;
+    }
+
+    /**
+     * Get cart related products link IDs
+     *
+     * @return array
+     */
+    private function getCartRelatedProductLinkIds(): array
+    {
+        $productIds = $this->_itemRelationsList->getRelatedProductIds($this->getQuote()->getAllItems());
+        $linkIds = [];
+        if (!empty($productIds)) {
+            $linkField = $this->getProductLinkField();
+            /* @var $collection Collection */
+            $collection = $this->productCollectionFactory->create();
+            $collection->addIdFilter($productIds);
+            foreach ($collection as $product) {
+                /** * @var Product $product */
+                $linkIds[] = $product->getData($linkField);
+            }
+        }
+        return $linkIds;
+    }
+
+    /**
+     * Retrieve just added to cart product object
+     *
+     * @return ProductInterface|null
+     */
+    private function getLastAddedProduct(): ?ProductInterface
+    {
+        $product = null;
+        $productId = $this->_getLastAddedProductId();
+        if ($productId) {
+            try {
+                $product = $this->productRepository->getById($productId);
+            } catch (NoSuchEntityException $e) {
+                $product = null;
+            }
+        }
+        return $product;
+    }
+
+    /**
+     * Retrieve Array of Product instances in Cart
+     *
+     * @return array
+     */
+    private function getCartProducts(): array
+    {
+        if ($this->cartProducts === null) {
+            $this->cartProducts = [];
+            foreach ($this->getQuote()->getAllItems() as $quoteItem) {
+                /* @var $quoteItem \Magento\Quote\Model\Quote\Item */
+                $product = $quoteItem->getProduct();
+                if ($product) {
+                    $this->cartProducts[$product->getEntityId()] = $product;
+                }
+            }
+        }
+        return $this->cartProducts;
     }
 }

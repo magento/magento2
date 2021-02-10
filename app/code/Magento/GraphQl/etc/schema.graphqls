@@ -79,6 +79,12 @@ input FilterMatchTypeInput @doc(description: "Defines a filter that performs a f
     match: String @doc(description: "One or more words to filter on")
 }
 
+input FilterStringTypeInput @doc(description: "Defines a filter for an input string.") {
+    in: [String] @doc(description: "Filters items that are exactly the same as entries specified in an array of strings.")
+    eq: String @doc(description: "Filters items that are exactly the same as the specified string.")
+    match: String @doc(description: "Defines a filter that performs a fuzzy search using the specified string.")
+}
+
 type SearchResultPageInfo @doc(description: "SearchResultPageInfo provides navigation for the query response") {
     page_size: Int @doc(description: "Specifies the maximum number of items to return")
     current_page: Int @doc(description: "Specifies which page of results to return")
@@ -270,4 +276,9 @@ enum CurrencyEnum @doc(description: "The list of available currency codes") {
     ROL
     TRL
     XPF
+}
+
+input EnteredOptionInput @doc(description: "Defines a customer-entered option") {
+    uid: ID! @doc(description: "An encoded ID")
+    value: String! @doc(description: "Text the customer entered")
 }

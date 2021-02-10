@@ -42,8 +42,7 @@
         </after>
 
         <!-- Search default simple product in grid -->
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
-        <waitForPageLoad stepKey="waitForProductCatalogPage"/>
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage"/>
         <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGrid">
             <argument name="sku" value="$$initialSimpleProduct.sku$$"/>
         </actionGroup>
@@ -62,8 +61,7 @@
 
         <!-- Update default simple product with price -->
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{simpleProductDataOverriding.price}}" stepKey="fillSimpleProductPrice"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForSimpleProductSave"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickButtonSave"/>
 
         <!-- Verify customer see success message -->
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>

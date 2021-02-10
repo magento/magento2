@@ -26,7 +26,7 @@ class Messages extends Template
 
     /**
      * @var JsonDataHelper
-     * @deprecated
+     * @deprecated 100.3.0
      */
     protected $jsonHelper;
 

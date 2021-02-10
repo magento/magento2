@@ -27,8 +27,12 @@
                 <argument name="category" value="$$createCategory$$"/>
             </actionGroup>
             <!-- TODO: REMOVE AFTER FIX MC-21717 -->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush eav" stepKey="flushCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value="eav"/>
+            </actionGroup>
         </before>
 
         <after>

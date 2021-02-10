@@ -26,7 +26,9 @@
             <!--Set currency allow config-->
             <magentoCLI command="config:set currency/options/allow RHD,CHW,CHE,AMD,EUR,USD" stepKey="setCurrencyAllow"/>
             <!--TODO: Add Api key-->
-            <magentoCLI command="cache:flush" stepKey="clearCache"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <!--Create product-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct">
@@ -68,7 +70,9 @@
         <see selector="{{StorefrontCategoryMainSection.productPrice}}" userInput="€" stepKey="seeEURInPrice"/>
         <!--Set allowed currencies greater then 10-->
         <magentoCLI command="config:set currency/options/allow RHD,CHW,YER,ZMK,CHE,EUR,USD,AMD,RUB,DZD,ARS,AWG" stepKey="setCurrencyAllow"/>
-        <magentoCLI command="cache:flush" stepKey="clearCache"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <!--Import rates from Currency Converter API with currencies greater then 10-->
         <amOnPage url="{{AdminCurrencyRatesPage.url}}" stepKey="onCurrencyRatePageSecondTime"/>
         <actionGroup ref="AdminImportCurrencyRatesActionGroup" stepKey="importCurrencyRatesGreaterThen10">

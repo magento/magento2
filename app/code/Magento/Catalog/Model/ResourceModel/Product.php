@@ -180,7 +180,7 @@ class Product extends AbstractResource
     /**
      * Product Category table name getter
      *
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      * @return string
      */
     public function getProductCategoryTable()
@@ -204,7 +204,7 @@ class Product extends AbstractResource
     /**
      * Retrieve product website identifiers
      *
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      * @param \Magento\Catalog\Model\Product|int $product
      * @return array
      */
@@ -379,7 +379,7 @@ class Product extends AbstractResource
     /**
      * Save product website relations
      *
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */
@@ -408,7 +408,7 @@ class Product extends AbstractResource
      * @param DataObject $object
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      */
     protected function _saveCategories(DataObject $object)
     {
@@ -776,7 +776,7 @@ class Product extends AbstractResource
     /**
      * Retrieve ProductWebsiteLink instance.
      *
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      * @return ProductWebsiteLink
      */
     private function getProductWebsiteLink()
@@ -787,7 +787,7 @@ class Product extends AbstractResource
     /**
      * Retrieve CategoryLink instance.
      *
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      * @return Product\CategoryLink
      */
     private function getProductCategoryLink()
@@ -805,7 +805,7 @@ class Product extends AbstractResource
      * Store id is required to correctly identify attribute value we are working with.
      *
      * @inheritdoc
-     * @since 101.1.0
+     * @since 102.0.0
      */
     protected function getAttributeRow($entity, $object, $attribute)
     {

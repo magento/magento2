@@ -39,7 +39,7 @@
         <generateDate date="now" format="m/j/Y" stepKey="generateDefaultDate"/>
 
         <!--Navigate to Stores > Attributes > Product.-->
-        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
 
         <!--Create new Product Attribute as TextField, with code and default value.-->
         <actionGroup ref="CreateProductAttributeWithDateFieldActionGroup" stepKey="createAttribute">

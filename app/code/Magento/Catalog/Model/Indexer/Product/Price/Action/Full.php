@@ -425,7 +425,7 @@ class Full extends AbstractAction
         $mainTablesByDimension = [];
 
         foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
-            $mainTablesByDimension[] = $this->dimensionTableMaintainer->getMainTable($dimensions);
+            $mainTablesByDimension[] = $this->dimensionTableMaintainer->getMainTableByDimensions($dimensions);
 
             //Move data from indexers with old realisation
             $this->moveDataFromReplicaTableToReplicaTables($dimensions);
@@ -488,7 +488,7 @@ class Full extends AbstractAction
     /**
      * Retrieves the index table that should be used
      *
-     * @deprecated
+     * @deprecated 102.0.6
      */
     protected function getIndexTargetTable(): string
     {

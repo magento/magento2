@@ -170,7 +170,7 @@ class EmailNotification implements EmailNotificationInterface
     private function emailAndPasswordChanged(CustomerInterface $customer, $email): void
     {
         $storeId = $customer->getStoreId();
-        if (!$storeId) {
+        if ($storeId === null) {
             $storeId = $this->getWebsiteStoreId($customer);
         }
 
@@ -196,7 +196,7 @@ class EmailNotification implements EmailNotificationInterface
     private function emailChanged(CustomerInterface $customer, $email): void
     {
         $storeId = $customer->getStoreId();
-        if (!$storeId) {
+        if ($storeId === null) {
             $storeId = $this->getWebsiteStoreId($customer);
         }
 
@@ -221,7 +221,7 @@ class EmailNotification implements EmailNotificationInterface
     private function passwordReset(CustomerInterface $customer): void
     {
         $storeId = $customer->getStoreId();
-        if (!$storeId) {
+        if ($storeId === null) {
             $storeId = $this->getWebsiteStoreId($customer);
         }
 
@@ -320,7 +320,7 @@ class EmailNotification implements EmailNotificationInterface
     public function passwordReminder(CustomerInterface $customer): void
     {
         $storeId = $customer->getStoreId();
-        if (!$storeId) {
+        if ($storeId === null) {
             $storeId = $this->getWebsiteStoreId($customer);
         }
 
@@ -344,7 +344,7 @@ class EmailNotification implements EmailNotificationInterface
     public function passwordResetConfirmation(CustomerInterface $customer): void
     {
         $storeId = $customer->getStoreId();
-        if (!$storeId) {
+        if ($storeId === null) {
             $storeId = $this->getWebsiteStoreId($customer);
         }
 
@@ -365,7 +365,7 @@ class EmailNotification implements EmailNotificationInterface
      * @param CustomerInterface $customer
      * @param string $type
      * @param string $backUrl
-     * @param int $storeId
+     * @param int|null $storeId
      * @param string $sendemailStoreId
      * @return void
      * @throws LocalizedException
@@ -374,7 +374,7 @@ class EmailNotification implements EmailNotificationInterface
         CustomerInterface $customer,
         $type = self::NEW_ACCOUNT_EMAIL_REGISTERED,
         $backUrl = '',
-        $storeId = 0,
+        $storeId = null,
         $sendemailStoreId = null
     ): void {
         $types = self::TEMPLATE_TYPES;
@@ -385,7 +385,7 @@ class EmailNotification implements EmailNotificationInterface
             );
         }
 
-        if (!$storeId) {
+        if ($storeId === null) {
             $storeId = $this->getWebsiteStoreId($customer, $sendemailStoreId);
         }
 

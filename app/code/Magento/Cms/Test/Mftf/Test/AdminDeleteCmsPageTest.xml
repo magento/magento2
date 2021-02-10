@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteCmsPageTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Delete a CMS Page via the Admin"/>
+            <title value="Admin should be able to delete CMS Pages"/>
+            <description value="Admin should be able to delete CMS Pages"/>
+            <severity value="CRITICAL"/>
+            <group value="Cms"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminNavigateToPageGridActionGroup" stepKey="navigateToCmsPageGrid"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridSearchFilters"/>
+            <actionGroup ref="CreateNewPageWithBasicValues" stepKey="createNewPageWithBasicValues"/>
+            <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSaveCmsPageButton"/>
+        </before>
+        <after>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <actionGroup ref="AdminSearchCmsPageInGridByUrlKeyActionGroup" stepKey="findCreatedCmsPage">
+            <argument name="urlKey" value="{{_defaultCmsPage.identifier}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminDeleteCmsPageFromGridActionGroup" stepKey="deleteCmsPage">
+            <argument name="urlKey" value="{{_defaultCmsPage.identifier}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value="The page has been deleted."/>
+        </actionGroup>
+        <actionGroup ref="AdminSearchCmsPageInGridByUrlKeyActionGroup" stepKey="searchDeletedPage">
+            <argument name="urlKey" value="{{_defaultCmsPage.identifier}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminCmsPageIsNotInGridActionGroup" stepKey="assertCmsPageIsNotInGrid">
+            <argument name="urlKey" value="{{_defaultCmsPage.identifier}}"/>
+        </actionGroup>
+    </test>
+</tests>

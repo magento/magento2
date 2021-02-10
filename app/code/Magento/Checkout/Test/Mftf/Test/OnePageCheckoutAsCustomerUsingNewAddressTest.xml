@@ -73,8 +73,7 @@
         <waitForPageLoad stepKey="waitForAddressSaving"/>
 
         <!-- Click next button to open payment section -->
-        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
-        <waitForPageLoad stepKey="waitForShipmentPageLoad"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
 
         <!-- Change the address -->
         <uncheckOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution"/>
@@ -98,8 +97,7 @@
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Open created order in backend -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
-        <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>

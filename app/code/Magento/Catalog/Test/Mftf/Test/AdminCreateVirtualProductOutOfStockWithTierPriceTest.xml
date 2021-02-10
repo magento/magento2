@@ -31,8 +31,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
-        <waitForPageLoad stepKey="waitForProductCatalogPage"/>
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductToggle"/>
         <waitForPageLoad stepKey="waitForProductToggleToSelectProduct"/>
         <click selector="{{AdminProductGridActionSection.addVirtualProduct}}" stepKey="clickVirtualProduct"/>
@@ -58,12 +57,11 @@
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
         <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickOnDoneAdvancedCategorySelect"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection"/>
         <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{virtualProductOutOfStock.urlKey}}" stepKey="fillUrlKey"/>
         <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForVirtualProductSaved"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSaveButton"/>
 
         <!-- Verify we see success message -->
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSuccessMessage"/>
@@ -72,7 +70,9 @@
         <amOnPage url="{{StorefrontProductPage.url(virtualProductOutOfStock.urlKey)}}" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageToLoad"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{virtualProductOutOfStock.name}}" stepKey="seeVirtualProductNameOnStoreFrontPage"/>
-        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{virtualProductOutOfStock.sku}}" stepKey="seeVirtualProductSku"/>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeVirtualProductSku">
+            <argument name="productSku" value="{{virtualProductOutOfStock.sku}}"/>
+        </actionGroup>
 
         <!--  Verify customer see product tier price on product page -->
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.productTierPriceByForTextLabel('1', tierPriceOnDefault.qty_0)}}" stepKey="firstTierPriceText"/>

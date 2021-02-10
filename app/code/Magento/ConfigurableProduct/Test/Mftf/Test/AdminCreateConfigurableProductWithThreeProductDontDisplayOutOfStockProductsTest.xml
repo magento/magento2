@@ -82,8 +82,7 @@
         </after>
 
         <!--Create configurable product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
         <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="createConfigurableProduct">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
@@ -121,7 +120,9 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigurableProduct"/>
 
         <!-- Flash cache -->
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <!--Assert configurable product in category -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>

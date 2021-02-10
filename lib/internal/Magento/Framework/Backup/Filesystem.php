@@ -317,7 +317,7 @@ class Filesystem extends AbstractBackup
 
     /**
      * @return Ftp
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected function getRollBackFtp()
     {
@@ -333,7 +333,7 @@ class Filesystem extends AbstractBackup
 
     /**
      * @return Fs
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected function getRollBackFs()
     {

@@ -36,8 +36,7 @@
         </after>
 
         <!-- Search default simple product in the grid -->
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
-        <waitForPageLoad stepKey="waitForProductCatalogPage"/>
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage"/>
         <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGrid">
             <argument name="sku" value="$$initialSimpleProduct.sku$$"/>
         </actionGroup>
@@ -58,7 +57,7 @@
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory"/>
         <waitForPageLoad stepKey="waitForCategory2"/>
         <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickOnDoneAdvancedCategorySelect"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection"/>
         <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{simpleProductRegularPriceCustomOptions.urlKey}}" stepKey="fillUrlKey"/>
         <click selector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" stepKey="clickAdminProductCustomizableOption"/>
@@ -76,15 +75,13 @@
         <selectOption selector="{{AdminProductCustomizableOptionsSection.clickSelectPriceType(simpleProductCustomizableOption.title,'0')}}" userInput="{{simpleProductCustomizableOption.option_0_price_type}}" stepKey="selectOptionPriceType"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueSku(simpleProductCustomizableOption.title,'0')}}" userInput="{{simpleProductCustomizableOption.option_0_sku}}" stepKey="fillOptionSku"/>
         <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForSimpleProductSave"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSaveButton"/>
 
         <!--Verify customer see success message-->
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>
 
         <!--Search updated simple product(from above step) in the grid page-->
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPageToSearchUpdatedSimpleProduct"/>
-        <waitForPageLoad stepKey="waitForProductCatalogPageToLoad"/>
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPageToSearchUpdatedSimpleProduct"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAll"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickFiltersButton"/>
         <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{simpleProductRegularPriceCustomOptions.name}}" stepKey="fillSimpleProductNameInNameFilter"/>
@@ -124,7 +121,9 @@
         <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{simpleProductRegularPriceCustomOptions.name}}" stepKey="seeSimpleProductNameOnStoreFrontPage"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{simpleProductRegularPriceCustomOptions.price}}" stepKey="seeSimpleProductPriceOnStoreFrontPage"/>
-        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{simpleProductRegularPriceCustomOptions.sku}}" stepKey="seeSimpleProductSkuOnStoreFrontPage"/>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeSimpleProductSkuOnStoreFrontPage">
+            <argument name="productSku" value="{{simpleProductRegularPriceCustomOptions.sku}}"/>
+        </actionGroup>
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="productStockAvailableStatus"/>
         <assertEquals stepKey="assertStockAvailableOnProductPage">
             <expectedResult type="string">{{simpleProductRegularPriceCustomOptions.storefrontStatus}}</expectedResult>
@@ -150,9 +149,7 @@
         <!-- Verify added Product in cart -->
         <selectOption selector="{{StorefrontProductPageSection.customOptionDropDown}}" userInput="{{simpleProductCustomizableOption.option_0_title}} +$98.00" stepKey="selectCustomOption"/>
         <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="1" stepKey="fillProductQuantity"/>
-        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="clickOnAddToCartButton"/>
-        <waitForPageLoad stepKey="waitForProductToAddInCart"/>
-        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
         <seeElement selector="{{StorefrontProductPageSection.successMsg}}" stepKey="seeYouAddedSimpleprod4ToYourShoppingCartSuccessSaveMessage"/>
         <seeElement selector="{{StorefrontMinicartSection.quantity(1)}}" stepKey="seeAddedProductQuantityInCart"/>
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>

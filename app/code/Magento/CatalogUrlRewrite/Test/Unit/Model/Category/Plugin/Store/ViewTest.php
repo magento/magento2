@@ -3,25 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category\Plugin\Store;
 
-use Magento\CatalogUrlRewrite\Model\Category\Plugin\Store\View as StoreViewPlugin;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Model\AbstractModel;
-use Magento\Store\Model\ResourceModel\Store;
-use Magento\UrlRewrite\Model\UrlPersistInterface;
+use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
+use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryFactory;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\CatalogUrlRewrite\Model\Category\Plugin\Store\View as StoreViewPlugin;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
-use Magento\Catalog\Model\Category;
-use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
-use Magento\Catalog\Model\Product;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\ResourceModel\Store;
+use Magento\UrlRewrite\Model\UrlPersistInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ViewTest extends \PHPUnit\Framework\TestCase
+class ViewTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -34,56 +39,59 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     private $plugin;
 
     /**
-     * @var AbstractModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractModel|MockObject
      */
     private $abstractModelMock;
 
     /**
-     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|MockObject
      */
     private $subjectMock;
 
     /**
-     * @var UrlPersistInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlPersistInterface|MockObject
      */
     private $urlPersistMock;
 
     /**
-     * @var CategoryFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryFactory|MockObject
      */
     private $categoryFactoryMock;
 
     /**
-     * @var ProductFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductFactory|MockObject
      */
     private $productFactoryMock;
 
     /**
-     * @var CategoryUrlRewriteGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryUrlRewriteGenerator|MockObject
      */
     private $categoryUrlRewriteGeneratorMock;
 
     /**
-     * @var ProductUrlRewriteGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductUrlRewriteGenerator|MockObject
      */
     private $productUrlRewriteGeneratorMock;
 
     /**
-     * @var Category|\PHPUnit_Framework_MockObject_MockObject
+     * @var Category|MockObject
      */
     private $categoryMock;
 
     /**
-     * @var ProductCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductCollection|MockObject
      */
     private $productCollectionMock;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
     private $productMock;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->abstractModelMock = $this->getMockBuilder(AbstractModel::class)
@@ -117,7 +125,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->productCollectionMock = $this->getMockBuilder(ProductCollection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addCategoryIds', 'addAttributeToSelect', 'addWebsiteFilter', 'getIterator'])
+            ->setMethods(['addCategoryIds', 'addAttributeToSelect', 'getIterator', 'addStoreFilter'])
             ->getMock();
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
@@ -135,7 +143,12 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testAfterSave()
+    /**
+     * Test after save
+     *
+     * @return void
+     */
+    public function testAfterSave(): void
     {
         $origStoreMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
@@ -151,9 +164,16 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->abstractModelMock->expects($this->any())
             ->method('isObjectNew')
             ->willReturn(true);
+        $categoryCollection = $this->getMockBuilder(CategoryCollection::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getIterator'])
+            ->getMock();
+        $categoryCollection->expects($this->any())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([]));
         $this->categoryMock->expects($this->once())
             ->method('getCategories')
-            ->willReturn([]);
+            ->willReturn($categoryCollection);
         $this->categoryFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->categoryMock);
@@ -170,7 +190,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->method('addAttributeToSelect')
             ->willReturn($this->productCollectionMock);
         $this->productCollectionMock->expects($this->once())
-            ->method('addWebsiteFilter')
+            ->method('addStoreFilter')
             ->willReturn($this->productCollectionMock);
         $iterator = new \ArrayIterator([$this->productMock]);
         $this->productCollectionMock->expects($this->once())
@@ -187,7 +207,12 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testAfterDelete()
+    /**
+     * Test after delete
+     *
+     * @return void
+     */
+    public function testAfterDelete(): void
     {
         $this->urlPersistMock->expects($this->once())
             ->method('deleteByData');

@@ -25,6 +25,7 @@ use Magento\Framework\Data\Collection;
  * At least one target directory must be set
  *
  * @api
+ * @since 100.0.2
  */
 class Filesystem extends \Magento\Framework\Data\Collection
 {

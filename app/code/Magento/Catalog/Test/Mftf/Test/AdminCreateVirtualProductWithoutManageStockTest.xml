@@ -27,8 +27,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
-        <waitForPageLoad stepKey="waitForProductCatalogPage"/>
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductToggle"/>
         <waitForPageLoad stepKey="waitForProductToggleToSelectProduct"/>
         <click selector="{{AdminProductGridActionSection.addVirtualProduct}}" stepKey="clickVirtualProduct"/>
@@ -41,19 +40,18 @@
         <fillField selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" userInput="{{virtualProductWithoutManageStock.special_price}}" stepKey="fillSpecialPrice"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{virtualProductWithoutManageStock.quantity}}" stepKey="fillProductQuantity"/>
-        <click selector="{{AdminProductFormSection.advancedInventoryLink}}" stepKey="clickAdvancedInventoryLink"/>
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickAdvancedInventoryLink"/>
         <click selector="{{AdminProductFormAdvancedInventorySection.manageStock}}" stepKey="clickManageStock"/>
         <checkOption selector="{{AdminProductFormAdvancedInventorySection.useConfigSettings}}" stepKey="CheckUseConfigSettingsCheckBox"/>
-        <click selector="{{AdminProductFormAdvancedInventorySection.doneButton}}" stepKey="clickDoneButtonOnAdvancedInventorySection"/>
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickDoneButtonOnAdvancedInventorySection"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
         <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickOnDoneAdvancedCategorySelect"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection"/>
         <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{virtualProductWithoutManageStock.urlKey}}" stepKey="fillUrlKey"/>
         <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForVirtualProductSaved"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSaveButton"/>
 
         <!-- Verify we see success message -->
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSuccessMessage"/>
@@ -62,7 +60,9 @@
         <amOnPage url="{{StorefrontProductPage.url(virtualProductWithoutManageStock.urlKey)}}" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontPageToLoad"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{virtualProductWithoutManageStock.name}}" stepKey="seeVirtualProductNameOnStoreFrontPage"/>
-        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{virtualProductWithoutManageStock.sku}}" stepKey="seeVirtualProductSku"/>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeVirtualProductSku">
+            <argument name="productSku" value="{{virtualProductWithoutManageStock.sku}}"/>
+        </actionGroup>
 
         <!-- Verify customer see product special price on the storefront page -->
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.specialPriceAmount}}" stepKey="specialPriceAmount"/>

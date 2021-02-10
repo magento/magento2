@@ -38,7 +38,7 @@
         <click selector="{{AdminProductFormSection.productNameUseDefault}}" stepKey="uncheckUseDefault"/>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="fillNewName"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
         <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterGridByName">
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>

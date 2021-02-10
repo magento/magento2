@@ -55,7 +55,7 @@
         <!--Select Shipping Rate "Flat Rate" and click "Next" button-->
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShipping"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask2"/>
-        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
         <!--Verify that "My billing and shipping address are the same" is unchecked and billing address is preselected-->
         <dontSeeCheckboxIsChecked selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="shippingAndBillingAddressIsSameUnchecked"/>
         <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" stepKey="assertBillingAddress"/>

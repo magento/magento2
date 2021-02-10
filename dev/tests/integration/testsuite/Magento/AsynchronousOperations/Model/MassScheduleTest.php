@@ -28,6 +28,8 @@ use Magento\Webapi\Model\Config\Reader as ConfigReader;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @magentoDbIsolation disabled
  */
 class MassScheduleTest extends \PHPUnit\Framework\TestCase
 {
@@ -66,6 +68,9 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
      */
     private $skus = [];
 
+    /** @var string */
+    private $logFilePath;
+
     /**
      * @var Registry
      */
@@ -77,12 +82,7 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
     /** @var ConfigReader */
     protected $configReader;
 
-    /**
-     * @var string
-     */
-    protected $logFilePath;
-
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fileResolverMock = $this->createMock(\Magento\Framework\Config\FileResolverInterface::class);
         $this->objectManager = Bootstrap::getObjectManager();
@@ -168,7 +168,7 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->publisherConsumerController->stopConsumers();
         $this->clearProducts();

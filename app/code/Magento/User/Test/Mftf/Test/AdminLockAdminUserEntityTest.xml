@@ -22,13 +22,17 @@
         <before>
             <magentoCLI command="config:set admin/captcha/enable 0" stepKey="disableAdminCaptcha"/>
             <magentoCLI command="config:set admin/security/lockout_failures 2" stepKey="setDefaultMaximumLoginFailures"/>
-            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches1"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches1">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
             <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
         </before>
         <after>
             <magentoCLI command="config:set admin/captcha/enable 1" stepKey="enableAdminCaptcha"/>
             <magentoCLI command="config:set admin/security/lockout_failures 6" stepKey="setDefaultMaximumLoginFailures"/>
-            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 

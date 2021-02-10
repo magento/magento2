@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminEnhancedMediaGalleryVerifyUpdatedTagsTest">
+        <annotations>
+            <features value="MediaGallery"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1703"/>
+            <title value="User checks if the deleted tags are removed from Edit page, Tags field"/>
+            <stories value="User checks if the deleted tags are removed from Edit page, Tags field"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1337102/scenarios/5064888"/>
+            <description value="User checks if changes made on the tags are updated from Edit page, Tags field"/>
+            <severity value="CRITICAL"/>
+            <group value="media_gallery_ui"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteImage"/>
+        </after>
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
+            <argument name="image" value="ImageUpload3"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewImageDetails"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsEditActionGroup" stepKey="editImage"/>
+        <actionGroup ref="AdminMediaGalleryEditAssetAddKeywordActionGroup" stepKey="setKeywords">
+            <argument name="keyword" value="UpdatedImageDetails.keyword"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsSaveActionGroup" stepKey="saveImage">
+            <argument name="image" value="UpdatedImageDetails"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageKeywordsActionGroup" stepKey="verifyAddedKeywords">
+            <argument name="keywords" value="UpdatedImageDetails.keyword"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsEditActionGroup" stepKey="updateImageDetails"/>
+        <actionGroup ref="AdminMediaGalleryEditAssetRemoveKeywordActionGroup" stepKey="removeKeywords">
+            <argument name="keyword" value="{{UpdatedImageDetails.keyword}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsSaveActionGroup" stepKey="saveUpdatedImage">
+            <argument name="image" value="UpdatedImageDetails"/>
+        </actionGroup>
+        <actionGroup ref="AssetAdminEnhancedMediaGalleryAssetDetailsKeywordsAbsentActionGroup" stepKey="verifyRemovedKeywords">
+            <argument name="keywords" value="{{UpdatedImageDetails.keyword}}"/>
+        </actionGroup>
+    </test>
+</tests>

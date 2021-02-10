@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMediaGalleryVerifyImageGridAttributesTest">
+        <annotations>
+            <features value="MediaGallery"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/708"/>
+            <title value="Verify image grid attributes"/>
+            <stories value="[Story #41] User views limited image information from the image grid in Media Gallery" />
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1054245/scenarios/3839218"/>
+            <description value="User views basic image attributes in Media Gallery grid"/>
+            <severity value="CRITICAL"/>
+            <group value="media_gallery_ui"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="deleteImage"/>
+        </after>
+
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
+            <argument name="image" value="ImageUpload"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertImageAttributesOnEnhancedMediaGalleryActionGroup" stepKey="assertImageAttributes">
+            <argument name="image" value="ImageUpload"/>
+        </actionGroup>
+    </test>
+</tests>

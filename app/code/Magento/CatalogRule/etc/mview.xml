@@ -26,6 +26,7 @@
     <view id="catalog_product_price" class="Magento\Catalog\Model\Indexer\Product\Price" group="indexer">
         <subscriptions>
             <table name="catalogrule_product_price" entity_column="product_id" />
+            <table name="catalogrule_product_price_replica" entity_column="product_id" />
         </subscriptions>
     </view>
 </config>

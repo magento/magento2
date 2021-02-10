@@ -115,9 +115,7 @@
         <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" userInput="1:00 AM" stepKey="seeProductOptionTimeInput" />
         <!--Select shipping method-->
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
-        <waitForElement selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
-        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskAfterClickNext"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
         <!--Select payment method-->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
         <!-- Place Order -->
@@ -154,7 +152,7 @@
 
         <click selector="{{AdminOrderDetailsMainActionsSection.reorder}}" stepKey="clickReorder"/>
         <actionGroup ref="AdminCheckoutSelectCheckMoneyOrderBillingMethodActionGroup" stepKey="selectBillingMethod"/>
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="trySubmitOrder"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="trySubmitOrder" />
 
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionField.title}}" stepKey="seeAdminOrderProductOptionField1" />
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionArea.title}}" stepKey="seeAdminOrderProductOptionArea1"/>

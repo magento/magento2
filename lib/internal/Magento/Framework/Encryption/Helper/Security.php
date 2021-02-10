@@ -12,6 +12,7 @@ use Laminas\Crypt\Utils;
  * Class implements compareString from Laminas\Crypt
  *
  * @api
+ * @since 100.0.2
  */
 class Security
 {

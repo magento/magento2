@@ -5,14 +5,16 @@
  */
 
 /**@var \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <?php $_element = $block->getElement() ?>
 <?php $_jsObjectName = $block->getFieldSetId() != null ? $block->getFieldSetId() : $_element->getHtmlId() ?>
 <div class="rule-tree">
-    <fieldset id="<?= $block->escapeHtmlAttr($_jsObjectName) ?>" <?= /* @noEscape */ $_element->serialize(['class']) ?> class="fieldset">
+<fieldset id="<?= $block->escapeHtmlAttr($_jsObjectName) ?>" <?= /* @noEscape */ $_element->serialize(['class']) ?>
+          class="fieldset">
         <legend class="legend"><span><?= $block->escapeHtml($_element->getLegend()) ?></span></legend>
         <br>
-    <?php if ($_element->getComment()) : ?>
+    <?php if ($_element->getComment()): ?>
         <div class="messages">
             <div class="message message-notice"><?= $block->escapeHtml($_element->getComment()) ?></div>
         </div>
@@ -22,16 +24,21 @@
     </div>
     </fieldset>
 </div>
-<script>
+
+<?php $scriptString = <<<script
+
 require([
-    "Magento_Rule/rules",
-    "prototype"
+    'Magento_Rule/rules',
+    'prototype'
 ], function(VarienRulesForm){
 
-window.<?= /* @noEscape */ $_jsObjectName ?> = new VarienRulesForm('<?= /* @noEscape */ $_jsObjectName ?>', '<?= /* @noEscape */ $block->getNewChildUrl() ?>');
-<?php if ($_element->getReadonly()) : ?>
-    <?= /* @noEscape */ $_element->getHtmlId() ?>.setReadonly(true);
-<?php endif; ?>
+script;
+$scriptString .= 'window.' . /* @noEscape */ $_jsObjectName . ' = new VarienRulesForm(\'' .
+    /* @noEscape */ $_jsObjectName . '\', \'' .  /* @noEscape */ $block->getNewChildUrl() . '\');';
+if ($_element->getReadonly()):
+    $scriptString .= /* @noEscape */ $_element->getHtmlId() . '.setReadonly(true);' . PHP_EOL;
+endif;
 
-});
-</script>
+$scriptString .= '});' . PHP_EOL;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Reports\Model\ResourceModel\Quote\Item;
 
@@ -17,6 +18,8 @@ use Magento\Framework\App\ResourceConnection;
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
+    private const PREPARED_FLAG_NAME = 'reports_collection_prepared';
+
     /**
      * Join fields
      *
@@ -99,6 +102,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     public function prepareActiveCartItems()
     {
         $quoteItemsSelect = $this->getSelect();
+
+        if ($this->getFlag(self::PREPARED_FLAG_NAME)) {
+            return $quoteItemsSelect;
+        }
+
         $quoteItemsSelect->reset()
             ->from(['main_table' => $this->getTable('quote_item')], '')
             ->columns('main_table.product_id')
@@ -114,6 +122,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             )->group(
                 'main_table.product_id'
             );
+        $this->setFlag(self::PREPARED_FLAG_NAME, true);
 
         return $quoteItemsSelect;
     }

@@ -3,31 +3,85 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+$blockId = $block->getId();
 ?>
-<div id="product_composite_configure" class="product-configure-popup" style="display:none;">
-    <iframe name="product_composite_configure_iframe" id="product_composite_configure_iframe" style="width:0; height:0; border:0px solid #fff; position:absolute; top:-1000px; left:-1000px" onload="window.productConfigure && productConfigure.onLoadIFrame()"></iframe>
-    <form action="" method="post" id="product_composite_configure_form" enctype="multipart/form-data" onsubmit="productConfigure.onConfirmBtn(); return false;" target="product_composite_configure_iframe">
+<div id="product_composite_configure"
+     class="product-configure-popup product-configure-popup-<?= $block->escapeHtmlAttr($blockId) ?>">
+    <iframe name="product_composite_configure_iframe" id="product_composite_configure_iframe"></iframe>
+    <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+        'onload',
+        "window.productConfigure && productConfigure.onLoadIFrame()",
+        'iframe[name=\'product_composite_configure_iframe\']:last-of-type'
+    ) ?>
+
+    <form action="" method="post" id="product_composite_configure_form" enctype="multipart/form-data"
+          target="product_composite_configure_iframe" class="product_composite_configure_form">
         <div class="entry-edit">
-            <div id="product_composite_configure_messages" style="display: none;" >
+            <div id="product_composite_configure_messages" class="product_composite_configure_messages">
                 <div class="messages"><div class="message message-error error"><div></div></div></div>
             </div>
             <div id="product_composite_configure_form_fields" class="content product-composite-configure-inner"></div>
-            <div id="product_composite_configure_form_additional" style="display:none;"></div>
-            <div id="product_composite_configure_form_confirmed" style="display:none;"></div>
+            <div id="product_composite_configure_form_additional" class="product_composite_configure_form_additional">
+            </div>
+            <div id="product_composite_configure_form_confirmed" class="product_composite_configure_form_confirmed">
+            </div>
         </div>
         <input type="hidden" name="as_js_varname" value="iFrameResponse" />
         <input type="hidden" name="form_key" value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>" />
     </form>
-    <div id="product_composite_configure_confirmed" style="display:none;"></div>
+    <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+        'onsubmit',
+        'productConfigure.onConfirmBtn();event.preventDefault()',
+        '.product_composite_configure_form:last-of-type'
+    ) ?>
 
-    <script>
+    <div id="product_composite_configure_confirmed" class="product_composite_configure_confirmed"></div>
+
+    <?php $scriptString = <<<script
+        prodCompConfIframe = document.querySelector(
+            ".product-configure-popup-$blockId iframe[name='product_composite_configure_iframe']"
+        );
+        prodCompConfIframe.style.width = 0;
+        prodCompConfIframe.style.height = 0;
+        prodCompConfIframe.style.border = "0px solid #fff";
+        prodCompConfIframe.style.position = "absolute";
+        prodCompConfIframe.style.top = "-1000px";
+        prodCompConfIframe.style.left = "-1000px";
+
+        prodCompConfMessages = document.querySelector(
+            ".product-configure-popup-$blockId .product_composite_configure_messages"
+        );
+        prodCompConfMessages.style.display = "none";
+
+        prodCompConfFormAdd = document.querySelector(
+            ".product-configure-popup-$blockId .product_composite_configure_form_additional"
+        );
+        prodCompConfFormAdd.style.display = "none";
+
+        prodCompConfFormConf = document.querySelector(
+            ".product-configure-popup-$blockId .product_composite_configure_form_confirmed"
+        );
+        prodCompConfFormConf.style.display = "none";
+
+        prodCompConfConf = document.querySelector(
+            ".product-configure-popup-$blockId .product_composite_configure_confirmed"
+        );
+        prodCompConfConf.style.display = "none";
+
+        prodConfPopup = document.querySelector(".product-configure-popup-$blockId");
+        prodConfPopup.style.display = "none";
+
         require([
             "jquery",
             "mage/mage"
         ], function(jQuery){
-
-            jQuery('#product_composite_configure_form').mage('form').mage('validation');
-
+            jQuery('.product_composite_configure_form').each(function () {
+                jQuery(this).mage('form').mage('validation');
+            });
         });
-    </script>
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>
 </div>

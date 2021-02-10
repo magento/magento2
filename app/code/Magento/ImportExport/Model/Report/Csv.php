@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\ImportExport\Model\Report;
 
@@ -60,22 +61,16 @@ class Csv implements ReportProcessorInterface
     }
 
     /**
-     * @param string $originalFileName
-     * @param ProcessingErrorAggregatorInterface $errorAggregator
-     * @param bool $writeOnlyErrorItems
-     * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @inheritDoc
      */
     public function createReport(
         $originalFileName,
         ProcessingErrorAggregatorInterface $errorAggregator,
         $writeOnlyErrorItems = false
     ) {
+        $outputCsv = $this->outputCsvFactory->create();
+
         $sourceCsv = $this->createSourceCsvModel($originalFileName);
-
-        $outputFileName = $this->generateOutputFileName($originalFileName);
-        $outputCsv = $this->createOutputCsvModel($outputFileName);
-
         $columnsName = $sourceCsv->getColNames();
         $columnsName[] = self::REPORT_ERROR_COLUMN_NAME;
         $outputCsv->setHeaderCols($columnsName);
@@ -88,10 +83,16 @@ class Csv implements ReportProcessorInterface
             }
         }
 
+        $directory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $outputFileName = $this->generateOutputFileName($originalFileName);
+        $directory->writeFile(Import::IMPORT_HISTORY_DIR . $outputFileName, $outputCsv->getContents());
+
         return $outputFileName;
     }
 
     /**
+     * Retrieve error messages
+     *
      * @param int $rowNumber
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @return string
@@ -112,16 +113,21 @@ class Csv implements ReportProcessorInterface
     }
 
     /**
+     * Generate output filename based on source filename
+     *
      * @param string $sourceFile
      * @return string
      */
     protected function generateOutputFileName($sourceFile)
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $fileName = basename($sourceFile, self::ERROR_REPORT_FILE_EXTENSION);
         return $fileName . self::ERROR_REPORT_FILE_SUFFIX . self::ERROR_REPORT_FILE_EXTENSION;
     }
 
     /**
+     * Create source CSV model
+     *
      * @param string $sourceFile
      * @return \Magento\ImportExport\Model\Import\Source\Csv
      */
@@ -132,20 +138,6 @@ class Csv implements ReportProcessorInterface
                 'file' => $sourceFile,
                 'directory' => $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR),
                 'delimiter' => $this->reportHelper->getDelimiter(),
-            ]
-        );
-    }
-
-    /**
-     * @param string $outputFileName
-     * @return \Magento\ImportExport\Model\Export\Adapter\Csv
-     */
-    protected function createOutputCsvModel($outputFileName)
-    {
-        return $this->outputCsvFactory->create(
-            [
-                'destination' => Import::IMPORT_HISTORY_DIR . $outputFileName,
-                'destinationDirectoryCode' => DirectoryList::VAR_DIR,
             ]
         );
     }

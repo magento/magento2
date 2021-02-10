@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEnhancedMediaGalleryAssertMassActionModeDetailsActionGroup">
+        <annotations>
+            <description>Asserts that massaction mode can be enabled and disabled, verify massaction view after switch to massaction mode</description>
+        </annotations>
+        <arguments>
+            <argument name="imageName" type="string"/>
+        </arguments>
+        <click selector="{{AdminEnhancedMediaGalleryMassActionSection.massActionCheckbox(imageName)}}" stepKey="selectImageInGridToDelte"/>
+        <see selector="{{AdminEnhancedMediaGalleryMassActionSection.totalSelected}}" userInput="(1 Selected)" stepKey="verifySelectedCount"/>
+    </actionGroup>
+</actionGroups>

@@ -11,6 +11,9 @@ use Magento\Framework\Search\EngineResolverInterface;
 
 /**
  * Proxy for adapter-specific index switcher
+ *
+ * @deprecated mysql search engine has been removed
+ * @see \Magento\Elasticsearch
  */
 class IndexSwitcherProxy implements IndexSwitcherInterface
 {

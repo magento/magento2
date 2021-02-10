@@ -27,7 +27,7 @@
         </after>
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
         <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
         <fillField userInput="$$simpleProduct.name$$new" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
@@ -36,7 +36,7 @@
         <fillField userInput="$$simpleProduct.quantity$$" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
         <fillField userInput="$$simpleProduct.custom_attributes[url_key]$$" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
         <see userInput="The value specified in the URL Key field would generate a URL that already exists" selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="assertErrorMessage"/>
     </test>
 </tests>

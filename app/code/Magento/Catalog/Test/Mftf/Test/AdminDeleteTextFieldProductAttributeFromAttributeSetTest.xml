@@ -48,8 +48,7 @@
         <waitForPageLoad stepKey="waitForAttributeSetEditPageToLoad"/>
         <see selector="{{AdminProductAttributeSetEditSection.groupTree}}" userInput="$$attribute.attribute_code$$" stepKey="seeAttributeInAttributeGroupTree"/>
         <!--Open Product Index Page and filter the product-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct">
             <argument name="product" value="SimpleProduct2"/>
         </actionGroup>
@@ -82,8 +81,7 @@
         <dontSee userInput="$$attribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="dontSeeAttributeInAttributeGroupTree"/>
         <dontSee userInput="$$attribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.unassignedAttributesTree}}" stepKey="dontSeeAttributeInUnassignedAttributeTree"/>
         <!--Verify Product Attribute is not present in Product Index Page -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="openProductIndexPage"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageToLoad1"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct1">
             <argument name="product" value="SimpleProduct2"/>
         </actionGroup>

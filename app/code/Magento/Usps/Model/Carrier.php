@@ -1470,7 +1470,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param \Magento\Framework\DataObject $request
      * @return string
-     * @deprecated This method should not be used anymore.
+     * @deprecated 100.2.1 This method should not be used anymore.
      * @see \Magento\Usps\Model\Carrier::_doShipmentRequest method doc block.
      */
     protected function _formUsExpressShipmentRequest(\Magento\Framework\DataObject $request)
@@ -1647,7 +1647,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @deprecated Should not be used anymore.
+     * @deprecated 100.2.1 Should not be used anymore.
      * @see \Magento\Usps\Model\Carrier::_doShipmentRequest doc block.
      */
     protected function _formIntlShipmentRequest(\Magento\Framework\DataObject $request)
@@ -1902,7 +1902,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Framework\DataObject $request
      * @return \Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @deprecated This method must not be used anymore. Starting from 23.02.2018 USPS elimates API usage for
+     * @deprecated 100.2.1 This method must not be used anymore. Starting from 23.02.2018 USPS elimates API usage for
      * free shipping labels generating.
      */
     protected function _doShipmentRequest(\Magento\Framework\DataObject $request)

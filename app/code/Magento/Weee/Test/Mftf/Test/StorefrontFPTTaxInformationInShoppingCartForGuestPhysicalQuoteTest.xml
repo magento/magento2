@@ -63,7 +63,7 @@
             <createData entity="DefaultTaxConfig" stepKey="defaultTaxConfiguration"/>
             <createData entity="WeeeConfigDisable" stepKey="disableFPT"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
             <magentoCron groups="index" stepKey="reindexBrokenIndices"/>

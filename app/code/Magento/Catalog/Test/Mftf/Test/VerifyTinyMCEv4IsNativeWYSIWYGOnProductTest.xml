@@ -44,13 +44,13 @@
         <see selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertImageBtn}}" userInput="Insert Image..." stepKey="seeInsertImage1"/>
         <dontSee selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="insertWidget1" />
         <dontSee selector="{{TinyMCESection.InsertVariableBtn}}" stepKey="insertVariable1" />
-        <scrollTo selector="{{ProductDescriptionWYSIWYGToolbarSection.showHideBtn}}" stepKey="scrollToDesShowHideBtn2" />
+        <scrollTo selector="{{ProductShortDescriptionWYSIWYGToolbarSection.showHideBtn}}" y="-150" x="0" stepKey="scrollToDesShowHideBtn2" />
         <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.showHideBtn}}" stepKey="clickShowHideBtn2" />
         <waitForElementVisible selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertImageBtn}}" stepKey="waitForInsertImage2" />
         <see selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertImageBtn}}" userInput="Insert Image..." stepKey="seeInsertImage2"/>
         <dontSee selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="insertWidget2" />
         <dontSee selector="{{TinyMCESection.InsertVariableBtn}}" stepKey="insertVariable2" />
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
         <!-- Go to storefront product page, assert product content -->
         <amOnPage url="{{_defaultProduct.name}}.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>

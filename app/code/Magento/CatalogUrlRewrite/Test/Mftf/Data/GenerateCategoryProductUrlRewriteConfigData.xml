@@ -27,4 +27,12 @@
         <data key="path">catalog/seo/product_use_categories</data>
         <data key="value">0</data>
     </entity>
+    <entity name="EnableCreatePermanentRedirect">
+        <data key="path">catalog/seo/save_rewrites_history</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisableCreatePermanentRedirect">
+        <data key="path">catalog/seo/save_rewrites_history</data>
+        <data key="value">0</data>
+    </entity>
 </entities>

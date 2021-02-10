@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
+    <suite name="InContextPaypalSuite">
+        <before>
+            <!-- Login -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <!--Config PayPal Express Checkout-->
+            <actionGroup ref="ConfigPayPalExpressCheckoutActionGroup" stepKey="ConfigPayPalExpressCheckout"/>
+            <!-- Configure PayPal Express Checkout -->
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanFullPageCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Cleanup Paypal configurations -->
+            <magentoCLI command="config:set {{StorefrontPaypalMerchantAccountIdConfigData.path}} {{StorefrontPaypalMerchantAccountIdConfigData.value}}" stepKey="deleteMerchantId"/>
+            <magentoCLI command="config:set {{StorefrontPaypalDisableInContextCheckoutConfigData.path}} {{StorefrontPaypalDisableInContextCheckoutConfigData.value}}" stepKey="disableInContextPayPal"/>
+            <magentoCLI command="config:set {{StorefrontPaypalDisableConfigData.path}} {{StorefrontPaypalDisableConfigData.value}}" stepKey="disablePaypal"/>
+            <createData entity="SamplePaypalConfig" stepKey="setDefaultPaypalConfig"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanFullPageCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </after>
+        <include>
+            <group name="paypalExpress"/>
+        </include>
+    </suite>
+</suites>

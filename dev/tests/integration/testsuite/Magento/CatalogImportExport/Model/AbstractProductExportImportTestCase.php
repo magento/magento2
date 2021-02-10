@@ -9,6 +9,8 @@ use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
 use Magento\Store\Model\Store;
+use Magento\TestFramework\Annotation\DataFixture;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 /**
  * Abstract class for testing product export and import scenarios
@@ -69,9 +71,14 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
     private $writer;
 
     /**
+     * @var string
+     */
+    private $csvFile;
+
+    /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->fileSystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
@@ -84,9 +91,14 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->executeFixtures($this->fixtures, true);
+
+        if ($this->csvFile !== null) {
+            $directoryWrite = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+            $directoryWrite->delete($this->csvFile);
+        }
     }
 
     /**
@@ -104,6 +116,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
      */
     public function testImportExport(array $fixtures, array $skus, array $skippedAttributes = []): void
     {
+        $this->csvFile = null;
         $this->fixtures = $fixtures;
         $this->executeFixtures($fixtures);
         $this->modifyData($skus);
@@ -242,6 +255,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
      */
     protected function executeFixtures(array $fixtures, bool $rollback = false)
     {
+        Resolver::getInstance()->setCurrentFixtureType(DataFixture::ANNOTATION);
         foreach ($fixtures as $fixture) {
             $fixturePath = $this->resolveFixturePath($fixture, $rollback);
             include $fixturePath;
@@ -378,6 +392,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
     private function exportProducts(\Magento\CatalogImportExport\Model\Export\Product $exportProduct = null)
     {
         $csvfile = uniqid('importexport_') . '.csv';
+        $this->csvFile = $csvfile;
 
         $exportProduct = $exportProduct ?: $this->objectManager->create(
             \Magento\CatalogImportExport\Model\Export\Product::class

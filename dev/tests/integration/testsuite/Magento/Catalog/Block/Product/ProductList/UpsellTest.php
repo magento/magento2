@@ -22,7 +22,7 @@ class UpsellTest extends AbstractLinksTest
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -43,7 +43,7 @@ class UpsellTest extends AbstractLinksTest
         $this->prepareBlock();
         $html = $this->block->toHtml();
         $this->assertNotEmpty($html);
-        $this->assertContains('Simple Up Sell', $html);
+        $this->assertStringContainsString('Simple Up Sell', $html);
         $this->assertCount(1, $this->block->getItems());
     }
 
@@ -120,7 +120,7 @@ class UpsellTest extends AbstractLinksTest
      */
     public function testMultipleWebsitesUpsellProducts(array $data): void
     {
-        $this->updateProducts($this->prepareWebsiteIdsProducts());
+        $this->updateProducts($this->prepareProductsWebsiteIds());
         $productLinks = array_replace_recursive($this->existingProducts, $data['productLinks']);
         $this->linkProducts('simple-1', $productLinks);
         $this->product = $this->productRepository->get(

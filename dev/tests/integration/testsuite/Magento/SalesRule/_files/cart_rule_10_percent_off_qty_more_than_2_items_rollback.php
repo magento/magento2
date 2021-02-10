@@ -5,5 +5,6 @@
  */
 declare(strict_types=1);
 
-// phpcs:ignore Magento2.Security.IncludeFile
-require __DIR__ . '/rules_rollback.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/SalesRule/_files/rules_rollback.php');

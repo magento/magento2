@@ -457,11 +457,26 @@
         .action {
             &.delete {
                 &:extend(.abs-remove-button-for-blocks all);
-                line-height: unset;
                 position: absolute;
                 right: 0;
                 top: -1px;
-                width: auto;
+            }
+        }
+
+        .block-wishlist {
+            .action {
+                &.delete {
+                    line-height: unset;
+                    width: auto;
+                }
+            }
+        }
+
+        .block-compare {
+            .action {
+                &.delete {
+                    right: initial;
+                }
             }
         }
 
@@ -814,6 +829,7 @@
                 &:extend(.abs-remove-button-for-blocks all);
                 left: -6px;
                 position: absolute;
+                right: 0;
                 top: 0;
             }
 

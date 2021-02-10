@@ -24,8 +24,7 @@
         </before>
         <after>
             <!-- Clean up our modifications to the existing color attribute -->
-            <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
-            <waitForPageLoad stepKey="waitForProductAttributes"/>
+            <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
             <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="color" stepKey="fillFilter"/>
             <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="clickSearch"/>
             <click selector="{{AdminProductAttributeGridSection.AttributeCode('color')}}" stepKey="clickRowToEdit"/>
@@ -39,8 +38,7 @@
         </after>
 
         <!-- Go to the edit page for the "color" attribute -->
-        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
-        <waitForPageLoad stepKey="waitForProductAttributes"/>
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
         <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="color" stepKey="fillFilter"/>
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="clickSearch"/>
         <click selector="{{AdminProductAttributeGridSection.AttributeCode('color')}}" stepKey="clickRowToEdit"/>
@@ -102,8 +100,7 @@
         </actionGroup>
 
         <!-- Create a configurable product to verify the storefront with -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad stepKey="waitForProductGridPage"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductToggle"/>
         <click selector="{{AdminProductGridActionSection.addConfigurableProduct}}" stepKey="clickOnAddConfigurableProduct"/>
         <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>

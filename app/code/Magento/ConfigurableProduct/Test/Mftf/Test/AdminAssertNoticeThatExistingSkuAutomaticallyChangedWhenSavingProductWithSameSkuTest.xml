@@ -36,8 +36,7 @@
         </after>
 
         <!-- Create configurable product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
         <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="createConfigurableProduct">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
@@ -64,7 +63,7 @@
 
         <!-- Save product -->
         <waitForElementVisible selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitForSaveBtnVisible"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProductAgain"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProductAgain"/>
         <waitForElementVisible selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="waitPopUpVisible"/>
         <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmPopup"/>
 

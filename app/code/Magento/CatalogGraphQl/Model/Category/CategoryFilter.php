@@ -13,7 +13,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\ArgumentApplier\Filter;
-use Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match;
+use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\ArgumentApplier\Sort;
 use Magento\Search\Model\Query;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -24,6 +24,11 @@ use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder;
  */
 class CategoryFilter
 {
+    /**
+     * @var string
+     */
+    private const SPECIAL_CHARACTERS = '-+~/\\<>\'":*$#@()!,.?`=%&^';
+
     /**
      * @var ScopeConfigInterface
      */
@@ -67,6 +72,7 @@ class CategoryFilter
         $categoryIds = [];
         $criteria[Filter::ARGUMENT_NAME] = $this->formatMatchFilters($criteria['filters'], $store);
         $criteria[Filter::ARGUMENT_NAME][CategoryInterface::KEY_IS_ACTIVE] = ['eq' => 1];
+        $criteria[Sort::ARGUMENT_NAME][CategoryInterface::KEY_POSITION] = ['ASC'];
         $searchCriteria = $this->searchCriteriaBuilder->build('categoryList', $criteria);
         $pageSize = $criteria['pageSize'] ?? 20;
         $currentPage = $criteria['currentPage'] ?? 1;
@@ -120,7 +126,7 @@ class CategoryFilter
         foreach ($filters as $filter => $condition) {
             $conditionType = current(array_keys($condition));
             if ($conditionType === 'match') {
-                $searchValue = trim(str_replace(Match::SPECIAL_CHARACTERS, '', $condition[$conditionType]));
+                $searchValue = trim(str_replace(self::SPECIAL_CHARACTERS, '', $condition[$conditionType]));
                 $matchLength = strlen($searchValue);
                 if ($matchLength < $minQueryLength) {
                     throw new InputException(__('Invalid match filter. Minimum length is %1.', $minQueryLength));

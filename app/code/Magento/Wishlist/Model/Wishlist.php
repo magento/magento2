@@ -181,6 +181,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
      * @param Json|null $serializer
      * @param StockRegistryInterface|null $stockRegistry
      * @param ScopeConfigInterface|null $scopeConfig
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -226,6 +227,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
      *
      * @param int $customerId
      * @param bool $create Create wishlist if don't exists
+     *
      * @return $this
      */
     public function loadByCustomerId($customerId, $create = false)
@@ -274,6 +276,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
      * Load by sharing code
      *
      * @param string $code
+     *
      * @return $this
      */
     public function loadByCode($code)
@@ -370,6 +373,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
      * Retrieve wishlist item collection
      *
      * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     *
      * @throws NoSuchEntityException
      */
     public function getItemCollection()
@@ -379,7 +383,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
                 $this
             )->addStoreFilter(
                 $this->getSharedStoreIds()
-            )->setVisibilityFilter();
+            )->setVisibilityFilter($this->_useCurrentWebsite);
         }
 
         return $this->_itemCollection;
@@ -389,6 +393,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
      * Retrieve wishlist item collection
      *
      * @param int $itemId
+     *
      * @return false|Item
      */
     public function getItem($itemId)
@@ -403,7 +408,9 @@ class Wishlist extends AbstractModel implements IdentityInterface
      * Adding item to wishlist
      *
      * @param Item $item
+     *
      * @return $this
+     *
      * @throws Exception
      */
     public function addItem(Item $item)
@@ -424,9 +431,12 @@ class Wishlist extends AbstractModel implements IdentityInterface
      * @param int|Product $product
      * @param DataObject|array|string|null $buyRequest
      * @param bool $forciblySetQty
+     *
      * @return Item|string
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     *
      * @throws LocalizedException
      * @throws InvalidArgumentException
      */
@@ -465,6 +475,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
             $_buyRequest = $buyRequest;
         } elseif (is_string($buyRequest)) {
             $isInvalidItemConfiguration = false;
+            $buyRequestData = [];
             try {
                 $buyRequestData = $this->serializer->unserialize($buyRequest);
                 if (!is_array($buyRequestData)) {
@@ -481,6 +492,9 @@ class Wishlist extends AbstractModel implements IdentityInterface
             $_buyRequest = new DataObject($buyRequest);
         } else {
             $_buyRequest = new DataObject();
+        }
+        if ($_buyRequest->getData('action') !== 'updateItem') {
+            $_buyRequest->setData('action', 'add');
         }
 
         /* @var $product Product */
@@ -502,6 +516,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
 
         $errors = [];
         $items = [];
+        $item = null;
 
         foreach ($cartCandidates as $candidate) {
             if ($candidate->getParentProductId()) {
@@ -529,7 +544,9 @@ class Wishlist extends AbstractModel implements IdentityInterface
      * Set customer id
      *
      * @param int $customerId
+     *
      * @return $this
+     *
      * @throws LocalizedException
      */
     public function setCustomerId($customerId)
@@ -541,6 +558,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
      * Retrieve customer id
      *
      * @return int
+     *
      * @throws LocalizedException
      */
     public function getCustomerId()
@@ -552,6 +570,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
      * Retrieve data for save
      *
      * @return array
+     *
      * @throws LocalizedException
      */
     public function getDataForSave()
@@ -567,6 +586,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
      * Retrieve shared store ids for current website or all stores if $current is false
      *
      * @return array
+     *
      * @throws NoSuchEntityException
      */
     public function getSharedStoreIds()
@@ -590,6 +610,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
      * Set shared store ids
      *
      * @param array $storeIds
+     *
      * @return $this
      */
     public function setSharedStoreIds($storeIds)
@@ -602,6 +623,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
      * Retrieve wishlist store object
      *
      * @return \Magento\Store\Model\Store
+     *
      * @throws NoSuchEntityException
      */
     public function getStore()
@@ -616,6 +638,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
      * Set wishlist store
      *
      * @param Store $store
+     *
      * @return $this
      */
     public function setStore($store)
@@ -653,6 +676,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
      * Retrieve if product has stock or config is set for showing out of stock products
      *
      * @param int $productId
+     *
      * @return bool
      */
     private function isInStock($productId)
@@ -671,7 +695,9 @@ class Wishlist extends AbstractModel implements IdentityInterface
      * Check customer is owner this wishlist
      *
      * @param int $customerId
+     *
      * @return bool
+     *
      * @throws LocalizedException
      */
     public function isOwner($customerId)
@@ -696,10 +722,13 @@ class Wishlist extends AbstractModel implements IdentityInterface
      * @param int|Item $itemId
      * @param DataObject $buyRequest
      * @param null|array|DataObject $params
+     *
      * @return $this
+     *
      * @throws LocalizedException
      *
      * @see \Magento\Catalog\Helper\Product::addParamsToBuyRequest()
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -726,15 +755,16 @@ class Wishlist extends AbstractModel implements IdentityInterface
             }
             $params->setCurrentConfig($item->getBuyRequest());
             $buyRequest = $this->_catalogProduct->addParamsToBuyRequest($buyRequest, $params);
+            $buyRequest->setData('action', 'updateItem');
 
             $product->setWishlistStoreId($item->getStoreId());
             $items = $this->getItemCollection();
             $isForceSetQuantity = true;
-            foreach ($items as $_item) {
-                /* @var $_item Item */
-                if ($_item->getProductId() == $product->getId() && $_item->representProduct(
-                    $product
-                ) && $_item->getId() != $item->getId()
+            foreach ($items as $wishlistItem) {
+                /* @var $wishlistItem Item */
+                if ($wishlistItem->getProductId() == $product->getId()
+                    && $wishlistItem->getId() != $item->getId()
+                    && $wishlistItem->representProduct($product)
                 ) {
                     // We do not add new wishlist item, but updating the existing one
                     $isForceSetQuantity = false;
@@ -748,10 +778,11 @@ class Wishlist extends AbstractModel implements IdentityInterface
                 throw new LocalizedException(__($resultItem));
             }
 
+            if ($resultItem->getDescription() != $item->getDescription()) {
+                $resultItem->setDescription($item->getDescription())->save();
+            }
+
             if ($resultItem->getId() != $itemId) {
-                if ($resultItem->getDescription() != $item->getDescription()) {
-                    $resultItem->setDescription($item->getDescription())->save();
-                }
                 $item->isDeleted(true);
                 $this->setDataChanges(true);
             } else {

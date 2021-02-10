@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Model\Order\Pdf\Items\Invoice;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Sales\Model\RtlTextHandler;
+
 /**
  * Sales Order Invoice Pdf default items renderer
  */
@@ -20,6 +23,11 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
     protected $string;
 
     /**
+     * @var RtlTextHandler
+     */
+    private $rtlTextHandler;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
@@ -29,6 +37,8 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param RtlTextHandler|null $rtlTextHandler
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -39,7 +49,8 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        ?RtlTextHandler $rtlTextHandler = null
     ) {
         $this->string = $string;
         parent::__construct(
@@ -52,6 +63,7 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
             $resourceCollection,
             $data
         );
+        $this->rtlTextHandler = $rtlTextHandler  ?: ObjectManager::getInstance()->get(RtlTextHandler::class);
     }
 
     /**
@@ -68,18 +80,14 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
         $lines = [];
 
         // draw Product name
-        $lines[0] = [
-            [
-                // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                'text' => $this->string->split(html_entity_decode($item->getName()), 35, true, true),
+        $lines[0][] = [
+                'text' => $this->string->split($this->prepareText((string)$item->getName()), 35, true, true),
                 'feed' => 35
-            ]
         ];
 
         // draw SKU
         $lines[0][] = [
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            'text' => $this->string->split(html_entity_decode($this->getSku($item)), 17),
+            'text' => $this->string->split($this->prepareText((string)$this->getSku($item)), 17),
             'feed' => 290,
             'align' => 'right',
         ];
@@ -155,5 +163,17 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
 
         $page = $pdf->drawLineBlocks($page, [$lineBlock], ['table_header' => true]);
         $this->setPage($page);
+    }
+
+    /**
+     * Returns prepared for PDF text, reversed in case of RTL text
+     *
+     * @param string $string
+     * @return string
+     */
+    private function prepareText(string $string): string
+    {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        return $this->rtlTextHandler->reverseRtlText(html_entity_decode($string));
     }
 }

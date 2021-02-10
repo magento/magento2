@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLoginAsCustomerSubscribeToNewsletterTest">
+        <annotations>
+            <features value="Login as Customer"/>
+            <stories value="Subscribe to newsletter"/>
+            <title value="Admin user login as customer and make subscription to newsletter"/>
+            <description
+                value="Verify that Admin can subscribe to newsletter using Login as Customer functionality"/>
+            <severity value="AVERAGE"/>
+            <group value="login_as_customer"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
+                        stepKey="enableLoginAsCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
+                        stepKey="enableLoginAsCustomerAutoDetection"/>
+            <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
+            <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
+                        stepKey="disableLoginAsCustomer"/>
+            <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
+        </after>
+
+        <!-- Admin Login as Customer from Customer page -->
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
+                     stepKey="lLoginAsCustomerFromCustomerPage">
+            <argument name="customerId" value="$$createCustomer.id$$"/>
+        </actionGroup>
+
+        <!-- Subscribe for newsletter -->
+        <actionGroup ref="StorefrontCustomerNavigateToNewsletterPageActionGroup" stepKey="navigateToNewsletterPage"/>
+        <actionGroup ref="StorefrontCustomerUpdateGeneralSubscriptionActionGroup" stepKey="subscribeToNewsletter"/>
+        <actionGroup ref="AssertStorefrontCustomerMessagesActionGroup" stepKey="assertMessage">
+            <argument name="message" value="We have saved your subscription."/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSignOutAndCloseTabActionGroup" stepKey="signOutAfterLoggedInAsCustomer"/>
+
+        <!-- Verify subscription successful -->
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
+            <argument name="customerId" value="$$createCustomer.id$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertCustomerIsSubscribedToNewsletters" stepKey="assertSubscribedToNewsletter"/>
+    </test>
+</tests>
