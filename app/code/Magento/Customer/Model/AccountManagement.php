@@ -386,7 +386,7 @@ class AccountManagement implements AccountManagementInterface
     /**
      * @var AuthorizationInterface
      */
-    protected $authorization;
+    private $authorization;
 
     /**
      * @param CustomerFactory $customerFactory
