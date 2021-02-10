@@ -14,6 +14,7 @@ namespace Magento\Widget\Block;
 /**
  * Interface \Magento\Widget\Block\BlockInterface
  *
+ * @api
  */
 interface BlockInterface
 {

@@ -7,6 +7,8 @@ namespace Magento\Vault\Block\Customer;
 
 /**
  * Interface IconInterface
+ *
+ * @api
  */
 interface IconInterface
 {
