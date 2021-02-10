@@ -459,9 +459,13 @@ class LinkManagementTest extends WebapiAbstract
             'simple_with_empty_configurable_attribute_value' => [
                 'parent_sku' => 'configurable',
                 'child_sku' => 'simple2',
-                'error_message' => (string)__(
-                    'The child product doesn\'t have the "%1" attribute value. Verify the value and try again.'
-                ),
+                'error_message' => TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP
+                    ? (string)__(
+                        'The child product doesn\'t have the "%1" attribute value. Verify the value and try again.'
+                    )
+                    : (string)__(
+                        'The child product doesn\'t have the \\"%1\\" attribute value. Verify the value and try again.'
+                    ),
             ]
         ];
     }
