@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\DataObject;
 
+/**
+ * @api
+ */
 class Factory
 {
     /**
