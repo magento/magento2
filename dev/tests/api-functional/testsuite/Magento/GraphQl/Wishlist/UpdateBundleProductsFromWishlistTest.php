@@ -77,7 +77,7 @@ class UpdateBundleProductsFromWishlistTest extends GraphQlAbstract
         // Add product to wishlist
         $wishlist = $this->addProductToWishlist();
         $wishlistId = $wishlist['addProductsToWishlist']['wishlist']['id'];
-        $wishlistItemId = $wishlist['addProductsToWishlist']['wishlist']['items_v2'][0]['id'];
+        $wishlistItemId = $wishlist['addProductsToWishlist']['wishlist']['items_v2']['items'][0]['id'];
         $itemsCount = $wishlist['addProductsToWishlist']['wishlist']['items_count'];
 
         $query = $this->getBundleQuery((int)$wishlistItemId, $qty, $bundleOptions, (int)$wishlistId);
@@ -87,9 +87,9 @@ class UpdateBundleProductsFromWishlistTest extends GraphQlAbstract
         $this->assertArrayHasKey('wishlist', $response['updateProductsInWishlist']);
         $response = $response['updateProductsInWishlist']['wishlist'];
         $this->assertEquals($itemsCount, $response['items_count']);
-        $this->assertEquals($qty, $response['items_v2'][0]['quantity']);
-        $this->assertNotEmpty($response['items_v2'][0]['bundle_options']);
-        $bundleOptions = $response['items_v2'][0]['bundle_options'];
+        $this->assertEquals($qty, $response['items_v2']['items'][0]['quantity']);
+        $this->assertNotEmpty($response['items_v2']['items'][0]['bundle_options']);
+        $bundleOptions = $response['items_v2']['items'][0]['bundle_options'];
         $this->assertEquals('Bundle Product Items', $bundleOptions[0]['label']);
         $this->assertEquals(Select::NAME, $bundleOptions[0]['type']);
     }
@@ -151,18 +151,20 @@ mutation {
       items_count
       updated_at
       items_v2 {
-        id
-        quantity
-        ... on BundleWishlistItem {
-          bundle_options {
-            id
-            label
-            type
-            values {
+        items{
+          id
+          quantity
+          ... on BundleWishlistItem {
+            bundle_options {
               id
               label
-              quantity
-              price
+              type
+              values {
+                id
+                label
+                quantity
+                price
+              }
             }
           }
         }
@@ -255,19 +257,21 @@ mutation {
       items_count
       updated_at
       items_v2 {
-        id
-        quantity
-        added_at
-        ... on BundleWishlistItem {
-          bundle_options {
-            id
-            label
-            type
-            values {
+        items{
+          id
+          quantity
+          added_at
+          ... on BundleWishlistItem {
+            bundle_options {
               id
               label
-              quantity
-              price
+              type
+              values {
+                id
+                label
+                quantity
+                price
+              }
             }
           }
         }

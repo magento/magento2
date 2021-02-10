@@ -7,35 +7,37 @@ declare(strict_types=1);
 
 namespace Magento\WishlistGraphQl\Model;
 
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Wishlist\Model\Item;
 use Magento\Wishlist\Model\ResourceModel\Wishlist as WishlistResourceModel;
 use Magento\Wishlist\Model\Wishlist;
-use Magento\Wishlist\Model\Wishlist\Data\WishlistOutput;
 use Magento\Wishlist\Model\Wishlist\BuyRequest\BuyRequestBuilder;
-use Magento\Wishlist\Model\Wishlist\Data\Error;
+use Magento\Wishlist\Model\Wishlist\Data\Error as WishlistError;
+use Magento\Wishlist\Model\Wishlist\Data\WishlistItem as WishlistItemData;
+use Magento\Wishlist\Model\Wishlist\Data\WishlistOutput;
 
 /**
  * Update wishlist items helper
  */
 class UpdateWishlistItem
 {
+    private const ERROR_UNDEFINED = 'UNDEFINED';
+
     /**
      * @var WishlistResourceModel
      */
     private $wishlistResource;
 
     /**
-     * @var array
-     */
-    private $errors = [];
-
-    /**
-     * BuyRequestBuilder
-     * @var BuyRequestBuilder $buyRequestBuilder
+     * @var BuyRequestBuilder
      */
     private $buyRequestBuilder;
 
-    private const ERROR_UNDEFINED = 'UNDEFINED';
+    /**
+     * @var array
+     */
+    private $errors = [];
 
     /**
      * @param WishlistResourceModel $wishlistResource
@@ -50,68 +52,90 @@ class UpdateWishlistItem
     }
 
     /**
-     * Update wishlist Item and set data from request
+     * Update wishlist item and set data from request
      *
-     * @param object $options
+     * @param WishlistItemData $wishlistItemData
      * @param Wishlist $wishlist
      *
      * @return WishlistOutput
-     * @throws GraphQlInputException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
+     * @throws AlreadyExistsException
      */
-    public function execute(object $options, Wishlist $wishlist)
+    public function execute(WishlistItemData $wishlistItemData, Wishlist $wishlist)
     {
-        $itemId = $options->getId();
-        if ($wishlist->getItem($itemId) == null) {
+        $wishlistItemId = (int) $wishlistItemData->getId();
+        $wishlistItemToUpdate = $wishlist->getItem($wishlistItemId);
+
+        if (!$wishlistItemToUpdate) {
             $this->addError(
-                __(
-                    'The wishlist item with ID "%id" does not belong to the wishlist',
-                    ['id' => $itemId]
-                )->render()
+                __('Could not find the wishlist item with ID "%1"', $wishlistItemId)->render()
             );
         } else {
-            $buyRequest = $this->buyRequestBuilder->build($options);
-            $item = $wishlist->getItem((int)$itemId);
-            $product = $item->getProduct();
-            $productId = $product->getId();
+            $updatedOptions = $this->getUpdatedOptions($wishlistItemData, $wishlistItemToUpdate);
 
-            if ($productId) {
-                $buyRequest->setData('action', 'updateItem');
-                $product->setWishlistStoreId($item->getStoreId());
-                $cartCandidates = $product->getTypeInstance()->processConfiguration($buyRequest, clone $product);
+            $wishlistItemToUpdate->setOptions($updatedOptions);
+            $wishlistItemToUpdate->setQty($wishlistItemData->getQuantity());
+            if ($wishlistItemData->getDescription()) {
+                $wishlistItemToUpdate->setDescription($wishlistItemData->getDescription());
+            }
 
-                /**
-                 * If the product with options existed or not
-                 */
-                if (is_string($cartCandidates)) {
-                    throw new GraphQlInputException(__('The product with options does not exist.'));
-                }
+            $this->wishlistResource->save($wishlist);
+        }
 
-                /**
-                 * If prepare process return one object
-                 */
-                if (!is_array($cartCandidates)) {
-                    $cartCandidates = [$cartCandidates];
-                }
+        return $this->prepareOutput($wishlist);
+    }
 
-                foreach ($cartCandidates as $candidate) {
-                    if ($candidate->getParentProductId()) {
-                        continue;
-                    }
-                    $candidate->setWishlistStoreId($item->getStoreId());
-                    $qty = $buyRequest->getData('qty') ? $buyRequest->getData('qty') : 1;
-                    $item->setOptions($candidate->getCustomOptions());
-                    $item->setQty($qty);
-                    if($options->getDescription()) {
-                        $item->setDescription($options->getDescription());
-                    }
-                }
-                $this->wishlistResource->save($wishlist);
-            } else {
-                throw new GraphQlInputException(__('The product does not exist.'));
+    /**
+     * Build the updated options for the specified wishlist item.
+     *
+     * @param WishlistItemData $wishlistItemData
+     * @param Item $wishlistItemToUpdate
+     * @return array
+     * @throws LocalizedException
+     */
+    private function getUpdatedOptions(WishlistItemData $wishlistItemData, Item $wishlistItemToUpdate)
+    {
+        $wishlistItemId = $wishlistItemToUpdate->getId();
+        $wishlistItemProduct = $wishlistItemToUpdate->getProduct();
+
+        if (!$wishlistItemProduct->getId()) {
+            throw new LocalizedException(
+                __('Could not find product for the wishlist item with ID "%1"', $wishlistItemId)
+            );
+        }
+
+        // Create a buy request with the updated wishlist item data
+        $updatedBuyRequest = $this->buyRequestBuilder
+            ->build($wishlistItemData)
+            ->setData('action', 'updateItem');
+
+        // Get potential products to add to the cart for the product type using the updated buy request
+        $wishlistItemProduct->setWishlistStoreId($wishlistItemToUpdate->getStoreId());
+        $cartCandidates = $wishlistItemProduct->getTypeInstance()->processConfiguration(
+            $updatedBuyRequest,
+            clone $wishlistItemProduct
+        );
+
+        if (is_string($cartCandidates)) {
+            throw new LocalizedException(
+                __('Could not prepare product for the wishlist item with ID %1', $wishlistItemId)
+            );
+        }
+
+        // Of the cart candidates, find the parent product and get its options
+        if (!is_array($cartCandidates)) {
+            $cartCandidates = [$cartCandidates];
+        }
+        $updatedOptions = [];
+        foreach ($cartCandidates as $candidate) {
+            if ($candidate->getParentProductId() === null) {
+                $candidate->setWishlistStoreId($wishlistItemToUpdate->getStoreId());
+                $updatedOptions = $candidate->getCustomOptions();
+                break;
             }
         }
-        return $this->prepareOutput($wishlist);
+
+        return $updatedOptions;
     }
 
     /**
@@ -124,7 +148,7 @@ class UpdateWishlistItem
      */
     private function addError(string $message, string $code = null): void
     {
-        $this->errors[] = new Error(
+        $this->errors[] = new WishlistError(
             $message,
             $code ?? self::ERROR_UNDEFINED
         );
