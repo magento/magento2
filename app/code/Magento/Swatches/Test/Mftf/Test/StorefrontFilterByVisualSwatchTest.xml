@@ -92,10 +92,7 @@
             <argument name="attributeCode" value="{{ProductAttributeFrontendLabel.label}}"/>
         </actionGroup>
 
-        <!-- Run re-index task-->
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
 
         <!-- Go to the category page -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>
