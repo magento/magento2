@@ -5,6 +5,7 @@
  */
 
 namespace Magento\CatalogImportExport\Model\Import;
+define('DS', DIRECTORY_SEPARATOR);
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Config as CatalogConfig;
@@ -22,6 +23,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
@@ -45,7 +47,10 @@ use Magento\Store\Model\Store;
  */
 class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 {
-    const CONFIG_KEY_PRODUCT_TYPES = 'global/importexport/import_product_types';
+    public const CONFIG_KEY_PRODUCT_TYPES = 'global/importexport/import_product_types';
+    private const HASH_ALGORITHM = 'sha256';
+
+
 
     /**
      * Size of bunch - part of products to save in one step.
@@ -758,6 +763,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private $stockProcessor;
 
     /**
+     * @var File
+     */
+    private $fileDriver;
+    
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -804,6 +814,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param ProductRepositoryInterface|null $productRepository
      * @param StatusProcessor|null $statusProcessor
      * @param StockProcessor|null $stockProcessor
+     * @param File|null $fileDriver
      * @throws LocalizedException
      * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -855,7 +866,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         DateTimeFactory $dateTimeFactory = null,
         ProductRepositoryInterface $productRepository = null,
         StatusProcessor $statusProcessor = null,
-        StockProcessor $stockProcessor = null
+        StockProcessor $stockProcessor = null,
+        ?File $fileDriver = null        
     ) {
         $this->_eventManager = $eventManager;
         $this->stockRegistry = $stockRegistry;
@@ -915,6 +927,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->dateTimeFactory = $dateTimeFactory ?? ObjectManager::getInstance()->get(DateTimeFactory::class);
         $this->productRepository = $productRepository ?? ObjectManager::getInstance()
                 ->get(ProductRepositoryInterface::class);
+        $this->fileDriver = $fileDriver ?: ObjectManager::getInstance()->get(File::class);
     }
 
     /**
@@ -1565,7 +1578,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $uploadedImages = [];
             $previousType = null;
             $prevAttributeSet = null;
+            $importDir = $this->_mediaDirectory->getAbsolutePath($this->getUploader()->getTmpDir());            
             $existingImages = $this->getExistingImages($bunch);
+            $this->addImageHashes($existingImages);
+            
 
             foreach ($bunch as $rowNum => $rowData) {
                 // reset category processor's failed categories array
@@ -1733,7 +1749,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $position = 0;
                 foreach ($rowImages as $column => $columnImages) {
                     foreach ($columnImages as $columnImageKey => $columnImage) {
-                        if (!isset($uploadedImages[$columnImage])) {
+                        $uploadedFile = $this->getAlreadyExistedImage($rowExistingImages, $columnImage, $importDir);
+                        if (!$uploadedFile && !isset($uploadedImages[$columnImage])) {
                             $uploadedFile = $this->uploadMediaFiles($columnImage);
                             $uploadedFile = $uploadedFile ?: $this->getSystemFile($columnImage);
                             if ($uploadedFile) {
@@ -1748,7 +1765,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                     ProcessingError::ERROR_LEVEL_NOT_CRITICAL
                                 );
                             }
-                        } else {
+                        } elseif (isset($uploadedImages[$columnImage])) {
                             $uploadedFile = $uploadedImages[$columnImage];
                         }
 
@@ -1777,8 +1794,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             }
 
                             if (isset($rowLabels[$column][$columnImageKey])
-                                && $rowLabels[$column][$columnImageKey] !=
-                                $currentFileData['label']
+                                && $rowLabels[$column][$columnImageKey] !== $currentFileData['label']
                             ) {
                                 $labelsForUpdate[] = [
                                     'label' => $rowLabels[$column][$columnImageKey],
@@ -1787,7 +1803,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                 ];
                             }
                         } else {
-                            if ($column == self::COL_MEDIA_IMAGE) {
+                            if ($column === self::COL_MEDIA_IMAGE) {
                                 $rowData[$column][] = $uploadedFile;
                             }
                             $mediaGallery[$storeId][$rowSku][$uploadedFile] = [
@@ -1903,25 +1919,15 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
             }
 
-            $this->saveProductEntity(
-                $entityRowsIn,
-                $entityRowsUp
-            )->_saveProductWebsites(
-                $this->websitesCache
-            )->_saveProductCategories(
-                $this->categoriesCache
-            )->_saveProductTierPrices(
-                $tierPrices
-            )->_saveMediaGallery(
-                $mediaGallery
-            )->_saveProductAttributes(
-                $attributes
-            )->updateMediaGalleryVisibility(
-                $imagesForChangeVisibility
-            )->updateMediaGalleryLabels(
-                $labelsForUpdate
-            );
-
+            $this->saveProductEntity($entityRowsIn, $entityRowsUp)
+                 ->_saveProductWebsites($this->websitesCache)
+                 ->_saveProductCategories($this->categoriesCache)
+                 ->_saveProductTierPrices($tierPrices)
+                 ->_saveMediaGallery($mediaGallery)
+                 ->_saveProductAttributes($attributes)
+                 ->updateMediaGalleryVisibility($imagesForChangeVisibility)
+                 ->updateMediaGalleryLabels($labelsForUpdate);
+            
             $this->_eventManager->dispatch(
                 'catalog_product_import_bunch_save_after',
                 ['adapter' => $this, 'bunch' => $bunch]
@@ -1933,6 +1939,88 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     //phpcs:enable Generic.Metrics.NestingLevel
 
     /**
+     * Returns image hash by path
+     *
+     * @param string $path
+     * @return string
+     */
+    private function getFileHash(string $path): string
+        {
+            return hash_file(self::HASH_ALGORITHM, $path);
+        }
+
+    /**
+     * Returns existed image
+     *
+     * @param array $imageRow
+     * @param string $columnImage
+     * @param string $importDir
+     * @return string
+     */
+    private function getAlreadyExistedImage(array $imageRow, string $columnImage, string $importDir): string
+        {
+            if (filter_var($columnImage, FILTER_VALIDATE_URL)) {
+                $hash = $this->getFileHash($columnImage);
+            } else {
+                $path = $importDir . DS . $columnImage;
+                $hash = $this->isFileExists($path) ? $this->getFileHash($path) : '';
+            }
+
+            return array_reduce(
+                $imageRow,
+                function ($exists, $file) use ($hash) {
+                    if (!$exists && isset($file['hash']) && $file['hash'] === $hash) {
+                        return $file['value'];
+                    }
+
+                    return $exists;
+                },
+                            ''
+            );
+        }
+
+    /**
+     * Generate hashes for existing images for comparison with newly uploaded images.
+     *
+     * @param array $images
+     * @return void
+     */
+    private function addImageHashes(array &$images): void
+    {
+        $productMediaPath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)
+                                             ->getAbsolutePath(DS . 'catalog' . DS . 'product');
+
+        foreach ($images as $storeId => $skus) {
+            foreach ($skus as $sku => $files) {
+                foreach ($files as $path => $file) {
+                    if ($this->fileDriver->isExists($productMediaPath . $file['value'])) {
+                        $fileName = $productMediaPath . $file['value'];
+                        $images[$storeId][$sku][$path]['hash'] = $this->getFileHash($fileName);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Is file exists
+     *
+     * @param string $path
+     * @return bool
+     */
+    private function isFileExists(string $path): bool
+        {
+            try {
+                $fileExists = $this->fileDriver->isExists($path);
+            } catch (\Exception $exception) {
+                $fileExists = false;
+            }
+
+            return $fileExists;
+        }
+    
+    
+    /**
      * Clears entries from Image Set and Row Data marked as no_selection
      *
      * @param array $rowImages
@@ -1943,9 +2031,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         foreach ($rowImages as $column => $columnImages) {
             foreach ($columnImages as $key => $image) {
-                if ($image == 'no_selection') {
-                    unset($rowImages[$column][$key]);
-                    unset($rowData[$column]);
+                if ($image === 'no_selection') {
+                    unset($rowImages[$column][$key], $rowData[$column]);
                 }
             }
         }
@@ -2089,6 +2176,22 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Returns the import directory if specified or a default import directory (media/import).
+     *
+     * @return string
+     */
+    private function getImportDir(): string
+        {
+            $dirConfig = DirectoryList::getDefaultConfig();
+            $dirAddon = $dirConfig[DirectoryList::MEDIA][DirectoryList::PATH];
+            
+            return empty($this->_parameters[Import::FIELD_NAME_IMG_FILE_DIR])
+                ? $dirAddon . DS . $this->_mediaDirectory->getRelativePath('import')
+                : $this->_parameters[Import::FIELD_NAME_IMG_FILE_DIR];
+        }
+    
+
+    /**
      * Returns an object for upload a media files
      *
      * @return \Magento\CatalogImportExport\Model\Import\Uploader
@@ -2104,12 +2207,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $dirConfig = DirectoryList::getDefaultConfig();
             $dirAddon = $dirConfig[DirectoryList::MEDIA][DirectoryList::PATH];
 
-            if (!empty($this->_parameters[Import::FIELD_NAME_IMG_FILE_DIR])) {
-                $tmpPath = $this->_parameters[Import::FIELD_NAME_IMG_FILE_DIR];
-            } else {
-                $tmpPath = $dirAddon . '/' . $this->_mediaDirectory->getRelativePath('import');
-            }
-
+            $tmpPath = $this->getImportDir();
+            
             if (!$fileUploader->setTmpDir($tmpPath)) {
                 throw new LocalizedException(
                     __('File directory \'%1\' is not readable.', $tmpPath)
