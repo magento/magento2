@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Wishlist;
 
 use Exception;
+use Magento\Bundle\Model\Selection;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -51,47 +52,67 @@ class UpdateBundleProductsFromWishlistTest extends GraphQlAbstract
     }
 
     /**
+     * Test that a wishlist item bundle product is properly updated.
+     *
+     * This includes the selected options for the bundle product.
+     *
      * @magentoConfigFixture default_store wishlist/general/active 1
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Bundle/_files/product_1.php
+     * @magentoApiDataFixture Magento/Bundle/_files/bundle_product_dropdown_options.php
      *
      * @throws Exception
      */
     public function testUpdateBundleProductWithOptions(): void
     {
-        $qty = 5;
-        $optionQty = 1;
-        $sku = 'bundle-product';
-        $product = $this->productRepository->get($sku);
-        /** @var Type $typeInstance */
-        $typeInstance = $product->getTypeInstance();
-        $typeInstance->setStoreFilter($product->getStoreId(), $product);
-        /** @var Option $option */
-        $option = $typeInstance->getOptionsCollection($product)->getLastItem();
-        /** @var Product $selection */
-        $selection = $typeInstance->getSelectionsCollection([$option->getId()], $product)->getLastItem();
-        $optionId = $option->getId();
-        $selectionId = $selection->getSelectionId();
-        $bundleOptions = $this->generateBundleOptionUid((int) $optionId, (int) $selectionId, $optionQty);
-
-        // Add product to wishlist
+        // Add the fixture bundle product to the fixture customer's wishlist
         $wishlist = $this->addProductToWishlist();
-        $wishlistId = $wishlist['addProductsToWishlist']['wishlist']['id'];
-        $wishlistItemId = $wishlist['addProductsToWishlist']['wishlist']['items_v2']['items'][0]['id'];
-        $itemsCount = $wishlist['addProductsToWishlist']['wishlist']['items_count'];
+        $wishlistId = (int) $wishlist['addProductsToWishlist']['wishlist']['id'];
+        $wishlistItemId = (int) $wishlist['addProductsToWishlist']['wishlist']['items_v2']['items'][0]['id'];
+        $previousItemsCount = $wishlist['addProductsToWishlist']['wishlist']['items_count'];
 
-        $query = $this->getBundleQuery((int)$wishlistItemId, $qty, $bundleOptions, (int)$wishlistId);
+        // Set the new values to update the wishlist item with
+        $newQuantity = 5;
+        $newDescription = 'This is a test.';
+        $newBundleOptionUid = $this->generateBundleOptionUid(
+            'bundle-product-dropdown-options',
+            false
+        );
+
+        // Update the newly added wishlist item as the fixture customer
+        $query = $this->getUpdateQuery(
+            $wishlistItemId,
+            $newQuantity,
+            $newDescription,
+            $newBundleOptionUid,
+            $wishlistId
+        );
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
-        $this->assertArrayHasKey('updateProductsInWishlist', $response);
-        $this->assertArrayHasKey('wishlist', $response['updateProductsInWishlist']);
-        $response = $response['updateProductsInWishlist']['wishlist'];
-        $this->assertEquals($itemsCount, $response['items_count']);
-        $this->assertEquals($qty, $response['items_v2']['items'][0]['quantity']);
-        $this->assertNotEmpty($response['items_v2']['items'][0]['bundle_options']);
-        $bundleOptions = $response['items_v2']['items'][0]['bundle_options'];
-        $this->assertEquals('Bundle Product Items', $bundleOptions[0]['label']);
-        $this->assertEquals(Select::NAME, $bundleOptions[0]['type']);
+        // Assert that the response has the expected base properties
+        self::assertArrayHasKey('updateProductsInWishlist', $response);
+        self::assertArrayHasKey('wishlist', $response['updateProductsInWishlist']);
+
+        // Assert that the wishlist item count is unchanged
+        $responseWishlist = $response['updateProductsInWishlist']['wishlist'];
+        self::assertEquals($previousItemsCount, $responseWishlist['items_count']);
+
+        // Assert that the wishlist item quantity and description are updated
+        $responseWishlistItem = $responseWishlist['items_v2']['items'][0];
+        self::assertEquals($newQuantity, $responseWishlistItem['quantity']);
+        self::assertEquals($newDescription, $responseWishlistItem['description']);
+
+        // Assert that the bundle option for this wishlist item is accurate
+        self::assertNotEmpty($responseWishlistItem['bundle_options']);
+        $responseBundleOption = $responseWishlistItem['bundle_options'][0];
+        self::assertEquals('Dropdown Options', $responseBundleOption['label']);
+        self::assertEquals(Select::NAME, $responseBundleOption['type']);
+
+        // Assert that the selected value for this bundle option is updated
+        self::assertNotEmpty($responseBundleOption['values']);
+        $responseOptionSelection = $responseBundleOption['values'][0];
+        self::assertEquals('Simple Product2', $responseOptionSelection['label']);
+        self::assertEquals(1, $responseOptionSelection['quantity']);
+        self::assertEquals(10, $responseOptionSelection['price']);
     }
 
     /**
@@ -116,14 +137,16 @@ class UpdateBundleProductsFromWishlistTest extends GraphQlAbstract
      *
      * @param int $wishlistItemId
      * @param int $qty
+     * @param string $description
      * @param string $bundleOptions
      * @param int $wishlistId
      *
      * @return string
      */
-    private function getBundleQuery(
+    private function getUpdateQuery(
         int $wishlistItemId,
         int $qty,
+        string $description,
         string $bundleOptions,
         int $wishlistId = 0
     ): string {
@@ -135,6 +158,7 @@ mutation {
       {
         wishlist_item_id: "{$wishlistItemId}"
         quantity: {$qty}
+        description: "{$description}"
         selected_options: [
           "{$bundleOptions}"
         ]
@@ -154,6 +178,7 @@ mutation {
         items{
           id
           quantity
+          description
           ... on BundleWishlistItem {
             bundle_options {
               id
@@ -176,15 +201,35 @@ MUTATION;
     }
 
     /**
-     * @param int $optionId
-     * @param int $selectionId
-     * @param int $quantity
+     * Generate the uid for the specified bundle option selection.
      *
+     * @param string $bundleProductSku
+     * @param bool $useFirstSelection
      * @return string
      */
-    private function generateBundleOptionUid(int $optionId, int $selectionId, int $quantity): string
+    private function generateBundleOptionUid(string $bundleProductSku, bool $useFirstSelection): string
     {
-        return base64_encode("bundle/$optionId/$selectionId/$quantity");
+        $product = $this->productRepository->get($bundleProductSku);
+
+        /** @var Type $typeInstance */
+        $typeInstance = $product->getTypeInstance();
+        $typeInstance->setStoreFilter($product->getStoreId(), $product);
+
+        /** @var Option $option */
+        $option = $typeInstance->getOptionsCollection($product)->getLastItem();
+        $optionId = (int) $option->getId();
+
+        /** @var Selection $selection */
+        $selections = $typeInstance->getSelectionsCollection([$option->getId()], $product);
+        if ($useFirstSelection) {
+            $selection = $selections->getFirstItem();
+        } else {
+            $selection = $selections->getLastItem();
+        }
+
+        $selectionId = (int) $selection->getSelectionId();
+
+        return base64_encode("bundle/$optionId/$selectionId/1");
     }
 
     /**
@@ -197,23 +242,14 @@ MUTATION;
      */
     private function addProductToWishlist(): array
     {
-        $sku = 'bundle-product';
-        $product = $this->productRepository->get($sku);
-        $qty = 2;
-        $optionQty = 1;
+        $bundleProductSku = 'bundle-product-dropdown-options';
+        $initialQuantity = 2;
+        $initialBundleOptionUid = $this->generateBundleOptionUid(
+            $bundleProductSku,
+            true
+        );
 
-        /** @var Type $typeInstance */
-        $typeInstance = $product->getTypeInstance();
-        $typeInstance->setStoreFilter($product->getStoreId(), $product);
-        /** @var Option $option */
-        $option = $typeInstance->getOptionsCollection($product)->getFirstItem();
-        /** @var Product $selection */
-        $selection = $typeInstance->getSelectionsCollection([$option->getId()], $product)->getFirstItem();
-        $optionId = $option->getId();
-        $selectionId = $selection->getSelectionId();
-        $bundleOptions = $this->generateBundleOptionUid((int) $optionId, (int) $selectionId, $optionQty);
-
-        $query = $this->addQuery($sku, $qty, $bundleOptions);
+        $query = $this->getAddQuery($bundleProductSku, $initialQuantity, $initialBundleOptionUid);
         return $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
@@ -227,7 +263,7 @@ MUTATION;
      *
      * @return string
      */
-    private function addQuery(
+    private function getAddQuery(
         string $sku,
         int $qty,
         string $bundleOptions,

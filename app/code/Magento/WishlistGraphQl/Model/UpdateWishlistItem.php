@@ -68,7 +68,11 @@ class UpdateWishlistItem
 
         if (!$wishlistItemToUpdate) {
             $this->addError(
-                __('Could not find the wishlist item with ID "%1"', $wishlistItemId)->render()
+                __('The wishlist item with ID "%1" does not belong to the wishlist', $wishlistItemId)->render()
+            );
+        } elseif ((int) $wishlistItemData->getQuantity() === 0) {
+            $this->addError(
+                __('The quantity of a wishlist item cannot be 0')->render()
             );
         } else {
             $updatedOptions = $this->getUpdatedOptions($wishlistItemData, $wishlistItemToUpdate);
