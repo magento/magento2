@@ -12,6 +12,8 @@ use Magento\Store\Api\StoreCookieManagerInterface;
 
 /**
  * DTO class to work with cookies.
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class StoreCookieManager implements StoreCookieManagerInterface
 {
@@ -58,7 +60,8 @@ class StoreCookieManager implements StoreCookieManagerInterface
         $cookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
             ->setHttpOnly(false)
             ->setDurationOneYear()
-            ->setPath($store->getStorePath());
+            ->setPath($store->getStorePath())
+            ->setSameSite('Lax');
 
         $this->cookieManager->setPublicCookie(self::COOKIE_NAME, $store->getCode(), $cookieMetadata);
     }

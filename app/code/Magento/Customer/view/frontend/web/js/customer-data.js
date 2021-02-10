@@ -38,7 +38,8 @@ define([
     function initStorage() {
         $.cookieStorage.setConf({
             path: '/',
-            expires: new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000)
+            expires: new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000),
+            samesite: 'lax'
         });
         storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
         storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
