@@ -8,6 +8,8 @@ namespace Magento\Catalog\Pricing\Price;
 
 /**
  * Special price interface
+ *
+ * @api
  */
 interface SpecialPriceInterface
 {
