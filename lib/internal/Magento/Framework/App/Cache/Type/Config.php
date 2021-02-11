@@ -11,6 +11,8 @@ use Magento\Framework\Config\CacheInterface;
 
 /**
  * System / Cache Management / Cache type "Configuration"
+ *
+ * @api
  */
 class Config extends TagScope implements CacheInterface
 {

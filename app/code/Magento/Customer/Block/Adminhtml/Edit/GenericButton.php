@@ -10,6 +10,7 @@ use Magento\Customer\Controller\RegistryConstants;
 /**
  * Class GenericButton
  * @package Magento\Customer\Block\Adminhtml\Edit
+ * @api
  */
 class GenericButton
 {

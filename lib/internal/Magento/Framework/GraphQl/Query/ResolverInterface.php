@@ -14,6 +14,8 @@ use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 
 /**
  * Resolver fetches the data and formats it according to the GraphQL schema.
+ *
+ * @api
  */
 interface ResolverInterface
 {
