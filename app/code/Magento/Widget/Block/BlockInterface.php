@@ -8,6 +8,7 @@
  * Widget Block Interface
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 namespace Magento\Widget\Block;
 

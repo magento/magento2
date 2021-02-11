@@ -13,6 +13,8 @@ use Monolog\Logger;
 
 /**
  * Base stream handler
+ *
+ * @api
  */
 class Base extends StreamHandler
 {

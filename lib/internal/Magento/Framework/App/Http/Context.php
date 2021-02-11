@@ -10,6 +10,8 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Context data for requests
+ *
+ * @api
  */
 class Context
 {

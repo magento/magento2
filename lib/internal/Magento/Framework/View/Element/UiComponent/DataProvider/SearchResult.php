@@ -19,6 +19,7 @@ use Magento\Framework\App\ObjectManager;
  * Class SearchResult
  * Generic Search Result
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class SearchResult extends AbstractCollection implements Api\Search\SearchResultInterface
 {

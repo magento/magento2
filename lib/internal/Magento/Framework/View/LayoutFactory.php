@@ -7,6 +7,8 @@ namespace Magento\Framework\View;
 
 /**
  * Factory class for Layout
+ *
+ * @api
  */
 class LayoutFactory
 {

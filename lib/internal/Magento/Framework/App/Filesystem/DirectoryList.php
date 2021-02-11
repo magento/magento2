@@ -9,6 +9,8 @@ use Magento\Framework\Code\Generator\Io;
 
 /**
  * A Magento application specific list of directories
+ *
+ * @api
  */
 class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
 {
