@@ -57,35 +57,35 @@
                 <item name="exclude" xsi:type="array">
                     <item name="captcha" xsi:type="array">
                         <item name="regexp" xsi:type="boolean">true</item>
-                        <item name="name" xsi:type="string">pub[/\\]+media[/\\]+captcha[/\\]*$</item>
+                        <item name="name" xsi:type="string">media[/\\]+captcha[/\\]*$</item>
                     </item>
                     <item name="catalog/product" xsi:type="array">
                         <item name="regexp" xsi:type="boolean">true</item>
-                        <item name="name" xsi:type="string">pub[/\\]+media[/\\]+catalog[/\\]+product[/\\]*$</item>
+                        <item name="name" xsi:type="string">media[/\\]+catalog[/\\]+product[/\\]*$</item>
                     </item>
                     <item name="customer" xsi:type="array">
                         <item name="regexp" xsi:type="boolean">true</item>
-                        <item name="name" xsi:type="string">pub[/\\]+media[/\\]+customer[/\\]*$</item>
+                        <item name="name" xsi:type="string">media[/\\]+customer[/\\]*$</item>
                     </item>
                     <item name="downloadable" xsi:type="array">
                         <item name="regexp" xsi:type="boolean">true</item>
-                        <item name="name" xsi:type="string">pub[/\\]+media[/\\]+downloadable[/\\]*$</item>
+                        <item name="name" xsi:type="string">media[/\\]+downloadable[/\\]*$</item>
                     </item>
                     <item name="import" xsi:type="array">
                         <item name="regexp" xsi:type="boolean">true</item>
-                        <item name="name" xsi:type="string">pub[/\\]+media[/\\]+import[/\\]*$</item>
+                        <item name="name" xsi:type="string">media[/\\]+import[/\\]*$</item>
                     </item>
                     <item name="theme" xsi:type="array">
                         <item name="regexp" xsi:type="boolean">true</item>
-                        <item name="name" xsi:type="string">pub[/\\]+media[/\\]+theme[/\\]*$</item>
+                        <item name="name" xsi:type="string">media[/\\]+theme[/\\]*$</item>
                     </item>
                     <item name="theme_customization" xsi:type="array">
                         <item name="regexp" xsi:type="boolean">true</item>
-                        <item name="name" xsi:type="string">pub[/\\]+media[/\\]+theme_customization[/\\]*$</item>
+                        <item name="name" xsi:type="string">media[/\\]+theme_customization[/\\]*$</item>
                     </item>
                     <item name="tmp" xsi:type="array">
                         <item name="regexp" xsi:type="boolean">true</item>
-                        <item name="name" xsi:type="string">pub[/\\]+media[/\\]+tmp[/\\]*$</item>
+                        <item name="name" xsi:type="string">media[/\\]+tmp[/\\]*$</item>
                     </item>
                 </item>
                 <item name="include" xsi:type="array"/>
@@ -287,6 +287,8 @@
                 <item name="button" xsi:type="string">button</item>
                 <item name="i" xsi:type="string">i</item>
                 <item name="u" xsi:type="string">u</item>
+                <item name="br" xsi:type="string">br</item>
+                <item name="b" xsi:type="string">b</item>
             </argument>
             <argument name="allowedAttributes" xsi:type="array">
                 <item name="class" xsi:type="string">class</item>

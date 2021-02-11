@@ -140,6 +140,8 @@ class Address extends AbstractAddress implements
 
     const ADDRESS_TYPE_SHIPPING = 'shipping';
 
+    private const CACHED_ITEMS_ALL = 'cached_items_all';
+
     /**
      * Prefix of model events
      *
@@ -636,8 +638,7 @@ class Address extends AbstractAddress implements
     public function getAllItems()
     {
         // We calculate item list once and cache it in three arrays - all items
-        $key = 'cached_items_all';
-        if (!$this->hasData($key)) {
+        if (!$this->hasData(self::CACHED_ITEMS_ALL)) {
             $quoteItems = $this->getQuote()->getItemsCollection();
             $addressItems = $this->getItemsCollection();
 
@@ -676,10 +677,10 @@ class Address extends AbstractAddress implements
             }
 
             // Cache calculated lists
-            $this->setData('cached_items_all', $items);
+            $this->setData(self::CACHED_ITEMS_ALL, $items);
         }
 
-        $items = $this->getData($key);
+        $items = $this->getData(self::CACHED_ITEMS_ALL);
 
         return $items;
     }
@@ -1114,7 +1115,13 @@ class Address extends AbstractAddress implements
      */
     public function getTotals()
     {
-        $totalsData = array_merge($this->getData(), ['address_quote_items' => $this->getAllItems()]);
+        $totalsData = array_merge(
+            $this->getData(),
+            [
+                'address_quote_items' => $this->getAllItems(),
+                'quote_items' => $this->getQuote()->getAllItems(),
+            ]
+        );
         $totals = $this->totalsReader->fetch($this->getQuote(), $totalsData);
         foreach ($totals as $total) {
             $this->addTotal($total);
@@ -1216,7 +1223,9 @@ class Address extends AbstractAddress implements
             $storeId
         );
 
-        $taxes = $taxInclude ? $this->getBaseTaxAmount() : 0;
+        $taxes = $taxInclude
+            ? $this->getBaseTaxAmount() + $this->getBaseDiscountTaxCompensationAmount()
+            : 0;
 
         return $includeDiscount ?
             ($this->getBaseSubtotalWithDiscount() + $taxes >= $amount) :
@@ -1652,7 +1661,7 @@ class Address extends AbstractAddress implements
     public function getEmail()
     {
         $email = $this->getData(self::KEY_EMAIL);
-        if (!$email && $this->getQuote()) {
+        if ($this->getQuote() && (!$email || $this->getQuote()->dataHasChangedFor('customer_email'))) {
             $email = $this->getQuote()->getCustomerEmail();
             $this->setEmail($email);
         }

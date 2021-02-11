@@ -27,6 +27,9 @@
     <type name="Magento\CatalogUrlRewrite\Model\Storage\DbStorage">
         <plugin name="dynamic_storage_plugin" type="Magento\CatalogUrlRewrite\Plugin\DynamicCategoryRewrites"/>
     </type>
+    <type name="Magento\Catalog\Model\Product\Action">
+        <plugin name="update_url_rewrites_after_websites_update_plugin" type="Magento\CatalogUrlRewrite\Plugin\Catalog\Model\Product\UpdateProductWebsiteUrlRewrites"/>
+    </type>
     <type name="Magento\CatalogUrlRewrite\Model\Map\UrlRewriteFinder">
         <arguments>
             <argument name="urlRewriteClassNames" xsi:type="array">
@@ -45,14 +48,11 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogUrlRewrite\Observer\CategoryUrlPathAutogeneratorObserver">
+    <type name="Magento\UrlRewrite\Model\UrlRewrite">
         <arguments>
-            <argument name="invalidValues" xsi:type="array">
-                <item name="0" xsi:type="string">admin</item>
-                <item name="1" xsi:type="string">soap</item>
-                <item name="2" xsi:type="string">rest</item>
-                <item name="3" xsi:type="string">graphql</item>
-                <item name="4" xsi:type="string">standard</item>
+            <argument name="entityToCacheTagMap" xsi:type="array">
+                <item name="product" xsi:type="const">Magento\Catalog\Model\Product::CACHE_TAG</item>
+                <item name="category" xsi:type="const">Magento\Catalog\Model\Category::CACHE_TAG</item>
             </argument>
         </arguments>
     </type>

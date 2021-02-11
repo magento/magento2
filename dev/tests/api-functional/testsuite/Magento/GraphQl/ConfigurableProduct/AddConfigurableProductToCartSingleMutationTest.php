@@ -8,9 +8,13 @@ declare(strict_types=1);
 namespace Magento\GraphQl\ConfigurableProduct;
 
 use Exception;
+use Magento\Config\Model\ResourceModel\Config;
+use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\CatalogInventory\Model\Configuration;
 
 /**
  * Add configurable product to cart testcases
@@ -23,12 +27,30 @@ class AddConfigurableProductToCartSingleMutationTest extends GraphQlAbstract
     private $getMaskedQuoteIdByReservedOrderId;
 
     /**
+     * @var Config $config
+     */
+    private $resourceConfig;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * @var ReinitableConfigInterface
+     */
+    private $reinitConfig;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
+        $this->resourceConfig = $objectManager->get(Config::class);
+        $this->scopeConfig = $objectManager->get(ScopeConfigInterface::class);
+        $this->reinitConfig = $objectManager->get(ReinitableConfigInterface::class);
     }
 
     /**
@@ -42,8 +64,9 @@ class AddConfigurableProductToCartSingleMutationTest extends GraphQlAbstract
         $parentSku = $product['sku'];
         $attributeId = (int) $product['configurable_options'][0]['attribute_id'];
         $valueIndex = $product['configurable_options'][0]['values'][1]['value_index'];
-
+        $productRowId = (string) $product['configurable_options'][0]['product_id'];
         $selectedConfigurableOptionsQuery = $this->generateSuperAttributesUIDQuery($attributeId, $valueIndex);
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
         $query = $this->getQuery(
@@ -54,17 +77,33 @@ class AddConfigurableProductToCartSingleMutationTest extends GraphQlAbstract
         );
 
         $response = $this->graphQlMutation($query);
-
+        $expectedProductOptionsValueUid = $this->generateConfigurableSelectionUID($attributeId, $valueIndex);
+        $expectedProductOptionsUid = base64_encode("configurable/$productRowId/$attributeId");
         $cartItem = current($response['addProductsToCart']['cart']['items']);
         self::assertEquals($quantity, $cartItem['quantity']);
         self::assertEquals($parentSku, $cartItem['product']['sku']);
+        self::assertEquals(base64_encode((string)$cartItem['product']['id']), $cartItem['product']['uid']);
         self::assertArrayHasKey('configurable_options', $cartItem);
 
         $option = current($cartItem['configurable_options']);
         self::assertEquals($attributeId, $option['id']);
         self::assertEquals($valueIndex, $option['value_id']);
+        self::assertEquals($expectedProductOptionsValueUid, $option['configurable_product_option_value_uid']);
+        self::assertEquals($expectedProductOptionsUid, $option['configurable_product_option_uid']);
         self::assertArrayHasKey('option_label', $option);
         self::assertArrayHasKey('value_label', $option);
+    }
+
+    /**
+     * Generates UID configurable product
+     *
+     * @param int $attributeId
+     * @param int $valueIndex
+     * @return string
+     */
+    private function generateConfigurableSelectionUID(int $attributeId, int $valueIndex): string
+    {
+        return base64_encode("configurable/$attributeId/$valueIndex");
     }
 
     /**
@@ -76,7 +115,7 @@ class AddConfigurableProductToCartSingleMutationTest extends GraphQlAbstract
      */
     private function generateSuperAttributesUIDQuery(int $attributeId, int $valueIndex): string
     {
-        return 'selected_options: ["' . base64_encode("configurable/$attributeId/$valueIndex") . '"]';
+        return 'selected_options: ["' . $this->generateConfigurableSelectionUID($attributeId, $valueIndex) . '"]';
     }
 
     /**
@@ -166,9 +205,20 @@ class AddConfigurableProductToCartSingleMutationTest extends GraphQlAbstract
      */
     public function testOutOfStockVariationToCart()
     {
+        $showOutOfStock = $this->scopeConfig->getValue(Configuration::XML_PATH_SHOW_OUT_OF_STOCK);
+
+        // Changing SHOW_OUT_OF_STOCK to show the out of stock option, otherwise graphql won't display it.
+        $this->resourceConfig->saveConfig(Configuration::XML_PATH_SHOW_OUT_OF_STOCK, 1);
+        $this->reinitConfig->reinit();
+
         $product = $this->getConfigurableProductInfo();
         $attributeId = (int) $product['configurable_options'][0]['attribute_id'];
         $valueIndex = $product['configurable_options'][0]['values'][0]['value_index'];
+        // Asserting that the first value is the right option we want to add to cart
+        $this->assertEquals(
+            $product['configurable_options'][0]['values'][0]['label'],
+            'Option 1'
+        );
         $parentSku = $product['sku'];
 
         $configurableOptionsQuery = $this->generateSuperAttributesUIDQuery($attributeId, $valueIndex);
@@ -191,6 +241,8 @@ class AddConfigurableProductToCartSingleMutationTest extends GraphQlAbstract
             $response['addProductsToCart']['user_errors'][0]['message'],
             $expectedErrorMessages
         );
+        $this->resourceConfig->saveConfig(Configuration::XML_PATH_SHOW_OUT_OF_STOCK, $showOutOfStock);
+        $this->reinitConfig->reinit();
     }
 
     /**
@@ -221,15 +273,20 @@ mutation {
         cart {
             items {
                 id
+                uid
                 quantity
                 product {
                     sku
+                    uid
+                    id
                 }
                 ... on ConfigurableCartItem {
                     configurable_options {
                         id
+                        configurable_product_option_uid
                         option_label
                         value_id
+                        configurable_product_option_value_uid
                         value_label
                     }
                 }
@@ -271,21 +328,36 @@ QUERY;
   ) {
     items {
       sku
+      uid
       ... on ConfigurableProduct {
         configurable_options {
           attribute_id
+          attribute_uid
           attribute_code
           id
+          uid
           label
           position
           product_id
           use_default
           values {
+            uid
             default_label
             label
             store_label
             use_default_value
             value_index
+          }
+        }
+        configurable_product_options_selection {
+          options_available_for_selection {
+            attribute_code
+            option_value_uids
+          }
+          variant {
+            uid
+            name
+            attribute_set_id
           }
         }
       }

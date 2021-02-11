@@ -7,6 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
+use Magento\Checkout\Api\Exception\PaymentProcessingRateLimitExceededException;
+use Magento\Checkout\Api\PaymentProcessingRateLimiterInterface;
+use Magento\Checkout\Api\PaymentSavingRateLimiterInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -18,7 +22,9 @@ use Magento\Quote\Model\Quote;
 use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderPool;
 
 /**
- * Set payment method on cart
+ * Saves related payment method info for a cart.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SetPaymentMethodOnCart
 {
@@ -38,18 +44,31 @@ class SetPaymentMethodOnCart
     private $additionalDataProviderPool;
 
     /**
+     * @var PaymentSavingRateLimiterInterface
+     */
+    private $paymentRateLimiter;
+
+    /**
      * @param PaymentMethodManagementInterface $paymentMethodManagement
      * @param PaymentInterfaceFactory $paymentFactory
      * @param AdditionalDataProviderPool $additionalDataProviderPool
+     * @param PaymentProcessingRateLimiterInterface|null $paymentRateLimiter
+     * @param PaymentSavingRateLimiterInterface|null $savingRateLimiter
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         PaymentMethodManagementInterface $paymentMethodManagement,
         PaymentInterfaceFactory $paymentFactory,
-        AdditionalDataProviderPool $additionalDataProviderPool
+        AdditionalDataProviderPool $additionalDataProviderPool,
+        ?PaymentProcessingRateLimiterInterface $paymentRateLimiter = null,
+        ?PaymentSavingRateLimiterInterface $savingRateLimiter = null
     ) {
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->paymentFactory = $paymentFactory;
         $this->additionalDataProviderPool = $additionalDataProviderPool;
+        $this->paymentRateLimiter = $savingRateLimiter
+            ?? ObjectManager::getInstance()->get(PaymentSavingRateLimiterInterface::class);
     }
 
     /**
@@ -62,6 +81,17 @@ class SetPaymentMethodOnCart
      */
     public function execute(Quote $cart, array $paymentData): void
     {
+        try {
+            try {
+                $this->paymentRateLimiter->limit();
+            } catch (PaymentProcessingRateLimitExceededException $ex) {
+                //Limit reached
+                return;
+            }
+        } catch (PaymentProcessingRateLimitExceededException $exception) {
+            throw new GraphQlInputException(__($exception->getMessage()), $exception);
+        }
+
         if (!isset($paymentData['code']) || empty($paymentData['code'])) {
             throw new GraphQlInputException(__('Required parameter "code" for "payment_method" is missing.'));
         }
