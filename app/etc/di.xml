@@ -1876,6 +1876,10 @@
                 <item name="hr" xsi:type="string">hr</item>
                 <item name="figure" xsi:type="string">figure</item>
                 <item name="button" xsi:type="string">button</item>
+                <item name="i" xsi:type="string">i</item>
+                <item name="u" xsi:type="string">u</item>
+                <item name="br" xsi:type="string">br</item>
+                <item name="b" xsi:type="string">b</item>
             </argument>
             <argument name="allowedAttributes" xsi:type="array">
                 <item name="class" xsi:type="string">class</item>
@@ -1909,6 +1913,17 @@
             <argument name="blockVariables" xsi:type="array">
                 <item name="secureRenderer" xsi:type="object">Magento\Framework\View\Helper\SecureHtmlRenderer\Proxy</item>
                 <item name="escaper" xsi:type="object">Magento\Framework\Escaper</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Validator\UrlKey">
+        <arguments>
+            <argument name="restrictedValues" xsi:type="array">
+                <item name="0" xsi:type="string">admin</item>
+                <item name="1" xsi:type="string">soap</item>
+                <item name="2" xsi:type="string">rest</item>
+                <item name="3" xsi:type="string">graphql</item>
+                <item name="4" xsi:type="string">standard</item>
             </argument>
         </arguments>
     </type>
