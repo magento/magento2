@@ -52,6 +52,8 @@ use Psr\Log\LoggerInterface;
  */
 class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 {
+    private const LONG_FILE_NAME_IMAGE = 'magento_long_image_name_magento_long_image_name_magento_long_image_name.jpg';
+
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product
      */
@@ -1027,13 +1029,12 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             )
         );
 
-        $this->importDataForMediaTest('import_media_additional_images.csv');
+        $this->importDataForMediaTest('import_media_additional_long_name_image.csv');
         $product->cleanModelCache();
         $product = $this->getProductBySku('simple_new');
         $items = array_values($product->getMediaGalleryImages()->getItems());
-        $images[] = ['file' => '/m/a/magento_additional_image_three.jpg', 'label' => ''];
-        $images[] = ['file' => '/m/a/magento_additional_image_four.jpg', 'label' => ''];
-        $this->assertCount(7, $items);
+        $images[] = ['file' => '/m/a/' . self::LONG_FILE_NAME_IMAGE, 'label' => ''];
+        $this->assertCount(6, $items);
         $this->assertEquals(
             $images,
             array_map(
@@ -1045,6 +1046,24 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         );
     }
 
+    /**
+     * Test import twice and check that image will not be duplicate
+     *
+     * @magentoDataFixture mediaImportImageFixture
+     * @return void
+     */
+    public function testSaveMediaImageDuplicateImages(): void
+    {
+        $this->importDataForMediaTest('import_media.csv');
+        $imagesCount = count($this->getProductBySku('simple_new')->getMediaGalleryImages()->getItems());
+
+        // import the same file again
+        $this->importDataForMediaTest('import_media.csv');
+
+        $this->assertCount($imagesCount, $this->getProductBySku('simple_new')->getMediaGalleryImages()->getItems());
+    }
+    
+    
     /**
      * Test that errors occurred during importing images are logged.
      *
@@ -1086,6 +1105,10 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             [
                 'source' => __DIR__ . '/../../../../Magento/Catalog/_files/magento_thumbnail.jpg',
                 'dest' => $dirPath . '/magento_thumbnail.jpg',
+            ],
+            [
+                'source' => __DIR__ . '/../../../../Magento/Catalog/_files/' . self::LONG_FILE_NAME_IMAGE,
+                'dest' => $dirPath . '/' . self::LONG_FILE_NAME_IMAGE,
             ],
             [
                 'source' => __DIR__ . '/_files/magento_additional_image_one.jpg',
