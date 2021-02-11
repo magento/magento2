@@ -74,7 +74,7 @@ class SignUpTest extends \PHPUnit\Framework\TestCase
             ->with(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE)
             ->willReturn($attemptsCount);
 
-        $attemptsCount -= 1;
+        --$attemptsCount;
         $this->flagManagerMock->expects($this->once())
             ->method('saveFlag')
             ->with(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, $attemptsCount);

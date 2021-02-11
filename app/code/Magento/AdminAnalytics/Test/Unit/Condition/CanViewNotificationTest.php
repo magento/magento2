@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\App\CacheInterface;
 
 /**
- * Class CanViewNotificationTest
+ * Test of CanViewNotification
  */
 class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
 {

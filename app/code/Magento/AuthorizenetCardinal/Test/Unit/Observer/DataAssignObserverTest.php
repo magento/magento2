@@ -19,7 +19,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class DataAssignObserverTest
+ * Class for DataAssignObserver
  */
 class DataAssignObserverTest extends TestCase
 {

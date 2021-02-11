@@ -9,7 +9,7 @@ namespace Magento\AsynchronousOperations\Test\Unit\Model\Entity;
 use Magento\AsynchronousOperations\Model\Entity\BulkSummaryMapper;
 
 /**
- * Class BulkSummaryMapperTest
+ * Test for BulkSummaryMapper
  */
 class BulkSummaryMapperTest extends \PHPUnit\Framework\TestCase
 {
@@ -91,7 +91,7 @@ class BulkSummaryMapperTest extends \PHPUnit\Framework\TestCase
             ->method('fetchOne')
             ->with($this->selectMock)
             ->willReturn($identifier);
-        
+
         $this->assertEquals($result, $this->model->entityToDatabase($entityType, $data));
     }
 

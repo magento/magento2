@@ -121,7 +121,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->storage->createDirectory($dir, $path);
         $this->assertFileExists($fullPath);
         $this->storage->deleteDirectory($fullPath);
-        $this->assertFileNotExists($fullPath);
+        $this->assertFileDoesNotExist($fullPath);
     }
 
     /**
@@ -167,7 +167,9 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      */
     public function testUploadFileWithExcludedDirPath(): void
     {
-        $this->expectExceptionMessage("We can't upload the file to current folder right now. Please try another folder.");
+        $this->expectExceptionMessage(
+            "We can't upload the file to current folder right now. Please try another folder."
+        );
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $fileName = 'magento_small_image.jpg';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);

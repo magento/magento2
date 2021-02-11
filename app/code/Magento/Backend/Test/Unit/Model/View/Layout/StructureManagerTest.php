@@ -12,7 +12,7 @@ use Magento\Framework\View\Layout\Data\Structure;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Class StructureManagerTest
+ * Test for StructureManager
  */
 class StructureManagerTest extends \PHPUnit\Framework\TestCase
 {

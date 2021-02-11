@@ -23,7 +23,7 @@ use Magento\Braintree\Model\Paypal\Helper\QuoteUpdater;
 use Magento\Braintree\Block\Paypal\Checkout\Review as CheckoutReview;
 
 /**
- * Class ReviewTest
+ * Test for Review
  *
  * @see \Magento\Braintree\Controller\Paypal\Review
  *

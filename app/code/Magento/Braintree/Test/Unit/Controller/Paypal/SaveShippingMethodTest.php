@@ -23,7 +23,7 @@ use Magento\Braintree\Controller\Paypal\SaveShippingMethod;
 use Magento\Braintree\Model\Paypal\Helper\ShippingMethodUpdater;
 
 /**
- * Class SaveShippingMethodTest
+ * Test for SaveShippingMethod
  *
  * @see \Magento\Braintree\Controller\Paypal\SaveShippingMethod
  *
