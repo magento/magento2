@@ -916,7 +916,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         }
 
         $this->_productLimitationFilters['website_ids'] = $websites;
-        $this->_applyProductLimitations();
+
+        if ($this->getStoreId() == Store::DEFAULT_STORE_ID) {
+            $this->_productLimitationJoinWebsite();
+        } else {
+            $this->_applyProductLimitations();
+        }
 
         return $this;
     }

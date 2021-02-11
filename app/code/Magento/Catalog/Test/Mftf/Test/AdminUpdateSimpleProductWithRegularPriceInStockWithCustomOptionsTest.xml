@@ -121,23 +121,29 @@
         <seeInField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueSku(simpleProductCustomizableOption.title,'0')}}" userInput="{{simpleProductCustomizableOption.option_0_sku}}" stepKey="seeOptionSku"/>
 
         <!-- Verify customer see updated simple product (from the above step) on the storefront page -->
-        <amOnPage url="{{StorefrontProductPage.url(simpleProductRegularPriceCustomOptions.urlKey)}}" stepKey="goToProductPage"/>
-        <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{simpleProductRegularPriceCustomOptions.name}}" stepKey="seeSimpleProductNameOnStoreFrontPage"/>
-        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{simpleProductRegularPriceCustomOptions.price}}" stepKey="seeSimpleProductPriceOnStoreFrontPage"/>
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="goToProductPage">
+            <argument name="productUrlKey" value="{{simpleProductRegularPriceCustomOptions.urlKey}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibilityr" stepKey="waitForStorefrontProductPageLoad"/>
+
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeSimpleProductNameOnStoreFrontPage">
+            <argument name="productName" value="{{simpleProductRegularPriceCustomOptions.name}}"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeSimpleProductPriceOnStoreFrontPage">
+            <argument name="productPrice" value="{{simpleProductRegularPriceCustomOptions.price}}"/>
+        </actionGroup>
+
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeSimpleProductSkuOnStoreFrontPage">
             <argument name="productSku" value="{{simpleProductRegularPriceCustomOptions.sku}}"/>
         </actionGroup>
-        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="productStockAvailableStatus"/>
-        <assertEquals stepKey="assertStockAvailableOnProductPage">
-            <expectedResult type="string">{{simpleProductRegularPriceCustomOptions.storefrontStatus}}</expectedResult>
-            <actualResult type="variable">productStockAvailableStatus</actualResult>
-        </assertEquals>
-        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="productPriceAmount"/>
-        <assertEquals stepKey="assertOldPriceTextOnProductPage">
-            <expectedResult type="string">${{simpleProductRegularPriceCustomOptions.price}}</expectedResult>
-            <actualResult type="variable">productPriceAmount</actualResult>
-        </assertEquals>
+
+        <comment userInput="Comment is added to preserve the step key for backward compatibilityr" stepKey="productStockAvailableStatus"/>
+        <actionGroup ref="AssertStorefrontProductStockStatusOnProductPageActionGroup" stepKey="assertStockAvailableOnProductPage">
+            <argument name="productStockStatus" value="{{simpleProductRegularPriceCustomOptions.storefrontStatus}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibilityr" stepKey="productPriceAmount"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibilityr" stepKey="assertOldPriceTextOnProductPage"/>
 
         <!--Verify customer see customizable options are Required -->
         <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomSelect(simpleProductCustomizableOption.title)}}" stepKey="verifyFirstCustomOptionIsRequired"/>
@@ -157,7 +163,7 @@
         <seeElement selector="{{StorefrontProductPageSection.successMsg}}" stepKey="seeYouAddedSimpleprod4ToYourShoppingCartSuccessSaveMessage"/>
         <seeElement selector="{{StorefrontMinicartSection.quantity(1)}}" stepKey="seeAddedProductQuantityInCart"/>
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
-        <see selector="{{StorefrontMinicartSection.miniCartItemsText}}" userInput="{{simpleProductRegularPriceCustomOptions.name}}"  stepKey="seeProductNameInMiniCart"/>
+        <see selector="{{StorefrontMinicartSection.miniCartItemsText}}" userInput="{{simpleProductRegularPriceCustomOptions.name}}" stepKey="seeProductNameInMiniCart"/>
         <see selector="{{StorefrontMinicartSection.miniCartItemsText}}" userInput="{{simpleProductRegularPriceCustomOptions.storefront_new_cartprice}}" stepKey="seeProductPriceInMiniCart"/>
     </test>
 </tests>
