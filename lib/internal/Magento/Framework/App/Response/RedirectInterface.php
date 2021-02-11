@@ -10,6 +10,7 @@ namespace Magento\Framework\App\Response;
 /**
  * Interface \Magento\Framework\App\Response\RedirectInterface
  *
+ * @api
  */
 interface RedirectInterface
 {

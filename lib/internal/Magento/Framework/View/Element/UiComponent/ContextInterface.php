@@ -13,6 +13,8 @@ use Magento\Framework\View\Element\UiComponentFactory;
 
 /**
  * Interface ContextInterface
+ *
+ * @api
  */
 interface ContextInterface
 {

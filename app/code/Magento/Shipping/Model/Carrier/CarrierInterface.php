@@ -8,6 +8,7 @@ namespace Magento\Shipping\Model\Carrier;
 /**
  * Interface \Magento\Shipping\Model\Carrier\CarrierInterface
  *
+ * @api
  */
 interface CarrierInterface
 {

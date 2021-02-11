@@ -12,6 +12,8 @@ use Magento\Framework\App\Request\InvalidRequestException;
 
 /**
  * Action that's aware of CSRF protection.
+ *
+ * @api
  */
 interface CsrfAwareActionInterface extends ActionInterface
 {

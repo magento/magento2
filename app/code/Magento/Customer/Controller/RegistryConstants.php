@@ -8,6 +8,7 @@ namespace Magento\Customer\Controller;
 /**
  * Declarations of core registry keys used by the Customer module
  *
+ * @api
  */
 class RegistryConstants
 {

@@ -12,6 +12,8 @@ use Magento\Framework\Controller\AbstractResult;
 /**
  * A result that contains raw response - may be good for passing through files,
  * returning result of downloads or some other binary contents
+ *
+ * @api
  */
 class Raw extends AbstractResult
 {

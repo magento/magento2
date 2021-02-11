@@ -5,6 +5,11 @@
  */
 namespace Magento\Customer\Model;
 
+/**
+ * Class Context
+ *
+ * @api
+ */
 class Context
 {
     /**
