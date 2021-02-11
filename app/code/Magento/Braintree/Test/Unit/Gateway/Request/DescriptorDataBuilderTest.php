@@ -13,7 +13,7 @@ use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
- * Class DescriptorDataBuilderTest
+ * Test for DescriptorDataBuilder
  */
 class DescriptorDataBuilderTest extends \PHPUnit\Framework\TestCase
 {

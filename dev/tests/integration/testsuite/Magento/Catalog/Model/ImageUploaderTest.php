@@ -90,7 +90,7 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
     {
         $expectedFilePath = $this->imageUploader->getBasePath() . DIRECTORY_SEPARATOR . 'magento_small_image_1.jpg';
 
-        $this->assertFileNotExists($this->mediaDirectory->getAbsolutePath($expectedFilePath));
+        $this->assertFileDoesNotExist($this->mediaDirectory->getAbsolutePath($expectedFilePath));
 
         $this->imageUploader->moveFileFromTmp('magento_small_image.jpg');
 

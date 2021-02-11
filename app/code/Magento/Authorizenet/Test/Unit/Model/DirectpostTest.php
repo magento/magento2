@@ -33,7 +33,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 
 /**
- * Class DirectpostTest
+ * Test for Directpost
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DirectpostTest extends TestCase
