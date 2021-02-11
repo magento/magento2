@@ -44,9 +44,9 @@
             <deleteData createDataKey="simple2" stepKey="deleteSimple2" before="delete"/>
         </after>
         <see userInput="3 items" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
-        <see userInput="$$product.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.nthProductName('1')}}" stepKey="seeProductName"/>
-        <see userInput="$$simple1.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.nthProductName('2')}}" stepKey="seeSimple1ProductName"/>
-        <see userInput="$$simple2.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.nthProductName('3')}}" stepKey="seeSimple2ProductName"/>
+        <see userInput="$$product.name$$" stepKey="seeProductName"/>
+        <see userInput="$$simple1.name$$" stepKey="seeSimple1ProductName"/>
+        <see userInput="$$simple2.name$$" stepKey="seeSimple2ProductName"/>
     </test>
     <test name="AdvanceCatalogSearchBundleByNameMysqlTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
         <annotations>
@@ -155,9 +155,9 @@
             <deleteData createDataKey="simple2" stepKey="deleteSimple2" before="delete"/>
         </after>
         <see userInput="3 items" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
-        <see userInput="$$product.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.nthProductName('1')}}" stepKey="seeProductName"/>
-        <see userInput="$$simple1.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.nthProductName('2')}}" stepKey="seeSimple1ProductName"/>
-        <see userInput="$$simple2.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.nthProductName('3')}}" stepKey="seeSimple2ProductName"/>
+        <see userInput="$$product.name$$" stepKey="seeProductName"/>
+        <see userInput="$$simple1.name$$" stepKey="seeSimple1ProductName"/>
+        <see userInput="$$simple2.name$$" stepKey="seeSimple2ProductName"/>
     </test>
     <test name="AdvanceCatalogSearchBundleByDescriptionMysqlTest" extends="AdvanceCatalogSearchSimpleProductByDescriptionTest">
         <annotations>
@@ -316,9 +316,9 @@
             <deleteData createDataKey="simple2" stepKey="deleteSimple2" before="delete"/>
         </after>
         <see userInput="3 items" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
-        <see userInput="$$product.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.nthProductName('1')}}" stepKey="seeProductName"/>
-        <see userInput="$$simple1.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.nthProductName('2')}}" stepKey="seeSimple1ProductName"/>
-        <see userInput="$$simple2.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.nthProductName('3')}}" stepKey="seeSimple2ProductName"/>
+        <see userInput="$$product.name$$" stepKey="seeProductName"/>
+        <see userInput="$$simple1.name$$" stepKey="seeSimple1ProductName"/>
+        <see userInput="$$simple2.name$$"  stepKey="seeSimple2ProductName"/>
     </test>
     <test name="AdvanceCatalogSearchBundleByPriceMysqlTest" extends="AdvanceCatalogSearchSimpleProductByPriceTest">
         <annotations>
