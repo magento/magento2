@@ -8,6 +8,8 @@ namespace Magento\Framework\Api;
 /**
  * Base Class for simple data Objects
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ *
+ * @api
  */
 abstract class AbstractSimpleObject
 {

@@ -21,6 +21,8 @@ namespace Magento\Framework\Filesystem;
  * This object is intended to be immutable (a "value object").
  * The defaults are pre-defined and can be modified only by inheritors of this class.
  * Through the constructor, it is possible to inject custom paths or URL paths, but impossible to inject new types.
+ *
+ * @api
  */
 class DirectoryList
 {

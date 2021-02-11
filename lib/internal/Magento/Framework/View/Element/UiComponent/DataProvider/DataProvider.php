@@ -14,6 +14,8 @@ use Magento\Framework\App\RequestInterface;
 
 /**
  * Class DataProvider
+ *
+ * @api
  */
 class DataProvider implements DataProviderInterface
 {

@@ -5,6 +5,11 @@
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Collection;
 
+/**
+ * Class Factory
+ *
+ * @api
+ */
 class Factory
 {
     /**

@@ -7,6 +7,8 @@ namespace Magento\Framework\View\Element\Html;
 
 /**
  * HTML select element block
+ *
+ * @api
  */
 class Select extends \Magento\Framework\View\Element\AbstractBlock
 {
