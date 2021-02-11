@@ -73,21 +73,17 @@ class RoleTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock->expects($this->any())
             ->method('serialize')
             ->willReturnCallback(
-                
-                    function ($value) {
-                        return json_encode($value);
-                    }
-                
+                function ($value) {
+                    return json_encode($value);
+                }
             );
 
         $this->serializerMock->expects($this->any())
             ->method('unserialize')
             ->willReturnCallback(
-                
-                    function ($value) {
-                        return json_decode($value, true);
-                    }
-                
+                function ($value) {
+                    return json_decode($value, true);
+                }
             );
 
         $this->aclDataCacheMock = $this->createMock(\Magento\Framework\Acl\Data\CacheInterface::class);
@@ -119,12 +115,10 @@ class RoleTest extends \PHPUnit\Framework\TestCase
         $this->_adapterMock->expects($this->once())
             ->method('fetchAll')
             ->willReturn(
-                
-                    [
-                        ['role_id' => 1, 'role_type' => 'G', 'parent_id' => null],
-                        ['role_id' => 2, 'role_type' => 'U', 'parent_id' => 1, 'user_id' => 1],
-                    ]
-                
+                [
+                    ['role_id' => 1, 'role_type' => 'G', 'parent_id' => null],
+                    ['role_id' => 2, 'role_type' => 'U', 'parent_id' => 1, 'user_id' => 1],
+                ]
             );
 
         $this->_groupFactoryMock->expects($this->once())->method('create')->with(['roleId' => '1']);
@@ -175,18 +169,16 @@ class RoleTest extends \PHPUnit\Framework\TestCase
             ->method('load')
             ->with(\Magento\Authorization\Model\Acl\Loader\Role::ACL_ROLES_CACHE_KEY)
             ->willReturn(
-                
-                    json_encode(
+                json_encode(
+                    [
                         [
-                            [
-                                'role_id' => 1,
-                                'role_type' => 'U',
-                                'parent_id' => 2,
-                                'user_id' => 3
-                            ]
+                            'role_id' => 1,
+                            'role_type' => 'U',
+                            'parent_id' => 2,
+                            'user_id' => 3
                         ]
-                    )
-                
+                    ]
+                )
             );
 
         $this->_roleFactoryMock->expects($this->never())->method('getModelInstance');

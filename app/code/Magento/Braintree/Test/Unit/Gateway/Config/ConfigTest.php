@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Class ConfigTest
+ * Test for Config
  */
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {

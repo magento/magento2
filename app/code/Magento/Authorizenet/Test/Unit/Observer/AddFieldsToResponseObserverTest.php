@@ -8,7 +8,7 @@ namespace Magento\Authorizenet\Test\Unit\Observer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Class AddFieldsToResponseObserverTest
+ * Test for AddFieldsToResponseObserver
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

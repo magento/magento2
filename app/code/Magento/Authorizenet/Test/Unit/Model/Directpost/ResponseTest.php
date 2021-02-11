@@ -32,7 +32,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
      */
     protected function generateHash($merchantMd5, $merchantApiLogin, $amount, $transactionId)
     {
-        return strtoupper(md5($merchantMd5 . $merchantApiLogin . $transactionId . $amount));
+        return strtoupper(md5($merchantMd5 . $merchantApiLogin . $transactionId . $amount));//phpcs:ignore
     }
 
     /**
