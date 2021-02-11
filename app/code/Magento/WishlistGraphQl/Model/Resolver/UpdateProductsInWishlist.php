@@ -15,6 +15,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Wishlist\Model\ResourceModel\Wishlist as WishlistResourceModel;
 use Magento\Wishlist\Model\Wishlist;
 use Magento\Wishlist\Model\Wishlist\Config as WishlistConfig;
+use Magento\Wishlist\Model\Wishlist\Data\Error;
 use Magento\Wishlist\Model\Wishlist\Data\WishlistItemFactory;
 use Magento\Wishlist\Model\WishlistFactory;
 use Magento\WishlistGraphQl\Mapper\WishlistDataMapper;
@@ -98,23 +99,24 @@ class UpdateProductsInWishlist implements ResolverInterface
         }
 
         $wishlistItems  = $this->getWishlistItems($args['wishlistItems'], $wishlist);
-        $userErrors = [];
 
         foreach ($wishlistItems as $wishlistItem) {
-            $wishlistOutput = $this->updateWishlistItem->execute($wishlistItem, $wishlist);
-            $wishlist = $wishlistOutput->getWishlist();
-
-            foreach ($wishlistOutput->getErrors() as $error) {
-                $userErrors[] = [
-                    'code' => $error->getCode(),
-                    'message' => $error->getMessage()
-                ];
-            }
+            $this->updateWishlistItem->execute($wishlistItem, $wishlist);
         }
 
+        $wishlistOutput = $this->updateWishlistItem->prepareOutput($wishlist);
+
         return [
-            'wishlist' => $this->wishlistDataMapper->map($wishlist),
-            'user_errors' => $userErrors
+            'wishlist' => $this->wishlistDataMapper->map($wishlistOutput->getWishlist()),
+            'user_errors' => array_map(
+                function (Error $error) {
+                    return [
+                        'code' => $error->getCode(),
+                        'message' => $error->getMessage(),
+                    ];
+                },
+                $wishlistOutput->getErrors()
+            )
         ];
     }
 

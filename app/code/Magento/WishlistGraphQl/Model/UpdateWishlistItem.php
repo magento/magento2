@@ -57,7 +57,6 @@ class UpdateWishlistItem
      * @param WishlistItemData $wishlistItemData
      * @param Wishlist $wishlist
      *
-     * @return WishlistOutput
      * @throws LocalizedException
      * @throws AlreadyExistsException
      */
@@ -85,8 +84,6 @@ class UpdateWishlistItem
 
             $this->wishlistResource->save($wishlist);
         }
-
-        return $this->prepareOutput($wishlist);
     }
 
     /**
@@ -165,7 +162,7 @@ class UpdateWishlistItem
      *
      * @return WishlistOutput
      */
-    private function prepareOutput(Wishlist $wishlist): WishlistOutput
+    public function prepareOutput(Wishlist $wishlist): WishlistOutput
     {
         $output = new WishlistOutput($wishlist, $this->errors);
         $this->errors = [];
