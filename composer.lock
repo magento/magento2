@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f5365cac2e92e03cfc847acddc376786",
+    "content-hash": "877f6c5b0d91c7b13fff9a87df19b0f3",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -8256,16 +8256,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "dev-MQE-2488-php73",
+            "version": "dev-MQE-2501-php74",
             "source": {
                 "type": "git",
                 "url": "git@github.com:magento-commerce/magento2-functional-testing-framework.git",
-                "reference": "4640c03111b7e68617dbccf1050f5780a2532ec5"
+                "reference": "ccdc23a466fc6c3c479dddb33ee5ddf68277adce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento-commerce/magento2-functional-testing-framework/zipball/4640c03111b7e68617dbccf1050f5780a2532ec5",
-                "reference": "4640c03111b7e68617dbccf1050f5780a2532ec5",
+                "url": "https://api.github.com/repos/magento-commerce/magento2-functional-testing-framework/zipball/ccdc23a466fc6c3c479dddb33ee5ddf68277adce",
+                "reference": "ccdc23a466fc6c3c479dddb33ee5ddf68277adce",
                 "shasum": ""
             },
             "require": {
@@ -8357,10 +8357,10 @@
                 "testing"
             ],
             "support": {
-                "source": "https://github.com/magento-commerce/magento2-functional-testing-framework/tree/MQE-2488-php73",
+                "source": "https://github.com/magento-commerce/magento2-functional-testing-framework/tree/MQE-2501-php74",
                 "issues": "https://github.com/magento-commerce/magento2-functional-testing-framework/issues"
             },
-            "time": "2021-02-04T23:40:31+00:00"
+            "time": "2021-02-10T14:58:14+00:00"
         },
         {
             "name": "mikey179/vfsstream",
