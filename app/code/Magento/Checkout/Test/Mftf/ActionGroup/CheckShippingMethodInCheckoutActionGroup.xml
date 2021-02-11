@@ -16,7 +16,9 @@
             <argument name="shippingMethod"/>
         </arguments>
 
-        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <waitForPageLoad stepKey="waitForPageFullyLoaded"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.shippingMethodInformation}}" stepKey="waitForShippingMethodInformationVisible"/>
         <see userInput="{{shippingMethod}}" selector="{{CheckoutPaymentSection.shippingMethodInformation}}" stepKey="assertshippingMethodInformation"/>
     </actionGroup>
 </actionGroups>

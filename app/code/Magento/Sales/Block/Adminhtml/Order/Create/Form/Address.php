@@ -399,4 +399,18 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
     {
         return $this->getBackendQuoteSession()->getStoreId();
     }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _getAdditionalFormElementTypes()
+    {
+        return array_merge(
+            parent::_getAdditionalFormElementTypes(),
+            [
+                'file' => \Magento\Customer\Block\Adminhtml\Form\Element\Address\File::class,
+                'image' => \Magento\Customer\Block\Adminhtml\Form\Element\Address\Image::class,
+            ]
+        );
+    }
 }
