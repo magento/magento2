@@ -6,22 +6,36 @@
 
 namespace Magento\Framework\Api;
 
+use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
+use Magento\Framework\Api\SimpleBuilderInterface;
 
 /**
  * Builder for SearchCriteria Service Data Object
+ *
+ * @api
  */
-class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
+class SearchCriteriaBuilder implements SimpleBuilderInterface
 {
+    /**
+     * @var array
+     */
+    private $data;
+
     /**
      * @var FilterGroupBuilder
      */
-    protected $_filterGroupBuilder;
+    private $filterGroupBuilder;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder
+     * @var FilterBuilder
      */
-    protected $filterBuilder;
+    private $filterBuilder;
+
+    /**
+     * @var ObjectFactory
+     */
+    private $objectFactory;
 
     /**
      * @param ObjectFactory $objectFactory
@@ -33,11 +47,9 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
         FilterGroupBuilder $filterGroupBuilder,
         FilterBuilder $filterBuilder
     ) {
-        parent::__construct(
-            $objectFactory
-        );
-        $this->_filterGroupBuilder = $filterGroupBuilder;
+        $this->filterGroupBuilder = $filterGroupBuilder;
         $this->filterBuilder = $filterBuilder;
+        $this->objectFactory = $objectFactory;
     }
 
     /**
@@ -49,20 +61,51 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
     {
         //Initialize with empty array if not set
         if (empty($this->data[SearchCriteria::FILTER_GROUPS])) {
-            $this->_set(SearchCriteria::FILTER_GROUPS, []);
+            $this->set(SearchCriteria::FILTER_GROUPS, []);
         }
-        return parent::create();
+
+        $dataObjectType = $this->getDataObjectType();
+        $dataObject = $this->objectFactory->create($dataObjectType, ['data' => $this->data]);
+        $this->data = [];
+
+        return $dataObject;
+    }
+
+    /**
+     * Return the Data type class name
+     *
+     * @return string
+     */
+    private function getDataObjectType()
+    {
+        $dataObjectType = '';
+        $pattern = '/(?<data_object>.*?)Builder(\\Interceptor)?/';
+        if (preg_match($pattern, get_class($this), $match)) {
+            $dataObjectType = $match['data_object'];
+        }
+
+        return $dataObjectType;
+    }
+
+    /**
+     * Return data Object data.
+     *
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->data;
     }
 
     /**
      * Create a filter group based on the filter array provided and add to the filter groups
      *
-     * @param \Magento\Framework\Api\Filter[] $filter
+     * @param Filter[] $filter
      * @return $this
      */
     public function addFilters(array $filter)
     {
-        $this->data[SearchCriteria::FILTER_GROUPS][] = $this->_filterGroupBuilder->setFilters($filter)->create();
+        $this->data[SearchCriteria::FILTER_GROUPS][] = $this->filterGroupBuilder->setFilters($filter)->create();
         return $this;
     }
 
@@ -86,12 +129,12 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
     /**
      * Set filter groups
      *
-     * @param \Magento\Framework\Api\Search\FilterGroup[] $filterGroups
+     * @param FilterGroup[] $filterGroups
      * @return $this
      */
     public function setFilterGroups(array $filterGroups)
     {
-        return $this->_set(SearchCriteria::FILTER_GROUPS, $filterGroups);
+        return $this->set(SearchCriteria::FILTER_GROUPS, $filterGroups);
     }
 
     /**
@@ -117,7 +160,7 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
      */
     public function setSortOrders(array $sortOrders)
     {
-        return $this->_set(SearchCriteria::SORT_ORDERS, $sortOrders);
+        return $this->set(SearchCriteria::SORT_ORDERS, $sortOrders);
     }
 
     /**
@@ -128,7 +171,7 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
      */
     public function setPageSize($pageSize)
     {
-        return $this->_set(SearchCriteria::PAGE_SIZE, $pageSize);
+        return $this->set(SearchCriteria::PAGE_SIZE, $pageSize);
     }
 
     /**
@@ -139,6 +182,20 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
      */
     public function setCurrentPage($currentPage)
     {
-        return $this->_set(SearchCriteria::CURRENT_PAGE, $currentPage);
+        return $this->set(SearchCriteria::CURRENT_PAGE, $currentPage);
+    }
+
+    /**
+     * Overwrite data in Object.
+     *
+     * @param string $key
+     * @param mixed $value
+     * @return $this
+     */
+    private function set($key, $value)
+    {
+        $this->data[$key] = $value;
+
+        return $this;
     }
 }

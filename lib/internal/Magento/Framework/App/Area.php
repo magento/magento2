@@ -12,6 +12,7 @@ use Magento\Framework\ObjectManager\ConfigLoaderInterface;
  * Application area model
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Area implements \Magento\Framework\App\AreaInterface
 {
@@ -39,62 +40,62 @@ class Area implements \Magento\Framework\App\AreaInterface
      *
      * @var array
      */
-    protected $_loadedParts;
+    private $loadedParts;
 
     /**
      * Area code
      *
      * @var string
      */
-    protected $_code;
+    private $code;
 
     /**
      * Event Manager
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $_eventManager;
+    private $eventManager;
 
     /**
      * Translator
      *
      * @var \Magento\Framework\TranslateInterface
      */
-    protected $_translator;
+    private $translator;
 
     /**
      * Object manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $_objectManager;
+    private $objectManager;
 
     /**
      * @var ConfigLoaderInterface
      */
-    protected $_diConfigLoader;
+    private $diConfigLoader;
 
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    protected $_logger;
+    private $logger;
 
     /**
      * Core design
      *
      * @var \Magento\Framework\App\DesignInterface
      */
-    protected $_design;
+    private $design;
 
     /**
      * @var \Magento\Framework\App\ScopeResolverInterface
      */
-    protected $_scopeResolver;
+    private $scopeResolver;
 
     /**
      * @var \Magento\Framework\View\DesignExceptions
      */
-    protected $_designExceptions;
+    private $designExceptions;
 
     /**
      * @param \Psr\Log\LoggerInterface $logger
@@ -118,15 +119,15 @@ class Area implements \Magento\Framework\App\AreaInterface
         \Magento\Framework\View\DesignExceptions $designExceptions,
         $areaCode
     ) {
-        $this->_code = $areaCode;
-        $this->_objectManager = $objectManager;
-        $this->_diConfigLoader = $diConfigLoader;
-        $this->_eventManager = $eventManager;
-        $this->_translator = $translator;
-        $this->_logger = $logger;
-        $this->_design = $design;
-        $this->_scopeResolver = $scopeResolver;
-        $this->_designExceptions = $designExceptions;
+        $this->code = $areaCode;
+        $this->objectManager = $objectManager;
+        $this->diConfigLoader = $diConfigLoader;
+        $this->eventManager = $eventManager;
+        $this->translator = $translator;
+        $this->logger = $logger;
+        $this->design = $design;
+        $this->scopeResolver = $scopeResolver;
+        $this->designExceptions = $designExceptions;
     }
 
     /**
@@ -138,9 +139,9 @@ class Area implements \Magento\Framework\App\AreaInterface
     public function load($part = null)
     {
         if ($part === null) {
-            $this->_loadPart(self::PART_CONFIG)->_loadPart(self::PART_DESIGN)->_loadPart(self::PART_TRANSLATE);
+            $this->loadPart(self::PART_CONFIG)->loadPart(self::PART_DESIGN)->loadPart(self::PART_TRANSLATE);
         } else {
-            $this->_loadPart($part);
+            $this->loadPart($part);
         }
         return $this;
     }
@@ -153,13 +154,13 @@ class Area implements \Magento\Framework\App\AreaInterface
      */
     public function detectDesign($request = null)
     {
-        if ($this->_code == self::AREA_FRONTEND) {
-            $isDesignException = $request && $this->_applyUserAgentDesignException($request);
+        if ($this->code == self::AREA_FRONTEND) {
+            $isDesignException = $request && $this->applyUserAgentDesignException($request);
             if (!$isDesignException) {
-                $this->_design->loadChange(
-                    $this->_scopeResolver->getScope()->getId()
+                $this->design->loadChange(
+                    $this->scopeResolver->getScope()->getId()
                 )->changeDesign(
-                    $this->_getDesign()
+                    $this->getDesign()
                 );
             }
         }
@@ -171,16 +172,16 @@ class Area implements \Magento\Framework\App\AreaInterface
      * @param \Magento\Framework\App\RequestInterface $request
      * @return bool
      */
-    protected function _applyUserAgentDesignException($request)
+    private function applyUserAgentDesignException($request)
     {
         try {
-            $theme = $this->_designExceptions->getThemeByRequest($request);
+            $theme = $this->designExceptions->getThemeByRequest($request);
             if (false !== $theme) {
-                $this->_getDesign()->setDesignTheme($theme);
+                $this->getDesign()->setDesignTheme($theme);
                 return true;
             }
         } catch (\Exception $e) {
-            $this->_logger->critical($e);
+            $this->logger->critical($e);
         }
         return false;
     }
@@ -188,9 +189,9 @@ class Area implements \Magento\Framework\App\AreaInterface
     /**
      * @return \Magento\Framework\View\DesignInterface
      */
-    protected function _getDesign()
+    private function getDesign()
     {
-        return $this->_objectManager->get(\Magento\Framework\View\DesignInterface::class);
+        return $this->objectManager->get(\Magento\Framework\View\DesignInterface::class);
     }
 
     /**
@@ -199,28 +200,28 @@ class Area implements \Magento\Framework\App\AreaInterface
      * @param   string $part
      * @return  $this
      */
-    protected function _loadPart($part)
+    private function loadPart($part)
     {
-        if (isset($this->_loadedParts[$part])) {
+        if (isset($this->loadedParts[$part])) {
             return $this;
         }
         \Magento\Framework\Profiler::start(
-            'load_area:' . $this->_code . '.' . $part,
-            ['group' => 'load_area', 'area_code' => $this->_code, 'part' => $part]
+            'load_area:' . $this->code . '.' . $part,
+            ['group' => 'load_area', 'area_code' => $this->code, 'part' => $part]
         );
         switch ($part) {
             case self::PART_CONFIG:
-                $this->_initConfig();
+                $this->initConfig();
                 break;
             case self::PART_TRANSLATE:
-                $this->_initTranslate();
+                $this->initTranslate();
                 break;
             case self::PART_DESIGN:
-                $this->_initDesign();
+                $this->initDesign();
                 break;
         }
-        $this->_loadedParts[$part] = true;
-        \Magento\Framework\Profiler::stop('load_area:' . $this->_code . '.' . $part);
+        $this->loadedParts[$part] = true;
+        \Magento\Framework\Profiler::stop('load_area:' . $this->code . '.' . $part);
         return $this;
     }
 
@@ -229,9 +230,9 @@ class Area implements \Magento\Framework\App\AreaInterface
      *
      * @return $this
      */
-    protected function _initConfig()
+    private function initConfig()
     {
-        $this->_objectManager->configure($this->_diConfigLoader->load($this->_code));
+        $this->objectManager->configure($this->diConfigLoader->load($this->code));
         return $this;
     }
 
@@ -240,12 +241,12 @@ class Area implements \Magento\Framework\App\AreaInterface
      *
      * @return $this
      */
-    protected function _initTranslate()
+    private function initTranslate()
     {
-        $this->_translator->loadData(null, false);
+        $this->translator->loadData(null, false);
 
         \Magento\Framework\Phrase::setRenderer(
-            $this->_objectManager->get(\Magento\Framework\Phrase\RendererInterface::class)
+            $this->objectManager->get(\Magento\Framework\Phrase\RendererInterface::class)
         );
 
         return $this;
@@ -256,9 +257,9 @@ class Area implements \Magento\Framework\App\AreaInterface
      *
      * @return $this
      */
-    protected function _initDesign()
+    private function initDesign()
     {
-        $this->_getDesign()->setArea($this->_code)->setDefaultDesignTheme();
+        $this->getDesign()->setArea($this->code)->setDefaultDesignTheme();
         return $this;
     }
 }

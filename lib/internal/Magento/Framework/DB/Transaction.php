@@ -9,6 +9,8 @@ namespace Magento\Framework\DB;
  * DB transaction model
  *
  * @todo need collect connection by name
+ *
+ * @api
  */
 class Transaction
 {
@@ -17,30 +19,30 @@ class Transaction
      *
      * @var array
      */
-    protected $_objects = [];
+    protected $objects = [];
 
     /**
      * Transaction objects array with alias key
      *
      * @var array
      */
-    protected $_objectsByAlias = [];
+    private $objectsByAlias = [];
 
     /**
      * Callbacks array.
      *
      * @var array
      */
-    protected $_beforeCommitCallbacks = [];
+    private $beforeCommitCallbacks = [];
 
     /**
      * Begin transaction for all involved object resources
      *
      * @return $this
      */
-    protected function _startTransaction()
+    private function startTransaction()
     {
-        foreach ($this->_objects as $object) {
+        foreach ($this->objects as $object) {
             $object->getResource()->beginTransaction();
         }
         return $this;
@@ -51,9 +53,9 @@ class Transaction
      *
      * @return $this
      */
-    protected function _commitTransaction()
+    private function commitTransaction()
     {
-        foreach ($this->_objects as $object) {
+        foreach ($this->objects as $object) {
             $object->getResource()->commit();
         }
         return $this;
@@ -64,9 +66,9 @@ class Transaction
      *
      * @return $this
      */
-    protected function _rollbackTransaction()
+    private function rollbackTransaction()
     {
-        foreach ($this->_objects as $object) {
+        foreach ($this->objects as $object) {
             $object->getResource()->rollBack();
         }
         return $this;
@@ -77,9 +79,9 @@ class Transaction
      *
      * @return $this
      */
-    protected function _runCallbacks()
+    private function runCallbacks()
     {
-        foreach ($this->_beforeCommitCallbacks as $callback) {
+        foreach ($this->beforeCommitCallbacks as $callback) {
             call_user_func($callback);
         }
         return $this;
@@ -94,9 +96,9 @@ class Transaction
      */
     public function addObject(\Magento\Framework\Model\AbstractModel $object, $alias = '')
     {
-        $this->_objects[] = $object;
+        $this->objects[] = $object;
         if (!empty($alias)) {
-            $this->_objectsByAlias[$alias] = $object;
+            $this->objectsByAlias[$alias] = $object;
         }
         return $this;
     }
@@ -109,7 +111,7 @@ class Transaction
      */
     public function addCommitCallback($callback)
     {
-        $this->_beforeCommitCallbacks[] = $callback;
+        $this->beforeCommitCallbacks[] = $callback;
         return $this;
     }
 
@@ -121,11 +123,11 @@ class Transaction
      */
     public function save()
     {
-        $this->_startTransaction();
+        $this->startTransaction();
         $error = false;
 
         try {
-            foreach ($this->_objects as $object) {
+            foreach ($this->objects as $object) {
                 $object->save();
             }
         } catch (\Exception $e) {
@@ -134,17 +136,17 @@ class Transaction
 
         if ($error === false) {
             try {
-                $this->_runCallbacks();
+                $this->runCallbacks();
             } catch (\Exception $e) {
                 $error = $e;
             }
         }
 
         if ($error) {
-            $this->_rollbackTransaction();
+            $this->rollbackTransaction();
             throw $error;
         } else {
-            $this->_commitTransaction();
+            $this->commitTransaction();
         }
 
         return $this;
@@ -158,11 +160,11 @@ class Transaction
      */
     public function delete()
     {
-        $this->_startTransaction();
+        $this->startTransaction();
         $error = false;
 
         try {
-            foreach ($this->_objects as $object) {
+            foreach ($this->objects as $object) {
                 $object->delete();
             }
         } catch (\Exception $e) {
@@ -171,17 +173,17 @@ class Transaction
 
         if ($error === false) {
             try {
-                $this->_runCallbacks();
+                $this->runCallbacks();
             } catch (\Exception $e) {
                 $error = $e;
             }
         }
 
         if ($error) {
-            $this->_rollbackTransaction();
+            $this->rollbackTransaction();
             throw $error;
         } else {
-            $this->_commitTransaction();
+            $this->commitTransaction();
         }
         return $this;
     }
