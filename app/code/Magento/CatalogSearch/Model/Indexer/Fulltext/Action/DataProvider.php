@@ -314,6 +314,28 @@ class DataProvider
     }
 
     /**
+     * Get attribute ids which should not be part of document in ES for configurable grouped and bundle products
+     *
+     * @param array $attributeCodes
+     * @return array
+     */
+    public function getNotIndexerAttributesForChildProducts(array $attributeCodes)
+    {
+        $select = $this->connection->select()
+            ->from(
+                ['e' =>$this->getTable('eav_attribute')],
+                ['attribute_id']
+            )->join(
+                ['a' =>$this->getTable('eav_entity_type')],
+                $this->connection->quoteInto(
+                    'a.entity_type_id = e.entity_type_id AND a.entity_type_code = ?', Product::ENTITY),
+            )
+            ->where('e.attribute_code IN (?)', $attributeCodes);
+        return $this->connection->fetchAssoc($select);
+    }
+
+
+    /**
      * Retrieve searchable attributes
      *
      * @param string $backendType

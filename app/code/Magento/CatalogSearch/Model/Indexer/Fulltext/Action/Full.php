@@ -199,6 +199,11 @@ class Full
     private $batchSize;
 
     /**
+     * @var array|null
+     */
+    private $notIndexerChildProductAttributes = null;
+
+    /**
      * @param ResourceConnection $resource
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -374,6 +379,11 @@ class Full
 
                 $productIndex = [$productData['entity_id'] => $productsAttributes[$productData['entity_id']]];
                 if (isset($relatedProducts[$productData['entity_id']])) {
+                    if (!$this->notIndexerChildProductAttributes) {
+                        $this->notIndexerChildProductAttributes =
+                            $this->dataProvider->getNotIndexerAttributesForChildProducts(['url_key']);
+                    }
+
                     $childProductsIndex = $this->getChildProductsIndex(
                         $productData['entity_id'],
                         $relatedProducts,
@@ -447,10 +457,26 @@ class Full
         $productIndex = [];
         foreach ($relatedProducts[$parentId] as $productChildId) {
             if ($this->isProductEnabled($productChildId, $productsAttributes)) {
-                $productIndex[$productChildId] = $productsAttributes[$productChildId];
+                $productIndex[$productChildId] = $this->getChildProductAttributes($productsAttributes[$productChildId]);
             }
         }
+
         return $productIndex;
+    }
+
+    /**
+     * Get attributes of related products
+     *
+     * @param array $productAttributes
+     * @return array
+     */
+    private function getChildProductAttributes(array $productAttributes): array
+    {
+        foreach ($this->notIndexerChildProductAttributes as $key => $value) {
+            unset($productAttributes[$key]);
+        }
+
+        return $productAttributes;
     }
 
     /**
