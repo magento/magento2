@@ -233,6 +233,17 @@ class File extends AbstractData
     }
 
     /**
+     * Get file basename from the file if it exists, otherwise, get from filename.
+     *
+     * @param string $fileName
+     * @return string
+     */
+    private function getFileBasename(string $fileName): string
+    {
+        return pathinfo($fileName, PATHINFO_BASENAME);
+    }
+
+    /**
      * Helper function that checks if the file was uploaded.
      *
      * This helper function is needed for testing.
@@ -248,7 +259,7 @@ class File extends AbstractData
         }
 
         // This case is required for file uploader UI component
-        $temporaryFile = FileProcessor::TMP_DIR . '/' . $this->fileProcessor->getStat($filename)['basename'];
+        $temporaryFile = FileProcessor::TMP_DIR . '/' . $this->getFileBasename($filename);
         if ($this->fileProcessor->isExist($temporaryFile)) {
             return true;
         }
