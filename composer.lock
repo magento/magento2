@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b12b1d108c49bc882c18e70abd4c243b",
+    "content-hash": "f5365cac2e92e03cfc847acddc376786",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -1075,16 +1075,16 @@
         },
         {
             "name": "laminas/laminas-code",
-            "version": "3.3.2",
+            "version": "3.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-code.git",
-                "reference": "128784abc7a0d9e1fcc30c446533aa6f1db1f999"
+                "reference": "1cb8f203389ab1482bf89c0e70a04849bacd7766"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-code/zipball/128784abc7a0d9e1fcc30c446533aa6f1db1f999",
-                "reference": "128784abc7a0d9e1fcc30c446533aa6f1db1f999",
+                "url": "https://api.github.com/repos/laminas/laminas-code/zipball/1cb8f203389ab1482bf89c0e70a04849bacd7766",
+                "reference": "1cb8f203389ab1482bf89c0e70a04849bacd7766",
                 "shasum": ""
             },
             "require": {
@@ -1092,15 +1092,18 @@
                 "laminas/laminas-zendframework-bridge": "^1.0",
                 "php": "^7.1"
             },
+            "conflict": {
+                "phpspec/prophecy": "<1.9.0"
+            },
             "replace": {
                 "zendframework/zend-code": "self.version"
             },
             "require-dev": {
-                "doctrine/annotations": "^1.0",
+                "doctrine/annotations": "^1.7",
                 "ext-phar": "*",
                 "laminas/laminas-coding-standard": "^1.0",
                 "laminas/laminas-stdlib": "^2.7 || ^3.0",
-                "phpunit/phpunit": "^7.5.15"
+                "phpunit/phpunit": "^7.5.16 || ^8.4"
             },
             "suggest": {
                 "doctrine/annotations": "Doctrine\\Common\\Annotations >=1.0 for annotation features",
@@ -1109,8 +1112,9 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.3.x-dev",
-                    "dev-develop": "3.4.x-dev"
+                    "dev-master": "3.4.x-dev",
+                    "dev-develop": "3.5.x-dev",
+                    "dev-dev-4.0": "4.0.x-dev"
                 }
             },
             "autoload": {
@@ -1128,7 +1132,7 @@
                 "code",
                 "laminas"
             ],
-            "time": "2019-12-31T16:28:14+00:00"
+            "time": "2019-12-31T16:28:24+00:00"
         },
         {
             "name": "laminas/laminas-config",

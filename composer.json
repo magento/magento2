@@ -43,7 +43,7 @@
         "elasticsearch/elasticsearch": "~2.0||~5.1||~6.1||~7.6",
         "guzzlehttp/guzzle": "^6.3.3",
         "laminas/laminas-captcha": "^2.7.1",
-        "laminas/laminas-code": "~3.3.0",
+        "laminas/laminas-code": "~3.4.1",
         "laminas/laminas-config": "^2.6.0",
         "laminas/laminas-console": "^2.6.0",
         "laminas/laminas-crypt": "^2.6.0",
