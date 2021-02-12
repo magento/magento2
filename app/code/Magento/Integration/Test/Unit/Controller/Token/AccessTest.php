@@ -58,25 +58,29 @@ class AccessTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->request = $this->createPartialMock(\Magento\Framework\App\RequestInterface::class, [
-                'getMethod',
-                'getModuleName',
-                'setModuleName',
-                'getActionName',
-                'setActionName',
-                'getParam',
-                'setParams',
-                'getParams',
-                'getCookie',
-                'isSecure'
-            ]);
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+            ->addMethods(['getMethod'])
+            ->onlyMethods(
+                [
+                    'getModuleName',
+                    'setModuleName',
+                    'getActionName',
+                    'setActionName',
+                    'getParam',
+                    'setParams',
+                    'getParams',
+                    'getCookie',
+                    'isSecure'
+                ]
+            )
+            ->getMockForAbstractClass();
         $this->response = $this->createMock(\Magento\Framework\App\Console\Response::class);
         /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
-        $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
-        $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $eventManager = $this->getMockForAbstractClass(\Magento\Framework\Event\ManagerInterface::class);
         /** @var \Magento\Framework\View\Layout\ProcessorInterface|\PHPUnit\Framework\MockObject\MockObject */
-        $update = $this->createMock(\Magento\Framework\View\Layout\ProcessorInterface::class);
+        $update = $this->getMockForAbstractClass(\Magento\Framework\View\Layout\ProcessorInterface::class);
         /** @var \Magento\Framework\View\Layout|\PHPUnit\Framework\MockObject\MockObject */
         $layout = $this->createMock(\Magento\Framework\View\Layout::class);
         $layout->expects($this->any())->method('getUpdate')->willReturn($update);
@@ -93,7 +97,7 @@ class AccessTest extends \PHPUnit\Framework\TestCase
         $page->expects($this->any())->method('getLayout')->willReturn($layout);
 
         /** @var \Magento\Framework\App\ViewInterface|\PHPUnit\Framework\MockObject\MockObject */
-        $view = $this->createMock(\Magento\Framework\App\ViewInterface::class);
+        $view = $this->getMockForAbstractClass(\Magento\Framework\App\ViewInterface::class);
         $view->expects($this->any())->method('getLayout')->willReturn($layout);
 
         /** @var \Magento\Framework\Controller\ResultFactory|\PHPUnit\Framework\MockObject\MockObject */
@@ -111,9 +115,9 @@ class AccessTest extends \PHPUnit\Framework\TestCase
             ->willReturn($resultFactory);
 
         $this->helperMock = $this->createMock(\Magento\Framework\Oauth\Helper\Request::class);
-        $this->frameworkOauthSvcMock = $this->createMock(\Magento\Framework\Oauth\OauthInterface::class);
-        $this->intOauthServiceMock = $this->createMock(\Magento\Integration\Api\OauthServiceInterface::class);
-        $this->integrationServiceMock = $this->createMock(\Magento\Integration\Api\IntegrationServiceInterface::class);
+        $this->frameworkOauthSvcMock = $this->getMockForAbstractClass(\Magento\Framework\Oauth\OauthInterface::class);
+        $this->intOauthServiceMock = $this->getMockForAbstractClass(\Magento\Integration\Api\OauthServiceInterface::class);
+        $this->integrationServiceMock = $this->getMockForAbstractClass(\Magento\Integration\Api\IntegrationServiceInterface::class);
         /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager $objectManagerHelper */
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->accessAction = $this->objectManagerHelper->getObject(
@@ -139,7 +143,8 @@ class AccessTest extends \PHPUnit\Framework\TestCase
         $this->helperMock->expects($this->once())
             ->method('getRequestUrl');
         $this->helperMock->expects($this->once())
-            ->method('prepareRequest');
+            ->method('prepareRequest')
+            ->willReturn(['oauth_consumer_key' => 'oauth_key']);
         $this->frameworkOauthSvcMock->expects($this->once())
             ->method('getAccessToken')
             ->willReturn(['response']);

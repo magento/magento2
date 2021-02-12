@@ -22,6 +22,8 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
 {
+    const STUB_INDEXER_NAME = 'Indexer Name';
+
     /**
      * Command being tested
      *
@@ -95,12 +97,12 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
         $this->configMock->expects($this->once())
             ->method('getIndexer')
             ->willReturn(
-                
-                    [
-                        'title' => 'Title_indexerOne',
-                        'shared_index' => null
-                    ]
-                
+
+                [
+                    'title' => 'Title_indexerOne',
+                    'shared_index' => null
+                ]
+
             );
         $this->configureAdminArea();
         $this->initIndexerCollectionByItems(
@@ -137,7 +139,8 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
         array $reindexAllCallMatchers,
         array $executedIndexers,
         array $executedSharedIndexers
-    ) {
+    )
+    {
         $this->addSeparateIndexersToConfigMock($indexers);
         $this->addAllIndexersToConfigMock($indexers);
 
@@ -405,9 +408,12 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     public function testExecuteWithLocalizedException()
     {
         $this->configureAdminArea();
-        $indexerOne = $this->getIndexerMock(['reindexAll', 'getStatus'], ['indexer_id' => 'indexer_1']);
+        $indexerOne = $this->getIndexerMock(
+            ['reindexAll', 'getStatus'],
+            ['indexer_id' => 'indexer_1', 'title' => self::STUB_INDEXER_NAME]
+        );
         $localizedException = new LocalizedException(new Phrase('Some Exception Message'));
-        $indexerOne->expects($this->once())->method('reindexAll')->will($this->throwException($localizedException));
+        $indexerOne->expects($this->once())->method('reindexAll')->willThrowException($localizedException);
         $this->initIndexerCollectionByItems([$indexerOne]);
         $this->command = new IndexerReindexCommand($this->objectManagerFactory);
         $commandTester = new CommandTester($this->command);

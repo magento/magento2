@@ -63,21 +63,22 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     public function testSave($addressId, $isDefaultBilling, $isDefaultShipping)
     {
         /** @var $address \Magento\Customer\Model\Address|\PHPUnit\Framework\MockObject\MockObject */
-        $address = $this->createPartialMock(
-            \Magento\Customer\Model\Address::class,
-            [
-                '__wakeup',
-                'getId',
-                'getEntityTypeId',
-                'getIsDefaultBilling',
-                'getIsDefaultShipping',
-                'hasDataChanges',
-                'validateBeforeSave',
-                'beforeSave',
-                'afterSave',
-                'isSaveAllowed'
-            ]
-        );
+        $address = $this->getMockBuilder(Address::class)
+            ->addMethods(['getIsDefaultBilling', 'getIsDefaultShipping'])
+            ->onlyMethods(
+                [
+                    '__wakeup',
+                    'getId',
+                    'getEntityTypeId',
+                    'hasDataChanges',
+                    'validateBeforeSave',
+                    'beforeSave',
+                    'afterSave',
+                    'isSaveAllowed'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->entitySnapshotMock->expects($this->once())->method('isModified')->willReturn(true);
         $this->entityRelationCompositeMock->expects($this->once())->method('processRelations');
         $address->expects($this->once())->method('isSaveAllowed')->willReturn(true);
