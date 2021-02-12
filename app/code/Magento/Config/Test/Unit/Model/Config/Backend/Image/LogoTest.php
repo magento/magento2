@@ -74,6 +74,10 @@ class LogoTest extends \PHPUnit\Framework\TestCase
         $this->uploaderMock->expects($this->once())
             ->method('setAllowedExtensions')
             ->with($this->equalTo(['jpg', 'jpeg', 'gif', 'png']));
+
+        $this->uploaderMock->method('save')
+            ->willReturn(['file' => 'filename']);
+
         $this->model->beforeSave();
     }
 }

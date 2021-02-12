@@ -223,6 +223,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         );
         $scope = $this->getMockBuilder(\Magento\Framework\App\ScopeInterface::class)->getMockForAbstractClass();
         $this->scopeResolver->expects($this->any())->method('getScope')->willReturn($scope);
+        $this->connection->method('fetchPairs')->willReturn([1 => 'sku']);
         $this->connection->expects($this->any())->method('fetchAssoc')->with($this->select)->willReturn([
             '1' => [
                 'option_id' => '1',
