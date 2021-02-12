@@ -51,11 +51,17 @@
         </actionGroup>
 
         <!-- Assert label with radio button presents on the page -->
-        <actionGroup ref="AssertAdminPaymentMethodRadioButtonExistsOnCreateOrderPageActionGroup" stepKey="assertPaymentRadioButtonIsPresent"/>
+        <actionGroup ref="AssertAdminPaymentMethodRadioButtonExistsOnCreateOrderPageActionGroup" stepKey="assertCheckMORadioButtonIsPresent"/>
+        <actionGroup ref="AssertAdminPaymentMethodRadioButtonExistsOnCreateOrderPageActionGroup" stepKey="assertBankTransferRadioButtonIsPresent">
+            <argument name="paymentMethodName" value="Bank Transfer Payment"/>
+        </actionGroup>
 
         <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
 
         <!-- Assert label with radio button presents after reload the page -->
-        <actionGroup ref="AssertAdminPaymentMethodRadioButtonExistsOnCreateOrderPageActionGroup" stepKey="assertPaymentRadioButtonIsPresentAfterReload"/>
+        <actionGroup ref="AssertAdminPaymentMethodRadioButtonExistsOnCreateOrderPageActionGroup" stepKey="assertCheckMORadioButtonIsPresentAfterReload"/>
+        <actionGroup ref="AssertAdminPaymentMethodRadioButtonExistsOnCreateOrderPageActionGroup" stepKey="assertBankTransferRadioButtonIsPresentAfterReload">
+            <argument name="paymentMethodName" value="Bank Transfer Payment"/>
+        </actionGroup>
     </test>
 </tests>
