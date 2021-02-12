@@ -12,7 +12,7 @@ namespace Magento\AdminNotification\Model\Config\Source;
  * @api
  * @since 100.0.2
  */
-class Frequency implements \Magento\Framework\Option\ArrayInterface
+class Frequency implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @return array

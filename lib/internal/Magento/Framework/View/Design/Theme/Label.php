@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\View\Design\Theme;
 
-class Label implements \Magento\Framework\Option\ArrayInterface
+class Label implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * Labels collection array

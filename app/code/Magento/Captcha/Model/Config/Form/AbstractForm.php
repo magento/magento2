@@ -13,7 +13,7 @@ namespace Magento\Captcha\Model\Config\Form;
 
 use Magento\Framework\App\Config\Value;
 
-abstract class AbstractForm extends Value implements \Magento\Framework\Option\ArrayInterface
+abstract class AbstractForm extends Value implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var string

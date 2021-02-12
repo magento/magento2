@@ -5,7 +5,7 @@
  */
 namespace Magento\Tax\Model\System\Config\Source;
 
-class Apply implements \Magento\Framework\Option\ArrayInterface
+class Apply implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var array

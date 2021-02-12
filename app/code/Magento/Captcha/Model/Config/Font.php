@@ -11,7 +11,7 @@
  */
 namespace Magento\Captcha\Model\Config;
 
-class Font implements \Magento\Framework\Option\ArrayInterface
+class Font implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * Captcha data

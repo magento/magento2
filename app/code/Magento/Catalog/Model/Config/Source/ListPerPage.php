@@ -10,7 +10,7 @@ namespace Magento\Catalog\Model\Config\Source;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class ListPerPage implements \Magento\Framework\Option\ArrayInterface
+class ListPerPage implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * Pager Options

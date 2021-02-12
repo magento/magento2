@@ -8,7 +8,7 @@ namespace Magento\Sales\Model\ResourceModel\Order\Invoice\Grid;
 /**
  * Sales invoices statuses option array
  */
-class StatusList implements \Magento\Framework\Option\ArrayInterface
+class StatusList implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var \Magento\Sales\Api\InvoiceRepositoryInterface

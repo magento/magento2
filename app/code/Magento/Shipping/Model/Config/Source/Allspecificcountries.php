@@ -5,7 +5,7 @@
  */
 namespace Magento\Shipping\Model\Config\Source;
 
-class Allspecificcountries implements \Magento\Framework\Option\ArrayInterface
+class Allspecificcountries implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * {@inheritdoc}

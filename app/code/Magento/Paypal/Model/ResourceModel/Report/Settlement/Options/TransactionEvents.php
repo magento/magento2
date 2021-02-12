@@ -10,7 +10,7 @@ namespace Magento\Paypal\Model\ResourceModel\Report\Settlement\Options;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class TransactionEvents implements \Magento\Framework\Option\ArrayInterface
+class TransactionEvents implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var \Magento\Paypal\Model\Report\Settlement\Row

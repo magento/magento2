@@ -16,7 +16,7 @@ use Magento\Config\Model\Config\Structure\Element\Dependency\Mapper;
 use Magento\Config\Model\Config\Structure\Element\Field;
 use Magento\Framework\Data\Form\Element\Text;
 use Magento\Framework\DataObject;
-use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\BlockFactory;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -296,7 +296,7 @@ class FieldTest extends TestCase
     public function testGetOptionsUsesOptionsInterfaceIfNoMethodIsProvided()
     {
         $this->_model->setData(['source_model' => 'Source_Model_Name'], 'scope');
-        $sourceModelMock = $this->getMockForAbstractClass(ArrayInterface::class);
+        $sourceModelMock = $this->getMockForAbstractClass(OptionSourceInterface::class);
         $this->_sourceFactoryMock->expects(
             $this->once()
         )->method(

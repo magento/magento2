@@ -10,7 +10,7 @@ namespace Magento\Customer\Model\Config;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Share extends \Magento\Framework\App\Config\Value implements \Magento\Framework\Option\ArrayInterface
+class Share extends \Magento\Framework\App\Config\Value implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * Xml config path to customers sharing scope value

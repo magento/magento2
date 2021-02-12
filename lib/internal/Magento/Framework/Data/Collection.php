@@ -10,17 +10,17 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Data collection
  *
- * TODO: Refactor use of \Magento\Framework\Option\ArrayInterface in library.
+ * TODO: Refactor use of \Magento\Framework\Data\OptionSourceInterface in library.
  *
  * @api
  * @since 100.0.2
  */
-class Collection implements \IteratorAggregate, \Countable, ArrayInterface, CollectionDataSourceInterface
+class Collection implements \IteratorAggregate, \Countable, OptionSourceInterface, CollectionDataSourceInterface
 {
     const SORT_ORDER_ASC = 'ASC';
 

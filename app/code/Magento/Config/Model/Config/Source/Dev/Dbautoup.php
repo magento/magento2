@@ -10,7 +10,7 @@ namespace Magento\Config\Model\Config\Source\Dev;
  * @api
  * @since 100.0.2
  */
-class Dbautoup implements \Magento\Framework\Option\ArrayInterface
+class Dbautoup implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @return array

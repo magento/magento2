@@ -9,7 +9,7 @@ namespace Magento\Config\Model\Config\Source;
  * @api
  * @since 100.0.2
  */
-class Store implements \Magento\Framework\Option\ArrayInterface
+class Store implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var array

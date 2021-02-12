@@ -10,7 +10,7 @@ namespace Magento\Config\Model\Config\Source;
  * @api
  * @since 100.0.2
  */
-class Enabledisable implements \Magento\Framework\Option\ArrayInterface
+class Enabledisable implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * Value which equal Enable for Enabledisable dropdown.

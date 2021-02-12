@@ -9,13 +9,13 @@
  */
 namespace Magento\PageCache\Model\System\Config\Source;
 
-use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 use Magento\PageCache\Model\Config;
 
 /**
  * Class Application
  */
-class Application implements ArrayInterface
+class Application implements OptionSourceInterface
 {
     /**
      * Options getter

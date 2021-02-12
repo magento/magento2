@@ -11,7 +11,7 @@ namespace Magento\Config\Model\Config\Source\Admin;
  * @api
  * @since 100.0.2
  */
-class Page implements \Magento\Framework\Option\ArrayInterface
+class Page implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * Menu model

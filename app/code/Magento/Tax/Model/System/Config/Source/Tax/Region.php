@@ -5,7 +5,7 @@
  */
 namespace Magento\Tax\Model\System\Config\Source\Tax;
 
-class Region implements \Magento\Framework\Option\ArrayInterface
+class Region implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory

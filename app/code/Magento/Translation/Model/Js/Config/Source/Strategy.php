@@ -7,7 +7,7 @@ namespace Magento\Translation\Model\Js\Config\Source;
 
 use Magento\Translation\Model\Js\Config;
 
-class Strategy implements \Magento\Framework\Option\ArrayInterface
+class Strategy implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * {@inheritdoc}

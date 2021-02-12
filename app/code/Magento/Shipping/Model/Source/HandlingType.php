@@ -5,7 +5,7 @@
  */
 namespace Magento\Shipping\Model\Source;
 
-class HandlingType implements \Magento\Framework\Option\ArrayInterface
+class HandlingType implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * {@inheritdoc}

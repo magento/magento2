@@ -8,7 +8,7 @@ namespace Magento\Paypal\Model\System\Config\Source;
 /**
  * Source model for merchant countries supported by PayPal
  */
-class MerchantCountry implements \Magento\Framework\Option\ArrayInterface
+class MerchantCountry implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var \Magento\Paypal\Model\ConfigFactory

@@ -14,7 +14,7 @@ namespace Magento\CatalogInventory\Model\Source;
  * @link https://devdocs.magento.com/guides/v2.4/inventory/index.html
  * @link https://devdocs.magento.com/guides/v2.4/inventory/inventory-api-reference.html
  */
-class Backorders implements \Magento\Framework\Option\ArrayInterface
+class Backorders implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @return array

@@ -5,7 +5,7 @@
  */
 namespace Magento\Payment\Model\Config\Source;
 
-class Cctype implements \Magento\Framework\Option\ArrayInterface
+class Cctype implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * Payment config model
