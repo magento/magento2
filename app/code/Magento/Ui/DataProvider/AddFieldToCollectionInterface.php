@@ -9,6 +9,8 @@ use Magento\Framework\Data\Collection;
 
 /**
  * AddFieldToCollection interface
+ *
+ * @api
  */
 interface AddFieldToCollectionInterface
 {

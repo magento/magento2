@@ -9,6 +9,8 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Resource for storing store configuration values
+ *
+ * @api
  */
 interface ConfigInterface
 {

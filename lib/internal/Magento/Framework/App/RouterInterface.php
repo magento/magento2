@@ -10,6 +10,7 @@ namespace Magento\Framework\App;
 /**
  * Interface \Magento\Framework\App\RouterInterface
  *
+ * @api
  */
 interface RouterInterface
 {

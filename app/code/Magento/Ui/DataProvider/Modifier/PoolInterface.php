@@ -8,6 +8,7 @@ namespace Magento\Ui\DataProvider\Modifier;
 /**
  * Interface \Magento\Ui\DataProvider\Modifier\PoolInterface
  *
+ * @api
  */
 interface PoolInterface
 {

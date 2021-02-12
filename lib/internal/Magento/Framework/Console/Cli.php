@@ -30,6 +30,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
  *
  * @inheritdoc
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Cli extends Console\Application
 {

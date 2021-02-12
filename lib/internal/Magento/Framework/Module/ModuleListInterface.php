@@ -10,6 +10,7 @@ namespace Magento\Framework\Module;
 /**
  * Interface \Magento\Framework\Module\ModuleListInterface
  *
+ * @api
  */
 interface ModuleListInterface
 {

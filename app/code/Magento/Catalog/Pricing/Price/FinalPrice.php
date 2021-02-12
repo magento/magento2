@@ -11,6 +11,8 @@ use Magento\Framework\Pricing\Price\AbstractPrice;
 
 /**
  * Final price model
+ *
+ * @api
  */
 class FinalPrice extends AbstractPrice implements FinalPriceInterface
 {

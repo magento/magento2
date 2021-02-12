@@ -11,6 +11,8 @@ use Magento\Store\Model\System\Store as SystemStore;
 
 /**
  * Ui stores options
+ *
+ * @api
  */
 class Options implements OptionSourceInterface
 {
