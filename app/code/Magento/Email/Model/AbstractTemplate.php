@@ -7,14 +7,14 @@
 namespace Magento\Email\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Mail\TemplateTypesInterface;
 use Magento\Framework\Model\AbstractModel;
+use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\Store\Model\Information as StoreInformation;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
-use Magento\MediaStorage\Helper\File\Storage\Database;
 
 /**
  * Template model class.

@@ -9,7 +9,7 @@ use Magento\Backend\App\Area\FrontNameResolver as BackendFrontNameResolver;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\Mail\TemplateTypesInterface;
 use Magento\Framework\View\DesignInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;

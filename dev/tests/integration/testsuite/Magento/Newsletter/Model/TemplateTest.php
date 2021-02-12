@@ -5,7 +5,7 @@
  */
 namespace Magento\Newsletter\Model;
 
-use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\Mail\TemplateTypesInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 

@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\Email\Test\Unit\Block\Adminhtml\Template\Grid\Renderer;
 
 use Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Type;
-use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\Mail\TemplateTypesInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
