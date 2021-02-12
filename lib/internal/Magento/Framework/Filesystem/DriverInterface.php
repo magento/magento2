@@ -393,4 +393,31 @@ interface DriverInterface
      * @return mixed
      */
     public function getRelativePath($basePath, $path = null);
+
+    /**
+     * Retrieve file metadata.
+     *
+     * Implementation must return associative array with next keys:
+     *
+     * ```
+     * [
+     *  'path',
+     *  'dirname',
+     *  'basename',
+     *  'extension',
+     *  'filename',
+     *  'timestamp',
+     *  'size',
+     *  'mimetype',
+     *  'extra' => [
+     *      'image-width',
+     *      'image-height'
+     *      ]
+     *  ];
+     *
+     * @param string $path Absolute path to file
+     * @return array
+     * @throws FileSystemException
+     */
+    public function getMetadata(string $path): array;
 }

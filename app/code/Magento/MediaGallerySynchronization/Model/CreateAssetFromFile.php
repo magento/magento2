@@ -75,7 +75,7 @@ class CreateAssetFromFile implements CreateAssetFromFileInterface
         $absolutePath = $this->getMediaDirectory()->getAbsolutePath($path);
         $driver = $this->getMediaDirectory()->getDriver();
 
-        if ($driver instanceof Filesystem\ExtendedDriverInterface) {
+        if ($driver instanceof Filesystem\DriverInterface) {
             $meta = $driver->getMetadata($absolutePath);
         } else {
             /**
