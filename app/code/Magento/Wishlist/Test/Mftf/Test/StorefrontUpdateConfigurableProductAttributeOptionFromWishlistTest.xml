@@ -79,6 +79,9 @@
                 <requiredEntity createDataKey="createConfigurableProduct"/>
                 <requiredEntity createDataKey="createSecondChildProduct"/>
             </createData>
+
+            <!-- Reindex invalidated indices after Product Attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </before>
         <after>
             <!-- Delete Configurable Product data -->
@@ -94,7 +97,7 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
             <!-- Reindex invalidated indices after Product Attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndicesAfterDelete"/>
         </after>
 
         <!-- Login as Customer -->
