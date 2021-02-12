@@ -12,7 +12,7 @@ use Magento\Email\Controller\Adminhtml\Email\Template;
 use Magento\Email\Model\ResourceModel\Template as TemplateResource;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\Mail\TemplateTypesInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 

@@ -9,7 +9,7 @@ namespace Magento\Framework\Mail;
 
 use Magento\Email\Model\BackendTemplate;
 use Magento\Email\Model\Template;
-use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\Mail\TemplateTypesInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\ObjectManagerInterface;

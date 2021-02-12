@@ -6,7 +6,7 @@
 namespace Magento\Email\Block\Adminhtml\Template\Edit;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\Mail\TemplateTypesInterface;
 
 /**
  * Test class for \Magento\Email\Block\Adminhtml\Template\Edit\Form

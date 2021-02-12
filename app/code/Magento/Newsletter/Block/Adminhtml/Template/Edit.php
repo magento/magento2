@@ -12,7 +12,7 @@
 namespace Magento\Newsletter\Block\Adminhtml\Template;
 
 use Magento\Backend\Block\Widget;
-use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\Mail\TemplateTypesInterface;
 
 /**
  * @api

@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Mail\Test\Unit\Template;
 
-use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Mail\EmailMessageInterface;
 use Magento\Framework\Mail\EmailMessageInterfaceFactory;
 use Magento\Framework\Mail\Message;
@@ -18,6 +17,7 @@ use Magento\Framework\Mail\Template\FactoryInterface;
 use Magento\Framework\Mail\Template\SenderResolverInterface;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Mail\TemplateInterface;
+use Magento\Framework\Mail\TemplateTypesInterface;
 use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\Mail\TransportInterfaceFactory;
 use Magento\Framework\ObjectManagerInterface;

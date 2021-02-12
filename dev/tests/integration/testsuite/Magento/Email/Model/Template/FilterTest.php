@@ -7,7 +7,7 @@ namespace Magento\Email\Model\Template;
 
 use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
-use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\Mail\TemplateTypesInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\View\Asset\ContentProcessorInterface;
 use Magento\Setup\Module\I18n\Locale;

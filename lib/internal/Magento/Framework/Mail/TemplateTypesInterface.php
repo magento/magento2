@@ -3,12 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\App;
+namespace Magento\Framework\Mail;
 
 /**
  * Template Types interface
- *
- * @deprecated 101.0.0 because of incorrect location
  */
 interface TemplateTypesInterface
 {
