@@ -10,7 +10,6 @@
     <preference for="Magento\Framework\View\Element\UiComponent\Control\ActionPoolInterface" type="Magento\Ui\Component\Control\ActionPool" />
     <preference for="Magento\Framework\Data\Argument\InterpreterInterface" type="Magento\Framework\Data\Argument\Interpreter\Composite" />
     <preference for="Magento\Framework\Config\ConverterInterface" type="Magento\Framework\View\Element\UiComponent\Config\Converter" />
-    <preference for="Magento\Framework\View\Element\UiComponent\Config\ManagerInterface" type="Magento\Ui\Model\Manager" />
     <preference for="Magento\Framework\View\Element\UiComponent\ContextInterface" type="Magento\Framework\View\Element\UiComponent\Context" />
     <preference for="Magento\Framework\View\Element\UiComponent\LayoutInterface" type="Magento\Framework\View\Layout\Generic"/>
     <preference for="Magento\Authorization\Model\UserContextInterface" type="Magento\Authorization\Model\CompositeUserContext"/>
@@ -142,11 +141,6 @@
     <type name="Magento\Ui\Config\Reader\Dom">
         <arguments>
             <argument name="schemaLocator" xsi:type="object">Magento\Ui\Config\Reader\SchemaLocator</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Ui\Model\Manager">
-        <arguments>
-            <argument name="domMerger" xsi:type="object">uiConfigurationDomMerger</argument>
         </arguments>
     </type>
     <virtualType name="uiTemplateDomMerger" type="Magento\Framework\View\Element\UiComponent\Config\DomMerger">
@@ -358,7 +352,6 @@
             </argument>
             <argument name="configFactory" xsi:type="object">uiComponentConfigFactory</argument>
             <argument name="definitionData" xsi:type="object">Magento\Ui\Config\Reader\Definition\Data</argument>
-            <argument name="componentManager" xsi:type="object">Magento\Ui\Model\Manager\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Ui\Config\Argument\Parser\ArrayType">
