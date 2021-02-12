@@ -13,7 +13,7 @@ namespace Magento\Payment\Model\Source;
  * @api
  * @since 100.0.2
  */
-class Cctype implements \Magento\Framework\Option\ArrayInterface
+class Cctype implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * Allowed CC types

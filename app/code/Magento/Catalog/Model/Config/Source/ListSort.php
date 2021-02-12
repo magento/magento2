@@ -11,7 +11,7 @@
  */
 namespace Magento\Catalog\Model\Config\Source;
 
-class ListSort implements \Magento\Framework\Option\ArrayInterface
+class ListSort implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * Catalog config

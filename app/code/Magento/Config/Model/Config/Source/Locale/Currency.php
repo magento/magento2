@@ -16,7 +16,7 @@ use Magento\Framework\Locale\ListsInterface;
  * @api
  * @since 100.0.2
  */
-class Currency implements \Magento\Framework\Option\ArrayInterface
+class Currency implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var array

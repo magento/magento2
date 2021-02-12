@@ -6,9 +6,9 @@
 namespace Magento\Framework\App\Scope;
 
 use Magento\Framework\App\ScopeResolverPool;
-use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 
-class Source implements ArrayInterface
+class Source implements OptionSourceInterface
 {
     /**
      * @var ScopeResolverPool

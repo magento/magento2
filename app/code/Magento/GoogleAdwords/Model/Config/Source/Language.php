@@ -12,7 +12,7 @@ namespace Magento\GoogleAdwords\Model\Config\Source;
  * @api
  * @since 100.0.2
  */
-class Language implements \Magento\Framework\Option\ArrayInterface
+class Language implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var \Magento\GoogleAdwords\Helper\Data

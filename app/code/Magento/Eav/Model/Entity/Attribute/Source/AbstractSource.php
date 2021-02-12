@@ -16,7 +16,7 @@ namespace Magento\Eav\Model\Entity\Attribute\Source;
  */
 abstract class AbstractSource implements
     \Magento\Eav\Model\Entity\Attribute\Source\SourceInterface,
-    \Magento\Framework\Option\ArrayInterface
+    \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * Reference to the attribute instance

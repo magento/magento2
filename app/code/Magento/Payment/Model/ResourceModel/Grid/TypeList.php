@@ -8,7 +8,7 @@ namespace Magento\Payment\Model\ResourceModel\Grid;
 /**
  * Sales transaction payment method types option array
  */
-class TypeList implements \Magento\Framework\Option\ArrayInterface
+class TypeList implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * Payment data

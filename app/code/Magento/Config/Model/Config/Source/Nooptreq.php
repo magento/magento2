@@ -9,7 +9,7 @@ namespace Magento\Config\Model\Config\Source;
  * @api
  * @since 100.0.2
  */
-class Nooptreq implements \Magento\Framework\Option\ArrayInterface
+class Nooptreq implements \Magento\Framework\Data\OptionSourceInterface
 {
     const VALUE_NO = '';
     const VALUE_OPTIONAL = 'opt';

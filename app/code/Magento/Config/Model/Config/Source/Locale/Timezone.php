@@ -13,7 +13,7 @@ namespace Magento\Config\Model\Config\Source\Locale;
  * @api
  * @since 100.0.2
  */
-class Timezone implements \Magento\Framework\Option\ArrayInterface
+class Timezone implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * Timezones that works incorrect with php_intl extension

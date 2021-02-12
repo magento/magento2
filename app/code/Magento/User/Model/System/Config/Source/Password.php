@@ -11,7 +11,7 @@
  */
 namespace Magento\User\Model\System\Config\Source;
 
-class Password extends \Magento\Framework\DataObject implements \Magento\Framework\Option\ArrayInterface
+class Password extends \Magento\Framework\DataObject implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * Get options for select

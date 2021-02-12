@@ -8,7 +8,7 @@ namespace Magento\Integration\Model\Integration\Source;
 /**
  * Integration status options.
  */
-class Status implements \Magento\Framework\Option\ArrayInterface
+class Status implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * Retrieve status options array.

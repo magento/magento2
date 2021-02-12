@@ -10,7 +10,7 @@ use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
 /**
  * Class Page
  */
-class Page implements \Magento\Framework\Option\ArrayInterface
+class Page implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var array

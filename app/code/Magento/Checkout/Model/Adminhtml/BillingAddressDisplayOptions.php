@@ -5,13 +5,13 @@
  */
 namespace Magento\Checkout\Model\Adminhtml;
 
-use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * BillingAddressDisplayOptions gets list of configuration options for billing address displaying on
  * the Payment step on checkout
  */
-class BillingAddressDisplayOptions implements ArrayInterface
+class BillingAddressDisplayOptions implements OptionSourceInterface
 {
     /**
      * Return array of options for billing address displaying on checkout payment step
