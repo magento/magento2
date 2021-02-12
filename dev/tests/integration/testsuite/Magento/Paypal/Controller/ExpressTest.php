@@ -200,7 +200,6 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setConstructorArgs(
                 [
                     $this->_objectManager->get(\Magento\Framework\App\Request\Http::class),
-                    $this->_objectManager->get(\Magento\Framework\Session\SidResolverInterface::class),
                     $this->_objectManager->get(\Magento\Framework\Session\Config\ConfigInterface::class),
                     $this->_objectManager->get(\Magento\Framework\Session\SaveHandlerInterface::class),
                     $this->_objectManager->get(\Magento\Framework\Session\ValidatorInterface::class),

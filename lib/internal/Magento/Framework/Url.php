@@ -126,11 +126,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     protected $_session;
 
     /**
-     * @var \Magento\Framework\Session\SidResolverInterface
-     */
-    protected $_sidResolver;
-
-    /**
      * Constructor
      *
      * @var \Magento\Framework\App\Route\ConfigInterface
@@ -200,7 +195,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo
      * @param \Magento\Framework\Url\ScopeResolverInterface $scopeResolver
      * @param \Magento\Framework\Session\Generic $session
-     * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\Url\RouteParamsResolverFactory $routeParamsResolverFactory
      * @param \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -217,7 +211,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo,
         \Magento\Framework\Url\ScopeResolverInterface $scopeResolver,
         \Magento\Framework\Session\Generic $session,
-        \Magento\Framework\Session\SidResolverInterface $sidResolver,
         \Magento\Framework\Url\RouteParamsResolverFactory $routeParamsResolverFactory,
         \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -232,7 +225,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         $this->_urlSecurityInfo = $urlSecurityInfo;
         $this->_scopeResolver = $scopeResolver;
         $this->_session = $session;
-        $this->_sidResolver = $sidResolver;
         $this->_routeParamsResolverFactory = $routeParamsResolverFactory;
         $this->_queryParamsResolver = $queryParamsResolver;
         $this->_scopeConfig = $scopeConfig;

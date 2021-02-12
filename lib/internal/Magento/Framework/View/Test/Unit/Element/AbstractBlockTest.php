@@ -14,7 +14,6 @@ use Magento\Framework\Config\View;
 use Magento\Framework\Escaper;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\Session\SessionManagerInterface;
-use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\ConfigInterface;
 use Magento\Framework\View\Element\AbstractBlock;
@@ -50,11 +49,6 @@ class AbstractBlockTest extends TestCase
     private $cacheStateMock;
 
     /**
-     * @var SidResolverInterface|MockObject
-     */
-    private $sidResolverMock;
-
-    /**
      * @var SessionManagerInterface|MockObject
      */
     private $sessionMock;
@@ -81,7 +75,6 @@ class AbstractBlockTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['lockedLoadData'])
             ->getMockForAbstractClass();
-        $this->sidResolverMock = $this->getMockForAbstractClass(SidResolverInterface::class);
         $this->sessionMock = $this->getMockForAbstractClass(SessionManagerInterface::class);
         $this->escaperMock = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
@@ -96,9 +89,6 @@ class AbstractBlockTest extends TestCase
         $contextMock->expects($this->once())
             ->method('getCacheState')
             ->willReturn($this->cacheStateMock);
-        $contextMock->expects($this->once())
-            ->method('getSidResolver')
-            ->willReturn($this->sidResolverMock);
         $contextMock->expects($this->once())
             ->method('getSession')
             ->willReturn($this->sessionMock);
@@ -282,10 +272,6 @@ class AbstractBlockTest extends TestCase
         $this->lockQuery->expects($this->any())
             ->method('lockedLoadData')
             ->willReturn($dataFromCache);
-        $this->sidResolverMock->expects($this->any())
-            ->method('getSessionIdQueryParam')
-            ->with($this->sessionMock)
-            ->willReturn('sessionIdQueryParam');
         $this->sessionMock->expects($this->any())
             ->method('getSessionId')
             ->willReturn('sessionId');

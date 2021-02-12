@@ -19,7 +19,6 @@ use Magento\Framework\App\State;
 use Magento\Framework\Encryption\UrlCoder;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Session\SessionManagerInterface;
-use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -55,11 +54,6 @@ class Redirect implements RedirectInterface
     protected $_session;
 
     /**
-     * @var SidResolverInterface
-     */
-    protected $_sidResolver;
-
-    /**
      * @var bool
      */
     protected $_canUseSessionIdInParam;
@@ -91,7 +85,6 @@ class Redirect implements RedirectInterface
      * @param StoreManagerInterface $storeManager
      * @param UrlCoder $urlCoder
      * @param SessionManagerInterface $session
-     * @param SidResolverInterface $sidResolver
      * @param UrlInterface $urlBuilder
      * @param Uri|null $uri
      * @param bool $canUseSessionIdInParam
@@ -104,7 +97,6 @@ class Redirect implements RedirectInterface
         StoreManagerInterface $storeManager,
         UrlCoder $urlCoder,
         SessionManagerInterface $session,
-        SidResolverInterface $sidResolver,
         UrlInterface $urlBuilder,
         Uri $uri = null,
         $canUseSessionIdInParam = true,
@@ -116,7 +108,6 @@ class Redirect implements RedirectInterface
         $this->_storeManager = $storeManager;
         $this->_urlCoder = $urlCoder;
         $this->_session = $session;
-        $this->_sidResolver = $sidResolver;
         $this->_urlBuilder = $urlBuilder;
         $this->uri = $uri ?: ObjectManager::getInstance()->get(Uri::class);
         $this->appState = $appState ?: ObjectManager::getInstance()->get(State::class);

@@ -84,7 +84,6 @@ class Quote extends \Magento\Framework\Session\SessionManager
 
     /**
      * @param \Magento\Framework\App\Request\Http $request
-     * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\Session\Config\ConfigInterface $sessionConfig
      * @param \Magento\Framework\Session\SaveHandlerInterface $saveHandler
      * @param \Magento\Framework\Session\ValidatorInterface $validator
@@ -102,7 +101,6 @@ class Quote extends \Magento\Framework\Session\SessionManager
      */
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
-        \Magento\Framework\Session\SidResolverInterface $sidResolver,
         \Magento\Framework\Session\Config\ConfigInterface $sessionConfig,
         \Magento\Framework\Session\SaveHandlerInterface $saveHandler,
         \Magento\Framework\Session\ValidatorInterface $validator,
@@ -125,7 +123,6 @@ class Quote extends \Magento\Framework\Session\SessionManager
         $this->quoteFactory = $quoteFactory;
         parent::__construct(
             $request,
-            $sidResolver,
             $sessionConfig,
             $saveHandler,
             $validator,
@@ -154,7 +151,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
                     $this->_quote->setCustomerGroupId($customerGroupId);
                     $this->_quote->setIsActive(false);
                     $this->_quote->setStoreId($this->getStoreId());
-                    
+
                     $this->quoteRepository->save($this->_quote);
                     $this->setQuoteId($this->_quote->getId());
                     $this->_quote = $this->quoteRepository->get($this->getQuoteId(), [$this->getStoreId()]);

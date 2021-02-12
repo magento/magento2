@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Store\Controller\Store;
 
 use Magento\Framework\Interception\InterceptorInterface;
-use Magento\Framework\Session\SidResolverInterface;
 use Magento\Store\Model\StoreResolver;
 use Magento\Store\Model\StoreSwitcher\RedirectDataPreprocessorInterface;
 use Magento\Store\Model\StoreSwitcher\RedirectDataSerializerInterface;
@@ -23,6 +22,11 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class RedirectTest extends AbstractController
 {
+    /**
+     * Session ID in query param
+     */
+    const SESSION_ID_QUERY_PARAM = 'SID';
+
     /**
      * @var RedirectDataPreprocessorInterface
      */
@@ -118,6 +122,6 @@ class RedirectTest extends AbstractController
 
         $result = (string)$this->getResponse()->getHeader('location');
         $this->assertNotEmpty($result);
-        $this->assertStringNotContainsString(SidResolverInterface::SESSION_ID_QUERY_PARAM . '=', $result);
+        $this->assertStringNotContainsString(self::SESSION_ID_QUERY_PARAM . '=', $result);
     }
 }

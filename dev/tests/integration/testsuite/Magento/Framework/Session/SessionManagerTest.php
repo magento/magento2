@@ -91,11 +91,6 @@ namespace Magento\Framework\Session {
         private $model;
 
         /**
-         * @var \Magento\Framework\Session\SidResolverInterface
-         */
-        private $sidResolver;
-
-        /**
          * @var string
          */
         private $sessionName;
@@ -127,19 +122,10 @@ namespace Magento\Framework\Session {
 
             $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-            /** @var \Magento\Framework\Session\SidResolverInterface $sidResolver */
             $this->appState = $this->getMockBuilder(State::class)
                 ->setMethods(['getAreaCode'])
                 ->disableOriginalConstructor()
                 ->getMock();
-
-            /** @var \Magento\Framework\Session\SidResolver $sidResolver */
-            $this->sidResolver = $this->objectManager->create(
-                \Magento\Framework\Session\SidResolver::class,
-                [
-                    'appState' => $this->appState,
-                ]
-            );
 
             $this->request = $this->objectManager->get(\Magento\Framework\App\RequestInterface::class);
         }
@@ -269,7 +255,6 @@ namespace Magento\Framework\Session {
              */
             $this->model = new \Magento\Framework\Session\SessionManager(
                 $this->objectManager->get(\Magento\Framework\App\Request\Http::class),
-                $this->sidResolver,
                 $this->objectManager->get(\Magento\Framework\Session\Config\ConfigInterface::class),
                 $this->objectManager->get(\Magento\Framework\Session\SaveHandlerInterface::class),
                 $this->objectManager->get(\Magento\Framework\Session\ValidatorInterface::class),
@@ -315,7 +300,6 @@ namespace Magento\Framework\Session {
             $this->model = $this->objectManager->create(
                 \Magento\Framework\Session\SessionManager::class,
                 [
-                    'sidResolver' => $this->sidResolver,
                     'saveHandler' => $saveHandler,
                     'sessionConfig' => $sessionConfig,
                 ]
@@ -352,10 +336,7 @@ namespace Magento\Framework\Session {
         private function initializeModel(): void
         {
             $this->model = $this->objectManager->create(
-                \Magento\Framework\Session\SessionManager::class,
-                [
-                    'sidResolver' => $this->sidResolver
-                ]
+                \Magento\Framework\Session\SessionManager::class
             );
         }
     }

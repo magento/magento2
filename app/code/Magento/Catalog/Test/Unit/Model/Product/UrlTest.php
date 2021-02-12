@@ -12,7 +12,6 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Url;
 use Magento\Catalog\Model\Product\Url as ProductUrl;
 use Magento\Framework\Filter\FilterManager;
-use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlFactory;
 use Magento\Store\Model\Store;
@@ -48,11 +47,6 @@ class UrlTest extends TestCase
      */
     protected $url;
 
-    /**
-     * @var SidResolverInterface|MockObject
-     */
-    protected $sidResolver;
-
     protected function setUp(): void
     {
         $this->filter = $this->getMockBuilder(
@@ -74,8 +68,6 @@ class UrlTest extends TestCase
                 ['setScope', 'getUrl']
             )->getMock();
 
-        $this->sidResolver = $this->getMockForAbstractClass(SidResolverInterface::class);
-
         $store = $this->createPartialMock(Store::class, ['getId']);
         $store->expects($this->any())->method('getId')->willReturn(1);
         $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
@@ -95,7 +87,6 @@ class UrlTest extends TestCase
                 'catalogCategory' => $this->catalogCategory,
                 'storeManager' => $storeManager,
                 'urlFactory' => $urlFactory,
-                'sidResolver' => $this->sidResolver,
             ]
         );
     }
@@ -186,10 +177,6 @@ class UrlTest extends TestCase
                 break;
             case 'getProductUrl':
                 $this->assertEquals($requestPathProduct, $this->model->getProductUrl($product, null));
-                $this->sidResolver
-                    ->expects($this->never())
-                    ->method('getUseSessionInUrl')
-                    ->willReturn(true);
                 break;
         }
     }

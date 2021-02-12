@@ -37,11 +37,6 @@ class Url extends \Magento\Framework\DataObject
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\Session\SidResolverInterface
-     */
-    protected $sidResolver;
-
-    /**
      * @var \Magento\UrlRewrite\Model\UrlFinderInterface
      */
     protected $urlFinder;
@@ -55,7 +50,6 @@ class Url extends \Magento\Framework\DataObject
      * @param \Magento\Framework\UrlFactory $urlFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Filter\FilterManager $filter
-     * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param UrlFinderInterface $urlFinder
      * @param array $data
      * @param ScopeConfigInterface|null $scopeConfig
@@ -64,7 +58,6 @@ class Url extends \Magento\Framework\DataObject
         \Magento\Framework\UrlFactory $urlFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Filter\FilterManager $filter,
-        \Magento\Framework\Session\SidResolverInterface $sidResolver,
         UrlFinderInterface $urlFinder,
         array $data = [],
         ScopeConfigInterface $scopeConfig = null
@@ -73,7 +66,6 @@ class Url extends \Magento\Framework\DataObject
         $this->urlFactory = $urlFactory;
         $this->storeManager = $storeManager;
         $this->filter = $filter;
-        $this->sidResolver = $sidResolver;
         $this->urlFinder = $urlFinder;
         $this->scopeConfig = $scopeConfig ?:
             \Magento\Framework\App\ObjectManager::getInstance()->get(ScopeConfigInterface::class);

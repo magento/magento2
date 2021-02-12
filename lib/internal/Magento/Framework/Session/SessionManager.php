@@ -50,13 +50,6 @@ class SessionManager implements SessionManagerInterface
     protected $request;
 
     /**
-     * SID resolver
-     *
-     * @var SidResolverInterface
-     */
-    protected $sidResolver;
-
-    /**
      * Session config
      *
      * @var Config\ConfigInterface
@@ -101,7 +94,6 @@ class SessionManager implements SessionManagerInterface
 
     /**
      * @param \Magento\Framework\App\Request\Http $request
-     * @param SidResolverInterface $sidResolver
      * @param ConfigInterface $sessionConfig
      * @param SaveHandlerInterface $saveHandler
      * @param ValidatorInterface $validator
@@ -116,7 +108,6 @@ class SessionManager implements SessionManagerInterface
      */
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
-        SidResolverInterface $sidResolver,
         ConfigInterface $sessionConfig,
         SaveHandlerInterface $saveHandler,
         ValidatorInterface $validator,
@@ -127,7 +118,6 @@ class SessionManager implements SessionManagerInterface
         SessionStartChecker $sessionStartChecker = null
     ) {
         $this->request = $request;
-        $this->sidResolver = $sidResolver;
         $this->sessionConfig = $sessionConfig;
         $this->saveHandler = $saveHandler;
         $this->validator = $validator;
