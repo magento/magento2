@@ -11,10 +11,15 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Option\Repository as OptionRepository;
 use Magento\Catalog\Model\ProductFactory;
+use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
 use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
+use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollectionFactory;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
  * Catalog product copier.
@@ -25,6 +30,8 @@ use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
  */
 class Copier
 {
+    private const ENTITY_TYPE = 'product';
+
     /**
      * @var Option\Repository
      */
@@ -51,24 +58,41 @@ class Copier
     private $scopeOverriddenValue;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * @var ResourceConnection
+     */
+    private $urlRewriteCollectionFactory;
+
+    /**
      * @param CopyConstructorInterface $copyConstructor
      * @param ProductFactory $productFactory
      * @param ScopeOverriddenValue $scopeOverriddenValue
      * @param OptionRepository|null $optionRepository
      * @param MetadataPool|null $metadataPool
+     * @param ScopeConfigInterface|null $scopeConfig
+     * @param UrlRewriteCollectionFactory|null $urlRewriteCollectionFactory
      */
     public function __construct(
         CopyConstructorInterface $copyConstructor,
         ProductFactory $productFactory,
         ScopeOverriddenValue $scopeOverriddenValue,
         OptionRepository $optionRepository,
-        MetadataPool $metadataPool
+        MetadataPool $metadataPool,
+        ?ScopeConfigInterface $scopeConfig = null,
+        ?UrlRewriteCollectionFactory $urlRewriteCollectionFactory = null
     ) {
         $this->productFactory = $productFactory;
         $this->copyConstructor = $copyConstructor;
         $this->scopeOverriddenValue = $scopeOverriddenValue;
         $this->optionRepository = $optionRepository;
         $this->metadataPool = $metadataPool;
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        $this->urlRewriteCollectionFactory = $urlRewriteCollectionFactory
+            ?: ObjectManager::getInstance()->get(UrlRewriteCollectionFactory::class);
     }
 
     /**
@@ -119,13 +143,12 @@ class Copier
     {
         $duplicate->setStoreId(Store::DEFAULT_STORE_ID);
         $resource = $product->getResource();
-        $attribute = $resource->getAttribute('url_key');
         $productId = $product->getId();
         $urlKey = $resource->getAttributeRawValue($productId, 'url_key', Store::DEFAULT_STORE_ID);
         do {
             $urlKey = $this->modifyUrl($urlKey);
             $duplicate->setUrlKey($urlKey);
-        } while (!$attribute->getEntity()->checkAttributeUniqueValue($attribute, $duplicate));
+        } while ($this->isUrlRewriteExists($urlKey));
         $duplicate->setData('url_path', null);
         $duplicate->save();
     }
@@ -205,5 +228,30 @@ class Copier
             }
         }
         return $productData;
+    }
+
+    /**
+     * Verify if generated url rewrite exists in url_rewrite table
+     *
+     * @param string $urlKey
+     * @return bool
+     */
+    private function isUrlRewriteExists(string $urlKey): bool
+    {
+        $urlRewriteCollection = $this->urlRewriteCollectionFactory->create();
+        $urlRewriteCollection->addFieldToFilter(UrlRewrite::ENTITY_TYPE, self::ENTITY_TYPE)
+            ->addFieldToFilter(UrlRewrite::REQUEST_PATH, $urlKey . $this->getUrlSuffix());
+
+        return !empty($urlRewriteCollection->getSize());
+    }
+
+    /**
+     * Returns default product url suffix config
+     *
+     * @return string
+     */
+    private function getUrlSuffix(): string
+    {
+        return $this->scopeConfig->getValue(ProductUrlPathGenerator::XML_PATH_PRODUCT_URL_SUFFIX);
     }
 }
