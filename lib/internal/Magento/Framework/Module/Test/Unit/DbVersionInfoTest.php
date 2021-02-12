@@ -9,7 +9,6 @@ namespace Magento\Framework\Module\Test\Unit;
 
 use Magento\Framework\Module\DbVersionInfo;
 use Magento\Framework\Module\ModuleListInterface;
-use Magento\Framework\Module\Output\ConfigInterface;
 use Magento\Framework\Module\ResourceInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -31,11 +30,6 @@ class DbVersionInfoTest extends TestCase
      */
     private $moduleResource;
 
-    /**
-     * @var ConfigInterface|MockObject
-     */
-    private $_outputConfig;
-
     protected function setUp(): void
     {
         $this->moduleList = $this->getMockForAbstractClass(ModuleListInterface::class);
@@ -49,8 +43,6 @@ class DbVersionInfoTest extends TestCase
         $this->moduleList->expects($this->any())
             ->method('getNames')
             ->willReturn(['Module_One', 'Module_Two']);
-
-        $this->_outputConfig = $this->getMockForAbstractClass(ConfigInterface::class);
         $this->moduleResource = $this->getMockForAbstractClass(ResourceInterface::class);
 
         $this->dbVersionInfo = new DbVersionInfo(
