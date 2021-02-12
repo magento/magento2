@@ -9,7 +9,6 @@ namespace Magento\Backend\Block\Media;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\Image\Adapter\UploadConfigInterface;
 use Magento\Backend\Model\Image\UploadResizeConfigInterface;
 
 /**
@@ -45,18 +44,10 @@ class Uploader extends \Magento\Backend\Block\Widget
     private $imageUploadConfig;
 
     /**
-     * @var UploadConfigInterface
-     * @deprecated 101.0.1
-     * @see \Magento\Backend\Model\Image\UploadResizeConfigInterface
-     */
-    private $imageConfig;
-
-    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\File\Size $fileSize
      * @param array $data
      * @param Json $jsonEncoder
-     * @param UploadConfigInterface $imageConfig
      * @param UploadResizeConfigInterface $imageUploadConfig
      */
     public function __construct(
@@ -64,13 +55,10 @@ class Uploader extends \Magento\Backend\Block\Widget
         \Magento\Framework\File\Size $fileSize,
         array $data = [],
         Json $jsonEncoder = null,
-        UploadConfigInterface $imageConfig = null,
         UploadResizeConfigInterface $imageUploadConfig = null
     ) {
         $this->_fileSizeService = $fileSize;
         $this->jsonEncoder = $jsonEncoder ?: ObjectManager::getInstance()->get(Json::class);
-        $this->imageConfig = $imageConfig
-            ?: ObjectManager::getInstance()->get(UploadConfigInterface::class);
         $this->imageUploadConfig = $imageUploadConfig
             ?: ObjectManager::getInstance()->get(UploadResizeConfigInterface::class);
         parent::__construct($context, $data);
