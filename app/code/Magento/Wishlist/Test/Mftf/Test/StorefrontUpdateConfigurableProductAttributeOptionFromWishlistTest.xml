@@ -15,6 +15,7 @@
             <title value="Update Configurable Product Option from Wishlist"/>
             <description value="Verify that Configurable Product Option has correct value after navigating to Wishlist Item editing page"/>
             <severity value="MAJOR"/>
+            <testCaseId value="MC-40881"/>
             <useCaseId value="MC-40651"/>
             <group value="catalog"/>
             <group value="configurableProduct"/>
