@@ -17,7 +17,6 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Session\SessionManagerInterface;
-use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url\ModifierInterface;
 use Magento\Framework\UrlInterface;
@@ -452,9 +451,6 @@ class StoreTest extends TestCase
         ]);
         $defaultStore->expects($this->atLeastOnce())->method('getId')->willReturn(5);
         $defaultStore->expects($this->atLeastOnce())->method('isCurrentlySecure')->willReturn($secure);
-
-        $sidResolver = $this->getMockForAbstractClass(SidResolverInterface::class);
-        $sidResolver->expects($this->any())->method('getSessionIdQueryParam')->willReturn('SID');
 
         $config = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
 

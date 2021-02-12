@@ -14,7 +14,6 @@ use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Api\StoreResolverInterface;
@@ -96,11 +95,6 @@ class RedirectTest extends TestCase
     private $currentStoreMock;
 
     /**
-     * @var SidResolverInterface|MockObject
-     */
-    private $sidResolverMock;
-
-    /**
      * @var HashGenerator|MockObject
      */
     private $hashGeneratorMock;
@@ -147,10 +141,6 @@ class RedirectTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getCode'])
             ->getMockForAbstractClass();
-        $this->sidResolverMock = $this->getMockBuilder(SidResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getUseSessionInUrl'])
-            ->getMockForAbstractClass();
         $this->hashGeneratorMock = $this->createMock(HashGenerator::class);
 
         $this->currentStoreMock = $this->getMockBuilder(Store::class)
@@ -187,7 +177,6 @@ class RedirectTest extends TestCase
                 'storeManager' => $this->storeManagerMock,
                 'storeRepository' => $this->storeRepositoryMock,
                 'storeResolver' => $this->storeResolverMock,
-                'sidResolver' => $this->sidResolverMock,
                 'hashGenerator' => $this->hashGeneratorMock,
                 'context' => $context,
                 'redirectDataGenerator' => $redirectDataGenerator,

@@ -7,7 +7,6 @@ namespace Magento\Framework\View\Element;
 
 use Magento\Framework\Math\Random;
 use Magento\Framework\Session\SessionManagerInterface;
-use Magento\Framework\Session\SidResolverInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -16,6 +15,11 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class AbstractBlockTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * Session ID in query param
+     */
+    const SESSION_ID_QUERY_PARAM = 'SID';
+
     /**
      * @var AbstractBlock
      */
@@ -593,7 +597,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $outerId = 'block-outer' .Random::getRandomNumber(1, 9999);
         $outer = $this->_createBlockWithLayout($outerId, $outerId);
         $block->setText(
-            $text = 'Some text with ' .SidResolverInterface::SESSION_ID_QUERY_PARAM
+            $text = 'Some text with ' .self::SESSION_ID_QUERY_PARAM
                 .'=' .$this->session->getSessionId()
         );
         $block->setData('cache_lifetime', 3600);

@@ -12,7 +12,6 @@ use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 
@@ -22,6 +21,11 @@ use Magento\Store\Api\StoreRepositoryInterface;
  */
 class StoreTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * Session ID in query param
+     */
+    const SESSION_ID_QUERY_PARAM = 'SID';
+
     /**
      * @var array
      */
@@ -63,7 +67,6 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             'filesystem' => $objectManager->get(\Magento\Framework\Filesystem::class),
             'config' => $objectManager->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class),
             'storeManager' => $objectManager->get(\Magento\Store\Model\StoreManager::class),
-            'sidResolver' => $objectManager->get(\Magento\Framework\Session\SidResolverInterface::class),
             'httpContext' => $objectManager->get(\Magento\Framework\App\Http\Context::class),
             'session' => $objectManager->get(\Magento\Framework\Session\SessionManagerInterface::class),
             'currencyFactory' => $objectManager->get(\Magento\Directory\Model\CurrencyFactory::class),
@@ -305,11 +308,11 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
         $this->model
             ->expects($this->any())->method('getUrl')
-            ->willReturn('http://localhost/index.php?' . SidResolverInterface::SESSION_ID_QUERY_PARAM . '=12345');
-        $this->request->setParams([SidResolverInterface::SESSION_ID_QUERY_PARAM, '12345']);
-        $this->request->setQueryValue(SidResolverInterface::SESSION_ID_QUERY_PARAM, '12345');
+            ->willReturn('http://localhost/index.php?' . self::SESSION_ID_QUERY_PARAM . '=12345');
+        $this->request->setParams([self::SESSION_ID_QUERY_PARAM, '12345']);
+        $this->request->setQueryValue(self::SESSION_ID_QUERY_PARAM, '12345');
         $this->assertStringContainsString(
-            SidResolverInterface::SESSION_ID_QUERY_PARAM . '=12345',
+            self::SESSION_ID_QUERY_PARAM . '=12345',
             $this->model->getCurrentUrl()
         );
 
