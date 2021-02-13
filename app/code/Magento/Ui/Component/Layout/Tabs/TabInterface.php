@@ -7,6 +7,8 @@ namespace Magento\Ui\Component\Layout\Tabs;
 
 /**
  * Interface TabInterface
+ *
+ * @api
  */
 interface TabInterface
 {
