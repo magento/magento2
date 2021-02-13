@@ -18,7 +18,6 @@ use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Api\Data\GroupInterfaceFactory;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Layer\Filter\Price;
-use Magento\Framework\Api\DataObjectHelper;
 use Magento\CatalogRule\Model\Rule;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -28,7 +27,6 @@ use Magento\Indexer\Model\Indexer;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\CatalogRule\Model\ResourceModel\Rule as RuleResourceModel;
-use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Group;
 use Magento\Store\Model\ResourceModel\Group as StoreGroupResourceModel;
@@ -67,15 +65,6 @@ class GroupExcludedWebsiteTest extends \PHPUnit\Framework\TestCase
     /** @var CustomerInterfaceFactory */
     private $customerFactory;
 
-    /** @var DataObjectHelper  */
-    protected $dataObjectHelper;
-
-    /** @var EncryptorInterface */
-    protected $encryptor;
-
-    /** @var CustomerRegistry */
-    protected $customerRegistry;
-
     /** @var GroupRepositoryInterface */
     private $groupRepository;
 
@@ -111,8 +100,6 @@ class GroupExcludedWebsiteTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->customerRepository = $this->objectManager->create(CustomerRepositoryInterface::class);
         $this->customerFactory = $this->objectManager->create(CustomerInterfaceFactory::class);
-        $this->dataObjectHelper = $this->objectManager->create(DataObjectHelper::class);
-        $this->customerRegistry = $this->objectManager->create(CustomerRegistry::class);
         $this->groupRepository = $this->objectManager->create(GroupRepositoryInterface::class);
         $this->groupFactory = $this->objectManager->create(GroupInterfaceFactory::class);
         $this->websiteResourceModel = $this->objectManager->get(WebsiteResourceModel::class);
