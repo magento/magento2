@@ -689,7 +689,7 @@ class QuoteGenerator
             foreach ($options as $option) {
                 $attributesInfo[] = [
                     "label" => $option->getLabel(),
-                    "value" => $option['options']['0']['label'],
+                    "value" => $option['options']['0']['label'] ?? null,
                     "option_id" => $option->getAttributeId(),
                     "option_value" => $option->getValues()[0]->getValueIndex()
                 ];

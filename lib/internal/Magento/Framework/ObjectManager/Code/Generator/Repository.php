@@ -11,8 +11,8 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\InputException;
-use Zend\Code\Reflection\MethodReflection;
-use Zend\Code\Reflection\ParameterReflection;
+use Laminas\Code\Reflection\MethodReflection;
+use Laminas\Code\Reflection\ParameterReflection;
 
 /**
  * Class Repository
@@ -244,11 +244,11 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
             'parameters' => [
                 [
                     'name' => 'id',
-                    'type' => $parameterReflection->getType(),
+                    'type' => $this->getTypeHintText($parameterReflection->getType()),
                 ],
             ],
             'body' => $body,
-            'returnType' => $methodReflection->getReturnType(),
+            'returnType' => $this->getTypeHintText($methodReflection->getReturnType()),
             'docblock' => [
                 'shortDescription' => 'load entity',
                 'tags' => [
@@ -532,9 +532,9 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     protected function _getGetListMethod()
     {
         $body = "\$collection = \$this->" . $this->_getSourceCollectionFactoryPropertyName() . "->create();\n"
-        . "\$this->extensionAttributesJoinProcessor->process(\$collection);\n"
-        . "\$this->getCollectionProcessor()->process(\$searchCriteria, \$collection);\n"
-        . "return \$collection;\n";
+            . "\$this->extensionAttributesJoinProcessor->process(\$collection);\n"
+            . "\$this->getCollectionProcessor()->process(\$searchCriteria, \$collection);\n"
+            . "return \$collection;\n";
         return [
             'name' => 'getList',
             'parameters' => [
@@ -720,9 +720,9 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
         if (!empty($params[0])) {
             /** @var ParameterReflection $parameterReflection */
             $parameterReflection = $params[0];
-            $result['paramType'] = $parameterReflection->getType();
+            $result['paramType'] = $this->getTypeHintText($parameterReflection->getType());
         }
-        $result['returnType'] = $methodReflection->getReturnType();
+        $result['returnType'] = $this->getTypeHintText($methodReflection->getReturnType());
 
         return $result;
     }
@@ -739,5 +739,16 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
             $this->methodList = get_class_methods($name);
         }
         return $this->methodList;
+    }
+
+    /**
+     * Get the text of the type hint.
+     *
+     * @param \ReflectionType|null $type
+     * @return string|null
+     */
+    private function getTypeHintText($type)
+    {
+        return $type instanceof \ReflectionType ? $type->getName() : $type;
     }
 }

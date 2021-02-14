@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Code\Generator;
 
-use Zend\Code\Generator\ValueGenerator;
+use Laminas\Code\Generator\ValueGenerator;
 
 abstract class EntityAbstract
 {
@@ -183,7 +183,6 @@ abstract class EntityAbstract
      */
     protected function _getClassProperties()
     {
-        // protected $_objectManager = null;
         $objectManager = [
             'name' => '_objectManager',
             'visibility' => 'protected',
@@ -250,9 +249,9 @@ abstract class EntityAbstract
             $this->_addError('Source class ' . $sourceClassName . ' doesn\'t exist.');
             return false;
         } elseif (/**
-             * If makeResultFileDirectory only fails because the file is already created,
-             * a competing process has generated the file, no exception should be thrown.
-             */
+         * If makeResultFileDirectory only fails because the file is already created,
+         * a competing process has generated the file, no exception should be thrown.
+         */
             !$this->_ioObject->makeResultFileDirectory($resultClassName)
             && !$this->_ioObject->fileExists($resultDir)
         ) {
@@ -306,7 +305,6 @@ abstract class EntityAbstract
 
     /**
      * @param \ReflectionParameter $parameter
-     *
      * @return null|string
      */
     private function extractParameterType(
@@ -328,7 +326,7 @@ abstract class EntityAbstract
             }
 
             if ($parameter->allowsNull()) {
-                $typeName = '?' .$typeName;
+                $typeName = '?' . $typeName;
             }
         }
 
@@ -337,8 +335,8 @@ abstract class EntityAbstract
 
     /**
      * @param \ReflectionParameter $parameter
-     *
      * @return null|ValueGenerator
+     * @throws \ReflectionException
      */
     private function extractParameterDefaultValue(
         \ReflectionParameter $parameter
@@ -362,6 +360,7 @@ abstract class EntityAbstract
      *
      * @param \ReflectionParameter $parameter
      * @return array
+     * @throws \ReflectionException
      */
     protected function _getMethodParameterInfo(\ReflectionParameter $parameter)
     {
