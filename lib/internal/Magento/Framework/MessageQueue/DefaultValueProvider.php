@@ -37,7 +37,7 @@ class DefaultValueProvider
      * @param string $connection
      * @param string $exchange
      */
-    public function __construct(DeploymentConfig $config, $connection = 'db', $exchange = 'magento')
+    public function __construct(DeploymentConfig $config, $connection = 'amqp', $exchange = 'magento')
     {
         $this->config = $config;
         $this->connection = $this->config->get('queue/default_connection', $connection);
