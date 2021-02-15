@@ -3,10 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Model;
 
 /**
  * The interface represents the type of classes that handling of a new data collection for MBI.
+ *
+ * @api
  */
 interface ExportDataHandlerInterface
 {
