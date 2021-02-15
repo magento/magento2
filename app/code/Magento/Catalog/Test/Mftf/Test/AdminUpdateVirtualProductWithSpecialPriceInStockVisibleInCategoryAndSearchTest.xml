@@ -112,11 +112,15 @@
         <!-- Verify customer see updated virtual product on the magento storefront page and is searchable by sku -->
         <amOnPage url="{{StorefrontProductPage.url(updateVirtualProductSpecialPrice.urlKey)}}" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
-        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{updateVirtualProductSpecialPrice.sku}}" stepKey="fillVirtualProductName"/>
-        <waitForPageLoad stepKey="waitForSearchTextBox"/>
-        <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextBoxButton"/>
-        <waitForPageLoad stepKey="waitForSearch"/>
-        <see selector="{{StorefrontQuickSearchResultsSection.productLink}}" userInput="{{updateVirtualProductSpecialPrice.name}}" stepKey="seeVirtualProductName"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillVirtualProductName">
+            <argument name="phrase" value="{{updateVirtualProductSpecialPrice.sku}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearchTextBox"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchTextBoxButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearch"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeVirtualProductName">
+            <argument name="productName" value="{{updateVirtualProductSpecialPrice.name}}"/>
+        </actionGroup>
 
         <!--Verify customer see updated virtual product with special price(from above step) on product storefront page by url key -->
         <amOnPage url="{{StorefrontProductPage.url(updateVirtualProductSpecialPrice.urlKey)}}" stepKey="goToProductStorefrontPage"/>

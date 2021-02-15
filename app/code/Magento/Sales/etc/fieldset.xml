@@ -774,6 +774,9 @@
             <field name="fax">
                 <aspect name="to_quote_address" />
             </field>
+            <field name="vat_id">
+                <aspect name="to_quote_address" />
+            </field>
         </fieldset>
         <fieldset id="order_address">
             <field name="prefix">
