@@ -14,7 +14,6 @@ namespace Magento\Eav\Model\Entity\Attribute\Backend;
  * and performing pre and post actions
  *
  * @api
- *
  */
 interface BackendInterface
 {

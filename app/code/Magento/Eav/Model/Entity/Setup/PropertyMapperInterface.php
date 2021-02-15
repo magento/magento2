@@ -13,7 +13,6 @@ namespace Magento\Eav\Model\Entity\Setup;
  * Interface \Magento\Eav\Model\Entity\Setup\PropertyMapperInterface
  *
  * @api
- *
  */
 interface PropertyMapperInterface
 {
