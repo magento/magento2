@@ -84,7 +84,13 @@ class SessionTest extends TestCase
             ->getMock();
         $this->sessionConfig = $this->createPartialMock(
             \Magento\Framework\Session\Config::class,
-            ['getCookiePath', 'getCookieDomain', 'getCookieSecure', 'getCookieHttpOnly']
+            [
+                'getCookiePath',
+                'getCookieDomain',
+                'getCookieSecure',
+                'getCookieHttpOnly',
+                'getCookieSameSite'
+            ]
         );
         $this->aclBuilder = $this->getMockBuilder(Builder::class)
             ->disableOriginalConstructor()
@@ -193,6 +199,9 @@ class SessionTest extends TestCase
         $cookieMetadata->expects($this->once())
             ->method('setHttpOnly')
             ->with($httpOnly)->willReturnSelf();
+        $cookieMetadata->expects($this->once())
+            ->method('setSameSite')
+            ->willReturnSelf();
 
         $this->cookieMetadataFactory->expects($this->once())
             ->method('createPublicCookieMetadata')
@@ -218,6 +227,9 @@ class SessionTest extends TestCase
         $this->sessionConfig->expects($this->once())
             ->method('getCookieHttpOnly')
             ->willReturn($httpOnly);
+        $this->sessionConfig->expects($this->once())
+            ->method('getCookieSameSite')
+            ->willReturn('Lax');
 
         $this->session->prolong();
 
@@ -247,7 +259,9 @@ class SessionTest extends TestCase
             $this->storage->expects($this->once())->method('getUser')->willReturn($userMock);
         }
         if ($isAclDefined && $isUserDefined) {
+            // phpstan:ignore
             $userMock->expects($this->any())->method('getAclRole')->willReturn($userAclRole);
+            // phpstan:ignore
             $aclMock->expects($this->once())->method('isAllowed')->with($userAclRole)->willReturn($isAllowed);
         }
 
