@@ -68,7 +68,7 @@ class AuthorizationTest extends TestCase
         $this->request->setPost(new Parameters($data));
 
         /** @var Product $product */
-        $product = $this->productRepository->get('simple');
+        $product = $this->productRepository->get('simple_design_attribute');
 
         $product = $this->initializationHelper->initialize($product);
         $this->assertEquals('simple_new', $product->getName());
