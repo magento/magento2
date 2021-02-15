@@ -115,6 +115,7 @@ class PoisonPillApplyDuringSetupUpgradeTest extends TestCase
         $this->registry = $objectManager->getObject(Registry::class);
         $this->moduleListInterface = $this->createMock(ModuleListInterface::class);
         $this->moduleListInterface->method('getNames')->willReturn(['Magento_MessageQueue']);
+        $this->moduleListInterface->method('getOne')->with('Magento_MessageQueue')->willReturn(['setup_version'=>'']);
         $this->declarationInstaller = $this->createMock(DeclarationInstaller::class);
         $this->declarationInstaller->method('installSchema')->willReturn(true);
         $this->schemaListener = $this->createMock(SchemaListener::class);
@@ -123,7 +124,6 @@ class PoisonPillApplyDuringSetupUpgradeTest extends TestCase
         $this->patchApplierFactory = $this->createMock(PatchApplierFactory::class);
         $this->patchApplier = $this->createMock(PatchApplier::class);
         $this->patchApplier->method('applySchemaPatch')->willReturn(true);
-
         $this->patchApplierFactory->method('create')->willReturn($this->patchApplier);
         $this->objectManagerProvider = $this->createMock(ObjectManagerProvider::class);
         $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManager\ObjectManager::class);
@@ -174,10 +174,8 @@ class PoisonPillApplyDuringSetupUpgradeTest extends TestCase
                 'cache_tag',
                 'flag'
             );
-
         $this->setupFactory = $this->createMock(SetupFactory::class);
         $this->setupFactory->method('create')->willReturn($this->schemaSetupInterface);
-
         $this->installer = $objectManager->getObject(
             Installer::class,
             [
