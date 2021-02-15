@@ -203,8 +203,6 @@ class PatchApplierTest extends TestCase
      */
     public function testApplyDataPatchForAlias($moduleName, $dataPatches, $moduleVersionInDb)
     {
-        $this->expectException('Exception');
-        $this->expectExceptionMessageMatches('"Unable to apply data patch .+ cannot be applied twice"');
         $this->dataPatchReaderMock->expects($this->once())
             ->method('read')
             ->with($moduleName)
@@ -516,8 +514,6 @@ class PatchApplierTest extends TestCase
      */
     public function testSchemaPatchApplyForPatchAlias($moduleName, $schemaPatches, $moduleVersionInDb)
     {
-        $this->expectException('Exception');
-        $this->expectExceptionMessageMatches('"Unable to apply patch .+ cannot be applied twice"');
         $this->schemaPatchReaderMock->expects($this->once())
             ->method('read')
             ->with($moduleName)
