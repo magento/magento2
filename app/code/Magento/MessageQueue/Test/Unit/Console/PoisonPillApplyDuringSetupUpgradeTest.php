@@ -155,6 +155,7 @@ class PoisonPillApplyDuringSetupUpgradeTest extends TestCase
         $this->adapterInterface->method('isTableExists')->willReturn(true);
         $this->adapterInterface->method('getTables')->willReturn([]);
         $this->adapterInterface->method('getSchemaListener')->willReturn($this->schemaListener);
+        $this->adapterInterface->method('describeTable')->willReturn(false);
         $this->resourceConnection = $objectManager->getObject(\Magento\Framework\App\ResourceConnection::class);
         $this->schemaSetupInterface = $this->createMock(\Magento\Framework\Setup\SchemaSetupInterface::class);
         $this->schemaSetupInterface->method('getConnection')->willReturn($this->adapterInterface);
