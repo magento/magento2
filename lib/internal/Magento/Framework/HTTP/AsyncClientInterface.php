@@ -13,6 +13,8 @@ use Magento\Framework\HTTP\AsyncClient\Request;
 
 /**
  * Asynchronous HTTP client.
+ *
+ * @api
  */
 interface AsyncClientInterface
 {
