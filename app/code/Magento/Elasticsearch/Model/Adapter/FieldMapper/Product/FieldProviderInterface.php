@@ -10,6 +10,8 @@ namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product;
 /**
  * Product fields provider.
  * Provide fields mapping configuration for elasticsearch service of internal product attributes.
+ *
+ * @api
  */
 interface FieldProviderInterface
 {
