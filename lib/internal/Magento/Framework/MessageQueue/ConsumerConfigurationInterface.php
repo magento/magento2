@@ -7,6 +7,7 @@ namespace Magento\Framework\MessageQueue;
 
 /**
  * Configuration for the consumer.
+ * @api
  */
 interface ConsumerConfigurationInterface
 {
