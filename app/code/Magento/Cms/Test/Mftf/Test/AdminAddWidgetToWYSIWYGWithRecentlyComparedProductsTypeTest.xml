@@ -51,8 +51,8 @@
         <selectOption selector="{{WidgetSection.ProductAttribute}}" userInput="Name" stepKey="selectProductAttributes" />
         <selectOption selector="{{WidgetSection.ButtonToShow}}" userInput="Add to Cart" stepKey="selectBtnToShow" />
         <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="Compared Products Grid Template" stepKey="selectTemplate" />
-        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading" />
+        <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidget"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoading"/>
         <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab" />
         <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
         <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
