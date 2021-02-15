@@ -14,6 +14,8 @@ namespace Magento\GraphQl\Model\Query;
  * - Class must extend ContextParametersProcessorInterface.
  * - Implement execute method which adds additional data to the context though extension attributes.
  * - This data will be present in each resolver.
+ *
+ * @api
  */
 interface ContextParametersProcessorInterface
 {
