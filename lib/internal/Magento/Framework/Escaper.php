@@ -258,18 +258,17 @@ class Escaper
      */
     public function escapeHtmlAttr($string, $escapeSingleQuote = true)
     {
+        $string = (string)$string;
+
         if ($escapeSingleQuote) {
             $translateInline = $this->getTranslateInline();
 
-            if ($translateInline->isAllowed()) {
-                return $this->inlineSensitiveEscapeHthmlAttr((string) $string);
-            }
-
-            return $this->getEscaper()
-                ->escapeHtmlAttr((string) $string);
+            return $translateInline->isAllowed()
+                ? $this->inlineSensitiveEscapeHthmlAttr($string)
+                : $this->getEscaper()->escapeHtmlAttr($string);
         }
 
-        return htmlspecialchars((string)$string, $this->htmlSpecialCharsFlag, 'UTF-8', false);
+        return htmlspecialchars($string, $this->htmlSpecialCharsFlag, 'UTF-8', false);
     }
 
     /**
