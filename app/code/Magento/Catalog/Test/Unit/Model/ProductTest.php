@@ -508,28 +508,17 @@ class ProductTest extends TestCase
     /**
      * @dataProvider getSingleStoreIds
      * @param bool $isObjectNew
+     * @return void
      */
-    public function testGetStoreSingleSiteModelIds(
-        bool $isObjectNew
-    ) {
+    public function testGetStoreSingleSiteModelIds(bool $isObjectNew): void
+    {
         $websiteIDs = [0 => 2];
-        $this->model->setWebsiteIds(
-            !$isObjectNew ? $websiteIDs : array_flip($websiteIDs)
-        );
+        $this->model->setWebsiteIds(!$isObjectNew ? $websiteIDs : array_flip($websiteIDs));
 
         $this->model->isObjectNew($isObjectNew);
 
-        $this->storeManager->expects(
-            $this->exactly(
-                (int)!$isObjectNew
-            )
-        )
-            ->method('isSingleStoreMode')
-            ->willReturn(true);
-
-        $this->website->expects(
-            $this->once()
-        )->method('getStoreIds')
+        $this->website->expects($this->once())
+            ->method('getStoreIds')
             ->willReturn($websiteIDs);
 
         $this->assertEquals($websiteIDs, $this->model->getStoreIds());
