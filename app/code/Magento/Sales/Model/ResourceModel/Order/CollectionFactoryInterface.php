@@ -8,6 +8,7 @@ namespace Magento\Sales\Model\ResourceModel\Order;
 
 /**
  * Class CollectionFactoryInterface
+ * @api
  */
 interface CollectionFactoryInterface
 {

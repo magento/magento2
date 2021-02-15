@@ -12,6 +12,7 @@ use Magento\Sales\Api\Data\ShipmentItemInterface;
 
 /**
  * Format shipment items for GraphQl output
+ * @api
  */
 interface FormatterInterface
 {

@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\ResourceModel\Provider;
 
 /**
  * Interface provides entities id list that should be updated in grid
+ * @api
  */
 interface NotSyncedDataProviderInterface
 {
