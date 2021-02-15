@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\App\Action;
 
+use Magento\Backend\App\AbstractAction;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;

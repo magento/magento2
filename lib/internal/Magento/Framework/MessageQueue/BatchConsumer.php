@@ -10,7 +10,6 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfig;
 
 /**
- * Class BatchConsumer
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BatchConsumer implements ConsumerInterface
@@ -74,9 +73,7 @@ class BatchConsumer implements ConsumerInterface
      * @param ConsumerConfigurationInterface $configuration
      * @param int $interval [optional]
      * @param int $batchSize [optional]
-     * @param MessageProcessorLoader $messageProcessorLoader [optional]
-     * @param MessageController $messageController [optional]
-     * @param ConsumerConfig $consumerConfig [optional]
+     * @param MessageProcessorLoader|null $messageProcessorLoader [optional]
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -103,7 +100,7 @@ class BatchConsumer implements ConsumerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process($maxNumberOfMessages = null)
     {
