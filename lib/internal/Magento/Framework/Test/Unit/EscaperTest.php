@@ -181,9 +181,9 @@ class EscaperTest extends TestCase
      * @param string $input
      * @param string $output
      * @return void
-     * @dataProvider escapeHtmlAttrWithInlineProvider
+     * @dataProvider escapeHtmlAttributeWithInlineTranslateEnabledDataProvider
      */
-    public function testEscapeHtmlAttrWithInline(string $input, string $output): void
+    public function testEscapeHtmlAttributeWithInlineTranslateEnabled(string $input, string $output): void
     {
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $this->translateInline,
@@ -209,7 +209,7 @@ class EscaperTest extends TestCase
      *
      * @return array
      */
-    public function escapeHtmlAttrWithInlineProvider(): array
+    public function escapeHtmlAttributeWithInlineTranslateEnabledDataProvider(): array
     {
         return [
             [

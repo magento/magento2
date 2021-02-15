@@ -495,22 +495,27 @@ class Escaper
     private function inlineSensitiveEscapeHthmlAttr(string $text): string
     {
         $escaper = $this->getEscaper();
+        $textLength = strlen($text);
+
+        if ($textLength < 6) {
+            return $escaper->escapeHtmlAttr($text);
+        }
+
         $firstCharacters = substr($text, 0, 3);
         $lastCharacters = substr($text, -3, 3);
 
-        if ($firstCharacters === '{{{' && $lastCharacters === '}}}') {
-            $textLength = strlen($text);
-            $text = substr($text, 3, $textLength - 6);
-            $strings = explode('}}{{', $text);
-            $escapedStrings = [];
-
-            foreach ($strings as $string) {
-                $escapedStrings[] = $escaper->escapeHtmlAttr($string);
-            }
-
-            return '{{{' . implode('}}{{', $escapedStrings) . '}}}';
+        if ($firstCharacters !== '{{{' || $lastCharacters !== '}}}') {
+            return $escaper->escapeHtmlAttr($text);
         }
 
-        return $escaper->escapeHtmlAttr($text);
+        $text = substr($text, 3, $textLength - 6);
+        $strings = explode('}}{{', $text);
+        $escapedStrings = [];
+
+        foreach ($strings as $string) {
+            $escapedStrings[] = $escaper->escapeHtmlAttr($string);
+        }
+
+        return '{{{' . implode('}}{{', $escapedStrings) . '}}}';
     }
 }
