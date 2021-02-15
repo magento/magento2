@@ -9,6 +9,7 @@ namespace Magento\MediaGallerySynchronizationApi\Api;
 
 /**
  * Synchronize assets from the media storage to database
+ * @api
  */
 interface SynchronizeInterface
 {

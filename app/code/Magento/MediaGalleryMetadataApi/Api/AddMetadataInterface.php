@@ -13,6 +13,7 @@ use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 
 /**
  * Add metadata to asset file
+ * @api
  */
 interface AddMetadataInterface
 {
