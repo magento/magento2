@@ -242,15 +242,15 @@ class Copier
         $urlRewriteCollection->addFieldToFilter(UrlRewrite::ENTITY_TYPE, self::ENTITY_TYPE)
             ->addFieldToFilter(UrlRewrite::REQUEST_PATH, $urlKey . $this->getUrlSuffix());
 
-        return !empty($urlRewriteCollection->getSize());
+        return $urlRewriteCollection->getSize() !== 0;
     }
 
     /**
      * Returns default product url suffix config
      *
-     * @return string
+     * @return string|null
      */
-    private function getUrlSuffix(): string
+    private function getUrlSuffix(): ?string
     {
         return $this->scopeConfig->getValue(ProductUrlPathGenerator::XML_PATH_PRODUCT_URL_SUFFIX);
     }
