@@ -20,9 +20,12 @@ use Magento\Catalog\Model\ResourceModel\Product as ProductResourceModel;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Eav\Model\Entity\AbstractEntity;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
+use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollectionFactory;
+use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -69,6 +72,16 @@ class CopierTest extends TestCase
     private $metadata;
 
     /**
+     * @var ScopeConfigInterface|MockObject
+     */
+    private $scopeConfigMock;
+
+    /**
+     * @var UrlRewriteCollection|MockObject
+     */
+    private $urlRewriteCollectionMock;
+
+    /**
      * @ingeritdoc
      */
     protected function setUp(): void
@@ -78,6 +91,14 @@ class CopierTest extends TestCase
         $this->scopeOverriddenValueMock = $this->createMock(ScopeOverriddenValue::class);
         $this->optionRepositoryMock = $this->createMock(Repository::class);
         $this->productMock = $this->createMock(Product::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+
+        $this->urlRewriteCollectionMock = $this->createMock(UrlRewriteCollection::class);
+        $this->urlRewriteCollectionMock->method('addFieldToFilter')
+            ->willReturnSelf();
+        $urlRewriteCollectionFactoryMock = $this->createMock(UrlRewriteCollectionFactory::class);
+        $urlRewriteCollectionFactoryMock->method('create')
+            ->willReturn($this->urlRewriteCollectionMock);
 
         $this->metadata = $this->getMockBuilder(EntityMetadata::class)
             ->disableOriginalConstructor()
@@ -95,7 +116,9 @@ class CopierTest extends TestCase
             $this->productFactoryMock,
             $this->scopeOverriddenValueMock,
             $this->optionRepositoryMock,
-            $metadataPool
+            $metadataPool,
+            $this->scopeConfigMock,
+            $urlRewriteCollectionFactoryMock
         );
     }
 
@@ -144,22 +167,9 @@ class CopierTest extends TestCase
             true,
             ['checkAttributeUniqueValue']
         );
-        $entityMock->expects($this->once())
-            ->method('checkAttributeUniqueValue')
-            ->willReturn(true);
-
-        $attributeMock = $this->getMockForAbstractClass(
-            AbstractAttribute::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getEntity']
-        );
-        $attributeMock->expects($this->once())
-            ->method('getEntity')
-            ->willReturn($entityMock);
+        $this->urlRewriteCollectionMock->expects($this->once())
+            ->method('getSize')
+            ->willReturn(0);
 
         $resourceMock = $this->getMockBuilder(ProductResourceModel::class)
             ->disableOriginalConstructor()
@@ -168,9 +178,6 @@ class CopierTest extends TestCase
         $resourceMock->expects($this->once())
             ->method('getAttributeRawValue')
             ->willReturn('urk-key-1');
-        $resourceMock->expects($this->exactly(2))
-            ->method('getAttribute')
-            ->willReturn($attributeMock);
 
         $this->productMock->expects($this->exactly(2))
             ->method('getResource')
@@ -301,9 +308,9 @@ class CopierTest extends TestCase
             true,
             ['checkAttributeUniqueValue']
         );
-        $entityMock->expects($this->exactly(11))
-            ->method('checkAttributeUniqueValue')
-            ->willReturn(true, false);
+        $this->urlRewriteCollectionMock->expects($this->once())
+            ->method('getSize')
+            ->willReturn(0);
 
         $attributeMock = $this->getMockForAbstractClass(
             AbstractAttribute::class,
