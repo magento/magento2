@@ -10,6 +10,8 @@ namespace Magento\Framework\Filter\DirectiveProcessor;
 
 /**
  * Transforms the output of a directive processor
+ *
+ * @api
  */
 interface FilterInterface
 {
