@@ -3,13 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Model;
 
+use Magento\Catalog\Model\Product\TypeFactory;
+use Magento\Catalog\Model\ResourceModel\ConfigFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory;
+use Magento\Framework\App\Cache\StateInterface;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Validator\UniversalFactory;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Catalog config model.
+ *
+ * @api
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -22,117 +33,122 @@ class Config extends \Magento\Eav\Model\Config
     /**
      * @var mixed
      */
-    protected $_attributeSetsById;
+    private $_attributeSetsById;
 
     /**
      * @var mixed
      */
-    protected $_attributeSetsByName;
+    private $_attributeSetsByName;
 
     /**
      * @var mixed
      */
-    protected $_attributeGroupsById;
+    private $_attributeGroupsById;
 
     /**
      * @var mixed
      */
-    protected $_attributeGroupsByName;
+    private $_attributeGroupsByName;
 
     /**
      * @var mixed
      */
-    protected $_productTypesById;
+    private $_productTypesById;
+
+    /**
+     * @var mixed
+     */
+    private $_productTypesByName;
 
     /**
      * Array of attributes codes needed for product load
      *
      * @var array
      */
-    protected $_productAttributes;
+    private $_productAttributes;
 
     /**
      * Product Attributes used in product listing
      *
      * @var array
      */
-    protected $_usedInProductListing;
+    private $_usedInProductListing;
 
     /**
      * Product Attributes For Sort By
      *
      * @var array
      */
-    protected $_usedForSortBy;
+    private $_usedForSortBy;
 
     /**
      * @var int|float|string|null
      */
-    protected $_storeId = null;
+    private $_storeId = null;
 
     /**
      * Core store config
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
-    protected $_scopeConfig;
+    private $_scopeConfig;
 
     /**
      * Eav config
      *
      * @var \Magento\Eav\Model\Config
      */
-    protected $_eavConfig;
+    private $_eavConfig;
 
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
-    protected $_storeManager;
+    private $_storeManager;
 
     /**
      * Set collection factory
      *
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory
+     * @var CollectionFactory
      */
-    protected $_setCollectionFactory;
+    private $_setCollectionFactory;
 
     /**
      * Group collection factory
      *
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory
      */
-    protected $_groupCollectionFactory;
+    private $_groupCollectionFactory;
 
     /**
      * Product type factory
      *
-     * @var \Magento\Catalog\Model\Product\TypeFactory
+     * @var TypeFactory
      */
-    protected $_productTypeFactory;
+    private $_productTypeFactory;
 
     /**
      * Config factory
      *
-     * @var \Magento\Catalog\Model\ResourceModel\ConfigFactory
+     * @var ConfigFactory
      */
-    protected $_configFactory;
+    private $_configFactory;
 
     /**
      * Constructor
      *
-     * @param \Magento\Framework\App\CacheInterface $cache
+     * @param CacheInterface $cache
      * @param \Magento\Eav\Model\Entity\TypeFactory $entityTypeFactory
      * @param \Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory $entityTypeCollectionFactory,
-     * @param \Magento\Framework\App\Cache\StateInterface $cacheState
-     * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Catalog\Model\ResourceModel\ConfigFactory $configFactory
-     * @param \Magento\Catalog\Model\Product\TypeFactory $productTypeFactory
+     * @param StateInterface $cacheState
+     * @param UniversalFactory $universalFactory
+     * @param ScopeConfigInterface $scopeConfig
+     * @param ConfigFactory $configFactory
+     * @param TypeFactory $productTypeFactory
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory
-     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $setCollectionFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param CollectionFactory $setCollectionFactory
+     * @param StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param SerializerInterface $serializer
      * @param array $attributesForPreload
@@ -140,17 +156,17 @@ class Config extends \Magento\Eav\Model\Config
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\App\CacheInterface $cache,
+        CacheInterface $cache,
         \Magento\Eav\Model\Entity\TypeFactory $entityTypeFactory,
         \Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory $entityTypeCollectionFactory,
-        \Magento\Framework\App\Cache\StateInterface $cacheState,
-        \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Catalog\Model\ResourceModel\ConfigFactory $configFactory,
-        \Magento\Catalog\Model\Product\TypeFactory $productTypeFactory,
+        StateInterface $cacheState,
+        UniversalFactory $universalFactory,
+        ScopeConfigInterface $scopeConfig,
+        ConfigFactory $configFactory,
+        TypeFactory $productTypeFactory,
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory,
-        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $setCollectionFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        CollectionFactory $setCollectionFactory,
+        StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $eavConfig,
         SerializerInterface $serializer = null,
         $attributesForPreload = []
@@ -182,14 +198,14 @@ class Config extends \Magento\Eav\Model\Config
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Catalog\Model\ResourceModel\Config::class);
+        $this->_init(ResourceModel\Config::class);
     }
 
     /**
      * Set store id
      *
      * @param integer $storeId
-     * @return \Magento\Catalog\Model\Config
+     * @return Config
      */
     public function setStoreId($storeId)
     {
@@ -421,7 +437,7 @@ class Config extends \Magento\Eav\Model\Config
     /**
      * Retrieve resource model
      *
-     * @return \Magento\Catalog\Model\ResourceModel\Config
+     * @return ResourceModel\Config
      */
     protected function _getResource()
     {

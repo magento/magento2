@@ -3,40 +3,46 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+namespace Magento\Catalog\Model\Layer\Filter;
+
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\UrlInterface;
+use Magento\Theme\Block\Html\Pager;
 
 /**
  * Filter item model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
-namespace Magento\Catalog\Model\Layer\Filter;
-
-class Item extends \Magento\Framework\DataObject
+class Item extends DataObject
 {
     /**
      * Url
      *
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
-    protected $_url;
+    private $_url;
 
     /**
      * Html pager block
      *
-     * @var \Magento\Theme\Block\Html\Pager
+     * @var Pager
      */
-    protected $_htmlPagerBlock;
+    private $_htmlPagerBlock;
 
     /**
      * Construct
      *
-     * @param \Magento\Framework\UrlInterface $url
-     * @param \Magento\Theme\Block\Html\Pager $htmlPagerBlock
+     * @param UrlInterface $url
+     * @param Pager $htmlPagerBlock
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\UrlInterface $url,
-        \Magento\Theme\Block\Html\Pager $htmlPagerBlock,
+        UrlInterface $url,
+        Pager $htmlPagerBlock,
         array $data = []
     ) {
         $this->_url = $url;
@@ -47,14 +53,14 @@ class Item extends \Magento\Framework\DataObject
     /**
      * Get filter instance
      *
-     * @return \Magento\Catalog\Model\Layer\Filter\AbstractFilter
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return AbstractFilter
+     * @throws LocalizedException
      */
     public function getFilter()
     {
         $filter = $this->getData('filter');
         if (!is_object($filter)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('The filter must be an object. Please set the correct filter.')
             );
         }

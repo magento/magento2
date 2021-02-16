@@ -3,35 +3,58 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Model\Type;
 
+use Magento\Checkout\Helper\Data;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory as CustomerDataFactory;
 use Magento\Customer\Api\Data\GroupInterface;
+use Magento\Customer\Model\AccountManagement;
+use Magento\Customer\Model\AddressFactory;
+use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\CustomerFactory;
+use Magento\Customer\Model\FormFactory;
 use Magento\Customer\Model\Metadata\Form;
+use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Url;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\DataObject\Copy;
+use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Math\Random;
+use Magento\Payment\Model\Method\AbstractMethod;
+use Magento\Quote\Api\CartManagementInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\TotalsCollector;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+use Magento\Sales\Model\OrderFactory;
+use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
+ * Checkout onepage
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Onepage
+class Onepage implements OnepageInterface
 {
-    /**
-     * Checkout types: Checkout as Guest, Register, Logged In Customer
-     */
-    const METHOD_GUEST    = 'guest';
-    const METHOD_REGISTER = 'register';
-    const METHOD_CUSTOMER = 'customer';
-    const USE_FOR_SHIPPING = 1;
-    const NOT_USE_FOR_SHIPPING = 0;
 
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var Session
      */
     protected $_customerSession;
 
@@ -41,66 +64,66 @@ class Onepage
     protected $_checkoutSession;
 
     /**
-     * @var \Magento\Quote\Model\Quote
+     * @var Quote
      */
     protected $_quote = null;
 
     /**
-     * @var \Magento\Checkout\Helper\Data
+     * @var Data
      */
     protected $_helper;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $_logger;
 
     /**
      * Customer url
      *
-     * @var \Magento\Customer\Model\Url
+     * @var Url
      */
     protected $_customerUrl;
 
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
     protected $_eventManager = null;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface
+     * @var RequestInterface
      */
     protected $_request;
 
     /**
-     * @var \Magento\Customer\Model\AddressFactory
+     * @var AddressFactory
      */
     protected $_customrAddrFactory;
 
     /**
-     * @var \Magento\Customer\Model\FormFactory
+     * @var FormFactory
      */
     protected $_customerFormFactory;
 
     /**
-     * @var \Magento\Customer\Model\CustomerFactory
+     * @var CustomerFactory
      */
     protected $_customerFactory;
 
     /**
-     * @var \Magento\Sales\Model\OrderFactory
+     * @var OrderFactory
      */
     protected $_orderFactory;
 
     /**
-     * @var \Magento\Framework\DataObject\Copy
+     * @var Copy
      */
     protected $_objectCopyService;
 
@@ -120,7 +143,7 @@ class Onepage
     protected $customerDataFactory;
 
     /**
-     * @var \Magento\Framework\Math\Random
+     * @var Random
      */
     protected $mathRandom;
 
@@ -140,7 +163,7 @@ class Onepage
     protected $orderSender;
 
     /**
-     * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @var CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -150,84 +173,84 @@ class Onepage
     protected $customerRepository;
 
     /**
-     * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
+     * @var ExtensibleDataObjectConverter
      */
     protected $extensibleDataObjectConverter;
 
     /**
-     * @var \Magento\Quote\Api\CartManagementInterface
+     * @var CartManagementInterface
      */
     protected $quoteManagement;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper
+     * @var DataObjectHelper
      */
     protected $dataObjectHelper;
 
     /**
-     * @var \Magento\Quote\Model\Quote\TotalsCollector
+     * @var TotalsCollector
      */
     protected $totalsCollector;
 
     /**
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Checkout\Helper\Data $helper
-     * @param \Magento\Customer\Model\Url $customerUrl
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param ManagerInterface $eventManager
+     * @param Data $helper
+     * @param Url $customerUrl
+     * @param LoggerInterface $logger
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Customer\Model\AddressFactory $customrAddrFactory
-     * @param \Magento\Customer\Model\FormFactory $customerFormFactory
-     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
-     * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Framework\DataObject\Copy $objectCopyService
+     * @param Session $customerSession
+     * @param StoreManagerInterface $storeManager
+     * @param RequestInterface $request
+     * @param AddressFactory $customrAddrFactory
+     * @param FormFactory $customerFormFactory
+     * @param CustomerFactory $customerFactory
+     * @param OrderFactory $orderFactory
+     * @param Copy $objectCopyService
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
      * @param CustomerDataFactory $customerDataFactory
-     * @param \Magento\Framework\Math\Random $mathRandom
-     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
+     * @param Random $mathRandom
+     * @param EncryptorInterface $encryptor
      * @param AddressRepositoryInterface $addressRepository
      * @param AccountManagementInterface $accountManagement
      * @param OrderSender $orderSender
      * @param CustomerRepositoryInterface $customerRepository
-     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
-     * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
-     * @param \Magento\Quote\Api\CartManagementInterface $quoteManagement
-     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
+     * @param CartRepositoryInterface $quoteRepository
+     * @param ExtensibleDataObjectConverter $extensibleDataObjectConverter
+     * @param CartManagementInterface $quoteManagement
+     * @param DataObjectHelper $dataObjectHelper
+     * @param TotalsCollector $totalsCollector
      * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Checkout\Helper\Data $helper,
-        \Magento\Customer\Model\Url $customerUrl,
-        \Psr\Log\LoggerInterface $logger,
+        ManagerInterface $eventManager,
+        Data $helper,
+        Url $customerUrl,
+        LoggerInterface $logger,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\RequestInterface $request,
-        \Magento\Customer\Model\AddressFactory $customrAddrFactory,
-        \Magento\Customer\Model\FormFactory $customerFormFactory,
-        \Magento\Customer\Model\CustomerFactory $customerFactory,
-        \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Framework\DataObject\Copy $objectCopyService,
+        Session $customerSession,
+        StoreManagerInterface $storeManager,
+        RequestInterface $request,
+        AddressFactory $customrAddrFactory,
+        FormFactory $customerFormFactory,
+        CustomerFactory $customerFactory,
+        OrderFactory $orderFactory,
+        Copy $objectCopyService,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Customer\Model\Metadata\FormFactory $formFactory,
         CustomerDataFactory $customerDataFactory,
-        \Magento\Framework\Math\Random $mathRandom,
-        \Magento\Framework\Encryption\EncryptorInterface $encryptor,
+        Random $mathRandom,
+        EncryptorInterface $encryptor,
         AddressRepositoryInterface $addressRepository,
         AccountManagementInterface $accountManagement,
         OrderSender $orderSender,
         CustomerRepositoryInterface $customerRepository,
-        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
-        \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
-        \Magento\Quote\Api\CartManagementInterface $quoteManagement,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
+        CartRepositoryInterface $quoteRepository,
+        ExtensibleDataObjectConverter $extensibleDataObjectConverter,
+        CartManagementInterface $quoteManagement,
+        DataObjectHelper $dataObjectHelper,
+        TotalsCollector $totalsCollector
     ) {
         $this->_eventManager = $eventManager;
         $this->_customerUrl = $customerUrl;
@@ -272,7 +295,7 @@ class Onepage
     /**
      * Quote object getter
      *
-     * @return \Magento\Quote\Model\Quote
+     * @return Quote
      */
     public function getQuote()
     {
@@ -285,11 +308,11 @@ class Onepage
     /**
      * Declare checkout quote instance
      *
-     * @param \Magento\Quote\Model\Quote $quote
+     * @param Quote $quote
      * @return $this
      * @codeCoverageIgnore
      */
-    public function setQuote(\Magento\Quote\Model\Quote $quote)
+    public function setQuote(Quote $quote)
     {
         $this->_quote = $quote;
         return $this;
@@ -298,7 +321,7 @@ class Onepage
     /**
      * Get customer session object
      *
-     * @return \Magento\Customer\Model\Session
+     * @return Session
      * @codeCoverageIgnore
      */
     public function getCustomerSession()
@@ -515,11 +538,11 @@ class Onepage
         }
 
         $data['checks'] = [
-            \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_CHECKOUT,
-            \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_COUNTRY,
-            \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_CURRENCY,
-            \Magento\Payment\Model\Method\AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX,
-            \Magento\Payment\Model\Method\AbstractMethod::CHECK_ZERO_TOTAL,
+            AbstractMethod::CHECK_USE_CHECKOUT,
+            AbstractMethod::CHECK_USE_FOR_COUNTRY,
+            AbstractMethod::CHECK_USE_FOR_CURRENCY,
+            AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX,
+            AbstractMethod::CHECK_ZERO_TOTAL,
         ];
 
         $payment = $quote->getPayment();
@@ -536,20 +559,20 @@ class Onepage
      * Validate quote state to be integrated with one page checkout process
      *
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function validate()
     {
         $quote = $this->getQuote();
 
         if ($quote->isMultipleShippingAddresses()) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('There are more than one shipping addresses.')
             );
         }
 
         if ($quote->getCheckoutMethod() == self::METHOD_GUEST && !$this->_helper->isAllowedGuestCheckout($quote)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Sorry, guest checkout is not available.'));
+            throw new LocalizedException(__('Sorry, guest checkout is not available.'));
         }
     }
 
@@ -561,7 +584,7 @@ class Onepage
     protected function _prepareGuestQuote()
     {
         $quote = $this->getQuote();
-        $quote->setCustomerId(null)
+        $quote->setCustomerId(0)
             ->setCustomerEmail($quote->getBillingAddress()->getEmail())
             ->setCustomerIsGuest(true)
             ->setCustomerGroupId(GroupInterface::NOT_LOGGED_IN_ID);
@@ -585,9 +608,9 @@ class Onepage
         $this->dataObjectHelper->populateWithArray(
             $customer,
             $dataArray,
-            \Magento\Customer\Api\Data\CustomerInterface::class
+            CustomerInterface::class
         );
-        $quote->setCustomer($customer)->setCustomerId(true);
+        $quote->setCustomer($customer)->setCustomerId(1);
 
         $customerBillingData->setIsDefaultBilling(true);
 
@@ -664,7 +687,7 @@ class Onepage
     {
         $customer = $this->getQuote()->getCustomer();
         $confirmationStatus = $this->accountManagement->getConfirmationStatus($customer->getId());
-        if ($confirmationStatus === \Magento\Customer\Model\AccountManagement::ACCOUNT_CONFIRMATION_REQUIRED) {
+        if ($confirmationStatus === AccountManagement::ACCOUNT_CONFIRMATION_REQUIRED) {
             $url = $this->_customerUrl->getEmailConfirmationUrl($customer->getEmail());
             $this->messageManager->addSuccessMessage(
                 // @codingStandardsIgnoreStart
@@ -758,7 +781,7 @@ class Onepage
      *
      * @param string $email
      * @param int $websiteId
-     * @return false|\Magento\Customer\Model\Customer
+     * @return false|Customer
      * @codeCoverageIgnore
      */
     protected function _customerEmailExists($email, $websiteId = null)

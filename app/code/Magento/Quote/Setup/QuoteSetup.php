@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Setup;
 
 use Magento\Eav\Model\Entity\Setup\Context;
@@ -10,10 +12,15 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Ddl\Table;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
  * Quote module setup class
+ *
+ * @api
  *
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  * @codeCoverageIgnore
@@ -23,12 +30,12 @@ class QuoteSetup extends EavSetup
     /**
      * @var ScopeConfigInterface
      */
-    protected $_config;
+    private $_config;
 
     /**
-     * @var \Magento\Framework\Encryption\EncryptorInterface
+     * @var EncryptorInterface
      */
-    protected $_encryptor;
+    private $_encryptor;
 
     /**
      * @var string
@@ -59,7 +66,7 @@ class QuoteSetup extends EavSetup
      *
      * @var $_flatEntityTables array
      */
-    protected $_flatEntityTables = [
+    private $_flatEntityTables = [
         'quote' => 'quote',
         'quote_item' => 'quote_item',
         'quote_address' => 'quote_address',
@@ -74,7 +81,7 @@ class QuoteSetup extends EavSetup
      * @param string $table
      * @return bool
      */
-    protected function _flatTableExist($table)
+    private function _flatTableExist($table)
     {
         $tablesList = $this->getConnection()->listTables();
         return in_array(
@@ -114,7 +121,7 @@ class QuoteSetup extends EavSetup
      * @param array $attr
      * @return $this
      */
-    protected function _addFlatAttribute($table, $attribute, $attr)
+    private function _addFlatAttribute($table, $attribute, $attr)
     {
         $tableInfo = $this->getConnection()
             ->describeTable($this->getTable($table));
@@ -138,7 +145,7 @@ class QuoteSetup extends EavSetup
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _getAttributeColumnDefinition($code, $data)
+    private function _getAttributeColumnDefinition($code, $data)
     {
         // Convert attribute type to column info
         $data['type'] = isset($data['type']) ? $data['type'] : 'varchar';
@@ -146,25 +153,25 @@ class QuoteSetup extends EavSetup
         $length = null;
         switch ($data['type']) {
             case 'timestamp':
-                $type = \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP;
+                $type = Table::TYPE_TIMESTAMP;
                 break;
             case 'datetime':
-                $type = \Magento\Framework\DB\Ddl\Table::TYPE_DATETIME;
+                $type = Table::TYPE_DATETIME;
                 break;
             case 'decimal':
-                $type = \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL;
+                $type = Table::TYPE_DECIMAL;
                 $length = '12,4';
                 break;
             case 'int':
-                $type = \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER;
+                $type = Table::TYPE_INTEGER;
                 break;
             case 'text':
-                $type = \Magento\Framework\DB\Ddl\Table::TYPE_TEXT;
+                $type = Table::TYPE_TEXT;
                 $length = 65536;
                 break;
             case 'char':
             case 'varchar':
-                $type = \Magento\Framework\DB\Ddl\Table::TYPE_TEXT;
+                $type = Table::TYPE_TEXT;
                 $length = 255;
                 break;
         }
@@ -189,7 +196,7 @@ class QuoteSetup extends EavSetup
     }
 
     /**
-     * @return \Magento\Framework\Encryption\EncryptorInterface
+     * @return EncryptorInterface
      */
     public function getEncryptor()
     {
@@ -199,7 +206,7 @@ class QuoteSetup extends EavSetup
     /**
      * Get quote connection
      *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @return AdapterInterface
      */
     public function getConnection()
     {
