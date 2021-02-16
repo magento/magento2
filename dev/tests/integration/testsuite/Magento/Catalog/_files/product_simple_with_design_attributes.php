@@ -42,5 +42,5 @@ $product->setTypeId(Type::TYPE_SIMPLE)
     ->setCustomDesignTo('2020-01-03')
     ->setHasOptions(true);
 /** @var ProductRepositoryInterface $productRepositoryFactory */
-$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
 $productRepository->save($product);
