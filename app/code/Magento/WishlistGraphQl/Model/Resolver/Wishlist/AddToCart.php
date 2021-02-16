@@ -59,7 +59,7 @@ class AddToCart implements ResolverInterface
     /**
      * @var LocaleQuantityProcessor
      */
-    protected $quantityProcessor;
+    private $quantityProcessor;
 
     /**
      * @var CreateEmptyCartForCustomer
@@ -84,6 +84,7 @@ class AddToCart implements ResolverInterface
      * @param WishlistDataMapper $wishlistDataMapper
      * @param LocaleQuantityProcessor $quantityProcessor
      * @param CreateEmptyCartForCustomer $createEmptyCartForCustomer
+     * @param AddProductsToCartService $addProductsToCart
      * @param CartItemsRequestBuilder $cartItemsRequestBuilder
      */
     public function __construct(
