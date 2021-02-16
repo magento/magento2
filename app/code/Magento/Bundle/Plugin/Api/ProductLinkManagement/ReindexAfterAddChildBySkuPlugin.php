@@ -13,9 +13,9 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Indexer\Product\Full;
 
 /**
- * Reindex bundle product after child has been updated.
+ * Reindex bundle product after child has been added.
  */
-class ReindexAfterSaveChildPlugin
+class ReindexAfterAddChildBySkuPlugin
 {
     /**
      * @var Full
@@ -38,19 +38,19 @@ class ReindexAfterSaveChildPlugin
     }
 
     /**
-     * Reindex bundle product after child has been updated.
+     * Reindex bundle product after child has been added.
      *
      * @param ProductLinkManagementInterface $subject
-     * @param bool $result
+     * @param int $result
      * @param string $sku
-     * @return bool
+     * @return int
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterSaveChild(
+    public function afterAddChildByProductSku(
         ProductLinkManagementInterface $subject,
-        bool $result,
+        int $result,
         string $sku
-    ): bool {
+    ): int {
         $bundleProduct = $this->productRepository->get($sku, true);
         $this->indexer->executeRow($bundleProduct->getId());
 
