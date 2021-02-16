@@ -196,6 +196,10 @@ class GuestTest extends TestCase
             ->method('setHttpOnly')
             ->with(true)
             ->willReturnSelf();
+        $metaDataMock->expects($this->once())
+            ->method('setSameSite')
+            ->with('Lax')
+            ->willReturnSelf();
         $this->cookieMetadataFactoryMock->expects($this->once())
             ->method('createPublicCookieMetadata')
             ->willReturn($metaDataMock);
@@ -278,6 +282,10 @@ class GuestTest extends TestCase
         $metaDataMock->expects($this->once())
             ->method('setHttpOnly')
             ->with(true)
+            ->willReturnSelf();
+        $metaDataMock->expects($this->once())
+            ->method('setSameSite')
+            ->with('Lax')
             ->willReturnSelf();
         $this->cookieMetadataFactoryMock->expects($this->once())
             ->method('createPublicCookieMetadata')
