@@ -301,7 +301,7 @@ class PatchApplier
     {
         if ($dataPatchAliases = $dataPatch->getAliases()) {
             foreach ($dataPatchAliases as $patchAlias) {
-                return $this->patchHistory->isApplied($patchAlias);
+                return $this->patchHistory->isApplied($patchAlias) ?? true;
             }
         }
         return false;
