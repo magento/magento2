@@ -32,4 +32,8 @@
     </type>
     <preference for="Magento\Newsletter\Model\SubscriptionManagerInterface"
                 type="Magento\Newsletter\Model\SubscriptionManager"/>
+    <type name="Magento\Newsletter\Model\Subscriber">
+        <plugin name="remove_subscriber_from_queue_after_unsubscribe"
+                type="Magento\Newsletter\Model\Plugin\RemoveSubscriberFromQueue"/>
+    </type>
 </config>
