@@ -1361,7 +1361,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function getAddressesCollection()
     {
-        $region = $this->regionFactory->create();
         $collection = $this->_addressCollectionFactory->create()->setOrderFilter($this);
         if ($this->getId()) {
             foreach ($collection as $address) {
@@ -1370,6 +1369,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
                         $address->setRegion($this->regionItems[$address->getCountryId()][$address->getRegion()]);
                     }
                 } else {
+                    $region = $this->regionFactory->create();
                     $region->loadByName($address->getRegion(), $address->getCountryId());
                     $this->regionItems[$address->getCountryId()][$address->getRegion()] = $region->getName();
                     if ($region->getName()) {
