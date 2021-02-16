@@ -114,7 +114,7 @@ class CurrentUrlRewritesRegenerator
     {
         if ($category->getData('save_rewrites_history')) {
             $targetPath = $this->categoryUrlPathGenerator->getUrlPathWithSuffix($category, $storeId);
-            if ($url->getRequestPath() !== $targetPath) {
+            if (strtolower($url->getRequestPath()) !== strtolower($targetPath)) {
                 $generatedUrl = clone $this->urlRewritePrototype;
                 $generatedUrl->setEntityType(CategoryUrlRewriteGenerator::ENTITY_TYPE)
                     ->setEntityId($category->getEntityId())
