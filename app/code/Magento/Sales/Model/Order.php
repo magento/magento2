@@ -320,7 +320,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     private $regionItems;
 
     /**
-     * @var RegionResource|null
+     * @var RegionResource
      */
     private $regionResource;
 
