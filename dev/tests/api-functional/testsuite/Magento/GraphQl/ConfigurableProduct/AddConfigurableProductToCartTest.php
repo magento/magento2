@@ -417,6 +417,44 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @magentoApiDataFixture Magento/Store/_files/second_store.php
+     */
+    public function testAddConfigurableProductToCartWithDifferentStoreHeader()
+    {
+        $searchResponse = $this->graphQlQuery($this->getFetchProductQuery('configurable'));
+        $product = current($searchResponse['products']['items']);
+
+        $quantity = 2;
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $parentSku = $product['sku'];
+        $sku = 'simple_20';
+        $attributeId = (int) $product['configurable_options'][0]['attribute_id'];
+        $optionId = $product['configurable_options'][0]['values'][1]['value_index'];
+
+        $query = $this->getQuery(
+            $maskedQuoteId,
+            $parentSku,
+            $sku,
+            $quantity
+        );
+        $headerMap = ['Store' => 'fixture_second_store'];
+        $response = $this->graphQlMutation($query, [], '', $headerMap);
+
+        $cartItem = current($response['addConfigurableProductsToCart']['cart']['items']);
+        self::assertEquals($quantity, $cartItem['quantity']);
+        self::assertEquals($parentSku, $cartItem['product']['sku']);
+        self::assertArrayHasKey('configurable_options', $cartItem);
+
+        $option = current($cartItem['configurable_options']);
+        self::assertEquals($attributeId, $option['id']);
+        self::assertEquals($optionId, $option['value_id']);
+        self::assertArrayHasKey('option_label', $option);
+        self::assertArrayHasKey('value_label', $option);
+    }
+
+    /**
      * @magentoConfigFixture default_store checkout/cart/configurable_product_image itself
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_child_products_with_images.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
