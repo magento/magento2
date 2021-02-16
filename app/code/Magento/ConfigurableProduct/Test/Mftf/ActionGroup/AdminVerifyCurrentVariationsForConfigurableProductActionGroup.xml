@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminVerifyCurrentVariationsForConfigurableProductActionGroup">
+        <annotations>
+            <description>Verify product data for the specified row in the Configurations Current Variations grid on the
+                Edit Product page in admin for a Configurable Product.</description>
+        </annotations>
+        <arguments>
+            <argument name="image" defaultValue="Magento_Catalog/images/product/placeholder/thumbnail.jpg" type="string"/>
+            <argument name="name" defaultValue="{{_defaultProduct.name}}" type="string"/>
+            <argument name="sku" defaultValue="{{_defaultProduct.sku}}" type="string"/>
+            <argument name="price" defaultValue="${{_defaultProduct.price}}" type="string"/>
+            <argument name="quantity" defaultValue="{{_defaultProduct.quantity}}" type="string"/>
+            <argument name="weight" defaultValue="{{_defaultProduct.weight}}" type="string"/>
+            <argument name="status" defaultValue="Enabled" type="string"/>
+            <argument name="attributes" type="string"/>
+            <argument name="index" defaultValue="1" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminProductFormConfigurationsSection.currentVariationsProductImage(index)}}" stepKey="waitForProductImage"/>
+        <grabAttributeFrom userInput="src" selector="{{AdminProductFormConfigurationsSection.currentVariationsProductImage(index)}}" stepKey="grabProductImageSrc"/>
+        <assertStringContainsString stepKey="assertProductImageSrc">
+            <expectedResult type="string">{{image}}</expectedResult>
+            <actualResult type="variable">$grabProductImageSrc</actualResult>
+        </assertStringContainsString>
+        <see userInput="{{name}}" selector="{{AdminProductFormConfigurationsSection.currentVariationsProductName(index)}}" stepKey="seeProductName"/>
+        <see userInput="{{sku}}" selector="{{AdminProductFormConfigurationsSection.currentVariationsProductSku(index)}}" stepKey="seeProductSku"/>
+        <see userInput="{{price}}" selector="{{AdminProductFormConfigurationsSection.currentVariationsProductPrice(index)}}" stepKey="seeProductPrice"/>
+        <see userInput="{{quantity}}" selector="{{AdminProductFormConfigurationsSection.currentVariationsProductQuantity(index)}}" stepKey="seeProductQuantity"/>
+        <see userInput="{{weight}}" selector="{{AdminProductFormConfigurationsSection.currentVariationsProductWeight(index)}}" stepKey="seeProductWeight"/>
+        <see userInput="{{status}}" selector="{{AdminProductFormConfigurationsSection.currentVariationsProductStatus(index)}}" stepKey="seeProductStatus"/>
+        <see userInput="{{attributes}}" selector="{{AdminProductFormConfigurationsSection.currentVariationsProductAttributes(index)}}" stepKey="seeProductAttributes"/>
+    </actionGroup>
+</actionGroups>
