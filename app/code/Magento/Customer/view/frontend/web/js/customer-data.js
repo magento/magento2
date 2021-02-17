@@ -358,7 +358,13 @@ define([
             return deferred.promise();
         },
 
-        onAjaxComplete: function(event, xhr, settings) {
+        /**
+         * Reload sections on ajax complete
+         *
+         * @param {Object} jsonResponse
+         * @param {Object} settings
+         */
+        onAjaxComplete: function(jsonResponse, settings) {
             var sections,
                 redirects;
 
@@ -369,7 +375,7 @@ define([
                     this.invalidate(sections);
                     redirects = ['redirect', 'backUrl'];
 
-                    if (_.isObject(xhr.responseJSON) && !_.isEmpty(_.pick(xhr.responseJSON, redirects))) { //eslint-disable-line
+                    if (_.isObject(jsonResponse) && !_.isEmpty(_.pick(jsonResponse, redirects))) { //eslint-disable-line
                         return;
                     }
                     this.reload(sections, true);
@@ -395,7 +401,7 @@ define([
      * Events listener
      */
     $(document).on('ajaxComplete', function (event, xhr, settings) {
-        customerData.onAjaxComplete(event, xhr, settings);
+        customerData.onAjaxComplete(xhr.responseJSON, settings);
     });
 
     /**
