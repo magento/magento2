@@ -39,6 +39,13 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     protected $storeManager;
 
     /**
+     * Attribute data key that indicates whether it should be used for rules
+     *
+     * @var string
+     */
+    protected $_isUsedForRuleProperty = 'is_used_for_promo_rules';
+
+    /**
      * @param \Magento\Rule\Model\Condition\Context $context
      * @param \Magento\Backend\Helper\Data $backendData
      * @param \Magento\Eav\Model\Config $config
@@ -97,6 +104,13 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 
         $attributes = [];
         foreach ($productAttributes as $attribute) {
+            /* @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+            if (!$attribute->isAllowedForRuleCondition() || !$attribute->getDataUsingMethod(
+                    $this->_isUsedForRuleProperty
+                )
+            ) {
+                continue;
+            }
             $attributes[$attribute->getAttributeCode()] = $attribute->getFrontendLabel();
         }
 
