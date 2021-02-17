@@ -98,11 +98,15 @@ class ArgumentsReader
      */
     private function processType(\ReflectionClass $class, \Laminas\Code\Reflection\ParameterReflection $parameter)
     {
+        $type = $parameter->detectType();
+
+        if ($type === 'array') {
+            return 'array';
+        }
+
         if ($parameter->getClass()) {
             return NamespaceResolver::NS_SEPARATOR . $parameter->getClass()->getName();
         }
-
-        $type =  $parameter->detectType();
 
         if ($type === 'null') {
             return null;
