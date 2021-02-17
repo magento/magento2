@@ -9,6 +9,7 @@ namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\CatalogImportExport\Model\Import\ProductImport;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\File\Csv;
@@ -22,10 +23,11 @@ use Magento\ImportExport\Model\Import\Source\Csv as CsvSource;
 use Magento\ImportExport\Model\Import\Source\CsvFactory;
 use Magento\MysqlMq\Model\Driver\Queue;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\MysqlMq\DeleteTopicRelatedMessages;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Checks that import with not exist images will fail
+ * Checks import behaviour if specified images do not exist
  *
  * @see \Magento\CatalogImportExport\Model\Import\Product
  *
@@ -33,6 +35,9 @@ use PHPUnit\Framework\TestCase;
  */
 class ImportWithNotExistImagesTest extends TestCase
 {
+    /** @var string */
+    const TOPIC = 'import_export.export';
+
     /** @var ObjectManagerInterface */
     private $objectManager;
 
@@ -69,6 +74,20 @@ class ImportWithNotExistImagesTest extends TestCase
     /**
      * @inheritdoc
      */
+    public static function setUpBeforeClass(): void
+    {
+        parent::setUpBeforeClass();
+
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var  DeleteTopicRelatedMessages $deleteMessages */
+        $deleteMessages = $objectManager->get(DeleteTopicRelatedMessages::class);
+        $deleteMessages->execute(self::TOPIC);
+    }
+
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -83,6 +102,7 @@ class ImportWithNotExistImagesTest extends TestCase
         $this->csvFactory = $this->objectManager->get(CsvFactory::class);
         $this->fileSystem = $this->objectManager->get(Filesystem::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->productRepository->cleanCache();
     }
 
     /**
@@ -102,19 +122,19 @@ class ImportWithNotExistImagesTest extends TestCase
      *
      * @return void
      */
-    public function testImportFailure(): void
+    public function testImportWithUnexistingImages(): void
     {
         $this->exportProducts();
-        $this->assertTrue($this->directory->isExist($this->filePath));
-        $csv = $this->csvReader->getData($this->directory->getAbsolutePath($this->filePath));
-        $this->assertCount(2, $csv);
-        $this->updateExportFile();
+        $this->assertTrue($this->directory->isExist($this->filePath), 'Products were not imported to file');
+        $fileContent = $this->csvReader->getData($this->directory->getAbsolutePath($this->filePath));
+        $this->assertCount(2, $fileContent);
+        $this->updateFileImagesToInvalidValues();
         $this->import->setParameters([
             'entity' => Product::ENTITY,
             'behavior' => ImportModel::BEHAVIOR_ADD_UPDATE,
         ]);
         $this->assertImportErrors();
-        $this->assertProductNoHaveChanges();
+        $this->assertProductImages('/m/a/magento_image.jpg', 'simple');
     }
 
     /**
@@ -125,7 +145,7 @@ class ImportWithNotExistImagesTest extends TestCase
     private function exportProducts(): void
     {
         $envelope = $this->queue->dequeue();
-        $decodedMessage = $this->messageEncoder->decode('import_export.export', $envelope->getBody());
+        $decodedMessage = $this->messageEncoder->decode(self::TOPIC, $envelope->getBody());
         $this->consumer->process($decodedMessage);
         $this->filePath = 'export/' . $decodedMessage->getFileName();
     }
@@ -135,14 +155,18 @@ class ImportWithNotExistImagesTest extends TestCase
      *
      * @return void
      */
-    private function updateExportFile(): void
+    private function updateFileImagesToInvalidValues(): void
     {
         $absolutePath = $this->directory->getAbsolutePath($this->filePath);
         $csv = $this->csvReader->getData($absolutePath);
-        foreach ($csv[1] as $key => $data) {
-            if ($data === '/m/a/magento_image.jpg') {
-                $csv[1][$key] = '/m/a/invalid_image.jpg';
-            }
+        $imagesKeys = ['base_image', 'small_image', 'thumbnail_image'];
+        $imagesPositions = [];
+        foreach ($imagesKeys as $key) {
+            $imagesPositions[] = array_search($key, $csv[0]);
+        }
+
+        foreach ($imagesPositions as $imagesPosition) {
+            $csv[1][$imagesPosition] = '/m/a/invalid_image.jpg';
         }
 
         $this->csvReader->appendData($absolutePath, $csv);
@@ -169,27 +193,34 @@ class ImportWithNotExistImagesTest extends TestCase
      */
     private function assertImportErrors(): void
     {
-        $errors = $this->import->setSource($this->prepareFile($this->filePath))->validateData();
-        $this->assertEmpty($errors->getAllErrors());
+        $validationErrors = $this->import->setSource($this->prepareFile($this->filePath))->validateData();
+        $this->assertEmpty($validationErrors->getAllErrors());
+        $this->import->getErrorAggregator()->clear();
         $this->import->importData();
-        $this->assertEquals(1, $errors->getErrorsCount());
-        $error = $errors->getAllErrors()[0];
-        $this->assertEquals('mediaUrlNotAvailable', $error->getErrorCode());
+        $importErrors = $this->import->getErrorAggregator()->getAllErrors();
+        $this->assertCount(1, $importErrors);
+        $importError = reset($importErrors);
+        $this->assertEquals(
+            RowValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE,
+            $importError->getErrorCode()
+        );
         $errorMsg = (string)__('Imported resource (image) could not be downloaded ' .
             'from external resource due to timeout or access permissions');
-        $this->assertEquals($errorMsg, $error->getErrorMessage());
+        $this->assertEquals($errorMsg, $importError->getErrorMessage());
     }
 
     /**
      * Assert product images were not changed after import
      *
+     * @param string $imageName
+     * @param string $productSku
      * @return void
      */
-    private function assertProductNoHaveChanges(): void
+    private function assertProductImages(string $imageName, string $productSku): void
     {
-        $product = $this->productRepository->get('simple');
-        $this->assertEquals('/m/a/magento_image.jpg', $product->getImage());
-        $this->assertEquals('/m/a/magento_image.jpg', $product->getSmallImage());
-        $this->assertEquals('/m/a/magento_image.jpg', $product->getThumbnail());
+        $product = $this->productRepository->get($productSku);
+        $this->assertEquals($imageName, $product->getImage());
+        $this->assertEquals($imageName, $product->getSmallImage());
+        $this->assertEquals($imageName, $product->getThumbnail());
     }
 }
