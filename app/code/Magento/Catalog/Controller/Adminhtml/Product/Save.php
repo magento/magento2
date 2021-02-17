@@ -6,20 +6,28 @@
 
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
-use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Controller\Adminhtml\Product;
+use Magento\Catalog\Model\Product\Copier;
+use Magento\Catalog\Model\Product\TypeTransitionManager;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\Escaper;
+use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Product save controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements HttpPostActionInterface
+class Save extends Product implements HttpPostActionInterface
 {
     /**
      * @var Initialization\Helper
@@ -27,22 +35,22 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
     protected $initializationHelper;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Copier
+     * @var Copier
      */
     protected $productCopier;
 
     /**
-     * @var \Magento\Catalog\Model\Product\TypeTransitionManager
+     * @var TypeTransitionManager
      */
     protected $productTypeManager;
 
     /**
-     * @var \Magento\Catalog\Api\CategoryLinkManagementInterface
+     * @var CategoryLinkManagementInterface
      */
     protected $categoryLinkManagement;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var ProductRepositoryInterface
      */
     protected $productRepository;
 
@@ -57,61 +65,66 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
     private $storeManager;
 
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     private $escaper;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     private $logger;
 
     /**
+     * @var ProductFactory
+     */
+    private $productFactory;
+
+    /**
      * Save constructor.
      *
-     * @param Action\Context $context
+     * @param Context $context
      * @param Builder $productBuilder
      * @param Initialization\Helper $initializationHelper
-     * @param \Magento\Catalog\Model\Product\Copier $productCopier
-     * @param \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Framework\Escaper $escaper
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement
-     * @param StoreManagerInterface $storeManager
+     * @param Copier $productCopier
+     * @param TypeTransitionManager $productTypeManager
+     * @param ProductRepositoryInterface $productRepository
+     * @param Escaper|null $escaper
+     * @param LoggerInterface|null $logger
+     * @param CategoryLinkManagementInterface|null $categoryLinkManagement
+     * @param StoreManagerInterface|null $storeManager
+     * @param ProductFactory|null $productFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
+        Context $context,
         Product\Builder $productBuilder,
         Initialization\Helper $initializationHelper,
-        \Magento\Catalog\Model\Product\Copier $productCopier,
-        \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Framework\Escaper $escaper = null,
-        \Psr\Log\LoggerInterface $logger = null,
-        \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement = null,
-        \Magento\Store\Model\StoreManagerInterface $storeManager = null
+        Copier $productCopier,
+        TypeTransitionManager $productTypeManager,
+        ProductRepositoryInterface $productRepository,
+        Escaper $escaper = null,
+        LoggerInterface $logger = null,
+        CategoryLinkManagementInterface $categoryLinkManagement = null,
+        StoreManagerInterface $storeManager = null,
+        ?ProductFactory $productFactory = null
     ) {
         parent::__construct($context, $productBuilder);
         $this->initializationHelper = $initializationHelper;
         $this->productCopier = $productCopier;
         $this->productTypeManager = $productTypeManager;
         $this->productRepository = $productRepository;
-        $this->escaper = $escaper ?: ObjectManager::getInstance()
-            ->get(\Magento\Framework\Escaper::class);
-        $this->logger = $logger ?: ObjectManager::getInstance()
-            ->get(\Psr\Log\LoggerInterface::class);
+        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
         $this->categoryLinkManagement = $categoryLinkManagement ?: ObjectManager::getInstance()
-            ->get(\Magento\Catalog\Api\CategoryLinkManagementInterface::class);
-        $this->storeManager = $storeManager ?: ObjectManager::getInstance()
-            ->get(\Magento\Store\Model\StoreManagerInterface::class);
+            ->get(CategoryLinkManagementInterface::class);
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->productFactory = $productFactory ?: ObjectManager::getInstance()->get(ProductFactory::class);
     }
 
     /**
      * Save product action
      *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -166,7 +179,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
 
                 if ($redirectBack === 'duplicate') {
                     $product->unsetData('quantity_and_stock_status');
-                    $newProduct = $this->productCopier->copy($product);
+                    $newProduct = $this->productCopier->copy($product, $this->productFactory->create());
                     $this->checkUniqueAttributes($product);
                     $this->messageManager->addSuccessMessage(__('You duplicated the product.'));
                 }

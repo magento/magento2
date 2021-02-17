@@ -8,8 +8,7 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\ProductRepository;
-use Magento\Framework\ObjectManagerInterface;
+use Magento\Catalog\Model\ProductFactory;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -31,6 +30,11 @@ class CopierTest extends TestCase
     private $productRepository;
 
     /**
+     * @var ProductFactory
+     */
+    private $productFactory;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -38,6 +42,7 @@ class CopierTest extends TestCase
         $objectManager = Bootstrap::getObjectManager();
         $this->copier = $objectManager->get(Copier::class);
         $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
+        $this->productFactory = $objectManager->get(ProductFactory::class);
     }
 
     /**
@@ -53,7 +58,8 @@ class CopierTest extends TestCase
     {
         $productSKU = 'simple_100';
         $product = $this->productRepository->get($productSKU);
-        $duplicate = $this->copier->copy($product);
+        $newProduct = $this->productFactory->create();
+        $duplicate = $this->copier->copy($product, $newProduct);
 
         $duplicateStoreView = $this->productRepository->getById($duplicate->getId(), false, Store::DISTRO_STORE_ID);
         $productStoreView = $this->productRepository->get($productSKU, false, Store::DISTRO_STORE_ID);
@@ -76,7 +82,7 @@ class CopierTest extends TestCase
     public function testProductCopyWithExistingUrlKeyPermanentType(): void
     {
         $product = $this->productRepository->get('simple');
-        $duplicate = $this->copier->copy($product);
+        $duplicate = $this->copier->copy($product, $this->productFactory->create());
 
         $data = [
             'url_key' => 'new-url-key',
@@ -86,7 +92,7 @@ class CopierTest extends TestCase
         $duplicate->addData($data);
         $this->productRepository->save($duplicate);
 
-        $secondDuplicate = $this->copier->copy($product);
+        $secondDuplicate = $this->copier->copy($product, $this->productFactory->create());
 
         $this->assertNotNull($secondDuplicate->getId());
     }
