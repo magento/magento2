@@ -114,6 +114,6 @@
         <seeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, NewWebSiteData.name)}}" stepKey="checkSecondWebsitesInDropDownSecondTime"/>
         <!-- Check if created tax attribute is saved -->
         <comment userInput="Check if created tax attribute is saved" stepKey="checkTaxAttributeIsSaved"/>
-        <seeInField selector="{{AdminProductAddFPTValueSection.setTaxValueForFPT($$createProductFPTAttribute.attribute_code$$)}}" userInput="10" stepKey="checkTaxAttributeSaved"/>
+        <seeInField selector="{{AdminProductAddFPTValueSection.setTaxValueForFPT($$createProductFPTAttribute.attribute_code$$)}}" userInput="10.0000" stepKey="checkTaxAttributeSaved"/>
     </test>
 </tests>

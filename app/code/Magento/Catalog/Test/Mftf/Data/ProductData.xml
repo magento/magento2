@@ -965,7 +965,7 @@
         <data key="quantity">89</data>
         <data key="status">In Stock</data>
         <data key="storefrontStatus">IN STOCK</data>
-        <data key="weight">89.0000</data>
+        <data key="weight">89</data>
         <data key="visibility">Search</data>
         <data key="type_id">simple</data>
         <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
@@ -978,7 +978,7 @@
         <data key="quantity">25</data>
         <data key="status">Out of Stock</data>
         <data key="storefrontStatus">OUT OF STOCK</data>
-        <data key="weight">125.0000</data>
+        <data key="weight">125</data>
         <data key="type_id">simple</data>
         <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
     </entity>
@@ -990,7 +990,7 @@
         <data key="quantity">200</data>
         <data key="status">In Stock</data>
         <data key="storefrontStatus">IN STOCK</data>
-        <data key="weight">120.0000</data>
+        <data key="weight">120</data>
         <data key="visibility">Catalog, Search</data>
         <data key="type_id">simple</data>
         <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
@@ -1003,7 +1003,7 @@
         <data key="quantity">125</data>
         <data key="status">In Stock</data>
         <data key="storefrontStatus">IN STOCK</data>
-        <data key="weight">25.0000</data>
+        <data key="weight">25</data>
         <data key="visibility">Catalog</data>
         <data key="type_id">simple</data>
         <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
@@ -1045,7 +1045,7 @@
         <data key="quantity">200</data>
         <data key="status">In Stock</data>
         <data key="storefrontStatus">IN STOCK</data>
-        <data key="weight">120.0000</data>
+        <data key="weight">120</data>
         <data key="type_id">simple</data>
         <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
     </entity>
@@ -1056,7 +1056,7 @@
         <data key="price">74.00</data>
         <data key="quantity">87</data>
         <data key="status">In Stock</data>
-        <data key="weight">333.0000</data>
+        <data key="weight">333</data>
         <data key="type_id">simple</data>
         <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
     </entity>
@@ -1067,7 +1067,7 @@
         <data key="price">325.00</data>
         <data key="quantity">123</data>
         <data key="status">In Stock</data>
-        <data key="weight">129.0000</data>
+        <data key="weight">129</data>
         <data key="visibility">Not Visible Individually</data>
         <data key="type_id">simple</data>
         <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
