@@ -6,12 +6,13 @@
 
 /**
  * @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Form\Account
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
 
-<div class="admin__page-section-title <?= $block->escapeHtmlAttr($block->getHeaderCssClass()) ?>">
-    <span class="title"><?= $block->escapeHtml($block->getHeaderText()) ?></span>
+<div class="admin__page-section-title <?= $escaper->escapeHtmlAttr($block->getHeaderCssClass()) ?>">
+    <span class="title"><?= $escaper->escapeHtml($block->getHeaderText()) ?></span>
     <div class="actions"></div>
 </div>
 <div id="customer_account_fields" class="admin__page-section-content">

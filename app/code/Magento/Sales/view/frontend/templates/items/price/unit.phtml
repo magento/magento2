@@ -4,10 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer $block */
+/**
+ * @var \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 $_item = $block->getItem();
 ?>
-<span class="price-excluding-tax" data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?>">
+<span class="price-excluding-tax" data-label="<?= $escaper->escapeHtml(__('Excl. Tax')) ?>">
     <span class="cart-price">
         <?= /* @noEscape */ $block->getOrder()->formatPrice($block->getItem()->getPrice()) ?>
     </span>

@@ -4,6 +4,11 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php /** @var $block \Magento\Sales\Block\Order\Info */ ?>
+<?php
+/**
+ * @var $block \Magento\Sales\Block\Order\Info
+ * @var \Magento\Framework\Escaper $escaper
+ */
+?>
 
-<span class="order-status"><?= $block->escapeHtml($block->getOrder()->getStatusLabel()) ?></span>
+<span class="order-status"><?= $escaper->escapeHtml($block->getOrder()->getStatusLabel()) ?></span>

@@ -6,6 +6,7 @@
 
 /**
  * @var \Magento\Sales\Block\Adminhtml\Order\View\Items $block
+ * @var \Magento\Framework\Escaper $escaper
  */
 $_order = $block->getOrder() ?>
 <div class="admin__table-wrapper">
@@ -17,7 +18,7 @@ $_order = $block->getOrder() ?>
                 $lastItemNumber = count($columns) ?>
                 <?php foreach ($columns as $columnName => $columnTitle) : ?>
                     <?php $i++; ?>
-                    <th class="col-<?= $block->escapeHtmlAttr($columnName) ?><?= /* @noEscape */ ($i === $lastItemNumber ? ' last' : '') ?>"><span><?= $block->escapeHtml($columnTitle) ?></span></th>
+                    <th class="col-<?= $escaper->escapeHtmlAttr($columnName) ?><?= /* @noEscape */ ($i === $lastItemNumber ? ' last' : '') ?>"><span><?= $escaper->escapeHtml($columnTitle) ?></span></th>
                 <?php endforeach; ?>
             </tr>
         </thead>

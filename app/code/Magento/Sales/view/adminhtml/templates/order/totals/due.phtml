@@ -4,11 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/**
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <?php if ($block->getCanDisplayTotalDue()): ?>
 <tr id="total-due">
-    <td class="label"><strong><?= $block->escapeHtml(__('Total Due')) ?></strong></td>
+    <td class="label"><strong><?= $escaper->escapeHtml(__('Total Due')) ?></strong></td>
 
     <td class="emph"><?= /* @noEscape */ $block->displayPriceAttribute('total_due', true) ?></td>
 </tr>

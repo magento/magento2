@@ -4,13 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/**
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <?php $_source  = $block->getSource() ?>
 <?php if ($_source): ?>
     <tr>
         <td class="label">
-            <?= $block->escapeHtml($block->getShippingLabel()) ?>
+            <?= $escaper->escapeHtml($block->getShippingLabel()) ?>
             <div id="shipping_amount_adv"></div>
         </td>
         <td>
@@ -23,7 +26,7 @@
     </tr>
     <tr>
         <td class="label">
-            <?= $block->escapeHtml(__('Adjustment Refund')) ?>
+            <?= $escaper->escapeHtml(__('Adjustment Refund')) ?>
             <div id="adjustment_positive_adv"></div>
         </td>
         <td>
@@ -36,7 +39,7 @@
     </tr>
     <tr>
         <td class="label">
-            <?= $block->escapeHtml(__('Adjustment Fee')) ?>
+            <?= $escaper->escapeHtml(__('Adjustment Fee')) ?>
             <div id="adjustment_negative_adv"></div>
         </td>
         <td>
@@ -52,7 +55,7 @@
                 Validation.addAllThese([
                     [
                         'not-negative-amount',
-                        '{$block->escapeJs(__('Please enter a positive number in this field.'))}',
+                        '{$escaper->escapeJs(__('Please enter a positive number in this field.'))}',
                         function (v) {
                             if (v.length)
                                 return /^\s*\d+([,.]\d+)*\s*%?\s*$/.test(v);

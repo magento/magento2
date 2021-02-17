@@ -387,7 +387,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
             $result = $formatTypeRenderer->renderArray($this->addressMapper->toFlatArray($address));
         }
 
-        return $this->escapeHtml($result);
+        return $this->_escaper->escapeHtml($result);
     }
 
     /**

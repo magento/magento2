@@ -67,13 +67,13 @@ class DefaultItems extends Template
             return sprintf(
                 '%d',
                 $value['qty']
-            ) . ' x ' . $this->escapeHtml(
+            ) . ' x ' . $this->_escaper->escapeHtml(
                 $value['title']
             ) . " " . $this->getItem()->getOrder()->formatPrice(
                 $value['price']
             );
         } else {
-            return $this->escapeHtml($value);
+            return $this->_escaper->escapeHtml($value);
         }
     }
 

@@ -4,10 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Sales\Block\Adminhtml\Order\Create\Items $block */
+/**
+ * @var \Magento\Sales\Block\Adminhtml\Order\Create\Items $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <div class="admin__page-section-title">
-    <strong class="title"><?= $block->escapeHtml($block->getHeaderText()) ?></strong>
+    <strong class="title"><?= $escaper->escapeHtml($block->getHeaderText()) ?></strong>
     <div class="actions">
         <?= $block->getButtonsHtml() ?>
     </div>

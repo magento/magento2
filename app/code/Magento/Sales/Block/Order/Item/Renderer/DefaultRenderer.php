@@ -223,7 +223,7 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
      */
     public function prepareSku($sku)
     {
-        return $this->escapeHtml($this->string->splitInjection($sku));
+        return $this->_escaper->escapeHtml($this->string->splitInjection($sku));
     }
 
     /**

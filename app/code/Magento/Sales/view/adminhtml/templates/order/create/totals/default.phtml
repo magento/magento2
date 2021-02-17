@@ -4,12 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/**
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
-<tr id="totals-default" class="<?= $block->escapeHtmlAttr($block->getTotal()->getCode()) ?> row-totals">
+<tr id="totals-default" class="<?= $escaper->escapeHtmlAttr($block->getTotal()->getCode()) ?> row-totals">
     <td class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
         <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()): ?><strong><?php endif; ?>
-            <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
+            <?= $escaper->escapeHtml($block->getTotal()->getTitle()) ?>
         <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()): ?></strong><?php endif; ?>
     </td>
     <td class="admin__total-amount">
@@ -18,13 +21,13 @@
         <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()): ?></strong><?php endif; ?>
     </td>
 </tr>
-<?php if ($block->escapeHtmlAttr($block->getTotal()->getStyle())): ?>
+<?php if ($escaper->escapeHtmlAttr($block->getTotal()->getStyle())): ?>
     <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-        $block->escapeHtmlAttr($block->getTotal()->getStyle()),
+        $escaper->escapeHtmlAttr($block->getTotal()->getStyle()),
         'tr#totals-default td.admin__total-mark'
     ) ?>
     <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-        $block->escapeHtmlAttr($block->getTotal()->getStyle()),
+        $escaper->escapeHtmlAttr($block->getTotal()->getStyle()),
         'tr#totals-default td.admin__total-amount'
     ) ?>
 <?php endif; ?>
