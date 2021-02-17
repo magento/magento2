@@ -53,7 +53,8 @@ interface RendererInterface
      *
      * @param array $addressAttributes
      * @param Format|null $format
+     * @param string|null $locale
      * @return string
      */
-    public function renderArray($addressAttributes, $format = null);
+    public function renderArray($addressAttributes, $format = null, $locale = null);
 }

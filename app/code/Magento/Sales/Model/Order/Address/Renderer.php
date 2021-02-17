@@ -7,8 +7,11 @@
 namespace Magento\Sales\Model\Order\Address;
 
 use Magento\Customer\Model\Address\Config as AddressConfig;
+use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Sales\Model\Order\Address;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class Renderer used for formatting an order address
@@ -28,17 +31,25 @@ class Renderer
     protected $eventManager;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
      * Constructor
      *
      * @param AddressConfig $addressConfig
      * @param EventManager $eventManager
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         AddressConfig $addressConfig,
-        EventManager $eventManager
+        EventManager $eventManager,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->addressConfig = $addressConfig;
         $this->eventManager = $eventManager;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -56,6 +67,11 @@ class Renderer
             return null;
         }
         $this->eventManager->dispatch('customer_address_format', ['type' => $formatType, 'address' => $address]);
-        return $formatType->getRenderer()->renderArray($address->getData());
+        $locale = $this->scopeConfig->getValue(
+            DirectoryHelper::XML_PATH_DEFAULT_LOCALE,
+            ScopeInterface::SCOPE_STORES,
+            $address->getOrder()->getStoreId()
+        );
+        return $formatType->getRenderer()->renderArray($address->getData(), null, $locale);
     }
 }
