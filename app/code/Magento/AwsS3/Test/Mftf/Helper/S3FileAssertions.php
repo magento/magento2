@@ -93,6 +93,49 @@ class S3FileAssertions extends Helper
     }
 
     /**
+     * Copy source into destination
+     *
+     * @param string $source
+     * @param string $destination
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function copy($source, $destination): void
+    {
+        $this->driver->copy($source, $destination);
+    }
+
+    /**
+     * Create directory in the S3 bucket
+     *
+     * @param string $path
+     * @param int $permissions
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function createDirectory($path, $permissions = 0777): void
+    {
+        $this->driver->createDirectory($path, $permissions);
+    }
+
+    /**
+     * Recursive delete directory in the S3 bucket
+     *
+     * @param string $path
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function deleteDirectory($path): void
+    {
+        if ($this->driver->isExists($path)) {
+            $this->driver->deleteDirectory($path);
+        }
+    }
+
+    /**
      * Assert a file exists on the remote storage system
      *
      * @param string $filePath
@@ -176,5 +219,19 @@ class S3FileAssertions extends Helper
     public function assertFileDoesNotContain($filePath, $text, $message = ""): void
     {
         $this->assertStringNotContainsString($text, $this->driver->fileGetContents($filePath), $message);
+    }
+
+    /**
+     * Asserts that a directory on the remote storage system is empty
+     *
+     * @param string $path
+     * @param string $message
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function assertDirectoryEmpty($path, $message = ""): void
+    {
+        $this->assertEmpty($this->driver->readDirectory($path), $message);
     }
 }
