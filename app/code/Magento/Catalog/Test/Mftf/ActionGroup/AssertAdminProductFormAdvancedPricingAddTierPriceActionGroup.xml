@@ -17,6 +17,8 @@
         <remove keyForRemoval="fillQuantity"/>
         <remove keyForRemoval="selectPriceType"/>
         <remove keyForRemoval="fillPriceAmount"/>
+        <remove keyForRemoval="waitCustomerGroupFilterAppears"/>
+        <remove keyForRemoval="selectCustomerGroupValue"/>
         <executeJS function="return window.getComputedStyle(document.querySelector(&quot;{$priceAmountSelector}&quot;)).getPropertyValue('min-width')" after="waitPriceAmountFieldAppers" stepKey="priceMinWidth"/>
         <assertEquals after="priceMinWidth" stepKey="assertWebsiteAmounts">
             <actualResult type="string">$priceMinWidth</actualResult>

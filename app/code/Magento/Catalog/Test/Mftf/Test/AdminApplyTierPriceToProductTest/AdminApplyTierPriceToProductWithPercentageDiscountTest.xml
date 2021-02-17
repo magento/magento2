@@ -42,7 +42,7 @@
         </actionGroup>
 
         <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="clickOnAdvancedPricingButtonForAssert"/>
-        <actionGroup ref="AssertAdminProductFormAdvancedPricingAddTierPriceActionGroup" stepKey="assertProductTierPricePriceInput"/>
+        <actionGroup ref="AssertAdminProductFormAdvancedPricingAddTierPriceActionGroup" stepKey="assertProductTierPriceInput"/>
         <actionGroup ref="AdminProductFormDoneAdvancedPricingDialogActionGroup" stepKey="doneButtonAfterAssert"/>
 
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToTopOfPage"/>
