@@ -49,7 +49,7 @@
             <argument name="query" value="$$createSimpleProduct.sku$$"/>
         </actionGroup>
         <!-- Should not see any search results -->
-        <actionGroup ref="AssertStorefrontProductNotOnSearchPageActionGroup" stepKey="dontSeeProduct">
+        <actionGroup ref="AssertStorefrontProductIsMissingOnSearchResultPageActionGroup" stepKey="dontSeeProduct">
             <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
         </actionGroup>
         <actionGroup ref="AssertStorefrontNoResultsMessageOnSearchPageActionGroup" stepKey="seeCantFindProductOneMessage"/>
