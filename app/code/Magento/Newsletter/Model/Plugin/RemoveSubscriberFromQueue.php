@@ -7,8 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Newsletter\Model\Plugin;
 
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Newsletter\Model\ResourceModel\Queue as QueueResource;
 use Magento\Newsletter\Model\Subscriber;
 
 /**
@@ -19,16 +18,16 @@ class RemoveSubscriberFromQueue
     private const STATUS = 'subscriber_status';
 
     /**
-     * @var AdapterInterface
+     * @var QueueResource
      */
-    private $connection;
+    private $queueResource;
 
     /**
-     * @param ResourceConnection $resource
+     * @param QueueResource $queueResource
      */
-    public function __construct(ResourceConnection $resource)
+    public function __construct(QueueResource $queueResource)
     {
-        $this->connection = $resource->getConnection();
+        $this->queueResource = $queueResource;
     }
 
     /**
@@ -41,13 +40,8 @@ class RemoveSubscriberFromQueue
      */
     public function afterUnsubscribe(Subscriber $subject, Subscriber $subscriber): Subscriber
     {
-        if ($subscriber->dataHasChangedFor(self::STATUS)
-            && $subscriber->getSubscriberStatus() === Subscriber::STATUS_UNSUBSCRIBED
-        ) {
-            $this->connection->delete(
-                $this->connection->getTableName('newsletter_queue_link'),
-                ['subscriber_id = ?' => $subscriber->getId(), 'letter_sent_at IS NULL']
-            );
+        if ($subscriber->isStatusChanged() && $subscriber->getSubscriberStatus() === Subscriber::STATUS_UNSUBSCRIBED) {
+            $this->queueResource->removeSubscriberFromQueue((int) $subscriber->getId());
         }
 
         return $subscriber;

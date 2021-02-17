@@ -86,7 +86,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $usedIds = array_flip($connection->fetchCol($select));
         $subscriberIds = array_flip($subscriberIds);
         $newIds = array_diff_key($subscriberIds, $usedIds);
-        
+
         $connection->beginTransaction();
         try {
             foreach (array_keys($newIds) as $subscriberId) {
@@ -123,6 +123,20 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $connection->rollBack();
             throw $e;
         }
+    }
+
+    /**
+     * Removes subscriber from queue
+     *
+     * @param int $subscriberId
+     * @return void
+     */
+    public function removeSubscriberFromQueue(int $subscriberId): void
+    {
+        $this->getConnection()->delete(
+            $this->getTable('newsletter_queue_link'),
+            ['subscriber_id = ?' => $subscriberId, 'letter_sent_at IS NULL']
+        );
     }
 
     /**
