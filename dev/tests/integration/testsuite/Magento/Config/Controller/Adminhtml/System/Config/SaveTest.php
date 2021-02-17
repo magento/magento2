@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Config\Controller\Adminhtml\System;
+namespace Magento\Config\Controller\Adminhtml\System\Config;
 
 use Magento\Config\Model\Config\Loader;
 use Magento\Framework\App\Request\Http as HttpRequest;
@@ -41,9 +41,9 @@ class SaveTest extends AbstractBackendController
 
     /**
      * @dataProvider saveConfigDataProvider
+     * @magentoDbIsolation enabled
      * @param array $params
      * @param array $post
-     * @magentoDbIsolation enabled
      * @return void
      */
     public function testSaveConfig(array $params, array $post): void
@@ -51,7 +51,7 @@ class SaveTest extends AbstractBackendController
         $expectedPathValue = $this->prepareExpectedPathValue($params['section'], $post['groups']);
         $this->dispatchWithParams($params, $post);
         $this->assertSessionMessages(
-            $this->equalTo([(string)__('You saved the configuration.')]),
+            $this->containsEqual((string)__('You saved the configuration.')),
             MessageInterface::TYPE_SUCCESS
         );
         $this->assertPathValue($expectedPathValue);
@@ -120,7 +120,6 @@ class SaveTest extends AbstractBackendController
      */
     private function prepareExpectedPathValue(string $section, array $groups): array
     {
-        $expectedData = [];
         foreach ($groups as $groupId => $groupData) {
             $groupPath = $section . '/' . $groupId;
             foreach ($groupData['fields'] as $fieldId => $fieldData) {
@@ -129,7 +128,7 @@ class SaveTest extends AbstractBackendController
             }
         }
 
-        return $expectedData;
+        return $expectedData ?? [];
     }
 
     /**
@@ -148,13 +147,18 @@ class SaveTest extends AbstractBackendController
                 $scope->getId(),
                 false
             );
-            $filteredActualPathValue = [];
             foreach ($groupData as $fieldPath => $fieldValue) {
-                if (isset($actualPathValue[$fieldPath])) {
-                    $filteredActualPathValue[$fieldPath] = $actualPathValue[$fieldPath];
-                }
+                $this->assertArrayHasKey(
+                    $fieldPath,
+                    $actualPathValue,
+                    sprintf('The expected config setting was not saved in the database. Path: %s', $fieldPath)
+                );
+                $this->assertEquals(
+                    $fieldValue,
+                    $actualPathValue[$fieldPath],
+                    sprintf('The expected value of the config setting is not correct. Path: %s', $fieldPath)
+                );
             }
-            $this->assertEquals($groupData, $filteredActualPathValue);
         }
     }
 
