@@ -111,6 +111,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
             ) {
                 continue;
             }
+
             $attributes[$attribute->getAttributeCode()] = $attribute->getFrontendLabel();
         }
 
