@@ -94,21 +94,54 @@
         <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
 
          <!--Assert storefront category list page-->
-        <amOnPage url="/" stepKey="amOnStorefront"/>
-        <waitForPageLoad stepKey="waitForStorefrontLoad"/>
-        <click userInput="$$createCategory.name$$" stepKey="clickOnCategoryName"/>
-        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
-        <see userInput="{{ProductWithLongNameSku.name}}" stepKey="assertProductPresent"/>
-        <see userInput="{{ProductWithLongNameSku.price}}" stepKey="assertProductPricePresent"/>
+        <!--<amOnPage url="/" stepKey="amOnStorefront"/>-->
+        <!--<waitForPageLoad stepKey="waitForStorefrontLoad"/>-->
+        <!--<click userInput="$$createCategory.name$$" stepKey="clickOnCategoryName"/>-->
+        <!--<waitForPageLoad stepKey="waitForCategoryPageLoad"/>-->
+        <!--<see userInput="{{ProductWithLongNameSku.name}}" stepKey="assertProductPresent"/>-->
+        <!--<see userInput="{{ProductWithLongNameSku.price}}" stepKey="assertProductPricePresent"/>-->
+
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="clickOnCategoryName">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertProductPresent">
+            <argument name="productName" value="{{ProductWithLongNameSku.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="assertProductPricePresent">
+            <argument name="productName" value="{{ProductWithLongNameSku.name}}"/>
+            <argument name="productPrice" value="{{ProductWithLongNameSku.price}}"/>
+        </actionGroup>
 
         <!--Assert storefront product details page-->
-        <click selector="{{StorefrontCategoryProductSection.ProductTitleByName(ProductWithLongNameSku.name)}}" stepKey="clickOnProductName"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
-        <seeInTitle userInput="{{ProductWithLongNameSku.name}}" stepKey="assertProductNameTitle"/>
-        <see userInput="{{ProductWithLongNameSku.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
-        <see userInput="{{ProductWithLongNameSku.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
-        <see selector="{{StorefrontProductInfoMainSection.productAttributeTitle1}}" userInput="$$createConfigProductAttribute.default_frontend_label$$" stepKey="seeColorAttributeName1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="$$getConfigAttributeOption1.label$$" stepKey="seeInDropDown1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="$$getConfigAttributeOption2.label$$" stepKey="seeInDropDown2"/>
+        <!--<click selector="{{StorefrontCategoryProductSection.ProductTitleByName(ProductWithLongNameSku.name)}}" stepKey="clickOnProductName"/>-->
+        <!--<waitForPageLoad stepKey="waitForProductPageLoad"/>-->
+        <!--<seeInTitle userInput="{{ProductWithLongNameSku.name}}" stepKey="assertProductNameTitle"/>-->
+        <!--<see userInput="{{ProductWithLongNameSku.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>-->
+        <!--<see userInput="{{ProductWithLongNameSku.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>-->
+        <!--<see selector="{{StorefrontProductInfoMainSection.productAttributeTitle1}}" userInput="$$createConfigProductAttribute.default_frontend_label$$" stepKey="seeColorAttributeName1"/>-->
+        <!--<see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="$$getConfigAttributeOption1.label$$" stepKey="seeInDropDown1"/>-->
+        <!--<see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="$$getConfigAttributeOption2.label$$" stepKey="seeInDropDown2"/>-->
+
+        <actionGroup ref="StorefrontOpenProductFromCategoryPageActionGroup" stepKey="clickOnProductName">
+            <argument name="productName" value="{{ProductWithLongNameSku.name}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductToLoad"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="assertProductName">
+            <argument name="productName" value="{{ProductWithLongNameSku.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="assertProductSku">
+            <argument name="productSku" value="{{ProductWithLongNameSku.sku}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductAttributeLabelVisibleActionGroup" stepKey="seeColorAttributeName1">
+            <argument name="productAttributeLabel" value="$$createConfigProductAttribute.default_frontend_label$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeInDropDown1">
+            <argument name="productAttributeOption" value="$$getConfigAttributeOption1.label$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeInDropDown2">
+            <argument name="productAttributeOption" value="$$getConfigAttributeOption2.label$$"/>
+        </actionGroup>
+
+
     </test>
 </tests>
