@@ -61,7 +61,7 @@ class DownloadableTest extends AbstractProductExportImportTestCase
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function testImportReplaceWithPagination(array $fixtures, array $skus, array $skippedAttributes = [])
+    public function testImportReplaceWithPagination(array $fixtures, array $skus, array $skippedAttributes = []) : void
     {
         $this->markTestSkipped('Uncomment after MAGETWO-38240 resolved');
     }
