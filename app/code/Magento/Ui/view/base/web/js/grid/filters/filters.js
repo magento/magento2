@@ -124,7 +124,10 @@ define([
          *
          * @returns {Filters} Chainable.
          */
-        initialize: function () {
+        initialize: function (config) {
+            if (typeof config.options !== 'undefined' && config.options.dateFormat) {
+                this.constructor.defaults.templates.filters.dateRange.dateFormat = config.options.dateFormat;
+            }
             _.bindAll(this, 'updateActive');
 
             this._super()
