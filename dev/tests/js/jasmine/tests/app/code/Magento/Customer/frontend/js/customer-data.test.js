@@ -510,6 +510,23 @@ define([
             });
         });
 
+        describe('"onAjaxComplete" method', function () {
+            it('Should not trigger reload if sections is empty', function () {
+                var event, xhr, settings;
+
+                event = jasmine.createSpy().and.returnValue($.event);
+                xhr = jasmine.createSpy();
+                spyOn(sectionConfig, 'getAffectedSections').and.returnValue([]);
+                spyOn(obj, 'reload');
+                settings = {
+                    type: "POST",
+                    url: "http://test.local"
+                };
+                obj.onAjaxComplete(event, xhr, settings);
+                expect(obj.reload).not.toHaveBeenCalled();
+            });
+        });
+
         describe('"Magento_Customer/js/customer-data" method', function () {
             it('Should be defined', function () {
                 expect(obj.hasOwnProperty('Magento_Customer/js/customer-data')).toBeDefined();
