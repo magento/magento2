@@ -127,6 +127,8 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
     }
 
     /**
+     * Run import replace with pagination tests.
+     *
      * @magentoAppArea adminhtml
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
@@ -147,6 +149,8 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
     }
 
     /**
+     * Data provider for import replaces tests.
+     *
      * @return array
      */
     public function importReplaceDataProvider()
