@@ -37,7 +37,7 @@
         </actionGroup>
 
         <!--Verify product on Product Page -->
-        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="amOnGroupedProductPage">
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="amOnSimpleProductPage">
             <argument name="productUrl" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAssertPageNotFoundErrorOnProductDetailPageActionGroup" stepKey="seeWhoops">
