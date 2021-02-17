@@ -11,7 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\IntegrationException;
-use Magento\MediaGallery\Model\Keyword\Command\GetAssetKeywords;
+use Magento\MediaGallery\Model\ResourceModel\Keyword\GetAssetsKeywords as GetAssetKeywords;
 use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
 use Magento\MediaGalleryApi\Api\Data\KeywordInterfaceFactory;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -67,7 +67,7 @@ class GetAssetKeywordsTest extends TestCase
         $this->configureAssetKeywordFactoryStub();
 
         /** @var KeywordInterface[] $keywords */
-        $keywords = $this->sut->execute($randomAssetId);
+        $keywords = $this->sut->execute([$randomAssetId]);
 
         $this->assertCount($expectedNumberOfFoundKeywords, $keywords);
     }
@@ -113,7 +113,7 @@ class GetAssetKeywordsTest extends TestCase
             ->method('critical')
             ->willReturnSelf();
 
-        $this->sut->execute($randomAssetId);
+        $this->sut->execute([$randomAssetId]);
     }
 
     /**

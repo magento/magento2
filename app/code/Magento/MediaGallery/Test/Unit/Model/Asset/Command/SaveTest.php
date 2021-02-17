@@ -13,7 +13,7 @@ use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\MediaGallery\Model\Asset\Command\Save;
+use Magento\MediaGallery\Model\ResourceModel\SaveAssets as Save;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -150,7 +150,7 @@ class SaveTest extends TestCase
             ->with(self::PREFIXED_TABLE_MEDIA_GALLERY_ASSET)
             ->willReturn(self::INSERT_ID);
 
-        $this->save->execute($this->mediaAssetMock);
+        $this->save->execute([$this->mediaAssetMock]);
     }
 
     /**
@@ -185,6 +185,6 @@ class SaveTest extends TestCase
 
         $this->expectException(CouldNotSaveException::class);
 
-        $this->save->execute($this->mediaAssetMock);
+        $this->save->execute([$this->mediaAssetMock]);
     }
 }

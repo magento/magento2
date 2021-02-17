@@ -11,7 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\MediaGallery\Model\Asset\Command\DeleteByPath;
+use Magento\MediaGallery\Model\ResourceModel\DeleteAssetsByPaths as DeleteByPath;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -74,7 +74,7 @@ class DeleteByPathTest extends TestCase
             ->method('delete')
             ->with('prefix_' . self::TABLE_NAME, ['path = ?' => self::FILE_PATH]);
 
-        $this->deleteMediaAssetByPath->execute(self::FILE_PATH);
+        $this->deleteMediaAssetByPath->execute([self::FILE_PATH]);
     }
 
     /**
@@ -91,6 +91,6 @@ class DeleteByPathTest extends TestCase
         $this->logger->expects($this->once())
             ->method('critical')
             ->willReturnSelf();
-        $this->deleteMediaAssetByPath->execute(self::FILE_PATH);
+        $this->deleteMediaAssetByPath->execute([self::FILE_PATH]);
     }
 }

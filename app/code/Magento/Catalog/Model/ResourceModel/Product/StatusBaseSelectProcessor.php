@@ -11,7 +11,6 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Eav\Model\Config;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -38,7 +37,6 @@ class StatusBaseSelectProcessor implements BaseSelectProcessorInterface
     /**
      * @param Config $eavConfig
      * @param MetadataPool $metadataPool
-     * @param StoreResolverInterface $storeResolver
      * @param StoreManagerInterface $storeManager
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -46,7 +44,6 @@ class StatusBaseSelectProcessor implements BaseSelectProcessorInterface
     public function __construct(
         Config $eavConfig,
         MetadataPool $metadataPool,
-        StoreResolverInterface $storeResolver,
         StoreManagerInterface $storeManager = null
     ) {
         $this->eavConfig = $eavConfig;

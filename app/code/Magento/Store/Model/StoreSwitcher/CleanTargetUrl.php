@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Store\Model\StoreSwitcher;
 
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\StoreSwitcherInterface;
 use Magento\Framework\Url\Helper\Data as UrlHelper;
 

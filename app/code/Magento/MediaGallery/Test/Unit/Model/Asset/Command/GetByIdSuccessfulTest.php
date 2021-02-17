@@ -12,7 +12,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\MediaGallery\Model\Asset\Command\GetById;
+use Magento\MediaGallery\Model\ResourceModel\GetAssetsByIds as GetById;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -107,7 +107,7 @@ class GetByIdSuccessfulTest extends TestCase
 
         $this->assertEquals(
             $mediaAssetStub,
-            $this->getMediaAssetById->execute(self::MEDIA_ASSET_STUB_ID)
+            $this->getMediaAssetById->execute([self::MEDIA_ASSET_STUB_ID])
         );
     }
 }

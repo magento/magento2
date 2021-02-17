@@ -10,7 +10,7 @@ namespace Magento\AdvancedSearch\Test\Unit\Block;
 use Magento\AdvancedSearch\Block\SearchData;
 use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
 use Magento\Framework\View\Element\Template\Context as TemplateContext;
-use Magento\Search\Model\QueryFactoryInterface;
+use Magento\Search\Model\QueryFactory as QueryFactoryInterface;
 use Magento\Search\Model\QueryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;

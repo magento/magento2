@@ -6,7 +6,7 @@
 namespace Magento\AdvancedSearch\Block;
 
 use Magento\Framework\View\Element\Template;
-use Magento\Search\Model\QueryFactoryInterface;
+use Magento\Search\Model\QueryFactory as QueryFactoryInterface;
 use Magento\Search\Model\QueryInterface;
 use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
 

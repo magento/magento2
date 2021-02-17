@@ -12,7 +12,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\MediaGallery\Model\Asset\Command\GetById;
+use Magento\MediaGallery\Model\ResourceModel\GetAssetsByIds as GetById;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -109,6 +109,6 @@ class GetByIdExceptionDuringMediaAssetInitializationTest extends TestCase
             ->method('critical')
             ->willReturnSelf();
 
-        $this->getMediaAssetById->execute(self::MEDIA_ASSET_STUB_ID);
+        $this->getMediaAssetById->execute([self::MEDIA_ASSET_STUB_ID]);
     }
 }

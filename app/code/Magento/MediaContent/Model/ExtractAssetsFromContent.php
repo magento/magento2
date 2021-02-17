@@ -10,7 +10,7 @@ namespace Magento\MediaContent\Model;
 use Magento\MediaContentApi\Model\SearchPatternConfigInterface;
 use Magento\MediaContentApi\Api\ExtractAssetsFromContentInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
-use Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface;
+use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface as GetByPathInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -85,7 +85,7 @@ class ExtractAssetsFromContent implements ExtractAssetsFromContentInterface
             $path = trim($path, '"\'');
             try {
                 /** @var AssetInterface $asset */
-                $asset = $this->getMediaAssetByPath->execute($this->getPathStartingWithSlash($path));
+                $asset = $this->getMediaAssetByPath->execute([$this->getPathStartingWithSlash($path)]);
                 $assets[$asset->getId()] = $asset;
             } catch (\Exception $exception) {
                 $this->logger->critical($exception);
