@@ -167,21 +167,6 @@ class CopierTest extends TestCase
             true,
             ['checkAttributeUniqueValue']
         );
-        $this->urlRewriteCollectionMock->expects($this->once())
-            ->method('getSize')
-            ->willReturn(0);
-
-        $resourceMock = $this->getMockBuilder(ProductResourceModel::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getAttributeRawValue', 'duplicate', 'getAttribute'])
-            ->getMock();
-        $resourceMock->expects($this->once())
-            ->method('getAttributeRawValue')
-            ->willReturn('urk-key-1');
-
-        $this->productMock->expects($this->exactly(2))
-            ->method('getResource')
-            ->willReturn($resourceMock);
 
         $duplicateMock = $this->getMockBuilder(Product::class)
             ->addMethods(
@@ -211,9 +196,6 @@ class CopierTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->productFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($duplicateMock);
 
         $duplicateMock->expects($this->once())->method('setOptions')->with([]);
         $duplicateMock->expects($this->once())->method('setIsDuplicate')->with(true);
@@ -240,18 +222,14 @@ class CopierTest extends TestCase
         $duplicateMock->expects($this->once())
             ->method('setMetaDescription')
             ->with(null);
-        $duplicateMock->expects($this->atLeastOnce())
-            ->method('getStoreIds')->willReturn([]);
+
         $duplicateMock->expects($this->atLeastOnce())
             ->method('setData')
             ->willReturn($duplicateMock);
         $this->copyConstructorMock->expects($this->once())
             ->method('build')
             ->with($this->productMock, $duplicateMock);
-        $duplicateMock->expects($this->once())
-            ->method('setUrlKey')
-            ->with('urk-key-2')
-            ->willReturn($duplicateMock);
+
         $duplicateMock->expects($this->once())
             ->method('save');
         $this->metadata->expects($this->once())
@@ -263,7 +241,7 @@ class CopierTest extends TestCase
             ->method('duplicate')
             ->with($this->productMock, $duplicateMock);
 
-        $this->assertEquals($duplicateMock, $this->_model->copy($this->productMock));
+        $this->assertEquals($duplicateMock, $this->_model->copy($this->productMock, $duplicateMock));
     }
 
     /**
@@ -308,9 +286,6 @@ class CopierTest extends TestCase
             true,
             ['checkAttributeUniqueValue']
         );
-        $this->urlRewriteCollectionMock->expects($this->once())
-            ->method('getSize')
-            ->willReturn(0);
 
         $attributeMock = $this->getMockForAbstractClass(
             AbstractAttribute::class,
@@ -329,9 +304,6 @@ class CopierTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getAttributeRawValue', 'duplicate', 'getAttribute'])
             ->getMock();
-        $resourceMock->expects($this->any())
-            ->method('getAttributeRawValue')
-            ->willReturn('urk-key-1');
         $resourceMock->expects($this->any())
             ->method('getAttribute')
             ->willReturn($attributeMock);
@@ -357,7 +329,6 @@ class CopierTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->productFactoryMock->expects($this->once())->method('create')->willReturn($duplicateMock);
 
         $duplicateMock->expects($this->once())->method('setOptions')->with([]);
         $duplicateMock->expects($this->once())->method('setIsDuplicate')->with(true);
@@ -373,21 +344,10 @@ class CopierTest extends TestCase
         $duplicateMock->expects($this->once())->method('setCreatedAt')->with(null);
         $duplicateMock->expects($this->once())->method('setUpdatedAt')->with(null);
         $duplicateMock->expects($this->once())->method('setId')->with(null);
-        $duplicateMock->expects($this->atLeastOnce())->method('getStoreIds')->willReturn([1]);
         $duplicateMock->expects($this->atLeastOnce())->method('setData')->willReturn($duplicateMock);
         $this->copyConstructorMock->expects($this->once())->method('build')->with($this->productMock, $duplicateMock);
-        $duplicateMock->expects(
-            $this->exactly(11)
-        )->method(
-            'setUrlKey'
-        )->with(
-            $this->stringContains('urk-key-')
-        )->willReturn(
-            $duplicateMock
-        );
-        $duplicateMock->expects($this->once())->method('save');
 
-        $this->scopeOverriddenValueMock->expects($this->once())->method('containsValue')->willReturn(true);
+        $duplicateMock->expects($this->once())->method('save');
 
         $this->metadata->expects($this->any())->method('getLinkField')->willReturn('linkField');
 
@@ -395,7 +355,6 @@ class CopierTest extends TestCase
             ['linkField', null, '2'],
         ]);
 
-        $this->expectException(UrlAlreadyExistsException::class);
-        $this->_model->copy($this->productMock);
+        $this->_model->copy($this->productMock, $duplicateMock);
     }
 }
