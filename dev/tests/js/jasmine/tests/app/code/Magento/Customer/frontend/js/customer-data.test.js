@@ -518,8 +518,8 @@ define([
                 spyOn(sectionConfig, 'getAffectedSections').and.returnValue([]);
                 spyOn(obj, 'reload');
                 settings = {
-                    type: "POST",
-                    url: "http://test.local"
+                    type: 'POST',
+                    url: 'http://test.local'
                 };
                 obj.onAjaxComplete(jsonResponse, settings);
                 expect(obj.reload).not.toHaveBeenCalled();

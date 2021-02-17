@@ -364,7 +364,7 @@ define([
          * @param {Object} jsonResponse
          * @param {Object} settings
          */
-        onAjaxComplete: function(jsonResponse, settings) {
+        onAjaxComplete: function (jsonResponse, settings) {
             var sections,
                 redirects;
 
