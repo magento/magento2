@@ -115,7 +115,6 @@ class SaveTest extends AttributeTest
     /**
      * @var Session|MockObject
      */
-
     private $sessionMock;
 
     protected function setUp(): void
@@ -133,6 +132,13 @@ class SaveTest extends AttributeTest
         $this->layoutFactoryMock = $this->createMock(LayoutFactory::class);
         $this->buildFactoryMock = $this->getMockBuilder(BuildFactory::class)
             ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->filterManagerMock = $this->getMockBuilder(FilterManager::class)
+            ->setMethods(['stripTags'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->productHelperMock = $this->getMockBuilder(ProductHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->attributeFactoryMock = $this->getMockBuilder(AttributeFactory::class)
@@ -164,19 +170,16 @@ class SaveTest extends AttributeTest
                     'save'
                 ]
             )->getMockForAbstractClass();
-        $this->buildFactoryMock->expects($this->any())
-            ->method('create')
+        $this->buildFactoryMock->method('create')
             ->willReturn($this->builderMock);
-        $this->validatorFactoryMock->expects($this->any())
-            ->method('create')
+        $this->validatorFactoryMock->method('create')
             ->willReturn($this->inputTypeValidatorMock);
-        $this->attributeFactoryMock
-            ->method('create')
+        $this->attributeFactoryMock->method('create')
             ->willReturn($this->productAttributeMock);
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     protected function getModel()
     {
@@ -201,8 +204,7 @@ class SaveTest extends AttributeTest
 
     public function testExecuteWithEmptyData()
     {
-        $this->requestMock->expects($this->any())
-            ->method('getParam')
+        $this->requestMock->method('getParam')
             ->willReturnMap([
                 ['isAjax', null, null],
                 ['serialized_options', '[]', ''],
@@ -218,8 +220,7 @@ class SaveTest extends AttributeTest
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->redirectMock);
-        $this->redirectMock->expects($this->any())
-            ->method('setPath')
+        $this->redirectMock->method('setPath')
             ->willReturnSelf();
 
         $this->assertInstanceOf(ResultRedirect::class, $this->getModel()->execute());
@@ -231,8 +232,7 @@ class SaveTest extends AttributeTest
             'frontend_input' => 'test_frontend_input',
         ];
 
-        $this->requestMock->expects($this->any())
-            ->method('getParam')
+        $this->requestMock->method('getParam')
             ->willReturnMap([
                 ['isAjax', null, null],
                 ['serialized_options', '[]', ''],
@@ -247,8 +247,7 @@ class SaveTest extends AttributeTest
         $this->requestMock->expects($this->once())
             ->method('getPostValue')
             ->willReturn($data);
-        $this->inputTypeValidatorMock->expects($this->any())
-            ->method('isValid')
+        $this->inputTypeValidatorMock->method('isValid')
             ->with($data['frontend_input'])
             ->willReturn(true);
         $this->presentationMock->expects($this->once())
@@ -293,8 +292,7 @@ class SaveTest extends AttributeTest
             'frontend_input' => 'test_frontend_input',
         ];
 
-        $this->requestMock->expects($this->any())
-            ->method('getParam')
+        $this->requestMock->method('getParam')
             ->willReturnMap([
                 ['isAjax', null, null],
                 ['serialized_options', '[]', ''],
@@ -320,8 +318,7 @@ class SaveTest extends AttributeTest
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->redirectMock);
-        $this->redirectMock->expects($this->any())
-            ->method('setPath')
+        $this->redirectMock->method('setPath')
             ->willReturnSelf();
         $this->builderMock->expects($this->once())
             ->method('setEntityTypeId')
@@ -335,12 +332,14 @@ class SaveTest extends AttributeTest
         $this->builderMock->expects($this->once())
             ->method('getAttributeSet')
             ->willReturn($this->attributeSetMock);
-        $this->requestMock->expects($this->any())
-            ->method('getParam')
+        $this->requestMock->method('getParam')
             ->willReturnMap([
                 ['set', null, 1],
                 ['attribute_code', null, 'test_attribute_code']
             ]);
+        $this->filterManagerMock->method('stripTags')
+            ->with($data['new_attribute_set_name'])
+            ->willReturn($data['new_attribute_set_name']);
         $this->inputTypeValidatorMock->expects($this->once())
             ->method('getMessages')
             ->willReturn([]);
@@ -355,10 +354,9 @@ class SaveTest extends AttributeTest
     {
         $serializedOptions = '{"key":"value"}';
         $message = "The attribute couldn't be saved due to an error. Verify your information and try again. "
-            . "If the error persists, please try again later.";
+            . 'If the error persists, please try again later.';
 
-        $this->requestMock->expects($this->any())
-            ->method('getParam')
+        $this->requestMock->method('getParam')
             ->willReturnMap([
                 ['isAjax', null, true],
                 ['serialized_options', '[]', $serializedOptions],
@@ -372,18 +370,16 @@ class SaveTest extends AttributeTest
             ->expects($this->once())
             ->method('addErrorMessage')
             ->with($message);
-        $this->addReturnResultConditions('catalog/*/edit', ['_current' => true], ['error' => true]);
+        $this->addReturnResultConditions(['_current' => true], ['error' => true]);
 
         $this->getModel()->execute();
     }
 
     /**
-     * @param string $path
      * @param array $params
      * @param array $response
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    private function addReturnResultConditions(string $path = '', array $params = [], array $response = [])
+    private function addReturnResultConditions(array $params = [], array $response = [])
     {
         $layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->setMethods(['initMessages', 'getMessagesBlock'])

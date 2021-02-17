@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CreateProductAttributeEntityApplyToFieldTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create Product Attributes"/>
+            <title value="Create product attribute entity apply to field test"/>
+            <description value="Check if 'Apply to' field on Product Attribute creation form works properly"/>
+            <severity value="AVERAGE"/>
+            <group value="Catalog"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="VirtualProduct" stepKey="createVirtualProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="DeleteAttributeSetByLabelActionGroup" stepKey="deleteCustomAttributeSet">
+                <argument name="label" value="{{CatalogAttributeSet.attribute_set_name}}"/>
+            </actionGroup>
+            <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
+                <argument name="ProductAttribute" value="{{textProductAttribute.attribute_code}}"/>
+            </actionGroup>
+            <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
+            <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
+            <waitForPageLoad stepKey="waitForDeletion"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Navigate to Stores > Attributes > Product.-->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
+
+        <!-- Create new Product Attribute for Simple products -->
+        <actionGroup ref="CreateProductAttributeForSimpleProductActionGroup" stepKey="createAttribute">
+            <argument name="attribute" value="textProductAttribute"/>
+        </actionGroup>
+
+        <!-- Add created attribute to Attribute Set -->
+        <actionGroup ref="AdminAddUnassignedAttributeToGroupActionGroup" stepKey="createCustomAttributeSet">
+            <argument name="label" value="{{CatalogAttributeSet.attribute_set_name}}"/>
+            <argument name="secondOption" value="{{textProductAttribute.attribute_code}}"/>
+        </actionGroup>
+
+        <!-- Check if Custom Attribute is applied for Simple product -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openSimpleProductPage">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductPageSelectAttributeSetActionGroup" stepKey="selectAttributeSetSimple">
+            <argument name="attributeSetName" value="{{CatalogAttributeSet.attribute_set_name}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminTextAttributePresentOnProductFormActionGroup" stepKey="checkCustomAttributeSimpleProduct">
+            <argument name="attributeCode" value="{{textProductAttribute.attribute_code}}"/>
+        </actionGroup>
+
+        <!-- Check if Custom Attribute is not applied for Virtual product -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openVirtualProductPage">
+            <argument name="productId" value="$$createVirtualProduct.id$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductPageSelectAttributeSetActionGroup" stepKey="selectAttributeSetVirtual">
+            <argument name="attributeSetName" value="{{CatalogAttributeSet.attribute_set_name}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminTextAttributeAbsentOnProductFormActionGroup" stepKey="checkCustomAttributeVirtualProduct">
+            <argument name="attributeCode" value="{{textProductAttribute.attribute_code}}"/>
+        </actionGroup>
+    </test>
+</tests>

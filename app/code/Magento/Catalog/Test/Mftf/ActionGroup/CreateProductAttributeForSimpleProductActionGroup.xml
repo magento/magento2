@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateProductAttributeForSimpleProductActionGroup" extends="CreateProductAttributeActionGroup" insertAfter="checkRequired">
+        <annotations>
+            <description>EXTENDS: createProductAttribute. Fills in the Apply To with "Simple" value.</description>
+        </annotations>
+
+        <click selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" stepKey="openAdvancedProperties"/>
+        <fillField stepKey="fillDefaultValue" selector="{{AdvancedAttributePropertiesSection.DefaultValueText}}" userInput="{{attribute.default_value}}"/>
+        <click selector="{{AdvancedAttributePropertiesSection.ApplyToSimple}}" stepKey="applyToSimpleProducts"/>
+    </actionGroup>
+</actionGroups>
