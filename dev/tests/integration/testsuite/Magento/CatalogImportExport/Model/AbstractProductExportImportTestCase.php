@@ -101,6 +101,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
      * @param string[] $skippedAttributes
      * @return void
      * @dataProvider exportImportDataProvider
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testImportExport(array $fixtures, array $skus, array $skippedAttributes = []): void
     {
@@ -111,8 +112,35 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         $csvFile = $this->executeExportTest($skus, $skippedAttributes);
 
         $this->executeImportReplaceTest($skus, $skippedAttributes, false, $csvFile);
-        $this->executeImportReplaceTest($skus, $skippedAttributes, true, $csvFile);
         $this->executeImportDeleteTest($skus, $csvFile);
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation disabled
+     * @magentoAppIsolation enabled
+     *
+     * @param array $fixtures
+     * @param string[] $skus
+     * @param string[] $skippedAttributes
+     * @dataProvider importReplaceDataProvider
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function testImportReplaceWithPagination(array $fixtures, array $skus, array $skippedAttributes = [])
+    {
+        $this->fixtures = $fixtures;
+        $this->executeFixtures($fixtures);
+        $this->modifyData($skus);
+        $skippedAttributes = array_merge(self::$skippedAttributes, $skippedAttributes);
+        $this->executeImportReplaceTest($skus, $skippedAttributes, true);
+    }
+
+    /**
+     * @return array
+     */
+    public function importReplaceDataProvider()
+    {
+        return $this->exportImportDataProvider();
     }
 
     /**
@@ -209,7 +237,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
 
             $this->assertEquals(
                 $value,
-                isset($actual[$key]) ? $actual[$key] : null,
+                $actual[$key] ?? null,
                 'Assert value at key - ' . $key . ' failed'
             );
         }
