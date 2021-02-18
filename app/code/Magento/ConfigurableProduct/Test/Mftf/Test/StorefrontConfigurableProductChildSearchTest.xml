@@ -144,9 +144,7 @@
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAll">
-            <argument name="indices" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindexAll"/>
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
             <argument name="tags" value=""/>
         </actionGroup>
