@@ -614,6 +614,20 @@ QUERY;
                 ]
             ],
             [
+                'parent_category_uid',
+                'eq',
+                'NA==',
+                [
+                    'id' => '5',
+                    'name' => 'Category 1.1.1',
+                    'url_key' => 'category-1-1-1',
+                    'url_path' => 'category-1/category-1-1/category-1-1-1',
+                    'children_count' => '0',
+                    'path' => '1/2/3/4/5',
+                    'position' => '1'
+                ]
+            ],
+            [
                 'name',
                 'match',
                 'Movable Position 2',
@@ -731,6 +745,41 @@ QUERY;
                 'parent_id',
                 'in',
                 '["3", "4"]',
+                [
+                    [
+                        'id' => '4',
+                        'name' => 'Category 1.1',
+                        'url_key' => 'category-1-1',
+                        'url_path' => 'category-1/category-1-1',
+                        'children_count' => '0',
+                        'path' => '1/2/3/4',
+                        'position' => '1'
+                    ],
+                    [
+                        'id' => '5',
+                        'name' => 'Category 1.1.1',
+                        'url_key' => 'category-1-1-1',
+                        'url_path' => 'category-1/category-1-1/category-1-1-1',
+                        'children_count' => '0',
+                        'path' => '1/2/3/4/5',
+                        'position' => '1'
+                    ],
+                    [
+                        'id' => '13',
+                        'name' => 'Category 1.2',
+                        'url_key' => 'category-1-2',
+                        'url_path' => 'category-1/category-1-2',
+                        'children_count' => '0',
+                        'path' => '1/2/3/13',
+                        'position' => '2'
+                    ]
+                ]
+            ],
+            // Filter by multiple parent UIDs
+            [
+                'parent_category_uid',
+                'in',
+                '["Mw==", "NA=="]',
                 [
                     [
                         'id' => '4',
