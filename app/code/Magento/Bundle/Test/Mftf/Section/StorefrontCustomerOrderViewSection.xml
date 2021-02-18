@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCustomerOrderViewSection">
+        <element name="allProductOptionLabels" type="text" parameterized="true" selector="#my-orders-table tbody:nth-of-type({{productIndex}}) .options-label"/>
+        <element name="productOptionLabel" type="text" parameterized="true" selector="//table[@id='my-orders-table']//tbody[{{productIndex}}]//tr[@class='options-label'][{{optionIndex}}]"/>
+        <element name="allProductOptionProducts" type="text" parameterized="true" selector="#my-orders-table tbody:nth-of-type({{productIndex}}) .item-options-container"/>
+        <element name="productOptionProductName" type="text" parameterized="true" selector="//table[@id='my-orders-table']//tbody[{{productIndex}}]//tr[contains(@class,'item-options-container')][{{optionIndex}}]//td[@data-th='Product Name']"/>
+        <element name="productOptionProductSku" type="text" parameterized="true" selector="//table[@id='my-orders-table']//tbody[{{productIndex}}]//tr[contains(@class,'item-options-container')][{{optionIndex}}]//td[@data-th='SKU']"/>
+        <element name="productOptionProductQuantity" type="text" parameterized="true" selector="//table[@id='my-orders-table']//tbody[{{productIndex}}]//tr[contains(@class,'item-options-container')][{{optionIndex}}]//td[@data-th='Quantity']"/>
+    </section>
+</sections>

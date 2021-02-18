@@ -70,6 +70,56 @@ class LocalFileAssertions extends Helper
     }
 
     /**
+     * Recursive delete directory
+     *
+     * @param string $path
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function deleteDirectory($path): void
+    {
+        $realPath = $this->expandPath($path);
+        if ($this->driver->isExists($realPath)) {
+            $this->driver->deleteDirectory($realPath);
+        }
+    }
+
+    /**
+     * Copy source into destination
+     *
+     * @param string $source
+     * @param string $destination
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function copy($source, $destination): void
+    {
+        $sourceRealPath = $this->expandPath($source);
+        $destinationRealPath = $this->expandPath($destination);
+        $this->driver->copy($sourceRealPath, $destinationRealPath);
+    }
+
+    /**
+     * Create directory
+     *
+     * @param string $path
+     * @param int $permissions
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function createDirectory($path, $permissions = 0777): void
+    {
+        $permissions = $this->convertOctalStringToDecimalInt($permissions);
+        $sourceRealPath = $this->expandPath($path);
+        $oldUmask = umask(0);
+        $this->driver->createDirectory($sourceRealPath, $permissions);
+        umask($oldUmask);
+    }
+
+    /**
      * Assert a file exists
      *
      * @param string $filePath
@@ -159,6 +209,36 @@ class LocalFileAssertions extends Helper
     {
         $realPath = $this->expandPath($filePath);
         $this->assertStringNotContainsString($text, $this->driver->fileGetContents($realPath), $message);
+    }
+
+    /**
+     * Asserts that a directory is empty
+     *
+     * @param string $path
+     * @param string $message
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function assertDirectoryEmpty($path, $message = ""): void
+    {
+        $realPath = $this->expandPath($path);
+        $this->assertEmpty($this->driver->readDirectory($realPath), $message);
+    }
+
+    /**
+     * Helper function to convert an octal string to its decimal equivalent
+     *
+     * @param string $string
+     * @return int
+     *
+     */
+    private function convertOctalStringToDecimalInt($string): int
+    {
+        if (is_string($string)) {
+            $string = octdec($string);
+        }
+        return $string;
     }
 
     /**

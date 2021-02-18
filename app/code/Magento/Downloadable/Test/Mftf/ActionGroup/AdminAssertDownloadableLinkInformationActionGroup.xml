@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertDownloadableLinkInformationActionGroup">
+        <annotations>
+            <description>Verifies the data for a downloadable link on the Edit Product page in admin.</description>
+        </annotations>
+        <arguments>
+            <argument name="title" defaultValue="{{downloadableLink.title}}" type="string"/>
+            <argument name="price" defaultValue="{{downloadableLink.price}}" type="string"/>
+            <argument name="fileType" defaultValue="{{downloadableLink.file_type}}" type="string"/>
+            <argument name="fileNameOrUrl" defaultValue="{{downloadableLink.file}}" type="string"/>
+            <argument name="sampleType" defaultValue="{{downloadableLink.sample_type}}" type="string"/>
+            <argument name="sampleFileNameOrUrl" defaultValue="{{downloadableLink.sample}}" type="string"/>
+            <argument name="shareable" defaultValue="{{downloadableLink.shareable}}" type="string"/>
+            <argument name="maxDownloads" defaultValue="0" type="string"/>
+            <argument name="index" defaultValue="0" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{AdminProductDownloadableSection.sectionHeader}}" dependentSelector="{{AdminProductDownloadableSection.addSampleTitleInput(index)}}" visible="false" stepKey="expandDownloadableSection"/>
+        <waitForElementVisible selector="{{AdminProductDownloadableSection.addSampleTitleInput(index)}}" stepKey="waitForDownloadableLinks"/>
+        <seeInField userInput="{{title}}" selector="{{AdminProductDownloadableSection.addLinkTitleInput(index)}}" stepKey="seeTitle"/>
+        <seeInField userInput="{{price}}" selector="{{AdminProductDownloadableSection.addLinkPriceInput(index)}}" stepKey="seePrice"/>
+        <seeInField userInput="{{fileType}}" selector="{{AdminProductDownloadableSection.addLinkFileTypeSelector(index)}}" stepKey="seeFileType"/>
+        <executeJS function="
+                    var element = document.evaluate(&quot;{{AdminProductDownloadableSection.linkFileNameOrUrl(index)}}&quot;, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+                    if ( typeof element.singleNodeValue.value !== &quot;undefined&quot; ) {
+                        return element.singleNodeValue.value; }
+                    else {
+                        return element.singleNodeValue.innerText; };"
+                   stepKey="grabFileNameOrUrl"/>
+        <assertStringContainsString stepKey="assertFileNameOrUrl">
+            <actualResult type="variable">grabFileNameOrUrl</actualResult>
+            <expectedResult type="string">{{fileNameOrUrl}}</expectedResult>
+        </assertStringContainsString>
+        <seeInField userInput="{{sampleType}}" selector="{{AdminProductDownloadableSection.addLinkSampleTypeSelector(index)}}" stepKey="seeSampleType"/>
+        <executeJS function="
+                    var element = document.evaluate(&quot;{{AdminProductDownloadableSection.linkSampleFileNameOrUrl(index)}}&quot;, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+                    if ( typeof element.singleNodeValue.value !== &quot;undefined&quot; ) {
+                        return element.singleNodeValue.value; }
+                    else {
+                        return element.singleNodeValue.innerText; };"
+                   stepKey="grabSampleFileNameOrUrl"/>
+        <assertStringContainsString stepKey="assertSampleFileNameOrUrl">
+            <actualResult type="variable">grabSampleFileNameOrUrl</actualResult>
+            <expectedResult type="string">{{sampleFileNameOrUrl}}</expectedResult>
+        </assertStringContainsString>
+        <seeInField userInput="{{shareable}}" selector="{{AdminProductDownloadableSection.addLinkShareableSelector(index)}}" stepKey="seeShareable"/>
+        <seeInField userInput="{{maxDownloads}}" selector="{{AdminProductDownloadableSection.addLinkMaxDownloadsInput(index)}}" stepKey="seeMaxDownloads"/>
+    </actionGroup>
+</actionGroups>
