@@ -71,7 +71,7 @@ class EmailMessageTest extends TestCase
     /**
      * @var string
      */
-    private $subject = 'Test subject';
+    private $subject = 'Test=20subject';
 
     /**
      * @var string
@@ -204,7 +204,7 @@ class EmailMessageTest extends TestCase
         $subject = 'Subject: =?UTF-8?Q?'
             . str_replace(' ', '=20', $this->subject)
             . '?=';
-        $this->assertStringContainsString($subject, $message->toString());
+        $this->assertStringContainsString($subject, quoted_printable_decode($message->toString()));
         $this->assertStringContainsString($content, $message->toString());
         //tests address factory
         $this->assertInstanceOf(Address::class, $message->getTo()[0]);
