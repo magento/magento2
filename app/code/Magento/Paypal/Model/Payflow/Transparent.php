@@ -331,11 +331,9 @@ class Transparent extends Payflowpro implements TransparentInterface
         $zeroAmountAuthorizationId = $this->getZeroAmountAuthorizationId($payment);
         /** @var PaymentTokenInterface $vaultPaymentToken */
         $vaultPaymentToken = $payment->getExtensionAttributes()->getVaultPaymentToken();
-        if ($vaultPaymentToken && empty($zeroAmountAuthorizationId)) {
+        if ($vaultPaymentToken && empty($zeroAmountAuthorizationId) && empty($payment->getParentTransactionId())) {
             $payment->setAdditionalInformation(self::PNREF, $vaultPaymentToken->getGatewayToken());
-            if (!$payment->getParentTransactionId()) {
-                $payment->setParentTransactionId($vaultPaymentToken->getGatewayToken());
-            }
+            $payment->setParentTransactionId($vaultPaymentToken->getGatewayToken());
         }
         parent::capture($payment, $amount);
 
