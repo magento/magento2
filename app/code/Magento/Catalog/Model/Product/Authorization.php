@@ -129,10 +129,7 @@ class Authorization
                 //No new value
                 continue;
             }
-            if ($attribute->getBackendType() == 'datetime' && $newValue === null) {
-                continue;
-            }
-            if (!in_array($newValue, $oldValues, true)) {
+            if ($newValue !== null && !in_array($newValue, $oldValues, true)) {
                 return true;
             }
         }

@@ -88,8 +88,8 @@ class AuthorizationTest extends TestCase
                 [
                     'product' => [
                         'name' => 'simple_new',
-                        'custom_design' => '',
-                        'page_layout' => '',
+                        'custom_design' => '3',
+                        'page_layout' => '1column',
                         'options_container' => 'container2',
                         'custom_layout_update' => '',
                         'custom_design_from' => '2021-02-19 00:00:00',
