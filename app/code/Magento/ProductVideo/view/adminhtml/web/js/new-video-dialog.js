@@ -246,6 +246,8 @@ define([
 
         _gallery: null,
 
+        _isUpdatingVideo: false,
+
         /**
          * Bind events
          * @private
@@ -335,6 +337,7 @@ define([
         _onGetVideoInformationSuccess: function (e, data) {
             var self = this;
 
+            this._isUpdatingVideo = true;
             self.element.on('finish_update_video finish_create_video', $.proxy(function (element, playerData) {
                     if (!self._onlyVideoPlayer ||
                         !self._isEditPage && playerData.oldVideoId !== playerData.newVideoId ||
@@ -395,6 +398,9 @@ define([
                 data: 'remote_image=' + sourceUrl,
                 type: 'post',
                 success: $.proxy(function (result) {
+                    if (!self._isUpdatingVideo) {
+                        return;
+                    }
                     this._tempPreviewImageData = result;
                     this._getPreviewImage().attr('src', sourceUrl).show();
                     this._blockActionButtons(false, true);
@@ -1098,6 +1104,7 @@ define([
 
             this._isEditPage = true;
             this.imageData = null;
+            this._isUpdatingVideo = false;
 
             if (this._previewImage) {
                 this._previewImage.remove();
