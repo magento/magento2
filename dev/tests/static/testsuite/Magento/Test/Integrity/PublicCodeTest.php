@@ -44,7 +44,7 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
             foreach (glob($whiteListFiles) as $fileName) {
                 $whiteListItems[] = file($fileName, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
             }
-            $this->blockWhitelist = $whiteListItems;
+            $this->blockWhitelist = array_merge([], ...$whiteListItems);
         }
         return $this->blockWhitelist;
     }
