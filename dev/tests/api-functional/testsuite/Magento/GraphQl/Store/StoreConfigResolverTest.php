@@ -55,7 +55,16 @@ class StoreConfigResolverTest extends GraphQlAbstract
   storeConfig {
     id,
     code,
+    store_code,
+    store_name,
+    store_sort_order,
+    is_default_store,
+    store_group_code,
+    store_group_name,
+    is_default_store_group,
     website_id,
+    website_code,
+    website_name,
     locale,
     base_currency_code,
     default_display_currency_code,
@@ -75,7 +84,7 @@ class StoreConfigResolverTest extends GraphQlAbstract
 QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('storeConfig', $response);
-        $this->validateStoreConfig($defaultStoreConfig, $response['storeConfig'], $store->getName());
+        $this->validateStoreConfig($defaultStoreConfig, $response['storeConfig'], $store);
     }
 
     /**
@@ -83,15 +92,32 @@ QUERY;
      *
      * @param StoreConfigInterface $storeConfig
      * @param array $responseConfig
-     * @param string $storeName
+     * @param Store $store
      */
     private function validateStoreConfig(
         StoreConfigInterface $storeConfig,
         array $responseConfig,
-        string $storeName
+        Store $store
     ): void {
         $this->assertEquals($storeConfig->getId(), $responseConfig['id']);
         $this->assertEquals($storeConfig->getCode(), $responseConfig['code']);
+
+        $this->assertEquals($store->getName(), $responseConfig['store_name']);
+        $this->assertEquals($store->getSortOrder(), $responseConfig['store_sort_order']);
+        $this->assertEquals(
+            $store->getGroup()->getDefaultStoreId() == $store->getId(),
+            $responseConfig['is_default_store']
+        );
+        $this->assertEquals($store->getGroup()->getCode(), $responseConfig['store_group_code']);
+        $this->assertEquals($store->getGroup()->getName(), $responseConfig['store_group_name']);
+        $this->assertEquals(
+            $store->getWebsite()->getDefaultGroupId() === $store->getGroupId(),
+            $responseConfig['is_default_store_group']
+        );
+        $this->assertEquals($store->getWebsite()->getCode(), $responseConfig['website_code']);
+        $this->assertEquals($store->getWebsite()->getName(), $responseConfig['website_name']);
+        $this->assertEquals($storeConfig->getCode(), $responseConfig['store_code']);
+
         $this->assertEquals($storeConfig->getLocale(), $responseConfig['locale']);
         $this->assertEquals($storeConfig->getBaseCurrencyCode(), $responseConfig['base_currency_code']);
         $this->assertEquals(
@@ -108,6 +134,6 @@ QUERY;
         $this->assertEquals($storeConfig->getSecureBaseLinkUrl(), $responseConfig['secure_base_link_url']);
         $this->assertEquals($storeConfig->getSecureBaseStaticUrl(), $responseConfig['secure_base_static_url']);
         $this->assertEquals($storeConfig->getSecureBaseMediaUrl(), $responseConfig['secure_base_media_url']);
-        $this->assertEquals($storeName, $responseConfig['store_name']);
+        $this->assertEquals($store->getName(), $responseConfig['store_name']);
     }
 }
