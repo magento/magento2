@@ -140,14 +140,14 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
         if (
             !empty($newPageData['custom_theme_from'])
             && date("Y-m-d", strtotime($postData['custom_theme_from']))
-            === date("Y-m-d", strtotime($pageData['custom_theme_from']))
+                === date("Y-m-d", strtotime($pageData['custom_theme_from']))
         ) {
             $newPageData['custom_theme_from'] = date("Y-m-d", strtotime($postData['custom_theme_from']));
         }
         if (
             !empty($newPageData['custom_theme_to'])
             && date("Y-m-d", strtotime($postData['custom_theme_to']))
-            === date("Y-m-d", strtotime($pageData['custom_theme_to']))
+                === date("Y-m-d", strtotime($pageData['custom_theme_to']))
         ) {
             $newPageData['custom_theme_to'] = date("Y-m-d", strtotime($postData['custom_theme_to']));
         }
