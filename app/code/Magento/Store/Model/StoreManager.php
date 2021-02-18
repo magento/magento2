@@ -7,7 +7,7 @@ namespace Magento\Store\Model;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Store\Model\StoreResolver as StoreResolverInterface;
+use StoreResolver;
 use Magento\Store\Model\ResourceModel\StoreWebsiteRelation;
 
 /**
@@ -57,7 +57,7 @@ class StoreManager implements
     protected $scopeConfig;
 
     /**
-     * @var StoreResolverInterface
+     * @var StoreResolver
      */
     protected $storeResolver;
 
@@ -94,7 +94,7 @@ class StoreManager implements
      * @param \Magento\Store\Api\GroupRepositoryInterface $groupRepository
      * @param \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param StoreResolverInterface $storeResolver
+     * @param StoreResolver $storeResolver
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param bool $isSingleStoreAllowed
      */
@@ -103,7 +103,7 @@ class StoreManager implements
         \Magento\Store\Api\GroupRepositoryInterface $groupRepository,
         \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        StoreResolverInterface $storeResolver,
+        StoreResolver $storeResolver,
         \Magento\Framework\Cache\FrontendInterface $cache,
         $isSingleStoreAllowed = true
     ) {

@@ -13,7 +13,6 @@ use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Encryption\UrlCoder;
 use Magento\Framework\Interception\InterceptorInterface;
-use Magento\Store\Model\StoreManagerInterface as StoreResolverInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\StoreSwitcher\ContextInterface;
@@ -151,7 +150,7 @@ class SwitchActionTest extends AbstractController
         $this->getRequest()->setParams(
             [
                 '___from_store' => $fromStore->getCode(),
-                StoreResolverInterface::PARAM_NAME => $targetStore->getCode(),
+                StoreManagerInterface::PARAM_NAME => $targetStore->getCode(),
                 ActionInterface::PARAM_NAME_URL_ENCODED => $urlEncoder->encode('/'),
                 'data' => $redirectData->getData(),
                 'time_stamp' => $redirectData->getTimestamp(),

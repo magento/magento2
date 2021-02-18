@@ -12,8 +12,8 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Payment\Gateway\ConfigInterface as PaymentConfigInterface;
-use Magento\Payment\Gateway\ConfigInterfaceFactory as PaymentConfigInterfaceFactory;
+use Magento\Payment\Gateway\ConfigInterface;
+use Magento\Payment\Gateway\ConfigInterfaceFactory;
 use Magento\Paypal\Model\Cart as PayPalCart;
 use Magento\Paypal\Model\CartFactory as PayPalCartFactory;
 use Magento\Paypal\Model\Payflow\Service\Gateway as PayPalPayflowGateway;
@@ -44,7 +44,7 @@ class TransparentTest extends TestCase
     private $subject;
 
     /**
-     * @var PaymentConfigInterface|MockObject
+     * @var ConfigInterface|MockObject
      */
     private $paymentConfig;
 
@@ -172,15 +172,15 @@ class TransparentTest extends TestCase
     }
 
     /**
-     * @return PaymentConfigInterfaceFactory|MockObject
+     * @return ConfigInterfaceFactory|MockObject
      */
     private function getPaymentConfigInterfaceFactory()
     {
-        $paymentConfigInterfaceFactory = $this->getMockBuilder(PaymentConfigInterfaceFactory::class)
+        $paymentConfigInterfaceFactory = $this->getMockBuilder(ConfigInterfaceFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->paymentConfig = $this->getMockBuilder(PaymentConfigInterface::class)
+        $this->paymentConfig = $this->getMockBuilder(ConfigInterface::class)
             ->setMethods(['setStoreId', 'setMethodInstance', 'setMethod', 'getBuildNotationCode'])
             ->getMockForAbstractClass();
 

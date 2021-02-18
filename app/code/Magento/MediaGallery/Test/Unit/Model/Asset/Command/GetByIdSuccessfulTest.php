@@ -12,7 +12,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\MediaGallery\Model\ResourceModel\GetAssetsByIds as GetById;
+use Magento\MediaGallery\Model\ResourceModel\GetAssetsByIds;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Test the GetById command successful scenario
+ * Test the GetAssetsByIds command successful scenario
  */
 class GetByIdSuccessfulTest extends TestCase
 {
@@ -41,7 +41,7 @@ class GetByIdSuccessfulTest extends TestCase
     ];
 
     /**
-     * @var GetById|MockObject
+     * @var GetAssetsByIds|MockObject
      */
     private $getMediaAssetById;
 
@@ -75,7 +75,7 @@ class GetByIdSuccessfulTest extends TestCase
         $logger = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->getMediaAssetById = (new ObjectManager($this))->getObject(
-            GetById::class,
+            GetAssetsByIds::class,
             [
                 'resourceConnection' => $resourceConnection,
                 'assetFactory' => $this->assetFactory,

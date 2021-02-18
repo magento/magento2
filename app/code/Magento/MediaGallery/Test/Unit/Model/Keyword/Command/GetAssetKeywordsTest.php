@@ -11,7 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\IntegrationException;
-use Magento\MediaGallery\Model\ResourceModel\Keyword\GetAssetsKeywords as GetAssetKeywords;
+use Magento\MediaGallery\Model\ResourceModel\Keyword\GetAssetsKeywords;
 use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
 use Magento\MediaGalleryApi\Api\Data\KeywordInterfaceFactory;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -21,7 +21,7 @@ use Psr\Log\LoggerInterface;
 class GetAssetKeywordsTest extends TestCase
 {
     /**
-     * @var GetAssetKeywords
+     * @var GetAssetsKeywords
      */
     private $sut;
 
@@ -46,7 +46,7 @@ class GetAssetKeywordsTest extends TestCase
         $this->assetKeywordFactoryStub = $this->createMock(KeywordInterfaceFactory::class);
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
-        $this->sut = new GetAssetKeywords(
+        $this->sut = new GetAssetsKeywords(
             $this->resourceConnectionStub,
             $this->assetKeywordFactoryStub,
             $this->loggerMock

@@ -17,7 +17,6 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Api\StoreRepositoryInterface;
-use Magento\Store\Model\StoreResolver as StoreResolverInterface;
 use Magento\Store\Controller\Store\Redirect;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -61,7 +60,7 @@ class RedirectTest extends TestCase
     private $requestMock;
 
     /**
-     * @var StoreResolverInterface|MockObject
+     * @var StoreResolver|MockObject
      */
     private $storeResolverMock;
 
@@ -124,7 +123,7 @@ class RedirectTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['redirect'])
             ->getMockForAbstractClass();
-        $this->storeResolverMock = $this->getMockBuilder(StoreResolverInterface::class)
+        $this->storeResolverMock = $this->getMockBuilder(StoreResolver::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCurrentStoreId'])
             ->getMockForAbstractClass();

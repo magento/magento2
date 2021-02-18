@@ -13,21 +13,21 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\MediaGallery\Model\ResourceModel\GetAssetsByIds as GetById;
+use Magento\MediaGallery\Model\ResourceModel\GetAssetsByIds;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Test the GetById command with exception thrown in case when there is no such entity
+ * Test the GetAssetsByIds command with exception thrown in case when there is no such entity
  */
 class GetByIdExceptionNoSuchEntityTest extends TestCase
 {
     private const MEDIA_ASSET_STUB_ID = 1;
 
     /**
-     * @var GetById|MockObject
+     * @var GetAssetsByIds|MockObject
      */
     private $getMediaAssetById;
 
@@ -61,7 +61,7 @@ class GetByIdExceptionNoSuchEntityTest extends TestCase
         $logger = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->getMediaAssetById = (new ObjectManager($this))->getObject(
-            GetById::class,
+            GetAssetsByIds::class,
             [
                 'resourceConnection' => $resourceConnection,
                 'assetFactory' => $this->assetFactory,

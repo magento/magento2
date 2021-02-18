@@ -11,7 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\MediaGallery\Model\ResourceModel\DeleteAssetsByPaths as DeleteByPath;
+use Magento\MediaGallery\Model\ResourceModel\DeleteAssetsByPaths;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -25,7 +25,7 @@ class DeleteByPathTest extends TestCase
     private const FILE_PATH = 'test-file-path/test.jpg';
 
     /**
-     * @var DeleteByPath
+     * @var DeleteAssetsByPaths
      */
     private $deleteMediaAssetByPath;
 
@@ -48,7 +48,7 @@ class DeleteByPathTest extends TestCase
         $resourceConnection = $this->createMock(ResourceConnection::class);
 
         $this->deleteMediaAssetByPath = (new ObjectManager($this))->getObject(
-            DeleteByPath::class,
+            DeleteAssetsByPaths::class,
             [
                 'resourceConnection' => $resourceConnection,
                 'logger' =>  $this->logger,
