@@ -11,6 +11,7 @@ use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Swatches\Model\ResourceModel\Swatch as SwatchResource;
+use Magento\Swatches\Model\Swatch;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Interception\PluginList;
 use PHPUnit\Framework\TestCase;
@@ -49,7 +50,7 @@ class EavAttributeTest extends TestCase
     /**
      * @return void
      */
-    public function testEavAttributePluginIsRegistered()
+    public function testEavAttributePluginIsRegistered(): void
     {
         $pluginInfo = $this->objectManager->get(PluginList::class)->get(Attribute::class);
         $this->assertSame(EavAttribute::class, $pluginInfo['save_swatches_option_params']['instance']);
@@ -67,7 +68,7 @@ class EavAttributeTest extends TestCase
         unset($options[0]);
         $optionsIds = $this->collectOptionsIds($options);
         $attribute->addData($this->prepareOptions($options));
-        $attribute->setData('swatch_input_type', 'dropdown');
+        $attribute->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_DROPDOWN);
         $attribute->beforeSave();
         $this->assertEmpty($this->fetchSwatchOptions($optionsIds), 'Swatch options were not deleted');
     }
@@ -80,7 +81,6 @@ class EavAttributeTest extends TestCase
      */
     private function prepareOptions(array $options): array
     {
-        unset($options[0]);
         foreach ($options as $key => $option) {
             $preparedOptions['option']['order'][$option->getValue()] = $key;
             $preparedOptions['option']['value'][$option->getValue()] = [$option->getLabel()];
