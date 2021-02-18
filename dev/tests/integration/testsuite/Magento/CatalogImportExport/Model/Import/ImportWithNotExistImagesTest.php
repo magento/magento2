@@ -36,7 +36,7 @@ use PHPUnit\Framework\TestCase;
 class ImportWithNotExistImagesTest extends TestCase
 {
     /** @var string */
-    const TOPIC = 'import_export.export';
+    private const TOPIC = 'import_export.export';
 
     /** @var ObjectManagerInterface */
     private $objectManager;
@@ -83,7 +83,6 @@ class ImportWithNotExistImagesTest extends TestCase
         $deleteMessages = $objectManager->get(DeleteTopicRelatedMessages::class);
         $deleteMessages->execute(self::TOPIC);
     }
-
 
     /**
      * @inheritdoc
