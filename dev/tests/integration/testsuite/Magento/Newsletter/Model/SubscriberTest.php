@@ -176,7 +176,6 @@ class SubscriberTest extends TestCase
      * Unsubscribe and check queue
      *
      * @magentoDataFixture Magento/Newsletter/_files/queue.php
-     * @magentoDbIsolation disabled
      *
      * @return void
      */
