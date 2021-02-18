@@ -10,7 +10,6 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfig;
 
 /**
- * Class BatchConsumer
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BatchConsumer implements ConsumerInterface
