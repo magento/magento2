@@ -81,7 +81,7 @@ class SetUrlsToCopiedProduct
     }
 
     /**
-     * Sets default and stores urls to duplicated product
+     * Sets default url to duplicated product
      *
      * @param Copier $subject
      * @param Product $duplicate
@@ -92,10 +92,25 @@ class SetUrlsToCopiedProduct
     public function beforeCopy(Copier $subject, Product $product, Product $duplicate): array
     {
         $this->setDefaultUrl($product, $duplicate);
-        $this->setStoresUrl($product, $duplicate);
         $product->unsetData('url_key');
 
         return [$product, $duplicate];
+    }
+
+    /**
+     * Sets stores urls to duplicated product
+     *
+     * @param Copier $subject
+     * @param Product $duplicate
+     * @param Product $product
+     * @return Product
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function afterCopy(Copier $subject, Product $duplicate, Product $product): Product
+    {
+        $this->setStoresUrl($product, $duplicate);
+
+        return $duplicate;
     }
 
     /**
@@ -105,7 +120,7 @@ class SetUrlsToCopiedProduct
      * @param Product $duplicate
      * @return void
      */
-    private function setDefaultUrl(Product $product, Product $duplicate) : void
+    private function setDefaultUrl(Product $product, Product $duplicate): void
     {
         $duplicate->setStoreId(Store::DEFAULT_STORE_ID);
         $productId = $product->getId();
@@ -130,7 +145,7 @@ class SetUrlsToCopiedProduct
      * @throws UrlAlreadyExistsException
      * @throws LocalizedException
      */
-    private function setStoresUrl(Product $product, Product $duplicate) : void
+    private function setStoresUrl(Product $product, Product $duplicate): void
     {
         $productId = $product->getId();
         $attribute = $this->productResource->getAttribute(self::URL_KEY_ATTRIBUTE);
@@ -163,7 +178,6 @@ class SetUrlsToCopiedProduct
             $this->productResource->saveAttribute($duplicate, self::URL_PATH_ATTRIBUTE);
             $this->productResource->saveAttribute($duplicate, self::URL_KEY_ATTRIBUTE);
         }
-        $duplicate->setStoreId(Store::DEFAULT_STORE_ID);
     }
 
     /**
@@ -172,7 +186,7 @@ class SetUrlsToCopiedProduct
      * @param string $urlKey
      * @return string
      */
-    private function modifyUrl(string $urlKey) : string
+    private function modifyUrl(string $urlKey): string
     {
         return preg_match(self::URL_PATTERN, $urlKey, $matches)
             ? $matches[1] . '-' . ($matches[2] + 1)
