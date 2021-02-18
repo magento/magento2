@@ -126,7 +126,7 @@ class FileInfo
      */
     public function getMimeType($fileName)
     {
-        if ($this->mediaDirectory->getDriver() instanceof ExtendedDriverInterface) {
+        if ($this->getMediaDirectory()->getDriver() instanceof ExtendedDriverInterface) {
             return $this->mediaDirectory->getDriver()->getMetadata($fileName)['mimetype'];
         } else {
             return $this->mime->getMimeType(
