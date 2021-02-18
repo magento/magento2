@@ -251,7 +251,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     public function _addAssociatedProductFilters()
     {
         foreach ($this->products as $product) {
-            $this->getProductType()->getUsedProducts(
+            $this->getProductType()->getUsedProductsStockFilter(
                 $product,
                 $this->getColumnValues('attribute_id') // Filter associated products
             );

@@ -39,7 +39,7 @@ class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterfac
     public function getProducts(ProductInterface $product)
     {
         if (!isset($this->products[$product->getId()])) {
-            $this->products[$product->getId()] = $this->configurable->getUsedProducts($product);
+            $this->products[$product->getId()] = $this->configurable->getUsedProductsStockFilter($product);
         }
         return $this->products[$product->getId()];
     }

@@ -399,7 +399,7 @@ class ConfigurableTest extends TestCase
         $productCollection->expects($this->once())->method('getItems')->willReturn([$productCollectionItem]);
 
         $this->productCollectionFactory->expects($this->any())->method('create')->willReturn($productCollection);
-        $this->model->getUsedProducts($product);
+        $this->model->getUsedProductsStockFilter($product);
     }
 
     /**

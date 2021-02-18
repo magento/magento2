@@ -19,7 +19,7 @@ $attribute->setData('use_product_image_for_swatch', 1);
 $attributeRepository->save($attribute);
 
 // get first child and set image
-$childrenProducts = $product->getTypeInstance()->getUsedProducts($product);
+$childrenProducts = $product->getTypeInstance()->getUsedProductsStockFilter($product);
 /** @var Product $firstChildSimpleProduct */
 $firstChildSimpleProduct = array_shift($childrenProducts);
 $firstChildSimpleProduct

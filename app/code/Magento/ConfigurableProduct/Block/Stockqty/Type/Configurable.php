@@ -22,6 +22,6 @@ class Configurable extends \Magento\CatalogInventory\Block\Stockqty\Composite
      */
     protected function _getChildProducts()
     {
-        return $this->getProduct()->getTypeInstance()->getUsedProducts($this->getProduct());
+        return $this->getProduct()->getTypeInstance()->getUsedProductsStockFilter($this->getProduct());
     }
 }

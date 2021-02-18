@@ -254,7 +254,7 @@ class Matrix extends \Magento\Backend\Block\Template
         $ids = $this->getProduct()->getAssociatedProductIds();
         if ($ids === null) {
             // form data overrides any relations stored in database
-            return $this->_configurableType->getUsedProducts($product);
+            return $this->_configurableType->getUsedProductsStockFilter($product);
         }
         $products = [];
         foreach ($ids as $productId) {

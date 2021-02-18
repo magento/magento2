@@ -42,7 +42,7 @@ class Gallery
         if ($parentProduct->getTypeId() == Configurable::TYPE_CODE) {
             /** @var Configurable $productType */
             $productType = $parentProduct->getTypeInstance();
-            $products = $productType->getUsedProducts($parentProduct);
+            $products = $productType->getUsedProductsStockFilter($parentProduct);
             /** @var Product $product */
             foreach ($products as $product) {
                 $key = $product->getId();

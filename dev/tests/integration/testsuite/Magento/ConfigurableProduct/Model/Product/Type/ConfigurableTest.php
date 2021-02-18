@@ -246,7 +246,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUsedProducts()
     {
-        $products = $this->model->getUsedProducts($this->product);
+        $products = $this->model->getUsedProductsStockFilter($this->product);
         $this->assertIsArray($products);
         $this->assertTrue(2 === count($products));
         foreach ($products as $product) {
@@ -263,7 +263,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     public function testGetUsedProductsWithRequiredAttributes()
     {
         $requiredAttributeIds = [86];
-        $products = $this->model->getUsedProducts($this->product, $requiredAttributeIds);
+        $products = $this->model->getUsedProductsStockFilter($this->product, $requiredAttributeIds);
         foreach ($products as $product) {
             self::assertNotNull($product->getData('meta_description'));
         }
@@ -275,7 +275,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUsedProductsWithoutRequiredAttributes()
     {
-        $products = $this->model->getUsedProducts($this->product);
+        $products = $this->model->getUsedProductsStockFilter($this->product);
         foreach ($products as $product) {
             self::assertNull($product->getData('meta_description'));
         }
@@ -643,6 +643,6 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     {
         $product = Bootstrap::getObjectManager()->create(Product::class);
         $product->load(1);
-        return $this->model->getUsedProducts($product);
+        return $this->model->getUsedProductsStockFilter($product);
     }
 }

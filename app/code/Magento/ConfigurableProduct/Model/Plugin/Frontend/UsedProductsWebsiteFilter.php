@@ -24,7 +24,7 @@ class UsedProductsWebsiteFilter
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeGetUsedProducts(
+    public function beforeGetUsedProductsStockFilter(
         Configurable $subject,
         ProductInterface $product,
         array $requiredAttributeIds = null
