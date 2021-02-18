@@ -9,6 +9,7 @@ namespace Magento\PhpStan\Formatters;
 
 use PHPStan\Command\AnalysisResult;
 use PHPStan\Command\ErrorFormatter\TableErrorFormatter;
+use PHPStan\Command\ErrorFormatter\ErrorFormatter;
 use PHPStan\Command\Output;
 
 /**
@@ -37,11 +38,21 @@ use PHPStan\Command\Output;
  *
  * @see \Magento\PhpStan\Formatters\Fixtures\ClassWithIgnoreAnnotation
  */
-class FilteredErrorFormatter extends TableErrorFormatter
+class FilteredErrorFormatter implements ErrorFormatter
 {
     private const MUTE_ERROR_ANNOTATION = 'phpstan:ignore';
 
     private const NO_ERRORS = 0;
+
+    private $tableErrorFormatter;
+
+    /**
+     * @param TableErrorFormatter $tableErrorFormatter
+     */
+    public function __construct(TableErrorFormatter $tableErrorFormatter)
+    {
+        $this->tableErrorFormatter = $tableErrorFormatter;
+    }
 
     /**
      * @inheritdoc
@@ -67,7 +78,7 @@ class FilteredErrorFormatter extends TableErrorFormatter
             $analysisResult->getProjectConfigFile()
         );
 
-        return parent::formatErrors($clearedAnalysisResult, $output);
+        return $this->tableErrorFormatter->formatErrors($clearedAnalysisResult, $output);
     }
 
     /**
