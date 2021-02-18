@@ -233,6 +233,9 @@
         <data key="website_id">0</data>
         <requiredEntity type="address">UK_Not_Default_Address</requiredEntity>
     </entity>
+    <entity name="Customer_With_Vat_Number" type="customer" extends="Simple_Customer_Without_Address">
+        <requiredEntity type="address">US_With_Vat_Number</requiredEntity>
+    </entity>
     <entity name="Customer_With_Different_Default_Billing_Shipping_Addresses" type="customer">
         <data key="group_id">1</data>
         <data key="email" unique="prefix">John.Doe@example.com</data>
