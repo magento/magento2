@@ -13,6 +13,8 @@ use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Model\Quote\Address\Total;
 
 /**
+ * Data model for the sidebar
+ *
  * @deprecated 100.1.0
  */
 class Sidebar
@@ -130,7 +132,7 @@ class Sidebar
             $filter = new \Zend_Filter_LocalizedToNormalized(
                 ['locale' => $this->resolver->getLocale()]
             );
-            return $filter->filter($itemQty);
+            return $filter->filter((string)$itemQty);
         }
         return $itemQty;
     }

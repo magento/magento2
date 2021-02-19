@@ -96,6 +96,16 @@ class BatchRangeIteratorTest extends \PHPUnit\Framework\TestCase
     {
         $this->selectMock->expects($this->once())->method('limit')->with($this->batchSize, $this->currentBatch);
         $this->selectMock->expects($this->once())->method('order')->with('correlationName.rangeField' . ' ASC');
+        $this->wrapperSelectMock->expects($this->once())
+            ->method('from')
+            ->with(
+                $this->selectMock,
+                [new \Zend_Db_Expr('COUNT(*) as cnt')]
+            );
+        $this->connectionMock->expects($this->once())
+            ->method('fetchRow')
+            ->with($this->wrapperSelectMock)
+            ->willReturn(['cnt' => 10]);
         $this->assertEquals($this->selectMock, $this->model->current());
         $this->assertEquals(0, $this->model->key());
     }
