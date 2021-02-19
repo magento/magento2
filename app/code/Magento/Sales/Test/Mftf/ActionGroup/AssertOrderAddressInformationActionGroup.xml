@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertOrderAddressInformationActionGroup" extends="VerifyBasicOrderInformationActionGroup">
         <remove keyForRemoval="seeCustomerName"/>
         <remove keyForRemoval="seeCustomerEmail"/>
@@ -15,6 +15,8 @@
         <remove keyForRemoval="seeBillingAddressCountry"/>
         <remove keyForRemoval="seeShippingAddressCountry"/>
         <see selector="{{AdminOrderAddressInformationSection.billingAddress}}" userInput="{{billingAddress.country}}" stepKey="seeBillingCountry" after="seeBillingAddressCity"/>
+        <see selector="{{AdminOrderAddressInformationSection.billingAddress}}" userInput="{{billingAddress.state}}" stepKey="seeBillingAddressState" after="seeBillingCountry"/>
         <see selector="{{AdminOrderAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.country}}" stepKey="seeAddressCountry" after="seeShippingAddressCity"/>
+        <see selector="{{AdminOrderAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.state}}" stepKey="seeShippingAddressState" after="seeAddressCountry"/>
     </actionGroup>
 </actionGroups>

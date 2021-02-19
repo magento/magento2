@@ -381,6 +381,7 @@
     </entity>
     <entity name="UK_With_State_Default_Billing" extends="UK_Not_Default_Address">
         <requiredEntity type="region">RegionUKGL</requiredEntity>
+        <data key="country">United Kingdom</data>
         <data key="state">Greater London</data>
         <data key="default_billing">Yes</data>
     </entity>
