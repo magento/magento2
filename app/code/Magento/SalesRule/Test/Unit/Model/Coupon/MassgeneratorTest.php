@@ -37,7 +37,8 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
     public function testGenerateCode(array $data, $length)
     {
         $salesRuleCouponMock = $this->createPartialMock(
-            \Magento\SalesRule\Helper\Coupon::class, ['getCharset', 'getCodeSeparator']
+            \Magento\SalesRule\Helper\Coupon::class,
+            ['getCharset', 'getCodeSeparator']
         );
 
         /** @var \Magento\SalesRule\Model\Coupon\Massgenerator $massgenerator */
@@ -174,7 +175,8 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
         ];
 
         $salesRuleCouponMock = $this->createPartialMock(
-            \Magento\SalesRule\Helper\Coupon::class, ['getCharset', 'getCodeSeparator']
+            \Magento\SalesRule\Helper\Coupon::class,
+            ['getCharset', 'getCodeSeparator']
         );
         $resourceMock = $this->createPartialMock(
             \Magento\SalesRule\Model\ResourceModel\Coupon::class,

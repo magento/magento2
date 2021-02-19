@@ -114,7 +114,7 @@ class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
         $invoker(
             /**
              * JS components in data-mage-init attributes should be initialized not in php.
-             * JS components should be initialized in templates for them to be properly statically analyzed for bundling.
+             * JS components should be initialized in templates for them to be properly statically analyzed for bundling
              *
              * @param string $file
              */
@@ -158,7 +158,7 @@ class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
         $result = [];
         foreach (glob(__DIR__ . '/_files/initialize_javascript/' . $filePattern) as $file) {
             $fileData = include $file;
-            $result = array_merge($result, $fileData);
+            $result = array_merge($result, $fileData); //phpcs:ignore
         }
         return $result;
     }
@@ -169,7 +169,7 @@ class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
         $invoker(
             /**
              * JS components in x-magento-init attributes should be initialized not in php.
-             * JS components should be initialized in templates for them to be properly statically analyzed for bundling.
+             * JS components should be initialized in templates for them to be properly statically analyzed for bundling
              *
              * @param string $file
              */
