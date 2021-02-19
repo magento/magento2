@@ -18,14 +18,14 @@ class RemoveSubscriberFromQueue
     /**
      * @var RemoveSubscriberFromQueueLink
      */
-    private $removeSubscriberFromQueue;
+    private $removeSubscriberFromQueueLink;
 
     /**
-     * @param RemoveSubscriberFromQueueLink $removeSubscriberFromQueue
+     * @param RemoveSubscriberFromQueueLink $removeSubscriberFromQueueLink
      */
-    public function __construct(RemoveSubscriberFromQueueLink $removeSubscriberFromQueue)
+    public function __construct(RemoveSubscriberFromQueueLink $removeSubscriberFromQueueLink)
     {
-        $this->removeSubscriberFromQueue = $removeSubscriberFromQueue;
+        $this->removeSubscriberFromQueueLink = $removeSubscriberFromQueueLink;
     }
 
     /**
@@ -39,7 +39,7 @@ class RemoveSubscriberFromQueue
     public function afterUnsubscribe(Subscriber $subject, Subscriber $subscriber): Subscriber
     {
         if ($subscriber->isStatusChanged() && $subscriber->getSubscriberStatus() === Subscriber::STATUS_UNSUBSCRIBED) {
-            $this->removeSubscriberFromQueue->execute((int) $subscriber->getId());
+            $this->removeSubscriberFromQueueLink->execute((int) $subscriber->getId());
         }
 
         return $subscriber;
