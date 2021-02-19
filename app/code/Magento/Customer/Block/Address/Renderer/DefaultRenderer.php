@@ -172,9 +172,9 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
             }
             $attributeCode = $attributeMetadata->getAttributeCode();
             if ($attributeCode == 'country_id' && isset($addressAttributes['country_id'])) {
-                $data['country'] = $this->_countryFactory->create()->loadByCode(
-                    $addressAttributes['country_id']
-                )->getName();
+                $data['country'] = $this->_countryFactory->create()
+                    ->loadByCode($addressAttributes['country_id'])
+                    ->getName($addressAttributes['locale'] ?? null);
             } elseif ($attributeCode == 'region' && isset($addressAttributes['region'])) {
                 $data['region'] = (string)__($addressAttributes['region']);
             } elseif (isset($addressAttributes[$attributeCode])) {
@@ -198,6 +198,7 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
             }
         }
         $format = $format !== null ? $format : $this->getFormatArray($addressAttributes);
+
         return $this->filterManager->template($format, ['variables' => $data]);
     }
 }
