@@ -502,7 +502,7 @@ class DataTest extends TestCase
         }
 
         $this->configurableMock->expects($this->once())
-            ->method('getUsedProducts')
+            ->method('getUsedProductsStockFilter')
             ->with($this->productMock)
             ->willReturn($simpleProducts);
     }

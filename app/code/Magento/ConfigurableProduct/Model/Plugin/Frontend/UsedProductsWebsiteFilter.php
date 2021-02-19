@@ -21,13 +21,15 @@ class UsedProductsWebsiteFilter
      * @param Configurable $subject
      * @param ProductInterface $product
      * @param array|null $requiredAttributeIds
+     * @param bool|null $skipStock
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeGetUsedProductsStockFilter(
         Configurable $subject,
         ProductInterface $product,
-        array $requiredAttributeIds = null
+        ?array $requiredAttributeIds = null,
+        ?bool $skipStock = null
     ): void {
         $subject->setStoreFilter($product->getStore(), $product);
     }

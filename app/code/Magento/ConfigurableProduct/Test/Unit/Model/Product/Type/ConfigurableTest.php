@@ -386,7 +386,8 @@ class ConfigurableTest extends TestCase
             ->method('getData')
             ->willReturnMap(
                 [
-                    ['_cache_instance_used_product_attributes', null, []]
+                    ['_cache_instance_products', null, []],
+                    ['_cache_instance_used_product_attributes', null, []],
                 ]
             );
         $this->catalogConfig->expects($this->any())->method('getProductAttributes')->willReturn([]);
