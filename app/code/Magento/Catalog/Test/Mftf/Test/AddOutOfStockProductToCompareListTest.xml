@@ -22,9 +22,7 @@
         <before>
             <comment userInput="Adding the comment for preserving Backward Compatibility" stepKey="loginAsAdmin"/>
             <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockDisable.path}} {{CatalogInventoryOptionsShowOutOfStockDisable.value}}" stepKey="setConfigShowOutOfStockFalse"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
             <createData entity="SimpleSubCategory" stepKey="category"/>
             <createData entity="SimpleProduct4" stepKey="product">
                 <requiredEntity createDataKey="category"/>
@@ -33,9 +31,7 @@
 
         <after>
             <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockDisable.path}} {{CatalogInventoryOptionsShowOutOfStockDisable.value}}" stepKey="setConfigShowOutOfStockFalse"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
             <deleteData createDataKey="product" stepKey="deleteProduct"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <comment userInput="Adding the comment for preserving Backward Compatibility"  stepKey="logout"/>
@@ -58,9 +54,7 @@
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
             <argument name="indices" value="catalog_product_price"/>
         </actionGroup>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-           <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <comment userInput="Open product page | Comment is kept to preserve the step key for backward compatibility" stepKey="openProductPage"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToSimpleProductPage2"/>
