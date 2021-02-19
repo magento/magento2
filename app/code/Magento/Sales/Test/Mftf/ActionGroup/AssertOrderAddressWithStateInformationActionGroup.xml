@@ -13,7 +13,7 @@
         <remove keyForRemoval="seeCustomerGroup"/>
         <remove keyForRemoval="seeBillingAddressCountry"/>
         <remove keyForRemoval="seeShippingAddressCountry"/>
-        <see selector="{{AdminOrderAddressInformationSection.billingAddress}}" userInput="{{billingAddress.state}}" stepKey="seeBillingAddressState" after="seeBillingAddressCountry"/>
-        <see selector="{{AdminOrderAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.state}}" stepKey="seeShippingAddressState" after="seeBillingAddressCountry"/>
+        <see selector="{{AdminOrderAddressInformationSection.billingAddress}}" userInput="{{billingAddress.state}}" stepKey="seeBillingAddressState"/>
+        <see selector="{{AdminOrderAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.state}}" stepKey="seeShippingAddressState"/>
     </actionGroup>
 </actionGroups>
