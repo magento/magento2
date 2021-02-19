@@ -60,7 +60,7 @@
             <argument name="orderId" value="$getOrderNumber"/>
         </actionGroup>
 
-        <actionGroup ref="AssertOrderAddressInformationActionGroup" stepKey="AssertOrderAddressInformation">
+        <actionGroup ref="AssertOrderAddressWithStateInformationActionGroup" stepKey="AssertOrderAddressInformation">
             <argument name="customer" value=""/>
             <argument name="shippingAddress" value="US_Address_NY_Default_Shipping"/>
             <argument name="billingAddress" value="UK_With_State_Default_Billing"/>

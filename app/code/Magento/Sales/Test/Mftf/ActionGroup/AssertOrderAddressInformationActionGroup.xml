@@ -15,8 +15,6 @@
         <remove keyForRemoval="seeBillingAddressCountry"/>
         <remove keyForRemoval="seeShippingAddressCountry"/>
         <see selector="{{AdminOrderAddressInformationSection.billingAddress}}" userInput="{{billingAddress.country}}" stepKey="seeBillingCountry" after="seeBillingAddressCity"/>
-        <see selector="{{AdminOrderAddressInformationSection.billingAddress}}" userInput="{{billingAddress.state}}" stepKey="seeBillingAddressState" after="seeBillingCountry"/>
-        <see selector="{{AdminOrderAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.country}}" stepKey="seeAddressCountry" after="seeShippingAddressCity"/>
-        <see selector="{{AdminOrderAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.state}}" stepKey="seeShippingAddressState" after="seeAddressCountry"/>
+        <see selector="{{AdminOrderAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.country}}" stepKey="seeAddressCountry" after="seeShippingAddressCity"/
     </actionGroup>
 </actionGroups>
