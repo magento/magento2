@@ -66,7 +66,7 @@ class Confirmation extends Column
     private function getFieldLabel(array $item)
     {
         $isConfirmationRequired = $this->accountConfirmation->isConfirmationRequired(
-            $item['website_id'][0],
+            $item['website_id'][0] ?? null,
             $item[$item['id_field_name']],
             $item['email']
         );
