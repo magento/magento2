@@ -429,6 +429,9 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         $this->readMock->expects($this->any())
             ->method('isFile')
             ->willReturn(false);
+        $this->readMock->expects($this->any())
+            ->method('stat')
+            ->willReturn(['size' => 0]);
         $this->databaseMock->expects($this->any())
             ->method('checkDbUsage')
             ->willReturn(true);

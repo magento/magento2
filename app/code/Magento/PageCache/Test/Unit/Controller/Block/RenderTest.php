@@ -118,11 +118,11 @@ class RenderTest extends \PHPUnit\Framework\TestCase
     public function testExecuteNoParams()
     {
         $this->requestMock->expects($this->once())->method('isAjax')->willReturn(true);
-        $this->requestMock->expects($this->at(10))
+        $this->requestMock->expects($this->at(6))
             ->method('getParam')
             ->with($this->equalTo('blocks'), $this->equalTo(''))
             ->willReturn('');
-        $this->requestMock->expects($this->at(11))
+        $this->requestMock->expects($this->at(7))
             ->method('getParam')
             ->with($this->equalTo('handles'), $this->equalTo(''))
             ->willReturn('');

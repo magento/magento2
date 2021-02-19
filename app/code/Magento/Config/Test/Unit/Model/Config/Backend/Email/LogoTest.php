@@ -159,6 +159,9 @@ class LogoTest extends \PHPUnit\Framework\TestCase
             ->with(Logo::UPLOAD_DIR . '/' . $oldValue)
             ->willReturn(true);
 
+        $this->uploaderMock->method('save')
+            ->willReturn(['file' => $oldValue]);
+
         $this->assertEquals($this->model, $this->model->beforeSave());
     }
 
