@@ -38,12 +38,8 @@
         </after>
         <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
         <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchStoreViewAdmin"/>
-        <conditionalClick selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateTab}}" dependentSelector="{{AdminShippingMethodFlatRateSection.carriersFlatRateTitle}}" visible="false" stepKey="expandTab"/>
-        <click selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateTitle}}" stepKey="uncheckUseSystemValueForFlatRateTitle"/>
-        <fillField selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateTitleField}}" userInput="Test carrier title name" stepKey="fillFieldTitle"/>
-        <click selector="{{AdminShippingMethodFlatRateSection.carriersSaveConfig}}" stepKey="saveShippingConfig"/>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCache">
-            <argument name="tags" value=""/>
+        <actionGroup ref="AdminSetShippingMethodTitleActionGroup" stepKey="setShippingMethodTitle">
+            <argument name="shippingMethodTitle" value="Test carrier title"/>
         </actionGroup>
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
             <argument name="Customer" value="$$createCustomer$$" />
@@ -54,10 +50,8 @@
         <actionGroup ref="StorefrontProductPageAddSimpleProductToCartActionGroup" stepKey="addProductToCart"/>
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="openShoppingCart"/>
         <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="cartSwitchStoreView"/>
-        <grabTextFrom selector="{{CheckoutPaymentSection.orderSummaryShippingMethod}}" stepKey="getShippingName"/>
-        <assertStringContainsString stepKey="assertShippingTitle">
-            <expectedResult type="string">Test carrier title name</expectedResult>
-            <actualResult type="variable">getShippingName</actualResult>
-        </assertStringContainsString>
+        <actionGroup ref="StorefrontValidateCartShippingMethodTitleActionGroup" stepKey="checkShippingTitle">
+            <argument name="shippingMethodTitle" value="Test carrier title"/>
+        </actionGroup>
     </test>
 </tests>

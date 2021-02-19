@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontValidateCartShippingMethodTitleActionGroup">
+        <annotations>
+            <description>Validate selected shipping method title in the cart</description>
+        </annotations>
+        <arguments>
+            <argument name="shippingMethodTitle" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.orderSummaryShippingMethod}}" stepKey="waitForShippingTitle"/>
+        <grabTextFrom selector="{{CheckoutPaymentSection.orderSummaryShippingMethod}}" stepKey="getShippingTitle"/>
+        <assertStringContainsString stepKey="assertShippingTitle">
+            <expectedResult type="string">{{shippingMethodTitle}}</expectedResult>
+            <actualResult type="variable">getShippingTitle</actualResult>
+        </assertStringContainsString>
+    </actionGroup>
+</actionGroups>
