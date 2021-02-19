@@ -422,6 +422,11 @@ class Data extends AbstractHelper
                 'type' => ScopeInterface::SCOPE_WEBSITE,
                 'value' => $request->getParam(ScopeInterface::SCOPE_WEBSITE),
             ];
+        } elseif ($request->getParam(ScopeInterface::SCOPE_STORE)) {
+            $scope = [
+                'type' => ScopeInterface::SCOPE_STORE,
+                'value' => $request->getParam(ScopeInterface::SCOPE_STORE),
+            ];
         } elseif ($request->getParam(self::STORE_ID)) {
             $scope = [
                 'type' => ScopeInterface::SCOPE_STORE,
