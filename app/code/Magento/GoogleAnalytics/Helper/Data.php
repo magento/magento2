@@ -21,9 +21,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     const XML_PATH_ACTIVE = 'google/analytics/active';
 
+    const XML_PATH_ACCOUNT_TYPE = 'google/analytics/account_type';
+
     const XML_PATH_ACCOUNT = 'google/analytics/account';
 
     const XML_PATH_ANONYMIZE = 'google/analytics/anonymize';
+
+    /**
+    * Account Types
+    */
+    const ACCOUNT_TYPE_GOOGLE_ANALYTICS = 0;
 
     /**
      * Whether GA is ready to use
@@ -47,5 +54,28 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function isAnonymizedIpActive($store = null)
     {
         return (bool)$this->scopeConfig->getValue(self::XML_PATH_ANONYMIZE, ScopeInterface::SCOPE_STORE, $store);
+    }
+
+    /**
+    * Get Google Analytics Account Type
+    *
+    * @return string
+    */
+    public function getAccountType()
+    {
+ 	    return $this->scopeConfig->getValue(
+    	    self::XML_PATH_ACCOUNT_TYPE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+    }
+    
+    /**
+     * Checks if Account Type is Google Analytics Account
+     *
+     * @return bool
+     */
+    public function isGoogleAnalyticsAccount()
+    {
+        return $this->getAccountType() == self::ACCOUNT_TYPE_GOOGLE_ANALYTICS;
     }
 }
