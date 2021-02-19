@@ -45,7 +45,7 @@ class Confirmation extends Column
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function prepareDataSource(array $dataSource)
     {
