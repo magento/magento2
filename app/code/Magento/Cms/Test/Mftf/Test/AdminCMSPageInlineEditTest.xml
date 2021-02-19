@@ -57,22 +57,22 @@
         <see userInput="{$todayFormatted}" selector="{{AdminOrdersGridSection.gridCell('2','Custom design from')}}" stepKey="assertCustomDesignFrom"/>
         <see userInput="{$tomorrowFormatted}" selector="{{AdminOrdersGridSection.gridCell('2','Custom design to')}}" stepKey="assertCustomDesignTo"/>
         <click selector="{{AdminDataGridTableSection.rows}}" stepKey="clickEdit"/>
-        <waitForElementVisible selector="{{AdminCmsGridPageInlineEditSection.customLayout}}" stepKey="waitForDate"/>
-        <selectOption userInput="2 columns with right bar" selector="{{AdminCmsGridPageInlineEditSection.customLayout}}" stepKey="changeLayoutFromGrid"/>
-        <click selector="{{AdminCmsGridPageInlineEditSection.savePageButton}}" stepKey="clickSaveFromGrid"/>
+        <waitForElementVisible selector="{{AdminCmsPageGridInlineEditSection.customLayout}}" stepKey="waitForDate"/>
+        <selectOption userInput="2 columns with right bar" selector="{{AdminCmsPageGridInlineEditSection.customLayout}}" stepKey="changeLayoutFromGrid"/>
+        <click selector="{{AdminCmsPageGridInlineEditSection.savePageButton}}" stepKey="clickSaveFromGrid"/>
         <see userInput="{$todayFormatted}" selector="{{AdminOrdersGridSection.gridCell('2','Custom design from')}}" stepKey="assertCustomDesignFrom2"/>
         <see userInput="{$tomorrowFormatted}" selector="{{AdminOrdersGridSection.gridCell('2','Custom design to')}}" stepKey="assertCustomDesignTo2"/>
         <click selector="{{AdminDataGridTableSection.rows}}" stepKey="clickEdit2"/>
-        <waitForElementVisible selector="{{AdminCmsGridPageInlineEditSection.customLayout}}" stepKey="waitForDate2"/>
-        <selectOption userInput="2 columns with left bar" selector="{{AdminCmsGridPageInlineEditSection.customLayout}}" stepKey="changeLayoutFromGrid2"/>
-        <click selector="{{AdminCmsGridPageInlineEditSection.savePageButton}}" stepKey="clickSaveFromGrid2"/>
+        <waitForElementVisible selector="{{AdminCmsPageGridInlineEditSection.customLayout}}" stepKey="waitForDate2"/>
+        <selectOption userInput="2 columns with left bar" selector="{{AdminCmsPageGridInlineEditSection.customLayout}}" stepKey="changeLayoutFromGrid2"/>
+        <click selector="{{AdminCmsPageGridInlineEditSection.savePageButton}}" stepKey="clickSaveFromGrid2"/>
         <see userInput="{$todayFormatted}" selector="{{AdminOrdersGridSection.gridCell('2','Custom design from')}}" stepKey="assertCustomDesignFrom3"/>
         <see userInput="{$tomorrowFormatted}" selector="{{AdminOrdersGridSection.gridCell('2','Custom design to')}}" stepKey="assertCustomDesignTo3"/>
         <click selector="{{AdminDataGridTableSection.rows}}" stepKey="clickEdit3"/>
-        <waitForElementVisible selector="{{AdminCmsGridPageInlineEditSection.customDesignFrom}}" stepKey="waitForDate3"/>
-        <fillField selector="{{AdminCmsGridPageInlineEditSection.customDesignFrom}}" userInput="{$newDateFrom}" stepKey="fillDateFromInGrid"/>
-        <fillField selector="{{AdminCmsGridPageInlineEditSection.customDesignTo}}" userInput="{$newDateTo}" stepKey="fillDateToInGrid"/>
-        <click selector="{{AdminCmsGridPageInlineEditSection.savePageButton}}" stepKey="clickSaveFromGrid3"/>
+        <waitForElementVisible selector="{{AdminCmsPageGridInlineEditSection.customDesignFrom}}" stepKey="waitForDate3"/>
+        <fillField selector="{{AdminCmsPageGridInlineEditSection.customDesignFrom}}" userInput="{$newDateFrom}" stepKey="fillDateFromInGrid"/>
+        <fillField selector="{{AdminCmsPageGridInlineEditSection.customDesignTo}}" userInput="{$newDateTo}" stepKey="fillDateToInGrid"/>
+        <click selector="{{AdminCmsPageGridInlineEditSection.savePageButton}}" stepKey="clickSaveFromGrid3"/>
         <see userInput="{$newDateFromFormatted}" selector="{{AdminOrdersGridSection.gridCell('2','Custom design from')}}" stepKey="assertCustomDesignFrom4"/>
         <see userInput="{$newDateToFormatted}" selector="{{AdminOrdersGridSection.gridCell('2','Custom design to')}}" stepKey="assertCustomDesignTo4"/>
     </test>

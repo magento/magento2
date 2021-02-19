@@ -7,7 +7,7 @@
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
-    <section name="AdminCmsGridPageInlineEditSection">
+    <section name="AdminCmsPageGridInlineEditSection">
         <element name="customDesignFrom" type="input" selector="tr.data-grid-editable-row:not([style*='display: none']) [name='custom_theme_from']"/>
         <element name="customDesignTo" type="input" selector="tr.data-grid-editable-row:not([style*='display: none']) [name='custom_theme_to']"/>
         <element name="customLayout" type="input" selector="tr.data-grid-editable-row:not([style*='display: none']) [name='page_layout']"/>
