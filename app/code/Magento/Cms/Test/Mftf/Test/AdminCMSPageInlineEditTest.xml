@@ -53,7 +53,7 @@
         <fillField selector="{{CmsDesignSection.customDesignFrom}}" userInput="{$today}" stepKey="fillDateFrom"/>
         <fillField selector="{{CmsDesignSection.customDesignTo}}" userInput="{$tomorrow}" stepKey="fillDateTo"/>
         <selectOption selector="{{CmsDesignSection.customTheme}}" userInput="{{MagentoBlankTheme.name}}" stepKey="fillCustomTheme"/>
-        <actionGroup ref="SaveCmsPageActionGroup" stepKey="save CmsPage"/>
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="saveCmsPage"/>
         <see userInput="{$todayFormatted}" selector="{{AdminOrdersGridSection.gridCell('2','Custom design from')}}" stepKey="assertCustomDesignFrom"/>
         <see userInput="{$tomorrowFormatted}" selector="{{AdminOrdersGridSection.gridCell('2','Custom design to')}}" stepKey="assertCustomDesignTo"/>
         <click selector="{{AdminDataGridTableSection.rows}}" stepKey="clickEdit"/>
