@@ -7,7 +7,7 @@
 namespace Magento\BundleImportExport\Test\Unit\Model\Import\Product\Type;
 
 /**
- * Class BundleTest
+ * Tests for Bundle
  *
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

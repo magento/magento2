@@ -6,6 +6,7 @@
 
 namespace Magento\Customer\Test\Unit\Model\ResourceModel;
 
+use Magento\Customer\Model\Address;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -261,7 +262,6 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 /**
  * Class SubResourceModelAddress
  * Mock method getAttributeLoader
- * @package Magento\Customer\Test\Unit\Model\ResourceModel
  * @codingStandardsIgnoreStart
  */
 class SubResourceModelAddress extends \Magento\Customer\Model\ResourceModel\Address

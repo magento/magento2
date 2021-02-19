@@ -21,9 +21,6 @@ class FieldDataConverter
      */
     const BATCH_SIZE_VARIABLE_NAME = 'DATA_CONVERTER_BATCH_SIZE';
 
-    /**
-     * Default batch size
-     */
     const DEFAULT_BATCH_SIZE = 50000;
 
     /**

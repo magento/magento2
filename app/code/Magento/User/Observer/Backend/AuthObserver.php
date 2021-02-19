@@ -20,7 +20,9 @@ use Magento\User\Model\UserFactory;
 
 /**
  * User backend observer model for authentication
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class AuthObserver implements ObserverInterface
 {

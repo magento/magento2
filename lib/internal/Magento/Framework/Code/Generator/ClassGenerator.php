@@ -112,12 +112,12 @@ class ClassGenerator extends \Laminas\Code\Generator\ClassGenerator implements
             $this->_setDataToObject($methodObject, $methodOptions, $this->_methodOptions);
 
             if (isset(
-                    $methodOptions['parameters']
-                ) && is_array(
-                    $methodOptions['parameters']
-                ) && count(
-                    $methodOptions['parameters']
-                ) > 0
+                $methodOptions['parameters']
+            ) && is_array(
+                $methodOptions['parameters']
+            ) && count(
+                $methodOptions['parameters']
+            ) > 0
             ) {
                 $parametersArray = [];
                 foreach ($methodOptions['parameters'] as $parameterOptions) {

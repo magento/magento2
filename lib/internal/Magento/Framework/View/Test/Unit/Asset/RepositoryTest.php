@@ -240,7 +240,13 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
                 ['area' => 'AREA', 'themeModel' => $this->getThemeMock(), 'module' => false, 'locale' => 'locale']],
             [
                 ['themeId' => 'ThemeID'],
-                ['area' => 'area', 'themeId' => 'ThemeID', 'themeModel' => 'ThemeID', 'module' => false, 'locale' => 'locale']
+                [
+                    'area' => 'area',
+                    'themeId' => 'ThemeID',
+                    'themeModel' => 'ThemeID',
+                    'module' => false,
+                    'locale' => 'locale'
+                ]
             ]
         ];
     }
@@ -255,7 +261,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('getThemeByFullPath')
             ->willReturnArgument(0);
 
-        $fallbackContextMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContex::class)
+        $fallbackContextMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContext::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->fallbackFactoryMock
@@ -320,7 +326,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('isSecure')
             ->willReturn(false);
 
-        $fallbackContextMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContex::class)
+        $fallbackContextMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContext::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->fallbackFactoryMock

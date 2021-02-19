@@ -116,8 +116,12 @@ class AccessTest extends \PHPUnit\Framework\TestCase
 
         $this->helperMock = $this->createMock(\Magento\Framework\Oauth\Helper\Request::class);
         $this->frameworkOauthSvcMock = $this->getMockForAbstractClass(\Magento\Framework\Oauth\OauthInterface::class);
-        $this->intOauthServiceMock = $this->getMockForAbstractClass(\Magento\Integration\Api\OauthServiceInterface::class);
-        $this->integrationServiceMock = $this->getMockForAbstractClass(\Magento\Integration\Api\IntegrationServiceInterface::class);
+        $this->intOauthServiceMock = $this->getMockForAbstractClass(
+            \Magento\Integration\Api\OauthServiceInterface::class
+        );
+        $this->integrationServiceMock = $this->getMockForAbstractClass(
+            \Magento\Integration\Api\IntegrationServiceInterface::class
+        );
         /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager $objectManagerHelper */
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->accessAction = $this->objectManagerHelper->getObject(

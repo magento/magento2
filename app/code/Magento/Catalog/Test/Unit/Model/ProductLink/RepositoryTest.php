@@ -251,7 +251,9 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     public function testDeleteWithNoSuchEntityException()
     {
         $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
-        $this->expectExceptionMessage('Product with SKU \'linkedProduct\' is not linked to product with SKU \'product\'');
+        $this->expectExceptionMessage(
+            'Product with SKU \'linkedProduct\' is not linked to product with SKU \'product\''
+        );
 
         $entityMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Link::class);
         $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);

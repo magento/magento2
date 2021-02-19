@@ -97,12 +97,10 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
         $this->configMock->expects($this->once())
             ->method('getIndexer')
             ->willReturn(
-
                 [
                     'title' => 'Title_indexerOne',
                     'shared_index' => null
                 ]
-
             );
         $this->configureAdminArea();
         $this->initIndexerCollectionByItems(
@@ -139,8 +137,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
         array $reindexAllCallMatchers,
         array $executedIndexers,
         array $executedSharedIndexers
-    )
-    {
+    ) {
         $this->addSeparateIndexersToConfigMock($indexers);
         $this->addAllIndexersToConfigMock($indexers);
 

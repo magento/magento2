@@ -6,7 +6,7 @@
 namespace Magento\SalesRule\Test\Unit\Model\Coupon;
 
 /**
- * Class MassgeneratorTest
+ * Tests for Massgenerator
  */
 class MassgeneratorTest extends \PHPUnit\Framework\TestCase
 {
@@ -36,7 +36,9 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGenerateCode(array $data, $length)
     {
-        $salesRuleCouponMock = $this->createPartialMock(\Magento\SalesRule\Helper\Coupon::class, ['getCharset', 'getCodeSeparator']);
+        $salesRuleCouponMock = $this->createPartialMock(
+            \Magento\SalesRule\Helper\Coupon::class, ['getCharset', 'getCodeSeparator']
+        );
 
         /** @var \Magento\SalesRule\Model\Coupon\Massgenerator $massgenerator */
         $massgenerator = $this->objectManager->getObject(
@@ -160,7 +162,9 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
     public function testGeneratePoolException()
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('We cannot create the requested Coupon Qty. Please check your settings and try again.');
+        $this->expectExceptionMessage(
+            'We cannot create the requested Coupon Qty. Please check your settings and try again.'
+        );
 
         $data = [
             'qty' => 3,
@@ -169,7 +173,9 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
             'max_attempts' => 0,
         ];
 
-        $salesRuleCouponMock = $this->createPartialMock(\Magento\SalesRule\Helper\Coupon::class, ['getCharset', 'getCodeSeparator']);
+        $salesRuleCouponMock = $this->createPartialMock(
+            \Magento\SalesRule\Helper\Coupon::class, ['getCharset', 'getCodeSeparator']
+        );
         $resourceMock = $this->createPartialMock(
             \Magento\SalesRule\Model\ResourceModel\Coupon::class,
             ['exists', '__wakeup', 'getIdFieldName']

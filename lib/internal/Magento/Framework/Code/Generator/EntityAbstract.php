@@ -7,11 +7,11 @@ namespace Magento\Framework\Code\Generator;
 
 use Laminas\Code\Generator\ValueGenerator;
 
+/**
+ * Parent class for entities
+ */
 abstract class EntityAbstract
 {
-    /**
-     * Entity type
-     */
     const ENTITY_TYPE = 'abstract';
 
     /**
@@ -237,6 +237,8 @@ abstract class EntityAbstract
     }
 
     /**
+     * Ensures that data is valid
+     *
      * @return bool
      */
     protected function _validateData()
@@ -262,6 +264,8 @@ abstract class EntityAbstract
     }
 
     /**
+     * Retrieves documentation block from class
+     *
      * @return array
      */
     protected function _getClassDocBlock()
@@ -271,6 +275,8 @@ abstract class EntityAbstract
     }
 
     /**
+     * Retrieves generated code
+     *
      * @return string
      */
     protected function _getGeneratedCode()
@@ -280,6 +286,8 @@ abstract class EntityAbstract
     }
 
     /**
+     * Fixes code style errors
+     *
      * @param string $sourceCode
      * @return string
      */
@@ -304,6 +312,8 @@ abstract class EntityAbstract
     }
 
     /**
+     * Retrieve type from parameter
+     *
      * @param \ReflectionParameter $parameter
      * @return null|string
      */
@@ -334,6 +344,8 @@ abstract class EntityAbstract
     }
 
     /**
+     * Retrieve default value from parameter
+     *
      * @param \ReflectionParameter $parameter
      * @return null|ValueGenerator
      * @throws \ReflectionException
