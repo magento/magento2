@@ -51,8 +51,10 @@ class DesignLoader
     public function load()
     {
         $area = $this->_areaList->getArea($this->appState->getAreaCode());
-        $area->load(\Magento\Framework\App\Area::PART_DESIGN);
-        $area->load(\Magento\Framework\App\Area::PART_TRANSLATE);
-        $area->detectDesign($this->_request);
+        if ($area &&
+            $this->_request &&
+            $this->_request instanceof RequestInterface) {
+            $area->detectDesign($this->_request);
+        }
     }
 }

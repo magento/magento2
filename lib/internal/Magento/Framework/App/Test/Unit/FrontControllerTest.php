@@ -156,10 +156,6 @@ class FrontControllerTest extends TestCase
         $exceptionMessage = 'exception_message';
         $exception = new InvalidRequestException($exceptionMessage);
 
-        $this->appStateMock->expects($this->any())->method('getAreaCode')->willReturn('frontend');
-        $this->areaMock->expects($this->at(0))->method('load')->with(Area::PART_DESIGN)->willReturnSelf();
-        $this->areaMock->expects($this->at(1))->method('load')->with(Area::PART_TRANSLATE)->willReturnSelf();
-        $this->areaListMock->expects($this->any())->method('getArea')->willReturn($this->areaMock);
         $this->routerList->expects($this->any())
             ->method('valid')
             ->willReturn(true);

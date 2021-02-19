@@ -49,15 +49,11 @@ class DesignLoaderTest extends TestCase
         );
     }
 
-    public function testLoad()
+    public function testLoad(): void
     {
         $area = $this->createMock(Area::class);
         $this->appState->expects($this->once())->method('getAreaCode')->willReturn('area');
         $this->_areaListMock->expects($this->once())->method('getArea')->with('area')->willReturn($area);
-        $area->expects($this->at(0))->method('load')
-            ->with(Area::PART_DESIGN)->willReturn($area);
-        $area->expects($this->at(1))->method('load')
-            ->with(Area::PART_TRANSLATE)->willReturn($area);
         $this->_model->load($this->_requestMock);
     }
 }

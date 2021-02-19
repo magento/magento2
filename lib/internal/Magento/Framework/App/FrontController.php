@@ -185,6 +185,11 @@ class FrontController implements FrontControllerInterface
         //Validating a request only once.
         if (!$this->validatedRequest) {
             try {
+                $area = $this->areaList->getArea($this->appState->getAreaCode());
+                if ($area) {
+                    $area->load(Area::PART_DESIGN);
+                    $area->load(Area::PART_TRANSLATE);
+                }
                 $this->requestValidator->validate($request, $actionInstance);
             } catch (InvalidRequestException $exception) {
                 //Validation failed - processing validation results.
@@ -193,9 +198,6 @@ class FrontController implements FrontControllerInterface
                     ["exception" => $exception]
                 );
                 $result = $exception->getReplaceResult();
-                $area = $this->areaList->getArea($this->appState->getAreaCode());
-                $area->load(Area::PART_DESIGN);
-                $area->load(Area::PART_TRANSLATE);
                 if ($messages = $exception->getMessages()) {
                     foreach ($messages as $message) {
                         $this->messages->addErrorMessage($message);
@@ -214,7 +216,7 @@ class FrontController implements FrontControllerInterface
             }
         }
 
-        //handling redirect to 404
+        // Handling redirect to 404
         if ($result instanceof NotFoundException) {
             throw $result;
         }
