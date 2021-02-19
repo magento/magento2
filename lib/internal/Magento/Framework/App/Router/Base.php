@@ -202,7 +202,7 @@ class Base implements \Magento\Framework\App\RouterInterface
         // get module name
         if ($request->getModuleName()) {
             $moduleFrontName = $request->getModuleName();
-        } elseif (strlen($param)) {
+        } elseif (strlen((string) $param)) {
             $moduleFrontName = $param;
         } else {
             $moduleFrontName = $this->_defaultPath->getPart('module');
@@ -271,7 +271,7 @@ class Base implements \Magento\Framework\App\RouterInterface
     protected function matchAction(\Magento\Framework\App\RequestInterface $request, array $params)
     {
         $moduleFrontName = $this->matchModuleFrontName($request, $params['moduleFrontName']);
-        if (!strlen($moduleFrontName)) {
+        if (!strlen((string) $moduleFrontName)) {
             return null;
         }
 
