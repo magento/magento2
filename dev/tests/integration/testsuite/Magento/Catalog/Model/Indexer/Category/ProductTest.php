@@ -196,7 +196,7 @@ class ProductTest extends TestCase
     public function testDeleteInactiveCategory(): void
     {
         $this->indexer->reindexAll();
-        $indexerShouldBeValid = $this->indexer->isInvalid();
+        $isInvalidIndexer = $this->indexer->isInvalid();
 
         $this->categoryRepository->deleteByIdentifier(4);
 
@@ -204,7 +204,7 @@ class ProductTest extends TestCase
         $state->loadByIndexer($this->indexer->getId());
         $status = $state->getStatus();
 
-        $this->assertFalse($indexerShouldBeValid);
+        $this->assertFalse($isInvalidIndexer);
         $this->assertEquals(StateInterface::STATUS_VALID, $status);
     }
 

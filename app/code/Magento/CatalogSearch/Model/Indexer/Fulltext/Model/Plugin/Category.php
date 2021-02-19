@@ -40,7 +40,7 @@ class Category
      */
     public function afterDelete(Resource $subjectCategory, Resource $resultCategory, DataObject $object) : Resource
     {
-        if ($object->getIsActive()) {
+        if ($object->getIsActive() || $object->getDeletedChildrenIds()) {
             $this->fulltextIndexerProcessor->markIndexerAsInvalid();
         }
 

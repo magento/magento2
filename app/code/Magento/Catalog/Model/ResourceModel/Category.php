@@ -232,9 +232,10 @@ class Category extends AbstractResource
      */
     protected function _afterDelete(DataObject $object)
     {
-        if ($object->getIsActive()) {
+        if ($object->getIsActive() || $object->getDeletedChildrenIds()) {
             $this->indexerProcessor->markIndexerAsInvalid();
         }
+
         return parent::_afterDelete($object);
     }
 
