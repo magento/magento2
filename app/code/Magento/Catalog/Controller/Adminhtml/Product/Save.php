@@ -140,7 +140,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
 
                 $originalSku = $product->getSku();
                 $canSaveCustomOptions = $product->getCanSaveCustomOptions();
-                $product->save();
+                $this->productRepository->save($product);
                 $this->handleImageRemoveError($data, $product->getId());
                 $productId = $product->getEntityId();
                 $productAttributeSetId = $product->getAttributeSetId();
