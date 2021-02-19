@@ -7,8 +7,11 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AssertOrderAddressWithStateInformationActionGroup" extends="AssertOrderAddressInformationActionGroup">
-        <see selector="{{AdminOrderAddressInformationSection.billingAddress}}" userInput="{{billingAddress.state}}" stepKey="seeBillingAddressState" after="seeBillingState"/>
-        <see selector="{{AdminOrderAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.state}}" stepKey="seeShippingAddressState" after="seeShippingState"/>
+    <actionGroup name="AssertOrderAddressWithStateInformationActionGroup" extends="VerifyBasicOrderInformationActionGroup">
+        <remove keyForRemoval="seeCustomerName"/>
+        <remove keyForRemoval="seeCustomerEmail"/>
+        <remove keyForRemoval="seeCustomerGroup"/>
+        <see selector="{{AdminOrderAddressInformationSection.billingAddress}}" userInput="{{billingAddress.state}}" stepKey="seeBillingAddressState" after="seeBillingAddressCountry"/>
+        <see selector="{{AdminOrderAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.state}}" stepKey="seeShippingAddressState" after="seeBillingAddressCountry"/>
     </actionGroup>
 </actionGroups>
