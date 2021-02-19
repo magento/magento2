@@ -80,7 +80,7 @@ class SaveAssets implements SaveAssetsInterface
                 $connection->insertOnDuplicate($tableName, $record);
             } catch (\Exception $exception) {
                 $this->logger->critical($exception);
-                $failedAssets[] = $asset;
+                $failedAssets[] = $asset->getTitle();
             }
         }
 

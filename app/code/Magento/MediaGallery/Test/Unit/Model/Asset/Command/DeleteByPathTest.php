@@ -72,7 +72,7 @@ class DeleteByPathTest extends TestCase
     {
         $this->adapter->expects($this->once())
             ->method('delete')
-            ->with('prefix_' . self::TABLE_NAME, ['path = ?' => self::FILE_PATH]);
+            ->with('prefix_' . self::TABLE_NAME, ['path LIKE ?' => self::FILE_PATH]);
 
         $this->deleteMediaAssetByPath->execute([self::FILE_PATH]);
     }
@@ -84,7 +84,7 @@ class DeleteByPathTest extends TestCase
     {
         $this->adapter->expects($this->once())
             ->method('delete')
-            ->with('prefix_' . self::TABLE_NAME, ['path = ?' => self::FILE_PATH])
+            ->with('prefix_' . self::TABLE_NAME, ['path LIKE ?' => self::FILE_PATH])
             ->willThrowException(new \Exception());
 
         $this->expectException(CouldNotDeleteException::class);

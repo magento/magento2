@@ -166,7 +166,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Framework\Api\FilterBuilder $filterBuilder = null,
         SearchCriteriaResolverFactory $searchCriteriaResolverFactory = null,
         SearchResultApplierFactory $searchResultApplierFactory = null,
-        TotalRecordsResolverFactory $totalRecordsResolverFactory = null,
+        TotalRecordsResolverFactory $totalRecordsResolverFactory = null
     ) {
         $this->searchResultFactory = $searchResultFactory ?? \Magento\Framework\App\ObjectManager::getInstance()
                 ->get(\Magento\Framework\Api\Search\SearchResultFactory::class);
