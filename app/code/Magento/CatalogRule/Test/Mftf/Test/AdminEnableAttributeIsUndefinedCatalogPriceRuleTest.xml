@@ -80,9 +80,7 @@
         </actionGroup>
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRules"/>
         <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!--Check Catalog Price Rule for first product-->
         <amOnPage url="{{StorefrontProductPage.url($$createFirstProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToFirstProductPage"/>
@@ -128,9 +126,7 @@
         </actionGroup>
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRules1"/>
         <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindexSecondTime"/>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheSecondTime">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheSecondTime"/>
 
         <!--Check Catalog Price Rule for third product-->
         <amOnPage url="{{StorefrontProductPage.url($$createThirdProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToThirdProductPage"/>
