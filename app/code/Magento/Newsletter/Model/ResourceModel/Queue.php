@@ -126,20 +126,6 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Removes subscriber from queue
-     *
-     * @param int $subscriberId
-     * @return void
-     */
-    public function removeSubscriberFromQueue(int $subscriberId): void
-    {
-        $this->getConnection()->delete(
-            $this->getTable('newsletter_queue_link'),
-            ['subscriber_id = ?' => $subscriberId, 'letter_sent_at IS NULL']
-        );
-    }
-
-    /**
      * Links queue to store
      *
      * @param ModelQueue $queue
