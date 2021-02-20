@@ -39,7 +39,7 @@
         "laminas/laminas-captcha": "^2.7.1",
         "laminas/laminas-code": "~3.4.1",
         "laminas/laminas-console": "^2.6.0",
-        "laminas/laminas-crypt": "^2.6.0",
+        "laminas/laminas-crypt": "^3.4.0",
         "laminas/laminas-db": "^2.8.2",
         "laminas/laminas-dependency-plugin": "^2.1.0",
         "laminas/laminas-di": "^2.6.1",
