@@ -6,7 +6,9 @@
 namespace Magento\Framework\Api\Search;
 
 /**
- * Faceted data
+ * Interface Aggregation fo get faceted data
+ *
+ * @api
  */
 interface AggregationInterface
 {

@@ -7,6 +7,8 @@ namespace Magento\Framework\Api;
 
 /**
  * Interface CriteriaInterface
+ *
+ * @api
  */
 interface CriteriaInterface
 {
