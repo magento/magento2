@@ -42,6 +42,7 @@
         <actionGroup ref="AdminAddCommentOnCreateOrderPageActionGroup" stepKey="provideComment">
             <argument name="comment" value="Test Order Comment"/>
         </actionGroup>
+        <scrollTo selector="{{AdminInvoicePaymentShippingSection.getShippingMethodAndRates}}" stepKey="scrollToShipping"/> 
         <actionGroup ref="SelectCheckMoneyPaymentMethodActionGroup" stepKey="selectPaymentMethod"/>
         <actionGroup ref="AdminSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRate"/>
         <seeCheckboxIsChecked selector="{{AdminOrderFormTotalSection.appendComments}}" stepKey="checkAppendCommentsCheckboxIsChecked"/>
