@@ -22,7 +22,8 @@ class ProductRepositoryPriceModeWebsiteChangePriceTest extends WebapiAbstract
      * @magentoApiDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoApiDataFixture Magento/Store/_files/second_store.php
      * @magentoApiDataFixture Magento/CatalogSearch/_files/full_reindex.php
-     * @magentoConfigFixture base_website catalog/price/scope 1
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoConfigFixture admin_store catalog/price/scope 1
      */
     public function testChangePriceForStore()
     {
@@ -36,21 +37,29 @@ class ProductRepositoryPriceModeWebsiteChangePriceTest extends WebapiAbstract
 
         $sku = 'simple';
 
-        $requestData1 = ['prices' => [
-            'price' => 20,
-            'store_id' => $store1->getId(),
-            'sku' => $sku
-        ]];
+        $requestData1 = [
+            'prices' => [
+                [
+                    'price' => 20,
+                    'store_id' => $store1->getId(),
+                    'sku' => $sku
+                ]
+            ]
+        ];
 
-        $requestData2 = ['prices' => [
-            'price' => 30,
-            'store_id' => $store2->getId(),
-            'sku' => $sku
-        ]];
+        $requestData2 = [
+            'prices' => [
+                [
+                    'price' => 30,
+                    'store_id' => $store2->getId(),
+                    'sku' => $sku
+                ]
+            ]
+        ];
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::PRODUCTS_RESOURCE_PATH,
+                'resourcePath' => self::PRICES_RESOURCE_PATH,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST
             ]
         ];
@@ -58,9 +67,9 @@ class ProductRepositoryPriceModeWebsiteChangePriceTest extends WebapiAbstract
         $this->_webApiCall($serviceInfo, $requestData1);
         $this->_webApiCall($serviceInfo, $requestData2);
 
-        /** @var \Magento\Catalog\Model\Product $product */
-        $product = Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
-        $product->setStoreId($store1->getId())->load($product->getIdBySku($sku));
+        /** @var \Magento\Catalog\Model\ProductRepository $productRepository */
+        $productRepository = Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\ProductRepository::class);
+        $product = $productRepository->get($sku, false, $store1->getId());
 
         $this->assertEquals(
             $product->getPrice(),
