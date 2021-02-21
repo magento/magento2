@@ -170,7 +170,7 @@ class BasePriceStorage implements BasePriceStorageInterface
 
         $priceAttribute = $this->productAttributeRepository->get($this->attributeCode);
 
-        if ($priceAttribute->isScopeWebsite()) {
+        if ($priceAttribute !== null && $priceAttribute->isScopeWebsite()) {
             $formattedPrices = $this->applyWebsitePrices($formattedPrices);
         }
 
