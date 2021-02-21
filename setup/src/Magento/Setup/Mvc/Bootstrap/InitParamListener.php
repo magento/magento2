@@ -3,25 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Mvc\Bootstrap;
 
-use Magento\Framework\App\Bootstrap as AppBootstrap;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\Request\Http;
-use Magento\Framework\App\State;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Shell\ComplexParameter;
+use Interop\Container\ContainerInterface;
 use Laminas\Console\Request;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\Mvc\Application;
 use Laminas\Mvc\MvcEvent;
-use Laminas\Router\Http\RouteMatch;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\Stdlib\RequestInterface;
-use Laminas\Uri\UriInterface;
+use Magento\Framework\App\Bootstrap as AppBootstrap;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\State;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Shell\ComplexParameter;
 
 /**
  * A listener that injects relevant Magento initialization parameters and initializes filesystem
@@ -52,7 +50,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      * @param int                   $priority
      * @return void
      */
-    public function attach(EventManagerInterface $events, $priority = 1)
+    public function attach(EventManagerInterface $events, $priority = 1): void
     {
         $sharedEvents = $events->getSharedManager();
         $sharedEvents->attach(
@@ -71,7 +69,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      * @param EventManagerInterface $events
      * @return void
      */
-    public function detach(EventManagerInterface $events)
+    public function detach(EventManagerInterface $events): void
     {
         foreach ($this->listeners as $index => $listener) {
             $events->detach($listener);
@@ -85,7 +83,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      * @param MvcEvent $e
      * @return void
      */
-    public function onBootstrap(MvcEvent $e)
+    public function onBootstrap(MvcEvent $e): void
     {
         /** @var Application $application */
         $application = $e->getApplication();
@@ -97,14 +95,14 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @inheritdoc
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
+     * @param ContainerInterface $container
+     * @param string $requestedName
+     * @param array|null $options
+     * @return array|object
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): object
     {
-        return $this->extractInitParameters($serviceLocator->get('Application'));
+        return $this->extractInitParameters($container->get('Application'));
     }
 
     /**
@@ -118,7 +116,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      * @param Application $application
      * @return array
      */
-    private function extractInitParameters(Application $application)
+    private function extractInitParameters(Application $application): array
     {
         $result = [];
         $config = $application->getConfig();
@@ -142,7 +140,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      * @param RequestInterface $request
      * @return array
      */
-    private function extractFromCli(RequestInterface $request)
+    private function extractFromCli(RequestInterface $request): array
     {
         if (!($request instanceof Request)) {
             return [];
@@ -164,7 +162,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      * @return DirectoryList
      * @throws \LogicException
      */
-    public function createDirectoryList($initParams)
+    public function createDirectoryList($initParams): DirectoryList
     {
         if (!isset($initParams[AppBootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS][DirectoryList::ROOT])) {
             throw new \LogicException('Magento root directory is not specified.');
@@ -180,7 +178,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      * @param DirectoryList $directoryList
      * @return Filesystem
      */
-    public function createFilesystem(DirectoryList $directoryList)
+    public function createFilesystem(DirectoryList $directoryList): Filesystem
     {
         $driverPool = new Filesystem\DriverPool();
         return new Filesystem(
