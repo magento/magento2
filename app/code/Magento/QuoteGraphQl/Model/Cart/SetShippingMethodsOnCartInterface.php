@@ -16,9 +16,10 @@ use Magento\Quote\Api\Data\CartInterface;
 
 /**
  * Extension point for setting shipping methods for a specified shopping cart
- *
  * All objects that are responsible for setting shipping methods on a cart via GraphQl
  * should implement this interface.
+ *
+ * @api
  */
 interface SetShippingMethodsOnCartInterface
 {
