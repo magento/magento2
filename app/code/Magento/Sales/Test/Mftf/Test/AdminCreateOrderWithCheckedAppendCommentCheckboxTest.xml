@@ -39,16 +39,12 @@
         <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addProduct">
             <argument name="product" value="$createProduct$"/>
         </actionGroup>
-        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerInfo">
-            <argument name="customer" value="$createCustomer$"/>
-            <argument name="address" value="US_Address_TX"/>
-        </actionGroup>
-        <actionGroup ref="SelectCashOnDeliveryPaymentMethodActionGroup" stepKey="selectPaymentMethod"/>
-        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRate"/>
-        <seeCheckboxIsChecked selector="{{AdminOrderFormTotalSection.appendComments}}" stepKey="checkAppendCommentsCheckboxIsChecked"/>
         <actionGroup ref="AdminAddCommentOnCreateOrderPageActionGroup" stepKey="provideComment">
             <argument name="comment" value="Test Order Comment"/>
         </actionGroup>
+        <actionGroup ref="SelectCheckMoneyPaymentMethodActionGroup" stepKey="selectPaymentMethod"/>
+        <actionGroup ref="AdminSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRate"/>
+        <seeCheckboxIsChecked selector="{{AdminOrderFormTotalSection.appendComments}}" stepKey="checkAppendCommentsCheckboxIsChecked"/>
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
         <actionGroup ref="AdminCheckIfCustomerIsNotifiedOfOrderCommentActionGroup" stepKey="assertCustomerIsNotified">
             <argument name="orderComment" value="Test Order Comment"/>
