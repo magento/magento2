@@ -21,6 +21,8 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 use Psr\Log\LoggerInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\View\Design\Theme\ThemePackageList;
+use Magento\Framework\Validator\Locale;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -78,6 +80,16 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
     private $deploymentConfigMock;
 
     /**
+     * @var ThemePackageList|MockObject
+     */
+    private $themePackageListMock;
+
+    /**
+     * @var Locale|MockObject
+     */
+    private $localeValidatorMock;
+
+    /**
      * @var StaticResource
      */
     private $object;
@@ -100,6 +112,8 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
         $this->configLoaderMock = $this->createMock(ConfigLoader::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $this->driverMock = $this->createMock(File::class);
+        $this->themePackageListMock = $this->createMock(ThemePackageList::class);
+        $this->localeValidatorMock = $this->createMock(Locale::class);
         $this->object = new StaticResource(
             $this->stateMock,
             $this->responseMock,
@@ -110,7 +124,9 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
             $this->objectManagerMock,
             $this->configLoaderMock,
             $this->deploymentConfigMock,
-            $this->driverMock
+            $this->driverMock,
+            $this->themePackageListMock,
+            $this->localeValidatorMock
         );
     }
 
@@ -201,6 +217,17 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
         $this->driverMock->expects($this->once())
             ->method('getRealPathSafety')
             ->willReturnArgument(0);
+        $this->themePackageListMock->expects($this->atLeastOnce())->method('getThemes')->willReturn(
+            [
+                'area/Magento/theme' => [
+                    'area' => 'area',
+                    'vendor' => 'Magento',
+                    'name' => 'theme',
+                ],
+            ]
+        );
+        $this->localeValidatorMock->expects($this->once())->method('isValid')->willReturn(true);
+
         $this->object->launch();
     }
 
@@ -319,5 +346,87 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage("Requested path '$path' is wrong.");
 
         $this->object->launch();
+    }
+
+    /**
+     * @param array $themes
+     * @dataProvider themesDataProvider
+     */
+    public function testLaunchWithInvalidTheme(array $themes): void
+    {
+        $this->expectException('InvalidArgumentException');
+        $path = 'frontend/Test/luma/en_US/calendar.css';
+
+        $this->stateMock->expects($this->once())
+            ->method('getMode')
+            ->willReturn(State::MODE_DEVELOPER);
+        $this->requestMock->expects($this->once())
+            ->method('get')
+            ->with('resource')
+            ->willReturn($path);
+        $this->driverMock->expects($this->once())
+            ->method('getRealPathSafety')
+            ->with($path)
+            ->willReturn($path);
+        $this->themePackageListMock->expects($this->once())->method('getThemes')->willReturn($themes);
+        $this->localeValidatorMock->expects($this->never())->method('isValid');
+        $this->expectExceptionMessage('Requested path ' . $path . ' is wrong.');
+
+        $this->object->launch();
+    }
+
+    /**
+     * @param array $themes
+     * @dataProvider themesDataProvider
+     */
+    public function testLaunchWithInvalidLocale(array $themes): void
+    {
+        $this->expectException('InvalidArgumentException');
+        $path = 'frontend/Magento/luma/test/calendar.css';
+
+        $this->stateMock->expects($this->once())
+            ->method('getMode')
+            ->willReturn(State::MODE_DEVELOPER);
+        $this->requestMock->expects($this->once())
+            ->method('get')
+            ->with('resource')
+            ->willReturn($path);
+        $this->driverMock->expects($this->once())
+            ->method('getRealPathSafety')
+            ->with($path)
+            ->willReturn($path);
+        $this->themePackageListMock->expects($this->once())->method('getThemes')->willReturn($themes);
+        $this->localeValidatorMock->expects($this->once())->method('isValid')->willReturn(false);
+        $this->expectExceptionMessage('Requested path ' . $path . ' is wrong.');
+
+        $this->object->launch();
+    }
+
+    /**
+     * @return array
+     */
+    public function themesDataProvider(): array
+    {
+        return  [
+            [
+                [
+                    'adminhtml/Magento/backend' => [
+                        'area' => 'adminhtml',
+                        'vendor' => 'Magento',
+                        'name' => 'backend',
+                    ],
+                    'frontend/Magento/blank' => [
+                        'area' => 'frontend',
+                        'vendor' => 'Magento',
+                        'name' => 'blank',
+                    ],
+                    'frontend/Magento/luma' => [
+                        'area' => 'frontend',
+                        'vendor' => 'Magento',
+                        'name' => 'luma',
+                    ],
+                ],
+            ],
+        ];
     }
 }
