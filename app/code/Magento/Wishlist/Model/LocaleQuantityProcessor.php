@@ -7,6 +7,8 @@
 namespace Magento\Wishlist\Model;
 
 /**
+ * Class LocaleQuantityProcessor
+ *
  * @api
  * @since 100.0.2
  */
