@@ -13,11 +13,11 @@ class NamespaceResolverTest extends \PHPUnit\Framework\TestCase
     protected $namespaceResolver;
 
     /**
-     * @var \Magento\Framework\Module\ModuleListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\ModuleListInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $moduleListMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->moduleListMock = $this->getMockBuilder(\Magento\Framework\Module\ModuleListInterface::class)

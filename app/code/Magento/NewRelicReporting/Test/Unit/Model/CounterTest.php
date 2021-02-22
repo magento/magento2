@@ -25,32 +25,32 @@ class CounterTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ProductManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productManagement;
 
     /**
-     * @var ConfigurableProductManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigurableProductManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configurableManagement;
 
     /**
-     * @var CategoryManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $categoryManagement;
 
     /**
-     * @var CustomerManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerManagement;
 
     /**
-     * @var WebsiteManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebsiteManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $websiteManagement;
 
     /**
-     * @var StoreManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagement;
 
@@ -59,7 +59,7 @@ class CounterTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productManagement = $this->getMockBuilder(\Magento\Catalog\Api\ProductManagementInterface::class)
             ->disableOriginalConstructor()
@@ -102,9 +102,7 @@ class CounterTest extends \PHPUnit\Framework\TestCase
             ->method('getCount')
             ->willReturn(1);
 
-        $this->assertInternalType(
-            'int',
-            $this->model->getAllProductsCount()
+        $this->assertIsInt($this->model->getAllProductsCount()
         );
     }
 
@@ -119,9 +117,7 @@ class CounterTest extends \PHPUnit\Framework\TestCase
             ->method('getCount')
             ->willReturn(1);
 
-        $this->assertInternalType(
-            'int',
-            $this->model->getConfigurableCount()
+        $this->assertIsInt($this->model->getConfigurableCount()
         );
     }
 
@@ -137,9 +133,7 @@ class CounterTest extends \PHPUnit\Framework\TestCase
             ->with(1)
             ->willReturn(1);
 
-        $this->assertInternalType(
-            'int',
-            $this->model->getActiveCatalogSize()
+        $this->assertIsInt($this->model->getActiveCatalogSize()
         );
     }
 
@@ -154,9 +148,7 @@ class CounterTest extends \PHPUnit\Framework\TestCase
             ->method('getCount')
             ->willReturn(1);
 
-        $this->assertInternalType(
-            'int',
-            $this->model->getCategoryCount()
+        $this->assertIsInt($this->model->getCategoryCount()
         );
     }
 
@@ -171,9 +163,7 @@ class CounterTest extends \PHPUnit\Framework\TestCase
             ->method('getCount')
             ->willReturn(1);
 
-        $this->assertInternalType(
-            'int',
-            $this->model->getCustomerCount()
+        $this->assertIsInt($this->model->getCustomerCount()
         );
     }
 
@@ -188,9 +178,7 @@ class CounterTest extends \PHPUnit\Framework\TestCase
             ->method('getCount')
             ->willReturn(1);
 
-        $this->assertInternalType(
-            'int',
-            $this->model->getWebsiteCount()
+        $this->assertIsInt($this->model->getWebsiteCount()
         );
     }
 
@@ -205,9 +193,7 @@ class CounterTest extends \PHPUnit\Framework\TestCase
             ->method('getCount')
             ->willReturn(1);
 
-        $this->assertInternalType(
-            'int',
-            $this->model->getStoreViewsCount()
+        $this->assertIsInt($this->model->getStoreViewsCount()
         );
     }
 }

@@ -23,22 +23,22 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Security\Model\SecurityManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Security\Model\SecurityManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $securityManager;
 
     /**
-     * @var AccountManagement|\PHPUnit_Framework_MockObject_MockObject
+     * @var AccountManagement|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $accountManagement;
 
     /**
-     * @var ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scope;
 
@@ -51,7 +51,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
      * Init mocks for tests
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -63,7 +63,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->accountManagement =  $this->createMock(AccountManagement::class);
-        $this->scope =  $this->createMock(ScopeInterface::class);
+        $this->scope =  $this->getMockForAbstractClass(ScopeInterface::class);
     }
 
     /**

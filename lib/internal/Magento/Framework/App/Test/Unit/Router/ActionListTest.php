@@ -13,12 +13,12 @@ class ActionListTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheMock;
 
     /**
-     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $readerMock;
 
@@ -28,11 +28,11 @@ class ActionListTest extends \PHPUnit\Framework\TestCase
     private $actionList;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->cacheMock = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
@@ -83,7 +83,7 @@ class ActionListTest extends \PHPUnit\Framework\TestCase
     {
         $this->cacheMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->cacheMock->expects($this->once())
             ->method('save');
         $this->readerMock->expects($this->once())

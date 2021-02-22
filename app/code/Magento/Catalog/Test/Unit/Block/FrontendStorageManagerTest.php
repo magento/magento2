@@ -16,13 +16,13 @@ class FrontendStorageManagerTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\Template\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $contextMock;
 
-    /** @var \Magento\Catalog\Model\FrontendStorageConfigurationPool|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\FrontendStorageConfigurationPool|\PHPUnit\Framework\MockObject\MockObject */
     protected $frontendStorageConfigurationPoolMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
             ->disableOriginalConstructor()

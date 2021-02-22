@@ -13,7 +13,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\Exception\LocalizedException;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use \PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
@@ -41,7 +41,7 @@ class ViewTest extends TestCase
      */
     private $order;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 

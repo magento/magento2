@@ -22,31 +22,31 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
     protected $provider;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilder;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfig;
 
     /**
-     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $store;
 
     /**
-     * @var Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var Url|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerUrl;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManager = $this->getMockForAbstractClass(
             \Magento\Store\Model\StoreManagerInterface::class,

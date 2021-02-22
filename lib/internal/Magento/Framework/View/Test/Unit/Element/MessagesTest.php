@@ -26,26 +26,26 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
     protected $messages;
 
     /**
-     * @var \Magento\Framework\Message\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageFactory;
 
     /**
-     * @var \Magento\Framework\Message\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactory;
 
     /**
-     * @var InterpretationStrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var InterpretationStrategyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageInterpretationStrategy;
 
     /**
-     * @var Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $escaperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->collectionFactory = $this->getMockBuilder(\Magento\Framework\Message\CollectionFactory::class)
             ->disableOriginalConstructor()
@@ -76,7 +76,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Message\Collection
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Message\Collection
      */
     protected function initMessageCollection()
     {
@@ -86,7 +86,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
 
         $this->collectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($collection));
+            ->willReturn($collection);
         return $collection;
     }
 
@@ -131,7 +131,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
 
         $collectionForAdd->expects($this->atLeastOnce())
             ->method('getItems')
-            ->will($this->returnValue($arrayMessages));
+            ->willReturn($arrayMessages);
 
         $this->assertSame($this->messages, $this->messages->addMessages($collectionForAdd));
     }
@@ -158,7 +158,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
         $this->messageFactory->expects($this->once())
             ->method('create')
             ->with(MessageInterface::TYPE_ERROR, $messageText)
-            ->will($this->returnValue($message));
+            ->willReturn($message);
 
         $collection = $this->initMessageCollection();
         $collection->expects($this->once())
@@ -177,7 +177,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
         $this->messageFactory->expects($this->once())
             ->method('create')
             ->with(MessageInterface::TYPE_WARNING, $messageText)
-            ->will($this->returnValue($message));
+            ->willReturn($message);
 
         $collection = $this->initMessageCollection();
         $collection->expects($this->once())
@@ -196,7 +196,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
         $this->messageFactory->expects($this->once())
             ->method('create')
             ->with(MessageInterface::TYPE_NOTICE, $messageText)
-            ->will($this->returnValue($message));
+            ->willReturn($message);
 
         $collection = $this->initMessageCollection();
         $collection->expects($this->once())
@@ -215,7 +215,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
         $this->messageFactory->expects($this->once())
             ->method('create')
             ->with(MessageInterface::TYPE_SUCCESS, $messageText)
-            ->will($this->returnValue($message));
+            ->willReturn($message);
 
         $collection = $this->initMessageCollection();
         $collection->expects($this->once())
@@ -234,7 +234,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
         $collection->expects($this->once())
             ->method('getItemsByType')
             ->with($messageType)
-            ->will($this->returnValue($resultMessages));
+            ->willReturn($resultMessages);
 
         $this->assertSame($resultMessages, $this->messages->getMessagesByType($messageType));
     }

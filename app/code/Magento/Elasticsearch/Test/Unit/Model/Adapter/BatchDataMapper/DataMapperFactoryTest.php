@@ -18,7 +18,7 @@ class DataMapperFactoryTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
@@ -32,7 +32,7 @@ class DataMapperFactoryTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->disableOriginalConstructor()
@@ -52,28 +52,31 @@ class DataMapperFactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testCreateEmpty()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $this->model->create('');
     }
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testCreateWrongType()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $this->model->create('wrong');
     }
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\ConfigurationMismatchException
      */
     public function testCreateFailure()
     {
+        $this->expectException(\Magento\Framework\Exception\ConfigurationMismatchException::class);
+
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->willReturn(new \stdClass());
@@ -87,7 +90,7 @@ class DataMapperFactoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->willReturn($this->createMock(BatchDataMapperInterface::class));
+            ->willReturn($this->getMockForAbstractClass(BatchDataMapperInterface::class));
         $this->assertInstanceOf(BatchDataMapperInterface::class, $this->model->create('product'));
     }
 }

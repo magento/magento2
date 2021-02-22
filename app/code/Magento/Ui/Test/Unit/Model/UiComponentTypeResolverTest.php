@@ -20,7 +20,7 @@ class UiComponentTypeResolverTest extends \PHPUnit\Framework\TestCase
      */
     private $contentTypeMap = [];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contentTypeMap = [
             'xml' => 'application/xml',
@@ -37,7 +37,7 @@ class UiComponentTypeResolverTest extends \PHPUnit\Framework\TestCase
      */
     public function testResolve(string $acceptType, string $contentType)
     {
-        $uiComponentContextMock = $this->createMock(ContextInterface::class);
+        $uiComponentContextMock = $this->getMockForAbstractClass(ContextInterface::class);
         $uiComponentContextMock->expects($this->atLeastOnce())->method('getAcceptType')->willReturn($acceptType);
 
         $this->assertEquals($contentType, $this->model->resolve($uiComponentContextMock));

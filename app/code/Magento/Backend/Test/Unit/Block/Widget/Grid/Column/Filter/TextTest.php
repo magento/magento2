@@ -19,16 +19,16 @@ class TextTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Backend\Block\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Block\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $context;
 
-    /** @var \Magento\Framework\DB\Helper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DB\Helper|\PHPUnit\Framework\MockObject\MockObject */
     protected $helper;
 
-    /** @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject */
     protected $escaper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->getMockBuilder(\Magento\Backend\Block\Context::class)
             ->setMethods(['getEscaper'])

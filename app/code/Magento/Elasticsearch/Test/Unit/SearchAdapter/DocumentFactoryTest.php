@@ -12,22 +12,22 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class DocumentFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var DocumentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var DocumentFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $model;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Elasticsearch\SearchAdapter\AggregationFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Elasticsearch\SearchAdapter\AggregationFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $aggregationFactory;
 
     /**
-     * @var \Magento\Framework\Search\EntityMetadata|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\EntityMetadata|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entityMetadata;
 
@@ -43,7 +43,7 @@ class DocumentFactoryTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->entityMetadata = $this->getMockBuilder(\Magento\Framework\Search\EntityMetadata::class)
             ->disableOriginalConstructor()

@@ -20,23 +20,23 @@ class TrackingTest extends \PHPUnit\Framework\TestCase
             'registry'
         )->with(
             'current_shipment'
-        )->will(
-            $this->returnValue($shipment)
+        )->willReturn(
+            $shipment
         );
 
         $carrier = $this->createPartialMock(
             \Magento\OfflineShipping\Model\Carrier\Freeshipping::class,
             ['isTrackingAvailable', 'getConfigData']
         );
-        $carrier->expects($this->once())->method('isTrackingAvailable')->will($this->returnValue(true));
+        $carrier->expects($this->once())->method('isTrackingAvailable')->willReturn(true);
         $carrier->expects(
             $this->once()
         )->method(
             'getConfigData'
         )->with(
             'title'
-        )->will(
-            $this->returnValue('configdata')
+        )->willReturn(
+            'configdata'
         );
 
         $config = $this->createPartialMock(\Magento\Shipping\Model\Config::class, ['getAllCarriers']);
@@ -46,8 +46,8 @@ class TrackingTest extends \PHPUnit\Framework\TestCase
             'getAllCarriers'
         )->with(
             1
-        )->will(
-            $this->returnValue(['free' => $carrier])
+        )->willReturn(
+            ['free' => $carrier]
         );
 
         /** @var \Magento\Shipping\Block\Adminhtml\Order\Tracking $model */

@@ -36,7 +36,7 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
      */
     protected $_expectedConditions = [];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_expectedConditions = [
             'counter' => 0,
@@ -51,13 +51,13 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
      * Retrieve resource model instance
      *
      * @param \Magento\Framework\DB\Select $select
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getResource(\Magento\Framework\DB\Select $select)
     {
         $connection = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
-        $connection->expects($this->once())->method('select')->will($this->returnValue($select));
-        $connection->expects($this->any())->method('quoteIdentifier')->will($this->returnArgument(0));
+        $connection->expects($this->once())->method('select')->willReturn($select);
+        $connection->expects($this->any())->method('quoteIdentifier')->willReturnArgument(0);
 
         $resource = $this->getMockForAbstractClass(
             \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
@@ -68,8 +68,8 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
             true,
             ['getConnection', 'getMainTable', 'getTable', '__wakeup']
         );
-        $resource->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
-        $resource->expects($this->any())->method('getTable')->will($this->returnArgument(0));
+        $resource->expects($this->any())->method('getConnection')->willReturn($connection);
+        $resource->expects($this->any())->method('getTable')->willReturnArgument(0);
 
         return $resource;
     }
@@ -88,14 +88,14 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
 
         $collection = $this->_getCollection($select);
 
-        /** @var $connection \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $connection \PHPUnit\Framework\MockObject\MockObject */
         $connection = $collection->getResource()->getConnection();
         $connection->expects(
             $this->any()
         )->method(
             'prepareSqlCondition'
-        )->will(
-            $this->returnCallback([$this, 'verifyPrepareSqlCondition'])
+        )->willReturnCallback(
+            [$this, 'verifyPrepareSqlCondition']
         );
 
         // expected date without time
@@ -132,7 +132,7 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey($key, $condition);
 
         if ($key == 'lt') {
-            $this->assertContains($value, $condition[$key]);
+            $this->assertStringContainsString($value, $condition[$key]);
         } else {
             $this->assertContains($value, $condition);
         }

@@ -26,12 +26,12 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ProductCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductCollection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productCollectionMock;
 
     /**
-     * @var ConfigurableProductType|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigurableProductType|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configurableProductTypeMock;
 
@@ -40,7 +40,7 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
      */
     private $productId = 11;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productCollectionMock = $this->getMockBuilder(ProductCollection::class)
             ->disableOriginalConstructor()
@@ -272,7 +272,7 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
     /**
      * Create product mock object
      *
-     * @return Product|\PHPUnit_Framework_MockObject_MockObject
+     * @return Product|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createProductMock()
     {

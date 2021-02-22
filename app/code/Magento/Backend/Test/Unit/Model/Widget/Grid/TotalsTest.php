@@ -13,16 +13,16 @@ class TotalsTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_parserMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_factoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         // prepare model
         $this->_parserMock = $this->createPartialMock(
@@ -36,7 +36,7 @@ class TotalsTest extends \PHPUnit\Framework\TestCase
             [['test1' => 3, 'test2' => 2], new \Magento\Framework\DataObject(['test1' => 3, 'test2' => 2])],
             [['test4' => 9, 'test5' => 2], new \Magento\Framework\DataObject(['test4' => 9, 'test5' => 2])],
         ];
-        $this->_factoryMock->expects($this->any())->method('create')->will($this->returnValueMap($createValueMap));
+        $this->_factoryMock->expects($this->any())->method('create')->willReturnMap($createValueMap);
 
         $arguments = ['factory' => $this->_factoryMock, 'parser' => $this->_parserMock];
 
@@ -50,7 +50,7 @@ class TotalsTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_parserMock);
         unset($this->_factoryMock);

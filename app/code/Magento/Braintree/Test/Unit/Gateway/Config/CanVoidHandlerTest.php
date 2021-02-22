@@ -15,7 +15,7 @@ class CanVoidHandlerTest extends \PHPUnit\Framework\TestCase
 {
     public function testHandleNotOrderPayment()
     {
-        $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
+        $paymentDO = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
         $subject = [
             'payment' => $paymentDO
         ];
@@ -28,7 +28,7 @@ class CanVoidHandlerTest extends \PHPUnit\Framework\TestCase
             ->method('readPayment')
             ->willReturn($paymentDO);
 
-        $paymentMock = $this->createMock(InfoInterface::class);
+        $paymentMock = $this->getMockForAbstractClass(InfoInterface::class);
 
         $paymentDO->expects(static::once())
             ->method('getPayment')
@@ -41,7 +41,7 @@ class CanVoidHandlerTest extends \PHPUnit\Framework\TestCase
 
     public function testHandleSomeAmountWasPaid()
     {
-        $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
+        $paymentDO = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
         $subject = [
             'payment' => $paymentDO
         ];

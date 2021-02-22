@@ -16,16 +16,16 @@ class StoreManagerTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Store\Api\StoreRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Api\StoreRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeRepositoryMock;
 
     /**
-     * @var \Magento\Store\Api\StoreResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Api\StoreResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->storeRepositoryMock = $this->getMockBuilder(\Magento\Store\Api\StoreRepositoryInterface::class)

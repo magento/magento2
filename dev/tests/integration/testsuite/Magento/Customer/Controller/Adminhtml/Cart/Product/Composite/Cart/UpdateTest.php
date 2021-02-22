@@ -49,7 +49,7 @@ class UpdateTest extends AbstractBackendController
     private $baseWebsiteId;
 
     /** @inheritdoc */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->quoteItemCollectionFactory = $this->_objectManager->get(CollectionFactory::class);
@@ -252,9 +252,9 @@ class UpdateTest extends AbstractBackendController
     /**
      * Prepare mock for updating file type options.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
-    private function prepareValidatorInfoMock(): \PHPUnit_Framework_MockObject_MockObject
+    private function prepareValidatorInfoMock(): \PHPUnit\Framework\MockObject\MockObject
     {
         $validatorInfoMock = $this->createMock(ValidatorInfo::class);
         $validatorInfoMock->method('setUseQuotePath')->willReturnSelf();

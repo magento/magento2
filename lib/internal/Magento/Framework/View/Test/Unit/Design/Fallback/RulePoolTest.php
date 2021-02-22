@@ -16,7 +16,7 @@ class RulePoolTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
         $filesystemMock->expects($this->any())
@@ -67,7 +67,7 @@ class RulePoolTest extends \PHPUnit\Framework\TestCase
         $theme->expects($this->any())->method('getParentTheme')->will($this->returnValue($parentTheme));
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->model = null;
     }
@@ -97,12 +97,10 @@ class RulePoolTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedException Fallback rule 'unsupported_type' is not supported
-     */
     public function testGetRuleUnsupportedType()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Fallback rule \'unsupported_type\' is not supported');
         $this->model->getRule('unsupported_type');
     }
 }

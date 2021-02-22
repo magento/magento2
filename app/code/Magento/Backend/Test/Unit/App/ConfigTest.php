@@ -11,12 +11,11 @@ use Magento\Backend\App\Config;
  * Test reading by path and reading flag from config
  *
  * @see \Magento\Backend\App\Config
- * @package Magento\Backend\Test\Unit\App
  */
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $appConfig;
 
@@ -25,7 +24,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->appConfig = $this->createPartialMock(\Magento\Framework\App\Config::class, ['get']);
         $this->model = new \Magento\Backend\App\Config($this->appConfig);
@@ -43,8 +42,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $this->equalTo('system'),
             $this->equalTo('default/' . $path),
             $this->isNull()
-        )->will(
-            $this->returnValue($expectedValue)
+        )->willReturn(
+            $expectedValue
         );
         $this->assertEquals($expectedValue, $this->model->getValue($path));
     }
@@ -64,8 +63,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         )->with(
             $this->equalTo('system'),
             $this->equalTo('default/' . $configPath)
-        )->will(
-            $this->returnValue($configValue)
+        )->willReturn(
+            $configValue
         );
         $this->assertEquals($expectedResult, $this->model->isSetFlag($configPath));
     }
@@ -89,7 +88,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      * Get ConfigData mock
      *
      * @param $mockedMethod
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\Data
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Config\Data
      */
     protected function getConfigDataMock($mockedMethod)
     {

@@ -11,21 +11,21 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as Ro
 class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Validator |\PHPUnit_Framework_MockObject_MockObject
+     * @var Validator |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $validator;
 
     /**
-     * @var Validator |\PHPUnit_Framework_MockObject_MockObject
+     * @var Validator |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $validators;
 
     /**
-     * @var RowValidatorInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var RowValidatorInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $validatorTest;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->validatorTest = $this->getMockForAbstractClass(
             \Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface::class,

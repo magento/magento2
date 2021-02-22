@@ -15,42 +15,42 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class PrintPackageTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $shipmentLoaderMock;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseMock;
 
     /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\Http\FileFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileFactoryMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionMock;
 
     /**
-     * @var \Magento\Framework\App\ActionFlag|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ActionFlag|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $actionFlag;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Shipment|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $shipmentMock;
 
@@ -59,7 +59,7 @@ class PrintPackageTest extends \PHPUnit\Framework\TestCase
      */
     protected $controller;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $orderId = 1;
         $shipmentId = 1;
@@ -86,30 +86,30 @@ class PrintPackageTest extends \PHPUnit\Framework\TestCase
             ['getRequest', 'getObjectManager', 'getResponse', 'getSession', 'getActionFlag']
         );
 
-        $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
+        $contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
         $contextMock->expects($this->any())
             ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManagerMock));
-        $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
-        $contextMock->expects($this->any())->method('getSession')->will($this->returnValue($this->sessionMock));
-        $contextMock->expects($this->any())->method('getActionFlag')->will($this->returnValue($this->actionFlag));
+            ->willReturn($this->objectManagerMock);
+        $contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
+        $contextMock->expects($this->any())->method('getSession')->willReturn($this->sessionMock);
+        $contextMock->expects($this->any())->method('getActionFlag')->willReturn($this->actionFlag);
 
         $this->requestMock->expects($this->at(0))
             ->method('getParam')
             ->with('order_id')
-            ->will($this->returnValue($orderId));
+            ->willReturn($orderId);
         $this->requestMock->expects($this->at(1))
             ->method('getParam')
             ->with('shipment_id')
-            ->will($this->returnValue($shipmentId));
+            ->willReturn($shipmentId);
         $this->requestMock->expects($this->at(2))
             ->method('getParam')
             ->with('shipment')
-            ->will($this->returnValue($shipment));
+            ->willReturn($shipment);
         $this->requestMock->expects($this->at(3))
             ->method('getParam')
             ->with('tracking')
-            ->will($this->returnValue($tracking));
+            ->willReturn($tracking);
         $this->shipmentLoaderMock->expects($this->once())
             ->method('setOrderId')
             ->with($orderId);
@@ -144,21 +144,21 @@ class PrintPackageTest extends \PHPUnit\Framework\TestCase
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($this->shipmentMock));
+            ->willReturn($this->shipmentMock);
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(\Magento\Shipping\Model\Order\Pdf\Packaging::class)
-            ->will($this->returnValue($packagingMock));
+            ->willReturn($packagingMock);
         $packagingMock->expects($this->once())
             ->method('getPdf')
             ->with($this->shipmentMock)
-            ->will($this->returnValue($pdfMock));
+            ->willReturn($pdfMock);
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with(\Magento\Framework\Stdlib\DateTime\DateTime::class)
-            ->will($this->returnValue($dateTimeMock));
-        $dateTimeMock->expects($this->once())->method('date')->with('Y-m-d_H-i-s')->will($this->returnValue($date));
-        $pdfMock->expects($this->once())->method('render')->will($this->returnValue($content));
+            ->willReturn($dateTimeMock);
+        $dateTimeMock->expects($this->once())->method('date')->with('Y-m-d_H-i-s')->willReturn($date);
+        $pdfMock->expects($this->once())->method('render')->willReturn($content);
         $this->fileFactoryMock->expects($this->once())
             ->method('create')
             ->with(
@@ -166,7 +166,7 @@ class PrintPackageTest extends \PHPUnit\Framework\TestCase
                 $content,
                 DirectoryList::VAR_DIR,
                 'application/pdf'
-            )->will($this->returnValue('result-pdf-content'));
+            )->willReturn('result-pdf-content');
 
         $this->assertEquals('result-pdf-content', $this->controller->execute());
     }
@@ -178,14 +178,14 @@ class PrintPackageTest extends \PHPUnit\Framework\TestCase
     {
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->actionFlag->expects($this->once())
             ->method('get')
             ->with('', \Magento\Backend\App\AbstractAction::FLAG_IS_URLS_CHECKED)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->sessionMock->expects($this->once())
             ->method('setIsUrlNotice')
             ->with(true);

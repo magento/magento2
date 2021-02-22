@@ -28,7 +28,7 @@ class DeserializerFactoryTest extends \PHPUnit\Framework\TestCase
         )->disableOriginalConstructor()->getMock();
 
         $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->once())->method('get')->will($this->returnValue($validInterpreterMock));
+        $objectManagerMock->expects($this->once())->method('get')->willReturn($validInterpreterMock);
 
         $interpreterFactory = new \Magento\Framework\Webapi\Rest\Request\DeserializerFactory(
             $objectManagerMock,
@@ -61,7 +61,7 @@ class DeserializerFactoryTest extends \PHPUnit\Framework\TestCase
             'The deserializer must implement "Magento\Framework\Webapi\Rest\Request\DeserializerInterface".'
         );
         $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->once())->method('get')->will($this->returnValue($invalidInterpreter));
+        $objectManagerMock->expects($this->once())->method('get')->willReturn($invalidInterpreter);
 
         $interpreterFactory = new \Magento\Framework\Webapi\Rest\Request\DeserializerFactory(
             $objectManagerMock,

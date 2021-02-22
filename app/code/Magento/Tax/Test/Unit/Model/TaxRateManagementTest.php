@@ -13,26 +13,26 @@ class TaxRateManagementTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchCriteriaBuilderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $filterBuilderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxRuleRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxRateRepositoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filterBuilderMock = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);
         $this->taxRuleRepositoryMock = $this->createMock(\Magento\Tax\Api\TaxRuleRepositoryInterface::class);

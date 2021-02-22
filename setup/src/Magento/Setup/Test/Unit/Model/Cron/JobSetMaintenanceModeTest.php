@@ -21,21 +21,21 @@ use Symfony\Component\Console\Output\OutputInterface;
 class JobSetMaintenanceModeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Status|\PHPUnit_Framework_MockObject_MockObject
+     * @var Status|\PHPUnit\Framework\MockObject\MockObject
      */
     private $statusMock;
 
     /**
-     * @var OutputInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OutputInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $outputMock;
 
     /**
-     * @var ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerProviderMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerProviderMock = $this->createMock(ObjectManagerProvider::class);
         $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class, [], '', false);
@@ -46,11 +46,11 @@ class JobSetMaintenanceModeTest extends \PHPUnit\Framework\TestCase
             [Cache::class, $cache],
 
         ];
-        $objectManager->expects($this->atLeastOnce())->method('get')->will($this->returnValueMap($valueMap));
+        $objectManager->expects($this->atLeastOnce())->method('get')->willReturnMap($valueMap);
         $this->objectManagerProviderMock->expects($this->once())->method('get')->willReturn($objectManager);
 
         $this->statusMock = $this->createMock(Status::class);
-        $this->outputMock = $this->createMock(OutputInterface::class);
+        $this->outputMock = $this->getMockForAbstractClass(OutputInterface::class);
     }
 
     public function testExecuteMaintenanceModeDisable()
@@ -71,10 +71,11 @@ class JobSetMaintenanceModeTest extends \PHPUnit\Framework\TestCase
     /**
      * Test MaintenanceModeDisable job execution when maintenance mode is set manually by admin
      *
-     * @expectedException \RuntimeException
      */
     public function testExecuteMaintenanceModeDisableExeption()
     {
+        $this->expectException(\RuntimeException::class);
+
         $command = $this->createMock(MaintenanceDisableCommand::class);
         $command->expects($this->once())->method('isSetAddressInfo')->willReturn(true);
         $command->expects($this->never())->method('run');

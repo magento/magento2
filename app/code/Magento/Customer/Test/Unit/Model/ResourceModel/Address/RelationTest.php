@@ -13,13 +13,13 @@ use Magento\Customer\Model\Address;
  */
 class RelationTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  \Magento\Customer\Model\CustomerFactory | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Customer\Model\CustomerFactory | \PHPUnit\Framework\MockObject\MockObject */
     protected $customerFactoryMock;
 
     /** @var  \Magento\Customer\Model\ResourceModel\Address\Relation */
     protected $relation;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerFactoryMock = $this->createPartialMock(
             \Magento\Customer\Model\CustomerFactory::class,

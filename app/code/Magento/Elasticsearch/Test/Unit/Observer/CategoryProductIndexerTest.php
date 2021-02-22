@@ -25,17 +25,17 @@ class CategoryProductIndexerTest extends \PHPUnit\Framework\TestCase
     private $observer;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var Processor|\PHPUnit_Framework_MockObject_MockObject
+     * @var Processor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $processorMock;
 
     /**
-     * @var Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Observer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $observerMock;
 
@@ -92,7 +92,7 @@ class CategoryProductIndexerTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteIfCategoryHasNoneChangedProducts(): void
     {
-        /** @var Event|\PHPUnit_Framework_MockObject_MockObject $eventMock */
+        /** @var Event|\PHPUnit\Framework\MockObject\MockObject $eventMock */
         $eventMock = $this->createPartialMock(Event::class, ['getProductIds']);
         $this->configMock->expects($this->once())->method('isElasticsearchEnabled')->willReturn(true);
 
@@ -112,7 +112,7 @@ class CategoryProductIndexerTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteIfElasticSearchIsDisabled(): void
     {
-        /** @var Event|\PHPUnit_Framework_MockObject_MockObject $eventMock */
+        /** @var Event|\PHPUnit\Framework\MockObject\MockObject $eventMock */
         $eventMock = $this->createPartialMock(Event::class, ['getProductIds']);
         $this->configMock->expects($this->once())->method('isElasticsearchEnabled')->willReturn(false);
         $eventMock->expects($this->never())->method('getProductIds')->willReturn([]);
@@ -126,7 +126,7 @@ class CategoryProductIndexerTest extends \PHPUnit\Framework\TestCase
      */
     private function getProductIdsWithEnabledElasticSearch(): void
     {
-        /** @var Event|\PHPUnit_Framework_MockObject_MockObject $eventMock */
+        /** @var Event|\PHPUnit\Framework\MockObject\MockObject $eventMock */
         $eventMock = $this->createPartialMock(Event::class, ['getProductIds']);
         $this->configMock->expects($this->once())->method('isElasticsearchEnabled')->willReturn(true);
         $eventMock->expects($this->once())->method('getProductIds')->willReturn([1]);

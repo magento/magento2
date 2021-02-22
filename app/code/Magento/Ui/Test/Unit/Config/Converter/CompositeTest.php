@@ -11,11 +11,11 @@ use Magento\Ui\Config\ConverterInterface;
 class CompositeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ConverterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConverterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $converter;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->converter = $this->getMockBuilder(ConverterInterface::class)->getMockForAbstractClass();
     }
@@ -37,11 +37,12 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Argument converter named 'missedKey' has not been defined.
      */
     public function testConvertWithMissedConverter()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Argument converter named \'missedKey\' has not been defined.');
+
         $element = new \DOMElement('name');
         $composite = new Composite(['key' => $this->converter], 'type');
         $composite->convert($element, ['type' => 'missedKey']);
@@ -49,11 +50,12 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Converter named 'key' is expected to be an argument converter instance.
      */
     public function testConvertWithInvalidConverter()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Converter named \'key\' is expected to be an argument converter instance.');
+
         $element = new \DOMElement('name');
         $std = new \stdClass();
         $composite = new Composite(['key' => $std], 'type');

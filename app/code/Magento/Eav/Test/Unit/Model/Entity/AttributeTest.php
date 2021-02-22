@@ -12,14 +12,14 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Attribute model to be tested
-     * @var \Magento\Eav\Model\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Entity\Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = $this->createPartialMock(\Magento\Eav\Model\Entity\Attribute::class, ['__wakeup']);
     }
@@ -27,7 +27,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_model = null;
     }

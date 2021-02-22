@@ -22,7 +22,7 @@ class ResponseErrorProcessorTest extends \PHPUnit\Framework\TestCase
      */
     private $responseErrorProcessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 

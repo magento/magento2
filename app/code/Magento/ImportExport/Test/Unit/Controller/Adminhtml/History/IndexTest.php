@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class IndexTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
@@ -25,7 +25,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     protected $indexController;
 
     /**
-     * @var \Magento\Framework\Controller\ResultFactory||\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\ResultFactory||\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultFactory;
 
@@ -34,7 +34,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resultPage = $this->createPartialMock(
             \Magento\Backend\Model\View\Result\Page::class,

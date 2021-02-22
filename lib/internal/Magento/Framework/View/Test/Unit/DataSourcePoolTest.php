@@ -19,11 +19,11 @@ class DataSourcePoolTest extends \PHPUnit\Framework\TestCase
     protected $dataSourcePool;
 
     /**
-     * @var \Magento\Framework\View\Element\BlockFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\BlockFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $blockFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->blockFactory = $this->getMockBuilder(\Magento\Framework\View\Element\BlockFactory::class)
             ->disableOriginalConstructor()
@@ -37,17 +37,18 @@ class DataSourcePoolTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid Data Source class name: NotExistingBlockClass
      */
     public function testAddWithException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid Data Source class name: NotExistingBlockClass');
+
         $this->dataSourcePool->add('DataSourcePoolTestBlock', 'NotExistingBlockClass');
     }
 
     /**
      * @param $blockClass
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function createBlock($blockClass)
     {
@@ -56,7 +57,7 @@ class DataSourcePoolTest extends \PHPUnit\Framework\TestCase
         $this->blockFactory->expects($this->once())
             ->method('createBlock')
             ->with($blockClass)
-            ->will($this->returnValue($block));
+            ->willReturn($block);
         return $block;
     }
 

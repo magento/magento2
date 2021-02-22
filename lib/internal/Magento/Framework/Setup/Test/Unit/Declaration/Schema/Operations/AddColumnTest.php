@@ -42,39 +42,39 @@ class AddColumnTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var DefinitionAggregator|\PHPUnit_Framework_MockObject_MockObject
+     * @var DefinitionAggregator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $definitionAggregatorMock;
 
     /**
-     * @var DbSchemaWriterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DbSchemaWriterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dbSchemaWriterMock;
 
     /**
-     * @var ElementFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ElementFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $elementFactoryMock;
 
     /**
-     * @var ElementHistoryFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ElementHistoryFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $elementHistoryFactoryMock;
 
     /**
-     * @var AddComplexElement|\PHPUnit_Framework_MockObject_MockObject
+     * @var AddComplexElement|\PHPUnit\Framework\MockObject\MockObject
      */
     private $addComplexElementMock;
 
     /**
-     * @var DropElement|\PHPUnit_Framework_MockObject_MockObject
+     * @var DropElement|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dropElementMock;
 
-    /** @var MigrateDataFrom|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var MigrateDataFrom|\PHPUnit\Framework\MockObject\MockObject */
     private $migrateDataTrigger;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->definitionAggregatorMock = $this->getMockBuilder(DefinitionAggregator::class)
             ->disableOriginalConstructor()

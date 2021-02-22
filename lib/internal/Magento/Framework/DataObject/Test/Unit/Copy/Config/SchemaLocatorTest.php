@@ -13,15 +13,15 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $urnResolverMock = $this->createMock(\Magento\Framework\Config\Dom\UrnResolver::class);
         $urnResolverMock->expects($this->exactly(2))
             ->method('getRealPath')
-            ->will($this->returnCallback(function ($urn) {
+            ->willReturnCallback(function ($urn) {
                 $urnParts = explode(':', $urn);
                 return 'schema_dir/' . $urnParts[3];
-            }));
+            });
 
         $this->model = new \Magento\Framework\DataObject\Copy\Config\SchemaLocator(
             $urnResolverMock,

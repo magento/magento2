@@ -109,12 +109,13 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Error in writing Auth file path/to/auth.json. Please check permissions for writing.
      * @return void
      */
     public function testExecuteWithException()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Error in writing Auth file path/to/auth.json. Please check permissions for writing.');
+
         $this->directoryReadMock->expects($this->once())
             ->method('readFile')
             ->with('composer.json')

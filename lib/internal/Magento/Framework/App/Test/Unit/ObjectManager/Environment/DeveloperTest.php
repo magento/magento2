@@ -15,7 +15,7 @@ class DeveloperTest extends \PHPUnit\Framework\TestCase
      */
     protected $_developer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $envFactoryMock = $this->createMock(\Magento\Framework\App\EnvironmentFactory::class);
         $this->_developer = new Developer($envFactoryMock);

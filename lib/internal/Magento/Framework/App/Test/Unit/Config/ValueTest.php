@@ -13,24 +13,24 @@ class ValueTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Framework\App\Cache\TypeListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Cache\TypeListInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cacheTypeListMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
@@ -61,8 +61,8 @@ class ValueTest extends \PHPUnit\Framework\TestCase
         )->with(
             null,
             'default'
-        )->will(
-            $this->returnValue('old_value')
+        )->willReturn(
+            'old_value'
         );
 
         $this->assertEquals('old_value', $this->model->getOldValue());
@@ -83,8 +83,8 @@ class ValueTest extends \PHPUnit\Framework\TestCase
         )->with(
             null,
             'default'
-        )->will(
-            $this->returnValue($oldValue)
+        )->willReturn(
+            $oldValue
         );
 
         $this->model->setValue($value);

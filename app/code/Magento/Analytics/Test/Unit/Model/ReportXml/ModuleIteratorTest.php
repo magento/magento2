@@ -11,21 +11,21 @@ use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
- * Module iterator test.
+ * Test for ModuleIterator.
  */
 class ModuleIteratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ModuleManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModuleManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $moduleManagerMock;
 
     /**
-     * @var ModuleIterator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModuleIterator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $moduleIterator;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->moduleManagerMock = $this->getMockBuilder(ModuleManager::class)
             ->disableOriginalConstructor()

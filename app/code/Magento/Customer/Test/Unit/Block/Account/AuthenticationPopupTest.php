@@ -19,22 +19,22 @@ class AuthenticationPopupTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Customer\Block\Account\AuthenticationPopup */
     private $model;
 
-    /** @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\Template\Context|\PHPUnit\Framework\MockObject\MockObject */
     private $contextMock;
 
-    /** @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $storeManagerMock;
 
-    /** @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $scopeConfigMock;
 
-    /** @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $urlBuilderMock;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
@@ -102,7 +102,7 @@ class AuthenticationPopupTest extends \PHPUnit\Framework\TestCase
             ->with(Form::XML_PATH_ENABLE_AUTOCOMPLETE, ScopeInterface::SCOPE_STORE, null)
             ->willReturn($isAutocomplete);
 
-        /** @var StoreInterface||\PHPUnit_Framework_MockObject_MockObject $storeMock */
+        /** @var StoreInterface||\PHPUnit\Framework\MockObject\MockObject $storeMock */
         $storeMock = $this->getMockBuilder(StoreInterface::class)
             ->setMethods(['getBaseUrl'])
             ->getMockForAbstractClass();
@@ -202,7 +202,7 @@ class AuthenticationPopupTest extends \PHPUnit\Framework\TestCase
             ->with(Form::XML_PATH_ENABLE_AUTOCOMPLETE, ScopeInterface::SCOPE_STORE, null)
             ->willReturn($isAutocomplete);
 
-        /** @var StoreInterface||\PHPUnit_Framework_MockObject_MockObject $storeMock */
+        /** @var StoreInterface||\PHPUnit\Framework\MockObject\MockObject $storeMock */
         $storeMock = $this->getMockBuilder(StoreInterface::class)
             ->setMethods(['getBaseUrl'])
             ->getMockForAbstractClass();

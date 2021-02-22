@@ -16,34 +16,34 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
     protected $helper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Sales\Model\Store
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Sales\Model\Store
      */
     protected $storeParam;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Sales\Model\Order
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Sales\Model\Order
      */
     protected $orderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Session
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Model\Session
      */
     protected $customerSessionMock;
 
     /**
-     * @var \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $repositoryMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config::class)
             ->setMethods(['getValue'])
@@ -128,7 +128,7 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $this->storeParam
             )
-            ->will($this->returnValue($returnValue));
+            ->willReturn($returnValue);
     }
 
     /**
@@ -157,7 +157,7 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
 
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->repositoryMock->expects($this->once())
             ->method('get')
             ->with(1)
@@ -178,11 +178,11 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
 
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->orderMock->expects($this->once())
             ->method('canReorder')
-            ->will($this->returnValue($orderCanReorder));
+            ->willReturn($orderCanReorder);
         $this->repositoryMock->expects($this->once())
             ->method('get')
             ->with(1)
@@ -201,7 +201,7 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
         $this->setupScopeConfigMock($storeScopeReturnValue);
         $this->orderMock->expects($this->once())
             ->method('getStore')
-            ->will($this->returnValue($this->storeParam));
+            ->willReturn($this->storeParam);
     }
 
     /**

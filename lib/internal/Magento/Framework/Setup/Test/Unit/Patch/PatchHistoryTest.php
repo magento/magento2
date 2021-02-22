@@ -14,7 +14,7 @@ use Magento\Framework\Setup\Patch\PatchInterface;
 
 /**
  * Class PatchHistoryTest
- * @package Magento\Framework\Setup\Test\Unit\Patch
+ * Test for PatchHistory
  */
 class PatchHistoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -24,11 +24,11 @@ class PatchHistoryTest extends \PHPUnit\Framework\TestCase
     private $patchHistory;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
@@ -45,10 +45,10 @@ class PatchHistoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testFixPatch()
     {
-        /** @var PatchInterface|\PHPUnit_Framework_MockObject_MockObject $patch1 */
-        $patch1 = $this->createMock(PatchInterface::class);
-        /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $adapterMock */
-        $adapterMock = $this->createMock(AdapterInterface::class);
+        /** @var PatchInterface|\PHPUnit\Framework\MockObject\MockObject $patch1 */
+        $patch1 = $this->getMockForAbstractClass(PatchInterface::class);
+        /** @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject $adapterMock */
+        $adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->any())->method('getConnection')->willReturn($adapterMock);
         $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
         $selectMock->expects($this->once())->method('from');
@@ -63,15 +63,16 @@ class PatchHistoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessageRegExp "Patch [a-zA-Z0-9\_]+ cannot be applied twice"
      */
     public function testFixAppliedPatch()
     {
-        /** @var PatchInterface|\PHPUnit_Framework_MockObject_MockObject $patch1 */
-        $patch1 = $this->createMock(PatchInterface::class);
-        /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $adapterMock */
-        $adapterMock = $this->createMock(AdapterInterface::class);
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessageMatches('"Patch [a-zA-Z0-9\\_]+ cannot be applied twice"');
+
+        /** @var PatchInterface|\PHPUnit\Framework\MockObject\MockObject $patch1 */
+        $patch1 = $this->getMockForAbstractClass(PatchInterface::class);
+        /** @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject $adapterMock */
+        $adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->any())->method('getConnection')->willReturn($adapterMock);
         $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
         $selectMock->expects($this->once())->method('from');
@@ -85,15 +86,16 @@ class PatchHistoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessageRegExp "Patch [a-zA-Z0-9\_]+ cannot be applied twice"
      */
     public function testFixPatchTwice()
     {
-        /** @var PatchInterface|\PHPUnit_Framework_MockObject_MockObject $patch1 */
-        $patch = $this->createMock(PatchInterface::class);
-        /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $adapterMock */
-        $adapterMock = $this->createMock(AdapterInterface::class);
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessageMatches('"Patch [a-zA-Z0-9\\_]+ cannot be applied twice"');
+
+        /** @var PatchInterface|\PHPUnit\Framework\MockObject\MockObject $patch1 */
+        $patch = $this->getMockForAbstractClass(PatchInterface::class);
+        /** @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject $adapterMock */
+        $adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->any())->method('getConnection')->willReturn($adapterMock);
         $this->resourceConnectionMock->expects($this->any())
             ->method('getTableName')

@@ -12,7 +12,7 @@ class PropertyGroupTest extends \PHPUnit\Framework\TestCase
      */
     protected $_object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_object = new \Magento\Framework\View\Asset\PropertyGroup(['test_property' => 'test_value']);
     }

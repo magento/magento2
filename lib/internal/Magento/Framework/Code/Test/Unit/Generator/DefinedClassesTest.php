@@ -40,14 +40,14 @@ namespace Magento\Framework\Code\Test\Unit\Generator {
         /** @var  AutoloaderInterface */
         private $initAutoloader;
 
-        protected function setUp()
+        protected function setUp(): void
         {
             $this->model = new DefinedClasses();
             self::$definedClassesTestActive = true;
             $this->initAutoloader = AutoloaderRegistry::getAutoloader();
         }
 
-        public function tearDown()
+        protected function tearDown(): void
         {
             self::$definedClassesTestActive = false;
             AutoloaderRegistry::registerAutoloader($this->initAutoloader);
@@ -62,7 +62,7 @@ namespace Magento\Framework\Code\Test\Unit\Generator {
         {
             $classOnDisc = 'Class\That\Exists\On\Disc';
             /**
-             * @var AutoloaderInterface | \PHPUnit_Framework_MockObject_MockObject $autoloaderMock
+             * @var AutoloaderInterface | \PHPUnit\Framework\MockObject\MockObject $autoloaderMock
              */
             $autoloaderMock = $this->createMock(\Magento\Framework\Autoload\AutoloaderInterface::class);
             $autoloaderMock->expects($this->once())->method('findFile')->with($classOnDisc)->willReturn(true);

@@ -15,7 +15,7 @@ class ExtensionAttributesInterfaceGeneratorTest extends \PHPUnit\Framework\TestC
      */
     private $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subject = new ExtensionAttributesInterfaceGenerator();
     }

@@ -7,7 +7,7 @@
 namespace Magento\Dhl\Test\Unit\Model\Validator;
 
 use Magento\Sales\Exception\DocumentValidationException;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Magento\Framework\Xml\Security;
 use Magento\Dhl\Model\Validator\ResponseErrorProcessor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -39,7 +39,7 @@ class XmlValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 

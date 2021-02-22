@@ -9,7 +9,7 @@ namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import\AdvancedPri
 use \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
 
 /**
- * Class TierPriceTypeTest.
+ * Test of TierPriceType.
  */
 class TierPriceTypeTest extends \PHPUnit\Framework\TestCase
 {
@@ -23,7 +23,7 @@ class TierPriceTypeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->tierPriceType = $objectManager->getObject(

@@ -8,12 +8,12 @@ namespace Magento\GoogleAdwords\Test\Unit\Helper;
 class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_registryMock;
 
@@ -22,7 +22,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected $_helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $className = \Magento\GoogleAdwords\Helper\Data::class;
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -61,15 +61,15 @@ class DataTest extends \PHPUnit\Framework\TestCase
             'isSetFlag'
         )->with(
             \Magento\GoogleAdwords\Helper\Data::XML_PATH_ACTIVE
-        )->will(
-            $this->returnValue($isActive)
+        )->willReturn(
+            $isActive
         );
-        $this->_scopeConfigMock->expects($this->any())->method('getValue')->with($this->isType('string'))->will(
-            $this->returnCallback(
+        $this->_scopeConfigMock->expects($this->any())->method('getValue')->with($this->isType('string'))->willReturnCallback(
+            
                 function () use ($returnConfigValue) {
                     return $returnConfigValue;
                 }
-            )
+            
         );
 
         $this->assertEquals($returnValue, $this->_helper->isGoogleAdwordsActive());
@@ -85,8 +85,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
         )->with(
             \Magento\GoogleAdwords\Helper\Data::XML_PATH_LANGUAGES,
             'default'
-        )->will(
-            $this->returnValue($languages)
+        )->willReturn(
+            $languages
         );
         $this->assertEquals($languages, $this->_helper->getLanguageCodes());
     }
@@ -119,8 +119,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
         )->with(
             \Magento\GoogleAdwords\Helper\Data::XML_PATH_LANGUAGE_CONVERT,
             'default'
-        )->will(
-            $this->returnValue($convertArray)
+        )->willReturn(
+            $convertArray
         );
         $this->assertEquals($returnLanguage, $this->_helper->convertLanguageCodeToLocaleCode($language));
     }
@@ -141,8 +141,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
         )->with(
             \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_IMG_SRC,
             'default'
-        )->will(
-            $this->returnValue($imgSrc)
+        )->willReturn(
+            $imgSrc
         );
         $this->assertEquals($imgSrc, $this->_helper->getConversionImgSrc());
     }
@@ -156,8 +156,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_JS_SRC
-        )->will(
-            $this->returnValue($jsSrc)
+        )->willReturn(
+            $jsSrc
         );
         $this->assertEquals($jsSrc, $this->_helper->getConversionJsSrc());
     }
@@ -192,8 +192,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             $xmlPath
-        )->will(
-            $this->returnValue($returnValue)
+        )->willReturn(
+            $returnValue
         );
 
         $this->assertEquals($returnValue, $this->_helper->{$method}());
@@ -215,8 +215,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_VALUE_TYPE
-        )->will(
-            $this->returnValue(\Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_TYPE_DYNAMIC)
+        )->willReturn(
+            \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_TYPE_DYNAMIC
         );
         $this->_registryMock->expects(
             $this->once()
@@ -224,8 +224,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             'registry'
         )->with(
             \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_REGISTRY_NAME
-        )->will(
-            $this->returnValue($returnValue)
+        )->willReturn(
+            $returnValue
         );
 
         $this->assertEquals($returnValue, $this->_helper->getConversionValue());
@@ -241,8 +241,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             'registry'
         )->with(
             \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_CURRENCY_REGISTRY_NAME
-        )->will(
-            $this->returnValue($returnValueCurrency)
+        )->willReturn(
+            $returnValueCurrency
         );
 
         $this->assertEquals($returnValueCurrency, $this->_helper->getConversionValueCurrency());
@@ -269,8 +269,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_VALUE_TYPE
-        )->will(
-            $this->returnValue(\Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_TYPE_CONSTANT)
+        )->willReturn(
+            \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_TYPE_CONSTANT
         );
         $this->_registryMock->expects($this->never())->method('registry');
         $this->_scopeConfigMock->expects(
@@ -279,8 +279,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_VALUE
-        )->will(
-            $this->returnValue($conversionValueConst)
+        )->willReturn(
+            $conversionValueConst
         );
 
         $this->assertEquals($returnValue, $this->_helper->getConversionValue());

@@ -13,7 +13,7 @@ use Magento\Signifyd\Model\Guarantee\CancelGuaranteeAbility;
 use Magento\Signifyd\Model\Guarantee\CancelingService;
 use Magento\Signifyd\Model\SignifydGateway\Gateway;
 use Magento\Signifyd\Model\SignifydGateway\GatewayException;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -64,7 +64,7 @@ class CancelingServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->caseManagement = $this->getMockBuilder(CaseManagementInterface::class)
             ->disableOriginalConstructor()

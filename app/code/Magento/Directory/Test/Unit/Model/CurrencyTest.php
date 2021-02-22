@@ -18,11 +18,11 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
     protected $currencyCode = 'USD';
 
     /**
-     * @var \Magento\Framework\Locale\CurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Locale\CurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeCurrencyMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->localeCurrencyMock = $this->createMock(\Magento\Framework\Locale\CurrencyInterface::class);
 

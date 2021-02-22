@@ -25,26 +25,26 @@ class AbstractMethodTest extends \PHPUnit\Framework\TestCase
     protected $payment;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \Magento\Quote\Api\Data\CartInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Api\Data\CartInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->setMethods(['getValue'])
@@ -121,7 +121,7 @@ class AbstractMethodTest extends \PHPUnit\Framework\TestCase
     public function testAssignData()
     {
         $data = new DataObject();
-        $paymentInfo = $this->createMock(InfoInterface::class);
+        $paymentInfo = $this->getMockForAbstractClass(InfoInterface::class);
 
         $this->payment->setInfoInstance($paymentInfo);
 

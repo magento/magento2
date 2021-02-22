@@ -20,29 +20,29 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     private $reader;
 
     /**
-     * @var DefaultValueProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var DefaultValueProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $defaultValueProvider;
 
     /**
-     * @var ObjectManagerConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerConfig;
 
     /**
-     * @var ReflectionGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReflectionGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $reflectionGenerator;
 
     /**
-     * @var ServiceMethodsMap|\PHPUnit_Framework_MockObject_MockObject
+     * @var ServiceMethodsMap|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $serviceMethodsMap;
 
     /**
      * Initialize parameters
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->defaultValueProvider = $this->createMock(DefaultValueProvider::class);
@@ -117,11 +117,12 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Service interface was expected, "Some\Service\NameInterface" given
      */
     public function testReadInvalidService()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Service interface was expected, "Some\\Service\\NameInterface" given');
+
         $this->defaultValueProvider->expects($this->any())->method('getConnection')->willReturn('amqp');
         $this->defaultValueProvider->expects($this->any())->method('getExchange')->willReturn('magento');
 

@@ -9,28 +9,28 @@ use Magento\Theme\Model\Design\Config\Plugin;
 
 class PluginTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $eventManager;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $storeManager;
 
-    /** @var \Magento\Theme\Model\DesignConfigRepository|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Model\DesignConfigRepository|\PHPUnit\Framework\MockObject\MockObject */
     protected $repository;
 
-    /** @var \Magento\Theme\Api\Data\DesignConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Api\Data\DesignConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $designConfig;
 
-    /** @var \Magento\Store\Api\Data\WebsiteInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Api\Data\WebsiteInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $website;
 
-    /** @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $store;
 
     /** @var  Plugin */
     protected $plugin;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->eventManager = $this->getMockForAbstractClass(
             \Magento\Framework\Event\ManagerInterface::class,

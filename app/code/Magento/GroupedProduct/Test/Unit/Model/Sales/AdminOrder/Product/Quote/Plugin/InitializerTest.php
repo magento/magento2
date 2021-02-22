@@ -21,36 +21,36 @@ class InitializerTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var QuoteInitializerPlugin|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuoteInitializerPlugin|\PHPUnit\Framework\MockObject\MockObject
      */
     private $plugin;
 
     /**
-     * @var QuoteInitializer|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuoteInitializer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $initializer;
 
     /**
-     * @var Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quote;
 
     /**
-     * @var QuoteItem|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuoteItem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteItem;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|\PHPUnit\Framework\MockObject\MockObject
      */
     private $product;
 
     /**
-     * @var DataObject|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataObject|\PHPUnit\Framework\MockObject\MockObject
      */
     private $config;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

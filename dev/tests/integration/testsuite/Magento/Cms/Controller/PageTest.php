@@ -25,7 +25,7 @@ class PageTest extends AbstractController
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_objectManager->configure([
@@ -39,7 +39,7 @@ class PageTest extends AbstractController
     public function testViewAction()
     {
         $this->dispatch('/enable-cookies');
-        $this->assertContains('What are Cookies?', $this->getResponse()->getBody());
+        $this->assertStringContainsString('What are Cookies?', $this->getResponse()->getBody());
     }
 
     public function testViewRedirectWithTrailingSlash()
@@ -60,7 +60,7 @@ class PageTest extends AbstractController
         $this->dispatch('/enable-cookies');
         $layout = $this->_objectManager->get(LayoutInterface::class);
         $breadcrumbsBlock = $layout->getBlock('breadcrumbs');
-        $this->assertContains($breadcrumbsBlock->toHtml(), $this->getResponse()->getBody());
+        $this->assertStringContainsString($breadcrumbsBlock->toHtml(), $this->getResponse()->getBody());
     }
 
     /**
@@ -70,7 +70,7 @@ class PageTest extends AbstractController
     {
         $this->dispatch('/shipping');
         $content = $this->getResponse()->getBody();
-        $this->assertContains('Shipping Test Page', $content);
+        $this->assertStringContainsString('Shipping Test Page', $content);
     }
 
     public static function cmsPageWithSystemRouteFixture()
@@ -100,7 +100,7 @@ class PageTest extends AbstractController
         /** @var LayoutInterface $layout */
         $layout = $this->_objectManager->get(LayoutInterface::class);
         $handles = $layout->getUpdate()->getHandles();
-        $this->assertContains('cms_page_view_selectable_test_custom_layout_page_3_test_selected', $handles);
+        $this->assertContains('cms_page_view_selectable_test_custom_layout_page_3_test_selected',$handles);
     }
 
     /**
@@ -115,7 +115,7 @@ class PageTest extends AbstractController
     {
         $page = $this->pageRetriever->execute($pageIdentifier, 0);
         $this->dispatch('/cms/page/view/page_id/' . $page->getId());
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<main id="maincontent" class="page-main">',
             $this->getResponse()->getBody()
         );

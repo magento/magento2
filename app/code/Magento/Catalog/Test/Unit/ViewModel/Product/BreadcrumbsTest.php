@@ -24,12 +24,12 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
     private $viewModel;
 
     /**
-     * @var CatalogHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var CatalogHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $catalogHelper;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfig;
 
@@ -41,7 +41,7 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->catalogHelper = $this->getMockBuilder(CatalogHelper::class)
             ->setMethods(['getProduct'])

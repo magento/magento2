@@ -25,22 +25,22 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var IndexerConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $indexerConfigMock;
 
     /**
-     * @var EntityFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityFactoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $entityFactoryMock;
 
     /**
-     * @var MviewConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var MviewConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mviewConfigMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $statesFactoryMock;
 
@@ -49,7 +49,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     private $collection;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -60,7 +60,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->entityFactoryMock = $this->getMockBuilder(EntityFactoryInterface::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->mviewConfigMock = $this->getMockBuilder(MviewConfigInterface::class)
             ->disableOriginalConstructor()
@@ -177,7 +177,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array $methods
      * @param array $data
-     * @return StateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return StateInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getStateMock(array $methods = [], array $data = [])
     {
@@ -192,7 +192,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $methods
-     * @return ViewInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return ViewInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getViewMock(array $methods = [])
     {
@@ -206,11 +206,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array $methods
      * @param array $data
-     * @return \PHPUnit_Framework_MockObject_MockObject|IndexerInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|IndexerInterface
      */
     private function getIndexerMock(array $methods = [], array $data = [])
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|IndexerInterface $indexer */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|IndexerInterface $indexer */
         $indexer = $this->getMockBuilder(IndexerInterface::class)
             ->setMethods(array_merge($methods, ['getId', 'getViewId']))
             ->disableOriginalConstructor()

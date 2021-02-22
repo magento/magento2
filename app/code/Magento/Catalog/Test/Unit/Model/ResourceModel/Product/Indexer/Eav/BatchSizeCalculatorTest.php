@@ -26,7 +26,7 @@ class BatchSizeCalculatorTest extends \PHPUnit\Framework\TestCase
             $batchSizes,
             $batchManagers
         );
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $batchManagerMock->expects($this->once())
             ->method('ensureBatchSize')
@@ -35,15 +35,16 @@ class BatchSizeCalculatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testEstimateBatchSizeThrowsExceptionIfIndexerIdIsNotRecognized()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $model = new BatchSizeCalculator(
             [],
             []
         );
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $model->estimateBatchSize($connectionMock, 'wrong_indexer_id');
     }

@@ -14,7 +14,7 @@ class PoolTest extends \PHPUnit\Framework\TestCase
      */
     public $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $adjustmentsData = [
             'adj1' => ['className' => 'adj1_class', 'sortOrder' => 10],
@@ -24,17 +24,17 @@ class PoolTest extends \PHPUnit\Framework\TestCase
             'adj5' => ['className' => 'adj5_class'],
         ];
 
-        /** @var Factory|\PHPUnit_Framework_MockObject_MockObject $adjustmentFactory */
+        /** @var Factory|\PHPUnit\Framework\MockObject\MockObject $adjustmentFactory */
         $adjustmentFactory = $this->getMockBuilder(\Magento\Framework\Pricing\Adjustment\Factory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $adjustmentFactory->expects($this->any())->method('create')->will(
-            $this->returnCallback(
+        $adjustmentFactory->expects($this->any())->method('create')->willReturnCallback(
+            
                 function ($className, $data) {
                     return $className . '|' . $data['sortOrder'];
                 }
-            )
+            
         );
 
         $this->model = new Pool($adjustmentFactory, $adjustmentsData);
@@ -80,10 +80,11 @@ class PoolTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testGetAdjustmentByNotExistingCode()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->model->getAdjustmentByCode('not_existing_code');
     }
 }

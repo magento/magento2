@@ -16,41 +16,41 @@ class GuestTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Sales\Helper\Guest */
     protected $guest;
 
-    /** @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject */
     protected $sessionMock;
 
-    /** @var \Magento\Framework\Stdlib\CookieManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Stdlib\CookieManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $cookieManagerMock;
 
-    /** @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $cookieMetadataFactoryMock;
 
-    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $managerInterfaceMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $orderFactoryMock;
 
-    /** @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ViewInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $viewInterfaceMock;
 
-    /** @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject */
     protected $storeModelMock;
 
-    /** @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject */
     protected $salesOrderMock;
 
     /**
-     * @var \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderRepository;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $searchCriteriaBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $appContextHelperMock = $this->createMock(\Magento\Framework\App\Helper\Context::class);
         $storeManagerInterfaceMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);

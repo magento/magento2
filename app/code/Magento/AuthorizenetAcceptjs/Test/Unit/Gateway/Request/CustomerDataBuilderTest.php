@@ -38,13 +38,13 @@ class CustomerDataBuilderTest extends TestCase
      */
     private $orderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
+        $this->paymentDOMock = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
         $this->paymentMock = $this->createMock(Payment::class);
         $this->paymentDOMock->method('getPayment')
             ->willReturn($this->paymentMock);
-        $this->orderMock = $this->createMock(OrderAdapterInterface::class);
+        $this->orderMock = $this->getMockForAbstractClass(OrderAdapterInterface::class);
         $this->paymentDOMock->method('getOrder')
             ->willReturn($this->orderMock);
 
@@ -53,7 +53,7 @@ class CustomerDataBuilderTest extends TestCase
 
     public function testBuild()
     {
-        $addressAdapterMock = $this->createMock(AddressAdapterInterface::class);
+        $addressAdapterMock = $this->getMockForAbstractClass(AddressAdapterInterface::class);
         $addressAdapterMock->method('getEmail')
             ->willReturn('foo@bar.com');
         $this->orderMock->method('getBillingAddress')

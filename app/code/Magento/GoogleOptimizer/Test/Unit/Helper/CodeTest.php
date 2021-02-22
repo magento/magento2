@@ -8,7 +8,7 @@ namespace Magento\GoogleOptimizer\Test\Unit\Helper;
 class CodeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_codeModelMock;
 
@@ -17,7 +17,7 @@ class CodeTest extends \PHPUnit\Framework\TestCase
      */
     protected $_helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_codeModelMock = $this->createMock(\Magento\GoogleOptimizer\Model\Code::class);
 
@@ -35,8 +35,8 @@ class CodeTest extends \PHPUnit\Framework\TestCase
         $categoryId = 1;
         $storeId = 1;
 
-        $categoryMock->expects($this->exactly(2))->method('getId')->will($this->returnValue($categoryId));
-        $categoryMock->expects($this->once())->method('getStoreId')->will($this->returnValue($storeId));
+        $categoryMock->expects($this->exactly(2))->method('getId')->willReturn($categoryId);
+        $categoryMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
         $this->_codeModelMock->expects(
             $this->once()
         )->method(
@@ -63,8 +63,8 @@ class CodeTest extends \PHPUnit\Framework\TestCase
         $categoryId = 1;
         $storeId = 1;
 
-        $productMock->expects($this->exactly(2))->method('getId')->will($this->returnValue($categoryId));
-        $productMock->expects($this->once())->method('getStoreId')->will($this->returnValue($storeId));
+        $productMock->expects($this->exactly(2))->method('getId')->willReturn($categoryId);
+        $productMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
         $this->_codeModelMock->expects(
             $this->once()
         )->method(
@@ -90,7 +90,7 @@ class CodeTest extends \PHPUnit\Framework\TestCase
 
         $categoryId = 1;
 
-        $pageMock->expects($this->exactly(2))->method('getId')->will($this->returnValue($categoryId));
+        $pageMock->expects($this->exactly(2))->method('getId')->willReturn($categoryId);
         $this->_codeModelMock->expects(
             $this->once()
         )->method(
@@ -107,16 +107,17 @@ class CodeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The model class is not valid
      */
     public function testExceptionNotValidEntityType()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The model class is not valid');
+
         $entity = $this->createMock(\Magento\Cms\Model\Block::class);
 
         $entityId = 1;
 
-        $entity->expects($this->exactly(2))->method('getId')->will($this->returnValue($entityId));
+        $entity->expects($this->exactly(2))->method('getId')->willReturn($entityId);
         $this->_codeModelMock->expects($this->never())->method('loadByEntityIdAndType');
 
         $this->assertEquals(
@@ -126,16 +127,17 @@ class CodeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The model is empty
      */
     public function testExceptionEmptyEntity()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The model is empty');
+
         $entity = $this->createMock(\Magento\Cms\Model\Block::class);
 
         $entityId = 0;
 
-        $entity->expects($this->exactly(1))->method('getId')->will($this->returnValue($entityId));
+        $entity->expects($this->exactly(1))->method('getId')->willReturn($entityId);
         $this->_codeModelMock->expects($this->never())->method('loadByEntityIdAndType');
 
         $this->assertEquals(

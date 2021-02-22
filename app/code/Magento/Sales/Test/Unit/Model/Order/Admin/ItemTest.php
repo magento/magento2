@@ -11,14 +11,14 @@ namespace Magento\Sales\Test\Unit\Model\Order\Admin;
 class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderItemMock;
 
     /** @var \Magento\Sales\Model\Order\Admin\Item */
     protected $item;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()

@@ -11,27 +11,27 @@ namespace Magento\ProductVideo\Test\Unit\Block\Product\View;
 class GalleryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Block\Product\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Block\Product\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\ArrayUtils|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\ArrayUtils|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $arrayUtilsMock;
 
     /**
-     * @var \Magento\ProductVideo\Helper\Media|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ProductVideo\Helper\Media|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mediaHelperMock;
 
     /**
-     * @var \Magento\Framework\Json\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Json\EncoderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $jsonEncoderMock;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $coreRegistry;
 
@@ -42,14 +42,14 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     protected $gallery;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productModelMock;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(\Magento\Catalog\Block\Product\Context::class);
         $this->arrayUtilsMock = $this->createMock(\Magento\Framework\Stdlib\ArrayUtils::class);

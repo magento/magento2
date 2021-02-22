@@ -18,7 +18,7 @@ class SortOrderTest extends \PHPUnit\Framework\TestCase
      */
     private $sortOrder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sortOrder = new SortOrder();
     }
@@ -48,10 +48,11 @@ class SortOrderTest extends \PHPUnit\Framework\TestCase
     /**
      * @param mixed $invalidDirection
      * @dataProvider invalidSortDirectionProvider
-     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testItThrowsAnExceptionIfAnInvalidSortOrderIsSet($invalidDirection)
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+
         $this->sortOrder->setDirection($invalidDirection);
     }
 
@@ -84,20 +85,22 @@ class SortOrderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testItValidatesADirectionAssignedDuringInstantiation()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+
         $this->sortOrder = new SortOrder([
             SortOrder::DIRECTION => 'not-asc-or-desc'
         ]);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testValidateField()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+
         $this->sortOrder = new SortOrder([
             SortOrder::FIELD => 'invalid field (value);'
         ]);

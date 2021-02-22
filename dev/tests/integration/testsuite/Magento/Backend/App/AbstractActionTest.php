@@ -105,7 +105,7 @@ class AbstractActionTest extends \Magento\TestFramework\TestCase\AbstractBackend
         if ($isLimitedAccess) {
             $this->assertNotContains($blockName, array_keys($actualBlocks));
         } else {
-            $this->assertContains($blockName, array_keys($actualBlocks));
+            $this->assertContains($blockName,array_keys($actualBlocks));
         }
     }
 

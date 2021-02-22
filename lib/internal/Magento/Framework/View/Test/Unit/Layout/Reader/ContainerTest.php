@@ -19,21 +19,21 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var Container|\PHPUnit_Framework_MockObject_MockObject
+     * @var Container|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $container;
 
     /**
-     * @var \Magento\Framework\View\Layout\ScheduledStructure\Helper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout\ScheduledStructure\Helper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \Magento\Framework\View\Layout\ReaderPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout\ReaderPool|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $readerPoolMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -71,7 +71,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
         $setStructureCondition,
         $setRemoveCondition
     ) {
-        /** @var ScheduledStructure|\PHPUnit_Framework_MockObject_MockObject $scheduledStructureMock */
+        /** @var ScheduledStructure|\PHPUnit\Framework\MockObject\MockObject $scheduledStructureMock */
         $scheduledStructureMock = $this->getMockBuilder(\Magento\Framework\View\Layout\ScheduledStructure::class)
             ->disableOriginalConstructor()->getMock();
         $scheduledStructureMock->expects($getStructureCondition)
@@ -86,7 +86,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
             ->method('setElementToRemoveList')
             ->with($containerName);
 
-        /** @var \Magento\Framework\View\Layout\Reader\Context|\PHPUnit_Framework_MockObject_MockObject $contextMock */
+        /** @var \Magento\Framework\View\Layout\Reader\Context|\PHPUnit\Framework\MockObject\MockObject $contextMock */
         $contextMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Reader\Context::class)
             ->disableOriginalConstructor()->getMock();
         $contextMock->expects($this->any())

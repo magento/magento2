@@ -30,99 +30,99 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     private $observer;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionFactoryMock;
 
     /**
-     * @var \Magento\Framework\Mail\Template\TransportBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Mail\Template\TransportBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $transportBuilderMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \Magento\Framework\Translate\Inline\StateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Translate\Inline\StateInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $inlineTranslationMock;
 
     /**
-     * @var \Magento\Sitemap\Model\ResourceModel\Sitemap\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sitemap\Model\ResourceModel\Sitemap\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sitemapCollectionMock;
 
     /**
-     * @var \Magento\Sitemap\Model\Sitemap|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sitemap\Model\Sitemap|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sitemapMock;
 
     /**
-     * @var \Magento\ProductAlert\Model\EmailFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ProductAlert\Model\EmailFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $emailFactoryMock;
 
     /**
-     * @var \Magento\ProductAlert\Model\Email|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ProductAlert\Model\Email|\PHPUnit\Framework\MockObject\MockObject
      */
     private $emailMock;
 
     /**
-     * @var \Magento\ProductAlert\Model\ResourceModel\Price\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ProductAlert\Model\ResourceModel\Price\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $priceColFactoryMock;
 
     /**
-     * @var \Magento\ProductAlert\Model\ResourceModel\Stock\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ProductAlert\Model\ResourceModel\Stock\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stockColFactoryMock;
 
     /**
-     * @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Website|\PHPUnit\Framework\MockObject\MockObject
      */
     private $websiteMock;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
     /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerRepositoryMock;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productRepositoryMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var ProductSalability|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductSalability|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productSalabilityMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->getMock();
@@ -208,10 +208,11 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testGetWebsitesThrowsException()
     {
+        $this->expectException(\Exception::class);
+
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
@@ -222,10 +223,11 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testProcessPriceThrowsException()
     {
+        $this->expectException(\Exception::class);
+
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
@@ -242,10 +244,11 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testProcessPriceCustomerRepositoryThrowsException()
     {
+        $this->expectException(\Exception::class);
+
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
@@ -274,10 +277,11 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testProcessPriceEmailThrowsException()
     {
+        $this->expectException(\Exception::class);
+
         $id = 1;
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
 
@@ -317,10 +321,11 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testProcessStockThrowsException()
     {
+        $this->expectException(\Exception::class);
+
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
@@ -338,10 +343,11 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testProcessStockCustomerRepositoryThrowsException()
     {
+        $this->expectException(\Exception::class);
+
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
@@ -372,10 +378,11 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testProcessStockEmailThrowsException()
     {
+        $this->expectException(\Exception::class);
+
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);

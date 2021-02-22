@@ -18,7 +18,7 @@ class SubstitutionTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $this->objectManager->getObject(\Magento\Payment\Model\Method\Substitution::class);
@@ -40,10 +40,10 @@ class SubstitutionTest extends \PHPUnit\Framework\TestCase
             'getAdditionalInformation'
         )->with(
             \Magento\Payment\Model\Method\Substitution::INFO_KEY_TITLE
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 $expectedResult
-            )
+            
         );
 
         $this->assertEquals($expectedResult, $this->model->getTitle());

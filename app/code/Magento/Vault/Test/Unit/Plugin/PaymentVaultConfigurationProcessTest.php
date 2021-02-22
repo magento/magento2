@@ -11,27 +11,27 @@ namespace Magento\Vault\Test\Unit\Plugin;
 class PaymentVaultConfigurationProcessTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
-     * @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $store;
 
     /**
-     * @var \Magento\Vault\Api\PaymentMethodListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Vault\Api\PaymentMethodListInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $vaultList;
 
     /**
-     * @var \Magento\Payment\Api\PaymentMethodListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Api\PaymentMethodListInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentMethodList;
 
     /**
-     * @var \Magento\Checkout\Block\Checkout\LayoutProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Checkout\Block\Checkout\LayoutProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $layoutProcessor;
 
@@ -43,7 +43,7 @@ class PaymentVaultConfigurationProcessTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManager = $this
             ->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)

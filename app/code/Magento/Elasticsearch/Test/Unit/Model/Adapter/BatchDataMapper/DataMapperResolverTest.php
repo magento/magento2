@@ -18,26 +18,26 @@ class DataMapperResolverTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var DataMapperFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataMapperFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataMapperFactoryMock;
 
     /**
-     * @var BatchDataMapperInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BatchDataMapperInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataMapperEntity;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dataMapperFactoryMock = $this->getMockBuilder(DataMapperFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataMapperEntity = $this->getMockBuilder(BatchDataMapperInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->model = (new ObjectManagerHelper($this))->getObject(
             \Magento\Elasticsearch\Model\Adapter\BatchDataMapper\DataMapperResolver::class,
             [

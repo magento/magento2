@@ -12,7 +12,7 @@ use Magento\Store\Model\ScopeInterface;
 class RobotsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
@@ -21,7 +21,7 @@ class RobotsTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();

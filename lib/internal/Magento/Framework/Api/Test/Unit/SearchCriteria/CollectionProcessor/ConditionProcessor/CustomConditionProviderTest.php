@@ -15,7 +15,7 @@ class CustomConditionProviderTest extends \PHPUnit\Framework\TestCase
     private $customConditionProcessorBuilder;
     private $customConditionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -63,21 +63,23 @@ class CustomConditionProviderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Custom processor for field "unknown-field" is absent.
      */
     public function testNegativeGetProcessorByFieldExceptionFieldIsAbsent()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Custom processor for field "unknown-field" is absent.');
+
         $testField = 'unknown-field';
         $this->customConditionProcessorBuilder->getProcessorByField($testField);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Custom processor must implement "Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionInterface".
      */
     public function testNegativeGetProcessorByFieldExceptionWrongClass()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Custom processor must implement "Magento\\Framework\\Api\\SearchCriteria\\CollectionProcessor\\ConditionProcessor\\CustomConditionInterface".');
+
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->customConditionProcessorBuilder = $objectManagerHelper
             ->getObject(

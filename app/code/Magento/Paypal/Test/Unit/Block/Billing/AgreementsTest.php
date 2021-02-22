@@ -11,49 +11,49 @@ namespace Magento\Paypal\Test\Unit\Block\Billing;
 class AgreementsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\View\Element\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $context;
 
     /**
      * @codingStandardsIgnoreStart
-     * @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      * @codingStandardsIgnoreEnd
      */
     private $agreementCollection;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlBuilder;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $escaper;
 
     /**
-     * @var \Magento\Paypal\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Paypal\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     private $helper;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $layout;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManager;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfig;
 
     /**
-     * @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cache;
 
@@ -65,7 +65,7 @@ class AgreementsTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $this->escaper = $this->createMock(\Magento\Framework\Escaper::class);

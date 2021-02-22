@@ -17,19 +17,19 @@ class InvalidSkuProcessorTest extends \PHPUnit\Framework\TestCase
     private $invalidSkuProcessor;
 
     /**
-     * @var \Magento\Catalog\Model\ProductIdLocatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ProductIdLocatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productIdLocator;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productRepository;
 
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productIdLocator = $this->getMockBuilder(\Magento\Catalog\Model\ProductIdLocatorInterface::class)
             ->disableOriginalConstructor()->getMockForAbstractClass();

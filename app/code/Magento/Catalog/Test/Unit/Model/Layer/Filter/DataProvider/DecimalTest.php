@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Test\Unit\Model\Layer\Filter\DataProvider;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Test for \Magento\Catalog\Model\Layer\Filter\DataProvider\Decimal
@@ -25,7 +25,7 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
      */
     private $target;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filter = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\FilterInterface::class)
             ->disableOriginalConstructor()
@@ -49,7 +49,7 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
         $this->resource->expects($this->once())
             ->method('getMinMax')
             ->with($this->filter)
-            ->will($this->returnValue([10, 20]));
+            ->willReturn([10, 20]);
         $max = $this->target->getMaxValue($this->filter);
         $this->assertSame(20, $max);
     }
@@ -59,7 +59,7 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
         $this->resource->expects($this->once())
             ->method('getMinMax')
             ->with($this->filter)
-            ->will($this->returnValue([50, 220]));
+            ->willReturn([50, 220]);
         $min = $this->target->getMinValue($this->filter);
         $this->assertSame(50, $min);
     }
@@ -70,7 +70,7 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
         $this->resource->expects($this->once())
             ->method('getCount')
             ->with($this->filter, $range)
-            ->will($this->returnValue(350));
+            ->willReturn(350);
         $this->assertSame(350, $this->target->getRangeItemCounts($range, $this->filter));
     }
 
@@ -79,7 +79,7 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
         $this->resource->expects($this->once())
             ->method('getMinMax')
             ->with($this->filter)
-            ->will($this->returnValue([74, 147]));
+            ->willReturn([74, 147]);
         $range = $this->target->getRange($this->filter);
         $this->assertSame(10, $range);
     }

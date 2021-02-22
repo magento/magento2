@@ -39,7 +39,7 @@ class GroupedProductLinkQueryTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -76,7 +76,7 @@ class GroupedProductLinkQueryTest extends TestCase
         foreach ($result[0]->getResult() as $link) {
             $this->assertEquals($sku, $link->getSku());
             $this->assertEquals('associated', $link->getLinkType());
-            $this->assertContains($link->getLinkedProductSku(), ['virtual-product', 'simple']);
+            $this->assertContains($link->getLinkedProductSku(),['virtual-product', 'simple']);
             $this->assertNotEmpty($link->getExtensionAttributes()->getQty());
         }
         //2nd criteria

@@ -38,32 +38,32 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ScopeConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|ScopeConfigInterface
      */
     private $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Resolver
+     * @var \PHPUnit\Framework\MockObject\MockObject|Resolver
      */
     private $layerResolverMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|SearchLayer
+     * @var \PHPUnit\Framework\MockObject\MockObject|SearchLayer
      */
     private $searchLayerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RecommendationsFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|RecommendationsFactory
      */
     private $recommendationsFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Recommendations
+     * @var \PHPUnit\Framework\MockObject\MockObject|Recommendations
      */
     private $recommendationsMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Resolver
+     * @var \PHPUnit\Framework\MockObject\MockObject|Resolver
      */
     private $queryResultFactory;
 
@@ -72,9 +72,9 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->layerResolverMock = $this->getMockBuilder(Resolver::class)
             ->disableOriginalConstructor()
             ->setMethods(['get'])
@@ -84,7 +84,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->layerResolverMock->expects($this->any())
             ->method('get')
-            ->will($this->returnValue($this->searchLayerMock));
+            ->willReturn($this->searchLayerMock);
 
         $this->recommendationsFactoryMock = $this->getMockBuilder(RecommendationsFactory::class)
             ->disableOriginalConstructor()
@@ -120,7 +120,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $isEnabledSearchRecommendations = false;
 
         /** @var $queryInterfaceMock QueryInterface */
-        $queryInterfaceMock = $this->createMock(QueryInterface::class);
+        $queryInterfaceMock = $this->getMockForAbstractClass(QueryInterface::class);
 
         $this->scopeConfigMock->expects($this->any())
             ->method('isSetFlag')
@@ -144,7 +144,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $queryText = 'test';
 
         /** @var $queryInterfaceMock QueryInterface */
-        $queryInterfaceMock = $this->createMock(QueryInterface::class);
+        $queryInterfaceMock = $this->getMockForAbstractClass(QueryInterface::class);
         $queryInterfaceMock->expects($this->any())->method('getQueryText')->willReturn($queryText);
 
         $this->scopeConfigMock->expects($this->any())
@@ -184,6 +184,6 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $this->queryResultFactory->expects($this->any())->method('create')->willReturn($queryResultMock);
 
         $result = $this->model->getItems($queryInterfaceMock);
-        $this->assertEquals(2, count($result));
+        $this->assertCount(2, $result);
     }
 }

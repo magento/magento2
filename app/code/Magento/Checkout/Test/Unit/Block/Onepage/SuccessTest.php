@@ -20,26 +20,26 @@ class SuccessTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $layout;
 
     /**
-     * @var \Magento\Sales\Model\Order\Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Config | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderConfig;
 
     /**
-     * @var \Magento\Checkout\Model\Session | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Checkout\Model\Session | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $checkoutSession;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -77,17 +77,17 @@ class SuccessTest extends \PHPUnit\Framework\TestCase
                 ),
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $context = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
             ->disableOriginalConstructor()
             ->setMethods(['getLayout', 'getEventManager', 'getUrlBuilder', 'getScopeConfig', 'getStoreManager'])
             ->getMock();
-        $context->expects($this->any())->method('getLayout')->will($this->returnValue($this->layout));
-        $context->expects($this->any())->method('getEventManager')->will($this->returnValue($eventManager));
-        $context->expects($this->any())->method('getUrlBuilder')->will($this->returnValue($urlBuilder));
-        $context->expects($this->any())->method('getScopeConfig')->will($this->returnValue($scopeConfig));
-        $context->expects($this->any())->method('getStoreManager')->will($this->returnValue($this->storeManagerMock));
+        $context->expects($this->any())->method('getLayout')->willReturn($this->layout);
+        $context->expects($this->any())->method('getEventManager')->willReturn($eventManager);
+        $context->expects($this->any())->method('getUrlBuilder')->willReturn($urlBuilder);
+        $context->expects($this->any())->method('getScopeConfig')->willReturn($scopeConfig);
+        $context->expects($this->any())->method('getStoreManager')->willReturn($this->storeManagerMock);
 
         $this->block = $objectManager->getObject(
             \Magento\Checkout\Block\Onepage\Success::class,
@@ -108,8 +108,8 @@ class SuccessTest extends \PHPUnit\Framework\TestCase
             'renderElement'
         )->with(
             'order.success.additional.info'
-        )->will(
-            $this->returnValue('AdditionalInfoHtml')
+        )->willReturn(
+            'AdditionalInfoHtml'
         );
         $this->block->setLayout($layout);
         $this->assertEquals('AdditionalInfoHtml', $this->block->getAdditionalInfoHtml());
@@ -167,8 +167,8 @@ class SuccessTest extends \PHPUnit\Framework\TestCase
     public function testGetContinueUrl()
     {
         $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
-        $storeMock->expects($this->once())->method('getBaseUrl')->will($this->returnValue('Expected Result'));
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
+        $storeMock->expects($this->once())->method('getBaseUrl')->willReturn('Expected Result');
 
         $this->assertEquals('Expected Result', $this->block->getContinueUrl());
     }

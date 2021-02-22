@@ -13,7 +13,7 @@ namespace Magento\Cms\Test\Unit\Model\Config\Source;
 class BlockTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Cms\Model\ResourceModel\Block\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cms\Model\ResourceModel\Block\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactory;
 
@@ -27,7 +27,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -55,11 +55,11 @@ class BlockTest extends \PHPUnit\Framework\TestCase
 
         $this->collectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($blockCollectionMock));
+            ->willReturn($blockCollectionMock);
 
         $blockCollectionMock->expects($this->once())
             ->method('toOptionIdArray')
-            ->will($this->returnValue('return-value'));
+            ->willReturn('return-value');
 
         $this->assertEquals('return-value', $this->block->toOptionArray());
     }

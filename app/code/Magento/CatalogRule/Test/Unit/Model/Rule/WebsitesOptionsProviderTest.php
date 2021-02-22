@@ -13,11 +13,11 @@ class WebsitesOptionsProviderTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
-    protected function setup()
+    protected function setup(): void
     {
         $this->storeMock = $this->createMock(\Magento\Store\Model\System\Store::class);
         $this->model = new \Magento\CatalogRule\Model\Rule\WebsitesOptionsProvider($this->storeMock);

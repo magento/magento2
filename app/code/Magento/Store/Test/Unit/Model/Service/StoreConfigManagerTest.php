@@ -21,21 +21,21 @@ class StoreConfigManagerTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\ResourceModel\Store\CollectionFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\ResourceModel\Store\CollectionFactory
      */
     protected $storeCollectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\Data\StoreConfigFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\Data\StoreConfigFactory
      */
     protected $storeConfigFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeConfigFactoryMock = $this->getMockBuilder(\Magento\Store\Model\Data\StoreConfigFactory::class)
             ->disableOriginalConstructor()
@@ -57,7 +57,7 @@ class StoreConfigManagerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $storeConfig
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getStoreMock(array $storeConfig)
     {
@@ -180,7 +180,7 @@ class StoreConfigManagerTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->getStoreConfigs([$code]);
 
-        $this->assertEquals(1, count($result));
+        $this->assertCount(1, $result);
         $this->assertEquals($id, $result[0]->getId());
         $this->assertEquals($code, $result[0]->getCode());
         $this->assertEquals($weightUnit, $result[0]->getWeightUnit());

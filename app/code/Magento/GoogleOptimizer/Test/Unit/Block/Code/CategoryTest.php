@@ -13,11 +13,11 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->registry = $this->createMock(\Magento\Framework\Registry::class);
@@ -27,7 +27,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->block = null;
     }
@@ -36,15 +36,15 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     {
         $categoryTags = ['catalog_category_1'];
         $category = $this->createMock(\Magento\Catalog\Model\Category::class);
-        $category->expects($this->once())->method('getIdentities')->will($this->returnValue($categoryTags));
+        $category->expects($this->once())->method('getIdentities')->willReturn($categoryTags);
         $this->registry->expects(
             $this->once()
         )->method(
             'registry'
         )->with(
             'current_category'
-        )->will(
-            $this->returnValue($category)
+        )->willReturn(
+            $category
         );
         $this->assertEquals($categoryTags, $this->block->getIdentities());
     }

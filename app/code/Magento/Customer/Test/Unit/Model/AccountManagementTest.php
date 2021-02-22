@@ -33,144 +33,144 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Customer\Model\CustomerFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\CustomerFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerFactory;
 
-    /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $manager;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $storeManager;
 
-    /** @var \Magento\Framework\Math\Random|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Math\Random|\PHPUnit\Framework\MockObject\MockObject */
     protected $random;
 
-    /** @var \Magento\Customer\Model\Metadata\Validator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\Metadata\Validator|\PHPUnit\Framework\MockObject\MockObject */
     protected $validator;
 
-    /** @var \Magento\Customer\Api\Data\ValidationResultsInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\Data\ValidationResultsInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $validationResultsInterfaceFactory;
 
-    /** @var \Magento\Customer\Api\AddressRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\AddressRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $addressRepository;
 
-    /** @var \Magento\Customer\Api\CustomerMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\CustomerMetadataInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerMetadata;
 
-    /** @var \Magento\Customer\Model\CustomerRegistry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\CustomerRegistry|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerRegistry;
 
-    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $logger;
 
-    /** @var \Magento\Framework\Encryption\EncryptorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Encryption\EncryptorInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $encryptor;
 
-    /** @var \Magento\Customer\Model\Config\Share|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\Config\Share|\PHPUnit\Framework\MockObject\MockObject */
     protected $share;
 
-    /** @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit\Framework\MockObject\MockObject */
     protected $string;
 
-    /** @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerRepository;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $scopeConfig;
 
-    /** @var \Magento\Framework\Mail\Template\TransportBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Mail\Template\TransportBuilder|\PHPUnit\Framework\MockObject\MockObject */
     protected $transportBuilder;
 
-    /** @var \Magento\Framework\Reflection\DataObjectProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Reflection\DataObjectProcessor|\PHPUnit\Framework\MockObject\MockObject */
     protected $dataObjectProcessor;
 
-    /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject */
     protected $registry;
 
-    /** @var \Magento\Customer\Helper\View|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Helper\View|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerViewHelper;
 
-    /** @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Stdlib\DateTime|\PHPUnit\Framework\MockObject\MockObject */
     protected $dateTime;
 
-    /** @var \Magento\Customer\Model\Customer|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\Customer|\PHPUnit\Framework\MockObject\MockObject */
     protected $customer;
 
-    /** @var \Magento\Framework\DataObjectFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DataObjectFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $objectFactory;
 
-    /** @var \Magento\Framework\Api\ExtensibleDataObjectConverter|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Api\ExtensibleDataObjectConverter|\PHPUnit\Framework\MockObject\MockObject */
     protected $extensibleDataObjectConverter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\Store
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\Store
      */
     protected $store;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Model\Data\CustomerSecure
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Model\Data\CustomerSecure
      */
     protected $customerSecure;
 
     /**
-     * @var AuthenticationInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var AuthenticationInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $authenticationMock;
 
     /**
-     * @var EmailNotificationInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var EmailNotificationInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $emailNotificationMock;
 
     /**
-     * @var DateTimeFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var DateTimeFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dateTimeFactory;
 
     /**
-     * @var AccountConfirmation|\PHPUnit_Framework_MockObject_MockObject
+     * @var AccountConfirmation|\PHPUnit\Framework\MockObject\MockObject
      */
     private $accountConfirmation;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Session\SessionManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Session\SessionManagerInterface
      */
     private $sessionManager;
 
     /**
-     * @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory
+     * @var  \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory
      */
     private $visitorCollectionFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Session\SaveHandlerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Session\SaveHandlerInterface
      */
     private $saveHandler;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Model\AddressRegistry
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Model\AddressRegistry
      */
     private $addressRegistryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|SearchCriteriaBuilder
+     * @var \PHPUnit\Framework\MockObject\MockObject|SearchCriteriaBuilder
      */
     private $searchCriteriaBuilderMock;
 
     /**
-     * @var AllowedCountries|\PHPUnit_Framework_MockObject_MockObject
+     * @var AllowedCountries|\PHPUnit\Framework\MockObject\MockObject
      */
     private $allowedCountriesReader;
 
     /**
-     * @var SessionCleanerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SessionCleanerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sessionCleanerMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerFactory = $this->createPartialMock(\Magento\Customer\Model\CustomerFactory::class, ['create']);
         $this->manager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
@@ -208,10 +208,10 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->allowedCountriesReader = $this->createMock(AllowedCountries::class);
         $this->authenticationMock = $this->getMockBuilder(AuthenticationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->emailNotificationMock = $this->getMockBuilder(EmailNotificationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->customerSecure = $this->getMockBuilder(\Magento\Customer\Model\Data\CustomerSecure::class)
             ->setMethods(['setRpToken', 'addData', 'setRpTokenCreatedAt', 'setData'])
@@ -285,10 +285,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testCreateAccountWithPasswordHashWithExistingCustomer()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+
         $websiteId = 1;
         $storeId = 1;
         $customerId = 1;
@@ -330,10 +331,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\State\InputMismatchException
      */
     public function testCreateAccountWithPasswordHashWithCustomerWithoutStoreId()
     {
+        $this->expectException(\Magento\Framework\Exception\State\InputMismatchException::class);
+
         $websiteId = 1;
         $defaultStoreId = 1;
         $customerId = 1;
@@ -403,10 +405,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateAccountWithPasswordHashWithLocalizedException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $websiteId = 1;
         $defaultStoreId = 1;
         $customerId = 1;
@@ -475,10 +478,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateAccountWithPasswordHashWithAddressException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $websiteId = 1;
         $defaultStoreId = 1;
         $customerId = 1;
@@ -566,10 +570,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateAccountWithPasswordHashWithNewCustomerAndLocalizedException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $storeId = 1;
         $storeName = 'store_name';
         $websiteId = 1;
@@ -782,8 +787,8 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         [
                             AccountManagement::XML_PATH_MINIMUM_PASSWORD_LENGTH,
@@ -798,7 +803,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
                             $minCharacterSetsNum,
                         ],
                     ]
-                )
+                
             );
 
         $this->string->expects($this->any())
@@ -1130,17 +1135,17 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->method('getStore')
             ->willReturn($this->store);
 
-        /** @var \Magento\Customer\Model\Address|\PHPUnit_Framework_MockObject_MockObject $addressModel */
+        /** @var \Magento\Customer\Model\Address|\PHPUnit\Framework\MockObject\MockObject $addressModel */
         $addressModel = $this->getMockBuilder(\Magento\Customer\Model\Address::class)->disableOriginalConstructor()
             ->setMethods(['setShouldIgnoreValidation'])->getMock();
 
-        /** @var \Magento\Customer\Api\Data\AddressInterface|\PHPUnit_Framework_MockObject_MockObject $customer */
+        /** @var \Magento\Customer\Api\Data\AddressInterface|\PHPUnit\Framework\MockObject\MockObject $customer */
         $address = $this->createMock(\Magento\Customer\Api\Data\AddressInterface::class);
         $address->expects($this->once())
             ->method('getId')
             ->willReturn($addressId);
 
-        /** @var Customer|\PHPUnit_Framework_MockObject_MockObject $customer */
+        /** @var Customer|\PHPUnit\Framework\MockObject\MockObject $customer */
         $customer = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -1323,29 +1328,32 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Invalid value of "0" provided for the customerId field
      */
     public function testValidateResetPasswordTokenBadCustomerId()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Invalid value of "0" provided for the customerId field');
+
         $this->accountManagement->validateResetPasswordLinkToken(0, '');
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage "resetPasswordLinkToken" is required. Enter and try again.
      */
     public function testValidateResetPasswordTokenBadResetPasswordLinkToken()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('"resetPasswordLinkToken" is required. Enter and try again.');
+
         $this->accountManagement->validateResetPasswordLinkToken(22, null);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\State\InputMismatchException
-     * @expectedExceptionMessage The password token is mismatched. Reset and try again.
      */
     public function testValidateResetPasswordTokenTokenMismatch()
     {
+        $this->expectException(\Magento\Framework\Exception\State\InputMismatchException::class);
+        $this->expectExceptionMessage('The password token is mismatched. Reset and try again.');
+
         $this->customerRegistry->expects($this->atLeastOnce())
             ->method('retrieveSecureData')
             ->willReturn($this->customerSecure);
@@ -1354,11 +1362,12 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\State\ExpiredException
-     * @expectedExceptionMessage The password token is expired. Reset and try again.
      */
     public function testValidateResetPasswordTokenTokenExpired()
     {
+        $this->expectException(\Magento\Framework\Exception\State\ExpiredException::class);
+        $this->expectExceptionMessage('The password token is expired. Reset and try again.');
+
         $this->reInitModel();
         $this->customerRegistry->expects($this->atLeastOnce())
             ->method('retrieveSecureData')
@@ -1453,7 +1462,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
         $dateTimeFactory->expects($this->any())->method('create')->willReturn($dateTimeMock);
-        $this->sessionCleanerMock = $this->createMock(SessionCleanerInterface::class);
+        $this->sessionCleanerMock = $this->getMockForAbstractClass(SessionCleanerInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->accountManagement = $this->objectManagerHelper->getObject(
@@ -1498,7 +1507,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->reInitModel();
         $customer = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $customer->expects($this->any())
             ->method('getId')
             ->willReturn($customerId);
@@ -1575,17 +1584,17 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $newPassword = 'new_password';
 
         $this->reInitModel();
-        /** @var \Magento\Customer\Model\Address|\PHPUnit_Framework_MockObject_MockObject $addressModel */
+        /** @var \Magento\Customer\Model\Address|\PHPUnit\Framework\MockObject\MockObject $addressModel */
         $addressModel = $this->getMockBuilder(\Magento\Customer\Model\Address::class)->disableOriginalConstructor()
             ->setMethods(['setShouldIgnoreValidation'])->getMock();
 
-        /** @var \Magento\Customer\Api\Data\AddressInterface|\PHPUnit_Framework_MockObject_MockObject $customer */
+        /** @var \Magento\Customer\Api\Data\AddressInterface|\PHPUnit\Framework\MockObject\MockObject $customer */
         $address = $this->createMock(\Magento\Customer\Api\Data\AddressInterface::class);
         $address->expects($this->any())
             ->method('getId')
             ->willReturn($addressId);
 
-        /** @var Customer|\PHPUnit_Framework_MockObject_MockObject $customer */
+        /** @var Customer|\PHPUnit\Framework\MockObject\MockObject $customer */
         $customer = $this->getMockBuilder(Customer::class)->disableOriginalConstructor()->getMock();
         $customer->expects($this->any())->method('getId')->willReturn($customerId);
         $customer->expects($this->any())
@@ -1761,11 +1770,12 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Exception message
      */
     public function testCreateAccountWithPasswordHashForGuestException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Exception message');
+
         $storeId = 1;
         $websiteId = 1;
         $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
@@ -2052,10 +2062,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateAccountWithStoreNotInWebsite()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $storeId = 1;
         $websiteId = 1;
         $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
@@ -2096,7 +2107,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     {
         $customerMock = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $customerMock->method('getWebsiteId')->willReturn(1);
         $customerMock->method('getStoreId')->willReturn(1);
         $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
@@ -2113,14 +2124,15 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for validating customer store id by customer website id with Exception
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The store view is not in the associated website.
      */
     public function testValidateCustomerStoreIdByWebsiteIdException(): void
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The store view is not in the associated website.');
+
         $customerMock = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();

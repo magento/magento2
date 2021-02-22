@@ -13,12 +13,12 @@ namespace Magento\GoogleOptimizer\Test\Unit\Helper;
 class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_googleAnalyticsHelperMock;
 
@@ -27,7 +27,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected $_helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $className = \Magento\GoogleOptimizer\Helper\Data::class;
@@ -54,8 +54,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             \Magento\GoogleOptimizer\Helper\Data::XML_PATH_ENABLED,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
-        )->will(
-            $this->returnValue($isExperimentsEnabled)
+        )->willReturn(
+            $isExperimentsEnabled
         );
 
         $this->assertEquals($isExperimentsEnabled, $this->_helper->isGoogleExperimentEnabled($store));
@@ -86,8 +86,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             \Magento\GoogleOptimizer\Helper\Data::XML_PATH_ENABLED,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
-        )->will(
-            $this->returnValue($isExperimentsEnabled)
+        )->willReturn(
+            $isExperimentsEnabled
         );
 
         $this->_googleAnalyticsHelperMock->expects(
@@ -96,8 +96,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             'isGoogleAnalyticsAvailable'
         )->with(
             $store
-        )->will(
-            $this->returnValue($isAnalyticsAvailable)
+        )->willReturn(
+            $isAnalyticsAvailable
         );
 
         $this->assertEquals($result, $this->_helper->isGoogleExperimentActive($store));

@@ -23,25 +23,25 @@ class ThemeProviderTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     private $objectManager;
 
-    /** @var \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $collectionFactory;
 
-    /** @var \Magento\Theme\Model\ThemeFactory|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Theme\Model\ThemeFactory|\PHPUnit\Framework\MockObject\MockObject  */
     private $themeFactory;
 
-    /** @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\CacheInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $cache;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject */
     private $serializer;
 
-    /** @var \Magento\Theme\Model\Theme\ThemeProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Model\Theme\ThemeProvider|\PHPUnit\Framework\MockObject\MockObject */
     private $themeProvider;
 
-    /** @var \Magento\Theme\Model\Theme|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Model\Theme|\PHPUnit\Framework\MockObject\MockObject */
     private $theme;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManagerHelper($this);
         $this->collectionFactory = $this->createPartialMock(
@@ -178,7 +178,7 @@ class ThemeProviderTest extends \PHPUnit\Framework\TestCase
             ->method('toArray')
             ->willReturn($themeArray);
 
-        $this->themeFactory->expects($this->once())->method('create')->will($this->returnValue($this->theme));
+        $this->themeFactory->expects($this->once())->method('create')->willReturn($this->theme);
         $this->cache->expects($this->once())
             ->method('load')
             ->with('theme-by-id-' . self::THEME_ID)

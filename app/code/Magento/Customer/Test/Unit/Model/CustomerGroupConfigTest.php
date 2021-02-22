@@ -21,12 +21,12 @@ class CustomerGroupConfigTest extends \PHPUnit\Framework\TestCase
     private $customerGroupConfig;
 
     /**
-     * @var \Magento\Config\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Config\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var \Magento\Customer\Api\GroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\GroupRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $groupRepositoryMock;
 
@@ -35,7 +35,7 @@ class CustomerGroupConfigTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(\Magento\Config\Model\Config::class)
             ->disableOriginalConstructor()

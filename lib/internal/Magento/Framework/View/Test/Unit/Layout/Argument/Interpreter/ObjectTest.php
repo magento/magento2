@@ -17,12 +17,12 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
     const EXPECTED_CLASS = \Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter\ObjectTest::class;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\Data\Argument\InterpreterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Argument\InterpreterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_interpreter;
 
@@ -36,7 +36,7 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_booleanUtils = $this->createMock(\Magento\Framework\Stdlib\BooleanUtils::class);

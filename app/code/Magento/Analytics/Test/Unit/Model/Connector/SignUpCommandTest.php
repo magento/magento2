@@ -23,44 +23,44 @@ class SignUpCommandTest extends \PHPUnit\Framework\TestCase
     private $signUpCommand;
 
     /**
-     * @var AnalyticsToken|\PHPUnit_Framework_MockObject_MockObject
+     * @var AnalyticsToken|\PHPUnit\Framework\MockObject\MockObject
      */
     private $analyticsTokenMock;
 
     /**
-     * @var IntegrationManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var IntegrationManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $integrationManagerMock;
 
     /**
-     * @var IntegrationToken|\PHPUnit_Framework_MockObject_MockObject
+     * @var IntegrationToken|\PHPUnit\Framework\MockObject\MockObject
      */
     private $integrationToken;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var ClientInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $httpClientMock;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var ResponseResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $responseResolverMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->analyticsTokenMock =  $this->getMockBuilder(AnalyticsToken::class)
             ->disableOriginalConstructor()
@@ -73,13 +73,13 @@ class SignUpCommandTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->httpClientMock = $this->getMockBuilder(ClientInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->responseResolverMock = $this->getMockBuilder(ResponseResolver::class)
             ->disableOriginalConstructor()
             ->getMock();

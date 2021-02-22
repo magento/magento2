@@ -15,11 +15,11 @@ class SearchEngineTest extends \PHPUnit\Framework\TestCase
     private $searchEngine;
 
     /**
-     * @var \Magento\Framework\Search\AdapterInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\AdapterInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     private $adapter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 
@@ -31,7 +31,7 @@ class SearchEngineTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $adapterFactory->expects($this->once())->method('create')->will($this->returnValue($this->adapter));
+        $adapterFactory->expects($this->once())->method('create')->willReturn($this->adapter);
 
         $this->searchEngine = $helper->getObject(
             \Magento\Search\Model\SearchEngine::class,
@@ -54,7 +54,7 @@ class SearchEngineTest extends \PHPUnit\Framework\TestCase
         $this->adapter->expects($this->once())
             ->method('query')
             ->with($this->equalTo($request))
-            ->will($this->returnValue($response));
+            ->willReturn($response);
 
         $result = $this->searchEngine->search($request);
         $this->assertInstanceOf(\Magento\Framework\Search\ResponseInterface::class, $result);

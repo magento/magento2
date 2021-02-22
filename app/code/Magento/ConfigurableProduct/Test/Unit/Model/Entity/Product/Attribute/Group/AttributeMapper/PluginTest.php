@@ -16,26 +16,26 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $registry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $attribute;
 
     /**
-     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject
      */
     private $magentoObject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 
@@ -74,14 +74,14 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $attrSetId = 333;
         $expected = ['is_configurable' => 1];
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $attributeMapper */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $attributeMapper */
         $attributeMapper = $this->getMockBuilder(
             \Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface::class
         )
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var \Magento\Eav\Model\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject $attribute */
+        /** @var \Magento\Eav\Model\Entity\Attribute|\PHPUnit\Framework\MockObject\MockObject $attribute */
         $attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -91,20 +91,20 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         };
 
         $this->attributeFactory->expects($this->once())->method('create')
-            ->will($this->returnValue($this->attribute));
+            ->willReturn($this->attribute);
 
         $this->attribute->expects($this->once())->method('getUsedAttributes')
             ->with($this->equalTo($attrSetId))
-            ->will($this->returnValue([$attrSetId]));
+            ->willReturn([$attrSetId]);
 
         $attribute->expects($this->once())->method('getAttributeId')
-            ->will($this->returnValue($attrSetId));
+            ->willReturn($attrSetId);
 
         $this->registry->expects($this->once())->method('registry')
             ->with($this->equalTo('current_attribute_set'))
-            ->will($this->returnValue($this->magentoObject));
+            ->willReturn($this->magentoObject);
 
-        $this->magentoObject->expects($this->once())->method('getId')->will($this->returnValue($attrSetId));
+        $this->magentoObject->expects($this->once())->method('getId')->willReturn($attrSetId);
 
         $result = $this->model->aroundMap($attributeMapper, $proceed, $attribute);
         $this->assertEquals($expected, $result);

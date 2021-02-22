@@ -18,8 +18,8 @@ class OptionTest extends \PHPUnit\Framework\TestCase
             'getChildBlock'
         )->with(
             'add_button'
-        )->will(
-            $this->returnValue($button)
+        )->willReturn(
+            $button
         );
 
         $layout = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getBlock']);
@@ -29,15 +29,15 @@ class OptionTest extends \PHPUnit\Framework\TestCase
             'getBlock'
         )->with(
             'admin.product.bundle.items'
-        )->will(
-            $this->returnValue($itemsBlock)
+        )->willReturn(
+            $itemsBlock
         );
 
         $block = $this->createPartialMock(
             \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option::class,
             ['getLayout']
         );
-        $block->expects($this->atLeastOnce())->method('getLayout')->will($this->returnValue($layout));
+        $block->expects($this->atLeastOnce())->method('getLayout')->willReturn($layout);
 
         $this->assertNotEquals(42, $block->getAddButtonId());
         $button->setId(42);

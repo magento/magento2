@@ -7,7 +7,7 @@ namespace Magento\Tax\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tax\Model\TaxAddressManager;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use \PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class TaxAddressManagerTest extends \PHPUnit\Framework\TestCase
 {
@@ -26,7 +26,7 @@ class TaxAddressManagerTest extends \PHPUnit\Framework\TestCase
      */
     private $customerSessionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -63,7 +63,7 @@ class TaxAddressManagerTest extends \PHPUnit\Framework\TestCase
         list($customerDefBillAddId, $isPrimaryBilling, $isDefaultBilling) = $billingInfo;
         list($customerDefShipAddId, $isPrimaryShipping, $isDefaultShipping) = $shippingInfo;
 
-        /* @var \Magento\Customer\Model\Address|\PHPUnit_Framework_MockObject_MockObject $address */
+        /* @var \Magento\Customer\Model\Address|\PHPUnit\Framework\MockObject\MockObject $address */
         $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->setMethods([
                 'getId',
@@ -89,7 +89,7 @@ class TaxAddressManagerTest extends \PHPUnit\Framework\TestCase
         $address->expects($this->any())->method('getIsPrimaryShipping')->willReturn($isPrimaryShipping);
         $address->expects($this->any())->method('getIsDefaultShipping')->willReturn($isDefaultShipping);
 
-        /* @var \Magento\Customer\Model\Customer|\PHPUnit_Framework_MockObject_MockObject $customer */
+        /* @var \Magento\Customer\Model\Customer|\PHPUnit\Framework\MockObject\MockObject $customer */
         $customer = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->setMethods(['getDefaultBilling', 'getDefaultShipping'])
             ->disableOriginalConstructor()
@@ -133,7 +133,7 @@ class TaxAddressManagerTest extends \PHPUnit\Framework\TestCase
         $isAddressDefaultBilling,
         $isAddressDefaultShipping
     ) {
-        /* @var \Magento\Customer\Api\Data\AddressInterface|\PHPUnit_Framework_MockObject_MockObject $address */
+        /* @var \Magento\Customer\Api\Data\AddressInterface|\PHPUnit\Framework\MockObject\MockObject $address */
         $address = $this->getMockBuilder(\Magento\Customer\Api\Data\AddressInterface::class)
             ->disableOriginalConstructor()
             ->getMock();

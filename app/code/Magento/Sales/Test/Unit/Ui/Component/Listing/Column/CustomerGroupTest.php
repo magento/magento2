@@ -20,11 +20,11 @@ class CustomerGroupTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var GroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $groupRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)

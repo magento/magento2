@@ -18,11 +18,11 @@ class StatusTextTest extends AbstractColumnTest
     const STATUS_TEXT = 'Enabled';
 
     /**
-     * @var Status|\PHPUnit_Framework_MockObject_MockObject
+     * @var Status|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $statusMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

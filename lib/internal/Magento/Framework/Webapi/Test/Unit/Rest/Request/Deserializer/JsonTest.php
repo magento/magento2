@@ -7,7 +7,7 @@ namespace Magento\Framework\Webapi\Test\Unit\Rest\Request\Deserializer;
 
 class JsonTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_helperFactoryMock;
 
     /** @var \Magento\Framework\Webapi\Rest\Request\Deserializer\Json */
@@ -16,13 +16,13 @@ class JsonTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Json\Decoder */
     protected $decoderMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_appStateMock;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** Prepare mocks for SUT constructor. */
         $this->decoderMock = $this->getMockBuilder(\Magento\Framework\Json\Decoder::class)
@@ -43,7 +43,7 @@ class JsonTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_jsonDeserializer);
         unset($this->decoderMock);
@@ -91,7 +91,7 @@ class JsonTest extends \PHPUnit\Framework\TestCase
             ->will($this->throwException(new \InvalidArgumentException));
         $this->_appStateMock->expects($this->once())
             ->method('getMode')
-            ->will($this->returnValue('production'));
+            ->willReturn('production');
         /** Initialize SUT. */
         $inputInvalidJson = '{"key1":"test1"."key2":"test2"}';
         try {
@@ -121,7 +121,7 @@ class JsonTest extends \PHPUnit\Framework\TestCase
             );
         $this->_appStateMock->expects($this->once())
             ->method('getMode')
-            ->will($this->returnValue('developer'));
+            ->willReturn('developer');
         /** Initialize SUT. */
         $inputInvalidJson = '{"key1":"test1"."key2":"test2"}';
         try {
@@ -129,7 +129,7 @@ class JsonTest extends \PHPUnit\Framework\TestCase
             $this->fail("Exception is expected to be raised");
         } catch (\Magento\Framework\Webapi\Exception $e) {
             $this->assertInstanceOf(\Magento\Framework\Webapi\Exception::class, $e, 'Exception type is invalid');
-            $this->assertContains('Decoding error:', $e->getMessage(), 'Exception message is invalid');
+            $this->assertStringContainsString('Decoding error:', $e->getMessage(), 'Exception message is invalid');
             $this->assertEquals(
                 \Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST,
                 $e->getHttpCode(),

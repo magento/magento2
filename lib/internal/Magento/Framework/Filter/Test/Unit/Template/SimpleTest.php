@@ -12,7 +12,7 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
      */
     protected $_filter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_filter = new \Magento\Framework\Filter\Template\Simple();
     }

@@ -20,31 +20,31 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfig;
 
     /**
-     * @var \Magento\Directory\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     private $directoryHelper;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
-     * @var \Magento\Payment\Model\Source\CctypeFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Model\Source\CctypeFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $ccTypeFactory;
 
     /**
-     * @var \Magento\Paypal\Model\CertFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Paypal\Model\CertFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $certFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
@@ -212,7 +212,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with('payment/' . Config::METHOD_WPP_EXPRESS . '/allow_ba_signup')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->assertEquals(1, $this->model->getValue('allow_ba_signup'));
     }
 
@@ -223,7 +223,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with('payment/' . Config::METHOD_WPP_PE_EXPRESS . '/allow_ba_signup')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->assertEquals(1, $this->model->getValue('allow_ba_signup'));
     }
 
@@ -274,7 +274,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with('payment/paypal_express/skip_order_review_step')
-            ->will($this->returnValue($value));
+            ->willReturn($value);
         $this->assertEquals($url, $this->model->getPayPalBasicStartUrl('token'));
     }
 
@@ -300,7 +300,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with('payment/' . Config::METHOD_WPP_BML . '/publisher_id')
-            ->will($this->returnValue('12345'));
+            ->willReturn('12345');
         $this->assertEquals('12345', $this->model->getBmlPublisherId());
     }
 
@@ -312,7 +312,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with('payment/' . Config::METHOD_WPP_BML . '/' . $section . '_position')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
         $this->assertEquals($expected, $this->model->getBmlPosition($section));
     }
 
@@ -335,7 +335,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with('payment/' . Config::METHOD_WPP_BML . '/' . $section . '_size')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
         $this->assertEquals($expected, $this->model->getBmlSize($section));
     }
 
@@ -359,20 +359,20 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->directoryHelper->expects($this->any())
             ->method('getDefaultCountry')
             ->with(1)
-            ->will($this->returnValue('US'));
+            ->willReturn('US');
         $this->scopeConfig->expects($this->any())
             ->method('isSetFlag')
-            ->will($this->returnValue($expectedFlag));
+            ->willReturn($expectedFlag);
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         ['payment/' . Config::METHOD_WPP_BML . '/' . $section . '_display', 'store', 1, $expectedValue],
                         ['payment/' . Config::METHOD_WPP_BML . '/active', 'store', 1, $expectedValue],
                         ['payment/' . Config::METHOD_WPP_PE_BML . '/active', 'store', 1, $expectedValue],
                     ]
-                )
+                
             );
         $this->assertEquals($expected, $this->model->getBmlDisplay($section));
     }

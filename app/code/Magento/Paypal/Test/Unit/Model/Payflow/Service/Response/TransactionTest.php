@@ -12,7 +12,7 @@ use Magento\Paypal\Model\Payflow\Service\Response\Transaction;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * @see Transaction
@@ -45,10 +45,11 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
     /**
      * @covers \Magento\Paypal\Model\Payflow\Service\Response\Transaction::savePaymentInQuote
      *
-     * @expectedException \InvalidArgumentException
      */
     public function testSavePaymentInQuote()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $cartId = 12;
         /** @var Transaction $transactionService */
         $transactionService = (new ObjectManager($this))->getObject(

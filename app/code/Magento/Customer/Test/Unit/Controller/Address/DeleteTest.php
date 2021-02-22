@@ -19,31 +19,31 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\App\Action\Context */
     protected $context;
 
-    /** @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject */
     protected $sessionMock;
 
-    /** @var \Magento\Framework\Data\Form\FormKey\Validator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Data\Form\FormKey\Validator|\PHPUnit\Framework\MockObject\MockObject */
     protected $validatorMock;
 
-    /** @var \Magento\Customer\Api\AddressRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\AddressRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $addressRepositoryMock;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $request;
 
-    /** @var \Magento\Customer\Api\Data\AddressInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\Data\AddressInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $address;
 
-    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $messageManager;
 
-    /** @var \Magento\Framework\Controller\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Controller\Result\RedirectFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $resultRedirectFactory;
 
-    /** @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit\Framework\MockObject\MockObject */
     protected $resultRedirect;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()

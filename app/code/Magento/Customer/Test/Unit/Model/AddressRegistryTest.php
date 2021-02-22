@@ -15,11 +15,11 @@ class AddressRegistryTest extends \PHPUnit\Framework\TestCase
     private $unit;
 
     /**
-     * @var \Magento\Customer\Model\AddressFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\AddressFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $addressFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->addressFactory = $this->getMockBuilder(\Magento\Customer\Model\AddressFactory::class)
             ->disableOriginalConstructor()
@@ -38,13 +38,13 @@ class AddressRegistryTest extends \PHPUnit\Framework\TestCase
         $address->expects($this->once())
             ->method('load')
             ->with($addressId)
-            ->will($this->returnValue($address));
+            ->willReturn($address);
         $address->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($addressId));
+            ->willReturn($addressId);
         $this->addressFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($address));
+            ->willReturn($address);
         $actual = $this->unit->retrieve($addressId);
         $this->assertEquals($address, $actual);
         $actualCached = $this->unit->retrieve($addressId);
@@ -52,10 +52,11 @@ class AddressRegistryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testRetrieveException()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $addressId = 1;
         $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->setMethods(['load', 'getId', '__wakeup'])
@@ -64,13 +65,13 @@ class AddressRegistryTest extends \PHPUnit\Framework\TestCase
         $address->expects($this->once())
             ->method('load')
             ->with($addressId)
-            ->will($this->returnValue($address));
+            ->willReturn($address);
         $address->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->addressFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($address));
+            ->willReturn($address);
         $this->unit->retrieve($addressId);
     }
 
@@ -84,13 +85,13 @@ class AddressRegistryTest extends \PHPUnit\Framework\TestCase
         $address->expects($this->exactly(2))
             ->method('load')
             ->with($addressId)
-            ->will($this->returnValue($address));
+            ->willReturn($address);
         $address->expects($this->exactly(2))
             ->method('getId')
-            ->will($this->returnValue($addressId));
+            ->willReturn($addressId);
         $this->addressFactory->expects($this->exactly(2))
             ->method('create')
-            ->will($this->returnValue($address));
+            ->willReturn($address);
         $actual = $this->unit->retrieve($addressId);
         $this->assertEquals($address, $actual);
         $this->unit->remove($addressId);

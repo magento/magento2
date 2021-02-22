@@ -72,7 +72,7 @@ class DebugTest extends \PHPUnit\Framework\TestCase
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Exception
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->shell = $this->objectManager->get(Shell::class);
@@ -89,7 +89,7 @@ class DebugTest extends \PHPUnit\Framework\TestCase
      * @inheritdoc
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->reinitDeploymentConfig();
         $this->etcDirectory->delete(self::$backupFile);
@@ -143,7 +143,7 @@ class DebugTest extends \PHPUnit\Framework\TestCase
         $this->removeDebugLog();
         $this->logger->debug($message);
         $this->assertFileExists($this->getDebuggerLogPath());
-        $this->assertContains($message, file_get_contents($this->getDebuggerLogPath()));
+        $this->assertStringContainsString($message, file_get_contents($this->getDebuggerLogPath()));
         $this->assertNull($this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_DEBUG_LOGGING));
 
         $this->checkCommonFlow($message);
@@ -229,7 +229,7 @@ class DebugTest extends \PHPUnit\Framework\TestCase
         $this->removeDebugLog();
         $this->logger->debug($message);
         $this->assertFileExists($this->getDebuggerLogPath());
-        $this->assertContains($message, file_get_contents($this->getDebuggerLogPath()));
+        $this->assertStringContainsString($message, file_get_contents($this->getDebuggerLogPath()));
 
         $this->enableDebugging(false);
         $this->removeDebugLog();

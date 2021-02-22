@@ -36,7 +36,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$pathToSource = BP;
         self::$reportDir = self::$pathToSource . '/dev/tests/static/report';
@@ -331,9 +331,19 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             touch($reportFile);
         }
         $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
-        $result = $codeSniffer->run(
-            $this->isFullScan() ? $this->getFullWhitelist() : self::getWhitelist(['php', 'phtml'])
-        );
+        $fileList = $this->isFullScan() ? $this->getFullWhitelist() : self::getWhitelist(['php', 'phtml']);
+        $ignoreList = Files::init()->readLists(__DIR__ . '/_files/phpcs/ignorelist/*.txt');
+        if ($ignoreList) {
+            $ignoreListPattern = sprintf('#(%s)#i', implode('|', $ignoreList));
+            $fileList = array_filter(
+                $fileList,
+                function ($path) use ($ignoreListPattern) {
+                    return !preg_match($ignoreListPattern, $path);
+                }
+            );
+        }
+
+        $result = $codeSniffer->run($fileList);
         $report = file_get_contents($reportFile);
         $this->assertEquals(
             0,
@@ -435,9 +445,9 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             }
         }
 
-        $this->assertEquals(
+        $this->assertCount(
             0,
-            count($filesMissingStrictTyping),
+            $filesMissingStrictTyping,
             "Following files are missing strict type declaration:"
             . PHP_EOL
             . implode(PHP_EOL, $filesMissingStrictTyping)

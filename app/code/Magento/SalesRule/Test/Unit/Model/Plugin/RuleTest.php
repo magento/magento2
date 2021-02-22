@@ -14,7 +14,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     protected $plugin;
 
     /**}
-     * @var \Magento\SalesRule\Model\Rule|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\Rule|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $subject;
 
@@ -23,7 +23,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
      */
     protected $genericClosure;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->subject = $this->getMockBuilder(\Magento\SalesRule\Model\Rule::class)

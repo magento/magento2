@@ -18,16 +18,16 @@ class BundleRegularPriceTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $saleableInterfaceMock;
 
-    /** @var \Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $bundleCalculatorMock;
 
-    /** @var \Magento\Framework\Pricing\PriceInfo\Base |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Pricing\PriceInfo\Base |\PHPUnit\Framework\MockObject\MockObject */
     protected $priceInfoMock;
 
-    /** @var CustomOptionPrice|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CustomOptionPrice|\PHPUnit\Framework\MockObject\MockObject */
     protected $customOptionPriceMock;
 
     /**
@@ -36,14 +36,14 @@ class BundleRegularPriceTest extends \PHPUnit\Framework\TestCase
     protected $quantity = 1;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrencyMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->saleableInterfaceMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
@@ -61,7 +61,7 @@ class BundleRegularPriceTest extends \PHPUnit\Framework\TestCase
 
         $this->saleableInterfaceMock->expects($this->once())
             ->method('getPriceInfo')
-            ->will($this->returnValue($this->priceInfoMock));
+            ->willReturn($this->priceInfoMock);
 
         $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
 
@@ -80,16 +80,16 @@ class BundleRegularPriceTest extends \PHPUnit\Framework\TestCase
 
         $this->saleableInterfaceMock->expects($this->once())
             ->method('getPrice')
-            ->will($this->returnValue($expectedResult));
+            ->willReturn($expectedResult);
 
         $this->bundleCalculatorMock->expects($this->once())
             ->method('getMinRegularAmount')
             ->with($expectedResult, $this->saleableInterfaceMock)
-            ->will($this->returnValue($expectedResult));
+            ->willReturn($expectedResult);
 
         $this->priceCurrencyMock->expects($this->once())
             ->method('convertAndRound')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $result = $this->regularPrice->getAmount();
         $this->assertEquals($expectedResult, $result, 'Incorrect amount');
@@ -105,16 +105,16 @@ class BundleRegularPriceTest extends \PHPUnit\Framework\TestCase
 
         $this->saleableInterfaceMock->expects($this->once())
             ->method('getPrice')
-            ->will($this->returnValue($expectedResult));
+            ->willReturn($expectedResult);
 
         $this->bundleCalculatorMock->expects($this->once())
             ->method('getMaxRegularAmount')
             ->with($expectedResult, $this->saleableInterfaceMock)
-            ->will($this->returnValue($expectedResult));
+            ->willReturn($expectedResult);
 
         $this->priceCurrencyMock->expects($this->once())
             ->method('convertAndRound')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $result = $this->regularPrice->getMaximalPrice();
         $this->assertEquals($expectedResult, $result, 'Incorrect amount');
@@ -147,16 +147,16 @@ class BundleRegularPriceTest extends \PHPUnit\Framework\TestCase
 
         $this->saleableInterfaceMock->expects($this->once())
             ->method('getPrice')
-            ->will($this->returnValue($price));
+            ->willReturn($price);
 
         $this->bundleCalculatorMock->expects($this->once())
             ->method('getMaxRegularAmount')
             ->with($expectedPrice, $this->saleableInterfaceMock)
-            ->will($this->returnValue($expectedPrice));
+            ->willReturn($expectedPrice);
 
         $this->priceCurrencyMock->expects($this->once())
             ->method('convertAndRound')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $result = $this->regularPrice->getMaximalPrice();
         $this->assertEquals($expectedPrice, $result, 'Incorrect amount');
@@ -172,16 +172,16 @@ class BundleRegularPriceTest extends \PHPUnit\Framework\TestCase
 
         $this->saleableInterfaceMock->expects($this->once())
             ->method('getPrice')
-            ->will($this->returnValue($expectedResult));
+            ->willReturn($expectedResult);
 
         $this->priceCurrencyMock->expects($this->once())
             ->method('convertAndRound')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->bundleCalculatorMock->expects($this->once())
             ->method('getMinRegularAmount')
             ->with($expectedResult, $this->saleableInterfaceMock)
-            ->will($this->returnValue($expectedResult));
+            ->willReturn($expectedResult);
 
         $result = $this->regularPrice->getMinimalPrice();
         $this->assertEquals($expectedResult, $result, 'Incorrect amount');
@@ -199,7 +199,7 @@ class BundleRegularPriceTest extends \PHPUnit\Framework\TestCase
 
         $this->saleableInterfaceMock->expects($this->once())
             ->method('getPrice')
-            ->will($this->returnValue($price));
+            ->willReturn($price);
 
         $this->saleableInterfaceMock->expects($this->once())
             ->method('getPriceType')
@@ -217,12 +217,12 @@ class BundleRegularPriceTest extends \PHPUnit\Framework\TestCase
 
         $this->priceCurrencyMock->expects($this->once())
             ->method('convertAndRound')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->bundleCalculatorMock->expects($this->once())
             ->method('getMinRegularAmount')
             ->with($expectedValue, $this->saleableInterfaceMock)
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $result = $this->regularPrice->getMinimalPrice();
         $this->assertEquals($expectedValue, $result, 'Incorrect amount');

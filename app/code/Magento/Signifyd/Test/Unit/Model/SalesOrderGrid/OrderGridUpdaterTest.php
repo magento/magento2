@@ -8,7 +8,7 @@ namespace Magento\Signifyd\Test\Unit\Model\SalesOrderGrid;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Sales\Model\ResourceModel\GridInterface;
 use Magento\Signifyd\Model\SalesOrderGrid\OrderGridUpdater;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class OrderGridUpdaterTest extends \PHPUnit\Framework\TestCase
 {
@@ -30,7 +30,7 @@ class OrderGridUpdaterTest extends \PHPUnit\Framework\TestCase
     /**
      * Sets up testing class and dependency mocks.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderGrid = $this->getMockBuilder(GridInterface::class)
             ->getMockForAbstractClass();

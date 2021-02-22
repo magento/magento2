@@ -20,7 +20,7 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Filesystem\DirectoryList
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Filesystem\DirectoryList
      */
     private $directoryList;
 
@@ -34,7 +34,7 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
      */
     private $composerFactory;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
     }
@@ -102,7 +102,7 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
 
         $actualRequiredExtensions = $composerInfo->getRequiredExtensions();
         foreach ($expectedExtensions as $expectedExtension) {
-            $this->assertContains($expectedExtension, $actualRequiredExtensions);
+            $this->assertContains($expectedExtension,$actualRequiredExtensions);
         }
     }
 

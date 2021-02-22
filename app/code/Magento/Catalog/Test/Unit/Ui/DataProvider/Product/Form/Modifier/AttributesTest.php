@@ -16,21 +16,21 @@ use Magento\Framework\UrlInterface;
 class AttributesTest extends AbstractModifierTest
 {
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registryMock;
 
     /**
-     * @var AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AuthorizationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $authorizationMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)

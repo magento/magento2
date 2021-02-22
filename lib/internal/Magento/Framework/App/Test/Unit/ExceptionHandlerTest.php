@@ -61,11 +61,11 @@ class ExceptionHandlerTest extends \PHPUnit\Framework\TestCase
      */
     private $requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->encryptorInterfaceMock = $this->createMock(EncryptorInterface::class);
+        $this->encryptorInterfaceMock = $this->getMockForAbstractClass(EncryptorInterface::class);
         $this->filesystemMock = $this->createMock(Filesystem::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->responseMock = $this->createMock(ResponseHttp::class);
         $this->requestMock = $this->getMockBuilder(RequestHttp::class)
             ->disableOriginalConstructor()

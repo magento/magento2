@@ -31,7 +31,7 @@ class ZookeeperTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!extension_loaded('zookeeper')) {
             $this->markTestSkipped('Test was skipped because php extension Zookeeper is not installed.');
@@ -39,22 +39,24 @@ class ZookeeperTest extends TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessage The path needs to be a non-empty string.
      * @return void
      */
     public function testConstructionWithPathException()
     {
+        $this->expectException(\Magento\Framework\Exception\RuntimeException::class);
+        $this->expectExceptionMessage('The path needs to be a non-empty string.');
+
         $this->zookeeperProvider = new ZookeeperProvider($this->host, '');
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessage The host needs to be a non-empty string.
      * @return void
      */
     public function testConstructionWithHostException()
     {
+        $this->expectException(\Magento\Framework\Exception\RuntimeException::class);
+        $this->expectExceptionMessage('The host needs to be a non-empty string.');
+
         $this->zookeeperProvider = new ZookeeperProvider('', $this->path);
     }
 

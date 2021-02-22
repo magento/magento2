@@ -13,12 +13,12 @@ use Magento\Framework\UrlInterface;
 class NotificationAboutFailedSubscriptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|SubscriptionStatusProvider
+     * @var \PHPUnit\Framework\MockObject\MockObject|SubscriptionStatusProvider
      */
     private $subscriptionStatusMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|UrlInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|UrlInterface
      */
     private $urlBuilderMock;
 
@@ -35,7 +35,7 @@ class NotificationAboutFailedSubscriptionTest extends \PHPUnit\Framework\TestCas
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subscriptionStatusMock = $this->getMockBuilder(SubscriptionStatusProvider::class)
             ->disableOriginalConstructor()

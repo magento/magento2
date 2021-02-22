@@ -19,12 +19,12 @@ use PHPUnit\Framework\TestCase;
 class CaptchaTest extends TestCase
 {
     /**
-     * @var CaptchaHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var CaptchaHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $helperMock;
 
     /**
-     * @var CustomerSession|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerSession|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerSessionMock;
 
@@ -46,7 +46,7 @@ class CaptchaTest extends TestCase
     /**
      * Create mocks and model
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helperMock = $this->createMock(CaptchaHelper::class);
         $this->customerSessionMock = $this->createMock(CustomerSession::class);

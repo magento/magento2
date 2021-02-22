@@ -42,11 +42,11 @@ class PackageResultTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->errorFactory = $this->getMockBuilder(ErrorFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -135,11 +135,12 @@ class PackageResultTest extends TestCase
     /**
      * Case when the same results are given more than once.
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Same object received from carrier.
      */
     public function testAppendSameReference(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Same object received from carrier.');
+
         $rate1 = $this->getMockBuilder(Method::class)
             ->disableOriginalConstructor()
             ->setMethods(['getMethod', 'getPrice', 'setPrice'])

@@ -33,17 +33,17 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     protected $mode = 'r';
 
     /**
-     * @var \Magento\Framework\Filesystem\DriverInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\DriverInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $driver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->driver = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\DriverInterface::class);
         $this->driver->expects($this->any())
             ->method('isExists')
             ->with($this->path)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->driver->expects($this->once())
             ->method('fileOpen')
             ->with($this->path, $this->mode)
@@ -51,22 +51,23 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         $this->file = new Read($this->path, $this->driver);
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->file = null;
         $this->driver = null;
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\FileSystemException
      */
     public function testInstanceFileNotExists()
     {
+        $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
+
         $driver = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\DriverInterface::class);
         $driver->expects($this->once())
             ->method('isExists')
             ->with($this->path)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $file = new Read($this->path, $driver);
         $this->assertInstanceOf(\Magento\Framework\Filesystem\File\Read::class, $file);
     }
@@ -78,7 +79,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         $this->driver->expects($this->once())
             ->method('fileRead')
             ->with($this->resource, $length)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertEquals($result, $this->file->read($length));
     }
 
@@ -90,7 +91,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         $this->driver->expects($this->once())
             ->method('fileGetContents')
             ->with($this->path, $flag, $context)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertEquals($result, $this->file->readAll($flag, $context));
     }
 
@@ -102,7 +103,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         $this->driver->expects($this->once())
             ->method('fileReadLine')
             ->with($this->resource, $length, $ending)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertEquals($result, $this->file->readLine($length, $ending));
     }
 
@@ -116,7 +117,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         $this->driver->expects($this->once())
             ->method('fileGetCsv')
             ->with($this->resource, $length, $delimiter, $enclosure, $escape)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertEquals($result, $this->file->readCsv($length, $delimiter, $enclosure, $escape));
     }
 
@@ -126,7 +127,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         $this->driver->expects($this->once())
             ->method('fileTell')
             ->with($this->resource)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertEquals($result, $this->file->tell());
     }
 
@@ -136,7 +137,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         $this->driver->expects($this->once())
             ->method('endOfFile')
             ->with($this->resource)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertEquals($result, $this->file->eof());
     }
 
@@ -146,7 +147,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         $this->driver->expects($this->once())
             ->method('fileClose')
             ->with($this->resource)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertEquals($result, $this->file->close());
     }
 
@@ -156,7 +157,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         $this->driver->expects($this->once())
             ->method('stat')
             ->with($this->path)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertEquals($result, $this->file->stat());
     }
 
@@ -168,7 +169,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         $this->driver->expects($this->once())
             ->method('fileSeek')
             ->with($this->resource, $offset, $whence)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertEquals($result, $this->file->seek($offset, $whence));
     }
 }

@@ -37,7 +37,7 @@ class UpgradeQuoteCustomerEmailObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->observerMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
@@ -48,7 +48,7 @@ class UpgradeQuoteCustomerEmailObserverTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getCustomerDataObject', 'getOrigCustomerDataObject'])
             ->getMock();
 
-        $this->observerMock->expects($this->any())->method('getEvent')->will($this->returnValue($this->eventMock));
+        $this->observerMock->expects($this->any())->method('getEvent')->willReturn($this->eventMock);
 
         $this->quoteRepositoryMock = $this
             ->getMockBuilder(\Magento\Quote\Api\CartRepositoryInterface::class)
@@ -78,10 +78,10 @@ class UpgradeQuoteCustomerEmailObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->eventMock->expects($this->any())
             ->method('getCustomerDataObject')
-            ->will($this->returnValue($customer));
+            ->willReturn($customer);
         $this->eventMock->expects($this->any())
             ->method('getOrigCustomerDataObject')
-            ->will($this->returnValue($customerOrig));
+            ->willReturn($customerOrig);
 
         $customerOrig->expects($this->any())
             ->method('getEmail')

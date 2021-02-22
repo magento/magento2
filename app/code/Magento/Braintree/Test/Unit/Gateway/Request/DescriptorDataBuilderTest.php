@@ -10,10 +10,10 @@ use Magento\Braintree\Gateway\Request\DescriptorDataBuilder;
 use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
- * Class DescriptorDataBuilderTest
+ * Test for DescriptorDataBuilder
  */
 class DescriptorDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
@@ -32,7 +32,7 @@ class DescriptorDataBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $builder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -52,7 +52,7 @@ class DescriptorDataBuilderTest extends \PHPUnit\Framework\TestCase
      */
     public function testBuild(array $descriptors, array $expected)
     {
-        $paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
+        $paymentDOMock = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
         $buildSubject = [
             'payment' => $paymentDOMock,
         ];
@@ -61,7 +61,7 @@ class DescriptorDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->with($buildSubject)
             ->willReturn($paymentDOMock);
 
-        $order = $this->createMock(OrderAdapterInterface::class);
+        $order = $this->getMockForAbstractClass(OrderAdapterInterface::class);
         $order->expects(self::once())->method('getStoreId')->willReturn('1');
 
         $paymentDOMock->expects(self::once())->method('getOrder')->willReturn($order);

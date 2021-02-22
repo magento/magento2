@@ -76,7 +76,7 @@ class ReportWriterTest extends TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)->getMockForAbstractClass();
         $this->reportValidatorMock = $this->getMockBuilder(ReportValidator::class)

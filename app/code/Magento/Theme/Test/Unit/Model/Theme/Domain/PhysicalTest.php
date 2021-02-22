@@ -17,39 +17,39 @@ class PhysicalTest extends \PHPUnit\Framework\TestCase
         $physicalTheme->setData(['parent_id' => 10, 'theme_title' => 'Test Theme']);
 
         $copyService = $this->createPartialMock(\Magento\Theme\Model\CopyService::class, ['copy']);
-        $copyService->expects($this->once())->method('copy')->will($this->returnValue($copyService));
+        $copyService->expects($this->once())->method('copy')->willReturn($copyService);
 
         $virtualTheme = $this->createPartialMock(
             \Magento\Theme\Model\Theme::class,
             ['__wakeup', 'getThemeImage', 'createPreviewImageCopy', 'save']
         );
-        $virtualTheme->expects($this->once())->method('getThemeImage')->will($this->returnValue($virtualTheme));
+        $virtualTheme->expects($this->once())->method('getThemeImage')->willReturn($virtualTheme);
 
         $virtualTheme->expects(
             $this->once()
         )->method(
             'createPreviewImageCopy'
-        )->will(
-            $this->returnValue($virtualTheme)
+        )->willReturn(
+            $virtualTheme
         );
 
-        $virtualTheme->expects($this->once())->method('save')->will($this->returnValue($virtualTheme));
+        $virtualTheme->expects($this->once())->method('save')->willReturn($virtualTheme);
 
         $themeFactory = $this->createPartialMock(\Magento\Theme\Model\ThemeFactory::class, ['create']);
-        $themeFactory->expects($this->once())->method('create')->will($this->returnValue($virtualTheme));
+        $themeFactory->expects($this->once())->method('create')->willReturn($virtualTheme);
 
         $themeCollection = $this->createPartialMock(
             \Magento\Theme\Model\ResourceModel\Theme\Collection::class,
             ['addTypeFilter', 'addAreaFilter', 'addFilter', 'count']
         );
 
-        $themeCollection->expects($this->any())->method('addTypeFilter')->will($this->returnValue($themeCollection));
+        $themeCollection->expects($this->any())->method('addTypeFilter')->willReturn($themeCollection);
 
-        $themeCollection->expects($this->any())->method('addAreaFilter')->will($this->returnValue($themeCollection));
+        $themeCollection->expects($this->any())->method('addAreaFilter')->willReturn($themeCollection);
 
-        $themeCollection->expects($this->any())->method('addFilter')->will($this->returnValue($themeCollection));
+        $themeCollection->expects($this->any())->method('addFilter')->willReturn($themeCollection);
 
-        $themeCollection->expects($this->once())->method('count')->will($this->returnValue(1));
+        $themeCollection->expects($this->once())->method('count')->willReturn(1);
 
         $domainModel = new \Magento\Theme\Model\Theme\Domain\Physical(
             $this->createMock(\Magento\Framework\View\Design\ThemeInterface::class),

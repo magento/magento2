@@ -28,7 +28,7 @@ class ConfigCollectorTest extends TestCase
     /**
      * @inheritDoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->collector = Bootstrap::getObjectManager()->get(ConfigCollector::class);
     }

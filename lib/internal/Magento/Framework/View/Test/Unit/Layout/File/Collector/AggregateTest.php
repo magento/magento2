@@ -13,31 +13,31 @@ class AggregateTest extends \PHPUnit\Framework\TestCase
     private $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $_fileList;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $_baseFiles;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $_themeFiles;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $_overridingBaseFiles;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $_overridingThemeFiles;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_fileList = $this->createMock(\Magento\Framework\View\File\FileList::class);
         $this->_baseFiles = $this->getMockForAbstractClass(\Magento\Framework\View\File\CollectorInterface::class);
@@ -49,7 +49,7 @@ class AggregateTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\View\File\CollectorInterface::class
         );
         $fileListFactory = $this->createMock(\Magento\Framework\View\File\FileList\Factory::class);
-        $fileListFactory->expects($this->once())->method('create')->will($this->returnValue($this->_fileList));
+        $fileListFactory->expects($this->once())->method('create')->willReturn($this->_fileList);
         $this->_model = new \Magento\Framework\View\Layout\File\Collector\Aggregated(
             $fileListFactory,
             $this->_baseFiles,
@@ -71,8 +71,8 @@ class AggregateTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getInheritedThemes'
-        )->will(
-            $this->returnValue([$parentTheme, $parentTheme])
+        )->willReturn(
+            [$parentTheme, $parentTheme]
         );
 
         $files = [
@@ -91,8 +91,8 @@ class AggregateTest extends \PHPUnit\Framework\TestCase
             'getFiles'
         )->with(
             $theme
-        )->will(
-            $this->returnValue([$files[0]])
+        )->willReturn(
+            [$files[0]]
         );
 
         $this->_themeFiles->expects(
@@ -101,8 +101,8 @@ class AggregateTest extends \PHPUnit\Framework\TestCase
             'getFiles'
         )->with(
             $parentTheme
-        )->will(
-            $this->returnValue([$files[1]])
+        )->willReturn(
+            [$files[1]]
         );
         $this->_overridingBaseFiles->expects(
             $this->at(0)
@@ -110,8 +110,8 @@ class AggregateTest extends \PHPUnit\Framework\TestCase
             'getFiles'
         )->with(
             $parentTheme
-        )->will(
-            $this->returnValue([$files[2]])
+        )->willReturn(
+            [$files[2]]
         );
         $this->_overridingThemeFiles->expects(
             $this->at(0)
@@ -119,8 +119,8 @@ class AggregateTest extends \PHPUnit\Framework\TestCase
             'getFiles'
         )->with(
             $parentTheme
-        )->will(
-            $this->returnValue([$files[3]])
+        )->willReturn(
+            [$files[3]]
         );
 
         $this->_themeFiles->expects(
@@ -129,8 +129,8 @@ class AggregateTest extends \PHPUnit\Framework\TestCase
             'getFiles'
         )->with(
             $theme
-        )->will(
-            $this->returnValue([$files[4]])
+        )->willReturn(
+            [$files[4]]
         );
         $this->_overridingBaseFiles->expects(
             $this->at(1)
@@ -138,8 +138,8 @@ class AggregateTest extends \PHPUnit\Framework\TestCase
             'getFiles'
         )->with(
             $theme
-        )->will(
-            $this->returnValue([$files[5]])
+        )->willReturn(
+            [$files[5]]
         );
         $this->_overridingThemeFiles->expects(
             $this->at(1)
@@ -147,8 +147,8 @@ class AggregateTest extends \PHPUnit\Framework\TestCase
             'getFiles'
         )->with(
             $theme
-        )->will(
-            $this->returnValue([$files[6]])
+        )->willReturn(
+            [$files[6]]
         );
 
         $this->_fileList->expects($this->at(0))->method('add')->with([$files[0]]);
@@ -159,7 +159,7 @@ class AggregateTest extends \PHPUnit\Framework\TestCase
         $this->_fileList->expects($this->at(5))->method('replace')->with([$files[5]]);
         $this->_fileList->expects($this->at(6))->method('replace')->with([$files[6]]);
 
-        $this->_fileList->expects($this->atLeastOnce())->method('getAll')->will($this->returnValue($files));
+        $this->_fileList->expects($this->atLeastOnce())->method('getAll')->willReturn($files);
 
         $this->assertSame($files, $this->_model->getFiles($theme, '*'));
     }

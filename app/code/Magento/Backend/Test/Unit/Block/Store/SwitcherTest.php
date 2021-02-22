@@ -15,7 +15,7 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
 
     private $storeManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -36,7 +36,7 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
     {
         $websiteMock =  $this->createMock(\Magento\Store\Model\Website::class);
         $websites = [0 => $websiteMock, 1 => $websiteMock];
-        $this->storeManagerMock->expects($this->once())->method('getWebsites')->will($this->returnValue($websites));
+        $this->storeManagerMock->expects($this->once())->method('getWebsites')->willReturn($websites);
         $this->assertEquals($websites, $this->switcherBlock->getWebsites());
     }
 
@@ -44,7 +44,7 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
     {
         $websiteMock =  $this->createMock(\Magento\Store\Model\Website::class);
         $websites = [0 => $websiteMock, 1 => $websiteMock];
-        $this->storeManagerMock->expects($this->once())->method('getWebsites')->will($this->returnValue($websites));
+        $this->storeManagerMock->expects($this->once())->method('getWebsites')->willReturn($websites);
 
         $this->switcherBlock->setWebsiteIds([1]);
         $expected = [1 => $websiteMock];

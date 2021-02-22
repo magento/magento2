@@ -49,7 +49,7 @@ class QuoteManagerTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -64,7 +64,7 @@ class QuoteManagerTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->checkoutSession->clearQuote();
         $this->checkoutSession->setCustomerData(null);

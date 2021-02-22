@@ -23,17 +23,17 @@ class QuantityTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ConfigInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $securityConfigMock;
 
     /**
-     * @var CollectionFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var Collection | \PHPUnit_Framework_MockObject_MockObject
+     * @var Collection | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionMock;
 
@@ -51,7 +51,7 @@ class QuantityTest extends \PHPUnit\Framework\TestCase
      * Init mocks for tests
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->securityConfigMock =  $this->getMockBuilder(\Magento\Security\Model\ConfigInterface::class)
@@ -113,10 +113,11 @@ class QuantityTest extends \PHPUnit\Framework\TestCase
      * @param int $securityEventType
      * @param int $requestsMethod
      * @dataProvider dataProviderSecurityEventTypeWithRequestsMethod
-     * @expectedException \Magento\Framework\Exception\SecurityViolationException
      */
     public function testCheckException($securityEventType, $requestsMethod)
     {
+        $this->expectException(\Magento\Framework\Exception\SecurityViolationException::class);
+
         $limitNumberPasswordResetRequests = 10;
 
         $this->prepareTestCheck($requestsMethod, $limitNumberPasswordResetRequests);
@@ -174,19 +175,19 @@ class QuantityTest extends \PHPUnit\Framework\TestCase
     {
         $this->remoteAddressMock->expects($this->any())
             ->method('getRemoteAddress')
-            ->will($this->returnValue(12345));
+            ->willReturn(12345);
 
         $this->securityConfigMock->expects($this->any())
             ->method('getPasswordResetProtectionType')
-            ->will($this->returnValue($requestsMethod));
+            ->willReturn($requestsMethod);
 
         $this->securityConfigMock->expects($this->once())
             ->method('getMaxNumberPasswordResetRequests')
-            ->will($this->returnValue($limitNumberPasswordResetRequests));
+            ->willReturn($limitNumberPasswordResetRequests);
 
         $this->securityConfigMock->expects($this->any())
             ->method('getCustomerServiceEmail')
-            ->will($this->returnValue('test@host.com'));
+            ->willReturn('test@host.com');
 
         $this->collectionFactoryMock->expects($this->once())
             ->method('create')

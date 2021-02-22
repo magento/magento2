@@ -19,22 +19,22 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Newsletter\Model\Template|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Newsletter\Model\Template|\PHPUnit\Framework\MockObject\MockObject */
     protected $template;
 
-    /** @var \Magento\Newsletter\Model\SubscriberFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Newsletter\Model\SubscriberFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $subscriberFactory;
 
-    /** @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject */
     protected $appState;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $storeManager;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->appState = $this->createMock(\Magento\Framework\App\State::class);

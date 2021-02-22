@@ -10,11 +10,11 @@ use \Magento\Framework\Image\AdapterFactory;
 class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Image\Adapter\ConfigInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Image\Adapter\ConfigInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->createPartialMock(
             \Magento\Framework\Image\Adapter\ConfigInterface::class,
@@ -25,15 +25,15 @@ class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getAdapters'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 [
                     'GD2' => ['class' => \Magento\Framework\Image\Adapter\Gd2::class],
                     'IMAGEMAGICK' => ['class' => \Magento\Framework\Image\Adapter\ImageMagick::class],
                     'wrongInstance' => ['class' => 'stdClass'],
                     'test' => [],
                 ]
-            )
+            
         );
     }
 
@@ -55,8 +55,8 @@ class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             $class
-        )->will(
-            $this->returnValue($imageAdapterMock)
+        )->willReturn(
+            $imageAdapterMock
         );
 
         $adapterFactory = new AdapterFactory($objectManagerMock, $this->configMock);
@@ -84,7 +84,7 @@ class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
         $adapterAlias = 'IMAGEMAGICK';
         $adapterClass = \Magento\Framework\Image\Adapter\ImageMagick::class;
 
-        $this->configMock->expects($this->once())->method('getAdapterAlias')->will($this->returnValue($adapterAlias));
+        $this->configMock->expects($this->once())->method('getAdapterAlias')->willReturn($adapterAlias);
 
         $objectManagerMock =
             $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['create']);
@@ -97,8 +97,8 @@ class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             $adapterClass
-        )->will(
-            $this->returnValue($imageAdapterMock)
+        )->willReturn(
+            $imageAdapterMock
         );
 
         $adapterFactory = new AdapterFactory($objectManagerMock, $this->configMock);
@@ -108,12 +108,13 @@ class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Framework\Image\AdapterFactory::create
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Image adapter is not selected.
      */
     public function testInvalidArgumentException()
     {
-        $this->configMock->expects($this->once())->method('getAdapterAlias')->will($this->returnValue(''));
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Image adapter is not selected.');
+
+        $this->configMock->expects($this->once())->method('getAdapterAlias')->willReturn('');
         $objectManagerMock =
             $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['create']);
         $adapterFactory = new AdapterFactory($objectManagerMock, $this->configMock);
@@ -122,11 +123,12 @@ class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Framework\Image\AdapterFactory::create
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Image adapter for 'test' is not setup.
      */
     public function testNonAdapterClass()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Image adapter for \'test\' is not setup.');
+
         $alias = 'test';
         $objectManagerMock =
             $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['create']);
@@ -137,11 +139,12 @@ class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Framework\Image\AdapterFactory::create
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage stdClass is not instance of \Magento\Framework\Image\Adapter\AdapterInterface
      */
     public function testWrongInstance()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('stdClass is not instance of \\Magento\\Framework\\Image\\Adapter\\AdapterInterface');
+
         $alias = 'wrongInstance';
         $class = 'stdClass';
         $objectManagerMock =
@@ -154,8 +157,8 @@ class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             $class
-        )->will(
-            $this->returnValue($imageAdapterMock)
+        )->willReturn(
+            $imageAdapterMock
         );
 
         $adapterFactory = new AdapterFactory($objectManagerMock, $this->configMock);

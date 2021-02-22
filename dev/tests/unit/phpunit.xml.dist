@@ -6,33 +6,36 @@
  */
 -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.2/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.1/phpunit.xsd"
          colors="true"
          columns="max"
          beStrictAboutTestsThatDoNotTestAnything="false"
          bootstrap="./framework/bootstrap.php"
         >
-    <testsuite name="Magento_Unit_Tests_App_Code">
-        <directory suffix="Test.php">../../../app/code/*/*/Test/Unit</directory>
-    </testsuite>
-    <testsuite name="Magento_Unit_Tests_Other">
-        <directory suffix="Test.php">../../../lib/internal/*/*/Test/Unit</directory>
-        <directory suffix="Test.php">../../../lib/internal/*/*/*/Test/Unit</directory>
-        <directory suffix="Test.php">../../../setup/src/*/*/Test/Unit</directory>
-        <directory suffix="Test.php">../../../vendor/*/module-*/Test/Unit</directory>
-        <directory suffix="Test.php">../../../vendor/*/framework/Test/Unit</directory>
-        <directory suffix="Test.php">../../../vendor/*/framework/*/Test/Unit</directory>
-        <directory suffix="Test.php">../../tests/unit/*/Test/Unit</directory>
-    </testsuite>
+    <testsuites>
+        <testsuite name="Magento_Unit_Tests_App_Code">
+            <directory suffix="Test.php">../../../app/code/*/*/Test/Unit</directory>
+        </testsuite>
+        <testsuite name="Magento_Unit_Tests_Other">
+            <directory>../../../lib/internal/*/*/Test/Unit</directory>
+            <directory>../../../lib/internal/*/*/*/Test/Unit</directory>
+            <directory>../../../setup/src/*/*/Test/Unit</directory>
+            <directory>../../../vendor/*/module-*/Test/Unit</directory>
+            <directory>../../../vendor/*/framework/Test/Unit</directory>
+            <directory>../../../vendor/*/framework/*/Test/Unit</directory>
+            <directory>../../tests/unit/*/Test/Unit</directory>
+        </testsuite>
+    </testsuites>
+
     <php>
         <ini name="date.timezone" value="America/Los_Angeles"/>
         <ini name="xdebug.max_nesting_level" value="200"/>
     </php>
     <filter>
-        <whitelist addUncoveredFilesFromWhiteList="true">
-            <directory suffix=".php">../../../app/code/*</directory>
-            <directory suffix=".php">../../../lib/internal/Magento</directory>
-            <directory suffix=".php">../../../setup/src/*</directory>
+        <whitelist>
+            <directory>../../../app/code/*</directory>
+            <directory>../../../lib/internal/Magento</directory>
+            <directory>../../../setup/src/*</directory>
             <exclude>
                 <directory>../../../app/code/*/*/Test</directory>
                 <directory>../../../lib/internal/*/*/Test</directory>
@@ -64,18 +67,4 @@
         </listener>
         <listener class="Magento\Framework\TestFramework\Unit\Listener\ReplaceObjectManager"/>
     </listeners>
-    <logging>
-        <!--coverage_html_placeholder
-            <log type="coverage-html" target="{{coverage_dir}}/test-reports/coverage" charset="UTF-8" yui="true" highlight="true"/>
-        coverage_html_placeholder-->
-        <!--coverage_cov_placeholder
-            <log type="coverage-php" target="{{coverage_dir}}/test-reports/coverage.cov"/>
-        coverage_cov_placeholder-->
-        <!--coverage_clover_placeholder
-            <log type="coverage-clover" target="{{coverage_dir}}/test-reports/phpunit.coverage.xml"/>
-        coverage_clover_placeholder-->
-        <!--coverage_crap4j_placeholder
-            <log type="coverage-crap4j" target="{{coverage_dir}}/test-reports/phpunit.crap4j.xml"/>
-        coverage_crap4j_placeholder-->
-    </logging>
 </phpunit>

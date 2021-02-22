@@ -10,7 +10,7 @@ use Magento\Braintree\Gateway\Validator\ErrorCodeProvider;
 use Magento\Braintree\Gateway\Validator\PaymentNonceResponseValidator;
 use Magento\Payment\Gateway\Validator\Result;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class PaymentNonceResponseValidatorTest extends \PHPUnit\Framework\TestCase
 {
@@ -24,7 +24,7 @@ class PaymentNonceResponseValidatorTest extends \PHPUnit\Framework\TestCase
      */
     private $resultInterfaceFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resultInterfaceFactory = $this->getMockBuilder(ResultInterfaceFactory::class)
             ->disableOriginalConstructor()

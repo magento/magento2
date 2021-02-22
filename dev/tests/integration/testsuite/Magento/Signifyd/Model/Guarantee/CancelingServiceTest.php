@@ -46,7 +46,7 @@ class CancelingServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
 
@@ -57,7 +57,7 @@ class CancelingServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->service = $this->objectManager->create(CancelingService::class, [
             'gateway' => $this->gateway,

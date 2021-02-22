@@ -11,17 +11,17 @@ use Magento\Framework\Locale\Currency;
 class CurrencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Event\Manager | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Manager | \PHPUnit\Framework\MockObject\MockObject
      */
     private $mockEventManager;
 
     /**
-     * @var \Magento\Framework\Locale\Resolver | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Locale\Resolver | \PHPUnit\Framework\MockObject\MockObject
      */
     private $mockLocaleResolver;
 
     /**
-     * @var \Magento\Framework\CurrencyFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\CurrencyFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $mockCurrencyFactory;
 
@@ -39,7 +39,7 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
     const TEST_EXCEPTION_CURRENCY = 'ZZZ';
     const TEST_EXCEPTION_CURRENCY_LOCALE = 'es_ES';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockEventManager = $this
             ->getMockBuilder(\Magento\Framework\Event\Manager::class)
@@ -79,7 +79,7 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
         $this->mockCurrencyFactory
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($options));
+            ->willReturn($options);
 
         $this->mockEventManager
             ->expects($this->once())
@@ -101,7 +101,7 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
         $this->mockCurrencyFactory
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($options));
+            ->willReturn($options);
 
         $this->mockEventManager
             ->expects($this->once())
@@ -124,7 +124,7 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
         $this->mockCurrencyFactory
             ->expects($this->never())
             ->method('create')
-            ->will($this->returnValue($options));
+            ->willReturn($options);
 
         $this->mockEventManager
             ->expects($this->never())
@@ -146,7 +146,7 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
         $this->mockCurrencyFactory
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($options));
+            ->willReturn($options);
 
         $this->mockEventManager
             ->expects($this->once())
@@ -177,7 +177,7 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
         $this->mockCurrencyFactory
             ->expects($this->at(1))
             ->method('create')
-            ->will($this->returnValue($options));
+            ->willReturn($options);
 
         $this->mockEventManager
             ->expects($this->once())

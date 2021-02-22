@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class PermissionsTest
+ * Test for Permissions
  */
 class PermissionsTest extends TestCase
 {
@@ -23,7 +23,7 @@ class PermissionsTest extends TestCase
     private $permissions;
 
     /**
-     * @var AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AuthorizationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mockAuthorization;
 
@@ -32,7 +32,7 @@ class PermissionsTest extends TestCase
      */
     private $objectManager;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 

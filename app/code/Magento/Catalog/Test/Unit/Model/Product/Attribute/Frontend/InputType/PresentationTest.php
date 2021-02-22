@@ -15,11 +15,11 @@ class PresentationTest extends \PHPUnit\Framework\TestCase
     private $presentation;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute| \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute| \PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->presentation = new \Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation();
         $this->attributeMock = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)

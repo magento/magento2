@@ -18,12 +18,12 @@ use Magento\Catalog\Model\Product;
 class ProductIdentitiesExtenderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Configurable
+     * @var \PHPUnit\Framework\MockObject\MockObject|Configurable
      */
     private $configurableTypeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ProductRepositoryInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|ProductRepositoryInterface
      */
     private $productRepositoryMock;
 
@@ -32,7 +32,7 @@ class ProductIdentitiesExtenderTest extends \PHPUnit\Framework\TestCase
      */
     private $plugin;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configurableTypeMock = $this->getMockBuilder(Configurable::class)
             ->disableOriginalConstructor()

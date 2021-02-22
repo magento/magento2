@@ -15,31 +15,31 @@ class ThemeModularTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit\Framework\MockObject\MockObject
      */
     private $themeDirectory;
 
     /**
-     * @var \Magento\Framework\View\File\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\File\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileFactory;
 
     /**
-     * @var \Magento\Framework\View\Helper\PathPattern|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Helper\PathPattern|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pathPatternHelperMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $readDirFactory;
 
     /**
-     * @var \Magento\Framework\Component\ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Component\ComponentRegistrarInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $componentRegistrar;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->themeDirectory = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);
         $this->themeDirectory->expects($this->any())
@@ -53,7 +53,7 @@ class ThemeModularTest extends \PHPUnit\Framework\TestCase
         $this->readDirFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
         $this->readDirFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->themeDirectory));
+            ->willReturn($this->themeDirectory);
         $this->componentRegistrar = $this->getMockForAbstractClass(
             \Magento\Framework\Component\ComponentRegistrarInterface::class
         );
@@ -70,11 +70,11 @@ class ThemeModularTest extends \PHPUnit\Framework\TestCase
     {
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
-            ->will($this->returnValue(''));
+            ->willReturn('');
         $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
         $theme->expects($this->once())
             ->method('getFullPath')
-            ->will($this->returnValue('area/Vendor/theme'));
+            ->willReturn('area/Vendor/theme');
         $this->assertSame([], $this->model->getFiles($theme, ''));
     }
 
@@ -118,7 +118,7 @@ class ThemeModularTest extends \PHPUnit\Framework\TestCase
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
             ->with(ComponentRegistrar::THEME, $themePath)
-            ->will($this->returnValue('/full/theme/path'));
+            ->willReturn('/full/theme/path');
 
         $this->assertSame([$fileOne, $fileTwo], $this->model->getFiles($theme, $inputPath));
     }
@@ -157,7 +157,7 @@ class ThemeModularTest extends \PHPUnit\Framework\TestCase
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
             ->with(ComponentRegistrar::THEME, $themePath)
-            ->will($this->returnValue('/full/theme/path'));
+            ->willReturn('/full/theme/path');
 
         $this->assertSame([$fileOne], $this->model->getFiles($theme, $inputPath));
     }
@@ -188,7 +188,7 @@ class ThemeModularTest extends \PHPUnit\Framework\TestCase
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
             ->with(ComponentRegistrar::THEME, $themePath)
-            ->will($this->returnValue('/full/theme/path'));
+            ->willReturn('/full/theme/path');
 
         $this->model->getFiles($theme, $inputPath);
     }

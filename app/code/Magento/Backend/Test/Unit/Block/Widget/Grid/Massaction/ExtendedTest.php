@@ -17,37 +17,37 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
     protected $_block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_layoutMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_gridMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_eventManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_urlModelMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_gridMock = $this->createPartialMock(
             \Magento\Backend\Block\Widget\Grid::class,
             ['getId', 'getCollection']
         );
-        $this->_gridMock->expects($this->any())->method('getId')->will($this->returnValue('test_grid'));
+        $this->_gridMock->expects($this->any())->method('getId')->willReturn('test_grid');
 
         $this->_layoutMock = $this->createPartialMock(
             \Magento\Framework\View\Layout::class,
@@ -60,8 +60,8 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
             'getParentName'
         )->with(
             'test_grid_massaction'
-        )->will(
-            $this->returnValue('test_grid')
+        )->willReturn(
+            'test_grid'
         );
         $this->_layoutMock->expects(
             $this->any()
@@ -69,8 +69,8 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
             'getBlock'
         )->with(
             'test_grid'
-        )->will(
-            $this->returnValue($this->_gridMock)
+        )->willReturn(
+            $this->_gridMock
         );
 
         $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
@@ -92,7 +92,7 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
         $this->_block->setNameInLayout('test_grid_massaction');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_layoutMock);
         unset($this->_eventManagerMock);

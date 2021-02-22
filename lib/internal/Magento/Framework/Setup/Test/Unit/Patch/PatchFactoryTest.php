@@ -26,14 +26,14 @@ class PatchFactoryTest extends \PHPUnit\Framework\TestCase
     private $patchFactory;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->patchFactory = $objectManager->getObject(
             PatchFactory::class,
             [
@@ -43,11 +43,12 @@ class PatchFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage stdClass should implement Magento\Framework\Setup\Patch\PatchInterface interface
      */
     public function testCreateNonPatchInterface()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('stdClass should implement Magento\\Framework\\Setup\\Patch\\PatchInterface interface');
+
         $patchNonPatchInterface = $this->createMock(\stdClass::class);
         $this->objectManagerMock->expects($this->any())
             ->method('create')

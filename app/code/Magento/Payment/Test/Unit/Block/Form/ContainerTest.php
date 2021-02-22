@@ -30,7 +30,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
             return null;
         };
         $block = $this->createPartialMock(\Magento\Payment\Block\Form\Container::class, ['getChildBlock']);
-        $block->expects($this->atLeastOnce())->method('getChildBlock')->will($this->returnCallback($func));
+        $block->expects($this->atLeastOnce())->method('getChildBlock')->willReturnCallback($func);
 
         $template = 'any_template.phtml';
         $this->assertNotEquals($template, $childBlockA->getTemplate());

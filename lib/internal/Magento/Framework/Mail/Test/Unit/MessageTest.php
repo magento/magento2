@@ -15,7 +15,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
      */
     protected $message;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->message = new \Magento\Framework\Mail\Message();
     }

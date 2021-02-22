@@ -16,46 +16,46 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     protected $_view;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_layoutMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_configScopeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_layoutProcessor;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_actionFlagMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_eventManagerMock;
 
     /**
-     * @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\Page|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultPage;
 
     /**
-     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $response;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
@@ -63,7 +63,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->_configScopeMock = $this->createMock(\Magento\Framework\Config\ScopeInterface::class);
         $this->_layoutProcessor = $this->createMock(\Magento\Framework\View\Model\Layout\Merge::class);
         $this->_layoutMock->expects($this->any())->method('getUpdate')
-            ->will($this->returnValue($this->_layoutProcessor));
+            ->willReturn($this->_layoutProcessor);
         $this->_actionFlagMock = $this->createMock(\Magento\Framework\App\ActionFlag::class);
         $this->_eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $pageConfigMock = $this->getMockBuilder(
@@ -90,14 +90,14 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->resultPage->expects($this->any())
             ->method('getConfig')
-            ->will($this->returnValue($pageConfigMock));
+            ->willReturn($pageConfigMock);
         $pageFactory = $this->getMockBuilder(\Magento\Framework\View\Result\PageFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $pageFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->resultPage));
+            ->willReturn($this->resultPage);
 
         $this->response = $this->createMock(\Magento\Framework\App\Response\Http::class);
 
@@ -121,11 +121,12 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Layout must be loaded only once.
      */
     public function testLoadLayoutWhenLayoutAlreadyLoaded()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Layout must be loaded only once.');
+
         $this->_view->setIsLayoutLoaded(true);
         $this->_view->loadLayout();
     }
@@ -137,8 +138,8 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getFullActionName'
-        )->will(
-            $this->returnValue('action_name')
+        )->willReturn(
+            'action_name'
         );
         $this->_view->loadLayout();
     }
@@ -157,7 +158,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     {
         $this->_requestMock->expects($this->once())
             ->method('getFullActionName')
-            ->will($this->returnValue('ExpectedValue'));
+            ->willReturn('ExpectedValue');
 
         $this->assertEquals('expectedvalue', $this->_view->getDefaultLayoutHandle());
     }
@@ -166,7 +167,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     {
         $this->_requestMock->expects($this->once())
             ->method('getFullActionName')
-            ->will($this->returnValue('Full_Action_Name'));
+            ->willReturn('Full_Action_Name');
 
         $this->_layoutProcessor->expects($this->once())
             ->method('addHandle')
@@ -180,7 +181,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $pageHandles = ['full_action_name', 'full_action_name_key_value'];
         $this->_requestMock->expects($this->once())
             ->method('getFullActionName')
-            ->will($this->returnValue('Full_Action_Name'));
+            ->willReturn('Full_Action_Name');
 
         $this->_layoutProcessor->expects($this->once())
             ->method('addHandle')
@@ -194,7 +195,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ['', \Magento\Framework\App\ActionInterface::FLAG_NO_DISPATCH_BLOCK_EVENT, false],
             ['', \Magento\Framework\App\ActionInterface::FLAG_NO_DISPATCH_BLOCK_EVENT, false],
         ];
-        $this->_actionFlagMock->expects($this->any())->method('get')->will($this->returnValueMap($valueMap));
+        $this->_actionFlagMock->expects($this->any())->method('get')->willReturnMap($valueMap);
         $this->_view->generateLayoutBlocks();
     }
 
@@ -204,7 +205,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ['', \Magento\Framework\App\ActionInterface::FLAG_NO_DISPATCH_BLOCK_EVENT, true],
             ['', \Magento\Framework\App\ActionInterface::FLAG_NO_DISPATCH_BLOCK_EVENT, true],
         ];
-        $this->_actionFlagMock->expects($this->any())->method('get')->will($this->returnValueMap($valueMap));
+        $this->_actionFlagMock->expects($this->any())->method('get')->willReturnMap($valueMap);
 
         $this->_eventManagerMock->expects($this->never())->method('dispatch');
         $this->_view->generateLayoutBlocks();
@@ -219,8 +220,8 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         )->with(
             '',
             'no-renderLayout'
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
         $this->_eventManagerMock->expects($this->never())->method('dispatch');
         $this->_view->renderLayout();
@@ -231,7 +232,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->_actionFlagMock->expects($this->once())
             ->method('get')
             ->with('', 'no-renderLayout')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->_layoutMock->expects($this->once())->method('addOutputElement')->with('output');
         $this->resultPage->expects($this->once())->method('renderResult')->with($this->response);
         $this->_view->renderLayout('output');
@@ -242,7 +243,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->_actionFlagMock->expects($this->once())
             ->method('get')
             ->with('', 'no-renderLayout')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->_layoutMock->expects($this->never())->method('addOutputElement');
         $this->resultPage->expects($this->once())->method('renderResult')->with($this->response);

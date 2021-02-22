@@ -33,7 +33,7 @@ use Magento\Wishlist\Model\ResourceModel\Wishlist as WishlistResource;
 use Magento\Wishlist\Model\ResourceModel\Wishlist\Collection as WishlistCollection;
 use Magento\Wishlist\Model\Wishlist;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -42,67 +42,67 @@ use PHPUnit_Framework_MockObject_MockObject;
 class WishlistTest extends TestCase
 {
     /**
-     * @var Registry|PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|PHPUnit\Framework\MockObject\MockObject
      */
     protected $registry;
 
     /**
-     * @var HelperProduct|PHPUnit_Framework_MockObject_MockObject
+     * @var HelperProduct|PHPUnit\Framework\MockObject\MockObject
      */
     protected $productHelper;
 
     /**
-     * @var Data|PHPUnit_Framework_MockObject_MockObject
+     * @var Data|PHPUnit\Framework\MockObject\MockObject
      */
     protected $helper;
 
     /**
-     * @var WishlistResource|PHPUnit_Framework_MockObject_MockObject
+     * @var WishlistResource|PHPUnit\Framework\MockObject\MockObject
      */
     protected $resource;
 
     /**
-     * @var WishlistCollection|PHPUnit_Framework_MockObject_MockObject
+     * @var WishlistCollection|PHPUnit\Framework\MockObject\MockObject
      */
     protected $collection;
 
     /**
-     * @var StoreManagerInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 
     /**
-     * @var DateTime\DateTime|PHPUnit_Framework_MockObject_MockObject
+     * @var DateTime\DateTime|PHPUnit\Framework\MockObject\MockObject
      */
     protected $date;
 
     /**
-     * @var ItemFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var ItemFactory|PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemFactory;
 
     /**
-     * @var CollectionFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemsFactory;
 
     /**
-     * @var ProductFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var ProductFactory|PHPUnit\Framework\MockObject\MockObject
      */
     protected $productFactory;
 
     /**
-     * @var Random|PHPUnit_Framework_MockObject_MockObject
+     * @var Random|PHPUnit\Framework\MockObject\MockObject
      */
     protected $mathRandom;
 
     /**
-     * @var DateTime|PHPUnit_Framework_MockObject_MockObject
+     * @var DateTime|PHPUnit\Framework\MockObject\MockObject
      */
     protected $dateTime;
 
     /**
-     * @var ManagerInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventDispatcher;
 
@@ -112,26 +112,26 @@ class WishlistTest extends TestCase
     protected $wishlist;
 
     /**
-     * @var ProductRepositoryInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRepositoryInterface|PHPUnit\Framework\MockObject\MockObject
      */
     protected $productRepository;
 
     /**
-     * @var Json|PHPUnit_Framework_MockObject_MockObject
+     * @var Json|PHPUnit\Framework\MockObject\MockObject
      */
     protected $serializer;
 
     /**
-     * @var StockItemRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var StockItemRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfig;
 
     /**
-     * @var StockRegistryInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var StockRegistryInterface|PHPUnit\Framework\MockObject\MockObject
      */
     private $stockRegistry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
@@ -177,20 +177,20 @@ class WishlistTest extends TestCase
         $this->dateTime = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
-        $this->stockRegistry = $this->createMock(StockRegistryInterface::class);
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->productRepository = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
+        $this->stockRegistry = $this->getMockForAbstractClass(StockRegistryInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->serializer = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $context->expects($this->once())
             ->method('getEventDispatcher')
-            ->will($this->returnValue($this->eventDispatcher));
+            ->willReturn($this->eventDispatcher);
 
         $this->wishlist = new Wishlist(
             $context,
@@ -229,7 +229,7 @@ class WishlistTest extends TestCase
             ->with($this->logicalOr($this->wishlist, $customerId, $customerIdFieldName));
         $this->mathRandom->expects($this->once())
             ->method('getUniqueHash')
-            ->will($this->returnValue($sharingCode));
+            ->willReturn($sharingCode);
 
         $this->assertInstanceOf(
             Wishlist::class,
@@ -240,7 +240,7 @@ class WishlistTest extends TestCase
     }
 
     /**
-     * @param int|Item|PHPUnit_Framework_MockObject_MockObject $itemId
+     * @param int|Item|PHPUnit\Framework\MockObject\MockObject $itemId
      * @param DataObject $buyRequest
      * @param null|array|DataObject $param
      * @throws LocalizedException
@@ -259,41 +259,41 @@ class WishlistTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $newItem->expects($this->any())->method('setProductId')->will($this->returnSelf());
-        $newItem->expects($this->any())->method('setWishlistId')->will($this->returnSelf());
-        $newItem->expects($this->any())->method('setStoreId')->will($this->returnSelf());
-        $newItem->expects($this->any())->method('setOptions')->will($this->returnSelf());
-        $newItem->expects($this->any())->method('setProduct')->will($this->returnSelf());
-        $newItem->expects($this->any())->method('setQty')->will($this->returnSelf());
-        $newItem->expects($this->any())->method('getItem')->will($this->returnValue(2));
-        $newItem->expects($this->any())->method('save')->will($this->returnSelf());
+        $newItem->expects($this->any())->method('setProductId')->willReturnSelf();
+        $newItem->expects($this->any())->method('setWishlistId')->willReturnSelf();
+        $newItem->expects($this->any())->method('setStoreId')->willReturnSelf();
+        $newItem->expects($this->any())->method('setOptions')->willReturnSelf();
+        $newItem->expects($this->any())->method('setProduct')->willReturnSelf();
+        $newItem->expects($this->any())->method('setQty')->willReturnSelf();
+        $newItem->expects($this->any())->method('getItem')->willReturn(2);
+        $newItem->expects($this->any())->method('save')->willReturnSelf();
 
-        $this->itemFactory->expects($this->once())->method('create')->will($this->returnValue($newItem));
+        $this->itemFactory->expects($this->once())->method('create')->willReturn($newItem);
 
-        $this->storeManager->expects($this->any())->method('getStores')->will($this->returnValue($stores));
-        $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($stores[0]));
+        $this->storeManager->expects($this->any())->method('getStores')->willReturn($stores);
+        $this->storeManager->expects($this->any())->method('getStore')->willReturn($stores[0]);
 
         $product = $this->getMockBuilder(
             Product::class
         )->disableOriginalConstructor()->getMock();
-        $product->expects($this->any())->method('getId')->will($this->returnValue($productId));
-        $product->expects($this->any())->method('getStoreId')->will($this->returnValue($storeId));
+        $product->expects($this->any())->method('getId')->willReturn($productId);
+        $product->expects($this->any())->method('getStoreId')->willReturn($storeId);
 
         $stockItem = $this->getMockBuilder(StockItem::class)->disableOriginalConstructor()->getMock();
-        $stockItem->expects($this->any())->method('getIsInStock')->will($this->returnValue(true));
+        $stockItem->expects($this->any())->method('getIsInStock')->willReturn(true);
         $this->stockRegistry->expects($this->any())
             ->method('getStockItem')
-            ->will($this->returnValue($stockItem));
+            ->willReturn($stockItem);
 
         $instanceType = $this->getMockBuilder(AbstractType::class)
             ->disableOriginalConstructor()
             ->getMock();
         $instanceType->expects($this->once())
             ->method('processConfiguration')
-            ->will(
-                $this->returnValue(
+            ->willReturn(
+                
                     $this->getMockBuilder(Product::class)->disableOriginalConstructor()->getMock()
-                )
+                
             );
 
         $newProduct = $this->getMockBuilder(
@@ -302,15 +302,15 @@ class WishlistTest extends TestCase
         $newProduct->expects($this->any())
             ->method('setStoreId')
             ->with($storeId)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $newProduct->expects($this->once())
             ->method('getTypeInstance')
-            ->will($this->returnValue($instanceType));
+            ->willReturn($instanceType);
 
         $item = $this->getMockBuilder(Item::class)->disableOriginalConstructor()->getMock();
         $item->expects($this->once())
             ->method('getProduct')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
 
         $items = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
@@ -318,28 +318,28 @@ class WishlistTest extends TestCase
 
         $items->expects($this->once())
             ->method('addWishlistFilter')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $items->expects($this->once())
             ->method('addStoreFilter')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $items->expects($this->once())
             ->method('setVisibilityFilter')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $items->expects($this->once())
             ->method('getItemById')
-            ->will($this->returnValue($item));
+            ->willReturn($item);
         $items->expects($this->any())
             ->method('getIterator')
-            ->will($this->returnValue(new ArrayIterator([$item])));
+            ->willReturn(new ArrayIterator([$item]));
 
         $this->itemsFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($items));
+            ->willReturn($items);
 
         $this->productRepository->expects($this->once())
             ->method('getById')
             ->with($productId, false, $storeId)
-            ->will($this->returnValue($newProduct));
+            ->willReturn($newProduct);
 
         $this->assertInstanceOf(
             Wishlist::class,
@@ -413,11 +413,11 @@ class WishlistTest extends TestCase
         $stockItem = $this->getMockBuilder(
             StockItem::class
         )->disableOriginalConstructor()->getMock();
-        $stockItem->expects($this->any())->method('getIsInStock')->will($this->returnValue(true));
+        $stockItem->expects($this->any())->method('getIsInStock')->willReturn(true);
 
         $this->stockRegistry->expects($this->any())
             ->method('getStockItem')
-            ->will($this->returnValue($stockItem));
+            ->willReturn($stockItem);
 
         $this->assertEquals($result, $this->wishlist->addNewItem($productMock, $buyRequest));
     }

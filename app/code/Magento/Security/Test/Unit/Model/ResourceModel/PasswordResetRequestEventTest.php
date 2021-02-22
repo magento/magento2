@@ -29,7 +29,7 @@ class PasswordResetRequestEventTest extends \PHPUnit\Framework\TestCase
      * Init mocks for tests
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 

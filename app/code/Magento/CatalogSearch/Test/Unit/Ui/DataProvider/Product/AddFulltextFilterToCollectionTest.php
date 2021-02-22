@@ -15,12 +15,12 @@ use Magento\CatalogSearch\Ui\DataProvider\Product\AddFulltextFilterToCollection;
 class AddFulltextFilterToCollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var SearchCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCollection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $searchCollection;
 
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collection;
 
@@ -34,7 +34,7 @@ class AddFulltextFilterToCollectionTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManagerHelper($this);
 

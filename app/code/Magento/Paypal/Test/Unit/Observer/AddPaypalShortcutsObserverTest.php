@@ -39,13 +39,13 @@ class AddPaypalShortcutsObserverTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddShortcutsButtons(array $blocks)
     {
-        /** @var ShortcutButtons|\PHPUnit_Framework_MockObject_MockObject $shortcutButtonsMock */
+        /** @var ShortcutButtons|\PHPUnit\Framework\MockObject\MockObject $shortcutButtonsMock */
         $shortcutButtonsMock = $this->getMockBuilder(ShortcutButtons::class)
             ->setMethods(['getLayout', 'addShortcut'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var ShortcutButtons|\PHPUnit_Framework_MockObject_MockObject $shortcutButtonsMock */
+        /** @var ShortcutButtons|\PHPUnit\Framework\MockObject\MockObject $shortcutButtonsMock */
         $eventMock = $this->getMockBuilder(DataObject::class)
             ->setMethods(
                 [
@@ -64,11 +64,11 @@ class AddPaypalShortcutsObserverTest extends \PHPUnit\Framework\TestCase
         $observer = new Observer();
         $observer->setEvent($eventMock);
 
-        /** @var Config|\PHPUnit_Framework_MockObject_MockObject $paypalConfigMock */
+        /** @var Config|\PHPUnit\Framework\MockObject\MockObject $paypalConfigMock */
         $paypalConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var Factory|\PHPUnit_Framework_MockObject_MockObject $shortcutFactoryMock */
+        /** @var Factory|\PHPUnit\Framework\MockObject\MockObject $shortcutFactoryMock */
         $shortcutFactoryMock = $this->getMockBuilder(Factory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -79,7 +79,7 @@ class AddPaypalShortcutsObserverTest extends \PHPUnit\Framework\TestCase
             $paypalConfigMock
         );
 
-        /** @var Layout|\PHPUnit_Framework_MockObject_MockObject $layoutMock */
+        /** @var Layout|\PHPUnit\Framework\MockObject\MockObject $layoutMock */
         $layoutMock = $this->getMockBuilder(Layout::class)
             ->setMethods(['createBlock'])
             ->disableOriginalConstructor()

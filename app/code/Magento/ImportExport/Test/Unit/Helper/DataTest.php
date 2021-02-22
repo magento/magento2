@@ -27,33 +27,33 @@ class DataTest extends TestCase
     private $objectManagerHelper;
 
     /**
-     * @var FileSize|PHPUnit_Framework_MockObject_MockObject
+     * @var FileSize|PHPUnit\Framework\MockObject\MockObject
      */
     private $fileSizeMock;
 
     /**
-     * @var Context|PHPUnit_Framework_MockObject_MockObject
+     * @var Context|PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var ScopeConfigInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var HelperData|PHPUnit_Framework_MockObject_MockObject
+     * @var HelperData|PHPUnit\Framework\MockObject\MockObject
      */
     private $helperData;
 
     /**
      * Set up environment
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
         $this->fileSizeMock = $this->createMock(FileSize::class);
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->contextMock->expects($this->any())->method('getScopeConfig')->willReturn($this->scopeConfigMock);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);

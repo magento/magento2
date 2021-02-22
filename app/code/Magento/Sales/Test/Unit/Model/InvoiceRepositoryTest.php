@@ -19,21 +19,21 @@ class InvoiceRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $invoice;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $invoiceMetadata;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchResultFactory;
 
     /**
-     * @var CollectionProcessorInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionProcessorInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionProcessorMock;
     
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->invoiceMetadata = $this->createMock(\Magento\Sales\Model\ResourceModel\Metadata::class);
@@ -79,20 +79,22 @@ class InvoiceRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage An ID is needed. Set the ID and try again.
      */
     public function testGetNoId()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('An ID is needed. Set the ID and try again.');
+
         $this->invoice->get(null);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The entity that was requested doesn't exist. Verify the entity and try again.
      */
     public function testGetEntityNoId()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('The entity that was requested doesn\'t exist. Verify the entity and try again.');
+
         $id = 1;
 
         $entity = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)

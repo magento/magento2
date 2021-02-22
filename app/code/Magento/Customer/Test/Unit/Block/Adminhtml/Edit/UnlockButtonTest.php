@@ -45,7 +45,7 @@ class UnlockButtonTest extends \PHPUnit\Framework\TestCase
      */
     protected $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(\Magento\Backend\Block\Widget\Context::class);
         $this->customerRegistryMock = $this->createPartialMock(

@@ -44,14 +44,14 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
  WHERE (INSTR(product_name_table.value, 'TestProductName'))";
 
     /**
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataPool;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $connection = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['quote', 'select']);
@@ -59,7 +59,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $connection
             ->expects($this->any())
             ->method('quote')
-            ->will($this->returnValue('\'TestProductName\''));
+            ->willReturn('\'TestProductName\'');
         $connection
             ->expects($this->any())
             ->method('select')
@@ -72,19 +72,19 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $resource
             ->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($connection));
+            ->willReturn($connection);
         $resource
             ->expects($this->any())
             ->method('getMainTable')
-            ->will($this->returnValue('testMainTableName'));
+            ->willReturn('testMainTableName');
         $resource
             ->expects($this->any())
             ->method('getTableName')
-            ->will($this->returnValue('testMainTableName'));
+            ->willReturn('testMainTableName');
         $resource
             ->expects($this->any())
             ->method('getTable')
-            ->will($this->returnValue('testMainTableName'));
+            ->willReturn('testMainTableName');
 
         $catalogConfFactory = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\ConfigFactory::class,
@@ -98,12 +98,12 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $catalogConf
             ->expects($this->once())
             ->method('getEntityTypeId')
-            ->will($this->returnValue(4));
+            ->willReturn(4);
 
         $catalogConfFactory
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($catalogConf));
+            ->willReturn($catalogConf);
 
         $attribute = $this->createPartialMock(
             \Magento\Catalog\Model\Entity\Attribute::class,
@@ -113,15 +113,15 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('loadByCode')
             ->with(4, 'name')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $attribute
             ->expects($this->once())
             ->method('getBackendTable')
-            ->will($this->returnValue($this->attrTableName));
+            ->willReturn($this->attrTableName);
         $attribute
             ->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($this->attrId));
+            ->willReturn($this->attrId);
 
         $catalogAttrFactory = $this->createPartialMock(
             \Magento\Catalog\Model\Entity\AttributeFactory::class,
@@ -131,19 +131,19 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $catalogAttrFactory
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($attribute));
+            ->willReturn($attribute);
 
         $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId']);
         $store
             ->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($this->storeId));
+            ->willReturn($this->storeId);
 
         $storeManager = $this->createPartialMock(\Magento\Store\Model\StoreManager::class, ['getStore']);
         $storeManager
             ->expects($this->once())
             ->method('getStore')
-            ->will($this->returnValue($store));
+            ->willReturn($store);
 
         $this->collection = $this->objectManager->getObject(
             \Magento\Wishlist\Model\ResourceModel\Item\Collection::class,

@@ -15,16 +15,16 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Developer\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Developer\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->helperMock = $this->createPartialMock(\Magento\Developer\Helper\Data::class, ['isDevAllowed']);
@@ -47,8 +47,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $this->equalTo('dev/translate_inline/active'),
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->equalTo($store)
-        )->will(
-            $this->returnValue($result)
+        )->willReturn(
+            $result
         );
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $config = $objectManager->getObject(
@@ -69,8 +69,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'isDevAllowed'
         )->with(
             $store
-        )->will(
-            $this->returnValue($result)
+        )->willReturn(
+            $result
         );
 
         $this->assertEquals($result, $this->model->isDevAllowed($store));

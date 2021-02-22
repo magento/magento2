@@ -112,7 +112,7 @@ class WidgetInstanceForm extends Form
         try {
             $this->browser->find($anchor, $anchorStrategy)->hover();
             $this->_rootElement->find($element, $elementStrategy)->click();
-        } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
+        } catch (\PHPUnit\Extensions\Selenium2TestCase\WebDriverException $e) {
             return false;
         }
         return true;

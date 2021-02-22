@@ -44,7 +44,7 @@ class ImageTest extends TestCase
         ];
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
@@ -67,7 +67,7 @@ class ImageTest extends TestCase
 
         $mock->expects($this->any())
             ->method('getData')
-            ->will($this->returnValue($productImage));
+            ->willReturn($productImage);
 
         $mock->expects($this->any())
             ->method('getStore');
@@ -89,7 +89,7 @@ class ImageTest extends TestCase
 
         $mock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($mockedStore));
+            ->willReturn($mockedStore);
 
         return $mock;
     }
@@ -106,7 +106,7 @@ class ImageTest extends TestCase
 
         $mock->expects($this->any())
             ->method('getBaseUrl')
-            ->will($this->returnValue(''));
+            ->willReturn('');
 
         return $mock;
     }

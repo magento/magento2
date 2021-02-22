@@ -19,67 +19,67 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesystem;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $sourceTheme;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $targetTheme;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $link;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $linkCollection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $update;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $updateCollection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $updateFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customizationPath;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject[]
+     * @var \PHPUnit\Framework\MockObject\MockObject[]
      */
     protected $targetFiles = [];
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject[]
+     * @var \PHPUnit\Framework\MockObject\MockObject[]
      */
     protected $sourceFiles = [];
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $dirWriteMock;
 
@@ -87,7 +87,7 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $sourceFileOne = $this->createPartialMock(\Magento\Theme\Model\Theme\File::class, ['__wakeup', 'delete']);
         $sourceFileOne->setData(
@@ -141,8 +141,8 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
             'getDirectoryWrite'
         )->with(
             DirectoryList::MEDIA
-        )->will(
-            $this->returnValue($this->dirWriteMock)
+        )->willReturn(
+            $this->dirWriteMock
         );
 
         /* Init \Magento\Widget\Model\ResourceModel\Layout\Update\Collection model  */
@@ -151,7 +151,7 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
             \Magento\Widget\Model\Layout\Update::class,
             ['__wakeup', 'getCollection']
         );
-        $this->updateFactory->expects($this->at(0))->method('create')->will($this->returnValue($this->update));
+        $this->updateFactory->expects($this->at(0))->method('create')->willReturn($this->update);
         $this->updateCollection = $this->createPartialMock(
             \Magento\Widget\Model\ResourceModel\Layout\Update\Collection::class,
             ['addThemeFilter', 'delete', 'getIterator']
@@ -160,8 +160,8 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getCollection'
-        )->will(
-            $this->returnValue($this->updateCollection)
+        )->willReturn(
+            $this->updateCollection
         );
 
         /* Init Link an Link_Collection model */
@@ -170,7 +170,7 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
             \Magento\Widget\Model\ResourceModel\Layout\Link\Collection::class,
             ['addThemeFilter', 'getIterator', 'addFieldToFilter']
         );
-        $this->link->expects($this->any())->method('getCollection')->will($this->returnValue($this->linkCollection));
+        $this->link->expects($this->any())->method('getCollection')->willReturn($this->linkCollection);
 
         $eventManager = $this->createPartialMock(\Magento\Framework\Event\ManagerInterface::class, ['dispatch']);
 
@@ -184,7 +184,7 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->object = null;
         $this->filesystem = null;
@@ -208,20 +208,20 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\View\Design\Theme\Customization::class,
             ['getFiles']
         );
-        $customization->expects($this->atLeastOnce())->method('getFiles')->will($this->returnValue([]));
+        $customization->expects($this->atLeastOnce())->method('getFiles')->willReturn([]);
         $this->sourceTheme->expects(
             $this->once()
         )->method(
             'getCustomization'
-        )->will(
-            $this->returnValue($customization)
+        )->willReturn(
+            $customization
         );
         $this->targetTheme->expects(
             $this->once()
         )->method(
             'getCustomization'
-        )->will(
-            $this->returnValue($customization)
+        )->willReturn(
+            $customization
         );
 
         $this->updateCollection->expects($this->once())->method('delete');
@@ -281,15 +281,15 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
             $this->atLeastOnce()
         )->method(
             'getFiles'
-        )->will(
-            $this->returnValue($this->sourceFiles)
+        )->willReturn(
+            $this->sourceFiles
         );
         $this->sourceTheme->expects(
             $this->once()
         )->method(
             'getCustomization'
-        )->will(
-            $this->returnValue($sourceCustom)
+        )->willReturn(
+            $sourceCustom
         );
         $targetCustom = $this->createPartialMock(
             \Magento\Framework\View\Design\Theme\Customization::class,
@@ -299,30 +299,30 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
             $this->atLeastOnce()
         )->method(
             'getFiles'
-        )->will(
-            $this->returnValue($this->targetFiles)
+        )->willReturn(
+            $this->targetFiles
         );
         $this->targetTheme->expects(
             $this->once()
         )->method(
             'getCustomization'
-        )->will(
-            $this->returnValue($targetCustom)
+        )->willReturn(
+            $targetCustom
         );
 
         $this->linkCollection->expects(
             $this->any()
         )->method(
             'addFieldToFilter'
-        )->will(
-            $this->returnValue($this->linkCollection)
+        )->willReturn(
+            $this->linkCollection
         );
         $this->linkCollection->expects(
             $this->any()
         )->method(
             'getIterator'
-        )->will(
-            $this->returnValue(new \ArrayIterator([]))
+        )->willReturn(
+            new \ArrayIterator([])
         );
 
         foreach ($this->targetFiles as $targetFile) {
@@ -383,85 +383,85 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\View\Design\Theme\Customization::class,
             ['getFiles']
         );
-        $customization->expects($this->atLeastOnce())->method('getFiles')->will($this->returnValue([]));
+        $customization->expects($this->atLeastOnce())->method('getFiles')->willReturn([]);
         $this->sourceTheme->expects(
             $this->once()
         )->method(
             'getCustomization'
-        )->will(
-            $this->returnValue($customization)
+        )->willReturn(
+            $customization
         );
         $this->targetTheme->expects(
             $this->once()
         )->method(
             'getCustomization'
-        )->will(
-            $this->returnValue($customization)
+        )->willReturn(
+            $customization
         );
 
         $this->linkCollection->expects(
             $this->any()
         )->method(
             'addFieldToFilter'
-        )->will(
-            $this->returnValue($this->linkCollection)
+        )->willReturn(
+            $this->linkCollection
         );
         $this->linkCollection->expects(
             $this->any()
         )->method(
             'getIterator'
-        )->will(
-            $this->returnValue(new \ArrayIterator([]))
+        )->willReturn(
+            new \ArrayIterator([])
         );
 
         $this->customizationPath->expects(
             $this->at(0)
         )->method(
             'getCustomizationPath'
-        )->will(
-            $this->returnValue('source/path')
+        )->willReturn(
+            'source/path'
         );
 
         $this->customizationPath->expects(
             $this->at(1)
         )->method(
             'getCustomizationPath'
-        )->will(
-            $this->returnValue('target/path')
+        )->willReturn(
+            'target/path'
         );
 
         $this->dirWriteMock->expects(
             $this->any()
         )->method(
             'isDirectory'
-        )->will(
-            $this->returnValueMap([['source/path', true], ['source/path/subdir', true]])
+        )->willReturnMap(
+            [['source/path', true], ['source/path/subdir', true]]
         );
 
         $this->dirWriteMock->expects(
             $this->any()
         )->method(
             'isExist'
-        )->will(
-            $this->returnValueMap(
+        )->willReturnMap(
+            
                 [
                     ['target/path', true]
                 ]
-            )
+            
         );
 
         $this->dirWriteMock->expects(
             $this->any()
         )->method(
             'read'
-        )->will(
-            $this->returnValueMap(
+        )->willReturnMap(
+            
                 [
                     ['target/path', ['target/path/subdir']],
                     ['source/path', ['source/path/subdir']],
                     ['source/path/subdir', ['source/path/subdir/file_one.jpg', 'source/path/subdir/file_two.png']],
                 ]
-            )
+            
         );
 
         $expectedCopyEvents = [
@@ -472,7 +472,7 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
         $recordCopyEvent = function () use (&$actualCopyEvents) {
             $actualCopyEvents[] = func_get_args();
         };
-        $this->dirWriteMock->expects($this->any())->method('copyFile')->will($this->returnCallback($recordCopyEvent));
+        $this->dirWriteMock->expects($this->any())->method('copyFile')->willReturnCallback($recordCopyEvent);
 
         $this->object->copy($this->sourceTheme, $this->targetTheme);
 

@@ -14,42 +14,42 @@ namespace Magento\Setup\Test\Unit\Fixtures\Quote;
 class QuoteGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productRepository;
 
     /**
-     * @var \Magento\ConfigurableProduct\Api\OptionRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ConfigurableProduct\Api\OptionRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $optionRepository;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productCollectionFactory;
 
     /**
-     * @var \Magento\ConfigurableProduct\Api\LinkManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ConfigurableProduct\Api\LinkManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $linkManagement;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializer;
 
     /**
-     * @var \Magento\Setup\Fixtures\Quote\QuoteConfiguration|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Fixtures\Quote\QuoteConfiguration|\PHPUnit\Framework\MockObject\MockObject
      */
     private $config;
 
     /**
-     * @var \Magento\Setup\Fixtures\FixtureModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Fixtures\FixtureModel|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fixtureModelMock;
 
@@ -61,7 +61,7 @@ class QuoteGeneratorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->fixtureModelMock = $this->getMockBuilder(\Magento\Setup\Fixtures\FixtureModel::class)
             ->disableOriginalConstructor()

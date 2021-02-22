@@ -32,41 +32,41 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var LocaleCurrency|\PHPUnit_Framework_MockObject_MockObject
+     * @var LocaleCurrency|\PHPUnit\Framework\MockObject\MockObject
      */
     private $localeCurrencyMock;
 
     /**
-     * @var UiElementProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var UiElementProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $uiElementProcessorMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
     /**
-     * @var Currency|\PHPUnit_Framework_MockObject_MockObject
+     * @var Currency|\PHPUnit\Framework\MockObject\MockObject
      */
     private $currencyMock;
 
     /**
-     * @var CurrencyModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var CurrencyModel|\PHPUnit\Framework\MockObject\MockObject
      */
     private $currencyModelMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(ContextInterface::class)
             ->getMockForAbstractClass();

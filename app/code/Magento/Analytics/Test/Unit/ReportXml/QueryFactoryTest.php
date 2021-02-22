@@ -16,37 +16,37 @@ class QueryFactoryTest extends \PHPUnit\Framework\TestCase
     private $subject;
 
     /**
-     * @var \Magento\Analytics\ReportXml\Query|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Analytics\ReportXml\Query|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryMock;
 
     /**
-     * @var \Magento\Analytics\ReportXml\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Analytics\ReportXml\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
      */
     private $selectMock;
 
     /**
-     * @var \Magento\Analytics\ReportXml\DB\Assembler\AssemblerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Analytics\ReportXml\DB\Assembler\AssemblerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assemblerMock;
 
     /**
-     * @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryCacheMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var \Magento\Analytics\ReportXml\SelectHydrator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Analytics\ReportXml\SelectHydrator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $selectHydratorMock;
 
@@ -56,14 +56,14 @@ class QueryFactoryTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \Magento\Analytics\ReportXml\DB\SelectBuilderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Analytics\ReportXml\DB\SelectBuilderFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $selectBuilderFactoryMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->queryMock = $this->getMockBuilder(
             \Magento\Analytics\ReportXml\Query::class

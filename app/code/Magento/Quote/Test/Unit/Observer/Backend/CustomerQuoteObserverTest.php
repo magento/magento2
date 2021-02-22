@@ -14,31 +14,31 @@ class CustomerQuoteObserverTest extends \PHPUnit\Framework\TestCase
     protected $customerQuote;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Model\Config\Share
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Model\Config\Share
      */
     protected $configMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Api\CartRepositoryInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event\Observer
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Event\Observer
      */
     protected $observerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Event
      */
     protected $eventMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
@@ -54,7 +54,7 @@ class CustomerQuoteObserverTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getCustomerDataObject', 'getOrigCustomerDataObject'])
             ->getMock();
-        $this->observerMock->expects($this->any())->method('getEvent')->will($this->returnValue($this->eventMock));
+        $this->observerMock->expects($this->any())->method('getEvent')->willReturn($this->eventMock);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->customerQuote = $objectManager->getObject(
             \Magento\Quote\Observer\Backend\CustomerQuoteObserver::class,
@@ -73,19 +73,19 @@ class CustomerQuoteObserverTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $customerDataObjectMock->expects($this->any())
             ->method('getGroupId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $origCustomerDataObjectMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $origCustomerDataObjectMock->expects($this->any())
             ->method('getGroupId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->eventMock->expects($this->any())
             ->method('getCustomerDataObject')
-            ->will($this->returnValue($customerDataObjectMock));
+            ->willReturn($customerDataObjectMock);
         $this->eventMock->expects($this->any())
             ->method('getOrigCustomerDataObject')
-            ->will($this->returnValue($origCustomerDataObjectMock));
+            ->willReturn($origCustomerDataObjectMock);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getForCustomer')
             ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException());
@@ -102,31 +102,31 @@ class CustomerQuoteObserverTest extends \PHPUnit\Framework\TestCase
     {
         $this->configMock->expects($this->once())
             ->method('isWebsiteScope')
-            ->will($this->returnValue($isWebsiteScope));
+            ->willReturn($isWebsiteScope);
         $customerDataObjectMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $customerDataObjectMock->expects($this->any())
             ->method('getGroupId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $customerDataObjectMock->expects($this->any())
             ->method('getWebsiteId')
-            ->will($this->returnValue(2));
+            ->willReturn(2);
         if ($isWebsiteScope) {
             $websites = $websites[0];
             $this->storeManagerMock->expects($this->once())
                 ->method('getWebsite')
                 ->with(2)
-                ->will($this->returnValue($websites));
+                ->willReturn($websites);
         } else {
             $this->storeManagerMock->expects($this->once())
                 ->method('getWebsites')
-                ->will($this->returnValue($websites));
+                ->willReturn($websites);
         }
         $this->eventMock->expects($this->any())
             ->method('getCustomerDataObject')
-            ->will($this->returnValue($customerDataObjectMock));
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote $quoteMock */
+            ->willReturn($customerDataObjectMock);
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Quote\Model\Quote $quoteMock */
         $quoteMock = $this->getMockBuilder(
             \Magento\Quote\Model\Quote::class
         )->setMethods(
@@ -141,7 +141,7 @@ class CustomerQuoteObserverTest extends \PHPUnit\Framework\TestCase
         $websiteCount = count($websites);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getForCustomer')
-            ->will($this->returnValue($quoteMock));
+            ->willReturn($quoteMock);
         $quoteMock->expects($this->exactly($websiteCount))
             ->method('setWebsite');
         $quoteMock->expects($this->exactly($websiteCount))

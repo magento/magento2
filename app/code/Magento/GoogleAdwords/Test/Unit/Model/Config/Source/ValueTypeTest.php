@@ -12,7 +12,7 @@ class ValueTypeTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $objectManager->getObject(\Magento\GoogleAdwords\Model\Config\Source\ValueType::class, []);

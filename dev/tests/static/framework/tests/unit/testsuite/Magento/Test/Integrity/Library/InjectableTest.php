@@ -22,19 +22,19 @@ class InjectableTest extends \PHPUnit\Framework\TestCase
     protected $fileReflection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $parameterReflection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $declaredClass;
 
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->injectable = new Injectable();
         $this->fileReflection = $this->getMockBuilder(
@@ -61,32 +61,32 @@ class InjectableTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getDeclaringClass'
-        )->will(
-            $this->returnValue($this->declaredClass)
+        )->willReturn(
+            $this->declaredClass
         );
 
         $methodReflection->expects(
             $this->any()
         )->method(
             'getParameters'
-        )->will(
-            $this->returnValue([$this->parameterReflection])
+        )->willReturn(
+            [$this->parameterReflection]
         );
 
         $classReflection->expects(
             $this->once()
         )->method(
             'getMethods'
-        )->will(
-            $this->returnValue([$methodReflection])
+        )->willReturn(
+            [$methodReflection]
         );
 
         $this->fileReflection->expects(
             $this->once()
         )->method(
             'getClasses'
-        )->will(
-            $this->returnValue([$classReflection])
+        )->willReturn(
+            [$classReflection]
         );
     }
 
@@ -105,16 +105,16 @@ class InjectableTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getName'
-        )->will(
-            $this->returnValue(\Magento\Core\Model\Object::class)
+        )->willReturn(
+            \Magento\Core\Model\Object::class
         );
 
         $this->parameterReflection->expects(
             $this->once()
         )->method(
             'getClass'
-        )->will(
-            $this->returnValue($classReflection)
+        )->willReturn(
+            $classReflection
         );
 
         $this->assertEquals(
@@ -130,12 +130,12 @@ class InjectableTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDependenciesWithException()
     {
-        $this->parameterReflection->expects($this->once())->method('getClass')->will(
-            $this->returnCallback(
+        $this->parameterReflection->expects($this->once())->method('getClass')->willReturnCallback(
+            
                 function () {
                     throw new \ReflectionException('Class Magento\Core\Model\Object does not exist');
                 }
-            )
+            
         );
 
         $this->assertEquals(
@@ -148,16 +148,17 @@ class InjectableTest extends \PHPUnit\Framework\TestCase
      * Covered with some different exception method
      *
      * @test
-     * @expectedException \ReflectionException
      */
     public function testGetDependenciesWithOtherException()
     {
-        $this->parameterReflection->expects($this->once())->method('getClass')->will(
-            $this->returnCallback(
+        $this->expectException(\ReflectionException::class);
+
+        $this->parameterReflection->expects($this->once())->method('getClass')->willReturnCallback(
+            
                 function () {
                     throw new \ReflectionException('Some message');
                 }
-            )
+            
         );
 
         $this->injectable->getDependencies($this->fileReflection);
@@ -170,7 +171,7 @@ class InjectableTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDependenciesWhenMethodDeclaredInParentClass()
     {
-        $this->declaredClass->expects($this->once())->method('getName')->will($this->returnValue('ParentClass'));
+        $this->declaredClass->expects($this->once())->method('getName')->willReturn('ParentClass');
 
         $this->injectable->getDependencies($this->fileReflection);
     }

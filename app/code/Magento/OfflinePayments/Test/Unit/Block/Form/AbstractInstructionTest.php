@@ -12,7 +12,7 @@ class AbstractInstructionTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $this->_model = $this->getMockForAbstractClass(

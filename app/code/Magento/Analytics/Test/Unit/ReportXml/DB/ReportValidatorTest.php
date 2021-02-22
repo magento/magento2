@@ -12,31 +12,33 @@ use Magento\Analytics\ReportXml\QueryFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\Stub\Stub;
+use PHPUnit\Framework\TestCase;
 
-class ReportValidatorTest extends \PHPUnit\Framework\TestCase
+class ReportValidatorTest extends TestCase
 {
     /**
-     * @var ConnectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConnectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionFactoryMock;
 
     /**
-     * @var QueryFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var QueryFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryFactoryMock;
 
     /**
-     * @var Query|\PHPUnit_Framework_MockObject_MockObject
+     * @var Query|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryMock;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|\PHPUnit\Framework\MockObject\MockObject
      */
     private $selectMock;
 
@@ -53,7 +55,7 @@ class ReportValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connectionFactoryMock = $this->getMockBuilder(ConnectionFactory::class)
             ->disableOriginalConstructor()->getMock();
@@ -79,9 +81,9 @@ class ReportValidatorTest extends \PHPUnit\Framework\TestCase
      * @dataProvider errorDataProvider
      * @param string $reportName
      * @param array $result
-     * @param \PHPUnit\Framework\MockObject\Stub $queryReturnStub
+     * @param Stub $queryReturnStub
      */
-    public function testValidate($reportName, $result, \PHPUnit\Framework\MockObject\Stub $queryReturnStub)
+    public function testValidate($reportName, $result, Stub $queryReturnStub)
     {
         $connectionName = 'testConnection';
         $this->queryFactoryMock->expects($this->once())

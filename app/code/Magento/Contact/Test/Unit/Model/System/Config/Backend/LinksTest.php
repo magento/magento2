@@ -10,11 +10,11 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class LinksTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Contact\Model\System\Config\Backend\Links|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Contact\Model\System\Config\Backend\Links|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = (new ObjectManager($this))->getObject(
             \Magento\Contact\Model\System\Config\Backend\Links::class
@@ -23,6 +23,6 @@ class LinksTest extends \PHPUnit\Framework\TestCase
 
     public function testGetIdentities()
     {
-        $this->assertTrue(is_array($this->_model->getIdentities()));
+        $this->assertIsArray($this->_model->getIdentities());
     }
 }

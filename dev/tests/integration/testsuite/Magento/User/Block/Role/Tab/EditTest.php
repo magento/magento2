@@ -15,7 +15,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
      */
     protected $_block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $roleAdmin = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Authorization\Model\Role::class);
@@ -35,7 +35,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
     public function testConstructor()
     {
         $this->assertNotEmpty($this->_block->getSelectedResources());
-        $this->assertContains('Magento_Backend::all', $this->_block->getSelectedResources());
+        $this->assertContains('Magento_Backend::all',$this->_block->getSelectedResources());
     }
 
     public function testGetTree()

@@ -12,12 +12,12 @@ class OauthTest extends \PHPUnit\Framework\TestCase
     /** @var Oauth */
     protected $_oauthHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_oauthHelper = new Oauth(new \Magento\Framework\Math\Random());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_oauthHelper);
     }

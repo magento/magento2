@@ -17,22 +17,22 @@ class RegexceptionsTest extends \PHPUnit\Framework\TestCase
     protected $cellParameters;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $labelFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $labelMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $elementFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $elementMock;
 
@@ -41,7 +41,7 @@ class RegexceptionsTest extends \PHPUnit\Framework\TestCase
      */
     protected $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cellParameters = [
             'size'  => 'testSize',
@@ -117,7 +117,11 @@ class RegexceptionsTest extends \PHPUnit\Framework\TestCase
 
         $actual = $this->object->renderCellTemplate($columnName);
         foreach ($this->cellParameters as $parameter) {
-            $this->assertContains($parameter, $actual, 'Parameter \'' . $parameter . '\' missing in render output.');
+            $this->assertStringContainsString(
+                $parameter,
+                $actual,
+                'Parameter \'' . $parameter . '\' missing in render output.'
+            );
         }
     }
 

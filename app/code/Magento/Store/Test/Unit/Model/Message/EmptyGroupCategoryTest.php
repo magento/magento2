@@ -6,7 +6,7 @@
 namespace Magento\Store\Test\Unit\Model\Message;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Magento\Store\Model\Message\EmptyGroupCategory;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\ResourceModel\Group\Collection;
@@ -37,7 +37,7 @@ class EmptyGroupCategoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
 

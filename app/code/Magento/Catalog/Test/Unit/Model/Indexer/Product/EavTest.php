@@ -13,26 +13,26 @@ class EavTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Eav\Action\Row|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Indexer\Product\Eav\Action\Row|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_productEavIndexerRow;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Eav\Action\Rows|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Indexer\Product\Eav\Action\Rows|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_productEavIndexerRows;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Eav\Action\Full|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Indexer\Product\Eav\Action\Full|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_productEavIndexerFull;
 
     /**
-     * @var \Magento\Framework\Indexer\CacheContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\CacheContext|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cacheContextMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_productEavIndexerRow = $this->getMockBuilder(
             \Magento\Catalog\Model\Indexer\Product\Eav\Action\Row::class

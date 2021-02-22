@@ -120,7 +120,7 @@ class UpdateProductVideoTest extends Injectable
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         if ($this->configData) {
             $this->objectManager->create(

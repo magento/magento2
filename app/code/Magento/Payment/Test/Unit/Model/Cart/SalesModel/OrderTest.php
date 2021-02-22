@@ -10,10 +10,10 @@ class OrderTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Payment\Model\Cart\SalesModel\Order */
     protected $_model;
 
-    /** @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject */
     protected $_orderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
         $this->_model = new \Magento\Payment\Model\Cart\SalesModel\Order($this->_orderMock);
@@ -41,8 +41,8 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         )->with(
             'any key',
             'any args'
-        )->will(
-            $this->returnValue('some value')
+        )->willReturn(
+            'some value'
         );
         $this->assertEquals('some value', $this->_model->getDataUsingMethod('any key', 'any args'));
     }
@@ -94,7 +94,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
                 ]
             ),
         ];
-        $this->_orderMock->expects($this->once())->method('getAllItems')->will($this->returnValue($items));
+        $this->_orderMock->expects($this->once())->method('getAllItems')->willReturn($items);
         $this->assertEquals($expected, $this->_model->getAllItems());
     }
 }

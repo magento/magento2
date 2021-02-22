@@ -9,7 +9,7 @@ use Magento\Directory\Helper\Data;
 use Magento\Payment\Model\Checks\CanUseForCountry\CountryProvider;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * CountryProviderTest contains tests for CountryProvider class
@@ -31,7 +31,7 @@ class CountryProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $quote;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->directory = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()

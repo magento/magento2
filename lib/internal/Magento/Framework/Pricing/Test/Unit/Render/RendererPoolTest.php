@@ -15,31 +15,31 @@ use Magento\Framework\Pricing\Render\RendererPool;
 class RendererPoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Pricing\Render\RendererPool | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Render\RendererPool | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $object;
 
     /**
-     * @var \Magento\Framework\View\Layout | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \Magento\Catalog\Pricing\Price\BasePrice | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Pricing\Price\BasePrice | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceMock;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
             ->disableOriginalConstructor()
@@ -49,7 +49,7 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->contextMock->expects($this->any())
             ->method('getLayout')
-            ->will($this->returnValue($this->layoutMock));
+            ->willReturn($this->layoutMock);
         $this->productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -61,18 +61,19 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
     /**
      * Test createPriceRender() if not found render class name
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Class name for price code "price_test" not registered
      */
     public function testCreatePriceRenderNoClassName()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Class name for price code "price_test" not registered');
+
         $methodData = [];
         $priceCode = 'price_test';
         $data = [];
         $type = 'simple';
         $this->productMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($type));
+            ->willReturn($type);
 
         $testedClass = $this->createTestedEntity($data);
         $result = $testedClass->createPriceRender($priceCode, $this->productMock, $methodData);
@@ -82,11 +83,12 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
     /**
      * Test createPriceRender() if not found price model
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Price model for price code "price_test" not registered
      */
     public function testCreatePriceRenderNoPriceModel()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Price model for price code "price_test" not registered');
+
         $methodData = [];
         $priceCode = 'price_test';
         $type = 'simple';
@@ -108,13 +110,13 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
         $priceInfoMock->expects($this->once())
             ->method('getPrice')
             ->with($this->equalTo($priceCode))
-            ->will($this->returnValue($priceModel));
+            ->willReturn($priceModel);
         $this->productMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($type));
+            ->willReturn($type);
         $this->productMock->expects($this->once())
             ->method('getPriceInfo')
-            ->will($this->returnValue($priceInfoMock));
+            ->willReturn($priceInfoMock);
 
         $testedClass = $this->createTestedEntity($data);
         $result = $testedClass->createPriceRender($priceCode, $this->productMock, $methodData);
@@ -124,12 +126,12 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
     /**
      * Test createPriceRender() if not found price model
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Block "Magento\Framework\View\Element\Template\Context" must implement
-     * \Magento\Framework\Pricing\Render\PriceBoxRenderInterface
      */
     public function testCreatePriceRenderBlockNotPriceBox()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Block "Magento\\Framework\\View\\Element\\Template\\Context" must implement \\Magento\\Framework\\Pricing\\Render\\PriceBoxRenderInterface');
+
         $methodData = [];
         $priceCode = 'price_test';
         $type = 'simple';
@@ -150,13 +152,13 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
         $priceInfoMock->expects($this->once())
             ->method('getPrice')
             ->with($this->equalTo($priceCode))
-            ->will($this->returnValue($this->priceMock));
+            ->willReturn($this->priceMock);
         $this->productMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($type));
+            ->willReturn($type);
         $this->productMock->expects($this->once())
             ->method('getPriceInfo')
-            ->will($this->returnValue($priceInfoMock));
+            ->willReturn($priceInfoMock);
 
         $contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
             ->disableOriginalConstructor()
@@ -174,7 +176,7 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
         $this->layoutMock->expects($this->once())
             ->method('createBlock')
             ->with($this->equalTo($className), $this->equalTo(''), $this->equalTo($arguments))
-            ->will($this->returnValue($block));
+            ->willReturn($block);
 
         $result = $testedClass->createPriceRender($priceCode, $this->productMock, $methodData);
         $this->assertNull($result);
@@ -207,13 +209,13 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
         $priceInfoMock->expects($this->once())
             ->method('getPrice')
             ->with($this->equalTo($priceCode))
-            ->will($this->returnValue($this->priceMock));
+            ->willReturn($this->priceMock);
         $this->productMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($type));
+            ->willReturn($type);
         $this->productMock->expects($this->once())
             ->method('getPriceInfo')
-            ->will($this->returnValue($priceInfoMock));
+            ->willReturn($priceInfoMock);
 
         $renderBlock = $this->getMockBuilder(\Magento\Framework\Pricing\Render\PriceBox::class)
             ->disableOriginalConstructor()
@@ -233,7 +235,7 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
         $this->layoutMock->expects($this->once())
             ->method('createBlock')
             ->with($this->equalTo($className), $this->equalTo(''), $this->equalTo($arguments))
-            ->will($this->returnValue($renderBlock));
+            ->willReturn($renderBlock);
 
         $result = $testedClass->createPriceRender($priceCode, $this->productMock, $methodData);
         $this->assertInstanceOf(\Magento\Framework\Pricing\Render\PriceBoxRenderInterface::class, $result);
@@ -242,11 +244,12 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
     /**
      * Test createAmountRender() if amount render class not found
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage There is no amount render class for price code "base_price_test"
      */
     public function testCreateAmountRenderNoAmountClass()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('There is no amount render class for price code "base_price_test"');
+
         $data = [];
         $type = 'simple';
         $methodData = [];
@@ -257,10 +260,10 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->productMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($type));
+            ->willReturn($type);
         $this->priceMock->expects($this->once())
             ->method('getPriceCode')
-            ->will($this->returnValue($priceCode));
+            ->willReturn($priceCode);
 
         $testedClass = $this->createTestedEntity($data);
         $result = $testedClass->createAmountRender($amountMock, $this->productMock, $this->priceMock, $methodData);
@@ -270,12 +273,12 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
     /**
      * Test createAmountRender() if amount render block not implement Amount interface
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Block "Magento\Framework\View\Element\Template\Context"
-     * must implement \Magento\Framework\Pricing\Render\AmountRenderInterface
      */
     public function testCreateAmountRenderNotAmountInterface()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Block "Magento\\Framework\\View\\Element\\Template\\Context" must implement \\Magento\\Framework\\Pricing\\Render\\AmountRenderInterface');
+
         $type = 'simple';
         $methodData = [];
         $priceCode = 'base_price_test';
@@ -295,10 +298,10 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->productMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($type));
+            ->willReturn($type);
         $this->priceMock->expects($this->once())
             ->method('getPriceCode')
-            ->will($this->returnValue($priceCode));
+            ->willReturn($priceCode);
 
         $contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
             ->disableOriginalConstructor()
@@ -318,7 +321,7 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
         $this->layoutMock->expects($this->once())
             ->method('createBlock')
             ->with($this->equalTo($amountRenderClass), $this->equalTo(''), $this->equalTo($arguments))
-            ->will($this->returnValue($block));
+            ->willReturn($block);
 
         $result = $testedClass->createAmountRender($amountMock, $this->productMock, $this->priceMock, $methodData);
         $this->assertNull($result);
@@ -350,10 +353,10 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->productMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($type));
+            ->willReturn($type);
         $this->priceMock->expects($this->once())
             ->method('getPriceCode')
-            ->will($this->returnValue($priceCode));
+            ->willReturn($priceCode);
 
         $blockMock = $this->getMockBuilder(\Magento\Framework\Pricing\Render\Amount::class)
             ->disableOriginalConstructor()
@@ -372,7 +375,7 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
         $this->layoutMock->expects($this->once())
             ->method('createBlock')
             ->with($this->equalTo($amountRenderClass), $this->equalTo(''), $this->equalTo($arguments))
-            ->will($this->returnValue($blockMock));
+            ->willReturn($blockMock);
 
         $blockMock->expects($this->once())
             ->method('setTemplate')
@@ -391,10 +394,10 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
         $priceCode = 'base_price_test';
         $this->productMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($typeId));
+            ->willReturn($typeId);
         $this->priceMock->expects($this->once())
             ->method('getPriceCode')
-            ->will($this->returnValue($priceCode));
+            ->willReturn($priceCode);
 
         $code = 'test_code';
         $adjustments = [$code => 'some data'];
@@ -417,10 +420,10 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
         $priceCode = 'base_price_test';
         $this->productMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($typeId));
+            ->willReturn($typeId);
         $this->priceMock->expects($this->once())
             ->method('getPriceCode')
-            ->will($this->returnValue($priceCode));
+            ->willReturn($priceCode);
 
         $code = 'test_code';
         $adjustments = [
@@ -466,10 +469,10 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
 
         $this->productMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($typeId));
+            ->willReturn($typeId);
         $this->priceMock->expects($this->once())
             ->method('getPriceCode')
-            ->will($this->returnValue($priceCode));
+            ->willReturn($priceCode);
 
         $blockMock = $this->getMockBuilder(\Magento\Framework\View\Element\Template::class)
             ->disableOriginalConstructor()
@@ -481,7 +484,7 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
         $this->layoutMock->expects($this->once())
             ->method('createBlock')
             ->with($this->equalTo($class))
-            ->will($this->returnValue($blockMock));
+            ->willReturn($blockMock);
 
         $testedClass = $this->createTestedEntity($data);
         $result = $testedClass->getAdjustmentRenders($this->productMock, $this->priceMock);
@@ -492,11 +495,12 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
     /**
      * Test getAmountRenderBlockTemplate() through createAmountRender() in case when template not exists
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage For type "simple" amount render block not configured
      */
     public function testGetAmountRenderBlockTemplateNoTemplate()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('For type "simple" amount render block not configured');
+
         $type = 'simple';
         $methodData = [];
         $priceCode = 'base_price_test';
@@ -519,10 +523,10 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
 
         $this->productMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($type));
+            ->willReturn($type);
         $this->priceMock->expects($this->once())
             ->method('getPriceCode')
-            ->will($this->returnValue($priceCode));
+            ->willReturn($priceCode);
 
         $blockMock = $this->getMockBuilder(\Magento\Framework\Pricing\Render\Amount::class)
             ->disableOriginalConstructor()
@@ -541,7 +545,7 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
         $this->layoutMock->expects($this->once())
             ->method('createBlock')
             ->with($this->equalTo($amountRenderClass), $this->equalTo(''), $this->equalTo($arguments))
-            ->will($this->returnValue($blockMock));
+            ->willReturn($blockMock);
 
         $result = $testedClass->createAmountRender($amountMock, $this->productMock, $this->priceMock, $methodData);
         $this->assertNull($result);
@@ -550,11 +554,12 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
     /**
      * Test getRenderBlockTemplate() through createPriceRender() in case when template not exists
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Price code "price_test" render block not configured
      */
     public function testGetRenderBlockTemplate()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Price code "price_test" render block not configured');
+
         $methodData = [];
         $priceCode = 'price_test';
         $type = 'simple';
@@ -577,13 +582,13 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
         $priceInfoMock->expects($this->once())
             ->method('getPrice')
             ->with($this->equalTo($priceCode))
-            ->will($this->returnValue($this->priceMock));
+            ->willReturn($this->priceMock);
         $this->productMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($type));
+            ->willReturn($type);
         $this->productMock->expects($this->once())
             ->method('getPriceInfo')
-            ->will($this->returnValue($priceInfoMock));
+            ->willReturn($priceInfoMock);
 
         $renderBlock = $this->getMockBuilder(\Magento\Framework\Pricing\Render\PriceBox::class)
             ->disableOriginalConstructor()
@@ -600,7 +605,7 @@ class RendererPoolTest extends \PHPUnit\Framework\TestCase
         $this->layoutMock->expects($this->once())
             ->method('createBlock')
             ->with($this->equalTo($className), $this->equalTo(''), $this->equalTo($arguments))
-            ->will($this->returnValue($renderBlock));
+            ->willReturn($renderBlock);
 
         $result = $testedClass->createPriceRender($priceCode, $this->productMock, $methodData);
         $this->assertInstanceOf(\Magento\Framework\Pricing\Render\PriceBoxRenderInterface::class, $result);

@@ -36,7 +36,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
      */
     protected $integrationManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->integrationServiceMock = $this->getMockBuilder(
             \Magento\Integration\Api\IntegrationServiceInterface::class
@@ -74,7 +74,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->integrationServiceMock);
         unset($this->integrationManager);
@@ -92,8 +92,8 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getIntegrations'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 [
                     'TestIntegration1' => [
                         'email' => 'test-integration1@magento.com',
@@ -102,7 +102,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
                     ],
                     'TestIntegration2' => ['email' => 'test-integration2@magento.com'],
                 ]
-            )
+            
         );
         $intLookupData1 = $this->getMockBuilder(\Magento\Integration\Model\Integration::class)
             ->disableOriginalConstructor()
@@ -134,8 +134,8 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             'findByName'
         )->with(
             'TestIntegration1'
-        )->will(
-            $this->returnValue($intLookupData1)
+        )->willReturn(
+            $intLookupData1
         );
         $this->integrationServiceMock->expects($this->once())->method('create')->with($integrationsData2);
         $this->integrationServiceMock->expects(
@@ -144,8 +144,8 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             'findByName'
         )->with(
             'TestIntegration2'
-        )->will(
-            $this->returnValue($intLookupData2)
+        )->willReturn(
+            $intLookupData2
         );
         $this->integrationServiceMock->expects($this->at(1))->method('update')->with($intUpdateData1);
         $this->integrationManager->processIntegrationConfig(['TestIntegration1', 'TestIntegration2']);
@@ -186,8 +186,8 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         // Integration already exists, so update with new data and recreate
-        $this->integrationServiceMock->expects($this->at(0))->method('findByName')->with('TestIntegration1')->will(
-            $this->returnValue($integrationObject)
+        $this->integrationServiceMock->expects($this->at(0))->method('findByName')->with('TestIntegration1')->willReturn(
+            $integrationObject
         );
         $this->aclRetriever->expects($this->once())->method('getAllowedResourcesByUser')
             ->willReturn($originalResources);
@@ -227,15 +227,15 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         // Integration1 does not exist, so create it
-        $this->integrationServiceMock->expects($this->at(0))->method('findByName')->with('TestIntegration1')->will(
-            $this->returnValue($integrationObject)
+        $this->integrationServiceMock->expects($this->at(0))->method('findByName')->with('TestIntegration1')->willReturn(
+            $integrationObject
         );
         $integrationObject->expects($this->any())->method('getId')->willReturn(false);
         $this->integrationServiceMock->expects($this->any())->method('create');
 
         // Integration2 does not exist, so create it
-        $this->integrationServiceMock->expects($this->at(2))->method('findByName')->with('TestIntegration2')->will(
-            $this->returnValue($integrationObject)
+        $this->integrationServiceMock->expects($this->at(2))->method('findByName')->with('TestIntegration2')->willReturn(
+            $integrationObject
         );
 
         $this->integrationManager->processConfigBasedIntegrations($integrations);

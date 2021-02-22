@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 class CryptKeyGeneratorTest extends TestCase
 {
     /**
-     * @var Random|\PHPUnit_Framework_MockObject_MockObject
+     * @var Random|\PHPUnit\Framework\MockObject\MockObject
      */
     private $randomMock;
 
@@ -25,7 +25,7 @@ class CryptKeyGeneratorTest extends TestCase
      */
     private $cryptKeyGenerator;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->randomMock = $this->getMockBuilder(Random::class)
             ->disableOriginalConstructor()

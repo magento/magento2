@@ -17,21 +17,21 @@ class CssTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilder;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlCoder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->urlBuilder = $this->createMock(\Magento\Backend\Model\Url::class);
@@ -58,7 +58,7 @@ class CssTest extends \PHPUnit\Framework\TestCase
     public function testGetUploadCssFileNote()
     {
         $method = self::getMethod('_getUploadCssFileNote');
-        /** @var $sizeModel \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\File\Size  */
+        /** @var $sizeModel \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\File\Size  */
         $sizeModel = $this->createMock(\Magento\Framework\File\Size::class);
         $sizeModel->expects($this->any())->method('getMaxFileSizeInMb')->willReturn('2M');
 
@@ -68,8 +68,8 @@ class CssTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             \Magento\Framework\File\Size::class
-        )->will(
-            $this->returnValue($sizeModel)
+        )->willReturn(
+            $sizeModel
         );
 
         $result = $method->invokeArgs($this->_model, []);
@@ -92,8 +92,8 @@ class CssTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             \Magento\Framework\App\Config\ScopeConfigInterface::class
-        )->will(
-            $this->returnValue($configModel)
+        )->willReturn(
+            $configModel
         );
 
         $result = $method->invokeArgs($this->_model, []);
@@ -129,7 +129,7 @@ class CssTest extends \PHPUnit\Framework\TestCase
         $fileId = 1;
         $themeId = 1;
         $this->urlCoder->expects($this->atLeastOnce())->method('encode')->with($fileId)
-            ->will($this->returnValue('encoded'));
+            ->willReturn('encoded');
         $this->urlBuilder->expects($this->atLeastOnce())->method('getUrl')
             ->with($this->anything(), ['theme_id' => $themeId, 'file' => 'encoded']);
         $this->_model->getDownloadUrl($fileId, $themeId);

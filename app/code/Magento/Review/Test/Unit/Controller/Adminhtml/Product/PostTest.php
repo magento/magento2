@@ -25,56 +25,56 @@ class PostTest extends \PHPUnit\Framework\TestCase
     protected $context;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeModelMock;
 
     /**
-     * @var \Magento\Review\Model\Review|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Review\Model\Review|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $reviewMock;
 
     /**
-     * @var \Magento\Review\Model\ReviewFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Review\Model\ReviewFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $reviewFactoryMock;
 
     /**
-     * @var \Magento\Review\Model\Rating|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Review\Model\Rating|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $ratingMock;
 
     /**
-     * @var \Magento\Review\Model\RatingFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Review\Model\RatingFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $ratingFactoryMock;
 
     /**
-     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultRedirectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_prepareMockObjects();
 

@@ -19,24 +19,24 @@ class ConfigChangeDetectorTest extends \PHPUnit\Framework\TestCase
     private $configChangeDetectorPlugin;
 
     /**
-     * @var ChangeDetector|\PHPUnit_Framework_MockObject_MockObject
+     * @var ChangeDetector|\PHPUnit\Framework\MockObject\MockObject
      */
     private $changeDetectorMock;
 
     /**
-     * @var FrontControllerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FrontControllerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $frontControllerMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->changeDetectorMock = $this->getMockBuilder(ChangeDetector::class)
             ->disableOriginalConstructor()
@@ -62,13 +62,14 @@ class ConfigChangeDetectorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @codingStandardsIgnoreStart
-     * @expectedExceptionMessage The configuration file has changed. Run the "app:config:import" or the "setup:upgrade" command to synchronize the configuration.
      * @codingStandardsIgnoreEnd
      */
     public function testBeforeDispatchWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The configuration file has changed. Run the "app:config:import" or the "setup:upgrade" command to synchronize the configuration.');
+
         $this->changeDetectorMock->expects($this->once())
             ->method('hasChanges')
             ->willReturn(true);

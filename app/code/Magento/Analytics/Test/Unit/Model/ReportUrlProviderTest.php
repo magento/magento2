@@ -20,22 +20,22 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class ReportUrlProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var AnalyticsToken|\PHPUnit_Framework_MockObject_MockObject
+     * @var AnalyticsToken|\PHPUnit\Framework\MockObject\MockObject
      */
     private $analyticsTokenMock;
 
     /**
-     * @var OTPRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @var OTPRequest|\PHPUnit\Framework\MockObject\MockObject
      */
     private $otpRequestMock;
 
     /**
-     * @var FlagManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var FlagManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $flagManagerMock;
 
@@ -57,11 +57,11 @@ class ReportUrlProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->analyticsTokenMock = $this->getMockBuilder(AnalyticsToken::class)
             ->disableOriginalConstructor()

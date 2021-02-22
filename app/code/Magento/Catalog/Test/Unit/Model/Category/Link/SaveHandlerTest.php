@@ -12,7 +12,7 @@ use Magento\Framework\EntityManager\HydratorInterface;
 use Magento\Framework\EntityManager\HydratorPool;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Indexer\IndexerRegistry;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class SaveHandlerTest
@@ -42,7 +42,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productCategoryLink = $this->getMockBuilder(CategoryLink::class)
             ->disableOriginalConstructor()

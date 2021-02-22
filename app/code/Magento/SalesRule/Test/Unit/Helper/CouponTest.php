@@ -33,7 +33,7 @@ class CouponTest extends \PHPUnit\Framework\TestCase
      */
     protected $separator = '|';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->couponParameters = [
             'separator' => $this->separator,
@@ -80,7 +80,7 @@ class CouponTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with($helper::XML_PATH_SALES_RULE_COUPON_LENGTH, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-            ->will($this->returnValue($defaultLength));
+            ->willReturn($defaultLength);
 
         $this->assertEquals($defaultLength, $helper->getDefaultLength());
     }
@@ -92,7 +92,7 @@ class CouponTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with($helper::XML_PATH_SALES_RULE_COUPON_FORMAT, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-            ->will($this->returnValue($defaultFormat));
+            ->willReturn($defaultFormat);
 
         $this->assertEquals($defaultFormat, $helper->getDefaultFormat());
     }
@@ -104,7 +104,7 @@ class CouponTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with($helper::XML_PATH_SALES_RULE_COUPON_PREFIX, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-            ->will($this->returnValue($defaultPrefix));
+            ->willReturn($defaultPrefix);
 
         $this->assertEquals($defaultPrefix, $helper->getDefaultPrefix());
     }
@@ -116,7 +116,7 @@ class CouponTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with($helper::XML_PATH_SALES_RULE_COUPON_SUFFIX, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-            ->will($this->returnValue($defaultSuffix));
+            ->willReturn($defaultSuffix);
 
         $this->assertEquals($defaultSuffix, $helper->getDefaultSuffix());
     }
@@ -128,7 +128,7 @@ class CouponTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with($helper::XML_PATH_SALES_RULE_COUPON_DASH_INTERVAL, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-            ->will($this->returnValue($defaultDashInterval));
+            ->willReturn($defaultDashInterval);
 
         $this->assertEquals($defaultDashInterval, $helper->getDefaultDashInterval());
     }

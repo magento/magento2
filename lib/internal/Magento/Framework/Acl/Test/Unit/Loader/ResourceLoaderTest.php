@@ -20,18 +20,18 @@ class ResourceLoaderTest extends \PHPUnit\Framework\TestCase
         /** @var $acl \Magento\Framework\Acl */
         $acl = $this->createPartialMock(\Magento\Framework\Acl::class, ['addResource']);
         $acl->expects($this->exactly(2))->method('addResource');
-        $acl->expects($this->at(0))->method('addResource')->with($aclResource, null)->will($this->returnSelf());
-        $acl->expects($this->at(1))->method('addResource')->with($aclResource, $aclResource)->will($this->returnSelf());
+        $acl->expects($this->at(0))->method('addResource')->with($aclResource, null)->willReturnSelf();
+        $acl->expects($this->at(1))->method('addResource')->with($aclResource, $aclResource)->willReturnSelf();
 
         $factoryObject = $this->createPartialMock(\Magento\Framework\Acl\AclResourceFactory::class, ['createResource']);
-        $factoryObject->expects($this->any())->method('createResource')->will($this->returnValue($aclResource));
+        $factoryObject->expects($this->any())->method('createResource')->willReturn($aclResource);
 
         /** @var $resourceProvider \Magento\Framework\Acl\AclResource\ProviderInterface */
         $resourceProvider = $this->createMock(\Magento\Framework\Acl\AclResource\ProviderInterface::class);
         $resourceProvider->expects($this->once())
             ->method('getAclResources')
-            ->will(
-                $this->returnValue(
+            ->willReturn(
+                
                     [
                         [
                             'id' => 'parent_resource::id',
@@ -47,7 +47,7 @@ class ResourceLoaderTest extends \PHPUnit\Framework\TestCase
                             ],
                         ],
                     ]
-                )
+                
             );
 
         /** @var $loaderResource \Magento\Framework\Acl\Loader\ResourceLoader */
@@ -59,11 +59,12 @@ class ResourceLoaderTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for \Magento\Framework\Acl\Loader\ResourceLoader::populateAcl
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Missing ACL resource identifier
      */
     public function testPopulateAclWithException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Missing ACL resource identifier');
+
         /** @var $aclResource \Magento\Framework\Acl\AclResource */
         $aclResource = $this->createMock(\Magento\Framework\Acl\AclResource::class);
 
@@ -72,14 +73,14 @@ class ResourceLoaderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $factoryObject->expects($this->any())->method('createResource')->will($this->returnValue($aclResource));
+        $factoryObject->expects($this->any())->method('createResource')->willReturn($aclResource);
 
         /** @var $resourceProvider \Magento\Framework\Acl\AclResource\ProviderInterface */
         $resourceProvider = $this->createMock(\Magento\Framework\Acl\AclResource\ProviderInterface::class);
         $resourceProvider->expects($this->once())
             ->method('getAclResources')
-            ->will(
-                $this->returnValue(
+            ->willReturn(
+                
                     [
                         [
                             'title' => 'Parent Resource Title',
@@ -94,7 +95,7 @@ class ResourceLoaderTest extends \PHPUnit\Framework\TestCase
                             ],
                         ],
                     ]
-                )
+                
             );
 
         /** @var $acl \Magento\Framework\Acl */

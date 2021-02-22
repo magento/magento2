@@ -11,32 +11,32 @@ namespace Magento\Framework\DB\Test\Unit;
 class QueryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $selectMock;
 
     /**
-     * @var \Magento\Framework\Api\CriteriaInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\CriteriaInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $criteriaMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Zend_Db_Statement_Pdo|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Zend_Db_Statement_Pdo|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fetchStmtMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fetchStrategyMock;
 
@@ -50,7 +50,7 @@ class QueryTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -107,13 +107,13 @@ class QueryTest extends \PHPUnit\Framework\TestCase
         $adapterMock = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['fetchCol']);
         $this->resourceMock->expects($this->once())
             ->method('getIdFieldName')
-            ->will($this->returnValue('return-value'));
+            ->willReturn('return-value');
         $this->selectMock->expects($this->once())
             ->method('getConnection')
-            ->will($this->returnValue($adapterMock));
+            ->willReturn($adapterMock);
         $adapterMock->expects($this->once())
             ->method('fetchCol')
-            ->will($this->returnValue('fetch-result'));
+            ->willReturn('fetch-result');
 
         $this->assertEquals('fetch-result', $this->query->getAllIds());
     }
@@ -132,10 +132,10 @@ class QueryTest extends \PHPUnit\Framework\TestCase
             ->with('COUNT(*)');
         $this->selectMock->expects($this->once())
             ->method('getConnection')
-            ->will($this->returnValue($adapterMock));
+            ->willReturn($adapterMock);
         $adapterMock->expects($this->once())
             ->method('fetchOne')
-            ->will($this->returnValue(10.689));
+            ->willReturn(10.689);
 
         $this->assertEquals(10, $this->query->getSize());
     }
@@ -149,7 +149,7 @@ class QueryTest extends \PHPUnit\Framework\TestCase
     {
         $this->fetchStrategyMock->expects($this->once())
             ->method('fetchAll')
-            ->will($this->returnValue('return-value'));
+            ->willReturn('return-value');
 
         $this->assertEquals('return-value', $this->query->fetchAll());
     }
@@ -164,13 +164,13 @@ class QueryTest extends \PHPUnit\Framework\TestCase
         $adapterMock = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['query']);
         $this->selectMock->expects($this->once())
             ->method('getConnection')
-            ->will($this->returnValue($adapterMock));
+            ->willReturn($adapterMock);
         $adapterMock->expects($this->once())
             ->method('query')
-            ->will($this->returnValue($this->fetchStmtMock));
+            ->willReturn($this->fetchStmtMock);
         $this->fetchStmtMock->expects($this->once())
             ->method('fetch')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->assertEquals([], $this->query->fetchItem());
     }

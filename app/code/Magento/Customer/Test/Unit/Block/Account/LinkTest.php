@@ -25,7 +25,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Block\Account\Link::class,
             ['layout' => $layout, 'customerUrl' => $helper]
         );
-        $helper->expects($this->any())->method('getAccountUrl')->will($this->returnValue('account url'));
+        $helper->expects($this->any())->method('getAccountUrl')->willReturn('account url');
 
         $this->assertEquals('account url', $block->getHref());
     }

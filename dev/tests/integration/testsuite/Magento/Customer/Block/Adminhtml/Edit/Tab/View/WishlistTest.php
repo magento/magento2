@@ -34,7 +34,7 @@ class WishlistTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -46,7 +46,7 @@ class WishlistTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->registry->unregister(RegistryConstants::CURRENT_CUSTOMER_ID);
 

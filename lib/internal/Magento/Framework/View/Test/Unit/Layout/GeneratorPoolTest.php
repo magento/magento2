@@ -16,17 +16,17 @@ use \Magento\Framework\View\Layout\Data\Structure as DataStructure;
 class GeneratorPoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\View\Layout\ScheduledStructure\Helper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout\ScheduledStructure\Helper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \Magento\Framework\View\Layout\Reader\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout\Reader\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $readerContextMock;
 
     /**
-     * @var \Magento\Framework\View\Layout\Generator\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout\Generator\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $generatorContextMock;
 
@@ -36,7 +36,7 @@ class GeneratorPoolTest extends \PHPUnit\Framework\TestCase
     protected $scheduledStructure;
 
     /**
-     * @var \Magento\Framework\View\Layout\Data\Structure|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout\Data\Structure|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $structureMock;
 
@@ -48,7 +48,7 @@ class GeneratorPoolTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         // ScheduledStructure
         $this->readerContextMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Reader\Context::class)
@@ -84,7 +84,7 @@ class GeneratorPoolTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject[]
+     * @return \PHPUnit\Framework\MockObject\MockObject[]
      */
     protected function getGeneratorsMocks()
     {

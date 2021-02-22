@@ -17,22 +17,22 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Website|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $websiteMock;
 
     /**
-     * @var \Magento\Store\Model\Group|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Group|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $groupMock;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
@@ -41,7 +41,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      */
     protected $groupId = 2;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->websiteMock = $this->getMockBuilder(\Magento\Store\Model\Website::class)

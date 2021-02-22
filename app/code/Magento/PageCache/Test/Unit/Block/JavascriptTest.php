@@ -13,36 +13,36 @@ class JavascriptTest extends \PHPUnit\Framework\TestCase
     const COOKIE_NAME = 'private_content_version';
 
     /**
-     * @var \Magento\PageCache\Block\Javascript|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\PageCache\Block\Javascript|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $blockJavascript;
 
     /**
-     * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\Framework\View\Layout\ProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout\ProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutUpdateMock;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
             ->disableOriginalConstructor()
@@ -111,23 +111,23 @@ class JavascriptTest extends \PHPUnit\Framework\TestCase
             ->willReturn($isSecure);
         $this->requestMock->expects($this->once())
             ->method('getRouteName')
-            ->will($this->returnValue('route'));
+            ->willReturn('route');
         $this->requestMock->expects($this->once())
             ->method('getControllerName')
-            ->will($this->returnValue('controller'));
+            ->willReturn('controller');
         $this->requestMock->expects($this->once())
             ->method('getActionName')
-            ->will($this->returnValue('action'));
+            ->willReturn('action');
         $this->requestMock->expects($this->once())
             ->method('getRequestUri')
-            ->will($this->returnValue('uri'));
+            ->willReturn('uri');
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
             ->willReturn($url);
         $this->layoutUpdateMock->expects($this->once())
             ->method('getHandles')
             ->willReturn($handles);
-        $this->assertRegExp($expectedResult, $this->blockJavascript->getScriptOptions());
+        $this->assertMatchesRegularExpression($expectedResult, $this->blockJavascript->getScriptOptions());
     }
 
     /**
@@ -172,19 +172,19 @@ class JavascriptTest extends \PHPUnit\Framework\TestCase
 
         $this->requestMock->expects($this->once())
             ->method('getRouteName')
-            ->will($this->returnValue($route));
+            ->willReturn($route);
 
         $this->requestMock->expects($this->once())
             ->method('getControllerName')
-            ->will($this->returnValue($controller));
+            ->willReturn($controller);
 
         $this->requestMock->expects($this->once())
             ->method('getActionName')
-            ->will($this->returnValue($action));
+            ->willReturn($action);
 
         $this->requestMock->expects($this->once())
             ->method('getRequestUri')
-            ->will($this->returnValue($uri));
+            ->willReturn($uri);
 
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
@@ -193,7 +193,7 @@ class JavascriptTest extends \PHPUnit\Framework\TestCase
         $this->layoutUpdateMock->expects($this->once())
             ->method('getHandles')
             ->willReturn($handles);
-        $this->assertRegExp($expectedResult, $this->blockJavascript->getScriptOptions());
+        $this->assertMatchesRegularExpression($expectedResult, $this->blockJavascript->getScriptOptions());
     }
 
     /**

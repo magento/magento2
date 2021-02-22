@@ -15,13 +15,13 @@ class IndexSwitcherProxyTest extends \PHPUnit\Framework\TestCase
     /** @var IndexSwitcherProxy */
     private $model;
 
-    /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $objectManagerMock;
 
-    /** @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var EngineResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $engineResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMockForAbstractClass();
@@ -86,11 +86,12 @@ class IndexSwitcherProxyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage current_handler index switcher doesn't implement
      */
     public function testSwitchIndexWithWrongHandler()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('current_handler index switcher doesn\'t implement');
+
         $currentHandler = 'current_handler';
         $currentHandlerClass = \stdClass::class;
         $handles = [

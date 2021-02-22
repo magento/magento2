@@ -11,7 +11,7 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 
 /**
  * Class ImportTest
- * @package Magento\ImportExport\Test\Unit\Model
+ * Test for Import
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
@@ -21,94 +21,94 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     /**
      * Entity adapter.
      *
-     * @var \Magento\ImportExport\Model\Import\Entity\AbstractEntity|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Import\Entity\AbstractEntity|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_entityAdapter;
 
     /**
      * Import export data
      *
-     * @var \Magento\ImportExport\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_importExportData = null;
 
     /**
-     * @var \Magento\ImportExport\Model\Import\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Import\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_importConfig;
 
     /**
-     * @var \Magento\ImportExport\Model\Import\Entity\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Import\Entity\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_entityFactory;
 
     /**
-     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_importData;
 
     /**
-     * @var \Magento\ImportExport\Model\Export\Adapter\CsvFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Export\Adapter\CsvFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_csvFactory;
 
     /**
-     * @var \Magento\Framework\HTTP\Adapter\FileTransferFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\HTTP\Adapter\FileTransferFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_httpFactory;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\UploaderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Model\File\UploaderFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_uploaderFactory;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexerRegistry;
 
     /**
-     * @var \Magento\ImportExport\Model\Source\Import\Behavior\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Source\Import\Behavior\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_behaviorFactory;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_filesystem;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_coreConfig;
 
     /**
-     * @var \Magento\ImportExport\Model\Import|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Import|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $import;
 
     /**
-     * @var \Magento\ImportExport\Model\History|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\History|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $historyModel;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dateTime;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_varDirectory;
 
     /**
-     * @var \Magento\Framework\Filesystem\DriverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\DriverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_driver;
 
     /**
-     * @var ProcessingErrorAggregatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProcessingErrorAggregatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $errorAggregatorMock;
 
@@ -117,7 +117,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -251,14 +251,14 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $entityTypeCode = 'code';
         $this->_importData->expects($this->any())
                         ->method('getEntityTypeCode')
-                        ->will($this->returnValue($entityTypeCode));
+                        ->willReturn($entityTypeCode);
         $behaviour = 'behaviour';
         $this->_importData->expects($this->once())
                         ->method('getBehavior')
-                        ->will($this->returnValue($behaviour));
+                        ->willReturn($behaviour);
         $this->import->expects($this->any())
                     ->method('getDataSourceModel')
-                    ->will($this->returnValue($this->_importData));
+                    ->willReturn($this->_importData);
 
         $this->import->expects($this->any())->method('setData')->withConsecutive(
             ['entity', $entityTypeCode],
@@ -266,10 +266,10 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         );
         $this->_entityAdapter->expects($this->any())
                     ->method('importData')
-                    ->will($this->returnValue(true));
+                    ->willReturn(true);
         $this->import->expects($this->any())
                     ->method('_getEntityAdapter')
-                    ->will($this->returnValue($this->_entityAdapter));
+                    ->willReturn($this->_entityAdapter);
         $this->_importConfig
             ->expects($this->any())
             ->method('getEntities')
@@ -285,33 +285,34 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         ];
 
         foreach ($importOnceMethodsReturnNull as $method) {
-            $this->import->expects($this->once())->method($method)->will($this->returnValue(null));
+            $this->import->expects($this->once())->method($method)->willReturn(null);
         }
 
-        $this->assertEquals(true, $this->import->importSource());
+        $this->assertTrue($this->import->importSource());
     }
 
     /**
      * Test importSource with expected exception
      *
-     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
      */
     public function testImportSourceException()
     {
+        $this->expectException(\Magento\Framework\Exception\AlreadyExistsException::class);
+
         $exceptionMock = new \Magento\Framework\Exception\AlreadyExistsException(
             __('URL key for specified store already exists.')
         );
         $entityTypeCode = 'code';
         $this->_importData->expects($this->any())
             ->method('getEntityTypeCode')
-            ->will($this->returnValue($entityTypeCode));
+            ->willReturn($entityTypeCode);
         $behaviour = 'behaviour';
         $this->_importData->expects($this->any())
             ->method('getBehavior')
-            ->will($this->returnValue($behaviour));
+            ->willReturn($behaviour);
         $this->import->expects($this->any())
             ->method('getDataSourceModel')
-            ->will($this->returnValue($this->_importData));
+            ->willReturn($this->_importData);
         $this->import->expects($this->any())->method('setData')->withConsecutive(
             ['entity', $entityTypeCode],
             ['behavior', $behaviour]
@@ -322,7 +323,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ->will($this->throwException($exceptionMock));
         $this->import->expects($this->any())
             ->method('_getEntityAdapter')
-            ->will($this->returnValue($this->_entityAdapter));
+            ->willReturn($this->_entityAdapter);
 
         $this->import->importSource();
     }
@@ -477,9 +478,9 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $this->assertTrue($this->import->validateSource($csvMock));
 
         $logTrace = $this->import->getFormatedLogTrace();
-        $this->assertContains('Begin data validation', $logTrace);
-        $this->assertContains('This file does not contain any data', $logTrace);
-        $this->assertContains('Import data validation is complete', $logTrace);
+        $this->assertStringContainsString('Begin data validation', $logTrace);
+        $this->assertStringContainsString('This file does not contain any data', $logTrace);
+        $this->assertStringContainsString('Import data validation is complete', $logTrace);
     }
 
     public function testInvalidateIndex()
@@ -606,12 +607,13 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Entity is unknown
      * @dataProvider unknownEntitiesProvider
      */
     public function testGetUnknownEntity($entity)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Entity is unknown');
+
         $this->_importConfig->method('getEntities')
             ->willReturn(['test' => []]);
 
@@ -700,10 +702,11 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      * Cover isReportEntityType().
      *
      * @dataProvider isReportEntityTypeExceptionDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testIsReportEntityTypeException($entity, $getEntitiesResult, $getEntityResult, $expectedResult)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $importMock = $this->getMockBuilder(\Magento\ImportExport\Model\Import::class)
             ->disableOriginalConstructor()
             ->setMethods(
@@ -896,11 +899,12 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     /**
      * Cover createHistoryReport().
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Source file coping failed
      */
     public function testCreateHistoryReportThrowException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Source file coping failed');
+
         $sourceFileRelative = null;
         $entity = '';
         $extension = '';

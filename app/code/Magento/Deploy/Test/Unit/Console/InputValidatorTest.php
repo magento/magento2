@@ -23,8 +23,8 @@ use Symfony\Component\Console\Input\InputArgument;
 
 /**
  * Class InputValidatorTest
- * @package Magento\Deploy\Test\Unit\Console
- *  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Test for InputValidator
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InputValidatorTest extends TestCase
 {
@@ -46,7 +46,7 @@ class InputValidatorTest extends TestCase
     /**
      * @throws \Zend_Validate_Exception
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -66,7 +66,7 @@ class InputValidatorTest extends TestCase
 
         $localeObjectMock->expects($this->any())->method('isValid')
             ->with('en_US')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->inputValidator = $this->objectManagerHelper->getObject(
             InputValidator::class,
@@ -122,7 +122,10 @@ class InputValidatorTest extends TestCase
                 new ArrayInput([], $inputDefinition)
             );
         } catch (\Exception $e) {
-            $this->assertContains('--area (-a) and --exclude-area cannot be used at the same time', $e->getMessage());
+            $this->assertStringContainsString(
+                '--area (-a) and --exclude-area cannot be used at the same time',
+                $e->getMessage()
+            );
             $this->assertInstanceOf(InvalidArgumentException::class, $e);
         }
     }
@@ -146,7 +149,10 @@ class InputValidatorTest extends TestCase
                 new ArrayInput([], $inputDefinition)
             );
         } catch (\Exception $e) {
-            $this->assertContains('--theme (-t) and --exclude-theme cannot be used at the same time', $e->getMessage());
+            $this->assertStringContainsString(
+                '--theme (-t) and --exclude-theme cannot be used at the same time',
+                $e->getMessage()
+            );
             $this->assertInstanceOf(InvalidArgumentException::class, $e);
         }
     }
@@ -169,7 +175,7 @@ class InputValidatorTest extends TestCase
                 new ArrayInput([], $inputDefinition)
             );
         } catch (\Exception $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 '--language (-l) and --exclude-language cannot be used at the same time',
                 $e->getMessage()
             );
@@ -197,9 +203,8 @@ class InputValidatorTest extends TestCase
                 new ArrayInput([], $inputDefinition)
             );
         } catch (\Exception $e) {
-            $this->assertContains(
-                'Argument "' .
-                Options::CONTENT_VERSION
+            $this->assertStringContainsString(
+                'Argument "' . Options::CONTENT_VERSION
                 . '" has invalid value, content version should contain only characters, digits and dots',
                 $e->getMessage()
             );

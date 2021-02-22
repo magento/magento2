@@ -16,13 +16,13 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
 
     const MODULE_DIR_PATH = '/path/to/payment/schema';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $moduleReader = $this->getMockBuilder(
             \Magento\Framework\Module\Dir\Reader::class
         )->disableOriginalConstructor()->setMethods([])->getMock();
-        $moduleReader->expects($this->once())->method('getModuleDir')->with('etc', 'Magento_Payment')->will(
-            $this->returnValue(self::MODULE_DIR_PATH)
+        $moduleReader->expects($this->once())->method('getModuleDir')->with('etc', 'Magento_Payment')->willReturn(
+            self::MODULE_DIR_PATH
         );
         $this->model = new SchemaLocator($moduleReader);
     }

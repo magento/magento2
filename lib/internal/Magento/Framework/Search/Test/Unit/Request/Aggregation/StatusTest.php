@@ -16,7 +16,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     private $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         
         $this->objectManagerHelper = new ObjectManagerHelper($this);

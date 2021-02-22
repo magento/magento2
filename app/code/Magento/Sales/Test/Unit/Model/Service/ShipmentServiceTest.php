@@ -15,35 +15,35 @@ class ShipmentServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Repository
      *
-     * @var \Magento\Sales\Api\ShipmentCommentRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\ShipmentCommentRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $commentRepositoryMock;
 
     /**
      * Search Criteria Builder
      *
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchCriteriaBuilderMock;
 
     /**
      * Filter Builder
      *
-     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filterBuilderMock;
 
     /**
      * Repository
      *
-     * @var \Magento\Sales\Api\ShipmentRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\ShipmentRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $repositoryMock;
 
     /**
      * Shipment Notifier
      *
-     * @var \Magento\Shipping\Model\ShipmentNotifier|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Shipping\Model\ShipmentNotifier|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $notifierMock;
 
@@ -55,7 +55,7 @@ class ShipmentServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * SetUp
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManagerHelper($this);
 
@@ -106,10 +106,10 @@ class ShipmentServiceTest extends \PHPUnit\Framework\TestCase
         $this->repositoryMock->expects($this->once())
             ->method('get')
             ->with($id)
-            ->will($this->returnValue($shipmentMock));
+            ->willReturn($shipmentMock);
         $shipmentMock->expects($this->once())
             ->method('getShippingLabel')
-            ->will($this->returnValue($returnValue));
+            ->willReturn($returnValue);
 
         $this->assertEquals($returnValue, $this->shipmentService->getLabel($id));
     }
@@ -128,28 +128,28 @@ class ShipmentServiceTest extends \PHPUnit\Framework\TestCase
         $this->filterBuilderMock->expects($this->once())
             ->method('setField')
             ->with('parent_id')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())
             ->method('setValue')
             ->with($id)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())
             ->method('setConditionType')
             ->with('eq')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($filterMock));
+            ->willReturn($filterMock);
         $this->searchCriteriaBuilderMock->expects($this->once())
             ->method('addFilters')
             ->with([$filterMock]);
         $this->searchCriteriaBuilderMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($searchCriteriaMock));
+            ->willReturn($searchCriteriaMock);
         $this->commentRepositoryMock->expects($this->once())
             ->method('getList')
             ->with($searchCriteriaMock)
-            ->will($this->returnValue($returnValue));
+            ->willReturn($returnValue);
 
         $this->assertEquals($returnValue, $this->shipmentService->getCommentsList($id));
     }
@@ -172,11 +172,11 @@ class ShipmentServiceTest extends \PHPUnit\Framework\TestCase
         $this->repositoryMock->expects($this->once())
             ->method('get')
             ->with($id)
-            ->will($this->returnValue($modelMock));
+            ->willReturn($modelMock);
         $this->notifierMock->expects($this->once())
             ->method('notify')
             ->with($modelMock)
-            ->will($this->returnValue($returnValue));
+            ->willReturn($returnValue);
 
         $this->assertEquals($returnValue, $this->shipmentService->notify($id));
     }

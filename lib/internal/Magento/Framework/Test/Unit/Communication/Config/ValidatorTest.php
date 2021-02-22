@@ -17,16 +17,16 @@ use Magento\Framework\Reflection\TypeProcessor;
 class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var TypeProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var TypeProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $typeProcessor;
 
     /**
-     * @var MethodsMap|\PHPUnit_Framework_MockObject_MockObject
+     * @var MethodsMap|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $methodsMap;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->methodsMap = $this->createMock(MethodsMap::class);
 
@@ -45,24 +45,26 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException  \LogicException
-     * @expectedExceptionCode 333
-     * @expectedExceptionMessage Response schema definition has service class with wrong annotated methods
      */
     public function testValidateResponseSchemaType()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Response schema definition has service class with wrong annotated methods');
+        $this->expectExceptionCode(333);
+
         /** @var Validator $validator */
         $validator = new Validator($this->typeProcessor, $this->methodsMap);
         $validator->validateResponseSchemaType('123', '123');
     }
 
     /**
-     * @expectedException  \LogicException
-     * @expectedExceptionCode 333
-     * @expectedExceptionMessage Request schema definition has service class with wrong annotated methods
      */
     public function testValidateRequestSchemaType()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Request schema definition has service class with wrong annotated methods');
+        $this->expectExceptionCode(333);
+
         /** @var Validator $validator */
         $validator = new Validator($this->typeProcessor, $this->methodsMap);
         $validator->validateRequestSchemaType('123', '123');

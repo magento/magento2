@@ -24,7 +24,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Webapi\Rest\Request\DeserializerFactory */
     protected $_deserializerFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** Prepare mocks for request constructor arguments. */
         $this->_deserializerFactory = $this->getMockBuilder(
@@ -34,7 +34,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         )->disableOriginalConstructor()->getMock();
         $areaListMock = $this->createMock(\Magento\Framework\App\AreaList::class);
         $configScopeMock = $this->createMock(\Magento\Framework\Config\ScopeInterface::class);
-        $areaListMock->expects($this->once())->method('getFrontName')->will($this->returnValue('rest'));
+        $areaListMock->expects($this->once())->method('getFrontName')->willReturn('rest');
         /** Instantiate request. */
         // TODO: Get rid of SUT mocks.
         $this->_cookieManagerMock = $this->createMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
@@ -58,7 +58,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_deserializerFactory);
         unset($this->_request);
@@ -80,8 +80,8 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             'getHeader'
         )->with(
             'Accept'
-        )->will(
-            $this->returnValue($acceptHeader)
+        )->willReturn(
+            $acceptHeader
         );
         $this->assertSame($expectedResult, $this->_request->getAcceptTypes());
     }
@@ -104,7 +104,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     protected function _prepareSutForGetBodyParamsTest($params)
     {
         $content = 'rawBody';
-        $this->_request->expects($this->exactly(2))->method('getContent')->will($this->returnValue($content));
+        $this->_request->expects($this->exactly(2))->method('getContent')->willReturn($content);
         $contentType = 'contentType';
         $this->_request->expects(
             $this->once()
@@ -112,8 +112,8 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             'getHeader'
         )->with(
             'Content-Type'
-        )->will(
-            $this->returnValue($contentType)
+        )->willReturn(
+            $contentType
         );
         $deserializer = $this->getMockBuilder(
             \Magento\Framework\Webapi\Rest\Request\Deserializer\Json::class
@@ -126,8 +126,8 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             'deserialize'
         )->with(
             $content
-        )->will(
-            $this->returnValue($params)
+        )->willReturn(
+            $params
         );
         $this->_deserializerFactory->expects(
             $this->once()
@@ -135,8 +135,8 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             $contentType
-        )->will(
-            $this->returnValue($deserializer)
+        )->willReturn(
+            $deserializer
         );
     }
 
@@ -156,8 +156,8 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             'getHeader'
         )->with(
             'Content-Type'
-        )->will(
-            $this->returnValue($contentTypeHeader)
+        )->willReturn(
+            $contentTypeHeader
         );
 
         try {

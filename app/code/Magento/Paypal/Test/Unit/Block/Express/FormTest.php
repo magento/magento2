@@ -18,17 +18,17 @@ use Magento\Paypal\Model\Express\Checkout;
 class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_paypalData;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_paypalConfig;
 
     /**
-     * @var CurrentCustomer|\PHPUnit_Framework_MockObject_MockObject
+     * @var CurrentCustomer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $currentCustomer;
 
@@ -37,34 +37,34 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_paypalData = $this->createMock(\Magento\Paypal\Helper\Data::class);
 
         $this->_paypalConfig = $this->createMock(\Magento\Paypal\Model\Config::class);
         $this->_paypalConfig->expects($this->once())
             ->method('setMethod')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $paypalConfigFactory = $this->createPartialMock(\Magento\Paypal\Model\ConfigFactory::class, ['create']);
         $paypalConfigFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->_paypalConfig));
+            ->willReturn($this->_paypalConfig);
 
         $mark = $this->createMock(\Magento\Framework\View\Element\Template::class);
         $mark->expects($this->once())
             ->method('setTemplate')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $mark->expects($this->any())
             ->method('__call')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $layout = $this->getMockForAbstractClass(
             \Magento\Framework\View\LayoutInterface::class
         );
         $layout->expects($this->once())
             ->method('createBlock')
             ->with(\Magento\Framework\View\Element\Template::class)
-            ->will($this->returnValue($mark));
+            ->willReturn($mark);
 
         $this->currentCustomer = $this
             ->getMockBuilder(\Magento\Customer\Helper\Session\CurrentCustomer::class)
@@ -95,11 +95,11 @@ class FormTest extends \PHPUnit\Framework\TestCase
     {
         $this->currentCustomer->expects($this->once())
             ->method('getCustomerId')
-            ->will($this->returnValue('customer id'));
+            ->willReturn('customer id');
         $this->_paypalData->expects($this->once())
             ->method('shouldAskToCreateBillingAgreement')
             ->with($this->identicalTo($this->_paypalConfig), 'customer id')
-            ->will($this->returnValue($ask));
+            ->willReturn($ask);
         $this->assertEquals(
             $expected,
             $this->_model->getBillingAgreementCode()

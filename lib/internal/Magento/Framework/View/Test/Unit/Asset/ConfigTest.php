@@ -16,12 +16,12 @@ use Magento\Store\Model\ScopeInterface;
 class ConfigTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
      */
     private $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\State
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\State
      */
     private $appStateMock;
 
@@ -33,7 +33,7 @@ class ConfigTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->getMockForAbstractClass();

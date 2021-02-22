@@ -18,24 +18,24 @@ class SelectBuilderTest extends \PHPUnit\Framework\TestCase
     private $selectBuilder;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|\PHPUnit\Framework\MockObject\MockObject
      */
     private $selectMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
@@ -43,7 +43,7 @@ class SelectBuilderTest extends \PHPUnit\Framework\TestCase
 
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()

@@ -18,16 +18,16 @@ class AbstractConfigTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var AbstractConfigTesting|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractConfigTesting|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $config;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->setMethods(['getValue', 'isSetFlag'])
@@ -341,7 +341,7 @@ class AbstractConfigTest extends \PHPUnit\Framework\TestCase
     {
         $productMetadata = $this->getMockBuilder(ProductMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $productMetadata->method('getEdition')
             ->willReturn('SomeEdition');
 

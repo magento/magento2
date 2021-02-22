@@ -9,7 +9,7 @@ namespace Magento\Marketplace\Test\Unit\Model;
 class PartnersTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Marketplace\Model\Partners
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Marketplace\Model\Partners
      */
     private $partnersModelMock;
 
@@ -33,7 +33,7 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
                     }
                  }';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->partnersModelMock = $this->getPartnersModelMock(
             [
@@ -57,7 +57,7 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
     {
         $this->partnersModelMock->expects($this->once())
             ->method('getApiUrl')
-            ->will($this->returnValue($this->apiUrl));
+            ->willReturn($this->apiUrl);
 
         $curlMock = $this->getCurlMock(['post', 'getBody', 'setOptions']);
         $curlMock->expects($this->once())
@@ -66,17 +66,17 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
             ->method('setOptions');
         $curlMock->expects($this->once())
             ->method('getBody')
-            ->will($this->returnValue($this->returnPackages));
+            ->willReturn($this->returnPackages);
         $this->partnersModelMock->expects($this->exactly(3))
             ->method('getCurlClient')
-            ->will($this->returnValue($curlMock));
+            ->willReturn($curlMock);
 
         $cacheMock = $this->getCacheMock(['savePartnersToCache']);
         $cacheMock->expects($this->once())
             ->method('savePartnersToCache');
         $this->partnersModelMock->expects($this->once())
             ->method('getCache')
-            ->will($this->returnValue($cacheMock));
+            ->willReturn($cacheMock);
         $this->partnersModelMock->expects($this->once())
             ->method('getReferer');
 
@@ -90,7 +90,7 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
     {
         $this->partnersModelMock->expects($this->once())
             ->method('getApiUrl')
-            ->will($this->returnValue($this->apiUrl));
+            ->willReturn($this->apiUrl);
 
         $curlMock = $this->getCurlMock(['post', 'getBody', 'setOptions']);
         $curlMock->expects($this->once())
@@ -100,7 +100,7 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
             ->will($this->throwException(new \Exception));
         $this->partnersModelMock->expects($this->exactly(3))
             ->method('getCurlClient')
-            ->will($this->returnValue($curlMock));
+            ->willReturn($curlMock);
 
         $cacheMock = $this->getCacheMock(['savePartnersToCache', 'loadPartnersFromCache']);
         $cacheMock->expects($this->never())
@@ -109,7 +109,7 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
             ->method('loadPartnersFromCache');
         $this->partnersModelMock->expects($this->once())
             ->method('getCache')
-            ->will($this->returnValue($cacheMock));
+            ->willReturn($cacheMock);
         $this->partnersModelMock->expects($this->once())
             ->method('getReferer');
 
@@ -119,7 +119,7 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets partners block mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Marketplace\Block\Partners
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Marketplace\Block\Partners
      */
     public function getPartnersBlockMock($methods = null)
     {
@@ -129,7 +129,7 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets partners model mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Marketplace\Model\Partners
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Marketplace\Model\Partners
      */
     public function getPartnersModelMock($methods)
     {
@@ -139,7 +139,7 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets partners model mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\HTTP\Client\Curl
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\HTTP\Client\Curl
      */
     public function getCurlMock($methods)
     {
@@ -149,7 +149,7 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets cache mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\HTTP\Client\Curl
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\HTTP\Client\Curl
      */
     public function getCacheMock($methods)
     {

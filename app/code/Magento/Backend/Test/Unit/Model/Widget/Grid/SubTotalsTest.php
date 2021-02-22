@@ -13,16 +13,16 @@ class SubTotalsTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_parserMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_factoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_parserMock = $this->createMock(\Magento\Backend\Model\Widget\Grid\Parser::class);
 
@@ -33,8 +33,8 @@ class SubTotalsTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             ['sub_test1' => 3, 'sub_test2' => 2]
-        )->will(
-            $this->returnValue(new \Magento\Framework\DataObject(['sub_test1' => 3, 'sub_test2' => 2]))
+        )->willReturn(
+            new \Magento\Framework\DataObject(['sub_test1' => 3, 'sub_test2' => 2])
         );
 
         $arguments = ['factory' => $this->_factoryMock, 'parser' => $this->_parserMock];
@@ -52,7 +52,7 @@ class SubTotalsTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_parserMock);
         unset($this->_factoryMock);

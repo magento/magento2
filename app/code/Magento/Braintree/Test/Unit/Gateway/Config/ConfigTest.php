@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Class ConfigTest
+ * Test for Config
  */
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
@@ -25,18 +25,18 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->serializerMock = $this->createMock(Json::class);
 
         $objectManager = new ObjectManager($this);
@@ -206,7 +206,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->with($this->getPath(Config::KEY_USE_CVV), ScopeInterface::SCOPE_STORE, null)
             ->willReturn(1);
 
-        static::assertEquals(true, $this->model->isCvvEnabled());
+        static::assertTrue($this->model->isCvvEnabled());
     }
 
     /**

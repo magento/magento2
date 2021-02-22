@@ -29,24 +29,24 @@ class AddStockItemsObserverTest extends TestCase
      */
     private $subject;
     /**
-     * @var StockItemCriteriaInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var StockItemCriteriaInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $criteriaInterfaceFactoryMock;
 
     /**
-     * @var StockItemRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StockItemRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stockItemRepositoryMock;
 
     /**
-     * @var StockConfigurationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StockConfigurationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stockConfigurationMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->criteriaInterfaceFactoryMock = $this->getMockBuilder(StockItemCriteriaInterfaceFactory::class)
@@ -139,7 +139,7 @@ class AddStockItemsObserverTest extends TestCase
             ->with(self::identicalTo($productExtension))
             ->willReturnSelf();
 
-        /** @var ProductCollection|\PHPUnit_Framework_MockObject_MockObject $productCollection */
+        /** @var ProductCollection|\PHPUnit\Framework\MockObject\MockObject $productCollection */
         $productCollection = $this->getMockBuilder(ProductCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -151,7 +151,7 @@ class AddStockItemsObserverTest extends TestCase
             ->with(self::identicalTo($productId))
             ->willReturn($product);
 
-        /** @var Observer|\PHPUnit_Framework_MockObject_MockObject $observer */
+        /** @var Observer|\PHPUnit\Framework\MockObject\MockObject $observer */
         $observer = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->getMock();

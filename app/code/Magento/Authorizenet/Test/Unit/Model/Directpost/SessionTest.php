@@ -22,11 +22,11 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     protected $session;
 
     /**
-     * @var StorageInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StorageInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storageMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storageMock = $this
             ->getMockBuilder(\Magento\Framework\Session\StorageInterface::class)

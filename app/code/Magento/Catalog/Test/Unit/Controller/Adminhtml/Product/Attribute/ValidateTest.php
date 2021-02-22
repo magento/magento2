@@ -77,7 +77,7 @@ class ValidateTest extends AttributeTest
      */
     private $attributeCodeValidatorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->resultJsonFactoryMock = $this->getMockBuilder(ResultJsonFactory::class)

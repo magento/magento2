@@ -14,7 +14,7 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Test for Magento\OfflineShipping\Model\Quote\Address\FreeShipping class.
@@ -44,9 +44,9 @@ class FreeShippingTest extends \PHPUnit\Framework\TestCase
      */
     private $calculator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->calculator = $this->createMock(Calculator::class);
 
         $this->model = new FreeShipping(
@@ -116,7 +116,7 @@ class FreeShippingTest extends \PHPUnit\Framework\TestCase
     {
         $store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->storeManager->method('getStore')
             ->with(self::$storeId)
             ->willReturn($store);

@@ -50,7 +50,7 @@ class CustomerGroupTest extends \PHPUnit\Framework\TestCase
      */
     private $proceedMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -89,7 +89,7 @@ class CustomerGroupTest extends \PHPUnit\Framework\TestCase
      */
     public function testAroundSave($customerGroupId, $callTimes)
     {
-        $subjectMock = $this->createMock(GroupRepositoryInterface::class);
+        $subjectMock = $this->getMockForAbstractClass(GroupRepositoryInterface::class);
         $customerGroupMock = $this->createPartialMock(
             Group::class,
             ['getId']

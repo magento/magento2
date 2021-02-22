@@ -18,31 +18,31 @@ class LogoutTest extends \PHPUnit\Framework\TestCase
     /** @var Logout */
     protected $controller;
 
-    /** @var \Magento\Framework\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $contextMock;
 
-    /** @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject */
     protected $sessionMock;
 
-    /** @var CookieMetadataFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CookieMetadataFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $cookieMetadataFactory;
 
-    /** @var PhpCookieManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var PhpCookieManager|\PHPUnit\Framework\MockObject\MockObject */
     protected $cookieManager;
 
-    /** @var CookieMetadata|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CookieMetadata|\PHPUnit\Framework\MockObject\MockObject */
     protected $cookieMetadata;
 
-    /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Redirect|\PHPUnit\Framework\MockObject\MockObject */
     protected $resultRedirect;
 
-    /** @var RedirectFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var RedirectFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $redirectFactory;
 
-    /** @var RedirectInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var RedirectInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $redirect;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
             ->disableOriginalConstructor()

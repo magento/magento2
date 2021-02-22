@@ -47,7 +47,7 @@ class AdminTokenServiceTest extends WebapiAbstract
     /**
      * Setup AdminTokenService
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->_markTestAsRestOnly();
         $this->tokenService = Bootstrap::getObjectManager()->get(\Magento\Integration\Model\AdminTokenService::class);

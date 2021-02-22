@@ -12,7 +12,7 @@ class ElementTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $xmlString = file_get_contents(__DIR__ . '/_files/element.xml');
         $this->model = new \Magento\Framework\App\Config\Element($xmlString);

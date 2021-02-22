@@ -21,11 +21,11 @@ class AreaListTest extends \PHPUnit\Framework\TestCase
     protected $_resolverFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_resolverFactory = $this
@@ -49,8 +49,8 @@ class AreaListTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             'testValue'
-        )->will(
-            $this->returnValue($resolverMock)
+        )->willReturn(
+            $resolverMock
         );
 
         $actual = $this->_model->getCodeByFrontName('testFrontName');
@@ -158,7 +158,7 @@ class AreaListTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getObjectManagerMockGetArea()
     {
@@ -170,7 +170,7 @@ class AreaListTest extends \PHPUnit\Framework\TestCase
                 $this->equalTo(\Magento\Framework\App\AreaInterface::class),
                 $this->equalTo(['areaCode' => 'testArea'])
             )
-            ->will($this->returnValue('ok'));
+            ->willReturn('ok');
 
         return $objectManagerMock;
     }

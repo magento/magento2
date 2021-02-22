@@ -52,28 +52,28 @@ class RuleTest extends \PHPUnit\Framework\TestCase
         )->with(
             self::TABLE_NAME,
             $this->isInstanceOf('Zend_Db_Expr')
-        )->will(
-            $this->returnValue($select)
+        )->willReturn(
+            $select
         );
 
         $connectionMock = $this->createPartialMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['select', 'fetchAll']
         );
-        $connectionMock->expects($this->once())->method('select')->will($this->returnValue($select));
+        $connectionMock->expects($this->once())->method('select')->willReturn($select);
         $connectionMock->expects(
             $this->once()
         )->method(
             'fetchAll'
         )->with(
             $select
-        )->will(
-            $this->returnCallback([$this, 'fetchAllCallback'])
+        )->willReturnCallback(
+            [$this, 'fetchAllCallback']
         );
 
         $resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
-        $resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
-        $resourceMock->expects($this->once())->method('getTableName')->will($this->returnValue(self::TABLE_NAME));
+        $resourceMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
+        $resourceMock->expects($this->once())->method('getTableName')->willReturn(self::TABLE_NAME);
 
         $flagFactory = $this->createMock(\Magento\Reports\Model\FlagFactory::class);
         $createdatFactoryMock = $this->createPartialMock(
@@ -113,8 +113,8 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     {
         $whereParts = $select->getPart(\Magento\Framework\DB\Select::WHERE);
         $this->assertCount(2, $whereParts);
-        $this->assertContains("rule_name IS NOT NULL", $whereParts[0]);
-        $this->assertContains("rule_name <> ''", $whereParts[1]);
+        $this->assertStringContainsString("rule_name IS NOT NULL", $whereParts[0]);
+        $this->assertStringContainsString("rule_name <> ''", $whereParts[1]);
 
         $orderParts = $select->getPart(\Magento\Framework\DB\Select::ORDER);
         $this->assertCount(1, $orderParts);

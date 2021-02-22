@@ -21,7 +21,7 @@ class CryptTest extends \PHPUnit\Framework\TestCase
         MCRYPT_RIJNDAEL_256 => [MCRYPT_MODE_CBC],
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_key = substr(__CLASS__, -32, 32);
     }
@@ -124,10 +124,11 @@ class CryptTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider getConstructorExceptionData
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testConstructorException($key, $cipher, $mode, $initVector)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         new \Magento\Framework\Encryption\Crypt($key, $cipher, $mode, $initVector);
     }
 

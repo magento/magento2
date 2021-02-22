@@ -12,7 +12,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     /**
      * \Magento\Framework\Filesystem\Driver
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $driver;
 
@@ -24,7 +24,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     /**
      * \Magento\Framework\Filesystem\File\ReadFactory
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileFactory;
 
@@ -38,7 +38,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->driver = $this->createMock(\Magento\Framework\Filesystem\Driver\File::class);
         $this->fileFactory = $this->createMock(\Magento\Framework\Filesystem\File\ReadFactory::class);
@@ -52,7 +52,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     /**
      * Tear down
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->driver = null;
         $this->fileFactory = null;
@@ -61,13 +61,13 @@ class ReadTest extends \PHPUnit\Framework\TestCase
 
     public function testIsExist()
     {
-        $this->driver->expects($this->once())->method('isExists')->will($this->returnValue(true));
+        $this->driver->expects($this->once())->method('isExists')->willReturn(true);
         $this->assertTrue($this->read->isExist('correct-path'));
     }
 
     public function testStat()
     {
-        $this->driver->expects($this->once())->method('stat')->will($this->returnValue(['some-stat-data']));
+        $this->driver->expects($this->once())->method('stat')->willReturn(['some-stat-data']);
         $this->assertEquals(['some-stat-data'], $this->read->stat('correct-path'));
     }
 
@@ -81,11 +81,11 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         $this->driver->expects($this->once())
             ->method('getAbsolutePath')
             ->with($this->path, $path)
-            ->will($this->returnValue($path));
+            ->willReturn($path);
         $this->driver->expects($this->once())
             ->method('fileGetContents')
             ->with($path, $flag, $context)
-            ->will($this->returnValue($contents));
+            ->willReturn($contents);
 
         $this->assertEquals($contents, $this->read->readFile($path, $flag, $context));
     }

@@ -19,11 +19,11 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     protected $mediaDatabase;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $deploymentConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $this->deploymentConfig->expects(
@@ -32,13 +32,13 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             'resource'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 [
                     'default_setup' => ['name' => 'default_setup', 'connection' => 'connect1'],
                     'custom_resource' => ['name' => 'custom_resource', 'connection' => 'connect2'],
                 ]
-            )
+            
         );
         $this->mediaDatabase = new Database($this->deploymentConfig);
     }

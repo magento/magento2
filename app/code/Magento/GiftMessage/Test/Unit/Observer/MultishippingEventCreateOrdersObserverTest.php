@@ -15,7 +15,7 @@ class MultishippingEventCreateOrdersObserverTest extends \PHPUnit\Framework\Test
      */
     protected $multishippingEventCreateOrdersObserver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->multishippingEventCreateOrdersObserver = new Observer();
     }

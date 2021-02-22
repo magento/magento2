@@ -23,21 +23,21 @@ class BundlePriceTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $priceCurrencyMock;
 
     /**
-     * @var PriceInfoInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceInfoInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $priceInfoFactory;
 
     /**
-     * @var FormattedPriceInfoBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var FormattedPriceInfoBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $formattedPriceInfoBuilder;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->getMockForAbstractClass();
@@ -71,13 +71,13 @@ class BundlePriceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $productRender = $this->getMockBuilder(ProductRenderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $amount = $this->getMockBuilder(AmountInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $minAmount = $this->getMockBuilder(AmountInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $priceInfo = $this->getMockBuilder(PriceInfoInterface::class)
             ->setMethods(
                 [

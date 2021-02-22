@@ -81,7 +81,7 @@ class CollectionTest extends BaseCollection
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->storeManager = $this->getStoreManager();
@@ -164,7 +164,7 @@ class CollectionTest extends BaseCollection
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
         $reflectionProperty->setAccessible(true);

@@ -18,46 +18,46 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     protected $action;
 
     /**
-     * @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ViewInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $viewMock;
 
     /**
-     * @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\Framework\View\Element\BlockInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\BlockInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $blockMock;
 
     /**
-     * @var \Magento\Backend\Model\Menu|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Menu|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $menuMock;
 
     /**
-     * @var \Magento\Backend\Model\Menu\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Menu\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $menuItemMock;
 
     /**
-     * @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\Page|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageConfigMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Title|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $titleMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 

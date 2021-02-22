@@ -18,11 +18,11 @@ class AgreementTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_apiNvpMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -41,15 +41,15 @@ class AgreementTest extends \PHPUnit\Framework\TestCase
         )->setMethods(
             ['getApi', 'setMethod', 'getConfig', 'importPaymentInfo']
         )->disableOriginalConstructor()->getMock();
-        $proMock->expects($this->any())->method('getApi')->will($this->returnValue($this->_apiNvpMock));
-        $proMock->expects($this->any())->method('getConfig')->will($this->returnValue($paypalConfigMock));
+        $proMock->expects($this->any())->method('getApi')->willReturn($this->_apiNvpMock);
+        $proMock->expects($this->any())->method('getConfig')->willReturn($paypalConfigMock);
 
         $billingAgreementMock = $this->getMockBuilder(
             \Magento\Paypal\Model\Billing\Agreement::class
         )->disableOriginalConstructor()->setMethods(
             ['load', '__wakeup']
         )->getMock();
-        $billingAgreementMock->expects($this->any())->method('load')->will($this->returnValue($billingAgreementMock));
+        $billingAgreementMock->expects($this->any())->method('load')->willReturn($billingAgreementMock);
 
         $agreementFactoryMock = $this->getMockBuilder(
             \Magento\Paypal\Model\Billing\AgreementFactory::class
@@ -60,8 +60,8 @@ class AgreementTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($billingAgreementMock)
+        )->willReturn(
+            $billingAgreementMock
         );
 
         $cartMock = $this->getMockBuilder(\Magento\Paypal\Model\Cart::class)->disableOriginalConstructor()->getMock();
@@ -70,7 +70,7 @@ class AgreementTest extends \PHPUnit\Framework\TestCase
         )->disableOriginalConstructor()->setMethods(
             ['create']
         )->getMock();
-        $cartFactoryMock->expects($this->any())->method('create')->will($this->returnValue($cartMock));
+        $cartFactoryMock->expects($this->any())->method('create')->willReturn($cartMock);
 
         $arguments = [
             'agreementFactory' => $agreementFactoryMock,

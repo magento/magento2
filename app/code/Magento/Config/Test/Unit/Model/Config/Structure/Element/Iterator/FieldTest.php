@@ -13,16 +13,16 @@ class FieldTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_fieldMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_groupMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_fieldMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Field::class);
         $this->_groupMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Group::class);
@@ -41,7 +41,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_fieldMock);
         unset($this->_groupMock);
@@ -66,7 +66,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
             ['_elementType' => 'group', 'id' => 'someGroup_2'],
             'scope'
         );
-        $this->_groupMock->expects($this->any())->method('isVisible')->will($this->returnValue(true));
+        $this->_groupMock->expects($this->any())->method('isVisible')->willReturn(true);
 
         $this->_fieldMock->expects(
             $this->at(0)
@@ -84,7 +84,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
             ['_elementType' => 'field', 'id' => 'someField_2'],
             'scope'
         );
-        $this->_fieldMock->expects($this->any())->method('isVisible')->will($this->returnValue(true));
+        $this->_fieldMock->expects($this->any())->method('isVisible')->willReturn(true);
 
         $items = [];
         foreach ($this->_model as $item) {

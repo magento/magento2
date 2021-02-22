@@ -16,27 +16,27 @@ class CheckUserCreateObserverTest extends \PHPUnit\Framework\TestCase
     protected $checkUserCreateObserver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_helper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_actionFlag;
 
     /*
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_messageManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_session;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_urlManager;
 
@@ -46,21 +46,21 @@ class CheckUserCreateObserverTest extends \PHPUnit\Framework\TestCase
     protected $_objectManager;
 
     /**
-     * @var \Magento\Captcha\Observer\CaptchaStringResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Captcha\Observer\CaptchaStringResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $captchaStringResolver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_captcha;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $redirect;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_helper = $this->createMock(\Magento\Captcha\Helper\Data::class);
@@ -101,8 +101,8 @@ class CheckUserCreateObserverTest extends \PHPUnit\Framework\TestCase
             'error'
         )->with(
             $redirectUrl
-        )->will(
-            $this->returnValue($redirectUrl)
+        )->willReturn(
+            $redirectUrl
         );
 
         $response = $this->createMock(\Magento\Framework\App\Response\Http::class);
@@ -115,22 +115,22 @@ class CheckUserCreateObserverTest extends \PHPUnit\Framework\TestCase
         )->with(
             $redirectRoutePath,
             ['_nosecret' => true]
-        )->will(
-            $this->returnValue($redirectUrl)
+        )->willReturn(
+            $redirectUrl
         );
 
         $controller = $this->createMock(\Magento\Framework\App\Action\Action::class);
-        $controller->expects($this->any())->method('getRequest')->will($this->returnValue($request));
-        $controller->expects($this->any())->method('getResponse')->will($this->returnValue($response));
-        $this->_captcha->expects($this->any())->method('isRequired')->will($this->returnValue(true));
+        $controller->expects($this->any())->method('getRequest')->willReturn($request);
+        $controller->expects($this->any())->method('getResponse')->willReturn($response);
+        $this->_captcha->expects($this->any())->method('isRequired')->willReturn(true);
         $this->_captcha->expects(
             $this->once()
         )->method(
             'isCorrect'
         )->with(
             $captchaValue
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
         $this->captchaStringResolver->expects(
             $this->once()
@@ -139,8 +139,8 @@ class CheckUserCreateObserverTest extends \PHPUnit\Framework\TestCase
         )->with(
             $request,
             $formId
-        )->will(
-            $this->returnValue($captchaValue)
+        )->willReturn(
+            $captchaValue
         );
         $this->_helper->expects(
             $this->any()
@@ -148,8 +148,8 @@ class CheckUserCreateObserverTest extends \PHPUnit\Framework\TestCase
             'getCaptcha'
         )->with(
             $formId
-        )->will(
-            $this->returnValue($this->_captcha)
+        )->willReturn(
+            $this->_captcha
         );
         $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($warningMessage);
         $this->_actionFlag->expects(

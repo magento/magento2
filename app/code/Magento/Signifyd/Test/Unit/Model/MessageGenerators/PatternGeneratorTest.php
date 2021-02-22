@@ -16,11 +16,12 @@ class PatternGeneratorTest extends \PHPUnit\Framework\TestCase
      * Checks an exception if generators does not receives required data.
      *
      * @covers \Magento\Signifyd\Model\MessageGenerators\PatternGenerator::generate
-     * @expectedException \Magento\Signifyd\Model\MessageGenerators\GeneratorException
-     * @expectedExceptionMessage The "caseId" should not be empty.
      */
     public function testGenerateThrowsException()
     {
+        $this->expectException(\Magento\Signifyd\Model\MessageGenerators\GeneratorException::class);
+        $this->expectExceptionMessage('The "caseId" should not be empty.');
+
         $data = [];
         $generator = new PatternGenerator('Signifyd Case %1 has been created for order.', ['caseId']);
         $generator->generate($data);

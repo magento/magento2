@@ -22,13 +22,13 @@ class ErrorProcessorTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Json\Encoder */
     protected $encoderMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_appStateMock;
 
     /** @var \Psr\Log\LoggerInterface */
     protected $_loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** Set up mocks for SUT. */
         $this->encoderMock = $this->getMockBuilder(\Magento\Framework\Json\Encoder::class)
@@ -57,7 +57,7 @@ class ErrorProcessorTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_errorProcessor);
         unset($this->encoderMock);
@@ -78,8 +78,9 @@ class ErrorProcessorTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'encode'
-        )->will(
-            $this->returnCallback([$this, 'callbackJsonEncode'], $this->returnArgument(0))
+        )->willReturnCallback(
+            [$this, 'callbackJsonEncode'],
+            $this->returnArgument(0)
         );
         /** Init output buffering to catch output via echo function. */
         ob_start();
@@ -112,14 +113,15 @@ class ErrorProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $_SERVER['HTTP_ACCEPT'] = 'json';
         /** Mock app to return enabled developer mode flag. */
-        $this->_appStateMock->expects($this->any())->method('getMode')->will($this->returnValue('developer'));
+        $this->_appStateMock->expects($this->any())->method('getMode')->willReturn('developer');
         /** Assert that jsonEncode method will be executed once. */
         $this->encoderMock->expects(
             $this->once()
         )->method(
             'encode'
-        )->will(
-            $this->returnCallback([$this, 'callbackJsonEncode'], $this->returnArgument(0))
+        )->willReturnCallback(
+            [$this, 'callbackJsonEncode'],
+            $this->returnArgument(0)
         );
         ob_start();
         $this->_errorProcessor->renderErrorMessage('Message', 'Message trace.', 401);
@@ -155,7 +157,7 @@ class ErrorProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $_SERVER['HTTP_ACCEPT'] = 'xml';
         /** Mock app to return enabled developer mode flag. */
-        $this->_appStateMock->expects($this->any())->method('getMode')->will($this->returnValue('developer'));
+        $this->_appStateMock->expects($this->any())->method('getMode')->willReturn('developer');
         /** Init output buffering to catch output via echo function. */
         ob_start();
         $this->_errorProcessor->renderErrorMessage('Message', 'Trace message.', 401);
@@ -188,7 +190,7 @@ class ErrorProcessorTest extends \PHPUnit\Framework\TestCase
     public function testMaskExceptionInDeveloperMode()
     {
         /** Mock app isDeveloperMode to return true. */
-        $this->_appStateMock->expects($this->once())->method('getMode')->will($this->returnValue('developer'));
+        $this->_appStateMock->expects($this->once())->method('getMode')->willReturn('developer');
         /** Init Logical exception. */
         $errorMessage = 'Error Message';
         $logicalException = new \LogicException($errorMessage);
@@ -234,12 +236,10 @@ class ErrorProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->_loggerMock->expects($this->once())
             ->method('critical')
-            ->will(
-                $this->returnCallback(
-                    function (\Exception $loggedException) use ($thrownException) {
-                        $this->assertSame($thrownException, $loggedException->getPrevious());
-                    }
-                )
+            ->willReturnCallback(
+                function (\Exception $loggedException) use ($thrownException) {
+                    $this->assertSame($thrownException, $loggedException->getPrevious());
+                }
             );
         $this->_errorProcessor->maskException($thrownException);
     }
@@ -328,7 +328,7 @@ class ErrorProcessorTest extends \PHPUnit\Framework\TestCase
             "Masked exception HTTP code is invalid: expected '{$expectedHttpCode}', " .
             "given '{$maskedException->getHttpCode()}'."
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             $expectedMessage,
             $maskedException->getMessage(),
             "Masked exception message is invalid: expected '{$expectedMessage}', " .
