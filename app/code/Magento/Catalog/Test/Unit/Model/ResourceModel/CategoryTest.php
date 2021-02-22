@@ -27,6 +27,8 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class CategoryTest extends \PHPUnit\Framework\TestCase
 {
+    private const STUB_PRIMARY_KEY = 'PK';
+
     /**
      * @var Category
      */
@@ -161,11 +163,19 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock->expects($this->once())
             ->method('serialize')
             ->willReturnCallback(
-                
-                    function ($value) {
-                        return json_encode($value);
-                    }
-                
+                function ($value) {
+                    return json_encode($value);
+                }
+            );
+
+        $this->connectionMock->method('getPrimaryKeyName')->willReturn(self::STUB_PRIMARY_KEY);
+        $this->connectionMock->method('getIndexList')
+            ->willReturn(
+                [
+                    self::STUB_PRIMARY_KEY => [
+                        'COLUMNS_LIST' => ['Column']
+                    ]
+                ]
             );
 
         $result = $this->category->findWhereAttributeIs($entityIdsFilter, $attribute, $expectedValue);

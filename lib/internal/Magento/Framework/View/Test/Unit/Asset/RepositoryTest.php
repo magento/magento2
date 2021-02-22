@@ -9,6 +9,7 @@ namespace Magento\Framework\View\Test\Unit\Asset;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
+use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * Unit test for Magento\Framework\View\Asset\Repository
@@ -73,6 +74,11 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     private $remoteFactoryMock;
 
     /**
+     * @var \Magento\Framework\View\Design\ThemeInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $themeMock;
+
+    /**
      * {@inheritDoc}
      */
     protected function setUp(): void
@@ -112,12 +118,26 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $repositoryMapMock = $this->createPartialMock(\Magento\Framework\View\Asset\File::class, ['getMap']);
+        $repositoryMapMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File::class)
+            ->addMethods(['getMap'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $repositoryMapMock->method('getMap')->willReturn([]);
         $this->objectManagerMock->method('get')
             ->with(\Magento\Framework\View\Asset\RepositoryMap::class)
             ->willReturn($repositoryMapMock);
         \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerMock);
+
+        $this->designMock
+            ->expects($this->any())
+            ->method('getDesignParams')
+            ->willReturn(
+                [
+                    'themeModel' => $this->getThemeMock(),
+                    'area' => 'area',
+                    'locale' => 'locale'
+                ]
+            );
 
         $this->repository = (new ObjectManager($this))->getObject(Repository::class, [
             'baseUrl' => $this->urlMock,
@@ -171,7 +191,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     public function testUpdateDesignParamsWithThemePath()
     {
         $params = ['area' => 'AREA'];
-        $result = ['area' => 'AREA', 'themeModel' => 'Theme', 'module' => false, 'locale' => null];
+        $result = ['area' => 'AREA', 'themeModel' => 'Theme', 'module' => false, 'locale' => 'locale'];
 
         $this->designMock
             ->expects($this->once())
@@ -193,7 +213,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     public function testUpdateDesignParamsWithThemeId()
     {
         $params = ['area' => 'AREA'];
-        $result = ['area' => 'AREA', 'themeModel' => 'Theme', 'module' => false, 'locale' => null];
+        $result = ['area' => 'AREA', 'themeModel' => 'Theme', 'module' => false, 'locale' => 'locale'];
 
         $this->designMock
             ->expects($this->once())
@@ -217,10 +237,16 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 ['area' => 'AREA'],
-                ['area' => 'AREA', 'themeModel' => '', 'module' => '', 'locale' => '']],
+                ['area' => 'AREA', 'themeModel' => $this->getThemeMock(), 'module' => false, 'locale' => 'locale']],
             [
                 ['themeId' => 'ThemeID'],
-                ['area' => '', 'themeId' => 'ThemeID', 'themeModel' => 'ThemeID', 'module' => '', 'locale' => '']
+                [
+                    'area' => 'area',
+                    'themeId' => 'ThemeID',
+                    'themeModel' => 'ThemeID',
+                    'module' => false,
+                    'locale' => 'locale'
+                ]
             ]
         ];
     }
@@ -235,7 +261,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('getThemeByFullPath')
             ->willReturnArgument(0);
 
-        $fallbackContextMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContex::class)
+        $fallbackContextMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContext::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->fallbackFactoryMock
@@ -243,10 +269,10 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->with(
                 [
-                    'baseUrl' => '',
-                    'areaType' => '',
+                    'baseUrl' => null,
+                    'areaType' => 'area',
                     'themePath' => 'Default',
-                    'localeCode' => ''
+                    'localeCode' => 'locale'
                 ]
             )
             ->willReturn($fallbackContextMock);
@@ -300,7 +326,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('isSecure')
             ->willReturn(false);
 
-        $fallbackContextMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContex::class)
+        $fallbackContextMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContext::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->fallbackFactoryMock
@@ -489,5 +515,17 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('Scope separator "::" cannot be used without scope identifier.');
 
         $this->repository->extractModule('::asdsad');
+    }
+
+    /**
+     * @return ThemeInterface|MockObject
+     */
+    private function getThemeMock()
+    {
+        if (null === $this->themeMock) {
+            $this->themeMock = $this->getMockForAbstractClass(ThemeInterface::class);
+        }
+
+        return $this->themeMock;
     }
 }
