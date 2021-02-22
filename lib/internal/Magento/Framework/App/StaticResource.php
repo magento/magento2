@@ -265,6 +265,12 @@ class StaticResource implements \Magento\Framework\AppInterface
         return $this->logger;
     }
 
+    /**
+     * Check that theme is available.
+     *
+     * @param string $theme
+     * @return bool
+     */
     private function isThemeAllowed(string $theme): bool
     {
         return in_array($theme, array_keys($this->themePackageList->getThemes()));
