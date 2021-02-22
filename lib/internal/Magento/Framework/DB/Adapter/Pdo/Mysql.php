@@ -3072,8 +3072,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     protected function _prepareQuotedSqlCondition($text, $value, $fieldName)
     {
+        $text = str_replace('{{fieldName}}', $fieldName, $text);
         $sql = $this->quoteInto($text, $value);
-        $sql = str_replace('{{fieldName}}', $fieldName, $sql);
         return $sql;
     }
 
@@ -4080,7 +4080,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     {
         $indexName = $this->getPrimaryKeyName($tableName, $schemaName);
         $indexes = $this->getIndexList($tableName);
-        if ($indexName && count($indexes[$indexName]['COLUMNS_LIST']) == 1) {
+        if ($indexName && isset($indexes[$indexName]) && count($indexes[$indexName]['COLUMNS_LIST']) == 1) {
             return current($indexes[$indexName]['COLUMNS_LIST']);
         }
         return false;
