@@ -198,7 +198,7 @@ class ProductTest extends TestCase
         $this->indexer->reindexAll();
         $isInvalidIndexer = $this->indexer->isInvalid();
 
-        $this->categoryRepository->deleteByIdentifier(4);
+        $this->categoryRepository->deleteByIdentifier(8);
 
         $state = $this->indexer->getState();
         $state->loadByIndexer($this->indexer->getId());
