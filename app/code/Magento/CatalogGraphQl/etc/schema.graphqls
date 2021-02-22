@@ -49,6 +49,12 @@ enum PriceTypeEnum @doc(description: "This enumeration the price type.") {
     DYNAMIC
 }
 
+enum CustomizableDateTypeEnum @doc(description: "This enumeration customizable date type.") {
+    DATE
+    DATE_TIME
+    TIME
+}
+
 type ProductPrices @doc(description: "ProductPrices is deprecated, replaced by PriceRange. The ProductPrices object contains the regular price of an item, as well as its minimum and maximum prices. Only composite products, which include bundle, configurable, and grouped products, can contain a minimum and maximum price.") {
     minimalPrice: Price @deprecated(reason: "Use PriceRange.minimum_price.") @doc(description: "The lowest possible final price for all the options defined within a composite product. If you are specifying a price range, this would be the from value.")
     maximalPrice: Price @deprecated(reason: "Use PriceRange.maximum_price.") @doc(description: "The highest possible final price for all the options defined within a composite product. If you are specifying a price range, this would be the to value.")
@@ -154,6 +160,7 @@ type CustomizableDateOption implements CustomizableOptionInterface @doc(descript
 type CustomizableDateValue @doc(description: "CustomizableDateValue defines the price and sku of a product whose page contains a customized date picker.") {
     price: Float @doc(description: "The price assigned to this option.")
     price_type: PriceTypeEnum @doc(description: "FIXED, PERCENT, or DYNAMIC.")
+    type: CustomizableDateTypeEnum @doc(description: "DATE, DATE_TIME or TIME") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CustomizableDateTypeOptionValue")
     sku: String @doc(description: "The Stock Keeping Unit for this option.")
     uid: ID! @doc(description: "The unique ID for a `CustomizableDateValue` object.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CustomizableEnteredOptionValueUid")
 }
@@ -332,7 +339,8 @@ input CategoryFilterInput  @doc(description: "CategoryFilterInput defines the fi
 {
     ids: FilterEqualTypeInput @deprecated(reason: "Use the `category_uid` argument instead.") @doc(description: "Deprecated: use 'category_uid' to filter uniquely identifiers of categories.")
     category_uid: FilterEqualTypeInput @doc(description: "Filter by the unique category ID for a `CategoryInterface` object.")
-    parent_id: FilterEqualTypeInput @doc(description: "Filter by the unique parent category ID for a `CategoryInterface` object.")
+    parent_id: FilterEqualTypeInput @deprecated @doc(description: "Filter by the unique parent category ID for a `CategoryInterface` object.")
+    parent_category_uid: FilterEqualTypeInput @doc(description: "Filter by the unique parent category ID for a `CategoryInterface` object.")
     url_key: FilterEqualTypeInput @doc(description: "Filter by the part of the URL that identifies the category.")
     name: FilterMatchTypeInput @doc(description: "Filter by the display name of the category.")
     url_path: FilterEqualTypeInput @doc(description: "Filter by the URL path for the category.")
