@@ -28,6 +28,7 @@
                 <host>localhost</host>
                 <port>25</port>
                 <set_return_path>0</set_return_path>
+                <transport>sendmail</transport>
             </smtp>
         </system>
         <trans_email>

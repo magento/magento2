@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Email\Model;
 
+use Laminas\Mail\Transport\Smtp;
+use Laminas\Mail\Transport\SmtpOptions;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Mail\MessageInterface;
@@ -32,6 +34,41 @@ class Transport implements TransportInterface
      * Configuration path for custom Return-Path email
      */
     const XML_PATH_SENDING_RETURN_PATH_EMAIL = 'system/smtp/return_path_email';
+
+    /**
+     * Configuration path for custom Transport
+     */
+    const XML_PATH_TRANSPORT = 'system/smtp/transport';
+
+    /**
+     * Configuration path for SMTP Host
+     */
+    const XML_PATH_HOST = 'system/smtp/host';
+
+    /**
+     * Configuration path for SMTP Port
+     */
+    const XML_PATH_PORT = 'system/smtp/port';
+
+    /**
+     * Configuration path for SMTP Username
+     */
+    const XML_PATH_USERNAME = 'system/smtp/username';
+
+    /**
+     * Configuration path for SMTP Password
+     */
+    const XML_PATH_PASSWORD = 'system/smtp/password';
+
+    /**
+     * Configuration path for SMTP Auth type
+     */
+    const XML_PATH_AUTH = 'system/smtp/auth';
+
+    /**
+     * Configuration path for SMTP SSL
+     */
+    const XML_PATH_SSL = 'system/smtp/ssl';
 
     /**
      * Whether return path should be set or no.
@@ -79,7 +116,17 @@ class Transport implements TransportInterface
             ScopeInterface::SCOPE_STORE
         );
 
-        $this->laminasTransport = new Sendmail($parameters);
+        $transport = $scopeConfig->getValue(
+            self::XML_PATH_TRANSPORT,
+            ScopeInterface::SCOPE_STORE
+        );
+
+        if ($transport === 'smtp') {
+            $this->laminasTransport = $this->createSmtpTransport($scopeConfig);
+        } else {
+            $this->laminasTransport = $this->createSendmailTransport($parameters);
+        }
+
         $this->message = $message;
     }
 
@@ -110,5 +157,68 @@ class Transport implements TransportInterface
     public function getMessage()
     {
         return $this->message;
+    }
+
+    /**
+     * @param $parameters
+     * @return Smtp
+     */
+    private function createSmtpTransport($scopeConfig)
+    {
+        $host = $scopeConfig->getValue(
+            self::XML_PATH_HOST,
+            ScopeInterface::SCOPE_STORE
+        );
+
+        $port = $scopeConfig->getValue(
+            self::XML_PATH_PORT,
+            ScopeInterface::SCOPE_STORE
+        );
+
+        $username = $scopeConfig->getValue(
+            self::XML_PATH_USERNAME,
+            ScopeInterface::SCOPE_STORE
+        );
+
+        $password = $scopeConfig->getValue(
+            self::XML_PATH_PASSWORD,
+            ScopeInterface::SCOPE_STORE
+        );
+
+        $auth = $scopeConfig->getValue(
+            self::XML_PATH_AUTH,
+            ScopeInterface::SCOPE_STORE
+        );
+
+        $ssl = $scopeConfig->getValue(
+            self::XML_PATH_SSL,
+            ScopeInterface::SCOPE_STORE
+        );
+
+        $options  = [
+            'name' => 'localhost',
+            'host' => $host,
+            'port' => $port,
+            'connection_class' => $auth,
+            'connection_config' => [
+                'username' => $username,
+                'password' => $password,
+            ]
+        ];
+
+        if ($ssl && $ssl !== 'none') {
+            $connectionConfig['ssl'] = $ssl;
+        }
+
+        return new Smtp(new SmtpOptions($options));
+    }
+
+    /**
+     * @param $parameters
+     * @return Sendmail
+     */
+    private function createSendmailTransport($parameters)
+    {
+        return new Sendmail($parameters);
     }
 }
