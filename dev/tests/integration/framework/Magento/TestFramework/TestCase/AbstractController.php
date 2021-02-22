@@ -109,7 +109,7 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
         $request = $this->getRequest();
         $request->setRequestUri($uri);
         if ($request->isPost()
-            && !array_key_exists('form_key', $request->getPost())
+            && !property_exists($request->getPost(), 'form_key')
         ) {
             /** @var FormKey $formKey */
             $formKey = $this->_objectManager->get(FormKey::class);

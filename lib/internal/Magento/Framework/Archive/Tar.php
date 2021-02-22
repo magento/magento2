@@ -447,12 +447,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
 
         $header = unpack(self::_getFormatParseHeader(), $headerBlock);
 
-        $header['mode'] = octdec($header['mode']);
-        $header['uid'] = octdec($header['uid']);
-        $header['gid'] = octdec($header['gid']);
-        $header['size'] = octdec($header['size']);
-        $header['mtime'] = octdec($header['mtime']);
-        $header['checksum'] = octdec($header['checksum']);
+        $header = $this->convertOctToDec($header);
 
         if ($header['type'] == "5") {
             $header['size'] = 0;
@@ -484,6 +479,23 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
         }
 
         return false;
+    }
+
+    /**
+     * Converts octal numbers to decimal ones for specific header types.
+     *
+     * @param array $header
+     * @return array
+     */
+    private function convertOctToDec(array $header): array
+    {
+        $typesToConvert = ['mode', 'uid', 'gid', 'size', 'mtime', 'checksum'];
+        foreach ($typesToConvert as $type) {
+            $octNum = preg_replace('/[^0-7]/', '', $header[$type]);
+            $header[$type] = octdec($octNum);
+        }
+
+        return $header;
     }
 
     /**

@@ -170,11 +170,11 @@ class AddTest extends AbstractController
     public function testAddProductWithUnavailableQty(): void
     {
         $product = $this->productRepository->get('simple-1');
-        $postData = ['product' => $product->getId(), 'qty' => 1000];
+        $postData = ['product' => $product->getId(), 'qty' => '1000'];
         $this->dispatchAddToCartRequest($postData);
-        $this->assertRedirect($this->stringContains($product->getProductUrl()));
         $message = (string)__('The requested qty is not available');
         $this->assertSessionMessages($this->containsEqual($message), MessageInterface::TYPE_ERROR);
+        $this->assertRedirect($this->stringContains($product->getProductUrl()));
     }
 
     /**

@@ -114,8 +114,8 @@ class CategoryTreeTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($this->_model->getParentIds());
         $this->_model->unsetData();
         $this->_model->load(4);
-        $this->assertTrue(in_array(3, $this->_model->getParentIds()));
-        $this->assertFalse(in_array(4, $this->_model->getParentIds()));
+        $this->assertContainsEquals(3, $this->_model->getParentIds());
+        $this->assertNotContainsEquals(4, $this->_model->getParentIds());
     }
 
     public function testGetChildren()
@@ -167,9 +167,9 @@ class CategoryTreeTest extends \PHPUnit\Framework\TestCase
     public function testGetAnchorsAbove()
     {
         $this->_model->load(4);
-        $this->assertTrue(in_array(3, $this->_model->getAnchorsAbove()));
+        $this->assertContainsEquals(3, $this->_model->getAnchorsAbove());
         $this->_model->load(5);
-        $this->assertTrue(in_array(4, $this->_model->getAnchorsAbove()));
+        $this->assertContainsEquals(4, $this->_model->getAnchorsAbove());
     }
 
     public function testGetParentCategories()
