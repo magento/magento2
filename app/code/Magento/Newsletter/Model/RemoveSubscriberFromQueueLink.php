@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Newsletter\Model;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Responsible for removing subscriber from queue
@@ -16,16 +15,16 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 class RemoveSubscriberFromQueueLink
 {
     /**
-     * @var AdapterInterface
+     * @var ResourceConnection
      */
-    private $connection;
+    private $resourceConnection;
 
     /**
-     * @param ResourceConnection $resource
+     * @param ResourceConnection $resourceConnection
      */
-    public function __construct(ResourceConnection $resource)
+    public function __construct(ResourceConnection $resourceConnection)
     {
-        $this->connection = $resource->getConnection();
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
@@ -36,8 +35,10 @@ class RemoveSubscriberFromQueueLink
      */
     public function execute(int $subscriberId): void
     {
-        $this->connection->delete(
-            $this->connection->getTableName('newsletter_queue_link'),
+        $connection = $this->resourceConnection->getConnection();
+
+        $connection->delete(
+            $this->resourceConnection->getTableName('newsletter_queue_link'),
             ['subscriber_id = ?' => $subscriberId, 'letter_sent_at IS NULL']
         );
     }
