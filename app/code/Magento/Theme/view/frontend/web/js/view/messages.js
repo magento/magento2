@@ -8,12 +8,13 @@
  */
 define([
     'jquery',
+    'knockout',
     'uiComponent',
     'Magento_Customer/js/customer-data',
     'underscore',
     'escaper',
     'jquery/jquery-storageapi'
-], function ($, Component, customerData, _, escaper) {
+], function ($, ko, Component, customerData, _, escaper) {
     'use strict';
 
     return Component.extend({
@@ -30,9 +31,9 @@ define([
             this._super();
 
             this.cookieMessages = _.unique($.cookieStorage.get('mage-messages'), 'text');
-            this.messages = customerData.get('messages').extend({
+            this.messages = ko.observable({ ...customerData.get('messages').extend({
                 disposableCustomerData: 'messages'
-            });
+            })() });
 
             // Force to clean obsolete messages
             if (!_.isEmpty(this.messages().messages)) {
