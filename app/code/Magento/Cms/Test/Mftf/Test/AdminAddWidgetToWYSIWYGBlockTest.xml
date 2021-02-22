@@ -65,17 +65,17 @@
         <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidgetBtn"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoading2"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad6"/>
-        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
-        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.splitButtonMenu}}" stepKey="waitForSplitButtonMenuVisible"/>
-        <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
-        <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="expandButtonMenu"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSplitButtonMenuVisible"/>
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSavePage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSuccessMessage"/>
         <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache" />
         <amOnPage url="$$createCMSPage.identifier$$" stepKey="amOnPageTestPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad7" />
         <see userInput="Home page" stepKey="seeHomePageCMSPage"/>
         <after>
-            <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
-            <waitForPageLoad stepKey="waitForPageLoad2"/>
+            <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="amOnEditPage"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad2"/>
             <conditionalClick selector="{{CmsPagesPageActionsSection.clearAllButton}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
             <waitForPageLoad stepKey="waitForGridReload"/>
             <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage" />
