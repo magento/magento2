@@ -18,7 +18,6 @@ use Magento\Checkout\Model\Session;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Module\Manager;
-use Magento\Framework\Registry;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -82,11 +81,6 @@ class UpsellTest extends TestCase
     private $eventManagerMock;
 
     /**
-     * @var MockObject
-     */
-    private $registryMock;
-
-    /**
      * Set up tests.
      */
     protected function setUp(): void
@@ -108,10 +102,6 @@ class UpsellTest extends TestCase
         $this->moduleManagerMock = $this->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
             ->setMethods(['isEnabled'])
-            ->getMock();
-        $this->registryMock = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['registry'])
             ->getMock();
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
@@ -236,12 +226,6 @@ class UpsellTest extends TestCase
             ->method('setDoNotUseCategoryId')
             ->with(true);
 
-        $this->registryMock
-            ->expects($this->once())
-            ->method('registry')
-            ->with('product')
-            ->willReturn($this->productMock);
-
         $this->productMock
             ->expects($this->once())
             ->method('getUpSellProductCollection')
@@ -254,10 +238,6 @@ class UpsellTest extends TestCase
         $limits = new \ReflectionProperty($this->block, '_itemLimits');
         $limits->setAccessible(true);
         $limits->setValue($this->block, $limit);
-
-        $registry = new \ReflectionProperty($this->block, '_coreRegistry');
-        $registry->setAccessible(true);
-        $registry->setValue($this->block, $this->registryMock);
 
         $catalogConfig = new \ReflectionProperty($this->block, '_catalogConfig');
         $catalogConfig->setAccessible(true);
@@ -341,6 +321,7 @@ class UpsellTest extends TestCase
             )
             ->willReturnSelf();
 
+        $this->block->setData('product', $this->productMock);
         $this->block->getItemCollection();
     }
 }
