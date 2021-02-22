@@ -23,7 +23,7 @@ use Magento\Braintree\Model\Paypal\Helper\QuoteUpdater;
 use Magento\Braintree\Block\Paypal\Checkout\Review as CheckoutReview;
 
 /**
- * Class ReviewTest
+ * Test for Review
  *
  * @see \Magento\Braintree\Controller\Paypal\Review
  *
@@ -32,32 +32,32 @@ use Magento\Braintree\Block\Paypal\Checkout\Review as CheckoutReview;
 class ReviewTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var QuoteUpdater|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuoteUpdater|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteUpdaterMock;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var Session|\PHPUnit\Framework\MockObject\MockObject
      */
     private $checkoutSessionMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
     /**
-     * @var ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultFactoryMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageManagerMock;
 
@@ -67,13 +67,13 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
     private $review;
 
     /**
-     * @var Logger|\PHPUnit_Framework_MockObject_MockObject
+     * @var Logger|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $contextMock */
+        /** @var Context|\PHPUnit\Framework\MockObject\MockObject $contextMock */
         $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -263,7 +263,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @return Redirect|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getResultRedirectMock()
     {
@@ -273,7 +273,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return AbstractBlock|\PHPUnit_Framework_MockObject_MockObject
+     * @return AbstractBlock|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getChildBlockMock()
     {
@@ -283,7 +283,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return CheckoutReview|\PHPUnit_Framework_MockObject_MockObject
+     * @return CheckoutReview|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getBlockMock()
     {
@@ -293,7 +293,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @return Layout|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getLayoutMock()
     {
@@ -303,7 +303,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Page|\PHPUnit_Framework_MockObject_MockObject
+     * @return Page|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getResultPageMock()
     {
@@ -313,7 +313,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @return Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getQuoteMock()
     {

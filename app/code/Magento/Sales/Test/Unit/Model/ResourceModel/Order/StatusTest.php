@@ -19,17 +19,17 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connectionMock;
 
@@ -38,28 +38,28 @@ class StatusTest extends \PHPUnit\Framework\TestCase
      */
     protected $selectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
-        $this->selectMock->expects($this->any())->method('from')->will($this->returnSelf());
+        $this->selectMock->expects($this->any())->method('from')->willReturnSelf();
         $this->selectMock->expects($this->any())->method('where');
 
         $this->connectionMock = $this->createPartialMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['update', 'insertOnDuplicate', 'select']
         );
-        $this->connectionMock->expects($this->any())->method('select')->will($this->returnValue($this->selectMock));
+        $this->connectionMock->expects($this->any())->method('select')->willReturn($this->selectMock);
 
         $this->resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $tableName = 'sales_order_status_state';
         $this->resourceMock->expects($this->at(1))
             ->method('getTableName')
             ->with($this->equalTo($tableName))
-            ->will($this->returnValue($tableName));
+            ->willReturn($tableName);
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
-            ->will(
-                $this->returnValue($this->connectionMock)
+            ->willReturn(
+                $this->connectionMock
             );
 
         $this->configMock = $this->createPartialMock(\Magento\Eav\Model\Config::class, ['getConnectionName']);

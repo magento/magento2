@@ -15,24 +15,24 @@ class NewActionTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Prod
     /** @var NewAction */
     protected $action;
 
-    /** @var \Magento\Backend\Model\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Model\View\Result\Page|\PHPUnit\Framework\MockObject\MockObject */
     protected $resultPage;
 
-    /** @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit\Framework\MockObject\MockObject */
     protected $resultForward;
 
-    /** @var \Magento\Catalog\Controller\Adminhtml\Product\Builder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Controller\Adminhtml\Product\Builder|\PHPUnit\Framework\MockObject\MockObject */
     protected $productBuilder;
 
-    /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject */
     protected $product;
 
     /**
-     * @var Helper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Helper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $initializationHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productBuilder = $this->createPartialMock(
             \Magento\Catalog\Controller\Adminhtml\Product\Builder::class,
@@ -40,9 +40,9 @@ class NewActionTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Prod
         );
         $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)->disableOriginalConstructor()
             ->setMethods(['addData', 'getTypeId', 'getStoreId', '__sleep', '__wakeup'])->getMock();
-        $this->product->expects($this->any())->method('getTypeId')->will($this->returnValue('simple'));
-        $this->product->expects($this->any())->method('getStoreId')->will($this->returnValue('1'));
-        $this->productBuilder->expects($this->any())->method('build')->will($this->returnValue($this->product));
+        $this->product->expects($this->any())->method('getTypeId')->willReturn('simple');
+        $this->product->expects($this->any())->method('getStoreId')->willReturn('1');
+        $this->productBuilder->expects($this->any())->method('build')->willReturn($this->product);
 
         $this->resultPage = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Page::class)
             ->disableOriginalConstructor()

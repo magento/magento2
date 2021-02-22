@@ -13,17 +13,17 @@ use \Magento\Sales\Model\CronJob\AggregateSalesReportOrderData;
 class AggregateSalesReportOrderDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeResolverMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeDateMock;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Report\OrderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Report\OrderFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderFactoryMock;
 
@@ -32,7 +32,7 @@ class AggregateSalesReportOrderDataTest extends \PHPUnit\Framework\TestCase
      */
     protected $observer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->localeResolverMock = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)
             ->disableOriginalConstructor()
@@ -64,7 +64,7 @@ class AggregateSalesReportOrderDataTest extends \PHPUnit\Framework\TestCase
             ->with($date);
         $this->orderFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($orderMock));
+            ->willReturn($orderMock);
         $this->observer->execute();
     }
 
@@ -84,7 +84,7 @@ class AggregateSalesReportOrderDataTest extends \PHPUnit\Framework\TestCase
         $date = (new \DateTime())->sub(new \DateInterval('PT25H'));
         $this->localeDateMock->expects($this->once())
             ->method('date')
-            ->will($this->returnValue($date));
+            ->willReturn($date);
 
         return $date;
     }

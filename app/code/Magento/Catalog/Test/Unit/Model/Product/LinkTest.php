@@ -15,28 +15,28 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Link\SaveHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Link\SaveHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $saveProductLinksMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productCollection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $linkCollection = $this->getMockBuilder(
             \Magento\Catalog\Model\ResourceModel\Product\Link\Collection::class
         )->disableOriginalConstructor()->setMethods(
             ['setLinkModel']
         )->getMock();
-        $linkCollection->expects($this->any())->method('setLinkModel')->will($this->returnSelf());
+        $linkCollection->expects($this->any())->method('setLinkModel')->willReturnSelf();
         $linkCollectionFactory = $this->getMockBuilder(
             \Magento\Catalog\Model\ResourceModel\Product\Link\CollectionFactory::class
         )->disableOriginalConstructor()->setMethods(
@@ -44,13 +44,13 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         )->getMock();
         $linkCollectionFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($linkCollection));
+            ->willReturn($linkCollection);
         $this->productCollection = $this->getMockBuilder(
             \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection::class
         )->disableOriginalConstructor()->setMethods(
             ['setLinkModel']
         )->getMock();
-        $this->productCollection->expects($this->any())->method('setLinkModel')->will($this->returnSelf());
+        $this->productCollection->expects($this->any())->method('setLinkModel')->willReturnSelf();
         $productCollectionFactory = $this->getMockBuilder(
             \Magento\Catalog\Model\ResourceModel\Product\Link\Product\CollectionFactory::class
         )->disableOriginalConstructor()->setMethods(
@@ -58,7 +58,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         )->getMock();
         $productCollectionFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->productCollection));
+            ->willReturn($this->productCollection);
 
         $this->resource = $this->createPartialMock(
             \Magento\Framework\Model\ResourceModel\AbstractResource::class,
@@ -116,12 +116,12 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('getTable')
             ->with($attributeTypeTable)
-            ->will($this->returnValue($attributeTypeTable));
+            ->willReturn($attributeTypeTable);
         $this->resource
             ->expects($this->any())
             ->method('getAttributeTypeTable')
             ->with($attributeType)
-            ->will($this->returnValue($attributeTypeTable));
+            ->willReturn($attributeTypeTable);
         $this->assertEquals($attributeTypeTable, $this->model->getAttributeTypeTable($attributeType));
     }
 
@@ -148,7 +148,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->resource
             ->expects($this->any())->method('getAttributesByType')
             ->with($typeId)
-            ->will($this->returnValue($linkAttributes));
+            ->willReturn($linkAttributes);
         $this->model->setData('link_type_id', $typeId);
         $this->assertEquals($linkAttributes, $this->model->getAttributes());
     }

@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogSearch\Test\Unit\Model\Layer\Filter;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Test for \Magento\CatalogSearch\Model\Layer\Filter\Price
@@ -53,7 +53,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Catalog\Model\Layer\State|MockObject */
     private $state;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
@@ -71,7 +71,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
 
         $dataProviderFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->dataProvider));
+            ->willReturn($this->dataProvider);
 
         $this->layer = $this->getMockBuilder(\Magento\Catalog\Model\Layer::class)
             ->disableOriginalConstructor()
@@ -84,7 +84,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->layer->expects($this->any())
             ->method('getState')
-            ->will($this->returnValue($this->state));
+            ->willReturn($this->state);
 
         $this->fulltextCollection = $this->fulltextCollection = $this->getMockBuilder(
             \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection::class
@@ -95,7 +95,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
 
         $this->layer->expects($this->any())
             ->method('getProductCollection')
-            ->will($this->returnValue($this->fulltextCollection));
+            ->willReturn($this->fulltextCollection);
 
         $this->itemDataBuilder = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\Item\DataBuilder::class)
             ->disableOriginalConstructor()
@@ -117,10 +117,10 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $filterItem->expects($this->any())
             ->method($this->anything())
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->filterItemFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($filterItem));
+            ->willReturn($filterItem);
 
         $escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
             ->disableOriginalConstructor()
@@ -128,7 +128,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $escaper->expects($this->any())
             ->method('escapeHtml')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
             ->disableOriginalConstructor()
@@ -163,8 +163,8 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->at(0))
             ->method('getParam')
             ->with($requestField)
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($field) use ($requestField, $idField, $requestValue, $idValue) {
                         switch ($field) {
                             case $requestField:
@@ -173,7 +173,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
                                 return $idValue;
                         }
                     }
-                )
+                
             );
 
         $result = $this->target->apply($this->request);
@@ -212,19 +212,19 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->target->setRequestVar($requestVar);
         $this->request->expects($this->exactly(1))
             ->method('getParam')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($field) use ($requestVar, $priceId) {
                         $this->assertTrue(in_array($field, [$requestVar, 'id']));
                         return $priceId;
                     }
-                )
+                
             );
 
         $this->fulltextCollection->expects($this->once())
             ->method('addFieldToFilter')
             ->with('price')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->target->setCurrencyRate(1);
         $this->target->apply($this->request);
@@ -237,12 +237,12 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $attributeCode = 'attributeCode';
         $this->attribute->expects($this->any())
             ->method('getAttributeCode')
-            ->will($this->returnValue($attributeCode));
+            ->willReturn($attributeCode);
 
         $this->fulltextCollection->expects($this->once())
             ->method('getFacetedData')
             ->with($attributeCode)
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->target->getItems();
     }
 }

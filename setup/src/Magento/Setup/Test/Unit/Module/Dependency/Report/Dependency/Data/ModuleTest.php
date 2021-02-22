@@ -10,12 +10,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ModuleTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dependencyFirst;
 
     /**
-     * @var \Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dependencySecond;
 
@@ -24,7 +24,7 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
      */
     protected $module;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->dependencyFirst =
             $this->createMock(\Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency::class);
@@ -55,10 +55,10 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
 
     public function testGetHardDependenciesCount()
     {
-        $this->dependencyFirst->expects($this->once())->method('isHard')->will($this->returnValue(true));
+        $this->dependencyFirst->expects($this->once())->method('isHard')->willReturn(true);
         $this->dependencyFirst->expects($this->never())->method('isSoft');
 
-        $this->dependencySecond->expects($this->once())->method('isHard')->will($this->returnValue(false));
+        $this->dependencySecond->expects($this->once())->method('isHard')->willReturn(false);
         $this->dependencySecond->expects($this->never())->method('isSoft');
 
         $this->assertEquals(1, $this->module->getHardDependenciesCount());
@@ -67,10 +67,10 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
     public function testGetSoftDependenciesCount()
     {
         $this->dependencyFirst->expects($this->never())->method('isHard');
-        $this->dependencyFirst->expects($this->once())->method('isSoft')->will($this->returnValue(true));
+        $this->dependencyFirst->expects($this->once())->method('isSoft')->willReturn(true);
 
         $this->dependencySecond->expects($this->never())->method('isHard');
-        $this->dependencySecond->expects($this->once())->method('isSoft')->will($this->returnValue(false));
+        $this->dependencySecond->expects($this->once())->method('isSoft')->willReturn(false);
 
         $this->assertEquals(1, $this->module->getSoftDependenciesCount());
     }

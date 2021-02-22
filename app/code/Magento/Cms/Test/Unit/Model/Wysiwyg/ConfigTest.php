@@ -17,52 +17,52 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected $wysiwygConfig;
 
     /**
-     * @var \Magento\Backend\Model\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $backendUrlMock;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $assetRepoMock;
 
     /**
-     * @var \Magento\Framework\AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\AuthorizationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $authorizationMock;
 
     /**
-     * @var \Magento\Variable\Model\Variable\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Variable\Model\Variable\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $variableConfigMock;
 
     /**
-     * @var \Magento\Widget\Model\Widget\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Widget\Model\Widget\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $widgetConfigMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
     /**
-     * @var \Magento\Framework\View\Asset\File|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\File|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $assetFileMock;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesystemMock;
 
@@ -76,7 +76,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     protected $windowSize = [];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->backendUrlMock = $this->getMockBuilder(\Magento\Backend\Model\UrlInterface::class)
@@ -171,7 +171,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->filesystemMock->expects($this->once())
             ->method('getUri')
             ->willReturn('pub/static');
-        /** @var \Magento\Framework\View\Asset\ContextInterface|\PHPUnit_Framework_MockObject_MockObject $contextMock */
+        /** @var \Magento\Framework\View\Asset\ContextInterface|\PHPUnit\Framework\MockObject\MockObject $contextMock */
         $contextMock = $this->createMock(\Magento\Framework\View\Asset\ContextInterface::class);
         $contextMock->expects($this->once())
             ->method('getBaseUrl')

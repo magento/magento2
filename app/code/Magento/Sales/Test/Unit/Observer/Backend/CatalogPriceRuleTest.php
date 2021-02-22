@@ -16,16 +16,16 @@ class CatalogPriceRuleTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_quoteMock;
 
     /**
-     * @var Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Observer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventObserverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eventObserverMock = $this->createMock(\Magento\Framework\Event\Observer::class);
         $this->_quoteMock = $this->createMock(\Magento\Quote\Model\ResourceModel\Quote::class);

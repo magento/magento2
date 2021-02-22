@@ -18,14 +18,14 @@ use Magento\Framework\Phrase;
 class TypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Type
+     * @var \PHPUnit\Framework\MockObject\MockObject|Type
      */
     protected $block;
 
     /**
      * Setup environment
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->block = $this->getMockBuilder(Type::class)
             ->disableOriginalConstructor()

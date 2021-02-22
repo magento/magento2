@@ -13,15 +13,15 @@ class UrlGeneratorTest extends \PHPUnit\Framework\TestCase
         $urlPath = 'mng/item/edit';
 
         $itemMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getItemId']);
-        $itemMock->expects($this->once())->method('getItemId')->will($this->returnValue($itemId));
+        $itemMock->expects($this->once())->method('getItemId')->willReturn($itemId);
 
         $urlModelMock = $this->createMock(\Magento\Backend\Model\Url::class);
         $urlModelMock->expects(
             $this->once()
         )->method(
             'getUrl'
-        )->will(
-            $this->returnValue('http://localhost/' . $urlPath . '/flag/1/item_id/' . $itemId)
+        )->willReturn(
+            'http://localhost/' . $urlPath . '/flag/1/item_id/' . $itemId
         );
 
         $model = new \Magento\Backend\Model\Widget\Grid\Row\UrlGenerator(
@@ -35,8 +35,8 @@ class UrlGeneratorTest extends \PHPUnit\Framework\TestCase
 
         $url = $model->getUrl($itemMock);
 
-        $this->assertContains($urlPath, $url);
-        $this->assertContains('flag/1', $url);
-        $this->assertContains('item_id/' . $itemId, $url);
+        $this->assertStringContainsString($urlPath, $url);
+        $this->assertStringContainsString('flag/1', $url);
+        $this->assertStringContainsString('item_id/' . $itemId, $url);
     }
 }

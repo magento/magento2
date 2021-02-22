@@ -17,52 +17,52 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     /** @var Configurable */
     private $configurable;
 
-    /** @var \Magento\Framework\Stdlib\ArrayUtils|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Stdlib\ArrayUtils|\PHPUnit\Framework\MockObject\MockObject */
     private $arrayUtils;
 
-    /** @var \Magento\Framework\Json\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Json\EncoderInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $jsonEncoder;
 
-    /** @var \Magento\ConfigurableProduct\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\ConfigurableProduct\Helper\Data|\PHPUnit\Framework\MockObject\MockObject */
     private $helper;
 
-    /** @var \Magento\Swatches\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Swatches\Helper\Data|\PHPUnit\Framework\MockObject\MockObject */
     private $swatchHelper;
 
-    /** @var \Magento\Swatches\Helper\Media|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Swatches\Helper\Media|\PHPUnit\Framework\MockObject\MockObject */
     private $swatchMediaHelper;
 
-    /** @var \Magento\Catalog\Helper\Product|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Helper\Product|\PHPUnit\Framework\MockObject\MockObject */
     private $catalogProduct;
 
-    /** @var \Magento\Customer\Helper\Session\CurrentCustomer|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Helper\Session\CurrentCustomer|\PHPUnit\Framework\MockObject\MockObject */
     private $currentCustomer;
 
-    /** @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $priceCurrency;
 
-    /** @var \Magento\ConfigurableProduct\Model\ConfigurableAttributeData|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\ConfigurableProduct\Model\ConfigurableAttributeData|\PHPUnit\Framework\MockObject\MockObject */
     private $configurableAttributeData;
 
-    /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject */
     private $product;
 
-    /** @var \Magento\Catalog\Model\Product\Type\AbstractType|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\Product\Type\AbstractType|\PHPUnit\Framework\MockObject\MockObject */
     private $typeInstance;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $scopeConfig;
 
-    /** @var \Magento\Catalog\Helper\Image|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Helper\Image|\PHPUnit\Framework\MockObject\MockObject */
     private $imageHelper;
 
-    /** @var \Magento\Catalog\Model\Product\Image\UrlBuilder|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Catalog\Model\Product\Image\UrlBuilder|\PHPUnit\Framework\MockObject\MockObject  */
     private $imageUrlBuilder;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $variationPricesMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->arrayUtils = $this->createMock(\Magento\Framework\Stdlib\ArrayUtils::class);
         $this->jsonEncoder = $this->createMock(\Magento\Framework\Json\EncoderInterface::class);

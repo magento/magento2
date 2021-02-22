@@ -19,26 +19,26 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  */
 class DataProductHashMapTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var HashMapPool|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var HashMapPool|\PHPUnit\Framework\MockObject\MockObject */
     private $hashMapPoolMock;
 
-    /** @var DataCategoryHashMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataCategoryHashMap|\PHPUnit\Framework\MockObject\MockObject */
     private $dataCategoryMapMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionFactoryMock;
 
     /**
-     * @var ProductCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductCollection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productCollectionMock;
 
-    /** @var DataProductHashMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataProductHashMap|\PHPUnit\Framework\MockObject\MockObject */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->hashMapPoolMock = $this->createMock(HashMapPool::class);
         $this->dataCategoryMapMock = $this->createMock(DataCategoryHashMap::class);
@@ -73,7 +73,7 @@ class DataProductHashMapTest extends \PHPUnit\Framework\TestCase
         $productIds = ['1' => [1, 2, 3], '2' => [2, 3], '3' => 3];
         $productIdsOther = ['2' => [2, 3, 4]];
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $selectMock = $this->createMock(Select::class);
 
         $this->productCollectionMock->expects($this->exactly(3))

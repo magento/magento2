@@ -14,22 +14,22 @@ use Magento\Framework\View\Element\Message\Renderer\RenderersPool;
 class InterpretationStrategyTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var RenderersPool | \PHPUnit_Framework_MockObject_MockObject
+     * @var RenderersPool | \PHPUnit\Framework\MockObject\MockObject
      */
     private $renderersPool;
 
     /**
-     * @var MessageConfigurationsPool | \PHPUnit_Framework_MockObject_MockObject
+     * @var MessageConfigurationsPool | \PHPUnit\Framework\MockObject\MockObject
      */
     private $messageConfigurationsPool;
 
     /**
-     * @var RendererInterface  | \PHPUnit_Framework_MockObject_MockObject
+     * @var RendererInterface  | \PHPUnit\Framework\MockObject\MockObject
      */
     private $renderer;
 
     /**
-     * @var MessageInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var MessageInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $messageMock;
 
@@ -38,7 +38,7 @@ class InterpretationStrategyTest extends \PHPUnit\Framework\TestCase
      */
     private $interpretationStrategy;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->renderersPool = $this->getMockBuilder(
             \Magento\Framework\View\Element\Message\Renderer\RenderersPool::class

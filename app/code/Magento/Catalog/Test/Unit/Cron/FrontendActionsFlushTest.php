@@ -15,13 +15,13 @@ class FrontendActionsFlushTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Catalog\Model\ResourceModel\ProductFrontendAction|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ResourceModel\ProductFrontendAction|\PHPUnit\Framework\MockObject\MockObject */
     protected $productFrontendActionMock;
 
-    /** @var \Magento\Catalog\Model\FrontendStorageConfigurationPool|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\FrontendStorageConfigurationPool|\PHPUnit\Framework\MockObject\MockObject */
     protected $frontendStorageConfigurationPoolMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productFrontendActionMock = $this->getMockBuilder(
             \Magento\Catalog\Model\ResourceModel\ProductFrontendAction::class
@@ -54,7 +54,7 @@ class FrontendActionsFlushTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('from')
             ->with('catalog_product_frontend_action', ['action_id', 'type_id'])
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $selectMock
             ->expects($this->once())
             ->method('group')

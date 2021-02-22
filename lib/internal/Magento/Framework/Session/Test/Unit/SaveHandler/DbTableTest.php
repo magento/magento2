@@ -45,7 +45,7 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }
@@ -72,13 +72,13 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
             'isTableExists'
         )->with(
             $this->equalTo(self::SESSION_TABLE)
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
-        $resource->expects($this->once())->method('getTableName')->will($this->returnValue(self::SESSION_TABLE));
-        $resource->expects($this->once())->method('getConnection')->will($this->returnValue($connection));
+        $resource->expects($this->once())->method('getTableName')->willReturn(self::SESSION_TABLE);
+        $resource->expects($this->once())->method('getConnection')->willReturn($connection);
 
         $this->_model = new \Magento\Framework\Session\SaveHandler\DbTable($resource);
 
@@ -88,14 +88,15 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\SessionException
-     * @expectedExceptionMessage The write connection to the database isn't available. Please try again later.
      */
     public function testCheckConnectionNoConnection()
     {
+        $this->expectException(\Magento\Framework\Exception\SessionException::class);
+        $this->expectExceptionMessage('The write connection to the database isn\'t available. Please try again later.');
+
         $resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
-        $resource->expects($this->once())->method('getTableName')->will($this->returnValue(self::SESSION_TABLE));
-        $resource->expects($this->once())->method('getConnection')->will($this->returnValue(null));
+        $resource->expects($this->once())->method('getTableName')->willReturn(self::SESSION_TABLE);
+        $resource->expects($this->once())->method('getConnection')->willReturn(null);
 
         $this->_model = new \Magento\Framework\Session\SaveHandler\DbTable($resource);
 
@@ -105,11 +106,12 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\SessionException
-     * @expectedExceptionMessage The database storage table doesn't exist. Verify the table and try again.
      */
     public function testCheckConnectionNoTable()
     {
+        $this->expectException(\Magento\Framework\Exception\SessionException::class);
+        $this->expectExceptionMessage('The database storage table doesn\'t exist. Verify the table and try again.');
+
         $connection = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['isTableExists']);
         $connection->expects(
             $this->once()
@@ -117,13 +119,13 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
             'isTableExists'
         )->with(
             $this->equalTo(self::SESSION_TABLE)
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
 
         $resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
-        $resource->expects($this->once())->method('getTableName')->will($this->returnValue(self::SESSION_TABLE));
-        $resource->expects($this->once())->method('getConnection')->will($this->returnValue($connection));
+        $resource->expects($this->once())->method('getTableName')->willReturn(self::SESSION_TABLE);
+        $resource->expects($this->once())->method('getConnection')->willReturn($connection);
 
         $this->_model = new \Magento\Framework\Session\SaveHandler\DbTable($resource);
 
@@ -147,13 +149,13 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
     /**
      * Prepares mock for test model with specified connections
      *
-     * @param \PHPUnit_Framework_MockObject_MockObject $connection
+     * @param \PHPUnit\Framework\MockObject\MockObject $connection
      */
     protected function _prepareResourceMock($connection)
     {
         $resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
-        $resource->expects($this->once())->method('getTableName')->will($this->returnValue(self::SESSION_TABLE));
-        $resource->expects($this->once())->method('getConnection')->will($this->returnValue($connection));
+        $resource->expects($this->once())->method('getTableName')->willReturn(self::SESSION_TABLE);
+        $resource->expects($this->once())->method('getConnection')->willReturn($connection);
 
         $this->_model = new \Magento\Framework\Session\SaveHandler\DbTable($resource);
     }
@@ -170,9 +172,9 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
             ['select', 'from', 'where', 'fetchOne', 'isTableExists']
         );
 
-        $connection->expects($this->once())->method('isTableExists')->will($this->returnValue(true));
+        $connection->expects($this->once())->method('isTableExists')->willReturn(true);
 
-        $connection->expects($this->once())->method('select')->will($this->returnSelf());
+        $connection->expects($this->once())->method('select')->willReturnSelf();
         $connection->expects(
             $this->once()
         )->method(
@@ -180,8 +182,8 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
         )->with(
             self::SESSION_TABLE,
             [self::COLUMN_SESSION_DATA]
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
+            
         );
         $connection->expects(
             $this->once()
@@ -189,8 +191,8 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
             'where'
         )->with(
             self::COLUMN_SESSION_ID . ' = :' . self::COLUMN_SESSION_ID
-        )->will(
-            $this->returnValue(self::SELECT_OBJECT)
+        )->willReturn(
+            self::SELECT_OBJECT
         );
 
         $sessionData = self::SESSION_DATA;
@@ -204,8 +206,8 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
         )->with(
             self::SELECT_OBJECT,
             [self::COLUMN_SESSION_ID => self::SESSION_ID]
-        )->will(
-            $this->returnValue($sessionData)
+        )->willReturn(
+            $sessionData
         );
 
         $this->_prepareResourceMock($connection);
@@ -246,17 +248,17 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['select', 'from', 'where', 'fetchOne', 'update', 'insert', 'isTableExists']
         );
-        $connection->expects($this->once())->method('isTableExists')->will($this->returnValue(true));
-        $connection->expects($this->once())->method('select')->will($this->returnSelf());
-        $connection->expects($this->once())->method('from')->with(self::SESSION_TABLE)->will($this->returnSelf());
+        $connection->expects($this->once())->method('isTableExists')->willReturn(true);
+        $connection->expects($this->once())->method('select')->willReturnSelf();
+        $connection->expects($this->once())->method('from')->with(self::SESSION_TABLE)->willReturnSelf();
         $connection->expects(
             $this->once()
         )->method(
             'where'
         )->with(
             self::COLUMN_SESSION_ID . ' = :' . self::COLUMN_SESSION_ID
-        )->will(
-            $this->returnValue(self::SELECT_OBJECT)
+        )->willReturn(
+            self::SELECT_OBJECT
         );
         $connection->expects(
             $this->once()
@@ -265,8 +267,8 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
         )->with(
             self::SELECT_OBJECT,
             [self::COLUMN_SESSION_ID => self::SESSION_ID]
-        )->will(
-            $this->returnValue($sessionExists)
+        )->willReturn(
+            $sessionExists
         );
 
         if ($sessionExists) {
@@ -275,16 +277,16 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
                 $this->once()
             )->method(
                 'update'
-            )->will(
-                $this->returnCallback([$this, 'verifyUpdate'])
+            )->willReturnCallback(
+                [$this, 'verifyUpdate']
             );
         } else {
             $connection->expects(
                 $this->once()
             )->method(
                 'insert'
-            )->will(
-                $this->returnCallback([$this, 'verifyInsert'])
+            )->willReturnCallback(
+                [$this, 'verifyInsert']
             );
             $connection->expects($this->never())->method('update');
         }
@@ -302,7 +304,7 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(self::SESSION_TABLE, $table);
 
-        $this->assertInternalType('int', $bind[self::COLUMN_SESSION_EXPIRES]);
+        $this->assertIsInt($bind[self::COLUMN_SESSION_EXPIRES]);
         $this->assertEquals(base64_encode(self::SESSION_DATA), $bind[self::COLUMN_SESSION_DATA]);
         $this->assertEquals(self::SESSION_ID, $bind[self::COLUMN_SESSION_ID]);
     }
@@ -318,7 +320,7 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(self::SESSION_TABLE, $table);
 
-        $this->assertInternalType('int', $bind[self::COLUMN_SESSION_EXPIRES]);
+        $this->assertIsInt($bind[self::COLUMN_SESSION_EXPIRES]);
         $this->assertEquals(base64_encode(self::SESSION_DATA), $bind[self::COLUMN_SESSION_DATA]);
 
         $this->assertEquals([self::COLUMN_SESSION_ID . '=?' => self::SESSION_ID], $where);

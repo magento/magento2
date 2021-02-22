@@ -18,40 +18,40 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     protected $closureMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $typeInstanceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->groupedConfigPlugin = new \Magento\GroupedProduct\Helper\Product\Configuration\Plugin\Grouped();
         $this->itemMock = $this->createMock(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface::class);
         $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $this->typeInstanceMock = $this->createMock(\Magento\GroupedProduct\Model\Product\Type\Grouped::class);
 
-        $this->itemMock->expects($this->any())->method('getProduct')->will($this->returnValue($this->productMock));
+        $this->itemMock->expects($this->any())->method('getProduct')->willReturn($this->productMock);
 
         $this->productMock->expects(
             $this->any()
         )->method(
             'getTypeInstance'
-        )->will(
-            $this->returnValue($this->typeInstanceMock)
+        )->willReturn(
+            $this->typeInstanceMock
         );
 
         $this->subjectMock = $this->createMock(\Magento\Catalog\Helper\Product\Configuration::class);
@@ -67,9 +67,9 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
 
         $associatedProdMock = $this->createMock(\Magento\Catalog\Model\Product::class);
 
-        $associatedProdMock->expects($this->once())->method('getId')->will($this->returnValue($associatedProductId));
+        $associatedProdMock->expects($this->once())->method('getId')->willReturn($associatedProductId);
 
-        $associatedProdMock->expects($this->once())->method('getName')->will($this->returnValue($associatedProdName));
+        $associatedProdMock->expects($this->once())->method('getName')->willReturn($associatedProdName);
 
         $this->typeInstanceMock->expects(
             $this->once()
@@ -77,16 +77,16 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             'getAssociatedProducts'
         )->with(
             $this->productMock
-        )->will(
-            $this->returnValue([$associatedProdMock])
+        )->willReturn(
+            [$associatedProdMock]
         );
 
         $this->productMock->expects(
             $this->once()
         )->method(
             'getTypeId'
-        )->will(
-            $this->returnValue(\Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE)
+        )->willReturn(
+            \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE
         );
 
         $quantityItemMock = $this->createPartialMock(
@@ -94,7 +94,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             ['getValue', 'getProduct', 'getOptionByCode', 'getFileDownloadParams']
         );
 
-        $quantityItemMock->expects($this->any())->method('getValue')->will($this->returnValue(1));
+        $quantityItemMock->expects($this->any())->method('getValue')->willReturn(1);
 
         $this->itemMock->expects(
             $this->once()
@@ -102,8 +102,8 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             'getOptionByCode'
         )->with(
             'associated_product_' . $associatedProductId
-        )->will(
-            $this->returnValue($quantityItemMock)
+        )->willReturn(
+            $quantityItemMock
         );
 
         $returnValue = [['label' => 'productName', 'value' => 2]];
@@ -134,16 +134,16 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             'getAssociatedProducts'
         )->with(
             $this->productMock
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
 
         $this->productMock->expects(
             $this->once()
         )->method(
             'getTypeId'
-        )->will(
-            $this->returnValue(\Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE)
+        )->willReturn(
+            \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE
         );
 
         $chainCallResult = [['label' => 'label', 'value' => 'value']];
@@ -171,8 +171,8 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getTypeId'
-        )->will(
-            $this->returnValue('other_product_type')
+        )->willReturn(
+            'other_product_type'
         );
 
         $this->closureMock = function () use ($chainCallResult) {

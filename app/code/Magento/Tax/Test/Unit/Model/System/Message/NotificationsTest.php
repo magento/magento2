@@ -25,39 +25,39 @@ class NotificationsTest extends \PHPUnit\Framework\TestCase
     private $notifications;
 
     /**
-     * @var StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var UrlInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $urlBuilderMock;
 
     /**
-     * @var TaxConfig | \PHPUnit_Framework_MockObject_MockObject
+     * @var TaxConfig | \PHPUnit\Framework\MockObject\MockObject
      */
     private $taxConfigMock;
 
     /**
-     * @var NotificationInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var NotificationInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $notificationMock;
 
     /**
-     * @var Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $escaperMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
-        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->taxConfigMock = $this->createMock(TaxConfig::class);
-        $this->notificationMock = $this->createMock(NotificationInterface::class);
+        $this->notificationMock = $this->getMockForAbstractClass(NotificationInterface::class);
         $this->escaperMock = $this->createMock(Escaper::class);
         $this->notifications = (new ObjectManager($this))->getObject(
             Notifications::class,

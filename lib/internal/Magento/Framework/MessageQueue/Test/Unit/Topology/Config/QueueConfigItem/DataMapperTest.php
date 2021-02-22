@@ -13,17 +13,17 @@ use Magento\Framework\MessageQueue\Topology\Config\QueueConfigItem\DataMapper;
 class DataMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configData;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $communicationConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $queueNameBuilder;
 
@@ -32,7 +32,7 @@ class DataMapperTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configData = $this->createMock(Data::class);
         $this->communicationConfig = $this->createMock(CommunicationConfig::class);

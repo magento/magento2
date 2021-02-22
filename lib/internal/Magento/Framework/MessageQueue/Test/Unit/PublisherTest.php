@@ -34,49 +34,49 @@ class PublisherTest extends \PHPUnit\Framework\TestCase
     /**
      * Publisher config mock.
      *
-     * @var PublisherConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var PublisherConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $publisherConfig;
 
     /**
      * Amqp config mock.
      *
-     * @var AmqpConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var AmqpConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $amqpConfig;
 
     /**
      * Message validator mock.
      *
-     * @var MessageValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var MessageValidator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageValidator;
 
     /**
      * Message encoder mock.
      *
-     * @var MessageEncoder|\PHPUnit_Framework_MockObject_MockObject
+     * @var MessageEncoder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageEncoder;
 
     /**
      * Exchange repository mock.
      *
-     * @var ExchangeRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var ExchangeRepository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $exchangeRepository;
 
     /**
      * Envelope factory mock.
      *
-     * @var EnvelopeFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var EnvelopeFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $envelopeFactory;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->publisherConfig = $this->getMockBuilder(PublisherConfig::class)
             ->disableOriginalConstructor()

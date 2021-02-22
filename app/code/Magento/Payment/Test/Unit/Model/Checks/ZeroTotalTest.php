@@ -26,7 +26,7 @@ class ZeroTotalTest extends \PHPUnit\Framework\TestCase
         if (!$total) {
             $paymentMethod->expects($this->once())
                 ->method('getCode')
-                ->will($this->returnValue($code));
+                ->willReturn($code);
         }
 
         $quote = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
@@ -36,7 +36,7 @@ class ZeroTotalTest extends \PHPUnit\Framework\TestCase
 
         $quote->expects($this->once())
             ->method('getBaseGrandTotal')
-            ->will($this->returnValue($total));
+            ->willReturn($total);
 
         $model = new ZeroTotal();
         $this->assertEquals($expectation, $model->isApplicable($paymentMethod, $quote));

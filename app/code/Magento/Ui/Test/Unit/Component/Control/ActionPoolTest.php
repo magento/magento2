@@ -24,32 +24,32 @@ class ActionPoolTest extends \PHPUnit\Framework\TestCase
     protected $actionPool;
 
     /**
-     * @var Context| \PHPUnit_Framework_MockObject_MockObject
+     * @var Context| \PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var ItemFactory| \PHPUnit_Framework_MockObject_MockObject
+     * @var ItemFactory| \PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemFactoryMock;
 
     /**
-     * @var AbstractBlock| \PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractBlock| \PHPUnit\Framework\MockObject\MockObject
      */
     protected $toolbarBlockMock;
 
     /**
-     * @var UiComponentInterface| \PHPUnit_Framework_MockObject_MockObject
+     * @var UiComponentInterface| \PHPUnit\Framework\MockObject\MockObject
      */
     protected $uiComponentInterfaceMock;
 
     /**
-     * @var Object[]| \PHPUnit_Framework_MockObject_MockObject
+     * @var Object[]| \PHPUnit\Framework\MockObject\MockObject
      */
     protected $items;
 
     /**
-     * @var LayoutInterface[]| \PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutInterface[]| \PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 
@@ -58,7 +58,7 @@ class ActionPoolTest extends \PHPUnit\Framework\TestCase
      */
     protected $key = 'id';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createPartialMock(
             \Magento\Framework\View\Element\UiComponent\Context::class,

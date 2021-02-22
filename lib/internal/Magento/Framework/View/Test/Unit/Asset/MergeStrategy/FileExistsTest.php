@@ -12,17 +12,17 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class FileExistsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\MergeStrategyInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Asset\MergeStrategyInterface
      */
     private $mergerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\WriteInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\WriteInterface
      */
     private $dirMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\File
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Asset\File
      */
     private $resultAsset;
 
@@ -31,7 +31,7 @@ class FileExistsTest extends \PHPUnit\Framework\TestCase
      */
     private $fileExists;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mergerMock = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\MergeStrategyInterface::class);
         $this->dirMock = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
@@ -39,22 +39,22 @@ class FileExistsTest extends \PHPUnit\Framework\TestCase
         $filesystem->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::STATIC_VIEW)
-            ->will($this->returnValue($this->dirMock));
+            ->willReturn($this->dirMock);
         $this->fileExists = new FileExists($this->mergerMock, $filesystem);
         $this->resultAsset = $this->createMock(\Magento\Framework\View\Asset\File::class);
-        $this->resultAsset->expects($this->once())->method('getPath')->will($this->returnValue('foo/file'));
+        $this->resultAsset->expects($this->once())->method('getPath')->willReturn('foo/file');
     }
 
     public function testMergeExists()
     {
-        $this->dirMock->expects($this->once())->method('isExist')->with('foo/file')->will($this->returnValue(true));
+        $this->dirMock->expects($this->once())->method('isExist')->with('foo/file')->willReturn(true);
         $this->mergerMock->expects($this->never())->method('merge');
         $this->fileExists->merge([], $this->resultAsset);
     }
 
     public function testMergeNotExists()
     {
-        $this->dirMock->expects($this->once())->method('isExist')->with('foo/file')->will($this->returnValue(false));
+        $this->dirMock->expects($this->once())->method('isExist')->with('foo/file')->willReturn(false);
         $this->mergerMock->expects($this->once())->method('merge')->with([], $this->resultAsset);
         $this->fileExists->merge([], $this->resultAsset);
     }

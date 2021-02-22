@@ -9,28 +9,28 @@ use Magento\Framework\View\Asset\Bundle\Manager;
 
 class ManagerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  Manager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Manager|\PHPUnit\Framework\MockObject\MockObject */
     protected $manager;
 
-    /** @var  \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject */
     protected $filesystem;
 
-    /** @var  \Magento\Framework\View\Asset\Bundle|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\View\Asset\Bundle|\PHPUnit\Framework\MockObject\MockObject */
     protected $bundle;
 
-    /** @var  \Magento\Framework\View\Asset\Bundle\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\View\Asset\Bundle\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $bundleConfig;
 
-    /** @var  \Magento\Framework\View\Asset\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\View\Asset\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $assetConfig;
 
-    /** @var  \Magento\Framework\View\Asset\LocalInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\View\Asset\LocalInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $asset;
 
-    /** @var \Magento\Framework\View\Asset\Minification|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Asset\Minification|\PHPUnit\Framework\MockObject\MockObject */
     private $minificationMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->disableOriginalConstructor()

@@ -14,21 +14,21 @@ class AccessValidatorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $userContextMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $entityManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $bulkSummaryFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->userContextMock = $this->createMock(\Magento\Authorization\Model\UserContextInterface::class);
         $this->entityManagerMock = $this->createMock(\Magento\Framework\EntityManager\EntityManager::class);

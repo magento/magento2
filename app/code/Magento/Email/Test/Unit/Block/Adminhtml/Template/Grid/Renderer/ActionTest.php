@@ -16,11 +16,11 @@ class ActionTest extends \PHPUnit\Framework\TestCase
     protected $action;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $columnMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->columnMock = $this->getMockBuilder(\Magento\Backend\Block\Widget\Grid\Column::class)
@@ -58,6 +58,6 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         $this->action->setColumn($this->columnMock);
         $row = new \Magento\Framework\DataObject();
         $row->setId(1);
-        $this->assertContains('admin__control-select', $this->action->render($row));
+        $this->assertStringContainsString('admin__control-select', $this->action->render($row));
     }
 }

@@ -55,7 +55,7 @@ class FrequencyTest extends \PHPUnit\Framework\TestCase
      * Init mocks for tests
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->securityConfigMock =  $this->getMockBuilder(\Magento\Security\Model\ConfigInterface::class)
@@ -133,10 +133,11 @@ class FrequencyTest extends \PHPUnit\Framework\TestCase
      * @param int $securityEventType
      * @param int $requestsMethod
      * @dataProvider dataProviderSecurityEventTypeWithRequestsMethod
-     * @expectedException \Magento\Framework\Exception\SecurityViolationException
      */
     public function testCheckException($securityEventType, $requestsMethod)
     {
+        $this->expectException(\Magento\Framework\Exception\SecurityViolationException::class);
+
         $limitTimeBetweenPasswordResetRequests = 600;
         $timestamp = time();
 
@@ -205,19 +206,19 @@ class FrequencyTest extends \PHPUnit\Framework\TestCase
     {
         $this->remoteAddressMock->expects($this->once())
             ->method('getRemoteAddress')
-            ->will($this->returnValue(12345));
+            ->willReturn(12345);
 
         $this->securityConfigMock->expects($this->any())
             ->method('getPasswordResetProtectionType')
-            ->will($this->returnValue($requestsMethod));
+            ->willReturn($requestsMethod);
 
         $this->securityConfigMock->expects($this->once())
             ->method('getMinTimeBetweenPasswordResetRequests')
-            ->will($this->returnValue($limitTimeBetweenPasswordResetRequests));
+            ->willReturn($limitTimeBetweenPasswordResetRequests);
 
         $this->securityConfigMock->expects($this->any())
             ->method('getCustomerServiceEmail')
-            ->will($this->returnValue('test@host.com'));
+            ->willReturn('test@host.com');
 
         $this->collectionFactoryMock->expects($this->once())
             ->method('create')

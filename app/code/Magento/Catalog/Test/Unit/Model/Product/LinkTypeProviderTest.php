@@ -14,17 +14,17 @@ class LinkTypeProviderTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $linkTypeFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $linkAttributeFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $linkFactoryMock;
 
@@ -33,7 +33,7 @@ class LinkTypeProviderTest extends \PHPUnit\Framework\TestCase
      */
     protected $linkTypes;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->linkTypeFactoryMock = $this->createPartialMock(
             \Magento\Catalog\Api\Data\ProductLinkTypeInterfaceFactory::class,

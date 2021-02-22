@@ -24,36 +24,36 @@ class CacheTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $product;
 
     /**
-     * @var \Magento\Framework\View\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $viewConfig;
 
     /**
-     * @var \Magento\Framework\Config\View|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\View|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $config;
 
     /**
-     * @var \Magento\Theme\Model\ResourceModel\Theme\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ResourceModel\Theme\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $themeCollection;
 
     /**
-     * @var \Magento\Catalog\Helper\Image|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Image|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $imageHelper;
 
     /**
-     * @var \Magento\Framework\Data\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mediaGalleryCollection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
@@ -136,7 +136,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
 
         $this->imageHelper->expects($this->exactly(3))
             ->method('init')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [
                     $this->product,
                     'product_image',
@@ -155,7 +155,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
                     $this->getImageData('product_thumbnail'),
                     $this->imageHelper
                 ],
-            ]));
+            ]);
         $this->imageHelper->expects($this->exactly(3))
             ->method('setImageFile')
             ->with($imageFile)
@@ -184,7 +184,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
 
         $this->imageHelper->expects($this->exactly(3))
             ->method('save')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->model->generate($this->product);
     }

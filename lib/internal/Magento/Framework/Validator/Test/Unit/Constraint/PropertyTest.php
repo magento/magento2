@@ -19,14 +19,14 @@ class PropertyTest extends \PHPUnit\Framework\TestCase
     protected $_constraint;
 
     /**
-     * @var \Magento\Framework\Validator\ValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Validator\ValidatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_validatorMock;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_validatorMock = $this->createMock(\Magento\Framework\Validator\ValidatorInterface::class);
         $this->_constraint = new \Magento\Framework\Validator\Constraint\Property(
@@ -74,8 +74,8 @@ class PropertyTest extends \PHPUnit\Framework\TestCase
             'isValid'
         )->with(
             $validateValue
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
 
         if ($expectedResult) {
@@ -85,8 +85,8 @@ class PropertyTest extends \PHPUnit\Framework\TestCase
                 $this->once()
             )->method(
                 'getMessages'
-            )->will(
-                $this->returnValue($validatorMessages)
+            )->willReturn(
+                $validatorMessages
             );
         }
 

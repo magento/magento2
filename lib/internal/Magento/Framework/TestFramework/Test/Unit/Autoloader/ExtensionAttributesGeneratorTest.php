@@ -15,7 +15,7 @@ class ExtensionAttributesGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     private $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subject = new ExtensionAttributesGenerator();
     }

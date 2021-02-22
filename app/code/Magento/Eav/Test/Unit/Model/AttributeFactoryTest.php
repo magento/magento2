@@ -22,7 +22,7 @@ class AttributeFactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_className = 'Test_Class';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var $objectManagerMock \Magento\Framework\ObjectManagerInterface */
         $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
@@ -30,14 +30,14 @@ class AttributeFactoryTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'create'
-        )->will(
-            $this->returnCallback([$this, 'getModelInstance'])
+        )->willReturnCallback(
+            [$this, 'getModelInstance']
         );
 
         $this->_factory = new \Magento\Eav\Model\AttributeFactory($objectManagerMock);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_factory);
     }
@@ -57,7 +57,7 @@ class AttributeFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function getModelInstance($className, $arguments)
     {
-        $this->assertInternalType('array', $arguments);
+        $this->assertIsArray($arguments);
         $this->assertArrayHasKey('data', $arguments);
         $this->assertEquals($this->_arguments, $arguments['data']);
 

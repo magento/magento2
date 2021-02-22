@@ -19,7 +19,7 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
     const MALICIOUS_TEXT = 'test malicious';
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
@@ -29,24 +29,24 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
     protected $preview;
 
     /**
-     * @var \Magento\Framework\Filter\Input\MaliciousCode|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filter\Input\MaliciousCode|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $maliciousCode;
 
     /**
-     * @var \Magento\Email\Model\Template|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Email\Model\Template|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $template;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 
     /**
      * Init data
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

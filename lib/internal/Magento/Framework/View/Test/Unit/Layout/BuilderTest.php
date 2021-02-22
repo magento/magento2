@@ -27,25 +27,25 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     {
         $fullActionName = 'route_controller_action';
 
-        /** @var Http|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var Http|\PHPUnit\Framework\MockObject\MockObject */
         $request = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $request->expects($this->exactly(3))->method('getFullActionName')->will($this->returnValue($fullActionName));
+        $request->expects($this->exactly(3))->method('getFullActionName')->willReturn($fullActionName);
 
-        /** @var ProcessorInterface|\PHPUnit_Framework_MockObject_MockObject $processor */
+        /** @var ProcessorInterface|\PHPUnit\Framework\MockObject\MockObject $processor */
         $processor = $this->createMock(\Magento\Framework\View\Layout\ProcessorInterface::class);
         $processor->expects($this->once())->method('load');
 
-        /** @var Layout|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var Layout|\PHPUnit\Framework\MockObject\MockObject */
         $layout = $this->createPartialMock(
             \Magento\Framework\View\Layout::class,
             $this->getLayoutMockMethods()
         );
-        $layout->expects($this->atLeastOnce())->method('getUpdate')->will($this->returnValue($processor));
-        $layout->expects($this->atLeastOnce())->method('generateXml')->will($this->returnValue($processor));
-        $layout->expects($this->atLeastOnce())->method('generateElements')->will($this->returnValue($processor));
+        $layout->expects($this->atLeastOnce())->method('getUpdate')->willReturn($processor);
+        $layout->expects($this->atLeastOnce())->method('generateXml')->willReturn($processor);
+        $layout->expects($this->atLeastOnce())->method('generateElements')->willReturn($processor);
 
         $data = ['full_action_name' => $fullActionName, 'layout' => $layout];
-        /** @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject $eventManager */
+        /** @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject $eventManager */
         $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $eventManager->expects($this->at(0))->method('dispatch')->with('layout_load_before', $data);
         $eventManager->expects($this->at(1))->method('dispatch')->with('layout_generate_blocks_before', $data);

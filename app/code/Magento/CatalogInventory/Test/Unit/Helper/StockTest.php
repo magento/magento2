@@ -20,31 +20,31 @@ class StockTest extends \PHPUnit\Framework\TestCase
     protected $stock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface
      */
     protected $stockRegistryProviderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogInventory\Model\ResourceModel\Stock\StatusFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\CatalogInventory\Model\ResourceModel\Stock\StatusFactory
      */
     protected $statusFactoryMock;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockConfigurationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\StockConfigurationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockConfiguration;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stockRegistryProviderMock = $this->getMockBuilder(
             \Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface::class

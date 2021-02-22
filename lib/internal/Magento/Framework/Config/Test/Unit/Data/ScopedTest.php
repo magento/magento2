@@ -18,26 +18,26 @@ class ScopedTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_readerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_configScopeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_cacheMock;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_readerMock = $this->createMock(\Magento\Framework\Config\ReaderInterface::class);
@@ -108,8 +108,8 @@ class ScopedTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getCurrentScope'
-        )->will(
-            $this->returnValue('adminhtml')
+        )->willReturn(
+            'adminhtml'
         );
 
         /** set empty cache data */
@@ -119,8 +119,8 @@ class ScopedTest extends \PHPUnit\Framework\TestCase
             'load'
         )->with(
             'adminhtml::tag'
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
 
         /** get data from reader  */
@@ -130,8 +130,8 @@ class ScopedTest extends \PHPUnit\Framework\TestCase
             'read'
         )->with(
             'adminhtml'
-        )->will(
-            $this->returnValue($testValue)
+        )->willReturn(
+            $testValue
         );
 
         $this->serializerMock->expects($this->once())
@@ -161,8 +161,8 @@ class ScopedTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getCurrentScope'
-        )->will(
-            $this->returnValue('adminhtml')
+        )->willReturn(
+            'adminhtml'
         );
 
         $this->serializerMock->expects($this->once())

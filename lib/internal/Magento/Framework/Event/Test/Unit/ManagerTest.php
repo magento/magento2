@@ -18,32 +18,32 @@ use Magento\Framework\Event\Manager as EventManager;
 class ManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $invokerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $event;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $wrapperFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $observer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventConfigMock;
 
@@ -57,11 +57,11 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->invokerMock = $this->createMock(InvokerInterface::class);
-        $this->eventConfigMock = $this->createMock(ConfigInterface::class);
+        $this->invokerMock = $this->getMockForAbstractClass(InvokerInterface::class);
+        $this->eventConfigMock = $this->getMockForAbstractClass(ConfigInterface::class);
 
         $this->eventManager = $this->objectManagerHelper->getObject(
             EventManager::class,

@@ -13,21 +13,21 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     protected $session;
 
     /**
-     * @var \Magento\Framework\Session\Config\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Session\Config\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\CookieManagerInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\CookieManagerInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cookieManagerMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cookieMetadataFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->configMock = $this->createMock(\Magento\Framework\Session\Config\ConfigInterface::class);
@@ -48,7 +48,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         );
 
         $actionValidatorMock = $this->createMock(\Magento\Framework\Model\ActionValidator\RemoveAction::class);
-        $actionValidatorMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
+        $actionValidatorMock->expects($this->any())->method('isAllowed')->willReturn(true);
 
         $context = $helper->getObject(
             \Magento\Framework\Model\Context::class,
@@ -75,7 +75,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->cookieManagerMock->expects($this->once())
             ->method('getCookie')
             ->with(\Magento\Persistent\Model\Session::COOKIE_NAME)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->session->loadByCookieKey(null);
     }
 
@@ -85,17 +85,17 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     public function testAfterDeleteCommit()
     {
         $cookiePath = 'some_path';
-        $this->configMock->expects($this->once())->method('getCookiePath')->will($this->returnValue($cookiePath));
+        $this->configMock->expects($this->once())->method('getCookiePath')->willReturn($cookiePath);
         $cookieMetadataMock = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
         $cookieMetadataMock->expects($this->once())
             ->method('setPath')
             ->with($cookiePath)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->cookieMetadataFactoryMock->expects($this->once())
             ->method('createSensitiveCookieMetadata')
-            ->will($this->returnValue($cookieMetadataMock));
+            ->willReturn($cookieMetadataMock);
         $this->cookieManagerMock->expects(
             $this->once()
         )->method(
@@ -119,22 +119,22 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $cookieMetadataMock->expects($this->once())
             ->method('setPath')
             ->with($cookiePath)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $cookieMetadataMock->expects($this->once())
             ->method('setDuration')
             ->with($duration)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $cookieMetadataMock->expects($this->once())
             ->method('setSecure')
             ->with(false)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $cookieMetadataMock->expects($this->once())
             ->method('setHttpOnly')
             ->with(true)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->cookieMetadataFactoryMock->expects($this->once())
             ->method('createPublicCookieMetadata')
-            ->will($this->returnValue($cookieMetadataMock));
+            ->willReturn($cookieMetadataMock);
         $this->cookieManagerMock->expects($this->once())
             ->method('setPublicCookie')
             ->with(
@@ -166,26 +166,26 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $cookieMetadataMock->expects($this->exactly($numCalls))
             ->method('setPath')
             ->with($cookiePath)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $cookieMetadataMock->expects($this->exactly($numCalls))
             ->method('setDuration')
             ->with($cookieDuration)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $cookieMetadataMock->expects($this->exactly($numCalls))
             ->method('setSecure')
             ->with(false)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $cookieMetadataMock->expects($this->exactly($numCalls))
             ->method('setHttpOnly')
             ->with(true)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->cookieMetadataFactoryMock->expects($this->exactly($numCalls))
             ->method('createPublicCookieMetadata')
-            ->will($this->returnValue($cookieMetadataMock));
+            ->willReturn($cookieMetadataMock);
         $this->cookieManagerMock->expects($this->exactly($numGetCookieCalls))
             ->method('getCookie')
             ->with(\Magento\Persistent\Model\Session::COOKIE_NAME)
-            ->will($this->returnValue($cookieValue));
+            ->willReturn($cookieValue);
         $this->cookieManagerMock->expects($this->exactly($numCalls))
             ->method('setPublicCookie')
             ->with(

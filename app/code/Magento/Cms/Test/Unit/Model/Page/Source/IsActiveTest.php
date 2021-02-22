@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class IsActiveTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var Page|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cmsPageMock;
 
@@ -28,7 +28,7 @@ class IsActiveTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
         $this->cmsPageMock = $this->getMockBuilder(\Magento\Cms\Model\Page::class)

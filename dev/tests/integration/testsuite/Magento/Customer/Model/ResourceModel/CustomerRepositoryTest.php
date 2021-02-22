@@ -67,7 +67,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->customerRepository = $this->objectManager->create(CustomerRepositoryInterface::class);
@@ -88,7 +88,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
@@ -230,12 +230,12 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
             'email',
         ];
         foreach ($expectedInBefore as $key) {
-            $this->assertContains($key, array_keys($inBeforeOnly));
+            $this->assertContains($key,array_keys($inBeforeOnly));
         }
-        $this->assertContains('created_in', array_keys($inAfterOnly));
-        $this->assertContains('firstname', array_keys($inAfterOnly));
-        $this->assertContains('lastname', array_keys($inAfterOnly));
-        $this->assertContains('email', array_keys($inAfterOnly));
+        $this->assertContains('created_in',array_keys($inAfterOnly));
+        $this->assertContains('firstname',array_keys($inAfterOnly));
+        $this->assertContains('lastname',array_keys($inAfterOnly));
+        $this->assertContains('email',array_keys($inAfterOnly));
         $this->assertNotContains('password_hash', array_keys($inAfterOnly));
     }
 
@@ -273,7 +273,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
             ->setAddresses([$newAddressDataObject, $addresses[1]]);
         $this->customerRepository->save($newCustomerEntity);
         $newCustomer = $this->customerRepository->get($email);
-        $this->assertEquals(2, count($newCustomer->getAddresses()));
+        $this->assertCount(2, $newCustomer->getAddresses());
 
         foreach ($newCustomer->getAddresses() as $newAddress) {
             if ($newAddress->getId() == $addressId) {
@@ -306,7 +306,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $newCustomerDetails = $this->customerRepository->getById($customerId);
         //Verify that old addresses are still present
-        $this->assertEquals(2, count($newCustomerDetails->getAddresses()));
+        $this->assertCount(2, $newCustomerDetails->getAddresses());
     }
 
     /**
@@ -333,7 +333,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $newCustomerDetails = $this->customerRepository->getById($customerId);
         //Verify that old addresses are removed
-        $this->assertEquals(0, count($newCustomerDetails->getAddresses()));
+        $this->assertCount(0, $newCustomerDetails->getAddresses());
     }
 
     /**

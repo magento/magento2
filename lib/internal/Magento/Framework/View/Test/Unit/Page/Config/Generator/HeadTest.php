@@ -24,21 +24,21 @@ class HeadTest extends \PHPUnit\Framework\TestCase
     protected $headGenerator;
 
     /**
-     * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageConfigMock;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Title|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $title;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->pageConfigMock = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
             ->disableOriginalConstructor()
@@ -66,7 +66,7 @@ class HeadTest extends \PHPUnit\Framework\TestCase
     public function testProcess()
     {
         $generatorContextMock = $this->createMock(Context::class);
-        $this->title->expects($this->any())->method('set')->with()->will($this->returnSelf());
+        $this->title->expects($this->any())->method('set')->with()->willReturnSelf();
         $structureMock = $this->createMock(Structure::class);
         $readerContextMock = $this->createMock(ReaderContext::class);
         $readerContextMock->expects($this->any())->method('getPageConfigStructure')->willReturn($structureMock);
@@ -138,18 +138,18 @@ class HeadTest extends \PHPUnit\Framework\TestCase
             ->with('name', ['attributes' => ['media' => 'print'], 'ie_condition' => 'lt IE 7']);
         $structureMock->expects($this->once())
             ->method('getAssets')
-            ->will($this->returnValue($assets));
+            ->willReturn($assets);
 
         $title = 'Page title';
         $structureMock->expects($this->atLeastOnce())
             ->method('getTitle')
-            ->will($this->returnValue($title));
-        $this->pageConfigMock->expects($this->any())->method('getTitle')->will($this->returnValue($this->title));
+            ->willReturn($title);
+        $this->pageConfigMock->expects($this->any())->method('getTitle')->willReturn($this->title);
 
         $metadata = ['name1' => 'content1', 'name2' => 'content2'];
         $structureMock->expects($this->once())
             ->method('getMetadata')
-            ->will($this->returnValue($metadata));
+            ->willReturn($metadata);
         $this->pageConfigMock->expects($this->exactly(2))
             ->method('setMetadata')
             ->withConsecutive(['name1', 'content1'], ['name2', 'content2']);
@@ -165,7 +165,7 @@ class HeadTest extends \PHPUnit\Framework\TestCase
         ];
         $structureMock->expects($this->once())
             ->method('getElementAttributes')
-            ->will($this->returnValue($elementAttributes));
+            ->willReturn($elementAttributes);
         $this->pageConfigMock->expects($this->exactly(3))
             ->method('setElementAttribute')
             ->withConsecutive(

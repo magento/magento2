@@ -17,32 +17,32 @@ use Magento\Framework\DB\Select\QueryModifierInterface;
 class FieldDataConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var Generator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Generator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryGeneratorMock;
 
     /**
-     * @var DataConverterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataConverterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataConverterMock;
 
     /**
-     * @var Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|\PHPUnit\Framework\MockObject\MockObject
      */
     private $selectMock;
 
     /**
-     * @var QueryModifierInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var QueryModifierInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryModifierMock;
 
     /**
-     * @var SelectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var SelectFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $selectFactoryMock;
 
@@ -56,14 +56,14 @@ class FieldDataConverterTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->queryGeneratorMock = $this->createMock(Generator::class);
-        $this->dataConverterMock = $this->createMock(DataConverterInterface::class);
+        $this->dataConverterMock = $this->getMockForAbstractClass(DataConverterInterface::class);
         $this->selectMock = $this->createMock(Select::class);
-        $this->queryModifierMock = $this->createMock(QueryModifierInterface::class);
+        $this->queryModifierMock = $this->getMockForAbstractClass(QueryModifierInterface::class);
         $this->selectFactoryMock = $this->getMockBuilder(SelectFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -207,14 +207,15 @@ class FieldDataConverterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string|int $batchSize
-     * @expectedException \InvalidArgumentException
      * @codingStandardsIgnoreStart
-     * @expectedExceptionMessage Invalid value for environment variable DATA_CONVERTER_BATCH_SIZE. Should be integer, >= 1 and < value of PHP_INT_MAX
      * @codingStandardsIgnoreEnd
      * @dataProvider convertBatchSizeFromEnvInvalidDataProvider
      */
     public function testConvertBatchSizeFromEnvInvalid($batchSize)
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid value for environment variable DATA_CONVERTER_BATCH_SIZE. Should be integer, >= 1 and < value of PHP_INT_MAX');
+
         $table = 'table';
         $identifier = 'id';
         $field = 'field';

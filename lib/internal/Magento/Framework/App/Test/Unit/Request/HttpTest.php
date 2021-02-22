@@ -22,12 +22,12 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\App\Route\ConfigInterface\Proxy | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Route\ConfigInterface\Proxy | \PHPUnit\Framework\MockObject\MockObject
      */
     private $routerListMock;
 
     /**
-     * @var \Magento\Framework\App\Request\PathInfoProcessorInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\PathInfoProcessorInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $infoProcessorMock;
 
@@ -37,12 +37,12 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     private $pathInfo;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager | \PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\StringUtils | \PHPUnit\Framework\MockObject\MockObject
      */
     private $converterMock;
 
@@ -56,20 +56,20 @@ class HttpTest extends \PHPUnit\Framework\TestCase
      */
     private $serverArray;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->routerListMock = $this->createPartialMock(
             \Magento\Framework\App\Route\ConfigInterface\Proxy::class,
             ['getRouteFrontName', 'getRouteByFrontName', '__wakeup']
         );
         $this->infoProcessorMock = $this->createMock(\Magento\Framework\App\Request\PathInfoProcessorInterface::class);
-        $this->infoProcessorMock->expects($this->any())->method('process')->will($this->returnArgument(1));
+        $this->infoProcessorMock->expects($this->any())->method('process')->willReturnArgument(1);
         $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->converterMock = $this->getMockBuilder(\Magento\Framework\Stdlib\StringUtils::class)
             ->disableOriginalConstructor()
             ->setMethods(['cleanString'])
             ->getMock();
-        $this->converterMock->expects($this->any())->method('cleanString')->will($this->returnArgument(0));
+        $this->converterMock->expects($this->any())->method('cleanString')->willReturnArgument(0);
 
         // Stash the $_SERVER array to protect it from modification in test
         $this->serverArray = $_SERVER;
@@ -78,7 +78,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->pathInfo =  $this->objectManager->getObject(\Magento\Framework\App\Request\PathInfo::class);
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $_SERVER = $this->serverArray;
     }
@@ -138,7 +138,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     public function testSetRouteNameWithRouter()
     {
         $router = $this->createMock(\Magento\Framework\App\Route\ConfigInterface::class);
-        $this->routerListMock->expects($this->any())->method('getRouteFrontName')->will($this->returnValue($router));
+        $this->routerListMock->expects($this->any())->method('getRouteFrontName')->willReturn($router);
         $this->model = $this->getModel();
         $this->model->setRouteName('RouterName');
         $this->assertEquals('RouterName', $this->model->getRouteName());
@@ -147,7 +147,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     public function testSetRouteNameWithNullRouterValue()
     {
         $this->model = $this->getModel();
-        $this->routerListMock->expects($this->once())->method('getRouteFrontName')->will($this->returnValue(null));
+        $this->routerListMock->expects($this->once())->method('getRouteFrontName')->willReturn(null);
         $this->model->setRouteName('RouterName');
     }
 
@@ -380,7 +380,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     {
         $this->model = $this->getModel();
         $_SERVER['REQUEST_METHOD'] = $httpMethod;
-        $this->assertEquals(true, $this->model->isSafeMethod());
+        $this->assertTrue($this->model->isSafeMethod());
     }
 
     /**
@@ -392,7 +392,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     {
         $this->model = $this->getModel();
         $_SERVER['REQUEST_METHOD'] = $httpMethod;
-        $this->assertEquals(false, $this->model->isSafeMethod());
+        $this->assertFalse($this->model->isSafeMethod());
     }
 
     /**

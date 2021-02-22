@@ -16,7 +16,7 @@ use Magento\Framework\App\State;
 class ConcealInProductionConfigListTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stateMock;
 
@@ -25,7 +25,7 @@ class ConcealInProductionConfigListTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()

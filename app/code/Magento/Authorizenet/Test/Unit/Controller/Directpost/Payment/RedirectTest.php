@@ -11,10 +11,10 @@ use Magento\Framework\App\ViewInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Block\Transparent\Iframe;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
- * Class RedirectTest
+ * Test for Redirect
  */
 class RedirectTest extends \PHPUnit\Framework\TestCase
 {
@@ -38,7 +38,7 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 

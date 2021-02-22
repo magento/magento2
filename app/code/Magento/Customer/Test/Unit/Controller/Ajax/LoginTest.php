@@ -28,7 +28,7 @@ use Magento\Framework\Stdlib\Cookie\CookieMetadata;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -156,7 +156,7 @@ class LoginTest extends \PHPUnit\Framework\TestCase
 
         /** @var Context|MockObject $context */
         $context = $this->createMock(Context::class);
-        $this->redirect = $this->createMock(RedirectInterface::class);
+        $this->redirect = $this->getMockForAbstractClass(RedirectInterface::class);
         $context->method('getRedirect')
             ->willReturn($this->redirect);
         $context->method('getRequest')
@@ -316,7 +316,7 @@ class LoginTest extends \PHPUnit\Framework\TestCase
     private function withScopeConfig(): void
     {
         /** @var ScopeConfigInterface|MockObject $scopeConfig */
-        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->controller->setScopeConfig($scopeConfig);
         $scopeConfig->method('getValue')
             ->with('customer/startup/redirect_dashboard')

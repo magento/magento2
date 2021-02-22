@@ -27,34 +27,34 @@ class DebugTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var DriverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DriverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stateMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var FormatterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FormatterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $formatterMock;
 
     /**
-     * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $deploymentConfigMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filesystemMock = $this->getMockBuilder(DriverInterface::class)
             ->getMockForAbstractClass();

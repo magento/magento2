@@ -19,7 +19,7 @@ class FlatTest extends \PHPUnit\Framework\TestCase
      */
     protected $_fixturePath;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $arrayNodeConfig = new \Magento\Framework\Config\Dom\ArrayNodeConfig(
             new \Magento\Framework\Config\Dom\NodePathMatcher(),
@@ -47,11 +47,12 @@ class FlatTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Node path '/root/someOtherVal' is not unique, but it has not been marked as array.
      */
     public function testConvertWithNotUnique()
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Node path \'/root/someOtherVal\' is not unique, but it has not been marked as array.');
+
         $dom = new \DOMDocument();
         $dom->load($this->_fixturePath . 'source_notuniq.xml');
 
@@ -59,11 +60,12 @@ class FlatTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Array is expected to contain value for key 'id'.
      */
     public function testConvertWrongArray()
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Array is expected to contain value for key \'id\'.');
+
         $dom = new \DOMDocument();
         $dom->load($this->_fixturePath . 'source_wrongarray.xml');
 

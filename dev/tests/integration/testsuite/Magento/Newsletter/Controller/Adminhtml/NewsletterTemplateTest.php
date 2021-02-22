@@ -23,7 +23,7 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
@@ -45,7 +45,7 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
     /**
      * @inheritDoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /**
          * Unset messages

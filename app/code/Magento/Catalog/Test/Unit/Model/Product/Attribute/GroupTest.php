@@ -21,7 +21,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->model->hasSystemAttributes());
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
@@ -48,7 +48,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
 
         $mock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($mockedCollection));
+            ->willReturn($mockedCollection);
 
         return $mock;
     }
@@ -67,10 +67,10 @@ class GroupTest extends \PHPUnit\Framework\TestCase
 
         $mock->expects($this->any())
             ->method('setAttributeGroupFilter')
-            ->will($this->returnValue($mock));
+            ->willReturn($mock);
         $mock->expects($this->any())
             ->method('getIterator')
-            ->will($this->returnValue(new \ArrayIterator([$item])));
+            ->willReturn(new \ArrayIterator([$item]));
 
         return $mock;
     }

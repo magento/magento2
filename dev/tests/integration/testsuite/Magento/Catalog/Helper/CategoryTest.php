@@ -19,14 +19,14 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Catalog\Helper\Category::class
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if ($this->_helper) {
             $helperClass = get_class($this->_helper);

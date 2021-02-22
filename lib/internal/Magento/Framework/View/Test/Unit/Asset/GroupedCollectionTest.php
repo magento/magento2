@@ -17,22 +17,22 @@ class GroupedCollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected $_asset;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $factory = $this->createMock(\Magento\Framework\View\Asset\PropertyGroupFactory::class);
         $factory->expects(
             $this->any()
         )->method(
             'create'
-        )->will(
-            $this->returnCallback([$this, 'createAssetGroup'])
+        )->willReturnCallback(
+            [$this, 'createAssetGroup']
         );
         $this->_object = new \Magento\Framework\View\Asset\GroupedCollection($factory);
         $this->_asset = new \Magento\Framework\View\Asset\Remote('http://127.0.0.1/magento/test.css');
         $this->_object->add('asset', $this->_asset);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_object = null;
         $this->_asset = null;
@@ -57,7 +57,7 @@ class GroupedCollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected function _assertGroups(array $expectedGroups, array $actualGroupObjects)
     {
-        $this->assertInternalType('array', $actualGroupObjects);
+        $this->assertIsArray($actualGroupObjects);
         $actualGroups = [];
         /** @var $actualGroup \Magento\Framework\View\Asset\PropertyGroup */
         foreach ($actualGroupObjects as $actualGroup) {
@@ -85,7 +85,7 @@ class GroupedCollectionTest extends \PHPUnit\Framework\TestCase
         $cssAsset = new \Magento\Framework\View\Asset\Remote('http://127.0.0.1/style.css', 'css');
         $jsAsset = new \Magento\Framework\View\Asset\Remote('http://127.0.0.1/script.js', 'js');
         $jsAssetAllowingMerge = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\MergeableInterface::class);
-        $jsAssetAllowingMerge->expects($this->any())->method('getContentType')->will($this->returnValue('js'));
+        $jsAssetAllowingMerge->expects($this->any())->method('getContentType')->willReturn('js');
 
         // assets with identical properties should be grouped together
         $this->_object->add('css_asset_one', $cssAsset, ['property' => 'test_value']);

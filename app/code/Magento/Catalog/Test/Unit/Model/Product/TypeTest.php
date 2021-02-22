@@ -124,10 +124,10 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 
         $mockedProduct->expects($this->at(0))
             ->method('getTypeId')
-            ->will($this->returnValue('type_id_1'));
+            ->willReturn('type_id_1');
         $mockedProduct->expects($this->at(1))
             ->method('getTypeId')
-            ->will($this->returnValue('type_id_3'));
+            ->willReturn('type_id_3');
 
         $this->assertInstanceOf(
             \Magento\Catalog\Model\Product\Type\Simple::class,
@@ -147,7 +147,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $mockedPriceInfoFactory = $this->getMockedPriceInfoFactory();
@@ -204,7 +204,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 
         $mock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($mockedPriceInfoInterface));
+            ->willReturn($mockedPriceInfoInterface);
 
         return $mock;
     }
@@ -233,13 +233,13 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 
         $mock->expects($this->any())
             ->method('get')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         ['some_model', [], $this->getMockedProductTypeVirtual()],
                         [\Magento\Catalog\Model\Product\Type\Simple::class, [], $this->getMockedProductTypeSimple()],
                     ]
-                )
+                
             );
 
         return $mock;
@@ -289,7 +289,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 
         $mock->expects($this->any())
             ->method('getAll')
-            ->will($this->returnValue($this->_productTypes));
+            ->willReturn($this->_productTypes);
 
         return $mock;
     }
@@ -306,13 +306,13 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 
         $mock->expects($this->any())
             ->method('create')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         ['some_model', [], $this->getMockedProductTypePrice()],
                         [\Magento\Catalog\Model\Product\Type\Price::class, [], $this->getMockedProductTypePrice()],
                     ]
-                )
+                
             );
 
         return $mock;

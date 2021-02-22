@@ -39,7 +39,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
 
         $resource = $this->getResourceMock();
 
-        /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject $select */
+        /** @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject $select */
         $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -73,7 +73,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getResourceMock()
     {
@@ -83,7 +83,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
         $connection->expects($this->at(0))
             ->method('quote')
             ->with($this->equalTo('some searchable text'))
-            ->will($this->returnValue("'some searchable text'"));
+            ->willReturn("'some searchable text'");
 
         $resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()

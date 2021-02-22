@@ -43,10 +43,10 @@ class TransactionResponseValidatorTest extends TestCase
      */
     private $resultMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resultFactoryMock = $this->createMock(ResultInterfaceFactory::class);
-        $this->resultMock = $this->createMock(ResultInterface::class);
+        $this->resultMock = $this->getMockForAbstractClass(ResultInterface::class);
 
         $this->validator = new TransactionResponseValidator(
             $this->resultFactoryMock,

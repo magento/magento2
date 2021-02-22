@@ -31,12 +31,12 @@ class CarrierResultTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var MockObject|StoreManagerInterface $storeManager */
         $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->result = new CarrierResult($storeManager);
     }
 

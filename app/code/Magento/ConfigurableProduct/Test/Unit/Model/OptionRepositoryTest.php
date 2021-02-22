@@ -25,31 +25,31 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $configurableTypeResource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $optionResource;
 
     /**
-     * @var Loader|\PHPUnit_Framework_MockObject_MockObject
+     * @var Loader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $optionLoader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productRepositoryMock = $this->getMockBuilder(ProductRepositoryInterface::class)
             ->getMockForAbstractClass();
@@ -96,7 +96,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($productSku)
             ->willReturn($this->productMock);
 
-        $optionMock = $this->createMock(OptionInterface::class);
+        $optionMock = $this->getMockForAbstractClass(OptionInterface::class);
         $optionMock->expects(self::once())
             ->method('getId')
             ->willReturn($optionId);
@@ -113,11 +113,12 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage This is implemented for the "configurable" configurable product only.
      */
     public function testGetNotConfigurableProduct()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('This is implemented for the "configurable" configurable product only.');
+
         $productSku = "configurable";
         $optionId = 3;
 
@@ -130,7 +131,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($productSku)
             ->willReturn($this->productMock);
 
-        $optionMock = $this->createMock(OptionInterface::class);
+        $optionMock = $this->getMockForAbstractClass(OptionInterface::class);
         $optionMock->expects(self::never())
             ->method('getId');
 
@@ -141,14 +142,15 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage This is implemented for the "3" configurable product only.
      */
     public function testGetNotProductById()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('This is implemented for the "3" configurable product only.');
+
         $entityId = 3;
         /** @var OptionInterface $optionMock */
-        $optionMock = $this->createMock(OptionInterface::class);
+        $optionMock = $this->getMockForAbstractClass(OptionInterface::class);
 
         $this->configurableTypeResource->expects(self::once())
             ->method('getEntityIdByAttribute')
@@ -168,14 +170,15 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The variations from the "3" product can't be deleted.
      */
     public function testDeleteCantSaveProducts()
     {
+        $this->expectException(\Magento\Framework\Exception\StateException::class);
+        $this->expectExceptionMessage('The variations from the "3" product can\'t be deleted.');
+
         $entityId = 3;
         /** @var OptionInterface $optionMock */
-        $optionMock = $this->createMock(OptionInterface::class);
+        $optionMock = $this->getMockForAbstractClass(OptionInterface::class);
 
         $this->configurableTypeResource->expects(self::once())
             ->method('getEntityIdByAttribute')
@@ -200,11 +203,12 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The option with "33" ID can't be deleted.
      */
     public function testDeleteCantDeleteOption()
     {
+        $this->expectException(\Magento\Framework\Exception\StateException::class);
+        $this->expectExceptionMessage('The option with "33" ID can\'t be deleted.');
+
         $entityId = 3;
         $optionMock = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
@@ -276,11 +280,12 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The "3" entity that was requested doesn't exist. Verify the entity and try again.
      */
     public function testGetEmptyExtensionAttribute()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('The "3" entity that was requested doesn\'t exist. Verify the entity and try again.');
+
         $optionId = 3;
         $productSku = "configurable";
 
@@ -293,7 +298,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($productSku)
             ->willReturn($this->productMock);
 
-        $optionMock = $this->createMock(OptionInterface::class);
+        $optionMock = $this->getMockForAbstractClass(OptionInterface::class);
         $optionMock->expects(self::never())
             ->method('getId');
 
@@ -318,7 +323,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($productSku)
             ->willReturn($this->productMock);
 
-        $optionMock = $this->createMock(OptionInterface::class);
+        $optionMock = $this->getMockForAbstractClass(OptionInterface::class);
 
         $this->optionLoader->expects(self::once())
             ->method('load')
@@ -329,11 +334,12 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage This is implemented for the "configurable" configurable product only.
      */
     public function testGetListNotConfigurableProduct()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('This is implemented for the "configurable" configurable product only.');
+
         $productSku = "configurable";
 
         $this->productRepositoryMock->expects($this->once())

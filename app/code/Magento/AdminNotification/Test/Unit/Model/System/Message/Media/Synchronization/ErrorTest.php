@@ -8,12 +8,12 @@ namespace Magento\AdminNotification\Test\Unit\Model\System\Message\Media\Synchro
 class ErrorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_syncFlagMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_fileStorage;
 
@@ -22,7 +22,7 @@ class ErrorTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_syncFlagMock = $this->createPartialMock(
             \Magento\MediaStorage\Model\File\Storage\Flag::class,
@@ -30,7 +30,7 @@ class ErrorTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->_fileStorage = $this->createMock(\Magento\MediaStorage\Model\File\Storage\Flag::class);
-        $this->_fileStorage->expects($this->any())->method('loadSelf')->will($this->returnValue($this->_syncFlagMock));
+        $this->_fileStorage->expects($this->any())->method('loadSelf')->willReturn($this->_syncFlagMock);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = ['fileStorage' => $this->_fileStorage];
@@ -44,7 +44,7 @@ class ErrorTest extends \PHPUnit\Framework\TestCase
     {
         $messageText = 'We were unable to synchronize one or more media files.';
 
-        $this->assertContains($messageText, (string)$this->_model->getText());
+        $this->assertStringContainsString($messageText, (string)$this->_model->getText());
     }
 
     /**
@@ -65,7 +65,7 @@ class ErrorTest extends \PHPUnit\Framework\TestCase
 
         $this->_syncFlagMock->expects($this->any())->method('setState');
         $this->_syncFlagMock->expects($this->any())->method('save');
-        $this->_syncFlagMock->expects($this->any())->method('getFlagData')->will($this->returnValue($data));
+        $this->_syncFlagMock->expects($this->any())->method('getFlagData')->willReturn($data);
         //check first call
         $this->assertEquals($expectedFirstRun, $model->isDisplayed());
         //check second call(another branch of if operator)

@@ -32,7 +32,7 @@ class AssociatedProductsTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->registry = $this->objectManager->get(\Magento\Framework\Registry::class);
@@ -48,8 +48,8 @@ class AssociatedProductsTest extends TestCase
     {
         $productSku = 'configurable';
         $associatedProductsData = [
-            [10 => '10.000'],
-            [20 => '20.000']
+            [10 => '10.000000'],
+            [20 => '20.000000']
         ];
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
@@ -58,7 +58,7 @@ class AssociatedProductsTest extends TestCase
         $store = $this->objectManager->create(\Magento\Store\Model\Store::class);
         $store->load('admin');
         $this->registry->register('current_store', $store);
-        /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject $localeResolver */
+        /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit\Framework\MockObject\MockObject $localeResolver */
         $localeResolver = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)
             ->setMethods(['getLocale'])
             ->getMockForAbstractClass();

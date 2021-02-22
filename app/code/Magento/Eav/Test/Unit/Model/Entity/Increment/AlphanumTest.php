@@ -14,7 +14,7 @@ class AlphanumTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = new \Magento\Eav\Model\Entity\Increment\Alphanum();
     }
@@ -57,11 +57,12 @@ class AlphanumTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid character encountered in increment ID: ---wrong-id---
      */
     public function testGetNextIdThrowsExceptionIfIdContainsNotAllowedCharacters()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Invalid character encountered in increment ID: ---wrong-id---');
+
         $this->model->setLastId('---wrong-id---');
         $this->model->setPrefix('prefix');
         $this->model->getNextId();

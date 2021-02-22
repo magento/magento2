@@ -35,41 +35,41 @@ class CleanConfigurationTmpImagesTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
     /**
-     * @var FileStorage|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileStorage|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileStorageDb;
 
     /**
-     * @var MediaConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var MediaConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mediaConfig;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystem;
 
     /**
-     * @var Write|\PHPUnit_Framework_MockObject_MockObject
+     * @var Write|\PHPUnit\Framework\MockObject\MockObject
      */
     private $writeFolder;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $seralizer;
 
     /**
-     * @var ProductInitializationHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductInitializationHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMockForAbstractClass();
@@ -185,7 +185,7 @@ class CleanConfigurationTmpImagesTest extends \PHPUnit\Framework\TestCase
      * @param array $expectedData
      * @param bool $hasDataChanges
      * @param bool $wasChanged
-     * @return Product|\PHPUnit_Framework_MockObject_MockObject
+     * @return Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getProductMock(array $expectedData = null, $hasDataChanges = false, $wasChanged = false)
     {

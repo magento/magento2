@@ -28,7 +28,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     private $conditionBuilderFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productResourceMock = $this->getMockBuilder(ProductResource::class)
             ->disableOriginalConstructor()

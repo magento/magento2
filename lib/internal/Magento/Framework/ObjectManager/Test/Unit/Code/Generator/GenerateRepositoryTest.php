@@ -8,7 +8,7 @@ namespace Magento\Framework\ObjectManager\Test\Unit\Code\Generator;
 use Composer\Autoload\ClassLoader;
 use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\ObjectManager\Code\Generator\Repository;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use \PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class RepositoryTest
@@ -23,7 +23,7 @@ class GenerateRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->ioGenerator = $this->getMockBuilder(Io::class)
             ->disableOriginalConstructor()

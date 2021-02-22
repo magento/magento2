@@ -49,7 +49,7 @@ class HandlerTest extends AbstractController
         self::assertEquals('2017-01-06 12:47:03', $caseEntity->getCreatedAt());
         self::assertEquals('2017-01-06 12:47:03', $caseEntity->getUpdatedAt());
         self::assertEquals('Magento', $caseEntity->getAssociatedTeam()['teamName']);
-        self::assertEquals(true, $caseEntity->isGuaranteeEligible());
+        self::assertTrue($caseEntity->isGuaranteeEligible());
         self::assertEquals(CaseInterface::STATUS_OPEN, $caseEntity->getStatus());
         self::assertEquals($orderEntityId, $caseEntity->getOrderId());
 

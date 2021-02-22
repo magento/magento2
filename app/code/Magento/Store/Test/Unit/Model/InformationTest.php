@@ -16,22 +16,22 @@ class InformationTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $store;
 
     /**
-     * @var \Magento\Store\Model\Address\Renderer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Address\Renderer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $renderer;
 
     /**
-     * @var \Magento\Directory\Model\RegionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\RegionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $regionFactory;
 
     /**
-     * @var \Magento\Directory\Model\CountryFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\CountryFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $countryFactory;
 
@@ -43,7 +43,7 @@ class InformationTest extends \PHPUnit\Framework\TestCase
     /**
      * Init mocks for tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $mockData = $this->mockConfigData = [
             Information::XML_PATH_STORE_INFO_NAME => 'Country Furnishings',

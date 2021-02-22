@@ -25,61 +25,61 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     private $contextMock;
 
     /**
-     * @var \Magento\Framework\HTTP\PhpEnvironment\Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\HTTP\PhpEnvironment\Request|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
     /**
-     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultRedirectMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageManagerMock;
 
     /**
-     * @var \Magento\Framework\Validator\StringLength|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Validator\StringLength|\PHPUnit\Framework\MockObject\MockObject
      */
     private $lengthValidator;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\Validator\AvailablePath|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Model\File\Validator\AvailablePath|\PHPUnit\Framework\MockObject\MockObject
      */
     private $pathValidator;
 
     /**
-     * @var \Magento\Sitemap\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sitemap\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     private $helper;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileSystem;
 
     /**
-     * @var \Magento\Sitemap\Model\SitemapFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sitemap\Model\SitemapFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $siteMapFactory;
 
     /**
-     * @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     private $session;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()

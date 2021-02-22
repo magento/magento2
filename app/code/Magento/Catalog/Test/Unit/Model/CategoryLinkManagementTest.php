@@ -14,16 +14,16 @@ class CategoryLinkManagementTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $categoryRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productLinkFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->categoryRepositoryMock = $this->createMock(\Magento\Catalog\Model\CategoryRepository::class);
         $productResource = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);

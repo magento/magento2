@@ -57,7 +57,7 @@ class ExtensionAttributesProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up helper.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -110,37 +110,37 @@ class ExtensionAttributesProcessorTest extends \PHPUnit\Framework\TestCase
         $this->methodsMapProcessorMock->expects($this->once())
             ->method('getMethodsMap')
             ->with($dataObjectType)
-            ->will($this->returnValue([$methodName => []]));
+            ->willReturn([$methodName => []]);
         $this->methodsMapProcessorMock->expects($this->once())
             ->method('isMethodValidForDataField')
             ->with($dataObjectType, $methodName)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->fieldNamerMock->expects($this->once())
             ->method('getFieldNameForMethodName')
             ->with($methodName)
-            ->will($this->returnValue($attributeName));
+            ->willReturn($attributeName);
         $permissionName = 'Magento_Permission';
         $this->configMock->expects($this->once())
             ->method('get')
-            ->will($this->returnValue([
+            ->willReturn([
                 $dataObjectType => [
                     $attributeName => [ Converter::RESOURCE_PERMISSIONS => [ $permissionName ] ]
                 ]
-              ]));
+              ]);
         $this->authorizationMock->expects($this->once())
             ->method('isAllowed')
             ->with($permissionName)
-            ->will($this->returnValue($isPermissionAllowed));
+            ->willReturn($isPermissionAllowed);
 
         if ($isPermissionAllowed) {
             $this->methodsMapProcessorMock->expects($this->once())
                 ->method('getMethodReturnType')
                 ->with($dataObjectType, $methodName)
-                ->will($this->returnValue('string'));
+                ->willReturn('string');
             $this->typeCasterMock->expects($this->once())
                 ->method('castValueToType')
                 ->with($attributeValue, 'string')
-                ->will($this->returnValue($attributeValue));
+                ->willReturn($attributeValue);
         }
 
         $value = $this->model->buildOutputDataArray(

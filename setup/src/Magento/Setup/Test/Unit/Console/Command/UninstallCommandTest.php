@@ -14,21 +14,21 @@ use Magento\Setup\Model\Installer;
 class UninstallCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var InstallerFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var InstallerFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $installerFactory;
 
     /**
-     * @var Installer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Installer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $installer;
 
     /**
-     * @var UninstallCommand|\PHPUnit_Framework_MockObject_MockObject
+     * @var UninstallCommand|\PHPUnit\Framework\MockObject\MockObject
      */
     private $command;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->installerFactory = $this->createMock(\Magento\Setup\Model\InstallerFactory::class);
         $this->installer = $this->createMock(\Magento\Setup\Model\Installer::class);
@@ -38,7 +38,7 @@ class UninstallCommandTest extends \PHPUnit\Framework\TestCase
     public function testExecuteInteractionYes()
     {
         $this->installer->expects($this->once())->method('uninstall');
-        $this->installerFactory->expects($this->once())->method('create')->will($this->returnValue($this->installer));
+        $this->installerFactory->expects($this->once())->method('create')->willReturn($this->installer);
 
         $this->checkInteraction(true);
     }
@@ -60,15 +60,15 @@ class UninstallCommandTest extends \PHPUnit\Framework\TestCase
         $question
             ->expects($this->once())
             ->method('ask')
-            ->will($this->returnValue($answer));
+            ->willReturn($answer);
 
-        /** @var \Symfony\Component\Console\Helper\HelperSet|\PHPUnit_Framework_MockObject_MockObject $helperSet */
+        /** @var \Symfony\Component\Console\Helper\HelperSet|\PHPUnit\Framework\MockObject\MockObject $helperSet */
         $helperSet = $this->createMock(\Symfony\Component\Console\Helper\HelperSet::class);
         $helperSet
             ->expects($this->once())
             ->method('get')
             ->with('question')
-            ->will($this->returnValue($question));
+            ->willReturn($question);
         $this->command->setHelperSet($helperSet);
 
         $tester = new CommandTester($this->command);

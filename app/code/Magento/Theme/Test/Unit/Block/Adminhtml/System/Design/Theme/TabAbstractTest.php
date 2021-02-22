@@ -12,7 +12,7 @@ class TabAbstractTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = $this->getMockForAbstractClass(
             \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\AbstractTab::class,
@@ -30,7 +30,7 @@ class TabAbstractTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }
@@ -38,7 +38,7 @@ class TabAbstractTest extends \PHPUnit\Framework\TestCase
     public function testGetTabTitle()
     {
         $label = 'test label';
-        $this->_model->expects($this->once())->method('getTabLabel')->will($this->returnValue($label));
+        $this->_model->expects($this->once())->method('getTabLabel')->willReturn($label);
         $this->assertEquals($label, $this->_model->getTabTitle());
     }
 
@@ -51,11 +51,11 @@ class TabAbstractTest extends \PHPUnit\Framework\TestCase
     public function testCanShowTab($isVirtual, $themeId, $result)
     {
         $themeMock = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['isVirtual', 'getId', '__wakeup']);
-        $themeMock->expects($this->any())->method('isVirtual')->will($this->returnValue($isVirtual));
+        $themeMock->expects($this->any())->method('isVirtual')->willReturn($isVirtual);
 
-        $themeMock->expects($this->any())->method('getId')->will($this->returnValue($themeId));
+        $themeMock->expects($this->any())->method('getId')->willReturn($themeId);
 
-        $this->_model->expects($this->any())->method('_getCurrentTheme')->will($this->returnValue($themeMock));
+        $this->_model->expects($this->any())->method('_getCurrentTheme')->willReturn($themeMock);
 
         if ($result === true) {
             $this->assertTrue($this->_model->canShowTab());

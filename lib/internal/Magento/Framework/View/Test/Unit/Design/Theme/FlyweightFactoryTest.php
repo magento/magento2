@@ -10,7 +10,7 @@ use \Magento\Framework\View\Design\Theme\FlyweightFactory;
 class FlyweightFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Design\Theme\ThemeProviderInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Design\Theme\ThemeProviderInterface
      */
     protected $themeProviderMock;
 
@@ -19,7 +19,7 @@ class FlyweightFactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $factory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->themeProviderMock =
             $this->createMock(\Magento\Framework\View\Design\Theme\ThemeProviderInterface::class);
@@ -35,9 +35,9 @@ class FlyweightFactoryTest extends \PHPUnit\Framework\TestCase
     public function testCreateById($path, $expectedId)
     {
         $theme = $this->createMock(\Magento\Theme\Model\Theme::class);
-        $theme->expects($this->exactly(2))->method('getId')->will($this->returnValue($expectedId));
+        $theme->expects($this->exactly(2))->method('getId')->willReturn($expectedId);
 
-        $theme->expects($this->once())->method('getFullPath')->will($this->returnValue(null));
+        $theme->expects($this->once())->method('getFullPath')->willReturn(null);
         $theme->expects($this->once())->method('getCode')->willReturn($expectedId);
         $this->themeProviderMock->expects(
             $this->once()
@@ -45,8 +45,8 @@ class FlyweightFactoryTest extends \PHPUnit\Framework\TestCase
             'getThemeById'
         )->with(
             $expectedId
-        )->will(
-            $this->returnValue($theme)
+        )->willReturn(
+            $theme
         );
 
         $this->assertSame($theme, $this->factory->create($path));
@@ -71,9 +71,9 @@ class FlyweightFactoryTest extends \PHPUnit\Framework\TestCase
         $path = 'frontend/Magento/luma';
         $themeId = 7;
         $theme = $this->createMock(\Magento\Theme\Model\Theme::class);
-        $theme->expects($this->exactly(2))->method('getId')->will($this->returnValue($themeId));
+        $theme->expects($this->exactly(2))->method('getId')->willReturn($themeId);
 
-        $theme->expects($this->once())->method('getFullPath')->will($this->returnValue($path));
+        $theme->expects($this->once())->method('getFullPath')->willReturn($path);
         $theme->expects($this->once())->method('getCode')->willReturn('Magento/luma');
         $this->themeProviderMock->expects(
             $this->once()
@@ -81,19 +81,20 @@ class FlyweightFactoryTest extends \PHPUnit\Framework\TestCase
             'getThemeByFullPath'
         )->with(
             'frontend/frontend/Magento/luma'
-        )->will(
-            $this->returnValue($theme)
+        )->willReturn(
+            $theme
         );
 
         $this->assertSame($theme, $this->factory->create($path));
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Unable to load theme by specified key: '0'
      */
     public function testCreateDummy()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Unable to load theme by specified key: \'0\'');
+
         $themeId = 0;
         $theme = $this->createMock(\Magento\Theme\Model\Theme::class);
 
@@ -103,19 +104,20 @@ class FlyweightFactoryTest extends \PHPUnit\Framework\TestCase
             'getThemeById'
         )->with(
             $themeId
-        )->will(
-            $this->returnValue($theme)
+        )->willReturn(
+            $theme
         );
 
         $this->assertNull($this->factory->create($themeId));
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Incorrect theme identification key
      */
     public function testNegativeCreate()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Incorrect theme identification key');
+
         $this->factory->create(null);
     }
 }

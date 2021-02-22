@@ -10,7 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\DriverPool;
-use \PHPUnit_Framework_MockObject_MockObject as Mock;
+use \PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * @inheritdoc
@@ -42,7 +42,7 @@ class FileReaderTest extends \PHPUnit\Framework\TestCase
      */
     private $driverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dirListMock = $this->getMockBuilder(DirectoryList::class)
             ->disableOriginalConstructor()

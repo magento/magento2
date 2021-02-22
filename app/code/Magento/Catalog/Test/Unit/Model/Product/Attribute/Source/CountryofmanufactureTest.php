@@ -33,11 +33,11 @@ class CountryofmanufactureTest extends \PHPUnit\Framework\TestCase
     private $countryOfManufacture;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
@@ -51,7 +51,7 @@ class CountryofmanufactureTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $this->countryOfManufacture,
             'serializer',
@@ -69,12 +69,12 @@ class CountryofmanufactureTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAllOptions($cachedDataSrl, $cachedDataUnsrl)
     {
-        $this->storeMock->expects($this->once())->method('getCode')->will($this->returnValue('store_code'));
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($this->storeMock));
+        $this->storeMock->expects($this->once())->method('getCode')->willReturn('store_code');
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
         $this->cacheConfig->expects($this->once())
             ->method('load')
             ->with($this->equalTo('COUNTRYOFMANUFACTURE_SELECT_STORE_store_code'))
-            ->will($this->returnValue($cachedDataSrl));
+            ->willReturn($cachedDataSrl);
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
             ->willReturn($cachedDataUnsrl);

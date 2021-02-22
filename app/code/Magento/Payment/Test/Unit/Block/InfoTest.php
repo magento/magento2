@@ -10,26 +10,26 @@ use Magento\Framework\DataObject;
 class InfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_storeManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_eventManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_escaper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_storeManager = $this->getMockBuilder(
@@ -70,12 +70,12 @@ class InfoTest extends \PHPUnit\Framework\TestCase
 
         if (isset($storeCode)) {
             $storeMock = $this->_getStoreMock($storeCode);
-            $this->_storeManager->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
+            $this->_storeManager->expects($this->any())->method('getStore')->willReturn($storeMock);
         }
 
         $paymentInfo = $this->getMockBuilder(\Magento\Payment\Model\Info::class)
             ->disableOriginalConstructor()->getMock();
-        $paymentInfo->expects($this->any())->method('getMethodInstance')->will($this->returnValue($methodInstance));
+        $paymentInfo->expects($this->any())->method('getMethodInstance')->willReturn($methodInstance);
 
         $this->_object->setData('info', $paymentInfo);
         $this->_object->setData('is_secure_mode', $isSecureMode);
@@ -100,7 +100,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param bool $store
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getMethodInstanceMock($store)
     {
@@ -109,26 +109,27 @@ class InfoTest extends \PHPUnit\Framework\TestCase
         )->setMethods(
             ['getStore']
         )->disableOriginalConstructor()->getMock();
-        $methodInstance->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $methodInstance->expects($this->any())->method('getStore')->willReturn($store);
         return $methodInstance;
     }
 
     /**
      * @param string $storeCode
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getStoreMock($storeCode)
     {
         $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)->disableOriginalConstructor()->getMock();
-        $storeMock->expects($this->any())->method('getCode')->will($this->returnValue($storeCode));
+        $storeMock->expects($this->any())->method('getCode')->willReturn($storeCode);
         return $storeMock;
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testGetInfoThrowException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->_object->setData('info', new \Magento\Framework\DataObject([]));
         $this->_object->getInfo();
     }

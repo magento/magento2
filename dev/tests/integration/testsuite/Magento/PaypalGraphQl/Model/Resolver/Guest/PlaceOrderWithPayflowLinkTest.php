@@ -48,7 +48,7 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
     /** @var Request|MockObject */
     private $payflowRequest;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->graphQlRequest = $this->objectManager->create(GraphQlRequest::class);
@@ -85,7 +85,7 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager->removeSharedInstance(Gateway::class);
     }

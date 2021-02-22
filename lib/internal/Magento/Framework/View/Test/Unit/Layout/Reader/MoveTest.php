@@ -22,16 +22,16 @@ class MoveTest extends \PHPUnit\Framework\TestCase
     protected $move;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var ScheduledStructure|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScheduledStructure|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scheduledStructureMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -98,10 +98,11 @@ class MoveTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testProcessInvalidData()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $invalidElement = new \Magento\Framework\View\Layout\Element('<move element="product" into="product.info"/>');
         $this->move->interpret($this->contextMock, $invalidElement, $invalidElement);
     }

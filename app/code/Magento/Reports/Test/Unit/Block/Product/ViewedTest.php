@@ -12,13 +12,13 @@ class ViewedTest extends \PHPUnit\Framework\TestCase
      */
     protected $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->block = $objectManager->getObject(\Magento\Reports\Block\Product\Viewed::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->block = null;
     }
@@ -28,7 +28,7 @@ class ViewedTest extends \PHPUnit\Framework\TestCase
         $productTags = ['catalog_product_1'];
 
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $product->expects($this->once())->method('getIdentities')->will($this->returnValue($productTags));
+        $product->expects($this->once())->method('getIdentities')->willReturn($productTags);
 
         $collection = new \ReflectionProperty(\Magento\Reports\Block\Product\Viewed::class, '_collection');
         $collection->setAccessible(true);

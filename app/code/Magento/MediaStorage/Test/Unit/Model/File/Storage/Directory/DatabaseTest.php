@@ -13,47 +13,47 @@ use Magento\MediaStorage\Model\ResourceModel\File\Storage\Directory\Database;
 class DatabaseTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\MediaStorage\Model\File\Storage\Directory\Database |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Model\File\Storage\Directory\Database |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryDatabase;
 
     /**
-     * @var \Magento\Framework\Model\Context |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Context |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\Registry |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registryMock;
 
     /**
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperStorageDatabase;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dateModelMock;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\Storage\Directory\Database |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Model\File\Storage\Directory\Database |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryMock;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\Storage\Directory\DatabaseFactory |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Model\File\Storage\Directory\DatabaseFactory |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var Database |\PHPUnit_Framework_MockObject_MockObject
+     * @var Database |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceDirectoryDatabaseMock;
 
@@ -70,7 +70,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup preconditions
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
         $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
@@ -93,8 +93,8 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($this->directoryMock)
+        )->willReturn(
+            $this->directoryMock
         );
 
         $this->configMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
@@ -105,11 +105,11 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
         )->with(
             \Magento\MediaStorage\Model\File\Storage::XML_PATH_STORAGE_MEDIA_DATABASE,
             'default'
-        )->will(
-            $this->returnValue($this->customConnectionName)
+        )->willReturn(
+            $this->customConnectionName
         );
 
-        $this->contextMock->expects($this->once())->method('getLogger')->will($this->returnValue($this->loggerMock));
+        $this->contextMock->expects($this->once())->method('getLogger')->willReturn($this->loggerMock);
 
         $this->directoryDatabase = new \Magento\MediaStorage\Model\File\Storage\Directory\Database(
             $this->contextMock,
@@ -130,7 +130,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
      */
     public function testImportDirectories()
     {
-        $this->directoryMock->expects($this->any())->method('getParentId')->will($this->returnValue(1));
+        $this->directoryMock->expects($this->any())->method('getParentId')->willReturn(1);
         $this->directoryMock->expects($this->any())->method('save');
 
         $this->directoryMock->expects(
@@ -154,7 +154,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
      */
     public function testImportDirectoriesFailureWithoutParent()
     {
-        $this->directoryMock->expects($this->any())->method('getParentId')->will($this->returnValue(null));
+        $this->directoryMock->expects($this->any())->method('getParentId')->willReturn(null);
 
         $this->loggerMock->expects($this->any())->method('critical');
 
@@ -166,7 +166,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
      */
     public function testImportDirectoriesFailureNotArray()
     {
-        $this->directoryMock->expects($this->never())->method('getParentId')->will($this->returnValue(null));
+        $this->directoryMock->expects($this->never())->method('getParentId')->willReturn(null);
 
         $this->directoryDatabase->importDirectories('not an array');
     }

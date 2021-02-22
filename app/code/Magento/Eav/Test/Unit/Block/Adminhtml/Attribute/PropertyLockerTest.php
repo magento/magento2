@@ -12,16 +12,16 @@ class PropertyLockerTest extends \PHPUnit\Framework\TestCase
     /** @var PropertyLocker */
     protected $object;
 
-    /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|\PHPUnit\Framework\MockObject\MockObject */
     protected $attributeMock;
 
-    /** @var \Magento\Framework\Data\Form|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Data\Form|\PHPUnit\Framework\MockObject\MockObject */
     protected $formMock;
 
-    /** @var \Magento\Eav\Model\Entity\Attribute\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Eav\Model\Entity\Attribute\Config|\PHPUnit\Framework\MockObject\MockObject */
     protected $attributeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->setMethods(['getId'])

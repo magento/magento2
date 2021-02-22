@@ -16,11 +16,11 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\DeploymentConfig
      */
     private $deploymentConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->object = new ConfigOptionsList();
         $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
@@ -29,7 +29,7 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
     public function testGetOptions()
     {
         $options = $this->object->getOptions();
-        $this->assertInternalType('array', $options);
+        $this->assertIsArray($options);
         foreach ($options as $option) {
             $this->assertInstanceOf(\Magento\Framework\Setup\Option\AbstractConfigOption::class, $option);
         }
@@ -50,7 +50,7 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $this->assertInternalType('array', $actualConfig);
+        $this->assertIsArray($actualConfig);
         /** @var \Magento\Framework\Config\Data\ConfigData $config */
         foreach ($actualConfig as $i => $config) {
             $this->assertInstanceOf(\Magento\Framework\Config\Data\ConfigData::class, $config);

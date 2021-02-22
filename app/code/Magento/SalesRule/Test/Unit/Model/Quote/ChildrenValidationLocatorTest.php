@@ -34,16 +34,16 @@ class ChildrenValidationLocatorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var QuoteItem|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuoteItem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteItemMock;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 

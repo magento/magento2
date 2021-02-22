@@ -11,7 +11,7 @@ use Magento\UrlRewrite\Model\UrlPersistInterface;
 class UrlRewriteBunchReplacerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var UrlPersistInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var UrlPersistInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $urlPersistMock;
 
@@ -20,9 +20,9 @@ class UrlRewriteBunchReplacerTest extends \PHPUnit\Framework\TestCase
      */
     private $urlRewriteBunchReplacer;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->urlPersistMock = $this->createMock(UrlPersistInterface::class);
+        $this->urlPersistMock = $this->getMockForAbstractClass(UrlPersistInterface::class);
         $this->urlRewriteBunchReplacer = new UrlRewriteBunchReplacer(
             $this->urlPersistMock
         );

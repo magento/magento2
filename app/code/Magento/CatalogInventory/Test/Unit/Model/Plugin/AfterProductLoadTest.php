@@ -15,21 +15,21 @@ class AfterProductLoadTest extends \PHPUnit\Framework\TestCase
     protected $plugin;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\Data\ProductInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductExtensionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\Data\ProductExtensionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productExtensionFactoryMock;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductExtensionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\Data\ProductExtensionInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productExtensionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $stockRegistryMock = $this->createMock(\Magento\CatalogInventory\Api\StockRegistryInterface::class);
         $this->productExtensionFactoryMock = $this->getMockBuilder(
@@ -69,7 +69,7 @@ class AfterProductLoadTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->productMock->expects(($this->once()))
             ->method('getId')
-            ->will($this->returnValue($productId));
+            ->willReturn($productId);
     }
 
     public function testAfterLoad()

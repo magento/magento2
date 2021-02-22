@@ -11,12 +11,12 @@ use Magento\Framework\App\Config\ConfigSourceInterface;
 class ConfigSourceAggregatedTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ConfigSourceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigSourceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sourceMock;
 
     /**
-     * @var ConfigSourceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigSourceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sourceMockTwo;
 
@@ -25,7 +25,7 @@ class ConfigSourceAggregatedTest extends \PHPUnit\Framework\TestCase
      */
     private $source;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->sourceMock = $this->getMockBuilder(ConfigSourceInterface::class)
             ->getMockForAbstractClass();

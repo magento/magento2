@@ -25,34 +25,34 @@ class RssTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderFactory;
 
     /**
-     * @var \Magento\Framework\App\Rss\UrlBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Rss\UrlBuilderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderInterface;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigInterface;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Signature
+     * @var \PHPUnit\Framework\MockObject\MockObject|Signature
      */
     private $signature;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $this->orderFactory = $this->createPartialMock(\Magento\Sales\Model\OrderFactory::class, ['create']);
@@ -80,12 +80,12 @@ class RssTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getId', 'getCustomerId', 'getIncrementId', 'load', '__wakeup', '__sleep'])
             ->disableOriginalConstructor()
             ->getMock();
-        $order->expects($this->once())->method('load')->will($this->returnSelf());
-        $order->expects($this->once())->method('getId')->will($this->returnValue(1));
-        $order->expects($this->once())->method('getCustomerId')->will($this->returnValue(1));
-        $order->expects($this->once())->method('getIncrementId')->will($this->returnValue('100000001'));
+        $order->expects($this->once())->method('load')->willReturnSelf();
+        $order->expects($this->once())->method('getId')->willReturn(1);
+        $order->expects($this->once())->method('getCustomerId')->willReturn(1);
+        $order->expects($this->once())->method('getIncrementId')->willReturn('100000001');
 
-        $this->orderFactory->expects($this->once())->method('create')->will($this->returnValue($order));
+        $this->orderFactory->expects($this->once())->method('create')->willReturn($order);
         $data = base64_encode(json_encode(['order_id' => 1, 'increment_id' => '100000001', 'customer_id' => 1]));
         $signature = '651932dfc862406b72628d95623bae5ea18242be757b3493b337942d61f834be';
         $this->signature->expects($this->once())->method('signData')->willReturn($signature);
@@ -112,7 +112,7 @@ class RssTest extends \PHPUnit\Framework\TestCase
     {
         $this->scopeConfigInterface->expects($this->once())->method('isSetFlag')
             ->with('rss/order/status', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertTrue($this->rss->isRssAllowed());
     }
 }

@@ -88,7 +88,7 @@ class ViewTest extends TestCase
      */
     private $productMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->abstractModelMock = $this->getMockBuilder(AbstractModel::class)

@@ -15,36 +15,36 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     private $requestBuilder;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\Search\Request\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $config;
 
     /**
-     * @var \Magento\Framework\Search\Request\Mapper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Mapper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMapper;
 
     /**
-     * @var \Magento\Framework\Search\Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request|\PHPUnit\Framework\MockObject\MockObject
      */
     private $request;
 
     /**
-     * @var \Magento\Framework\Search\Request\Binder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Binder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $binder;
 
     /**
-     * @var \Magento\Framework\Search\Request\Cleaner|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Cleaner|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cleaner;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 

@@ -21,7 +21,7 @@ class TaxRulesFixtureTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Fixtures\FixtureModel
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Fixtures\FixtureModel
      */
     private $fixtureModelMock;
 
@@ -72,7 +72,7 @@ class TaxRulesFixtureTest extends \PHPUnit\Framework\TestCase
 
         $this->taxRateRepositoryMock = $this->getMockBuilder(TaxRateRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->configWriterMock = $this->getMockBuilder(ConfigWriter::class)
             ->disableOriginalConstructor()
@@ -85,17 +85,17 @@ class TaxRulesFixtureTest extends \PHPUnit\Framework\TestCase
         $this->taxRuleRepositoryMock = $this->getMockBuilder(TaxRuleRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['save', 'get', 'delete', 'deleteById', 'getList'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->fixtureModelMock
             ->expects($this->exactly(2))
             ->method('getValue')
-            ->will($this->returnValueMap(
+            ->willReturnMap(
                 [
                     ['tax_mode', 'VAT'],
                     ['tax_rules', 2]
                 ]
-            ));
+            );
 
         $this->taxRateCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()

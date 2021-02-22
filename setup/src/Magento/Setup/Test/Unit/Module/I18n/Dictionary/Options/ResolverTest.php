@@ -25,11 +25,11 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
         $root = __DIR__ . '/_files/source';
         $componentRegistrar->expects($this->any())
             ->method('getPaths')
-            ->will(
-                $this->returnValueMap([
+            ->willReturnMap(
+                [
                     [ComponentRegistrar::MODULE, [$root . '/app/code/module1', $root . '/app/code/module2']],
                     [ComponentRegistrar::THEME, [$root . '/app/design']],
-                ])
+                ]
             );
         $directoryList = $this->createMock(\Magento\Framework\App\Filesystem\DirectoryList::class);
         $directoryList->expects($this->any())->method('getRoot')->willReturn('root');

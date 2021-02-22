@@ -19,7 +19,7 @@ class PathPatternTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->pathPatternHelper = $this->objectManagerHelper->getObject(

@@ -13,11 +13,11 @@ class StoreManagementTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Store\Model\ResourceModel\Store\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\ResourceModel\Store\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storesFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storesFactoryMock = $this->createPartialMock(
             \Magento\Store\Model\ResourceModel\Store\CollectionFactory::class,

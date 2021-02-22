@@ -17,7 +17,7 @@ class InputtypeTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $this->_helper->getObject(\Magento\Catalog\Model\System\Config\Source\Inputtype::class);
@@ -25,7 +25,7 @@ class InputtypeTest extends \PHPUnit\Framework\TestCase
 
     public function testToOptionArrayIsArray()
     {
-        $this->assertInternalType('array', $this->_model->toOptionArray());
+        $this->assertIsArray($this->_model->toOptionArray());
     }
 
     public function testToOptionArrayValid()

@@ -15,26 +15,26 @@ class CustomerAuthenticatedEventObserverTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $observerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
         $this->observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
@@ -53,17 +53,17 @@ class CustomerAuthenticatedEventObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('setCustomerId')
             ->with(null)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->customerSessionMock
             ->expects($this->once())
             ->method('setCustomerGroupId')
             ->with(null)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->requestMock
             ->expects($this->once())
             ->method('getParam')
             ->with('context')
-            ->will($this->returnValue('not_checkout'));
+            ->willReturn('not_checkout');
         $this->quoteManagerMock->expects($this->once())->method('expire');
         $this->quoteManagerMock->expects($this->never())->method('setGuest');
         $this->model->execute($this->observerMock);
@@ -75,17 +75,17 @@ class CustomerAuthenticatedEventObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('setCustomerId')
             ->with(null)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->customerSessionMock
             ->expects($this->once())
             ->method('setCustomerGroupId')
             ->with(null)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->requestMock
             ->expects($this->once())
             ->method('getParam')
             ->with('context')
-            ->will($this->returnValue('checkout'));
+            ->willReturn('checkout');
         $this->quoteManagerMock->expects($this->never())->method('expire');
         $this->quoteManagerMock->expects($this->once())->method('setGuest');
         $this->model->execute($this->observerMock);

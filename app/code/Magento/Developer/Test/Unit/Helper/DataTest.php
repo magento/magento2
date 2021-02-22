@@ -13,21 +13,21 @@ class DataTest extends \PHPUnit\Framework\TestCase
     protected $helper;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $remoteAddressMock;
 
     /**
-     * @var \Magento\Framework\HTTP\Header | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\HTTP\Header | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $httpHeaderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $className = \Magento\Developer\Helper\Data::class;
@@ -55,15 +55,15 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 \Magento\Developer\Helper\Data::XML_PATH_DEV_ALLOW_IPS,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
-            )->will($this->returnValue($allowedIps));
+            )->willReturn($allowedIps);
 
         $this->remoteAddressMock->expects($this->once())
             ->method('getRemoteAddress')
-            ->will($this->returnValue('remoteAddress'));
+            ->willReturn('remoteAddress');
 
         $this->httpHeaderMock->expects($this->exactly($callNum))
             ->method('getHttpHost')
-            ->will($this->returnValue('httpHost'));
+            ->willReturn('httpHost');
 
         $this->assertEquals($expected, $this->helper->isDevAllowed($storeId));
     }

@@ -17,17 +17,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class DatabaseTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResourceConnection
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ResourceConnection
      */
     private $resource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Adapter\AdapterInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DB\Adapter\AdapterInterface
      */
     private $connection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Zend_Db_Statement_Interface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Zend_Db_Statement_Interface
      */
     private $statement;
 
@@ -42,14 +42,14 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     private $database;
 
     /**
-     * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $deploymentConfig;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
@@ -121,10 +121,11 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     /**
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      * @throws \Zend_Db_Statement_Exception
-     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
      */
     public function testlockWithAlreadyAcquiredLockInSameSession()
     {
+        $this->expectException(\Magento\Framework\Exception\AlreadyExistsException::class);
+
         $this->deploymentConfig
             ->method('isDbAvailable')
             ->with()

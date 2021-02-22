@@ -21,14 +21,14 @@ class UserTest extends \PHPUnit\Framework\TestCase
     /** @var User */
     private $model;
 
-    /** @var UserHelper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UserHelper|\PHPUnit\Framework\MockObject\MockObject */
     private $userDataMock;
 
     /**
      * Set required values
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->userDataMock = $this->getMockBuilder(UserHelper::class)
             ->disableOriginalConstructor()
@@ -80,9 +80,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
             $this->model->changeResetPasswordLinkToken($token)
         );
         $this->assertEquals($token, $this->model->getRpToken());
-        $this->assertInternalType(
-            'string',
-            $this->model->getRpTokenCreatedAt()
+        $this->assertIsString($this->model->getRpTokenCreatedAt()
         );
     }
 

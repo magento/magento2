@@ -18,7 +18,7 @@ class QuoteIdMaskTest extends \PHPUnit\Framework\TestCase
      */
     protected $quoteIdMask;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->quoteIdMask = $helper->getObject(

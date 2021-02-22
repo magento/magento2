@@ -13,7 +13,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class LoaderTest
@@ -40,7 +40,7 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
      */
     private $loader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->optionValueFactory = $this->getMockBuilder(OptionValueInterfaceFactory::class)
             ->disableOriginalConstructor()

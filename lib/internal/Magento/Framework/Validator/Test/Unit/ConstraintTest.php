@@ -17,14 +17,14 @@ class ConstraintTest extends \PHPUnit\Framework\TestCase
     protected $_constraint;
 
     /**
-     * @var \Magento\Framework\Validator\ValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Validator\ValidatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_validatorMock;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_validatorMock = $this->getMockBuilder(
             \Magento\Framework\Validator\AbstractValidator::class
@@ -62,8 +62,8 @@ class ConstraintTest extends \PHPUnit\Framework\TestCase
             'isValid'
         )->with(
             $value
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
 
         if ($expectedResult) {
@@ -73,8 +73,8 @@ class ConstraintTest extends \PHPUnit\Framework\TestCase
                 $this->once()
             )->method(
                 'getMessages'
-            )->will(
-                $this->returnValue($expectedMessages)
+            )->willReturn(
+                $expectedMessages
             );
         }
 

@@ -7,7 +7,7 @@ namespace Magento\Authorizenet\Test\Unit\Model\Directpost;
 
 use Magento\Authorizenet\Model\Directpost\Request;
 use Magento\Framework\Intl\DateTimeFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class RequestTest extends \PHPUnit\Framework\TestCase
 {
@@ -21,7 +21,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
      */
     private $requestModel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dateTimeFactory = $this->getMockBuilder(DateTimeFactory::class)
             ->disableOriginalConstructor()

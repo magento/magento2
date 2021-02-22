@@ -62,7 +62,7 @@ class ListActionTest extends \PHPUnit\Framework\TestCase
      * Set up test
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createPartialMock(\Magento\Backend\App\Action\Context::class, [
                 'getAuthorization',
@@ -128,7 +128,7 @@ class ListActionTest extends \PHPUnit\Framework\TestCase
 
         $this->contextMock->expects($this->any())->method("getRequest")->willReturn($this->request);
         $this->contextMock->expects($this->any())->method("getResponse")->willReturn($this->response);
-        $this->contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->view));
+        $this->contextMock->expects($this->any())->method('getView')->willReturn($this->view);
 
         $this->page = $this->createPartialMock(\Magento\Framework\View\Result\Page::class, ['getConfig']);
         $this->config = $this->createPartialMock(\Magento\Framework\View\Result\Page::class, ['getTitle']);
@@ -136,11 +136,11 @@ class ListActionTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['prepend'])
             ->getMock();
 
-        $this->block->expects($this->any())->method('setActive')->will($this->returnValue(1));
-        $this->view->expects($this->any())->method('getLayout')->will($this->returnValue($this->layout));
-        $this->layout->expects($this->any())->method('getBlock')->with('menu')->will($this->returnValue($this->block));
-        $this->block->expects($this->any())->method('getMenuModel')->will($this->returnValue($this->menu));
-        $this->menu->expects($this->any())->method('getParentItems')->will($this->returnValue($this->items));
+        $this->block->expects($this->any())->method('setActive')->willReturn(1);
+        $this->view->expects($this->any())->method('getLayout')->willReturn($this->layout);
+        $this->layout->expects($this->any())->method('getBlock')->with('menu')->willReturn($this->block);
+        $this->block->expects($this->any())->method('getMenuModel')->willReturn($this->menu);
+        $this->menu->expects($this->any())->method('getParentItems')->willReturn($this->items);
 
         $this->object = new \Magento\Indexer\Controller\Adminhtml\Indexer\ListAction($this->contextMock);
     }
@@ -149,27 +149,27 @@ class ListActionTest extends \PHPUnit\Framework\TestCase
     {
         $this->view->expects($this->any())
             ->method('loadLayout')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->view->expects($this->any())
             ->method('getPage')
-            ->will($this->returnValue($this->page));
+            ->willReturn($this->page);
 
         $this->page->expects($this->any())
             ->method('getConfig')
-            ->will($this->returnValue($this->config));
+            ->willReturn($this->config);
 
         $this->config->expects($this->any())
             ->method('getTitle')
-            ->will($this->returnValue($this->title));
+            ->willReturn($this->title);
 
         $this->title->expects($this->any())
             ->method('prepend')->with(__('Index Management'))
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->view->expects($this->any())
             ->method('renderLayout')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $result = $this->object->execute();
         $this->assertNull($result);

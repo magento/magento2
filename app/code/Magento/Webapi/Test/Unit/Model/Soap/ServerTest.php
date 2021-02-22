@@ -24,16 +24,16 @@ class ServerTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Webapi\Model\Soap\ServerFactory */
     protected $_soapServerFactory;
 
-    /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit\Framework\MockObject\MockObject */
     protected $_typeProcessor;
 
-    /** @var \Magento\Webapi\Model\Soap\Wsdl\Generator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Webapi\Model\Soap\Wsdl\Generator|\PHPUnit\Framework\MockObject\MockObject */
     protected $wsdlGenerator;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_scopeConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_storeManagerMock = $this->getMockBuilder(
             \Magento\Store\Model\StoreManager::class
@@ -46,22 +46,22 @@ class ServerTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getBaseUrl'
-        )->will(
-            $this->returnValue('http://magento.com/')
+        )->willReturn(
+            'http://magento.com/'
         );
-        $this->_storeMock->expects($this->any())->method('getCode')->will($this->returnValue('storeCode'));
+        $this->_storeMock->expects($this->any())->method('getCode')->willReturn('storeCode');
 
         $this->_storeManagerMock->expects(
             $this->any()
         )->method(
             'getStore'
-        )->will(
-            $this->returnValue($this->_storeMock)
+        )->willReturn(
+            $this->_storeMock
         );
 
         $areaListMock = $this->createMock(\Magento\Framework\App\AreaList::class);
         $configScopeMock = $this->createMock(\Magento\Framework\Config\ScopeInterface::class);
-        $areaListMock->expects($this->any())->method('getFrontName')->will($this->returnValue('soap'));
+        $areaListMock->expects($this->any())->method('getFrontName')->willReturn('soap');
 
         $this->_requestMock = $this->getMockBuilder(
             \Magento\Framework\Webapi\Request::class
@@ -90,7 +90,7 @@ class ServerTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_soapServer);
         unset($this->_requestMock);
@@ -106,7 +106,7 @@ class ServerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetApiCharset()
     {
-        $this->_scopeConfig->expects($this->once())->method('getValue')->will($this->returnValue('Windows-1251'));
+        $this->_scopeConfig->expects($this->once())->method('getValue')->willReturn('Windows-1251');
         $this->assertEquals(
             'Windows-1251',
             $this->_soapServer->getApiCharset(),
@@ -119,7 +119,7 @@ class ServerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetApiCharsetDefaultEncoding()
     {
-        $this->_scopeConfig->expects($this->once())->method('getValue')->will($this->returnValue(null));
+        $this->_scopeConfig->expects($this->once())->method('getValue')->willReturn(null);
         $this->assertEquals(
             \Magento\Webapi\Model\Soap\Server::SOAP_DEFAULT_ENCODING,
             $this->_soapServer->getApiCharset(),
@@ -144,7 +144,7 @@ class ServerTest extends \PHPUnit\Framework\TestCase
     {
         $param = "testModule1AllSoapAndRest:V1,testModule2AllSoapNoRest:V1";
         $serviceKey = \Magento\Webapi\Model\Soap\Server::REQUEST_PARAM_SERVICES;
-        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue($param));
+        $this->_requestMock->expects($this->any())->method('getParam')->willReturn($param);
         $expectedResult = "http://magento.com/soap/storeCode?{$serviceKey}={$param}&wsdl=1";
         $actualResult = $this->_soapServer->generateUri(true);
         $this->assertEquals($expectedResult, urldecode($actualResult), 'URI (with WSDL param) generated is invalid.');
@@ -157,7 +157,7 @@ class ServerTest extends \PHPUnit\Framework\TestCase
     {
         $param = "testModule1AllSoapAndRest:V1,testModule2AllSoapNoRest:V1";
         $serviceKey = \Magento\Webapi\Model\Soap\Server::REQUEST_PARAM_SERVICES;
-        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue($param));
+        $this->_requestMock->expects($this->any())->method('getParam')->willReturn($param);
         $expectedResult = "http://magento.com/soap/storeCode?{$serviceKey}={$param}";
         $actualResult = $this->_soapServer->generateUri(false);
         $this->assertEquals(

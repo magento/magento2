@@ -11,31 +11,31 @@ use Magento\Framework\Phrase;
 
 class RegistrationTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Theme\Model\Theme\Registration|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Model\Theme\Registration|\PHPUnit\Framework\MockObject\MockObject */
     protected $themeRegistration;
 
-    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $logger;
 
-    /** @var \Magento\Backend\App\AbstractAction|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\App\AbstractAction|\PHPUnit\Framework\MockObject\MockObject */
     protected $abstractAction;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $request;
 
-    /** @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject */
     protected $appState;
 
-    /** @var \Magento\Theme\Model\Theme\Collection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Model\Theme\Collection|\PHPUnit\Framework\MockObject\MockObject */
     protected $themeCollection;
 
-    /** @var \Magento\Theme\Model\ResourceModel\Theme\Collection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Model\ResourceModel\Theme\Collection|\PHPUnit\Framework\MockObject\MockObject */
     protected $themeLoader;
 
     /** @var Registration */
     protected $plugin;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->themeRegistration = $this->createMock(\Magento\Theme\Model\Theme\Registration::class);
         $this->logger = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class, [], '', false);

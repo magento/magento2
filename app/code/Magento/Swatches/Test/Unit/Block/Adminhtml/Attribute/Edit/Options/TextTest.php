@@ -16,14 +16,14 @@ use Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options\Text;
 class TextTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Text
+     * @var \PHPUnit\Framework\MockObject\MockObject|Text
      */
     private $model;
 
     /**
      * Setup environment for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = $this->getMockBuilder(Text::class)
             ->disableOriginalConstructor()

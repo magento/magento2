@@ -18,26 +18,26 @@ use Magento\Ui\Component\Wysiwyg\ConfigInterface;
 class WysiwygTest extends AbstractElementTest
 {
     /**
-     * @var FormFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var FormFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $formFactoryMock;
 
     /**
-     * @var Form|\PHPUnit_Framework_MockObject_MockObject
+     * @var Form|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $formMock;
 
     /**
-     * @var Editor|\PHPUnit_Framework_MockObject_MockObject
+     * @var Editor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $editorMock;
 
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $wysiwygConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->formFactoryMock = $this->getMockBuilder(FormFactory::class)

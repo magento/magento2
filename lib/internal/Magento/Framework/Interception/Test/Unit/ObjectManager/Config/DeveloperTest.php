@@ -15,11 +15,11 @@ class DeveloperTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Interception\ConfigInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Interception\ConfigInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $interceptionConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->interceptionConfig = $this->createMock(\Magento\Framework\Interception\ConfigInterface::class);
         $this->model = new Developer();
@@ -27,7 +27,7 @@ class DeveloperTest extends \PHPUnit\Framework\TestCase
 
     public function testGetInstanceTypeReturnsInterceptorClass()
     {
-        $this->interceptionConfig->expects($this->once())->method('hasPlugins')->will($this->returnValue(true));
+        $this->interceptionConfig->expects($this->once())->method('hasPlugins')->willReturn(true);
         $this->model->setInterceptionConfig($this->interceptionConfig);
 
         $this->assertEquals('SomeClass\Interceptor', $this->model->getInstanceType('SomeClass'));
@@ -47,7 +47,7 @@ class DeveloperTest extends \PHPUnit\Framework\TestCase
 
     public function testGetOriginalInstanceTypeReturnsInterceptedClass()
     {
-        $this->interceptionConfig->expects($this->once())->method('hasPlugins')->will($this->returnValue(true));
+        $this->interceptionConfig->expects($this->once())->method('hasPlugins')->willReturn(true);
         $this->model->setInterceptionConfig($this->interceptionConfig);
 
         $this->assertEquals('SomeClass\Interceptor', $this->model->getInstanceType('SomeClass'));

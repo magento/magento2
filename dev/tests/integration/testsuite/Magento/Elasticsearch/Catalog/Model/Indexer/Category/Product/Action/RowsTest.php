@@ -57,7 +57,7 @@ class RowsTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->rowsIndexer = $this->objectManager->get(Rows::class);
@@ -68,7 +68,7 @@ class RowsTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function assertPreConditions()
+    protected function assertPreConditions(): void
     {
         $currentEngine = $this->objectManager->get(EngineResolverInterface::class)->getCurrentSearchEngine();
         $this->assertEquals($this->getInstalledSearchEngine(), $currentEngine);
@@ -137,8 +137,8 @@ class RowsTest extends \PHPUnit\Framework\TestCase
         $secondProductId = $productRepository->get('simpleC')->getId();
 
         $this->assertCount(2, $productIds);
-        $this->assertContains($secondProductId, $productIds);
-        $this->assertContains($firstProductId, $productIds);
+        $this->assertContains($secondProductId,$productIds);
+        $this->assertContains($firstProductId,$productIds);
     }
 
     /**

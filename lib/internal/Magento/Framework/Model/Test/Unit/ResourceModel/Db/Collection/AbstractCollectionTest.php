@@ -23,28 +23,28 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\Data\Collection\EntityFactoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Data\Collection\EntityFactoryInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $entityFactoryMock;
 
-    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $loggerMock;
 
-    /** @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $fetchStrategyMock;
 
-    /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $managerMock;
 
-    /** @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit\Framework\MockObject\MockObject  */
     protected $resourceMock;
 
-    /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit\Framework\MockObject\MockObject */
     protected $connectionMock;
 
-    /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject  */
     protected $selectMock;
 
-    /** @var \Magento\Framework\App\ObjectManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ObjectManager|\PHPUnit\Framework\MockObject\MockObject */
     protected $objectManagerMock;
 
     /**
@@ -52,7 +52,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManagerBackup;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->entityFactoryMock = $this->createMock(\Magento\Framework\Data\Collection\EntityFactoryInterface::class);
         $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
@@ -66,7 +66,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock
             ->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
 
         $this->selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->setMethods(['getPart', 'setPart', 'from', 'columns'])
@@ -76,7 +76,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->connectionMock
             ->expects($this->any())
             ->method('select')
-            ->will($this->returnValue($this->selectMock));
+            ->willReturn($this->selectMock);
 
         $this->objectManagerMock = $this->createMock(\Magento\Framework\App\ObjectManager::class);
 
@@ -86,10 +86,10 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->uut = $this->getUut();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
-        /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManagerMock*/
+        /** @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject $objectManagerMock*/
         $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
@@ -118,17 +118,17 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock
             ->expects($this->any())
             ->method('getMainTable')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->resourceMock
             ->expects($this->any())
             ->method('getTable')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->uut = $this->getUut();
 
         $this->assertTrue($this->uut->setMainTable('') instanceof Uut);
-        $this->assertEquals(null, $this->uut->getMainTable());
+        $this->assertNull($this->uut->getMainTable());
     }
 
     public function testSetMainTableFirst()
@@ -136,7 +136,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock
             ->expects($this->any())
             ->method('getTable')
-            ->will($this->returnValue(self::TABLE_NAME));
+            ->willReturn(self::TABLE_NAME);
 
         $this->selectMock->expects($this->never())->method('getPart');
 
@@ -149,14 +149,14 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->connectionMock
             ->expects($this->any())
             ->method('select')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->uut = $this->getUut();
 
         $this->resourceMock
             ->expects($this->any())
             ->method('getTable')
-            ->will($this->returnValue(self::TABLE_NAME));
+            ->willReturn(self::TABLE_NAME);
 
         $this->uut->setMainTable('');
         $this->selectMock->expects($this->never())->method('getPart');
@@ -172,14 +172,14 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->selectMock
             ->expects($this->atLeastOnce())
             ->method('getPart')
-            ->will($this->returnValue(['main_table' => []]));
+            ->willReturn(['main_table' => []]);
 
         $this->selectMock->expects($this->atLeastOnce())->method('setPart');
 
         $this->resourceMock
             ->expects($this->any())
             ->method('getTable')
-            ->will($this->returnValueMap([['', self::TABLE_NAME], [$anotherTableName, $anotherTableName]]));
+            ->willReturnMap([['', self::TABLE_NAME], [$anotherTableName, $anotherTableName]]);
 
         $this->uut = $this->getUut();
 
@@ -205,14 +205,14 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock
             ->expects($this->any())
             ->method('getIdFieldName')
-            ->will($this->returnValue($idFieldNameRet));
+            ->willReturn($idFieldNameRet);
 
         $this->uut->removeAllFieldsFromSelect();
 
         $this->selectMock
             ->expects($this->any())
             ->method('getPart')
-            ->will($this->returnValue($getPartRet));
+            ->willReturn($getPartRet);
 
         $this->selectMock
             ->expects($this->once())
@@ -318,7 +318,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock
             ->expects($this->any())
             ->method('getIdFieldName')
-            ->will($this->returnValue('id_field'));
+            ->willReturn('id_field');
 
         $this->uut->setFieldsToSelect(['alias' => 'field']);
         $this->assertTrue($this->uut->removeAllFieldsFromSelect() instanceof Uut);
@@ -333,11 +333,12 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Magento\Framework\DB\Select does not extend \Magento\Framework\DataObject
      */
     public function testSetModelInvalidType()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Magento\\Framework\\DB\\Select does not extend \\Magento\\Framework\\DataObject');
+
         $this->uut->setModel(Select::class);
     }
 
@@ -376,7 +377,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock
             ->expects($this->any())
             ->method('getTable')
-            ->will($this->returnValue(self::TABLE_NAME));
+            ->willReturn(self::TABLE_NAME);
 
         $this->assertEquals(self::TABLE_NAME, $this->uut->getTable(''));
     }
@@ -419,7 +420,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
     public function testSave()
     {
         for ($i = 0; $i < 3; $i++) {
-            /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject $item */
+            /** @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject $item */
             $item = $this->createPartialMock(\Magento\Framework\DataObject::class, ['save']);
             $item->expects($this->once())->method('save');
             $this->uut->addItem($item);

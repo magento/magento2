@@ -47,7 +47,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -86,7 +86,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
         $this->assertRedirect($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/new/'));
         $this->assertSessionMessages(
-            $this->contains('You saved the product.'),
+            $this->containsEqual('You saved the product.'),
             MessageInterface::TYPE_SUCCESS
         );
     }
@@ -330,7 +330,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product/save/id/' . $postData['id']);
         $this->assertSessionMessages(
-            $this->contains('You saved the product.'),
+            $this->containsEqual('You saved the product.'),
             MessageInterface::TYPE_SUCCESS
         );
     }
@@ -594,11 +594,11 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
         $this->assertSessionMessages(
-            $this->contains('You saved the product.'),
+            $this->containsEqual('You saved the product.'),
             MessageInterface::TYPE_SUCCESS
         );
         $this->assertSessionMessages(
-            $this->contains('You duplicated the product.'),
+            $this->containsEqual('You duplicated the product.'),
             MessageInterface::TYPE_SUCCESS
         );
     }

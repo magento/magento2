@@ -9,17 +9,17 @@ namespace Magento\Eav\Test\Unit\Model\ResourceModel;
 class AttributeLoaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Eav\Api\AttributeRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Api\AttributeRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeRepositoryMock;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataPoolMock;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $searchCriteriaBuilderMock;
 
@@ -28,7 +28,7 @@ class AttributeLoaderTest extends \PHPUnit\Framework\TestCase
      */
     private $attributeLoader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attributeRepositoryMock = $this->createMock(\Magento\Eav\Api\AttributeRepositoryInterface::class);
         $this->metadataPoolMock = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)

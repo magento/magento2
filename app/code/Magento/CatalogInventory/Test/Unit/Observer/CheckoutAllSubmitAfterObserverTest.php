@@ -15,26 +15,26 @@ class CheckoutAllSubmitAfterObserverTest extends \PHPUnit\Framework\TestCase
     protected $observer;
 
     /**
-     * @var \Magento\CatalogInventory\Observer\SubtractQuoteInventoryObserver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Observer\SubtractQuoteInventoryObserver|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $subtractQuoteInventoryObserver;
 
     /**
-     * @var \Magento\CatalogInventory\Observer\ReindexQuoteInventoryObserver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Observer\ReindexQuoteInventoryObserver|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $reindexQuoteInventoryObserver;
 
     /**
-     * @var \Magento\Framework\Event|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $event;
 
     /**
-     * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventObserver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subtractQuoteInventoryObserver = $this->createMock(
             \Magento\CatalogInventory\Observer\SubtractQuoteInventoryObserver::class
@@ -56,7 +56,7 @@ class CheckoutAllSubmitAfterObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->eventObserver->expects($this->atLeastOnce())
             ->method('getEvent')
-            ->will($this->returnValue($this->event));
+            ->willReturn($this->event);
 
         $this->observer = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
             \Magento\CatalogInventory\Observer\CheckoutAllSubmitAfterObserver::class,
@@ -72,11 +72,11 @@ class CheckoutAllSubmitAfterObserverTest extends \PHPUnit\Framework\TestCase
         $quote = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['getInventoryProcessed']);
         $quote->expects($this->once())
             ->method('getInventoryProcessed')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->event->expects($this->once())
             ->method('getQuote')
-            ->will($this->returnValue($quote));
+            ->willReturn($quote);
 
         $this->subtractQuoteInventoryObserver->expects($this->once())
             ->method('execute')

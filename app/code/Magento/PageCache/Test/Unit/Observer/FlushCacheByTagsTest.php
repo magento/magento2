@@ -12,22 +12,22 @@ class FlushCacheByTagsTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\PageCache\Observer\FlushCacheByTags */
     protected $_model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\PageCache\Model\Config */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\PageCache\Model\Config */
     protected $_configMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\PageCache\Cache */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\PageCache\Cache */
     protected $_cacheMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\PageCache\Model\Cache\Type */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject|\Magento\PageCache\Model\Cache\Type */
     private $fullPageCacheMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Cache\Tag\Resolver */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Cache\Tag\Resolver */
     private $tagResolver;
 
     /**
      * Set up all mocks and data for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_configMock = $this->createPartialMock(\Magento\PageCache\Model\Config::class, ['getType', 'isEnabled']);
@@ -56,7 +56,7 @@ class FlushCacheByTagsTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecute($cacheState)
     {
-        $this->_configMock->expects($this->any())->method('isEnabled')->will($this->returnValue($cacheState));
+        $this->_configMock->expects($this->any())->method('isEnabled')->willReturn($cacheState);
         $observerObject = $this->createMock(\Magento\Framework\Event\Observer::class);
         $observedObject = $this->createMock(\Magento\Store\Model\Store::class);
 
@@ -65,12 +65,12 @@ class FlushCacheByTagsTest extends \PHPUnit\Framework\TestCase
             $expectedTags = ['cache_1', 'cache_group'];
 
             $eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getObject']);
-            $eventMock->expects($this->once())->method('getObject')->will($this->returnValue($observedObject));
-            $observerObject->expects($this->once())->method('getEvent')->will($this->returnValue($eventMock));
+            $eventMock->expects($this->once())->method('getObject')->willReturn($observedObject);
+            $observerObject->expects($this->once())->method('getEvent')->willReturn($eventMock);
             $this->_configMock->expects($this->once())
                 ->method('getType')
                 ->willReturn(\Magento\PageCache\Model\Config::BUILT_IN);
-            $this->tagResolver->expects($this->once())->method('getTags')->will($this->returnValue($tags));
+            $this->tagResolver->expects($this->once())->method('getTags')->willReturn($tags);
 
             $this->fullPageCacheMock->expects($this->once())
                 ->method('clean')
@@ -94,23 +94,23 @@ class FlushCacheByTagsTest extends \PHPUnit\Framework\TestCase
 
     public function testExecuteWithEmptyTags()
     {
-        $this->_configMock->expects($this->any())->method('isEnabled')->will($this->returnValue(true));
+        $this->_configMock->expects($this->any())->method('isEnabled')->willReturn(true);
         $observerObject = $this->createMock(\Magento\Framework\Event\Observer::class);
         $observedObject = $this->createMock(\Magento\Store\Model\Store::class);
 
         $tags = [];
 
         $eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getObject']);
-        $eventMock->expects($this->once())->method('getObject')->will($this->returnValue($observedObject));
-        $observerObject->expects($this->once())->method('getEvent')->will($this->returnValue($eventMock));
+        $eventMock->expects($this->once())->method('getObject')->willReturn($observedObject);
+        $observerObject->expects($this->once())->method('getEvent')->willReturn($eventMock);
         $this->_configMock->expects(
             $this->once()
         )->method(
             'getType'
-        )->will(
-            $this->returnValue(\Magento\PageCache\Model\Config::BUILT_IN)
+        )->willReturn(
+            \Magento\PageCache\Model\Config::BUILT_IN
         );
-        $this->tagResolver->expects($this->once())->method('getTags')->will($this->returnValue($tags));
+        $this->tagResolver->expects($this->once())->method('getTags')->willReturn($tags);
 
         $this->fullPageCacheMock->expects($this->never())->method('clean');
 

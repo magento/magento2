@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ConfigurablePriceResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var LowestPriceOptionsProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LowestPriceOptionsProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $lowestPriceOptionsProvider;
 
@@ -21,16 +21,16 @@ class ConfigurablePriceResolverTest extends \PHPUnit\Framework\TestCase
     protected $resolver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\ConfigurableProduct\Model\Product\Type\Configurable
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\ConfigurableProduct\Model\Product\Type\Configurable
      */
     protected $configurable;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface
      */
     protected $priceResolver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $className = \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class;
         $this->configurable = $this->createPartialMock($className, ['getUsedProducts']);
@@ -38,7 +38,7 @@ class ConfigurablePriceResolverTest extends \PHPUnit\Framework\TestCase
         $className = \Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface::class;
         $this->priceResolver = $this->getMockForAbstractClass($className, [], '', false, true, true, ['resolvePrice']);
 
-        $this->lowestPriceOptionsProvider = $this->createMock(LowestPriceOptionsProviderInterface::class);
+        $this->lowestPriceOptionsProvider = $this->getMockForAbstractClass(LowestPriceOptionsProviderInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->resolver = $objectManager->getObject(

@@ -35,7 +35,7 @@ class ProxyDeferredFactoryTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->factory = Bootstrap::getObjectManager()->get(ProxyDeferredFactory::class);
         $this->callbackDeferredFactory = Bootstrap::getObjectManager()->get(CallbackDeferredFactory::class);
@@ -126,12 +126,11 @@ class ProxyDeferredFactoryTest extends TestCase
 
     /**
      * Test with deferred value having different type.
-     *
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Wrong instance returned by deferred
-     */
+     **/
     public function testCreateWrongValue(): void
     {
+        $this->expectExceptionMessage("Wrong instance returned by deferred");
+        $this->expectException(\RuntimeException::class);
         $callback = function () {
             return new class {
                 public function getValue()

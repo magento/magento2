@@ -11,26 +11,26 @@ use Magento\Framework\DataObject;
 class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_storeManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_eventManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_escaper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_storeManager = $this->getMockBuilder(
@@ -56,10 +56,11 @@ class FormTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testGetMethodException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $method = new \Magento\Framework\DataObject([]);
         $this->_object->setData('method', $method);
         $this->_object->getMethod();
@@ -70,7 +71,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $method = $this->createMock(\Magento\Payment\Model\MethodInterface::class);
         $method->expects($this->once())
             ->method('getCode')
-            ->will($this->returnValue('method_code'));
+            ->willReturn('method_code');
         $this->_object->setData('method', $method);
         $this->assertEquals('method_code', $this->_object->getMethodCode());
     }
@@ -87,13 +88,13 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $methodInstance->expects($this->any())
             ->method('getData')
             ->with($field)
-            ->will($this->returnValue($value));
+            ->willReturn($value);
         $method = $this->getMockBuilder(
             \Magento\Payment\Model\MethodInterface::class
         )->getMockForAbstractClass();
         $method->expects($this->any())
             ->method('getInfoInstance')
-            ->will($this->returnValue($methodInstance));
+            ->willReturn($methodInstance);
         $this->_object->setData('method', $method);
         $this->assertEquals($expected, $this->_object->getInfoData($field));
     }

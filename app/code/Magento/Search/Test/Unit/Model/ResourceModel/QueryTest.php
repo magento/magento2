@@ -15,11 +15,11 @@ class QueryTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $adapter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -49,7 +49,7 @@ class QueryTest extends \PHPUnit\Framework\TestCase
 
     public function testSaveIncrementalPopularity()
     {
-        /** @var \Magento\Search\Model\Query|\PHPUnit_Framework_MockObject_MockObject $model */
+        /** @var \Magento\Search\Model\Query|\PHPUnit\Framework\MockObject\MockObject $model */
         $model = $this->getMockBuilder(\Magento\Search\Model\Query::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -68,7 +68,7 @@ class QueryTest extends \PHPUnit\Framework\TestCase
 
     public function testSaveNumResults()
     {
-        /** @var \Magento\Search\Model\Query|\PHPUnit_Framework_MockObject_MockObject $model */
+        /** @var \Magento\Search\Model\Query|\PHPUnit\Framework\MockObject\MockObject $model */
         $model = $this->getMockBuilder(\Magento\Search\Model\Query::class)
             ->setMethods(['getNumResults', 'getStoreId', 'getQueryText'])
             ->disableOriginalConstructor()

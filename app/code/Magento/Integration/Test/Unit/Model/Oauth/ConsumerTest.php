@@ -21,12 +21,12 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
     protected $consumerModel;
 
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registryMock;
 
@@ -46,17 +46,17 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
     protected $urlValidator;
 
     /**
-     * @var \Magento\Integration\Helper\Oauth\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Integration\Helper\Oauth\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $oauthDataMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\Data\Collection\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\AbstractDb|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceCollectionMock;
 
@@ -65,7 +65,7 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
      */
     protected $validDataArray;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createPartialMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher']);
         $eventManagerMock = $this->getMockForAbstractClass(
@@ -79,7 +79,7 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
         );
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
-            ->will($this->returnValue($eventManagerMock));
+            ->willReturn($eventManagerMock);
 
         $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
 
@@ -93,7 +93,7 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
         );
         $this->oauthDataMock->expects($this->any())
             ->method('getConsumerExpirationPeriod')
-            ->will($this->returnValue(\Magento\Integration\Helper\Oauth\Data::CONSUMER_EXPIRATION_PERIOD_DEFAULT));
+            ->willReturn(\Magento\Integration\Helper\Oauth\Data::CONSUMER_EXPIRATION_PERIOD_DEFAULT);
 
         $this->resourceMock = $this->createPartialMock(
             \Magento\Integration\Model\ResourceModel\Oauth\Consumer::class,
@@ -135,55 +135,60 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid Callback URL
      */
     public function testValidateInvalidData()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Invalid Callback URL');
+
         $this->validDataArray['callback_url'] = 'invalid';
         $this->consumerModel->setData($this->validDataArray);
         $this->consumerModel->validate();
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid Callback URL
      */
     public function testValidateInvalidCallback()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Invalid Callback URL');
+
         $this->validDataArray['callback_url'] = 'invalid';
         $this->consumerModel->setData($this->validDataArray);
         $this->consumerModel->validate();
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid Rejected Callback URL
      */
     public function testValidateInvalidRejectedCallback()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Invalid Rejected Callback URL');
+
         $this->validDataArray['rejected_callback_url'] = 'invalid';
         $this->consumerModel->setData($this->validDataArray);
         $this->consumerModel->validate();
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Consumer Key 'invalid' is less than 32 characters long
      */
     public function testValidateInvalidConsumerKey()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Consumer Key \'invalid\' is less than 32 characters long');
+
         $this->validDataArray['key'] = 'invalid';
         $this->consumerModel->setData($this->validDataArray);
         $this->consumerModel->validate();
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Consumer Secret 'invalid' is less than 32 characters long
      */
     public function testValidateInvalidConsumerSecret()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Consumer Secret \'invalid\' is less than 32 characters long');
+
         $this->validDataArray['secret'] = 'invalid';
         $this->consumerModel->setData($this->validDataArray);
         $this->consumerModel->validate();

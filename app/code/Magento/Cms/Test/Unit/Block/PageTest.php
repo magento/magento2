@@ -20,7 +20,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
      */
     protected $page;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->block = $objectManager->getObject(\Magento\Cms\Block\Page::class);
@@ -32,7 +32,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
         $this->page->setId(1);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->block = null;
     }

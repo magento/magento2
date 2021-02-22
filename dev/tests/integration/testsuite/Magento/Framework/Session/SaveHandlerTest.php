@@ -25,19 +25,19 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $deploymentConfigMock;
 
     /**
-     * @var SaveHandlerFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var SaveHandlerFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $saveHandlerFactoryMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
@@ -49,7 +49,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager->removeSharedInstance(DeploymentConfig::class);
         $this->objectManager->removeSharedInstance(SaveHandlerFactory::class);

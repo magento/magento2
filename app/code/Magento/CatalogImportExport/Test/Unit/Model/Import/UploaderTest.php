@@ -14,51 +14,51 @@ namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
 class UploaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $coreFileStorageDb;
 
     /**
-     * @var \Magento\MediaStorage\Helper\File\Storage|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Helper\File\Storage|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $coreFileStorage;
 
     /**
-     * @var \Magento\Framework\Image\AdapterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Image\AdapterFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $imageFactory;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $validator;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesystem;
 
     /**
-     * @var \Magento\Framework\Filesystem\File\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\File\ReadFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $readFactory;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Writer| \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Writer| \PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryMock;
 
     /**
-     * @var \Magento\Framework\Math\Random|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Math\Random|\PHPUnit\Framework\MockObject\MockObject
      */
     private $random;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Uploader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogImportExport\Model\Import\Uploader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $uploader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->coreFileStorageDb = $this->getMockBuilder(\Magento\MediaStorage\Helper\File\Storage\Database::class)
             ->disableOriginalConstructor()
@@ -92,7 +92,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->filesystem->expects($this->any())
                         ->method('getDirectoryWrite')
-                        ->will($this->returnValue($this->directoryMock));
+                        ->willReturn($this->directoryMock);
 
         $this->random = $this->getMockBuilder(\Magento\Framework\Math\Random::class)
             ->disableOriginalConstructor()
@@ -152,13 +152,13 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
         // Expected invocations to create reader and read contents from url
         $this->readFactory->expects($this->once())->method('create')
             ->with($expectedHost)
-            ->will($this->returnValue($readMock));
+            ->willReturn($readMock);
         $readMock->expects($this->once())->method('readAll')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         // Expected invocation to write the temp file
         $this->directoryMock->expects($this->any())->method('writeFile')
-            ->will($this->returnValue($expectedFileName));
+            ->willReturn($expectedFileName);
 
         // Expected invocations save the downloaded file to temp file
         // and move the temp file to the destination directory
@@ -192,8 +192,8 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
         $this->directoryMock->expects($this->once())->method('getAbsolutePath')->with($destDir)
             ->willReturn($destDir . '/' . $fileName);
         //Check invoking of getTmpDir(), _setUploadFile(), save() methods.
-        $this->uploader->expects($this->once())->method('getTmpDir')->will($this->returnValue(''));
-        $this->uploader->expects($this->once())->method('_setUploadFile')->will($this->returnSelf());
+        $this->uploader->expects($this->once())->method('getTmpDir')->willReturn('');
+        $this->uploader->expects($this->once())->method('_setUploadFile')->willReturnSelf();
         $this->uploader->expects($this->once())->method('save')->with($destDir . '/' . $fileName)
             ->willReturn(['name' => $fileName]);
 

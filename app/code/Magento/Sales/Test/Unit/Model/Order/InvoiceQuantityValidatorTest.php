@@ -15,7 +15,7 @@ use Magento\Sales\Model\Order;
 class InvoiceQuantityValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\InvoiceQuantityValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\InvoiceQuantityValidator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $model;
 
@@ -25,21 +25,21 @@ class InvoiceQuantityValidatorTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\Data\OrderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderMock;
 
     /**
-     * @var \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderRepositoryMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\InvoiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\Data\InvoiceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $invoiceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -159,7 +159,7 @@ class InvoiceQuantityValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $orderItemId
      * @param $qty
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getInvoiceItemMock($orderItemId, $qty)
     {
@@ -176,7 +176,7 @@ class InvoiceQuantityValidatorTest extends \PHPUnit\Framework\TestCase
      * @param $id
      * @param $qtyToInvoice
      * @param $isDummy
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getOrderItemMock($id, $qtyToInvoice, $isDummy)
     {

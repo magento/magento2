@@ -15,7 +15,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_structure = new \Magento\Framework\Data\Structure();
     }
@@ -69,10 +69,11 @@ class StructureTest extends \PHPUnit\Framework\TestCase
      * @param array $elements
      * @return void
      * @dataProvider importExceptionDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testImportException($elements)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->_structure->importElements($elements);
     }
 
@@ -140,10 +141,11 @@ class StructureTest extends \PHPUnit\Framework\TestCase
      * @param array $elements
      * @return void
      * @dataProvider importExceptionElementNotFoundDataProvider
-     * @expectedException \OutOfBoundsException
      */
     public function testImportExceptionElementNotFound($elements)
     {
+        $this->expectException(\OutOfBoundsException::class);
+
         $this->_structure->importElements($elements);
     }
 
@@ -184,10 +186,11 @@ class StructureTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateElementException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $elementId = uniqid('id');
         $this->_structure->createElement($elementId, []);
         $this->_structure->createElement($elementId, []);
@@ -227,21 +230,23 @@ class StructureTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \OutOfBoundsException
      */
     public function testSetAttributeNoElementException()
     {
+        $this->expectException(\OutOfBoundsException::class);
+
         $this->_structure->setAttribute('non-existing', 'foo', 'bar');
     }
 
     /**
      * @param string $attribute
      * @return void
-     * @expectedException \InvalidArgumentException
      * @dataProvider setAttributeArgumentExceptionDataProvider
      */
     public function testSetAttributeArgumentException($attribute)
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->_structure->importElements(['element' => []]);
         $this->_structure->setAttribute('element', $attribute, 'value');
     }
@@ -260,10 +265,11 @@ class StructureTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \OutOfBoundsException
      */
     public function testGetAttributeNoElementException()
     {
+        $this->expectException(\OutOfBoundsException::class);
+
         $this->_structure->getAttribute('non-existing', 'foo');
     }
 
@@ -365,11 +371,12 @@ class StructureTest extends \PHPUnit\Framework\TestCase
      * @param string $elementId
      * @param string $parentId
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @dataProvider setAsChildExceptionDataProvider
      */
     public function testSetAsChildException($elementId, $parentId)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->_structure->createElement('one', []);
         $this->_structure->createElement('two', []);
         $this->_structure->createElement('three', []);
@@ -459,10 +466,11 @@ class StructureTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testReorderChildException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->_structure->createElement('one', []);
         $this->_structure->createElement('two', []);
         $this->_structure->reorderChild('one', 'two', 0);
@@ -516,10 +524,11 @@ class StructureTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testReorderToSiblingException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->_structure->createElement('one', []);
         $this->_structure->createElement('two', []);
         $this->_structure->createElement('three', []);

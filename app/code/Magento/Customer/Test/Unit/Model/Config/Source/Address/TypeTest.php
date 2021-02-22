@@ -13,7 +13,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = new \Magento\Customer\Model\Config\Source\Address\Type();
     }

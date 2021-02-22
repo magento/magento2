@@ -16,17 +16,17 @@ class CurrencyInformationAcquirerTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $currencyInformationFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $exchangeRateFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 
@@ -38,7 +38,7 @@ class CurrencyInformationAcquirerTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup the test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -107,7 +107,7 @@ class CurrencyInformationAcquirerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('USD', $result->getDefaultDisplayCurrencyCode());
         $this->assertEquals('$', $result->getDefaultDisplayCurrencySymbol());
         $this->assertEquals(['AUD'], $result->getAvailableCurrencyCodes());
-        $this->assertTrue(is_array($result->getExchangeRates()));
+        $this->assertIsArray($result->getExchangeRates());
         $this->assertEquals([$exchangeRate], $result->getExchangeRates());
         $this->assertEquals('0.80', $result->getExchangeRates()[0]->getRate());
         $this->assertEquals('AUD', $result->getExchangeRates()[0]->getCurrencyTo());

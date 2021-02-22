@@ -14,12 +14,12 @@ use Magento\Store\Model\Store;
 class StoreViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|IndexerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|IndexerInterface
      */
     protected $indexerMock;
 
@@ -29,21 +29,21 @@ class StoreViewTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexerRegistryMock;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $tableMaintainer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->indexerMock = $this->getMockForAbstractClass(
             IndexerInterface::class,

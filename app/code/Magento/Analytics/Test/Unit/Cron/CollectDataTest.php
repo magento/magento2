@@ -13,12 +13,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class CollectDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ExportDataHandlerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ExportDataHandlerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $exportDataHandlerMock;
 
     /**
-     * @var SubscriptionStatusProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubscriptionStatusProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subscriptionStatusMock;
 
@@ -35,7 +35,7 @@ class CollectDataTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->exportDataHandlerMock = $this->getMockBuilder(ExportDataHandlerInterface::class)
             ->getMockForAbstractClass();

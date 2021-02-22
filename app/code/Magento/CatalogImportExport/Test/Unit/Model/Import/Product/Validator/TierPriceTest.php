@@ -16,16 +16,16 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Customer\Api\GroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\GroupRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $groupRepositoryInterface;
 
-    /** @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject */
     protected $searchCriteriaBuilder;
 
-    /** @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver|\PHPUnit\Framework\MockObject\MockObject */
     protected $storeResolver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->groupRepositoryInterface = $this->createMock(
             \Magento\Customer\Model\ResourceModel\GroupRepository::class

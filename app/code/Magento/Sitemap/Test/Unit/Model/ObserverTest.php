@@ -28,41 +28,41 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     private $observer;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionFactoryMock;
 
     /**
-     * @var \Magento\Sitemap\Model\ResourceModel\Sitemap\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sitemap\Model\ResourceModel\Sitemap\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sitemapCollectionMock;
 
     /**
-     * @var \Magento\Sitemap\Model\Sitemap|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sitemap\Model\Sitemap|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sitemapMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var Emulation|\PHPUnit_Framework_MockObject_MockObject
+     * @var Emulation|\PHPUnit\Framework\MockObject\MockObject
      */
     private $appEmulationMock;
 
     /**
-     * @var EmailNotification|\PHPUnit_Framework_MockObject_MockObject
+     * @var EmailNotification|\PHPUnit\Framework\MockObject\MockObject
      */
     private $emailNotificationMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->getMock();

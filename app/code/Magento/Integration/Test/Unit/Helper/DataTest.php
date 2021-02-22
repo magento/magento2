@@ -12,7 +12,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Integration\Helper\Data */
     protected $dataHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->dataHelper = $helper->getObject(\Magento\Integration\Helper\Data::class);

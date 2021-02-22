@@ -19,21 +19,21 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     protected $address;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderMock;
 
     /**
-     * @var \Magento\Directory\Model\RegionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\RegionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $regionFactoryMock;
 
     /**
-     * @var \Magento\Directory\Model\Region|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\Region|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $regionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
         $this->orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
@@ -127,7 +127,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->willReturn(2);
         $this->regionMock->expects($this->never())
             ->method('getCode');
-        $this->assertEquals(null, $this->address->getRegionCode());
+        $this->assertNull($this->address->getRegionCode());
     }
 
     public function testGetName()

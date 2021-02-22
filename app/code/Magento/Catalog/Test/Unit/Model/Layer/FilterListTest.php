@@ -12,22 +12,22 @@ use \Magento\Catalog\Model\Layer\FilterList;
 class FilterListTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $layerMock;
 
@@ -36,7 +36,7 @@ class FilterListTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->attributeListMock = $this->createMock(
@@ -69,7 +69,7 @@ class FilterListTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManagerMock->expects($this->at(0))
             ->method('create')
-            ->will($this->returnValue('filter'));
+            ->willReturn('filter');
 
         $this->objectManagerMock->expects($this->at(1))
             ->method('create')
@@ -80,15 +80,15 @@ class FilterListTest extends \PHPUnit\Framework\TestCase
                     'layer' => $this->layerMock
                 ]
             )
-            ->will($this->returnValue('filter'));
+            ->willReturn('filter');
 
         $this->attributeMock->expects($this->once())
             ->method($method)
-            ->will($this->returnValue($value));
+            ->willReturn($value);
 
         $this->attributeListMock->expects($this->once())
             ->method('getList')
-            ->will($this->returnValue([$this->attributeMock]));
+            ->willReturn([$this->attributeMock]);
 
         $this->assertEquals(['filter', 'filter'], $this->model->getFilters($this->layerMock));
     }

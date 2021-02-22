@@ -10,17 +10,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class OptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $selectionFirst;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $selectionSecond;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resource;
 
@@ -29,7 +29,7 @@ class OptionTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->selectionFirst = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
@@ -62,8 +62,8 @@ class OptionTest extends \PHPUnit\Framework\TestCase
 
     public function testIsSaleablePositive()
     {
-        $this->selectionFirst->expects($this->any())->method('isSaleable')->will($this->returnValue(true));
-        $this->selectionSecond->expects($this->any())->method('isSaleable')->will($this->returnValue(false));
+        $this->selectionFirst->expects($this->any())->method('isSaleable')->willReturn(true);
+        $this->selectionSecond->expects($this->any())->method('isSaleable')->willReturn(false);
 
         $this->model->setSelections([$this->selectionFirst, $this->selectionSecond]);
         $this->assertTrue($this->model->isSaleable());
@@ -71,8 +71,8 @@ class OptionTest extends \PHPUnit\Framework\TestCase
 
     public function testIsSaleableNegative()
     {
-        $this->selectionFirst->expects($this->any())->method('isSaleable')->will($this->returnValue(false));
-        $this->selectionSecond->expects($this->any())->method('isSaleable')->will($this->returnValue(false));
+        $this->selectionFirst->expects($this->any())->method('isSaleable')->willReturn(false);
+        $this->selectionSecond->expects($this->any())->method('isSaleable')->willReturn(false);
 
         $this->model->setSelections([$this->selectionFirst, $this->selectionSecond]);
         $this->assertFalse($this->model->isSaleable());
@@ -80,8 +80,8 @@ class OptionTest extends \PHPUnit\Framework\TestCase
 
     public function testGetDefaultSelection()
     {
-        $this->selectionFirst->expects($this->any())->method('getIsDefault')->will($this->returnValue(true));
-        $this->selectionSecond->expects($this->any())->method('getIsDefault')->will($this->returnValue(false));
+        $this->selectionFirst->expects($this->any())->method('getIsDefault')->willReturn(true);
+        $this->selectionSecond->expects($this->any())->method('getIsDefault')->willReturn(false);
 
         $this->model->setSelections([$this->selectionFirst, $this->selectionSecond]);
         $this->assertEquals($this->selectionFirst, $this->model->getDefaultSelection());
@@ -89,8 +89,8 @@ class OptionTest extends \PHPUnit\Framework\TestCase
 
     public function testGetDefaultSelectionNegative()
     {
-        $this->selectionFirst->expects($this->any())->method('getIsDefault')->will($this->returnValue(false));
-        $this->selectionSecond->expects($this->any())->method('getIsDefault')->will($this->returnValue(false));
+        $this->selectionFirst->expects($this->any())->method('getIsDefault')->willReturn(false);
+        $this->selectionSecond->expects($this->any())->method('getIsDefault')->willReturn(false);
 
         $this->model->setSelections([$this->selectionFirst, $this->selectionSecond]);
         $this->assertNull($this->model->getDefaultSelection());
@@ -127,7 +127,7 @@ class OptionTest extends \PHPUnit\Framework\TestCase
         $data = 'data';
 
         $this->resource->expects($this->any())->method('getSearchableData')->with($productId, $storeId)
-            ->will($this->returnValue($data));
+            ->willReturn($data);
 
         $this->assertEquals($data, $this->model->getSearchableData($productId, $storeId));
     }
@@ -136,8 +136,8 @@ class OptionTest extends \PHPUnit\Framework\TestCase
     {
         $selectionId = 15;
 
-        $this->selectionFirst->expects($this->any())->method('getSelectionId')->will($this->returnValue($selectionId));
-        $this->selectionSecond->expects($this->any())->method('getSelectionId')->will($this->returnValue(16));
+        $this->selectionFirst->expects($this->any())->method('getSelectionId')->willReturn($selectionId);
+        $this->selectionSecond->expects($this->any())->method('getSelectionId')->willReturn(16);
 
         $this->model->setSelections([$this->selectionFirst, $this->selectionSecond]);
         $this->assertEquals($this->selectionFirst, $this->model->getSelectionById($selectionId));
@@ -147,8 +147,8 @@ class OptionTest extends \PHPUnit\Framework\TestCase
     {
         $selectionId = 15;
 
-        $this->selectionFirst->expects($this->any())->method('getSelectionId')->will($this->returnValue(16));
-        $this->selectionSecond->expects($this->any())->method('getSelectionId')->will($this->returnValue(17));
+        $this->selectionFirst->expects($this->any())->method('getSelectionId')->willReturn(16);
+        $this->selectionSecond->expects($this->any())->method('getSelectionId')->willReturn(17);
 
         $this->model->setSelections([$this->selectionFirst, $this->selectionSecond]);
         $this->assertNull($this->model->getSelectionById($selectionId));

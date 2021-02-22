@@ -17,12 +17,12 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class SimpleTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryMock;
 
     /**
-     * @var \Magento\Framework\View\Design\Fallback\Rule\RuleInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\Fallback\Rule\RuleInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $ruleMock;
 
@@ -32,21 +32,21 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReadFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $readFactoryMock;
 
     /**
-     * @var RulePool|\PHPUnit_Framework_MockObject_MockObject
+     * @var RulePool|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rulePoolMock;
 
     /**
-     * @var DirectoryList|\PHPUnit_Framework_MockObject_MockObject
+     * @var DirectoryList|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryListMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->directoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\Read::class)
             ->disableOriginalConstructor()
@@ -183,11 +183,12 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage File path 'var/test/../file.ext' is forbidden for security reasons.
      */
     public function testResolveSecurityException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('File path \'var/test/../file.ext\' is forbidden for security reasons.');
+
         $this->ruleMock->expects($this->once())
             ->method('getPatternDirs')
             ->willReturn([
@@ -292,7 +293,7 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $themePath
-     * @return \Magento\Framework\View\Design\ThemeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\View\Design\ThemeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getMockForTheme($themePath)
     {

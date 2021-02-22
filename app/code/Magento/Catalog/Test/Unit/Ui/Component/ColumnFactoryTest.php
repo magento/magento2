@@ -61,7 +61,7 @@ class ColumnFactoryTest extends TestCase
         $this->attribute = $this->getMockBuilder(ProductAttributeInterface::class)
             ->setMethods(['usesSource'])
             ->getMockForAbstractClass();
-        $this->context = $this->createMock(ContextInterface::class);
+        $this->context = $this->getMockForAbstractClass(ContextInterface::class);
         $this->uiComponentFactory = $this->createMock(UiComponentFactory::class);
         $this->column = $this->getMockForAbstractClass(ColumnInterface::class);
         $this->uiComponentFactory->method('create')

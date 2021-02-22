@@ -25,12 +25,12 @@ class DepersonalizePluginTest extends TestCase
     private $plugin;
 
     /**
-     * @var CatalogSession|\PHPUnit_Framework_MockObject_MockObject
+     * @var CatalogSession|\PHPUnit\Framework\MockObject\MockObject
      */
     private $catalogSessionMock;
 
     /**
-     * @var DepersonalizeChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var DepersonalizeChecker|\PHPUnit\Framework\MockObject\MockObject
      */
     private $depersonalizeCheckerMock;
 
@@ -42,7 +42,7 @@ class DepersonalizePluginTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->catalogSessionMock = $this->createPartialMock(CatalogSession::class, ['clearStorage']);

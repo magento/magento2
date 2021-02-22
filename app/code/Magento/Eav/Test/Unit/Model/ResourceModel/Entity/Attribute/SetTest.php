@@ -16,49 +16,49 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class SetTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Set
+     * @var \PHPUnit\Framework\MockObject\MockObject|Set
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $eavConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $typeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $transactionManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $relationProcessor;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->resourceMock = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
@@ -116,12 +116,13 @@ class SetTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The default attribute set can't be deleted.
      * @return void
      */
     public function testBeforeDeleteStateException()
     {
+        $this->expectException(\Magento\Framework\Exception\StateException::class);
+        $this->expectExceptionMessage('The default attribute set can\'t be deleted.');
+
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class));
@@ -140,12 +141,13 @@ class SetTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage test exception
      * @return void
      */
     public function testBeforeDelete()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('test exception');
+
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class));
@@ -227,9 +229,9 @@ class SetTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['from', 'joinLeft', 'where'])
             ->getMock();
-        $selectMock->expects($this->once())->method('from')->will($this->returnSelf());
-        $selectMock->expects($this->once())->method('joinLeft')->will($this->returnSelf());
-        $selectMock->expects($this->atLeastOnce())->method('where')->will($this->returnSelf());
+        $selectMock->expects($this->once())->method('from')->willReturnSelf();
+        $selectMock->expects($this->once())->method('joinLeft')->willReturnSelf();
+        $selectMock->expects($this->atLeastOnce())->method('where')->willReturnSelf();
 
         $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
             ->disableOriginalConstructor()

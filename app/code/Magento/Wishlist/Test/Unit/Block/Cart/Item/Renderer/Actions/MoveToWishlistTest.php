@@ -16,10 +16,10 @@ class MoveToWishlistTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    /** @var Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Data|\PHPUnit\Framework\MockObject\MockObject */
     protected $wishlistHelperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -50,7 +50,7 @@ class MoveToWishlistTest extends \PHPUnit\Framework\TestCase
         $json = '{json;}';
 
         /**
-         * @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock
+         * @var Item|\PHPUnit\Framework\MockObject\MockObject $itemMock
          */
         $itemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()

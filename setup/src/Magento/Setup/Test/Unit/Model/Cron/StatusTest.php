@@ -11,31 +11,31 @@ use Magento\Setup\Model\Cron\Status;
 class StatusTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Status
+     * @var \PHPUnit\Framework\MockObject\MockObject|Status
      */
     private $status;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem
      */
     private $filesystem;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\WriteInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\WriteInterface
      */
     private $varReaderWriter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Psr\Log\LoggerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Psr\Log\LoggerInterface
      */
     private $logger;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\SetupLoggerFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Cron\SetupLoggerFactory
      */
     private $setupLoggerFactory;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->varReaderWriter = $this->getMockForAbstractClass(
@@ -46,7 +46,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
         );
         $this->filesystem->expects($this->once())
             ->method('getDirectoryWrite')
-            ->will($this->returnValue($this->varReaderWriter));
+            ->willReturn($this->varReaderWriter);
         $this->logger = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class, [], '', false);
         $this->setupLoggerFactory =
             $this->createMock(\Magento\Setup\Model\Cron\SetupLoggerFactory::class);
@@ -91,11 +91,12 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage ".update_in_progress.flag" cannot be created
      */
     public function testToggleUpdateInProgressTrueException()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('".update_in_progress.flag" cannot be created');
+
         $this->varReaderWriter->expects($this->once())
             ->method('touch')
             ->willThrowException(new FileSystemException(new \Magento\Framework\Phrase('Exception')));
@@ -123,11 +124,12 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage ".update_error.flag" cannot be created
      */
     public function testToggleUpdateErrorTrueException()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('".update_error.flag" cannot be created');
+
         $this->varReaderWriter->expects($this->once())
             ->method('touch')
             ->willThrowException(new FileSystemException(new \Magento\Framework\Phrase('Exception')));

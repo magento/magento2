@@ -27,7 +27,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($assertArray, $this->model->getAllOptions());
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
@@ -52,7 +52,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
 
         $mock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($mockedCollection));
+            ->willReturn($mockedCollection);
 
         return $mock;
     }
@@ -68,11 +68,11 @@ class PageTest extends \PHPUnit\Framework\TestCase
 
         $mock->expects($this->any())
             ->method('load')
-            ->will($this->returnValue($mock));
+            ->willReturn($mock);
 
         $mock->expects($this->any())
             ->method('toOptionArray')
-            ->will($this->returnValue($this->testArray));
+            ->willReturn($this->testArray);
 
         return $mock;
     }

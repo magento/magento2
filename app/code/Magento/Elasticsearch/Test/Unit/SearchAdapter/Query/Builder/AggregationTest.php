@@ -17,17 +17,17 @@ class AggregationTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Elasticsearch\Model\Adapter\FieldMapperInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Elasticsearch\Model\Adapter\FieldMapperInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fieldMapper;
 
     /**
-     * @var \Magento\Framework\Search\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestInterface;
 
     /**
-     * @var BucketInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BucketInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestBucketInterface;
 
@@ -36,7 +36,7 @@ class AggregationTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 
@@ -50,7 +50,7 @@ class AggregationTest extends \PHPUnit\Framework\TestCase
 
         $this->requestBucketInterface = $this->getMockBuilder(BucketInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->model = $helper->getObject(
             \Magento\Elasticsearch\SearchAdapter\Query\Builder\Aggregation::class,

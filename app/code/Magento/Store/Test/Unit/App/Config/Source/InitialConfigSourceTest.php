@@ -9,7 +9,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\DataObject;
 use Magento\Store\App\Config\Source\InitialConfigSource;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * @inheritdoc
@@ -39,7 +39,7 @@ class InitialConfigSourceTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->readerMock = $this->getMockBuilder(Reader::class)
             ->disableOriginalConstructor()

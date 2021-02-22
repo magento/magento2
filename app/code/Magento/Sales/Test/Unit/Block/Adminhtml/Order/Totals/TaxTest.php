@@ -11,10 +11,10 @@ namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Totals;
 
 class TaxTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Block\Adminhtml\Order\Totals\Tax */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Block\Adminhtml\Order\Totals\Tax */
     private $taxMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $getCalculatedTax = [
             'tax' => 'tax',
@@ -26,7 +26,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $taxHelperMock->expects($this->any())
             ->method('getCalculatedTaxes')
-            ->will($this->returnValue($getCalculatedTax));
+            ->willReturn($getCalculatedTax);
 
         $this->taxMock = $this->getMockBuilder(\Magento\Sales\Block\Adminhtml\Order\Totals\Tax::class)
             ->setConstructorArgs($this->_getConstructArguments($taxHelperMock))
@@ -48,7 +48,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
     {
         $this->taxMock->expects($this->once())
             ->method('getOrder')
-            ->will($this->returnValue($source));
+            ->willReturn($source);
 
         $actualResult = $this->taxMock->getFullTaxInfo();
         $this->assertSame($expectedResult, $actualResult);
@@ -68,7 +68,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->taxMock->expects($this->once())
             ->method('getSource')
-            ->will($this->returnValue($source));
+            ->willReturn($source);
 
         $actualResult = $this->taxMock->getFullTaxInfo();
         $this->assertSame($expectedResult, $actualResult);

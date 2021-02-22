@@ -16,12 +16,12 @@ use Magento\GoogleAdwords\Block\Code;
 class DbTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var Config | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $config;
 
     /**
-     * @var \Magento\Cron\Model\Config\Converter\Db|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cron\Model\Config\Converter\Db|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_converter;
 
@@ -33,7 +33,7 @@ class DbTest extends \PHPUnit\Framework\TestCase
     /**
      * Initialize parameters
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -53,7 +53,7 @@ class DbTest extends \PHPUnit\Framework\TestCase
         $this->config->expects($this->once())
             ->method('get')
             ->with('system', 'default')
-            ->will($this->returnValue($data));
+            ->willReturn($data);
         $expected = [
             'default' => [
                 'job1' => ['schedule' => $job1['schedule']['cron_expr']],

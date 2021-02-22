@@ -15,36 +15,36 @@ class EmulateCustomerObserverTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $observerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressRepositoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerRepositoryMock = $this->getMockForAbstractClass(
             \Magento\Customer\Api\CustomerRepositoryInterface::class,
@@ -81,7 +81,7 @@ class EmulateCustomerObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->helperMock->expects($this->never())->method('isShoppingCartPersist');
         $this->sessionHelperMock->expects($this->never())->method('isPersistent');
         $this->model->execute($this->observerMock);
@@ -93,8 +93,8 @@ class EmulateCustomerObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
-            ->will($this->returnValue(true));
-        $this->helperMock->expects($this->once())->method('isShoppingCartPersist')->will($this->returnValue(false));
+            ->willReturn(true);
+        $this->helperMock->expects($this->once())->method('isShoppingCartPersist')->willReturn(false);
         $this->sessionHelperMock->expects($this->never())->method('isPersistent');
         $this->model->execute($this->observerMock);
     }
@@ -149,33 +149,33 @@ class EmulateCustomerObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
-            ->will($this->returnValue(true));
-        $this->helperMock->expects($this->once())->method('isShoppingCartPersist')->will($this->returnValue(true));
-        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
-        $this->sessionHelperMock->expects($this->once())->method('getSession')->will($this->returnValue($sessionMock));
-        $sessionMock->expects($this->once())->method('getCustomerId')->will($this->returnValue($customerId));
+            ->willReturn(true);
+        $this->helperMock->expects($this->once())->method('isShoppingCartPersist')->willReturn(true);
+        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->willReturn(true);
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
+        $this->sessionHelperMock->expects($this->once())->method('getSession')->willReturn($sessionMock);
+        $sessionMock->expects($this->once())->method('getCustomerId')->willReturn($customerId);
         $this->customerRepositoryMock
             ->expects($this->once())
             ->method('getById')
             ->with(1)
-            ->will($this->returnValue($customerMock));
-        $customerMock->expects($this->once())->method('getId')->will($this->returnValue($customerId));
-        $customerMock->expects($this->once())->method('getGroupId')->will($this->returnValue($customerGroupId));
+            ->willReturn($customerMock);
+        $customerMock->expects($this->once())->method('getId')->willReturn($customerId);
+        $customerMock->expects($this->once())->method('getGroupId')->willReturn($customerGroupId);
         $this->customerSessionMock
             ->expects($this->once())
             ->method('setCustomerId')
             ->with($customerId)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->customerSessionMock
             ->expects($this->once())
             ->method('setCustomerGroupId')
-            ->with($customerGroupId)->will($this->returnSelf());
+            ->with($customerGroupId)->willReturnSelf();
         $this->customerSessionMock
             ->expects($this->once())
             ->method('setIsCustomerEmulated')
             ->with(true)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->model->execute($this->observerMock);
     }
 
@@ -185,10 +185,10 @@ class EmulateCustomerObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
-            ->will($this->returnValue(true));
-        $this->helperMock->expects($this->once())->method('isShoppingCartPersist')->will($this->returnValue(true));
-        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(true));
+            ->willReturn(true);
+        $this->helperMock->expects($this->once())->method('isShoppingCartPersist')->willReturn(true);
+        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->willReturn(true);
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(true);
         $this->customerRepositoryMock
             ->expects($this->never())
             ->method('get');

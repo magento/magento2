@@ -13,10 +13,10 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
     /** @var Options */
     protected $model;
 
-    /** @var ListInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ListInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $listMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->listMock = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\Label\ListInterface::class)
             ->getMockForAbstractClass();

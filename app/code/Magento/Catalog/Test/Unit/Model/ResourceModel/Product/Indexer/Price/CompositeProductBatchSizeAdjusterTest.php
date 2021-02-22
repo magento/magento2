@@ -17,11 +17,11 @@ class CompositeProductBatchSizeAdjusterTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CompositeProductRelationsCalculator
+     * @var \PHPUnit\Framework\MockObject\MockObject|CompositeProductRelationsCalculator
      */
     private $relationsCalculatorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->relationsCalculatorMock = $this->getMockBuilder(CompositeProductRelationsCalculator::class)
             ->disableOriginalConstructor()

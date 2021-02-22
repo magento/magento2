@@ -14,11 +14,11 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
     protected $_proxy;
 
     /**
-     * @var \Magento\Framework\App\Route\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Route\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_object = $this->createPartialMock(
             \Magento\Framework\App\Route\ConfigInterface::class,
@@ -29,7 +29,7 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
         $objectManager->expects($this->once())
             ->method('get')
             ->with(\Magento\Framework\App\Route\ConfigInterface::class)
-            ->will($this->returnValue($this->_object));
+            ->willReturn($this->_object);
 
         $this->_proxy = new \Magento\Framework\App\Route\ConfigInterface\Proxy(
             $objectManager,

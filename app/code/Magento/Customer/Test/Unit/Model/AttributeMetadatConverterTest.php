@@ -18,32 +18,32 @@ use Magento\Customer\Model\AttributeMetadataConverter;
 class AttributeMetadatConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var OptionInterfaceFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var OptionInterfaceFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $optionFactory;
 
     /**
-     * @var ValidationRuleInterfaceFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var ValidationRuleInterfaceFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $validationRuleFactory;
 
     /**
-     * @var AttributeMetadataInterfaceFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeMetadataInterfaceFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeMetadataFactory;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\DataObjectHelper | \PHPUnit\Framework\MockObject\MockObject
      */
     private $dataObjectHelper;
 
     /** @var  AttributeMetadataConverter */
     private $model;
 
-    /** @var  \Magento\Customer\Model\Attribute | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Customer\Model\Attribute | \PHPUnit\Framework\MockObject\MockObject */
     private $attribute;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->optionFactory = $this->getMockBuilder(OptionInterfaceFactory::class)
             ->setMethods(['create'])

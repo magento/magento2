@@ -9,16 +9,16 @@ use Magento\Theme\Model\Design\Config\ValueProcessor;
 
 class ValueProcessorTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Theme\Model\Design\BackendModelFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Model\Design\BackendModelFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $backendModelFactory;
 
-    /** @var \Magento\Framework\App\Config\Value|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Config\Value|\PHPUnit\Framework\MockObject\MockObject */
     protected $backendModel;
 
     /** @var ValueProcessor */
     protected $valueProcessor;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->backendModelFactory = $this->getMockBuilder(\Magento\Theme\Model\Design\BackendModelFactory::class)
             ->disableOriginalConstructor()

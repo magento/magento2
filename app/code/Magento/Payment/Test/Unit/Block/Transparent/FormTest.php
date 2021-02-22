@@ -18,31 +18,31 @@ use Magento\Payment\Model\Method\TransparentInterface;
 class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var FormTesting | \PHPUnit_Framework_MockObject_MockObject
+     * @var FormTesting | \PHPUnit\Framework\MockObject\MockObject
      */
     private $form;
 
     /**
-     * @var RequestInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
     /**
-     * @var UrlInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $urlBuilderMock;
 
     /**
-     * @var TransparentInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var TransparentInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $methodMock;
 
     /**
-     * @var Session | \PHPUnit_Framework_MockObject_MockObject
+     * @var Session | \PHPUnit\Framework\MockObject\MockObject
      */
     private $checkoutSessionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
 

@@ -53,7 +53,7 @@ class GuestShippingInformationManagementTest extends TestCase
      */
     private $maskFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->management = $objectManager->get(GuestShippingInformationManagementInterface::class);
@@ -73,11 +73,12 @@ class GuestShippingInformationManagementTest extends TestCase
      * @magentoDataFixture Magento/Sales/_files/quote.php
      * @magentoDataFixture Magento/Customer/_files/customer_with_addresses.php
      * @dataProvider getAddressesVariation
-     * @expectedException  \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The shipping information was unable to be saved. Verify the input data and try again.
+     *
      */
     public function testDifferentAddresses(bool $swapShipping)
     {
+        $this->expectExceptionMessage("The shipping information was unable to be saved. Verify the input data and try again.");
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
         $carts = $this->cartRepo->getList(
             $this->searchCriteria->addFilter('reserved_order_id', 'test01')->create()
         )->getItems();

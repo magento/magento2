@@ -8,14 +8,14 @@ namespace Magento\CatalogInventory\Test\Unit\Model\Adminhtml\Stock;
 class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\CatalogInventory\Model\Adminhtml\Stock\Item|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\Adminhtml\Stock\Item|PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
     /**
      * setUp
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $resourceMock = $this->createPartialMock(
             \Magento\Framework\Model\ResourceModel\AbstractResource::class,
@@ -33,11 +33,11 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
         $allGroup->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(32000));
+            ->willReturn(32000);
 
         $groupManagement->expects($this->any())
             ->method('getAllCustomersGroup')
-            ->will($this->returnValue($allGroup));
+            ->willReturn($allGroup);
 
         $this->_model = $objectHelper->getObject(
             \Magento\CatalogInventory\Model\Adminhtml\Stock\Item::class,

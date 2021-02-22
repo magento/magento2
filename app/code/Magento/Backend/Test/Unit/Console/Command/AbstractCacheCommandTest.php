@@ -11,7 +11,7 @@ use Magento\Backend\Console\Command\AbstractCacheManageCommand;
 abstract class AbstractCacheCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\Cache\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Cache\Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cacheManagerMock;
 
@@ -20,7 +20,7 @@ abstract class AbstractCacheCommandTest extends \PHPUnit\Framework\TestCase
      */
     protected $command;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cacheManagerMock = $this->createMock(\Magento\Framework\App\Cache\Manager::class);
     }

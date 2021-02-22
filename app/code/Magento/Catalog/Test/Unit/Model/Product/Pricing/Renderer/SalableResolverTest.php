@@ -14,11 +14,11 @@ class SalableResolverTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $product;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->product = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,

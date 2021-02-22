@@ -13,26 +13,26 @@ class SuggestConfigurableAttributesTest extends \PHPUnit\Framework\TestCase
     protected $suggestAttributes;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeListMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
@@ -58,8 +58,8 @@ class SuggestConfigurableAttributesTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             'label_part'
-        )->will(
-            $this->returnValue('attribute')
+        )->willReturn(
+            'attribute'
         );
         $this->attributeListMock->expects(
             $this->once()
@@ -67,8 +67,8 @@ class SuggestConfigurableAttributesTest extends \PHPUnit\Framework\TestCase
             'getSuggestedAttributes'
         )->with(
             'attribute'
-        )->will(
-            $this->returnValue('some_value_for_json')
+        )->willReturn(
+            'some_value_for_json'
         );
         $this->helperMock->expects(
             $this->once()
@@ -76,8 +76,8 @@ class SuggestConfigurableAttributesTest extends \PHPUnit\Framework\TestCase
             'jsonEncode'
         )->with(
             'some_value_for_json'
-        )->will(
-            $this->returnValue('body')
+        )->willReturn(
+            'body'
         );
         $this->responseMock->expects($this->once())->method('representJson')->with('body');
         $this->suggestAttributes->execute();

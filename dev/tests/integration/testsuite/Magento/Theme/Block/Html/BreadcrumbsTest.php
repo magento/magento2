@@ -23,7 +23,7 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
      */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         Bootstrap::getObjectManager()->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
         $this->block = Bootstrap::getObjectManager()
@@ -38,9 +38,9 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
         $info = ['label' => 'test label', 'title' => 'test title', 'link' => 'test link'];
         $this->block->addCrumb('test', $info);
         $html = $this->block->toHtml();
-        $this->assertContains('test label', $html);
-        $this->assertContains('test&#x20;title', $html);
-        $this->assertContains('test link', $html);
+        $this->assertStringContainsString('test label', $html);
+        $this->assertStringContainsString('test&#x20;title', $html);
+        $this->assertStringContainsString('test link', $html);
     }
 
     public function testGetCacheKeyInfo()

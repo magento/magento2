@@ -13,16 +13,16 @@ class SynonymGroupRepositoryTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var \Magento\Search\Model\SynonymGroupFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Search\Model\SynonymGroupFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $factory;
 
     /**
-     * @var \Magento\Search\Model\ResourceModel\SynonymGroup|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Search\Model\ResourceModel\SynonymGroup|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceModel;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->factory = $this->createPartialMock(\Magento\Search\Model\SynonymGroupFactory::class, ['create']);
         $this->resourceModel = $this->createMock(\Magento\Search\Model\ResourceModel\SynonymGroup::class);
@@ -52,11 +52,12 @@ class SynonymGroupRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Search\Model\Synonym\MergeConflictException
-     * @expectedExceptionMessage Merge conflict with existing synonym group(s): (a,b,c)
      */
     public function testSaveCreateMergeConflict()
     {
+        $this->expectException(\Magento\Search\Model\Synonym\MergeConflictException::class);
+        $this->expectExceptionMessage('Merge conflict with existing synonym group(s): (a,b,c)');
+
         $synonymGroupModel = $this->createMock(\Magento\Search\Model\SynonymGroup::class);
         $synonymGroupModel->expects($this->once())->method('load')->with(null);
         $synonymGroupModel->expects($this->once())->method('getSynonymGroup')->willReturn(null);
@@ -137,11 +138,12 @@ class SynonymGroupRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Search\Model\Synonym\MergeConflictException
-     * @expectedExceptionMessage (d,h,i)
      */
     public function testSaveUpdateMergeConflict()
     {
+        $this->expectException(\Magento\Search\Model\Synonym\MergeConflictException::class);
+        $this->expectExceptionMessage('(d,h,i)');
+
         $synonymGroupModel = $this->createMock(\Magento\Search\Model\SynonymGroup::class);
         $synonymGroupModel->expects($this->once())->method('load')->with(1);
         $synonymGroupModel->expects($this->exactly(2))->method('getSynonymGroup')->willReturn('a,b,c');

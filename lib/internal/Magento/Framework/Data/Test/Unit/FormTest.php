@@ -14,17 +14,17 @@ use \Magento\Framework\Data\Form;
 class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_factoryElementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_factoryCollectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_formKeyMock;
 
@@ -33,7 +33,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     protected $_form;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_factoryElementMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
 
@@ -46,7 +46,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->_factoryCollectionMock
             ->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($collectionModel));
+            ->willReturn($collectionModel);
 
         $this->_formKeyMock = $this->createPartialMock(\Magento\Framework\Data\Form\FormKey::class, ['getFormKey']);
 
@@ -56,11 +56,11 @@ class FormTest extends \PHPUnit\Framework\TestCase
     public function testFormKeyUsing()
     {
         $formKey = 'form-key';
-        $this->_formKeyMock->expects($this->once())->method('getFormKey')->will($this->returnValue($formKey));
+        $this->_formKeyMock->expects($this->once())->method('getFormKey')->willReturn($formKey);
 
         $this->_form->setUseContainer(true);
         $this->_form->setMethod('post');
-        $this->assertContains($formKey, $this->_form->toHtml());
+        $this->assertStringContainsString($formKey, $this->_form->toHtml());
     }
 
     public function testSettersGetters()
@@ -103,15 +103,16 @@ class FormTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage An element with a "1" ID already exists.
      */
     public function testElementExistsException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('An element with a "1" ID already exists.');
+
         $buttonElement = $this->getMockBuilder(\Magento\Framework\Data\Form\Element\Button::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $buttonElement->expects($this->any())->method('getId')->will($this->returnValue('1'));
+        $buttonElement->expects($this->any())->method('getId')->willReturn('1');
 
         $this->_form->addElement($buttonElement);
         $this->_form->addElementToCollection($buttonElement);
@@ -124,8 +125,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $buttonElement = $this->getMockBuilder(\Magento\Framework\Data\Form\Element\Button::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $buttonElement->expects($this->any())->method('getId')->will($this->returnValue('1'));
-        $buttonElement->expects($this->any())->method('getName')->will($this->returnValue('Hero'));
+        $buttonElement->expects($this->any())->method('getId')->willReturn('1');
+        $buttonElement->expects($this->any())->method('getName')->willReturn('Hero');
 
         $this->_form->addElement($buttonElement);
         $this->_form->addElementToCollection($buttonElement);

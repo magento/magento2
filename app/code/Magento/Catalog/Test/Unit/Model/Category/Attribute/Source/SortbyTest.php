@@ -20,7 +20,7 @@ class SortbyTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($validResult, $this->model->getAllOptions());
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
@@ -42,7 +42,7 @@ class SortbyTest extends \PHPUnit\Framework\TestCase
 
         $mock->expects($this->any())
             ->method('getAttributesUsedForSortBy')
-            ->will($this->returnValue([['frontend_label' => 'fl', 'attribute_code' => 'fc']]));
+            ->willReturn([['frontend_label' => 'fl', 'attribute_code' => 'fc']]);
 
         return $mock;
     }

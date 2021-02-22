@@ -18,7 +18,7 @@ class IndexerResetStateCommandTest extends AbstractIndexerCommandCommonSetup
      */
     private $command;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->stateMock->expects($this->once())->method('setAreaCode')->with(FrontNameResolver::AREA_CODE);
@@ -37,7 +37,7 @@ class IndexerResetStateCommandTest extends AbstractIndexerCommandCommonSetup
         $stateMock->expects($this->exactly(1))
             ->method('setStatus')
             ->with(\Magento\Framework\Indexer\StateInterface::STATUS_INVALID)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $stateMock->expects($this->exactly(1))
             ->method('save');

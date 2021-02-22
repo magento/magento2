@@ -15,7 +15,7 @@ class TranslitTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(\Magento\Framework\Filter\Translit::class);
@@ -77,8 +77,8 @@ class TranslitTest extends \PHPUnit\Framework\TestCase
         )->with(
             'url/convert',
             'default'
-        )->will(
-            $this->returnValue(['char8482' => ['from' => '™', 'to' => 'TM']])
+        )->willReturn(
+            ['char8482' => ['from' => '™', 'to' => 'TM']]
         );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

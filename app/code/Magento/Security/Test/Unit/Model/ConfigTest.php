@@ -31,7 +31,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      * Init mocks for tests
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfigMock = $this->createPartialMock(
             \Magento\Framework\App\Config\ScopeConfigInterface::class,
@@ -71,8 +71,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 \Magento\Security\Model\Config::XML_PATH_EMAIL_RECIPIENT,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
-            ->will(
-                $this->returnValue($email)
+            ->willReturn(
+                $email
             );
         $this->assertEquals($email, $this->model->getCustomerServiceEmail());
     }
@@ -87,8 +87,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(\Magento\Backend\Model\Auth\Session::XML_PATH_SESSION_LIFETIME)
-            ->will(
-                $this->returnValue($lifetime)
+            ->willReturn(
+                $lifetime
             );
         $this->assertEquals($lifetime, $this->model->getAdminSessionLifetime());
     }
@@ -102,8 +102,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
             ->with(\Magento\Security\Model\Config::XML_PATH_ADMIN_ACCOUNT_SHARING)
-            ->will(
-                $this->returnValue($isShared)
+            ->willReturn(
+                $isShared
             );
         $this->assertEquals($isShared, $this->model->isAdminAccountSharingEnabled());
     }

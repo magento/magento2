@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class WildcardTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Search\Request\Filter\Wildcard|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Filter\Wildcard|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestFilter;
 
@@ -21,14 +21,14 @@ class WildcardTest extends \PHPUnit\Framework\TestCase
     private $filter;
 
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\ConditionManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Adapter\Mysql\ConditionManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $conditionManager;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->requestFilter = $this->getMockBuilder(\Magento\Framework\Search\Request\Filter\Term::class)
@@ -42,12 +42,12 @@ class WildcardTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->conditionManager->expects($this->any())
             ->method('generateCondition')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($field, $operator, $value) {
                         return sprintf('%s %s %s', $field, $operator, $value);
                     }
-                )
+                
             );
 
         $this->filter = $objectManager->getObject(
@@ -69,7 +69,7 @@ class WildcardTest extends \PHPUnit\Framework\TestCase
     {
         $this->requestFilter->expects($this->once())
             ->method('getField')
-            ->will($this->returnValue($field));
+            ->willReturn($field);
         $this->requestFilter->expects($this->once())->method('getValue')->willReturn($value);
 
         $actualResult = $this->filter->buildFilter($this->requestFilter, $isNegation);

@@ -40,7 +40,7 @@ class ReorderTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -53,7 +53,7 @@ class ReorderTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->customerSession->setCustomerId(null);
 
@@ -89,7 +89,7 @@ class ReorderTest extends AbstractController
         $this->dispatchReorderRequest();
         $this->assertRedirect($this->stringContains('sales/guest/form'));
         $this->assertSessionMessages(
-            $this->contains((string)__('You entered incorrect data. Please try again.')),
+            $this->containsEqual((string)__('You entered incorrect data. Please try again.')),
             MessageInterface::TYPE_ERROR
         );
     }

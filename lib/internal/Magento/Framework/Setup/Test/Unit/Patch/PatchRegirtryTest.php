@@ -23,16 +23,16 @@ class PatchRegirtryTest extends \PHPUnit\Framework\TestCase
     private $patchRegistry;
 
     /**
-     * @var PatchFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PatchFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $patchFactoryMock;
 
     /**
-     * @var PatchHistory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PatchHistory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $patchHistoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->patchFactoryMock = $this->getMockBuilder(PatchFactory::class)
@@ -70,7 +70,7 @@ class PatchRegirtryTest extends \PHPUnit\Framework\TestCase
             ->with(\SomeDataPatch::class)
             ->willReturn(true);
 
-        $this->assertEquals(false, $this->patchRegistry->registerPatch(\SomeDataPatch::class));
+        $this->assertFalse($this->patchRegistry->registerPatch(\SomeDataPatch::class));
     }
 
     public function testGetIterator()

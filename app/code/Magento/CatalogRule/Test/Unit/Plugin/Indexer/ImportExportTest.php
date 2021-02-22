@@ -13,14 +13,14 @@ class ImportExportTest extends \PHPUnit\Framework\TestCase
     /**
      * Indexer processor mock
      *
-     * @var \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $ruleProductProcessor;
 
     /**
      * Import model mock
      *
-     * @var \Magento\ImportExport\Model\Import|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Import|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $subject;
 
@@ -31,7 +31,7 @@ class ImportExportTest extends \PHPUnit\Framework\TestCase
      */
     protected $plugin;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->ruleProductProcessor = $this->createPartialMock(
             \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor::class,

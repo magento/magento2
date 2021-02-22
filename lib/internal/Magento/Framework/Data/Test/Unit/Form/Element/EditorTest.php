@@ -19,27 +19,27 @@ class EditorTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\Element\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $factoryMock;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\Element\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $escaperMock;
 
     /**
-     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $formMock;
 
     /**
-     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
@@ -49,11 +49,11 @@ class EditorTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
@@ -105,11 +105,11 @@ class EditorTest extends \PHPUnit\Framework\TestCase
     public function testGetElementHtml()
     {
         $html = $this->model->getElementHtml();
-        $this->assertContains('</textarea>', $html);
-        $this->assertContains('rows="2"', $html);
-        $this->assertContains('cols="15"', $html);
-        $this->assertRegExp('/class=\".*textarea.*\"/i', $html);
-        $this->assertNotRegExp('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html);
+        $this->assertStringContainsString('</textarea>', $html);
+        $this->assertStringContainsString('rows="2"', $html);
+        $this->assertStringContainsString('cols="15"', $html);
+        $this->assertMatchesRegularExpression('/class=\".*textarea.*\"/i', $html);
+        $this->assertDoesNotMatchRegularExpression('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html);
 
         $this->configMock->expects($this->any())->method('getData')
             ->willReturnMap(
@@ -119,7 +119,7 @@ class EditorTest extends \PHPUnit\Framework\TestCase
                 ]
             );
         $html = $this->model->getElementHtml();
-        $this->assertRegExp('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html);
+        $this->assertMatchesRegularExpression('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html);
 
         $this->configMock->expects($this->any())->method('getData')
             ->willReturnMap(
@@ -131,7 +131,7 @@ class EditorTest extends \PHPUnit\Framework\TestCase
                 ]
             );
         $html = $this->model->getElementHtml();
-        $this->assertRegExp('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html);
+        $this->assertMatchesRegularExpression('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html);
     }
 
     /**
@@ -209,6 +209,6 @@ class EditorTest extends \PHPUnit\Framework\TestCase
 
         $html = $this->model->getElementHtml();
 
-        $this->assertRegExp('/.*"Insert Image...":"Insert Image...".*/i', $html);
+        $this->assertMatchesRegularExpression('/.*"Insert Image...":"Insert Image...".*/i', $html);
     }
 }

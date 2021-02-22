@@ -17,10 +17,10 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
@@ -38,7 +38,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $instance = $this->getMockBuilder(\Magento\Paypal\Helper\Shortcut\ValidatorInterface::class)->getMock();
 
         $this->objectManagerMock->expects($this->once())->method('create')->with(Factory::DEFAULT_VALIDATOR)
-            ->will($this->returnValue($instance));
+            ->willReturn($instance);
 
         $this->assertInstanceOf(
             \Magento\Paypal\Helper\Shortcut\ValidatorInterface::class,
@@ -53,7 +53,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $instance = $this->getMockBuilder(\Magento\Paypal\Helper\Shortcut\ValidatorInterface::class)->getMock();
 
         $this->objectManagerMock->expects($this->once())->method('create')->with(Factory::CHECKOUT_VALIDATOR)
-            ->will($this->returnValue($instance));
+            ->willReturn($instance);
 
         $this->assertInstanceOf(
             \Magento\Paypal\Helper\Shortcut\ValidatorInterface::class,

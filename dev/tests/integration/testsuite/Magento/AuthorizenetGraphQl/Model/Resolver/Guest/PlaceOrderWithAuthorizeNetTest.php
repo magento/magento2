@@ -45,7 +45,7 @@ class PlaceOrderWithAuthorizeNetTest extends TestCase
     /** @var Zend_Http_Response */
     protected $responseMock;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->jsonSerializer = $this->objectManager->get(SerializerInterface::class);
@@ -63,7 +63,7 @@ class PlaceOrderWithAuthorizeNetTest extends TestCase
         $this->objectManager->addSharedInstance($clientFactoryMock, ZendClientFactory::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager->removeSharedInstance(ZendClientFactory::class);
     }

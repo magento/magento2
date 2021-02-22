@@ -20,12 +20,12 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
     private $plugin;
 
     /**
-     * @var \Magento\Newsletter\Model\SubscriberFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Newsletter\Model\SubscriberFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subscriberFactory;
 
     /**
-     * @var SubscriberModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubscriberModel|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subscriber;
 
@@ -35,26 +35,26 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var ExtensionAttributesFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ExtensionAttributesFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $extensionFactoryMock;
 
     /**
-     * @var CustomerExtensionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerExtensionInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerExtensionMock;
 
     /**
-     * @var Subscriber|\PHPUnit_Framework_MockObject_MockObject
+     * @var Subscriber|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subscriberResourceMock;
 
     /**
-     * @var CustomerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subscriberFactory = $this->getMockBuilder(\Magento\Newsletter\Model\SubscriberFactory::class)
             ->disableOriginalConstructor()
@@ -111,12 +111,12 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
     public function testAfterSave($subscriptionOriginalValue, $subscriptionNewValue)
     {
         $customerId = 1;
-        /** @var CustomerInterface | \PHPUnit_Framework_MockObject_MockObject $result */
+        /** @var CustomerInterface | \PHPUnit\Framework\MockObject\MockObject $result */
         $result = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
-        /** @var CustomerRepository | \PHPUnit_Framework_MockObject_MockObject $subject */
+        /** @var CustomerRepository | \PHPUnit\Framework\MockObject\MockObject $subject */
         $subject = $this->createMock(\Magento\Customer\Api\CustomerRepositoryInterface::class);
 
-        /** @var CustomerExtensionInterface|\PHPUnit_Framework_MockObject_MockObject $resultExtensionAttributes */
+        /** @var CustomerExtensionInterface|\PHPUnit\Framework\MockObject\MockObject $resultExtensionAttributes */
         $resultExtensionAttributes = $this->getMockBuilder(CustomerExtensionInterface::class)
             ->setMethods(['getIsSubscribed', 'setIsSubscribed'])
             ->getMockForAbstractClass();
@@ -182,7 +182,7 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
         $this->subscriber->expects($this->once())->method('getId')->willReturn(1);
         $this->subscriber->expects($this->once())->method('delete')->willReturnSelf();
 
-        $this->assertEquals(true, $this->plugin->afterDelete($subject, true, $customer));
+        $this->assertTrue($this->plugin->afterDelete($subject, true, $customer));
     }
 
     public function testAroundDeleteById()
@@ -199,7 +199,7 @@ class CustomerPluginTest extends \PHPUnit\Framework\TestCase
         $this->subscriber->expects($this->once())->method('getId')->willReturn(1);
         $this->subscriber->expects($this->once())->method('delete')->willReturnSelf();
 
-        $this->assertEquals(true, $this->plugin->aroundDeleteById($subject, $deleteCustomerById, $customerId));
+        $this->assertTrue($this->plugin->aroundDeleteById($subject, $deleteCustomerById, $customerId));
     }
 
     /**

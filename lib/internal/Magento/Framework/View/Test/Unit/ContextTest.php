@@ -22,21 +22,21 @@ class ContextTest extends \PHPUnit\Framework\TestCase
     protected $context;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $appState;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\DesignInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $design;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->markTestSkipped('Testcase needs to be refactored.');
         $this->appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
@@ -147,7 +147,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
 
         $this->appState->expects($this->once())
             ->method('getAreaCode')
-            ->will($this->returnValue($area));
+            ->willReturn($area);
 
         $this->assertEquals($area, $this->context->getArea());
     }
@@ -158,7 +158,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
 
         $this->request->expects($this->once())
             ->method('getModuleName')
-            ->will($this->returnValue($moduleName));
+            ->willReturn($moduleName);
 
         $this->assertEquals($moduleName, $this->context->getModuleName());
     }
@@ -169,7 +169,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
 
         $this->request->expects($this->once())
             ->method('getModuleName')
-            ->will($this->returnValue($frontName));
+            ->willReturn($frontName);
 
         $this->assertEquals($frontName, $this->context->getFrontName());
     }
@@ -180,7 +180,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
 
         $this->request->expects($this->once())
             ->method('getControllerName')
-            ->will($this->returnValue($controllerName));
+            ->willReturn($controllerName);
 
         $this->assertEquals($controllerName, $this->context->getControllerName());
     }
@@ -191,7 +191,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
 
         $this->request->expects($this->once())
             ->method('getActionName')
-            ->will($this->returnValue($actionName));
+            ->willReturn($actionName);
 
         $this->assertEquals($actionName, $this->context->getActionName());
     }
@@ -205,15 +205,15 @@ class ContextTest extends \PHPUnit\Framework\TestCase
 
         $this->request->expects($this->once())
             ->method('getModuleName')
-            ->will($this->returnValue($frontName));
+            ->willReturn($frontName);
 
         $this->request->expects($this->once())
             ->method('getControllerName')
-            ->will($this->returnValue($controllerName));
+            ->willReturn($controllerName);
 
         $this->request->expects($this->once())
             ->method('getActionName')
-            ->will($this->returnValue($actionName));
+            ->willReturn($actionName);
 
         $this->assertEquals($fullActionName, $this->context->getFullActionName());
     }
@@ -229,7 +229,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getHeader')
             ->with('Accept')
-            ->will($this->returnValue($headerAccept));
+            ->willReturn($headerAccept);
 
         $this->assertEquals($acceptType, $this->context->getAcceptType());
     }
@@ -260,7 +260,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getPost')
             ->with($key, $default)
-            ->will($this->returnValue($postValue));
+            ->willReturn($postValue);
 
         $this->assertEquals($postValue, $this->context->getPost($key, $default));
     }
@@ -274,7 +274,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getPost')
             ->with($key, $default)
-            ->will($this->returnValue($queryValue));
+            ->willReturn($queryValue);
 
         $this->assertEquals($queryValue, $this->context->getQuery($key, $default));
     }
@@ -288,7 +288,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getParam')
             ->with($key, $default)
-            ->will($this->returnValue($paramValue));
+            ->willReturn($paramValue);
 
         $this->assertEquals($paramValue, $this->context->getParam($key, $default));
     }
@@ -299,7 +299,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
 
         $this->request->expects($this->once())
             ->method('getParams')
-            ->will($this->returnValue($params));
+            ->willReturn($params);
 
         $this->assertEquals($params, $this->context->getParams());
     }
@@ -312,7 +312,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getHeader')
             ->with($headerName)
-            ->will($this->returnValue($headerValue));
+            ->willReturn($headerValue);
 
         $this->assertEquals($headerValue, $this->context->getHeader($headerName));
     }
@@ -323,7 +323,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
 
         $this->request->expects($this->once())
             ->method('getContent')
-            ->will($this->returnValue($content));
+            ->willReturn($content);
 
         $this->assertEquals($content, $this->context->getContent());
     }

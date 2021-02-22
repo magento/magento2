@@ -16,16 +16,16 @@ class ElementVisibilityCompositeTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var ElementVisibilityInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ElementVisibilityInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $firstVisibilityMock;
 
     /**
-     * @var ElementVisibilityInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ElementVisibilityInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $secondVisibilityMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->firstVisibilityMock = $this->getMockBuilder(ElementVisibilityInterface::class)
             ->getMockForAbstractClass();
@@ -36,13 +36,14 @@ class ElementVisibilityCompositeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\ConfigurationMismatchException
      * @codingStandardsIgnoreStart
-     * @expectedExceptionMessage stdClass: Instance of Magento\Config\Model\Config\Structure\ElementVisibilityInterface is expected, got stdClass instead
      * @codingStandardsIgnoreEnd
      */
     public function testException()
     {
+        $this->expectException(\Magento\Framework\Exception\ConfigurationMismatchException::class);
+        $this->expectExceptionMessage('stdClass: Instance of Magento\\Config\\Model\\Config\\Structure\\ElementVisibilityInterface is expected, got stdClass instead');
+
         $visibility = [
             'stdClass' => new \stdClass()
         ];

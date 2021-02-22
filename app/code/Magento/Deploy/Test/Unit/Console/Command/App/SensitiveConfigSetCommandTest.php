@@ -12,7 +12,7 @@ use Magento\Deploy\Console\Command\App\SensitiveConfigSetCommand;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Framework\Console\Cli;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -48,7 +48,7 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->facadeMock = $this->getMockBuilder(SensitiveConfigSetFacade::class)
             ->disableOriginalConstructor()
@@ -108,10 +108,7 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             Cli::RETURN_FAILURE,
             $tester->getStatusCode()
         );
-        $this->assertContains(
-            'This command is unavailable right now.',
-            $tester->getDisplay()
-        );
+        $this->assertStringContainsString('This command is unavailable right now.', $tester->getDisplay());
     }
 
     public function testExecuteWithException()
@@ -130,9 +127,6 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             Cli::RETURN_FAILURE,
             $tester->getStatusCode()
         );
-        $this->assertContains(
-            'Some exception',
-            $tester->getDisplay()
-        );
+        $this->assertStringContainsString('Some exception', $tester->getDisplay());
     }
 }

@@ -33,62 +33,62 @@ class InstantPurchaseTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var CustomerData | \PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerData | \PHPUnit\Framework\MockObject\MockObject
      */
     private $customerData;
 
     /**
-     * @var Session | \PHPUnit_Framework_MockObject_MockObject
+     * @var Session | \PHPUnit\Framework\MockObject\MockObject
      */
     private $customerSession;
 
     /**
-     * @var StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
-     * @var InstantPurchaseModel | \PHPUnit_Framework_MockObject_MockObject
+     * @var InstantPurchaseModel | \PHPUnit\Framework\MockObject\MockObject
      */
     private $instantPurchase;
 
     /**
-     * @var PaymentTokenFormatter | \PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentTokenFormatter | \PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentTokenFormatter;
 
     /**
-     * @var CustomerAddressesFormatter | \PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerAddressesFormatter | \PHPUnit\Framework\MockObject\MockObject
      */
     private $customerAddressesFormatter;
 
     /**
-     * @var ShippingMethodFormatter | \PHPUnit_Framework_MockObject_MockObject
+     * @var ShippingMethodFormatter | \PHPUnit\Framework\MockObject\MockObject
      */
     private $shippingMethodFormatter;
 
     /**
-     * @var Store | \PHPUnit_Framework_MockObject_MockObject
+     * @var Store | \PHPUnit\Framework\MockObject\MockObject
      */
     private $store;
 
     /**
-     * @var Customer | \PHPUnit_Framework_MockObject_MockObject
+     * @var Customer | \PHPUnit\Framework\MockObject\MockObject
      */
     private $customer;
 
     /**
-     * @var InstantPurchaseOption | \PHPUnit_Framework_MockObject_MockObject
+     * @var InstantPurchaseOption | \PHPUnit\Framework\MockObject\MockObject
      */
     private $instantPurchaseOption;
 
     /**
      * Setup environment for testing
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerSession = $this->createMock(Session::class);
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->instantPurchase = $this->createMock(InstantPurchaseModel::class);
         $this->paymentTokenFormatter = $this->createMock(PaymentTokenFormatter::class);
         $this->customerAddressesFormatter = $this->createMock(CustomerAddressesFormatter::class);

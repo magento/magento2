@@ -25,31 +25,31 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Reporting | \PHPUnit_Framework_MockObject_MockObject
+     * @var Reporting | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $reporting;
 
     /**
-     * @var SearchCriteriaInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteriaInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchCriteria;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var FilterBuilder | \PHPUnit_Framework_MockObject_MockObject
+     * @var FilterBuilder | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $filterBuilder;
 
     /**
-     * @var AttributeRepository | \PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeRepository | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->reporting = $this->getMockBuilder(
             \Magento\Framework\View\Element\UiComponent\DataProvider\Reporting::class
@@ -138,16 +138,16 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->getData();
 
-        $this->assertTrue(is_array($result));
+        $this->assertIsArray($result);
         $this->assertArrayHasKey('totalRecords', $result);
         $this->assertEquals(1, $result['totalRecords']);
         $this->assertArrayHasKey('items', $result);
-        $this->assertTrue(is_array($result['items']));
+        $this->assertIsArray($result['items']);
         $this->assertEquals($result['items'], $expected);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function mockSearchCriteria()
     {

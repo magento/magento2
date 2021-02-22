@@ -22,7 +22,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $this->objectManager->getObject(\Magento\Framework\Message\Collection::class);
@@ -137,7 +137,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         }
 
         $this->assertEquals($this->model->getItemsByType(MessageInterface::TYPE_ERROR), $this->model->getErrors());
-        $this->assertEquals(4, count($this->model->getErrors()));
+        $this->assertCount(4, $this->model->getErrors());
     }
 
     /**

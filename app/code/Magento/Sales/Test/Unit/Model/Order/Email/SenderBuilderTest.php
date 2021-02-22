@@ -16,26 +16,26 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
     protected $senderBuilder;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $templateContainerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $identityContainerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $transportBuilder;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
 
         $this->templateContainerMock = $this->createPartialMock(
@@ -98,16 +98,16 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
 
         $this->identityContainerMock->expects($this->once())
             ->method('getEmailCopyTo')
-            ->will($this->returnValue(['example@mail.com']));
+            ->willReturn(['example@mail.com']);
         $this->identityContainerMock->expects($this->once())
             ->method('getCopyMethod')
-            ->will($this->returnValue('bcc'));
+            ->willReturn('bcc');
         $this->identityContainerMock->expects($this->once())
             ->method('getCustomerEmail')
-            ->will($this->returnValue($customerEmail));
+            ->willReturn($customerEmail);
         $this->identityContainerMock->expects($this->once())
             ->method('getCustomerName')
-            ->will($this->returnValue($customerName));
+            ->willReturn($customerName);
         $this->identityContainerMock->expects($this->exactly(1))
             ->method('getStore')
             ->willReturn($this->storeMock);
@@ -123,7 +123,7 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
 
         $this->transportBuilder->expects($this->exactly(1))
             ->method('getTransport')
-            ->will($this->returnValue($transportMock));
+            ->willReturn($transportMock);
 
         $this->senderBuilder->send();
     }
@@ -152,7 +152,7 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
             ->willReturn(1);
         $this->transportBuilder->expects($this->exactly(2))
             ->method('getTransport')
-            ->will($this->returnValue($transportMock));
+            ->willReturn($transportMock);
 
         $this->senderBuilder->sendCopyTo();
     }
@@ -173,32 +173,32 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
 
         $this->templateContainerMock->expects($this->exactly($count))
             ->method('getTemplateId')
-            ->will($this->returnValue($templateId));
+            ->willReturn($templateId);
         $this->transportBuilder->expects($this->exactly($count))
             ->method('setTemplateIdentifier')
             ->with($this->equalTo($templateId));
         $this->templateContainerMock->expects($this->exactly($count))
             ->method('getTemplateOptions')
-            ->will($this->returnValue($templateOptions));
+            ->willReturn($templateOptions);
         $this->transportBuilder->expects($this->exactly($count))
             ->method('setTemplateOptions')
             ->with($this->equalTo($templateOptions));
         $this->templateContainerMock->expects($this->exactly($count))
             ->method('getTemplateVars')
-            ->will($this->returnValue($templateVars));
+            ->willReturn($templateVars);
         $this->transportBuilder->expects($this->exactly($count))
             ->method('setTemplateVars')
             ->with($this->equalTo($templateVars));
 
         $this->identityContainerMock->expects($this->exactly($count))
             ->method('getEmailIdentity')
-            ->will($this->returnValue($emailIdentity));
+            ->willReturn($emailIdentity);
         $this->transportBuilder->expects($this->exactly($count))
             ->method('setFromByScope')
             ->with($this->equalTo($emailIdentity), 1);
 
         $this->identityContainerMock->expects($this->once())
             ->method('getEmailCopyTo')
-            ->will($this->returnValue($emailCopyTo));
+            ->willReturn($emailCopyTo);
     }
 }

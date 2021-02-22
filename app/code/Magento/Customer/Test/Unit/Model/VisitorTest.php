@@ -25,21 +25,21 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registry;
 
     /**
-     * @var \Magento\Customer\Model\ResourceModel\Visitor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\ResourceModel\Visitor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Framework\Session\SessionManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Session\SessionManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $session;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->registry = $this->createMock(\Magento\Framework\Registry::class);
         $this->session = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
@@ -88,7 +88,7 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
 
     public function testSaveByRequest()
     {
-        $this->session->expects($this->once())->method('setVisitorData')->will($this->returnSelf());
+        $this->session->expects($this->once())->method('setVisitorData')->willReturnSelf();
         $this->assertSame($this->visitor, $this->visitor->saveByRequest(null));
     }
 

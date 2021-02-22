@@ -18,16 +18,16 @@ class OrderAdapterTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var OrderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderMock;
 
     /**
-     * @var \Magento\Payment\Gateway\Data\Order\AddressAdapterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Gateway\Data\Order\AddressAdapterFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressAdapterFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
@@ -67,7 +67,7 @@ class OrderAdapterTest extends \PHPUnit\Framework\TestCase
     {
         $this->orderMock->expects($this->once())->method('getBillingAddress')->willReturn(null);
 
-        $this->assertSame(null, $this->model->getBillingAddress());
+        $this->assertNull($this->model->getBillingAddress());
     }
 
     public function testGetBillingAddress()
@@ -91,7 +91,7 @@ class OrderAdapterTest extends \PHPUnit\Framework\TestCase
     {
         $this->orderMock->expects($this->once())->method('getShippingAddress')->willReturn(null);
 
-        $this->assertSame(null, $this->model->getShippingAddress());
+        $this->assertNull($this->model->getShippingAddress());
     }
 
     public function testGetShippingAddress()
