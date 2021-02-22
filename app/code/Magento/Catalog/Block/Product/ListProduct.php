@@ -136,7 +136,13 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      */
     public function getLoadedProductCollection()
     {
-        return $this->_getProductCollection();
+        $collection = $this->_getProductCollection();
+        $categoryId = $this->getLayer()->getCurrentCategory()->getId();
+        foreach ($collection as $product) {
+            $product->setData('category_id', $categoryId);
+        }
+
+        return $collection;
     }
 
     /**
