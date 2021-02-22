@@ -12,7 +12,6 @@ use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\LoginAsCustomerApi\Api\AuthenticateCustomerBySecretInterface;
-use Magento\LoginAsCustomerApi\Api\GetAuthenticationDataBySecretInterface;
 
 /**
  * Remove all items from guest shopping cart and mark cart as not-guest
@@ -21,11 +20,6 @@ use Magento\LoginAsCustomerApi\Api\GetAuthenticationDataBySecretInterface;
  */
 class ProcessShoppingCartPlugin
 {
-    /**
-     * @var GetAuthenticationDataBySecretInterface
-     */
-    private $getAuthenticationDataBySecret;
-
     /**
      * @var CustomerSession
      */
@@ -42,18 +36,15 @@ class ProcessShoppingCartPlugin
     private $quoteRepository;
 
     /**
-     * @param GetAuthenticationDataBySecretInterface $getAuthenticationDataBySecret
      * @param CustomerSession $customerSession
      * @param CheckoutSession $checkoutSession
      * @param CartRepositoryInterface $quoteRepository
      */
     public function __construct(
-        GetAuthenticationDataBySecretInterface $getAuthenticationDataBySecret,
         CustomerSession $customerSession,
         CheckoutSession $checkoutSession,
         CartRepositoryInterface $quoteRepository
     ) {
-        $this->getAuthenticationDataBySecret = $getAuthenticationDataBySecret;
         $this->customerSession = $customerSession;
         $this->checkoutSession = $checkoutSession;
         $this->quoteRepository = $quoteRepository;
