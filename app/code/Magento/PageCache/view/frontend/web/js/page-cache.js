@@ -53,7 +53,7 @@ define([
             contents = function (elem) {
                 return $.map(elem, function (el) {
                     var iframeHostName;
-                    
+
                     // prevent cross origin iframe content reading
                     if ($.nodeName(el, 'iframe')) {
                         iframeHostName = $('<a>').prop('href', $(el).prop('src'))
@@ -63,7 +63,7 @@ define([
                             return [];
                         }
                     }
-                    
+
                     try {
                         return $.nodeName(el, 'iframe') ?
                             el.contentDocument || (el.contentWindow ? el.contentWindow.document : []) :
