@@ -26,7 +26,7 @@ class ConfigurableProductTest extends \PHPUnit\Framework\TestCase
         );
         $quoteItemMock->expects($this->once())
             ->method('getProductType')
-            ->will($this->returnValue($data['product_type']));
+            ->willReturn($data['product_type']);
 
         $stockItemMock = $this->createPartialMock(
             \Magento\CatalogInventory\Model\Stock\Item::class,

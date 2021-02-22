@@ -23,7 +23,7 @@ class AliasResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->aliasResolver = $objectManagerHelper->getObject(

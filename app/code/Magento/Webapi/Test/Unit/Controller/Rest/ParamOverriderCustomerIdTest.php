@@ -22,7 +22,7 @@ class ParamOverriderCustomerIdTest extends \PHPUnit\Framework\TestCase
      */
     private $userContext;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->userContext = $this->getMockBuilder(\Magento\Authorization\Model\UserContextInterface::class)
             ->getMockForAbstractClass();
@@ -40,10 +40,10 @@ class ParamOverriderCustomerIdTest extends \PHPUnit\Framework\TestCase
 
         $this->userContext->expects($this->once())
             ->method('getUserType')
-            ->will($this->returnValue(UserContextInterface::USER_TYPE_CUSTOMER));
+            ->willReturn(UserContextInterface::USER_TYPE_CUSTOMER);
         $this->userContext->expects($this->once())
             ->method('getUserId')
-            ->will($this->returnValue($retValue));
+            ->willReturn($retValue);
 
         $this->assertSame($retValue, $this->model->getOverriddenValue());
     }
@@ -52,7 +52,7 @@ class ParamOverriderCustomerIdTest extends \PHPUnit\Framework\TestCase
     {
         $this->userContext->expects($this->once())
             ->method('getUserType')
-            ->will($this->returnValue(UserContextInterface::USER_TYPE_ADMIN));
+            ->willReturn(UserContextInterface::USER_TYPE_ADMIN);
 
         $this->assertNull($this->model->getOverriddenValue());
     }

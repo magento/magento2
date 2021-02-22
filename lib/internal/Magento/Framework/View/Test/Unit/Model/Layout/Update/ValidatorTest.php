@@ -16,26 +16,26 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     private $_objectHelper;
 
     /**
-     * @var \Magento\Framework\Config\DomFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\DomFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $domConfigFactory;
 
     /**
-     * @var \Magento\Framework\View\Model\Layout\Update\Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Model\Layout\Update\Validator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $model;
 
     /**
-     * @var \Magento\Framework\Config\Dom\UrnResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\Dom\UrnResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urnResolver;
 
     /**
-     * @var \Magento\Framework\Config\ValidationStateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\ValidationStateInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $validationState;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->domConfigFactory = $this->getMockBuilder(
@@ -193,11 +193,12 @@ XML;
     }
 
     /**
-     * @expectedException \Magento\Framework\Config\Dom\ValidationException
-     * @expectedExceptionMessage Please correct the XML data and try again.
      */
     public function testIsValidThrowsValidationException()
     {
+        $this->expectException(\Magento\Framework\Config\Dom\ValidationException::class);
+        $this->expectExceptionMessage('Please correct the XML data and try again.');
+
         $this->domConfigFactory->expects($this->once())->method('createDom')->willThrowException(
             new \Magento\Framework\Config\Dom\ValidationException('Please correct the XML data and try again.')
         );
@@ -205,11 +206,12 @@ XML;
     }
 
     /**
-     * @expectedException \Magento\Framework\Config\Dom\ValidationSchemaException
-     * @expectedExceptionMessage Please correct the XSD data and try again.
      */
     public function testIsValidThrowsValidationSchemaException()
     {
+        $this->expectException(\Magento\Framework\Config\Dom\ValidationSchemaException::class);
+        $this->expectExceptionMessage('Please correct the XSD data and try again.');
+
         $this->domConfigFactory->expects($this->once())->method('createDom')->willThrowException(
             new \Magento\Framework\Config\Dom\ValidationSchemaException(
                 new Phrase('Please correct the XSD data and try again.')
@@ -219,11 +221,12 @@ XML;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Exception.
      */
     public function testIsValidThrowsException()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Exception.');
+
         $this->domConfigFactory->expects($this->once())->method('createDom')->willThrowException(
             new \Exception('Exception.')
         );

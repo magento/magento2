@@ -7,13 +7,13 @@ namespace Magento\CatalogInventory\Test\Unit\Model\Config\Backend;
 
 class ManagestockTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  \Magento\CatalogInventory\Model\Indexer\Stock\Processor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\CatalogInventory\Model\Indexer\Stock\Processor|\PHPUnit\Framework\MockObject\MockObject */
     protected $stockIndexerProcessor;
 
     /** @var \Magento\CatalogInventory\Model\Config\Backend\Managestock */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stockIndexerProcessor = $this->getMockBuilder(
             \Magento\CatalogInventory\Model\Indexer\Stock\Processor::class

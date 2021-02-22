@@ -16,7 +16,7 @@ use Magento\Sales\Model\Order;
 class CheckoutTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var Session|\PHPUnit\Framework\MockObject\MockObject
      */
     private $session;
 
@@ -25,7 +25,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
      */
     private $checkout;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->session = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()

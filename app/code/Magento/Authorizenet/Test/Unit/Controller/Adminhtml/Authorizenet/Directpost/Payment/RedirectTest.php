@@ -10,7 +10,7 @@ use Magento\Payment\Block\Transparent\Iframe;
 
 /**
  * Class RedirectTest
- *
+ * Test for Redirect
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -22,81 +22,86 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
     protected $directpost;
 
     /**
-     * @var \Magento\Authorizenet\Model\Directpost\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Authorizenet\Model\Directpost\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directpostSessionMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderMock;
 
     /**
-     * @var \Magento\Sales\Model\AdminOrder\Create|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\AdminOrder\Create|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $adminOrderCreateMock;
 
     /**
-     * @var \Magento\Backend\Model\Session\Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Session\Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionQuoteMock;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageManagerMock;
 
     /**
-     * @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Catalog\Helper\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productHelperMock;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $escaperMock;
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultPageFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $forwardFactoryMock;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $coreRegistryMock;
 
     /**
-     * @var \Magento\Framework\View\Result\LayoutFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\LayoutFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultLayoutFactoryMock;
 
     /**
-     * @var \Magento\Authorizenet\Helper\Backend\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Authorizenet\Helper\Backend\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperMock;
 
-    protected function setUp()
+    /**
+     * @var Redirect
+     */
+    private $controller;
+
+    protected function setUp(): void
     {
         $this->directpostSessionMock = $this->getMockBuilder(\Magento\Authorizenet\Model\Directpost\Session::class)
             ->setMethods([

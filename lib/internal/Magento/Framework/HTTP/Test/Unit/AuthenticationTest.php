@@ -16,7 +16,7 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
     public function testGetCredentials($server, $expectedLogin, $expectedPass)
     {
         $request = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $request->expects($this->once())->method('getServerValue')->will($this->returnValue($server));
+        $request->expects($this->once())->method('getServerValue')->willReturn($server);
         $response = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $authentication = new \Magento\Framework\HTTP\Authentication($request, $response);
         $this->assertSame([$expectedLogin, $expectedPass], $authentication->getCredentials());
@@ -87,6 +87,6 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($headers->has('WWW-Authenticate'));
         $header  = $headers->get('WWW-Authenticate');
         $this->assertEquals('Basic realm="' . $realm . '"', $header->current()->getFieldValue());
-        $this->assertContains('401', $response->getBody());
+        $this->assertStringContainsString('401', $response->getBody());
     }
 }

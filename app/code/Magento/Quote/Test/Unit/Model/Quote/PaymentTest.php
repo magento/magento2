@@ -24,28 +24,28 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|SpecificationFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|SpecificationFactory
      */
     private $specificationFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|ManagerInterface
      */
     private $eventManager;
 
     /**
-     * @var \Magento\Framework\Serialize\JsonValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\JsonValidator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $jsonValidatorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->specificationFactory = $this->getMockBuilder(
             SpecificationFactory::class
         )->disableOriginalConstructor()
             ->getMock();
-        $this->eventManager = $this->createMock(ManagerInterface::class);
+        $this->eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
         $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->setMethods(['unserialize'])
             ->disableOriginalConstructor()
@@ -113,7 +113,7 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         $quoteId = 1;
         $storeId = 1;
 
-        $paymentMethod = $this->createMock(MethodInterface::class);
+        $paymentMethod = $this->getMockForAbstractClass(MethodInterface::class);
         $quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->getMock();

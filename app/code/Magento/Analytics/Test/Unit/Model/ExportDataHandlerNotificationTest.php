@@ -20,7 +20,7 @@ class ExportDataHandlerNotificationTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
     }
@@ -54,7 +54,7 @@ class ExportDataHandlerNotificationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function createExportDataHandlerMock()
     {
@@ -62,7 +62,7 @@ class ExportDataHandlerNotificationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function createAnalyticsConnectorMock()
     {

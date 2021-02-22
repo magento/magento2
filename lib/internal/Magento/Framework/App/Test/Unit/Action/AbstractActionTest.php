@@ -8,25 +8,25 @@ namespace Magento\Framework\App\Test\Unit\Action;
 
 class AbstractActionTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\App\Action\AbstractAction|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Action\AbstractAction|\PHPUnit\Framework\MockObject\MockObject */
     protected $action;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $request;
 
-    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $response;
 
-    /** @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $redirectFactory;
 
-    /** @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit\Framework\MockObject\MockObject */
     protected $redirect;
 
-    /** @var \Magento\Framework\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $context;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()->getMock();

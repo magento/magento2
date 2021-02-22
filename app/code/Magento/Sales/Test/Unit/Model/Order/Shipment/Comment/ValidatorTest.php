@@ -17,14 +17,14 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     protected $validator;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment\Comment|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Shipment\Comment|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $commentModelMock;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->commentModelMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Shipment\Comment::class,
@@ -45,10 +45,10 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->commentModelMock->expects($this->any())
             ->method('hasData')
-            ->will($this->returnValueMap($commentDataMap));
+            ->willReturnMap($commentDataMap);
         $this->commentModelMock->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue($commentData));
+            ->willReturn($commentData);
         $actualWarnings = $this->validator->validate($this->commentModelMock);
         $this->assertEquals($expectedWarnings, $actualWarnings);
     }

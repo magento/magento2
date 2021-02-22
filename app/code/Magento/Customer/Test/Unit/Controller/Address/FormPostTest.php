@@ -44,129 +44,129 @@ class FormPostTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Context |\PHPUnit_Framework_MockObject_MockObject
+     * @var Context |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var Session |\PHPUnit_Framework_MockObject_MockObject
+     * @var Session |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $session;
 
     /**
-     * @var FormKeyValidator |\PHPUnit_Framework_MockObject_MockObject
+     * @var FormKeyValidator |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $formKeyValidator;
 
     /**
-     * @var FormFactory |\PHPUnit_Framework_MockObject_MockObject
+     * @var FormFactory |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $formFactory;
 
     /**
-     * @var AddressRepositoryInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var AddressRepositoryInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressRepository;
 
     /**
-     * @var AddressInterfaceFactory |\PHPUnit_Framework_MockObject_MockObject
+     * @var AddressInterfaceFactory |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressDataFactory;
 
     /**
-     * @var RegionInterfaceFactory |\PHPUnit_Framework_MockObject_MockObject
+     * @var RegionInterfaceFactory |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $regionDataFactory;
 
     /**
-     * @var DataObjectProcessor |\PHPUnit_Framework_MockObject_MockObject
+     * @var DataObjectProcessor |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataProcessor;
 
     /**
-     * @var DataObjectHelper |\PHPUnit_Framework_MockObject_MockObject
+     * @var DataObjectHelper |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataObjectHelper;
 
     /**
-     * @var ForwardFactory |\PHPUnit_Framework_MockObject_MockObject
+     * @var ForwardFactory |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultForwardFactory;
 
     /**
-     * @var PageFactory |\PHPUnit_Framework_MockObject_MockObject
+     * @var PageFactory |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultPageFactory;
 
     /**
-     * @var RegionFactory |\PHPUnit_Framework_MockObject_MockObject
+     * @var RegionFactory |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $regionFactory;
 
     /**
-     * @var RequestInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var ResultRedirect |\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultRedirect |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultRedirect;
 
     /**
-     * @var RedirectFactory |\PHPUnit_Framework_MockObject_MockObject
+     * @var RedirectFactory |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultRedirectFactory;
 
     /**
-     * @var RedirectInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var RedirectInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $redirect;
 
     /**
-     * @var ObjectManagerInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManager;
 
     /**
-     * @var AddressInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var AddressInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressData;
 
     /**
-     * @var RegionInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var RegionInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $regionData;
 
     /**
-     * @var Form |\PHPUnit_Framework_MockObject_MockObject
+     * @var Form |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $form;
 
     /**
-     * @var HelperData |\PHPUnit_Framework_MockObject_MockObject
+     * @var HelperData |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperData;
 
     /**
-     * @var Region |\PHPUnit_Framework_MockObject_MockObject
+     * @var Region |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $region;
 
     /**
-     * @var ManagerInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageManager;
 
     /**
-     * @var \Magento\Customer\Model\Address\Mapper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Address\Mapper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerAddressMapper;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->prepareContext();
 

@@ -19,22 +19,22 @@ class AbstractCompositeTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_iteratorMock;
 
     /**
-     * @var \Magento\Framework\Module\Manager | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Manager | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $moduleManagerMock;
 
     /**
-     * @var ElementVisibilityInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ElementVisibilityInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $elementVisibilityMock;
 
@@ -50,7 +50,7 @@ class AbstractCompositeTest extends \PHPUnit\Framework\TestCase
         'children' => ['someGroup' => []],
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->elementVisibilityMock = $this->getMockBuilder(ElementVisibilityInterface::class)
             ->getMockForAbstractClass();
@@ -70,7 +70,7 @@ class AbstractCompositeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_iteratorMock);
         unset($this->_storeManagerMock);
@@ -103,30 +103,30 @@ class AbstractCompositeTest extends \PHPUnit\Framework\TestCase
 
     public function testHasChildrenReturnsTrueIfThereAreVisibleChildren()
     {
-        $this->_iteratorMock->expects($this->once())->method('current')->will($this->returnValue(true));
-        $this->_iteratorMock->expects($this->once())->method('valid')->will($this->returnValue(true));
+        $this->_iteratorMock->expects($this->once())->method('current')->willReturn(true);
+        $this->_iteratorMock->expects($this->once())->method('valid')->willReturn(true);
         $this->assertTrue($this->_model->hasChildren());
     }
 
     public function testIsVisibleReturnsTrueIfThereAreVisibleChildren()
     {
-        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
-        $this->_iteratorMock->expects($this->once())->method('current')->will($this->returnValue(true));
-        $this->_iteratorMock->expects($this->once())->method('valid')->will($this->returnValue(true));
+        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->willReturn(true);
+        $this->_iteratorMock->expects($this->once())->method('current')->willReturn(true);
+        $this->_iteratorMock->expects($this->once())->method('valid')->willReturn(true);
         $this->_model->setData(['showInDefault' => 'true'], 'default');
         $this->assertTrue($this->_model->isVisible());
     }
 
     public function testIsVisibleReturnsTrueIfElementHasFrontEndModel()
     {
-        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
+        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->willReturn(true);
         $this->_model->setData(['showInDefault' => 'true', 'frontend_model' => 'Model_Name'], 'default');
         $this->assertTrue($this->_model->isVisible());
     }
 
     public function testIsVisibleReturnsFalseIfElementHasNoChildrenAndFrontendModel()
     {
-        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
+        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->willReturn(true);
         $this->_model->setData(['showInDefault' => 'true'], 'default');
         $this->assertFalse($this->_model->isVisible());
     }

@@ -28,41 +28,41 @@ class PageTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var DateTime|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dateTimeMock;
 
     /**
-     * @var EntityManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entityManagerMock;
 
     /**
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataPoolMock;
 
     /**
-     * @var Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var Page|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourcesMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()

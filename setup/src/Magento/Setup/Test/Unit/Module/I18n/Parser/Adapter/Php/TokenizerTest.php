@@ -24,7 +24,7 @@ class TokenizerTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->tokenizer = $this->objectManager->getObject(
@@ -39,20 +39,20 @@ class TokenizerTest extends \PHPUnit\Framework\TestCase
     {
         $class = 'Phrase';
         $this->parseFile();
-        $this->assertEquals(false, $this->tokenizer->isMatchingClass($class)); // new
-        $this->assertEquals(true, $this->tokenizer->isMatchingClass($class)); // \Magento\Framework\Phrase(
-        $this->assertEquals(false, $this->tokenizer->isMatchingClass($class)); // 'Testing'
-        $this->assertEquals(false, $this->tokenizer->isMatchingClass($class)); // )
-        $this->assertEquals(false, $this->tokenizer->isMatchingClass($class)); // ;
-        $this->assertEquals(false, $this->tokenizer->isMatchingClass($class)); // new
-        $this->assertEquals(true, $this->tokenizer->isMatchingClass($class)); // Phrase(
-        $this->assertEquals(false, $this->tokenizer->isMatchingClass($class)); // 'More testing'
-        $this->assertEquals(false, $this->tokenizer->isMatchingClass($class)); // )
-        $this->assertEquals(false, $this->tokenizer->isMatchingClass($class)); // ;
-        $this->assertEquals(false, $this->tokenizer->isMatchingClass($class)); // new
-        $this->assertEquals(false, $this->tokenizer->isMatchingClass($class)); // \Magento\Framework\DataObject(
-        $this->assertEquals(false, $this->tokenizer->isMatchingClass($class)); // )
-        $this->assertEquals(false, $this->tokenizer->isMatchingClass($class)); // ;
+        $this->assertFalse($this->tokenizer->isMatchingClass($class)); // new
+        $this->assertTrue($this->tokenizer->isMatchingClass($class)); // \Magento\Framework\Phrase(
+        $this->assertFalse($this->tokenizer->isMatchingClass($class)); // 'Testing'
+        $this->assertFalse($this->tokenizer->isMatchingClass($class)); // )
+        $this->assertFalse($this->tokenizer->isMatchingClass($class)); // ;
+        $this->assertFalse($this->tokenizer->isMatchingClass($class)); // new
+        $this->assertTrue($this->tokenizer->isMatchingClass($class)); // Phrase(
+        $this->assertFalse($this->tokenizer->isMatchingClass($class)); // 'More testing'
+        $this->assertFalse($this->tokenizer->isMatchingClass($class)); // )
+        $this->assertFalse($this->tokenizer->isMatchingClass($class)); // ;
+        $this->assertFalse($this->tokenizer->isMatchingClass($class)); // new
+        $this->assertFalse($this->tokenizer->isMatchingClass($class)); // \Magento\Framework\DataObject(
+        $this->assertFalse($this->tokenizer->isMatchingClass($class)); // )
+        $this->assertFalse($this->tokenizer->isMatchingClass($class)); // ;
     }
 
     /**

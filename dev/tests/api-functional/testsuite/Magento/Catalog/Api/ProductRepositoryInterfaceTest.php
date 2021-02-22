@@ -89,7 +89,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -104,7 +104,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     /**
      * @inheritDoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->deleteFixtureProducts();
         parent::tearDown();
@@ -179,7 +179,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, ['sku' => $invalidSku]);
             $this->fail("Expected throwing exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
@@ -622,7 +622,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $this->assertArrayHasKey('product_links', $response);
         $links = $response['product_links'];
-        $this->assertEquals(1, count($links));
+        $this->assertCount(1, $links);
         $this->assertEquals($productLinkData, $links[0]);
 
         // update link information
@@ -649,7 +649,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $this->assertArrayHasKey('product_links', $response);
         $links = $response['product_links'];
-        $this->assertEquals(1, count($links));
+        $this->assertCount(1, $links);
         $this->assertEquals($productLinkData, $links[0]);
 
         // Remove link
@@ -730,9 +730,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $this->assertArrayHasKey('options', $response);
         $options = $response['options'];
-        $this->assertEquals(2, count($options));
-        $this->assertEquals(1, count($options[0]['values']));
-        $this->assertEquals(1, count($options[1]['values']));
+        $this->assertCount(2, $options);
+        $this->assertCount(1, $options[0]['values']);
+        $this->assertCount(1, $options[1]['values']);
 
         //update the product options, adding a value to option 1, delete an option and create a new option
         $options[0]['values'][] = [
@@ -760,9 +760,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $response = $this->updateProduct($response);
         $this->assertArrayHasKey('options', $response);
         $options = $response['options'];
-        $this->assertEquals(2, count($options));
-        $this->assertEquals(2, count($options[0]['values']));
-        $this->assertEquals(1, count($options[1]['values']));
+        $this->assertCount(2, $options);
+        $this->assertCount(2, $options[0]['values']);
+        $this->assertCount(1, $options[1]['values']);
 
         //update product without setting options field, option should not be changed
         unset($response['options']);
@@ -770,7 +770,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $response = $this->getProduct($productData[ProductInterface::SKU]);
         $this->assertArrayHasKey('options', $response);
         $options = $response['options'];
-        $this->assertEquals(2, count($options));
+        $this->assertCount(2, $options);
 
         //update product with empty options, options should be removed
         $response['options'] = [];
@@ -797,7 +797,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $response = $this->saveProduct($productData);
         $this->assertArrayHasKey('media_gallery_entries', $response);
         $mediaGalleryEntries = $response['media_gallery_entries'];
-        $this->assertEquals(2, count($mediaGalleryEntries));
+        $this->assertCount(2, $mediaGalleryEntries);
         $id = $mediaGalleryEntries[0]['id'];
         foreach ($mediaGalleryEntries as &$entry) {
             unset($entry['id']);
@@ -835,7 +835,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         ];
         $response = $this->updateProduct($response);
         $mediaGalleryEntries = $response['media_gallery_entries'];
-        $this->assertEquals(1, count($mediaGalleryEntries));
+        $this->assertCount(1, $mediaGalleryEntries);
         unset($mediaGalleryEntries[0]['id']);
         $expectedValue = [
             [
@@ -852,13 +852,13 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         unset($response['media_gallery_entries']);
         $response = $this->updateProduct($response);
         $mediaGalleryEntries = $response['media_gallery_entries'];
-        $this->assertEquals(1, count($mediaGalleryEntries));
+        $this->assertCount(1, $mediaGalleryEntries);
         unset($mediaGalleryEntries[0]['id']);
         $this->assertEquals($expectedValue, $mediaGalleryEntries);
         //pass empty array, delete all existing media gallery entries
         $response['media_gallery_entries'] = [];
         $response = $this->updateProduct($response);
-        $this->assertEquals(true, empty($response['media_gallery_entries']));
+        $this->assertEmpty($response['media_gallery_entries']);
         $this->deleteProduct($productData[ProductInterface::SKU]);
     }
 
@@ -1260,7 +1260,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $searchResult = $this->_webApiCall($serviceInfo, $requestData);
 
         $this->assertEquals(3, $searchResult['total_count']);
-        $this->assertEquals(1, count($searchResult['items']));
+        $this->assertCount(1, $searchResult['items']);
         $this->assertEquals('search_product_4', $searchResult['items'][0][ProductInterface::SKU]);
         $this->assertNotNull(
             $searchResult['items'][0][ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids']
@@ -1662,8 +1662,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $missingAttributes = ['news_from_date', 'custom_design_from'];
         $expectedAttribute = ['special_price', 'special_from_date'];
         $attributeCodes = array_column($customAttributes, 'attribute_code');
-        $this->assertEquals(0, count(array_intersect($attributeCodes, $missingAttributes)));
-        $this->assertEquals(2, count(array_intersect($attributeCodes, $expectedAttribute)));
+        $this->assertCount(0, array_intersect($attributeCodes, $missingAttributes));
+        $this->assertCount(2, array_intersect($attributeCodes, $expectedAttribute));
     }
 
     /**
@@ -1695,7 +1695,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->saveProduct($productData);
         $response = $this->getProduct($productData[ProductInterface::SKU]);
         $customAttributes = array_column($response['custom_attributes'], 'value', 'attribute_code');
-        $this->assertFalse(array_key_exists(self::KEY_SPECIAL_PRICE, $customAttributes));
+        $this->assertArrayNotHasKey(self::KEY_SPECIAL_PRICE, $customAttributes);
     }
 
     /**

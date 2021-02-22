@@ -13,7 +13,7 @@ class QueryParamsResolverTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Url\QueryParamsResolver */
     protected $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->object = $objectManager->getObject(\Magento\Framework\Url\QueryParamsResolver::class);

@@ -15,11 +15,11 @@ class AggregateInvokerTest extends \PHPUnit\Framework\TestCase
     protected $_invoker;
 
     /**
-     * @var \PHPUnit\Framework\TestCase|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\TestCase|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_testCase;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_testCase = $this->createPartialMock(
             \PHPUnit\Framework\Test::class,

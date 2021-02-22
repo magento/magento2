@@ -12,12 +12,12 @@ use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 class UrlRewriteExceptionMessageFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Message\Factory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\Factory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $messageFactoryMock;
 
     /**
-     * @var \Magento\Framework\UrlInterface| \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface| \PHPUnit\Framework\MockObject\MockObject
      */
     private $urlMock;
 
@@ -26,7 +26,7 @@ class UrlRewriteExceptionMessageFactoryTest extends \PHPUnit\Framework\TestCase
      */
     private $urlRewriteExceptionMessageFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->urlMock = $this->createMock(\Magento\Framework\UrlInterface::class);
 
@@ -55,7 +55,7 @@ class UrlRewriteExceptionMessageFactoryTest extends \PHPUnit\Framework\TestCase
             ->method('getUrl')
             ->willReturn('htmlUrl');
 
-        $message = $this->createMock(MessageInterface::class);
+        $message = $this->getMockForAbstractClass(MessageInterface::class);
 
         $message->expects($this->once())
             ->method('setText')
@@ -84,10 +84,11 @@ class UrlRewriteExceptionMessageFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\RuntimeException
      */
     public function testCreateMessageNotFound()
     {
+        $this->expectException(\Magento\Framework\Exception\RuntimeException::class);
+
         $exception = new \Exception('message');
         $this->urlRewriteExceptionMessageFactory->createMessage($exception);
     }

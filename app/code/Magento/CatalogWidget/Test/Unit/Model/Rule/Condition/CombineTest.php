@@ -14,16 +14,16 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class CombineTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\CatalogWidget\Model\Rule\Condition\Combine|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogWidget\Model\Rule\Condition\Combine|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $condition;
 
     /**
-     * @var \Magento\CatalogWidget\Model\Rule\Condition\ProductFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogWidget\Model\Rule\Condition\ProductFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $conditionFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $arguments = $objectManagerHelper->getConstructArguments(
@@ -65,9 +65,9 @@ class CombineTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['loadAttributeOptions', 'getAttributeOption'])
             ->disableOriginalConstructor()
             ->getMock();
-        $productCondition->expects($this->any())->method('loadAttributeOptions')->will($this->returnSelf());
+        $productCondition->expects($this->any())->method('loadAttributeOptions')->willReturnSelf();
         $productCondition->expects($this->any())->method('getAttributeOption')
-            ->will($this->returnValue($attributeOptions));
+            ->willReturn($attributeOptions);
 
         $this->conditionFactory->expects($this->atLeastOnce())->method('create')->willReturn($productCondition);
 
@@ -83,7 +83,7 @@ class CombineTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->setMethods(['collectValidatedAttributes'])
             ->getMock();
         $condition->expects($this->any())->method('collectValidatedAttributes')->with($collection)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->condition->setConditions([$condition]);
 

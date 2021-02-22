@@ -15,41 +15,41 @@ class PreventClearCheckoutSessionObserverTest extends \PHPUnit\Framework\TestCas
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $observerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $actionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $eventMethods = ['getControllerAction', 'dispatch', '__wakeUp'];
         $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
@@ -58,7 +58,7 @@ class PreventClearCheckoutSessionObserverTest extends \PHPUnit\Framework\TestCas
         $this->observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
         $this->eventMock = $this->createPartialMock(\Magento\Framework\Event::class, $eventMethods);
         $this->actionMock = $this->createMock(\Magento\Persistent\Controller\Index::class);
-        $this->observerMock->expects($this->once())->method('getEvent')->will($this->returnValue($this->eventMock));
+        $this->observerMock->expects($this->once())->method('getEvent')->willReturn($this->eventMock);
         $this->model = new \Magento\Persistent\Observer\PreventClearCheckoutSessionObserver(
             $this->sessionHelperMock,
             $this->helperMock,
@@ -71,9 +71,9 @@ class PreventClearCheckoutSessionObserverTest extends \PHPUnit\Framework\TestCas
         $this->eventMock
             ->expects($this->once())
             ->method('getControllerAction')
-            ->will($this->returnValue($this->actionMock));
-        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
+            ->willReturn($this->actionMock);
+        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->willReturn(true);
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
         $this->helperMock->expects($this->never())->method('isShoppingCartPersist');
         $this->actionMock->expects($this->once())->method('setClearCheckoutSession')->with(false);
         $this->model->execute($this->observerMock);
@@ -84,10 +84,10 @@ class PreventClearCheckoutSessionObserverTest extends \PHPUnit\Framework\TestCas
         $this->eventMock
             ->expects($this->once())
             ->method('getControllerAction')
-            ->will($this->returnValue($this->actionMock));
-        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(true));
-        $this->helperMock->expects($this->once())->method('isShoppingCartPersist')->will($this->returnValue(false));
+            ->willReturn($this->actionMock);
+        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->willReturn(true);
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(true);
+        $this->helperMock->expects($this->once())->method('isShoppingCartPersist')->willReturn(false);
         $this->actionMock->expects($this->once())->method('setClearCheckoutSession')->with(false);
         $this->model->execute($this->observerMock);
     }

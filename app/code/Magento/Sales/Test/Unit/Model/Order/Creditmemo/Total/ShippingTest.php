@@ -9,12 +9,12 @@ namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Total;
 class ShippingTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $creditmemoMock;
 
     /**
-     * @var \Magento\Tax\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxConfig;
 
@@ -23,7 +23,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
      */
     protected $shippingCollector;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -73,11 +73,12 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
     /**
      * situation: The admin user specified a desired shipping refund that is greater than the amount allowed
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Maximum shipping amount allowed to refund is: 5
      */
     public function testCollectException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Maximum shipping amount allowed to refund is: 5');
+
         $orderShippingAmount = 10;
         $orderShippingRefunded = 5;
         $allowedShippingAmount = $orderShippingAmount - $orderShippingRefunded;

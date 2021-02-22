@@ -20,7 +20,7 @@ use Magento\Paypal\Model\Config;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\OrderFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class ReturnUrlTest
@@ -92,14 +92,14 @@ class ReturnUrlTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var PaymentFailuresInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentFailuresInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentFailures;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -146,11 +146,11 @@ class ReturnUrlTest extends \PHPUnit\Framework\TestCase
 
         $this->quote = $this->getMockBuilder(CartInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->paymentFailures = $this->getMockBuilder(PaymentFailuresInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->context->method('getView')
             ->willReturn($this->view);

@@ -26,24 +26,24 @@ class BundleOptionPriceTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $saleableItemMock;
 
     /**
-     * @var \Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $bundleCalculatorMock;
 
     /**
-     * @var BundleOptions|\PHPUnit_Framework_MockObject_MockObject
+     * @var BundleOptions|\PHPUnit\Framework\MockObject\MockObject
      */
     private $bundleOptionsMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->bundleOptionsMock = $this->createMock(BundleOptions::class);
         $this->saleableItemMock = $this->createMock(Product::class);
@@ -71,7 +71,7 @@ class BundleOptionPriceTest extends \PHPUnit\Framework\TestCase
         $collection = $this->createMock(\Magento\Bundle\Model\ResourceModel\Option\Collection::class);
         $this->bundleOptionsMock->expects($this->any())
             ->method('getOptions')
-            ->will($this->returnValue($collection));
+            ->willReturn($collection);
         $this->assertEquals($collection, $this->bundleOptionPrice->getOptions());
     }
 
@@ -82,12 +82,12 @@ class BundleOptionPriceTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetOptionSelectionAmount()
     {
-        $selectionAmount = $this->createMock(AmountInterface::class);
+        $selectionAmount = $this->getMockForAbstractClass(AmountInterface::class);
         $product = $this->createMock(Product::class);
         $selection = $this->createMock(Selection::class);
         $this->bundleOptionsMock->expects($this->any())
             ->method('getOptionSelectionAmount')
-            ->will($this->returnValue($selectionAmount))
+            ->willReturn($selectionAmount)
             ->with($product, $selection, false);
         $this->assertEquals($selectionAmount, $this->bundleOptionPrice->getOptionSelectionAmount($selection));
     }
@@ -99,11 +99,11 @@ class BundleOptionPriceTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAmount()
     {
-        $amountMock = $this->createMock(AmountInterface::class);
+        $amountMock = $this->getMockForAbstractClass(AmountInterface::class);
         $this->bundleCalculatorMock->expects($this->once())
             ->method('getOptionsAmount')
             ->with($this->equalTo($this->saleableItemMock))
-            ->will($this->returnValue($amountMock));
+            ->willReturn($amountMock);
         $this->assertSame($amountMock, $this->bundleOptionPrice->getAmount());
     }
 
@@ -115,7 +115,7 @@ class BundleOptionPriceTest extends \PHPUnit\Framework\TestCase
     public function testGetValue()
     {
         $value = 1;
-        $this->bundleOptionsMock->expects($this->any())->method('calculateOptions')->will($this->returnValue($value));
+        $this->bundleOptionsMock->expects($this->any())->method('calculateOptions')->willReturn($value);
         $this->assertEquals($value, $this->bundleOptionPrice->getValue());
     }
 }

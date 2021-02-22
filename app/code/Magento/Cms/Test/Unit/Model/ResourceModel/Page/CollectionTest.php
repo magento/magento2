@@ -16,16 +16,16 @@ class CollectionTest extends AbstractCollectionTest
     protected $collection;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataPoolMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

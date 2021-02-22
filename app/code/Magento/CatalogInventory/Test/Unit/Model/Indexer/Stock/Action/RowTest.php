@@ -18,18 +18,19 @@ class RowTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->_model = $objectManager->getObject(\Magento\CatalogInventory\Model\Indexer\Stock\Action\Row::class);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage We can't rebuild the index for an undefined product.
      */
     public function testEmptyId()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('We can\'t rebuild the index for an undefined product.');
+
         $this->_model->execute(null);
     }
 }

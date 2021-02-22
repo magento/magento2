@@ -29,41 +29,41 @@ class MergeTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\Url\ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url\ScopeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scope;
 
     /**
-     * @var \Magento\Framework\Cache\FrontendInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Cache\FrontendInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cache;
 
     /**
-     * @var \Magento\Framework\View\Model\Layout\Update\Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Model\Layout\Update\Validator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $layoutValidator;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializer;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $logger;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
      */
     private $appState;
 
     /**
-     * @var LayoutCacheKeyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutCacheKeyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutCacheKeyMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
 
@@ -98,11 +98,12 @@ class MergeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Config\Dom\ValidationSchemaException
-     * @expectedExceptionMessage Processed schema file is not valid.
      */
     public function testValidateMergedLayoutThrowsException()
     {
+        $this->expectException(\Magento\Framework\Config\Dom\ValidationSchemaException::class);
+        $this->expectExceptionMessage('Processed schema file is not valid.');
+
         $messages = [
             'Please correct the XSD data and try again.',
         ];

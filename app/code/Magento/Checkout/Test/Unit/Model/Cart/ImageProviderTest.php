@@ -14,21 +14,21 @@ class ImageProviderTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Quote\Api\CartItemRepositoryInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Quote\Api\CartItemRepositoryInterface
      */
     private $itemRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Checkout\CustomerData\ItemPoolInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Checkout\CustomerData\ItemPoolInterface
      */
     private $itemPoolMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Checkout\CustomerData\DefaultItem
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Checkout\CustomerData\DefaultItem
      */
     private $customerItem;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->itemRepositoryMock = $this->createMock(\Magento\Quote\Api\CartItemRepositoryInterface::class);
         $this->itemPoolMock = $this->createMock(\Magento\Checkout\CustomerData\ItemPoolInterface::class);

@@ -16,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class AdapterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var QueryContainerFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var QueryContainerFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryContainerFactory;
 
@@ -26,27 +26,27 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Elasticsearch\SearchAdapter\ConnectionManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Elasticsearch\SearchAdapter\ConnectionManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connectionManager;
 
     /**
-     * @var \Magento\Elasticsearch\SearchAdapter\Mapper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Elasticsearch\SearchAdapter\Mapper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mapper;
 
     /**
-     * @var \Magento\Elasticsearch\SearchAdapter\ResponseFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Elasticsearch\SearchAdapter\ResponseFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseFactory;
 
     /**
-     * @var \Magento\Framework\Search\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Elasticsearch\SearchAdapter\Aggregation\Builder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Elasticsearch\SearchAdapter\Aggregation\Builder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $aggregationBuilder;
 
@@ -54,7 +54,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      * Setup method
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connectionManager = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\ConnectionManager::class)
             ->disableOriginalConstructor()

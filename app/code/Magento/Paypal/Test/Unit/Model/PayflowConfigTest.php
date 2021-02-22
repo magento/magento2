@@ -20,21 +20,21 @@ class PayflowConfigTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var MethodInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var MethodInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $methodInterfaceMock;
 
     /**
-     * @var PayflowConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var PayflowConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $config;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->setMethods(['getValue', 'isSetFlag'])
@@ -173,7 +173,7 @@ class PayflowConfigTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->with('paypal/general/merchant_country')
-            ->will($this->returnValue('US'));
+            ->willReturn('US');
 
         $i = 0;
         foreach ($expectsMethods as $method => $isActive) {

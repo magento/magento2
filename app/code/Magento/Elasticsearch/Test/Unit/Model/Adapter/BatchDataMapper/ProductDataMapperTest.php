@@ -64,13 +64,13 @@ class ProductDataMapperTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->builderMock = $this->createTestProxy(Builder::class);
-        $this->fieldMapperMock = $this->createMock(FieldMapperInterface::class);
+        $this->fieldMapperMock = $this->getMockForAbstractClass(FieldMapperInterface::class);
         $this->dataProvider = $this->createMock(DataProvider::class);
         $this->attribute = $this->createMock(Attribute::class);
-        $this->additionalFieldsProvider = $this->createMock(AdditionalFieldsProviderInterface::class);
+        $this->additionalFieldsProvider = $this->getMockForAbstractClass(AdditionalFieldsProviderInterface::class);
         $this->dateFieldTypeMock = $this->createMock(Date::class);
         $filterableAttributeTypes = [
             'boolean' => 'boolean',
@@ -107,10 +107,10 @@ class ProductDataMapperTest extends TestCase
         $this->builderMock->expects($this->any())
             ->method('addFields')
             ->withConsecutive([$additionalFields])
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->builderMock->expects($this->any())
             ->method('build')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->additionalFieldsProvider->expects($this->once())
             ->method('getFields')
             ->with([$productId], $storeId)
@@ -215,12 +215,12 @@ class ProductDataMapperTest extends TestCase
             ]
         );
 
-        $sourceMock = $this->createMock(SourceInterface::class);
+        $sourceMock = $this->getMockForAbstractClass(SourceInterface::class);
         $attributeMock->method('getSource')->willReturn($sourceMock);
         $sourceMock->method('getAllOptions')->willReturn($attributeData['options'] ?? []);
         $options = [];
         foreach ($attributeData['options'] as $option) {
-            $optionMock = $this->createMock(AttributeOptionInterface::class);
+            $optionMock = $this->getMockForAbstractClass(AttributeOptionInterface::class);
             $optionMock->method('getValue')->willReturn($option['value']);
             $optionMock->method('getLabel')->willReturn($option['label']);
             $options[] = $optionMock;

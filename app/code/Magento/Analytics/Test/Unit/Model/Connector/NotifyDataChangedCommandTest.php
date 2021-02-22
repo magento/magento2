@@ -24,26 +24,26 @@ class NotifyDataChangedCommandTest extends \PHPUnit\Framework\TestCase
     private $notifyDataChangedCommand;
 
     /**
-     * @var AnalyticsToken|\PHPUnit_Framework_MockObject_MockObject
+     * @var AnalyticsToken|\PHPUnit\Framework\MockObject\MockObject
      */
     private $analyticsTokenMock;
 
     /**
-     * @var ClientInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $httpClientMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     public $configMock;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->analyticsTokenMock =  $this->getMockBuilder(AnalyticsToken::class)
             ->disableOriginalConstructor()
@@ -51,15 +51,15 @@ class NotifyDataChangedCommandTest extends \PHPUnit\Framework\TestCase
 
         $this->httpClientMock =  $this->getMockBuilder(ClientInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->configMock =  $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->loggerMock =  $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $successHandler = $this->getMockBuilder(\Magento\Analytics\Model\Connector\Http\ResponseHandlerInterface::class)
             ->getMockForAbstractClass();
         $successHandler->method('handleResponse')

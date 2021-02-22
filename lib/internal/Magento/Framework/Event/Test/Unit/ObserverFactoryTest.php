@@ -16,7 +16,7 @@ use \Magento\Framework\Event\ObserverFactory;
 class ObserverFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
@@ -25,7 +25,7 @@ class ObserverFactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $observerFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->createPartialMock(
             \Magento\Framework\ObjectManager\ObjectManager::class,
@@ -41,7 +41,7 @@ class ObserverFactoryTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with($className)
-            ->will($this->returnValue($observerMock));
+            ->willReturn($observerMock);
 
         $result = $this->observerFactory->get($className);
         $this->assertEquals($observerMock, $result);
@@ -56,7 +56,7 @@ class ObserverFactoryTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with($className, $this->equalTo($arguments))
-            ->will($this->returnValue($observerMock));
+            ->willReturn($observerMock);
 
         $result = $this->observerFactory->create($className, $arguments);
         $this->assertEquals($observerMock, $result);

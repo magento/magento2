@@ -12,7 +12,7 @@ namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Product;
 class RowSizeEstimatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
@@ -21,7 +21,7 @@ class RowSizeEstimatorTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceConnectionMock = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()

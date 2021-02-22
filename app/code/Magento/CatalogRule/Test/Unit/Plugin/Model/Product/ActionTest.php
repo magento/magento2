@@ -13,10 +13,10 @@ class ActionTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\CatalogRule\Plugin\Model\Product\Action */
     protected $action;
 
-    /** @var \Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor|\PHPUnit\Framework\MockObject\MockObject */
     protected $productRuleProcessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productRuleProcessor = $this->getMockBuilder(
             \Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor::class

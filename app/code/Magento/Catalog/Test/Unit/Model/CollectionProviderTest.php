@@ -20,31 +20,31 @@ class CollectionProviderTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $converterPoolMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $providerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $converterMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productMock = $this->createMock(Product::class);
         $this->converterPoolMock = $this->createMock(ConverterPool::class);
-        $this->providerMock = $this->createMock(CollectionProviderInterface::class);
-        $this->converterMock = $this->createMock(ConverterInterface::class);
+        $this->providerMock = $this->getMockForAbstractClass(CollectionProviderInterface::class);
+        $this->converterMock = $this->getMockForAbstractClass(ConverterInterface::class);
 
         $this->model = new CollectionProvider($this->converterPoolMock, ['crosssell' => $this->providerMock]);
     }
@@ -110,11 +110,12 @@ class CollectionProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * Test exception when collection provider is not configured for product link type.
      *
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The collection provider isn't registered.
      */
     public function testGetCollectionWithMissingProviders()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('The collection provider isn\'t registered.');
+
         $this->model->getCollection($this->productMock, 'upsell');
     }
 }

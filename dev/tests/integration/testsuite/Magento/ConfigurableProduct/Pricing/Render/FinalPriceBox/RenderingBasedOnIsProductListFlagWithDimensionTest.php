@@ -47,7 +47,7 @@ class RenderingBasedOnIsProductListFlagWithDimensionTest extends \PHPUnit\Framew
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $this->product = $productRepository->get('configurable');
@@ -88,7 +88,7 @@ class RenderingBasedOnIsProductListFlagWithDimensionTest extends \PHPUnit\Framew
     public function testRenderingByDefault()
     {
         $html = $this->finalPriceBox->toHtml();
-        self::assertContains('5.99', $html);
+        self::assertStringContainsString('5.99',$html);
         $this->assertGreaterThanOrEqual(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
@@ -124,7 +124,7 @@ class RenderingBasedOnIsProductListFlagWithDimensionTest extends \PHPUnit\Framew
     {
         $this->finalPriceBox->setData('is_product_list', $flag);
         $html = $this->finalPriceBox->toHtml();
-        self::assertContains('5.99', $html);
+        self::assertStringContainsString('5.99',$html);
         $this->assertEquals(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(

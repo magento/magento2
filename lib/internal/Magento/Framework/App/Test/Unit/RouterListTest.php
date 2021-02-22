@@ -15,7 +15,7 @@ class RouterListTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
@@ -24,7 +24,7 @@ class RouterListTest extends \PHPUnit\Framework\TestCase
      */
     protected $routerList;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->routerList = [
             'adminRouter' => ['class' => 'AdminClass', 'disable' => true, 'sortOrder' => 10],
@@ -44,7 +44,7 @@ class RouterListTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->at(0))
             ->method('create')
             ->with('DefaultClass')
-            ->will($this->returnValue($expectedClass));
+            ->willReturn($expectedClass);
 
         $this->assertEquals($expectedClass, $this->model->current());
     }
@@ -55,7 +55,7 @@ class RouterListTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->at(0))
             ->method('create')
             ->with('FrontClass')
-            ->will($this->returnValue($expectedClass));
+            ->willReturn($expectedClass);
 
         $this->model->next();
         $this->assertEquals($expectedClass, $this->model->current());
@@ -82,12 +82,12 @@ class RouterListTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->at(0))
             ->method('create')
             ->with('DefaultClass')
-            ->will($this->returnValue($defaultClass));
+            ->willReturn($defaultClass);
 
         $this->objectManagerMock->expects($this->at(1))
             ->method('create')
             ->with('FrontClass')
-            ->will($this->returnValue($frontClass));
+            ->willReturn($frontClass);
 
         $this->assertEquals($defaultClass, $this->model->current());
         $this->model->next();

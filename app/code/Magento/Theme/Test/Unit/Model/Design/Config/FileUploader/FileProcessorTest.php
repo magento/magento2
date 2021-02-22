@@ -14,34 +14,34 @@ use Magento\Theme\Model\Design\Config\FileUploader\FileProcessor;
  */
 class FileProcessorTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\MediaStorage\Model\File\UploaderFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\MediaStorage\Model\File\UploaderFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $uploaderFactory;
 
-    /** @var \Magento\MediaStorage\Model\File\Uploader|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\MediaStorage\Model\File\Uploader|\PHPUnit\Framework\MockObject\MockObject */
     protected $uploader;
 
-    /** @var \Magento\Theme\Model\Design\BackendModelFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Model\Design\BackendModelFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $backendModelFactory;
 
-    /** @var \Magento\Theme\Model\Design\Backend\File|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Model\Design\Backend\File|\PHPUnit\Framework\MockObject\MockObject */
     protected $backendModel;
 
-    /** @var \Magento\Theme\Model\Design\Config\MetadataProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Model\Design\Config\MetadataProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $metadataProvider;
 
-    /** @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $directoryWrite;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $storeManager;
 
-    /** @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $store;
 
     /** @var FileProcessor */
     protected $fileProcessor;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->uploaderFactory = $this->getMockBuilder(\Magento\MediaStorage\Model\File\UploaderFactory::class)
             ->disableOriginalConstructor()

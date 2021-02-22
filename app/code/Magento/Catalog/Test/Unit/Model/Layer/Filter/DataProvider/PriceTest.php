@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\Unit\Model\Layer\Filter\DataProvider;
 use \Magento\Catalog\Model\Layer\Filter\DataProvider\Price;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Test for \Magento\Catalog\Model\Layer\Filter\DataProvider\Price
@@ -36,7 +36,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      */
     private $target;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productCollection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
             ->disableOriginalConstructor()
@@ -48,7 +48,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->layer->expects($this->any())
             ->method('getProductCollection')
-            ->will($this->returnValue($this->productCollection));
+            ->willReturn($this->productCollection);
         $this->coreRegistry = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->disableOriginalConstructor()
             ->setMethods(['registry'])
@@ -85,13 +85,13 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $map = $this->getValueMap();
         $this->scopeConfig->expects($this->exactly(5))
             ->method('getValue')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($key, $scope) use ($map) {
                         $this->assertArrayHasKey($key, $map);
                         return $map[$key]['scope'] === $scope ? $map[$key]['value'] : null;
                     }
-                )
+                
             );
         $this->assertSame($map[Price::XML_PATH_RANGE_CALCULATION]['value'], $this->target->getRangeCalculationValue());
         $this->assertSame($map[Price::XML_PATH_RANGE_STEP]['value'], $this->target->getRangeStepValue());
@@ -116,11 +116,11 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $priceRange = 10;
         $category->expects($this->once())
             ->method('getFilterPriceRange')
-            ->will($this->returnValue($priceRange));
+            ->willReturn($priceRange);
         $this->coreRegistry->expects($this->once())
             ->method('registry')
             ->with('current_category_filter')
-            ->will($this->returnValue($category));
+            ->willReturn($category);
         $this->target->getPriceRange();
     }
 
@@ -134,15 +134,15 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $priceRange = 0;
         $category->expects($this->once())
             ->method('getFilterPriceRange')
-            ->will($this->returnValue($priceRange));
+            ->willReturn($priceRange);
         $this->coreRegistry->expects($this->once())
             ->method('registry')
             ->with('current_category_filter')
-            ->will($this->returnValue($category));
+            ->willReturn($category);
         $maxPrice = 8000;
         $this->productCollection->expects($this->once())
             ->method('getMaxPrice')
-            ->will($this->returnValue($maxPrice));
+            ->willReturn($maxPrice);
         $this->target->getPriceRange();
     }
 
@@ -151,7 +151,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $maxPrice = 8000;
         $this->productCollection->expects($this->once())
             ->method('getMaxPrice')
-            ->will($this->returnValue($maxPrice));
+            ->willReturn($maxPrice);
         $this->assertSame((float)$maxPrice, $this->target->getMaxPrice());
     }
 
@@ -193,7 +193,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->resource->expects($this->once())
             ->method('getCount')
             ->with($range)
-            ->will($this->returnValue($count));
+            ->willReturn($count);
         $this->assertSame($count, $this->target->getRangeItemCounts($range));
     }
 

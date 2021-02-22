@@ -19,7 +19,7 @@ class DataObjectTest extends \PHPUnit\Framework\TestCase
     /**
      * Prepares the environment before running a test.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->dataObject = new \Magento\Framework\DataObject();
@@ -28,7 +28,7 @@ class DataObjectTest extends \PHPUnit\Framework\TestCase
     /**
      * Cleans up the environment after running a test.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->dataObject = null;
         parent::tearDown();
@@ -180,8 +180,8 @@ string',
 
         $this->dataObject->setData('key2', 'value2');
         $this->assertEquals('value2', $this->dataObject->getData('key2'));
-        $this->assertEquals(null, $this->dataObject->getKey2());
-        $this->assertEquals(null, $this->dataObject->getDataUsingMethod('key2'));
+        $this->assertNull($this->dataObject->getKey2());
+        $this->assertNull($this->dataObject->getDataUsingMethod('key2'));
     }
 
     /**
@@ -283,10 +283,11 @@ string',
     /**
      * Tests \Magento\Framework\DataObject->__call()
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCall()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->dataObject->setData('key', 'value');
         $this->dataObject->setTest('test');
         $this->assertEquals('test', $this->dataObject->getData('test'));

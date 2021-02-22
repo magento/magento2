@@ -8,22 +8,22 @@ namespace Magento\Store\Test\Unit\Url\Plugin;
 class RouteParamsResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Url\QueryParamsResolverInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Url\QueryParamsResolverInterface
      */
     protected $queryParamsResolverMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\Store
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\Store
      */
     protected $storeMock;
 
@@ -32,7 +32,7 @@ class RouteParamsResolverTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
@@ -69,10 +69,10 @@ class RouteParamsResolverTest extends \PHPUnit\Framework\TestCase
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeCode
             )
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->storeManagerMock->expects($this->any())->method('hasSingleStore')->willReturn(false);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $routeParamsResolverMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $routeParamsResolverMock */
         $routeParamsResolverMock = $this->getMockBuilder(\Magento\Framework\Url\RouteParamsResolver::class)
             ->setMethods(['setScope', 'getScope'])
             ->disableOriginalConstructor()
@@ -101,11 +101,11 @@ class RouteParamsResolverTest extends \PHPUnit\Framework\TestCase
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeCode
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->storeManagerMock->expects($this->any())->method('hasSingleStore')->willReturn(false);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $routeParamsResolverMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $routeParamsResolverMock */
         $routeParamsResolverMock = $this->getMockBuilder(\Magento\Framework\Url\RouteParamsResolver::class)
             ->setMethods(['setScope', 'getScope'])
             ->disableOriginalConstructor()
@@ -134,10 +134,10 @@ class RouteParamsResolverTest extends \PHPUnit\Framework\TestCase
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeCode
             )
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->storeManagerMock->expects($this->any())->method('hasSingleStore')->willReturn(true);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $routeParamsResolverMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $routeParamsResolverMock */
         $routeParamsResolverMock = $this->getMockBuilder(\Magento\Framework\Url\RouteParamsResolver::class)
             ->setMethods(['setScope', 'getScope'])
             ->disableOriginalConstructor()
@@ -166,11 +166,11 @@ class RouteParamsResolverTest extends \PHPUnit\Framework\TestCase
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeCode
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->storeManagerMock->expects($this->any())->method('hasSingleStore')->willReturn(false);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $routeParamsResolverMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $routeParamsResolverMock */
         $routeParamsResolverMock = $this->getMockBuilder(\Magento\Framework\Url\RouteParamsResolver::class)
             ->setMethods(['setScope', 'getScope'])
             ->disableOriginalConstructor()

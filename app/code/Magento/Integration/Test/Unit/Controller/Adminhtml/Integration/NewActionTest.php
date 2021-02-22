@@ -16,7 +16,7 @@ class NewActionTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\
         $this->_requestMock->expects($this->any())
             ->method('setActionName')
             ->with('edit')
-            ->will($this->returnValue($this->_requestMock));
+            ->willReturn($this->_requestMock);
         $integrationContr = $this->_createIntegrationController('NewAction');
         $result = $integrationContr->execute();
         $this->assertNull($result);

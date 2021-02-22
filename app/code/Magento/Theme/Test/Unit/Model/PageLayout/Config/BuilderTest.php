@@ -17,17 +17,17 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     protected $builder;
 
     /**
-     * @var \Magento\Framework\View\PageLayout\ConfigFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\PageLayout\ConfigFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configFactory;
 
     /**
-     * @var \Magento\Framework\View\PageLayout\File\Collector\Aggregated|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\PageLayout\File\Collector\Aggregated|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileCollector;
 
     /**
-     * @var \Magento\Theme\Model\ResourceModel\Theme\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ResourceModel\Theme\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $themeCollection;
 
@@ -36,7 +36,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configFactory = $this->getMockBuilder(\Magento\Framework\View\PageLayout\ConfigFactory::class)
             ->disableOriginalConstructor()

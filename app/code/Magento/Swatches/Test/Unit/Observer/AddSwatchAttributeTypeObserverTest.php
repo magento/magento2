@@ -10,16 +10,16 @@ namespace Magento\Swatches\Test\Unit\Observer;
  */
 class AddSwatchAttributeTypeObserverTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Module\Manager|\PHPUnit\Framework\MockObject\MockObject */
     protected $moduleManagerMock;
 
-    /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject */
     protected $eventObserverMock;
 
-    /** @var \Magento\Swatches\Observer\AddSwatchAttributeTypeObserver|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Swatches\Observer\AddSwatchAttributeTypeObserver|\PHPUnit\Framework\MockObject\MockObject */
     protected $observerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->moduleManagerMock = $this->createMock(\Magento\Framework\Module\Manager::class);
 

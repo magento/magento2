@@ -18,7 +18,7 @@ class LabelTest extends \PHPUnit\Framework\TestCase
      */
     protected $_label;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
         $collectionFactoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
@@ -48,9 +48,9 @@ class LabelTest extends \PHPUnit\Framework\TestCase
     {
         $this->_label->setValue('Label Text');
         $html = $this->_label->getElementHtml();
-        $this->assertContains("<div class=\"control-value\">Label Text", $html);
+        $this->assertStringContainsString("<div class=\"control-value\">Label Text", $html);
         $this->_label->setBold(true);
         $html = $this->_label->getElementHtml();
-        $this->assertContains("<div class=\"control-value special\">Label Text", $html);
+        $this->assertStringContainsString("<div class=\"control-value special\">Label Text", $html);
     }
 }

@@ -28,62 +28,62 @@ class FilterTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit\Framework\MockObject\MockObject
      */
     private $string;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $logger;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $escaper;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assetRepo;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfig;
 
     /**
-     * @var \Magento\Variable\Model\VariableFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Variable\Model\VariableFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $coreVariableFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $layout;
 
     /**
-     * @var \Magento\Framework\View\LayoutFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $layoutFactory;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
      */
     private $appState;
 
     /**
-     * @var \Magento\Backend\Model\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $backendUrlBuilder;
 
     /**
-     * @var \Magento\Variable\Model\Source\Variables|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Variable\Model\Source\Variables|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configVariables;
 
@@ -122,7 +122,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
      */
     private $directiveProcessors;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -212,7 +212,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array|null $mockedMethods Methods to mock
-     * @return Filter|\PHPUnit_Framework_MockObject_MockObject
+     * @return Filter|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getModel($mockedMethods = null)
     {
@@ -269,7 +269,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
 
         $filter->expects($this->exactly(count($expectedResults)))
             ->method('getCssFilesContent')
-            ->will($this->returnValue($css));
+            ->willReturn($css);
 
         $designParams = [
             'area' => Area::AREA_FRONTEND,
@@ -279,7 +279,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $filter->setDesignParams($designParams);
 
         foreach ($expectedResults as $expectedResult) {
-            $this->assertContains($expectedResult, $filter->applyInlineCss($html));
+            $this->assertStringContainsString($expectedResult, $filter->applyInlineCss($html));
         }
     }
 
@@ -364,10 +364,11 @@ class FilterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\MailException
      */
     public function testApplyInlineCssThrowsExceptionWhenDesignParamsNotSet()
     {
+        $this->expectException(\Magento\Framework\Exception\MailException::class);
+
         $filter = $this->getModel();
         $cssProcessor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
@@ -450,11 +451,12 @@ class FilterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\MailException
      * @throws NoSuchEntityException
      */
     public function testProtocolDirectiveWithInvalidSchema()
     {
+        $this->expectException(\Magento\Framework\Exception\MailException::class);
+
         $model = $this->getModel();
         $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
         $storeMock->expects($this->once())->method('isCurrentlySecure')->willReturn(true);

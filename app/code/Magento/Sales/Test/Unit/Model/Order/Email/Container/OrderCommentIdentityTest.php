@@ -15,23 +15,23 @@ class OrderCommentIdentityTest extends \PHPUnit\Framework\TestCase
     protected $identity;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigInterfaceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
     protected $storeId;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfigInterfaceMock = $this->getMockForAbstractClass(
             \Magento\Framework\App\Config\ScopeConfigInterface::class
@@ -43,7 +43,7 @@ class OrderCommentIdentityTest extends \PHPUnit\Framework\TestCase
         $this->storeId = 999999999999;
         $this->storeMock->expects($this->any())
             ->method('getStoreId')
-            ->will($this->returnValue($this->storeId));
+            ->willReturn($this->storeId);
 
         $this->identity = new OrderCommentIdentity($this->scopeConfigInterfaceMock, $this->storeManagerMock);
     }
@@ -57,7 +57,7 @@ class OrderCommentIdentityTest extends \PHPUnit\Framework\TestCase
                 $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
                 $this->equalTo($this->storeId)
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->identity->setStore($this->storeMock);
         $result = $this->identity->isEnabled();
         $this->assertTrue($result);
@@ -72,7 +72,7 @@ class OrderCommentIdentityTest extends \PHPUnit\Framework\TestCase
                 $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
                 $this->equalTo($this->storeId)
             )
-            ->will($this->returnValue('test_value,test_value2'));
+            ->willReturn('test_value,test_value2');
         $this->identity->setStore($this->storeMock);
         $result = $this->identity->getEmailCopyTo();
         $this->assertEquals(['test_value', 'test_value2'], $result);
@@ -87,7 +87,7 @@ class OrderCommentIdentityTest extends \PHPUnit\Framework\TestCase
                 $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
                 $this->equalTo($this->storeId)
             )
-            ->will($this->returnValue('test_value, test_value2'));
+            ->willReturn('test_value, test_value2');
         $this->identity->setStore($this->storeMock);
         $result = $this->identity->getEmailCopyTo();
         $this->assertEquals(['test_value', 'test_value2'], $result);
@@ -102,7 +102,7 @@ class OrderCommentIdentityTest extends \PHPUnit\Framework\TestCase
                 $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
                 $this->equalTo($this->storeId)
             )
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->identity->setStore($this->storeMock);
         $result = $this->identity->getEmailCopyTo();
         $this->assertFalse($result);
@@ -117,7 +117,7 @@ class OrderCommentIdentityTest extends \PHPUnit\Framework\TestCase
                 $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
                 $this->equalTo($this->storeId)
             )
-            ->will($this->returnValue('copy_method'));
+            ->willReturn('copy_method');
 
         $this->identity->setStore($this->storeMock);
         $result = $this->identity->getCopyMethod();
@@ -133,7 +133,7 @@ class OrderCommentIdentityTest extends \PHPUnit\Framework\TestCase
                 $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
                 $this->equalTo($this->storeId)
             )
-            ->will($this->returnValue('template_id'));
+            ->willReturn('template_id');
 
         $this->identity->setStore($this->storeMock);
         $result = $this->identity->getGuestTemplateId();
@@ -149,7 +149,7 @@ class OrderCommentIdentityTest extends \PHPUnit\Framework\TestCase
                 $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
                 $this->equalTo($this->storeId)
             )
-            ->will($this->returnValue('template_id'));
+            ->willReturn('template_id');
 
         $this->identity->setStore($this->storeMock);
         $result = $this->identity->getTemplateId();
@@ -167,7 +167,7 @@ class OrderCommentIdentityTest extends \PHPUnit\Framework\TestCase
     {
         $this->storeManagerMock->expects($this->once())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
         $result = $this->identity->getStore();
         $this->assertEquals($this->storeMock, $result);
     }
@@ -196,7 +196,7 @@ class OrderCommentIdentityTest extends \PHPUnit\Framework\TestCase
                 $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
                 $this->equalTo($this->storeId)
             )
-            ->will($this->returnValue($emailIdentity));
+            ->willReturn($emailIdentity);
 
         $this->identity->setStore($this->storeMock);
         $result = $this->identity->getEmailIdentity();

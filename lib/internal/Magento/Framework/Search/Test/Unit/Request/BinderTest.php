@@ -17,7 +17,7 @@ class BinderTest extends \PHPUnit\Framework\TestCase
     /**
      * SetUP method
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 

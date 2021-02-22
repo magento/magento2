@@ -25,52 +25,52 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     protected $renderer;
 
     /**
-     * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageConfigMock;
 
     /**
-     * @var \Magento\Framework\View\Asset\AssetInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\AssetInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $assetInterfaceMock;
 
     /**
-     * @var \Magento\Framework\View\Asset\MergeService|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\MergeService|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $assetMergeServiceMock;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $escaperMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stringMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var MsApplicationTileImage|\PHPUnit_Framework_MockObject_MockObject
+     * @var MsApplicationTileImage|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $msApplicationTileImageMock;
 
     /**
-     * @var \Magento\Framework\View\Asset\GroupedCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\GroupedCollection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $assetsCollection;
 
     /**
-     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Title|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $titleMock;
 
@@ -79,7 +79,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->pageConfigMock = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
             ->disableOriginalConstructor()
@@ -182,13 +182,13 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->pageConfigMock
             ->expects($this->once())
             ->method('getMetadata')
-            ->will($this->returnValue($metadata));
+            ->willReturn($metadata);
 
         $this->msApplicationTileImageMock
             ->expects($this->once())
             ->method('getUrl')
             ->with('https://site.domain/ms-tile.jpg')
-            ->will($this->returnValue('https://site.domain/ms-tile.jpg'));
+            ->willReturn('https://site.domain/ms-tile.jpg');
 
         $this->assertEquals($expected, $this->renderer->renderMetadata());
     }
@@ -207,13 +207,13 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->pageConfigMock
             ->expects($this->once())
             ->method('getMetadata')
-            ->will($this->returnValue($metadata));
+            ->willReturn($metadata);
 
         $this->msApplicationTileImageMock
             ->expects($this->once())
             ->method('getUrl')
             ->with('images/ms-tile.jpg')
-            ->will($this->returnValue($expectedMetaUrl));
+            ->willReturn($expectedMetaUrl);
 
         $this->assertEquals($expected, $this->renderer->renderMetadata());
     }

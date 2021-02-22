@@ -22,21 +22,21 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     protected $address;
 
     /**
-     * @var \Magento\Customer\Model\Customer | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Customer | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customer;
 
     /**
-     * @var \Magento\Customer\Model\CustomerFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\CustomerFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerFactory;
 
     /**
-     * @var \Magento\Customer\Model\ResourceModel\Address | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\ResourceModel\Address | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -45,10 +45,10 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->customer->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(self::ORIG_CUSTOMER_ID));
+            ->willReturn(self::ORIG_CUSTOMER_ID);
         $this->customer->expects($this->any())
             ->method('load')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->customerFactory = $this->getMockBuilder(\Magento\Customer\Model\CustomerFactory::class)
             ->disableOriginalConstructor()
@@ -56,7 +56,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->customerFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->customer));
+            ->willReturn($this->customer);
 
         $this->resource = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Address::class)
             ->disableOriginalConstructor()
@@ -96,7 +96,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $customer->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(self::ORIG_CUSTOMER_ID + 1));
+            ->willReturn(self::ORIG_CUSTOMER_ID + 1);
 
         $this->address->setCustomer($customer);
         $this->assertEquals(self::ORIG_CUSTOMER_ID + 1, $this->address->getCustomerId());
@@ -108,10 +108,10 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 
         $this->resource->expects($this->any())
             ->method('loadAllAttributes')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->resource->expects($this->any())
             ->method('getSortedAttributes')
-            ->will($this->returnValue($resultValue));
+            ->willReturn($resultValue);
 
         $this->assertEquals($resultValue, $this->address->getAttributes());
     }
@@ -129,11 +129,11 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $mockEntityType->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(self::ORIG_CUSTOMER_ID));
+            ->willReturn(self::ORIG_CUSTOMER_ID);
 
         $this->resource->expects($this->any())
             ->method('getEntityType')
-            ->will($this->returnValue($mockEntityType));
+            ->willReturn($mockEntityType);
 
         $this->assertEquals(self::ORIG_CUSTOMER_ID, $this->address->getEntityTypeId());
     }

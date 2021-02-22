@@ -12,7 +12,7 @@ class RemoteTest extends \PHPUnit\Framework\TestCase
      */
     protected $_object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_object = new \Magento\Framework\View\Asset\Remote('https://127.0.0.1/magento/test/style.css', 'css');
     }

@@ -12,7 +12,7 @@ class SerializerTest extends \PHPUnit\Framework\TestCase
      */
     protected $_layoutMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_layoutMock = $this->getMockBuilder(
             \Magento\Framework\View\LayoutInterface::class
@@ -27,7 +27,7 @@ class SerializerTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser::class,
             ['getSelectedProducts']
         );
-        $grid->expects($this->once())->method('getSelectedProducts')->will($this->returnValue(['product1']));
+        $grid->expects($this->once())->method('getSelectedProducts')->willReturn(['product1']);
         $arguments = [
             'data' => [
                 'grid_block' => $grid,

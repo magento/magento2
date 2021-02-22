@@ -13,17 +13,17 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new \Magento\Config\Model\Config\Structure\Element\Group\Proxy($this->_objectManagerMock);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
         unset($this->_objectManagerMock);
@@ -34,15 +34,15 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
         $groupMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Group::class);
 
         $groupMock->expects($this->once())->method('setData');
-        $groupMock->expects($this->once())->method('getId')->will($this->returnValue('group_id'));
+        $groupMock->expects($this->once())->method('getId')->willReturn('group_id');
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(
             'create'
         )->with(
             \Magento\Config\Model\Config\Structure\Element\Group::class
-        )->will(
-            $this->returnValue($groupMock)
+        )->willReturn(
+            $groupMock
         );
 
         $this->_model->setData([], '');

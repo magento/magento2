@@ -37,7 +37,7 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Product\Attribute\Backend\Tierprice::class
@@ -78,10 +78,11 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
      * Test that duplicated tier price values issues exception during validation.
      *
      * @dataProvider validateDuplicateDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
+     *
      */
     public function testValidateDuplicate(array $tierPricesData)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $product = new \Magento\Framework\DataObject();
         $product->setTierPrice($tierPricesData);
 
@@ -111,11 +112,9 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     */
     public function testValidateDuplicateWebsite()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $product = new \Magento\Framework\DataObject();
         $product->setTierPrice(
             [
@@ -128,11 +127,9 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
         $this->_model->validate($product);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     */
     public function testValidatePercentage()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $product = new \Magento\Framework\DataObject();
         $product->setTierPrice(
             [

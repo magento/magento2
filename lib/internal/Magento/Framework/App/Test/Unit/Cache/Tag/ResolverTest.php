@@ -11,12 +11,12 @@ use \Magento\Framework\App\Cache\Tag\Resolver;
 class ResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Cache\Tag\Strategy\Factory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Cache\Tag\Strategy\Factory
      */
     private $strategyFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Cache\Tag\StrategyInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Cache\Tag\StrategyInterface
      */
     private $strategy;
 
@@ -25,7 +25,7 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->strategyFactory = $this->createMock(\Magento\Framework\App\Cache\Tag\Strategy\Factory::class);
 

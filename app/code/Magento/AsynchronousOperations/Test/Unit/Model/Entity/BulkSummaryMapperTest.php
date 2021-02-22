@@ -9,7 +9,7 @@ namespace Magento\AsynchronousOperations\Test\Unit\Model\Entity;
 use Magento\AsynchronousOperations\Model\Entity\BulkSummaryMapper;
 
 /**
- * Class BulkSummaryMapperTest
+ * Test for BulkSummaryMapper
  */
 class BulkSummaryMapperTest extends \PHPUnit\Framework\TestCase
 {
@@ -19,31 +19,31 @@ class BulkSummaryMapperTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataPoolMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $entityMetadataMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $selectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->metadataPoolMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
         $this->resourceConnectionMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
@@ -91,7 +91,7 @@ class BulkSummaryMapperTest extends \PHPUnit\Framework\TestCase
             ->method('fetchOne')
             ->with($this->selectMock)
             ->willReturn($identifier);
-        
+
         $this->assertEquals($result, $this->model->entityToDatabase($entityType, $data));
     }
 

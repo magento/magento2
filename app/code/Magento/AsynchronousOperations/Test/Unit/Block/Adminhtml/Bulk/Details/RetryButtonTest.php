@@ -13,16 +13,16 @@ class RetryButtonTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $detailsMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->detailsMock = $this->getMockBuilder(\Magento\AsynchronousOperations\Model\Operation\Details::class)
             ->disableOriginalConstructor()

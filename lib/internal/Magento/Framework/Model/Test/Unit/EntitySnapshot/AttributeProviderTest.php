@@ -19,17 +19,17 @@ use Magento\Framework\ObjectManagerInterface as ObjectManager;
 class AttributeProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $concreteAttributeProviderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataPoolMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
@@ -38,7 +38,7 @@ class AttributeProviderTest extends \PHPUnit\Framework\TestCase
      */
     protected $attributeProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->concreteAttributeProviderMock = $this->getMockBuilder(
             AttributeProviderInterface::class

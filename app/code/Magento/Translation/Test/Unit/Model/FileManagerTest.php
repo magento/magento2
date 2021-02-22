@@ -11,26 +11,26 @@ use Magento\Translation\Model\FileManager;
 class FileManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Translation\Model\FileManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Translation\Model\FileManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $model;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assetRepoMock;
 
     /**
-     * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit\Framework\MockObject\MockObject
      */
     private $directoryListMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Driver\File|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Driver\File|\PHPUnit\Framework\MockObject\MockObject
      */
     private $driverFileMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->assetRepoMock = $this->createMock(\Magento\Framework\View\Asset\Repository::class);

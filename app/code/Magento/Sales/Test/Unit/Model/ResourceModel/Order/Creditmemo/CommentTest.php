@@ -16,34 +16,34 @@ class CommentTest extends \PHPUnit\Framework\TestCase
     protected $commentResource;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo\Comment|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Creditmemo\Comment|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $commentModelMock;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $appResourceMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo\Comment\Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Creditmemo\Comment\Validator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $validatorMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entitySnapshotMock;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->commentModelMock = $this->createMock(\Magento\Sales\Model\Order\Creditmemo\Comment::class);
         $this->appResourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
@@ -55,16 +55,16 @@ class CommentTest extends \PHPUnit\Framework\TestCase
 
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
         $this->connectionMock->expects($this->any())
             ->method('describeTable')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->connectionMock->expects($this->any())
             ->method('insert');
         $this->connectionMock->expects($this->any())
             ->method('lastInsertId');
-        $this->commentModelMock->expects($this->any())->method('hasDataChanges')->will($this->returnValue(true));
-        $this->commentModelMock->expects($this->any())->method('isSaveAllowed')->will($this->returnValue(true));
+        $this->commentModelMock->expects($this->any())->method('hasDataChanges')->willReturn(true);
+        $this->commentModelMock->expects($this->any())->method('isSaveAllowed')->willReturn(true);
 
         $relationProcessorMock = $this->createMock(
             \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class
@@ -93,7 +93,7 @@ class CommentTest extends \PHPUnit\Framework\TestCase
         $this->validatorMock->expects($this->once())
             ->method('validate')
             ->with($this->equalTo($this->commentModelMock))
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->entitySnapshotMock->expects($this->once())
             ->method('isModified')
             ->with($this->commentModelMock)
@@ -106,11 +106,12 @@ class CommentTest extends \PHPUnit\Framework\TestCase
     /**
      * Test _beforeSaveMethod via save() with failed validation
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Cannot save comment:
      */
     public function testSaveValidationFailed()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Cannot save comment:');
+
         $this->entitySnapshotMock->expects($this->once())
             ->method('isModified')
             ->with($this->commentModelMock)
@@ -118,7 +119,7 @@ class CommentTest extends \PHPUnit\Framework\TestCase
         $this->validatorMock->expects($this->once())
             ->method('validate')
             ->with($this->equalTo($this->commentModelMock))
-            ->will($this->returnValue(['warning message']));
+            ->willReturn(['warning message']);
         $this->commentResource->save($this->commentModelMock);
         $this->assertTrue(true);
     }

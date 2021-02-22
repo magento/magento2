@@ -18,11 +18,11 @@ class ScopeValidatorTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ScopeResolverPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeResolverPool|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeResolverPool;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeResolverPool = $this->getMockBuilder(\Magento\Framework\App\ScopeResolverPool::class)
             ->disableOriginalConstructor()

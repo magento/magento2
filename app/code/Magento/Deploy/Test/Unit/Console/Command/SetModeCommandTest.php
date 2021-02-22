@@ -10,12 +10,13 @@ use Magento\Deploy\Console\Command\SetModeCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * @package Magento\Deploy\Test\Unit\Console\Command
+ * Class SetModeCommandTest
+ * Test for SetModeCommandTest
  */
 class SetModeCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Deploy\Model\Mode|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Deploy\Model\Mode|\PHPUnit\Framework\MockObject\MockObject
      */
     private $modeMock;
 
@@ -25,11 +26,11 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
     private $command;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         $this->modeMock = $this->createMock(\Magento\Deploy\Model\Mode::class);
@@ -49,10 +50,7 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
 
         $tester = new CommandTester($this->command);
         $tester->execute(['mode' => 'production']);
-        $this->assertContains(
-            "production mode",
-            $tester->getDisplay()
-        );
+        $this->assertStringContainsString("production mode", $tester->getDisplay());
     }
 
     public function testSetDeveloperMode()
@@ -61,10 +59,7 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
 
         $tester = new CommandTester($this->command);
         $tester->execute(['mode' => 'developer']);
-        $this->assertContains(
-            "developer mode",
-            $tester->getDisplay()
-        );
+        $this->assertStringContainsString("developer mode", $tester->getDisplay());
     }
 
     public function testSetDefaultMode()
@@ -73,10 +68,7 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
 
         $tester = new CommandTester($this->command);
         $tester->execute(['mode' => 'default']);
-        $this->assertContains(
-            "default mode",
-            $tester->getDisplay()
-        );
+        $this->assertStringContainsString("default mode", $tester->getDisplay());
     }
 
     public function testSetProductionSkipCompilation()
@@ -85,19 +77,13 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
 
         $tester = new CommandTester($this->command);
         $tester->execute(['mode' => 'production', '--skip-compilation' => true]);
-        $this->assertContains(
-            "production mode",
-            $tester->getDisplay()
-        );
+        $this->assertStringContainsString("production mode", $tester->getDisplay());
     }
 
     public function testSetInvalidMode()
     {
         $tester = new CommandTester($this->command);
         $tester->execute(['mode' => 'invalid-mode']);
-        $this->assertContains(
-            'The mode can\'t be switched to "invalid-mode".',
-            $tester->getDisplay()
-        );
+        $this->assertStringContainsString('The mode can\'t be switched to "invalid-mode".', $tester->getDisplay());
     }
 }

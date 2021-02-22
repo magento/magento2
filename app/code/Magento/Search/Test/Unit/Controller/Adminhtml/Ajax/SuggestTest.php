@@ -17,34 +17,34 @@ class SuggestTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     private $objectManagerHelper;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $request;
 
-    /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $url;
 
-    /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject */
     private $context;
 
-    /** @var \Magento\Search\Model\AutocompleteInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Search\Model\AutocompleteInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $autocomplete;
 
     /**
-     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultRedirectMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\Json|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultJsonMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->autocomplete = $this->getMockBuilder(\Magento\Search\Model\AutocompleteInterface::class)
             ->disableOriginalConstructor()
@@ -73,10 +73,10 @@ class SuggestTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->context->expects($this->atLeastOnce())
             ->method('getRequest')
-            ->will($this->returnValue($this->request));
+            ->willReturn($this->request);
         $this->context->expects($this->any())
             ->method('getUrl')
-            ->will($this->returnValue($this->url));
+            ->willReturn($this->url);
         $this->context->expects($this->any())
             ->method('getResultFactory')
             ->willReturn($this->resultFactoryMock);
@@ -116,11 +116,11 @@ class SuggestTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('q')
-            ->will($this->returnValue($searchString));
+            ->willReturn($searchString);
 
         $this->autocomplete->expects($this->once())
             ->method('getItems')
-            ->will($this->returnValue([$firstItemMock, $secondItemMock]));
+            ->willReturn([$firstItemMock, $secondItemMock]);
 
         $this->resultJsonMock->expects($this->once())
             ->method('setData')
@@ -137,7 +137,7 @@ class SuggestTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('q')
-            ->will($this->returnValue($searchString));
+            ->willReturn($searchString);
         $this->url->expects($this->once())
             ->method('getBaseUrl')
             ->willReturn($url);

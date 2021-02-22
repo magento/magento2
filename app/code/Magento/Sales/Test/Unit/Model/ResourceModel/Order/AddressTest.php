@@ -16,36 +16,36 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     protected $addressResource;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $appResourceMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Address|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Address|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressMock;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Address\Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Address\Validator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $validatorMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entitySnapshotMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->addressMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Address::class,
@@ -60,11 +60,11 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         );
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->connectionMock->expects($this->any())
             ->method('describeTable')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->connectionMock->expects($this->any())
             ->method('insert');
         $this->connectionMock->expects($this->any())
@@ -87,14 +87,14 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->validatorMock->expects($this->once())
             ->method('validate')
             ->with($this->equalTo($this->addressMock))
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->entitySnapshotMock->expects($this->once())
             ->method('isModified')
             ->with($this->addressMock)
             ->willReturn(true);
         $this->addressMock->expects($this->once())
             ->method('getParentId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->addressResource->save($this->addressMock);
     }
@@ -102,22 +102,23 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     /**
      * test _beforeSaveMethod via save() with failed validation
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage We can't save the address:
      */
     public function testSaveValidationFailed()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('We can\'t save the address:');
+
         $this->entitySnapshotMock->expects($this->once())
             ->method('isModified')
             ->with($this->addressMock)
             ->willReturn(true);
         $this->addressMock->expects($this->any())
             ->method('hasDataChanges')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->validatorMock->expects($this->once())
             ->method('validate')
             ->with($this->equalTo($this->addressMock))
-            ->will($this->returnValue(['warning message']));
+            ->willReturn(['warning message']);
         $this->addressResource->save($this->addressMock);
     }
 }

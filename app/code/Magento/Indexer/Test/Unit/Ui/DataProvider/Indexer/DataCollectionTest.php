@@ -28,24 +28,24 @@ class DataCollectionTest extends \PHPUnit\Framework\TestCase
     private $dataCollection;
 
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $indexerRegistryMock;
 
     /**
-     * @var EntityFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityFactoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $entityFactoryMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -154,11 +154,11 @@ class DataCollectionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $data
-     * @return \PHPUnit_Framework_MockObject_MockObject|IndexerInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|IndexerInterface
      */
     private function getIndexerMock(array $data = [])
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|IndexerInterface $indexer */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|IndexerInterface $indexer */
         $indexer = $this->getMockBuilder(IndexerInterface::class)
             ->getMockForAbstractClass();
         foreach ($data as $methodName => $result) {

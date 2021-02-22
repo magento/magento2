@@ -24,37 +24,37 @@ class ShipmentLoaderTest extends \PHPUnit\Framework\TestCase
     private $objectManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $registryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $messageManagerMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\ShipmentRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\ShipmentRepository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shipmentRepositoryMock;
 
     /**
-     * @var ShipmentDocumentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentDocumentFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $documentFactoryMock;
 
     /**
-     * @var ShipmentTrackCreationInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentTrackCreationInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $trackFactoryMock;
 
     /**
-     * @var ShipmentItemCreationInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentItemCreationInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $itemFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $orderRepositoryMock;
 
@@ -63,7 +63,7 @@ class ShipmentLoaderTest extends \PHPUnit\Framework\TestCase
      */
     private $loader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = new ObjectManager($this);
         $this->shipmentRepositoryMock = $this->getMockBuilder(\Magento\Sales\Model\Order\ShipmentRepository::class)
@@ -145,16 +145,16 @@ class ShipmentLoaderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($orderMock));
+            ->willReturn($orderMock);
         $orderMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($this->loader->getOrderId()));
+            ->willReturn($this->loader->getOrderId());
         $orderMock->expects($this->any())
             ->method('getForcedShipmentWithInvoice')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $orderMock->expects($this->once())
             ->method('canShip')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $shipmentModelMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Shipment::class)
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -165,11 +165,11 @@ class ShipmentLoaderTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->trackFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($trackMock));
+            ->willReturn($trackMock);
         $shipmentModelMock->expects($this->any())
             ->method('addTrack')
             ->with($this->equalTo($trackMock))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->registryMock->expects($this->once())
             ->method('register')
             ->with('current_shipment', $shipmentModelMock);
@@ -178,7 +178,7 @@ class ShipmentLoaderTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->itemFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($itemMock));
+            ->willReturn($itemMock);
         $this->documentFactoryMock->expects($this->once())->method('create')->willReturn($shipmentModelMock);
 
         $this->assertEquals($shipmentModelMock, $this->loader->load());

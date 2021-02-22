@@ -31,7 +31,7 @@ class CaseInfoTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->order = $this->objectManager->create(Order::class);
@@ -85,7 +85,7 @@ class CaseInfoTest extends \PHPUnit\Framework\TestCase
 
         $block = $this->getBlock();
         self::assertNotEmpty($block->toHtml());
-        self::assertContains((string) $block->getCaseGuaranteeDisposition(), $block->toHtml());
+        self::assertStringContainsString((string) $block->getCaseGuaranteeDisposition(),$block->toHtml());
     }
 
     /**

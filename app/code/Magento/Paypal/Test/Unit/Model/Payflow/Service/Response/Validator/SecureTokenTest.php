@@ -21,7 +21,7 @@ class SecureTokenTest extends \PHPUnit\Framework\TestCase
     protected $validator;
 
     /**
-     * @var Transparent| \PHPUnit_Framework_MockObject_MockObject
+     * @var Transparent| \PHPUnit\Framework\MockObject\MockObject
      */
     protected $payflowFacade;
 
@@ -30,7 +30,7 @@ class SecureTokenTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->validator = new \Magento\Paypal\Model\Payflow\Service\Response\Validator\SecureToken();
         $this->payflowFacade = $this->getMockBuilder(Transparent::class)

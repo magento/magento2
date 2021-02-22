@@ -14,7 +14,7 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\PageCache\Model\DepersonalizeChecker;
 use Magento\PageCache\Model\Layout\DepersonalizePlugin;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Tests \Magento\PageCache\Model\Layout\DepersonalizePlugin.
@@ -27,29 +27,29 @@ class DepersonalizePluginTest extends TestCase
     private $plugin;
 
     /**
-     * @var LayoutInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutInterface|PHPUnit\Framework\MockObject\MockObject
      */
     private $layoutMock;
 
     /**
-     * @var Manager|PHPUnit_Framework_MockObject_MockObject
+     * @var Manager|PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var Session|PHPUnit_Framework_MockObject_MockObject
+     * @var Session|PHPUnit\Framework\MockObject\MockObject
      */
     private $messageSessionMock;
 
     /**
-     * @var DepersonalizeChecker|PHPUnit_Framework_MockObject_MockObject
+     * @var DepersonalizeChecker|PHPUnit\Framework\MockObject\MockObject
      */
     private $depersonalizeCheckerMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->eventManagerMock = $this->createMock(Manager::class);

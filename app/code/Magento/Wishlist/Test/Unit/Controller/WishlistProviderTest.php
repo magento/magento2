@@ -37,7 +37,7 @@ class WishlistProviderTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -66,7 +66,7 @@ class WishlistProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->wishlistFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($wishlist));
+            ->willReturn($wishlist);
 
         $this->assertEquals($wishlist, $this->wishlistProvider->getWishlist());
     }
@@ -79,21 +79,21 @@ class WishlistProviderTest extends \PHPUnit\Framework\TestCase
         );
         $wishlist->expects($this->once())
             ->method('loadByCustomerId')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $wishlist->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $wishlist->expects($this->once())
             ->method('getCustomerId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->wishlistFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($wishlist));
+            ->willReturn($wishlist);
 
         $this->customerSession->expects($this->once())
             ->method('getCustomerId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->assertEquals($wishlist, $this->wishlistProvider->getWishlist());
     }
@@ -107,25 +107,25 @@ class WishlistProviderTest extends \PHPUnit\Framework\TestCase
 
         $wishlist->expects($this->once())
             ->method('load')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $wishlist->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $wishlist->expects($this->once())
             ->method('getCustomerId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->wishlistFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($wishlist));
+            ->willReturn($wishlist);
 
         $this->request->expects($this->once())
             ->method('getParam')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->customerSession->expects($this->once())
             ->method('getCustomerId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->assertEquals($wishlist, $this->wishlistProvider->getWishlist());
     }
@@ -139,22 +139,22 @@ class WishlistProviderTest extends \PHPUnit\Framework\TestCase
 
         $wishlist->expects($this->once())
             ->method('load')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $wishlist->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $wishlist->expects($this->once())
             ->method('getCustomerId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->wishlistFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($wishlist));
+            ->willReturn($wishlist);
 
         $this->request->expects($this->once())
             ->method('getParam')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
-        $this->assertEquals(false, $this->wishlistProvider->getWishlist());
+        $this->assertFalse($this->wishlistProvider->getWishlist());
     }
 }

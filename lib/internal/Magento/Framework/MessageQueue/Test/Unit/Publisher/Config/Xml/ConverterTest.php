@@ -16,14 +16,14 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     private $converter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $defaultConfigProviderMock;
 
     /**
      * Initialize parameters
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->defaultConfigProviderMock =
             $this->createMock(\Magento\Framework\MessageQueue\DefaultValueProvider::class);
@@ -46,11 +46,12 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Connection name is missing
      */
     public function testConvertWithException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Connection name is missing');
+
         $fixtureDir = __DIR__ . '/../../../_files/queue_publisher';
         $xmlFile = $fixtureDir . '/invalid.xml';
         $dom = new \DOMDocument();

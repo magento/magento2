@@ -13,11 +13,11 @@ class TablerateTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $tableateFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->tableateFactoryMock =
             $this->getMockBuilder(\Magento\OfflineShipping\Model\ResourceModel\Carrier\TablerateFactory::class)

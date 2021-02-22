@@ -50,7 +50,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      */
     private static $magentoFrameworkLibaryName = 'magento/framework';
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$root = BP;
         self::$rootJson = json_decode(file_get_contents(self::$root . '/composer.json'), true);
@@ -150,8 +150,8 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      */
     private function assertCodingStyle($contents)
     {
-        $this->assertNotRegExp('/" :\s*["{]/', $contents, 'Coding style: there should be no space before colon.');
-        $this->assertNotRegExp('/":["{]/', $contents, 'Coding style: a space is necessary after colon.');
+        $this->assertDoesNotMatchRegularExpression('/" :\s*["{]/', $contents, 'Coding style: there should be no space before colon.');
+        $this->assertDoesNotMatchRegularExpression('/":["{]/', $contents, 'Coding style: a space is necessary after colon.');
     }
 
     /**
@@ -188,13 +188,13 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
                 $this->assertNoVersionSpecified($json);
                 break;
             case 'magento2-language':
-                $this->assertRegExp('/^magento\/language\-[a-z]{2}_([a-z]{4}_)?[a-z]{2}$/', $json->name);
+                $this->assertMatchesRegularExpression('/^magento\/language\-[a-z]{2}_([a-z]{4}_)?[a-z]{2}$/', $json->name);
                 $this->assertDependsOnFramework($json->require);
                 $this->assertRequireInSync($json);
                 $this->assertNoVersionSpecified($json);
                 break;
             case 'magento2-theme':
-                $this->assertRegExp('/^magento\/theme-(?:adminhtml|frontend)(\-[a-z0-9_]+)+$/', $json->name);
+                $this->assertMatchesRegularExpression('/^magento\/theme-(?:adminhtml|frontend)(\-[a-z0-9_]+)+$/', $json->name);
                 $this->assertDependsOnPhp($json->require);
                 $this->assertPhpVersionInSync($json->name, $json->require->php);
                 $this->assertDependsOnFramework($json->require);
@@ -203,7 +203,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
                 break;
             case 'magento2-library':
                 $this->assertDependsOnPhp($json->require);
-                $this->assertRegExp('/^magento\/framework*/', $json->name);
+                $this->assertMatchesRegularExpression('/^magento\/framework*/', $json->name);
                 $this->assertPhpVersionInSync($json->name, $json->require->php);
                 $this->assertRequireInSync($json);
                 $this->assertAutoload($json);

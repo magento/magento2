@@ -19,26 +19,26 @@ class DateTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\Element\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $factoryMock;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\Element\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $escaperMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeDateMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
         $this->collectionFactoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
@@ -93,7 +93,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $exactly
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getFormMock($exactly)
     {

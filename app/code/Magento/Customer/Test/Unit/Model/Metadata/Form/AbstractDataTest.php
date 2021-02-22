@@ -17,16 +17,16 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Customer\Test\Unit\Model\Metadata\Form\ExtendsAbstractData */
     protected $_model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Stdlib\DateTime\TimezoneInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Stdlib\DateTime\TimezoneInterface */
     protected $_localeMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Locale\ResolverInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Locale\ResolverInterface */
     protected $_localeResolverMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Psr\Log\LoggerInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Psr\Log\LoggerInterface */
     protected $_loggerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Api\Data\AttributeMetadataInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Api\Data\AttributeMetadataInterface */
     protected $_attributeMock;
 
     /** @var string */
@@ -38,7 +38,7 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
     /** @var string */
     protected $_isAjax;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_localeMock = $this->getMockBuilder(
             \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class
@@ -69,11 +69,12 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Attribute object is undefined
      */
     public function testGetAttributeException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Attribute object is undefined');
+
         $this->_model->setAttribute(false);
         $this->_model->getAttribute();
     }
@@ -108,7 +109,7 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->_model, $this->_model->setExtractedData($data));
         $this->assertSame($data, $this->_model->getExtractedData());
         $this->assertSame('VALUE', $this->_model->getExtractedData('KEY'));
-        $this->assertSame(null, $this->_model->getExtractedData('BAD_KEY'));
+        $this->assertNull($this->_model->getExtractedData('BAD_KEY'));
     }
 
     /**
@@ -120,7 +121,7 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
     public function testApplyInputFilter($input, $output, $filter)
     {
         if ($input) {
-            $this->_attributeMock->expects($this->once())->method('getInputFilter')->will($this->returnValue($filter));
+            $this->_attributeMock->expects($this->once())->method('getInputFilter')->willReturn($filter);
         }
         $this->assertEquals($output, $this->_model->applyInputFilter($input));
     }
@@ -158,8 +159,8 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
                 'getDateFormat'
             )->with(
                 $this->equalTo(\IntlDateFormatter::SHORT)
-            )->will(
-                $this->returnValue($output)
+            )->willReturn(
+                $output
             );
         }
         $actual = $this->_model->dateFilterFormat($format);
@@ -183,7 +184,7 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
     public function testApplyOutputFilter($input, $output, $filter)
     {
         if ($input) {
-            $this->_attributeMock->expects($this->once())->method('getInputFilter')->will($this->returnValue($filter));
+            $this->_attributeMock->expects($this->once())->method('getInputFilter')->willReturn($filter);
         }
         $this->assertEquals($output, $this->_model->applyOutputFilter($input));
     }
@@ -328,8 +329,8 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getAttributeCode'
-        )->will(
-            $this->returnValue($attributeCode)
+        )->willReturn(
+            $attributeCode
         );
         $this->_model->setRequestScope($requestScope);
         $this->_model->setRequestScopeOnly($requestScopeOnly);
@@ -349,8 +350,8 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             'ATTR_CODE'
-        )->will(
-            $this->returnValue($expectedValue)
+        )->willReturn(
+            $expectedValue
         );
 
         $requestMockTwo = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)->getMock();
@@ -360,8 +361,8 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             'REQUEST_SCOPE'
-        )->will(
-            $this->returnValue(['ATTR_CODE' => $expectedValue])
+        )->willReturn(
+            ['ATTR_CODE' => $expectedValue]
         );
 
         $requestMockFour = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)->getMock();
@@ -371,8 +372,8 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             'REQUEST_SCOPE'
-        )->will(
-            $this->returnValue([])
+        )->willReturn(
+            []
         );
 
         $requestMockThree = $this->getMockBuilder(
@@ -382,8 +383,8 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getParams'
-        )->will(
-            $this->returnValue(['REQUEST' => ['SCOPE' => ['ATTR_CODE' => $expectedValue]]])
+        )->willReturn(
+            ['REQUEST' => ['SCOPE' => ['ATTR_CODE' => $expectedValue]]]
         );
         return [
             [$requestMockOne, 'ATTR_CODE', false, false, $expectedValue],

@@ -47,7 +47,7 @@ class CustomizationTest extends TestCase
      */
     private $storeThemesResolver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)->getMock();
         $this->designPackage = $this->getMockBuilder(DesignInterface::class)->getMock();
@@ -57,7 +57,7 @@ class CustomizationTest extends TestCase
             ->setMethods(['getThemeCustomizations', 'getThemeByFullPath'])
             ->getMock();
 
-        $this->storeThemesResolver = $this->createMock(StoreThemesResolverInterface::class);
+        $this->storeThemesResolver = $this->getMockForAbstractClass(StoreThemesResolverInterface::class);
 
         $this->model = new Customization(
             $this->storeManager,
@@ -163,7 +163,7 @@ class CustomizationTest extends TestCase
             ->willReturn([$this->getAssignedTheme(), $this->getUnassignedTheme()]);
 
         $themeAssigned = $this->model->isThemeAssignedToStore($this->getAssignedTheme());
-        $this->assertEquals(true, $themeAssigned);
+        $this->assertTrue($themeAssigned);
     }
 
     /**
@@ -177,7 +177,7 @@ class CustomizationTest extends TestCase
             ->willReturn($this->getAssignedTheme()->getId());
 
         $themeUnassigned = $this->model->isThemeAssignedToStore($this->getUnassignedTheme(), $this->getStore());
-        $this->assertEquals(false, $themeUnassigned);
+        $this->assertFalse($themeUnassigned);
     }
 
     /**

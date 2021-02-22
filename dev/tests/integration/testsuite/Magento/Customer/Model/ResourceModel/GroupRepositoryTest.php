@@ -32,7 +32,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Framework\Api\SortOrderBuilder */
     private $sortOrderBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->groupRepository = $this->objectManager->create(\Magento\Customer\Api\GroupRepositoryInterface::class);
@@ -68,12 +68,10 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with id = 9999
-     */
     public function testGetGroupException()
     {
+        $this->expectExceptionMessage("No such entity with id = 9999");
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
         $this->groupRepository->getById(9999);
     }
 
@@ -130,11 +128,12 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Invalid value of "9999" provided for the taxClassId field.
+     *
      */
     public function testUpdateGroupException()
     {
+        $this->expectExceptionMessage("Invalid value of \"9999\" provided for the taxClassId field.");
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
         $group = $this->groupFactory->create()->setId(null)->setCode('New Group')->setTaxClassId(3);
         $groupId = $this->groupRepository->save($group)->getId();
         $this->assertNotNull($groupId);
@@ -172,12 +171,10 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->groupRepository->deleteById($groupId));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with id = 9999
-     */
     public function testDeleteDoesNotExist()
     {
+        $this->expectExceptionMessage("No such entity with id = 9999");
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
         $this->assertFalse($this->groupRepository->deleteById(9999));
     }
 

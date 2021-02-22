@@ -16,22 +16,22 @@ use Magento\Store\Model\ResourceModel\Group;
 class StoreGroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var GroupModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupModel|\PHPUnit\Framework\MockObject\MockObject
      */
     private $groupMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|IndexerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|IndexerInterface
      */
     private $indexerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Group
+     * @var \PHPUnit\Framework\MockObject\MockObject|Group
      */
     private $subject;
 
     /**
-     * @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $indexerRegistryMock;
 
@@ -40,7 +40,7 @@ class StoreGroupTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->groupMock = $this->createPartialMock(
             GroupModel::class,

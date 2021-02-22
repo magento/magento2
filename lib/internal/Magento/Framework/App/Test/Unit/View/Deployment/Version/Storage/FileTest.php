@@ -16,11 +16,11 @@ class FileTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $directory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->directory = $this->createMock(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
         $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
@@ -28,7 +28,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getDirectoryWrite')
             ->with('fixture_dir')
-            ->will($this->returnValue($this->directory));
+            ->willReturn($this->directory);
         $this->object = new File($filesystem, 'fixture_dir', 'fixture_file.txt');
     }
 

@@ -15,21 +15,21 @@ use \Magento\Setup\Model\BasePackageInfo;
 class BasePackageInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\FileSystem\Directory\ReadFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\FileSystem\Directory\ReadFactory
      */
     private $readFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\FileSystem\Directory\ReadInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\FileSystem\Directory\ReadInterface
      */
     private $readerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\BasePackageInfo
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\BasePackageInfo
      */
     private $basePackageInfo;
 
-    public function setup()
+    protected function setup(): void
     {
         $this->readFactoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
         $this->readerMock = $this->getMockForAbstractClass(

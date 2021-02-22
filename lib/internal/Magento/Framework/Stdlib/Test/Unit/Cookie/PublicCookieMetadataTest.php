@@ -19,7 +19,7 @@ class PublicCookieMetadataTest extends \PHPUnit\Framework\TestCase
     /** @var PublicCookieMetadata */
     private $publicCookieMetadata;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->publicCookieMetadata = $objectManager->getObject(

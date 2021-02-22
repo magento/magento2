@@ -24,26 +24,26 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\App\Rss\UrlBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Rss\UrlBuilderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderInterface;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigInterface;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerInterface;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->urlBuilderInterface = $this->createMock(\Magento\Framework\App\Rss\UrlBuilderInterface::class);
         $this->scopeConfigInterface = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
@@ -68,7 +68,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsRssAllowed($isAllowed)
     {
-        $this->scopeConfigInterface->expects($this->once())->method('getValue')->will($this->returnValue($isAllowed));
+        $this->scopeConfigInterface->expects($this->once())->method('getValue')->willReturn($isAllowed);
         $this->assertEquals($isAllowed, $this->link->isRssAllowed());
     }
 
@@ -96,8 +96,8 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     public function testIsTopCategory($isTop, $categoryLevel)
     {
         $categoryModel = $this->createPartialMock(\Magento\Catalog\Model\Category::class, ['__wakeup', 'getLevel']);
-        $this->registry->expects($this->once())->method('registry')->will($this->returnValue($categoryModel));
-        $categoryModel->expects($this->any())->method('getLevel')->will($this->returnValue($categoryLevel));
+        $this->registry->expects($this->once())->method('registry')->willReturn($categoryModel);
+        $categoryModel->expects($this->any())->method('getLevel')->willReturn($categoryLevel);
         $this->assertEquals($isTop, $this->link->isTopCategory());
     }
 
@@ -115,15 +115,15 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     public function testGetLink()
     {
         $rssUrl = 'http://rss.magento.com';
-        $this->urlBuilderInterface->expects($this->once())->method('getUrl')->will($this->returnValue($rssUrl));
+        $this->urlBuilderInterface->expects($this->once())->method('getUrl')->willReturn($rssUrl);
 
         $categoryModel = $this->createPartialMock(\Magento\Catalog\Model\Category::class, ['__wakeup', 'getId']);
-        $this->registry->expects($this->once())->method('registry')->will($this->returnValue($categoryModel));
-        $categoryModel->expects($this->any())->method('getId')->will($this->returnValue('1'));
+        $this->registry->expects($this->once())->method('registry')->willReturn($categoryModel);
+        $categoryModel->expects($this->any())->method('getId')->willReturn('1');
 
         $storeModel = $this->createPartialMock(\Magento\Catalog\Model\Category::class, ['__wakeup', 'getId']);
-        $this->storeManagerInterface->expects($this->any())->method('getStore')->will($this->returnValue($storeModel));
-        $storeModel->expects($this->any())->method('getId')->will($this->returnValue('1'));
+        $this->storeManagerInterface->expects($this->any())->method('getStore')->willReturn($storeModel);
+        $storeModel->expects($this->any())->method('getId')->willReturn('1');
 
         $this->assertEquals($rssUrl, $this->link->getLink());
     }

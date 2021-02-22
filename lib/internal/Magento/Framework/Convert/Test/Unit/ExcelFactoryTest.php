@@ -16,11 +16,11 @@ class ExcelFactoryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->setMethods(['create'])

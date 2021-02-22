@@ -15,7 +15,7 @@ class PaginationProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $model = new PaginationProcessor;
 
-        /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock */
+        /** @var SearchCriteriaInterface|\PHPUnit\Framework\MockObject\MockObject $searchCriteriaMock */
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
             ->getMock();
         $searchCriteriaMock->expects($this->once())
@@ -25,7 +25,7 @@ class PaginationProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('getPageSize')
             ->willReturn(33);
 
-        /** @var AbstractDb|\PHPUnit_Framework_MockObject_MockObject $searchCriteriarMock */
+        /** @var AbstractDb|\PHPUnit\Framework\MockObject\MockObject $searchCriteriarMock */
         $collectionMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -97,7 +97,7 @@ class AssertProductPage extends AbstractAssertForm
         $expectedName = $this->product->getName();
         try {
             $actualName = $this->productView->getProductName();
-        } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
+        } catch (\PHPUnit\Extensions\Selenium2TestCase\WebDriverException $e) {
             return "Could not find product '{$this->product->getName()}' name on the page.\n" . $e->getMessage();
         }
 
@@ -167,7 +167,7 @@ class AssertProductPage extends AbstractAssertForm
         $expectedSku = $this->product->getSku();
         try {
             $actualSku = $this->productView->getProductSku();
-        } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
+        } catch (\PHPUnit\Extensions\Selenium2TestCase\WebDriverException $e) {
             return "Could not find product {$this->product->getName()}' SKU on the page.\n" . $e->getMessage();
         }
 

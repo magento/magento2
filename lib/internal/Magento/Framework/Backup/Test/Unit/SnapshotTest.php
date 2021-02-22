@@ -17,7 +17,7 @@ class SnapshotTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $file = 'var/backup/2.sql';
-        $manager->expects($this->once())->method('getBackupFilename')->will($this->returnValue($file));
+        $manager->expects($this->once())->method('getBackupFilename')->willReturn($file);
 
         $model = new \Magento\Framework\Backup\Snapshot($filesystem, $backupFactory);
         $model->setDbBackupManager($manager);

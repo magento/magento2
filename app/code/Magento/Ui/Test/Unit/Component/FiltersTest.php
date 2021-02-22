@@ -15,22 +15,22 @@ use \Magento\Ui\Component\Filters;
  */
 class FiltersTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var Filters|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Filters|\PHPUnit\Framework\MockObject\MockObject */
     private $filters;
 
-    /** @var \Magento\Framework\View\Element\UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\UiComponentInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $uiComponentInterface;
 
-    /** @var \Magento\Framework\View\Element\UiComponentFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\UiComponentFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $uiComponentFactory;
 
-    /** @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $context;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->uiComponentInterface = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)

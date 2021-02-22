@@ -9,7 +9,7 @@ namespace Magento\Setup\Model;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Application;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -24,14 +24,14 @@ class ObjectManagerProviderTest extends TestCase
     private $object;
 
     /**
-     * @var ServiceLocatorInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var ServiceLocatorInterface|PHPUnit\Framework\MockObject\MockObject
      */
     private $locator;
 
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->locator = $this->getMockForAbstractClass(ServiceLocatorInterface::class);
         $this->object = new ObjectManagerProvider($this->locator, new Bootstrap());

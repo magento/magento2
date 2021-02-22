@@ -28,16 +28,16 @@ class AddBillingAgreementToSessionObserverTest extends \PHPUnit\Framework\TestCa
     protected $_event;
 
     /**
-     * @var \Magento\Paypal\Model\Billing\Agreement Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Paypal\Model\Billing\Agreement Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_agreementFactory;
 
     /**
-     * @var \Magento\Checkout\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Checkout\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_checkoutSession;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_event = new \Magento\Framework\DataObject();
 
@@ -68,8 +68,8 @@ class AddBillingAgreementToSessionObserverTest extends \PHPUnit\Framework\TestCa
             '__call'
         )->with(
             'getBillingAgreementData'
-        )->will(
-            $this->returnValue(null)
+        )->willReturn(
+            null
         );
         $this->_event->setPayment($payment);
         $this->_agreementFactory->expects($this->never())->method('create');
@@ -84,7 +84,7 @@ class AddBillingAgreementToSessionObserverTest extends \PHPUnit\Framework\TestCa
     public function testAddBillingAgreementToSession($isValid)
     {
         $agreement = $this->createMock(\Magento\Paypal\Model\Billing\Agreement::class);
-        $agreement->expects($this->once())->method('isValid')->will($this->returnValue($isValid));
+        $agreement->expects($this->once())->method('isValid')->willReturn($isValid);
         $comment = $this->getMockForAbstractClass(
             \Magento\Framework\Model\AbstractModel::class,
             [],
@@ -106,8 +106,8 @@ class AddBillingAgreementToSessionObserverTest extends \PHPUnit\Framework\TestCa
             ) : __(
                 'We can\'t create a billing agreement for this order.'
             )
-        )->will(
-            $this->returnValue($comment)
+        )->willReturn(
+            $comment
         );
         if ($isValid) {
             $agreement->expects(
@@ -116,8 +116,8 @@ class AddBillingAgreementToSessionObserverTest extends \PHPUnit\Framework\TestCa
                 '__call'
             )->with(
                 'getReferenceId'
-            )->will(
-                $this->returnValue('agreement reference id')
+            )->willReturn(
+                'agreement reference id'
             );
             $agreement->expects($this->once())->method('addOrderRelation')->with($order);
             $order->expects(new MethodInvokedAtIndex(0))->method('addRelatedObject')->with($agreement);
@@ -148,21 +148,21 @@ class AddBillingAgreementToSessionObserverTest extends \PHPUnit\Framework\TestCa
             '__call'
         )->with(
             'getBillingAgreementData'
-        )->will(
-            $this->returnValue('not empty')
+        )->willReturn(
+            'not empty'
         );
-        $payment->expects($this->once())->method('getOrder')->will($this->returnValue($order));
+        $payment->expects($this->once())->method('getOrder')->willReturn($order);
         $agreement->expects(
             $this->once()
         )->method(
             'importOrderPayment'
         )->with(
             $payment
-        )->will(
-            $this->returnValue($agreement)
+        )->willReturn(
+            $agreement
         );
         $this->_event->setPayment($payment);
-        $this->_agreementFactory->expects($this->once())->method('create')->will($this->returnValue($agreement));
+        $this->_agreementFactory->expects($this->once())->method('create')->willReturn($agreement);
         $this->_model->execute($this->_observer);
     }
 

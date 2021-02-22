@@ -9,28 +9,28 @@ use Magento\Customer\Ui\Component\Listing\Columns;
 
 class ColumnsTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $context;
 
-    /** @var \Magento\Customer\Ui\Component\ColumnFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Ui\Component\ColumnFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $columnFactory;
 
-    /** @var \Magento\Customer\Ui\Component\Listing\AttributeRepository|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Ui\Component\Listing\AttributeRepository|\PHPUnit\Framework\MockObject\MockObject */
     protected $attributeRepository;
 
-    /** @var \Magento\Customer\Model\Attribute|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\Attribute|\PHPUnit\Framework\MockObject\MockObject */
     protected $attribute;
 
-    /** @var \Magento\Ui\Component\Listing\Columns\ColumnInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Ui\Component\Listing\Columns\ColumnInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $column;
 
-    /** @var \Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater|\PHPUnit\Framework\MockObject\MockObject */
     protected $inlineEditUpdater;
 
     /** @var Columns */
     protected $component;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
             ->getMockForAbstractClass();

@@ -13,27 +13,27 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $postDataHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);
-        $this->urlBuilderMock->expects($this->any())->method('getUrl')->will($this->returnArgument(0));
+        $this->urlBuilderMock->expects($this->any())->method('getUrl')->willReturnArgument(0);
 
         /**
-         * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject $contextMock
+         * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit\Framework\MockObject\MockObject $contextMock
          */
         $contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $contextMock->expects($this->any())->method('getUrlBuilder')->will($this->returnValue($this->urlBuilderMock));
+        $contextMock->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilderMock);
 
         $escaperMock = $this->getMockBuilder(\Magento\Framework\Escaper::class)
             ->disableOriginalConstructor()
@@ -72,7 +72,7 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
         $this->postDataHelperMock->expects($this->once())
             ->method('getPostData')
             ->with($this->equalTo($switchUrl), $this->equalTo(['currency' => $expectedCurrencyCode]))
-            ->will($this->returnValue($expectedResult));
+            ->willReturn($expectedResult);
 
         $this->assertEquals($expectedResult, $this->object->getSwitchCurrencyPostData($expectedCurrencyCode));
     }

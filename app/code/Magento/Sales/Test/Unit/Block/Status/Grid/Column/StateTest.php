@@ -14,16 +14,16 @@ class StateTest extends \PHPUnit\Framework\TestCase
     private $stateColumn;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $orderStatusCollectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->orderStatusCollectionFactoryMock = $this->createPartialMock(
@@ -72,10 +72,10 @@ class StateTest extends \PHPUnit\Framework\TestCase
         );
         $this->orderStatusCollectionFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($collectionMock));
+            ->willReturn($collectionMock);
         $collectionMock->expects($this->once())
             ->method('joinStates')
-            ->will($this->returnValue($statuses));
+            ->willReturn($statuses);
 
         $result = $this->stateColumn->decorateState('processing', $rowMock, $columnMock, false);
         $this->assertSame('processing[Suspected Fraud]', $result);

@@ -15,52 +15,52 @@ use \Magento\Wishlist\Model\Item;
 class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registry;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Url|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $catalogUrl;
 
     /**
-     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productTypeConfig;
 
     /**
-     * @var \Magento\Wishlist\Model\ResourceModel\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Wishlist\Model\ResourceModel\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Wishlist\Model\ResourceModel\Item\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Wishlist\Model\ResourceModel\Item\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collection;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $date;
 
     /**
-     * @var \Magento\Wishlist\Model\Item\OptionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Wishlist\Model\Item\OptionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $optionFactory;
 
     /**
-     * @var \Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemOptFactory;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productRepository;
 
@@ -69,7 +69,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $context = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
             ->disableOriginalConstructor()
@@ -141,7 +141,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($optionMock);
         $this->model->addOption($option);
-        $this->assertEquals(1, count($this->model->getOptions()));
+        $this->assertCount(1, $this->model->getOptions());
     }
 
     /**
@@ -165,7 +165,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($optionMock);
         $this->model->addOption($option);
-        $this->assertEquals(1, count($this->model->getOptions()));
+        $this->assertCount(1, $this->model->getOptions());
         $this->model->removeOption($code);
         $actualOptions = $this->model->getOptions();
         $actualOption = array_pop($actualOptions);
@@ -183,7 +183,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $optionMock->expects($this->any())
             ->method('getCode')
-            ->will($this->returnValue('second_key'));
+            ->willReturn('second_key');
 
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
@@ -208,9 +208,9 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['__wakeup', 'getValue'])
             ->getMock();
 
-        $optionsOneMock->expects($this->once())->method('getCode')->will($this->returnValue($code));
-        $optionsOneMock->expects($this->once())->method('getValue')->will($this->returnValue($optionValue));
-        $optionsTwoMock->expects($this->once())->method('getValue')->will($this->returnValue($optionValue));
+        $optionsOneMock->expects($this->once())->method('getCode')->willReturn($code);
+        $optionsOneMock->expects($this->once())->method('getValue')->willReturn($optionValue);
+        $optionsTwoMock->expects($this->once())->method('getValue')->willReturn($optionValue);
 
         $result = $this->model->compareOptions(
             [$code => $optionsOneMock],
@@ -234,9 +234,9 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['__wakeup', 'getValue'])
             ->getMock();
 
-        $optionsOneMock->expects($this->once())->method('getCode')->will($this->returnValue($code));
-        $optionsOneMock->expects($this->once())->method('getValue')->will($this->returnValue($optionOneValue));
-        $optionsTwoMock->expects($this->once())->method('getValue')->will($this->returnValue($optionTwoValue));
+        $optionsOneMock->expects($this->once())->method('getCode')->willReturn($code);
+        $optionsOneMock->expects($this->once())->method('getValue')->willReturn($optionOneValue);
+        $optionsTwoMock->expects($this->once())->method('getValue')->willReturn($optionTwoValue);
 
         $result = $this->model->compareOptions(
             [$code => $optionsOneMock],
@@ -258,7 +258,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['__wakeup'])
             ->getMock();
 
-        $optionsOneMock->expects($this->once())->method('getCode')->will($this->returnValue($code));
+        $optionsOneMock->expects($this->once())->method('getCode')->willReturn($code);
 
         $result = $this->model->compareOptions(
             [$code => $optionsOneMock],

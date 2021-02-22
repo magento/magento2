@@ -66,7 +66,7 @@ class UnlockTest extends \PHPUnit\Framework\TestCase
      * Init mocks for tests
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
@@ -74,7 +74,7 @@ class UnlockTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->authenticationMock = $this->getMockBuilder(AuthenticationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->setMethods(['getParam'])
@@ -116,7 +116,7 @@ class UnlockTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with($this->equalTo('customer_id'))
-            ->will($this->returnValue($customerId));
+            ->willReturn($customerId);
         $this->authenticationMock->expects($this->once())->method('unlock')->with($customerId);
         $this->messageManagerMock->expects($this->once())->method('addSuccessMessage');
         $this->redirectMock->expects($this->once())
@@ -136,7 +136,7 @@ class UnlockTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with($this->equalTo('customer_id'))
-            ->will($this->returnValue($customerId));
+            ->willReturn($customerId);
         $this->authenticationMock->expects($this->once())
             ->method('unlock')
             ->with($customerId)

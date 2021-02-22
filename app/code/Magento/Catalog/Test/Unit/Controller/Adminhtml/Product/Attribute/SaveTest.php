@@ -31,76 +31,76 @@ use Magento\Framework\View\LayoutInterface;
 class SaveTest extends AttributeTest
 {
     /**
-     * @var BuildFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var BuildFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $buildFactoryMock;
 
     /**
-     * @var FilterManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filterManagerMock;
 
     /**
-     * @var ProductHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productHelperMock;
 
     /**
-     * @var AttributeFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeFactoryMock;
 
     /**
-     * @var ValidatorFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ValidatorFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $validatorFactoryMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $groupCollectionFactoryMock;
 
     /**
-     * @var LayoutFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutFactoryMock;
 
     /**
-     * @var ResultRedirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultRedirect|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $redirectMock;
 
     /**
-     * @var AttributeSet|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeSet|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeSetMock;
 
     /**
-     * @var Build|\PHPUnit_Framework_MockObject_MockObject
+     * @var Build|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $builderMock;
 
     /**
-     * @var InputTypeValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var InputTypeValidator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $inputTypeValidatorMock;
 
     /**
-     * @var FormData|\PHPUnit_Framework_MockObject_MockObject
+     * @var FormData|\PHPUnit\Framework\MockObject\MockObject
      */
     private $formDataSerializerMock;
 
     /**
-     * @var ProductAttributeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductAttributeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productAttributeMock;
 
     /**
-     * @var AttributeCodeValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeCodeValidator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeCodeValidatorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->buildFactoryMock = $this->getMockBuilder(BuildFactory::class)
@@ -134,7 +134,7 @@ class SaveTest extends AttributeTest
             ->getMock();
         $this->attributeSetMock = $this->getMockBuilder(AttributeSetInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->builderMock = $this->getMockBuilder(Build::class)
             ->disableOriginalConstructor()
             ->getMock();

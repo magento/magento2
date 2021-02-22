@@ -17,21 +17,21 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     private $controller;
 
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultFactory;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $url;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(ConfigInterface::class)->getMockForAbstractClass();
 
@@ -46,19 +46,19 @@ class IndexTest extends \PHPUnit\Framework\TestCase
 
         $context->expects($this->any())
             ->method('getUrl')
-            ->will($this->returnValue($this->url));
+            ->willReturn($this->url);
 
         $context->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue(
+            ->willReturn(
                 $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)->getMockForAbstractClass()
-            ));
+            );
 
         $context->expects($this->any())
             ->method('getResponse')
-            ->will($this->returnValue(
+            ->willReturn(
                 $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)->getMockForAbstractClass()
-            ));
+            );
 
         $this->resultFactory = $this->getMockBuilder(
             ResultFactory::class
@@ -67,7 +67,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
 
         $context->expects($this->once())
             ->method('getResultFactory')
-            ->will($this->returnValue($this->resultFactory));
+            ->willReturn($this->resultFactory);
 
         $this->controller = new \Magento\Contact\Controller\Index\Index(
             $context,

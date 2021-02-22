@@ -12,7 +12,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
      */
     protected $_productType;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_productType = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Catalog\Model\Product\Type::class
@@ -127,7 +127,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     {
         $options = $this->_productType->getAllOptions();
         $types = $this->_assertOptions($options);
-        $this->assertContains('', $types);
+        $this->assertContains('',$types);
     }
 
     public function testGetOptions()
@@ -173,8 +173,8 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     public function testGetCompositeTypes()
     {
         $types = $this->_productType->getCompositeTypes();
-        $this->assertInternalType('array', $types);
-        $this->assertContains(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE, $types);
+        $this->assertIsArray($types);
+        $this->assertContains(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE,$types);
     }
 
     public function testGetTypesByPriority()
@@ -209,17 +209,17 @@ class TypeTest extends \PHPUnit\Framework\TestCase
      */
     protected function _assertOptions($options)
     {
-        $this->assertInternalType('array', $options);
+        $this->assertIsArray($options);
         $types = [];
         foreach ($options as $option) {
             $this->assertArrayHasKey('value', $option);
             $this->assertArrayHasKey('label', $option);
             $types[] = $option['value'];
         }
-        $this->assertContains(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, $types);
-        $this->assertContains(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL, $types);
-        $this->assertContains(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE, $types);
-        $this->assertContains(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE, $types);
+        $this->assertContains(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,$types);
+        $this->assertContains(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL,$types);
+        $this->assertContains(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE,$types);
+        $this->assertContains(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE,$types);
         return $types;
     }
 }

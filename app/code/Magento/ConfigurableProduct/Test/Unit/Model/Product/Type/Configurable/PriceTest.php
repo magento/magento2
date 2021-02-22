@@ -36,7 +36,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -68,11 +68,11 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         /** @var PriceInterface|MockObject $price */
         $price = $this->getMockBuilder(PriceInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         /** @var AmountInterface|MockObject $amount */
         $amount = $this->getMockBuilder(AmountInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $configurableProduct->expects($this->any())
             ->method('getCustomOption')

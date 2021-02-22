@@ -20,26 +20,26 @@ class ProductOptionProcessorTest extends \PHPUnit\Framework\TestCase
     protected $processor;
 
     /**
-     * @var DataObject | \PHPUnit_Framework_MockObject_MockObject
+     * @var DataObject | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataObject;
 
     /**
-     * @var DataObjectFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var DataObjectFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataObjectFactory;
 
     /**
-     * @var BundleOptionInterfaceFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var BundleOptionInterfaceFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $bundleOptionInterfaceFactory;
 
     /**
-     * @var BundleOptionInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var BundleOptionInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $bundleOption;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dataObject = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods([
@@ -184,7 +184,7 @@ class ProductOptionProcessorTest extends \PHPUnit\Framework\TestCase
 
         if (!empty($expected)) {
             $this->assertArrayHasKey($expected, $result);
-            $this->assertTrue(is_array($result[$expected]));
+            $this->assertIsArray($result[$expected]);
         } else {
             $this->assertEmpty($result);
         }

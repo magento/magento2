@@ -11,11 +11,12 @@ class MergeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppArea frontend
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Handle 'default' must not contain blocks with 'ttl' attribute specified
+     *
      */
     public function testLoadEntitySpecificHandleWithEsiBlock()
     {
+        $this->expectExceptionMessage("Handle 'default' must not contain blocks with 'ttl' attribute specified");
+        $this->expectException(\LogicException::class);
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         // Mock cache to avoid layout being read from existing cache

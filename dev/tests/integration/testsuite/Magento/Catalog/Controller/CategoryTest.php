@@ -48,7 +48,7 @@ class CategoryTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -126,7 +126,7 @@ class CategoryTest extends AbstractController
         /* Layout updates */
         $handles = $this->layout->getUpdate()->getHandles();
         foreach ($expectedHandles as $expectedHandleName) {
-            $this->assertContains($expectedHandleName, $handles);
+            $this->assertContains($expectedHandleName,$handles);
         }
 
         $responseBody = $this->getResponse()->getBody();

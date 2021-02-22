@@ -13,7 +13,7 @@ class CctypeTest extends \PHPUnit\Framework\TestCase
     /**
      * Payment data
      *
-     * @var \Magento\Payment\Model\Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Model\Config | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_paymentConfig;
 
@@ -22,7 +22,7 @@ class CctypeTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_paymentConfig = $this->getMockBuilder(
             \Magento\Payment\Model\Config::class
@@ -37,7 +37,7 @@ class CctypeTest extends \PHPUnit\Framework\TestCase
         $expectedArray = [
             ['value' => 'code', 'label' => 'name'],
         ];
-        $this->_paymentConfig->expects($this->once())->method('getCcTypes')->will($this->returnValue($cctypesArray));
+        $this->_paymentConfig->expects($this->once())->method('getCcTypes')->willReturn($cctypesArray);
         $this->assertEquals($expectedArray, $this->_model->toOptionArray());
     }
 }

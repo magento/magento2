@@ -15,7 +15,7 @@ class BaseurlTest extends \PHPUnit\Framework\TestCase
         $context = (new ObjectManager($this))->getObject(\Magento\Framework\Model\Context::class);
 
         $resource = $this->createMock(\Magento\Config\Model\ResourceModel\Config\Data::class);
-        $resource->expects($this->any())->method('addCommitCallback')->will($this->returnValue($resource));
+        $resource->expects($this->any())->method('addCommitCallback')->willReturn($resource);
         $resourceCollection = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

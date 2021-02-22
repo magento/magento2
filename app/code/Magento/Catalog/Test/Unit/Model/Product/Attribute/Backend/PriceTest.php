@@ -18,19 +18,19 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attribute;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
-    /** @var  \Magento\Directory\Model\CurrencyFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Directory\Model\CurrencyFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $currencyFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $localeFormat = $objectHelper->getObject(\Magento\Framework\Locale\Format::class);
@@ -86,11 +86,12 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests for the cases that expect to fail validation
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @dataProvider dataProviderValidateForFailure
      */
     public function testValidateForFailure($value)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $object = $this->createMock(\Magento\Catalog\Model\Product::class);
         $object->expects($this->once())->method('getData')->willReturn($value);
 

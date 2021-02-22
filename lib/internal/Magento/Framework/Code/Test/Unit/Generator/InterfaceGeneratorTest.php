@@ -64,7 +64,7 @@ class InterfaceGeneratorTest extends \PHPUnit\Framework\TestCase
         'testMethod3' => ['name' => 'testMethod3'],
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->interfaceGenerator = new \Magento\Framework\Code\Generator\InterfaceGenerator();
     }

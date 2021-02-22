@@ -23,32 +23,32 @@ class StockStateTest extends \PHPUnit\Framework\TestCase
     protected $stockState;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockStateProvider;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockRegistryProvider;
 
     /**
-     * @var \Magento\CatalogInventory\Api\Data\StockInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\Data\StockInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stock;
 
     /**
-     * @var \Magento\CatalogInventory\Api\Data\StockItemInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\Data\StockItemInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockItem;
 
     /**
-     * @var \Magento\CatalogInventory\Api\Data\StockStatusInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\Data\StockStatusInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockStatus;
 
     /**
-     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectResult;
 
@@ -56,7 +56,7 @@ class StockStateTest extends \PHPUnit\Framework\TestCase
     protected $websiteId = 111;
     protected $qty = 111;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -91,13 +91,13 @@ class StockStateTest extends \PHPUnit\Framework\TestCase
         );
         $this->stockRegistryProvider->expects($this->any())
             ->method('getStock')
-            ->will($this->returnValue($this->stock));
+            ->willReturn($this->stock);
         $this->stockRegistryProvider->expects($this->any())
             ->method('getStockItem')
-            ->will($this->returnValue($this->stockItem));
+            ->willReturn($this->stockItem);
         $this->stockRegistryProvider->expects($this->any())
             ->method('getStockStatus')
-            ->will($this->returnValue($this->stockStatus));
+            ->willReturn($this->stockStatus);
 
         $this->stockState = $this->objectManagerHelper->getObject(
             \Magento\CatalogInventory\Model\StockState::class,
@@ -108,31 +108,28 @@ class StockStateTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->stockState = null;
     }
 
     public function testVerifyStock()
     {
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $this->stockState->verifyStock($this->productId, $this->websiteId)
         );
     }
 
     public function testVerifyNotification()
     {
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $this->stockState->verifyNotification($this->productId, $this->websiteId)
         );
     }
 
     public function testCheckQty()
     {
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $this->stockState->checkQty($this->productId, $this->qty, $this->websiteId)
         );
     }

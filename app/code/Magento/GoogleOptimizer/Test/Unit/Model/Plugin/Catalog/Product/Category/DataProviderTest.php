@@ -13,7 +13,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     private $plugin;
 
     /**
-     * @var \Magento\GoogleOptimizer\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\GoogleOptimizer\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     private $helper;
 
@@ -22,7 +22,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->helper = $this->getMockBuilder(\Magento\GoogleOptimizer\Helper\Data::class)

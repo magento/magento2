@@ -7,22 +7,22 @@ namespace Magento\CacheInvalidate\Test\Unit\Observer;
 
 class FlushAllCacheObserverTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\CacheInvalidate\Observer\FlushAllCacheObserver */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\CacheInvalidate\Observer\FlushAllCacheObserver */
     protected $model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Event\Observer */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Event\Observer */
     protected $observerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\PageCache\Model\Config */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\PageCache\Model\Config */
     protected $configMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\CacheInvalidate\Model\PurgeCache */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\CacheInvalidate\Model\PurgeCache */
     protected $purgeCache;
 
     /**
      * Set up all mocks and data for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->createPartialMock(\Magento\PageCache\Model\Config::class, ['getType', 'isEnabled']);
         $this->purgeCache = $this->createMock(\Magento\CacheInvalidate\Model\PurgeCache::class);
@@ -38,13 +38,13 @@ class FlushAllCacheObserverTest extends \PHPUnit\Framework\TestCase
      */
     public function testFlushAllCache()
     {
-        $this->configMock->expects($this->once())->method('isEnabled')->will($this->returnValue(true));
+        $this->configMock->expects($this->once())->method('isEnabled')->willReturn(true);
         $this->configMock->expects(
             $this->once()
         )->method(
             'getType'
-        )->will(
-            $this->returnValue(\Magento\PageCache\Model\Config::VARNISH)
+        )->willReturn(
+            \Magento\PageCache\Model\Config::VARNISH
         );
 
         $this->purgeCache->expects($this->once())->method('sendPurgeRequest')->with('.*');

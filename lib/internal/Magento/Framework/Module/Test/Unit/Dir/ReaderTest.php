@@ -21,36 +21,36 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_moduleListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_protFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_dirsMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_baseConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_fileIteratorFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryReadFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_protFactoryMock = $this->createMock(\Magento\Framework\App\Config\BaseFactory::class);
         $this->_dirsMock = $this->createMock(\Magento\Framework\Module\Dir::class);
@@ -76,8 +76,8 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         )->with(
             'Test_Module',
             'etc'
-        )->will(
-            $this->returnValue('app/code/Test/Module/etc')
+        )->willReturn(
+            'app/code/Test/Module/etc'
         );
         $this->assertEquals(
             'app/code/Test/Module/etc',
@@ -97,15 +97,15 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     {
         $configPath = 'app/code/Test/Module/etc/config.xml';
         $modulesDirectoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
-        $modulesDirectoryMock->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
+        $modulesDirectoryMock->expects($this->any())->method('getRelativePath')->willReturnArgument(0);
         $modulesDirectoryMock->expects($this->any())->method('isExist')
             ->with($configPath)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->directoryReadFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($modulesDirectoryMock));
+            ->willReturn($modulesDirectoryMock);
 
-        $this->_moduleListMock->expects($this->once())->method('getNames')->will($this->returnValue(['Test_Module']));
+        $this->_moduleListMock->expects($this->once())->method('getNames')->willReturn(['Test_Module']);
         $model = new \Magento\Framework\Module\Dir\Reader(
             $this->_dirsMock,
             $this->_moduleListMock,
@@ -123,15 +123,15 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     {
         $configPath = 'app/code/Test/Module/composer.json';
         $modulesDirectoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
-        $modulesDirectoryMock->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
+        $modulesDirectoryMock->expects($this->any())->method('getRelativePath')->willReturnArgument(0);
         $modulesDirectoryMock->expects($this->any())->method('isExist')
             ->with($configPath)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->directoryReadFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($modulesDirectoryMock));
+            ->willReturn($modulesDirectoryMock);
 
-        $this->_moduleListMock->expects($this->once())->method('getNames')->will($this->returnValue(['Test_Module']));
+        $this->_moduleListMock->expects($this->once())->method('getNames')->willReturn(['Test_Module']);
         $model = new \Magento\Framework\Module\Dir\Reader(
             $this->_dirsMock,
             $this->_moduleListMock,

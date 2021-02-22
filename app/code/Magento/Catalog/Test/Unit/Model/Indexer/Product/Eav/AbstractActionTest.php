@@ -8,29 +8,29 @@ namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Eav;
 class AbstractActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_eavDecimalFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_eavSourceFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfig;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_eavDecimalFactoryMock = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory::class,
@@ -65,28 +65,29 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
 
         $this->_eavSourceFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($expectedIndexers['source']));
+            ->willReturn($expectedIndexers['source']);
 
         $this->_eavDecimalFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($expectedIndexers['decimal']));
+            ->willReturn($expectedIndexers['decimal']);
 
         $this->assertEquals($expectedIndexers, $this->_model->getIndexers());
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Unknown EAV indexer type "unknown_type".
      */
     public function testGetIndexerWithUnknownTypeThrowsException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Unknown EAV indexer type "unknown_type".');
+
         $this->_eavSourceFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue('return_value'));
+            ->willReturn('return_value');
 
         $this->_eavDecimalFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue('return_value'));
+            ->willReturn('return_value');
 
         $this->_model->getIndexer('unknown_type');
     }
@@ -99,11 +100,11 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
     {
         $this->_eavSourceFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue('source_return_value'));
+            ->willReturn('source_return_value');
 
         $this->_eavDecimalFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue('decimal_return_value'));
+            ->willReturn('decimal_return_value');
 
         $this->assertEquals('source_return_value', $this->_model->getIndexer('source'));
     }
@@ -130,11 +131,11 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
 
         $this->_eavSourceFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($eavSource));
+            ->willReturn($eavSource);
 
         $this->_eavDecimalFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($eavDecimal));
+            ->willReturn($eavDecimal);
 
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
@@ -198,11 +199,11 @@ class AbstractActionTest extends \PHPUnit\Framework\TestCase
 
         $this->_eavSourceFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($eavSource));
+            ->willReturn($eavSource);
 
         $this->_eavDecimalFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($eavDecimal));
+            ->willReturn($eavDecimal);
 
         $this->scopeConfig->expects($this->once())
             ->method('getValue')

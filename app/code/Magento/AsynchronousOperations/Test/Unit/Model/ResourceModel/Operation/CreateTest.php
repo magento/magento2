@@ -12,17 +12,17 @@ namespace Magento\AsynchronousOperations\Test\Unit\Model\ResourceModel\Operation
 class CreateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataPool;
 
     /**
-     * @var \Magento\Framework\EntityManager\TypeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\TypeResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $typeResolver;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnection;
 
@@ -36,7 +36,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->metadataPool = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
             ->disableOriginalConstructor()->getMock();
@@ -97,10 +97,11 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      * Test for execute method with exception.
      *
      * @return void
-     * @expectedException \Exception
      */
     public function testExecuteWithException()
     {
+        $this->expectException(\Exception::class);
+
         $connectionName = 'default';
         $operationData = ['key1' => 'value1'];
         $operationTable = 'magento_operation';

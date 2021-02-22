@@ -14,7 +14,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
      */
     private $mapper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mapper = new Mapper();
     }

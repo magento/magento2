@@ -16,22 +16,22 @@ class NotifierPoolTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\Notification\NotifierList|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Notification\NotifierList|\PHPUnit\Framework\MockObject\MockObject */
     protected $notifierList;
 
     /**
-     * @var \Magento\Framework\Notification\NotifierPool[]|\PHPUnit_Framework_MockObject_MockObject[]
+     * @var \Magento\Framework\Notification\NotifierPool[]|\PHPUnit\Framework\MockObject\MockObject[]
      */
     protected $notifiers;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $notifier1 = $this->createMock(\Magento\Framework\Notification\NotifierPool::class);
         $notifier2 = $this->createMock(\Magento\Framework\Notification\NotifierPool::class);
         $this->notifiers = [$notifier1, $notifier2];
         $this->notifierList = $this->createMock(\Magento\Framework\Notification\NotifierList::class);
-        $this->notifierList->expects($this->any())->method('asArray')->will($this->returnValue($this->notifiers));
+        $this->notifierList->expects($this->any())->method('asArray')->willReturn($this->notifiers);
         $this->notifierPool = $this->objectManagerHelper->getObject(
             \Magento\Framework\Notification\NotifierPool::class,
             [

@@ -18,14 +18,14 @@ class ShippingLabelConverterTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Sales\Api\Data\ShipmentInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\Data\ShipmentInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shipmentMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = new \Magento\Sales\Plugin\ShippingLabelConverter();
 

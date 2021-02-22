@@ -48,9 +48,9 @@ class ProductPriceIndexFilterTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->stockConfiguration = $this->createMock(StockConfigurationInterface::class);
+        $this->stockConfiguration = $this->getMockForAbstractClass(StockConfigurationInterface::class);
         $this->item = $this->createMock(Item::class);
         $this->resourceCnnection = $this->createMock(ResourceConnection::class);
         $this->generator = $this->createMock(Generator::class);
@@ -82,17 +82,17 @@ class ProductPriceIndexFilterTest extends \PHPUnit\Framework\TestCase
             ->willReturn($selectMock);
         $this->generator->expects($this->once())
             ->method('generate')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     $this->getBatchIteratorCallback($selectMock, 5)
-                )
+                
             );
 
         $fetchStmtMock = $this->createPartialMock(\Zend_Db_Statement_Pdo::class, ['fetchAll']);
         $fetchStmtMock->expects($this->any())
             ->method('fetchAll')
-            ->will($this->returnValue([['product_id' => 1]]));
-        $connectionMock->expects($this->any())->method('query')->will($this->returnValue($fetchStmtMock));
+            ->willReturn([['product_id' => 1]]);
+        $connectionMock->expects($this->any())->method('query')->willReturn($fetchStmtMock);
         $this->productPriceIndexFilter->modifyPrice($indexTableStructure, $entityIds);
     }
 

@@ -26,37 +26,37 @@ class SuggestionsTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $config;
 
     /**
-     * @var QueryResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var QueryResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryResultFactory;
 
     /**
-     * @var ConnectionManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConnectionManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionManager;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfig;
 
     /**
-     * @var SearchIndexNameResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchIndexNameResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $searchIndexNameResolver;
 
     /**
-     * @var StoreManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
-     * @var QueryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var QueryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $query;
 
@@ -65,7 +65,7 @@ class SuggestionsTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->getMockBuilder(\Magento\Elasticsearch\Model\Config::class)
             ->disableOriginalConstructor()
@@ -180,6 +180,6 @@ class SuggestionsTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($query);
 
-        $this->assertInternalType('array', $this->model->getItems($this->query));
+        $this->assertIsArray($this->model->getItems($this->query));
     }
 }

@@ -10,12 +10,12 @@ use \Magento\Framework\View\Layout\Argument\Interpreter\Options;
 class OptionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\Data\Argument\InterpreterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Argument\InterpreterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_interpreter;
 
@@ -24,7 +24,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new Options($this->_objectManager);
@@ -38,10 +38,10 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'toOptionArray'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 ['value1' => 'label 1', 'value2' => 'label 2', ['value' => 'value3', 'label' => 'label 3']]
-            )
+            
         );
         $this->_objectManager->expects(
             $this->once()
@@ -49,8 +49,8 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             $modelClass
-        )->will(
-            $this->returnValue($model)
+        )->willReturn(
+            $model
         );
         $input = ['model' => $modelClass];
         $expected = [

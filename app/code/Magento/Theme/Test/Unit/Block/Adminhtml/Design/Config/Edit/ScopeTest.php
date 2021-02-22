@@ -23,16 +23,16 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
     protected $context;
 
     /**
-     * @var ScopeResolverPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeResolverPool|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeResolverPool;
 
     /**
-     * @var Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initContext();
 

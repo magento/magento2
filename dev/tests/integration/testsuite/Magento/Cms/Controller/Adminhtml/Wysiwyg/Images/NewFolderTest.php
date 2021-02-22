@@ -46,7 +46,7 @@ class NewFolderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->filesystem = $objectManager->get(\Magento\Framework\Filesystem::class);
@@ -111,7 +111,7 @@ class NewFolderTest extends \PHPUnit\Framework\TestCase
         $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath . $dirPath);
         $this->model->execute();
 
-        $this->assertFileNotExists(
+        $this->assertFileDoesNotExist(
             $this->fullDirectoryPath . $dirPath . $this->dirName
         );
     }
@@ -119,7 +119,7 @@ class NewFolderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Framework\Filesystem::class);

@@ -14,16 +14,16 @@ class AuthorizationRoleTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\User\Model\Plugin\AuthorizationRole */
     protected $model;
 
-    /** @var \Magento\User\Model\ResourceModel\User|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\User\Model\ResourceModel\User|\PHPUnit\Framework\MockObject\MockObject */
     protected $userResourceModelMock;
 
-    /** @var \Magento\Authorization\Model\Role|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Authorization\Model\Role|\PHPUnit\Framework\MockObject\MockObject */
     protected $roleMock;
 
     /**
      * Set required values
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->userResourceModelMock = $this->getMockBuilder(\Magento\User\Model\ResourceModel\User::class)
             ->disableOriginalConstructor()

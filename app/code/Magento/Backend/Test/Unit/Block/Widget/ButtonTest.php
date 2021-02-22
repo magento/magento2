@@ -12,26 +12,26 @@ namespace Magento\Backend\Test\Unit\Block\Widget;
 class ButtonTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_layoutMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_factoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_blockMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_buttonMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
 
@@ -44,7 +44,7 @@ class ButtonTest extends \PHPUnit\Framework\TestCase
         $this->_blockMock = $objectManagerHelper->getObject(\Magento\Backend\Block\Widget\Button::class, $arguments);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_layoutMock);
         unset($this->_buttonMock);
@@ -58,7 +58,7 @@ class ButtonTest extends \PHPUnit\Framework\TestCase
     {
         $this->_blockMock->setData($data);
         $attributes = $this->_blockMock->getAttributesHtml();
-        $this->assertRegExp($expect, $attributes);
+        $this->assertMatchesRegularExpression($expect, $attributes);
     }
 
     /**

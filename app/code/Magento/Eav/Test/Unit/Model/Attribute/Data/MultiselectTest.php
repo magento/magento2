@@ -12,7 +12,7 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $timezoneMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
         $loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
@@ -37,8 +37,8 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
         $requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $attributeMock = $this->createMock(\Magento\Eav\Model\Attribute::class);
 
-        $requestMock->expects($this->once())->method('getParam')->will($this->returnValue($param));
-        $attributeMock->expects($this->once())->method('getAttributeCode')->will($this->returnValue('attributeCode'));
+        $requestMock->expects($this->once())->method('getParam')->willReturn($param);
+        $attributeMock->expects($this->once())->method('getAttributeCode')->willReturn('attributeCode');
 
         $this->model->setAttribute($attributeMock);
         $this->assertEquals($expectedResult, $this->model->extractValue($requestMock));
@@ -75,13 +75,13 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
     public function testOutputValue($format, $expectedResult)
     {
         $entityMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
-        $entityMock->expects($this->once())->method('getData')->will($this->returnValue('value1,value2,'));
+        $entityMock->expects($this->once())->method('getData')->willReturn('value1,value2,');
 
         $sourceMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class);
-        $sourceMock->expects($this->any())->method('getOptionText')->will($this->returnArgument(0));
+        $sourceMock->expects($this->any())->method('getOptionText')->willReturnArgument(0);
 
         $attributeMock = $this->createMock(\Magento\Eav\Model\Attribute::class);
-        $attributeMock->expects($this->any())->method('getSource')->will($this->returnValue($sourceMock));
+        $attributeMock->expects($this->any())->method('getSource')->willReturn($sourceMock);
 
         $this->model->setEntity($entityMock);
         $this->model->setAttribute($attributeMock);

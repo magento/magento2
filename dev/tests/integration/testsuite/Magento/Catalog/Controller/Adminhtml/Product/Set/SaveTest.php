@@ -87,7 +87,7 @@ class SaveTest extends AbstractBackendController
     /**
      * @inheritDoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->logger = $this->_objectManager->get(Monolog::class);
@@ -109,7 +109,7 @@ class SaveTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->attributeRepository->get('country_of_manufacture')->setIsUserDefined(false);
         parent::tearDown();
@@ -204,7 +204,7 @@ class SaveTest extends AbstractBackendController
         $jsonResponse = $this->json->unserialize($this->getResponse()->getBody());
         $this->assertNotNull($jsonResponse);
         $this->assertEquals(1, $jsonResponse['error']);
-        $this->assertContains(
+        $this->assertStringContainsString(
             (string)__('Attribute group with same code already exist. Please rename &quot;attribute-group-name&quot; group'),
             $jsonResponse['message']
         );
@@ -237,7 +237,7 @@ class SaveTest extends AbstractBackendController
         $this->dispatch('backend/catalog/product/edit/id/' . $product->getEntityId());
         $syslogPath = $this->getSyslogPath();
         $syslogContent = file_exists($syslogPath) ? file_get_contents($syslogPath) : '';
-        $this->assertNotContains($message, $syslogContent);
+        $this->assertStringNotContainsString($message, $syslogContent);
     }
 
     /**

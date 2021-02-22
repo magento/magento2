@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class TemporaryStorageTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $adapter;
 
@@ -27,11 +27,11 @@ class TemporaryStorageTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $config;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->tableName = 'some_table_name';
 
@@ -63,7 +63,7 @@ class TemporaryStorageTest extends \PHPUnit\Framework\TestCase
     {
         $sql = 'some SQL query';
 
-        /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject $select */
+        /** @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject $select */
         $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -159,7 +159,7 @@ class TemporaryStorageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \Magento\Framework\DB\Ddl\Table|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\DB\Ddl\Table|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createTemporaryTable($persistentConnection = true)
     {

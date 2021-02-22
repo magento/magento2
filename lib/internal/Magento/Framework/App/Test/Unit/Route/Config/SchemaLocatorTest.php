@@ -18,7 +18,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Config\Dom\UrnResolver */
     protected $urnResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         /** @var \Magento\Framework\Config\Dom\UrnResolver $urnResolverMock */
@@ -34,7 +34,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
             ->willReturn(
                 $this->urnResolver->getRealPath('urn:magento:framework:App/etc/routes_merged.xsd')
             );
-        $this->assertContains(
+        $this->assertStringContainsString(
             $this->urnResolver->getRealPath('urn:magento:framework:App/etc/routes_merged.xsd'),
             $this->config->getSchema()
         );
@@ -48,7 +48,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
             ->willReturn(
                 $this->urnResolver->getRealPath('urn:magento:framework:App/etc/routes.xsd')
             );
-        $this->assertContains(
+        $this->assertStringContainsString(
             $this->urnResolver->getRealPath('urn:magento:framework:App/etc/routes.xsd'),
             $this->config->getPerFileSchema()
         );

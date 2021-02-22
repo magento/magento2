@@ -8,12 +8,12 @@ namespace Magento\Widget\Test\Unit\Block\Adminhtml\Widget\Instance\Edit\Tab;
 class PropertiesTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $widget;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $registry;
 
@@ -22,7 +22,7 @@ class PropertiesTest extends \PHPUnit\Framework\TestCase
      */
     protected $propertiesBlock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->widget = $this->createMock(\Magento\Widget\Model\Widget\Instance::class);
         $this->registry = $this->createMock(\Magento\Framework\Registry::class);

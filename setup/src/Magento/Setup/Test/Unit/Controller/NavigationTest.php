@@ -13,7 +13,7 @@ use Magento\Setup\Model\ObjectManagerProvider;
 class NavigationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Navigation
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Navigation
      */
     private $navigationModel;
 
@@ -23,16 +23,16 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
     private $controller;
 
     /**
-     * @var \Magento\Setup\Model\Cron\Status|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Model\Cron\Status|\PHPUnit\Framework\MockObject\MockObject
      */
     private $status;
 
     /**
-     * @var \Magento\Setup\Model\ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Model\ObjectManagerProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerProvider;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->navigationModel = $this->createMock(\Magento\Setup\Model\Navigation::class);
         $this->status = $this->createMock(\Magento\Setup\Model\Cron\Status::class);

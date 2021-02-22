@@ -27,7 +27,7 @@ class TimeZoneProviderTest extends \PHPUnit\Framework\TestCase
                 ['scopeType' => ScopeConfigInterface::SCOPE_TYPE_DEFAULT]
             )
             ->willReturn($timeZone);
-        /** @var ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject $objectManagerProvider */
+        /** @var ObjectManagerProvider|\PHPUnit\Framework\MockObject\MockObject $objectManagerProvider */
         $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $objectManagerProvider->expects($this->any())
             ->method('get')

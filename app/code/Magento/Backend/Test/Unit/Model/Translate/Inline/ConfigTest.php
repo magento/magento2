@@ -17,8 +17,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'isSetFlag'
         )->with(
             $this->equalTo('dev/translate_inline/active_admin')
-        )->will(
-            $this->returnValue($result)
+        )->willReturn(
+            $result
         );
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $config = $objectManager->getObject(

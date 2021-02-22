@@ -25,14 +25,14 @@ class GetUtilityPageIdentifiersTest extends TestCase
     private $model;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfig;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)

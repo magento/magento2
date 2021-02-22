@@ -15,7 +15,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Theme\Model\Design::class
@@ -127,7 +127,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
         $serializer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(SerializerInterface::class);
         $cachedDesign = $serializer->unserialize($cachedDesign);
 
-        $this->assertInternalType('array', $cachedDesign);
+        $this->assertIsArray($cachedDesign);
         $this->assertArrayHasKey('design', $cachedDesign);
         $this->assertEquals($cachedDesign['design'], $design->getDesign());
 
@@ -146,7 +146,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
 
         $cachedDesign = $serializer->unserialize($cachedDesign);
 
-        $this->assertTrue(is_array($cachedDesign));
+        $this->assertIsArray($cachedDesign);
         $this->assertEquals($cachedDesign['design'], $design->getDesign());
     }
 
@@ -194,8 +194,8 @@ class DesignTest extends \PHPUnit\Framework\TestCase
             'scopeTimeStamp'
         )->with(
             $storeId
-        )->will(
-            $this->returnValue($storeDatetime)
+        )->willReturn(
+            $storeDatetime
         );
         // store time must stay unchanged during test execution
         $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

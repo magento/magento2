@@ -15,13 +15,13 @@ class ExchangeInstallerTest extends \PHPUnit\Framework\TestCase
 {
     public function testInstall()
     {
-        $bindingInstaller = $this->createMock(BindingInstallerInterface::class);
+        $bindingInstaller = $this->getMockForAbstractClass(BindingInstallerInterface::class);
         $model = new ExchangeInstaller($bindingInstaller);
         $channel = $this->createMock(AMQPChannel::class);
 
-        $binding = $this->createMock(BindingInterface::class);
+        $binding = $this->getMockForAbstractClass(BindingInterface::class);
 
-        $exchange = $this->createMock(ExchangeConfigItemInterface::class);
+        $exchange = $this->getMockForAbstractClass(ExchangeConfigItemInterface::class);
         $exchange->expects($this->exactly(2))->method('getName')->willReturn('magento');
         $exchange->expects($this->once())->method('getType')->willReturn('topic');
         $exchange->expects($this->once())->method('isDurable')->willReturn(true);

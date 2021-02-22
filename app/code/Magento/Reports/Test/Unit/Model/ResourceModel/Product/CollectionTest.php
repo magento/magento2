@@ -54,7 +54,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     private $collection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $eventTypeFactoryMock;
 
@@ -64,17 +64,17 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $selectMock;
 
@@ -83,14 +83,14 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $context = $this->createPartialMock(Context::class, ['getResource', 'getEavConfig']);
         $entityFactoryMock = $this->createMock(EntityFactory::class);
-        $loggerMock = $this->createMock(LoggerInterface::class);
-        $fetchStrategyMock = $this->createMock(FetchStrategyInterface::class);
-        $eventManagerMock = $this->createMock(ManagerInterface::class);
+        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $fetchStrategyMock = $this->getMockForAbstractClass(FetchStrategyInterface::class);
+        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $eavConfigMock = $this->createMock(Config::class);
         $this->resourceMock = $this->createPartialMock(ResourceConnection::class, ['getTableName', 'getConnection']);
         $eavEntityFactoryMock = $this->createMock(EavEntityFactory::class);
@@ -102,13 +102,13 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         );
         $moduleManagerMock = $this->createMock(Manager::class);
         $productFlatStateMock = $this->createMock(State::class);
-        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $optionFactoryMock = $this->createMock(OptionFactory::class);
         $catalogUrlMock = $this->createMock(Url::class);
-        $localeDateMock = $this->createMock(TimezoneInterface::class);
+        $localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
         $customerSessionMock = $this->createMock(Session::class);
         $dateTimeMock = $this->createMock(DateTime::class);
-        $groupManagementMock = $this->createMock(GroupManagementInterface::class);
+        $groupManagementMock = $this->getMockForAbstractClass(GroupManagementInterface::class);
         $eavConfig = $this->createPartialMock(Config::class, ['getEntityType']);
         $entityType = $this->createMock(Type::class);
 
@@ -290,7 +290,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      * @param string $className
      * @param array $methods
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function createPartialMockForAbstractClass($className, $methods)
     {

@@ -16,16 +16,16 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
      */
     private $order;
 
     /**
-     * @var \Magento\Sales\Model\Order\Pdf\AbstractPdf|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Pdf\AbstractPdf|\PHPUnit\Framework\MockObject\MockObject
      */
     private $pdf;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->order = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
@@ -33,7 +33,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->order->expects($this->any())
             ->method('formatPriceTxt')
-            ->will($this->returnCallback([$this, 'formatPrice']));
+            ->willReturnCallback([$this, 'formatPrice']);
 
         $this->pdf = $this->createPartialMock(
             \Magento\Sales\Model\Order\Pdf\AbstractPdf::class,
@@ -44,7 +44,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Filter\FilterManager::class,
             ['stripTags']
         );
-        $filterManager->expects($this->any())->method('stripTags')->will($this->returnArgument(0));
+        $filterManager->expects($this->any())->method('stripTags')->willReturnArgument(0);
 
         $modelConstructorArgs = $objectManager->getConstructArguments(
             \Magento\Downloadable\Model\Sales\Order\Pdf\Items\Creditmemo::class,
@@ -61,7 +61,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
         $this->model->setPage(new \Zend_Pdf_Page('a4'));
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->model = null;
         $this->order = null;
@@ -124,19 +124,19 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
                 ]
             )
         );
-        $this->model->expects($this->any())->method('getLinksTitle')->will($this->returnValue('Download Links'));
+        $this->model->expects($this->any())->method('getLinksTitle')->willReturn('Download Links');
         $this->model->expects(
             $this->any()
         )->method(
             'getLinks'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 new \Magento\Framework\DataObject(
                     ['purchased_items' => [
                         new \Magento\Framework\DataObject(['link_title' => 'Magento User Guide']), ],
                     ]
                 )
-            )
+            
         );
         $this->pdf->expects(
             $this->once()
@@ -146,8 +146,8 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
             $this->anything(),
             $expectedPdfData,
             $expectedPageSettings
-        )->will(
-            $this->returnValue($expectedPdfPage)
+        )->willReturn(
+            $expectedPdfPage
         );
 
         $this->assertNotSame($expectedPdfPage, $this->model->getPage());

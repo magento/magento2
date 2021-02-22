@@ -40,39 +40,39 @@ class AlternativeSourceTest extends \PHPUnit\Framework\TestCase
     const NEW_CONTENT = 'test-new-content';
 
     /**
-     * @var SortInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SortInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sorterMock;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var LockerProcessInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LockerProcessInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $lockerProcessMock;
 
     /**
-     * @var AssetBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var AssetBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assetBuilderMock;
 
     /**
-     * @var ContentProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContentProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $alternativeMock;
 
     /**
-     * @var FilenameResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilenameResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filenameResolverMock;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sorterMock = $this->getMockBuilder(SortInterface::class)
             ->getMockForAbstractClass();
@@ -270,8 +270,8 @@ class AlternativeSourceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $asset
-     * @return ContentProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @param \PHPUnit\Framework\MockObject\MockObject $asset
+     * @return ContentProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getProcessorMock($asset)
     {
@@ -287,7 +287,7 @@ class AlternativeSourceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Chain|\PHPUnit_Framework_MockObject_MockObject
+     * @return Chain|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getChainMock()
     {
@@ -301,7 +301,7 @@ class AlternativeSourceTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $content
      * @param int $contentExactly
-     * @return Chain|\PHPUnit_Framework_MockObject_MockObject
+     * @return Chain|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getChainMockExpects($content = '', $contentExactly = 1)
     {
@@ -321,7 +321,7 @@ class AlternativeSourceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return File|\PHPUnit_Framework_MockObject_MockObject
+     * @return File|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getAssetNew()
     {
@@ -333,19 +333,19 @@ class AlternativeSourceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return LocalInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return LocalInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getAssetMock()
     {
         $assetMock = $this->getMockBuilder(LocalInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         return $assetMock;
     }
 
     /**
-     * @return LocalInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return LocalInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getAssetMockExpects()
     {
@@ -365,7 +365,7 @@ class AlternativeSourceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return FallbackContext|\PHPUnit_Framework_MockObject_MockObject
+     * @return FallbackContext|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getContextMock()
     {

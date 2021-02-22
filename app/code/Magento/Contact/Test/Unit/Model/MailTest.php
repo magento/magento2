@@ -15,27 +15,27 @@ class MailTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlMock;
 
     /**
-     * @var \Magento\Framework\Mail\Template\TransportBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Mail\Template\TransportBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $transportBuilderMock;
 
     /**
-     * @var \Magento\Framework\Translate\Inline\StateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Translate\Inline\StateInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $inlineTranslationMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
@@ -44,7 +44,7 @@ class MailTest extends \PHPUnit\Framework\TestCase
      */
     private $mail;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(ConfigInterface::class)->getMockForAbstractClass();
         $this->urlMock = $this->createMock(\Magento\Framework\UrlInterface::class);
@@ -57,7 +57,7 @@ class MailTest extends \PHPUnit\Framework\TestCase
         )->disableOriginalConstructor(
         )->getMock();
 
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
         $this->mail = new Mail(
             $this->configMock,
@@ -74,14 +74,14 @@ class MailTest extends \PHPUnit\Framework\TestCase
 
         $transport = $this->createMock(\Magento\Framework\Mail\TransportInterface::class);
 
-        $store = $this->createMock(StoreInterface::class);
+        $store = $this->getMockForAbstractClass(StoreInterface::class);
         $store->expects($this->once())->method('getId')->willReturn(555);
 
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($store);
 
         $this->transportBuilderMock->expects($this->once())
             ->method('setTemplateIdentifier')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
             ->method('setTemplateOptions')
@@ -89,25 +89,25 @@ class MailTest extends \PHPUnit\Framework\TestCase
                 'area' => 'frontend',
                 'store' => 555,
             ])
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
             ->method('setTemplateVars')
             ->with($templateVars)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
             ->method('setFrom')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
             ->method('addTo')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
             ->method('setReplyTo')
             ->with($email)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
             ->method('getTransport')

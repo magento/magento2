@@ -39,7 +39,7 @@ class GroupedTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->block = $this->objectManager->get(Grouped::class);
@@ -62,7 +62,7 @@ class GroupedTest extends TestCase
         $this->block->setItem($creditMemoItem);
         $this->block->getLayout()->setBlock('item_price', $priceBlock);
         $output = $this->block->toHtml();
-        self::assertContains('SKU: simple_11', $output);
-        self::assertContains('"product-name">Simple 11', $output);
+        self::assertStringContainsString('SKU: simple_11', $output);
+        self::assertStringContainsString('"product-name">Simple 11', $output);
     }
 }

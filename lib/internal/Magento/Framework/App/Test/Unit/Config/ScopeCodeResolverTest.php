@@ -13,17 +13,17 @@ use Magento\Framework\App\ScopeResolverPool;
 class ScopeCodeResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ScopeResolverPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeResolverPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeResolverPool;
 
     /**
-     * @var ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeResolver;
 
     /**
-     * @var ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scope;
 
@@ -32,7 +32,7 @@ class ScopeCodeResolverTest extends \PHPUnit\Framework\TestCase
      */
     private $scopeCodeResolver;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->scopeResolverPool = $this->getMockBuilder(ScopeResolverPool::class)
             ->disableOriginalConstructor()

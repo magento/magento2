@@ -46,22 +46,22 @@ class NameTest extends \PHPUnit\Framework\TestCase
 
     /**#@-*/
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject | AttributeMetadataInterface */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject | AttributeMetadataInterface */
     private $attribute;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Options */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Model\Options */
     private $_options;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Escaper */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Escaper */
     private $_escaper;
 
     /** @var  Name */
     private $_block;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Api\CustomerMetadataInterface */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Api\CustomerMetadataInterface */
     private $customerMetadata;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Api\AddressMetadataInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Api\AddressMetadataInterface */
     private $addressMetadata;
 
     /**
@@ -69,12 +69,12 @@ class NameTest extends \PHPUnit\Framework\TestCase
      */
     protected $_objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_escaper = $this->createMock(\Magento\Framework\Escaper::class);
         $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
-        $context->expects($this->any())->method('getEscaper')->will($this->returnValue($this->_escaper));
+        $context->expects($this->any())->method('getEscaper')->willReturn($this->_escaper);
 
         $addressHelper = $this->createMock(\Magento\Customer\Helper\Address::class);
 
@@ -86,17 +86,17 @@ class NameTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->customerMetadata->expects($this->any())
             ->method('getAttributeMetadata')
-            ->will($this->returnValue($this->attribute));
+            ->willReturn($this->attribute);
         $this->customerMetadata
             ->expects($this->any())
             ->method('getCustomAttributesMetadata')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->addressMetadata = $this->getMockBuilder(\Magento\Customer\Api\AddressMetadataInterface::class)
             ->getMockForAbstractClass();
         $this->addressMetadata->expects($this->any())
             ->method('getAttributeMetadata')
-            ->will($this->returnValue($this->attribute));
+            ->willReturn($this->attribute);
 
         $this->_block = new \Magento\Customer\Block\Widget\Name(
             $context,
@@ -115,7 +115,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
         $this->_setUpShowAttribute([\Magento\Customer\Model\Data\Customer::PREFIX => self::PREFIX]);
         $this->assertTrue($this->_block->showPrefix());
 
-        $this->attribute->expects($this->at(0))->method('isVisible')->will($this->returnValue(false));
+        $this->attribute->expects($this->at(0))->method('isVisible')->willReturn(false);
         $this->assertFalse($this->_block->showPrefix());
     }
 
@@ -228,10 +228,10 @@ class NameTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getNamePrefixOptions'
-        )->will(
-            $this->returnValue($prefixOptions)
+        )->willReturn(
+            $prefixOptions
         );
-        $this->_escaper->expects($this->once())->method('escapeHtml')->will($this->returnValue($prefix));
+        $this->_escaper->expects($this->once())->method('escapeHtml')->willReturn($prefix);
 
         $this->assertSame($expectedOptions, $this->_block->getPrefixOptions());
     }
@@ -247,8 +247,8 @@ class NameTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getNamePrefixOptions'
-        )->will(
-            $this->returnValue([])
+        )->willReturn(
+            []
         );
 
         $this->assertEmpty($this->_block->getPrefixOptions());
@@ -276,10 +276,10 @@ class NameTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getNameSuffixOptions'
-        )->will(
-            $this->returnValue($suffixOptions)
+        )->willReturn(
+            $suffixOptions
         );
-        $this->_escaper->expects($this->once())->method('escapeHtml')->will($this->returnValue($suffix));
+        $this->_escaper->expects($this->once())->method('escapeHtml')->willReturn($suffix);
 
         $this->assertSame($expectedOptions, $this->_block->getSuffixOptions());
     }
@@ -295,8 +295,8 @@ class NameTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getNameSuffixOptions'
-        )->will(
-            $this->returnValue([])
+        )->willReturn(
+            []
         );
 
         $this->assertEmpty($this->_block->getSuffixOptions());
@@ -326,22 +326,22 @@ class NameTest extends \PHPUnit\Framework\TestCase
             $this->at(0)
         )->method(
             'isVisible'
-        )->will(
-            $this->returnValue($isPrefixVisible)
+        )->willReturn(
+            $isPrefixVisible
         );
         $this->attribute->expects(
             $this->at(1)
         )->method(
             'isVisible'
-        )->will(
-            $this->returnValue($isMiddlenameVisible)
+        )->willReturn(
+            $isMiddlenameVisible
         );
         $this->attribute->expects(
             $this->at(2)
         )->method(
             'isVisible'
-        )->will(
-            $this->returnValue($isSuffixVisible)
+        )->willReturn(
+            $isSuffixVisible
         );
 
         $this->assertEquals($expectedValue, $this->_block->getContainerClassName());
@@ -440,7 +440,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
          * first call to the method. Subsequent calls may return true or false depending on the returnValue
          * of the at({0, 1, 2, 3, ...}), etc. calls as set and configured in a particular test.
          */
-        $this->attribute->expects($this->at(0))->method('isVisible')->will($this->returnValue(true));
+        $this->attribute->expects($this->at(0))->method('isVisible')->willReturn(true);
     }
 
     /**
@@ -463,8 +463,8 @@ class NameTest extends \PHPUnit\Framework\TestCase
          * all code paths in Name::_getAttribute() will be executed. Returning true for the third isRequired()
          * call causes the is*Required() method of the block to return true for the attribute.
          */
-        $this->attribute->expects($this->at(0))->method('isRequired')->will($this->returnValue(false));
-        $this->attribute->expects($this->at(1))->method('isRequired')->will($this->returnValue(true));
-        $this->attribute->expects($this->at(2))->method('isRequired')->will($this->returnValue(true));
+        $this->attribute->expects($this->at(0))->method('isRequired')->willReturn(false);
+        $this->attribute->expects($this->at(1))->method('isRequired')->willReturn(true);
+        $this->attribute->expects($this->at(2))->method('isRequired')->willReturn(true);
     }
 }

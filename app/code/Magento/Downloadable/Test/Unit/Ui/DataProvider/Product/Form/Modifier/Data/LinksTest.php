@@ -28,37 +28,37 @@ class LinksTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var LocatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LocatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $locatorMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $escaperMock;
 
     /**
-     * @var DownloadableFile|\PHPUnit_Framework_MockObject_MockObject
+     * @var DownloadableFile|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $downloadableFileMock;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var LinkModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var LinkModel|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $linkModelMock;
 
     /**
-     * @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
@@ -70,17 +70,17 @@ class LinksTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->productMock = $this->getMockBuilder(ProductInterface::class)
             ->setMethods(['getLinksTitle', 'getId', 'getTypeId'])
             ->getMockForAbstractClass();
-        $this->locatorMock = $this->createMock(LocatorInterface::class);
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->locatorMock = $this->getMockForAbstractClass(LocatorInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->escaperMock = $this->createMock(Escaper::class);
         $this->downloadableFileMock = $this->createMock(DownloadableFile::class);
-        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->linkModelMock = $this->createMock(LinkModel::class);
         $this->links = $this->objectManagerHelper->getObject(
             Links::class,

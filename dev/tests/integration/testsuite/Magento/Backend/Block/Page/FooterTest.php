@@ -21,7 +21,7 @@ class FooterTest extends \PHPUnit\Framework\TestCase
      */
     protected $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $productMetadataMock =  $this->getMockBuilder(\Magento\Framework\App\ProductMetadata::class)
@@ -43,6 +43,6 @@ class FooterTest extends \PHPUnit\Framework\TestCase
     public function testToHtml()
     {
         $footerContent = $this->block->toHtml();
-        $this->assertContains('ver. ' . $this::TEST_PRODUCT_VERSION, $footerContent, 'No or wrong product version.');
+        $this->assertStringContainsString('ver. ' . $this::TEST_PRODUCT_VERSION, $footerContent, 'No or wrong product version.');
     }
 }

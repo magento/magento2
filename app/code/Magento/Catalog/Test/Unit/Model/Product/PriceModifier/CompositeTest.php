@@ -13,21 +13,21 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
     protected $compositeModel;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceModifierMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
@@ -46,8 +46,8 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             'some_class_name'
-        )->will(
-            $this->returnValue($this->priceModifierMock)
+        )->willReturn(
+            $this->priceModifierMock
         );
         $this->priceModifierMock->expects(
             $this->once()
@@ -56,8 +56,8 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
         )->with(
             100,
             $this->productMock
-        )->will(
-            $this->returnValue(150)
+        )->willReturn(
+            150
         );
         $this->assertEquals(150, $this->compositeModel->modifyPrice(100, $this->productMock));
     }

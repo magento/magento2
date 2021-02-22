@@ -28,21 +28,21 @@ class CountryCreditCardTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\Math\Random|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Math\Random|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mathRandomMock;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceMock = $this->getMockForAbstractClass(AbstractResource::class);
         $this->mathRandomMock = $this->getMockBuilder(Random::class)

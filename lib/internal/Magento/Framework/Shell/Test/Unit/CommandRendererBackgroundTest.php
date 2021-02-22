@@ -17,11 +17,11 @@ class CommandRendererBackgroundTest extends \PHPUnit\Framework\TestCase
     protected $testCommand = 'php -r test.php';
 
     /**
-     * @var \Magento\Framework\OsInfo|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\OsInfo|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $osInfo;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->osInfo = $this->getMockBuilder(\Magento\Framework\OsInfo::class)->getMock();
     }
@@ -35,7 +35,7 @@ class CommandRendererBackgroundTest extends \PHPUnit\Framework\TestCase
     {
         $this->osInfo->expects($this->once())
             ->method('isWindows')
-            ->will($this->returnValue($isWindows));
+            ->willReturn($isWindows);
 
         $commandRenderer = new CommandRendererBackground($this->osInfo);
         $this->assertEquals(

@@ -8,7 +8,7 @@ namespace Magento\Persistent\Test\Unit\Model;
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManagerMock;
 
@@ -17,7 +17,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_factory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -42,8 +42,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             $className,
             []
-        )->will(
-            $this->returnValue($classMock)
+        )->willReturn(
+            $classMock
         );
 
         $this->assertEquals($classMock, $this->_factory->create($className));
@@ -62,8 +62,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             $className,
             $data
-        )->will(
-            $this->returnValue($classMock)
+        )->willReturn(
+            $classMock
         );
 
         $this->assertEquals($classMock, $this->_factory->create($className, $data));

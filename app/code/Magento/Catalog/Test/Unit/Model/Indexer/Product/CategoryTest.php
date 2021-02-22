@@ -13,31 +13,31 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Category\Product\Action\FullFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Indexer\Category\Product\Action\FullFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fullMock;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Category\Action\RowsFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Indexer\Product\Category\Action\RowsFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rowsMock;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexerMock;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexerRegistryMock;
 
     /**
-     * @var \Magento\Framework\Indexer\CacheContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\CacheContext|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cacheContextMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fullMock = $this->createPartialMock(
             \Magento\Catalog\Model\Indexer\Category\Product\Action\FullFactory::class,
@@ -90,9 +90,9 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Indexer\Product\Category\Action\Rows::class,
             ['execute']
         );
-        $rowMock->expects($this->at(0))->method('execute')->with($ids)->will($this->returnSelf());
+        $rowMock->expects($this->at(0))->method('execute')->with($ids)->willReturnSelf();
 
-        $this->rowsMock->expects($this->once())->method('create')->will($this->returnValue($rowMock));
+        $this->rowsMock->expects($this->once())->method('create')->willReturn($rowMock);
 
         $this->model->execute($ids);
     }
@@ -107,9 +107,9 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Indexer\Product\Category\Action\Rows::class,
             ['execute']
         );
-        $rowMock->expects($this->once())->method('execute')->with($ids)->will($this->returnSelf());
+        $rowMock->expects($this->once())->method('execute')->with($ids)->willReturnSelf();
 
-        $this->rowsMock->expects($this->once())->method('create')->will($this->returnValue($rowMock));
+        $this->rowsMock->expects($this->once())->method('create')->willReturn($rowMock);
 
         $this->cacheContextMock->expects($this->once())
             ->method('registerEntities')
@@ -123,7 +123,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->indexerRegistryMock->expects($this->any())
             ->method('get')
             ->with(\Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID)
-            ->will($this->returnValue($this->indexerMock));
+            ->willReturn($this->indexerMock);
     }
 
     public function testExecuteFull()

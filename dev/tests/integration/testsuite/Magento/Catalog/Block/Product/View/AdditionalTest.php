@@ -28,9 +28,9 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
 
         $list = $block->getChildHtmlList();
 
-        $this->assertInternalType('array', $list);
+        $this->assertIsArray($list);
         $this->assertCount(2, $list);
-        $this->assertContains($htmlFirst, $list);
-        $this->assertContains($htmlSecond, $list);
+        $this->assertContains($htmlFirst,$list);
+        $this->assertContains($htmlSecond,$list);
     }
 }

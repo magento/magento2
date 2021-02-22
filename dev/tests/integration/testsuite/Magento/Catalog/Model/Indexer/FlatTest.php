@@ -56,7 +56,7 @@ class FlatTest extends \Magento\TestFramework\Indexer\TestCase
      */
     protected static $totalBefore = 0;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::loadAttributeCodes();
 
@@ -76,7 +76,7 @@ class FlatTest extends \Magento\TestFramework\Indexer\TestCase
         $category = $this->instantiateCategoryModel();
         $result = $category->getCollection()->getAllIds();
         $this->assertNotEmpty($result);
-        $this->assertTrue(is_array($result));
+        $this->assertIsArray($result);
     }
 
     /**
@@ -128,7 +128,7 @@ class FlatTest extends \Magento\TestFramework\Indexer\TestCase
         $this->createSubCategoriesInDefaultCategory();
 
         $result = $this->getLoadedDefaultCategory()->getCollection()->getItems();
-        $this->assertTrue(is_array($result));
+        $this->assertIsArray($result);
 
         $this->assertEquals(self::$defaultCategoryId, $result[self::$categoryOne]->getParentId());
         $this->assertEquals(self::$categoryOne, $result[self::$categoryTwo]->getParentId());
@@ -155,7 +155,7 @@ class FlatTest extends \Magento\TestFramework\Indexer\TestCase
         $result = $category->getAllChildren(true);
         $this->assertNotEmpty($result);
         $this->assertCount(3, $result);
-        $this->assertContains(self::$categoryOne, $result);
+        $this->assertContains(self::$categoryOne,$result);
 
         $categoryOne = $this->getLoadedCategory(self::$categoryOne);
         $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Category\Flat::class, $categoryOne->getResource());
@@ -163,7 +163,7 @@ class FlatTest extends \Magento\TestFramework\Indexer\TestCase
         $result = $categoryOne->getAllChildren(true);
         $this->assertNotEmpty($result);
         $this->assertCount(2, $result);
-        $this->assertContains(self::$categoryTwo, $result);
+        $this->assertContains(self::$categoryTwo,$result);
         $this->checkCategoryData($categoryOne);
 
         $categoryTwo = $this->getLoadedCategory(self::$categoryTwo);
@@ -236,7 +236,7 @@ class FlatTest extends \Magento\TestFramework\Indexer\TestCase
         $category = $this->instantiateCategoryModel();
         $result = $category->getCollection()->getAllIds();
         $this->assertNotEmpty($result);
-        $this->assertTrue(is_array($result));
+        $this->assertIsArray($result);
         $this->assertCount($countBeforeModification, $result);
     }
 

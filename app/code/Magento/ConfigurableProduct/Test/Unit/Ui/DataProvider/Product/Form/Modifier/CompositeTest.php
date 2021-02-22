@@ -26,31 +26,31 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var LocatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LocatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productLocatorMock;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var AssociatedProducts|\PHPUnit_Framework_MockObject_MockObject
+     * @var AssociatedProducts|\PHPUnit\Framework\MockObject\MockObject
      */
     private $associatedProductsMock;
 
     /**
-     * @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productMock;
 
     /**
-     * @var AllowedProductTypes|\PHPUnit_Framework_MockObject_MockObject
+     * @var AllowedProductTypes|\PHPUnit\Framework\MockObject\MockObject
      */
     private $allowedProductTypesMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productLocatorMock = $this->getMockBuilder(LocatorInterface::class)
             ->getMockForAbstractClass();
@@ -208,7 +208,7 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $initialMeta
      * @param array $resultMeta
-     * @return ModifierInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return ModifierInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createModifierMock(array $initialMeta, array $resultMeta)
     {

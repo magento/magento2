@@ -16,36 +16,36 @@ class ToOrderItemTest extends \PHPUnit\Framework\TestCase
     protected $converter;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderItemInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\Data\OrderItemInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderItemFactoryMock;
 
     /**
-     * @var \Magento\Framework\DataObject\Copy|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject\Copy|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectCopyServiceMock;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteItemMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Type\Simple|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Type\Simple|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productTypeMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderItemInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\Data\OrderItemInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderItemMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderItemFactoryMock = $this->createPartialMock(
             \Magento\Sales\Api\Data\OrderItemInterfaceFactory::class,

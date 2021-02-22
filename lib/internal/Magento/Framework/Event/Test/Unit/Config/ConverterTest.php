@@ -30,7 +30,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->filePath = __DIR__ . '/_files/';
@@ -46,11 +46,12 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Attribute name is missed
      */
     public function testConvertThrowsExceptionWhenDomIsInvalid()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Attribute name is missed');
+
         $this->source->loadXML(file_get_contents($this->filePath . 'event_invalid_config.xml'));
         $this->model->convert($this->source);
     }

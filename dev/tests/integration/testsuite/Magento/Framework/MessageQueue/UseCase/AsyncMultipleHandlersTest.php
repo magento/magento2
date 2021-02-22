@@ -73,7 +73,7 @@ class AsyncMultipleHandlersTest extends QueueTestCaseAbstract
 
         //assertions
         foreach ($this->expectedValues as $item) {
-            $this->assertContains($item, file_get_contents($this->logFilePath));
+            $this->assertStringContainsString($item, file_get_contents($this->logFilePath));
         }
     }
 }

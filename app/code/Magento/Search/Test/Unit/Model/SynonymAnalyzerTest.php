@@ -20,14 +20,14 @@ class SynonymAnalyzerTest extends \PHPUnit\Framework\TestCase
     private $synonymAnalyzer;
 
     /**
-     * @var \Magento\Search\Model\SynonymReader |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Search\Model\SynonymReader |\PHPUnit\Framework\MockObject\MockObject
      */
     private $synReaderModel;
 
     /**
      * Test set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 

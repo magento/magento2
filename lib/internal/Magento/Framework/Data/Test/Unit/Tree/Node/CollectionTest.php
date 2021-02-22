@@ -15,7 +15,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected $collection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $tree = new \Magento\Framework\Data\Tree();
         $node = new \Magento\Framework\Data\Tree\Node(['id' => 'root'], 'id', $tree);

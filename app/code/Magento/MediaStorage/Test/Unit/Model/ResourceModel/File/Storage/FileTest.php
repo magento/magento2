@@ -24,24 +24,24 @@ class FileTest extends \PHPUnit\Framework\TestCase
     protected $storageFile;
 
     /**
-     * @var \Magento\MediaStorage\Helper\File\Media|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Helper\File\Media|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesystemMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryReadMock;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->filesystemMock = $this->createPartialMock(\Magento\Framework\Filesystem::class, ['getDirectoryRead']);
@@ -64,7 +64,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->storageFile);
     }
@@ -80,16 +80,16 @@ class FileTest extends \PHPUnit\Framework\TestCase
             'getDirectoryRead'
         )->with(
             $this->equalTo(DirectoryList::MEDIA)
-        )->will(
-            $this->returnValue($this->directoryReadMock)
+        )->willReturn(
+            $this->directoryReadMock
         );
 
         $this->directoryReadMock->expects(
             $this->any()
         )->method(
             'isDirectory'
-        )->will(
-            $this->returnValueMap(
+        )->willReturnMap(
+            
                 [
                     ['/', true],
                     ['folder_one', true],
@@ -100,7 +100,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
                     ['folder_one/folder_two/.htaccess', false],
                     ['folder_one/folder_two/file_two.txt', false],
                 ]
-            )
+            
         );
 
         $paths = [
@@ -124,7 +124,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getPathInfo'
-        )->will($this->returnValueMap($pathInfos));
+        )->willReturnMap($pathInfos);
 
         sort($paths);
         $this->directoryReadMock->expects(
@@ -133,8 +133,8 @@ class FileTest extends \PHPUnit\Framework\TestCase
             'readRecursively'
         )->with(
             $this->equalTo('/')
-        )->will(
-            $this->returnValue($paths)
+        )->willReturn(
+            $paths
         );
 
         $expected = [

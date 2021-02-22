@@ -16,21 +16,21 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $groupServiceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $converterMock;
 
     /**
-     * @var GroupSourceLoggedInOnlyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupSourceLoggedInOnlyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $groupSourceLoggedInOnly;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->groupServiceMock = $this->createMock(\Magento\Customer\Api\GroupManagementInterface::class);
         $this->converterMock = $this->createMock(\Magento\Framework\Convert\DataObject::class);

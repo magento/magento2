@@ -18,25 +18,25 @@ class PayflowlinkTest extends \PHPUnit\Framework\TestCase
     /** @var Payflowlink */
     protected $model;
 
-    /** @var  \Magento\Sales\Model\Order\Payment|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Sales\Model\Order\Payment|\PHPUnit\Framework\MockObject\MockObject */
     protected $infoInstance;
 
-    /** @var  \Magento\Paypal\Model\Payflow\Request|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Paypal\Model\Payflow\Request|\PHPUnit\Framework\MockObject\MockObject */
     protected $payflowRequest;
 
-    /** @var  \Magento\Paypal\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Paypal\Model\Config|\PHPUnit\Framework\MockObject\MockObject */
     protected $paypalConfig;
 
-    /** @var  \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject */
     protected $store;
 
-    /** @var  \Magento\Paypal\Model\Payflow\Service\Gateway|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Paypal\Model\Payflow\Service\Gateway|\PHPUnit\Framework\MockObject\MockObject */
     private $gatewayMock;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $scopeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->store = $this->createMock(\Magento\Store\Model\Store::class);
         $storeManager = $this->createMock(
@@ -71,19 +71,19 @@ class PayflowlinkTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($this->store));
+        $storeManager->expects($this->any())->method('getStore')->willReturn($this->store);
         $configFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->paypalConfig);
         $this->payflowRequest->expects($this->any())
             ->method('__call')
-            ->will($this->returnCallback(function ($method) {
+            ->willReturnCallback(function ($method) {
                 if (strpos($method, 'set') === 0) {
                     return $this->payflowRequest;
                 }
                 return null;
-            }));
-        $requestFactory->expects($this->any())->method('create')->will($this->returnValue($this->payflowRequest));
+            });
+        $requestFactory->expects($this->any())->method('create')->willReturn($this->payflowRequest);
 
         $helper = new ObjectManagerHelper($this);
         $this->model = $helper->getObject(

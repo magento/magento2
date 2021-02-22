@@ -17,19 +17,19 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     /** @var  Reader */
     protected $reader;
 
-    /** @var  FileResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  FileResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $fileResolver;
 
-    /** @var  Converter|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Converter|\PHPUnit\Framework\MockObject\MockObject */
     protected $converter;
 
-    /** @var  SchemaLocatorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  SchemaLocatorInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $schemaLocator;
 
-    /** @var  ValidationStateInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  ValidationStateInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $validationState;
 
-    /** @var Backend|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Backend|\PHPUnit\Framework\MockObject\MockObject */
     protected $helper;
 
     /**
@@ -37,7 +37,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fileResolver = $this->getMockForAbstractClass(
             \Magento\Framework\Config\FileResolverInterface::class

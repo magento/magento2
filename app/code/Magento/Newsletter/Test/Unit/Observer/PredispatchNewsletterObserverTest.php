@@ -24,27 +24,27 @@ use PHPUnit\Framework\TestCase;
 class PredispatchNewsletterObserverTest extends TestCase
 {
     /**
-     * @var Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Observer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mockObject;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlMock;
 
     /**
-     * @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $redirectMock;
 
     /**
-     * @var ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $responseMock;
 
@@ -61,15 +61,15 @@ class PredispatchNewsletterObserverTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp() : void
+    protected function setUp(): void
     {
-        $this->configMock = $this->createMock(ScopeConfigInterface::class);
-        $this->urlMock = $this->createMock(UrlInterface::class);
+        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->urlMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setRedirect'])
             ->getMockForAbstractClass();
-        $this->redirectMock = $this->createMock(RedirectInterface::class);
+        $this->redirectMock = $this->getMockForAbstractClass(RedirectInterface::class);
         $this->newsletterConfig = $this->createMock(Config::class);
         $this->objectManager = new ObjectManager($this);
         $this->mockObject = new PredispatchNewsletterObserver(

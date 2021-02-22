@@ -67,7 +67,7 @@ class ActivityTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 

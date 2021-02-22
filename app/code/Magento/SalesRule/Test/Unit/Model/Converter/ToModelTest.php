@@ -8,12 +8,12 @@ namespace Magento\SalesRule\Test\Unit\Model\Converter;
 class ToModelTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\SalesRule\Model\RuleFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\RuleFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $ruleFactory;
 
     /**
-     * @var \Magento\Framework\Reflection\DataObjectProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Reflection\DataObjectProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataObjectProcessor;
 
@@ -22,7 +22,7 @@ class ToModelTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->ruleFactory = $this->getMockBuilder(\Magento\SalesRule\Model\RuleFactory::class)
             ->disableOriginalConstructor()
@@ -193,7 +193,7 @@ class ToModelTest extends \PHPUnit\Framework\TestCase
     public function testFormattingDate($data)
     {
         /**
-         * @var \Magento\SalesRule\Model\Data\Rule|\PHPUnit_Framework_MockObject_MockObject $dataModel
+         * @var \Magento\SalesRule\Model\Data\Rule|\PHPUnit\Framework\MockObject\MockObject $dataModel
          */
         $dataModel = $this->getMockBuilder(\Magento\SalesRule\Model\Data\Rule::class)
             ->disableOriginalConstructor()

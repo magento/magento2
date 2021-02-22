@@ -23,7 +23,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
     protected $_validItem;
 
     /**
-     * @var \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_salesModel;
 
@@ -46,7 +46,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_salesModel = $this->getMockForAbstractClass(
             \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface::class
@@ -58,8 +58,8 @@ class CartTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             'sales model'
-        )->will(
-            $this->returnValue($this->_salesModel)
+        )->willReturn(
+            $this->_salesModel
         );
         $eventManagerMock = $this->getMockForAbstractClass(\Magento\Framework\Event\ManagerInterface::class);
 
@@ -75,12 +75,12 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $taxContainer = new \Magento\Framework\DataObject(
             ['base_discount_tax_compensation_amount' => 0.2, 'base_shipping_discount_tax_compensation_amnt' => 0.1]
         );
-        $this->_salesModel->expects($this->once())->method('getTaxContainer')->will($this->returnValue($taxContainer));
-        $this->_salesModel->expects($this->once())->method('getAllItems')->will($this->returnValue($items));
-        $this->_salesModel->expects($this->once())->method('getBaseSubtotal')->will($this->returnValue(2.1));
-        $this->_salesModel->expects($this->once())->method('getBaseTaxAmount')->will($this->returnValue(0.1));
-        $this->_salesModel->expects($this->once())->method('getBaseShippingAmount')->will($this->returnValue(1.1));
-        $this->_salesModel->expects($this->once())->method('getBaseDiscountAmount')->will($this->returnValue(0.3));
+        $this->_salesModel->expects($this->once())->method('getTaxContainer')->willReturn($taxContainer);
+        $this->_salesModel->expects($this->once())->method('getAllItems')->willReturn($items);
+        $this->_salesModel->expects($this->once())->method('getBaseSubtotal')->willReturn(2.1);
+        $this->_salesModel->expects($this->once())->method('getBaseTaxAmount')->willReturn(0.1);
+        $this->_salesModel->expects($this->once())->method('getBaseShippingAmount')->willReturn(1.1);
+        $this->_salesModel->expects($this->once())->method('getBaseDiscountAmount')->willReturn(0.3);
         $this->assertEmpty($this->_model->getAllItems());
         $this->assertEquals(2.1, $this->_model->getSubtotal());
         $this->assertEquals(0.1 + 0.2 + 0.1, $this->_model->getTax());
@@ -267,41 +267,41 @@ class CartTest extends \PHPUnit\Framework\TestCase
             $this->_model->setTransferDiscountAsItem();
             $expectedSubtotal -= $values['base_discount_amount'];
         }
-        $this->_salesModel->expects($this->once())->method('getTaxContainer')->will($this->returnValue($taxContainer));
+        $this->_salesModel->expects($this->once())->method('getTaxContainer')->willReturn($taxContainer);
         $this->_salesModel->expects(
             $this->once()
         )->method(
             'getAllItems'
-        )->will(
-            $this->returnValue([$this->_validItem])
+        )->willReturn(
+            [$this->_validItem]
         );
         $this->_salesModel->expects(
             $this->once()
         )->method(
             'getBaseSubtotal'
-        )->will(
-            $this->returnValue($values['base_subtotal'])
+        )->willReturn(
+            $values['base_subtotal']
         );
         $this->_salesModel->expects(
             $this->once()
         )->method(
             'getBaseTaxAmount'
-        )->will(
-            $this->returnValue($values['base_tax_amount'])
+        )->willReturn(
+            $values['base_tax_amount']
         );
         $this->_salesModel->expects(
             $this->once()
         )->method(
             'getBaseShippingAmount'
-        )->will(
-            $this->returnValue($values['base_shipping_amount'])
+        )->willReturn(
+            $values['base_shipping_amount']
         );
         $this->_salesModel->expects(
             $this->once()
         )->method(
             'getBaseDiscountAmount'
-        )->will(
-            $this->returnValue($values['base_discount_amount'])
+        )->willReturn(
+            $values['base_discount_amount']
         );
         $this->_salesModel->expects(
             $this->once()
@@ -309,8 +309,8 @@ class CartTest extends \PHPUnit\Framework\TestCase
             'getDataUsingMethod'
         )->with(
             'base_grand_total'
-        )->will(
-            $this->returnValue($values['base_grand_total'])
+        )->willReturn(
+            $values['base_grand_total']
         );
         return $expectedSubtotal;
     }
@@ -332,41 +332,41 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $taxContainer = new \Magento\Framework\DataObject(
             ['base_discount_tax_compensation_amount' => 0, 'base_shipping_discount_tax_compensation_amnt' => 0]
         );
-        $this->_salesModel->expects($this->once())->method('getTaxContainer')->will($this->returnValue($taxContainer));
+        $this->_salesModel->expects($this->once())->method('getTaxContainer')->willReturn($taxContainer);
         $this->_salesModel->expects(
             $this->once()
         )->method(
             'getAllItems'
-        )->will(
-            $this->returnValue([$this->_validItem])
+        )->willReturn(
+            [$this->_validItem]
         );
         $this->_salesModel->expects(
             $this->once()
         )->method(
             'getBaseSubtotal'
-        )->will(
-            $this->returnValue($totals['subtotal'])
+        )->willReturn(
+            $totals['subtotal']
         );
         $this->_salesModel->expects(
             $this->once()
         )->method(
             'getBaseTaxAmount'
-        )->will(
-            $this->returnValue($totals['tax'])
+        )->willReturn(
+            $totals['tax']
         );
         $this->_salesModel->expects(
             $this->once()
         )->method(
             'getBaseShippingAmount'
-        )->will(
-            $this->returnValue($totals['shipping'])
+        )->willReturn(
+            $totals['shipping']
         );
         $this->_salesModel->expects(
             $this->once()
         )->method(
             'getBaseDiscountAmount'
-        )->will(
-            $this->returnValue($totals['discount'])
+        )->willReturn(
+            $totals['discount']
         );
         $this->_salesModel->expects(
             $this->once()
@@ -374,8 +374,8 @@ class CartTest extends \PHPUnit\Framework\TestCase
             'getDataUsingMethod'
         )->with(
             'base_grand_total'
-        )->will(
-            $this->returnValue(6.0 + $totals['tax'] + $totals['shipping'] - $totals['discount'])
+        )->willReturn(
+            6.0 + $totals['tax'] + $totals['shipping'] - $totals['discount']
         );
         return $totals;
     }

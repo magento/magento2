@@ -8,17 +8,17 @@ namespace Magento\Wishlist\Test\Unit\Pricing\ConfiguredPrice;
 class ConfigurableProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $saleableItem;
 
     /**
-     * @var \Magento\Framework\Pricing\Adjustment\CalculatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Adjustment\CalculatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $calculator;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $priceCurrency;
 
@@ -28,11 +28,11 @@ class ConfigurableProductTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceInfoInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceInfoInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $priceInfoMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->priceInfoMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceInfoInterface::class)
             ->getMockForAbstractClass();

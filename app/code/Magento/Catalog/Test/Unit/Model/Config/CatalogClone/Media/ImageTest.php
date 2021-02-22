@@ -22,34 +22,34 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eavConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeCollectionFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeCollection;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Entity\Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attribute;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $escaperMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eavConfig = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
             ->disableOriginalConstructor()
@@ -67,8 +67,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->attributeCollectionFactory->expects($this->any())->method('create')->will(
-            $this->returnValue($this->attributeCollection)
+        $this->attributeCollectionFactory->expects($this->any())->method('create')->willReturn(
+            $this->attributeCollection
         );
 
         $this->attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
@@ -103,13 +103,13 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     public function testGetPrefixes(string $actualLabel, string $expectedLabel): void
     {
         $entityTypeId = 3;
-        /** @var \Magento\Eav\Model\Entity\Type|\PHPUnit_Framework_MockObject_MockObject $entityType */
+        /** @var \Magento\Eav\Model\Entity\Type|\PHPUnit\Framework\MockObject\MockObject $entityType */
         $entityType = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
             ->disableOriginalConstructor()
             ->getMock();
         $entityType->expects($this->once())->method('getId')->willReturn($entityTypeId);
 
-        /** @var AbstractFrontend|\PHPUnit_Framework_MockObject_MockObject $frontend */
+        /** @var AbstractFrontend|\PHPUnit\Framework\MockObject\MockObject $frontend */
         $frontend = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend::class)
             ->setMethods(['getLabel'])
             ->disableOriginalConstructor()

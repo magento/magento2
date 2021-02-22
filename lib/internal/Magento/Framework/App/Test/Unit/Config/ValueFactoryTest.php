@@ -7,7 +7,7 @@ namespace Magento\Framework\App\Test\Unit\Config;
 
 class ValueFactoryTest extends \Magento\Framework\TestFramework\Unit\AbstractFactoryTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->instanceClassName = \Magento\Framework\App\Config\ValueInterface::class;
         $this->factoryClassName = \Magento\Framework\App\Config\ValueFactory::class;
@@ -15,13 +15,14 @@ class ValueFactoryTest extends \Magento\Framework\TestFramework\Unit\AbstractFac
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateWithException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue('somethingElse'));
+            ->willReturn('somethingElse');
         $this->factory->create();
     }
 }

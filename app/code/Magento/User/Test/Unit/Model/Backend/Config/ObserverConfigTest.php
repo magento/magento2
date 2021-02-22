@@ -43,16 +43,16 @@ class ObserverConfigTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|ConfigInterface
      */
     private $backendConfigMock;
 
     /**
      * Set environment for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->backendConfigMock = $this->createMock(ConfigInterface::class);
+        $this->backendConfigMock = $this->getMockForAbstractClass(ConfigInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
@@ -71,7 +71,7 @@ class ObserverConfigTest extends \PHPUnit\Framework\TestCase
         $this->backendConfigMock->expects(self::any())->method('getValue')
             ->with(self::XML_ADMIN_SECURITY_PASSWORD_LIFETIME)
             ->willReturn('0');
-        $this->assertEquals(false, $this->model->_isLatestPasswordExpired([]));
+        $this->assertFalse($this->model->_isLatestPasswordExpired([]));
     }
 
     /**
@@ -82,7 +82,7 @@ class ObserverConfigTest extends \PHPUnit\Framework\TestCase
         $this->backendConfigMock->expects(self::any())->method('getValue')
             ->with(self::XML_ADMIN_SECURITY_PASSWORD_LIFETIME)
             ->willReturn('2');
-        $this->assertEquals(true, $this->model->_isLatestPasswordExpired(['last_updated' => 1571428052]));
+        $this->assertTrue($this->model->_isLatestPasswordExpired(['last_updated' => 1571428052]));
     }
 
     /**
@@ -104,7 +104,7 @@ class ObserverConfigTest extends \PHPUnit\Framework\TestCase
         $this->backendConfigMock->expects(self::any())->method('getValue')
             ->with(self::XML_ADMIN_SECURITY_PASSWORD_IS_FORCED)
             ->willReturn('1');
-        $this->assertEquals(true, $this->model->isPasswordChangeForced());
+        $this->assertTrue($this->model->isPasswordChangeForced());
     }
 
     /**
@@ -115,7 +115,7 @@ class ObserverConfigTest extends \PHPUnit\Framework\TestCase
         $this->backendConfigMock->expects(self::any())->method('getValue')
             ->with(self::XML_ADMIN_SECURITY_PASSWORD_IS_FORCED)
             ->willReturn('0');
-        $this->assertEquals(false, $this->model->isPasswordChangeForced());
+        $this->assertFalse($this->model->isPasswordChangeForced());
     }
 
     /**

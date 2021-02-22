@@ -17,7 +17,7 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
      */
     protected $_addressConfig;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->_addressConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Customer\Model\Address\Config::class

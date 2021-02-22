@@ -34,46 +34,46 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resource;
 
     /**
-     * @var ProductRelation|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRelation|\PHPUnit\Framework\MockObject\MockObject
      */
     private $relation;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var AbstractAttribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractAttribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $abstractAttribute;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|\PHPUnit\Framework\MockObject\MockObject
      */
     private $product;
 
     /**
-     * @var AttributeOptionProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeOptionProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeOptionProvider;
 
     /**
-     * @var OptionProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var OptionProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $optionProvider;
 
     /**
-     * @var ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeResolver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->setMethods(['select', 'fetchAll', 'insertOnDuplicate'])

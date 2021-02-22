@@ -12,7 +12,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected $_objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -32,7 +32,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             \Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection::class
         );
         $collection->setClassTypeFilter($classType, $elementId);
-        $this->assertRegExp($expected, (string)$collection->getSelect());
+        $this->assertMatchesRegularExpression($expected, (string)$collection->getSelect());
     }
 
     public function setClassTypeFilterDataProvider()
@@ -54,10 +54,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * Test setClassTypeFilter with wrong Class Type
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testSetClassTypeFilterWithWrongType()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $collection = $this->_objectManager->create(
             \Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection::class
         );

@@ -14,22 +14,22 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class LinkTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataPoolMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataMock;
 
     /**
-     * @var \Magento\Downloadable\Model\ResourceModel\Link|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Downloadable\Model\ResourceModel\Link|\PHPUnit\Framework\MockObject\MockObject
      */
     private $linkResource;
 
     /**
-     * @var \Magento\Downloadable\Model\LinkFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Downloadable\Model\LinkFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $linkFactory;
 
@@ -38,7 +38,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
      */
     private $target;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->linkFactory = $this->getMockBuilder(\Magento\Downloadable\Model\LinkFactory::class)
@@ -70,7 +70,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider saveDataProvider
-     * @param \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product
+     * @param \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject $product
      * @param array $data
      * @param array $modelData
      */
@@ -79,10 +79,10 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $link = $this->createLinkkModel($product, $modelData, true);
         $this->linkFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($link));
+            ->willReturn($link);
         $product->expects($this->once())
             ->method('setIsCustomOptionChanged')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->target->save($product, $data);
     }
 
@@ -159,7 +159,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product
+     * @param \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject $product
      * @param array $data
      * @param array $expectedItems
      * @dataProvider deleteDataProvider
@@ -210,10 +210,10 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product
+     * @param \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject $product
      * @param array $modelData
      * @param bool $isUnlimited
-     * @return \Magento\Downloadable\Model\Link|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Downloadable\Model\Link|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createLinkkModel($product, array $modelData, $isUnlimited)
     {
@@ -241,23 +241,23 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $link->expects($this->once())
             ->method('setData')
             ->with($modelData)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $link->expects($this->once())
             ->method('setLinkType')
             ->with($modelData['type'])
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $link->expects($this->once())
             ->method('setProductId')
             ->with($product->getData('id'))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $link->expects($this->once())
             ->method('setStoreId')
             ->with($product->getStoreId())
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $link->expects($this->once())
             ->method('setWebsiteId')
             ->with($product->getStore()->getWebsiteId())
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $link->expects($this->once())
             ->method('setPrice')
             ->with(0);
@@ -266,7 +266,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->with(0);
         $link->expects($this->once())
             ->method('getIsUnlimited')
-            ->will($this->returnValue($isUnlimited));
+            ->willReturn($isUnlimited);
         return $link;
     }
 
@@ -275,7 +275,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
      * @param int $storeId
      * @param int $storeWebsiteId
      * @param array $websiteIds
-     * @return \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      * @internal param bool $isUnlimited
      */
     private function createProductMock($id, $storeId, $storeWebsiteId, array $websiteIds)
@@ -296,26 +296,26 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $product->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($id));
+            ->willReturn($id);
         $product->expects($this->any())
             ->method('getStoreId')
-            ->will($this->returnValue($storeId));
+            ->willReturn($storeId);
         $product->expects($this->any())
             ->method('getWebsiteIds')
-            ->will($this->returnValue($websiteIds));
+            ->willReturn($websiteIds);
         $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->setMethods(['getWebsiteId'])
             ->getMock();
         $store->expects($this->any())
             ->method('getWebsiteId')
-            ->will($this->returnValue($storeWebsiteId));
+            ->willReturn($storeWebsiteId);
         $product->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($store));
+            ->willReturn($store);
         $product->expects($this->any())
             ->method('getLinksPurchasedSeparately')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $product->expects($this->any())
             ->method('getData')
             ->with('id')

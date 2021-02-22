@@ -10,7 +10,7 @@ class ExtensionAttributesFactoryTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Api\ExtensionAttributesFactory */
     private $factory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var \Magento\Framework\ObjectManagerInterface */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -21,27 +21,21 @@ class ExtensionAttributesFactoryTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testCreateThrowExceptionIfInterfaceNotImplemented()
     {
+        $this->expectException(\LogicException::class);
         $this->factory->create(\Magento\Framework\Api\ExtensionAttributesFactoryTest::class);
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testCreateThrowExceptionIfInterfaceNotOverridden()
     {
+        $this->expectException(\LogicException::class);
         $this->factory->create(\Magento\TestModuleExtensionAttributes\Model\Data\FakeExtensibleOne::class);
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testCreateThrowExceptionIfReturnIsIncorrect()
     {
+        $this->expectException(\LogicException::class);
         $this->factory->create(\Magento\TestModuleExtensionAttributes\Model\Data\FakeExtensibleTwo::class);
     }
 

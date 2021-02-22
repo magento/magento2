@@ -13,11 +13,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_scopeConfig = $this->getMockBuilder(
             \Magento\Framework\App\Config\ScopeConfigInterface::class
@@ -39,8 +39,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             $path
-        )->will(
-            $this->returnValue($expectedValue)
+        )->willReturn(
+            $expectedValue
         );
         $actual = $this->_model->getValue($path);
         $this->assertEquals($expectedValue, $actual);

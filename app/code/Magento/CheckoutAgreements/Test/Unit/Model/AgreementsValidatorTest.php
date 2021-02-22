@@ -16,7 +16,7 @@ class AgreementsValidatorTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
     }
@@ -73,7 +73,7 @@ class AgreementsValidatorTest extends \PHPUnit\Framework\TestCase
         );
         $provider->expects($this->once())
             ->method('getRequiredAgreementIds')
-            ->will($this->returnValue([1, 3, '4']));
+            ->willReturn([1, 3, '4']);
 
         $this->object = $this->objectManagerHelper->getObject(
             \Magento\CheckoutAgreements\Model\AgreementsValidator::class,

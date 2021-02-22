@@ -12,7 +12,7 @@ use Magento\Paypal\Model\Payflow\Service\Request\SecureToken;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Paypal\Model\PayflowConfig;
 use Magento\Quote\Model\Quote;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Test class for \Magento\Paypal\Model\Payflow\Service\Request\SecureToken
@@ -42,7 +42,7 @@ class SecureTokenTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->url = $this->createMock(\Magento\Framework\UrlInterface::class);
         $this->mathRandom = $this->createMock(\Magento\Framework\Math\Random::class);

@@ -12,7 +12,7 @@ class EditablemultiselectTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $testHelper->getObject(\Magento\Framework\Data\Form\Element\Editablemultiselect::class);
@@ -30,16 +30,16 @@ class EditablemultiselectTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->setDisabled(true);
         $elementHtml = $this->_model->getElementHtml();
-        $this->assertContains('disabled="disabled"', $elementHtml);
-        $this->assertContains('data-is-removable="no"', $elementHtml);
-        $this->assertContains('data-is-editable="no"', $elementHtml);
+        $this->assertStringContainsString('disabled="disabled"', $elementHtml);
+        $this->assertStringContainsString('data-is-removable="no"', $elementHtml);
+        $this->assertStringContainsString('data-is-editable="no"', $elementHtml);
     }
 
     public function testGetElementHtmlRendersRelatedJsClassInitialization()
     {
         $this->_model->setElementJsClass('CustomSelect');
         $elementHtml = $this->_model->getElementHtml();
-        $this->assertContains('ElementControl = new CustomSelect(', $elementHtml);
-        $this->assertContains('ElementControl.init();', $elementHtml);
+        $this->assertStringContainsString('ElementControl = new CustomSelect(', $elementHtml);
+        $this->assertStringContainsString('ElementControl.init();', $elementHtml);
     }
 }

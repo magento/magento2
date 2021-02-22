@@ -16,7 +16,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Catalog\Api\ProductRepositoryInterface::class
@@ -199,10 +199,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
         $product = $repository->get('simple');
         // fixture
 
-        $this->assertContains(
-            "The product's required option(s) weren't entered. Make sure the options are entered and try again.",
-            $this->_model->prepareForCart(new \Magento\Framework\DataObject(), $product)
-        );
+        $this->assertStringContainsString("The product's required option(s) weren't entered. Make sure the options are entered and try again.",$this->_model->prepareForCart(new \Magento\Framework\DataObject(), $product));
     }
 
     public function testGetSpecifyOptionMessage()
@@ -225,10 +222,11 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @expectedException \Magento\Framework\Exception\LocalizedException
+     *
      */
     public function testCheckProductBuyStateException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\ProductRepository::class
         );
@@ -443,12 +441,12 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
         $product->load(1);
         // fixture
         $data = $this->_model->getSearchableData($product);
-        $this->assertContains('Test Field', $data);
-        $this->assertContains('Test Date and Time', $data);
-        $this->assertContains('Test Select', $data);
-        $this->assertContains('Test Radio', $data);
-        $this->assertContains('Option 1', $data);
-        $this->assertContains('Option 2', $data);
+        $this->assertContains('Test Field',$data);
+        $this->assertContains('Test Date and Time',$data);
+        $this->assertContains('Test Select',$data);
+        $this->assertContains('Test Radio',$data);
+        $this->assertContains('Option 1',$data);
+        $this->assertContains('Option 2',$data);
     }
 
     public function testGetProductsToPurchaseByReqGroups()

@@ -25,22 +25,22 @@ use Magento\Store\Model\Store;
 class StatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eavConfig;
 
     /**
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataPool;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
-     * @var Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|\PHPUnit\Framework\MockObject\MockObject
      */
     private $select;
 
@@ -49,7 +49,7 @@ class StatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
      */
     private $statusBaseSelectProcessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eavConfig = $this->getMockBuilder(Config::class)->disableOriginalConstructor()->getMock();
         $this->metadataPool = $this->getMockBuilder(MetadataPool::class)->disableOriginalConstructor()->getMock();
@@ -70,7 +70,7 @@ class StatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
         $attributeId = 2;
         $currentStoreId = 1;
 
-        $metadata = $this->createMock(EntityMetadataInterface::class);
+        $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
         $metadata->expects($this->once())
             ->method('getLinkField')
             ->willReturn($linkField);
@@ -79,10 +79,10 @@ class StatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
             ->with(ProductInterface::class)
             ->willReturn($metadata);
 
-        /** @var AttributeInterface|\PHPUnit_Framework_MockObject_MockObject $statusAttribute */
+        /** @var AttributeInterface|\PHPUnit\Framework\MockObject\MockObject $statusAttribute */
         $statusAttribute = $this->getMockBuilder(AttributeInterface::class)
             ->setMethods(['getBackendTable', 'getAttributeId'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $statusAttribute->expects($this->atLeastOnce())
             ->method('getBackendTable')
             ->willReturn($backendTable);

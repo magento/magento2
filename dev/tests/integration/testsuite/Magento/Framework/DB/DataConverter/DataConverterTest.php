@@ -18,7 +18,7 @@ use Magento\Framework\ObjectManagerInterface;
 class DataConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var InQueryModifier|\PHPUnit_Framework_MockObject_MockObject
+     * @var InQueryModifier|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryModifierMock;
 
@@ -28,22 +28,22 @@ class DataConverterTest extends \PHPUnit\Framework\TestCase
     private $dataConverter;
 
     /**
-     * @var BatchIterator|\PHPUnit_Framework_MockObject_MockObject
+     * @var BatchIterator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $iteratorMock;
 
     /**
-     * @var Generator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Generator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryGeneratorMock;
 
     /**
-     * @var Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|\PHPUnit\Framework\MockObject\MockObject
      */
     private $selectByRangeMock;
 
     /**
-     * @var Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var Mysql|\PHPUnit\Framework\MockObject\MockObject
      */
     private $adapterMock;
 
@@ -60,7 +60,7 @@ class DataConverterTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up before test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
 
@@ -68,7 +68,7 @@ class DataConverterTest extends \PHPUnit\Framework\TestCase
         $this->queryModifierMock = $this->getMockBuilder(QueryModifierInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['modify'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->dataConverter = $this->objectManager->get(SerializedToJson::class);
 
@@ -132,12 +132,11 @@ class DataConverterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test that exception with valid text is thrown when data is corrupted
-     *
-     * @expectedException \Magento\Framework\DB\FieldDataConversionException
-     * @expectedExceptionMessage Error converting field `value` in table `table` where `id`=2 using
-     */
+     **/
     public function testDataConvertErrorReporting()
     {
+        $this->expectExceptionMessage("Error converting field `value` in table `table` where `id`=2 using");
+        $this->expectException(\Magento\Framework\DB\FieldDataConversionException::class);
         $rows = [
             1 => 'N;',
             2 => 'a:2:{s:3:"foo";s:3:"bar";s:3:"bar";s:',

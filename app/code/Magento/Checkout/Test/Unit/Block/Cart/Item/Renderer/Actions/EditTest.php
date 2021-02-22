@@ -16,10 +16,10 @@ class EditTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $urlBuilderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -42,14 +42,14 @@ class EditTest extends \PHPUnit\Framework\TestCase
         $configureUrl = 'configure url';
 
         /**
-         * @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock
+         * @var Item|\PHPUnit\Framework\MockObject\MockObject $itemMock
          */
         $itemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         /**
-         * @var Product|\PHPUnit_Framework_MockObject_MockObject $itemMock
+         * @var Product|\PHPUnit\Framework\MockObject\MockObject $itemMock
          */
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()

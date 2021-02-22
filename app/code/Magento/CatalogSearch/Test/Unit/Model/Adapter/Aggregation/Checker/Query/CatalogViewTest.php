@@ -23,32 +23,32 @@ class CatalogViewTest extends \PHPUnit\Framework\TestCase
     private $catalogViewMock;
 
     /**
-     * @var CategoryRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $categoryRepositoryMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
     /**
-     * @var QueryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var QueryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryMock;
 
     /**
-     * @var Filter|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryFilterMock;
 
     /**
-     * @var Term|\PHPUnit_Framework_MockObject_MockObject
+     * @var Term|\PHPUnit\Framework\MockObject\MockObject
      */
     private $termFilterMock;
 
@@ -58,16 +58,16 @@ class CatalogViewTest extends \PHPUnit\Framework\TestCase
     private $name;
 
     /**
-     * @var CategoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $categoryMock;
 
     /**
-     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->categoryRepositoryMock = $this->getMockBuilder(CategoryRepositoryInterface::class)
             ->disableOriginalConstructor()

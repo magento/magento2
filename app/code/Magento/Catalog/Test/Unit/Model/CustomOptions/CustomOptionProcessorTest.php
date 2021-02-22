@@ -13,39 +13,39 @@ use Magento\Catalog\Model\CustomOptions\CustomOptionProcessor;
 class CustomOptionProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\DataObject\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectFactory;
 
     /**
-     * @var \Magento\Quote\Model\Quote\ProductOptionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\ProductOptionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productOptionFactory;
 
     /**
-     * @var \Magento\Quote\Api\Data\ProductOptionExtensionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Api\Data\ProductOptionExtensionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $extensionFactory;
 
     /**
      * @var \Magento\Catalog\Model\CustomOptions\CustomOptionFactory
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customOptionFactory;
 
-    /** @var \Magento\Quote\Api\Data\CartItemInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Quote\Api\Data\CartItemInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $cartItem;
 
-    /** @var \Magento\Quote\Api\Data\ProductOptionExtensionInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Quote\Api\Data\ProductOptionExtensionInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $extensibleAttribute;
 
-    /** @var \Magento\Quote\Model\Quote\ProductOption|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Quote\Model\Quote\ProductOption|\PHPUnit\Framework\MockObject\MockObject */
     protected $productOption;
 
-    /** @var \Magento\Catalog\Model\CustomOptions\CustomOption|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\CustomOptions\CustomOption|\PHPUnit\Framework\MockObject\MockObject */
     protected $customOption;
 
-    /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject */
     protected $buyRequest;
 
     /** @var CustomOptionProcessor */
@@ -54,7 +54,7 @@ class CustomOptionProcessorTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Serialize\Serializer\Json */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectFactory = $this->getMockBuilder(\Magento\Framework\DataObject\Factory::class)
             ->setMethods(['create'])

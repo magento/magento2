@@ -18,7 +18,7 @@ class OutputTest extends TestCase
      */
     protected $_helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_helper = Bootstrap::getObjectManager()->get(Output::class);
     }

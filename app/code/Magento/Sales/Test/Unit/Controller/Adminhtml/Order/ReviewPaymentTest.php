@@ -12,49 +12,49 @@ namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order;
  */
 class ReviewPaymentTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Sales\Controller\Adminhtml\Order\ReviewPayment | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Sales\Controller\Adminhtml\Order\ReviewPayment | \PHPUnit\Framework\MockObject\MockObject */
     protected $reviewPayment;
 
-    /** @var  \Magento\Backend\App\Action\Context| \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Backend\App\Action\Context| \PHPUnit\Framework\MockObject\MockObject */
     protected $contextMock;
 
-    /** @var  \Magento\Sales\Api\Data\OrderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Sales\Api\Data\OrderInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $orderMock;
 
-    /** @var  \Magento\Backend\Model\View\Result\RedirectFactory | \PHPUnit_Framework_MockObject_MockObject*/
+    /** @var  \Magento\Backend\Model\View\Result\RedirectFactory | \PHPUnit\Framework\MockObject\MockObject*/
     protected $resultRedirectFactoryMock;
 
-    /** @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit\Framework\MockObject\MockObject */
     protected $resultRedirectMock;
 
-    /**@var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject */
+    /**@var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject */
     protected $requestMock;
 
-    /** @var  \Magento\Sales\Model\Order\Payment|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Sales\Model\Order\Payment|\PHPUnit\Framework\MockObject\MockObject */
     protected $paymentMock;
 
-    /** @var \Magento\Framework\Message\Manager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Message\Manager|\PHPUnit\Framework\MockObject\MockObject */
     protected $messageManagerMock;
 
     /**
-     * @var \Magento\Sales\Api\OrderManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\OrderManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderManagementMock;
 
     /**
-     * @var \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderRepositoryMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
      * Test setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createPartialMock(\Magento\Backend\App\Action\Context::class, [
                 'getRequest',

@@ -17,17 +17,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class IndexSwitcherTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connection;
 
     /**
-     * @var \Magento\Framework\Search\Request\IndexScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\IndexScopeResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $indexScopeResolver;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeState;
 
@@ -37,11 +37,11 @@ class IndexSwitcherTest extends \PHPUnit\Framework\TestCase
     private $indexSwitcher;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resource = $this->getMockBuilder(ResourceConnection::class)
             ->setMethods(['getConnection'])
@@ -181,11 +181,12 @@ class IndexSwitcherTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\CatalogSearch\Model\Indexer\Scope\IndexTableNotExistException
-     * @expectedExceptionMessage Temporary table for index catalogsearch_fulltext doesn't exist
      */
     public function testSwitchWhenTemporaryIndexNotExist()
     {
+        $this->expectException(\Magento\CatalogSearch\Model\Indexer\Scope\IndexTableNotExistException::class);
+        $this->expectExceptionMessage('Temporary table for index catalogsearch_fulltext doesn\'t exist');
+
         $dimensions = [$this->getMockBuilder(Dimension::class)->setConstructorArgs(['scope', '1'])];
 
         $this->scopeState->expects($this->once())

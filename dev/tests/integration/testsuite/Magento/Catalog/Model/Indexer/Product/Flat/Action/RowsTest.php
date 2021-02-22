@@ -20,7 +20,7 @@ class RowsTest extends \Magento\TestFramework\Indexer\TestCase
      */
     protected $_processor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Product::class

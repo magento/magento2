@@ -22,12 +22,12 @@ class CVV2MatchTest extends \PHPUnit\Framework\TestCase
     protected $validator;
 
     /**
-     * @var \Magento\Payment\Model\Method\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Model\Method\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var Transparent|\PHPUnit_Framework_MockObject_MockObject
+     * @var Transparent|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $payflowproFacade;
 
@@ -36,7 +36,7 @@ class CVV2MatchTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(ConfigInterface::class)
             ->getMockForAbstractClass();

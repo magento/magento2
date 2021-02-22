@@ -11,11 +11,11 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class BuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Rule\Model\Condition\Sql\Builder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Rule\Model\Condition\Sql\Builder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_builder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $expressionMock = $this->createMock(\Magento\Rule\Model\Condition\Sql\Expression::class);
         $expressionFactory = $this->createPartialMock(
@@ -24,7 +24,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         );
         $expressionFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($expressionMock));
+            ->willReturn($expressionMock);
         $this->_builder = (new ObjectManagerHelper($this))->getObject(
             \Magento\Rule\Model\Condition\Sql\Builder::class,
             ['expressionFactory' => $expressionFactory]
@@ -57,18 +57,18 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
 
         $collection->expects($this->once())
             ->method('getResource')
-            ->will($this->returnValue($resource));
+            ->willReturn($resource);
         $collection->expects($this->any())
             ->method('getSelect')
-            ->will($this->returnValue($select));
+            ->willReturn($select);
 
         $resource->expects($this->once())
             ->method('getConnection')
-            ->will($this->returnValue($connection));
+            ->willReturn($connection);
 
         $combine->expects($this->any())
             ->method('getConditions')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->_builder->attachConditionToCollection($collection, $combine);
     }
@@ -91,11 +91,11 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
             ['getOperatorForValidate', 'getMappedSqlField', 'getAttribute', 'getBindArgumentValue']
         );
 
-        $abstractCondition->expects($this->once())->method('getMappedSqlField')->will($this->returnValue('argument'));
-        $abstractCondition->expects($this->once())->method('getOperatorForValidate')->will($this->returnValue('&gt;'));
-        $abstractCondition->expects($this->at(1))->method('getAttribute')->will($this->returnValue('attribute'));
-        $abstractCondition->expects($this->at(2))->method('getAttribute')->will($this->returnValue('attribute'));
-        $abstractCondition->expects($this->once())->method('getBindArgumentValue')->will($this->returnValue(10));
+        $abstractCondition->expects($this->once())->method('getMappedSqlField')->willReturn('argument');
+        $abstractCondition->expects($this->once())->method('getOperatorForValidate')->willReturn('&gt;');
+        $abstractCondition->expects($this->at(1))->method('getAttribute')->willReturn('attribute');
+        $abstractCondition->expects($this->at(2))->method('getAttribute')->willReturn('attribute');
+        $abstractCondition->expects($this->once())->method('getBindArgumentValue')->willReturn(10);
 
         $conditions = [$abstractCondition];
         $collection = $this->createPartialMock(
@@ -125,15 +125,15 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
             false
         );
 
-        $connection->expects($this->once())->method('quoteInto')->with(' > ?', 10)->will($this->returnValue(' > 10'));
-        $collection->expects($this->once())->method('getResource')->will($this->returnValue($resource));
-        $resource->expects($this->once())->method('getConnection')->will($this->returnValue($connection));
+        $connection->expects($this->once())->method('quoteInto')->with(' > ?', 10)->willReturn(' > 10');
+        $collection->expects($this->once())->method('getResource')->willReturn($resource);
+        $resource->expects($this->once())->method('getConnection')->willReturn($connection);
         $combine->expects($this->once())->method('getValue')->willReturn('attribute');
         $combine->expects($this->once())->method('getAggregator')->willReturn(' AND ');
-        $combine->expects($this->at(0))->method('getConditions')->will($this->returnValue($conditions));
-        $combine->expects($this->at(1))->method('getConditions')->will($this->returnValue($conditions));
-        $combine->expects($this->at(2))->method('getConditions')->will($this->returnValue($conditions));
-        $combine->expects($this->at(3))->method('getConditions')->will($this->returnValue($conditions));
+        $combine->expects($this->at(0))->method('getConditions')->willReturn($conditions);
+        $combine->expects($this->at(1))->method('getConditions')->willReturn($conditions);
+        $combine->expects($this->at(2))->method('getConditions')->willReturn($conditions);
+        $combine->expects($this->at(3))->method('getConditions')->willReturn($conditions);
 
         $this->_builder->attachConditionToCollection($collection, $combine);
     }

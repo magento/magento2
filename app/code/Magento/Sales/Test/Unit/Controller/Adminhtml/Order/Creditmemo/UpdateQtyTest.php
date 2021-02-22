@@ -19,82 +19,82 @@ class UpdateQtyTest extends \PHPUnit\Framework\TestCase
     protected $controller;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $loaderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $creditmemoMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $actionFlagMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultPageFactoryMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultJsonFactoryMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RawFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\RawFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultRawFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\Page|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultPageMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\Json|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultJsonMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Raw|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\Raw|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultRawMock;
 
@@ -103,7 +103,7 @@ class UpdateQtyTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->creditmemoMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo::class)
             ->disableOriginalConstructor()
@@ -146,31 +146,31 @@ class UpdateQtyTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->contextMock->expects($this->any())
             ->method('getHelper')
-            ->will($this->returnValue($this->helperMock));
+            ->willReturn($this->helperMock);
         $this->actionFlagMock = $this->getMockBuilder(\Magento\Framework\App\ActionFlag::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->any())
             ->method('getSession')
-            ->will($this->returnValue($this->sessionMock));
+            ->willReturn($this->sessionMock);
         $this->contextMock->expects($this->any())
             ->method('getActionFlag')
-            ->will($this->returnValue($this->actionFlagMock));
+            ->willReturn($this->actionFlagMock);
         $this->contextMock->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
         $this->contextMock->expects($this->any())
             ->method('getResponse')
-            ->will($this->returnValue($this->responseMock));
+            ->willReturn($this->responseMock);
         $this->contextMock->expects($this->any())
             ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManagerMock));
+            ->willReturn($this->objectManagerMock);
         $this->contextMock->expects($this->any())
             ->method('getTitle')
-            ->will($this->returnValue($titleMock));
+            ->willReturn($titleMock);
         $this->contextMock->expects($this->any())
             ->method('getMessageManager')
-            ->will($this->returnValue($this->messageManagerMock));
+            ->willReturn($this->messageManagerMock);
         $this->loaderMock = $this->getMockBuilder(\Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader::class)
             ->disableOriginalConstructor()
             ->getMock();

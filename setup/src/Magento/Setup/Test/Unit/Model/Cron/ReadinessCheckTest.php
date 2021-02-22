@@ -11,27 +11,27 @@ use Magento\Setup\Model\Cron\ReadinessCheck;
 class ReadinessCheckTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Validator\DbValidator
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Validator\DbValidator
      */
     private $dbValidator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\DeploymentConfig
      */
     private $deploymentConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem
      */
     private $filesystem;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\Write
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\Write
      */
     private $write;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\PhpReadinessCheck
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\PhpReadinessCheck
      */
     private $phpReadinessCheck;
 
@@ -41,7 +41,7 @@ class ReadinessCheckTest extends \PHPUnit\Framework\TestCase
     private $readinessCheck;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\BasePackageInfo
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\BasePackageInfo
      */
     private $basePackageInfo;
 
@@ -51,11 +51,11 @@ class ReadinessCheckTest extends \PHPUnit\Framework\TestCase
     private $expected;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\Status
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Cron\Status
      */
     private $status;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->dbValidator = $this->createMock(\Magento\Setup\Validator\DbValidator::class);
         $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);

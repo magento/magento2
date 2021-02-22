@@ -26,8 +26,8 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
         $specification = $this->getMockBuilder(
             \Magento\Payment\Model\Checks\SpecificationInterface::class
         )->disableOriginalConstructor()->setMethods([])->getMock();
-        $specification->expects($this->once())->method('isApplicable')->with($paymentMethod, $quote)->will(
-            $this->returnValue($expectation)
+        $specification->expects($this->once())->method('isApplicable')->with($paymentMethod, $quote)->willReturn(
+            $expectation
         );
         $model = new Composite([$specification]);
         $this->assertEquals($expectation, $model->isApplicable($paymentMethod, $quote));

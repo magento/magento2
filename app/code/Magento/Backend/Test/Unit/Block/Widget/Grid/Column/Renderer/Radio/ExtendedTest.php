@@ -15,16 +15,16 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
     protected $_object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_converter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_column;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $context = $this->createMock(\Magento\Backend\Block\Context::class);
         $this->_converter = $this->createPartialMock(
@@ -47,9 +47,9 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
     public function testRender(array $rowData, $expectedResult)
     {
         $selectedFlatArray = [1 => 'One'];
-        $this->_column->expects($this->once())->method('getValues')->will($this->returnValue($selectedFlatArray));
-        $this->_column->expects($this->once())->method('getIndex')->will($this->returnValue('label'));
-        $this->_column->expects($this->once())->method('getHtmlName')->will($this->returnValue('test[]'));
+        $this->_column->expects($this->once())->method('getValues')->willReturn($selectedFlatArray);
+        $this->_column->expects($this->once())->method('getIndex')->willReturn('label');
+        $this->_column->expects($this->once())->method('getHtmlName')->willReturn('test[]');
         $this->_converter->expects($this->never())->method('toFlatArray');
         $this->assertEquals($expectedResult, $this->_object->render(new \Magento\Framework\DataObject($rowData)));
     }

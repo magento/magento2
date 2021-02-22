@@ -12,7 +12,7 @@ namespace Magento\Framework\Data\Test\Unit\Form\Element;
 class TextareaTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManagerMock;
 
@@ -21,7 +21,7 @@ class TextareaTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
         $collectionFactoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
@@ -54,9 +54,9 @@ class TextareaTest extends \PHPUnit\Framework\TestCase
     public function testGetElementHtml()
     {
         $html = $this->_model->getElementHtml();
-        $this->assertContains('</textarea>', $html);
-        $this->assertContains('rows="2"', $html);
-        $this->assertContains('cols="15"', $html);
+        $this->assertStringContainsString('</textarea>', $html);
+        $this->assertStringContainsString('rows="2"', $html);
+        $this->assertStringContainsString('cols="15"', $html);
         $this->assertTrue(preg_match('/class=\".*textarea.*\"/i', $html) > 0);
     }
 

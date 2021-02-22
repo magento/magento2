@@ -9,16 +9,16 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 
 class ViewTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\App\Helper\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Helper\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $context;
 
-    /** @var \Magento\Customer\Helper\View|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Helper\View|\PHPUnit\Framework\MockObject\MockObject */
     protected $object;
 
-    /** @var CustomerMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CustomerMetadataInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerMetadataService;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->getMockBuilder(\Magento\Framework\App\Helper\Context::class)
             ->disableOriginalConstructor()
@@ -26,10 +26,10 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->customerMetadataService = $this->createMock(\Magento\Customer\Api\CustomerMetadataInterface::class);
 
         $attributeMetadata = $this->createMock(\Magento\Customer\Api\Data\AttributeMetadataInterface::class);
-        $attributeMetadata->expects($this->any())->method('isVisible')->will($this->returnValue(true));
+        $attributeMetadata->expects($this->any())->method('isVisible')->willReturn(true);
         $this->customerMetadataService->expects($this->any())
             ->method('getAttributeMetadata')
-            ->will($this->returnValue($attributeMetadata));
+            ->willReturn($attributeMetadata);
 
         $this->object = new \Magento\Customer\Helper\View($this->context, $this->customerMetadataService);
     }
@@ -43,15 +43,15 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $customerData->expects($this->any())
-            ->method('getPrefix')->will($this->returnValue($prefix));
+            ->method('getPrefix')->willReturn($prefix);
         $customerData->expects($this->any())
-            ->method('getFirstname')->will($this->returnValue($firstName));
+            ->method('getFirstname')->willReturn($firstName);
         $customerData->expects($this->any())
-            ->method('getMiddlename')->will($this->returnValue($middleName));
+            ->method('getMiddlename')->willReturn($middleName);
         $customerData->expects($this->any())
-            ->method('getLastname')->will($this->returnValue($lastName));
+            ->method('getLastname')->willReturn($lastName);
         $customerData->expects($this->any())
-            ->method('getSuffix')->will($this->returnValue($suffix));
+            ->method('getSuffix')->willReturn($suffix);
         $this->assertEquals($result, $this->object->getCustomerName($customerData));
     }
 

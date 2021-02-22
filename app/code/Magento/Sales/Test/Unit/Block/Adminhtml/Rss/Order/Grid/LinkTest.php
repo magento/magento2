@@ -24,21 +24,21 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\Framework\App\Rss\UrlBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Rss\UrlBuilderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderInterface;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigInterface;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $this->urlBuilderInterface = $this->createMock(\Magento\Framework\App\Rss\UrlBuilderInterface::class);
@@ -60,7 +60,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $link = 'http://magento.com/backend/rss/feed/index/type/new_order';
         $this->urlBuilderInterface->expects($this->once())->method('getUrl')
             ->with(['type' => 'new_order'])
-            ->will($this->returnValue($link));
+            ->willReturn($link);
         $this->assertEquals($link, $this->link->getLink());
     }
 

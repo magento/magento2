@@ -17,12 +17,12 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\Email\Model\Template\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Email\Model\Template\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_emailConfig;
 
@@ -31,7 +31,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      */
     protected $_templatesFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_coreRegistry = $this->createMock(\Magento\Framework\Registry::class);
         $this->_emailConfig = $this->createMock(\Magento\Email\Model\Template\Config::class);
@@ -52,13 +52,13 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'toOptionArray'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 [
                     ['value' => 'template_one', 'label' => 'Template One'],
                     ['value' => 'template_two', 'label' => 'Template Two'],
                 ]
-            )
+            
         );
         $this->_coreRegistry->expects(
             $this->once()
@@ -66,8 +66,8 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             'registry'
         )->with(
             'config_system_email_template'
-        )->will(
-            $this->returnValue($collection)
+        )->willReturn(
+            $collection
         );
         $this->_emailConfig->expects(
             $this->once()
@@ -75,8 +75,8 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             'getTemplateLabel'
         )->with(
             'template_new'
-        )->will(
-            $this->returnValue('Template New')
+        )->willReturn(
+            'Template New'
         );
         $expectedResult = [
             [

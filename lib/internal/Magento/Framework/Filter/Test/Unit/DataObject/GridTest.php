@@ -19,12 +19,12 @@ class GridTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('create')
             ->with(\Magento\Framework\DataObject::class, [])
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function () {
                         return new DataObject();
                     }
-                )
+                
             );
 
         $gridFilter = new Grid($entityFactoryMock);
@@ -36,24 +36,24 @@ class GridTest extends \PHPUnit\Framework\TestCase
         /** @var \Zend_Filter_Interface $filterMock */
         /** This filter should be applied to all fields values */
         $filterMock = $this->createMock(\Zend_Filter_Interface::class);
-        $filterMock->expects($this->exactly(4))->method('filter')->will(
-            $this->returnCallback(
+        $filterMock->expects($this->exactly(4))->method('filter')->willReturnCallback(
+            
                 function ($input) {
                     return '(' . $input . ')';
                 }
-            )
+            
         );
         $gridFilter->addFilter($filterMock);
 
         /** @var \Zend_Filter_Interface $fieldFilterMock */
         /** This filter should be applied to 'field2' field value only */
         $fieldFilterMock = $this->createMock(\Zend_Filter_Interface::class);
-        $fieldFilterMock->expects($this->exactly(2))->method('filter')->will(
-            $this->returnCallback(
+        $fieldFilterMock->expects($this->exactly(2))->method('filter')->willReturnCallback(
+            
                 function ($input) {
                     return '[' . $input . ']';
                 }
-            )
+            
         );
         $gridFilter->addFilter($fieldFilterMock, 'field2');
 

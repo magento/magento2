@@ -17,22 +17,22 @@ class EngineResolverTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfig;
 
     /**
-     * @var string|\PHPUnit_Framework_MockObject_MockObject
+     * @var string|\PHPUnit\Framework\MockObject\MockObject
      */
     private $path;
 
     /**
-     * @var string|\PHPUnit_Framework_MockObject_MockObject
+     * @var string|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeType;
 
     /**
-     * @var null|string|\PHPUnit_Framework_MockObject_MockObject
+     * @var null|string|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeCode;
 
@@ -42,7 +42,7 @@ class EngineResolverTest extends \PHPUnit\Framework\TestCase
     private $engines = [];
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
@@ -51,7 +51,7 @@ class EngineResolverTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->disableOriginalConstructor()

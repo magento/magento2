@@ -10,7 +10,7 @@ use Magento\Framework\Json\DecoderInterface;
 use Magento\Signifyd\Model\SignifydGateway\ApiCallException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use \Zend_Http_Response as Response;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use \PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class ResponseHandlerTest extends \PHPUnit\Framework\TestCase
 {
@@ -54,13 +54,13 @@ class ResponseHandlerTest extends \PHPUnit\Framework\TestCase
      */
     private $response;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
         $this->dataDecoder = $this->getMockBuilder(DecoderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->response = $this->getMockBuilder(Response::class)
             ->disableOriginalConstructor()
@@ -111,11 +111,12 @@ class ResponseHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException     \Magento\Signifyd\Model\SignifydGateway\ApiCallException
-     * @expectedExceptionMessage  Response is not valid JSON: Decoding failed: Syntax error
      */
     public function testHandleEmptyJsonException()
     {
+        $this->expectException(\Magento\Signifyd\Model\SignifydGateway\ApiCallException::class);
+        $this->expectExceptionMessage('Response is not valid JSON: Decoding failed: Syntax error');
+
         $this->response->expects($this->any())
             ->method('getStatus')
             ->willReturn(self::$successfulCode);
@@ -133,11 +134,12 @@ class ResponseHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException     \Magento\Signifyd\Model\SignifydGateway\ApiCallException
-     * @expectedExceptionMessage  Response is not valid JSON: Some error
      */
     public function testHandleInvalidJson()
     {
+        $this->expectException(\Magento\Signifyd\Model\SignifydGateway\ApiCallException::class);
+        $this->expectExceptionMessage('Response is not valid JSON: Some error');
+
         $this->response->expects($this->any())
             ->method('getStatus')
             ->willReturn(self::$successfulCode);
@@ -148,7 +150,7 @@ class ResponseHandlerTest extends \PHPUnit\Framework\TestCase
 
         $this->dataDecoder = $this->getMockBuilder(DecoderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->dataDecoder->expects($this->once())
             ->method('decode')

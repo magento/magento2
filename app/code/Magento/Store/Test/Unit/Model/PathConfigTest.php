@@ -13,18 +13,18 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class PathConfigTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject*/
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit\Framework\MockObject\MockObject*/
     private $scopeConfigMock;
-    /** @var \Magento\Framework\Url\SecurityInfoInterface | \PHPUnit_Framework_MockObject_MockObject*/
+    /** @var \Magento\Framework\Url\SecurityInfoInterface | \PHPUnit\Framework\MockObject\MockObject*/
     private $urlSecurityInfoMock;
-    /** @var StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject*/
+    /** @var StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject*/
     private $storeManagerMock;
-    /** @var Store | \PHPUnit_Framework_MockObject_MockObject*/
+    /** @var Store | \PHPUnit\Framework\MockObject\MockObject*/
     private $storeMock;
     /** @var \Magento\Store\Model\RouteConfig */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->disableOriginalConstructor()
@@ -114,7 +114,7 @@ class PathConfigTest extends \PHPUnit\Framework\TestCase
 
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValueMap($getValueReturnMap));
+            ->willReturnMap($getValueReturnMap);
 
         if ($secure) {
             $this->urlSecurityInfoMock->expects($this->once())->method('isSecure')->with($path)->willReturn($secure);

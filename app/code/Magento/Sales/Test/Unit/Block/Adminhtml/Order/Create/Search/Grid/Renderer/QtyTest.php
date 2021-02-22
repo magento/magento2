@@ -13,16 +13,16 @@ class QtyTest extends \PHPUnit\Framework\TestCase
     protected $renderer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $rowMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $typeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -44,18 +44,18 @@ class QtyTest extends \PHPUnit\Framework\TestCase
             'isProductSet'
         )->with(
             'id'
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
-        $this->rowMock->expects($this->once())->method('getTypeId')->will($this->returnValue('id'));
+        $this->rowMock->expects($this->once())->method('getTypeId')->willReturn('id');
         $columnMock = $this->createPartialMock(
             \Magento\Backend\Block\Widget\Grid\Column::class,
             ['getInlineCss', 'getId']
         );
         $this->renderer->setColumn($columnMock);
 
-        $columnMock->expects($this->once())->method('getId')->will($this->returnValue('id_name'));
-        $columnMock->expects($this->once())->method('getInlineCss')->will($this->returnValue('inline_css'));
+        $columnMock->expects($this->once())->method('getId')->willReturn('id_name');
+        $columnMock->expects($this->once())->method('getInlineCss')->willReturn('inline_css');
 
         $this->assertEquals($expected, $this->renderer->render($this->rowMock));
     }

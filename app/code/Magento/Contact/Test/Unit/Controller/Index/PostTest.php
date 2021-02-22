@@ -21,54 +21,54 @@ class PostTest extends \PHPUnit\Framework\TestCase
     private $controller;
 
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\RedirectFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $redirectResultFactoryMock;
 
     /**
-     * @var Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var Redirect|\PHPUnit\Framework\MockObject\MockObject
      */
     private $redirectResultMock;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlMock;
 
     /**
-     * @var \Magento\Framework\App\Request\HttpRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\HttpRequest|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestStub;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageManagerMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \Magento\Framework\App\Request\DataPersistorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\DataPersistorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataPersistorMock;
 
     /**
-     * @var MailInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var MailInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mailMock;
 
     /**
      * test setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mailMock = $this->getMockBuilder(MailInterface::class)->getMockForAbstractClass();
         $this->configMock = $this->getMockBuilder(ConfigInterface::class)->getMockForAbstractClass();

@@ -36,7 +36,7 @@ class CompositeTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->helper = $this->objectManager->get(Composite::class);
@@ -48,7 +48,7 @@ class CompositeTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->registry->unregister('composite_configure_result_error_message');
         $this->registry->unregister(RegistryConstants::CURRENT_CUSTOMER_ID);
@@ -82,14 +82,8 @@ class CompositeTest extends TestCase
         $this->assertTrue($preparedProduct && $preparedCurrentProduct);
         $this->assertEquals(1, $this->registry->registry(RegistryConstants::CURRENT_CUSTOMER_ID));
         $this->assertNotNull($preparedProduct->getPreconfiguredValues());
-        $this->assertContains(
-            'CATALOG_PRODUCT_COMPOSITE_CONFIGURE',
-            $resultLayout->getLayout()->getUpdate()->getHandles()
-        );
-        $this->assertContains(
-            'catalog_product_view_type_' . $product->getTypeId(),
-            $resultLayout->getLayout()->getUpdate()->getHandles()
-        );
+        $this->assertContains('CATALOG_PRODUCT_COMPOSITE_CONFIGURE',$resultLayout->getLayout()->getUpdate()->getHandles());
+        $this->assertContains('catalog_product_view_type_' . $product->getTypeId(),$resultLayout->getLayout()->getUpdate()->getHandles());
     }
 
     /**
@@ -110,10 +104,7 @@ class CompositeTest extends TestCase
             $expectedErrorMessage,
             $this->registry->registry('composite_configure_result_error_message')
         );
-        $this->assertContains(
-            'CATALOG_PRODUCT_COMPOSITE_CONFIGURE_ERROR',
-            $resultLayout->getLayout()->getUpdate()->getHandles()
-        );
+        $this->assertContains('CATALOG_PRODUCT_COMPOSITE_CONFIGURE_ERROR',$resultLayout->getLayout()->getUpdate()->getHandles());
     }
 
     /**

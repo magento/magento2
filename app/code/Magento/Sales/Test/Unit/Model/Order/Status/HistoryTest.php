@@ -19,7 +19,7 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Sales\Model\Order | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $order;
 
@@ -29,11 +29,11 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface |  \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface |  \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -62,7 +62,7 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
     public function testSetIsCustomerNotified()
     {
         $this->model->setIsCustomerNotified(true);
-        $this->assertEquals(true, $this->model->getIsCustomerNotified());
+        $this->assertTrue($this->model->getIsCustomerNotified());
     }
 
     public function testSetIsCustomerNotifiedNotApplicable()

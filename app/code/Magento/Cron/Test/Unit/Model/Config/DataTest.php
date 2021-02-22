@@ -35,7 +35,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->with('test_cache_id')
             ->willReturn(json_encode($jobs));
 
-        $dbReader->expects($this->once())->method('get')->will($this->returnValue($dbReaderData));
+        $dbReader->expects($this->once())->method('get')->willReturn($dbReaderData);
 
         $serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
         $serializerMock->method('unserialize')

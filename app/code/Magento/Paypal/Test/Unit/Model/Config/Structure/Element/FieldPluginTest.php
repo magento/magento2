@@ -22,11 +22,11 @@ class FieldPluginTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var FieldConfigStructureMock|\PHPUnit_Framework_MockObject_MockObject
+     * @var FieldConfigStructureMock|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subjectMock = $this->getMockBuilder(FieldConfigStructureMock::class)
             ->disableOriginalConstructor()

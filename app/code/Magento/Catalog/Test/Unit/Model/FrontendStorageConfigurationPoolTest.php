@@ -22,10 +22,10 @@ class FrontendStorageConfigurationPoolTest extends \PHPUnit\Framework\TestCase
      */
     private $defaultStorageConfiguration;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->defaultStorageConfiguration = $this->createMock(FrontendStorageConfigurationInterface::class);
-        $productStorageConfiguration = $this->createMock(ProductInterface::class);
+        $this->defaultStorageConfiguration = $this->getMockForAbstractClass(FrontendStorageConfigurationInterface::class);
+        $productStorageConfiguration = $this->getMockForAbstractClass(ProductInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             \Magento\Catalog\Model\FrontendStorageConfigurationPool::class,
@@ -44,11 +44,12 @@ class FrontendStorageConfigurationPoolTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid pool type with namespace: product
      */
     public function testGetWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Invalid pool type with namespace: product');
+
         $this->assertEquals($this->defaultStorageConfiguration, $this->model->get('product'));
     }
 }

@@ -11,7 +11,7 @@ class MethodInvokedAtIndexTest extends \PHPUnit\Framework\TestCase
 {
     public function testMatches()
     {
-        $invocationObject = new \PHPUnit\Framework\MockObject\Invocation\ObjectInvocation(
+        $invocationObject = new \PHPUnit\Framework\MockObject\Invocation(
             'ClassName',
             'ValidMethodName',
             [],

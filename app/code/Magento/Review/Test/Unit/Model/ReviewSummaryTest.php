@@ -30,7 +30,7 @@ class ReviewSummaryTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->reviewSummaryCollectionFactoryMock = $this->createPartialMock(
             \Magento\Review\Model\ResourceModel\Review\Summary\CollectionFactory::class,
@@ -58,36 +58,36 @@ class ReviewSummaryTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Product::class,
             ['getId', 'addData', '__wakeup']
         );
-        $product->expects($this->once())->method('getId')->will($this->returnValue($productId));
+        $product->expects($this->once())->method('getId')->willReturn($productId);
         $product->expects($this->once())->method('addData')
             ->with($testSummaryData)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $summaryData = $this->createPartialMock(
             \Magento\Review\Model\Review\Summary::class,
             ['getData', '__wakeup']
         );
-        $summaryData->expects($this->atLeastOnce())->method('getData')->will(
-            $this->returnValueMap(
+        $summaryData->expects($this->atLeastOnce())->method('getData')->willReturnMap(
+            
                 [
                     ['reviews_count', null, $testSummaryData['reviews_count']],
                     ['rating_summary', null, $testSummaryData['rating_summary']]
                 ]
-            )
+            
         );
         $summaryCollection = $this->createPartialMock(
             \Magento\Review\Model\ResourceModel\Review\Summary\Collection::class,
             ['addEntityFilter', 'addStoreFilter', 'getFirstItem', '__wakeup']
         );
         $summaryCollection->expects($this->once())->method('addEntityFilter')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $summaryCollection->expects($this->once())->method('addStoreFilter')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $summaryCollection->expects($this->once())->method('getFirstItem')
-            ->will($this->returnValue($summaryData));
+            ->willReturn($summaryData);
 
         $this->reviewSummaryCollectionFactoryMock->expects($this->once())->method('create')
-            ->will($this->returnValue($summaryCollection));
+            ->willReturn($summaryCollection);
 
         $this->assertNull($this->reviewSummary->appendSummaryDataToObject($product, $storeId));
     }

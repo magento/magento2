@@ -118,7 +118,7 @@ class CreateAccountTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->accountManagement = $this->objectManager->get(AccountManagementInterface::class);
@@ -139,7 +139,7 @@ class CreateAccountTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->mutableScopeConfig->clean();
@@ -499,7 +499,7 @@ class CreateAccountTest extends TestCase
         ];
         $actualInAfterOnly = array_keys($inAfterOnly);
         foreach ($expectedInAfter as $item) {
-            $this->assertContains($item, $actualInAfterOnly);
+            $this->assertContains($item,$actualInAfterOnly);
         }
     }
 
@@ -735,7 +735,7 @@ class CreateAccountTest extends TestCase
         $messageFrom = reset($messageFrom);
         $this->assertEquals($expectedData['name'], $messageFrom->getName());
         $this->assertEquals($expectedData['email'], $messageFrom->getEmail());
-        $this->assertContains(
+        $this->assertStringContainsString(
             $expectedData['message'],
             $message->getBody()->getParts()[0]->getRawContent(),
             'Expected message wasn\'t found in email content.'

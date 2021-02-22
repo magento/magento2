@@ -16,7 +16,7 @@ class SetTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $resource = $this->createMock(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set::class);
         $attrGroupFactory = $this->createMock(\Magento\Eav\Model\Entity\Attribute\GroupFactory::class);
@@ -30,7 +30,7 @@ class SetTest extends \PHPUnit\Framework\TestCase
         $this->_model = $objectManagerHelper->getObject(\Magento\Eav\Model\Entity\Attribute\Set::class, $arguments);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_model = null;
     }
@@ -42,7 +42,7 @@ class SetTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateWithExistingName($attributeSetName, $exceptionMessage)
     {
-        $this->_model->getResource()->expects($this->any())->method('validate')->will($this->returnValue(false));
+        $this->_model->getResource()->expects($this->any())->method('validate')->willReturn(false);
 
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->expectExceptionMessage($exceptionMessage);
@@ -52,7 +52,7 @@ class SetTest extends \PHPUnit\Framework\TestCase
 
     public function testValidateWithNonexistentValidName()
     {
-        $this->_model->getResource()->expects($this->any())->method('validate')->will($this->returnValue(true));
+        $this->_model->getResource()->expects($this->any())->method('validate')->willReturn(true);
 
         $this->_model->setAttributeSetName('nonexistent_name');
         $this->assertTrue($this->_model->validate());

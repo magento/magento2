@@ -32,7 +32,7 @@ class EventTest extends \PHPUnit\Framework\TestCase
      */
     protected $observer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $data = [
             'name' => 'ObserverName',
@@ -44,7 +44,7 @@ class EventTest extends \PHPUnit\Framework\TestCase
         $this->observers->addObserver($this->observer);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->event);
     }

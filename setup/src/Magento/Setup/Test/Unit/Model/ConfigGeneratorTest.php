@@ -19,17 +19,17 @@ use Magento\Setup\Model\ConfigOptionsList\DriverOptions;
 class ConfigGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var DeploymentConfig | \PHPUnit_Framework_MockObject_MockObject
+     * @var DeploymentConfig | \PHPUnit\Framework\MockObject\MockObject
      */
     private $deploymentConfigMock;
 
     /**
-     * @var ConfigGenerator | \PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigGenerator | \PHPUnit\Framework\MockObject\MockObject
      */
     private $model;
 
     /**
-     * @var ConfigData|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigData|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configDataMock;
 
@@ -38,7 +38,7 @@ class ConfigGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     private $driverOptionsMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
