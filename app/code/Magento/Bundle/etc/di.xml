@@ -241,4 +241,16 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Quote\Model\Quote\Item\Option\Comparator">
+        <arguments>
+            <argument name="customComparators" xsi:type="array">
+                <item name="bundle_selection_attributes" xsi:type="object">Magento\Bundle\Model\Quote\Item\Option\BundleSelectionAttributesComparator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\QuoteManagement">
+        <plugin name="update_bundle_quote_item_options"
+                type="Magento\Bundle\Plugin\Quote\UpdateBundleQuoteItemOptions"
+                sortOrder="10"/>
+    </type>
 </config>
