@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace Magento\JwtFrameworkAdapter\Model;
 
 use Jose\Component\Core\AlgorithmManager;
-use Jose\Easy\AlgorithmProvider;
 
 class JweContentAlgorithmManagerFactory
 {
@@ -22,8 +21,17 @@ class JweContentAlgorithmManagerFactory
         \Jose\Component\Encryption\Algorithm\ContentEncryption\A256GCM::class,
     ];
 
+    /**
+     * @var AlgorithmProviderFactory
+     */
+    private $algorithmProviderFactory;
+
+    public function __construct(AlgorithmProviderFactory $algorithmProviderFactory) {
+        $this->algorithmProviderFactory = $algorithmProviderFactory;
+    }
+
     public function create(): AlgorithmManager
     {
-        return new AlgorithmManager((new AlgorithmProvider(self::ALGOS))->getAvailableAlgorithms());
+        return new AlgorithmManager($this->algorithmProviderFactory->create(self::ALGOS)->getAvailableAlgorithms());
     }
 }
