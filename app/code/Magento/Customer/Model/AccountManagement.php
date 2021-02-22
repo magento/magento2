@@ -928,7 +928,19 @@ class AccountManagement implements AccountManagementInterface
             }
             $this->customerRegistry->remove($customer->getId());
         } catch (InputException $e) {
+            $isSecureArea = $this->registry->registry('isSecureArea');
+            if ($isSecureArea !== null) {
+                $this->registry->unregister('isSecureArea');
+            }
+            $this->registry->register('isSecureArea', true);
+
             $this->customerRepository->delete($customer);
+
+            if ($isSecureArea !== null) {
+                $this->registry->unregister('isSecureArea');
+                $this->registry->register('isSecureArea', $isSecureArea);
+            }
+
             throw $e;
         }
         $customer = $this->customerRepository->getById($customer->getId());
