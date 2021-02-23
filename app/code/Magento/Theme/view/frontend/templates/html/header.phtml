@@ -18,7 +18,7 @@ $welcomeMessage = $block->getWelcome();
         <!-- /ko -->
         <!-- ko ifnot: customer().fullname  -->
         <span class="not-logged-in"
-              data-bind='html:"<?= $block->escapeHtml($welcomeMessage) ?>"'></span>
+              data-bind="html: '<?= $block->escapeHtml($welcomeMessage) ?>'"></span>
         <?= $block->getBlockHtml('header.additional') ?>
         <!-- /ko -->
     </li>
