@@ -247,6 +247,7 @@ class Generic implements CacheInterface
             'mimetype',
             'basename',
             'dirname',
+            'extra'
         ]);
 
         foreach ($objectListing as $path => $object) {

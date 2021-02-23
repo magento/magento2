@@ -400,11 +400,11 @@ class AwsS3 implements RemoteDriverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Check is specified path a file.
      */
     private function isTypeFile($path)
     {
-        $metadata = $this->metadataProvider->getMetadata($path);
+        $metadata = $this->metadataProvider->getMetadata($this->normalizeRelativePath($path));
         if ($metadata && isset($metadata['type'])) {
             return $metadata['type'] === 'file';
         }
@@ -424,8 +424,6 @@ class AwsS3 implements RemoteDriverInterface
 
         try {
             return $this->isTypeFile($path);
-        } catch (UnableToRetrieveMetadata $e) {
-            return false;
         } catch (\League\Flysystem\FilesystemException $e) {
             $this->logger->error($e->getMessage());
         }
@@ -518,14 +516,7 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function stat($path): array
     {
-        $path = $this->normalizeRelativePath($path, true);
-        $metaInfo = $this->metadataProvider->getMetadata($path);
-
-        if (!$metaInfo) {
-            throw new FileSystemException(__('Cannot gather stats! %1', [$this->getWarningMessage()]));
-        }
-
-        return [
+        $result = [
             'dev' => 0,
             'ino' => 0,
             'mode' => 0,
@@ -537,11 +528,30 @@ class AwsS3 implements RemoteDriverInterface
             'ctime' => 0,
             'blksize' => 0,
             'blocks' => 0,
-            'size' => $metaInfo['size'] ?? 0,
-            'type' => $metaInfo['type'] ?? '',
-            'mtime' => $metaInfo['timestamp'] ?? 0,
+            'size' => 0,
+            'type' => '',
+            'mtime' => 0,
             'disposition' => null
         ];
+        $path = $this->normalizeRelativePath($path, true);
+        try {
+            $metaInfo = $this->metadataProvider->getMetadata($path);
+        } catch (UnableToRetrieveMetadata $exception) {
+            if ($this->adapter->fileExists($path)) {
+                $result['type'] = 'dir';
+            }
+            return $result;
+        }
+
+        if (!$metaInfo) {
+            throw new FileSystemException(__('Cannot gather stats! %1', [$this->getWarningMessage()]));
+        }
+        if ($metaInfo['type'] === 'file') {
+            $result['size'] = $metaInfo['size'];
+            $result['type'] = $metaInfo['type'];
+            $result['mtime'] = $metaInfo['timestamp'];
+        }
+        return $result;
     }
 
     /**
@@ -549,7 +559,7 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function getMetadata(string $path): array
     {
-        return $this->metadataProvider->getMetadata($path);
+        return $this->metadataProvider->getMetadata($this->normalizeRelativePath($path));
     }
 
     /**
@@ -901,7 +911,8 @@ class AwsS3 implements RemoteDriverInterface
             if (isset($item['path'])
                 && $item['path'] !== $relativePath
                 && (!$relativePath || strpos($item['path'], $relativePath) === 0)) {
-                $itemsList[] = $this->getAbsolutePath($item['dirname'], $item['path']);
+                $dirname = dirname($item['path']);
+                $itemsList[] = $this->getAbsolutePath($dirname, $item['path']);
             }
         }
 

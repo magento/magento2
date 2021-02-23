@@ -45,7 +45,7 @@ class MetadataProvider implements MetadataProviderInterface
     public function getMetadata(string $path): array
     {
         $metadata = $this->cache->getMetadata($path);
-        if ($metadata && is_array($metadata) && $this->isMetadataComplete($metadata)) {
+        if ($metadata && is_array($metadata) && ($metadata['type'] == 'dir' || $this->isMetadataComplete($metadata))) {
             return $metadata;
         }
         $meta = $this->adapter->lastModified($path);
@@ -58,8 +58,11 @@ class MetadataProvider implements MetadataProviderInterface
             'mimetype' => $meta->mimeType(),
             'dirname' => dirname($meta->path()),
             'basename' => basename($meta->path()),
-            'extra' => $meta->extraMetadata(),
         ];
+        $extraMetadata = $meta->extraMetadata();
+        if (isset($extraMetadata['Metadata']['image-width']) && isset($extraMetadata['Metadata']['image-height'])) {
+            $data['extra'] = $extraMetadata['Metadata'];
+        }
         $this->cache->updateMetadata($path, $data, true);
         return $data;
     }
@@ -72,9 +75,9 @@ class MetadataProvider implements MetadataProviderInterface
      */
     private function isMetadataComplete($metadata)
     {
-        $keys = ['type', 'size', 'timestamp', 'visibility', 'mimetype', 'dirname'. 'basename', 'extra'];
+        $keys = ['type', 'size', 'timestamp', 'visibility', 'mimetype', 'dirname', 'basename'];
         foreach ($keys as $key) {
-            if (!isset($metadata[$key])) {
+            if (!array_key_exists($key, $metadata)) {
                 return false;
             }
         }
