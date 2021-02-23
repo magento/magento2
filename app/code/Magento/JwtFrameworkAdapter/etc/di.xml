@@ -7,11 +7,4 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\Jwt\JwtManagerInterface" type="Magento\JwtFrameworkAdapter\Model\JwtManager" />
-    <type name="Magento\JwtFrameworkAdapter\Model\JweCompressionManagerFactory">
-        <arguments>
-            <argument name="methods" xsi:type="array">
-                <item name="deflate" xsi:type="object">Jose\Component\Encryption\Compression\Deflate</item>
-            </argument>
-        </arguments>
-    </type>
 </config>
