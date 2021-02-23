@@ -22,6 +22,8 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests Address Edit Block
  *
+ * @see \Magento\Customer\Block\Address\Edit
+ *
  * @magentoAppArea frontend
  * @magentoAppIsolation enabled
  *
@@ -190,14 +192,13 @@ class EditTest extends TestCase
      */
     public function testCheckPostCodeLabels(): void
     {
-        $newLabel = 'default store postcode label';
         $html = $this->executeInStoreContext->execute('default', [$this->block, 'toHtml']);
         $this->assertEquals(
             1,
             Xpath::getElementsCountForXpath(
                 sprintf(
                     "//form[contains(@class, 'form-address-edit')]//label[@for='zip']/span[contains(text(), '%s')]",
-                    $newLabel
+                    'default store postcode label'
                 ),
                 $html
             )
