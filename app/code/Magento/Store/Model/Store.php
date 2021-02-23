@@ -1249,7 +1249,7 @@ class Store extends AbstractExtensibleModel implements
             . '://'
             . $storeParsedUrl['host']
             . (isset($storeParsedUrl['port']) ? ':' . $storeParsedUrl['port'] : '')
-            . $storeParsedUrl['path']
+            . (isset($storeParsedUrl['path']) ? ':' . $storeParsedUrl['path'] : '')
             . $requestStringPath
             . ($currentUrlQueryParams ? '?' . http_build_query($currentUrlQueryParams) : '');
 
