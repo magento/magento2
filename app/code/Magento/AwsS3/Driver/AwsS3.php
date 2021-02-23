@@ -911,8 +911,7 @@ class AwsS3 implements RemoteDriverInterface
             if (isset($item['path'])
                 && $item['path'] !== $relativePath
                 && (!$relativePath || strpos($item['path'], $relativePath) === 0)) {
-                $dirname = dirname($item['path']);
-                $itemsList[] = $this->getAbsolutePath($dirname, $item['path']);
+                $itemsList[] = $this->getAbsolutePath(dirname($item['path']), $item['path']);
             }
         }
 

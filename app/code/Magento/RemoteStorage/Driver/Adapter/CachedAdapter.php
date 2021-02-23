@@ -128,7 +128,7 @@ class CachedAdapter implements FilesystemAdapter
         $this->adapter->createDirectory($path, $config);
         $type = 'dir';
         $dirname = $path;
-        $this->cache->updateMetadata($dirname, compact('path', 'type'), true);
+        $this->cache->updateMetadata($dirname, ['path' => $path, 'type' => $type], true);
     }
 
     /**
@@ -137,7 +137,7 @@ class CachedAdapter implements FilesystemAdapter
     public function setVisibility(string $path, string $visibility): void
     {
         $this->adapter->setVisibility($path, $visibility);
-        $this->cache->updateMetadata($path, compact('path', 'visibility'), true);
+        $this->cache->updateMetadata($path, ['path' => $path, 'visibility' => $visibility], true);
     }
 
     /**
@@ -156,7 +156,7 @@ class CachedAdapter implements FilesystemAdapter
         if (! $adapterResponse) {
             $this->cache->resetData($path);
         } else {
-            $cacheEntry = is_array($adapterResponse) ? $adapterResponse : compact('path');
+            $cacheEntry = is_array($adapterResponse) ? $adapterResponse : ['path' => $path];
             $this->cache->updateMetadata($path, $cacheEntry, true);
         }
 
@@ -174,7 +174,7 @@ class CachedAdapter implements FilesystemAdapter
         }
         $result = $this->adapter->read($path);
         if ($result) {
-            $object = ['contents' => $result] + compact('path');
+            $object = ['path' => $path, 'contents' => $result];
             $this->cache->updateMetadata($path, $object, true);
         }
 
