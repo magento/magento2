@@ -44,11 +44,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     protected $_calculation;
 
     /**
-     * @var \Magento\Tax\Model\Calculation\Rule\Validator
-     */
-    protected $validator;
-
-    /**
      * Name of object id field
      *
      * @var string
@@ -81,7 +76,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
         array $data = []
     ) {
         $this->_calculation = $calculation;
-        $this->validator = $validator;
         parent::__construct(
             $context,
             $registry,
@@ -89,7 +83,8 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
             $customAttributeFactory,
             $resource,
             $resourceCollection,
-            $data
+            $data,
+            $validator
         );
         $this->_init(\Magento\Tax\Model\ResourceModel\Calculation\Rule::class);
         $this->_taxClass = $taxClass;
@@ -278,14 +273,6 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
             return null;
         }
         return array_values(array_unique($values));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _getValidationRulesBeforeSave()
-    {
-        return $this->validator;
     }
 
     /**

@@ -97,6 +97,7 @@
             <argument name="session" xsi:type="object" shared="false">Magento\Framework\Session\Generic\Proxy</argument>
             <argument name="isCustomEntryPoint" xsi:type="init_parameter">Magento\Store\Model\Store::CUSTOM_ENTRY_POINT_PARAM</argument>
             <argument name="url" xsi:type="object" shared="false">Magento\Framework\UrlInterface</argument>
+            <argument name="modelValidator" xsi:type="object">Magento\Store\Model\Validation\StoreValidator</argument>
         </arguments>
     </type>
     <type name="Magento\Store\Model\StoreManager">

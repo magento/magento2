@@ -14,6 +14,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreIsInactiveException;
+use Magento\Store\Model\Validation\StoreCodeValidator;
 
 /**
  * Gets the store from the path if valid
@@ -38,18 +39,26 @@ class StorePathInfoValidator
     private $pathInfo;
 
     /**
+     * @var StoreCodeValidator
+     */
+    private $storeCodeValidator;
+
+    /**
      * @param ScopeConfigInterface $config
      * @param StoreRepositoryInterface $storeRepository
      * @param PathInfo $pathInfo
+     * @param StoreCodeValidator $storeCodeValidator
      */
     public function __construct(
         ScopeConfigInterface $config,
         StoreRepositoryInterface $storeRepository,
-        PathInfo $pathInfo
+        PathInfo $pathInfo,
+        StoreCodeValidator $storeCodeValidator
     ) {
         $this->config = $config;
         $this->storeRepository = $storeRepository;
         $this->pathInfo = $pathInfo;
+        $this->storeCodeValidator = $storeCodeValidator;
     }
 
     /**
@@ -70,7 +79,7 @@ class StorePathInfoValidator
             $pathInfo = $this->pathInfo->getPathInfo($request->getRequestUri(), $request->getBaseUrl());
         }
         $storeCode = $this->getStoreCode($pathInfo);
-        if (empty($storeCode) || $storeCode === Store::ADMIN_CODE) {
+        if (empty($storeCode) || $storeCode === Store::ADMIN_CODE || !$this->storeCodeValidator->isValid($storeCode)) {
             return null;
         }
 

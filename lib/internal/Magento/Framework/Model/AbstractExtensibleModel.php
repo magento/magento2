@@ -55,6 +55,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param \Magento\Framework\Validator\ValidatorInterface|null $modelValidator
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -63,12 +64,13 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
         AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        ?\Magento\Framework\Validator\ValidatorInterface $modelValidator = null
     ) {
         $this->extensionAttributesFactory = $extensionFactory;
         $this->customAttributeFactory = $customAttributeFactory;
         $data = $this->filterCustomAttributes($data);
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data, $modelValidator);
         if (isset($data['id'])) {
             $this->setId($data['id']);
         }
