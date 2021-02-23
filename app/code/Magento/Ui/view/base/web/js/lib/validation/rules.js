@@ -836,14 +836,18 @@ define([
         ],
         'less-than-equals-to': [
             function (value, params) {
-                if (!$.isNumeric(params)) {
+                value = utils.parseNumber(value);
+
+                if (isNaN(parseFloat(params))) {
                     params = $(params).val();
                 }
 
-                if ($.isNumeric(params) && $.isNumeric(value)) {
+                params = utils.parseNumber(params);
+
+                if (!isNaN(params) && !isNaN(value)) {
                     this.lteToVal = params;
 
-                    return parseFloat(value) <= parseFloat(params);
+                    return value <= params;
                 }
 
                 return true;
@@ -854,14 +858,18 @@ define([
         ],
         'greater-than-equals-to': [
             function (value, params) {
-                if (!$.isNumeric(params)) {
+                value = utils.parseNumber(value);
+
+                if (isNaN(parseFloat(params))) {
                     params = $(params).val();
                 }
 
-                if ($.isNumeric(params) && $.isNumeric(value)) {
+                params = utils.parseNumber(params);
+
+                if (!isNaN(params) && !isNaN(value)) {
                     this.gteToVal = params;
 
-                    return parseFloat(value) >= parseFloat(params);
+                    return value >= params;
                 }
 
                 return true;
