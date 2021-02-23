@@ -17,6 +17,20 @@ use Magento\Framework\Autoload\ClassLoaderWrapper;
 
 \define('VENDOR_PATH', BP . '/app/etc/vendor_path.php');
 
+/**
+ * Ensure php backwards compatibility of laminas-code module
+ *
+ * Can be removed once https://github.com/laminas/laminas-code/pull/73 is released to 3.5.x
+ * or PHP minimum version is 8.0
+ * or laminas-code module is updated to version 4.0+ with tested PHP 7.4+ support
+ */
+if (!defined('T_NAME_QUALIFIED')) {
+    define('T_NAME_QUALIFIED', 24001);
+}
+if (! defined('T_NAME_FULLY_QUALIFIED')) {
+    define('T_NAME_FULLY_QUALIFIED', 24002);
+}
+
 if (!\is_readable(VENDOR_PATH)) {
     throw new \Exception(
         'We can\'t read some files that are required to run the Magento application. '
