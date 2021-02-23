@@ -100,8 +100,8 @@ class ArgumentsReader
     {
         $type = $parameter->detectType();
 
-        if ($type === 'array') {
-            return 'array';
+        if (in_array($type, $this->scalarTypesProvider->getTypes())) {
+            return $type;
         }
 
         if ($parameter->getClass()) {
