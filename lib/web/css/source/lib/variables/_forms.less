@@ -23,6 +23,11 @@
 @form-element-input__vertical-align: baseline;
 @form-element-input__background-clip: padding-box; // [border-box|content-box|padding-box]
 @form-element-input__font-size: @font-size__base;
+
+//  On iOS the input has to be at least 16px large,
+//  otherwise it will needlessly trigger page zoom once the input is focused.
+@form-element-input-mobile__font-size: 1.6rem;
+
 @form-element-input__color: false;
 @form-element-input__font-family: @font-family__base;
 @form-element-input__font-weight: false;
