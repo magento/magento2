@@ -27,43 +27,45 @@ class Date extends \Magento\Framework\View\Element\Template
         $maxDate = $this->getMaxDate();
         $showOn = $this->getShowOn();
         $firstDay = $this->getFirstDay();
-
-        $html .= '<script type="text/javascript">
-            require(["jquery", "mage/calendar"], function($){
-                    $("#' .
+        $html .= '<script type="text/x-magento-init">
+        {
+            "#' .
             $this->getId() .
-            '").calendar({
-                        showsTime: ' .
+            '": {
+                "mage/calendar": {
+                    "showsTime":  ' .
             ($this->getTimeFormat() ? 'true' : 'false') .
             ',
                         ' .
-            ($this->getTimeFormat() ? 'timeFormat: "' .
-            $this->getTimeFormat() .
-            '",' : '') .
+            ($this->getTimeFormat() ? '"timeFormat": "' .
+                $this->getTimeFormat() .
+                '",' : '') .
             '
-                        dateFormat: "' .
+                        "dateFormat": "' .
             $this->getDateFormat() .
             '",
-                        buttonImage: "' .
+                        "buttonImage": "' .
             $this->getImage() .
             '",
                         ' .
-            ($calendarYearsRange ? 'yearRange: "' .
-            $calendarYearsRange .
-            '",' : '') .
+            ($calendarYearsRange ? '"yearRange": "' .
+                $calendarYearsRange .
+                '",' : '') .
             '
-                        buttonText: "' .
+                        "buttonText": "' .
             (string)new \Magento\Framework\Phrase(
                 'Select Date'
             ) .
-            '"' . ($maxDate ? ', maxDate: "' . $maxDate . '"' : '') .
-            ($changeMonth === null ? '' : ', changeMonth: ' . $changeMonth) .
-            ($changeYear === null ? '' : ', changeYear: ' . $changeYear) .
-            ($showOn ? ', showOn: "' . $showOn . '"' : '') .
-            ($firstDay ? ', firstDay: ' . $firstDay : '') .
-            '})
-            });
-            </script>';
+            '"' . ($maxDate ? ', "maxDate": "' . $maxDate . '"' : '') .
+            ($changeMonth === null ? '' : ', "changeMonth": ' . $changeMonth) .
+            ($changeYear === null ? '' : ', "changeYear": ' . $changeYear) .
+            ($showOn ? ', "showOn": "' . $showOn . '"' : '') .
+            ($firstDay ? ', "firstDay": ' . $firstDay : '') .
+            '
+                }
+            }
+        }
+        </script>';
 
         return $html;
     }
