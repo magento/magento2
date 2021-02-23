@@ -140,7 +140,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param CompositeValidator $compositeValidator
-     * @param \Magento\Framework\Validator\ValidatorInterface|null $modelValidator
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -160,8 +160,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        CompositeValidator $compositeValidator = null,
-        ?\Magento\Framework\Validator\ValidatorInterface $modelValidator = null
+        CompositeValidator $compositeValidator = null
     ) {
         $this->_directoryData = $directoryData;
         $data = $this->_implodeArrayField($data);
@@ -183,8 +182,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
             $customAttributeFactory,
             $resource,
             $resourceCollection,
-            $data,
-            $modelValidator
+            $data
         );
     }
 

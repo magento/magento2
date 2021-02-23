@@ -333,6 +333,11 @@ class Store extends AbstractExtensibleModel implements
     private $pillPut;
 
     /**
+     * @var \Magento\Store\Model\Validation\StoreValidator
+     */
+    private $modelValidator;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -360,6 +365,7 @@ class Store extends AbstractExtensibleModel implements
      * @param \Magento\Framework\Event\ManagerInterface|null $eventManager
      * @param \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface|null $pillPut
      * @param \Magento\Store\Model\Validation\StoreValidator|null $modelValidator
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -389,7 +395,7 @@ class Store extends AbstractExtensibleModel implements
         array $data = [],
         \Magento\Framework\Event\ManagerInterface $eventManager = null,
         \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null,
-        ?\Magento\Framework\Validator\ValidatorInterface $modelValidator = null
+        \Magento\Store\Model\Validation\StoreValidator $modelValidator = null
     ) {
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->_config = $config;
@@ -412,6 +418,8 @@ class Store extends AbstractExtensibleModel implements
             ->get(\Magento\Framework\Event\ManagerInterface::class);
         $this->pillPut = $pillPut ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface::class);
+        $this->modelValidator = $modelValidator ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Store\Model\Validation\StoreValidator::class);
 
         parent::__construct(
             $context,
@@ -420,8 +428,7 @@ class Store extends AbstractExtensibleModel implements
             $customAttributeFactory,
             $resource,
             $resourceCollection,
-            $data,
-            $modelValidator
+            $data
         );
     }
 
@@ -472,6 +479,14 @@ class Store extends AbstractExtensibleModel implements
             $this->_session->start();
         }
         return $this->_session;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function _getValidationRulesBeforeSave()
+    {
+        return $this->modelValidator;
     }
 
     /**

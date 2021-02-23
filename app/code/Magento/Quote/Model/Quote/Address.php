@@ -10,7 +10,6 @@ use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Model\Address\AbstractAddress;
-use Magento\Customer\Model\Address\CompositeValidator;
 use Magento\Customer\Model\Address\Mapper;
 use Magento\Directory\Helper\Data;
 use Magento\Directory\Model\CountryFactory;
@@ -335,7 +334,7 @@ class Address extends AbstractAddress implements
      * @param array $data
      * @param Json $serializer
      * @param StoreManagerInterface $storeManager
-     * @param CompositeValidator $compositeValidator
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -372,8 +371,7 @@ class Address extends AbstractAddress implements
         AbstractDb $resourceCollection = null,
         array $data = [],
         Json $serializer = null,
-        StoreManagerInterface $storeManager = null,
-        CompositeValidator $compositeValidator = null
+        StoreManagerInterface $storeManager = null
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_addressItemFactory = $addressItemFactory;
@@ -394,7 +392,6 @@ class Address extends AbstractAddress implements
         $this->totalsReader = $totalsReader;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
-
         parent::__construct(
             $context,
             $registry,
@@ -411,9 +408,7 @@ class Address extends AbstractAddress implements
             $dataObjectHelper,
             $resource,
             $resourceCollection,
-            $data,
-            $compositeValidator,
-            $this->validator
+            $data
         );
     }
 
@@ -1426,6 +1421,14 @@ class Address extends AbstractAddress implements
     }
 
     /******************************* End Total Collector Interface *******************************************/
+
+    /**
+     * @inheritdoc
+     */
+    protected function _getValidationRulesBeforeSave()
+    {
+        return $this->validator;
+    }
 
     /**
      * @inheritdoc

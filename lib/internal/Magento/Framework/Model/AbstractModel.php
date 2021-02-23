@@ -164,25 +164,18 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     protected $storedData = [];
 
     /**
-     * @var \Magento\Framework\Validator\ValidatorInterface|null
-     */
-    private $modelValidator;
-
-    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @param \Magento\Framework\Validator\ValidatorInterface|null $modelValidator
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = [],
-        ?\Magento\Framework\Validator\ValidatorInterface $modelValidator = null
+        array $data = []
     ) {
         $this->_registry = $registry;
         $this->_appState = $context->getAppState();
@@ -192,7 +185,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
         $this->_resourceCollection = $resourceCollection;
         $this->_logger = $context->getLogger();
         $this->_actionValidator = $context->getActionValidator();
-        $this->modelValidator = $modelValidator;
 
         if (method_exists($this->_resource, 'getIdFieldName')
             || $this->_resource instanceof \Magento\Framework\DataObject
@@ -783,7 +775,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      */
     protected function _getValidationRulesBeforeSave()
     {
-        return $this->modelValidator;
+        return null;
     }
 
     /**
