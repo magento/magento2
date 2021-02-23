@@ -41,7 +41,6 @@
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
         </before>
-
         <after>
             <!--Clean up products-->
             <actionGroup ref="DeleteProductByNameActionGroup" stepKey="cleanUpProducts">
@@ -57,11 +56,10 @@
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
          <!--Create a configurable product with long name and sku-->
-        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductIndexPage"/>
-        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="goToProductCreatePage">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductCreatePage"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="waitForProductCreatePage">
             <argument name="productType" value="configurable"/>
         </actionGroup>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductCreatePage"/>
         <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillProductName">
             <argument name="product" value="ProductWithLongNameSku"/>
         </actionGroup>

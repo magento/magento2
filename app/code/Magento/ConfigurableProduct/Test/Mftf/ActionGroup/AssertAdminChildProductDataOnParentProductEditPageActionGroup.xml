@@ -10,12 +10,13 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertAdminChildProductDataOnParentProductEditPageActionGroup">
         <annotations>
-            <description>Proper Child product data (name, sku, price) are shown on the Configurable Product edit page.</description>
+            <description>Verify the proper child product data (name, sku, price) is shown on the Configurable Product edit page.</description>
         </annotations>
         <arguments>
             <argument name="attribute" type="string"/>
             <argument name="value" type="string"/>
         </arguments>
-        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsCells(attribute)}}" userInput="{{value}}" stepKey="seeChildProductData"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsCells(attribute)}}" userInput="{{value}}"
+             stepKey="seeChildProductData"/>
     </actionGroup>
 </actionGroups>
