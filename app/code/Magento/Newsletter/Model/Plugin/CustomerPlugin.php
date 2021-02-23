@@ -53,11 +53,6 @@ class CustomerPlugin
     private $storeManager;
 
     /**
-     * @var array
-     */
-    private $customerSubscriber = [];
-
-    /**
      * @var SubscriberFactory
      */
     private $subscriberFactory;
@@ -132,7 +127,6 @@ class CustomerPlugin
             $subscriber = $subscribeStatus
                 ? $this->subscriptionManager->subscribeCustomer((int)$result->getId(), $storeId)
                 : $this->subscriptionManager->unsubscribeCustomer((int)$result->getId(), $storeId);
-            $this->customerSubscriber[(int)$result->getId()] = $subscriber;
         }
         $this->addIsSubscribedExtensionAttribute($result, $subscriber->isSubscribed());
 
@@ -314,11 +308,6 @@ class CustomerPlugin
      */
     private function getSubscriber(CustomerInterface $customer): Subscriber
     {
-        $customerId = (int)$customer->getId();
-        if (isset($this->customerSubscriber[$customerId])) {
-            return $this->customerSubscriber[$customerId];
-        }
-
         /** @var Subscriber $subscriber */
         $subscriber = $this->subscriberFactory->create();
         $websiteId = $this->getCurrentWebsiteId($customer);
@@ -330,7 +319,6 @@ class CustomerPlugin
         if (!$subscriber->getId()) {
             $subscriber->loadBySubscriberEmail((string)$customer->getEmail(), $websiteId);
         }
-        $this->customerSubscriber[$customerId] = $subscriber;
 
         return $subscriber;
     }
