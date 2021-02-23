@@ -14,6 +14,7 @@ use League\Flysystem\PathPrefixer;
 use Magento\AwsS3\Driver\AwsS3;
 use Magento\FunctionalTestingFramework\Helper\Helper;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\RemoteStorage\Driver\Adapter\MetadataProvider;
 
 /**
  * Class for MFTF helpers for doing file assertions using S3.
@@ -60,7 +61,8 @@ class S3FileAssertions extends Helper
         $adapter = new AwsS3V3Adapter($client, $config['bucket'], $prefix);
         $prefixer = new PathPrefixer($prefix);
         $objectUrl = $client->getObjectUrl($config['bucket'], ltrim($prefixer->prefixPath('.'), '/'));
-        $s3Driver = new AwsS3($adapter, new MockTestLogger(), $objectUrl);
+        $metadataProvider = new MetadataProvider($adapter, new DummyMetadataCache());
+        $s3Driver = new AwsS3($adapter, new MockTestLogger(), $objectUrl, $metadataProvider);
 
         $this->driver = $s3Driver;
     }
