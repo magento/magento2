@@ -41,9 +41,6 @@
             <argument name="file" value="{{import_tax_rates.filename}}"/>
         </actionGroup>
 
-
-        <pause stepKey="pause"/>
-
         <!-- Verify Imported Tax Rates -->
         <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="navigateToTaxRatesPage"/>
         <actionGroup ref="AdminFilterLegacyGridActionGroup" stepKey="filterGridCA">

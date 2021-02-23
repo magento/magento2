@@ -12,5 +12,8 @@
         <annotations>
             <description>Clicks the 'Export Tax Rates' button.</description>
         </annotations>
+        <waitForElementVisible selector="{{AdminImportExportTaxRatesSection.exportTaxRatesButton}}" stepKey="waitForExportTaxRates"/>
+        <click selector="{{AdminImportExportTaxRatesSection.exportTaxRatesButton}}" stepKey="clickExportTaxRates"/>
+        <waitForPageLoad stepKey="waitForImport"/>
     </actionGroup>
 </actionGroups>
