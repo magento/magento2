@@ -333,6 +333,11 @@ class Store extends AbstractExtensibleModel implements
     private $pillPut;
 
     /**
+     * @var Validation\StoreValidator
+     */
+    private $modelValidator;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -359,7 +364,7 @@ class Store extends AbstractExtensibleModel implements
      * @param array $data optional generic object data
      * @param \Magento\Framework\Event\ManagerInterface|null $eventManager
      * @param \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface|null $pillPut
-     *
+     * @param \Magento\Store\Model\Validation\StoreValidator|null $modelValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -388,7 +393,8 @@ class Store extends AbstractExtensibleModel implements
         $isCustomEntryPoint = false,
         array $data = [],
         \Magento\Framework\Event\ManagerInterface $eventManager = null,
-        \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null
+        \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null,
+        ?\Magento\Store\Model\Validation\StoreValidator $modelValidator = null
     ) {
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->_config = $config;
@@ -411,6 +417,8 @@ class Store extends AbstractExtensibleModel implements
             ->get(\Magento\Framework\Event\ManagerInterface::class);
         $this->pillPut = $pillPut ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface::class);
+        $this->modelValidator = $modelValidator ?? \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Store\Model\Validation\StoreValidator::class);
         parent::__construct(
             $context,
             $registry,
@@ -472,30 +480,11 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * Validation rules for store
-     *
-     * @return \Zend_Validate_Interface|null
-     * @throws \Zend_Validate_Exception
+     * @inheritDoc
      */
     protected function _getValidationRulesBeforeSave()
     {
-        $validator = new \Magento\Framework\Validator\DataObject();
-
-        $storeLabelRule = new \Zend_Validate_NotEmpty();
-        $storeLabelRule->setMessage(__('Name is required'), \Zend_Validate_NotEmpty::IS_EMPTY);
-        $validator->addRule($storeLabelRule, 'name');
-
-        $storeCodeRule = new \Zend_Validate_Regex('/^[a-z]+[a-z0-9_]*$/i');
-        $storeCodeRule->setMessage(
-            __(
-                'The store code may contain only letters (a-z), numbers (0-9) or underscore (_),'
-                . ' and the first character must be a letter.'
-            ),
-            \Zend_Validate_Regex::NOT_MATCH
-        );
-        $validator->addRule($storeCodeRule, 'code');
-
-        return $validator;
+        return $this->modelValidator;
     }
 
     /**

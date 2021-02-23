@@ -444,4 +444,12 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Store\Model\Validation\StoreValidator">
+        <arguments>
+            <argument name="rules" xsi:type="array">
+                <item name="name" xsi:type="object">Magento\Store\Model\Validation\StoreNameValidator</item>
+                <item name="code" xsi:type="object">Magento\Store\Model\Validation\StoreCodeValidator</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
