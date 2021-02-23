@@ -5,11 +5,9 @@
  */
 namespace Magento\Catalog\Model\Category;
 
-use Magento\AwsS3\Driver\AwsS3;
 use Magento\Catalog\Model\Category\Media\PathResolverFactory;
 use Magento\Catalog\Model\Category\Media\PathResolverInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
