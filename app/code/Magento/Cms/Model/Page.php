@@ -15,6 +15,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Validation\ValidationException;
 use Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface;
+use Magento\Backend\Model\Validator\UrlKey\CompositeUrlKey;
 
 /**
  * Cms Page Model
@@ -73,6 +74,11 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     private $wysiwygValidator;
 
     /**
+     * @var CompositeUrlKey
+     */
+    private $compositeUrlValidator;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
@@ -80,6 +86,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * @param array $data
      * @param CustomLayoutRepository|null $customLayoutRepository
      * @param WYSIWYGValidatorInterface|null $wysiwygValidator
+     * @param CompositeUrlKey|null $compositeUrlValidator
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -88,13 +95,16 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         ?CustomLayoutRepository $customLayoutRepository = null,
-        ?WYSIWYGValidatorInterface $wysiwygValidator = null
+        ?WYSIWYGValidatorInterface $wysiwygValidator = null,
+        CompositeUrlKey $compositeUrlValidator = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->customLayoutRepository = $customLayoutRepository
             ?? ObjectManager::getInstance()->get(CustomLayoutRepository::class);
         $this->wysiwygValidator = $wysiwygValidator
             ?? ObjectManager::getInstance()->get(WYSIWYGValidatorInterface::class);
+        $this->compositeUrlValidator = $compositeUrlValidator
+            ?? ObjectManager::getInstance()->get(CompositeUrlKey::class);
     }
 
     /**
@@ -600,6 +610,10 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
                         __('This identifier is reserved for "CMS No Cookies Page" in configuration.')
                     );
             }
+        }
+        $errors = $this->compositeUrlValidator->validate($currentIdentifier);
+        if (!empty($errors)) {
+            throw new LocalizedException($errors[0]);
         }
     }
 

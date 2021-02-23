@@ -8,27 +8,46 @@
 
 /** @var \Magento\Captcha\Model\DefaultModel $captcha */
 $captcha = $block->getCaptchaModel();
+/** @var bool $validationEnabled */
+$validationEnabled = $block->hasData('frontend_validation') ? $block->getData('frontend_validation') : true;
+$inputName = $block->escapeHtmlAttr(\Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE);
+$loaderUrl = $block->escapeUrl($block->getViewFileUrl('images/loader-2.gif'));
+$note = $block->escapeHtml(__('<strong>Attention</strong>: Captcha is case sensitive.'), ['strong']);
 ?>
-<div class="field captcha required" role="<?= $block->escapeHtmlAttr($block->getFormId()) ?>">
-    <label for="captcha_<?= $block->escapeHtmlAttr($block->getFormId()) ?>" class="label"><span><?= $block->escapeHtml(__('Please type the letters and numbers below')) ?></span></label>
+<div class="field captcha<?php if ($validationEnabled): ?> required<?php endif; ?>"
+     role="<?= $block->escapeHtmlAttr($block->getFormId()) ?>">
+    <label for="captcha_<?= $block->escapeHtmlAttr($block->getFormId()) ?>" class="label">
+        <span><?= $block->escapeHtml(__('Please type the letters and numbers below')) ?></span>
+    </label>
     <div class="control captcha">
-        <input name="<?= $block->escapeHtmlAttr(\Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE) ?>[<?= $block->escapeHtmlAttr($block->getFormId()) ?>]" type="text" class="input-text required-entry" data-validate="{required:true}" id="captcha_<?= $block->escapeHtmlAttr($block->getFormId()) ?>" autocomplete="off"/>
+        <input
+            name="<?= /* @noEscape */ $inputName ?>[<?= $block->escapeHtmlAttr($block->getFormId()) ?>]"
+            type="text"
+            class="input-text<?php if ($validationEnabled): ?> required-entry<?php endif; ?>"
+            <?php if ($validationEnabled): ?>data-validate="{required:true}"<?php endif; ?>
+            id="captcha_<?= $block->escapeHtmlAttr($block->getFormId()) ?>"
+            autocomplete="off"/>
         <div class="nested">
             <div class="field captcha no-label"
                  data-captcha="<?= $block->escapeHtmlAttr($block->getFormId()) ?>"
                  id="captcha-container-<?= $block->escapeHtmlAttr($block->getFormId()) ?>"
                  data-mage-init='{"captcha":{"url": "<?= $block->escapeUrl($block->getRefreshUrl()) ?>",
-                                            "imageLoader": "<?= $block->escapeUrl($block->getViewFileUrl('images/loader-2.gif')) ?>",
+                                            "imageLoader": "<?= /* @noEscape */ $loaderUrl ?>",
                                              "type": "<?= $block->escapeHtmlAttr($block->getFormId()) ?>"}}'>
                 <div class="control captcha-image">
-                    <img alt="<?= $block->escapeHtmlAttr(__('Please type the letters and numbers below')) ?>" class="captcha-img" height="<?= /* @noEscape */ (float) $block->getImgHeight() ?>" src="<?= $block->escapeUrl($captcha->getImgSrc()) ?>"/>
-                    <button type="button" class="action reload captcha-reload" title="<?= $block->escapeHtmlAttr(__('Reload captcha')) ?>"><span><?= $block->escapeHtml(__('Reload captcha')) ?></span></button>
+                    <img alt="<?= $block->escapeHtmlAttr(__('Please type the letters and numbers below')) ?>"
+                         class="captcha-img"
+                         height="<?= /* @noEscape */ (float) $block->getImgHeight() ?>"
+                         src="<?= $block->escapeUrl($captcha->getImgSrc()) ?>"/>
+                    <button type="button"
+                            class="action reload captcha-reload"
+                            title="<?= $block->escapeHtmlAttr(__('Reload captcha')) ?>">
+                        <span><?= $block->escapeHtml(__('Reload captcha')) ?></span>
+                    </button>
                 </div>
             </div>
-            <?php if ($captcha->isCaseSensitive()) :?>
-                <div class="captcha-note note">
-                    <?= $block->escapeHtml(__('<strong>Attention</strong>: Captcha is case sensitive.'), ['strong']) ?>
-                </div>
+            <?php if ($captcha->isCaseSensitive()):?>
+                <div class="captcha-note note"><?= /* @noEscape */ $note ?></div>
             <?php endif; ?>
         </div>
     </div>
