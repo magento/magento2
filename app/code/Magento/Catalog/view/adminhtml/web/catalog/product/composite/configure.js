@@ -47,10 +47,14 @@ define([
          * Initialize object
          */
         initialize: function () {
-            var self = this;
+            var self = this,
+                popupDialog = jQuery('#product_composite_configure');
 
             this._initWindowElements();
             jQuery.async('#product_composite_configure', function (el) {
+                if (el !== popupDialog[0]) {
+                    el = popupDialog[0];
+                }
                 self.dialog = jQuery(el).modal({
                     title: jQuery.mage.__('Configure Product'),
                     type: 'slide',

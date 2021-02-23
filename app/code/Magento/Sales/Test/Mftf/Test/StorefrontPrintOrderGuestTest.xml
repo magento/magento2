@@ -17,9 +17,6 @@
             <testCaseId value="MC-16225"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MQE-2288" />
-            </skip>
         </annotations>
         <before>
             <magentoCLI command="downloadable:domains:add" arguments="example.com static.magento.com" stepKey="addDownloadableDomain"/>
@@ -170,9 +167,7 @@
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>
             </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
             <!-- Place order with options according to dataset -->
             <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="newOrder">
@@ -217,6 +212,7 @@
             </actionGroup>
 
             <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRate"/>
+            <actionGroup ref="SelectCheckMoneyPaymentMethodActionGroup" stepKey="selectCheckMoneyPayment"/>
         </before>
         <after>
             <magentoCLI command="downloadable:domains:remove" arguments="example.com static.magento.com" stepKey="removeDownloadableDomain"/>
