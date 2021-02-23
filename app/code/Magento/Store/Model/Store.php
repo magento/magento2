@@ -482,7 +482,10 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * @inheritDoc
+     * Validation rules for store
+     *
+     * @return \Zend_Validate_Interface|null
+     * @throws \Zend_Validate_Exception
      */
     protected function _getValidationRulesBeforeSave()
     {

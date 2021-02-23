@@ -174,7 +174,6 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         $this->dataObjectHelper = $dataObjectHelper;
         $this->compositeValidator = $compositeValidator ?: ObjectManager::getInstance()
             ->get(CompositeValidator::class);
-
         parent::__construct(
             $context,
             $registry,

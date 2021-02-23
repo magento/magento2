@@ -50,27 +50,6 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
      * @covers \Magento\Store\App\Request\PathInfoProcessor::process
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      */
-    public function testProcessValidStoreDisabledStoreUrl()
-    {
-        /** @var \Magento\Store\Model\Store $store */
-        $store = Bootstrap::getObjectManager()->get(\Magento\Store\Model\Store::class);
-        $store->load('fixturestore', 'code');
-
-        /** @var \Magento\Framework\App\RequestInterface $request */
-        $request = Bootstrap::getObjectManager()->create(\Magento\Framework\App\RequestInterface::class);
-
-        /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
-        $config = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
-        $config->setValue(Store::XML_PATH_STORE_IN_URL, true);
-        $config->setValue(Store::XML_PATH_STORE_IN_URL, false, ScopeInterface::SCOPE_STORE, $store->getCode());
-        $pathInfo = sprintf('/%s/m/c/a', $store->getCode());
-        $this->assertEquals($pathInfo, $this->pathProcessor->process($request, $pathInfo));
-    }
-
-    /**
-     * @covers \Magento\Store\App\Request\PathInfoProcessor::process
-     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     */
     public function testProcessValidStoreCodeCaseProcessStoreName()
     {
         /** @var \Magento\Store\Model\Store $store */
@@ -111,30 +90,6 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
         $pathInfo = sprintf('/%s/m/c/a', $store->getCode());
         $this->assertEquals($pathInfo, $this->pathProcessor->process($request, $pathInfo));
         $this->assertEquals(\Magento\Framework\App\Router\Base::NO_ROUTE, $request->getActionName());
-    }
-
-    /**
-     * @covers \Magento\Store\App\Request\PathInfoProcessor::process
-     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     */
-    public function testProcessValidStoreCodeWhenStoreCodeInUrlIsDisabledWithFrontName()
-    {
-        /** @var \Magento\Store\Model\Store $store */
-        $store = Bootstrap::getObjectManager()->get(\Magento\Store\Model\Store::class);
-        $store->load('fixturestore', 'code');
-
-        /** @var \Magento\Framework\App\RequestInterface $request */
-        $request = Bootstrap::getObjectManager()->create(
-            \Magento\Framework\App\RequestInterface::class,
-            ['directFrontNames' => ['someFrontName' => true]]
-        );
-
-        /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
-        $config = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
-        $config->setValue(Store::XML_PATH_STORE_IN_URL, true);
-        $config->setValue(Store::XML_PATH_STORE_IN_URL, false, ScopeInterface::SCOPE_STORE, $store->getCode());
-        $pathInfo = sprintf('/%s/m/c/a', $store->getCode());
-        $this->assertEquals($pathInfo, $this->pathProcessor->process($request, $pathInfo));
     }
 
     /**
