@@ -139,7 +139,9 @@ class CartTest extends AbstractController
         $cart = $this->cartFactory->create();
         $this->assertEquals(3, $cart->getItemsCount());
         $expectedAddedIds[] = $item->getProductId();
-        $this->assertEquals($expectedAddedIds, $cart->getProductIds());
+        foreach ($expectedAddedIds as $addedId) {
+            $this->assertContains($addedId, $cart->getProductIds());
+        }
     }
 
     /**
