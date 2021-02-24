@@ -41,7 +41,9 @@ class StoreCodeValidator extends AbstractValidator
             ),
             \Zend_Validate_Regex::NOT_MATCH
         );
+        $result = $validator->isValid($value);
+        $this->_messages = $validator->getMessages();
 
-        return $validator->isValid($value);
+        return $result;
     }
 }

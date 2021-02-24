@@ -44,7 +44,9 @@ class StoreValidator extends AbstractValidator
         foreach ($this->rules as $fieldName => $rule) {
             $validator->addRule($rule, $fieldName);
         }
+        $result = $validator->isValid($value);
+        $this->_messages = $validator->getMessages();
 
-        return $validator->isValid($value);
+        return $result;
     }
 }

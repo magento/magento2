@@ -34,8 +34,13 @@ class StoreNameValidator extends AbstractValidator
     public function isValid($value)
     {
         $validator = $this->notEmptyValidatorFactory->create(['options' => []]);
-        $validator->setMessage(__('Name is required'), \Zend_Validate_NotEmpty::IS_EMPTY);
+        $validator->setMessage(
+            __('Name is required'),
+            \Zend_Validate_NotEmpty::IS_EMPTY
+        );
+        $result = $validator->isValid($value);
+        $this->_messages = $validator->getMessages();
 
-        return $validator->isValid($value);
+        return $result;
     }
 }
