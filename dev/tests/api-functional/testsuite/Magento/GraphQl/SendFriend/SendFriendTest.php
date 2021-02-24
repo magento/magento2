@@ -189,7 +189,7 @@ mutation {
     sendEmailToFriend(
         input: {
           $input
-        }
+        } 
     ) {
         sender {
             name
@@ -211,7 +211,6 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoConfigFixture default_store sendfriend/email/enabled 1
      * @magentoConfigFixture default_store sendfriend/email/max_per_hour 1
      * @magentoApiDataFixture Magento/SendFriend/Fixtures/sendfriend_configuration.php
      */
@@ -284,12 +283,12 @@ QUERY;
     {
         return [
             [
-          'product_id: 1
+          'product_id: 1	
          sender: {
             name: "Name"
             email: "e@mail.com"
             message: "Lorem Ipsum"
-        }
+        }          
           recipients: [
               {
                   name: ""
@@ -302,12 +301,12 @@ QUERY;
           ]', 'Please provide Name for all of recipients.'
             ],
             [
-                'product_id: 1
+                'product_id: 1	
           sender: {
             name: "Name"
             email: "e@mail.com"
             message: "Lorem Ipsum"
-        }
+        }          
           recipients: [
               {
                   name: "Recipient Name 1"
@@ -320,12 +319,12 @@ QUERY;
           ]', 'Please provide Email for all of recipients.'
             ],
             [
-                'product_id: 1
+                'product_id: 1	
           sender: {
             name: ""
             email: "e@mail.com"
             message: "Lorem Ipsum"
-        }
+        }          
           recipients: [
               {
                   name: "Recipient Name 1"
@@ -338,12 +337,12 @@ QUERY;
           ]', 'Please provide Name of sender.'
             ],
             [
-                'product_id: 1
+                'product_id: 1	
           sender: {
             name: "Name"
             email: "e@mail.com"
             message: ""
-        }
+        }          
           recipients: [
               {
                   name: "Recipient Name 1"
@@ -405,9 +404,9 @@ mutation {
             name: "Name"
             email: "e@mail.com"
             message: "Lorem Ipsum"
-        }
+        }          
           recipients: [{$recipients}]
-        }
+        } 
     ) {
         sender {
             name
