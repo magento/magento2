@@ -17,6 +17,6 @@
         </arguments>
 
         <amOnPage url="{{AdminEditCustomerGroupPage.url(customerGroupId)}}" stepKey="goToEditCustomerGroupPage"/>
-        <dontSee selector="{{AdminEditCustomerGroupSection.selectedExcludedWebsites}}" stepKey="checkThatWebsiteIsNotExcluded"/>
+        <dontSeeElement selector="{{AdminEditCustomerGroupSection.selectedExcludedWebsites}}" stepKey="checkThatWebsiteIsNotExcluded"/>
     </actionGroup>
 </actionGroups>
