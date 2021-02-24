@@ -22,6 +22,14 @@ define([
         },
 
         /**
+         * @param {*} price
+         * @return {*|String}
+         */
+        getFormattedPercent: function (price) {
+            return priceUtils.formatPrice(price, quote.getPriceFormat(), false);
+        },
+
+        /**
          * @return {*}
          */
         getTotals: function () {

@@ -55,6 +55,7 @@ define([
         if (isShowSign === undefined || isShowSign === true) {
             s = amount < 0 ? '-' : isShowSign ? '+' : '';
         } else if (isShowSign === false) {
+            pattern = '%s';
             s = '';
         }
         pattern = pattern.indexOf('{sign}') < 0 ? s + pattern : pattern.replace('{sign}', s);

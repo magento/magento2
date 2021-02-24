@@ -102,6 +102,14 @@ define([
         },
 
         /**
+         * @param {*} amount
+         * @return {*|String}
+         */
+        formatPercent: function (amount) {
+            return this.getFormattedPercent(amount);
+        },
+
+        /**
          * @param {*} parent
          * @param {*} percentage
          * @return {*|String}
