@@ -8,6 +8,7 @@ namespace Magento\Bundle\Model\Product;
 
 use Magento\Bundle\Api\Data\LinkInterface;
 use Magento\Bundle\Api\Data\LinkInterfaceFactory;
+use Magento\Bundle\Helper\Model\Link;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ExtensibleDataInterface;
@@ -30,18 +31,26 @@ class LinksList
     protected $dataObjectHelper;
 
     /**
+     * @var Link
+     */
+    protected $linkHelper;
+
+    /**
      * @param LinkInterfaceFactory $linkFactory
      * @param Type $type
      * @param DataObjectHelper $dataObjectHelper
+     * @param Link $linkHelper
      */
     public function __construct(
         LinkInterfaceFactory $linkFactory,
         Type $type,
-        DataObjectHelper $dataObjectHelper
+        DataObjectHelper $dataObjectHelper,
+        Link  $linkHelper
     ) {
         $this->linkFactory = $linkFactory;
         $this->type = $type;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->linkHelper = $linkHelper;
     }
 
     /**
@@ -65,8 +74,7 @@ class LinksList
             $selectionPriceType = $product->getPriceType() ? $selection->getSelectionPriceType() : null;
             $selectionPrice = $bundledProductPrice ? $bundledProductPrice : null;
 
-            $selectionData = $selection->getData();
-            unset($selectionData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]);
+            $selectionData = $this->linkHelper->cleanExtensionAttribute($selection->getData());
 
             /** @var LinkInterface $productLink */
             $productLink = $this->linkFactory->create();
