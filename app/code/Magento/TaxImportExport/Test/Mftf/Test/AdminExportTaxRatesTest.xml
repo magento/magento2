@@ -36,7 +36,7 @@
 <!--                <argument name="filePath">/var/tmp/tax_rates.csv</argument>-->
 <!--            </helper>-->
             <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteFileIfExists" stepKey="deleteExportFile">
-                <argument name="filePath">/home/seluser/Downloads/tax_rates.csv</argument>
+                <argument name="filePath">/home/centos/Downloads/tax_rates.csv</argument>
             </helper>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
@@ -45,14 +45,14 @@
         <actionGroup ref="AdminNavigateImportExportTaxRatesActionGroup" stepKey="navigateToImportExportTaxRatesPage"/>
         <actionGroup ref="AdminExportTaxRatesActionGroup" stepKey="exportTaxRates"/>
         <assertFileExists stepKey="assertExportFileExists">
-            <actualResult type="string">/home/seluser/Downloads/tax_rates.csv</actualResult>
+            <actualResult type="string">/home/centos/Downloads/tax_rates.csv</actualResult>
         </assertFileExists>
         <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportedFileContainsCATaxRate">
-            <argument name="filePath">/home/seluser/Downloads/tax_rates.csv</argument>
+            <argument name="filePath">/home/centos/Downloads/tax_rates.csv</argument>
             <argument name="text">{{US_CA_Rate_1.code}}</argument>
         </helper>
         <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportedFileContainsNYTaxRate">
-            <argument name="filePath">/home/seluser/Downloads/tax_rates.csv</argument>
+            <argument name="filePath">/home/centos/Downloads/tax_rates.csv</argument>
             <argument name="text">{{US_NY_Rate_1.code}}</argument>
         </helper>
 <!--        <assertFileExists stepKey="assertExportFileExists">-->
