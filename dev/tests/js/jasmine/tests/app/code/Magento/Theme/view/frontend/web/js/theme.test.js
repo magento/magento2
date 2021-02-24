@@ -53,6 +53,10 @@ define([
                     {
                         id: '#my-addresses' + suffix,
                         link: 'http://magento.store/addresses/'
+                    },
+                    {
+                        id: '#create-account' + suffix,
+                        link: 'http://magento.store/customer/account/create/'
                     }
                 ];
 

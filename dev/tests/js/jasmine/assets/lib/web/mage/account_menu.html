@@ -17,7 +17,7 @@
                     <span>Change</span>
                 </button>
             </span>
-
+            <!-- Markup portion for Logged in customer -->
             <div class="customer-menu" data-target="dropdown" aria-hidden="false">
                 <ul class="header links">
                     <li>
@@ -37,9 +37,16 @@
                     </li>
                 </ul>
             </div>
+            <li class="link authorization-link" data-label="or">
+                <a href="http://magento.store/customer/account/logout/">Sign Out</a>
+            </li>
         </li>
+        <!-- Markup portion for Logged out customer -->
         <li class="link authorization-link" data-label="or">
-            <a href="http://magento.store/customer/account/logout/">Sign Out</a>
+            <a href="http://magento.store/customer/account/login/">Sign In</a>
+        </li>
+        <li>
+            <a href="http://magento.store/customer/account/create/" id="create-account">Create an Account</a>
         </li>
     </ul>
 </div>

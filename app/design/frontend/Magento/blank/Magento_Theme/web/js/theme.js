@@ -17,7 +17,7 @@ define([
     });
 
     $('.panel.header > .header.links').clone().appendTo('#store\\.links');
-    $('#store\\.links .customer-menu li a').each(function () {
+    $('#store\\.links li a').each(function () {
         var id = $(this).attr('id');
 
         if (id !== undefined) {
