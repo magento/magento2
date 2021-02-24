@@ -279,28 +279,6 @@ class PlaceOrderTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoConfigFixture default_store carriers/flatrate/active 1
      * @magentoConfigFixture default_store carriers/tablerate/active 1
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_free_payment_method.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
-     */
-    public function testPlaceOrderWithFreePaymentMethodNonZeroTotal()
-    {
-        $reservedOrderId = 'test_quote';
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
-        $query = $this->getQuery($maskedQuoteId);
-
-        self::expectExceptionMessage('Unable to place order: The requested Payment Method is not available');
-        $this->graphQlMutation($query);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoConfigFixture default_store carriers/flatrate/active 1
-     * @magentoConfigFixture default_store carriers/tablerate/active 1
      * @magentoConfigFixture default_store carriers/freeshipping/active 1
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
