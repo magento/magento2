@@ -12,9 +12,6 @@
         <annotations>
             <description>Updates the provided Product to the Wish List from the Storefront Product page. Validates that the Success Message is present and correct.</description>
         </annotations>
-        <arguments>
-            <argument name="productVar"/>
-        </arguments>
         <see selector="{{StorefrontCustomerWishlistSection.successMsg}}" userInput="{{productVar.name}} has been updated in your Wish List." stepKey="addProductToWishlistSeeProductNameAddedToWishlist"/>
     </actionGroup>
 </actionGroups>
