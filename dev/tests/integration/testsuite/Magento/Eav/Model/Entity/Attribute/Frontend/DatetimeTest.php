@@ -85,7 +85,11 @@ class DatetimeTest extends TestCase
         $attribute = $this->attributeRepository->get('datetime_attribute');
         $product = $this->productRepository->get('simple-on-two-websites');
         $product->setDatetimeAttribute($this->dateTime->date('Y-m-d H:i:s'));
-        $firstWebsiteValue = $attribute->getFrontend()->getValue($product);
+        $firstWebsiteValue = $this->executeInStoreContext->execute(
+            'default',
+            [$attribute->getFrontend(), 'getValue'],
+            $product
+        );
         $secondWebsiteValue = $this->executeInStoreContext->execute(
             'fixture_second_store',
             [$attribute->getFrontend(), 'getValue'],
