@@ -87,7 +87,7 @@ class DeleteByDirectoryPathTest extends TestCase
             self::expectException('\Magento\Framework\Exception\CouldNotDeleteException');
         }
 
-        $this->deleteMediaAssetByDirectoryPath->execute($directoryPath);
+        $this->deleteMediaAssetByDirectoryPath->execute([$directoryPath]);
     }
 
     /**
