@@ -11,6 +11,13 @@ namespace Magento\Framework\Webapi\Rest;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Phrase;
 
+/**
+ * Class Request
+ *
+ * @api
+ *
+ * @package Magento\Framework\Webapi\Rest
+ */
 class Request extends \Magento\Framework\Webapi\Request
 {
     /**#@+
