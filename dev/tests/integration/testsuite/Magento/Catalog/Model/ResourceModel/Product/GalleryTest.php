@@ -61,13 +61,14 @@ class GalleryTest extends TestCase
      *
      * @return void
      */
-    public function testProductUpdate(): void
+    public function testDeleteProductWithImage(): void
     {
         $product = $this->productRepository->get('simple');
 
         $attributeId = $this->readHandler->getAttribute()->getAttributeId();
         $mediaGalleryData = $this->galleryResource->loadProductGalleryByAttributeId($product, $attributeId);
         $values = array_column($mediaGalleryData, 'value_id');
+        $this->assertNotEmpty($this->getMediaGalleryDataByValues($values));
 
         $this->productRepository->delete($product);
 
