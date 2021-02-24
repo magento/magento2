@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminExportTaxRatesTest">
+        <annotations>
+            <features value="TaxImportExport"/>
+            <stories value="Export"/>
+            <title value="Export Tax Rates"/>
+            <description value="Exports tax rates from the System > Data Transfer > Import/Export Tax Rates page and
+            validates contents in downloaded file."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-38949"/>
+            <group value="importExport"/>
+            <group value="tax"/>
+        </annotations>
+
+        <before>
+            <!-- Create/Revert Seed Data -->
+            <createData entity="US_CA_Rate_1" stepKey="revertInitialTaxRateCA"/>
+            <createData entity="US_NY_Rate_1" stepKey="revertInitialTaxRateNY"/>
+
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <!-- Delete Data & Logout -->
+<!--            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteFileIfExists" stepKey="deleteExportFile">-->
+<!--                <argument name="filePath">/var/tmp/tax_rates.csv</argument>-->
+<!--            </helper>-->
+            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteFileIfExists" stepKey="deleteExportFile">
+                <argument name="filePath">/home/seluser/Downloads/tax_rates.csv</argument>
+            </helper>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Export Tax Rates & Validate Export -->
+        <actionGroup ref="AdminNavigateImportExportTaxRatesActionGroup" stepKey="navigateToImportExportTaxRatesPage"/>
+        <actionGroup ref="AdminExportTaxRatesActionGroup" stepKey="exportTaxRates"/>
+        <assertFileExists stepKey="assertExportFileExists">
+            <actualResult type="string">/home/seluser/Downloads/tax_rates.csv</actualResult>
+        </assertFileExists>
+        <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportedFileContainsCATaxRate">
+            <argument name="filePath">/home/seluser/Downloads/tax_rates.csv</argument>
+            <argument name="text">{{US_CA_Rate_1.code}}</argument>
+        </helper>
+        <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportedFileContainsNYTaxRate">
+            <argument name="filePath">/home/seluser/Downloads/tax_rates.csv</argument>
+            <argument name="text">{{US_NY_Rate_1.code}}</argument>
+        </helper>
+<!--        <assertFileExists stepKey="assertExportFileExists">-->
+<!--            <actualResult type="string">/var/tmp/tax_rates.csv</actualResult>-->
+<!--        </assertFileExists>-->
+<!--        <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportedFileContainsCATaxRate">-->
+<!--            <argument name="filePath">/var/tmp/tax_rates.csv</argument>-->
+<!--            <argument name="text">{{US_CA_Rate_1.code}}</argument>-->
+<!--        </helper>-->
+<!--        <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportedFileContainsNYTaxRate">-->
+<!--            <argument name="filePath">/var/tmp/tax_rates.csv</argument>-->
+<!--            <argument name="text">{{US_NY_Rate_1.code}}</argument>-->
+<!--        </helper>-->
+    </test>
+</tests>
