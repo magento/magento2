@@ -546,8 +546,9 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <index referenceId="CUSTOMER_GROUP_EXCLUDED_WEBSITE_CUSTOMER_GROUP_ID" indexType="btree">
+        <index referenceId="CUSTOMER_GROUP_EXCLUDED_WEBSITE_CUSTOMER_GROUP_ID_WEBSITE_ID" indexType="btree">
             <column name="customer_group_id"/>
+            <column name="website_id"/>
         </index>
     </table>
 </schema>

@@ -56,7 +56,7 @@ class DeleteCustomerGroupExcludedWebsite
         $websiteId = (int)$result->getId();
         if (!empty($websiteId)) {
             $deletedRecords = $this->groupExcludedWebsiteRepository->deleteByWebsite($websiteId);
-            if ($deletedRecords > 0) {
+            if ($deletedRecords) {
                 // invalidate product price index if website was deleted from customer group exclusion
                 $priceIndexer = $this->priceIndexProcessor->getIndexer();
                 $priceIndexer->invalidate();

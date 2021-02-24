@@ -11,7 +11,6 @@ use Magento\Customer\Api\Data\GroupExcludedWebsiteInterface;
 use Magento\Customer\Api\GroupExcludedWebsiteRepositoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Model\ResourceModel\AbstractResource;
 
 /**
  * Customer group website repository for CRUD operations with excluded websites.
@@ -35,15 +34,17 @@ class GroupExcludedWebsiteRepository implements GroupExcludedWebsiteRepositoryIn
     /**
      * @inheritdoc
      */
-    public function save(GroupExcludedWebsiteInterface $groupExcludedWebsite): AbstractResource
+    public function save(GroupExcludedWebsiteInterface $groupExcludedWebsite): GroupExcludedWebsiteInterface
     {
         try {
-            return $this->groupExcludedWebsiteResourceModel->save($groupExcludedWebsite);
+            $this->groupExcludedWebsiteResourceModel->save($groupExcludedWebsite);
         } catch (\Exception $e) {
             throw new CouldNotSaveException(
                 __('Could not save customer group website to exclude from customer group: "%1"', $e->getMessage())
             );
         }
+
+        return $groupExcludedWebsite;
     }
 
     /**
@@ -89,24 +90,26 @@ class GroupExcludedWebsiteRepository implements GroupExcludedWebsiteRepositoryIn
     /**
      * @inheritdoc
      */
-    public function delete(int $customerGroupId): AbstractResource
+    public function delete(int $customerGroupId): bool
     {
         try {
-            return $this->groupExcludedWebsiteResourceModel->delete($customerGroupId);
+            $this->groupExcludedWebsiteResourceModel->delete($customerGroupId);
         } catch (LocalizedException $e) {
             throw new LocalizedException(
                 __('Could not delete customer group with its excluded websites.')
             );
         }
+
+        return true;
     }
 
     /**
      * @inheritdoc
      */
-    public function deleteByWebsite(int $websiteId): int
+    public function deleteByWebsite(int $websiteId): bool
     {
         try {
-            return $this->groupExcludedWebsiteResourceModel->deleteByWebsite($websiteId);
+            return (bool)$this->groupExcludedWebsiteResourceModel->deleteByWebsite($websiteId);
         } catch (LocalizedException $e) {
             throw new LocalizedException(
                 __('Could not delete customer group excluded website by id.')

@@ -9,7 +9,6 @@ namespace Magento\Customer\Api;
 
 use Magento\Customer\Api\Data\GroupExcludedWebsiteInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Model\ResourceModel\AbstractResource;
 
 /**
  * Customer group website repository interface for websites that are excluded from customer group.
@@ -21,16 +20,16 @@ interface GroupExcludedWebsiteRepositoryInterface
      * Save customer group excluded website.
      *
      * @param GroupExcludedWebsiteInterface $groupExcludedWebsite
-     * @return AbstractResource
+     * @return GroupExcludedWebsiteInterface
      * @throws LocalizedException
      */
-    public function save(GroupExcludedWebsiteInterface $groupExcludedWebsite): AbstractResource;
+    public function save(GroupExcludedWebsiteInterface $groupExcludedWebsite): GroupExcludedWebsiteInterface;
 
     /**
      * Retrieve customer group excluded websites by customer group id.
      *
      * @param int $customerGroupId
-     * @return array
+     * @return string[]
      * @throws LocalizedException
      */
     public function getCustomerGroupExcludedWebsites(int $customerGroupId): array;
@@ -38,7 +37,7 @@ interface GroupExcludedWebsiteRepositoryInterface
     /**
      * Retrieve all excluded customer group websites per customer groups.
      *
-     * @return array
+     * @return int[]
      * @throws LocalizedException
      */
     public function getAllExcludedWebsites(): array;
@@ -47,17 +46,17 @@ interface GroupExcludedWebsiteRepositoryInterface
      * Delete customer group with its excluded websites.
      *
      * @param int $customerGroupId
-     * @return AbstractResource
+     * @return bool
      * @throws LocalizedException
      */
-    public function delete(int $customerGroupId): AbstractResource;
+    public function delete(int $customerGroupId): bool;
 
     /**
      * Delete customer group excluded website by id.
      *
      * @param int $websiteId
-     * @return int
+     * @return bool
      * @throws LocalizedException
      */
-    public function deleteByWebsite(int $websiteId): int;
+    public function deleteByWebsite(int $websiteId): bool;
 }

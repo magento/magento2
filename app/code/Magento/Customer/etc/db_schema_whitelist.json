@@ -357,7 +357,8 @@
             "website_id": true
         },
         "index": {
-            "CUSTOMER_GROUP_EXCLUDED_WEBSITE_CUSTOMER_GROUP_ID": true
+            "CUSTOMER_GROUP_EXCLUDED_WEBSITE_CUSTOMER_GROUP_ID": true,
+            "CUSTOMER_GROUP_EXCLUDED_WEBSITE_CUSTOMER_GROUP_ID_WEBSITE_ID": true
         },
         "constraint": {
             "PRIMARY": true
