@@ -43,8 +43,12 @@
         <seeElement selector="{{AdminProductGridSection.productRowByTypeAndName('Virtual Product',$createProduct.name$)}}" stepKey="seeVirtualProductInGrid"/>
         <!--Assert virtual product on storefront-->
         <comment userInput="Assert virtual product on storefront" stepKey="commentAssertVirtualProductOnStorefront"/>
-        <amOnPage url="{{StorefrontProductPage.url($createProduct.name$)}}" stepKey="openVirtualProductPage"/>
-        <waitForPageLoad stepKey="waitForStorefrontVirtualProductPageLoad"/>
-        <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertVirtualProductInStock"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openVirtualProductPage">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStorefrontVirtualProductPageLoad"/>
+        <actionGroup ref="AssertStorefrontProductStockStatusOnProductPageActionGroup" stepKey="assertVirtualProductInStock">
+            <argument name="productStockStatus" value="In Stock"/>
+        </actionGroup>
     </test>
 </tests>
