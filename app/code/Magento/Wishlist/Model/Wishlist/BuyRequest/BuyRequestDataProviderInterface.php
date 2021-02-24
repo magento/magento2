@@ -11,7 +11,7 @@ use Magento\Wishlist\Model\Wishlist\Data\WishlistItem;
 
 /**
  * Build buy request for adding products to wishlist
- *  *
+ *
  * @api
  */
 interface BuyRequestDataProviderInterface
