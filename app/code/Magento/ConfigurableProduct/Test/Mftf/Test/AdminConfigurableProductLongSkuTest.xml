@@ -115,6 +115,7 @@
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="clickOnCategoryName">
             <argument name="categoryName" value="$$createCategory.name$$"/>
         </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCategoryPageLoad"/>
         <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertProductPresent">
             <argument name="productName" value="{{ProductWithLongNameSku.name}}"/>
         </actionGroup>
@@ -126,7 +127,7 @@
         <actionGroup ref="StorefrontOpenProductFromCategoryPageActionGroup" stepKey="clickOnProductName">
             <argument name="productName" value="{{ProductWithLongNameSku.name}}"/>
         </actionGroup>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductToLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductPageLoad"/>
         <seeInTitle userInput="{{ProductWithLongNameSku.name}}" stepKey="assertProductNameTitle"/>
         <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="assertProductName">
             <argument name="productName" value="{{ProductWithLongNameSku.name}}"/>
