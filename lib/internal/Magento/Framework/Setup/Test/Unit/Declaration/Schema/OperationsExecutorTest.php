@@ -160,7 +160,7 @@ class OperationsExecutorTest extends TestCase
         $connectionMock = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceConnectionMock->expects(self::exactly(3))
+        $this->resourceConnectionMock->expects(self::exactly(2))
             ->method('getConnection')
             ->with('default')
             ->willReturn($connectionMock);
