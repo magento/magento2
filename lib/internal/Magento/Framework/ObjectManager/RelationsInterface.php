@@ -8,6 +8,7 @@ namespace Magento\Framework\ObjectManager;
 /**
  * Interface \Magento\Framework\ObjectManager\RelationsInterface
  *
+ * @api
  */
 interface RelationsInterface
 {
