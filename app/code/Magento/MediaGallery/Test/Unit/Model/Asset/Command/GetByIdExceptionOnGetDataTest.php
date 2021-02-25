@@ -97,7 +97,7 @@ class GetByIdExceptionOnGetDataTest extends TestCase
      */
     public function testExceptionDuringGetMediaAssetData(): void
     {
-        $this->statementMock->method('fetchAll')->willReturn([self::MEDIA_ASSET_DATA]);
+        $this->statementMock->method('fetch')->willReturn(self::MEDIA_ASSET_DATA);
         $this->adapter->method('query')->willThrowException(new \Exception());
 
         $this->expectException(IntegrationException::class);
