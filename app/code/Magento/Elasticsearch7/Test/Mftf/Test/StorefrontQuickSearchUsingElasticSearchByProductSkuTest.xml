@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontQuickSearchUsingElasticSearchByProductSkuTest">
+        <annotations>
+            <features value="Elasticsearch7"/>
+            <stories value="Storefront Search"/>
+            <title value="Check that AND query is performed when searching using ElasticSearch 7"/>
+            <description value="Check that AND query is performed when searching using ElasticSearch 7"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MQE-2540"/>
+            <useCaseId value="MC-29788"/>
+            <group value="SearchEngineElasticsearch"/>
+        </annotations>
+        <before>
+            <createData entity="defaultSimpleProduct" stepKey="createFirtsSimpleProduct">
+                <field key="sku">ABCDE</field>
+            </createData>
+            <createData entity="defaultSimpleProduct" stepKey="createSecondSimpleProduct">
+                <field key="sku">24 MB06</field>
+            </createData>
+            <createData entity="defaultSimpleProduct" stepKey="createThirdSimpleProduct">
+                <field key="sku">24 MB04</field>
+            </createData>
+            <createData entity="defaultSimpleProduct" stepKey="createFourthSimpleProduct">
+                <field key="sku">24 MB02</field>
+            </createData>
+            <createData entity="defaultSimpleProduct" stepKey="createFifthSimpleProduct">
+                <field key="sku">24 MB01</field>
+            </createData>
+
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createFirtsSimpleProduct" stepKey="deleteProductOne"/>
+            <deleteData url="/V1/products/24+MB06" stepKey="deleteProductTwo"/>
+            <deleteData url="/V1/products/24+MB04" stepKey="deleteProductThree"/>
+            <deleteData url="/V1/products/24+MB02" stepKey="deleteProductFour"/>
+            <deleteData url="/V1/products/24+MB01" stepKey="deleteProductFive"/>
+        </after>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductSku">
+            <argument name="phrase" value="$createThirdSimpleProduct.sku$"/>
+        </actionGroup>
+        <see userInput="4" selector="{{StorefrontCatalogSearchMainSection.productCount}}" stepKey="assertSearchResultCount"/>
+        <actionGroup ref="StorefrontQuickSearchSeeProductByNameActionGroup" stepKey="assertSecondProductName">
+            <argument name="productName" value="$createSecondSimpleProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchSeeProductByNameActionGroup" stepKey="assertThirdProductName">
+            <argument name="productName" value="$createThirdSimpleProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchSeeProductByNameActionGroup" stepKey="assertFourthProductName">
+            <argument name="productName" value="$createFourthSimpleProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchSeeProductByNameActionGroup" stepKey="assertFifthProductName">
+            <argument name="productName" value="$createFifthSimpleProduct.name$"/>
+        </actionGroup>
+    </test>
+</tests>
