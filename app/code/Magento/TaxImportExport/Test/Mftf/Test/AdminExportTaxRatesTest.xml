@@ -44,6 +44,16 @@
         <!-- Export Tax Rates & Validate Export -->
         <actionGroup ref="AdminNavigateImportExportTaxRatesActionGroup" stepKey="navigateToImportExportTaxRatesPage"/>
         <actionGroup ref="AdminExportTaxRatesActionGroup" stepKey="exportTaxRates"/>
+        <executeJS function="return window.performance.getEntriesByName('mousedown')[0].target.baseURI" stepKey="exportURI"/>
+
+        <comment userInput="{$exportURI}" stepKey="commentTest"/>
+<!--        <assertEquals stepKey="test">-->
+<!--            <actualResult type="variable">exportURI</actualResult>-->
+<!--            <expectedResult type="string">http://git24develop3.test/admin/tax/rate/importExport/</expectedResult>-->
+<!--        </assertEquals>-->
+
+        <!-- todo: curl command to go to URI to download file -->
+
         <assertFileExists stepKey="assertExportFileExists">
             <actualResult type="string">/home/centos/Downloads/tax_rates.csv</actualResult>
         </assertFileExists>
