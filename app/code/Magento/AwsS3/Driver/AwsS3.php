@@ -142,7 +142,7 @@ class AwsS3 implements RemoteDriverInterface
         }
 
         try {
-            return $this->adapter->fileExists($path);
+            return $this->adapter->fileExists($path) || $this->directoryExists($path);
         } catch (\League\Flysystem\FilesystemException $e) {
             $this->logger->error($e->getMessage());
             return false;
@@ -448,17 +448,28 @@ class AwsS3 implements RemoteDriverInterface
         try {
             return !$this->isTypeFile($path);
         } catch (UnableToRetrieveMetadata $e) {
-            try {
-                return iterator_count($this->adapter->listContents($path, false)) > 0;
-            } catch (\Throwable $e) {
-                // catch closed iterator
-                return false;
-            }
+            return $this->directoryExists($path);
         } catch (\League\Flysystem\FilesystemException $e) {
             $this->logger->error($e->getMessage());
         }
 
         return false;
+    }
+
+    /**
+     * Check if directory exists by path.
+     *
+     * @param string $path
+     * @return bool
+     */
+    private function directoryExists(string $path): bool
+    {
+        try {
+            return iterator_count($this->adapter->listContents($path, false)) > 0;
+        } catch (\Throwable $e) {
+            // catch closed iterator
+            return false;
+        }
     }
 
     /**
@@ -542,7 +553,7 @@ class AwsS3 implements RemoteDriverInterface
         try {
             $metaInfo = $this->metadataProvider->getMetadata($path);
         } catch (UnableToRetrieveMetadata $exception) {
-            if ($this->adapter->fileExists($path)) {
+            if ($this->directoryExists($path)) {
                 $result['type'] = 'dir';
             }
             return $result;
