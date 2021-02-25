@@ -40,12 +40,14 @@ class SingleChoiceProvider
                             $product
                         );
                         $selections = $selectionsCollection->exportToArray();
-                        foreach ($selections as $selection) {
-                            if ($isNoCustomizations) {
-                                $isNoCustomizations = (int) $selection['is_default'] === 1
-                                    && (int) $selection['selection_can_change_qty'] === 0;
-                            } else {
-                                break;
+                        if (count($selections) > 1) {
+                            foreach ($selections as $selection) {
+                                if ($isNoCustomizations) {
+                                    $isNoCustomizations = (int)$selection['is_default'] === 1
+                                        && (int)$selection['selection_can_change_qty'] === 0;
+                                } else {
+                                    break;
+                                }
                             }
                         }
                     } else {
