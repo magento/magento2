@@ -16,7 +16,7 @@ class CustomLayoutValidator
     /**
      * @var PageFactory
      */
-    protected $pageFactory;
+    private $pageFactory;
 
     /**
      * @var ManagerInterface
