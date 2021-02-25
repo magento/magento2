@@ -16,6 +16,8 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\Api\DataObjectHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Bundle\Helper\Model\Link;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class LinksListTest extends TestCase
 {
@@ -48,6 +50,14 @@ class LinksListTest extends TestCase
      * @var MockObject
      */
     protected $dataObjectHelperMock;
+    /**
+     * @var Link|MockObject
+     */
+    private $linkHelper;
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
 
     protected function setUp(): void
     {
@@ -80,7 +90,9 @@ class LinksListTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->productTypeMock = $this->createMock(Type::class);
-        $this->model = new LinksList($this->linkFactoryMock, $this->productTypeMock, $this->dataObjectHelperMock);
+        $this->objectManager = new ObjectManager($this);
+        $this->linkHelper = $this->objectManager->getObject(Link::class);
+        $this->model = new LinksList($this->linkFactoryMock, $this->productTypeMock, $this->dataObjectHelperMock, $this->linkHelper);
     }
 
     public function testLinksList()

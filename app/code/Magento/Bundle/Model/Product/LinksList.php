@@ -11,7 +11,6 @@ use Magento\Bundle\Api\Data\LinkInterfaceFactory;
 use Magento\Bundle\Helper\Model\Link;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Api\DataObjectHelper;
-use Magento\Framework\Api\ExtensibleDataInterface;
 
 class LinksList
 {
@@ -72,7 +71,7 @@ class LinksList
                 $bundledProductPrice = $selection->getPrice();
             }
             $selectionPriceType = $product->getPriceType() ? $selection->getSelectionPriceType() : null;
-            $selectionPrice = $bundledProductPrice ? $bundledProductPrice : null;
+            $selectionPrice = $bundledProductPrice ?: null;
 
             $selectionData = $this->linkHelper->cleanExtensionAttribute($selection->getData());
 
