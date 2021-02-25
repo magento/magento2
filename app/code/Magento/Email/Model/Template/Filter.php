@@ -1090,6 +1090,6 @@ class Filter extends \Magento\Framework\Filter\Template
             }
             $this->_logger->critical($e);
         }
-        return $value;
+        return (string) $value;
     }
 }
