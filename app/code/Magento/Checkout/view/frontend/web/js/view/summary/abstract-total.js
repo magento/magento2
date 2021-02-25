@@ -23,10 +23,16 @@ define([
 
         /**
          * @param {*} price
+         * @param {*} precision
          * @return {*|String}
          */
-        getFormattedPercent: function (price) {
-            return priceUtils.formatPrice(price, quote.getPriceFormat(), false);
+        getFormattedPercent: function (price, precision) {
+            var format = Object.assign({}, quote.getPriceFormat());
+
+            format.requiredPrecision = precision;
+            format.pattern = '%s';
+
+            return priceUtils.formatPrice(price, format, false);
         },
 
         /**
