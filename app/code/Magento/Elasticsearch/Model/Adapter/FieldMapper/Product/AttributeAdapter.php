@@ -11,6 +11,8 @@ use Magento\Framework\Api\CustomAttributesDataInterface;
 
 /**
  * Product attribute adapter for elasticsearch context.
+ *
+ * @api
  */
 class AttributeAdapter
 {
