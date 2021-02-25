@@ -57,8 +57,8 @@ class Coupon extends \Magento\Checkout\Block\Cart\AbstractCart
                     'cacheable' => false,
                     'after' => '-',
                     'form_id' => 'sales_rule_coupon_request',
-                    'image_width' => 230,
-                    'image_height' => 230
+                    'img_width' => 230,
+                    'img_height' => 50
                 ]
             );
         }

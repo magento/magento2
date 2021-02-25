@@ -9,6 +9,7 @@ namespace Magento\Checkout\Test\Unit\Model;
 
 use Magento\Checkout\Api\Exception\PaymentProcessingRateLimitExceededException;
 use Magento\Checkout\Api\PaymentProcessingRateLimiterInterface;
+use Magento\Checkout\Api\PaymentSavingRateLimiterInterface;
 use Magento\Checkout\Model\PaymentInformationManagement;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
@@ -61,9 +62,14 @@ class PaymentInformationManagementTest extends TestCase
     private $cartRepositoryMock;
 
     /**
-     * @var PaymentProcessingRateLimiterInterface|MockObject
+     * @var PaymentProcessingRateLimiterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $rateLimiterMock;
+
+    /**
+     * @var PaymentSavingRateLimiterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $saveLimiterMock;
 
     protected function setUp()
     {
@@ -80,13 +86,15 @@ class PaymentInformationManagementTest extends TestCase
         $this->cartRepositoryMock = $this->getMockBuilder(CartRepositoryInterface::class)
             ->getMock();
         $this->rateLimiterMock = $this->getMockForAbstractClass(PaymentProcessingRateLimiterInterface::class);
+        $this->saveLimiterMock = $this->getMockForAbstractClass(PaymentSavingRateLimiterInterface::class);
         $this->model = $objectManager->getObject(
             PaymentInformationManagement::class,
             [
                 'billingAddressManagement' => $this->billingAddressManagementMock,
                 'paymentMethodManagement' => $this->paymentMethodManagementMock,
                 'cartManagement' => $this->cartManagementMock,
-                'paymentRateLimiter' => $this->rateLimiterMock
+                'paymentRateLimiter' => $this->rateLimiterMock,
+                'saveRateLimiter' => $this->saveLimiterMock
             ]
         );
         $objectManager->setBackwardCompatibleProperty($this->model, 'logger', $this->loggerMock);
@@ -165,11 +173,10 @@ class PaymentInformationManagementTest extends TestCase
      */
     public function testSavePaymentInformationLimited(): void
     {
-        $this->rateLimiterMock->method('limit')
+        $this->saveLimiterMock->method('limit')
             ->willThrowException(new PaymentProcessingRateLimitExceededException(__('Error')));
-        $this->expectException(PaymentProcessingRateLimitExceededException::class);
 
-        $this->savePayment();
+        $this->assertFalse($this->savePayment());
     }
 
     public function testSavePaymentInformationWithoutBillingAddress()

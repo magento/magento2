@@ -13,6 +13,7 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\PaymentException;
 use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Checkout\Api\Exception\PaymentProcessingRateLimitExceededException;
 
 /**
  * Placing orders.
@@ -126,6 +127,9 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout implements
                 $this->_getCheckout()->getCheckoutSession()->setDisplaySuccess(true);
                 $this->_redirect('*/*/success');
             }
+        } catch (PaymentProcessingRateLimitExceededException $ex) {
+            $this->messageManager->addErrorMessage($ex->getMessage());
+            $this->_redirect('*/*/overview');
         } catch (PaymentException $e) {
             $message = $e->getMessage();
             if (!empty($message)) {
