@@ -21,7 +21,6 @@ define([
         isFullTaxSummaryDisplayed = window.checkoutConfig.isFullTaxSummaryDisplayed,
         isZeroTaxDisplayed = window.checkoutConfig.isZeroTaxDisplayed,
         taxAmount = 0,
-        percentPrecision = 3,
         rates = 0;
 
     return Component.extend({
@@ -107,7 +106,7 @@ define([
          * @return {*|String}
          */
         formatPercent: function (amount) {
-            return this.getFormattedPercent(amount, percentPrecision);
+            return this.getFormattedPercent(amount);
         },
 
         /**
