@@ -15,26 +15,19 @@
             <title value="Check that AND query is performed when searching using ElasticSearch 7"/>
             <description value="Check that AND query is performed when searching using ElasticSearch 7"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MQE-2540"/>
+            <testCaseId value="MC-31114"/>
             <useCaseId value="MC-29788"/>
             <group value="SearchEngineElasticsearch"/>
         </annotations>
         <before>
-            <createData entity="defaultSimpleProduct" stepKey="createFirtsSimpleProduct">
-                <field key="sku">ABCDE</field>
-            </createData>
-            <createData entity="defaultSimpleProduct" stepKey="createSecondSimpleProduct">
-                <field key="sku">24 MB06</field>
-            </createData>
-            <createData entity="defaultSimpleProduct" stepKey="createThirdSimpleProduct">
-                <field key="sku">24 MB04</field>
-            </createData>
-            <createData entity="defaultSimpleProduct" stepKey="createFourthSimpleProduct">
-                <field key="sku">24 MB02</field>
-            </createData>
-            <createData entity="defaultSimpleProduct" stepKey="createFifthSimpleProduct">
-                <field key="sku">24 MB01</field>
-            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
+
+            <createData entity="VirtualProduct" stepKey="createFirtsSimpleProduct"/>
+            <createData entity="SimpleProductWithCustomSku24MB06" stepKey="createSecondSimpleProduct"/>
+            <createData entity="SimpleProductWithCustomSku24MB04" stepKey="createThirdSimpleProduct"/>
+            <createData entity="SimpleProductWithCustomSku24MB02" stepKey="createFourthSimpleProduct"/>
+            <createData entity="SimpleProductWithCustomSku24MB01" stepKey="createFifthSimpleProduct"/>
 
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
                 <argument name="tags" value=""/>
@@ -45,16 +38,22 @@
         </before>
         <after>
             <deleteData createDataKey="createFirtsSimpleProduct" stepKey="deleteProductOne"/>
-            <deleteData url="/V1/products/24+MB06" stepKey="deleteProductTwo"/>
-            <deleteData url="/V1/products/24+MB04" stepKey="deleteProductThree"/>
-            <deleteData url="/V1/products/24+MB02" stepKey="deleteProductFour"/>
-            <deleteData url="/V1/products/24+MB01" stepKey="deleteProductFive"/>
+
+            <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToAdminCatalogProductPage"/>
+            <actionGroup ref="FilterProductGridByName2ActionGroup" stepKey="filterBundleProductOptionsDownToName">
+                <argument name="name" value="productWithSku24MB0"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteAllProducts"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductSku">
-            <argument name="phrase" value="$createThirdSimpleProduct.sku$"/>
+            <argument name="phrase" value="24 MB04"/>
         </actionGroup>
+
         <see userInput="4" selector="{{StorefrontCatalogSearchMainSection.productCount}}" stepKey="assertSearchResultCount"/>
+
         <actionGroup ref="StorefrontQuickSearchSeeProductByNameActionGroup" stepKey="assertSecondProductName">
             <argument name="productName" value="$createSecondSimpleProduct.name$"/>
         </actionGroup>
