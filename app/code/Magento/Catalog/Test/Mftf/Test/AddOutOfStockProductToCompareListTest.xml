@@ -108,8 +108,8 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="grabTextFromSuccessMessage2"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertSuccessMessage2"/>
 
-        <comment userInput="Check that product displays on add to compare widget | Comment is kept to preserve the step key for backward compatibility" stepKey="checkProdNameOnWidget"/>
-        <seeElement selector="{{StorefrontComparisonSidebarSection.ProductTitleByName($$product.name$$)}}" stepKey="seeProdNameOnCmpWidget"/>
+        <comment userInput="Comment is kept to preserve the step key for backward compatibility" stepKey="checkProdNameOnWidget"/>
+        <comment userInput="Comment is kept to preserve the step key for backward compatibility" stepKey="seeProdNameOnCmpWidget"/>
 
         <comment userInput="See product in the compare page" stepKey="seeProductInComparePage"/>
         <actionGroup ref="StorefrontOpenAndCheckComparisionActionGroup" stepKey="navigateToComparePage2"/>
