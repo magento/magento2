@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\RemoteStorage\Driver;
 
-use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\ExtendedDriverInterface;
 
 /**
  * Remote storage driver.
  */
-interface RemoteDriverInterface extends DriverInterface
+interface RemoteDriverInterface extends ExtendedDriverInterface
 {
     /**
      * Test storage connection.
