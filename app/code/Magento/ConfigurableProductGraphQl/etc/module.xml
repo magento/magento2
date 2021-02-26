@@ -14,6 +14,7 @@
             <module name="Magento_CatalogGraphQl"/>
             <module name="Magento_CatalogInventory"/>
             <module name="Magento_QuoteGraphQl"/>
+            <module name="Magento_SwatchesGraphQl"/>
         </sequence>
     </module>
 </config>

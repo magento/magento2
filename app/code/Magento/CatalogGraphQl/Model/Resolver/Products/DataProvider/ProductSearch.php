@@ -18,6 +18,8 @@ use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultAp
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchResultsInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
@@ -87,6 +89,7 @@ class ProductSearch
      * @param array $attributes
      * @param ContextInterface|null $context
      * @return SearchResultsInterface
+     * @throws GraphQlNoSuchEntityException
      */
     public function getList(
         SearchCriteriaInterface $searchCriteria,
@@ -107,6 +110,13 @@ class ProductSearch
         )->apply();
 
         $this->collectionPreProcessor->process($collection, $searchCriteriaForCollection, $attributes, $context);
+
+        try {
+            $collection->addMediaGalleryData();
+        } catch (LocalizedException $e) {
+            throw new GraphQlNoSuchEntityException(__('Cannot load media gallery'));
+        }
+
         $collection->load();
         $this->collectionPostProcessor->process($collection, $attributes);
 

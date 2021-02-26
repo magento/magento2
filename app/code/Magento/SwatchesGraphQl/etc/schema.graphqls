@@ -47,3 +47,7 @@ type TextSwatchData implements SwatchDataInterface {
 type ColorSwatchData implements SwatchDataInterface {
 
 }
+
+type ConfigurableProductOptionValue {
+    swatch: SwatchDataInterface
+}
