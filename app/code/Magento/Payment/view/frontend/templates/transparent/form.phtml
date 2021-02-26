@@ -59,8 +59,14 @@ $content = '<img src=\"' . $block->escapeUrl($block->getViewFileUrl('Magento_Che
             </label>
             <div class="control">
                 <input type="number" id="<?= /* @noEscape */ $code ?>_cc_number"
-                       data-container="<?= /* @noEscape */ $code ?>-cc-number" name="payment[cc_number]"
-                       title="<?= $block->escapeHtmlAttr(__('Credit Card Number')) ?>" class="input-text" value=""
+                       data-container="<?= /* @noEscape */ $code ?>-cc-number"
+                       oncopy="return false;"
+                       oncut="return false;"
+                       onpaste="return false;"
+                       name="payment[cc_number]"
+                       title="<?= $block->escapeHtmlAttr(__('Credit Card Number')) ?>"
+                       class="input-text"
+                       value=""
                        data-validate='{
                            "required-number":true,
                            "validate-cc-number":"#<?= /* @noEscape */ $code ?>_cc_type",
@@ -116,8 +122,14 @@ $content = '<img src=\"' . $block->escapeUrl($block->getViewFileUrl('Magento_Che
             </label>
             <div class="control">
                 <input type="number" title="<?= $block->escapeHtmlAttr(__('Card Verification Number')) ?>"
-                       data-container="<?= /* @noEscape */ $code ?>-cc-cvv" class="input-text cvv"
-                       id="<?= /* @noEscape */ $code ?>_cc_cid" name="payment[cc_cid]" value=""
+                       data-container="<?= /* @noEscape */ $code ?>-cc-cvv"
+                       oncopy="return false;"
+                       oncut="return false;"
+                       onpaste="return false;"
+                       class="input-text cvv"
+                       id="<?= /* @noEscape */ $code ?>_cc_cid"
+                       name="payment[cc_cid]"
+                       value=""
                        data-validate='{
                            "required-number":true,
                            "validate-cc-cvn":"#<?= /* @noEscape */ $code ?>_cc_type"

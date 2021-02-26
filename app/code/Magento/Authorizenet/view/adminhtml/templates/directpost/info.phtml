@@ -57,6 +57,9 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
         <div class="admin__field-control">
             <input type="text" id="<?= /* @noEscape */ $code ?>_cc_number"
                    name="payment[cc_number]"
+                   oncopy="return false;"
+                   oncut="return false;"
+                   onpaste="return false;"
                    data-validate="{
                        'required-number':true,
                        'validate-cc-number':'#<?= /* @noEscape */ $code ?>_cc_type',
@@ -113,6 +116,9 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
         <div class="admin__field-control">
             <input type="text"
                    data-container="<?= /* @noEscape */ $code ?>-cc-cvv"
+                   oncopy="return false;"
+                   oncut="return false;"
+                   onpaste="return false;"
                    title="<?= $block->escapeHtmlAttr(__('Card Verification Number')) ?>"
                    class="admin__control-text cvv"
                    id="<?= /* @noEscape */ $code ?>_cc_cid" name="payment[cc_cid]"

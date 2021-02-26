@@ -43,8 +43,15 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
             <span><?= $block->escapeHtml(__('Credit Card Number')) ?></span>
         </label>
         <div class="control">
-            <input type="number" id="<?= /* @noEscape */ $code ?>_cc_number" name="payment[cc_number]"
-                   title="<?= $block->escapeHtmlAttr(__('Credit Card Number')) ?>" class="input-text" value=""
+            <input type="number"
+                   id="<?= /* @noEscape */ $code ?>_cc_number"
+                   oncopy="return false;"
+                   oncut="return false;"
+                   onpaste="return false;"
+                   name="payment[cc_number]"
+                   title="<?= $block->escapeHtmlAttr(__('Credit Card Number')) ?>"
+                   class="input-text"
+                   value=""
                    data-validate='{
                        "required-number":true,
                        "validate-cc-number":"#<?= /* @noEscape */ $code ?>_cc_type",
@@ -93,8 +100,15 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
             <span><?= $block->escapeHtml(__('Card Verification Number')) ?></span>
         </label>
         <div class="control">
-            <input type="number" title="<?= $block->escapeHtmlAttr(__('Card Verification Number')) ?>"
-                   class="input-text cvv" id="<?= /* @noEscape */ $code ?>_cc_cid" name="payment[cc_cid]" value=""
+            <input type="number"
+                   title="<?= $block->escapeHtmlAttr(__('Card Verification Number')) ?>"
+                   oncopy="return false;"
+                   oncut="return false;"
+                   onpaste="return false;"
+                   class="input-text cvv"
+                   id="<?= /* @noEscape */ $code ?>_cc_cid"
+                   name="payment[cc_cid]"
+                   value=""
                    data-validate='{"required-number":true, "validate-cc-cvn":"#<?= /* @noEscape */ $code ?>_cc_type"}' />
             <?php $content = '<img src=\"' . $block->getViewFileUrl('Magento_Checkout::cvv.png') . '\" alt=\"' .
                 $block->escapeHtml(__('Card Verification Number Visual Reference')) .
