@@ -9,8 +9,11 @@ namespace Magento\Cms\Model\Page\CustomLayout;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\Cms\Model\PageFactory;
+use Magento\Cms\Model\PageRepository;
 
+/**
+ * Class for layout update validation
+ */
 class CustomLayoutValidator
 {
     /**
@@ -25,11 +28,11 @@ class CustomLayoutValidator
 
     /**
      * CustomLayoutValidator constructor.
-     * @param PageFactory $pageFactory
+     * @param PageRepository $pageFactory
      * @param ManagerInterface $messageManager
      */
     public function __construct(
-        PageFactory $pageFactory,
+        PageRepository $pageFactory,
         ManagerInterface $messageManager
     ) {
         $this->pageFactory = $pageFactory;
@@ -43,18 +46,23 @@ class CustomLayoutValidator
      * @return bool
      * @throws LocalizedException
      */
-    public function validate(array $data)
+    public function validate(array $data) : bool
     {
         $layoutUpdate = isset($data['layout_update_xml']) ? $data['layout_update_xml'] : null;
         $customLayoutUpdate = isset($data['custom_layout_update_xml']) ? $data['custom_layout_update_xml'] : null;
-        $page = $this->pageFactory->create();
-        $page->load($data['page_id']);
-        $oldLayoutUpdate = $page->getId() ? $page->getLayoutUpdateXml() : null;
-        $olCustomLayoutUpdate = $page->getId() ? $page->getCustomLayoutUpdateXml() : null;
-        if ($layoutUpdate && $oldLayoutUpdate !== $layoutUpdate
-            || $customLayoutUpdate && $olCustomLayoutUpdate !== $customLayoutUpdate
-        ) {
-            throw new LocalizedException(__('Custom layout update text cannot be changed, only removed'));
+        if (isset($data['page_id'])) {
+            $page = $this->pageFactory->getById($data['page_id']);
+            $oldLayoutUpdate = $page->getId() ? $page->getLayoutUpdateXml() : null;
+            $oldCustomLayoutUpdate = $page->getId() ? $page->getCustomLayoutUpdateXml() : null;
+            if ($layoutUpdate && $oldLayoutUpdate !== $layoutUpdate
+                || $customLayoutUpdate && $oldCustomLayoutUpdate !== $customLayoutUpdate
+            ) {
+                throw new LocalizedException(__('Custom layout update text cannot be changed, only removed'));
+            }
+        } else {
+            if ($layoutUpdate || $customLayoutUpdate) {
+                throw new LocalizedException(__('Custom layout update text cannot be changed, only removed'));
+            }
         }
         return true;
     }

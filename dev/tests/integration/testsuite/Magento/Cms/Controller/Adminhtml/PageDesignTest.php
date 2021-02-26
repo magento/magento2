@@ -65,7 +65,10 @@ class PageDesignTest extends AbstractBackendController
      */
     private $pagesToDelete = [];
 
-    private $postDaraProcessor;
+    /**
+     * @var PostDataProcessor
+     */
+    private $postDataProcessor;
 
     /**
      * @inheritDoc
@@ -84,7 +87,7 @@ class PageDesignTest extends AbstractBackendController
         $this->pageRetriever = Bootstrap::getObjectManager()->get(GetPageByIdentifierInterface::class);
         $this->scopeConfig = Bootstrap::getObjectManager()->get(ScopeConfigInterface::class);
         $this->pagesToDelete = [];
-        $this->postDaraProcessor = Bootstrap::getObjectManager()->get(PostDataProcessor::class);
+        $this->postDataProcessor = Bootstrap::getObjectManager()->get(PostDataProcessor::class);
     }
 
     /**
@@ -315,6 +318,6 @@ class PageDesignTest extends AbstractBackendController
             PageInterface::CUSTOM_LAYOUT_UPDATE_XML => '<container />',
             PageInterface::LAYOUT_UPDATE_XML => '<container />',
         ];
-        $this->assertFalse($this->postDaraProcessor->validate($requestData));
+        $this->assertFalse($this->postDataProcessor->validate($requestData));
     }
 }
