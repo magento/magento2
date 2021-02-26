@@ -209,6 +209,7 @@ class AwsS3Test extends TestCase
      * @param bool $has
      * @param array $metadata
      * @param bool $expected
+     * @param iterable $listContents
      * @param \Exception|null $metadataException
      * @throws FileSystemException
      * @dataProvider isDirectoryDataProvider
@@ -219,11 +220,15 @@ class AwsS3Test extends TestCase
         bool $has,
         array $metadata,
         bool $expected,
+        iterable $listContents,
         \Exception $metadataException = null
     ): void {
         $this->adapterMock->method('fileExists')
             ->with($normalizedPath)
             ->willReturn($has);
+        $this->adapterMock->method('listContents')
+            ->with($normalizedPath)
+            ->willReturn($listContents);
         if (!$metadataException) {
             $this->metadataProviderMock->method('getMetadata')
                 ->with($normalizedPath)
@@ -249,6 +254,7 @@ class AwsS3Test extends TestCase
                 false,
                 [],
                 false,
+                new \ArrayIterator([]),
                 new UnableToRetrieveMetadata('Can not fetch metadata.')
             ],
             [
@@ -258,7 +264,8 @@ class AwsS3Test extends TestCase
                 [
                     'type' => AwsS3::TYPE_DIR
                 ],
-                true
+                true,
+                new \ArrayIterator(['some_directory']),
             ],
             [
                 self::URL . 'some_directory',
@@ -267,7 +274,8 @@ class AwsS3Test extends TestCase
                 [
                     'type' => AwsS3::TYPE_DIR
                 ],
-                true
+                true,
+                new \ArrayIterator(['some_directory']),
             ],
             [
                 self::URL . 'some_directory',
@@ -276,21 +284,24 @@ class AwsS3Test extends TestCase
                 [
                     'type' => AwsS3::TYPE_FILE
                 ],
-                false
+                false,
+                new \ArrayIterator(['some_directory']),
             ],
             [
                 '',
                 '',
                 true,
                 [],
-                true
+                true,
+                new \ArrayIterator(['some_directory']),
             ],
             [
                 '/',
                 '',
                 true,
                 [],
-                true
+                true,
+                new \ArrayIterator(['some_directory']),
             ],
         ];
     }
@@ -477,6 +488,10 @@ class AwsS3Test extends TestCase
                     throw new UnableToRetrieveMetadata('');
                 }
             });
+        $this->adapterMock->expects($this->any())
+            ->method('listContents')
+            ->with('test/test2')
+            ->willReturn(new \EmptyIterator());
         $this->adapterMock->expects(self::once())
             ->method('createDirectory')
             ->with('test/test2');
