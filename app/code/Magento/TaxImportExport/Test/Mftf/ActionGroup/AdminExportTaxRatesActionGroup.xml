@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminExportTaxRatesActionGroup">
+    <actionGroup name="AdminClickExportTaxRatesActionGroup">
         <annotations>
             <description>Clicks the 'Export Tax Rates' button.</description>
         </annotations>

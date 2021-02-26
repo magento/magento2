@@ -16,9 +16,9 @@
             <description value="Exports tax rates from the System > Data Transfer > Import/Export Tax Rates page and
             validates contents in downloaded file. Note that MFTF cannot simply click export and have access to the file
             that is downloaded in the browser due to the test not having access to the server that is running the test
-            browser. Therefore, this test clicks the Export button, grabs the request URI from the browser, and executes
-            the same request on the magento machine via a curl request to download the same file there so that the test
-            has access to the exported file."/>
+            browser. Therefore, this test verifies that the Export button can be successfully clicked, grabs the request
+            URL from the Export button's form, executes the request on the magento machine via a curl request, and
+            verifies the contents of the exported file."/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-38949"/>
             <group value="importExport"/>
@@ -41,16 +41,14 @@
 
         <!-- Export Tax Rates & Validate Export -->
         <actionGroup ref="AdminNavigateImportExportTaxRatesActionGroup" stepKey="navigateToImportExportTaxRatesPage"/>
-        <actionGroup ref="AdminExportTaxRatesActionGroup" stepKey="exportTaxRates"/>
-        <executeJS function="return window.performance.getEntriesByName('mousedown')[0].target.baseURI" stepKey="exportURI"/>
-        <comment userInput="{$exportURI}" stepKey="commentExportURI"/>
-        <executeJS function="return window.location.origin" stepKey="baseUrl"/>
+        <actionGroup ref="AdminClickExportTaxRatesActionGroup" stepKey="exportTaxRates"/>
+        <grabAttributeFrom userInput="action" selector="{{AdminImportExportTaxRatesSection.exportTaxRatesButtonForm}}" stepKey="grabExportUrl"/>
         <helper class="\Magento\TaxImportExport\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsCATaxRate">
-            <argument name="uri">{$baseUrl}/admin/tax/rate/exportPost/</argument>
+            <argument name="url">{$grabExportUrl}</argument>
             <argument name="expectedString">{{US_CA_Rate_1.code}}</argument>
         </helper>
         <helper class="\Magento\TaxImportExport\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsNYTaxRate">
-            <argument name="uri">{$baseUrl}/admin/tax/rate/exportPost/</argument>
+            <argument name="url">{$grabExportUrl}</argument>
             <argument name="expectedString">{{US_NY_Rate_1.code}}</argument>
         </helper>
     </test>

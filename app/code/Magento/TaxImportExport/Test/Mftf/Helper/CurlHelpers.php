@@ -17,35 +17,33 @@ class CurlHelpers extends Helper
     /**
      * Assert a that a curl request's response contains an expected string
      *
-     * @param string $uri
+     * @param string $url
      * @param string $expectedString
      * @return void
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function assertCurlResponseContainsString($uri, $expectedString): void
+    public function assertCurlResponseContainsString($url, $expectedString): void
     {
         $cookie = $this->getCookie();
-        echo $cookie;
-        $curlResponse = $this->getCurlResponse($uri, $cookie);
-        echo $curlResponse;
+        $curlResponse = $this->getCurlResponse($url, $cookie);
         $this->assertStringContainsString($expectedString, $curlResponse);
     }
 
     /**
-     * Sends a curl request with the provided URI & cookie. Returns the response
+     * Sends a curl request with the provided URL & cookie. Returns the response
      *
-     * @param string $uri
+     * @param string $url
      * @param string $cookie
      * @return string
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function getCurlResponse($uri, $cookie): string
+    public function getCurlResponse($url, $cookie): string
     {
         try {
             // Start Session
-            $session = curl_init($uri);
+            $session = curl_init($url);
 
             // Set Options
             curl_setopt($session, CURLOPT_COOKIE, $cookie);
@@ -65,7 +63,7 @@ class CurlHelpers extends Helper
     }
 
     /**
-     * Sends a curl request with the provided URI & cookie. Returns the response in JSON format
+     * Gets the value of the specified cookie and returns the key value pair of the cookie
      *
      * @return string
      *

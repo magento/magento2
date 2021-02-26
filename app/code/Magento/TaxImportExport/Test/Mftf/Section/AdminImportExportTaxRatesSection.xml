@@ -11,6 +11,7 @@
     <section name="AdminImportExportTaxRatesSection">
         <element name="uploadFile" type="input" selector="#import_rates_file"/>
         <element name="importTaxRatesButton" type="button" selector="[title='Import Tax Rates']"/>
-        <element name="exportTaxRatesButton" type="button" selector="[title='Export Tax Rates']"/>
+        <element name="exportTaxRatesButtonForm" type="block" selector="#export_form"/>
+        <element name="exportTaxRatesButton" type="button" selector="#export_form [title='Export Tax Rates']"/>
     </section>
 </sections>
