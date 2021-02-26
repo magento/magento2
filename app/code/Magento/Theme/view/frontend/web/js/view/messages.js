@@ -31,9 +31,9 @@ define([
             this._super();
 
             this.cookieMessages = _.unique($.cookieStorage.get('mage-messages'), 'text');
-            this.messages = ko.observable({ ...customerData.get('messages').extend({
+            this.messages = ko.observable(Object.assign({}, customerData.get('messages').extend({
                 disposableCustomerData: 'messages'
-            })() });
+            })()));
 
             // Force to clean obsolete messages
             if (!_.isEmpty(this.messages().messages)) {
