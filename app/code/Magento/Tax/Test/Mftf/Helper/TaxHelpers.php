@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Tax\Test\Mftf\Helper;
 
+use Facebook\WebDriver\Remote\RemoteWebDriver as FacebookWebDriver;
 use Facebook\WebDriver\WebDriverBy;
 use Magento\FunctionalTestingFramework\Helper\Helper;
+use Magento\FunctionalTestingFramework\Module\MagentoWebDriver;
 
 /**
  * Class for MFTF helpers for Tax module.
@@ -34,11 +36,13 @@ class TaxHelpers extends Helper
         string $successMessageContainer
     ): void {
         try {
+            /** @var MagentoWebDriver $webDriver */
             $magentoWebDriver = $this->getModule('\Magento\FunctionalTestingFramework\Module\MagentoWebDriver');
-            $facebookWebDriver = $magentoWebDriver->webDriver;
+            /** @var FacebookWebDriver $webDriver */
+            $webDriver = $magentoWebDriver->webDriver;
 
             $magentoWebDriver->waitForPageLoad(30);
-            $rows = $facebookWebDriver->findElements(WebDriverBy::xpath($rowsToDelete));
+            $rows = $webDriver->findElements(WebDriverBy::xpath($rowsToDelete));
             while (!empty($rows)) {
                 $rows[0]->click();
                 $magentoWebDriver->waitForPageLoad(30);
@@ -49,7 +53,7 @@ class TaxHelpers extends Helper
                 $magentoWebDriver->click($modalAcceptButton);
                 $magentoWebDriver->waitForPageLoad(60);
                 $magentoWebDriver->waitForText($successMessage, 10, $successMessageContainer);
-                $rows = $facebookWebDriver->findElements(WebDriverBy::xpath($rowsToDelete));
+                $rows = $webDriver->findElements(WebDriverBy::xpath($rowsToDelete));
             }
         } catch (\Exception $exception) {
             $this->fail($exception->getMessage());
