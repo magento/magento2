@@ -105,10 +105,11 @@ class UpdateWishlistItem
             );
         }
 
-        // Create a buy request with the updated wishlist item data
-        $updatedBuyRequest = $this->buyRequestBuilder
+        // Update the buy request using the wishlist item data. Use existing values for unspecified options.
+        $newBuyRequest = $this->buyRequestBuilder
             ->build($wishlistItemData)
             ->setData('action', 'updateItem');
+        $updatedBuyRequest = $wishlistItemToUpdate->getBuyRequest()->addData($newBuyRequest->toArray());
 
         // Get potential products to add to the cart for the product type using the updated buy request
         $wishlistItemProduct->setWishlistStoreId($wishlistItemToUpdate->getStoreId());
@@ -170,4 +171,3 @@ class UpdateWishlistItem
         return $output;
     }
 }
-

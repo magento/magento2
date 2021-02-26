@@ -8,16 +8,12 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Wishlist;
 
 use Exception;
-use Magento\Bundle\Model\Selection;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Wishlist\Model\WishlistFactory;
-use Magento\Bundle\Model\Option;
-use Magento\Bundle\Model\Product\Type;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
 use Magento\Ui\Component\Form\Element\Select;
 
 /**
@@ -59,7 +55,6 @@ class UpdateBundleProductsFromWishlistTest extends GraphQlAbstract
      * @magentoConfigFixture default_store wishlist/general/active 1
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Bundle/_files/bundle_product_dropdown_options.php
-     *
      * @throws Exception
      */
     public function testUpdateBundleProductWithOptions(): void
@@ -73,10 +68,8 @@ class UpdateBundleProductsFromWishlistTest extends GraphQlAbstract
         // Set the new values to update the wishlist item with
         $newQuantity = 5;
         $newDescription = 'This is a test.';
-        $newBundleOptionUid = $this->generateBundleOptionUid(
-            'bundle-product-dropdown-options',
-            false
-        );
+        $bundleProductOptions = $this->getBundleProductOptions('bundle-product-dropdown-options');
+        $newBundleOptionUid = $bundleProductOptions[1]["uid"];
 
         // Update the newly added wishlist item as the fixture customer
         $query = $this->getUpdateQuery(
@@ -110,26 +103,10 @@ class UpdateBundleProductsFromWishlistTest extends GraphQlAbstract
         // Assert that the selected value for this bundle option is updated
         self::assertNotEmpty($responseBundleOption['values']);
         $responseOptionSelection = $responseBundleOption['values'][0];
+        self::assertEquals($newBundleOptionUid, $responseOptionSelection['uid']);
         self::assertEquals('Simple Product2', $responseOptionSelection['label']);
         self::assertEquals(1, $responseOptionSelection['quantity']);
         self::assertEquals(10, $responseOptionSelection['price']);
-    }
-
-    /**
-     * Authentication header map
-     *
-     * @param string $username
-     * @param string $password
-     *
-     * @return array
-     *
-     * @throws AuthenticationException
-     */
-    private function getHeaderMap(string $username = 'customer@example.com', string $password = 'password'): array
-    {
-        $customerToken = $this->customerTokenService->createCustomerAccessToken($username, $password);
-
-        return ['Authorization' => 'Bearer ' . $customerToken];
     }
 
     /**
@@ -140,7 +117,6 @@ class UpdateBundleProductsFromWishlistTest extends GraphQlAbstract
      * @param string $description
      * @param string $bundleOptions
      * @param int $wishlistId
-     *
      * @return string
      */
     private function getUpdateQuery(
@@ -182,10 +158,12 @@ mutation {
           ... on BundleWishlistItem {
             bundle_options {
               id
+              uid
               label
               type
               values {
                 id
+                uid
                 label
                 quantity
                 price
@@ -201,66 +179,29 @@ MUTATION;
     }
 
     /**
-     * Generate the uid for the specified bundle option selection.
+     * Add a product to the to the wishlist.
      *
-     * @param string $bundleProductSku
-     * @param bool $useFirstSelection
-     * @return string
-     */
-    private function generateBundleOptionUid(string $bundleProductSku, bool $useFirstSelection): string
-    {
-        $product = $this->productRepository->get($bundleProductSku);
-
-        /** @var Type $typeInstance */
-        $typeInstance = $product->getTypeInstance();
-        $typeInstance->setStoreFilter($product->getStoreId(), $product);
-
-        /** @var Option $option */
-        $option = $typeInstance->getOptionsCollection($product)->getLastItem();
-        $optionId = (int) $option->getId();
-
-        /** @var Selection $selection */
-        $selections = $typeInstance->getSelectionsCollection([$option->getId()], $product);
-        if ($useFirstSelection) {
-            $selection = $selections->getFirstItem();
-        } else {
-            $selection = $selections->getLastItem();
-        }
-
-        $selectionId = (int) $selection->getSelectionId();
-
-        return base64_encode("bundle/$optionId/$selectionId/1");
-    }
-
-    /**
-     * @magentoConfigFixture default_store wishlist/general/active 1
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Bundle/_files/product_1.php
-     *
-     * @throws Exception
-     * return array
+     * @return array
+     * @throws AuthenticationException
      */
     private function addProductToWishlist(): array
     {
         $bundleProductSku = 'bundle-product-dropdown-options';
+        $bundleProductOptions = $this->getBundleProductOptions($bundleProductSku);
+        $initialBundleOptionUid = $bundleProductOptions[0]["uid"];
         $initialQuantity = 2;
-        $initialBundleOptionUid = $this->generateBundleOptionUid(
-            $bundleProductSku,
-            true
-        );
 
         $query = $this->getAddQuery($bundleProductSku, $initialQuantity, $initialBundleOptionUid);
         return $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
-     * Returns GraphQl add mutation string
+     * Returns the GraphQl mutation for adding an item to the wishlist.
      *
      * @param string $sku
      * @param int $qty
      * @param string $bundleOptions
      * @param int $wishlistId
-     *
      * @return string
      */
     private function getAddQuery(
@@ -317,5 +258,68 @@ mutation {
 }
 MUTATION;
     }
-}
 
+    /**
+     * Get the available options for the specified bundle product.
+     *
+     * @param string $bundleProductSku
+     * @return array
+     */
+    private function getBundleProductOptions(string $bundleProductSku)
+    {
+        $query = $this->getBundleProductSearchQuery($bundleProductSku);
+        $response = $this->graphQlQuery($query);
+
+        $bundleProduct = $response["products"]["items"][0];
+        $bundleProductOptions = $bundleProduct["items"][0]["options"];
+
+        return $bundleProductOptions;
+    }
+
+    /**
+     * Returns the GraphQl product search query for a bundle product.
+     *
+     * @param string $bundleProductSku
+     * @return string
+     */
+    private function getBundleProductSearchQuery(string $bundleProductSku): string
+    {
+        return <<<QUERY
+query {
+  products(search: "{$bundleProductSku}"){
+    items {
+      uid
+      sku
+      name
+      ... on BundleProduct {
+        items {
+          uid
+          title
+          type
+          options {
+            id
+            uid
+          }
+        }
+      }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * Authentication header map
+     *
+     * @param string $username
+     * @param string $password
+     * @return array
+     * @throws AuthenticationException
+     */
+    private function getHeaderMap(string $username = 'customer@example.com', string $password = 'password'): array
+    {
+        $customerToken = $this->customerTokenService->createCustomerAccessToken($username, $password);
+
+        return ['Authorization' => 'Bearer ' . $customerToken];
+    }
+}

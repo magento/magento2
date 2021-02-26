@@ -170,4 +170,3 @@ class UpdateProductsInWishlist implements ResolverInterface
         return $wishlist;
     }
 }
-
