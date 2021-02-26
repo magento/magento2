@@ -19,13 +19,14 @@ class CurlHelpers extends Helper
      *
      * @param string $url
      * @param string $expectedString
+     * @param string $formKey
      * @return void
      *
      */
-    public function assertCurlResponseContainsString($url, $expectedString): void
+    public function assertCurlResponseContainsString($url, $expectedString, $formKey = null): void
     {
         $cookie = $this->getCookie('admin');
-        $curlResponse = $this->getCurlResponse($url, $cookie);
+        $curlResponse = $this->getCurlResponse($url, $cookie, $formKey);
         $this->assertStringContainsString($expectedString, $curlResponse);
     }
 
@@ -34,29 +35,31 @@ class CurlHelpers extends Helper
      *
      * @param string $url
      * @param string $cookie
+     * @param string $formKey
      * @return string
      *
      */
-    public function getCurlResponse($url, $cookie): string
+    public function getCurlResponse($url, $cookie = null, $formKey = null): string
     {
-        try {
-            // Start Session
-            $session = curl_init($url);
+        // Start Session
+        $session = curl_init($url);
 
-            // Set Options
-            curl_setopt($session, CURLOPT_COOKIE, $cookie);
-            curl_setopt($session, CURLOPT_HEADER, false);
-            curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($session, CURLOPT_FOLLOWLOCATION, true);
-
-            // Execute
-            $response = curl_exec($session);
-            curl_close($session);
-
-            return $response;
-        } catch (\Exception $exception) {
-            $this->fail($exception->getMessage());
+        // Set Options
+        if ($formKey) {
+            $data = [
+                'form_key' => $formKey
+            ];
+            curl_setopt($session, CURLOPT_POST, true);
+            curl_setopt($session, CURLOPT_POSTFIELDS, $data);
         }
+        curl_setopt($session, CURLOPT_COOKIE, $cookie);
+        curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+
+        // Execute
+        $response = curl_exec($session);
+        curl_close($session);
+
+        return $response;
     }
 
     /**
@@ -75,6 +78,7 @@ class CurlHelpers extends Helper
             return $cookieName . '=' . $cookieValue;
         } catch (\Exception $exception) {
             $this->fail($exception->getMessage());
+            return '';
         }
     }
 }
