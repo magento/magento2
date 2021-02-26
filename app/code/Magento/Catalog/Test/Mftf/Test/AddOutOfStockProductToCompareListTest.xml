@@ -91,7 +91,7 @@
             <argument name="categoryName" value="$$category.name$$"/>
         </actionGroup>
 
-        <actionGroup ref="StorefrontClearFirstProductFromCompareActionGroup" stepKey="clickClearAll"/>
+        <actionGroup ref="StorefrontRemoveFirstProductFromCompareActionGroup" stepKey="clickClearAll"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForConfirmPageLoad"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="confirmProdDelate"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForConfirmLoad"/>
