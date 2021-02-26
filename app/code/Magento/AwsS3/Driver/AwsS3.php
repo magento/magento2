@@ -11,6 +11,7 @@ use Generator;
 use League\Flysystem\Config;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\UnableToRetrieveMetadata;
+use League\Flysystem\Visibility;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DriverInterface;
@@ -32,7 +33,7 @@ class AwsS3 implements RemoteDriverInterface
 
     private const TEST_FLAG = 'storage.flag';
 
-    private const CONFIG = ['ACL' => 'private'];
+    private const CONFIG = ['ACL' => 'private', 'visibility' => Visibility::PRIVATE];
 
     /**
      * @var FilesystemAdapter
