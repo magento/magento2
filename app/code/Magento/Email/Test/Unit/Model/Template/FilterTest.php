@@ -278,7 +278,7 @@ class FilterTest extends TestCase
     {
         $filter = $this->getModel();
         $filteredValue = $filter->filter(null);
-        $this->assertInternalType('string', $filteredValue);
+        $this->assertTrue(is_string($filteredValue));
     }
 
     /**
