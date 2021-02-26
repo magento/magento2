@@ -8,6 +8,9 @@ declare(strict_types=1);
 namespace Magento\SendFriend\Model;
 
 use Magento\Framework\Exception\LocalizedException as CoreException;
+use Magento\Framework\Stdlib\Cookie\CookieMetadata;
+use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * SendFriend Log
@@ -113,6 +116,11 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
     protected $remoteAddress;
 
     /**
+     * @var CookieMetadataFactory
+     */
+    private $cookieMetadataFactory;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -126,6 +134,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param CookieMetadataFactory $cookieMetadataFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -141,7 +150,8 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        CookieMetadataFactory $cookieMetadataFactory = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_transportBuilder = $transportBuilder;
@@ -151,6 +161,9 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
         $this->remoteAddress = $remoteAddress;
         $this->cookieManager = $cookieManager;
         $this->inlineTranslation = $inlineTranslation;
+        $this->cookieMetadataFactory = $cookieMetadataFactory  ?? ObjectManager::getInstance()->get(
+               CookieMetadataFactory::class
+            );
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -484,6 +497,11 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
         $cookieName = $this->_sendfriendData->getCookieName();
         $time = time();
         $newTimes = [];
+        $sensitiveCookMetadata = $this->cookieMetadataFactory->createSensitiveCookieMetadata(
+            [
+                CookieMetadata::KEY_SAME_SITE => 'Lax'
+            ]
+        );
 
         if (isset($this->_lastCookieValue[$cookieName])) {
             $oldTimes = $this->_lastCookieValue[$cookieName];
@@ -504,7 +522,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
         if ($increment) {
             $newTimes[] = $time;
             $newValue = implode(',', $newTimes);
-            $this->cookieManager->setSensitiveCookie($cookieName, $newValue);
+            $this->cookieManager->setSensitiveCookie($cookieName, $newValue, $sensitiveCookMetadata);
             $this->_lastCookieValue[$cookieName] = $newValue;
         }
 
