@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\TaxImportExport\Test\Mftf\Helper;
+namespace Magento\Catalog\Test\Mftf\Helper;
 
 use Magento\FunctionalTestingFramework\Helper\Helper;
 
