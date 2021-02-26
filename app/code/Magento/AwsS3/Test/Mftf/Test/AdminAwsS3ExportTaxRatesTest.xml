@@ -11,7 +11,7 @@
     <test name="AdminAwsS3ExportTaxRatesTest" extends="AdminExportTaxRatesTest">
         <annotations>
             <features value="AwsS3"/>
-            <stories value="Export"/>
+            <stories value="Export Tax"/>
             <title value="S3 - Export Tax Rates"/>
             <description value="Sets S3 for file system. Exports tax rates from the System > Data Transfer > Import/Export Tax Rates page and
             validates contents in downloaded file. Note that MFTF cannot simply click export and have access to the file
