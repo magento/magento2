@@ -40,7 +40,7 @@ define([
          * @return {*|Number}
          */
         countPrecision: function (amount, decimalSymbol) {
-            var decimalValue = amount.split(decimalSymbol);
+            var decimalValue = amount.toString().split(decimalSymbol);
 
             return decimalValue[1].length;
         },
