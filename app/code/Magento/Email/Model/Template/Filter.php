@@ -1086,10 +1086,10 @@ class Filter extends \Magento\Framework\Filter\Template
             if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
                 $value = sprintf(__('Error filtering template: %s'), $e->getMessage());
             } else {
-                $value = __("We're sorry, an error has occurred while generating this content.");
+                $value = (string) __("We're sorry, an error has occurred while generating this content.");
             }
             $this->_logger->critical($e);
         }
-        return (string) $value;
+        return $value;
     }
 }
