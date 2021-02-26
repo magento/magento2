@@ -8,13 +8,17 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminAwsS3ImportTaxRatesTest" extends="AdminImportTaxRatesTest">
+    <test name="AdminAwsS3ExportTaxRatesTest" extends="AdminExportTaxRatesTest">
         <annotations>
             <features value="AwsS3"/>
-            <stories value="Import Tax"/>
-            <title value="S3 - Import and Update Tax Rates"/>
-            <description value="Imports tax rates to create new tax rates and update existing tax rates. Verifies
-            results on tax rates grid page. Sets S3 for file system."/>
+            <stories value="Export"/>
+            <title value="S3 - Export Tax Rates"/>
+            <description value="Sets S3 for file system. Exports tax rates from the System > Data Transfer > Import/Export Tax Rates page and
+            validates contents in downloaded file. Note that MFTF cannot simply click export and have access to the file
+            that is downloaded in the browser due to the test not having access to the server that is running the test
+            browser. Therefore, this test verifies that the Export button can be successfully clicked, grabs the request
+            URL from the Export button's form, executes the request on the magento machine via a curl request, and
+            verifies the contents of the exported file."/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-38949"/>
             <group value="importExport"/>

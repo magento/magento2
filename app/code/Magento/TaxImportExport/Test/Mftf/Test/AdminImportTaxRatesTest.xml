@@ -22,6 +22,10 @@
         </annotations>
 
         <before>
+            <!-- Create/Revert Seed Data -->
+            <createData entity="US_CA_Rate_1" stepKey="revertInitialTaxRateCA"/>
+            <createData entity="US_NY_Rate_1" stepKey="revertInitialTaxRateNY"/>
+
             <!-- Login as Admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
