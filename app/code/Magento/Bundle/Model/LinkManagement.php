@@ -76,7 +76,7 @@ class LinkManagement implements ProductLinkManagementInterface
     /**
      * @var Link
      */
-    protected $linkHelper;
+    private $linkHelper;
 
     /**
      * @param ProductRepositoryInterface $productRepository

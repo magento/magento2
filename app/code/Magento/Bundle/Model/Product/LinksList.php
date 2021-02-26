@@ -32,7 +32,7 @@ class LinksList
     /**
      * @var Link
      */
-    protected $linkHelper;
+    private $linkHelper;
 
     /**
      * @param LinkInterfaceFactory $linkFactory
