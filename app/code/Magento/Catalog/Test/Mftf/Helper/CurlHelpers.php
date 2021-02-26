@@ -21,11 +21,10 @@ class CurlHelpers extends Helper
      * @param string $expectedString
      * @return void
      *
-     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function assertCurlResponseContainsString($url, $expectedString): void
     {
-        $cookie = $this->getCookie();
+        $cookie = $this->getCookie('admin');
         $curlResponse = $this->getCurlResponse($url, $cookie);
         $this->assertStringContainsString($expectedString, $curlResponse);
     }
@@ -37,7 +36,6 @@ class CurlHelpers extends Helper
      * @param string $cookie
      * @return string
      *
-     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function getCurlResponse($url, $cookie): string
     {
@@ -47,7 +45,6 @@ class CurlHelpers extends Helper
 
             // Set Options
             curl_setopt($session, CURLOPT_COOKIE, $cookie);
-//            curl_setopt($session, CURLOPT_POST, true);
             curl_setopt($session, CURLOPT_HEADER, false);
             curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($session, CURLOPT_FOLLOWLOCATION, true);
@@ -65,9 +62,9 @@ class CurlHelpers extends Helper
     /**
      * Gets the value of the specified cookie and returns the key value pair of the cookie
      *
+     * @param string $cookieName
      * @return string
      *
-     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function getCookie($cookieName = 'admin'): string
     {
