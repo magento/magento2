@@ -411,7 +411,7 @@ class Config extends \Magento\Eav\Model\Config
      * @param string $value
      * @return null|mixed
      */
-    public function getSourceOptionId($source, string $value)
+    public function getSourceOptionId($source, $value)
     {
         foreach ($source->getAllOptions() as $option) {
             if (strcasecmp($option['label'], $value) == 0 || $option['value'] == $value) {
