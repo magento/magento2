@@ -14,7 +14,11 @@
             <stories value="Export"/>
             <title value="Export Tax Rates"/>
             <description value="Exports tax rates from the System > Data Transfer > Import/Export Tax Rates page and
-            validates contents in downloaded file."/>
+            validates contents in downloaded file. Note that MFTF cannot simply click export and have access to the file
+            that is downloaded in the browser due to the test not having access to the server that is running the test
+            browser. Therefore, this test clicks the Export button, grabs the request URI from the browser, and executes
+            the same request on the magento machine via a curl request to download the same file there so that the test
+            has access to the exported file."/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-38949"/>
             <group value="importExport"/>
@@ -31,13 +35,7 @@
         </before>
 
         <after>
-            <!-- Delete Data & Logout -->
-<!--            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteFileIfExists" stepKey="deleteExportFile">-->
-<!--                <argument name="filePath">/var/tmp/tax_rates.csv</argument>-->
-<!--            </helper>-->
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteFileIfExists" stepKey="deleteExportFile">
-                <argument name="filePath">/home/centos/Downloads/tax_rates.csv</argument>
-            </helper>
+            <!-- Logout -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
@@ -45,36 +43,15 @@
         <actionGroup ref="AdminNavigateImportExportTaxRatesActionGroup" stepKey="navigateToImportExportTaxRatesPage"/>
         <actionGroup ref="AdminExportTaxRatesActionGroup" stepKey="exportTaxRates"/>
         <executeJS function="return window.performance.getEntriesByName('mousedown')[0].target.baseURI" stepKey="exportURI"/>
-
-        <comment userInput="{$exportURI}" stepKey="commentTest"/>
-<!--        <assertEquals stepKey="test">-->
-<!--            <actualResult type="variable">exportURI</actualResult>-->
-<!--            <expectedResult type="string">http://git24develop3.test/admin/tax/rate/importExport/</expectedResult>-->
-<!--        </assertEquals>-->
-
-        <!-- todo: curl command to go to URI to download file -->
-
-        <assertFileExists stepKey="assertExportFileExists">
-            <actualResult type="string">/home/centos/Downloads/tax_rates.csv</actualResult>
-        </assertFileExists>
-        <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportedFileContainsCATaxRate">
-            <argument name="filePath">/home/centos/Downloads/tax_rates.csv</argument>
-            <argument name="text">{{US_CA_Rate_1.code}}</argument>
+        <comment userInput="{$exportURI}" stepKey="commentExportURI"/>
+        <executeJS function="return window.location.origin" stepKey="baseUrl"/>
+        <helper class="\Magento\TaxImportExport\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsCATaxRate">
+            <argument name="uri">{$baseUrl}/admin/tax/rate/exportPost/</argument>
+            <argument name="expectedString">{{US_CA_Rate_1.code}}</argument>
         </helper>
-        <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportedFileContainsNYTaxRate">
-            <argument name="filePath">/home/centos/Downloads/tax_rates.csv</argument>
-            <argument name="text">{{US_NY_Rate_1.code}}</argument>
+        <helper class="\Magento\TaxImportExport\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsNYTaxRate">
+            <argument name="uri">{$baseUrl}/admin/tax/rate/exportPost/</argument>
+            <argument name="expectedString">{{US_NY_Rate_1.code}}</argument>
         </helper>
-<!--        <assertFileExists stepKey="assertExportFileExists">-->
-<!--            <actualResult type="string">/var/tmp/tax_rates.csv</actualResult>-->
-<!--        </assertFileExists>-->
-<!--        <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportedFileContainsCATaxRate">-->
-<!--            <argument name="filePath">/var/tmp/tax_rates.csv</argument>-->
-<!--            <argument name="text">{{US_CA_Rate_1.code}}</argument>-->
-<!--        </helper>-->
-<!--        <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportedFileContainsNYTaxRate">-->
-<!--            <argument name="filePath">/var/tmp/tax_rates.csv</argument>-->
-<!--            <argument name="text">{{US_NY_Rate_1.code}}</argument>-->
-<!--        </helper>-->
     </test>
 </tests>
