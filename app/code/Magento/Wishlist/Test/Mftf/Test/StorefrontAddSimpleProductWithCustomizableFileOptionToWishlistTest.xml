@@ -10,7 +10,8 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontAddSimpleProductWithCustomizableFileOptionToWishlistTest">
         <annotations>
-            <stories value="Wishlist"/>
+            <features value="Wishlist"/>
+            <stories value="Add product to wishlist"/>
             <title value="Add simple product with customizable file option to wishlist"/>
             <description value="Add simple Product with customizable file option to Wishlist and verify customizable options are preserved"/>
             <severity value="CRITICAL"/>
