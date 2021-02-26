@@ -9,6 +9,7 @@ namespace Magento\WishlistGraphQl\Model\Resolver;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -83,7 +84,7 @@ class UpdateProductsInWishlist implements ResolverInterface
         array $args = null
     ) {
         if (!$this->wishlistConfig->isEnabled()) {
-            throw new GraphQlAuthorizationException(__('The wishlist configuration is currently disabled'));
+            throw new GraphQlInputException(__('The wishlist configuration is currently disabled'));
         }
 
         $customerId = $context->getUserId();
@@ -95,7 +96,7 @@ class UpdateProductsInWishlist implements ResolverInterface
         $wishlist = $this->getWishlist((int) $args['wishlistId'], $customerId);
 
         if (null === $wishlist->getId() || $customerId !== (int) $wishlist->getCustomerId()) {
-            throw new GraphQlNoSuchEntityException(__('Could not find the specified wishlist'));
+            throw new GraphQlInputException(__('Could not find the specified wishlist'));
         }
 
         $wishlistItems  = $this->getWishlistItems($args['wishlistItems'], $wishlist);
