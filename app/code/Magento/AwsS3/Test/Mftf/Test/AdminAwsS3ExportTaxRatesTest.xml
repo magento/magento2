@@ -20,7 +20,7 @@
             URL from the Export button's form, executes the request on the magento machine via a curl request, and
             verifies the contents of the exported file."/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-38949"/>
+            <testCaseId value="MC-38621"/>
             <group value="importExport"/>
             <group value="tax"/>
         </annotations>

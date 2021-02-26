@@ -16,7 +16,7 @@
             <description value="Imports tax rates to create new tax rates and update existing tax rates. Verifies
             results on tax rates grid page."/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-38949"/>
+            <testCaseId value="MC-38621"/>
             <group value="importExport"/>
             <group value="tax"/>
         </annotations>
