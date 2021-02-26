@@ -40,12 +40,12 @@
             <deleteData createDataKey="createFirtsSimpleProduct" stepKey="deleteProductOne"/>
 
             <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToAdminCatalogProductPage"/>
-            <actionGroup ref="FilterProductGridByName2ActionGroup" stepKey="filterBundleProductOptionsDownToName">
+            <actionGroup ref="FilterProductGridByName2ActionGroup" stepKey="filterProductsGrid">
                 <argument name="name" value="productWithSku24MB0"/>
             </actionGroup>
             <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteAllProducts"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdminPanel"/>
         </after>
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductSku">
