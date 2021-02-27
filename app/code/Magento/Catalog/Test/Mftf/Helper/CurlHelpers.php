@@ -19,14 +19,14 @@ class CurlHelpers extends Helper
      *
      * @param string $url
      * @param string $expectedString
-     * @param string $formKey
+     * @param string $postBody
      * @return void
      *
      */
-    public function assertCurlResponseContainsString($url, $expectedString, $formKey = null): void
+    public function assertCurlResponseContainsString($url, $expectedString, $postBody = null): void
     {
         $cookie = $this->getCookie('admin');
-        $curlResponse = $this->getCurlResponse($url, $cookie, $formKey);
+        $curlResponse = $this->getCurlResponse($url, $cookie, $postBody);
         $this->assertStringContainsString($expectedString, $curlResponse);
     }
 
@@ -35,20 +35,18 @@ class CurlHelpers extends Helper
      *
      * @param string $url
      * @param string $cookie
-     * @param string $formKey
+     * @param string $postBody
      * @return string
      *
      */
-    public function getCurlResponse($url, $cookie = null, $formKey = null): string
+    private function getCurlResponse($url, $cookie = null, $postBody = null): string
     {
         // Start Session
         $session = curl_init($url);
 
         // Set Options
-        if ($formKey) {
-            $data = [
-                'form_key' => $formKey
-            ];
+        if ($postBody) {
+            $data = json_decode($postBody);
             curl_setopt($session, CURLOPT_POST, true);
             curl_setopt($session, CURLOPT_POSTFIELDS, $data);
         }
@@ -69,7 +67,7 @@ class CurlHelpers extends Helper
      * @return string
      *
      */
-    public function getCookie($cookieName = 'admin'): string
+    private function getCookie($cookieName = 'admin'): string
     {
         try {
             $webDriver = $this->getModule('\Magento\FunctionalTestingFramework\Module\MagentoWebDriver');

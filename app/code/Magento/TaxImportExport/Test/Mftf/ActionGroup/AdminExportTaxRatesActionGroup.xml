@@ -14,6 +14,6 @@
         </annotations>
         <waitForElementVisible selector="{{AdminImportExportTaxRatesSection.exportTaxRatesButton}}" stepKey="waitForExportTaxRates"/>
         <click selector="{{AdminImportExportTaxRatesSection.exportTaxRatesButton}}" stepKey="clickExportTaxRates"/>
-        <waitForPageLoad stepKey="waitForImport"/>
+        <waitForPageLoad stepKey="waitForExport"/>
     </actionGroup>
 </actionGroups>
