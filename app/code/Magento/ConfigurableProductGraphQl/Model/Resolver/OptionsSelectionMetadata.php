@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\ConfigurableProductGraphQl\Model\Resolver;
 
@@ -19,7 +20,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 /**
  * Resolver for options selection
  */
-class OptionsSelection implements ResolverInterface
+class OptionsSelectionMetadata implements ResolverInterface
 {
     /**
      * @var Metadata
