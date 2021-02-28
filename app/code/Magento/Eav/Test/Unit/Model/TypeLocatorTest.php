@@ -69,7 +69,7 @@ class TypeLocatorTest extends TestCase
         $serviceClass,
         $serviceEntityTypeMapData,
         $expected
-    ) {
+    ): void {
         $this->complexType->expects($this->once())->method('getType')->willReturn($expected);
         $type = $this->customAttributeTypeLocator->getType(
             $attributeCode,
@@ -83,7 +83,7 @@ class TypeLocatorTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getTypeDataProvider()
+    public function getTypeDataProvider(): array
     {
         $serviceInterface = ProductInterface::class;
         $eavEntityType = 'catalog_product';

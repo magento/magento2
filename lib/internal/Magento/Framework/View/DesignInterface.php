@@ -32,15 +32,6 @@ interface DesignInterface
     const XML_PATH_THEME_ID = 'design/theme/theme_id';
 
     /**
-     * Set package area
-     *
-     * @param string $area
-     * @return DesignInterface
-     * @TODO MAGETWO-31474: Remove deprecated method setArea
-     */
-    public function setArea($area);
-
-    /**
      * Retrieve package area
      *
      * @return string

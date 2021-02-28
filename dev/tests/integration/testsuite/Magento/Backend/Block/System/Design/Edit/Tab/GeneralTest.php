@@ -3,13 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Block\System\Design\Edit\Tab;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Backend\Block\System\Design\Edit\Tab\General
  * @magentoAppArea adminhtml
  */
-class GeneralTest extends \PHPUnit\Framework\TestCase
+class GeneralTest extends TestCase
 {
     /**
      * @magentoAppIsolation enabled

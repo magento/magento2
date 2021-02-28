@@ -3,17 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Model\View;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\Area;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @magentoComponentsDir Magento/Theme/Model/_files/design
  * @magentoDbIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DesignTest extends \PHPUnit\Framework\TestCase
+class DesignTest extends TestCase
 {
     /**
      * @var \Magento\Framework\View\DesignInterface
@@ -63,7 +67,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
         $this->_model = $objectManager->create(\Magento\Framework\View\DesignInterface::class);
         $this->_viewFileSystem = $objectManager->create(\Magento\Framework\View\FileSystem::class);
         $this->_viewConfig = $objectManager->create(\Magento\Framework\View\ConfigInterface::class);
-        $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
+        $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode(Area::AREA_FRONTEND);
     }
 
     /**
@@ -73,7 +77,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
      */
     protected function _emulateFixtureTheme($themePath = 'Test_FrameworkThemeTest/default')
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('frontend');
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea(Area::AREA_FRONTEND);
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get(\Magento\Framework\View\DesignInterface::class)->setDesignTheme($themePath);
 
@@ -85,8 +89,8 @@ class DesignTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(\Magento\Framework\View\DesignInterface::DEFAULT_AREA, $this->_model->getArea());
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\State::class)
-            ->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);
-        $this->assertEquals(\Magento\Framework\App\Area::AREA_ADMINHTML, $this->_model->getArea());
+            ->setAreaCode(Area::AREA_ADMINHTML);
+        $this->assertEquals(Area::AREA_ADMINHTML, $this->_model->getArea());
     }
 
     public function testSetDesignTheme()

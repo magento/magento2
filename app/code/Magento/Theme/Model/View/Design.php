@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Theme\Model\View;
 
@@ -15,14 +16,14 @@ use Magento\Store\Model\ScopeInterface;
 class Design implements \Magento\Framework\View\DesignInterface
 {
     /**
-     * Package area
+     * Design area
      *
      * @var string
      */
     protected $_area;
 
     /**
-     * Package theme
+     * Model theme
      *
      * @var \Magento\Theme\Model\Theme
      */
@@ -106,7 +107,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     }
 
     /**
-     * Set package area
+     * Set design area
      *
      * @param string $area
      * @return $this
@@ -114,7 +115,6 @@ class Design implements \Magento\Framework\View\DesignInterface
     public function setArea($area)
     {
         $this->_area = $area;
-        $this->_theme = null;
         return $this;
     }
 
@@ -143,7 +143,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     {
         if ($area) {
             $this->setArea($area);
-        } else {
+        } elseif (null == $area) {
             $area = $this->getArea();
         }
 
@@ -232,7 +232,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getThemePath(\Magento\Framework\View\Design\ThemeInterface $theme)
     {
@@ -272,7 +272,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDesignParams()
     {

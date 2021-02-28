@@ -46,16 +46,6 @@ interface ConsumerConfigurationInterface
     public function getQueueName();
 
     /**
-     * Get consumer type sync|async.
-     *
-     * @return string
-     * @deprecated 103.0.0
-     * @see \Magento\Framework\Communication\ConfigInterface::getTopic
-     * @throws \LogicException
-     */
-    public function getType();
-
-    /**
      * Get maximum number of message, which will be read by consumer before termination of the process.
      *
      * @return int|null

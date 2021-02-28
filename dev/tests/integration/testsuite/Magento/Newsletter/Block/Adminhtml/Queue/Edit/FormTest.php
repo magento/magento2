@@ -3,13 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Newsletter\Block\Adminhtml\Queue\Edit;
+
+use PHPUnit\Framework\TestCase;
+use Magento\Backend\App\Area\FrontNameResolver;
+use Magento\Newsletter\Model\Queue;
 
 /**
  * Test class for \Magento\Newsletter\Block\Adminhtml\Queue\Edit\Form
  * @magentoAppArea adminhtml
  */
-class FormTest extends \PHPUnit\Framework\TestCase
+class FormTest extends TestCase
 {
     /**
      * @magentoAppIsolation enabled
@@ -17,7 +23,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
     public function testPrepareForm()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $queue = $objectManager->get(\Magento\Newsletter\Model\Queue::class);
+        $queue = $objectManager->get(Queue::class);
         /** @var \Magento\Framework\Registry $registry */
         $registry = $objectManager->get(\Magento\Framework\Registry::class);
         $registry->register('current_queue', $queue);
@@ -25,12 +31,12 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $objectManager->get(
             \Magento\Framework\View\DesignInterface::class
         )->setArea(
-            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
+            FrontNameResolver::AREA_CODE
         )->setDefaultDesignTheme();
         $objectManager->get(
             \Magento\Framework\Config\ScopeInterface::class
         )->setCurrentScope(
-            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
+            FrontNameResolver::AREA_CODE
         );
         $block = $objectManager->create(
             \Magento\Newsletter\Block\Adminhtml\Queue\Edit\Form::class,
@@ -43,8 +49,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $prepareFormMethod->setAccessible(true);
 
         $statuses = [
-            \Magento\Newsletter\Model\Queue::STATUS_NEVER,
-            \Magento\Newsletter\Model\Queue::STATUS_PAUSE,
+            Queue::STATUS_NEVER,
+            Queue::STATUS_PAUSE,
         ];
         foreach ($statuses as $status) {
             $queue->setQueueStatus($status);

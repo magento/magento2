@@ -3,13 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\EncryptionKey\Block\Adminhtml\Crypt\Key;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\EncryptionKey\Block\Adminhtml\Crypt\Key\Form
  * @magentoAppArea adminhtml
  */
-class FormTest extends \PHPUnit\Framework\TestCase
+class FormTest extends TestCase
 {
     /**
      * @magentoAppIsolation enabled
