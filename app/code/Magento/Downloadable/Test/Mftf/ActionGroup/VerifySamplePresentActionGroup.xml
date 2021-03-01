@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="VerifySamplePresentActionGroup">
+        <annotations>
+            <description>Verify Sample is present on Downloadable Product page.</description>
+        </annotations>
+        <arguments>
+            <argument name="index" type="string" defaultValue="0"/>
+            <argument name="title" type="string" defaultValue=""/>
+        </arguments>
+
+        <waitForElementVisible selector="{{AdminProductDownloadableSection.addSampleTitleInput(index)}}" stepKey="waitForSample"/>
+        <see selector="{{AdminProductDownloadableSection.addSampleTitleInput(index)}}" userInput="{{title}}" stepKey="verifySampleTitle"/>
+    </actionGroup>
+</actionGroups>
