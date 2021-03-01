@@ -135,10 +135,6 @@ class ConfigurableOptionsSelectionTest extends GraphQlAbstract
         self::assertIsString($product['configurable_product_options_selection']['variant']['sku']);
         $urlKey = 'configurable-option-first-option-1-second-option-1';
         self::assertEquals($urlKey, $product['configurable_product_options_selection']['variant']['url_key']);
-        self::assertMatchesRegularExpression(
-            "/{$urlKey}/",
-            $product['configurable_product_options_selection']['variant']['url_path']
-        );
 
         $this->assertMediaGallery($product);
     }
@@ -264,7 +260,6 @@ products(filter:{
             uid
             sku
             url_key
-            url_path
           }
           media_gallery {
             url
