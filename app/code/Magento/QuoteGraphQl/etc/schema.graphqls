@@ -322,11 +322,11 @@ type SetGuestEmailOnCartOutput {
 }
 
 type SimpleCartItem implements CartItemInterface @doc(description: "Simple Cart Item") {
-    customizable_options: [SelectedCustomizableOption] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions")
+    customizable_options: [SelectedCustomizableOption]! @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions")
 }
 
 type VirtualCartItem implements CartItemInterface @doc(description: "Virtual Cart Item") {
-    customizable_options: [SelectedCustomizableOption] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions")
+    customizable_options: [SelectedCustomizableOption]! @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions")
 }
 
 interface CartItemInterface @typeResolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemTypeResolver") {
@@ -354,6 +354,7 @@ type SelectedCustomizableOption {
     id: Int! @deprecated(reason: "Use SelectedCustomizableOption.customizable_option_uid instead")
     customizable_option_uid: ID! @doc(description: "The unique ID for a `CustomizableRadioOption`, `CustomizableDropDownOption`, `CustomizableMultipleOption`, etc. of `CustomizableOptionInterface` objects")
     label: String!
+    type: String!
     is_required: Boolean!
     values: [SelectedCustomizableOptionValue!]!
     sort_order: Int!
