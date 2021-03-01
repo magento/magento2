@@ -144,6 +144,7 @@ function (
         updateAddress: function () {
             var addressData, newBillingAddress;
             addressUpadated = true;
+
             if (this.selectedAddress() && !this.isAddressFormVisible()) {
                 selectBillingAddress(this.selectedAddress());
                 checkoutData.setSelectedBillingAddress(this.selectedAddress().getKey());
@@ -208,6 +209,9 @@ function (
             return quote.billingAddress() || lastSelectedBillingAddress;
         }),
 
+        /**
+         * Check if Billing Address Changes should be canceled
+         */
         needCancelBillingAddressChanges: function () {
             if (addressEdited && !addressUpadated) {
                 this.cancelAddressEdit();

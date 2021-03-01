@@ -53,7 +53,7 @@ define([
          * @param {Object} step
          */
         navigateTo: function (step) {
-            if (step.code == "shipping") {
+            if (step.code === 'shipping') {
                 billingAddress().needCancelBillingAddressChanges();
             }
             stepNavigator.navigateTo(step.code);
