@@ -5,15 +5,22 @@
  */
 namespace Magento\Bundle\Block\Sales\Order\Items;
 
+use Magento\Catalog\Model\Product\OptionFactory;
 use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Sales\Api\OrderItemRepositoryInterface;
+use Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer;
 
 /**
  * Order item render block
  * @api
  * @since 100.0.2
  */
-class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
+class Renderer extends DefaultRenderer
 {
     /**
      * Serializer
@@ -23,21 +30,39 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
     private $serializer;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\Stdlib\StringUtils $string
-     * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
+     * @var OrderItemRepositoryInterface
+     */
+    private $orderItemRepository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @param Context $context
+     * @param StringUtils $string
+     * @param OptionFactory $productOptionFactory
      * @param array $data
-     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param Json $serializer
+     * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
+     * @param OrderItemRepositoryInterface $orderItemRepository
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\Stdlib\StringUtils $string,
-        \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
+        Context $context,
+        StringUtils $string,
+        OptionFactory $productOptionFactory,
         array $data = [],
-        Json $serializer = null
+        Json $serializer = null,
+        SearchCriteriaBuilder $searchCriteriaBuilder = null,
+        OrderItemRepositoryInterface $orderItemRepository = null
     ) {
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(Json::class);
+        $this->orderItemRepository = $orderItemRepository ?: ObjectManager::getInstance()
+            ->get(OrderItemRepositoryInterface::class);
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: ObjectManager::getInstance()
+            ->get(SearchCriteriaBuilder::class);
 
         parent::__construct($context, $string, $productOptionFactory, $data);
     }
@@ -215,8 +240,11 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
      * @param int $parentItemId
      * @return array
      */
-    public function getChildrenItems(int $parentItemId): array
+    public function getOrderItemChildren(int $parentItemId): array
     {
-        return $this->getOrder()->getItemById($parentItemId)->getChildrenItems();
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter('parent_item_id', $parentItemId)
+            ->create();
+        return $this->orderItemRepository->getList($searchCriteria)->getItems();
     }
 }

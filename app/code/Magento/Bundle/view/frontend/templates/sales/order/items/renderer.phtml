@@ -6,7 +6,7 @@
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 /** @var $block \Magento\Bundle\Block\Sales\Order\Items\Renderer */
 $parentItem = $block->getItem();
-$childItems = $block->getChildrenItems($parentItem->getId());
+$childItems = $block->getOrderItemChildren($parentItem->getId());
 $items = array_merge([$parentItem], $childItems);
 $index = 0;
 $prevOptionId = '';
@@ -23,7 +23,7 @@ $prevOptionId = '';
         <?php $showLastRow = false; ?>
     <?php endif; ?>
 
-    <?php if ($item->getParentItem()) : ?>
+    <?php if ($item->getParentItemId()) : ?>
         <?php $attributes = $block->getSelectionAttributes($item) ?>
         <?php if ($prevOptionId != $attributes['option_id']) : ?>
             <tr class="options-label">
@@ -33,15 +33,15 @@ $prevOptionId = '';
         <?php endif; ?>
     <?php endif; ?>
 <tr id="order-item-row-<?= /* @noEscape */ $item->getId() ?>"
-    class="<?php if ($item->getParentItem()) : ?>
+    class="<?php if ($item->getParentItemId()) : ?>
         item-options-container
     <?php else : ?>
         item-parent
     <?php endif; ?>"
-    <?php if ($item->getParentItem()) : ?>
+    <?php if ($item->getParentItemId()) : ?>
         data-th="<?= $block->escapeHtmlAttr($attributes['option_label']); ?>"
     <?php endif; ?>>
-    <?php if (!$item->getParentItem()) : ?>
+    <?php if (!$item->getParentItemId()) : ?>
         <td class="col name" data-th="<?= $block->escapeHtmlAttr(__('Product Name')); ?>">
             <strong class="product name product-item-name"><?= $block->escapeHtml($item->getName()); ?></strong>
         </td>
@@ -54,20 +54,20 @@ $prevOptionId = '';
         <?= /* @noEscape */ $block->prepareSku($item->getSku()); ?>
     </td>
     <td class="col price" data-th="<?= $block->escapeHtmlAttr(__('Price')); ?>">
-        <?php if (!$item->getParentItem()) : ?>
+        <?php if (!$item->getParentItemId()) : ?>
             <?= /* @noEscape */ $block->getItemPriceHtml(); ?>
         <?php else : ?>
             &nbsp;
         <?php endif; ?>
     </td>
     <td class="col qty" data-th="<?= $block->escapeHtmlAttr(__('Quantity')); ?>">
-        <?php if (($item->getParentItem() && $block->isChildCalculated()) ||
-        (!$item->getParentItem() && !$block->isChildCalculated()) ||
-        ($item->getQtyShipped() > 0 && $item->getParentItem() && $block->isShipmentSeparately())) : ?>
+        <?php if (($item->getParentItemId() && $block->isChildCalculated()) ||
+        (!$item->getParentItemId() && !$block->isChildCalculated()) ||
+        ($item->getQtyShipped() > 0 && $item->getParentItemId() && $block->isShipmentSeparately())) : ?>
             <ul class="items-qty">
         <?php endif; ?>
-        <?php if (($item->getParentItem() && $block->isChildCalculated()) ||
-            (!$item->getParentItem() && !$block->isChildCalculated())) : ?>
+        <?php if (($item->getParentItemId() && $block->isChildCalculated()) ||
+            (!$item->getParentItemId() && !$block->isChildCalculated())) : ?>
             <?php if ($item->getQtyOrdered() > 0) : ?>
                 <li class="item">
                     <span class="title"><?= $block->escapeHtml(__('Ordered')); ?></span>
@@ -92,7 +92,7 @@ $prevOptionId = '';
                     <span class="content"><?= /* @noEscape */ $item->getQtyRefunded() * 1; ?></span>
                 </li>
             <?php endif; ?>
-        <?php elseif ($item->getQtyShipped() > 0 && $item->getParentItem() && $block->isShipmentSeparately()) : ?>
+        <?php elseif ($item->getQtyShipped() > 0 && $item->getParentItemId() && $block->isShipmentSeparately()) : ?>
             <li class="item">
                 <span class="title"><?= $block->escapeHtml(__('Shipped')); ?></span>
                 <span class="content"><?= /* @noEscape */ $item->getQtyShipped() * 1; ?></span>
@@ -100,14 +100,14 @@ $prevOptionId = '';
         <?php else : ?>
             <span class="content"><?= /* @noEscape */ $parentItem->getQtyOrdered() * 1; ?></span>
         <?php endif; ?>
-        <?php if (($item->getParentItem() && $block->isChildCalculated()) ||
-        (!$item->getParentItem() && !$block->isChildCalculated()) ||
-        ($item->getQtyShipped() > 0 && $item->getParentItem() && $block->isShipmentSeparately())) :?>
+        <?php if (($item->getParentItemId() && $block->isChildCalculated()) ||
+        (!$item->getParentItemId() && !$block->isChildCalculated()) ||
+        ($item->getQtyShipped() > 0 && $item->getParentItemId() && $block->isShipmentSeparately())) :?>
             </ul>
         <?php endif; ?>
     </td>
     <td class="col subtotal" data-th="<?= $block->escapeHtmlAttr(__('Subtotal')) ?>">
-        <?php if (!$item->getParentItem()) : ?>
+        <?php if (!$item->getParentItemId()) : ?>
             <?= /* @noEscape */ $block->getItemRowTotalHtml(); ?>
         <?php else : ?>
             &nbsp;
