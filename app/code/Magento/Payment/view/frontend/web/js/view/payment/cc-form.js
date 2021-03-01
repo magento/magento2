@@ -200,7 +200,6 @@ define([
             return this.getCvvImageHtml();
         },
 
-
         /**
          * @deprecated
          * @returns {Object}
