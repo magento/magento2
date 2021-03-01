@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryRenditions\Plugin;
 
 use Magento\Framework\App\Config\Value;
+use Magento\MediaGalleryRenditions\Model\Config;
 use Magento\MediaGalleryRenditions\Model\Queue\ScheduleRenditionsUpdate;
 
 /**
@@ -15,6 +16,7 @@ use Magento\MediaGalleryRenditions\Model\Queue\ScheduleRenditionsUpdate;
  */
 class UpdateRenditionsOnConfigChange
 {
+    private const XML_PATH_MEDIA_GALLERY_RENDITIONS_ENABLE_PATH = 'system/media_gallery_renditions/enabled';
     private const XML_PATH_MEDIA_GALLERY_RENDITIONS_WIDTH_PATH = 'system/media_gallery_renditions/width';
     private const XML_PATH_MEDIA_GALLERY_RENDITIONS_HEIGHT_PATH = 'system/media_gallery_renditions/height';
 
@@ -24,10 +26,17 @@ class UpdateRenditionsOnConfigChange
     private $scheduleRenditionsUpdate;
 
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
+     * @param Config $config
      * @param ScheduleRenditionsUpdate $scheduleRenditionsUpdate
      */
-    public function __construct(ScheduleRenditionsUpdate $scheduleRenditionsUpdate)
+    public function __construct(Config $config, ScheduleRenditionsUpdate $scheduleRenditionsUpdate)
     {
+        $this->config = $config;
         $this->scheduleRenditionsUpdate = $scheduleRenditionsUpdate;
     }
 
@@ -41,7 +50,13 @@ class UpdateRenditionsOnConfigChange
      */
     public function afterSave(Value $config, Value $result): Value
     {
-        if ($this->isRenditionsValue($result) && $result->isValueChanged()) {
+        if ($this->isRenditionsEnabled($result)) {
+            $this->scheduleRenditionsUpdate->execute();
+
+            return $result;
+        }
+
+        if ($this->config->isEnabled() && $this->isRenditionsValue($result) && $result->isValueChanged()) {
             $this->scheduleRenditionsUpdate->execute();
         }
 
@@ -58,5 +73,18 @@ class UpdateRenditionsOnConfigChange
     {
         return $value->getPath() === self::XML_PATH_MEDIA_GALLERY_RENDITIONS_WIDTH_PATH
             || $value->getPath() === self::XML_PATH_MEDIA_GALLERY_RENDITIONS_HEIGHT_PATH;
+    }
+
+    /**
+     * Determine if media gallery renditions is enabled based on configuration value
+     *
+     * @param Value $value
+     * @return bool
+     */
+    private function isRenditionsEnabled(Value $value): bool
+    {
+        return $value->getPath() === self::XML_PATH_MEDIA_GALLERY_RENDITIONS_ENABLE_PATH
+            && $value->isValueChanged()
+            && $value->getValue();
     }
 }

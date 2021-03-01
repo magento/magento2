@@ -6,9 +6,11 @@
 namespace Magento\Cms\Helper\Wysiwyg;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\ValidatorException;
 
 /**
  * Wysiwyg Images Helper.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Images extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -65,6 +67,11 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
     protected $escaper;
 
     /**
+     * @var \Magento\Framework\Filesystem\Directory\Read
+     */
+    private $_readDirectory;
+
+    /**
      * Construct
      *
      * @param \Magento\Framework\App\Helper\Context $context
@@ -87,6 +94,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
 
         $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->_directory->create($this->getStorageRoot());
+        $this->_readDirectory = $filesystem->getDirectoryReadByPath($this->getStorageRoot());
     }
 
     /**
@@ -158,7 +166,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $id
      * @return string
-     * @throws \InvalidArgumentException When path contains restricted symbols.
+     * @throws \InvalidArgumentException
      */
     public function convertIdToPath($id)
     {
@@ -166,7 +174,10 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
             return $this->getStorageRoot();
         } else {
             $path = $this->getStorageRoot() . $this->idDecode($id);
-            if (preg_match('/\.\.(\\\|\/)/', $path)) {
+
+            try {
+                $this->_readDirectory->getAbsolutePath($path);
+            } catch (\Exception $e) {
                 throw new \InvalidArgumentException('Path is invalid');
             }
 

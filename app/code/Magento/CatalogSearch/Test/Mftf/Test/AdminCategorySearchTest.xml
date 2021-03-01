@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCategorySearchTest">
+        <annotations>
+            <features value="Search Category"/>
+            <stories value="Search categories in admin panel"/>
+            <title value="Search for categories"/>
+            <description value="Global search in backend can search into Categories."/>
+            <severity value="MINOR"/>
+            <group value="Search"/>
+            <testCaseId value="MC-37809"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Create Simple Category -->
+            <createData entity="SimpleSubCategory" stepKey="createSimpleCategory"/>
+        </before>
+        <after>
+            <!-- Delete created category -->
+            <deleteData createDataKey="createSimpleCategory" stepKey="deleteCreatedCategory"/>
+
+            <!-- Log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Add created category name in the search field-->
+        <actionGroup ref="AdminSetGlobalSearchValueActionGroup" stepKey="setSearch">
+            <argument name="textSearch" value="$$createSimpleCategory.name$$"/>
+        </actionGroup>
+
+        <!-- Wait for suggested results-->
+        <waitForElementVisible selector="{{AdminGlobalSearchSection.globalSearchSuggestedCategoryText}}" stepKey="waitForSuggestions"/>
+
+        <!-- Click on suggested result in category URL-->
+        <click selector="{{AdminGlobalSearchSection.globalSearchSuggestedCategoryLink}}" stepKey="openCategory"/>
+
+        <!-- Wait for suggested results-->
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+
+        <!-- Loaded page should be edit page of created category -->
+        <seeInField  selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="$$createSimpleCategory.name$$" stepKey="checkCategoryName"/>
+    </test>
+</tests>

@@ -5,16 +5,23 @@
  */
 namespace Magento\Sales\Model\Order\Validation;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Api\Data\ShipmentCommentCreationInterface;
+use Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface;
 use Magento\Sales\Api\Data\ShipmentInterface;
+use Magento\Sales\Api\Data\ShipmentItemCreationInterface;
+use Magento\Sales\Model\Order\Shipment\ShipmentItemsValidatorInterface;
 use Magento\Sales\Model\Order\Shipment\Validation\QuantityValidator;
 use Magento\Sales\Model\Order\OrderValidatorInterface;
 use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
 use Magento\Sales\Model\Order\Shipment\Validation\TrackValidator;
+use Magento\Sales\Model\ValidatorResultInterface;
 use Magento\Sales\Model\ValidatorResultMerger;
 
 /**
- * Class ShipOrder
+ * Ship order validation class
  */
 class ShipOrder implements ShipOrderInterface
 {
@@ -34,33 +41,42 @@ class ShipOrder implements ShipOrderInterface
     private $validatorResultMerger;
 
     /**
-     * ShipOrder constructor.
-     *
+     * @var ShipmentItemsValidatorInterface
+     */
+    private $itemsValidator;
+
+    /**
      * @param OrderValidatorInterface $orderValidator
      * @param ShipmentValidatorInterface $shipmentValidator
      * @param ValidatorResultMerger $validatorResultMerger
+     * @param ShipmentItemsValidatorInterface|null $itemsValidator
      */
     public function __construct(
         OrderValidatorInterface $orderValidator,
         ShipmentValidatorInterface $shipmentValidator,
-        ValidatorResultMerger $validatorResultMerger
+        ValidatorResultMerger $validatorResultMerger,
+        ShipmentItemsValidatorInterface $itemsValidator = null
     ) {
         $this->orderValidator = $orderValidator;
         $this->shipmentValidator = $shipmentValidator;
         $this->validatorResultMerger = $validatorResultMerger;
+        $this->itemsValidator = $itemsValidator
+            ?? ObjectManager::getInstance()->get(ShipmentItemsValidatorInterface::class);
     }
 
     /**
+     * Order shipment validate
+     *
      * @param OrderInterface $order
      * @param ShipmentInterface $shipment
      * @param array $items
      * @param bool $notify
      * @param bool $appendComment
-     * @param \Magento\Sales\Api\Data\ShipmentCommentCreationInterface|null $comment
+     * @param ShipmentCommentCreationInterface|null $comment
      * @param array $tracks
      * @param array $packages
-     * @param \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface|null $arguments
-     * @return \Magento\Sales\Model\ValidatorResultInterface
+     * @param ShipmentCreationArgumentsInterface|null $arguments
+     * @return ValidatorResultInterface
      */
     public function validate(
         $order,
@@ -68,10 +84,10 @@ class ShipOrder implements ShipOrderInterface
         array $items = [],
         $notify = false,
         $appendComment = false,
-        \Magento\Sales\Api\Data\ShipmentCommentCreationInterface $comment = null,
+        ShipmentCommentCreationInterface $comment = null,
         array $tracks = [],
         array $packages = [],
-        \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface $arguments = null
+        ShipmentCreationArgumentsInterface $arguments = null
     ) {
         $orderValidationResult = $this->orderValidator->validate(
             $order,
@@ -87,6 +103,39 @@ class ShipOrder implements ShipOrderInterface
             ]
         );
 
-        return $this->validatorResultMerger->merge($orderValidationResult, $shipmentValidationResult);
+        $orderItems = $this->getRequestedOrderItems($items, $order);
+        $itemsValidationResult = $this->itemsValidator->validate($orderItems);
+
+        return $this->validatorResultMerger->merge(
+            $orderValidationResult,
+            $shipmentValidationResult,
+            $itemsValidationResult->getMessages()
+        );
+    }
+
+    /**
+     * Return requested order items
+     *
+     * @param OrderItemInterface[] $items
+     * @param OrderInterface $order
+     * @return OrderItemInterface[]
+     */
+    private function getRequestedOrderItems(array $items, OrderInterface $order): array
+    {
+        $requestedItemIds = array_reduce(
+            $items,
+            function (array $result, ShipmentItemCreationInterface $item): array {
+                $result[] = $item->getOrderItemId();
+                return $result;
+            },
+            []
+        );
+
+        return array_filter(
+            $order->getAllItems(),
+            function (OrderItemInterface $orderItem) use ($requestedItemIds): bool {
+                return in_array($orderItem->getId(), $requestedItemIds);
+            }
+        );
     }
 }
