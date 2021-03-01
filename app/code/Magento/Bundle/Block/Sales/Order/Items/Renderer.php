@@ -212,11 +212,11 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
     /**
      * Get children items
      *
-     * @param $parentItem
+     * @param int $parentItemId
      * @return array
      */
-    public function getChildrenItems($parentItem): array
+    public function getChildrenItems(int $parentItemId): array
     {
-        return $this->getOrder()->getItemById($parentItem->getId())->getChildrenItems();
+        return $this->getOrder()->getItemById($parentItemId)->getChildrenItems();
     }
 }
