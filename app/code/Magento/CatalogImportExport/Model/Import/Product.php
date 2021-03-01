@@ -1855,7 +1855,7 @@ class Product extends AbstractEntity
                 }
 
                 $productTypeModel = $this->_productTypeModels[$productType];
-                if (!empty($rowData['tax_class_name'])) {
+                if (isset($rowData['tax_class_name']) && strlen($rowData['tax_class_name'])) {
                     $rowData['tax_class_id'] =
                         $this->taxClassProcessor->upsertTaxClass($rowData['tax_class_name'], $productTypeModel);
                 }

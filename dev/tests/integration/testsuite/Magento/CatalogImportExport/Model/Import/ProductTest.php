@@ -3526,4 +3526,42 @@ class ProductTest extends TestCase
             $errors->getErrorByRowNumber(0)[0]->getErrorMessage()
         );
     }
+
+    /**
+     * Test that product tax classes "none", "0" are imported correctly
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
+     * @magentoAppIsolation enabled
+     */
+    public function testImportProductWithTaxClassNone(): void
+    {
+        $pathToFile = __DIR__ . '/_files/product_tax_class_none_import.csv';
+        $importModel = $this->createImportModel($pathToFile);
+        $this->assertErrorsCount(0, $importModel->validateData());
+        $importModel->importData();
+        $simpleProduct = $this->getProductBySku('simple');
+        $this->assertSame('0', (string) $simpleProduct->getTaxClassId());
+        $simpleProduct = $this->getProductBySku('simple2');
+        $this->assertSame('0', (string) $simpleProduct->getTaxClassId());
+    }
+
+    /**
+     * @param int $count
+     * @param ProcessingErrorAggregatorInterface $errors
+     */
+    private function assertErrorsCount(int $count, ProcessingErrorAggregatorInterface $errors): void
+    {
+        $this->assertEquals(
+            $count,
+            $errors->getErrorsCount(),
+            array_reduce(
+                $errors->getAllErrors(),
+                function ($output, $error) {
+                    return "$output\n{$error->getErrorMessage()}";
+                },
+                ''
+            )
+        );
+    }
 }
