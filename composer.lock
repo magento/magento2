@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "78b8ae803eb67f0e4db57a81d3a80f79",
+    "content-hash": "5e36f67e452de5d4819d93701d6930dc",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -1258,6 +1258,7 @@
                 "console",
                 "laminas"
             ],
+            "abandoned": "laminas/laminas-cli",
             "time": "2019-12-31T16:31:45+00:00"
         },
         {
@@ -1316,36 +1317,37 @@
         },
         {
             "name": "laminas/laminas-db",
-            "version": "2.11.4",
+            "version": "2.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-db.git",
-                "reference": "5b59413b8dd5d79e3fe58c2650c60b1730989f36"
+                "reference": "80cbba4e749f9eb7d8036172acb9ad41e8b6923f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-db/zipball/5b59413b8dd5d79e3fe58c2650c60b1730989f36",
-                "reference": "5b59413b8dd5d79e3fe58c2650c60b1730989f36",
+                "url": "https://api.github.com/repos/laminas/laminas-db/zipball/80cbba4e749f9eb7d8036172acb9ad41e8b6923f",
+                "reference": "80cbba4e749f9eb7d8036172acb9ad41e8b6923f",
                 "shasum": ""
             },
             "require": {
-                "laminas/laminas-stdlib": "^2.7 || ^3.0",
+                "laminas/laminas-stdlib": "^3.3",
                 "laminas/laminas-zendframework-bridge": "^1.0",
-                "php": "^5.6 || ^7.0"
+                "php": "^7.3 || ~8.0.0"
             },
             "replace": {
                 "zendframework/zend-db": "^2.11.0"
             },
             "require-dev": {
                 "laminas/laminas-coding-standard": "~1.0.0",
-                "laminas/laminas-eventmanager": "^2.6.2 || ^3.0",
-                "laminas/laminas-hydrator": "^1.1 || ^2.1 || ^3.0",
-                "laminas/laminas-servicemanager": "^2.7.5 || ^3.0.3",
-                "phpunit/phpunit": "^5.7.27 || ^6.5.14"
+                "laminas/laminas-eventmanager": "^3.3",
+                "laminas/laminas-hydrator": "^3.2 || ^4.0",
+                "laminas/laminas-servicemanager": "^3.3",
+                "phpspec/prophecy-phpunit": "^2.0",
+                "phpunit/phpunit": "^9.3"
             },
             "suggest": {
                 "laminas/laminas-eventmanager": "Laminas\\EventManager component",
-                "laminas/laminas-hydrator": "Laminas\\Hydrator component for using HydratingResultSets",
+                "laminas/laminas-hydrator": "(^3.2 || ^4.0) Laminas\\Hydrator component for using HydratingResultSets",
                 "laminas/laminas-servicemanager": "Laminas\\ServiceManager component"
             },
             "type": "library",
@@ -1376,7 +1378,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-02-20T18:52:15+00:00"
+            "time": "2021-02-22T22:27:56+00:00"
         },
         {
             "name": "laminas/laminas-dependency-plugin",
@@ -3376,24 +3378,26 @@
         },
         {
             "name": "laminas/laminas-zendframework-bridge",
-            "version": "1.1.1",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-zendframework-bridge.git",
-                "reference": "6ede70583e101030bcace4dcddd648f760ddf642"
+                "reference": "6cccbddfcfc742eb02158d6137ca5687d92cee32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-zendframework-bridge/zipball/6ede70583e101030bcace4dcddd648f760ddf642",
-                "reference": "6ede70583e101030bcace4dcddd648f760ddf642",
+                "url": "https://api.github.com/repos/laminas/laminas-zendframework-bridge/zipball/6cccbddfcfc742eb02158d6137ca5687d92cee32",
+                "reference": "6cccbddfcfc742eb02158d6137ca5687d92cee32",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.6 || ^7.0 || ^8.0"
+                "php": "^7.3 || ^8.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5 || ^8.1 || ^9.3",
-                "squizlabs/php_codesniffer": "^3.5"
+                "psalm/plugin-phpunit": "^0.15.1",
+                "squizlabs/php_codesniffer": "^3.5",
+                "vimeo/psalm": "^4.6"
             },
             "type": "library",
             "extra": {
@@ -3426,7 +3430,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2020-09-14T14:23:00+00:00"
+            "time": "2021-02-25T21:54:58+00:00"
         },
         {
             "name": "magento/composer",
@@ -6096,16 +6100,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.173.14",
+            "version": "3.173.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "ff2b3623adc6781da48ee017e7042a363cd65955"
+                "reference": "63c6feca49bf4083f33bf250401c0c286759e101"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/ff2b3623adc6781da48ee017e7042a363cd65955",
-                "reference": "ff2b3623adc6781da48ee017e7042a363cd65955",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/63c6feca49bf4083f33bf250401c0c286759e101",
+                "reference": "63c6feca49bf4083f33bf250401c0c286759e101",
                 "shasum": ""
             },
             "require": {
@@ -6177,7 +6181,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2021-02-22T19:22:33+00:00"
+            "time": "2021-03-01T19:15:59+00:00"
         },
         {
             "name": "behat/gherkin",
@@ -6334,16 +6338,16 @@
         },
         {
             "name": "codeception/codeception",
-            "version": "4.1.17",
+            "version": "4.1.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "c153b1ab289b3e3109e685379aa8847c54ac2b68"
+                "reference": "f47547bac347dfb5ea5351ff91148cbcc08e6818"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/c153b1ab289b3e3109e685379aa8847c54ac2b68",
-                "reference": "c153b1ab289b3e3109e685379aa8847c54ac2b68",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/f47547bac347dfb5ea5351ff91148cbcc08e6818",
+                "reference": "f47547bac347dfb5ea5351ff91148cbcc08e6818",
                 "shasum": ""
             },
             "require": {
@@ -6421,7 +6425,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2021-02-01T07:30:47+00:00"
+            "time": "2021-02-23T17:11:42+00:00"
         },
         {
             "name": "codeception/lib-asserts",
@@ -7833,16 +7837,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "dev-MQE-2488-php73",
+            "version": "2.7.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:magento-commerce/magento2-functional-testing-framework.git",
-                "reference": "e28b50119845f939ee527d24057fc5fedac7feba"
+                "url": "https://github.com/magento/magento2-functional-testing-framework.git",
+                "reference": "690619fee29238cc87dca7a81413ce2fa7ecd161"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento-commerce/magento2-functional-testing-framework/zipball/e28b50119845f939ee527d24057fc5fedac7feba",
-                "reference": "e28b50119845f939ee527d24057fc5fedac7feba",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/690619fee29238cc87dca7a81413ce2fa7ecd161",
+                "reference": "690619fee29238cc87dca7a81413ce2fa7ecd161",
                 "shasum": ""
             },
             "require": {
@@ -7852,7 +7856,7 @@
                 "codeception/module-asserts": "^1.1",
                 "codeception/module-sequence": "^1.0",
                 "codeception/module-webdriver": "^1.0",
-                "composer/composer": "^1.6",
+                "composer/composer": "^1.9||^2.0",
                 "csharpru/vault-php": "~3.5.3",
                 "csharpru/vault-php-guzzle6-transport": "^2.0",
                 "ext-curl": "*",
@@ -7910,19 +7914,7 @@
                     "MFTF\\": "dev/tests/functional/tests/MFTF"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "tests\\unit\\": "dev/tests/unit"
-                }
-            },
-            "scripts": {
-                "tests": [
-                    "bin/phpunit-checks"
-                ],
-                "static": [
-                    "bin/static-checks"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "AGPL-3.0"
             ],
@@ -7933,11 +7925,7 @@
                 "magento",
                 "testing"
             ],
-            "support": {
-                "source": "https://github.com/magento-commerce/magento2-functional-testing-framework/tree/MQE-2488-php73",
-                "issues": "https://github.com/magento-commerce/magento2-functional-testing-framework/issues"
-            },
-            "time": "2021-02-14T00:47:28+00:00"
+            "time": "2021-02-24T20:38:08+00:00"
         },
         {
             "name": "mikey179/vfsstream",
@@ -11231,7 +11219,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "magento/magento2-functional-testing-framework": 20,
         "phpmd/phpmd": 0
     },
     "prefer-stable": true,
