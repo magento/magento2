@@ -54,7 +54,7 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
     private $redirect;
 
     /**
-     * @var mixed UrlInterface
+     * @var UrlInterface
      */
     private $urlBuilder;
 
