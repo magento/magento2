@@ -16,7 +16,7 @@ use Magento\ConfigurableProductGraphQl\Model\Formatter\Option;
 /**
  * Retrieve metadata for configurable option selection.
  */
-class ConfigurableOptionsMetadata
+class Metadata
 {
     /**
      * @var Data

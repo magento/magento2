@@ -9,6 +9,7 @@ namespace Magento\ConfigurableProductGraphQl\Model\Resolver;
 
 use Magento\ConfigurableProduct\Helper\Data;
 use Magento\ConfigurableProductGraphQl\Model\Formatter\Variant as VariantFormatter;
+use Magento\ConfigurableProductGraphQl\Model\Options\ConfigurableOptionsMetadata;
 use Magento\ConfigurableProductGraphQl\Model\Options\DataProvider\Variant;
 use Magento\ConfigurableProductGraphQl\Model\Options\Metadata;
 use Magento\ConfigurableProductGraphQl\Model\Options\SelectionUidFormatter;
@@ -26,6 +27,11 @@ class OptionsSelectionMetadata implements ResolverInterface
      * @var Metadata
      */
     private $configurableSelectionMetadata;
+
+    /**
+     * @var ConfigurableOptionsMetadata
+     */
+    private $configurableOptionsMetadata;
 
     /**
      * @var SelectionUidFormatter
@@ -49,6 +55,7 @@ class OptionsSelectionMetadata implements ResolverInterface
 
     /**
      * @param Metadata $configurableSelectionMetadata
+     * @param ConfigurableOptionsMetadata $configurableOptionsMetadata
      * @param SelectionUidFormatter $selectionUidFormatter
      * @param Variant $variant
      * @param VariantFormatter $variantFormatter
@@ -56,12 +63,14 @@ class OptionsSelectionMetadata implements ResolverInterface
      */
     public function __construct(
         Metadata $configurableSelectionMetadata,
+        ConfigurableOptionsMetadata $configurableOptionsMetadata,
         SelectionUidFormatter $selectionUidFormatter,
         Variant $variant,
         VariantFormatter $variantFormatter,
         Data $configurableProductHelper
     ) {
         $this->configurableSelectionMetadata = $configurableSelectionMetadata;
+        $this->configurableOptionsMetadata = $configurableOptionsMetadata;
         $this->selectionUidFormatter = $selectionUidFormatter;
         $this->variant = $variant;
         $this->variantFormatter = $variantFormatter;
@@ -85,14 +94,23 @@ class OptionsSelectionMetadata implements ResolverInterface
         $variants = $this->variant->getSalableVariantsByParent($product);
         $options = $this->configurableProductHelper->getOptions($product, $variants);
 
+        $configurableOptions = $this->configurableOptionsMetadata->getAvailableSelections(
+            $product,
+            $options,
+            $selectedOptions
+        );
+
+        $optionsAvailableForSelection = $this->configurableSelectionMetadata->getAvailableSelections(
+            $product,
+            $args['configurableOptionValueUids'] ?? []
+        );
+
         return [
-            'configurable_options' => $this->configurableSelectionMetadata->getAvailableSelections(
-                $product,
-                $options,
-                $selectedOptions
-            ),
+            'configurable_options' => $configurableOptions,
             'variant' => $this->variantFormatter->format($options, $selectedOptions, $variants),
-            'model' => $product
+            'model' => $product,
+            'options_available_for_selection' => $optionsAvailableForSelection['options_available_for_selection'],
+            'availableSelectionProducts' => $optionsAvailableForSelection['availableSelectionProducts']
         ];
     }
 }
