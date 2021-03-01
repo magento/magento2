@@ -529,6 +529,7 @@ class Multishipping extends \Magento\Framework\DataObject
                 $address = $this->addressRepository->getById($addressId);
             // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
             } catch (\Exception $e) {
+                $this->logger->error($e);
             }
             if (isset($address)) {
                 if (!($quoteAddress = $this->getQuote()->getShippingAddressByCustomerAddressId($address->getId()))) {

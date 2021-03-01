@@ -6,6 +6,7 @@
 
 namespace Magento\GiftMessage\Model;
 
+use Psr\Log\LoggerInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 
 class GiftMessageManager
@@ -16,12 +17,20 @@ class GiftMessageManager
     protected $messageFactory;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param MessageFactory $messageFactory
+     * @param LoggerInterface $logger
      */
     public function __construct(
-        \Magento\GiftMessage\Model\MessageFactory $messageFactory
+        \Magento\GiftMessage\Model\MessageFactory $messageFactory,
+        LoggerInterface $logger
     ) {
         $this->messageFactory = $messageFactory;
+        $this->logger = $logger;
     }
 
     /**
@@ -67,6 +76,7 @@ class GiftMessageManager
                             $giftMessage->delete();
                             $entity->setGiftMessageId(0)->save();
                         } catch (\Exception $e) {
+                            $this->logger->error($e);
                         }
                     }
                     continue;
@@ -85,6 +95,7 @@ class GiftMessageManager
 
                     $entity->setGiftMessageId($giftMessage->getId())->save();
                 } catch (\Exception $e) {
+                    $this->logger->error($e);
                 }
             }
         }

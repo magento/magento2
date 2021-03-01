@@ -18,6 +18,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
 use Magento\Tax\Api\TaxClassRepositoryInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Tax Calculation Model
@@ -189,6 +190,11 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
     protected $taxClassRepository;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -206,6 +212,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FilterBuilder $filterBuilder
      * @param TaxClassRepositoryInterface $taxClassRepository
+     * @param LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -228,6 +235,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
         TaxClassRepositoryInterface $taxClassRepository,
+        LoggerInterface $logger,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -245,6 +253,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
         $this->taxClassRepository = $taxClassRepository;
+        $this->logger = $logger;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -530,11 +539,13 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
                     try {
                         $defaultBilling = $this->customerAccountManagement->getDefaultBillingAddress($customerId);
                     } catch (NoSuchEntityException $e) {
+                        $this->logger->error($e);
                     }
 
                     try {
                         $defaultShipping = $this->customerAccountManagement->getDefaultShippingAddress($customerId);
                     } catch (NoSuchEntityException $e) {
+                        $this->logger->error($e);
                     }
 
                     if ($basedOn == 'billing' && isset($defaultBilling) && $defaultBilling->getCountryId()) {

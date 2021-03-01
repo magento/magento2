@@ -10,6 +10,7 @@ use Magento\Customer\Model\Config\Share as ShareConfig;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class CustomerQuote
@@ -32,18 +33,26 @@ class CustomerQuoteObserver implements ObserverInterface
     protected $quoteRepository;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param StoreManagerInterface $storeManager
      * @param ShareConfig $config
      * @param CartRepositoryInterface $quoteRepository
+     * @param LoggerInterface $logger
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         ShareConfig $config,
-        CartRepositoryInterface $quoteRepository
+        CartRepositoryInterface $quoteRepository,
+        LoggerInterface $logger
     ) {
         $this->storeManager = $storeManager;
         $this->config = $config;
         $this->quoteRepository = $quoteRepository;
+        $this->logger = $logger;
     }
 
     /**
@@ -76,6 +85,7 @@ class CustomerQuoteObserver implements ObserverInterface
                 }
             }
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            $this->logger->error($e);
         }
     }
 }

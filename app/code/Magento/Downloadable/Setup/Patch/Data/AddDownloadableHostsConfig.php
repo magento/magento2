@@ -19,6 +19,7 @@ use Magento\Framework\Url\ScopeResolverInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
+use Psr\Log\LoggerInterface;
 
 /**
  * Adding base url as allowed downloadable domain.
@@ -57,6 +58,11 @@ class AddDownloadableHostsConfig implements DataPatchInterface
     private $whitelist = [];
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * AddDownloadableHostsConfig constructor.
      *
      * @param UriHandler $uriHandler
@@ -64,19 +70,22 @@ class AddDownloadableHostsConfig implements DataPatchInterface
      * @param ScopeConfigInterface $scopeConfig
      * @param DomainManager $domainManager
      * @param ModuleDataSetupInterface $moduleDataSetup
+     * @param LoggerInterface $logger
      */
     public function __construct(
         UriHandler $uriHandler,
         ScopeResolverInterface $scopeResolver,
         ScopeConfigInterface $scopeConfig,
         DomainManager $domainManager,
-        ModuleDataSetupInterface $moduleDataSetup
+        ModuleDataSetupInterface $moduleDataSetup,
+        LoggerInterface $logger
     ) {
         $this->uriHandler = $uriHandler;
         $this->scopeResolver = $scopeResolver;
         $this->scopeConfig = $scopeConfig;
         $this->domainManager = $domainManager;
         $this->moduleDataSetup = $moduleDataSetup;
+        $this->logger = $logger;
     }
 
     /**
@@ -165,7 +174,9 @@ class AddDownloadableHostsConfig implements DataPatchInterface
         try {
             $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_STATIC, false));
             $this->addHost($scope->getBaseUrl(UrlInterface::URL_TYPE_STATIC, true));
-        } catch (\UnexpectedValueException $e) {} //@codingStandardsIgnoreLine
+        } catch (\UnexpectedValueException $e) {
+            $this->logger->error($e);
+        }
 
         try {
             $website = $scope->getWebsite();
