@@ -326,24 +326,25 @@ abstract class EntityAbstract
     private function extractParameterType(
         \ReflectionParameter $parameter
     ): ?string {
+        if (!$parameter->hasType()) {
+            return null;
+        }
+
         /** @var string|null $typeName */
         $typeName = null;
-        if ($parameter->hasType()) {
-            if ($parameter->isArray()) {
-                $typeName = 'array';
-            } elseif ($parameterClass = $this->getParameterClass($parameter)) {
-                $typeName = $this->_getFullyQualifiedClassName(
-                    $parameterClass->getName()
-                );
-            } elseif ($parameter->isCallable()) {
-                $typeName = 'callable';
-            } else {
-                $typeName = $parameter->getType()->getName();
-            }
 
-            if ($parameter->allowsNull()) {
-                $typeName = '?' .$typeName;
-            }
+        if ($parameter->isArray()) {
+            $typeName = 'array';
+        } elseif ($parameterClass = $this->getParameterClass($parameter)) {
+            $typeName = $this->_getFullyQualifiedClassName($parameterClass->getName());
+        } elseif ($parameter->isCallable()) {
+            $typeName = 'callable';
+        } else {
+            $typeName = $parameter->getType()->getName();
+        }
+
+        if ($parameter->allowsNull()) {
+            $typeName = '?' . $typeName;
         }
 
         return $typeName;
