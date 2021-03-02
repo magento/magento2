@@ -11,30 +11,24 @@
     <test name="AdminDeleteDownloadableProductSampleTest">
         <annotations>
             <features value="Catalog"/>
-            <title value="Delete Downloadable Product"/>
+            <stories value="Delete Downloadable Product"/>
             <title value="Delete Downloadable Product Samples"/>
             <description value="Admin should be able to delete downloadable product samples"/>
             <severity value="MAJOR"/>
             <group value="Downloadable"/>
         </annotations>
         <before>
-            <!-- Create category -->
+            <magentoCLI command="downloadable:domains:add static.magento.com" stepKey="addDownloadableDomain"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
-
-            <!-- Login as admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
         </before>
         <after>
-            <!-- Delete category -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-
-            <!-- Delete created downloadable product -->
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="DownloadableProduct"/>
             </actionGroup>
-
-            <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="downloadable:domains:remove static.magento.com" stepKey="removeDownloadableDomain"/>
         </after>
 
         <!-- Create downloadable product -->
@@ -80,11 +74,9 @@
         <!-- Check if Samples are present -->
         <actionGroup ref="VerifySamplePresentActionGroup" stepKey="verifySampleFilePresent">
             <argument name="index" value="0"/>
-            <argument name="title" value="{{downloadableSampleFile.title}}"/>
         </actionGroup>
         <actionGroup ref="VerifySamplePresentActionGroup" stepKey="verifySampleUrlPresent">
             <argument name="index" value="1"/>
-            <argument name="title" value="{{downloadableSampleUrl.title}}"/>
         </actionGroup>
 
         <!-- Remove Samples -->
@@ -97,11 +89,8 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductAfterSamplesRemoved"/>
 
         <!-- Check if Samples are absent -->
-        <actionGroup ref="VerifySampleAbsentActionGroup" stepKey="verifySampleFileAbsent">
-            <argument name="title" value="{{downloadableSampleFile.title}}"/>
-        </actionGroup>
-        <actionGroup ref="VerifySampleAbsentActionGroup" stepKey="verifySampleUrlAbsent">
-            <argument name="title" value="{{downloadableSampleUrl.title}}"/>
+        <actionGroup ref="VerifySampleAbsentActionGroup" stepKey="verifySamplesAbsent">
+            <argument name="index" value="0"/>
         </actionGroup>
     </test>
 </tests>

@@ -10,12 +10,12 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="VerifySampleAbsentActionGroup">
         <annotations>
-            <description>Verify Sample is absent on Downloadable Product page.</description>
+            <description>Verify Samples are absent on Downloadable Product page.</description>
         </annotations>
         <arguments>
-            <argument name="title" type="string" defaultValue=""/>
+            <argument name="index" type="string" defaultValue="0"/>
         </arguments>
 
-        <dontSee userInput="{{title}}" stepKey="verifySampleTitleAbsent"/>
+        <dontSeeElement selector="{{AdminProductDownloadableSection.addSampleTitleInput(index)}}" stepKey="verifySamplesAbsent"/>
     </actionGroup>
 </actionGroups>
