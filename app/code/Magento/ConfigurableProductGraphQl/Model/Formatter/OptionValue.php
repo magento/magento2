@@ -11,7 +11,6 @@ namespace Magento\ConfigurableProductGraphQl\Model\Formatter;
 use Magento\CatalogInventory\Model\StockRegistry;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 use Magento\ConfigurableProductGraphQl\Model\Options\SelectionUidFormatter;
-use Magento\SwatchesGraphQl\Model\Resolver\Product\Options\DataProvider\SwatchDataProvider;
 
 /**
  * Formatter for configurable product option values
@@ -24,27 +23,19 @@ class OptionValue
     private $selectionUidFormatter;
 
     /**
-     * @var SwatchDataProvider
-     */
-    private $swatchDataProvider;
-
-    /**
      * @var StockRegistry
      */
     private $stockRegistry;
 
     /**
      * @param SelectionUidFormatter $selectionUidFormatter
-     * @param SwatchDataProvider $swatchDataProvider
      * @param StockRegistry $stockRegistry
      */
     public function __construct(
         SelectionUidFormatter $selectionUidFormatter,
-        SwatchDataProvider $swatchDataProvider,
         StockRegistry $stockRegistry
     ) {
         $this->selectionUidFormatter = $selectionUidFormatter;
-        $this->swatchDataProvider = $swatchDataProvider;
         $this->stockRegistry = $stockRegistry;
     }
 
@@ -69,7 +60,7 @@ class OptionValue
             'is_available' => $this->getIsAvailable($optionIds[$valueIndex] ?? []),
             'is_use_default' => (bool)$attribute->getIsUseDefault(),
             'label' => $optionValue['label'],
-            'swatch' => $this->swatchDataProvider->getData($optionValue['value_index'])
+            'value_index' => $optionValue['value_index']
         ];
     }
 

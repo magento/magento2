@@ -49,5 +49,5 @@ type ColorSwatchData implements SwatchDataInterface {
 }
 
 type ConfigurableProductOptionValue {
-    swatch: SwatchDataInterface
+    swatch: SwatchDataInterface @resolver(class: "Magento\\SwatchesGraphQl\\Model\\Resolver\\Product\\Options\\SwatchData")
 }

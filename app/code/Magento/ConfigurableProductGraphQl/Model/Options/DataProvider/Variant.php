@@ -10,7 +10,6 @@ namespace Magento\ConfigurableProductGraphQl\Model\Options\DataProvider;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\StatusFactory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -44,8 +43,8 @@ class Variant
      * Load available child products by parent
      *
      * @param ProductInterface $product
-     * @return DataObject[]
-     * @throws LocalizedException
+     * @return ProductInterface[]
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getSalableVariantsByParent(ProductInterface $product): array
     {
