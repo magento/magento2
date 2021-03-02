@@ -1397,4 +1397,20 @@
         <requiredEntity type="product_option">ProductOptionField</requiredEntity>
         <requiredEntity type="product_option">ProductOptionField2</requiredEntity>
     </entity>
+    <entity name="SimpleProductWithCustomSku24MB01" type="product" extends="SimpleProduct2">
+        <data key="name" unique="suffix">ProductWithSku24MB01-</data>
+        <data key="sku" unique="suffix">24 MB01</data>
+    </entity>
+    <entity name="SimpleProductWithCustomSku24MB02" type="product" extends="SimpleProduct2">
+        <data key="name" unique="suffix">ProductWithSku24MB02-</data>
+        <data key="sku" unique="suffix">24 MB02 </data>
+    </entity>
+    <entity name="SimpleProductWithCustomSku24MB04" type="product" extends="SimpleProduct2">
+        <data key="name" unique="suffix">ProductWithSku24MB04-</data>
+        <data key="sku" unique="suffix">24 MB04 </data>
+    </entity>
+    <entity name="SimpleProductWithCustomSku24MB06" type="product" extends="SimpleProduct2">
+        <data key="name" unique="suffix">ProductWithSku24MB06-</data>
+        <data key="sku" unique="suffix">24 MB06 </data>
+    </entity>
 </entities>
