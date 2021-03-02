@@ -6,6 +6,7 @@
 
 namespace Magento\Customer\Test\Unit\Model\ResourceModel;
 
+use Magento\Customer\Model\Address;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -63,21 +64,22 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     public function testSave($addressId, $isDefaultBilling, $isDefaultShipping)
     {
         /** @var $address \Magento\Customer\Model\Address|\PHPUnit\Framework\MockObject\MockObject */
-        $address = $this->createPartialMock(
-            \Magento\Customer\Model\Address::class,
-            [
-                '__wakeup',
-                'getId',
-                'getEntityTypeId',
-                'getIsDefaultBilling',
-                'getIsDefaultShipping',
-                'hasDataChanges',
-                'validateBeforeSave',
-                'beforeSave',
-                'afterSave',
-                'isSaveAllowed'
-            ]
-        );
+        $address = $this->getMockBuilder(Address::class)
+            ->addMethods(['getIsDefaultBilling', 'getIsDefaultShipping'])
+            ->onlyMethods(
+                [
+                    '__wakeup',
+                    'getId',
+                    'getEntityTypeId',
+                    'hasDataChanges',
+                    'validateBeforeSave',
+                    'beforeSave',
+                    'afterSave',
+                    'isSaveAllowed'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->entitySnapshotMock->expects($this->once())->method('isModified')->willReturn(true);
         $this->entityRelationCompositeMock->expects($this->once())->method('processRelations');
         $address->expects($this->once())->method('isSaveAllowed')->willReturn(true);
@@ -260,7 +262,6 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 /**
  * Class SubResourceModelAddress
  * Mock method getAttributeLoader
- * @package Magento\Customer\Test\Unit\Model\ResourceModel
  * @codingStandardsIgnoreStart
  */
 class SubResourceModelAddress extends \Magento\Customer\Model\ResourceModel\Address

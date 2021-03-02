@@ -80,7 +80,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
                 $this->validateIndexerStatus($indexer);
                 $startTime = microtime(true);
                 $indexerConfig = $this->getConfig()->getIndexer($indexer->getId());
-                $sharedIndex = $indexerConfig['shared_index'];
+                $sharedIndex = $indexerConfig['shared_index'] ?? null;
 
                 // Skip indexers having shared index that was already complete
                 if (!in_array($sharedIndex, $this->sharedIndexesComplete)) {

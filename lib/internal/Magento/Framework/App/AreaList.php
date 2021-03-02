@@ -75,7 +75,7 @@ class AreaList
                 $resolver = $this->_resolverFactory->create($areaInfo['frontNameResolver']);
                 $areaInfo['frontName'] = $resolver->getFrontName(true);
             }
-            if ($areaInfo['frontName'] === $frontName) {
+            if (isset($areaInfo['frontName']) && $areaInfo['frontName'] === $frontName) {
                 return $areaCode;
             }
         }
