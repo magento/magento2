@@ -108,6 +108,9 @@ class CoreTest extends \PHPUnit\Framework\TestCase
             ->method('save')
             ->with($data, $this->anything(), $prefixedTags)
             ->willReturn(true);
+        $backendMock->expects($this->once())
+            ->method('getCapabilities')
+            ->willReturn(['priority' => null]);
         $frontend = new \Magento\Framework\Cache\Core([
             'disable_save'              => false,
             'caching'                   => true,

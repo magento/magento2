@@ -152,11 +152,7 @@ class SaveTest extends AbstractBackendController
         );
         $customerFormData = $this->session->getCustomerFormData();
         unset($customerFormData['form_key']);
-        if (!empty($expectedData) && !empty($customerFormData)) {
-            $expectedData = array_shift($expectedData);
-            $customerFormData = array_shift($customerFormData);
-        }
-        $this->assertEmpty(array_diff_assoc($expectedData, $customerFormData));
+        $this->assertEquals($expectedData, $customerFormData);
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new/key/'));
     }
 
@@ -389,12 +385,9 @@ class SaveTest extends AbstractBackendController
         $customerFormData = $this->session->getCustomerFormData();
         $this->assertNotEmpty($customerFormData);
         unset($customerFormData['form_key']);
-        if (!empty($customerFormData)) {
-            $customerFormData = array_shift($customerFormData);
-            $postFormatted = array_shift($postFormatted);
-        }
-        $this->assertEmpty(
-            array_diff_assoc($postFormatted, $customerFormData),
+        $this->assertEquals(
+            $postFormatted,
+            $customerFormData,
             'Customer form data should be formatted'
         );
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new/key/'));

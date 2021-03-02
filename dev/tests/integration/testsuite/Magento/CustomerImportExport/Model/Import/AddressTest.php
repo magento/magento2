@@ -116,20 +116,6 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test constructor
-     *
-     * @magentoDataFixture Magento/Customer/_files/import_export/customer_with_addresses.php
-     */
-    public function testConstruct()
-    {
-        $this->assertObjectHasAttribute('_entityTable', $this->_entityAdapter, 'Entity table must not be empty');
-        $this->assertObjectHasAttribute('errorMessageTemplates', $this->_entityAdapter, 'Templates must not be empty');
-        $this->assertObjectHasAttribute('_attributes', $this->_entityAdapter, 'Attributes must not be empty');
-        $this->assertObjectHasAttribute('_countryRegions', $this->_entityAdapter, 'Country regions must not be empty');
-        $this->assertObjectHasAttribute('_regions', $this->_entityAdapter, 'Regions must not be empty');
-    }
-
-    /**
      * Test _saveAddressEntity
      *
      * @magentoDataFixture Magento/Customer/_files/import_export/customer_with_addresses.php
