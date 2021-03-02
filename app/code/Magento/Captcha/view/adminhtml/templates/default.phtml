@@ -50,7 +50,7 @@ $validationEnabled = $block->hasData('frontend_validation') ? $block->getData('f
 //<![CDATA[
         var captcha = new Captcha(
             '<?= $block->escapeJs($block->getRefreshUrl()) ?>',
-            '<?= $block->escapeJs($block->escapeHtml($block->getFormId())) ?>'
+            '<?= $block->escapeJs($block->getFormId()) ?>'
         );
 
         $('captcha-reload').observe('click', function () {
