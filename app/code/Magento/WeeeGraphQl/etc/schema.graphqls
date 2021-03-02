@@ -10,6 +10,10 @@ type ProductPrice {
     fixed_product_taxes: [FixedProductTax] @doc(description: "The multiple FPTs that can be applied to a product price.") @resolver(class: "Magento\\WeeeGraphQl\\Model\\Resolver\\FixedProductTax")
 }
 
+type CartItemPrices {
+    fixed_product_taxes: [FixedProductTax] @doc(description: "Applied FPT to the cart item.") @resolver(class: "Magento\\WeeeGraphQl\\Model\\Resolver\\Quote\\FixedProductTax")
+}
+
 type FixedProductTax @doc(description: "A single FPT that can be applied to a product price.") {
     amount: Money @doc(description: "Amount of the FPT as a money object.")
     label: String @doc(description: "The label assigned to the FPT to be displayed on the frontend.")
