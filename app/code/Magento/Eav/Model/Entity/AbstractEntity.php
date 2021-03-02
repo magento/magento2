@@ -766,7 +766,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         if (!$this->linkIdField) {
             $indexList = $this->getConnection()->getIndexList($this->getEntityTable());
             $pkName = $this->getConnection()->getPrimaryKeyName($this->getEntityTable());
-            $this->linkIdField = $indexList[$pkName]['COLUMNS_LIST'][0];
+            $this->linkIdField = $indexList[$pkName]['COLUMNS_LIST'][0] ?? null;
             if (!$this->linkIdField) {
                 $this->linkIdField = $this->getEntityIdField();
             }

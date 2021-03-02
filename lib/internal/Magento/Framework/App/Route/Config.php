@@ -9,6 +9,9 @@ namespace Magento\Framework\App\Route;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Config holds the configuration of a route
+ */
 class Config implements ConfigInterface
 {
     /**
@@ -90,7 +93,7 @@ class Config implements ConfigInterface
         }
 
         $routers = $this->_reader->read($scope);
-        $routes = $routers[$this->_areaList->getDefaultRouter($scope)]['routes'];
+        $routes = $routers[$this->_areaList->getDefaultRouter($scope)]['routes'] ?? null;
         $routesData = $this->getSerializer()->serialize($routes);
         $this->_cache->save($routesData, $cacheId);
         $this->_routes[$scope] = $routes;
@@ -101,7 +104,7 @@ class Config implements ConfigInterface
      * Retrieve route front name
      *
      * @param string $routeId
-     * @param null $scope
+     * @param string $scope
      * @return string
      */
     public function getRouteFrontName($routeId, $scope = null)
@@ -111,6 +114,8 @@ class Config implements ConfigInterface
     }
 
     /**
+     * Retrieve route ID by front name
+     *
      * @param string $frontName
      * @param string $scope
      * @return bool|int|string
@@ -127,6 +132,8 @@ class Config implements ConfigInterface
     }
 
     /**
+     * Retrieve modules by front name
+     *
      * @param string $frontName
      * @param string $scope
      * @return string[]

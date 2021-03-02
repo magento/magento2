@@ -157,7 +157,7 @@ class CartPriceRulesFixtureTest extends \PHPUnit\Framework\TestCase
                 'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
                 'attribute' => 'category_ids',
                 'operator' => '==',
-                'value' => null,
+                'value' => 0,
             ];
 
             $secondCondition = [
@@ -245,8 +245,8 @@ class CartPriceRulesFixtureTest extends \PHPUnit\Framework\TestCase
     public function dataProviderGenerateAdvancedCondition()
     {
         return [
-            [1, [0], 1],
-            [1, [0], 300]
+            [1, [[0]], 1],
+            [1, [[0]], 300]
         ];
     }
 

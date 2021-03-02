@@ -251,7 +251,9 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     public function testDeleteWithNoSuchEntityException()
     {
         $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
-        $this->expectExceptionMessage('Product with SKU \'linkedProduct\' is not linked to product with SKU \'product\'');
+        $this->expectExceptionMessage(
+            'Product with SKU \'linkedProduct\' is not linked to product with SKU \'product\''
+        );
 
         $entityMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Link::class);
         $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
@@ -266,6 +268,11 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $entityMock->expects($this->exactly(2))->method('getSku')->willReturn('product');
         $entityMock->expects($this->once())->method('getLinkType')->willReturn('linkType');
         $this->metadataPoolMock->expects($this->once())->method('getHydrator')->willReturn($this->hydratorMock);
+
+        $this->metadataMock->expects($this->once())->method('getLinkField')->willReturn('linkField');
+        $this->hydratorMock->expects($this->once())->method('extract')->willReturn(['linkField' => 'parent_id']);
+        $this->linkTypeProvider->expects($this->once())->method('getLinkTypes')->willReturn(['linkType' => 1]);
+
         $this->model->delete($entityMock);
     }
 }
