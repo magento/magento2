@@ -78,8 +78,7 @@
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryPage">
             <argument name="categoryName" value="$$category.name$$"/>
         </actionGroup>
-
-        <actionGroup ref="StorefrontOpenAndCheckComparisionActionGroup" stepKey="navigateToComparePage"/>
+        <comment userInput="Comment is kept to preserve the step key for backward compatibility" stepKey="navigateToComparePage"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStorefrontProductComparePageLoad"/>
 
         <actionGroup ref="SeeProductInComparisonListActionGroup" stepKey="seeProductInCompareList">
@@ -92,11 +91,13 @@
             <argument name="categoryName" value="$$category.name$$"/>
         </actionGroup>
 
-        <actionGroup ref="StorefrontClearCompareActionGroup" stepKey="clickClearAll"/>
+        <actionGroup ref="StorefrontRemoveFirstProductFromCompareActionGroup" stepKey="clickClearAll"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForConfirmPageLoad"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="confirmProdDelate"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForConfirmLoad"/>
-        <comment userInput="Add product to compare list fom Category page | Comment is kept to preserve the step key for backward compatibility" stepKey="addToCmpFromCategPage"/>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="addToCmpFromCategPage">
+            <argument name="categoryName" value="$$category.name$$"/>
+        </actionGroup>
 
         <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverOverProduct"/>
 
@@ -108,11 +109,11 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="grabTextFromSuccessMessage2"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertSuccessMessage2"/>
 
-        <comment userInput="Check that product displays on add to compare widget | Comment is kept to preserve the step key for backward compatibility" stepKey="checkProdNameOnWidget"/>
-        <seeElement selector="{{StorefrontComparisonSidebarSection.ProductTitleByName($$product.name$$)}}" stepKey="seeProdNameOnCmpWidget"/>
+        <comment userInput="Comment is kept to preserve the step key for backward compatibility" stepKey="checkProdNameOnWidget"/>
+        <comment userInput="Comment is kept to preserve the step key for backward compatibility" stepKey="seeProdNameOnCmpWidget"/>
 
         <comment userInput="See product in the compare page" stepKey="seeProductInComparePage"/>
-        <actionGroup ref="StorefrontOpenAndCheckComparisionActionGroup" stepKey="navigateToComparePage2"/>
+        <comment userInput="Comment is kept to preserve the step key for backward compatibility" stepKey="navigateToComparePage2"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStorefrontProductComparePageLoad2"/>
 
         <actionGroup ref="SeeProductInComparisonListActionGroup" stepKey="seeProductInCompareList2">
