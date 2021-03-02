@@ -103,6 +103,9 @@ QUERY;
               label
               swatch {
                 value
+                ... on ImageSwatchData {
+                  thumbnail
+                }
               }
             }
           }
@@ -142,6 +145,10 @@ QUERY;
         $this->assertStringContainsString(
             $configurableProductOptionsSelection['values'][1]['swatch']['value'],
             $this->swatchMediaHelper->getSwatchAttributeImage(Swatch::SWATCH_IMAGE_NAME, $imageName)
+        );
+        $this->assertEquals(
+            $configurableProductOptionsSelection['values'][1]['swatch']['thumbnail'],
+            $this->swatchMediaHelper->getSwatchAttributeImage(Swatch::SWATCH_THUMBNAIL_NAME, $imageName)
         );
     }
 }
