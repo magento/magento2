@@ -34,12 +34,10 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
         foreach ($images as &$image) {
             if (!empty($image['removed'])) {
                 if (!empty($image['value_id'])) {
-                    if (preg_match('/\.\.(\\\|\/)/', $image['file'])) {
-                        continue;
-                    }
                     $recordsToDelete[] = $image['value_id'];
                     $catalogPath = $this->mediaConfig->getBaseMediaPath();
-                    $isFile = $this->mediaDirectory->isFile($catalogPath . $image['file']);
+                    $filePath = $this->mediaDirectory->getRelativePath($catalogPath . $image['file']);
+                    $isFile = $this->mediaDirectory->isFile($filePath);
                     // only delete physical files if they are not used by any other products and if this file exist
                     if ($isFile && !($this->resourceModel->countImageUses($image['file']) > 1)) {
                         $filesToDelete[] = ltrim($image['file'], '/');
@@ -116,6 +114,7 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
      *
      * @param array $files
      * @return null
+     * @throws \Magento\Framework\Exception\FileSystemException
      * @since 101.0.0
      */
     protected function removeDeletedImages(array $files)
@@ -125,5 +124,7 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
         foreach ($files as $filePath) {
             $this->mediaDirectory->delete($catalogPath . '/' . $filePath);
         }
+
+        return null;
     }
 }

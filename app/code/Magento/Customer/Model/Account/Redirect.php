@@ -21,7 +21,10 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 
 /**
+ * Redirect for customer account
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Redirect
 {
@@ -208,20 +211,37 @@ class Redirect
             ScopeInterface::SCOPE_STORE
         )
         ) {
-            $referer = $this->request->getParam(CustomerUrl::REFERER_QUERY_PARAM_NAME);
-            if ($referer) {
-                $referer = $this->urlDecoder->decode($referer);
-                preg_match('/logoutSuccess\//', $referer, $matches, PREG_OFFSET_CAPTURE);
+            $referrer = $this->request->getParam(CustomerUrl::REFERER_QUERY_PARAM_NAME);
+            if ($referrer) {
+                $referrer = $this->urlDecoder->decode($referrer);
+                preg_match('/logoutSuccess\//', $referrer, $matches, PREG_OFFSET_CAPTURE);
                 if (!empty($matches)) {
-                    $referer = str_replace('logoutSuccess/', '', $referer);
+                    $referrer = str_replace('logoutSuccess/', '', $referrer);
                 }
-                if ($this->hostChecker->isOwnOrigin($referer)) {
-                    $this->applyRedirect($referer);
+                if ($this->isReferrerValid($referrer) && $this->hostChecker->isOwnOrigin($referrer)) {
+                    $this->applyRedirect($referrer);
                 }
             }
         } elseif ($this->session->getAfterAuthUrl()) {
             $this->applyRedirect($this->session->getAfterAuthUrl(true));
         }
+    }
+
+    /**
+     * Check if referrer is well-formatted
+     *
+     * @param string $referrer
+     * @return bool
+     */
+    private function isReferrerValid(string $referrer) : bool
+    {
+        $result = true;
+        if (preg_match('/^(https?|\/\/)/i', $referrer)) {
+            if (filter_var($referrer, FILTER_VALIDATE_URL) === false) {
+                $result = false;
+            }
+        }
+        return $result;
     }
 
     /**

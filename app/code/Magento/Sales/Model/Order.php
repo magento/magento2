@@ -7,6 +7,7 @@ namespace Magento\Sales\Model;
 
 use Magento\Config\Model\Config\Source\Nooptreq;
 use Magento\Directory\Model\Currency;
+use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -308,6 +309,16 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     private $scopeConfig;
 
     /**
+     * @var RegionFactory
+     */
+    private $regionFactory;
+
+    /**
+     * @var array
+     */
+    private $regionItems;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -340,6 +351,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param OrderItemRepositoryInterface $itemRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param ScopeConfigInterface $scopeConfig
+     * @param RegionFactory $regionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -374,7 +386,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         ProductOption $productOption = null,
         OrderItemRepositoryInterface $itemRepository = null,
         SearchCriteriaBuilder $searchCriteriaBuilder = null,
-        ScopeConfigInterface $scopeConfig = null
+        ScopeConfigInterface $scopeConfig = null,
+        RegionFactory $regionFactory = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_orderConfig = $orderConfig;
@@ -403,6 +416,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: ObjectManager::getInstance()
             ->get(SearchCriteriaBuilder::class);
         $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        $this->regionFactory = $regionFactory ?: ObjectManager::getInstance()->get(RegionFactory::class);
+        $this->regionItems = [];
 
         parent::__construct(
             $context,
@@ -1328,6 +1343,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function getShippingMethod($asObject = false)
     {
+        // phpstan:ignore "Call to an undefined static method"
         $shippingMethod = parent::getShippingMethod();
         if (!$asObject || !$shippingMethod) {
             return $shippingMethod;
@@ -1346,9 +1362,21 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function getAddressesCollection()
     {
+        $region = $this->regionFactory->create();
         $collection = $this->_addressCollectionFactory->create()->setOrderFilter($this);
         if ($this->getId()) {
             foreach ($collection as $address) {
+                if (isset($this->regionItems[$address->getCountryId()][$address->getRegion()])) {
+                    if ($this->regionItems[$address->getCountryId()][$address->getRegion()]) {
+                        $address->setRegion($this->regionItems[$address->getCountryId()][$address->getRegion()]);
+                    }
+                } else {
+                    $region->loadByName($address->getRegion(), $address->getCountryId());
+                    $this->regionItems[$address->getCountryId()][$address->getRegion()] = $region->getName();
+                    if ($region->getName()) {
+                        $address->setRegion($region->getName());
+                    }
+                }
                 $address->setOrder($this);
             }
         }

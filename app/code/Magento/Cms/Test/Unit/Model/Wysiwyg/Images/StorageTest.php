@@ -138,7 +138,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         $this->directoryMock = $this->createPartialMock(
             \Magento\Framework\Filesystem\Directory\Write::class,
-            ['delete', 'getDriver', 'create', 'getRelativePath', 'isExist', 'isFile']
+            ['delete', 'getDriver', 'create', 'getRelativePath', 'getAbsolutePath', 'isExist', 'isFile']
         );
         $this->directoryMock->expects(
             $this->any()
@@ -166,11 +166,11 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         )->method(
             'getPathInfo'
         )->willReturnCallback(
-            
+
                 function ($path) {
                     return pathinfo($path);
                 }
-            
+
         );
 
         $this->adapterFactoryMock = $this->createMock(\Magento\Framework\Image\AdapterFactory::class);
@@ -283,6 +283,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('Directory /storage/some/another/dir is not under storage root path.');
 
         $this->driverMock->expects($this->atLeastOnce())->method('getRealPathSafety')->willReturnArgument(0);
+        $this->directoryMock->expects($this->atLeastOnce())->method('getAbsolutePath')->willReturnArgument(0);
         $this->imagesStorage->deleteDirectory(self::INVALID_DIRECTORY_OVER_ROOT);
     }
 
@@ -295,6 +296,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('We can\'t delete root directory /storage/root/dir right now.');
 
         $this->driverMock->expects($this->atLeastOnce())->method('getRealPathSafety')->willReturnArgument(0);
+        $this->directoryMock->expects($this->atLeastOnce())->method('getAbsolutePath')->willReturnArgument(0);
         $this->imagesStorage->deleteDirectory(self::STORAGE_ROOT_DIR);
     }
 
@@ -534,5 +536,16 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->adapterFactoryMock->expects($this->atLeastOnce())->method('create')->willReturn($image);
 
         $this->assertEquals($result, $this->imagesStorage->uploadFile($targetPath, $type));
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testUploadFileWithExcessivePath()
+    {
+        $path = 'target/path';
+        $targetPath = self::STORAGE_ROOT_DIR .str_repeat('a', 255) . $path;
+        $type = 'image';
+        $this->imagesStorage->uploadFile($targetPath, $type);
     }
 }

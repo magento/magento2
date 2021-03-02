@@ -225,6 +225,8 @@ class Storage extends \Magento\Framework\DataObject
      *
      * @param string $path
      * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     protected function createSubDirectories($path)
     {
@@ -295,6 +297,7 @@ class Storage extends \Magento\Framework\DataObject
      *
      * @param string $path Parent directory path
      * @return \Magento\Framework\Data\Collection\Filesystem
+     * @throws \Exception
      */
     public function getDirsCollection($path)
     {
@@ -393,6 +396,7 @@ class Storage extends \Magento\Framework\DataObject
      *
      * @param string $path Path to the directory
      * @return \Magento\Cms\Model\Wysiwyg\Images\Storage\Collection
+     * @throws \Exception
      */
     public function getCollection($path = null)
     {
@@ -414,6 +418,10 @@ class Storage extends \Magento\Framework\DataObject
      */
     public function createDirectory($name, $path)
     {
+        $path = $this->_directory->getDriver()->getRealPathSafety(
+            $this->_directory->getAbsolutePath($path)
+        );
+
         if (!preg_match(self::DIRECTORY_NAME_REGEXP, $name)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Please rename the folder using only letters, numbers, underscores and dashes.')
@@ -485,6 +493,9 @@ class Storage extends \Magento\Framework\DataObject
      *
      * @param string $path
      * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     protected function _deleteByPath($path)
     {
@@ -500,6 +511,8 @@ class Storage extends \Magento\Framework\DataObject
      *
      * @param string $target File path to be deleted
      * @return $this
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     public function deleteFile($target)
     {
@@ -530,11 +543,18 @@ class Storage extends \Magento\Framework\DataObject
      */
     public function uploadFile($targetPath, $type = null)
     {
-        if (!$this->isPathAllowed($targetPath, $this->getConditionsForExcludeDirs())) {
+        $targetPath = $this->file->getRealPathSafety($targetPath);
+
+        if ($this->file->isDirectory($targetPath)) {
+            $targetPath = $targetPath . DIRECTORY_SEPARATOR;
+        }
+
+        if (!$this->isPathAllowed($targetPath, $this->getConditionsForExcludeDirs()) || strlen($targetPath) > 255) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We can\'t upload the file to current folder right now. Please try another folder.')
             );
         }
+
         /** @var \Magento\MediaStorage\Model\File\Uploader $uploader */
         $uploader = $this->_uploaderFactory->create(['fileId' => 'image']);
         $allowed = $this->getAllowedExtensions($type);
@@ -561,9 +581,11 @@ class Storage extends \Magento\Framework\DataObject
     /**
      * Thumbnail path getter
      *
-     * @param  string $filePath original file path
-     * @param  bool $checkFile OPTIONAL is it necessary to check file availability
+     * @param string $filePath original file path
+     * @param bool $checkFile OPTIONAL is it necessary to check file availability
      * @return string|false
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     public function getThumbnailPath($filePath, $checkFile = false)
     {
@@ -587,9 +609,11 @@ class Storage extends \Magento\Framework\DataObject
     /**
      * Thumbnail URL getter
      *
-     * @param  string $filePath original file path
-     * @param  bool $checkFile OPTIONAL is it necessary to check file availability
+     * @param string $filePath original file path
+     * @param bool $checkFile OPTIONAL is it necessary to check file availability
      * @return string|false
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     public function getThumbnailUrl($filePath, $checkFile = false)
     {
@@ -610,6 +634,8 @@ class Storage extends \Magento\Framework\DataObject
      * @param string $source Image path to be resized
      * @param bool $keepRatio Keep aspect ratio or not
      * @return bool|string Resized filepath or false if errors were occurred
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     public function resizeFile($source, $keepRatio = true)
     {
@@ -643,6 +669,9 @@ class Storage extends \Magento\Framework\DataObject
      *
      * @param string $filename File basename
      * @return bool|string Thumbnail path or false for errors
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     public function resizeOnTheFly($filename)
     {
@@ -658,6 +687,8 @@ class Storage extends \Magento\Framework\DataObject
      *
      * @param bool|string $filePath Path to the file
      * @return string
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     public function getThumbsPath($filePath = false)
     {
@@ -782,10 +813,20 @@ class Storage extends \Magento\Framework\DataObject
      *
      * @param string $path
      * @return string
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     protected function _sanitizePath($path)
     {
-        return rtrim(preg_replace('~[/\\\]+~', '/', $this->_directory->getDriver()->getRealPathSafety($path)), '/');
+        return rtrim(
+            preg_replace(
+                '~[/\\\]+~',
+                '/',
+                $this->_directory->getDriver()->getRealPathSafety(
+                    $this->_directory->getAbsolutePath($path)
+                )
+            ),
+            '/'
+        );
     }
 
     /**
@@ -793,6 +834,7 @@ class Storage extends \Magento\Framework\DataObject
      *
      * @param string $path
      * @return string|bool
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     protected function _getRelativePathToRoot($path)
     {

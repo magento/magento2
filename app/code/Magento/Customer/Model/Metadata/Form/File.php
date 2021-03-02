@@ -11,6 +11,7 @@ use Magento\Framework\Api\ArrayObjectSearch;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\UploaderFactory;
 use Magento\Framework\Filesystem;
 
@@ -111,6 +112,7 @@ class File extends AbstractData
         $extend = $this->_getRequestValue($request);
 
         $attrCode = $this->getAttribute()->getAttributeCode();
+        // phpcs:ignore Magento2.Security.Superglobal
         if ($this->_requestScope || !isset($_FILES[$attrCode])) {
             $value = [];
             if (strpos($this->_requestScope, '/') !== false) {
@@ -120,9 +122,10 @@ class File extends AbstractData
                 $mainScope = $this->_requestScope;
                 $scopes = [];
             }
-
+            // phpcs:disable Magento2.Security.Superglobal
             if (!empty($_FILES[$mainScope])) {
                 foreach ($_FILES[$mainScope] as $fileKey => $scopeData) {
+                    // phpcs:enable Magento2.Security.Superglobal
                     foreach ($scopes as $scopeName) {
                         if (isset($scopeData[$scopeName])) {
                             $scopeData = $scopeData[$scopeName];
@@ -147,8 +150,10 @@ class File extends AbstractData
                 $value = [];
             }
         } else {
+            // phpcs:disable Magento2.Security.Superglobal
             if (isset($_FILES[$attrCode])) {
                 $value = $_FILES[$attrCode];
+                // phpcs:enable Magento2.Security.Superglobal
             } else {
                 $value = [];
             }
@@ -171,7 +176,7 @@ class File extends AbstractData
     {
         $label = $value['name'];
         $rules = $this->getAttribute()->getValidationRules();
-        $extension = pathinfo($value['name'], PATHINFO_EXTENSION);
+        $extension = $this->fileProcessor->getStat($value['name'])['extension'];
         $fileExtensions = ArrayObjectSearch::getArrayElementByName(
             $rules,
             'file_extensions'
@@ -219,12 +224,13 @@ class File extends AbstractData
      */
     protected function _isUploadedFile($filename)
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         if (is_uploaded_file($filename)) {
             return true;
         }
 
         // This case is required for file uploader UI component
-        $temporaryFile = FileProcessor::TMP_DIR . '/' . pathinfo($filename)['basename'];
+        $temporaryFile = FileProcessor::TMP_DIR . '/' . $this->fileProcessor->getStat($filename)['basename'];
         if ($this->fileProcessor->isExist($temporaryFile)) {
             return true;
         }
@@ -343,16 +349,20 @@ class File extends AbstractData
         }
 
         if (!empty($value['tmp_name'])) {
+            $uploader = $this->uploaderFactory->create(['fileId' => $value]);
+            $fileExtension = $uploader->getFileExtension();
+            if (!$this->_fileValidator->isValid($fileExtension)) {
+                throw new LocalizedException($this->_fileValidator->getMessages()[$fileExtension]);
+            }
+            $uploader->setFilesDispersion(true);
+            $uploader->setFilenamesCaseSensitivity(false);
+            $uploader->setAllowRenameFiles(true);
             try {
-                $uploader = $this->uploaderFactory->create(['fileId' => $value]);
-                $uploader->setFilesDispersion(true);
-                $uploader->setFilenamesCaseSensitivity(false);
-                $uploader->setAllowRenameFiles(true);
                 $uploader->save($mediaDir->getAbsolutePath($this->_entityTypeCode), $value['name']);
-                $result = $uploader->getUploadedFileName();
             } catch (\Exception $e) {
                 $this->_logger->critical($e);
             }
+            $result = $uploader->getUploadedFileName();
         }
 
         return $result;

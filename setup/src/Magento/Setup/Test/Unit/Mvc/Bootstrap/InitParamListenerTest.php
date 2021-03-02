@@ -311,6 +311,10 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
         $headersMock = $this->getMockBuilder(Headers::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $userMock = $this->getMockBuilder(\Magento\User\Model\User::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setReloadAclFlag'])
+            ->getMock();
 
         $routeMatchMock->expects($this->exactly(2))
             ->method('getParam')
@@ -415,6 +419,15 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
         $authenticationMock->expects($this->once())
             ->method('isLoggedIn')
             ->willReturn(true);
+        $authenticationMock->expects($this->any())
+            ->method('getUser')
+            ->willReturn($userMock);
+        $userMock->expects($this->once())
+            ->method('setReloadAclFlag')
+            ->with(1);
+        $adminSessionMock->expects($this->once())
+            ->method('refreshAcl')
+            ->with($userMock);
         $adminSessionMock->expects($this->once())
             ->method('isAllowed')
             ->with('Magento_Backend::setup_wizard', null)

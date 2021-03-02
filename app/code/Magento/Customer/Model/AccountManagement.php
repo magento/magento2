@@ -55,6 +55,7 @@ use Magento\Framework\Stdlib\StringUtils as StringHelper;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface as PsrLogger;
+use Magento\Framework\AuthorizationInterface;
 
 /**
  * Handle various customer account actions
@@ -204,6 +205,13 @@ class AccountManagement implements AccountManagementInterface
      * @see \Magento\Customer\Model\AccountManagement::XML_PATH_MINIMUM_PASSWORD_LENGTH
      */
     const MIN_PASSWORD_LENGTH = 6;
+
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Customer::manage';
 
     /**
      * @var CustomerFactory
@@ -376,6 +384,11 @@ class AccountManagement implements AccountManagementInterface
     private $sessionCleaner;
 
     /**
+     * @var AuthorizationInterface
+     */
+    protected $authorization;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -410,6 +423,7 @@ class AccountManagement implements AccountManagementInterface
      * @param GetCustomerByToken|null $getByToken
      * @param AllowedCountries|null $allowedCountriesReader
      * @param SessionCleanerInterface|null $sessionCleaner
+     * @param AuthorizationInterface|null $authorization
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -450,7 +464,8 @@ class AccountManagement implements AccountManagementInterface
         AddressRegistry $addressRegistry = null,
         GetCustomerByToken $getByToken = null,
         AllowedCountries $allowedCountriesReader = null,
-        SessionCleanerInterface $sessionCleaner = null
+        SessionCleanerInterface $sessionCleaner = null,
+        AuthorizationInterface $authorization = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -490,6 +505,7 @@ class AccountManagement implements AccountManagementInterface
         $this->allowedCountriesReader = $allowedCountriesReader
             ?: $objectManager->get(AllowedCountries::class);
         $this->sessionCleaner = $sessionCleaner ?? $objectManager->get(SessionCleanerInterface::class);
+        $this->authorization = $authorization ?? $objectManager->get(AuthorizationInterface::class);
     }
 
     /**
@@ -833,6 +849,11 @@ class AccountManagement implements AccountManagementInterface
      */
     public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
     {
+        $groupId = $customer->getGroupId();
+        if (isset($groupId) && !$this->authorization->isAllowed(self::ADMIN_RESOURCE)) {
+            $customer->setGroupId(null);
+        }
+
         if ($password !== null) {
             $this->checkPasswordStrength($password);
             $customerEmail = $customer->getEmail();
