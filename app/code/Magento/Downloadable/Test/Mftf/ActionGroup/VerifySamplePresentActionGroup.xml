@@ -14,10 +14,8 @@
         </annotations>
         <arguments>
             <argument name="index" type="string" defaultValue="0"/>
-            <argument name="title" type="string" defaultValue=""/>
         </arguments>
 
-        <waitForElementVisible selector="{{AdminProductDownloadableSection.addSampleTitleInput(index)}}" stepKey="waitForSample"/>
-        <see selector="{{AdminProductDownloadableSection.addSampleTitleInput(index)}}" userInput="{{title}}" stepKey="verifySampleTitle"/>
+        <seeElement selector="{{AdminProductDownloadableSection.addSampleTitleInput(index)}}" stepKey="verifySampleVisible"/>
     </actionGroup>
 </actionGroups>
