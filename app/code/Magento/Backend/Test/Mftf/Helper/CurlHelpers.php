@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Catalog\Test\Mftf\Helper;
+namespace Magento\Backend\Test\Mftf\Helper;
 
 use Magento\FunctionalTestingFramework\Helper\Helper;
 
@@ -20,12 +20,13 @@ class CurlHelpers extends Helper
      * @param string $url
      * @param string $expectedString
      * @param string $postBody
+     * @param string $cookieName
      * @return void
      *
      */
-    public function assertCurlResponseContainsString($url, $expectedString, $postBody = null): void
+    public function assertCurlResponseContainsString($url, $expectedString, $postBody = null, $cookieName = 'admin'): void
     {
-        $cookie = $this->getCookie('admin');
+        $cookie = $this->getCookie($cookieName);
         $curlResponse = $this->getCurlResponse($url, $cookie, $postBody);
         $this->assertStringContainsString($expectedString, $curlResponse);
     }
