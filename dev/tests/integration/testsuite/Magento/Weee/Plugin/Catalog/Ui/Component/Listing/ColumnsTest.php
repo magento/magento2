@@ -5,8 +5,6 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Weee\Model\Plugin;
-
 use Magento\Catalog\Ui\Component\Listing\Attribute\Repository;
 use Magento\Catalog\Ui\Component\Listing\Columns;
 use Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider;

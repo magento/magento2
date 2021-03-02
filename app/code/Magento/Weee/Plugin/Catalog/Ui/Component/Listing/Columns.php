@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Weee\Ui\Component\Listing;
+namespace Magento\Weee\Plugin\Catalog\Ui\Component\Listing;
 
 use Magento\Catalog\Ui\Component\Listing\Attribute\Repository;
 use Magento\Catalog\Ui\Component\Listing\Columns as DefaultColumns;
