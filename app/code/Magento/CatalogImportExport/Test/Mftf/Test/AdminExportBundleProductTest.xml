@@ -92,33 +92,118 @@
             <deleteData createDataKey="firstSimpleProductForFixedWithAttribute" stepKey="deleteFirstSimpleProductForFixedWithAttribute"/>
             <deleteData createDataKey="secondSimpleProductForFixedWithAttribute" stepKey="deleteSecondSimpleProductForFixedWithAttribute"/>
             <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
+            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteExportFileDirectory">
+                <argument name="path">var/export</argument>
+            </helper>
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <!-- Go to export page -->
-        <amOnPage url="{{AdminExportIndexPage.url}}" stepKey="goToExportIndexPage"/>
-
-        <!-- Export created below products -->
+        <!-- Export Created Products -->
+        <actionGroup ref="AdminNavigateToExportPageActionGroup" stepKey="goToExportIndexPage"/>
         <actionGroup ref="ExportAllProductsActionGroup" stepKey="exportCreatedProducts"/>
 
-        <!-- Start message queue for export consumer -->
+        <!-- Start Message Queue for Export Consumer -->
         <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
             <argument name="consumerName" value="{{AdminExportMessageConsumerData.consumerName}}"/>
             <argument name="maxMessages" value="{{AdminExportMessageConsumerData.messageLimit}}"/>
         </actionGroup>
         <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitForReload"/>
         <waitForElementVisible selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="waitForFileName"/>
         <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
 
-        <!-- Download product -->
+        <!-- Validate Export File on File System -->
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileExists" stepKey="assertExportFileExists">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+        </helper>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFirstSimpleProductForDynamic">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+            <argument name="text">$$firstSimpleProductForDynamic.sku$$</argument>
+        </helper>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsSecondSimpleProductForDynamic">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+            <argument name="text">$$secondSimpleProductForDynamic.sku$$</argument>
+        </helper>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsDynamicBundleProduct">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+            <argument name="text">$$createDynamicBundleProduct.sku$$</argument>
+        </helper>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFirstSimpleProductForFixed">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+            <argument name="text">$$firstSimpleProductForFixed.sku$$</argument>
+        </helper>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsSecondSimpleProductForFixed">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+            <argument name="text">$$secondSimpleProductForFixed.sku$$</argument>
+        </helper>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFixedBundleProduct">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+            <argument name="text">$$createFixedBundleProduct.sku$$</argument>
+        </helper>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFirstSimpleProductForFixedWithAttribute">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+            <argument name="text">$$firstSimpleProductForFixedWithAttribute.sku$$</argument>
+        </helper>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsSecondSimpleProductForFixedWithAttribute">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+            <argument name="text">$$secondSimpleProductForFixedWithAttribute.sku$$</argument>
+        </helper>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFixedBundleProductWithAttribute">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+            <argument name="text">$$createFixedBundleProductWithAttribute.sku$$</argument>
+        </helper>
+
+        <!-- Download Export File -->
         <actionGroup ref="DownloadFileActionGroup" stepKey="downloadCreatedProducts">
             <argument name="fileName" value="{$grabNameFile}"/>
         </actionGroup>
 
-        <!-- Delete exported file -->
+        <!-- Validate Downloaded Export File -->
+        <grabAttributeFrom userInput="href" selector="{{AdminExportAttributeSection.download('0'}}" stepKey="grabExportUrl"/>
+        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsFirstSimpleProductForDynamic">
+            <argument name="url">{$grabExportUrl}</argument>
+            <argument name="expectedString">$$firstSimpleProductForDynamic.sku$$</argument>
+        </helper>
+        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsSecondSimpleProductForDynamic">
+            <argument name="url">{$grabExportUrl}</argument>
+            <argument name="expectedString">$$secondSimpleProductForDynamic.sku$$</argument>
+        </helper>
+        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsDynamicBundleProduct">
+            <argument name="url">{$grabExportUrl}</argument>
+            <argument name="expectedString">$$createDynamicBundleProduct.sku$$</argument>
+        </helper>
+        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsFirstSimpleProductForFixed">
+            <argument name="url">{$grabExportUrl}</argument>
+            <argument name="expectedString">$$firstSimpleProductForFixed.sku$$</argument>
+        </helper>
+        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsSecondSimpleProductForFixed">
+            <argument name="url">{$grabExportUrl}</argument>
+            <argument name="expectedString">$$secondSimpleProductForFixed.sku$$</argument>
+        </helper>
+        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsFixedBundleProduct">
+            <argument name="url">{$grabExportUrl}</argument>
+            <argument name="expectedString">$$createFixedBundleProduct.sku$$</argument>
+        </helper>
+        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsFirstSimpleProductForFixedWithAttribute">
+            <argument name="url">{$grabExportUrl}</argument>
+            <argument name="expectedString">$$firstSimpleProductForFixedWithAttribute.sku$$</argument>
+        </helper>
+        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsSecondSimpleProductForFixedWithAttribute">
+            <argument name="url">{$grabExportUrl}</argument>
+            <argument name="expectedString">$$secondSimpleProductForFixedWithAttribute.sku$$</argument>
+        </helper>
+        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsFixedBundleProductWithAttribute">
+            <argument name="url">{$grabExportUrl}</argument>
+            <argument name="expectedString">$$createFixedBundleProductWithAttribute.sku$$</argument>
+        </helper>
+
+        <!-- Delete Export File -->
         <actionGroup ref="DeleteExportedFileActionGroup" stepKey="deleteExportedFile">
             <argument name="fileName" value="{$grabNameFile}"/>
         </actionGroup>
+        <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileDoesNotExist" stepKey="assertExportFileDeleted">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+        </helper>
     </test>
 </tests>
