@@ -20,7 +20,7 @@ use Laminas\Log\FormatterPluginManager as LogFormatterManager;
 use Laminas\Log\ProcessorPluginManager as LogProcessorManager;
 use Laminas\Log\WriterPluginManager as LogWriterManager;
 use Laminas\Serializer\AdapterPluginManager as SerializerAdapterManager;
-use Laminas\ServiceManager\AbstractFactoryInterface;
+use Laminas\ServiceManager\Factory\AbstractFactoryInterface;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Stdlib\DispatchableInterface;

@@ -56,7 +56,7 @@
         "laminas/laminas-mvc": "~2.7.0",
         "laminas/laminas-serializer": "^2.7.2",
         "laminas/laminas-server": "^2.6.1",
-        "laminas/laminas-servicemanager": "^2.7.8",
+        "laminas/laminas-servicemanager": "^3.6.0",
         "laminas/laminas-session": "^2.7.3",
         "laminas/laminas-soap": "^2.7.0",
         "laminas/laminas-stdlib": "^3.2.1",
