@@ -147,12 +147,12 @@ class ParserTest extends TestCase
     {
         $testContent = file_get_contents(__DIR__ . '/_files/datatranslate_fixture.html');
         $processedAttributes = [
-            "data-translate=\"[{'shown':'* Required Fields','translated':'* Required Fields',"
-            . "'original':'* Required Fields','location':'Tag attribute (ALT, TITLE, etc.)'}]\"",
-            "data-translate=\"[{'shown':'Email','translated':'Email','original':'Email',"
-            . "'location':'Tag attribute (ALT, TITLE, etc.)'}]\"",
-            "data-translate=\"[{'shown':'Password','translated':'Password','original':'Password',"
-            . "'location':'Tag attribute (ALT, TITLE, etc.)'}]\""
+            "data-translate=\"[{&quot;shown&quot;:&quot;* Required Fields&quot;,&quot;translated&quot;:&quot;* Required Fields&quot;,"
+            . "&quot;original&quot;:&quot;* Required Fields&quot;,&quot;location&quot;:&quot;Tag attribute (ALT, TITLE, etc.)&quot;}]\"",
+            "data-translate=\"[{&quot;shown&quot;:&quot;Email&quot;,&quot;translated&quot;:&quot;Email&quot;,&quot;original&quot;:&quot;Email&quot;,"
+            . "&quot;location&quot;:&quot;Tag attribute (ALT, TITLE, etc.)&quot;}]\"",
+            "data-translate=\"[{&quot;shown&quot;:&quot;Password&quot;,&quot;translated&quot;:&quot;Password&quot;,&quot;original&quot;:&quot;Password&quot;,"
+            . "&quot;location&quot;:&quot;Tag attribute (ALT, TITLE, etc.)&quot;}]\""
         ];
         $this->translateInlineMock->method('getAdditionalHtmlAttribute')->willReturn(null);
 
