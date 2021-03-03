@@ -11,6 +11,8 @@ use League\Flysystem\Config;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use Magento\RemoteStorage\Driver\Adapter\Cache\CacheInterface;
+use phpDocumentor\Reflection\Types\Iterable_;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\iterator;
 
 /**
  * Cached adapter implementation for filesystem storage.
@@ -63,7 +65,6 @@ class CachedAdapter implements FilesystemAdapter
         $object = [
             'type' => 'file',
             'path' => $path,
-            'contents' => $contents
         ];
         $this->cache->updateMetadata($path, $object, true);
     }
@@ -77,7 +78,6 @@ class CachedAdapter implements FilesystemAdapter
         $object = [
             'type' => 'file',
             'path' => $path,
-            'contents' => false
         ];
         $this->cache->updateMetadata($path, $object, true);
     }
@@ -166,17 +166,7 @@ class CachedAdapter implements FilesystemAdapter
      */
     public function read(string $path): string
     {
-        $result = $this->cache->getFileContents($path);
-        if (isset($result['contents'])) {
-            return $result['contents'];
-        }
-        $result = $this->adapter->read($path);
-        if ($result) {
-            $object = ['path' => $path, 'contents' => $result];
-            $this->cache->updateMetadata($path, $object, true);
-        }
-
-        return $result;
+        return $this->adapter->read($path);
     }
 
     /**

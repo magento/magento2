@@ -23,14 +23,6 @@ class DummyMetadataCache implements \Magento\RemoteStorage\Driver\Adapter\Cache\
     /**
      * @inheirtDoc
      */
-    public function getFileContents(string $path): ?array
-    {
-        return null;
-    }
-
-    /**
-     * @inheirtDoc
-     */
     public function getMetadata(string $path): ?array
     {
         return null;
@@ -46,14 +38,7 @@ class DummyMetadataCache implements \Magento\RemoteStorage\Driver\Adapter\Cache\
     /**
      * @inheirtDoc
      */
-    public function persist(): void
-    {
-    }
-
-    /**
-     * @inheirtDoc
-     */
-    public function load(): void
+    public function purgeQueue(): void
     {
     }
 

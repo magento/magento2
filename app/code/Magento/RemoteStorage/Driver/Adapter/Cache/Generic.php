@@ -67,48 +67,12 @@ class Generic implements CacheInterface
     }
 
     /**
-     * Destructor.
-     * @deprecated
-     */
-    public function __destruct()
-    {
-        $this->persist();
-    }
-
-    /**
      * @inheritdoc
      */
-    public function load(): void
+    public function purgeQueue(): void
     {
-        $cacheAdapterFrontend = $this->cacheAdapter->getFrontend();
-        $cacheIdPrefix = (string) $cacheAdapterFrontend->getLowLevelFrontend()->getOption('cache_id_prefix');
-        $cacheIds = $cacheAdapterFrontend->getBackend()->getIdsMatchingTags(["{$cacheIdPrefix}flysystem"]);
-
-        foreach ($cacheIds as $cacheId) {
-            $contents = $this->cacheAdapter->load($cacheId);
-
-            if ($contents !== false) {
-                $this->setFromStorage($contents);
-            }
-        }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function persist(): void
-    {
-        $contents = $this->filterData($this->cacheData);
-
-        foreach ($contents as $path => $metadata) {
-            $this->cacheAdapter->save(
-                $this->serializer->serialize([$path => $metadata]),
-                $this->prefix . $path,
-                ['flysystem']
-            );
-        }
-
         foreach ($this->cachePathPurgeQueue as $path) {
+            unset($this->cacheData[$path]);
             $this->cacheAdapter->remove($this->prefix . $path);
         }
     }
@@ -125,7 +89,11 @@ class Generic implements CacheInterface
         $this->cacheData[$path] = array_merge($this->cacheData[$path], $objectMetadata);
 
         if ($persist) {
-            $this->persist();
+            $this->cacheAdapter->save(
+                $this->serializer->serialize([$path => $this->cacheData[$path]]),
+                $this->prefix . $path,
+                [self::CACHE_TAG]
+            );
         }
 
         $this->ensureParentDirectories($path);
@@ -137,7 +105,11 @@ class Generic implements CacheInterface
     public function resetData(string $path): void
     {
         $this->cacheData[$path] = false;
-        $this->persist();
+        $this->cacheAdapter->save(
+            $this->serializer->serialize([$path => $this->cacheData[$path]]),
+            $this->prefix . $path,
+            [self::CACHE_TAG]
+        );
     }
 
     /**
@@ -146,28 +118,16 @@ class Generic implements CacheInterface
     public function exists(string $path): bool
     {
         if (!isset($this->cacheData[$path])) {
-            $contents = $this->cacheAdapter->load($this->prefix . $path);
+            $fileMeta = $this->cacheAdapter->load($this->prefix . $path);
 
-            if ($contents === false) {
+            if ($fileMeta === false) {
                 return false;
             }
 
-            $this->setFromStorage($contents);
+            $this->setFromStorage($fileMeta);
         }
 
         return $this->cacheData[$path] !== false;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getFileContents(string $path): ?array
-    {
-        if (isset($this->cacheData[$path]['contents']) && $this->cacheData[$path]['contents'] !== false) {
-            return $this->cacheData[$path];
-        }
-
-        return null;
     }
 
     /**
@@ -182,7 +142,12 @@ class Generic implements CacheInterface
             $object['path'] = $newpath;
             $object = array_merge($object, $this->pathUtil->pathInfo($newpath));
             $this->cacheData[$newpath] = $object;
-            $this->persist();
+            $this->cacheAdapter->save(
+                $this->serializer->serialize([$newpath => $this->cacheData[$newpath]]),
+                $this->prefix . $newpath,
+                [self::CACHE_TAG]
+            );
+            $this->purgeQueue();
         }
     }
 
@@ -218,7 +183,7 @@ class Generic implements CacheInterface
             }
         }
 
-        $this->persist();
+        $this->purgeQueue();
     }
 
     /**
@@ -234,41 +199,12 @@ class Generic implements CacheInterface
     }
 
     /**
-     * Filter data to store in the cache.
-     *
-     * @param array $objectListing
-     * @return array
-     */
-    private function filterData(array $objectListing)
-    {
-        $cachedProperties = array_flip([
-            'path',
-            'size',
-            'type',
-            'timestamp',
-            'visibility',
-            'mimetype',
-            'basename',
-            'dirname',
-            'extra'
-        ]);
-
-        foreach ($objectListing as $path => $object) {
-            if (is_array($object)) {
-                $objectListing[$path] = array_intersect_key($object, $cachedProperties);
-            }
-        }
-
-        return $objectListing;
-    }
-
-    /**
      * @inheritdoc
      */
     public function flushCache(): void
     {
         $this->cacheData = [];
-        $this->persist();
+        $this->cacheAdapter->clean([self::CACHE_TAG]);
     }
 
     /**

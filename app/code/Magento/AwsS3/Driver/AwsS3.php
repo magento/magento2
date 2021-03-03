@@ -143,7 +143,7 @@ class AwsS3 implements RemoteDriverInterface
         }
 
         try {
-            return $this->adapter->fileExists($path) || $this->directoryExists($path);
+            return $this->adapter->fileExists($path);
         } catch (\League\Flysystem\FilesystemException $e) {
             $this->logger->error($e->getMessage());
             return false;
@@ -279,7 +279,7 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function readDirectoryRecursively($path = null): array
     {
-        return $this->readPath($path, true);
+        return $this->readPath($this->normalizeRelativePath($path), true);
     }
 
     /**
@@ -287,7 +287,7 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function readDirectory($path): array
     {
-        return $this->readPath($path, false);
+        return $this->readPath($this->normalizeRelativePath($path), false);
     }
 
     /**
@@ -466,7 +466,7 @@ class AwsS3 implements RemoteDriverInterface
     private function directoryExists(string $path): bool
     {
         try {
-            return iterator_count($this->adapter->listContents($path, false)) > 0;
+            return $this->adapter->fileExists($path);
         } catch (\Throwable $e) {
             // catch closed iterator
             return false;
@@ -918,17 +918,15 @@ class AwsS3 implements RemoteDriverInterface
     private function readPath(string $path, $isRecursive = false): array
     {
         $relativePath = $this->normalizeRelativePath($path);
-        $contentsList = $this->adapter->listContents(
-            $this->fixPath($relativePath),
-            $isRecursive
-        );
-
         $itemsList = [];
-        foreach ($contentsList as $item) {
-            if (isset($item['path'])
-                && $item['path'] !== $relativePath
-                && (!$relativePath || strpos($item['path'], $relativePath) === 0)) {
-                $itemsList[] = $this->getAbsolutePath(dirname($item['path']), $item['path']);
+        foreach ($this->adapter->listContents($this->fixPath($relativePath), $isRecursive) as $listing) {
+            foreach ($listing as $item) {
+                $path = $item->path();
+                if (!empty($path)
+                    && $path !== $relativePath
+                    && (!$relativePath || strpos($path, $relativePath) === 0)) {
+                    $itemsList[] = $this->getAbsolutePath(dirname($path), $path);
+                }
             }
         }
 

@@ -14,20 +14,17 @@ namespace Magento\RemoteStorage\Driver\Adapter\Cache;
 interface CacheInterface
 {
     /**
+     * Cache tag
+     */
+    public const CACHE_TAG = 'flysystem';
+
+    /**
      * Check if file data exists in cache.
      *
      * @param string $path
      * @return bool
      */
     public function exists(string $path): bool;
-
-    /**
-     * Read file data from cache.
-     *
-     * @param string $path
-     * @return array|null
-     */
-    public function getFileContents(string $path): ?array;
 
     /**
      * Get metadata for path.
@@ -45,12 +42,7 @@ interface CacheInterface
     /**
      * Save data to storage.
      */
-    public function persist(): void;
-
-    /**
-     * Load the cache.
-     */
-    public function load(): void;
+    public function purgeQueue(): void;
 
     /**
      * Rename/move a file or directory.
