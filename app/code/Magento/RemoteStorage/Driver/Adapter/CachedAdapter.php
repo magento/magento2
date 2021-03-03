@@ -10,7 +10,6 @@ namespace Magento\RemoteStorage\Driver\Adapter;
 use League\Flysystem\Config;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
-use League\Flysystem\UnableToRetrieveMetadata;
 use Magento\RemoteStorage\Driver\Adapter\Cache\CacheInterface;
 
 /**
@@ -53,7 +52,6 @@ class CachedAdapter implements FilesystemAdapter
         $this->adapter = $adapter;
         $this->cache = $cache;
         $this->metadataProviderFactory = $metadataProviderFactory;
-        $this->cache->load();
     }
 
     /**
