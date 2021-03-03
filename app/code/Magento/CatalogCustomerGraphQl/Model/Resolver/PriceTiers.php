@@ -155,7 +155,8 @@ class PriceTiers implements ResolverInterface
         array $tierPrices,
         string $currencyCode
     ): array {
-        $this->resetFormatAndFilterTierPrices();
+        $this->formatAndFilterTierPrices = [];
+        $this->tierPricesQty = [];
         foreach ($tierPrices as $key => $tierPrice) {
             $tierPrice->setValue($this->priceCurrency->convertAndRound($tierPrice->getValue()));
             $this->formatTierPrices($productPrice, $currencyCode, $tierPrice);
@@ -213,16 +214,6 @@ class PriceTiers implements ResolverInterface
             }
         } else {
             $this->tierPricesQty[$qty] = $key;
-        }
-    }
-
-    /**
-     *  Remove all element from formatAndFilterTierPrices
-     */
-    private function resetFormatAndFilterTierPrices()
-    {
-        foreach ($this->formatAndFilterTierPrices as $key => $value) {
-            unset($this->formatAndFilterTierPrices[$key]);
         }
     }
 }
