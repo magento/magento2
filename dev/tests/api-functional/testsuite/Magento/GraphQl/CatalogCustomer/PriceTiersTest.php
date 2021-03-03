@@ -118,6 +118,34 @@ class PriceTiersTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/three_simple_products_with_tier_price.php
+     */
+    public function testGetCorrectDisplaingTierPriceForProducts()
+    {
+        $productSku = 'simple';
+        $query =  <<<QUERY
+{
+  products(search: "{$productSku}") {
+   items {
+        id
+        name
+          price_tiers {
+              quantity
+              final_price {
+                  value
+              }
+          }
+      }
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $this->assertCount(1, $response['products']['items'][0]['price_tiers']);
+        $this->assertCount(1, $response['products']['items'][1]['price_tiers']);
+        $this->assertCount(1, $response['products']['items'][2]['price_tiers']);
+    }
+
+    /**
      * Get the tier price value for the given product quantity
      *
      * @param float $quantity

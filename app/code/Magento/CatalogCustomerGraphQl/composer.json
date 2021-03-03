@@ -7,8 +7,7 @@
         "magento/framework": "*",
         "magento/module-catalog": "*",
         "magento/module-customer": "*",
-        "magento/module-catalog-graph-ql": "*",
-        "magento/module-store": "*"
+        "magento/module-catalog-graph-ql": "*"
     },
     "license": [
         "OSL-3.0",
