@@ -9,6 +9,7 @@ namespace Magento\Store\Model\Validation;
 
 use Magento\Framework\Validator\AbstractValidator;
 use Magento\Framework\Validator\DataObjectFactory;
+use Magento\Framework\Validator\ValidatorInterface;
 
 /**
  * Store model validator.
@@ -21,15 +22,15 @@ class StoreValidator extends AbstractValidator
     private $dataObjectValidatorFactory;
 
     /**
-     * @var array
+     * @var ValidatorInterface[]
      */
     private $rules;
 
     /**
      * @param DataObjectFactory $dataObjectValidatorFactory
-     * @param array $rules
+     * @param ValidatorInterface[] $rules
      */
-    public function __construct(DataObjectFactory $dataObjectValidatorFactory, array $rules)
+    public function __construct(DataObjectFactory $dataObjectValidatorFactory, array $rules = [])
     {
         $this->dataObjectValidatorFactory = $dataObjectValidatorFactory;
         $this->rules = $rules;
