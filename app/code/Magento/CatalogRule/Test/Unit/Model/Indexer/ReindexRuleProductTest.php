@@ -21,6 +21,8 @@ use PHPUnit\Framework\TestCase;
 
 class ReindexRuleProductTest extends TestCase
 {
+    private const ADMIN_WEBSITE_ID = 0;
+
     /**
      * @var ReindexRuleProduct
      */
@@ -57,7 +59,8 @@ class ReindexRuleProductTest extends TestCase
             $this->resourceMock,
             $this->activeTableSwitcherMock,
             $this->tableSwapperMock,
-            $this->localeDateMock
+            $this->localeDateMock,
+            true
         );
     }
 
@@ -85,6 +88,7 @@ class ReindexRuleProductTest extends TestCase
     public function testExecute()
     {
         $websiteId = 3;
+        $adminTimeZone = 'America/Chicago';
         $websiteTz = 'America/Los_Angeles';
         $productIds = [
             4 => [$websiteId => 1],
@@ -123,10 +127,11 @@ class ReindexRuleProductTest extends TestCase
         $ruleMock->expects($this->once())->method('getDiscountAmount')->willReturn(43);
         $ruleMock->expects($this->once())->method('getStopRulesProcessing')->willReturn(true);
 
-        $this->localeDateMock->expects($this->once())
-            ->method('getConfigTimezone')
-            ->with(ScopeInterface::SCOPE_WEBSITE, $websiteId)
-            ->willReturn($websiteTz);
+        $this->localeDateMock->method('getConfigTimezone')
+            ->willReturnMap([
+                [ScopeInterface::SCOPE_WEBSITE, self::ADMIN_WEBSITE_ID, $adminTimeZone],
+                [ScopeInterface::SCOPE_WEBSITE, $websiteId, $websiteTz],
+            ]);
 
         $batchRows = [
             [
