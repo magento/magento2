@@ -6,7 +6,8 @@
 namespace Magento\Customer\Api\Data;
 
 /**
- * Customer interface.
+ * Customer entity interface for API handling.
+ *
  * @api
  * @since 100.0.2
  */
