@@ -7,9 +7,14 @@
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Customer;
 
+/**
+ * Customer collection
+ */
 class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collection
 {
     /**
+     * @inheritDoc
+     *
      * @return $this
      */
     protected function _initSelect()
@@ -38,7 +43,7 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
             null,
             'left'
         )->joinAttribute(
-            'billing_regione',
+            'billing_region',
             'customer_address/region',
             'default_billing',
             null,
