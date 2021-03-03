@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontVerifyBundleProductOptionOnOrderActionGroup">
+        <annotations>
+            <description>Verify bundle option data for the specified option index on a placed order on the storefront.</description>
+        </annotations>
+        <arguments>
+            <argument name="optionTitle" defaultValue="{{DropDownBundleOption.title}}" type="string"/>
+            <argument name="optionProductName" defaultValue="{{_defaultProduct.name}}" type="string"/>
+            <argument name="optionProductSku" defaultValue="{{_defaultProduct.sku}}" type="string"/>
+            <argument name="optionProductQuantityDescription" defaultValue="Ordered 1" type="string"/>
+            <argument name="productIndex" defaultValue="1" type="string"/>
+            <argument name="optionIndex" defaultValue="1" type="string"/>
+        </arguments>
+        <waitForText userInput="{{optionTitle}}" selector="{{StorefrontCustomerOrderViewSection.productOptionLabel(productIndex, optionIndex)}}" stepKey="seeOptionTitle"/>
+        <see userInput="{{optionProductName}}" selector="{{StorefrontCustomerOrderViewSection.productOptionProductName(productIndex, optionIndex)}}" stepKey="seeOptionProductName"/>
+        <see userInput="{{optionProductSku}}" selector="{{StorefrontCustomerOrderViewSection.productOptionProductSku(productIndex, optionIndex)}}" stepKey="seeOptionProductSku"/>
+        <see userInput="{{optionProductQuantityDescription}}" selector="{{StorefrontCustomerOrderViewSection.productOptionProductQuantity(productIndex, optionIndex)}}" stepKey="seeOptionProductQuantity"/>
+    </actionGroup>
+</actionGroups>

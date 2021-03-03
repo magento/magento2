@@ -16,6 +16,7 @@ use Magento\Catalog\Model\Product\Media\Config;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
@@ -135,6 +136,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteWithIllegalFilename(): void
     {
+        $this->expectException(ValidatorException::class);
         $product = $this->getProduct();
         $product->setData(
             'media_gallery',
@@ -142,7 +144,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
                 'images' => [
                     'image' => [
                         'value_id' => '100',
-                        'file' => '/../..' . DIRECTORY_SEPARATOR . $this->fileName,
+                        'file' => '/../../..' . DIRECTORY_SEPARATOR . $this->fileName,
                         'label' => 'New image',
                         'removed' => 1,
                     ],
@@ -589,6 +591,102 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
                 '/m/a/magento_small_image.jpg',
                 '/m/a/magento_small_image.jpg',
                 false
+            ]
+        ];
+    }
+
+    /**
+     * Tests that images are added correctly
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
+     * @magentoDataFixture Magento/Store/_files/second_store.php
+     * @dataProvider addImagesDataProvider
+     * @param string $addFromStore
+     * @param array $newImages
+     * @param string $viewFromStore
+     * @param array $expectedImages
+     * @param array $select
+     * @return void
+     */
+    public function testAddImages(
+        string $addFromStore,
+        array $newImages,
+        string $viewFromStore,
+        array $expectedImages,
+        array $select = ['file', 'label', 'position']
+    ): void {
+        $storeId = (int)$this->storeRepository->get($addFromStore)->getId();
+        $product = $this->getProduct($storeId);
+        $images = $product->getData('media_gallery')['images'];
+        $images = array_merge($images, $newImages);
+        $product->setData('media_gallery', ['images' => $images]);
+        $this->updateHandler->execute($product);
+        $storeId = (int)$this->storeRepository->get($viewFromStore)->getId();
+        $product = $this->getProduct($storeId);
+        $actualImages = array_map(
+            function (\Magento\Framework\DataObject $item) use ($select) {
+                return $item->toArray($select);
+            },
+            $product->getMediaGalleryImages()->getItems()
+        );
+        $this->assertEquals($expectedImages, array_values($actualImages));
+    }
+
+    /**
+     * @return array[]
+     */
+    public function addImagesDataProvider(): array
+    {
+        return [
+            [
+                'fixture_second_store',
+                [
+                    [
+                        'file' => '/m/a/magento_small_image.jpg',
+                        'position' => 2,
+                        'label' => 'New Image Alt Text',
+                        'disabled' => 0,
+                        'media_type' => 'image'
+                    ]
+                ],
+                'default',
+                [
+                    [
+                        'file' => '/m/a/magento_image.jpg',
+                        'label' => 'Image Alt Text',
+                        'position' => 1,
+                    ],
+                    [
+                        'file' => '/m/a/magento_small_image.jpg',
+                        'label' => null,
+                        'position' => 2,
+                    ],
+                ]
+            ],
+            [
+                'fixture_second_store',
+                [
+                    [
+                        'file' => '/m/a/magento_small_image.jpg',
+                        'position' => 2,
+                        'label' => 'New Image Alt Text',
+                        'disabled' => 0,
+                        'media_type' => 'image'
+                    ]
+                ],
+                'fixture_second_store',
+                [
+                    [
+                        'file' => '/m/a/magento_image.jpg',
+                        'label' => 'Image Alt Text',
+                        'position' => 1,
+                    ],
+                    [
+                        'file' => '/m/a/magento_small_image.jpg',
+                        'label' => 'New Image Alt Text',
+                        'position' => 2,
+                    ],
+                ]
             ]
         ];
     }
