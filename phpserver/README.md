@@ -14,7 +14,7 @@ Without a router script, that is not possible via the php built-in server.
 
 ### How to install Magento
 
-Magento's web-based Setup Wizard runs from the `setup` subdirectory, which PHP's built-in web server cannot route. Therefore, you must install Magento using the <a href="https://devdocs.magento.com/guides/v2.3/install-gde/install/cli/install-cli.html" target="_blank">command line</a>. An example follows:
+Please read how to install Magento using the <a href="https://devdocs.magento.com/guides/v2.3/install-gde/install/cli/install-cli.html" target="_blank">command line</a>. An example follows:
 
 ```
 php bin/magento setup:install --base-url=http://127.0.0.1:8082 

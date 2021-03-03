@@ -51,7 +51,7 @@ To deploy sample data from the GitHub repository:
 
 ## Install Sample Data
 
-Once the sample data is deployed, it will be installed automatically when you install or upgrade your Magento instance either by using the Magento Setup Wizard or from the command line.
+Once the sample data is deployed, it will be installed automatically when you install or upgrade your Magento instance by using the command line.
 
 ## Uninstall Sample Data
 
