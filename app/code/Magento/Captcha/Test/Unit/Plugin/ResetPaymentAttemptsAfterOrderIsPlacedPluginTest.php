@@ -10,7 +10,7 @@ namespace Magento\Captcha\Test\Unit\Plugin;
 
 use Magento\Captcha\Model\ResourceModel\Log;
 use Magento\Captcha\Model\ResourceModel\LogFactory;
-use Magento\Captcha\Plugin\FrontendOrderPlacementPlugin;
+use Magento\Captcha\Plugin\ResetPaymentAttemptsAfterOrderIsPlacedPlugin;
 use Magento\Captcha\Helper\Data as HelperCaptcha;
 use Magento\Captcha\Model\DefaultModel;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -18,9 +18,9 @@ use Magento\Sales\Api\OrderManagementInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Unit test for \Magento\Captcha\Observer\FrontendOrderPlacementPluginTest
+ * Unit test for ResetPaymentAttemptsAfterOrderIsPlacedPluginTest
  */
-class FrontendOrderPlacementPluginTest extends TestCase
+class ResetPaymentAttemptsAfterOrderIsPlacedPluginTest extends TestCase
 {
     /**
      * Test that the method resets attempts for frontend checkout
@@ -39,7 +39,7 @@ class FrontendOrderPlacementPluginTest extends TestCase
         $logMock->expects($this->once())->method('deleteUserAttempts')->willReturnSelf();
         $resLogFactoryMock = $this->createMock(LogFactory::class);
         $resLogFactoryMock->expects($this->once())->method('create')->willReturn($logMock);
-        $observer = new FrontendOrderPlacementPlugin($helperCaptchaMock, $resLogFactoryMock);
+        $observer = new ResetPaymentAttemptsAfterOrderIsPlacedPlugin($helperCaptchaMock, $resLogFactoryMock);
         $observer->afterPlace($orderManagementInterfaceMock, $resultOrderMock, $orderMock);
     }
 }

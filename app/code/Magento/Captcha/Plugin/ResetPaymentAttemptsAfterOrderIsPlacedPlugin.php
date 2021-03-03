@@ -13,7 +13,7 @@ use Magento\Sales\Api\OrderManagementInterface;
 /**
  * Reset attempts for frontend checkout
  */
-class FrontendOrderPlacementPlugin
+class ResetPaymentAttemptsAfterOrderIsPlacedPlugin
 {
     /**
      * Form ID
@@ -23,7 +23,7 @@ class FrontendOrderPlacementPlugin
     /**
      * @var HelperCaptcha
      */
-    private HelperCaptcha $helper;
+    private $helper;
 
     /**
      * @var LogFactory
@@ -31,7 +31,7 @@ class FrontendOrderPlacementPlugin
     private $resLogFactory;
 
     /**
-     * ResetAttemptForFrontendAccountEditObserver constructor
+     * ResetPaymentAttemptsAfterOrderIsPlacedPlugin constructor
      *
      * @param HelperCaptcha $helper
      * @param LogFactory $resLogFactory

@@ -35,6 +35,6 @@
         </arguments>
     </type>
     <type name="Magento\Sales\Api\OrderManagementInterface">
-        <plugin name="frontend_order_placement_reset_captcha_attempt" type="Magento\Captcha\Plugin\FrontendOrderPlacementPlugin"/>
+        <plugin name="reset_payment_attempts_after_order_is_placed_plugin" type="Magento\Captcha\Plugin\ResetPaymentAttemptsAfterOrderIsPlacedPlugin"/>
     </type>
 </config>
