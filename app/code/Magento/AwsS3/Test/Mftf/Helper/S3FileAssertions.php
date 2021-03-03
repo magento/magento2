@@ -158,7 +158,7 @@ class S3FileAssertions extends Helper
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function assertSearchedForFileExists($path, $pattern, $message = ""): void
+    public function assertGlobbedFileExists($path, $pattern, $message = ""): void
     {
         $files = $this->driver->search($pattern, $path);
         $this->assertNotEmpty($files, $message);
@@ -233,7 +233,7 @@ class S3FileAssertions extends Helper
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function assertSearchedForFileContainsString($path, $pattern, $text, $fileIndex = 0, $message = ""): void
+    public function assertGlobbedFileContainsString($path, $pattern, $text, $fileIndex = 0, $message = ""): void
     {
         $files = $this->driver->search($pattern, $path);
         $this->assertStringContainsString($text, $this->driver->fileGetContents($files[$fileIndex]), $message);

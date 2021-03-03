@@ -143,7 +143,7 @@ class LocalFileAssertions extends Helper
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function assertSearchedForFileExists($path, $pattern, $message = ""): void
+    public function assertGlobbedFileExists($path, $pattern, $message = ""): void
     {
         $realPath = $this->expandPath($path);
         $files = $this->driver->search($pattern, $realPath);
@@ -223,7 +223,7 @@ class LocalFileAssertions extends Helper
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function assertSearchedForFileContainsString($path, $pattern, $text, $fileIndex = 0, $message = ""): void
+    public function assertGlobbedFileContainsString($path, $pattern, $text, $fileIndex = 0, $message = ""): void
     {
         $realPath = $this->expandPath($path);
         $files = $this->driver->search($pattern, $realPath);
