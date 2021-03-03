@@ -110,7 +110,7 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
      * @dataProvider importReplaceDataProvider
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function testImportReplaceWithPagination(array $fixtures, array $skus, array $skippedAttributes = []): void
+    public function testImportReplaceWithPagination(array $fixtures, array $skus, array $skippedAttributes = [])
     {
         $skippedAttributesExtended = array_merge($skippedAttributes, ['_cache_instance_product_set_attributes']);
         parent::testImportReplaceWithPagination($fixtures, $skus, $skippedAttributesExtended);
