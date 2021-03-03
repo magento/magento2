@@ -25,6 +25,7 @@
             <group value="catalog_import_export"/>
             <group value="mtf_migrated"/>
         </annotations>
+
         <before>
             <!--Create bundle product with dynamic price with two simple products -->
             <createData entity="SimpleProduct2" stepKey="firstSimpleProductForDynamic"/>
@@ -87,7 +88,9 @@
             </createData>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
+
         <after>
+            <!-- Delete Data & Reindex -->
             <deleteData createDataKey="createDynamicBundleProduct" stepKey="deleteDynamicBundleProduct"/>
             <deleteData createDataKey="firstSimpleProductForDynamic" stepKey="deleteFirstSimpleProductForDynamic"/>
             <deleteData createDataKey="secondSimpleProductForDynamic" stepKey="deleteSecondSimpleProductForDynamic"/>
