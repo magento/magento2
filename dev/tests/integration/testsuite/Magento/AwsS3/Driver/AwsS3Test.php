@@ -155,7 +155,6 @@ class AwsS3Test extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($this->awsDriver->isWritable(self::TEST_FILE_PATH));
         $this->assertTrue($this->awsDriver->isWritable(dirname(self::TEST_FILE_PATH)));
-
     }
 
     public function testCreateDir()
@@ -166,5 +165,4 @@ class AwsS3Test extends \PHPUnit\Framework\TestCase
         $this->awsDriver->deleteDirectory('test_create');
         $this->assertFalse($this->awsDriver->isExists('test_create'));
     }
-
 }

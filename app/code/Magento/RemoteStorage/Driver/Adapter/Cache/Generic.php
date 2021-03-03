@@ -22,6 +22,13 @@ class Generic implements CacheInterface
     private $cacheData = [];
 
     /**
+     * List of cache paths to be purged when persist is called
+     *
+     * @var array
+     */
+    private $cachePathPurgeQueue = [];
+
+    /**
      * @var string
      */
     private $prefix;
@@ -73,9 +80,16 @@ class Generic implements CacheInterface
      */
     public function load(): void
     {
-        $contents = $this->cacheAdapter->load($this->prefix);
-        if ($contents !== false) {
-            $this->setFromStorage($contents);
+        $cacheAdapterFrontend = $this->cacheAdapter->getFrontend();
+        $cacheIdPrefix = (string) $cacheAdapterFrontend->getLowLevelFrontend()->getOption('cache_id_prefix');
+        $cacheIds = $cacheAdapterFrontend->getBackend()->getIdsMatchingTags(["{$cacheIdPrefix}flysystem"]);
+
+        foreach ($cacheIds as $cacheId) {
+            $contents = $this->cacheAdapter->load($cacheId);
+
+            if ($contents !== false) {
+                $this->setFromStorage($contents);
+            }
         }
     }
 
@@ -84,8 +98,19 @@ class Generic implements CacheInterface
      */
     public function persist(): void
     {
-        $contents = $this->getForStorage();
-        $this->cacheAdapter->save($contents, $this->prefix);
+        $contents = $this->filterData($this->cacheData);
+
+        foreach ($contents as $path => $metadata) {
+            $this->cacheAdapter->save(
+                $this->serializer->serialize([$path => $metadata]),
+                $this->prefix . $path,
+                ['flysystem']
+            );
+        }
+
+        foreach ($this->cachePathPurgeQueue as $path) {
+            $this->cacheAdapter->remove($this->prefix . $path);
+        }
     }
 
     /**
@@ -120,10 +145,17 @@ class Generic implements CacheInterface
      */
     public function exists(string $path): bool
     {
-        if (isset($this->cacheData[$path])) {
-            return $this->cacheData[$path] !== false;
+        if (!isset($this->cacheData[$path])) {
+            $contents = $this->cacheAdapter->load($this->prefix . $path);
+
+            if ($contents === false) {
+                return false;
+            }
+
+            $this->setFromStorage($contents);
         }
-        return false;
+
+        return $this->cacheData[$path] !== false;
     }
 
     /**
@@ -146,6 +178,7 @@ class Generic implements CacheInterface
         if ($this->exists($path)) {
             $object = $this->cacheData[$path];
             unset($this->cacheData[$path]);
+            $this->cachePathPurgeQueue[] = $path;
             $object['path'] = $newpath;
             $object = array_merge($object, $this->pathUtil->pathInfo($newpath));
             $this->cacheData[$newpath] = $object;
@@ -181,6 +214,7 @@ class Generic implements CacheInterface
         foreach ($this->cacheData as $path => $object) {
             if ($this->pathIsInDirectory($dirname, $path) || $path === $dirname) {
                 unset($this->cacheData[$path]);
+                $this->cachePathPurgeQueue[] = $path;
             }
         }
 
@@ -238,23 +272,13 @@ class Generic implements CacheInterface
     }
 
     /**
-     * Retrieve serialized cache data.
-     *
-     * @return string
-     */
-    private function getForStorage()
-    {
-        return $this->serializer->serialize($this->filterData($this->cacheData));
-    }
-
-    /**
      * Load from serialized cache data.
      *
      * @param string $json
      */
-    private function setFromStorage($json)
+    private function setFromStorage(string $json)
     {
-        $this->cacheData = $this->serializer->unserialize($json);
+        $this->cacheData = array_merge($this->cacheData, $this->serializer->unserialize($json));
     }
 
     /**
