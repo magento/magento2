@@ -34,4 +34,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Api\OrderManagementInterface">
+        <plugin name="frontend_order_placement_reset_captcha_attempt" type="Magento\Captcha\Plugin\FrontendOrderPlacementPlugin"/>
+    </type>
 </config>
