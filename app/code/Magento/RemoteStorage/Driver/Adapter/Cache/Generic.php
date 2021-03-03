@@ -120,7 +120,7 @@ class Generic implements CacheInterface
      */
     public function exists(string $path): bool
     {
-        if ($path !== false && isset($this->cacheData[$path])) {
+        if (isset($this->cacheData[$path])) {
             return $this->cacheData[$path] !== false;
         }
         return false;
@@ -244,7 +244,7 @@ class Generic implements CacheInterface
      */
     private function getForStorage()
     {
-        return $this->serializer->serialize([$this->filterData($this->cacheData)]);
+        return $this->serializer->serialize($this->filterData($this->cacheData));
     }
 
     /**

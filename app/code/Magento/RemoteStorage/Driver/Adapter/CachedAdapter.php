@@ -147,7 +147,7 @@ class CachedAdapter implements FilesystemAdapter
     {
         $cacheHas = $this->cache->exists($path);
 
-        if ($cacheHas) {
+        if ($cacheHas !== null) {
             return $cacheHas;
         }
 
@@ -194,7 +194,7 @@ class CachedAdapter implements FilesystemAdapter
      */
     public function listContents(string $path, bool $deep): iterable
     {
-        return $this->adapter->listContents($path, $deep);
+        yield $this->adapter->listContents($path, $deep);
     }
 
     /**
