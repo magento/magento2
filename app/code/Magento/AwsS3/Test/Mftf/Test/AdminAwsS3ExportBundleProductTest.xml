@@ -11,15 +11,15 @@
     <test name="AdminAwsS3ExportBundleProductTest" extends="AdminExportBundleProductTest">
         <annotations>
             <features value="AwsS3"/>
-            <stories value="Export Tax"/>
-            <title value="S3 - Export Tax Rates"/>
-            <description value="Exports tax rates from the System > Data Transfer > Import/Export Tax Rates page, from
-            the Tax Rule page, from the Tax Rates grid page as a .csv, and from the Tax Rates grid page as an .xml.
-            Validates contents in downloaded file for each export area. Note that MFTF cannot simply click export and
-            have access to the file that is downloaded in the browser due to the test not having access to the server
-            that is running the test browser. Therefore, this test verifies that the Export button can be successfully
-            clicked, grabs the request URL from the Export button's form, executes the request on the magento machine
-            via a curl request, and verifies the contents of the exported file. Uses S3 for the file system."/>
+            <stories value="Export Products"/>
+            <title value="S3 - Export Bundle Products"/>
+            <description value="Verifies that a user can export Bundle and Simple child products for Bundled products
+            with a dynamic price, a fixed price, and a custom attribute. Verifies that the exported file and the
+            downloadable copy of the exported file contain the expected products. Note that MFTF cannot simply download
+            a file and have access to it due to the test not having access to the server that is running the test
+            browser. Therefore, this test verifies that the Download button can be successfully clicked, grabs the
+            request URL from the Download button, executes the request on the magento machine via a curl request, and
+            verifies the contents of the downloaded file. Uses S3 for the file system."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-38558"/>
             <group value="importExport"/>
