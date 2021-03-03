@@ -21,7 +21,7 @@ $registry->register('isSecureArea', true);
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
 try {
-    $product = $productRepository->get('simple_10', false, null, true);
+    $product = $productRepository->get('simple_19', false, null, true);
     $productRepository->delete($product);
 } catch (NoSuchEntityException $e) {
 }

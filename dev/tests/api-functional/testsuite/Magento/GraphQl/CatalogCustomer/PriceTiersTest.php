@@ -128,7 +128,7 @@ class PriceTiersTest extends GraphQlAbstract
 {
   products(search: "{$productSku}") {
    items {
-        id
+        sku
         name
           price_tiers {
               quantity
@@ -141,10 +141,14 @@ class PriceTiersTest extends GraphQlAbstract
 }
 QUERY;
         $response = $this->graphQlQuery($query);
-        $this->assertCount(0, $response['products']['items'][0]['price_tiers']);
-        $this->assertCount(1, $response['products']['items'][1]['price_tiers']);
-        $this->assertCount(1, $response['products']['items'][2]['price_tiers']);
-        $this->assertCount(1, $response['products']['items'][3]['price_tiers']);
+        foreach ($response['products']['items'] as $key => $item) {
+            if ($item['sku'] == 'simple_19') {
+                $this->assertCount(0, $response['products']['items'][$key]['price_tiers']);
+            }
+            if (in_array($item['sku'], ['simple_1','simple_2','simple_3'])) {
+                $this->assertCount(1, $response['products']['items'][$key]['price_tiers']);
+            }
+        }
     }
 
     /**
