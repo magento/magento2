@@ -155,7 +155,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         if ($imageName = $this->getUploadedImageName($value)) {
-            if (!$this->fileResidesOutsideCategoryDir($value)) {
+            if ($this->isTmpFileAvailable($value) && !$this->fileResidesOutsideCategoryDir($value)) {
                 $imageName = $this->checkUniqueImageName($imageName);
             }
             $object->setData($this->additionalData . $attributeName, $value);
