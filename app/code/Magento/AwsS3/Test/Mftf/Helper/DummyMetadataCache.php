@@ -39,21 +39,6 @@ class DummyMetadataCache implements \Magento\RemoteStorage\Driver\Adapter\Cache\
     /**
      * @inheirtDoc
      */
-    public function isDirListingComplete(string $dirname, bool $recursive): bool
-    {
-        return false;
-    }
-
-    /**
-     * @inheirtDoc
-     */
-    public function setDirListingComplete(string $dirname, bool $recursive): void
-    {
-    }
-
-    /**
-     * @inheirtDoc
-     */
     public function flushCache(): void
     {
     }

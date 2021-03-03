@@ -100,7 +100,6 @@ class AwsS3Test extends \PHPUnit\Framework\TestCase
         $this->assertEquals('text/plain', $meta['mimetype']);
         $this->assertArrayHasKey('timestamp', $meta);
         $this->assertArrayHasKey('visibility', $meta);
-        $this->assertArrayHasKey('extra', $meta);
     }
 
     public function testStat()

@@ -22,11 +22,6 @@ class Generic implements CacheInterface
     private $cacheData = [];
 
     /**
-     * @var array
-     */
-    private $directoryData = [];
-
-    /**
      * @var string
      */
     private $prefix;
@@ -189,8 +184,6 @@ class Generic implements CacheInterface
             }
         }
 
-        unset($this->directoryData[$dirname]);
-
         $this->persist();
     }
 
@@ -204,30 +197,6 @@ class Generic implements CacheInterface
         }
 
         return null;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function isDirListingComplete(string $dirname, bool $recursive): bool
-    {
-        if (! isset($this->directoryData[$dirname])) {
-            return false;
-        }
-
-        if ($recursive && $this->directoryData[$dirname] !== 'recursive') {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setDirListingComplete(string $dirname, bool $recursive): void
-    {
-        $this->directoryData[$dirname] = $recursive ? 'recursive' : true;
     }
 
     /**
@@ -265,7 +234,6 @@ class Generic implements CacheInterface
     public function flushCache(): void
     {
         $this->cacheData = [];
-        $this->directoryData = [];
         $this->persist();
     }
 
@@ -276,8 +244,7 @@ class Generic implements CacheInterface
      */
     private function getForStorage()
     {
-        $cleaned = $this->filterData($this->cacheData);
-        return $this->serializer->serialize([$cleaned, $this->directoryData]);
+        return $this->serializer->serialize([$this->filterData($this->cacheData)]);
     }
 
     /**
@@ -287,9 +254,7 @@ class Generic implements CacheInterface
      */
     private function setFromStorage($json)
     {
-        list($cacheData, $directoryData) = $this->serializer->unserialize($json);
-        $this->cacheData = $cacheData;
-        $this->directoryData = $directoryData;
+        $this->cacheData = $this->serializer->unserialize($json);
     }
 
     /**
@@ -317,6 +282,6 @@ class Generic implements CacheInterface
      */
     private function pathIsInDirectory($directory, $path)
     {
-        return $directory === '' || strpos($path, $directory . '/') === 0;
+        return $directory === '' || strpos((string)$path, $directory . '/') === 0;
     }
 }

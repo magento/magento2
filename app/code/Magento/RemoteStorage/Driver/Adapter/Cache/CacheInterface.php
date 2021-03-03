@@ -38,23 +38,6 @@ interface CacheInterface
     public function getMetadata(string $path): ?array;
 
     /**
-     * Check is the directory listing complete.
-     *
-     * @param string $dirname
-     * @param bool $recursive
-     * @return bool
-     */
-    public function isDirListingComplete(string $dirname, bool $recursive): bool;
-
-    /**
-     * Set directory listing complete.
-     *
-     * @param string $dirname
-     * @param bool $recursive
-     */
-    public function setDirListingComplete(string $dirname, bool $recursive): void;
-
-    /**
      * Flush the cache.
      */
     public function flushCache(): void;
