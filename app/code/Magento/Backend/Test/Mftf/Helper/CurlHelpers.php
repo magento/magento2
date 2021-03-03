@@ -47,7 +47,7 @@ class CurlHelpers extends Helper
 
         // Set Options
         if ($postBody) {
-            $data = json_decode($postBody);
+            $data = json_decode($postBody, true);
             curl_setopt($session, CURLOPT_POST, true);
             curl_setopt($session, CURLOPT_POSTFIELDS, $data);
         }
