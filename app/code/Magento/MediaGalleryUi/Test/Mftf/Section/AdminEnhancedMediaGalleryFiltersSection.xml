@@ -26,5 +26,6 @@
         <element name="searchOptionsFilterDone" type="button" selector="//div[label/span[contains(text(), '{{filterName}}')]]//button[@data-action='close-advanced-select']" parameterized="true"/>
         <element name="duplicatedFilterCheckbox" type="button" selector="//input[@name='duplicated']"/>
         <element name="activeFilterValue" type="text" selector="//div[@class='media-gallery-container']//div[@class='admin__current-filters-list-wrap']//li//span[contains(text(), '{{filterPlaceholder}}')]" parameterized="true"/>
+        <element name="clearFilters" type="button" selector="//div[@class='media-gallery-container']//div[@class='admin__data-grid-header']//button[@data-action='grid-filter-reset']" timeout="30"/>
     </section>
 </sections>
