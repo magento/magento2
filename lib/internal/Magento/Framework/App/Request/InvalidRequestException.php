@@ -16,6 +16,8 @@ use Magento\Framework\Phrase;
 
 /**
  * Received request is invalid.
+ *
+ * @api
  */
 class InvalidRequestException extends RuntimeException
 {
