@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Shipping\Block\Adminhtml\Order;
 
 use Magento\Backend\Block\Template;
@@ -28,17 +30,80 @@ class AddToPackageTest extends TestCase
      */
     private $orderRepository;
 
-    /** @var ObjectManagerInterface */
+    /**
+     * @var ObjectManagerInterface
+     */
     private $objectManager;
 
-    /** @var Registry */
+    /**
+     * @var Registry
+     */
     private $registry;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->registry = $this->objectManager->get(Registry::class);
         $this->orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
+    }
+
+    /**
+     * Test that Packaging popup renders
+     *
+     * @magentoDataFixture Magento/Shipping/_files/shipping_with_carrier_data.php
+     */
+    public function testGetCommentsHtml(): void
+    {
+        $expectedNeedle = "packaging.setItemQtyCallback(function(itemId){
+            var item = $$('[name=\"shipment[items]['+itemId+']\"]')[0],
+                itemTitle = $('order_item_' + itemId + '_title');
+            if (!itemTitle && !item) {
+                return 0;
+            }
+            if (item && !isNaN(item.value)) {
+                return item.value;
+            }
+        });";
+        $this->assertStringContainsString($expectedNeedle, $this->getHtml());
+    }
+
+    /**
+     * Verify currency code on custom value field
+     *
+     * @magentoDataFixture Magento/Shipping/_files/shipping_with_carrier_data_different_currency_code.php
+     */
+    public function testGetCurrencyCodeCustomValue ()
+    {
+        $template = '/<span class="customs-value-currency">\s*?(?<currency>[A-Za-z]+)\s*?<\/span>/';
+        $matches = [];
+        preg_match($template, $this->getHtml(), $matches);
+        $currency = $matches['currency'] ?? null;
+        $this->assertEquals('FR',$currency );
+    }
+
+    /**
+     * Get html for packaging popup
+     *
+     * @return string
+     */
+    private function getHtml()
+    {
+        /** @var Template $block */
+        $block = $this->objectManager->get(Packaging::class);
+
+        $order = $this->getOrderByIncrementId('100000001');
+
+        /** @var ShipmentTrackInterface $track */
+        $shipment = $order->getShipmentsCollection()->getFirstItem();
+
+        $this->registry->register('current_shipment', $shipment);
+
+        $block->setTemplate('Magento_Shipping::order/packaging/popup.phtml');
+
+        return $block->toHtml();
     }
 
     /**
@@ -58,37 +123,5 @@ class AddToPackageTest extends TestCase
             ->getItems();
 
         return array_pop($items);
-    }
-
-    /**
-     * Test that Packaging popup renders
-     *
-     * @magentoDataFixture Magento/Shipping/_files/shipping_with_carrier_data.php
-     */
-    public function testGetCommentsHtml()
-    {
-        /** @var Template $block */
-        $block = $this->objectManager->get(Packaging::class);
-
-        $order = $this->getOrderByIncrementId('100000001');
-
-        /** @var ShipmentTrackInterface $track */
-        $shipment = $order->getShipmentsCollection()->getFirstItem();
-
-        $this->registry->register('current_shipment', $shipment);
-
-        $block->setTemplate('Magento_Shipping::order/packaging/popup.phtml');
-        $html = $block->toHtml();
-        $expectedNeedle = "packaging.setItemQtyCallback(function(itemId){
-            var item = $$('[name=\"shipment[items]['+itemId+']\"]')[0],
-                itemTitle = $('order_item_' + itemId + '_title');
-            if (!itemTitle && !item) {
-                return 0;
-            }
-            if (item && !isNaN(item.value)) {
-                return item.value;
-            }
-        });";
-        $this->assertStringContainsString($expectedNeedle, $html);
     }
 }
