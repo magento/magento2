@@ -161,7 +161,10 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Get date of birth
      *
-     * @return string|null
+     * @return string|null In keeping with current security and privacy best practices, be sure you are aware of any
+     * potential legal and security risks associated with the storage of customers’ full date of birth
+     * (month, day, year) along with other personal identifiers (e.g., full name) before collecting or processing
+     * such data.
      */
     public function getDob();
 
