@@ -11,9 +11,15 @@
     <test name="AdminExportBundleProductTest">
         <annotations>
             <features value="CatalogImportExport"/>
-            <stories value="Export products"/>
-            <title value="Export Bundle Product"/>
-            <description value="Admin should be able to export Bundle Product"/>
+            <stories value="Export Products"/>
+            <title value="Export Bundle Products"/>
+            <description value="Verifies that a user can export Bundle and Simple child products for Bundled products
+            with a dynamic price, a fixed price, and a custom attribute. Verifies that exported file and the
+            downloadable copy of the export file contain the expected products. Note that MFTF cannot simply download a
+            file and have access to it due to the test not having access to the server that is running the test browser.
+            Therefore, this test verifies that the Download button can be successfully clicked, grabs the request URL
+            from the Download button, executes the request on the magento machine via a curl request, and verifies the
+            contents of the downloaded file."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14008"/>
             <group value="catalog_import_export"/>
@@ -160,7 +166,7 @@
         </actionGroup>
 
         <!-- Validate Downloaded Export File -->
-        <grabAttributeFrom userInput="href" selector="{{AdminExportAttributeSection.download('0'}}" stepKey="grabExportUrl"/>
+        <grabAttributeFrom userInput="href" selector="{{AdminExportAttributeSection.download('0')}}" stepKey="grabExportUrl"/>
         <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsFirstSimpleProductForDynamic">
             <argument name="url">{$grabExportUrl}</argument>
             <argument name="expectedString">$$firstSimpleProductForDynamic.sku$$</argument>
