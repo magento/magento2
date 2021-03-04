@@ -2910,6 +2910,20 @@ class ProductTest extends TestCase
     }
 
     /**
+     * Test that imported product stock status with stock quantity < 0 and backorders functionality enabled
+     * can be set to 'In stock'.
+     *
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testInStockQtyEqualOrBelowZeroImportWithBackordersEnabled(): void
+    {
+        $this->importFile('products_to_import_with_backorders_enabled_in_stock_and_qty_0.csv');
+        $product = $this->getProductBySku('simple_new');
+        $this->assertTrue($product->getDataByKey('quantity_and_stock_status')['is_in_stock']);
+    }
+
+    /**
      * Import file by providing import filename and bunch size.
      *
      * @param string $fileName

@@ -3176,7 +3176,12 @@ class Product extends AbstractEntity
         $stockItemDo = $this->stockRegistry->getStockItem($row['product_id'], $row['website_id']);
         $existStockData = $stockItemDo->getData();
 
-        if (isset($rowData['qty']) && $rowData['qty'] == 0 && !isset($rowData['is_in_stock'])) {
+        //if we have a qty that is 0 and is_in_stock is not set and backorders are not enabled, only then set is_in_stock = 0
+        if (
+            isset($rowData['qty']) &&
+            $rowData['qty'] == 0 &&
+            !isset($rowData['is_in_stock']) &&
+            !$stockItemDo->getBackorders()) {
             $rowData['is_in_stock'] = 0;
         }
 
