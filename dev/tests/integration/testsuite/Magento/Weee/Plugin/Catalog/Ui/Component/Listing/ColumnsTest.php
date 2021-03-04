@@ -15,7 +15,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @magentoDbIsolation enabled
+ * Class ColumnsTest
+ * Check if FPT attribute column in product grid won't be sortable
  */
 class ColumnsTest extends TestCase
 {
@@ -48,8 +49,7 @@ class ColumnsTest extends TestCase
     }
 
     /**
-     * Check if FPT attribute column in product grid won't be sortable
-     *
+     * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Weee/_files/fixed_product_attribute.php
      */
     public function testGetProductWeeeAttributesConfig()
