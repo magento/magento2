@@ -433,8 +433,8 @@ class AwsS3Test extends TestCase
         $expression = '/*';
         $path = 'path';
         $subPaths = [
-            [new \League\Flysystem\DirectoryAttributes('path/1')],
-            [new \League\Flysystem\DirectoryAttributes('path/2')]
+            new \League\Flysystem\DirectoryAttributes('path/1'),
+            new \League\Flysystem\DirectoryAttributes('path/2')
         ];
         $expectedResult = [self::URL . 'path/1', self::URL . 'path/2'];
         $this->metadataProviderMock->expects(self::atLeastOnce())->method('getMetadata')
@@ -458,8 +458,8 @@ class AwsS3Test extends TestCase
         $expression = '/*';
         $path = 'path';
         $subPaths = [
-            [new \League\Flysystem\DirectoryAttributes('path/1.jpg')],
-            [new \League\Flysystem\DirectoryAttributes('path/2.png')]
+            new \League\Flysystem\DirectoryAttributes('path/1.jpg'),
+            new \League\Flysystem\DirectoryAttributes('path/2.png')
         ];
         $expectedResult = [self::URL . 'path/1.jpg', self::URL . 'path/2.png'];
         $this->metadataProviderMock->expects(self::atLeastOnce())->method('getMetadata')

@@ -449,7 +449,12 @@ class AwsS3 implements RemoteDriverInterface
         try {
             return !$this->isTypeFile($path);
         } catch (UnableToRetrieveMetadata $e) {
-            return $this->directoryExists($path);
+            try {
+                return iterator_count($this->adapter->listContents($path, false)) > 0;
+            } catch (\Throwable $e) {
+                // catch closed iterator
+                return false;
+            }
         } catch (\League\Flysystem\FilesystemException $e) {
             $this->logger->error($e->getMessage());
         }
