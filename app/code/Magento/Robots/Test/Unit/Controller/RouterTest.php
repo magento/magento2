@@ -9,17 +9,17 @@ namespace Magento\Robots\Test\Unit\Controller;
 class RouterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\ActionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ActionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $actionFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\Router\ActionList|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Router\ActionList|\PHPUnit\Framework\MockObject\MockObject
      */
     private $actionListMock;
 
     /**
-     * @var \Magento\Framework\App\Route\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Route\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $routeConfigMock;
 
@@ -28,7 +28,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
      */
     private $router;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->actionFactoryMock = $this->getMockBuilder(\Magento\Framework\App\ActionFactory::class)
             ->disableOriginalConstructor()

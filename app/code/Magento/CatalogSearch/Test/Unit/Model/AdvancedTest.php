@@ -13,46 +13,46 @@ namespace Magento\CatalogSearch\Test\Unit\Model;
 class AdvancedTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection
      */
     protected $collection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogSearch\Model\ResourceModel\Advanced
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\CatalogSearch\Model\ResourceModel\Advanced
      */
     protected $resource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogSearch\Model\ResourceModel\ResourceProvider
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\CatalogSearch\Model\ResourceModel\ResourceProvider
      */
     protected $resourceProvider;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject[]|\Magento\Catalog\Model\ResourceModel\Eav\Attribute[]
+     * @var \PHPUnit\Framework\MockObject\MockObject[]|\Magento\Catalog\Model\ResourceModel\Eav\Attribute[]
      */
     protected $attributes;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Data\Collection
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Data\Collection
      */
     protected $dataCollection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Directory\Model\Currency
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Directory\Model\Currency
      */
     private $currency;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\Store
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\Store
      */
     private $store;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->collection = $this->createPartialMock(
             \Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection::class,
@@ -184,17 +184,17 @@ class AdvancedTest extends \PHPUnit\Framework\TestCase
     ) {
         $registry = new \Magento\Framework\Registry();
 
-        $this->collection->expects($this->any())->method('addAttributeToSelect')->will($this->returnSelf());
-        $this->collection->expects($this->any())->method('setStore')->will($this->returnSelf());
-        $this->collection->expects($this->any())->method('addMinimalPrice')->will($this->returnSelf());
-        $this->collection->expects($this->any())->method('addTaxPercents')->will($this->returnSelf());
-        $this->collection->expects($this->any())->method('addStoreFilter')->will($this->returnSelf());
-        $this->collection->expects($this->any())->method('setVisibility')->will($this->returnSelf());
+        $this->collection->expects($this->any())->method('addAttributeToSelect')->willReturnSelf();
+        $this->collection->expects($this->any())->method('setStore')->willReturnSelf();
+        $this->collection->expects($this->any())->method('addMinimalPrice')->willReturnSelf();
+        $this->collection->expects($this->any())->method('addTaxPercents')->willReturnSelf();
+        $this->collection->expects($this->any())->method('addStoreFilter')->willReturnSelf();
+        $this->collection->expects($this->any())->method('setVisibility')->willReturnSelf();
         $this->resource->expects($this->any())->method('prepareCondition')
-            ->will($this->returnValue(['like' => '%simple%']));
-        $this->resource->expects($this->any())->method('getIdFieldName')->will($this->returnValue('entity_id'));
+            ->willReturn(['like' => '%simple%']);
+        $this->resource->expects($this->any())->method('getIdFieldName')->willReturn('entity_id');
         $this->dataCollection->expects($this->any())->method('getIterator')
-            ->will($this->returnValue(new \ArrayIterator($attributes)));
+            ->willReturn(new \ArrayIterator($attributes));
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $advancedFactory = $this->getMockBuilder(\Magento\CatalogSearch\Model\ResourceModel\AdvancedFactory::class)
@@ -259,7 +259,7 @@ class AdvancedTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $table
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     private function createBackend($table)
     {
@@ -275,7 +275,7 @@ class AdvancedTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $optionText
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function createSource($optionText = 'optionText')
     {
@@ -380,7 +380,7 @@ class AdvancedTest extends \PHPUnit\Framework\TestCase
      * @param null $storeLabel
      * @param null $frontendInput
      * @param null $backendType
-     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createAttribute(
         $backend,
@@ -401,10 +401,10 @@ class AdvancedTest extends \PHPUnit\Framework\TestCase
             ]);
         $attribute->expects($this->any())->method('getBackend')->willReturn($backend);
         $attribute->expects($this->any())->method('getSource')->willReturn($source);
-        $attribute->expects($this->any())->method('getAttributeCode')->will($this->returnValue($attributeCode));
-        $attribute->expects($this->any())->method('getStoreLabel')->will($this->returnValue($storeLabel));
-        $attribute->expects($this->any())->method('getFrontendInput')->will($this->returnValue($frontendInput));
-        $attribute->expects($this->any())->method('getBackendType')->will($this->returnValue($backendType));
+        $attribute->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
+        $attribute->expects($this->any())->method('getStoreLabel')->willReturn($storeLabel);
+        $attribute->expects($this->any())->method('getFrontendInput')->willReturn($frontendInput);
+        $attribute->expects($this->any())->method('getBackendType')->willReturn($backendType);
         return $attribute;
     }
 }

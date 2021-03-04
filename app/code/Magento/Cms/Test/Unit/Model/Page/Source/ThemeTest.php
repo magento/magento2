@@ -12,7 +12,7 @@ use Magento\Framework\View\Design\Theme\Label\ListInterface;
 class ThemeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ListInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $listMock;
 
@@ -29,7 +29,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
         $this->listMock = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\Label\ListInterface::class)

@@ -12,7 +12,7 @@ namespace Magento\Framework\Data\Test\Unit\Form\Element;
 class CheckboxTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManagerMock;
 
@@ -21,7 +21,7 @@ class CheckboxTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
         $collectionFactoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
@@ -66,10 +66,10 @@ class CheckboxTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->setIsChecked(false);
         $html = $this->_model->getElementHtml();
-        $this->assertContains('type="checkbox"', $html);
-        $this->assertNotContains('checked="checked"', $html);
+        $this->assertStringContainsString('type="checkbox"', $html);
+        $this->assertStringNotContainsString('checked="checked"', $html);
         $this->_model->setIsChecked(true);
         $html = $this->_model->getElementHtml();
-        $this->assertContains('checked="checked"', $html);
+        $this->assertStringContainsString('checked="checked"', $html);
     }
 }

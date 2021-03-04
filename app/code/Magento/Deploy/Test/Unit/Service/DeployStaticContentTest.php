@@ -23,7 +23,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 use Psr\Log\LoggerInterface;
 
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * Static Content deploy service class unit tests
@@ -62,7 +62,7 @@ class DeployStaticContentTest extends \PHPUnit\Framework\TestCase
      */
     private $versionStorage;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->deployStrategyFactory = $this->createPartialMock(DeployStrategyFactory::class, ['create']);
         $this->queueFactory = $this->createPartialMock(QueueFactory::class, ['create']);
@@ -185,7 +185,7 @@ class DeployStaticContentTest extends \PHPUnit\Framework\TestCase
                 ->willReturnOnConsecutiveCalls($minifyTemplates);
         }
 
-        $this->assertEquals(null, $this->service->deploy($options));
+        $this->assertNull($this->service->deploy($options));
     }
 
     /**

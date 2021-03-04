@@ -8,11 +8,11 @@ namespace Magento\Directory\Test\Unit\Model\Country\Postcode;
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataStorageMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dataStorageMock = $this->createMock(\Magento\Directory\Model\Country\Postcode\Config\Data::class);
     }

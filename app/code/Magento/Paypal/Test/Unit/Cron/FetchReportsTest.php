@@ -20,21 +20,21 @@ class FetchReportsTest extends \PHPUnit\Framework\TestCase
     private $fetchReports;
 
     /**
-     * @var \Magento\Paypal\Model\Report\SettlementFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Paypal\Model\Report\SettlementFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $settlementFactoryMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $logger;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->getMock();
@@ -54,10 +54,11 @@ class FetchReportsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testExecuteThrowsException()
     {
+        $this->expectException(\Exception::class);
+
         $sftpCredentials = [
             'hostname' => ['test_hostname'],
             'username' => ['test_username'],

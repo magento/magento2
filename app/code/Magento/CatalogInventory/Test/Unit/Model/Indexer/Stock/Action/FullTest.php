@@ -28,7 +28,7 @@ class FullTest extends \PHPUnit\Framework\TestCase
 
         $resourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($connectionMock));
+            ->willReturn($connectionMock);
 
         $resourceMock->expects($this->any())
             ->method('getTableName')

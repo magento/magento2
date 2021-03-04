@@ -15,27 +15,27 @@ class NoCookiesTest extends \PHPUnit\Framework\TestCase
     private $controller;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Event\ManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Event\ManagerInterface
      */
     private $eventManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Request\Http
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\Request\Http
      */
     private $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Response\Http
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\Response\Http
      */
     private $responseMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Response\RedirectInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\Response\RedirectInterface
      */
     private $redirectResponseMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\ViewInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\ViewInterface
      */
     protected $viewMock;
 
@@ -43,7 +43,7 @@ class NoCookiesTest extends \PHPUnit\Framework\TestCase
     const REDIRECT_PATH = '\a\path';
     const REDIRECT_ARGUMENTS = '&arg1key=arg1value';
 
-    public function setup()
+    protected function setup(): void
     {
         $objectManager = new ObjectManager($this);
         $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)->getMock();

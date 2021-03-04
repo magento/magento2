@@ -18,22 +18,22 @@ use Magento\Theme\Helper\Storage;
 class StorageTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesystem;
 
     /**
-     * @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $session;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\FlyweightFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\Theme\FlyweightFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $themeFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
@@ -48,32 +48,32 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     protected $customizationPath;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryWrite;
 
     /**
-     * @var \Magento\Framework\App\Helper\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Helper\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextHelper;
 
     /**
-     * @var \Magento\Theme\Model\Theme|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\Theme|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $theme;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\Customization|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\Theme\Customization|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customization;
 
     /**
-     * @var \Magento\Framework\Url\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url\EncoderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlEncoder;
 
     /**
-     * @var \Magento\Framework\Url\DecoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url\DecoderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlDecoder;
 
@@ -87,7 +87,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customizationPath = '/' . implode('/', ['var', 'theme']);
 
@@ -102,7 +102,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         $this->filesystem->expects($this->any())
             ->method('getDirectoryWrite')
-            ->will($this->returnValue($this->directoryWrite));
+            ->willReturn($this->directoryWrite);
         $this->urlEncoder = $this->getMockBuilder(\Magento\Framework\Url\EncoderInterface::class)->getMock();
         $this->urlDecoder = $this->getMockBuilder(\Magento\Framework\Url\DecoderInterface::class)->getMock();
 
@@ -115,16 +115,16 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         $this->theme->expects($this->any())
             ->method('getCustomization')
-            ->will($this->returnValue($this->customization));
+            ->willReturn($this->customization);
 
         $this->request->expects($this->at(0))
             ->method('getParam')
             ->with(Storage::PARAM_THEME_ID)
-            ->will($this->returnValue(6));
+            ->willReturn(6);
         $this->request->expects($this->at(1))
             ->method('getParam')
             ->with(Storage::PARAM_CONTENT_TYPE)
-            ->will($this->returnValue(\Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE));
+            ->willReturn(\Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -141,7 +141,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->request = null;
         $this->filesystem = null;
@@ -197,11 +197,11 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getCustomizationPath'
-        )->will(
-            $this->returnValue($this->customizationPath)
+        )->willReturn(
+            $this->customizationPath
         );
 
-        $this->directoryWrite->expects($this->any())->method('isExist')->will($this->returnValue(true));
+        $this->directoryWrite->expects($this->any())->method('isExist')->willReturn(true);
 
         $this->assertEquals($thumbnailPath, $this->helper->getThumbnailPath($image));
     }
@@ -214,8 +214,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             Storage::PARAM_THEME_ID
-        )->will(
-            $this->returnValue(6)
+        )->willReturn(
+            6
         );
         $this->request->expects(
             $this->at(1)
@@ -223,8 +223,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             Storage::PARAM_CONTENT_TYPE
-        )->will(
-            $this->returnValue('image')
+        )->willReturn(
+            'image'
         );
         $this->request->expects(
             $this->at(2)
@@ -232,8 +232,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             Storage::PARAM_NODE
-        )->will(
-            $this->returnValue('node')
+        )->willReturn(
+            'node'
         );
 
         $expectedResult = [
@@ -252,8 +252,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             Storage::PARAM_CONTENT_TYPE
-        )->will(
-            $this->returnValue(\Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT)
+        )->willReturn(
+            \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT
         );
 
         $this->request->expects(
@@ -262,8 +262,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             Storage::PARAM_CONTENT_TYPE
-        )->will(
-            $this->returnValue(\Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE)
+        )->willReturn(
+            \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE
         );
 
         $fontTypes = $this->helper->getAllowedExtensionsByType();
@@ -276,11 +276,12 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      * @return void
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The image not found
      */
     public function testGetThumbnailPathNotFound()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The image not found');
+
         $this->filesystemDriver->method('getRealpathSafety')->willReturnArgument(0);
         $image = 'notFoundImage.png';
         $root = '/image';
@@ -432,22 +433,24 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid type
      */
     public function testGetStorageTypeNameInvalid()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Invalid type');
+
         $this->helper->getStorageTypeName();
     }
 
     /**
      * @test
      * @return void
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Theme was not found
      */
     public function testGetThemeNotFound()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Theme was not found');
+
         $this->themeFactory->expects($this->once())
             ->method('create')
             ->willReturn(null);

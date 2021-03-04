@@ -107,7 +107,8 @@ class SessionTest extends TestCase
             ->getMock();
         $cookieMetadataMock->expects($this->once())
             ->method('setPath')
-            ->with($cookiePath)->willReturnSelf();
+            ->with($cookiePath)
+            ->willReturnSelf();
         $this->cookieMetadataFactoryMock->expects($this->once())
             ->method('createSensitiveCookieMetadata')
             ->willReturn($cookieMetadataMock);
@@ -133,19 +134,24 @@ class SessionTest extends TestCase
             ->getMock();
         $cookieMetadataMock->expects($this->once())
             ->method('setPath')
-            ->with($cookiePath)->willReturnSelf();
+            ->with($cookiePath)
+            ->willReturnSelf();
         $cookieMetadataMock->expects($this->once())
             ->method('setDuration')
-            ->with($duration)->willReturnSelf();
+            ->with($duration)
+            ->willReturnSelf();
         $cookieMetadataMock->expects($this->once())
             ->method('setSecure')
-            ->with(false)->willReturnSelf();
+            ->with(false)
+            ->willReturnSelf();
         $cookieMetadataMock->expects($this->once())
             ->method('setHttpOnly')
-            ->with(true)->willReturnSelf();
+            ->with(true)
+            ->willReturnSelf();
         $cookieMetadataMock->expects($this->once())
             ->method('setSameSite')
-            ->with('Lax')->willReturnSelf();
+            ->with('Lax')
+            ->willReturnSelf();
         $this->cookieMetadataFactoryMock->expects($this->once())
             ->method('createPublicCookieMetadata')
             ->willReturn($cookieMetadataMock);
@@ -179,19 +185,24 @@ class SessionTest extends TestCase
             ->getMock();
         $cookieMetadataMock->expects($this->exactly($numCalls))
             ->method('setPath')
-            ->with($cookiePath)->willReturnSelf();
+            ->with($cookiePath)
+            ->willReturnSelf();
         $cookieMetadataMock->expects($this->exactly($numCalls))
             ->method('setDuration')
-            ->with($cookieDuration)->willReturnSelf();
+            ->with($cookieDuration)
+            ->willReturnSelf();
         $cookieMetadataMock->expects($this->exactly($numCalls))
             ->method('setSecure')
-            ->with(false)->willReturnSelf();
+            ->with(false)
+            ->willReturnSelf();
         $cookieMetadataMock->expects($this->exactly($numCalls))
             ->method('setHttpOnly')
-            ->with(true)->willReturnSelf();
+            ->with(true)
+            ->willReturnSelf();
         $cookieMetadataMock->expects($this->exactly($numCalls))
             ->method('setSameSite')
-            ->with('Lax')->willReturnSelf();
+            ->with('Lax')
+            ->willReturnSelf();
         $this->cookieMetadataFactoryMock->expects($this->exactly($numCalls))
             ->method('createPublicCookieMetadata')
             ->willReturn($cookieMetadataMock);

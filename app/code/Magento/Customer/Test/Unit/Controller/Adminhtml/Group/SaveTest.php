@@ -20,52 +20,52 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     /** @var Save */
     protected $controller;
 
-    /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $contextMock;
 
-    /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject */
     protected $registryMock;
 
-    /** @var \Magento\Customer\Api\GroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\GroupRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $groupRepositoryMock;
 
-    /** @var GroupInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var GroupInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $groupInterfaceFactoryMock;
 
-    /** @var \Magento\Backend\Model\View\Result\ForwardFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Model\View\Result\ForwardFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $forwardFactoryMock;
 
-    /** @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Result\PageFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $pageFactoryMock;
 
-    /** @var DataObjectProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataObjectProcessor|\PHPUnit\Framework\MockObject\MockObject */
     protected $dataObjectProcessorMock;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $request;
 
-    /** @var RedirectFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var RedirectFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $resultRedirectFactory;
 
-    /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Redirect|\PHPUnit\Framework\MockObject\MockObject */
     protected $resultRedirect;
 
-    /** @var \Magento\Customer\Api\Data\GroupInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\Data\GroupInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerGroup;
 
-    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $messageManager;
 
-    /** @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit\Framework\MockObject\MockObject */
     protected $resultForward;
 
-    /** @var \Magento\Customer\Api\Data\GroupInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\Data\GroupInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $group;
 
-    /** @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Model\Session|\PHPUnit\Framework\MockObject\MockObject */
     protected $session;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()

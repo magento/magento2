@@ -20,24 +20,24 @@ class MinifyTest extends \PHPUnit\Framework\TestCase
     protected $minify;
 
     /**
-     * @var \Magento\Framework\Code\Minifier\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Code\Minifier\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $adapterMock;
 
     /**
-     * @var \Magento\Framework\View\Asset\Minification|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\Minification|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $minificationMock;
 
     /**
-     * @var MinificationConfigProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var MinificationConfigProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $minificationConfigMock;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->adapterMock = $this->getMockBuilder(\Magento\Framework\Code\Minifier\AdapterInterface::class)
             ->setMethods(['minify'])

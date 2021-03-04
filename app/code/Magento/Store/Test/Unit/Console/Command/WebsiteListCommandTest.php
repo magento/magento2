@@ -23,7 +23,7 @@ class WebsiteListCommandTest extends \PHPUnit\Framework\TestCase
     private $command;
 
     /**
-     * @var \Magento\Store\Api\WebsiteRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Api\WebsiteRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $websiteRepositoryMock;
 
@@ -32,7 +32,7 @@ class WebsiteListCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

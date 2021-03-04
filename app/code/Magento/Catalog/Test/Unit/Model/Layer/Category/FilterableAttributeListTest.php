@@ -14,16 +14,16 @@ class FilterableAttributeListTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->collectionFactoryMock = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class,
@@ -41,32 +41,32 @@ class FilterableAttributeListTest extends \PHPUnit\Framework\TestCase
     public function testGetList()
     {
         $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
 
         $storeId = 4321;
-        $storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
+        $storeMock->expects($this->once())->method('getId')->willReturn($storeId);
 
         $collectionMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class);
         $this->collectionFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($collectionMock));
+            ->willReturn($collectionMock);
 
         $collectionMock
             ->expects($this->once())
             ->method('setItemObjectClass')
             ->with(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $collectionMock
             ->expects($this->once())
             ->method('addStoreLabel')
             ->with($storeId)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $collectionMock
             ->expects($this->once())
             ->method('setOrder')
             ->with('position', 'ASC');
-        $collectionMock->expects($this->once())->method('addIsFilterableInSearchFilter')->will($this->returnSelf());
+        $collectionMock->expects($this->once())->method('addIsFilterableInSearchFilter')->willReturnSelf();
         $collectionMock->expects($this->once())->method('load');
 
         $this->assertEquals($collectionMock, $this->model->getList());

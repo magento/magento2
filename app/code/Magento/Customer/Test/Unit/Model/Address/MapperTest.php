@@ -16,10 +16,10 @@ class MapperTest extends \PHPUnit\Framework\TestCase
      */
     protected $addressMapper;
 
-    /** @var \Magento\Framework\Api\ExtensibleDataObjectConverter|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Api\ExtensibleDataObjectConverter|\PHPUnit\Framework\MockObject\MockObject */
     protected $extensibleObjectConverter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->extensibleObjectConverter = $this->getMockBuilder(
             \Magento\Framework\Api\ExtensibleDataObjectConverter::class
@@ -62,11 +62,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \Magento\Customer\Api\Data\AddressInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Customer\Api\Data\AddressInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function createAddressMock()
     {
-        /** @var \Magento\Customer\Api\Data\RegionInterface|\PHPUnit_Framework_MockObject_MockObject $regionMock */
+        /** @var \Magento\Customer\Api\Data\RegionInterface|\PHPUnit\Framework\MockObject\MockObject $regionMock */
         $regionMock = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\RegionInterface::class, [], '', false);
         $regionMock->expects($this->any())->method('getRegion')->willReturn('Texas');
         $regionMock->expects($this->any())->method('getRegionId')->willReturn(1);

@@ -8,21 +8,21 @@ namespace Magento\SalesRule\Test\Unit\Observer;
 class AddSalesRuleNameToOrderObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\SalesRule\Observer\AddSalesRuleNameToOrderObserver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Observer\AddSalesRuleNameToOrderObserver|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\SalesRule\Model\Coupon|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\Coupon|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $couponMock;
 
     /**
-     * @var \Magento\SalesRule\Model\RuleFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\RuleFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $ruleFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->initMocks();
@@ -62,7 +62,7 @@ class AddSalesRuleNameToOrderObserverTest extends \PHPUnit\Framework\TestCase
 
         $observer->expects($this->any())
             ->method('getOrder')
-            ->will($this->returnValue($order));
+            ->willReturn($order);
 
         $this->couponMock->expects($this->never())
             ->method('loadByCode');
@@ -81,11 +81,11 @@ class AddSalesRuleNameToOrderObserverTest extends \PHPUnit\Framework\TestCase
 
         $observer->expects($this->any())
             ->method('getOrder')
-            ->will($this->returnValue($order));
+            ->willReturn($order);
 
         $order->expects($this->once())
             ->method('getCouponCode')
-            ->will($this->returnValue($couponCode));
+            ->willReturn($couponCode);
         $this->ruleFactory->expects($this->never())
             ->method('create');
 
@@ -105,21 +105,21 @@ class AddSalesRuleNameToOrderObserverTest extends \PHPUnit\Framework\TestCase
 
         $observer->expects($this->any())
             ->method('getOrder')
-            ->will($this->returnValue($order));
+            ->willReturn($order);
 
         $order->expects($this->once())
             ->method('getCouponCode')
-            ->will($this->returnValue($couponCode));
+            ->willReturn($couponCode);
         $this->couponMock->expects($this->once())
             ->method('getRuleId')
-            ->will($this->returnValue($ruleId));
+            ->willReturn($ruleId);
         $this->ruleFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($rule));
+            ->willReturn($rule);
         $rule->expects($this->once())
             ->method('load')
             ->with($ruleId)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $order->expects($this->once())
             ->method('setCouponRuleName');
 

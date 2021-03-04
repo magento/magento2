@@ -11,7 +11,7 @@ use Magento\Deploy\Console\Command\App\SensitiveConfigSet\CollectorInterface;
 use Magento\Deploy\Console\Command\App\SensitiveConfigSet\InteractiveCollector;
 use Magento\Deploy\Console\Command\App\SensitiveConfigSet\SimpleCollector;
 use Magento\Framework\ObjectManagerInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use stdClass;
 
 class CollectorFactoryTest extends \PHPUnit\Framework\TestCase
@@ -29,7 +29,7 @@ class CollectorFactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMockForAbstractClass();
@@ -60,20 +60,22 @@ class CollectorFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The class for "dummyType" type wasn't declared. Enter the class and try again.
      */
     public function testCreateNonExisted()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The class for "dummyType" type wasn\'t declared. Enter the class and try again.');
+
         $this->model->create('dummyType');
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage stdClass does not implement
      */
     public function testCreateWrongImplementation()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('stdClass does not implement');
+
         $type = 'wrongType';
         $this->objectManagerMock->expects($this->once())
             ->method('create')

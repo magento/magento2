@@ -10,7 +10,7 @@ use Magento\Catalog\Model\Product\Link\Resolver;
 class ResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
@@ -19,7 +19,7 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
      */
     protected $resolver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->getMockForAbstractClass();

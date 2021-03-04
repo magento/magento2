@@ -14,7 +14,7 @@ class OrderCommentSenderTest extends AbstractSenderTest
      */
     protected $sender;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stepMockSetup();
         $this->stepIdentityContainerInit(\Magento\Sales\Model\Order\Email\Container\OrderCommentIdentity::class);
@@ -45,7 +45,7 @@ class OrderCommentSenderTest extends AbstractSenderTest
         $this->stepAddressFormat($billingAddress);
         $this->orderMock->expects($this->once())
             ->method('getCustomerIsGuest')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->orderMock->expects($this->any())
             ->method('getCustomerName')
             ->willReturn($customerName);
@@ -55,7 +55,7 @@ class OrderCommentSenderTest extends AbstractSenderTest
 
         $this->identityContainerMock->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->templateContainerMock->expects($this->once())
             ->method('setTemplateVars')
             ->with(
@@ -89,7 +89,7 @@ class OrderCommentSenderTest extends AbstractSenderTest
 
         $this->identityContainerMock->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->orderMock->expects($this->any())
             ->method('getCustomerName')
             ->willReturn($customerName);

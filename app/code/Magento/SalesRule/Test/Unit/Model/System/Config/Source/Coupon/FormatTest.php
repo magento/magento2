@@ -9,16 +9,16 @@ namespace Magento\SalesRule\Test\Unit\Model\System\Config\Source\Coupon;
 class FormatTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\SalesRule\Model\System\Config\Source\Coupon\Format|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\System\Config\Source\Coupon\Format|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\SalesRule\Helper\Coupon|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Helper\Coupon|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $salesRuleCoupon;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -43,7 +43,7 @@ class FormatTest extends \PHPUnit\Framework\TestCase
         ];
         $this->salesRuleCoupon->expects($this->once())
             ->method('getFormatsList')
-            ->will($this->returnValue([$formatTitle]));
+            ->willReturn([$formatTitle]);
 
         $this->assertEquals($expected, $this->model->toOptionArray());
     }

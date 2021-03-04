@@ -14,7 +14,7 @@ class VisibilityTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->_model = $objectManager->getObject(\Magento\Catalog\Model\Product\Visibility::class);
@@ -27,13 +27,13 @@ class VisibilityTest extends \PHPUnit\Framework\TestCase
             ['getAttributeCode', '__wakeup']
         );
 
-        $abstractAttributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('code'));
+        $abstractAttributeMock->expects($this->any())->method('getAttributeCode')->willReturn('code');
 
         $this->_model->setAttribute($abstractAttributeMock);
 
         $flatColumns = $this->_model->getFlatColumns();
 
-        $this->assertTrue(is_array($flatColumns), 'FlatColumns must be an array value');
+        $this->assertIsArray($flatColumns, 'FlatColumns must be an array value');
         $this->assertTrue(!empty($flatColumns), 'FlatColumns must be not empty');
         foreach ($flatColumns as $result) {
             $this->assertArrayHasKey('unsigned', $result, 'FlatColumns must have "unsigned" column');

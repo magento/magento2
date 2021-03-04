@@ -22,37 +22,37 @@ use Magento\Translation\Model\Source\InitialTranslationSource;
 class InitialTranslationSourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var TranslateFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var TranslateFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $translationFactory;
 
     /**
-     * @var Translate|\PHPUnit_Framework_MockObject_MockObject
+     * @var Translate|\PHPUnit\Framework\MockObject\MockObject
      */
     private $translation;
 
     /**
-     * @var StoreManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
-     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|\PHPUnit\Framework\MockObject\MockObject
      */
     private $store;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connection;
 
     /**
-     * @var Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|\PHPUnit\Framework\MockObject\MockObject
      */
     private $select;
 
     /**
-     * @var DeploymentConfig | \PHPUnit_Framework_MockObject_MockObject
+     * @var DeploymentConfig | \PHPUnit\Framework\MockObject\MockObject
      */
     private $deploymentConfigMock;
 
@@ -61,7 +61,7 @@ class InitialTranslationSourceTest extends \PHPUnit\Framework\TestCase
      */
     private $source;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->translationFactory = $this->getMockBuilder(TranslateFactory::class)
             ->disableOriginalConstructor()
@@ -78,7 +78,7 @@ class InitialTranslationSourceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();

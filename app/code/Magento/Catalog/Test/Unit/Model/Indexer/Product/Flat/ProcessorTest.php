@@ -20,26 +20,26 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Indexer\Model\Indexer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Indexer\Model\Indexer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_indexerMock;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Flat\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Indexer\Product\Flat\State|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_stateMock;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexerRegistryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->_indexerMock = $this->createPartialMock(\Magento\Indexer\Model\Indexer::class, ['getId', 'invalidate']);
-        $this->_indexerMock->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $this->_indexerMock->expects($this->any())->method('getId')->willReturn(1);
 
         $this->_stateMock = $this->createPartialMock(
             \Magento\Catalog\Model\Indexer\Product\Flat\State::class,
@@ -72,7 +72,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarkIndexerAsInvalid()
     {
-        $this->_stateMock->expects($this->once())->method('isFlatEnabled')->will($this->returnValue(true));
+        $this->_stateMock->expects($this->once())->method('isFlatEnabled')->willReturn(true);
         $this->_indexerMock->expects($this->once())->method('invalidate');
         $this->prepareIndexer();
         $this->_model->markIndexerAsInvalid();
@@ -83,7 +83,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      */
     public function testMarkDisabledIndexerAsInvalid()
     {
-        $this->_stateMock->expects($this->once())->method('isFlatEnabled')->will($this->returnValue(false));
+        $this->_stateMock->expects($this->once())->method('isFlatEnabled')->willReturn(false);
         $this->_indexerMock->expects($this->never())->method('invalidate');
         $this->_model->markIndexerAsInvalid();
     }
@@ -93,7 +93,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $this->indexerRegistryMock->expects($this->once())
             ->method('get')
             ->with(Processor::INDEXER_ID)
-            ->will($this->returnValue($this->_indexerMock));
+            ->willReturn($this->_indexerMock);
     }
 
     /**

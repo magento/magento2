@@ -13,16 +13,16 @@ class ByPercentTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\SalesRule\Model\Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\Validator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $validator;
 
     /**
-     * @var \Magento\SalesRule\Model\Rule\Action\Discount\DataFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\Rule\Action\Discount\DataFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $discountDataFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -68,7 +68,7 @@ class ByPercentTest extends \PHPUnit\Framework\TestCase
             ['setAmount', 'setBaseAmount', 'setOriginalAmount', 'setBaseOriginalAmount']
         )->getMock();
 
-        $this->discountDataFactory->expects($this->once())->method('create')->will($this->returnValue($discountData));
+        $this->discountDataFactory->expects($this->once())->method('create')->willReturn($discountData);
 
         $rule = $this->getMockBuilder(
             \Magento\SalesRule\Model\Rule::class
@@ -97,8 +97,8 @@ class ByPercentTest extends \PHPUnit\Framework\TestCase
             'getItemPrice'
         )->with(
             $item
-        )->will(
-            $this->returnValue($validItemData['price'])
+        )->willReturn(
+            $validItemData['price']
         );
         $this->validator->expects(
             $this->atLeastOnce()
@@ -106,8 +106,8 @@ class ByPercentTest extends \PHPUnit\Framework\TestCase
             'getItemBasePrice'
         )->with(
             $item
-        )->will(
-            $this->returnValue($validItemData['basePrice'])
+        )->willReturn(
+            $validItemData['basePrice']
         );
         $this->validator->expects(
             $this->atLeastOnce()
@@ -115,8 +115,8 @@ class ByPercentTest extends \PHPUnit\Framework\TestCase
             'getItemOriginalPrice'
         )->with(
             $item
-        )->will(
-            $this->returnValue($validItemData['originalPrice'])
+        )->willReturn(
+            $validItemData['originalPrice']
         );
         $this->validator->expects(
             $this->atLeastOnce()
@@ -124,46 +124,46 @@ class ByPercentTest extends \PHPUnit\Framework\TestCase
             'getItemBaseOriginalPrice'
         )->with(
             $item
-        )->will(
-            $this->returnValue($validItemData['baseOriginalPrice'])
+        )->willReturn(
+            $validItemData['baseOriginalPrice']
         );
 
         $rule->expects(
             $this->atLeastOnce()
         )->method(
             'getDiscountAmount'
-        )->will(
-            $this->returnValue($ruleData['discountAmount'])
+        )->willReturn(
+            $ruleData['discountAmount']
         );
         $rule->expects(
             $this->atLeastOnce()
         )->method(
             'getDiscountQty'
-        )->will(
-            $this->returnValue($ruleData['discountQty'])
+        )->willReturn(
+            $ruleData['discountQty']
         );
 
         $item->expects(
             $this->atLeastOnce()
         )->method(
             'getDiscountAmount'
-        )->will(
-            $this->returnValue($itemData['discountAmount'])
+        )->willReturn(
+            $itemData['discountAmount']
         );
         $item->expects(
             $this->atLeastOnce()
         )->method(
             'getBaseDiscountAmount'
-        )->will(
-            $this->returnValue($itemData['baseDiscountAmount'])
+        )->willReturn(
+            $itemData['baseDiscountAmount']
         );
         if (!$ruleData['discountQty'] || $ruleData['discountQty'] > $qty) {
             $item->expects(
                 $this->atLeastOnce()
             )->method(
                 'getDiscountPercent'
-            )->will(
-                $this->returnValue($itemData['discountPercent'])
+            )->willReturn(
+                $itemData['discountPercent']
             );
             $item->expects($this->atLeastOnce())->method('setDiscountPercent')->with($expectedRuleDiscountQty);
         }
@@ -224,7 +224,7 @@ class ByPercentTest extends \PHPUnit\Framework\TestCase
     public function testFixQuantity($step, $qty, $expected)
     {
         $rule = $this->createPartialMock(\Magento\SalesRule\Model\Rule::class, ['getDiscountStep', '__wakeup']);
-        $rule->expects($this->once())->method('getDiscountStep')->will($this->returnValue($step));
+        $rule->expects($this->once())->method('getDiscountStep')->willReturn($step);
 
         $this->assertEquals($expected, $this->model->fixQuantity($qty, $rule));
     }

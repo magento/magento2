@@ -10,22 +10,22 @@ use Magento\Framework\Controller\ResultFactory;
 
 class SaveTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $context;
 
-    /** @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Controller\ResultFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $resultFactory;
 
-    /** @var \Magento\Framework\Controller\ResultInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Controller\ResultInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $resultPage;
 
-    /** @var \Magento\Theme\Model\Design\Config\FileUploader\FileProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Model\Design\Config\FileUploader\FileProcessor|\PHPUnit\Framework\MockObject\MockObject */
     protected $fileProcessor;
 
     /** @var Save */
     protected $controller;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()
@@ -47,7 +47,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->controller = new Save($this->context, $this->fileProcessor);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $_FILES = [];
     }

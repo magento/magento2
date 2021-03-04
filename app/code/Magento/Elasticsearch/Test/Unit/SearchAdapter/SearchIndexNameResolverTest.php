@@ -17,7 +17,7 @@ class SearchIndexNameResolverTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ClientOptionsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientOptionsInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $clientConfig;
 
@@ -40,7 +40,7 @@ class SearchIndexNameResolverTest extends \PHPUnit\Framework\TestCase
      * Setup method
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->clientConfig = $this->getMockBuilder(\Magento\Elasticsearch\Model\Config::class)
             ->disableOriginalConstructor()

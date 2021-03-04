@@ -21,26 +21,31 @@ class CollectionTimeLabelTest extends \PHPUnit\Framework\TestCase
     private $collectionTimeLabel;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $timeZoneMock;
 
     /**
-     * @var AbstractElement|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractElement|\PHPUnit\Framework\MockObject\MockObject
      */
     private $abstractElementMock;
 
     /**
-     * @var ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $localeResolver;
 
-    protected function setUp()
+    /**
+     * @var Form|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $formMock;
+
+    protected function setUp(): void
     {
         $this->abstractElementMock = $this->getMockBuilder(AbstractElement::class)
             ->setMethods(['getComment'])
@@ -63,7 +68,7 @@ class CollectionTimeLabelTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->timeZoneMock = $this->getMockBuilder(TimezoneInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->contextMock->expects($this->any())
             ->method('getLocaleDate')
             ->willReturn($this->timeZoneMock);
@@ -95,7 +100,7 @@ class CollectionTimeLabelTest extends \PHPUnit\Framework\TestCase
         $this->localeResolver->expects($this->once())
             ->method('getLocale')
             ->willReturn('en_US');
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             "/Eastern Standard Time \(America\/New_York\)/",
             $this->collectionTimeLabel->render($this->abstractElementMock)
         );

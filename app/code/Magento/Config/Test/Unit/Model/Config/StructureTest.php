@@ -11,7 +11,7 @@ use Magento\Config\Model\Config\Structure;
 use Magento\Config\Model\Config\Structure\Data;
 use Magento\Config\Model\Config\Structure\Element\FlyweightFactory;
 use Magento\Config\Model\Config\Structure\Element\Iterator\Tab as TabIterator;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * Test for Structure.
@@ -50,7 +50,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
      */
     protected $_structureData;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_flyweightFactory = $this->getMockBuilder(FlyweightFactory::class)
             ->disableOriginalConstructor()

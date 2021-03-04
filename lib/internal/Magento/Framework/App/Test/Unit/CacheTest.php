@@ -13,16 +13,16 @@ class CacheTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject[]
+     * @var \PHPUnit\Framework\MockObject\MockObject[]
      */
     protected $_cacheTypeMocks;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_cacheFrontendMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_initCacheTypeMocks();
 
@@ -43,8 +43,8 @@ class CacheTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'current'
-        )->will(
-            $this->returnValue($this->_cacheFrontendMock)
+        )->willReturn(
+            $this->_cacheFrontendMock
         );
         $frontendPoolMock->expects(
             $this->any()
@@ -52,8 +52,8 @@ class CacheTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             \Magento\Framework\App\Cache\Frontend\Pool::DEFAULT_FRONTEND_ID
-        )->will(
-            $this->returnValue($this->_cacheFrontendMock)
+        )->willReturn(
+            $this->_cacheFrontendMock
         );
 
         $this->_model = new \Magento\Framework\App\Cache($frontendPoolMock);
@@ -85,14 +85,14 @@ class CacheTest extends \PHPUnit\Framework\TestCase
      * Callback for the object manager to get different cache type mocks
      *
      * @param string $type Class of the cache type
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     public function getTypeMock($type)
     {
         return $this->_cacheTypeMocks[$type];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_cacheTypeMocks = [];
         $this->_cacheFrontendMock = null;
@@ -118,8 +118,8 @@ class CacheTest extends \PHPUnit\Framework\TestCase
             'load'
         )->with(
             'test_id'
-        )->will(
-            $this->returnValue('test_data')
+        )->willReturn(
+            'test_data'
         );
         $this->assertEquals('test_data', $this->_model->load('test_id'));
     }
@@ -187,8 +187,8 @@ class CacheTest extends \PHPUnit\Framework\TestCase
             'remove'
         )->with(
             'test_id'
-        )->will(
-            $this->returnValue($result)
+        )->willReturn(
+            $result
         );
         $this->assertEquals($result, $this->_model->remove('test_id'));
     }
@@ -211,8 +211,8 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         )->with(
             \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
             $expectedTags
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
         $this->assertTrue($this->_model->clean($expectedTags));
     }
@@ -225,8 +225,8 @@ class CacheTest extends \PHPUnit\Framework\TestCase
             'clean'
         )->with(
             \Zend_Cache::CLEANING_MODE_ALL
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
         $this->assertTrue($this->_model->clean());
     }

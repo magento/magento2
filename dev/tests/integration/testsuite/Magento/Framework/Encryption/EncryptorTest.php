@@ -12,7 +12,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
      */
     private $encryptor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->encryptor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\Encryption\Encryptor::class
@@ -45,14 +45,13 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Encryption key must be 32 character string without any white space.
-     *
      * @param string $key
      * @dataProvider invalidEncryptionKeyDataProvider
      */
     public function testValidateKeyInvalid($key)
     {
+        $this->expectExceptionMessage("Encryption key must be 32 character string without any white space.");
+        $this->expectException(\Exception::class);
         $this->encryptor->validateKey($key);
     }
 

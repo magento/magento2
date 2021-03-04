@@ -13,21 +13,21 @@ class DefaultLocatorTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_configMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $backendData = $this->createMock(\Magento\Backend\Helper\Data::class);
         $this->_requestMock = $this->getMockForAbstractClass(
@@ -49,7 +49,7 @@ class DefaultLocatorTest extends \PHPUnit\Framework\TestCase
 
     public function testGetDefaultCurrencyReturnDefaultStoreDefaultCurrencyIfNoStoreIsSpecified()
     {
-        $this->_configMock->expects($this->once())->method('getValue')->will($this->returnValue('storeCurrency'));
+        $this->_configMock->expects($this->once())->method('getValue')->willReturn('storeCurrency');
         $this->assertEquals('storeCurrency', $this->_model->getDefaultCurrency($this->_requestMock));
     }
 
@@ -61,19 +61,19 @@ class DefaultLocatorTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             'store'
-        )->will(
-            $this->returnValue('someStore')
+        )->willReturn(
+            'someStore'
         );
         $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
-        $storeMock->expects($this->once())->method('getBaseCurrencyCode')->will($this->returnValue('storeCurrency'));
+        $storeMock->expects($this->once())->method('getBaseCurrencyCode')->willReturn('storeCurrency');
         $this->_storeManagerMock->expects(
             $this->once()
         )->method(
             'getStore'
         )->with(
             'someStore'
-        )->will(
-            $this->returnValue($storeMock)
+        )->willReturn(
+            $storeMock
         );
         $this->assertEquals('storeCurrency', $this->_model->getDefaultCurrency($this->_requestMock));
     }
@@ -84,16 +84,16 @@ class DefaultLocatorTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getParam'
-        )->will(
-            $this->returnValueMap([['store', null, ''], ['website', null, 'someWebsite']])
+        )->willReturnMap(
+            [['store', null, ''], ['website', null, 'someWebsite']]
         );
         $websiteMock = $this->createMock(\Magento\Store\Model\Website::class);
         $websiteMock->expects(
             $this->once()
         )->method(
             'getBaseCurrencyCode'
-        )->will(
-            $this->returnValue('websiteCurrency')
+        )->willReturn(
+            'websiteCurrency'
         );
         $this->_storeManagerMock->expects(
             $this->once()
@@ -101,8 +101,8 @@ class DefaultLocatorTest extends \PHPUnit\Framework\TestCase
             'getWebsite'
         )->with(
             'someWebsite'
-        )->will(
-            $this->returnValue($websiteMock)
+        )->willReturn(
+            $websiteMock
         );
         $this->assertEquals('websiteCurrency', $this->_model->getDefaultCurrency($this->_requestMock));
     }
@@ -113,22 +113,22 @@ class DefaultLocatorTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getParam'
-        )->will(
-            $this->returnValueMap(
+        )->willReturnMap(
+            
                 [['store', null, ''], ['website', null, ''], ['group', null, 'someGroup']]
-            )
+            
         );
         $websiteMock = $this->createMock(\Magento\Store\Model\Website::class);
         $websiteMock->expects(
             $this->once()
         )->method(
             'getBaseCurrencyCode'
-        )->will(
-            $this->returnValue('websiteCurrency')
+        )->willReturn(
+            'websiteCurrency'
         );
 
         $groupMock = $this->createMock(\Magento\Store\Model\Group::class);
-        $groupMock->expects($this->once())->method('getWebsite')->will($this->returnValue($websiteMock));
+        $groupMock->expects($this->once())->method('getWebsite')->willReturn($websiteMock);
 
         $this->_storeManagerMock->expects(
             $this->once()
@@ -136,8 +136,8 @@ class DefaultLocatorTest extends \PHPUnit\Framework\TestCase
             'getGroup'
         )->with(
             'someGroup'
-        )->will(
-            $this->returnValue($groupMock)
+        )->willReturn(
+            $groupMock
         );
         $this->assertEquals('websiteCurrency', $this->_model->getDefaultCurrency($this->_requestMock));
     }

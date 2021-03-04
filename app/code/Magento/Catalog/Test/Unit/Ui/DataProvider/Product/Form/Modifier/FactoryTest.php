@@ -26,16 +26,16 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var ModifierInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModifierInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataProviderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManagerHelper($this);
         $this->dataProviderMock = $this->getMockBuilder(ModifierInterface::class)
@@ -60,10 +60,11 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateWithException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->willReturn(null);

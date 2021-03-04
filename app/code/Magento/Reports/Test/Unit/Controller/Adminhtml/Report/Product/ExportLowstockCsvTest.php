@@ -16,14 +16,14 @@ class ExportLowstockCsvTest extends \Magento\Reports\Test\Unit\Controller\Adminh
     protected $exportLowstockCsv;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dateMock;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

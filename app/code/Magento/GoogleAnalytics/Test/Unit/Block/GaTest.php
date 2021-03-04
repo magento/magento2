@@ -26,36 +26,36 @@ class GaTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @var Ga | \PHPUnit_Framework_MockObject_MockObject
+     * @var Ga | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $gaBlock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $cookieHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $salesOrderCollectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $googleAnalyticsDataMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $contextMock = $this->getMockBuilder(Context::class)->disableOriginalConstructor()->getMock();
@@ -66,7 +66,7 @@ class GaTest extends \PHPUnit\Framework\TestCase
 
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->storeMock = $this->getMockBuilder(Store::class)->disableOriginalConstructor()->getMock();
         $contextMock->expects($this->once())->method('getStoreManager')->willReturn($this->storeManagerMock);
@@ -193,7 +193,7 @@ class GaTest extends \PHPUnit\Framework\TestCase
      * Create Order mock with $orderItemCount items
      *
      * @param int $orderItemCount
-     * @return Order|\PHPUnit_Framework_MockObject_MockObject
+     * @return Order|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function createOrderMock($orderItemCount = 1)
     {
@@ -201,7 +201,7 @@ class GaTest extends \PHPUnit\Framework\TestCase
         for ($i = 0; $i < $orderItemCount; $i++) {
             $orderItemMock = $this->getMockBuilder(OrderItemInterface::class)
                 ->disableOriginalConstructor()
-                ->getMock();
+                ->getMockForAbstractClass();
             $orderItemMock->expects($this->once())->method('getSku')->willReturn('sku' . $i);
             $orderItemMock->expects($this->once())->method('getName')->willReturn('testName' . $i);
             $orderItemMock->expects($this->once())->method('getPrice')->willReturn($i . '.00');
@@ -220,7 +220,7 @@ class GaTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Collection | \PHPUnit_Framework_MockObject_MockObject
+     * @return Collection | \PHPUnit\Framework\MockObject\MockObject
      */
     protected function createCollectionMock()
     {

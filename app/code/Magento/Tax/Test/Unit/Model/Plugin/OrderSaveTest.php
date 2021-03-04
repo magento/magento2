@@ -15,17 +15,17 @@ class OrderSaveTest extends \PHPUnit\Framework\TestCase
     const ORDER_ITEM_ID = 116;
 
     /**
-     * @var \Magento\Tax\Model\Sales\Order\TaxFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Model\Sales\Order\TaxFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderTaxFactoryMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Tax\ItemFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Tax\ItemFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxItemFactoryMock;
 
     /**
-     * @var \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 
@@ -39,7 +39,7 @@ class OrderSaveTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderTaxFactoryMock = $this->getMockBuilder(
             \Magento\Tax\Model\Sales\Order\TaxFactory::class
@@ -64,7 +64,7 @@ class OrderSaveTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function setupOrderMock()
     {
@@ -84,7 +84,7 @@ class OrderSaveTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function setupExtensionAttributeMock()
     {

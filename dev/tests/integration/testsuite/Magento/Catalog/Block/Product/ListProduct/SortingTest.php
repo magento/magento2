@@ -70,7 +70,7 @@ class SortingTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);

@@ -10,7 +10,7 @@ class AbstractEavTest extends \PHPUnit\Framework\TestCase
     /**
      * Abstract eav export model
      *
-     * @var \Magento\ImportExport\Model\Export\Entity\AbstractEav|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Export\Entity\AbstractEav|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
@@ -21,7 +21,7 @@ class AbstractEavTest extends \PHPUnit\Framework\TestCase
      */
     protected $_expectedAttributes = ['firstname', 'lastname'];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = $this->getMockForAbstractClass(
             \Magento\ImportExport\Model\Export\Entity\AbstractEav::class,
@@ -37,12 +37,12 @@ class AbstractEavTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             '_getExportAttributeCodes'
-        )->will(
-            $this->returnValue($this->_expectedAttributes)
+        )->willReturn(
+            $this->_expectedAttributes
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }
@@ -91,19 +91,19 @@ class AbstractEavTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getAttributeCollection'
-        )->will(
-            $this->returnValue([$testAttribute])
+        )->willReturn(
+            [$testAttribute]
         );
 
         $this->_model->expects(
             $this->any()
         )->method(
             'getAttributeOptions'
-        )->will(
-            $this->returnValue($testAttributeOptions)
+        )->willReturn(
+            $testAttributeOptions
         );
 
-        /** @var $item \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $item \Magento\Framework\Model\AbstractModel|\PHPUnit\Framework\MockObject\MockObject */
         $item = $this->getMockForAbstractClass(
             \Magento\Framework\Model\AbstractModel::class,
             [],
@@ -113,7 +113,7 @@ class AbstractEavTest extends \PHPUnit\Framework\TestCase
             true,
             ['getData', '__wakeup']
         );
-        $item->expects($this->any())->method('getData')->will($this->returnValue($testAttributeValue));
+        $item->expects($this->any())->method('getData')->willReturn($testAttributeValue);
 
         $method = new \ReflectionMethod($this->_model, '_initAttributeValues');
         $method->setAccessible(true);

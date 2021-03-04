@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class TermTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Search\Request\Filter\Term|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Filter\Term|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestFilter;
 
@@ -21,14 +21,14 @@ class TermTest extends \PHPUnit\Framework\TestCase
     private $filter;
 
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\ConditionManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Adapter\Mysql\ConditionManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $conditionManager;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->requestFilter = $this->getMockBuilder(\Magento\Framework\Search\Request\Filter\Term::class)
@@ -42,8 +42,8 @@ class TermTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->conditionManager->expects($this->any())
             ->method('generateCondition')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($field, $operator, $value) {
                         return sprintf(
                             is_array($value) ? '%s %s (%s)' : '%s %s %s',
@@ -52,7 +52,7 @@ class TermTest extends \PHPUnit\Framework\TestCase
                             is_array($value) ? implode(', ', $value) : $value
                         );
                     }
-                )
+                
             );
 
         $this->filter = $objectManager->getObject(
@@ -74,10 +74,10 @@ class TermTest extends \PHPUnit\Framework\TestCase
     {
         $this->requestFilter->expects($this->once())
             ->method('getField')
-            ->will($this->returnValue($field));
+            ->willReturn($field);
         $this->requestFilter->expects($this->atLeastOnce())
             ->method('getValue')
-            ->will($this->returnValue($value));
+            ->willReturn($value);
 
         $actualResult = $this->filter->buildFilter($this->requestFilter, $isNegation);
         $this->assertEquals($expectedResult, $actualResult);

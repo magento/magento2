@@ -34,7 +34,7 @@ class ConditionTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($this->model->getIdsSelect($connection));
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(\Magento\Catalog\Model\Product\Condition::class);
@@ -72,7 +72,7 @@ class ConditionTest extends \PHPUnit\Framework\TestCase
 
         $mock->expects($this->any())
             ->method('select')
-            ->will($this->returnValue($mockedDbSelect));
+            ->willReturn($mockedDbSelect);
 
         return $mock;
     }
@@ -89,7 +89,7 @@ class ConditionTest extends \PHPUnit\Framework\TestCase
 
         $mock->expects($this->any())
             ->method('from')
-            ->will($this->returnValue($mock));
+            ->willReturn($mock);
 
         return $mock;
     }

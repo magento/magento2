@@ -20,7 +20,7 @@ class UrnResolverTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->urnResolver = $this->objectManagerHelper->getObject(\Magento\Framework\Config\Dom\UrnResolver::class);
@@ -64,21 +64,23 @@ class UrnResolverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
-     * @expectedExceptionMessage Unsupported format of schema location: 'urn:magento:test:test:etc/test_test.xsd'
      */
     public function testGetRealPathWrongSection()
     {
+        $this->expectException(\Magento\Framework\Exception\NotFoundException::class);
+        $this->expectExceptionMessage('Unsupported format of schema location: \'urn:magento:test:test:etc/test_test.xsd\'');
+
         $xsdUrn = 'urn:magento:test:test:etc/test_test.xsd';
         $this->urnResolver->getRealPath($xsdUrn);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
-     * @expectedExceptionMessage Could not locate schema: 'urn:magento:module:Magento_Test:test.xsd' at '/test.xsd'
      */
     public function testGetRealPathWrongModule()
     {
+        $this->expectException(\Magento\Framework\Exception\NotFoundException::class);
+        $this->expectExceptionMessage('Could not locate schema: \'urn:magento:module:Magento_Test:test.xsd\' at \'/test.xsd\'');
+
         $xsdUrn = 'urn:magento:module:Magento_Test:test.xsd';
         $this->urnResolver->getRealPath($xsdUrn);
     }

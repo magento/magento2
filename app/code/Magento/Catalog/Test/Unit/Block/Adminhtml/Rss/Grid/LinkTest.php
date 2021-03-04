@@ -24,11 +24,11 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\App\Rss\UrlBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Rss\UrlBuilderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderInterface;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->urlBuilderInterface = $this->createMock(\Magento\Framework\App\Rss\UrlBuilderInterface::class);
 
@@ -44,7 +44,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     public function testGetLink()
     {
         $rssUrl = 'http://rss.magento.com';
-        $this->urlBuilderInterface->expects($this->once())->method('getUrl')->will($this->returnValue($rssUrl));
+        $this->urlBuilderInterface->expects($this->once())->method('getUrl')->willReturn($rssUrl);
         $this->assertEquals($rssUrl, $this->link->getLink());
     }
 
@@ -55,6 +55,6 @@ class LinkTest extends \PHPUnit\Framework\TestCase
 
     public function testIsRssAllowed()
     {
-        $this->assertEquals(true, $this->link->isRssAllowed());
+        $this->assertTrue($this->link->isRssAllowed());
     }
 }

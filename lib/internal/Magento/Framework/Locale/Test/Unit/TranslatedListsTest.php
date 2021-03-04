@@ -64,11 +64,11 @@ class TranslatedListsTest extends TestCase
         'sr_Latn_RS' => 'Srpski (latinica, Srbija) / Serbian (Latin, Serbia)'
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockConfig = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->mockConfig->method('getAllowedLocales')
             ->willReturn(array_keys($this->expectedLocales));
         $this->mockConfig->method('getAllowedCurrencies')
@@ -76,7 +76,7 @@ class TranslatedListsTest extends TestCase
 
         $this->mockLocaleResolver = $this->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->mockLocaleResolver->expects($this->once())
             ->method('getLocale')
             ->willReturn('en_US');

@@ -78,7 +78,7 @@ class CreateWidgetEntityTest extends AbstractCreateWidgetEntityTest
      *
      * return void
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         if (!empty($this->caches)) {

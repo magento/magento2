@@ -50,7 +50,7 @@ class CustomLayoutManagerTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->resultFactory = $objectManager->get(PageResultFactory::class);
@@ -97,6 +97,6 @@ class CustomLayoutManagerTest extends TestCase
         $result = $this->resultFactory->create();
         $this->manager->applyUpdate($result, $this->repo->getFor($pageId));
         $this->identityMap->remove((int)$page->getId());
-        $this->assertContains('___selectable_page100_select2', $result->getLayout()->getUpdate()->getHandles());
+        $this->assertContains('___selectable_page100_select2',$result->getLayout()->getUpdate()->getHandles());
     }
 }

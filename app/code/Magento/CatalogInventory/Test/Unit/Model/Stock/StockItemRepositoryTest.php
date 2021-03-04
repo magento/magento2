@@ -23,79 +23,79 @@ class StockItemRepositoryTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Stock\Item |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\Stock\Item |\PHPUnit\Framework\MockObject\MockObject
      */
     private $stockItemMock;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockConfigurationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\StockConfigurationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stockConfigurationMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $productMock;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stockStateProviderMock;
 
     /**
-     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stockItemResourceMock;
 
     /**
-     * @var InventoryApiData\StockItemInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var InventoryApiData\StockItemInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stockItemFactoryMock;
 
     /**
-     * @var InventoryApiData\StockItemCollectionInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var InventoryApiData\StockItemCollectionInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stockItemCollectionMock;
 
     /**
-     * @var \Magento\Catalog\Model\ProductFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ProductFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productFactoryMock;
 
     /**
-     * @var \Magento\Framework\DB\QueryBuilderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\QueryBuilderFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryBuilderFactoryMock;
 
     /**
-     * @var \Magento\Framework\DB\MapperFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\MapperFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mapperMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $localeDateMock;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $indexProcessorMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dateTime;
 
     /**
-     * @var StockRegistryStorage|\PHPUnit_Framework_MockObject_MockObject
+     * @var StockRegistryStorage|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stockRegistryStorage;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stockItemMock = $this->getMockBuilder(\Magento\CatalogInventory\Model\Stock\Item::class)
             ->disableOriginalConstructor()
@@ -227,10 +227,11 @@ class StockItemRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function testDeleteException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotDeleteException::class);
+
         $this->stockItemResourceMock->expects($this->once())
             ->method('delete')
             ->with($this->stockItemMock)
@@ -251,11 +252,12 @@ class StockItemRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage The stock item with the "1" ID wasn't found. Verify the ID and try again.
      */
     public function testDeleteByIdException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotDeleteException::class);
+        $this->expectExceptionMessage('The stock item with the "1" ID wasn\'t found. Verify the ID and try again.');
+
         $id = 1;
 
         $this->stockItemFactoryMock->expects($this->once())->method('create')->willReturn($this->stockItemMock);
@@ -322,10 +324,11 @@ class StockItemRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSaveException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+
         $productId = 1;
 
         $this->stockItemMock->expects($this->any())->method('getProductId')->willReturn($productId);

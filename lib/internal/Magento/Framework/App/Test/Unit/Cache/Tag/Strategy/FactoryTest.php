@@ -11,17 +11,17 @@ use \Magento\Framework\App\Cache\Tag\Strategy\Factory;
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Cache\Tag\Strategy\Identifier
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Cache\Tag\Strategy\Identifier
      */
     private $identifierStrategy;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Cache\Tag\Strategy\Dummy
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Cache\Tag\Strategy\Dummy
      */
     private $dummyStrategy;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Cache\Tag\StrategyInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Cache\Tag\StrategyInterface
      */
     private $customStrategy;
 
@@ -30,7 +30,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->identifierStrategy = $this->createMock(\Magento\Framework\App\Cache\Tag\Strategy\Identifier::class);
 

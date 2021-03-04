@@ -18,7 +18,7 @@ use Magento\Setup\Fixtures\ConfigurableProductsFixture;
 class ConfigurableProductsFixtureTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Fixtures\FixtureModel
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Fixtures\FixtureModel
      */
     private $fixtureModelMock;
 
@@ -37,7 +37,7 @@ class ConfigurableProductsFixtureTest extends \PHPUnit\Framework\TestCase
      */
     private $attributePatternMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->fixtureModelMock = $this->getMockBuilder(\Magento\Setup\Fixtures\FixtureModel::class)
             ->disableOriginalConstructor()
@@ -94,7 +94,7 @@ class ConfigurableProductsFixtureTest extends \PHPUnit\Framework\TestCase
 
         $objectManagerMock->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [
                     \Magento\Store\Model\StoreManager::class,
                     $storeManagerMock
@@ -107,7 +107,7 @@ class ConfigurableProductsFixtureTest extends \PHPUnit\Framework\TestCase
                     \Magento\Catalog\Api\ProductAttributeOptionManagementInterface::class,
                     $productAttributeOptionManagementInterface
                 ]
-            ]));
+            ]);
 
         $attributeCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->setMethods(['create'])
@@ -116,8 +116,8 @@ class ConfigurableProductsFixtureTest extends \PHPUnit\Framework\TestCase
 
         $objectManagerMock->expects($this->any())
             ->method('create')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($className) use (
                         $attributeCollectionFactoryMock,
                         $categoryMock,
@@ -142,7 +142,7 @@ class ConfigurableProductsFixtureTest extends \PHPUnit\Framework\TestCase
 
                         return null;
                     }
-                )
+                
             );
 
         $valuesMap = [
@@ -199,7 +199,7 @@ class ConfigurableProductsFixtureTest extends \PHPUnit\Framework\TestCase
         $this->fixtureModelMock
             ->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValueMap($valuesMap));
+            ->willReturnMap($valuesMap);
 
         $this->model->execute();
     }
@@ -223,7 +223,7 @@ class ConfigurableProductsFixtureTest extends \PHPUnit\Framework\TestCase
         $this->fixtureModelMock
             ->expects($this->never())
             ->method('getObjectManager')
-            ->will($this->returnValue($objectManagerMock));
+            ->willReturn($objectManagerMock);
 
         $this->model->execute();
     }

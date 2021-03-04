@@ -16,31 +16,31 @@ class FormTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
-    /** @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\Template\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $context;
 
     /**
-     * @var \Magento\Review\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Review\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $reviewDataMock;
 
-    /** @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $productRepository;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $storeManager;
 
-    /** @var \Magento\Framework\UrlInterface|PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\UrlInterface|PHPUnit\Framework\MockObject\MockObject */
     protected $urlBuilder;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
@@ -58,8 +58,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getStoreManager'
-        )->will(
-            $this->returnValue($this->storeManager)
+        )->willReturn(
+            $this->storeManager
         );
         $this->context->expects($this->any())
             ->method('getRequest')
@@ -95,8 +95,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getStore'
-        )->will(
-            $this->returnValue(new \Magento\Framework\DataObject(['id' => $storeId]))
+        )->willReturn(
+            new \Magento\Framework\DataObject(['id' => $storeId])
         );
 
         $this->requestMock->expects($this->once())
@@ -154,7 +154,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->serializerMock->expects($this->once())->method('serialize')
-            ->will($this->returnValue(json_encode($jsLayout)));
+            ->willReturn(json_encode($jsLayout));
         $this->assertEquals('{"some-layout":"layout information"}', $this->object->getJsLayout());
     }
 }

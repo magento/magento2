@@ -14,7 +14,7 @@ class BatchSizeCalculatorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Indexer\BatchSizeManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\BatchSizeManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $estimatorMock;
 
@@ -23,7 +23,7 @@ class BatchSizeCalculatorTest extends \PHPUnit\Framework\TestCase
      */
     private $batchRowsCount;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->estimatorMock = $this->createMock(\Magento\Framework\Indexer\BatchSizeManagementInterface::class);
         $this->batchRowsCount = 200;

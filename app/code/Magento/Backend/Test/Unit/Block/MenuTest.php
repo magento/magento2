@@ -20,37 +20,37 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class MenuTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var Item|\PHPUnit\Framework\MockObject\MockObject
      */
     private $activeItemMock;
 
     /**
-     * @var MenuModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var MenuModel|\PHPUnit\Framework\MockObject\MockObject
      */
     private $menuModelMock;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlMock;
 
     /**
-     * @var IteratorFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var IteratorFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $iteratorFactoryMock;
 
     /**
-     * @var Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var Session|\PHPUnit\Framework\MockObject\MockObject
      */
     private $authSessionMock;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $menuConfigMock;
 
     /**
-     * @var ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $localeResolverMock;
 
@@ -60,12 +60,12 @@ class MenuTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var MenuItemChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var MenuItemChecker|\PHPUnit\Framework\MockObject\MockObject
      */
     private $menuItemCheckerMock;
 
     /**
-     * @var AnchorRenderer|\PHPUnit_Framework_MockObject_MockObject
+     * @var AnchorRenderer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $anchorRendererMock;
 
@@ -74,14 +74,14 @@ class MenuTest extends \PHPUnit\Framework\TestCase
      */
     private $menu;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->activeItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->urlMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->iteratorFactoryMock = $this->getMockBuilder(IteratorFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -93,10 +93,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
-        $this->menuItemChecker = $this->getMockBuilder(MenuItemChecker::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->anchorRendererMock = $this->getMockBuilder(AnchorRenderer::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -21,7 +21,7 @@ class ComponentRegistrarFixtureTest extends \PHPUnit\Framework\TestCase
     const THEME_NAME = 'frontend/Magento/theme';
     const LANGUAGE_NAME = 'magento_language';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->componentRegistrar = new ComponentRegistrar();
     }

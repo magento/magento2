@@ -10,7 +10,8 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfig;
 
 /**
- * Class BatchConsumer
+ * BatchConsumer is a consumer class which implements the consumer interface
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BatchConsumer implements ConsumerInterface
@@ -74,9 +75,7 @@ class BatchConsumer implements ConsumerInterface
      * @param ConsumerConfigurationInterface $configuration
      * @param int $interval [optional]
      * @param int $batchSize [optional]
-     * @param MessageProcessorLoader $messageProcessorLoader [optional]
-     * @param MessageController $messageController [optional]
-     * @param ConsumerConfig $consumerConfig [optional]
+     * @param MessageProcessorLoader|null $messageProcessorLoader [optional]
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -103,7 +102,7 @@ class BatchConsumer implements ConsumerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process($maxNumberOfMessages = null)
     {
@@ -151,9 +150,9 @@ class BatchConsumer implements ConsumerInterface
      */
     private function run(QueueInterface $queue, MergerInterface $merger, $maxNumberOfMessages)
     {
-        $count = $maxNumberOfMessages
+        $count = ($maxNumberOfMessages
             ? $maxNumberOfMessages
-            : $this->configuration->getMaxMessages() ?: 1;
+            : $this->configuration->getMaxMessages()) ?: 1;
         $transactionCallback = $this->getTransactionCallback($queue, $merger);
 
         if ($this->batchSize) {

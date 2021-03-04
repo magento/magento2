@@ -30,61 +30,61 @@ use Magento\Customer\Model\Session;
  */
 class SendTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  Send |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Send |\PHPUnit\Framework\MockObject\MockObject */
     protected $model;
 
-    /** @var  ActionContext |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  ActionContext |\PHPUnit\Framework\MockObject\MockObject */
     protected $context;
 
-    /** @var  FormKeyValidator |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  FormKeyValidator |\PHPUnit\Framework\MockObject\MockObject */
     protected $formKeyValidator;
 
-    /** @var  WishlistProviderInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  WishlistProviderInterface |\PHPUnit\Framework\MockObject\MockObject */
     protected $wishlistProvider;
 
-    /** @var  Store |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Store |\PHPUnit\Framework\MockObject\MockObject */
     protected $store;
 
-    /** @var  ResultFactory |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  ResultFactory |\PHPUnit\Framework\MockObject\MockObject */
     protected $resultFactory;
 
-    /** @var  ResultRedirect |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  ResultRedirect |\PHPUnit\Framework\MockObject\MockObject */
     protected $resultRedirect;
 
-    /** @var  ResultLayout |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  ResultLayout |\PHPUnit\Framework\MockObject\MockObject */
     protected $resultLayout;
 
-    /** @var  RequestInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  RequestInterface |\PHPUnit\Framework\MockObject\MockObject */
     protected $request;
 
-    /** @var  ManagerInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  ManagerInterface |\PHPUnit\Framework\MockObject\MockObject */
     protected $messageManager;
 
-    /** @var  CustomerData |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  CustomerData |\PHPUnit\Framework\MockObject\MockObject */
     protected $customerData;
 
-    /** @var  UrlInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  UrlInterface |\PHPUnit\Framework\MockObject\MockObject */
     protected $url;
 
-    /** @var  TransportInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  TransportInterface |\PHPUnit\Framework\MockObject\MockObject */
     protected $transport;
 
-    /** @var  EventManagerInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  EventManagerInterface |\PHPUnit\Framework\MockObject\MockObject */
     protected $eventManager;
 
-    /** @var  CaptchaHelper |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  CaptchaHelper |\PHPUnit\Framework\MockObject\MockObject */
     protected $captchaHelper;
 
-    /** @var CaptchaModel |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CaptchaModel |\PHPUnit\Framework\MockObject\MockObject */
     protected $captchaModel;
 
-    /** @var Session |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Session |\PHPUnit\Framework\MockObject\MockObject */
     protected $customerSession;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resultRedirect = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
             ->disableOriginalConstructor()
@@ -228,11 +228,12 @@ class SendTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
-     * @expectedExceptionMessage Page not found.
      */
     public function testExecuteNoWishlistAvailable()
     {
+        $this->expectException(\Magento\Framework\Exception\NotFoundException::class);
+        $this->expectExceptionMessage('Page not found.');
+
         $this->formKeyValidator->expects($this->once())
             ->method('validate')
             ->with($this->request)

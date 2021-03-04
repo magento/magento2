@@ -18,18 +18,18 @@ class ListCompareTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $layout;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->layout = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['getBlock']);
 
         $context = $this->createPartialMock(\Magento\Catalog\Block\Product\Context::class, ['getLayout']);
         $context->expects($this->any())
             ->method('getLayout')
-            ->will($this->returnValue($this->layout));
+            ->willReturn($this->layout);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->block = $objectManager->getObject(
@@ -38,7 +38,7 @@ class ListCompareTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->block = null;
     }
@@ -54,7 +54,7 @@ class ListCompareTest extends \PHPUnit\Framework\TestCase
         $product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getId', '__wakeup']);
         $product->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($productId));
+            ->willReturn($productId);
 
         $blockMock = $this->createPartialMock(\Magento\Framework\Pricing\Render::class, ['render']);
         $blockMock->expects($this->once())
@@ -68,12 +68,12 @@ class ListCompareTest extends \PHPUnit\Framework\TestCase
                     'zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST
                 ]
             )
-            ->will($this->returnValue($expectedResult));
+            ->willReturn($expectedResult);
 
         $this->layout->expects($this->once())
             ->method('getBlock')
             ->with($blockName)
-            ->will($this->returnValue($blockMock));
+            ->willReturn($blockMock);
 
         $this->assertEquals($expectedResult, $this->block->getProductPrice($product, '-compare-list-top'));
     }

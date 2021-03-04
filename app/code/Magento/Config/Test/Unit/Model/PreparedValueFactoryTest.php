@@ -18,7 +18,7 @@ use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 use Magento\Framework\App\ScopeResolver;
 use Magento\Framework\App\ScopeResolverPool;
 use Magento\Store\Model\ScopeTypeNormalizer;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * @inheritdoc
@@ -85,7 +85,7 @@ class PreparedValueFactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->structureFactoryMock = $this->getMockBuilder(StructureFactory::class)
             ->disableOriginalConstructor()
@@ -382,11 +382,12 @@ class PreparedValueFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessage Some exception
      */
     public function testCreateWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\RuntimeException::class);
+        $this->expectExceptionMessage('Some exception');
+
         $this->structureFactoryMock->expects($this->once())
             ->method('create')
             ->willThrowException(new \Exception('Some exception'));

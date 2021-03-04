@@ -14,21 +14,21 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $categoryRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productLinkMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->categoryRepositoryMock = $this->createMock(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
         $this->productRepositoryMock = $this->createMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
@@ -65,11 +65,12 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Could not save product "55" with position 1 to category 42
      */
     public function testSaveWithCouldNotSaveException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+        $this->expectExceptionMessage('Could not save product "55" with position 1 to category 42');
+
         $categoryId = 42;
         $productId = 55;
         $productPosition = 1;
@@ -117,11 +118,12 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Could not save product "55" with position 1 to category 42
      */
     public function testDeleteByIdsWithCouldNotSaveException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+        $this->expectExceptionMessage('Could not save product "55" with position 1 to category 42');
+
         $categoryId = "42";
         $productSku = "testSku";
         $productId = 55;
@@ -144,11 +146,12 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The category doesn't contain the specified product.
      */
     public function testDeleteWithInputException()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('The category doesn\'t contain the specified product.');
+
         $categoryId = "42";
         $productSku = "testSku";
         $productId = 60;

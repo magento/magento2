@@ -63,7 +63,7 @@ class SetShippingAddressOnCartTest extends GraphQlAbstract
      */
     private $customerRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->quoteResource = $objectManager->get(QuoteResource::class);
@@ -144,11 +144,12 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_virtual_product.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage The Cart includes virtual product(s) only, so a shipping address is not used.
      */
     public function testSetNewShippingAddressOnCartWithVirtualProduct()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The Cart includes virtual product(s) only, so a shipping address is not used.');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
@@ -273,11 +274,12 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not find a address with ID "100"
      */
     public function testSetNonExistentShippingAddressFromAddressBook()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a address with ID "100"');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
@@ -357,11 +359,12 @@ QUERY;
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Current customer does not have permission to address with ID "1"
      */
     public function testSetShippingAddressIfCustomerIsNotOwnerOfAddress()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Current customer does not have permission to address with ID "1"');
+
         $maskedQuoteId = $this->assignQuoteToCustomer('test_order_with_simple_product_without_address', 2);
 
         $query = <<<QUERY
@@ -394,10 +397,11 @@ QUERY;
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      *
-     * @expectedException \Exception
      */
     public function testSetShippingAddressToAnotherCustomerCart()
     {
+        $this->expectException(\Exception::class);
+
         $maskedQuoteId = $this->assignQuoteToCustomer('test_order_with_simple_product_without_address', 1);
 
         $query = <<<QUERY
@@ -469,11 +473,12 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Field CartAddressInput.street of required type [String]! was not provided.
      */
     public function testSetNewShippingAddressWithMissedRequiredStreetParameters()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Field CartAddressInput.street of required type [String]! was not provided.');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = <<<QUERY
 mutation {
@@ -568,11 +573,12 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage You cannot specify multiple shipping addresses.
      */
     public function testSetMultipleNewShippingAddresses()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('You cannot specify multiple shipping addresses.');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
@@ -669,11 +675,12 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testSetShippingAddressOnNonExistentCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a cart with ID "non_existent_masked_id"');
+
         $maskedQuoteId = 'non_existent_masked_id';
         $query = <<<QUERY
 mutation {

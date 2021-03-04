@@ -16,11 +16,11 @@ class AclConditionTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AuthorizationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $authorizationMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->authorizationMock = $this->getMockBuilder(AuthorizationInterface::class)
             ->getMock();

@@ -16,7 +16,7 @@ use \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 class ProductUrlKeyAutogeneratorObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productUrlPathGenerator;
 
@@ -58,7 +58,7 @@ class ProductUrlKeyAutogeneratorObserverTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getProduct'])
             ->getMock();
         $event->expects($this->atLeastOnce())->method('getProduct')->willReturn($product);
-        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $observer */
+        /** @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject $observer */
         $observer = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getEvent'])
@@ -85,7 +85,7 @@ class ProductUrlKeyAutogeneratorObserverTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getProduct'])
             ->getMock();
         $event->expects($this->atLeastOnce())->method('getProduct')->willReturn($product);
-        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $observer */
+        /** @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject $observer */
         $observer = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getEvent'])

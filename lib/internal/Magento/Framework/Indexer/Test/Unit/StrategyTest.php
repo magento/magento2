@@ -21,14 +21,14 @@ class StrategyTest extends \PHPUnit\Framework\TestCase
     /**
      * Resource mock
      *
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_resourceMock;
 
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->_model = new \Magento\Framework\Indexer\Table\Strategy(
@@ -43,13 +43,13 @@ class StrategyTest extends \PHPUnit\Framework\TestCase
      */
     public function testUseIdxTable()
     {
-        $this->assertEquals(false, $this->_model->getUseIdxTable());
+        $this->assertFalse($this->_model->getUseIdxTable());
         $this->_model->setUseIdxTable(false);
-        $this->assertEquals(false, $this->_model->getUseIdxTable());
+        $this->assertFalse($this->_model->getUseIdxTable());
         $this->_model->setUseIdxTable(true);
-        $this->assertEquals(true, $this->_model->getUseIdxTable());
+        $this->assertTrue($this->_model->getUseIdxTable());
         $this->_model->setUseIdxTable();
-        $this->assertEquals(false, $this->_model->getUseIdxTable());
+        $this->assertFalse($this->_model->getUseIdxTable());
     }
 
     /**
@@ -74,12 +74,12 @@ class StrategyTest extends \PHPUnit\Framework\TestCase
     public function testGetTableName()
     {
         $prefix = 'pre_';
-        $this->_resourceMock->expects($this->any())->method('getTableName')->will(
-            $this->returnCallback(
+        $this->_resourceMock->expects($this->any())->method('getTableName')->willReturnCallback(
+            
                 function ($tableName) use ($prefix) {
                     return $prefix . $tableName;
                 }
-            )
+            
         );
         $this->assertEquals('pre_test_tmp', $this->_model->getTableName('test'));
         $this->_model->setUseIdxTable(true);

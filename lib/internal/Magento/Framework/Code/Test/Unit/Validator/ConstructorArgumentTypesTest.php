@@ -10,12 +10,12 @@ class ConstructorArgumentTypesTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $argumentsReaderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $sourceArgumentsReaderMock;
 
@@ -24,7 +24,7 @@ class ConstructorArgumentTypesTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->argumentsReaderMock = $this->createMock(\Magento\Framework\Code\Reader\ArgumentsReader::class);
         $this->sourceArgumentsReaderMock =
@@ -47,11 +47,12 @@ class ConstructorArgumentTypesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\ValidatorException
-     * @expectedExceptionMessage Invalid constructor argument(s) in \stdClass
      */
     public function testValidateWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\ValidatorException::class);
+        $this->expectExceptionMessage('Invalid constructor argument(s) in \\stdClass');
+
         $className = '\stdClass';
         $classMock = new \ReflectionClass($className);
         $this->argumentsReaderMock->expects($this->once())->method('getConstructorArguments')->with($classMock)

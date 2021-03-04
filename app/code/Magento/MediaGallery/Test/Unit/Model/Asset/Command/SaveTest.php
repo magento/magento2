@@ -94,11 +94,11 @@ class SaveTest extends TestCase
     {
         /* Intermediary mocks */
         $this->adapterMock = $this->createMock(Mysql::class);
-        $this->mediaAssetMock = $this->createMock(AssetInterface::class);
+        $this->mediaAssetMock = $this->getMockForAbstractClass(AssetInterface::class);
 
         /* Save constructor mocks */
-        $this->extractorMock = $this->createMock(DataExtractorInterface::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->extractorMock = $this->getMockForAbstractClass(DataExtractorInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->resourceConnectionMock = $this->createConfiguredMock(
             ResourceConnection::class,
             [

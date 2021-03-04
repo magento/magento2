@@ -30,36 +30,36 @@ class VarnishPluginTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var Version|\PHPUnit_Framework_MockObject_MockObject
+     * @var Version|\PHPUnit\Framework\MockObject\MockObject
      */
     private $versionMock;
 
     /**
-     * @var AppState|\PHPUnit_Framework_MockObject_MockObject
+     * @var AppState|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stateMock;
 
     /**
-     * @var FrontControllerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FrontControllerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $frontControllerMock;
 
     /**
-     * @var ResponseHttp|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseHttp|\PHPUnit\Framework\MockObject\MockObject
      */
     private $responseMock;
 
     /**
-     * @var ResultInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()

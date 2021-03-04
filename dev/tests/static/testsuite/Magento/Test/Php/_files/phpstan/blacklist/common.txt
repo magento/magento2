@@ -14,3 +14,4 @@ dev/tests/api-functional/testsuite/Magento/Customer/Api/AddressRepositoryTest.ph
 dev/tests/api-functional/testsuite/Magento/Framework/Model/Entity/HydratorTest.php
 dev/tests/api-functional/testsuite/Magento/Integration/Model/AdminTokenServiceTest.php
 dev/tests/api-functional/testsuite/Magento/Integration/Model/CustomerTokenServiceTest.php
+dev/tests/utils/phpunitGroupConfig.php

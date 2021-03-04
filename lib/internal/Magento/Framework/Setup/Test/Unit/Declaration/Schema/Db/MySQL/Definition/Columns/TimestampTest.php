@@ -26,26 +26,26 @@ class TimestampTest extends \PHPUnit\Framework\TestCase
     private $timestamp;
 
     /**
-     * @var Nullable|\PHPUnit_Framework_MockObject_MockObject
+     * @var Nullable|\PHPUnit\Framework\MockObject\MockObject
      */
     private $nullableMock;
 
     /**
-     * @var Comment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Comment|\PHPUnit\Framework\MockObject\MockObject
      */
     private $commentMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var OnUpdate|\PHPUnit_Framework_MockObject_MockObject
+     * @var OnUpdate|\PHPUnit\Framework\MockObject\MockObject
      */
     private $onUpdateMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->nullableMock = $this->getMockBuilder(Nullable::class)
@@ -81,7 +81,7 @@ class TimestampTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinition($default, $nullable, $onUpdate, $expectedStatement)
     {
-        /** @var BooleanColumn|\PHPUnit_Framework_MockObject_MockObject $column */
+        /** @var BooleanColumn|\PHPUnit\Framework\MockObject\MockObject $column */
         $column = $this->getMockBuilder(BooleanColumn::class)
             ->disableOriginalConstructor()
             ->getMock();

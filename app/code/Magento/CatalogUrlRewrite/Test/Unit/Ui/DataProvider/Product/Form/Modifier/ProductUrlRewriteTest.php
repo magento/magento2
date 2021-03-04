@@ -16,11 +16,11 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 class ProductUrlRewriteTest extends AbstractModifierTest
 {
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)

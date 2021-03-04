@@ -16,7 +16,7 @@ class BuilderFactoryTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
@@ -25,7 +25,7 @@ class BuilderFactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $buildFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -80,18 +80,20 @@ class BuilderFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateInvalidData()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->buildFactory->create('some_wrong_type', []);
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateWithNonBuilderClass()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $wrongClass = $this->getMockBuilder(\Magento\Framework\View\Layout\BuilderFactory::class)
             ->disableOriginalConstructor()
             ->getMock();

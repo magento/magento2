@@ -11,7 +11,7 @@ namespace Magento\Cms\Test\Unit\Model\Config\Source;
 class PageTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Cms\Model\ResourceModel\Page\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cms\Model\ResourceModel\Page\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactory;
 
@@ -25,7 +25,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -53,11 +53,11 @@ class PageTest extends \PHPUnit\Framework\TestCase
 
         $this->collectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($pageCollectionMock));
+            ->willReturn($pageCollectionMock);
 
         $pageCollectionMock->expects($this->once())
             ->method('toOptionIdArray')
-            ->will($this->returnValue('return-value'));
+            ->willReturn('return-value');
 
         $this->assertEquals('return-value', $this->page->toOptionArray());
     }

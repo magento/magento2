@@ -20,42 +20,42 @@ use Magento\Store\Model\ScopeInterface;
 class EmailNotificationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Customer\Model\CustomerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\CustomerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerRegistryMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \Magento\Framework\Mail\Template\TransportBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Mail\Template\TransportBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $transportBuilderMock;
 
     /**
-     * @var \Magento\Customer\Helper\View|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Helper\View|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerViewHelperMock;
 
     /**
-     * @var \Magento\Framework\Reflection\DataObjectProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Reflection\DataObjectProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataProcessorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Model\Data\CustomerSecure
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Model\Data\CustomerSecure
      */
     private $customerSecureMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\Store
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\Store
      */
     private $storeMock;
 
@@ -65,11 +65,11 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var SenderResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SenderResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $senderResolverMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->customerRegistryMock = $this->createMock(\Magento\Customer\Model\CustomerRegistry::class);
 
@@ -160,8 +160,8 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
             ->with($sender, $customerStoreId)
             ->willReturn($senderValues);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $origCustomer */
-        $origCustomer = $this->createMock(CustomerInterface::class);
+        /** @var \PHPUnit\Framework\MockObject\MockObject $origCustomer */
+        $origCustomer = $this->getMockForAbstractClass(CustomerInterface::class);
         $origCustomer->expects($this->any())
             ->method('getStoreId')
             ->willReturn(0);
@@ -216,7 +216,7 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
             ->with('name', $customerName)
             ->willReturnSelf();
 
-        /** @var CustomerInterface|\PHPUnit_Framework_MockObject_MockObject $savedCustomer */
+        /** @var CustomerInterface|\PHPUnit\Framework\MockObject\MockObject $savedCustomer */
         $savedCustomer = clone $origCustomer;
 
         $origCustomer->expects($this->any())
@@ -328,8 +328,8 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
             ->with($sender, $customerStoreId)
             ->willReturn($senderValues);
 
-        /** @var CustomerInterface|\PHPUnit_Framework_MockObject_MockObject $customer */
-        $customer = $this->createMock(CustomerInterface::class);
+        /** @var CustomerInterface|\PHPUnit\Framework\MockObject\MockObject $customer */
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
         $customer->expects($this->any())
             ->method('getWebsiteId')
             ->willReturn($customerWebsiteId);
@@ -427,8 +427,8 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
             ->method('resolve')
             ->with($sender, $defaultStoreId)
             ->willReturn($senderValues);
-        /** @var CustomerInterface | \PHPUnit_Framework_MockObject_MockObject $customer */
-        $customer = $this->createMock(CustomerInterface::class);
+        /** @var CustomerInterface | \PHPUnit\Framework\MockObject\MockObject $customer */
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
         $customer->expects($this->any())
             ->method('getWebsiteId')
             ->willReturn($customerWebsiteId);
@@ -519,8 +519,8 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
             ->with($sender, $customerStoreId)
             ->willReturn($senderValues);
 
-        /** @var CustomerInterface|\PHPUnit_Framework_MockObject_MockObject $customer */
-        $customer = $this->createMock(CustomerInterface::class);
+        /** @var CustomerInterface|\PHPUnit\Framework\MockObject\MockObject $customer */
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
         $customer->expects($this->once())
             ->method('getStoreId')
             ->willReturn($customerStoreId);
@@ -604,8 +604,8 @@ class EmailNotificationTest extends \PHPUnit\Framework\TestCase
             ->with($sender, $customerStoreId)
             ->willReturn($senderValues);
 
-        /** @var CustomerInterface|\PHPUnit_Framework_MockObject_MockObject $customer */
-        $customer = $this->createMock(CustomerInterface::class);
+        /** @var CustomerInterface|\PHPUnit\Framework\MockObject\MockObject $customer */
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
         $customer->expects($this->any())
             ->method('getStoreId')
             ->willReturn($customerStoreId);

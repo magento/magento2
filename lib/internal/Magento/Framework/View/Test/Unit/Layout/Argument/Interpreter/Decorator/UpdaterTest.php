@@ -10,12 +10,12 @@ use \Magento\Framework\View\Layout\Argument\Interpreter\Decorator\Updater;
 class UpdaterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\Data\Argument\InterpreterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Argument\InterpreterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_interpreter;
 
@@ -24,7 +24,7 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_interpreter = $this->getMockForAbstractClass(
@@ -48,8 +48,8 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
             'evaluate'
         )->with(
             ['value' => 'some text']
-        )->will(
-            $this->returnValue($evaluatedValue)
+        )->willReturn(
+            $evaluatedValue
         );
 
         $updater = $this->getMockForAbstractClass(\Magento\Framework\View\Layout\Argument\UpdaterInterface::class);
@@ -59,8 +59,8 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
             'update'
         )->with(
             $evaluatedValue
-        )->will(
-            $this->returnValue($updatedValue)
+        )->willReturn(
+            $updatedValue
         );
 
         $this->_objectManager->expects(
@@ -69,8 +69,8 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             \Magento\Framework\View\Layout\Argument\UpdaterInterface::class
-        )->will(
-            $this->returnValue($updater)
+        )->willReturn(
+            $updater
         );
 
         $actual = $this->_model->evaluate($input);
@@ -88,8 +88,8 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
             'evaluate'
         )->with(
             $input
-        )->will(
-            $this->returnValue($expected)
+        )->willReturn(
+            $expected
         );
         $this->_objectManager->expects($this->never())->method('get');
 
@@ -98,21 +98,23 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Layout argument updaters are expected to be an array of classes
      */
     public function testEvaluateWrongUpdaterValue()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Layout argument updaters are expected to be an array of classes');
+
         $input = ['value' => 'some text', 'updater' => 'non-array'];
         $this->_model->evaluate($input);
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Instance of layout argument updater is expected
      */
     public function testEvaluateWrongUpdaterClass()
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Instance of layout argument updater is expected');
+
         $input = [
             'value' => 'some text',
             'updater' => [
@@ -121,12 +123,12 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
             ],
         ];
         $self = $this;
-        $this->_objectManager->expects($this->exactly(2))->method('get')->will(
-            $this->returnCallback(
+        $this->_objectManager->expects($this->exactly(2))->method('get')->willReturnCallback(
+            
                 function ($className) use ($self) {
                     return $self->getMockForAbstractClass($className);
                 }
-            )
+            
         );
 
         $this->_model->evaluate($input);

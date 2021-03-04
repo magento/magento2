@@ -15,13 +15,13 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     private $plugin;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $authorizationMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->authorizationMock = $this->createMock(AuthorizationInterface::class);
+        $this->authorizationMock = $this->getMockForAbstractClass(AuthorizationInterface::class);
         $this->plugin = new \Magento\AsynchronousOperations\Ui\Component\AdminNotification\Plugin(
             $this->authorizationMock
         );

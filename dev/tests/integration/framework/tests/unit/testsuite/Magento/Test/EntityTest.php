@@ -8,11 +8,11 @@ namespace Magento\Test;
 class EntityTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\AbstractModel|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = $this->createPartialMock(
             \Magento\Framework\Model\AbstractModel::class,
@@ -50,12 +50,10 @@ class EntityTest extends \PHPUnit\Framework\TestCase
         $this->_model->setId(null);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Class 'stdClass' is irrelevant to the tested model
-     */
     public function testConstructorIrrelevantModelClass()
     {
+        $this->expectExceptionMessage("Class 'stdClass' is irrelevant to the tested model");
+        $this->expectException(\InvalidArgumentException::class);
         new \Magento\TestFramework\Entity($this->_model, [], 'stdClass');
     }
 

@@ -14,7 +14,7 @@ use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\ValidatorException;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -57,7 +57,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->emulatedAreProcessorMock = $this->getMockBuilder(EmulatedAdminhtmlAreaProcessor::class)
             ->disableOriginalConstructor()
@@ -109,10 +109,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             ConfigSetCommand::ARG_VALUE => 'value'
         ]);
 
-        $this->assertContains(
-            __('Some message')->render(),
-            $tester->getDisplay()
-        );
+        $this->assertStringContainsString(__('Some message')->render(), $tester->getDisplay());
         $this->assertSame(Cli::RETURN_SUCCESS, $tester->getStatusCode());
     }
 
@@ -130,7 +127,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             ConfigSetCommand::ARG_VALUE => 'value'
         ]);
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             __('You cannot run this command because the Magento application is not installed.')->render(),
             $tester->getDisplay()
         );
@@ -154,7 +151,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             ConfigSetCommand::ARG_VALUE => 'value'
         ]);
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             __('This command is unavailable right now.')->render(),
             $tester->getDisplay()
         );
@@ -179,7 +176,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             ConfigSetCommand::ARG_VALUE => 'value'
         ]);
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             __('The "test/test/test" path does not exists')->render(),
             $tester->getDisplay()
         );

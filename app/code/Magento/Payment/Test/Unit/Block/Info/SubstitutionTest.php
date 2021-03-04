@@ -12,7 +12,7 @@ namespace Magento\Payment\Test\Unit\Block\Info;
 class SubstitutionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $layout;
 
@@ -29,7 +29,7 @@ class SubstitutionTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -59,10 +59,10 @@ class SubstitutionTest extends \PHPUnit\Framework\TestCase
                 'advanced/modules_disable_output/'
             ),
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 false
-            )
+            
         );
 
         $context = $this->getMockBuilder(
@@ -74,28 +74,28 @@ class SubstitutionTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getLayout'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 $this->layout
-            )
+            
         );
         $context->expects(
             $this->any()
         )->method(
             'getEventManager'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 $eventManager
-            )
+            
         );
         $context->expects(
             $this->any()
         )->method(
             'getScopeConfig'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 $scopeConfig
-            )
+            
         );
 
         $this->block = $this->objectManager->getObject(
@@ -118,10 +118,10 @@ class SubstitutionTest extends \PHPUnit\Framework\TestCase
         )->getMock();
         $childAbstractBlock = clone($abstractBlock);
 
-        $abstractBlock->expects($this->any())->method('getParentBlock')->will($this->returnValue($childAbstractBlock));
+        $abstractBlock->expects($this->any())->method('getParentBlock')->willReturn($childAbstractBlock);
 
-        $this->layout->expects($this->any())->method('getParentName')->will($this->returnValue('parentName'));
-        $this->layout->expects($this->any())->method('getBlock')->will($this->returnValue($abstractBlock));
+        $this->layout->expects($this->any())->method('getParentName')->willReturn('parentName');
+        $this->layout->expects($this->any())->method('getBlock')->willReturn($abstractBlock);
 
         $infoMock = $this->getMockBuilder(
             \Magento\Payment\Model\Info::class
@@ -131,7 +131,7 @@ class SubstitutionTest extends \PHPUnit\Framework\TestCase
         $methodMock = $this->getMockBuilder(
             \Magento\Payment\Model\MethodInterface::class
         )->getMockForAbstractClass();
-        $infoMock->expects($this->once())->method('getMethodInstance')->will($this->returnValue($methodMock));
+        $infoMock->expects($this->once())->method('getMethodInstance')->willReturn($methodMock);
         $this->block->setInfo($infoMock);
 
         $fakeBlock = new \StdClass();
@@ -143,7 +143,7 @@ class SubstitutionTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\View\Element\Template::class,
             '',
             ['data' => ['method' => $methodMock, 'template' => 'Magento_Payment::info/substitution.phtml']]
-        )->will($this->returnValue($fakeBlock));
+        )->willReturn($fakeBlock);
 
         $childAbstractBlock->expects(
             $this->any()

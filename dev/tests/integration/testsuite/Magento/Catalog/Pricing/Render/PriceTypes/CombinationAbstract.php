@@ -106,7 +106,7 @@ abstract class CombinationAbstract extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->objectManager = Bootstrap::getObjectManager();
@@ -128,7 +128,7 @@ abstract class CombinationAbstract extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->registry->unregister('product');
@@ -582,7 +582,7 @@ abstract class CombinationAbstract extends TestCase
         $this->addOptionToProduct($product);
         $this->productRepository->save($product);
         $priceHtml = $this->getCustomOptionsPriceHtml($this->getProduct($sku));
-        $this->assertContains(sprintf('data-price-amount="%s"', $optionPrice), $priceHtml);
+        $this->assertStringContainsString(sprintf('data-price-amount="%s"', $optionPrice), $priceHtml);
     }
 
     /**

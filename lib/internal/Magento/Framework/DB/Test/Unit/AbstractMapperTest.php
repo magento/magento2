@@ -14,42 +14,42 @@ use Magento\Framework\DB\Select;
 class AbstractMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $selectMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fetchStrategyMock;
 
     /**
-     * @var \Magento\Framework\Data\ObjectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\ObjectFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectFactoryMock;
 
     /**
-     * @var \Magento\Framework\DB\MapperFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\MapperFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mapperFactoryMock;
 
     /**
-     * @var \Magento\Framework\DB\AbstractMapper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\AbstractMapper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mapper;
 
@@ -58,7 +58,7 @@ class AbstractMapperTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceMock = $this->getMockForAbstractClass(
             \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
@@ -104,7 +104,7 @@ class AbstractMapperTest extends \PHPUnit\Framework\TestCase
      */
     public function testMap(array $mapperMethods, array $criteriaParts)
     {
-        /** @var \Magento\Framework\DB\AbstractMapper|\PHPUnit_Framework_MockObject_MockObject $mapper */
+        /** @var \Magento\Framework\DB\AbstractMapper|\PHPUnit\Framework\MockObject\MockObject $mapper */
         $mapper = $this->getMockForAbstractClass(
             \Magento\Framework\DB\AbstractMapper::class,
             [
@@ -131,7 +131,7 @@ class AbstractMapperTest extends \PHPUnit\Framework\TestCase
         );
         $criteriaMock->expects($this->once())
             ->method('toArray')
-            ->will($this->returnValue($criteriaParts));
+            ->willReturn($criteriaParts);
         foreach ($mapperMethods as $value => $method) {
             $mapper->expects($this->once())
                 ->method($method)
@@ -150,7 +150,7 @@ class AbstractMapperTest extends \PHPUnit\Framework\TestCase
         $criteriaParts = [
             'my_mapper_method_one' => 'my-test-value1'
         ];
-        /** @var \Magento\Framework\DB\AbstractMapper|\PHPUnit_Framework_MockObject_MockObject $mapper */
+        /** @var \Magento\Framework\DB\AbstractMapper|\PHPUnit\Framework\MockObject\MockObject $mapper */
         $mapper = $this->getMockForAbstractClass(
             \Magento\Framework\DB\AbstractMapper::class,
             [
@@ -177,7 +177,7 @@ class AbstractMapperTest extends \PHPUnit\Framework\TestCase
         );
         $criteriaMock->expects($this->once())
             ->method('toArray')
-            ->will($this->returnValue($criteriaParts));
+            ->willReturn($criteriaParts);
         $this->expectException(\InvalidArgumentException::class);
         $mapper->map($criteriaMock);
     }
@@ -192,7 +192,7 @@ class AbstractMapperTest extends \PHPUnit\Framework\TestCase
         $fields = [
             'key-attribute' => 'value-attribute',
         ];
-        /** @var \Magento\Framework\DB\AbstractMapper|\PHPUnit_Framework_MockObject_MockObject $mapper */
+        /** @var \Magento\Framework\DB\AbstractMapper|\PHPUnit\Framework\MockObject\MockObject $mapper */
         $mapper = $this->getMockForAbstractClass(
             \Magento\Framework\DB\AbstractMapper::class,
             [
@@ -229,7 +229,7 @@ class AbstractMapperTest extends \PHPUnit\Framework\TestCase
     {
         $resultCondition = 'sql-condition-value';
 
-        /** @var \Magento\Framework\DB\AbstractMapper|\PHPUnit_Framework_MockObject_MockObject $mapper */
+        /** @var \Magento\Framework\DB\AbstractMapper|\PHPUnit\Framework\MockObject\MockObject $mapper */
         $mapper = $this->getMockForAbstractClass(
             \Magento\Framework\DB\AbstractMapper::class,
             [
@@ -257,15 +257,15 @@ class AbstractMapperTest extends \PHPUnit\Framework\TestCase
 
         $mapper->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($connectionMock));
+            ->willReturn($connectionMock);
         $connectionMock->expects($this->any())
             ->method('quoteIdentifier')
             ->with('my-field')
-            ->will($this->returnValue('quote-field'));
+            ->willReturn('quote-field');
         $connectionMock->expects($this->any())
             ->method('prepareSqlCondition')
             ->with('quote-field', $condition)
-            ->will($this->returnValue($resultCondition));
+            ->willReturn($resultCondition);
 
         if (is_array($field)) {
             $resultCondition = '(' . implode(

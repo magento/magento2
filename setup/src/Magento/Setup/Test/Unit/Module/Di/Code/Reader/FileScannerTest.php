@@ -13,7 +13,7 @@ class FileScannerTest extends \PHPUnit\Framework\TestCase
      */
     private $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->object = new \Magento\Setup\Module\Di\Code\Reader\FileScanner(
             __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'classes.php'

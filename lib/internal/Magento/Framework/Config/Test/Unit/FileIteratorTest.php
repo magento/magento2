@@ -18,7 +18,7 @@ class FileIteratorTest extends \PHPUnit\Framework\TestCase
     protected $fileIterator;
 
     /**
-     * @var \Magento\Framework\Filesystem\File\Read|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\File\Read|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileRead;
 
@@ -30,11 +30,11 @@ class FileIteratorTest extends \PHPUnit\Framework\TestCase
     protected $filePaths;
 
     /**
-     * @var \Magento\Framework\Filesystem\File\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\File\ReadFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileReadFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filePaths = ['/file1', '/file2'];
         $this->fileReadFactory = $this->createMock(\Magento\Framework\Filesystem\File\ReadFactory::class);
@@ -42,7 +42,7 @@ class FileIteratorTest extends \PHPUnit\Framework\TestCase
         $this->fileIterator = new FileIterator($this->fileReadFactory, $this->filePaths);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->fileIterator = null;
         $this->filePaths = null;
@@ -59,7 +59,7 @@ class FileIteratorTest extends \PHPUnit\Framework\TestCase
                 ->willReturn($this->fileRead);
             $this->fileRead->expects($this->at($index))
                 ->method('readAll')
-                ->will($this->returnValue($contents[$index++]));
+                ->willReturn($contents[$index++]);
         }
         $index = 0;
         foreach ($this->fileIterator as $fileContent) {
@@ -80,7 +80,7 @@ class FileIteratorTest extends \PHPUnit\Framework\TestCase
                 ->willReturn($this->fileRead);
             $this->fileRead->expects($this->at($index))
                 ->method('readAll')
-                ->will($this->returnValue($contents[$index++]));
+                ->willReturn($contents[$index++]);
         }
         $this->assertEquals($expectedArray, $this->fileIterator->toArray());
     }

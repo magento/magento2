@@ -9,17 +9,17 @@ namespace Magento\Theme\Test\Unit\Observer;
 class CleanThemeRelatedContentObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Theme\Model\Config\Customization|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\Config\Customization|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $themeConfig;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\ImageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\Theme\ImageFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $themeImageFactory;
 
     /**
-     * @var \Magento\Widget\Model\ResourceModel\Layout\Update\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Widget\Model\ResourceModel\Layout\Update\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $updateCollection;
 
@@ -28,7 +28,7 @@ class CleanThemeRelatedContentObserverTest extends \PHPUnit\Framework\TestCase
      */
     protected $themeObserver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->themeConfig = $this->getMockBuilder(\Magento\Theme\Model\Config\Customization::class)
             ->disableOriginalConstructor()

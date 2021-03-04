@@ -99,7 +99,7 @@ class LoginUserOnBackendStep implements TestStepInterface
 
         try {
             $this->login();
-        } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
+        } catch (\PHPUnit\Extensions\Selenium2TestCase\WebDriverException $e) {
             if (strpos($e->getMessage(), 'Timed out after') !== false) {
                 $messages = $this->adminAuth->getMessagesBlock();
                 if (in_array($messages->getErrorMessage(), $this->errorMessages, true)) {

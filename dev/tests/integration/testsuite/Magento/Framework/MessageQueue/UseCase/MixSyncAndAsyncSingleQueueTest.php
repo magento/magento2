@@ -47,7 +47,7 @@ class MixSyncAndAsyncSingleQueueTest extends QueueTestCaseAbstract
 
         // Verify that asynchronous messages were processed
         foreach ($this->messages as $item) {
-            $this->assertContains($item, file_get_contents($this->logFilePath));
+            $this->assertStringContainsString($item, file_get_contents($this->logFilePath));
         }
     }
 }

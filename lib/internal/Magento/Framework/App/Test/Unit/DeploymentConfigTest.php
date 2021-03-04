@@ -57,17 +57,17 @@ class DeploymentConfigTest extends \PHPUnit\Framework\TestCase
     protected $_deploymentConfigMerged;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $reader;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$fixtureConfig = require __DIR__ . '/_files/config.php';
         self::$fixtureConfigMerged = require __DIR__ . '/_files/other/local_developer_merged.php';
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->reader = $this->createMock(\Magento\Framework\App\DeploymentConfig\Reader::class);
         $this->_deploymentConfig = new \Magento\Framework\App\DeploymentConfig($this->reader, []);
@@ -116,12 +116,13 @@ class DeploymentConfigTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $data
-     * @expectedException \Exception
-     * @expectedExceptionMessage Key collision
      * @dataProvider keyCollisionDataProvider
      */
     public function testKeyCollision(array $data)
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Key collision');
+
         $this->reader->expects($this->once())->method('load')->willReturn($data);
         $object = new DeploymentConfig($this->reader);
         $object->get();

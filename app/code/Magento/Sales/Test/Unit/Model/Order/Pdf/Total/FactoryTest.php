@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Model\Order\Pdf\Total;
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
@@ -17,7 +17,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_factory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_factory = new \Magento\Sales\Model\Order\Pdf\Total\Factory($this->_objectManager);
@@ -42,8 +42,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             $expectedClassName,
             $arguments
-        )->will(
-            $this->returnValue($createdModel)
+        )->willReturn(
+            $createdModel
         );
 
         $actual = $this->_factory->create($class, $arguments);
@@ -65,12 +65,12 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The PDF total model TEST must be or extend
-     * \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal.
      */
     public function testCreateException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The PDF total model TEST must be or extend \\Magento\\Sales\\Model\\Order\\Pdf\\Total\\DefaultTotal.');
+
         $this->_factory->create('TEST');
     }
 }

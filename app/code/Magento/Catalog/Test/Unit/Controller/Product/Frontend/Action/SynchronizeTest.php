@@ -20,26 +20,26 @@ class SynchronizeTest extends \PHPUnit\Framework\TestCase
     private $synchronize;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var Synchronizer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Synchronizer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $synchronizerMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
     /**
-     * @var JsonFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var JsonFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $jsonFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()

@@ -19,7 +19,7 @@ class RatingTest extends \PHPUnit\Framework\TestCase
     /**
      * Init objects needed by tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
         $this->rating = $helper->getObject(Rating::class);

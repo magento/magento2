@@ -37,7 +37,7 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Framework\Filesystem $filesystem */
@@ -90,7 +90,7 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
     {
         $expectedFilePath = $this->imageUploader->getBasePath() . DIRECTORY_SEPARATOR . 'magento_small_image_1.jpg';
 
-        $this->assertFileNotExists($this->mediaDirectory->getAbsolutePath($expectedFilePath));
+        $this->assertFileDoesNotExist($this->mediaDirectory->getAbsolutePath($expectedFilePath));
 
         $this->imageUploader->moveFileFromTmp('magento_small_image.jpg');
 
@@ -98,12 +98,12 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage File validation failed.
      * @return void
      */
     public function testSaveFileToTmpDirWithWrongExtension(): void
     {
+        $this->expectExceptionMessage("File validation failed.");
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $fileName = 'text.txt';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
         $filePath = $tmpDirectory->getAbsolutePath($fileName);
@@ -124,12 +124,12 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage File validation failed.
      * @return void
      */
     public function testSaveFileToTmpDirWithWrongFile(): void
     {
+        $this->expectExceptionMessage("File validation failed.");
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $fileName = 'file.gif';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
         $filePath = $tmpDirectory->getAbsolutePath($fileName);
@@ -152,7 +152,7 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(

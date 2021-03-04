@@ -7,7 +7,7 @@ namespace Magento\Config\Test\Unit\Model\Config\Export;
 
 use Magento\Config\Model\Config\Export\ExcludeList;
 use Magento\Config\Model\Config\TypePool;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use \PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class TypePoolTest extends \PHPUnit\Framework\TestCase
 {
@@ -16,7 +16,7 @@ class TypePoolTest extends \PHPUnit\Framework\TestCase
      */
     private $excludeListMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->excludeListMock = $this->getMockBuilder(ExcludeList::class)
             ->disableOriginalConstructor()

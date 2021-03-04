@@ -24,21 +24,21 @@ class ConfigurablePanelTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var LocatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LocatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productLocatorMock;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlBuilderMock;
 
     /**
-     * @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productLocatorMock = $this->getMockBuilder(LocatorInterface::class)
             ->getMockForAbstractClass();

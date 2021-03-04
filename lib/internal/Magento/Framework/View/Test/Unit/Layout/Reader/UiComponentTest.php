@@ -30,31 +30,31 @@ class UiComponentTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Helper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Helper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $helper;
 
     /**
-     * @var DataInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataConfigFactory;
 
     /**
-     * @var DataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataConfig;
 
     /**
-     * @var ReaderPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReaderPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $readerPool;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helper = $this->getMockBuilder(Helper::class)
             ->setMethods(['scheduleStructure'])
@@ -70,7 +70,7 @@ class UiComponentTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->dataConfig = $this->getMockBuilder(DataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->readerPool = $this->getMockBuilder(ReaderPool::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -95,8 +95,8 @@ class UiComponentTest extends \PHPUnit\Framework\TestCase
         $scheduleStructure = $this->getMockBuilder(ScheduledStructure::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->context->expects($this->any())->method('getScheduledStructure')->will(
-            $this->returnValue($scheduleStructure)
+        $this->context->expects($this->any())->method('getScheduledStructure')->willReturn(
+            $scheduleStructure
         );
         $this->helper->expects($this->any())->method('scheduleStructure')->with(
             $scheduleStructure,

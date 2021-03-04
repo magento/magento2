@@ -65,7 +65,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
     /** @var string String value stored in DB */
     private static $websiteDBString = 'test db value';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->formFactory = $this->objectManager->create(\Magento\Framework\Data\FormFactory::class);
@@ -90,10 +90,10 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $childBlock = $layout->addBlock(\Magento\Framework\View\Element\Text::class, 'element_dependence', 'block');
 
         $expectedValue = 'dependence_html_relations';
-        $this->assertNotContains($expectedValue, $block->toHtml());
+        $this->assertStringNotContainsString($expectedValue, $block->toHtml());
 
         $childBlock->setText($expectedValue);
-        $this->assertContains($expectedValue, $block->toHtml());
+        $this->assertStringContainsString($expectedValue, $block->toHtml());
     }
 
     /**
@@ -396,7 +396,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $fileIterator = $fileIteratorFactory->create(
             [__DIR__ . '/_files/test_system.xml']
         );
-        $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($fileIterator));
+        $fileResolverMock->expects($this->any())->method('get')->willReturn($fileIterator);
 
         $objectManager = Bootstrap::getObjectManager();
 
@@ -581,7 +581,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->setEncryptedValue('{ENCRYPTED_VALUE}');
 

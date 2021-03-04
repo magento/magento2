@@ -15,7 +15,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      */
     private $converter;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->converter = new Url(new ConverterUtils());
     }

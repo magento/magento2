@@ -12,7 +12,7 @@ namespace Magento\Framework\Data\Test\Unit\Form\Element;
 class HiddenTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManagerMock;
 
@@ -21,7 +21,7 @@ class HiddenTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
         $collectionFactoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
@@ -52,8 +52,8 @@ class HiddenTest extends \PHPUnit\Framework\TestCase
     public function testGetDefaultHtml()
     {
         $html = $this->_model->getDefaultHtml();
-        $this->assertContains('<input', $html);
-        $this->assertContains('type="hidden"', $html);
+        $this->assertStringContainsString('<input', $html);
+        $this->assertStringContainsString('type="hidden"', $html);
         $this->_model->setDefaultHtml('testhtml');
         $this->assertEquals('testhtml', $this->_model->getDefaultHtml());
     }

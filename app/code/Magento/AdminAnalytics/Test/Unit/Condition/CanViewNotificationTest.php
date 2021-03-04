@@ -13,26 +13,26 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\App\CacheInterface;
 
 /**
- * Class CanViewNotificationTest
+ * Test of CanViewNotification
  */
 class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CanViewNotification */
     private $canViewNotification;
 
-    /** @var  Logger|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Logger|\PHPUnit\Framework\MockObject\MockObject */
     private $viewerLoggerMock;
 
-    /** @var ProductMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ProductMetadataInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $productMetadataMock;
 
-    /** @var  Log|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Log|\PHPUnit\Framework\MockObject\MockObject */
     private $logMock;
 
-    /** @var  $cacheStorageMock \PHPUnit_Framework_MockObject_MockObject|CacheInterface */
+    /** @var  $cacheStorageMock \PHPUnit\Framework\MockObject\MockObject|CacheInterface */
     private $cacheStorageMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->cacheStorageMock = $this->getMockBuilder(CacheInterface::class)
             ->getMockForAbstractClass();
@@ -43,7 +43,7 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $objectManager = new ObjectManager($this);
         $this->canViewNotification = $objectManager->getObject(
             CanViewNotification::class,

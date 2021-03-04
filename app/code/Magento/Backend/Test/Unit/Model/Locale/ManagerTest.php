@@ -15,7 +15,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
     private $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\TranslateInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\TranslateInterface
      */
     private $_translator;
 
@@ -25,19 +25,19 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
     private $_session;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Model\Auth\Session
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\Model\Auth\Session
      */
     private $_authSession;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\App\ConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\App\ConfigInterface
      */
     private $_backendConfig;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_session = $this->createMock(\Magento\Backend\Model\Session::class);
 
@@ -52,15 +52,15 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
 
         $userMock = new \Magento\Framework\DataObject();
 
-        $this->_authSession->expects($this->any())->method('getUser')->will($this->returnValue($userMock));
+        $this->_authSession->expects($this->any())->method('getUser')->willReturn($userMock);
 
         $this->_translator = $this->getMockBuilder(\Magento\Framework\TranslateInterface::class)
             ->setMethods(['init', 'setLocale'])
             ->getMockForAbstractClass();
 
-        $this->_translator->expects($this->any())->method('setLocale')->will($this->returnValue($this->_translator));
+        $this->_translator->expects($this->any())->method('setLocale')->willReturn($this->_translator);
 
-        $this->_translator->expects($this->any())->method('init')->will($this->returnValue(false));
+        $this->_translator->expects($this->any())->method('init')->willReturn(false);
 
         $this->_model = new \Magento\Backend\Model\Locale\Manager(
             $this->_session,

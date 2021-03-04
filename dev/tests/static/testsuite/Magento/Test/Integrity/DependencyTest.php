@@ -167,11 +167,21 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     private static $routeMapper = null;
 
     /**
+     * @var ComponentRegistrar
+     */
+    private static $componentRegistrar = null;
+
+    /**
+     * @var array
+     */
+    private $undeclaredDependencyBlacklist;
+
+    /**
      * Sets up data
      *
      * @throws \Exception
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $root = BP;
         $rootJson = json_decode(file_get_contents($root . '/composer.json'), true);
@@ -353,34 +363,20 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     public function testUndeclared()
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $blackList = $this->getUndeclaredDependencyBlacklist();
         $invoker(
-            /**
-             * Check undeclared modules dependencies for specified file
-             *
-             * @param string $fileType
-             * @param string $file
-             */
-            function ($fileType, $file) {
-                // Validates file when it is belonged to default themes
-                $componentRegistrar = new ComponentRegistrar();
-                foreach ($componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
-                    if (strpos($file, $themeDir . '/') !== false) {
-                        return;
-                    }
-                }
-
-                $foundModuleName = '';
-                foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
-                    if (strpos($file, $moduleDir . '/') !== false) {
-                        $foundModuleName = str_replace('_', '\\', $moduleName);
-                        break;
-                    }
-                }
-                if (empty($foundModuleName)) {
+        /**
+         * Check undeclared modules dependencies for specified file
+         *
+         * @param string $fileType
+         * @param string $file
+         */
+            function ($fileType, $file) use ($blackList) {
+                $module = $this->getModuleNameForRelevantFile($file);
+                if (!$module) {
                     return;
                 }
 
-                $module = $foundModuleName;
                 $contents = $this->_getCleanedFileContents($fileType, $file);
 
                 $dependencies = $this->getDependenciesFromFiles($module, $fileType, $file, $contents);
@@ -390,7 +386,9 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
 
                 // Prepare output message
                 $result = [];
+
                 foreach ($undeclaredDependency as $type => $modules) {
+                    $modules = $this->filterOutBlacklistedDependencies($file, $modules, $blackList);
                     $modules = array_unique($modules);
                     if (empty($modules)) {
                         continue;
@@ -403,6 +401,93 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             },
             $this->getAllFiles()
         );
+    }
+
+    /**
+     * Filter out list of module dependencies based on the provided blacklist.
+     *
+     * Always exclude dependency on Setup because it is part of base Magento package.
+     *
+     * @param string $filePath
+     * @param string[] $modules
+     * @param array $blackList
+     * @return string[]
+     */
+    private function filterOutBlacklistedDependencies($filePath, $modules, array $blackList): array
+    {
+        $relativeFilePath = substr_replace($filePath, '', 0, strlen(BP . '/'));
+        foreach ($modules as $moduleKey => $module) {
+            if ($module == 'Magento\Setup') {
+                unset($modules[$moduleKey]);
+            }
+            if (isset($blackList[$relativeFilePath])
+                && in_array($module, $blackList[$relativeFilePath])
+            ) {
+                unset($modules[$moduleKey]);
+            }
+        }
+        return $modules;
+    }
+
+    /**
+     * Return a list of blacklisted undeclared dependencies.
+     *
+     * @return array
+     */
+    private function getUndeclaredDependencyBlacklist(): array
+    {
+        if (!isset($this->undeclaredDependencyBlacklist)) {
+            $this->undeclaredDependencyBlacklist = [];
+            foreach (glob(__DIR__ . '/_files/blacklist/undeclared_dependency/*.php') as $filename) {
+                $this->undeclaredDependencyBlacklist = array_merge_recursive(
+                    $this->undeclaredDependencyBlacklist,
+                    include $filename
+                );
+            }
+        }
+
+        return $this->undeclaredDependencyBlacklist;
+    }
+
+    /**
+     * Return module name for the file being tested if it should be tested. Return empty string otherwise.
+     *
+     * @param string $file
+     * @return string
+     */
+    private function getModuleNameForRelevantFile($file)
+    {
+        $componentRegistrar = self::getComponentRegistrar();
+        // Validates file when it belongs to default themes
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
+            if (strpos($file, $themeDir . '/') !== false) {
+                return '';
+            }
+        }
+
+        $foundModuleName = '';
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
+            if (strpos($file, $moduleDir . '/') !== false) {
+                $foundModuleName = str_replace('_', '\\', $moduleName);
+                break;
+            }
+        }
+        if (empty($foundModuleName)) {
+            return '';
+        }
+
+        return $foundModuleName;
+    }
+
+    /**
+     * @return ComponentRegistrar
+     */
+    private static function getComponentRegistrar()
+    {
+        if (!isset(self::$componentRegistrar)) {
+            self::$componentRegistrar = new ComponentRegistrar();
+        }
+        return self::$componentRegistrar;
     }
 
     /**

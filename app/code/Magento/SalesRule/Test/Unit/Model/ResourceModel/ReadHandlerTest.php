@@ -21,12 +21,12 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Rule|\PHPUnit_Framework_MockObject_MockObject
+     * @var Rule|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $ruleResource;
 
     /**
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataPool;
 
@@ -38,7 +38,7 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup the test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

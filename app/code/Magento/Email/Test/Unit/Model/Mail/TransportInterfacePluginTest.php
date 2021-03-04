@@ -16,17 +16,17 @@ use Magento\Store\Model\ScopeInterface;
 class TransportInterfacePluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var TransportInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TransportInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $transportMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var \Callable|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Callable|\PHPUnit\Framework\MockObject\MockObject
      */
     private $proceedMock;
 
@@ -40,9 +40,9 @@ class TransportInterfacePluginTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->transportMock = $this->createMock(TransportInterface::class);
+        $this->transportMock = $this->getMockForAbstractClass(TransportInterface::class);
         $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->proceedMock = function () {
             $this->isProceedMockCalled = true;

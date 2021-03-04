@@ -17,16 +17,16 @@ class SearchResponseBuilderTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Api\Search\SearchResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\Search\SearchResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $searchResultFactory;
 
     /**
-     * @var \Magento\Framework\Api\Search\DocumentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\Search\DocumentFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $documentFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->searchResultFactory = $this->getMockBuilder(\Magento\Framework\Api\Search\SearchResultFactory::class)
             ->disableOriginalConstructor()
@@ -50,7 +50,7 @@ class SearchResponseBuilderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        /** @var SearchResultInterface|\PHPUnit_Framework_MockObject_MockObject $searchResult */
+        /** @var SearchResultInterface|\PHPUnit\Framework\MockObject\MockObject $searchResult */
         $searchResult = $this->getMockBuilder(\Magento\Framework\Api\Search\SearchResultInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -65,7 +65,7 @@ class SearchResponseBuilderTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($searchResult);
 
-        /** @var QueryResponse|\PHPUnit_Framework_MockObject_MockObject $response */
+        /** @var QueryResponse|\PHPUnit\Framework\MockObject\MockObject $response */
         $response = $this->getMockBuilder(\Magento\Framework\Search\Response\QueryResponse::class)
             ->setMethods(['getIterator', 'getAggregations', 'getTotal'])
             ->disableOriginalConstructor()

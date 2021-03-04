@@ -12,32 +12,32 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Bulk;
 class PublisherTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\MessageQueue\Bulk\ExchangeRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\Bulk\ExchangeRepository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $exchangeRepository;
 
     /**
-     * @var \Magento\Framework\MessageQueue\EnvelopeFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\EnvelopeFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $envelopeFactory;
 
     /**
-     * @var \Magento\Framework\MessageQueue\MessageEncoder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\MessageEncoder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageEncoder;
 
     /**
-     * @var \Magento\Framework\MessageQueue\MessageValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\MessageValidator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageValidator;
 
     /**
-     * @var \Magento\Framework\MessageQueue\Publisher\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\Publisher\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $publisherConfig;
 
     /**
-     * @var \Magento\Framework\MessageQueue\MessageIdGeneratorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\MessageIdGeneratorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageIdGenerator;
 
@@ -51,7 +51,7 @@ class PublisherTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->exchangeRepository = $this
             ->getMockBuilder(\Magento\Framework\MessageQueue\Bulk\ExchangeRepository::class)

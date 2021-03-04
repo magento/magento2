@@ -13,52 +13,52 @@ namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 class RemoveTrackTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $shipmentLoaderMock;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment\Track|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Shipment\Track|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $shipmentTrackMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Shipment|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $shipmentMock;
 
     /**
-     * @var \Magento\Framework\App\View|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\View|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $viewMock;
 
     /**
-     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseMock;
 
     /**
-     * @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\Page|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultPageMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageConfigMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Title|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageTitleMock;
 
@@ -67,7 +67,7 @@ class RemoveTrackTest extends \PHPUnit\Framework\TestCase
      */
     protected $controller;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getParam']);
         $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
@@ -106,14 +106,14 @@ class RemoveTrackTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(\Magento\Sales\Model\Order\Shipment\Track::class)
-            ->will($this->returnValue($this->shipmentTrackMock));
+            ->willReturn($this->shipmentTrackMock);
 
-        $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
+        $contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
         $contextMock->expects($this->any())
             ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManagerMock));
-        $contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewMock));
-        $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
+            ->willReturn($this->objectManagerMock);
+        $contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
+        $contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
 
         $this->controller = new \Magento\Shipping\Controller\Adminhtml\Order\Shipment\RemoveTrack(
             $contextMock,
@@ -147,30 +147,30 @@ class RemoveTrackTest extends \PHPUnit\Framework\TestCase
         $this->shipmentTrackMock->expects($this->once())
             ->method('load')
             ->with($trackId)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->shipmentTrackMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($trackId));
+            ->willReturn($trackId);
         $this->requestMock->expects($this->at(0))
             ->method('getParam')
             ->with('track_id')
-            ->will($this->returnValue($trackId));
+            ->willReturn($trackId);
         $this->requestMock->expects($this->at(1))
             ->method('getParam')
             ->with('order_id')
-            ->will($this->returnValue($orderId));
+            ->willReturn($orderId);
         $this->requestMock->expects($this->at(2))
             ->method('getParam')
             ->with('shipment_id')
-            ->will($this->returnValue($shipmentId));
+            ->willReturn($shipmentId);
         $this->requestMock->expects($this->at(3))
             ->method('getParam')
             ->with('shipment')
-            ->will($this->returnValue($shipment));
+            ->willReturn($shipment);
         $this->requestMock->expects($this->at(4))
             ->method('getParam')
             ->with('tracking')
-            ->will($this->returnValue($tracking));
+            ->willReturn($tracking);
         $this->shipmentLoaderMock->expects($this->once())->method('setOrderId')->with($orderId);
         $this->shipmentLoaderMock->expects($this->once())->method('setShipmentId')->with($shipmentId);
         $this->shipmentLoaderMock->expects($this->once())->method('setShipment')->with($shipment);
@@ -189,11 +189,11 @@ class RemoveTrackTest extends \PHPUnit\Framework\TestCase
         $jsonHelper->expects($this->once())
             ->method('jsonEncode')
             ->with($errors)
-            ->will($this->returnValue('{json}'));
+            ->willReturn('{json}');
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with(\Magento\Framework\Json\Helper\Data::class)
-            ->will($this->returnValue($jsonHelper));
+            ->willReturn($jsonHelper);
         $this->responseMock->expects($this->once())
             ->method('representJson')
             ->with('{json}');
@@ -209,10 +209,10 @@ class RemoveTrackTest extends \PHPUnit\Framework\TestCase
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($this->shipmentMock));
+            ->willReturn($this->shipmentMock);
         $this->shipmentTrackMock->expects($this->once())
             ->method('delete')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $layoutMock = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['getBlock']);
         $trackingBlockMock = $this->createPartialMock(
@@ -222,13 +222,13 @@ class RemoveTrackTest extends \PHPUnit\Framework\TestCase
 
         $trackingBlockMock->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue($response));
+            ->willReturn($response);
         $layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('shipment_tracking')
-            ->will($this->returnValue($trackingBlockMock));
-        $this->viewMock->expects($this->once())->method('loadLayout')->will($this->returnSelf());
-        $this->viewMock->expects($this->any())->method('getLayout')->will($this->returnValue($layoutMock));
+            ->willReturn($trackingBlockMock);
+        $this->viewMock->expects($this->once())->method('loadLayout')->willReturnSelf();
+        $this->viewMock->expects($this->any())->method('getLayout')->willReturn($layoutMock);
         $this->responseMock->expects($this->once())
             ->method('setBody')
             ->with($response);
@@ -247,10 +247,10 @@ class RemoveTrackTest extends \PHPUnit\Framework\TestCase
         $this->shipmentTrackMock->expects($this->once())
             ->method('load')
             ->with($trackId)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->shipmentTrackMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($trackId));
+            ->willReturn($trackId);
         $this->representJson($errors);
 
         $this->assertNull($this->controller->execute());
@@ -269,7 +269,7 @@ class RemoveTrackTest extends \PHPUnit\Framework\TestCase
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->representJson($errors);
 
         $this->assertNull($this->controller->execute());
@@ -285,7 +285,7 @@ class RemoveTrackTest extends \PHPUnit\Framework\TestCase
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($this->shipmentMock));
+            ->willReturn($this->shipmentMock);
         $this->shipmentTrackMock->expects($this->once())
             ->method('delete')
             ->will($this->throwException(new \Exception()));

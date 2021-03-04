@@ -19,46 +19,46 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $imageHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $checkoutSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -76,19 +76,19 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
         );
         $contextMock->expects($this->once())
             ->method('getLayout')
-            ->will($this->returnValue($this->layoutMock));
+            ->willReturn($this->layoutMock);
         $contextMock->expects($this->once())
             ->method('getUrlBuilder')
-            ->will($this->returnValue($this->urlBuilderMock));
+            ->willReturn($this->urlBuilderMock);
         $contextMock->expects($this->once())
             ->method('getStoreManager')
-            ->will($this->returnValue($this->storeManagerMock));
+            ->willReturn($this->storeManagerMock);
         $contextMock->expects($this->once())
             ->method('getScopeConfig')
-            ->will($this->returnValue($this->scopeConfigMock));
+            ->willReturn($this->scopeConfigMock);
         $contextMock->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
 
         $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
 
@@ -113,12 +113,12 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
 
         $totalsBlockMock->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue($totalsHtml));
+            ->willReturn($totalsHtml);
 
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('checkout.cart.minicart.totals')
-            ->will($this->returnValue($totalsBlockMock));
+            ->willReturn($totalsBlockMock);
 
         $this->assertEquals($totalsHtml, $this->model->getTotalsHtml());
     }

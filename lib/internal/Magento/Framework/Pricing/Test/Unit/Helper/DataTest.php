@@ -16,11 +16,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrencyMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -39,12 +39,12 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->priceCurrencyMock->expects($this->once())
                 ->method('convertAndFormat')
                 ->with($amount, $includeContainer)
-                ->will($this->returnValue($result));
+                ->willReturn($result);
         } else {
             $this->priceCurrencyMock->expects($this->once())
                 ->method('convert')
                 ->with($amount)
-                ->will($this->returnValue($result));
+                ->willReturn($result);
         }
         $helper = $this->getHelper(['priceCurrency' => $this->priceCurrencyMock]);
         $this->assertEquals($result, $helper->currency($amount, $format, $includeContainer));
@@ -76,12 +76,12 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->priceCurrencyMock->expects($this->once())
                 ->method('convertAndFormat')
                 ->with($amount, $includeContainer, PriceCurrencyInterface::DEFAULT_PRECISION, $store)
-                ->will($this->returnValue($result));
+                ->willReturn($result);
         } else {
             $this->priceCurrencyMock->expects($this->once())
                 ->method('convert')
                 ->with($amount, $store)
-                ->will($this->returnValue($result));
+                ->willReturn($result);
         }
         $helper = $this->getHelper(['priceCurrency' => $this->priceCurrencyMock]);
         $this->assertEquals($result, $helper->currencyByStore($amount, $store, $format, $includeContainer));

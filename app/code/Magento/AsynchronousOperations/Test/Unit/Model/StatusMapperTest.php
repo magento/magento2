@@ -10,7 +10,7 @@ use Magento\Framework\Bulk\OperationInterface;
 use Magento\Framework\Bulk\BulkSummaryInterface;
 
 /**
- * Class StatusMapperTest
+ * Test for StatusMapper
  */
 class StatusMapperTest extends \PHPUnit\Framework\TestCase
 {
@@ -19,7 +19,7 @@ class StatusMapperTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = new \Magento\AsynchronousOperations\Model\StatusMapper();
     }

@@ -15,22 +15,22 @@ use Symfony\Component\Console\Question\Question;
 class YesNoTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var InputInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var InputInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $inputMock;
 
     /**
-     * @var OutputInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OutputInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $outputMock;
 
     /**
-     * @var QuestionHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuestionHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $questionHelperMock;
 
     /**
-     * @var QuestionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuestionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $questionFactoryMock;
 
@@ -42,7 +42,7 @@ class YesNoTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->inputMock = $this->getMockBuilder(InputInterface::class)
             ->getMockForAbstractClass();
@@ -70,7 +70,7 @@ class YesNoTest extends \PHPUnit\Framework\TestCase
         $secondMessage = 'Second message';
         $messages = [$firstMessage, $secondMessage];
 
-        /** @var Question|\PHPUnit_Framework_MockObject_MockObject $questionMock */
+        /** @var Question|\PHPUnit\Framework\MockObject\MockObject $questionMock */
         $questionMock = $this->getMockBuilder(Question::class)
             ->disableOriginalConstructor()
             ->getMock();

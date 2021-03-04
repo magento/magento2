@@ -14,42 +14,42 @@ use Magento\Catalog\Api\Data\ProductInterface;
 class FlatTableBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Helper\Product\Flat\Indexer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Product\Flat\Indexer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $flatIndexerMock;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Flat\TableDataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Indexer\Product\Flat\TableDataInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $tableDataMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataPoolMock;
 
     /**
-     * @var \Magento\Framework\EntityManager\EntityMetadataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\EntityMetadataInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataMock;
 
@@ -58,7 +58,7 @@ class FlatTableBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $flatTableBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->flatIndexerMock = $this->getMockBuilder(\Magento\Catalog\Helper\Product\Flat\Indexer::class)

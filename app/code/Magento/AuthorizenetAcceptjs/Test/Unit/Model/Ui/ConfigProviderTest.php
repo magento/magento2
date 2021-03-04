@@ -32,9 +32,9 @@ class ConfigProviderTest extends TestCase
      */
     private $provider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->cart = $this->createMock(CartInterface::class);
+        $this->cart = $this->getMockForAbstractClass(CartInterface::class);
         $this->config = $this->createMock(Config::class);
         $this->provider = new ConfigProvider($this->config, $this->cart);
     }

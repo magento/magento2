@@ -11,12 +11,12 @@ namespace Magento\Integration\Test\Unit\Model\ResourceModel\Oauth;
 class ConsumerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
@@ -30,7 +30,7 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
      */
     protected $consumerResource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->consumerMock = $this->createPartialMock(
             \Magento\Integration\Model\Oauth\Consumer::class,
@@ -62,10 +62,10 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
     public function testGetTimeInSecondsSinceCreation()
     {
         $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
-        $selectMock->expects($this->any())->method('from')->will($this->returnValue($selectMock));
-        $selectMock->expects($this->any())->method('reset')->will($this->returnValue($selectMock));
-        $selectMock->expects($this->any())->method('columns')->will($this->returnValue($selectMock));
-        $selectMock->expects($this->any())->method('where')->will($this->returnValue($selectMock));
+        $selectMock->expects($this->any())->method('from')->willReturn($selectMock);
+        $selectMock->expects($this->any())->method('reset')->willReturn($selectMock);
+        $selectMock->expects($this->any())->method('columns')->willReturn($selectMock);
+        $selectMock->expects($this->any())->method('where')->willReturn($selectMock);
         $this->connectionMock->expects($this->any())->method('select')->willReturn($selectMock);
         $this->connectionMock->expects($this->once())->method('fetchOne');
         $this->consumerResource->getTimeInSecondsSinceCreation(1);

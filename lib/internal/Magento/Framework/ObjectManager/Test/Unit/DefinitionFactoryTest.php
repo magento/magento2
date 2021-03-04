@@ -14,7 +14,7 @@ use Magento\Framework\ObjectManager\RelationsInterface;
 class DefinitionFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var File|\PHPUnit_Framework_MockObject_MockObject
+     * @var File|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystemDriverMock;
 
@@ -23,7 +23,7 @@ class DefinitionFactoryTest extends \PHPUnit\Framework\TestCase
      */
     private $definitionFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filesystemDriverMock = $this->createMock(File::class);
         $this->definitionFactory = new DefinitionFactory(

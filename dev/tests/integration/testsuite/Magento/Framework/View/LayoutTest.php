@@ -28,7 +28,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
      */
     protected $layoutFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->layoutFactory = $objectManager->get(\Magento\Framework\View\LayoutFactory::class);
@@ -183,7 +183,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
 
         $block = $this->_layout->createBlock($blockType, $blockName, ['data' => $blockData]);
 
-        $this->assertRegExp($expectedName, $block->getNameInLayout());
+        $this->assertMatchesRegularExpression($expectedName, $block->getNameInLayout());
         $this->assertEquals($expectedData, $block->getData());
     }
 
@@ -205,10 +205,11 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider blockNotExistsDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
+     *
      */
     public function testCreateBlockNotExists($name)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->_layout->createBlock($name);
     }
 
@@ -360,11 +361,9 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(['block1' => $block1, 'block2' => $block2], $this->_layout->getChildBlocks('parent'));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     */
     public function testAddBlockInvalidType()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->_layout->addBlock('invalid_name', 'child');
     }
 

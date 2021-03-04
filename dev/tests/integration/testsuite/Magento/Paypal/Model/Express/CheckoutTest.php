@@ -28,22 +28,22 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var Info|\PHPUnit_Framework_MockObject_MockObject
+     * @var Info|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paypalInfo;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paypalConfig;
 
     /**
-     * @var Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $apiTypeFactory;
 
     /**
-     * @var Nvp|\PHPUnit_Framework_MockObject_MockObject
+     * @var Nvp|\PHPUnit\Framework\MockObject\MockObject
      */
     private $api;
 
@@ -57,7 +57,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
 
@@ -270,7 +270,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $this->checkoutModel->returnFromPaypal('token');
 
         $billingAddress = $quote->getBillingAddress();
-        $this->assertContains($prefix, $billingAddress->getFirstname());
+        $this->assertStringContainsString($prefix, $billingAddress->getFirstname());
         $this->assertEquals('note', $billingAddress->getCustomerNote());
 
         $shippingAddress = $quote->getShippingAddress();
@@ -279,7 +279,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($shippingAddress->getMiddlename());
         $this->assertNull($shippingAddress->getSuffix());
         $this->assertTrue($shippingAddress->getShouldIgnoreValidation());
-        $this->assertContains('exported', $shippingAddress->getFirstname());
+        $this->assertStringContainsString('exported', $shippingAddress->getFirstname());
         $paymentAdditionalInformation = $quote->getPayment()->getAdditionalInformation();
         $this->assertArrayHasKey(Checkout::PAYMENT_INFO_TRANSPORT_SHIPPING_METHOD, $paymentAdditionalInformation);
         $this->assertArrayHasKey(Checkout::PAYMENT_INFO_TRANSPORT_PAYER_ID, $paymentAdditionalInformation);
@@ -498,13 +498,12 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture current_store general/country/default CA
      *
      * @magentoDbIsolation enabled
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage You can't use the payment type you selected to make payments to the billing country.
-     *
-     * @return void
+     ** @return void
      */
     public function testPaymentValidationWithAllowedSpecificCountryNegative(): void
     {
+        $this->expectExceptionMessage("You can't use the payment type you selected to make payments to the billing country.");
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $quote = $this->getFixtureQuote();
         $this->prepareCheckoutModel($quote);
         $quote->getPayment()->getMethodInstance()->validate();

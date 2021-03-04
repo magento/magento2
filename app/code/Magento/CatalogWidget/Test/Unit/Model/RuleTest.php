@@ -18,11 +18,11 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     protected $rule;
 
     /**
-     * @var \Magento\CatalogWidget\Model\Rule\Condition\CombineFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogWidget\Model\Rule\Condition\CombineFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $combineFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->combineFactory = $this->getMockBuilder(\Magento\CatalogWidget\Model\Rule\Condition\CombineFactory::class)
@@ -44,7 +44,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
             ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->combineFactory->expects($this->once())->method('create')->will($this->returnValue($condition));
+        $this->combineFactory->expects($this->once())->method('create')->willReturn($condition);
         $this->assertSame($condition, $this->rule->getConditionsInstance());
     }
 

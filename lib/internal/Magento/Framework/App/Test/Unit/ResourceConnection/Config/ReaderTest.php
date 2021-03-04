@@ -18,31 +18,31 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     protected $_filePath;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_fileResolverMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_converterMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_schemaLocatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_configLocalMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_validationStateMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_filePath = __DIR__ . '/_files/';
 
@@ -79,11 +79,11 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'get'
-        )->will(
-            $this->returnValue([file_get_contents($this->_filePath . 'resources.xml')])
+        )->willReturn(
+            [file_get_contents($this->_filePath . 'resources.xml')]
         );
 
-        $this->_converterMock->expects($this->once())->method('convert')->will($this->returnValue($modulesConfig));
+        $this->_converterMock->expects($this->once())->method('convert')->willReturn($modulesConfig);
 
         $this->assertEquals($expectedResult, $this->_model->read());
     }

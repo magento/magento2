@@ -14,16 +14,16 @@ class IndexTableRowSizeEstimatorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $websiteManagementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->websiteManagementMock = $this->createMock(\Magento\Store\Api\WebsiteManagementInterface::class);
         $this->collectionFactoryMock = $this->createPartialMock(

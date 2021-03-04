@@ -12,7 +12,7 @@ use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
 use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Customer\Model\Session;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class ConfigProviderTest
@@ -45,7 +45,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $configProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()

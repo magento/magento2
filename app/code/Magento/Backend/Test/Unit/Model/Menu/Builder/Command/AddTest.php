@@ -20,7 +20,7 @@ class AddTest extends \PHPUnit\Framework\TestCase
         'resource' => 'Magento_Backend::item',
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new \Magento\Backend\Model\Menu\Builder\Command\Add($this->_params);
     }
@@ -39,10 +39,11 @@ class AddTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testChainWithAnotherAddCommandTrowsException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->_model->chain(new \Magento\Backend\Model\Menu\Builder\Command\Add($this->_params));
     }
 }

@@ -11,11 +11,12 @@ use Magento\Framework\Setup\Option\TextConfigOption;
 class TextConfigOptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Frontend input type has to be 'text', 'textarea' or 'password'.
      */
     public function testConstructInvalidFrontendType()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Frontend input type has to be \'text\', \'textarea\' or \'password\'.');
+
         new TextConfigOption('test', SelectConfigOption::FRONTEND_WIZARD_SELECT, 'path/to/value');
     }
 
@@ -26,11 +27,12 @@ class TextConfigOptionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage must be a string
      */
     public function testValidateException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('must be a string');
+
         $option = new TextConfigOption('test', TextConfigOption::FRONTEND_WIZARD_TEXT, 'path/to/value');
         $option->validate(1);
     }

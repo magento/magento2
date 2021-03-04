@@ -91,7 +91,11 @@ class ExcelTest extends \PHPUnit\Framework\TestCase
             new \ArrayIterator($this->_testData),
             [$this, 'callbackMethod']
         );
-        $this->assertContains('_TRUE_', $convert->convert(), 'Failed asserting that callback method is called.');
+        $this->assertStringContainsString(
+            '_TRUE_',
+            $convert->convert(),
+            'Failed asserting that callback method is called.'
+        );
     }
 
     /**
@@ -102,7 +106,7 @@ class ExcelTest extends \PHPUnit\Framework\TestCase
      */
     protected function _writeFile($callback = false)
     {
-        $name = md5(microtime());
+        $name = md5(microtime());//phpcs:ignore
         $file = TESTS_TEMP_DIR . '/' . $name . '.xml';
 
         $stream = new \Magento\Framework\Filesystem\File\Write(
@@ -154,6 +158,10 @@ class ExcelTest extends \PHPUnit\Framework\TestCase
     public function testWriteCallback()
     {
         $file = $this->_writeFile(true);
-        $this->assertContains('_TRUE_', file_get_contents($file), 'Failed asserting that callback method is called.');
+        $this->assertStringContainsString(
+            '_TRUE_',
+            file_get_contents($file),
+            'Failed asserting that callback method is called.'
+        );
     }
 }

@@ -27,46 +27,46 @@ class RulesTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var \Magento\Framework\Acl\Builder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Acl\Builder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $aclBuilderMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var \Magento\Framework\Acl\RootResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Acl\RootResource|\PHPUnit\Framework\MockObject\MockObject
      */
     private $rootResourceMock;
 
     /**
-     * @var \Magento\Framework\Acl\Data\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Acl\Data\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $aclDataCacheMock;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var \Magento\Authorization\Model\Rules|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Authorization\Model\Rules|\PHPUnit\Framework\MockObject\MockObject
      */
     private $ruleMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\Context::class)
             ->disableOriginalConstructor()
@@ -80,7 +80,7 @@ class RulesTest extends \PHPUnit\Framework\TestCase
 
         $this->contextMock->expects($this->once())
             ->method('getResources')
-            ->will($this->returnValue($this->resourceConnectionMock));
+            ->willReturn($this->resourceConnectionMock);
 
         $this->connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
@@ -90,12 +90,12 @@ class RulesTest extends \PHPUnit\Framework\TestCase
         $this->resourceConnectionMock->expects($this->once())
             ->method('getConnection')
             ->with('connection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
 
         $this->resourceConnectionMock->expects($this->any())
             ->method('getTableName')
             ->with('authorization_rule', 'connection')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->aclBuilderMock = $this->getMockBuilder(\Magento\Framework\Acl\Builder::class)
             ->disableOriginalConstructor()
@@ -119,7 +119,7 @@ class RulesTest extends \PHPUnit\Framework\TestCase
 
         $this->aclBuilderMock->expects($this->any())
             ->method('getConfigCache')
-            ->will($this->returnValue($this->aclDataCacheMock));
+            ->willReturn($this->aclDataCacheMock);
 
         $this->ruleMock = $this->getMockBuilder(\Magento\Authorization\Model\Rules::class)
             ->disableOriginalConstructor()
@@ -128,7 +128,7 @@ class RulesTest extends \PHPUnit\Framework\TestCase
 
         $this->ruleMock->expects($this->any())
             ->method('getRoleId')
-            ->will($this->returnValue(self::TEST_ROLE_ID));
+            ->willReturn(self::TEST_ROLE_ID);
 
         $this->model = new \Magento\Authorization\Model\ResourceModel\Rules(
             $this->contextMock,
@@ -162,17 +162,18 @@ class RulesTest extends \PHPUnit\Framework\TestCase
     /**
      * Test LocalizedException throw case.
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage TestException
      */
     public function testLocalizedExceptionOccurance()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('TestException');
+
         $exceptionPhrase = $this->getMockBuilder(\Magento\Framework\Phrase::class)
             ->disableOriginalConstructor()
             ->setMethods(['render'])
             ->getMock();
 
-        $exceptionPhrase->expects($this->any())->method('render')->will($this->returnValue('TestException'));
+        $exceptionPhrase->expects($this->any())->method('render')->willReturn('TestException');
 
         $exception = new \Magento\Framework\Exception\LocalizedException($exceptionPhrase);
 

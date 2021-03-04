@@ -16,7 +16,7 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -65,10 +65,10 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
     /**
      * Check that method throw exception when writer was not defined
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testGetWriterThrowsException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->_model->getWriter();
     }
 

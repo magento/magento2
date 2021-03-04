@@ -21,11 +21,11 @@ class NodeMergingConfigTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var NodePathMatcher|\PHPUnit_Framework_MockObject_MockObject
+     * @var NodePathMatcher|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $nodePathMatcher;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->nodePathMatcher = $this->createMock(NodePathMatcher::class);
         $this->object = new NodeMergingConfig(
@@ -44,8 +44,8 @@ class NodeMergingConfigTest extends \PHPUnit\Framework\TestCase
         )->with(
             '/root/one',
             $xpath
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
         $this->nodePathMatcher->expects(
             $this->at(1)
@@ -54,8 +54,8 @@ class NodeMergingConfigTest extends \PHPUnit\Framework\TestCase
         )->with(
             '/root/two',
             $xpath
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
         $this->assertEquals('id', $this->object->getIdAttribute($xpath));
     }
@@ -70,8 +70,8 @@ class NodeMergingConfigTest extends \PHPUnit\Framework\TestCase
         )->with(
             '/root/one',
             $xpath
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
         $this->nodePathMatcher->expects(
             $this->at(1)
@@ -80,8 +80,8 @@ class NodeMergingConfigTest extends \PHPUnit\Framework\TestCase
         )->with(
             '/root/two',
             $xpath
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
         $this->nodePathMatcher->expects(
             $this->at(2)
@@ -90,8 +90,8 @@ class NodeMergingConfigTest extends \PHPUnit\Framework\TestCase
         )->with(
             '/root/three',
             $xpath
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
         $this->assertNull($this->object->getIdAttribute($xpath));
     }

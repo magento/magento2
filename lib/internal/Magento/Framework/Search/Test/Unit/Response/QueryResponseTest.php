@@ -20,11 +20,11 @@ class QueryResponseTest extends \PHPUnit\Framework\TestCase
     private $aggregations = [];
 
     /**
-     * @var \Magento\Framework\Search\Response\QueryResponse | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Response\QueryResponse | \PHPUnit\Framework\MockObject\MockObject
      */
     private $queryResponse;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 
@@ -33,7 +33,7 @@ class QueryResponseTest extends \PHPUnit\Framework\TestCase
                 ->disableOriginalConstructor()
                 ->getMock();
 
-            $document->expects($this->any())->method('getId')->will($this->returnValue($count));
+            $document->expects($this->any())->method('getId')->willReturn($count);
             $this->documents[] = $document;
         }
 

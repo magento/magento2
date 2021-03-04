@@ -12,23 +12,23 @@ namespace Magento\MysqlMq\Test\Unit\Model;
 class QueueManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\MysqlMq\Model\ResourceModel\Queue|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MysqlMq\Model\ResourceModel\Queue|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageResource;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfig;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dateTime;
 
     /**
      * @var \Magento\MysqlMq\Model\ResourceModel\MessageStatusCollectionFactory
-     *      |\PHPUnit_Framework_MockObject_MockObject
+     *      |\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageStatusCollectionFactory;
 
@@ -42,7 +42,7 @@ class QueueManagementTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->messageResource = $this->getMockBuilder(\Magento\MysqlMq\Model\ResourceModel\Queue::class)
             ->disableOriginalConstructor()->getMock();
@@ -207,7 +207,7 @@ class QueueManagementTest extends \PHPUnit\Framework\TestCase
     /**
      * Create mock of MessageStatus method.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getMessageStatusMock()
     {

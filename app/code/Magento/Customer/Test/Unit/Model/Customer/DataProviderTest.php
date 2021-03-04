@@ -26,7 +26,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Unit tests for \Magento\Customer\Model\Customer\DataProvider class.
@@ -71,7 +71,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eavConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -508,7 +508,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $shareMock = $this->getMockBuilder(Share::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $objectManagerMock->expects($this->any())
             ->method('get')
             ->willReturnMap(

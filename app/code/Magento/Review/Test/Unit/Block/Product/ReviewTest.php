@@ -29,45 +29,45 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
     private $block;
 
     /**
-     * @var \Magento\Review\Model\ResourceModel\Review\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Review\Model\ResourceModel\Review\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collection;
 
     /**
-     * @var \Magento\Review\Model\ResourceModel\Review\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Review\Model\ResourceModel\Review\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionFactory;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $registry;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     private $product;
 
     /**
-     * @var \Magento\Store\Model\StoreManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     private $store;
 
-    /** @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\Template\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $context;
 
-    /** @var \Magento\Framework\UrlInterface|PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\UrlInterface|PHPUnit\Framework\MockObject\MockObject */
     protected $urlBuilder;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initContextMock();
         $this->initRegistryMock();

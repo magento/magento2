@@ -27,34 +27,34 @@ class QueryFactoryTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryHelper;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $request;
 
     /**
-     * @var StringUtils|\PHPUnit_Framework_MockObject_MockObject
+     * @var StringUtils|\PHPUnit\Framework\MockObject\MockObject
      */
     private $string;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManager;
 
     /**
-     * @var Query|\PHPUnit_Framework_MockObject_MockObject
+     * @var Query|\PHPUnit\Framework\MockObject\MockObject
      */
     private $query;
 
     /**
      * SetUp method
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->queryHelper = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
@@ -75,7 +75,7 @@ class QueryFactoryTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $context */
+        /** @var Context|\PHPUnit\Framework\MockObject\MockObject $context */
         $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();

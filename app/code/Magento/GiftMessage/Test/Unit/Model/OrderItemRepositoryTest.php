@@ -17,46 +17,46 @@ use Magento\Framework\Exception\CouldNotSaveException;
 class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\GiftMessage\Model\OrderItemRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\GiftMessage\Model\OrderItemRepository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderItemRepository;
 
     /**
-     * @var \Magento\Sales\Model\OrderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\OrderFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderFactoryMock;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderMock;
 
     /**
-     * @var \Magento\GiftMessage\Helper\Message|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\GiftMessage\Helper\Message|\PHPUnit\Framework\MockObject\MockObject
      */
     private $helperMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
     /**
-     * @var \Magento\GiftMessage\Model\MessageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\GiftMessage\Model\MessageFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageFactoryMock;
 
     /**
-     * @var \Magento\GiftMessage\Model\Save|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\GiftMessage\Model\Save|\PHPUnit\Framework\MockObject\MockObject
      */
     private $giftMessageSaveModelMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)

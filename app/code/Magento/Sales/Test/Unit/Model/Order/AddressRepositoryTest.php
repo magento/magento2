@@ -79,7 +79,7 @@ class AddressRepositoryTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -241,11 +241,12 @@ class AddressRepositoryTest extends TestCase
      * Test for delete order address with exception
      *
      * @return void
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage The order address couldn't be deleted.
      */
     public function testDeleteWithException(): void
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotDeleteException::class);
+        $this->expectExceptionMessage('The order address couldn\'t be deleted.');
+
         $this->orderAddress->expects($this->never())
             ->method('getEntityId');
 
@@ -304,11 +305,12 @@ class AddressRepositoryTest extends TestCase
      * Test for save order address with exception
      *
      * @return void
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The order address couldn't be saved.
      */
     public function testSaveWithException(): void
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+        $this->expectExceptionMessage('The order address couldn\'t be saved.');
+
         $this->orderAddress->expects($this->never())
             ->method('getEntityId');
 

@@ -44,7 +44,7 @@ class InfoTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -58,7 +58,7 @@ class InfoTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->registry->unregister('current_order');
 
@@ -75,7 +75,7 @@ class InfoTest extends TestCase
         $order = $this->orderFactory->create()->loadByIncrementId('100000001');
         $this->registerOrder($order);
         $block = $this->layout->createBlock(Info::class)->setTemplate('Magento_Sales::order/order_status.phtml');
-        $this->assertContains((string)__($order->getStatusLabel()), strip_tags($block->toHtml()));
+        $this->assertStringContainsString((string)__($order->getStatusLabel()), strip_tags($block->toHtml()));
     }
 
     /**
@@ -88,10 +88,7 @@ class InfoTest extends TestCase
         $order = $this->orderFactory->create()->loadByIncrementId('100000001');
         $this->registerOrder($order);
         $block = $this->layout->createBlock(Info::class)->setTemplate('Magento_Sales::order/order_date.phtml');
-        $this->assertContains(
-            (string)__('Order Date: %1', $block->formatDate($order->getCreatedAt(), \IntlDateFormatter::LONG)),
-            strip_tags($block->toHtml())
-        );
+        $this->assertStringContainsString((string)__('Order Date: %1', $block->formatDate($order->getCreatedAt(), \IntlDateFormatter::LONG)), strip_tags($block->toHtml()));
     }
 
     /**

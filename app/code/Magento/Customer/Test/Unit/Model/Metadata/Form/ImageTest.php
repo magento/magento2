@@ -36,42 +36,42 @@ use PHPUnit_Framework_MockObject_MockObject;
 class ImageTest extends AbstractFormTestCase
 {
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|EncoderInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|EncoderInterface
      */
     private $urlEncode;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|NotProtectedExtension
+     * @var \PHPUnit\Framework\MockObject\MockObject|NotProtectedExtension
      */
     private $fileValidatorMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|Filesystem
+     * @var \PHPUnit\Framework\MockObject\MockObject|Filesystem
      */
     private $fileSystemMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|Http
+     * @var \PHPUnit\Framework\MockObject\MockObject|Http
      */
     private $requestMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|UploaderFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|UploaderFactory
      */
     private $uploaderFactoryMock;
 
     /**
-     * @var FileProcessor|PHPUnit_Framework_MockObject_MockObject
+     * @var FileProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileProcessorMock;
 
     /**
-     * @var ImageContentInterfaceFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var ImageContentInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $imageContentFactory;
 
     /**
-     * @var FileProcessorFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var FileProcessorFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileProcessorFactoryMock;
 
@@ -100,10 +100,7 @@ class ImageTest extends AbstractFormTestCase
      */
     private $driverMock;
 
-    /**
-     * @inheritdoc
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

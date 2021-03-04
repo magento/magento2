@@ -11,7 +11,7 @@ use \Magento\Setup\Fixtures\IndexersStatesApplyFixture;
 class IndexersStatesApplyFixtureTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Fixtures\FixtureModel
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Fixtures\FixtureModel
      */
     private $fixtureModelMock;
 
@@ -20,7 +20,7 @@ class IndexersStatesApplyFixtureTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->fixtureModelMock = $this->createMock(\Magento\Setup\Fixtures\FixtureModel::class);
 
@@ -52,7 +52,12 @@ class IndexersStatesApplyFixtureTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getValue')
             ->willReturn([
-                'indexer' => ['id' => 1]
+                'indexer' => [
+                    [
+                        'id' => 1,
+                        'set_scheduled' => false,
+                    ]
+                ]
             ]);
         $this->fixtureModelMock
             ->method('getObjectManager')

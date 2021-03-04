@@ -13,16 +13,16 @@ use Magento\Catalog\Model\ResourceModel\Product as ResourceModel;
 
 class ReadHandlerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var ResourceModel\Website\Link | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var ResourceModel\Website\Link | \PHPUnit\Framework\MockObject\MockObject */
     private $websiteLink;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \PHPUnit\Framework\MockObject\MockObject  */
     private $extensionAttributes;
 
     /** @var  ReadHandler  */
     private $readHandler;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->websiteLink = $this->getMockBuilder(ResourceModel\Website\Link::class)
             ->disableOriginalConstructor()

@@ -15,10 +15,10 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     /** @var Website */
     protected $model;
 
-    /** @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject */
     protected $indexerRegistryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->indexerRegistryMock = $this->getMockBuilder(\Magento\Framework\Indexer\IndexerRegistry::class)
             ->disableOriginalConstructor()
@@ -31,7 +31,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     {
         $subjectId = 0;
 
-        /** @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject $subjectMock */
+        /** @var \Magento\Store\Model\Website|\PHPUnit\Framework\MockObject\MockObject $subjectMock */
         $subjectMock = $this->getMockBuilder(\Magento\Store\Model\Website::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -43,7 +43,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
             return $subjectMock;
         };
 
-        /** @var IndexerInterface|\PHPUnit_Framework_MockObject_MockObject $indexerMock */
+        /** @var IndexerInterface|\PHPUnit\Framework\MockObject\MockObject $indexerMock */
         $indexerMock = $this->getMockBuilder(\Magento\Framework\Indexer\IndexerInterface::class)
             ->getMockForAbstractClass();
         $indexerMock->expects($this->once())
@@ -61,7 +61,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     {
         $subjectId = 1;
 
-        /** @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject $subjectMock */
+        /** @var \Magento\Store\Model\Website|\PHPUnit\Framework\MockObject\MockObject $subjectMock */
         $subjectMock = $this->getMockBuilder(\Magento\Store\Model\Website::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -81,12 +81,12 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
 
     public function testAfterDelete()
     {
-        /** @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject $subjectMock */
+        /** @var \Magento\Store\Model\Website|\PHPUnit\Framework\MockObject\MockObject $subjectMock */
         $subjectMock = $this->getMockBuilder(\Magento\Store\Model\Website::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var IndexerInterface|\PHPUnit_Framework_MockObject_MockObject $indexerMock */
+        /** @var IndexerInterface|\PHPUnit\Framework\MockObject\MockObject $indexerMock */
         $indexerMock = $this->getMockBuilder(\Magento\Framework\Indexer\IndexerInterface::class)
             ->getMockForAbstractClass();
         $indexerMock->expects($this->once())

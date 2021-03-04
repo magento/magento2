@@ -16,26 +16,26 @@ class StoresConfigTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_storeManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_storeOne;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_storeTwo;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_config;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_storeOne = $this->createMock(\Magento\Store\Model\Store::class);
         $this->_storeTwo = $this->createMock(\Magento\Store\Model\Store::class);
@@ -55,40 +55,40 @@ class StoresConfigTest extends \PHPUnit\Framework\TestCase
         $this->_storeOne
             ->expects($this->at(0))
             ->method('getCode')
-            ->will($this->returnValue('code_0'));
+            ->willReturn('code_0');
 
         $this->_storeOne
             ->expects($this->at(1))
             ->method('getId')
-            ->will($this->returnValue(0));
+            ->willReturn(0);
 
         $this->_storeTwo
             ->expects($this->at(0))
             ->method('getCode')
-            ->will($this->returnValue('code_1'));
+            ->willReturn('code_1');
 
         $this->_storeTwo
             ->expects($this->at(1))
             ->method('getId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->_storeManager
             ->expects($this->once())
             ->method('getStores')
             ->with(true)
-            ->will($this->returnValue([0 => $this->_storeOne, 1 => $this->_storeTwo]));
+            ->willReturn([0 => $this->_storeOne, 1 => $this->_storeTwo]);
 
         $this->_config
             ->expects($this->at(0))
             ->method('getValue')
             ->with($path, 'store', 'code_0')
-            ->will($this->returnValue(0));
+            ->willReturn(0);
 
         $this->_config
             ->expects($this->at(1))
             ->method('getValue')
             ->with($path, 'store', 'code_1')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->assertEquals([0 => 0, 1 => 1], $this->_model->getStoresConfigByPath($path));
     }

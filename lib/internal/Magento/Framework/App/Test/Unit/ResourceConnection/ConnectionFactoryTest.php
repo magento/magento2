@@ -18,11 +18,11 @@ class ConnectionFactoryTest extends \PHPUnit\Framework\TestCase
     private $connectionFactory;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
@@ -52,11 +52,11 @@ class ConnectionFactoryTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $connectionAdapterMock->expects($this->once())
             ->method('getConnection')
-            ->will($this->returnValue($connectionMock));
+            ->willReturn($connectionMock);
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(\Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface::class)
-            ->will($this->returnValue($connectionAdapterMock));
+            ->willReturn($connectionAdapterMock);
         $this->objectManagerMock->expects($this->any())
             ->method('get')
             ->with(\Magento\Framework\DB\Adapter\DdlCache::class)

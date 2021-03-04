@@ -7,6 +7,8 @@
 namespace Magento\Wishlist\Model;
 
 /**
+ * Class LocaleQuantityProcessor for localized quantity to internal format
+ *
  * @api
  * @since 100.0.2
  */
@@ -43,7 +45,7 @@ class LocaleQuantityProcessor
     public function process($qty)
     {
         $this->localFilter->setOptions(['locale' => $this->localeResolver->getLocale()]);
-        $qty = $this->localFilter->filter((double)$qty);
+        $qty = $this->localFilter->filter((string)$qty);
         if ($qty < 0) {
             $qty = null;
         }

@@ -23,11 +23,11 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var WebsiteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebsiteFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $websiteFactory;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
 
@@ -49,7 +49,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
             \Magento\Store\Model\ResourceModel\Website\Collection::class,
             ['getSize']
         );
-        $websiteCollection->expects($this->any())->method('getSize')->will($this->returnValue(2));
+        $websiteCollection->expects($this->any())->method('getSize')->willReturn(2);
 
         $this->websiteFactory->expects($this->any())
             ->method('create')

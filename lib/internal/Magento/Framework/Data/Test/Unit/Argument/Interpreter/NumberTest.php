@@ -14,19 +14,20 @@ class NumberTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new Number();
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Numeric value is expected
      *
      * @dataProvider evaluateExceptionDataProvider
      */
     public function testEvaluateException($input)
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Numeric value is expected');
+
         $this->_model->evaluate($input);
     }
 

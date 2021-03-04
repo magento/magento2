@@ -20,34 +20,34 @@ class CacheTest extends \PHPUnit\Framework\TestCase
     private $fetchStrategyCache;
 
     /**
-     * @var FrontendInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FrontendInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheMock;
 
     /**
-     * @var FetchStrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FetchStrategyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fetchStrategyMock;
 
     /**
-     * @var Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|\PHPUnit\Framework\MockObject\MockObject
      */
     private $selectMock;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->selectMock = $this->createPartialMock(Select::class, ['assemble']);
         $this->selectMock->expects($this->once())
             ->method('assemble')
             ->willReturn('SELECT * FROM fixture_table');
-        $this->cacheMock = $this->createMock(FrontendInterface::class);
-        $this->fetchStrategyMock = $this->createMock(FetchStrategyInterface::class);
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->cacheMock = $this->getMockForAbstractClass(FrontendInterface::class);
+        $this->fetchStrategyMock = $this->getMockForAbstractClass(FetchStrategyInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $this->fetchStrategyCache = (new ObjectManager($this))->getObject(
             Cache::class,
             [

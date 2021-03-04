@@ -24,11 +24,11 @@ class DiscountsTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->collectionFactory = $this->createPartialMock(
             \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory::class,
@@ -52,11 +52,11 @@ class DiscountsTest extends \PHPUnit\Framework\TestCase
                 'setOrder',
                 'load'
             ]);
-        $this->collectionFactory->expects($this->once())->method('create')->will($this->returnValue($ruleCollection));
-        $ruleCollection->expects($this->once())->method('addWebsiteGroupDateFilter')->will($this->returnSelf());
-        $ruleCollection->expects($this->once())->method('addFieldToFilter')->will($this->returnSelf());
-        $ruleCollection->expects($this->once())->method('setOrder')->will($this->returnSelf());
-        $ruleCollection->expects($this->once())->method('load')->will($this->returnSelf());
+        $this->collectionFactory->expects($this->once())->method('create')->willReturn($ruleCollection);
+        $ruleCollection->expects($this->once())->method('addWebsiteGroupDateFilter')->willReturnSelf();
+        $ruleCollection->expects($this->once())->method('addFieldToFilter')->willReturnSelf();
+        $ruleCollection->expects($this->once())->method('setOrder')->willReturnSelf();
+        $ruleCollection->expects($this->once())->method('load')->willReturnSelf();
         $this->assertEquals($ruleCollection, $this->discounts->getDiscountCollection(1, 1));
     }
 }

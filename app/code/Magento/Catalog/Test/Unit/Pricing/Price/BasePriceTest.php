@@ -12,49 +12,49 @@ namespace Magento\Catalog\Test\Unit\Pricing\Price;
 class BasePriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Pricing\Price\BasePrice|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Pricing\Price\BasePrice|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $basePrice;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceInfo\Base |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceInfo\Base |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceInfoMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $saleableItemMock;
 
     /**
-     * @var \Magento\Framework\Pricing\Adjustment\Calculator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Adjustment\Calculator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $calculatorMock;
 
     /**
-     * @var \Magento\Catalog\Pricing\Price\RegularPrice|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Pricing\Price\RegularPrice|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $regularPriceMock;
 
     /**
-     * @var \Magento\Catalog\Pricing\Price\TierPrice|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Pricing\Price\TierPrice|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $tierPriceMock;
 
     /**
-     * @var \Magento\Catalog\Pricing\Price\SpecialPrice|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Pricing\Price\SpecialPrice|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $specialPriceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject[]
+     * @var \PHPUnit\Framework\MockObject\MockObject[]
      */
     protected $prices;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $qty = 1;
         $this->saleableItemMock = $this->createMock(\Magento\Catalog\Model\Product::class);
@@ -66,7 +66,7 @@ class BasePriceTest extends \PHPUnit\Framework\TestCase
 
         $this->saleableItemMock->expects($this->once())
             ->method('getPriceInfo')
-            ->will($this->returnValue($this->priceInfoMock));
+            ->willReturn($this->priceInfoMock);
         $this->prices = [
             'regular_price' => $this->regularPriceMock,
             'tier_price' => $this->tierPriceMock,
@@ -93,16 +93,16 @@ class BasePriceTest extends \PHPUnit\Framework\TestCase
     {
         $this->priceInfoMock->expects($this->once())
             ->method('getPrices')
-            ->will($this->returnValue($this->prices));
+            ->willReturn($this->prices);
         $this->regularPriceMock->expects($this->exactly(3))
             ->method('getValue')
-            ->will($this->returnValue(100));
+            ->willReturn(100);
         $this->tierPriceMock->expects($this->exactly(2))
             ->method('getValue')
-            ->will($this->returnValue(99));
+            ->willReturn(99);
         $this->specialPriceMock->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($specialPriceValue));
+            ->willReturn($specialPriceValue);
         $this->assertSame($expectedResult, $this->basePrice->getValue());
     }
 

@@ -16,11 +16,11 @@ class EngineTest extends \PHPUnit\Framework\TestCase
     private $target;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
@@ -32,11 +32,11 @@ class EngineTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $resource->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connection));
+            ->willReturn($this->connection);
 
         $resource->expects($this->any())
             ->method('getTableName')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $objectManager = new ObjectManager($this);
         $this->target = $objectManager->getObject(

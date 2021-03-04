@@ -39,7 +39,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     private $productFactory;
 
     /**
-     * @var SalableProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var SalableProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $salableProcessor;
 
@@ -58,7 +58,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     ];
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $eavConfig;
 
@@ -68,27 +68,27 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configurableAttributeFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $typeConfigurableFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeCollectionFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $productCollectionFactory;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productRepository;
 
@@ -98,27 +98,27 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     private $objectHelper;
 
     /**
-     * @var JoinProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var JoinProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $extensionAttributesJoinProcessorMock;
 
     /**
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataPool;
 
     /**
-     * @var EntityMetadata|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityMetadata|\PHPUnit\Framework\MockObject\MockObject
      */
     private $entityMetadata;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $cache;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $serializer;
 
@@ -130,7 +130,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $eventManager = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
@@ -169,7 +169,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->extensionAttributesJoinProcessorMock = $this->getMockBuilder(JoinProcessorInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->entityMetadata = $this->getMockBuilder(EntityMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -417,20 +417,20 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $product->expects($this->atLeastOnce())->method('getStoreId')->willReturn($productStore);
         $product->expects($this->atLeastOnce())->method('hasData')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         ['_cache_instance_configurable_attributes', 1],
                     ]
-                )
+                
             );
         $product->expects($this->any())->method('getData')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         ['_cache_instance_configurable_attributes', null, [$attribute]],
                     ]
-                )
+                
             );
 
         $result = $this->model->getConfigurableAttributesAsArray($product);
@@ -452,7 +452,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     {
         $configurableAttributes = '_cache_instance_configurable_attributes';
 
-        /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
+        /** @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['hasData', 'getId'])
             ->disableOriginalConstructor()
@@ -468,7 +468,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     {
         $configurableAttributes = '_cache_instance_configurable_attributes';
 
-        /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
+        /** @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['getData', 'hasData', 'setData', 'getId'])
             ->disableOriginalConstructor()
@@ -586,16 +586,16 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $productCollection->expects($this->any())->method('setFlag')->will($this->returnSelf());
+        $productCollection->expects($this->any())->method('setFlag')->willReturnSelf();
         $productCollection
             ->expects($this->once())
             ->method('setProductFilter')
             ->with($productMock)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $productCollection
             ->expects($this->once())
             ->method('addStoreFilter')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $productCollection
             ->expects($this->once())
             ->method('getSize')
@@ -604,11 +604,11 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('process')
             ->with($productCollection)
-            ->will($this->returnValue($productCollection));
+            ->willReturn($productCollection);
         $this->productCollectionFactory
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($productCollection));
+            ->willReturn($productCollection);
         $this->assertTrue($this->model->isSalable($productMock));
     }
 
@@ -635,7 +635,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $optionMock = $this->getMockBuilder(OptionInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $usedAttributeMock = $this->getMockBuilder(
             Attribute::class
         )
@@ -702,11 +702,12 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\ConfigurableProduct\Model\Product\Type\Configurable::checkProductBuyState()
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage You need to choose options for your item.
      */
     public function testCheckProductBuyStateException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('You need to choose options for your item.');
+
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['getSkipCheckRequiredOption', 'getCustomOption'])
             ->disableOriginalConstructor()

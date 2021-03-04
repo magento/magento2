@@ -37,10 +37,10 @@ class TransferFactoryTest extends TestCase
      */
     private $filterMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->transferBuilder = $this->createMock(TransferBuilder::class);
-        $this->transferMock = $this->createMock(TransferInterface::class);
+        $this->transferMock = $this->getMockForAbstractClass(TransferInterface::class);
         $this->filterMock = $this->createMock(RemoveFieldsFilter::class);
 
         $this->transferFactory = new TransferFactory(

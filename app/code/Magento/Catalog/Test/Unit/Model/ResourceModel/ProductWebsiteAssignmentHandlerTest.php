@@ -19,11 +19,11 @@ class ProductWebsiteAssignmentHandlerTest extends TestCase
     protected $handler;
 
     /**
-     * @var Link|\PHPUnit_Framework_MockObject_MockObject
+     * @var Link|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productLinkMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 

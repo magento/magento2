@@ -21,7 +21,7 @@ class ContainerAbstractTest extends \PHPUnit\Framework\TestCase
         $paymentInfo = $objectManagerHelper->getObject(\Magento\Payment\Model\Info::class);
         $methodInstance = $objectManagerHelper->getObject(\Magento\OfflinePayments\Model\Checkmo::class);
         $paymentInfo->setMethodInstance($methodInstance);
-        $block->expects($this->atLeastOnce())->method('getPaymentInfo')->will($this->returnValue($paymentInfo));
+        $block->expects($this->atLeastOnce())->method('getPaymentInfo')->willReturn($paymentInfo);
 
         $childBlock = $objectManagerHelper->getObject(\Magento\Framework\View\Element\Template::class);
         $block->expects(
@@ -30,8 +30,8 @@ class ContainerAbstractTest extends \PHPUnit\Framework\TestCase
             'getChildBlock'
         )->with(
             'payment.info.checkmo'
-        )->will(
-            $this->returnValue($childBlock)
+        )->willReturn(
+            $childBlock
         );
 
         $template = 'any_template.phtml';

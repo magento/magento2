@@ -9,7 +9,7 @@ use Magento\Framework\DataObject;
 use Magento\Paypal\Model\Payflow\Service\Response\Validator\IAVSResponse;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Paypal\Model\PayflowConfig;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class IAVSResponseTest extends \PHPUnit\Framework\TestCase
 {

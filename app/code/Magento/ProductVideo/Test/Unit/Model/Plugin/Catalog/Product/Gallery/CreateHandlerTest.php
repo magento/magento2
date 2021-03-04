@@ -19,29 +19,29 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     protected $subject;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $product;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Entity\Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $attribute;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Gallery|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Gallery|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceModel;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Gallery\CreateHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Gallery\CreateHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mediaGalleryCreateHandler;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
 

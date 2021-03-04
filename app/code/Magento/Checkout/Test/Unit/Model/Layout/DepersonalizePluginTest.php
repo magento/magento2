@@ -25,24 +25,24 @@ class DepersonalizePluginTest extends TestCase
     private $plugin;
 
     /**
-     * @var LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $layoutMock;
 
     /**
-     * @var CheckoutSession|\PHPUnit_Framework_MockObject_MockObject
+     * @var CheckoutSession|\PHPUnit\Framework\MockObject\MockObject
      */
     private $checkoutSessionMock;
 
     /**
-     * @var DepersonalizeChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var DepersonalizeChecker|\PHPUnit\Framework\MockObject\MockObject
      */
     private $depersonalizeCheckerMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->checkoutSessionMock = $this->createPartialMock(CheckoutSession::class, ['clearStorage']);

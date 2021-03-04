@@ -54,7 +54,7 @@ class DeclarativeInstallerTest extends SetupTestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->moduleManager = $objectManager->get(TestModuleManager::class);
@@ -281,7 +281,7 @@ class DeclarativeInstallerTest extends SetupTestCase
         } catch (\Exception $e) {
             $installException = $e->getPrevious();
             self::assertSame(1, $installException->getCode());
-            self::assertContains(
+            self::assertStringContainsString(
                 'The reference table named "reference_table" is disabled',
                 $installException->getMessage()
             );
@@ -379,8 +379,8 @@ class DeclarativeInstallerTest extends SetupTestCase
         $this->cliCommand->upgrade();
         $tableStatements = $this->describeTable->describeShard('default');
         $tableSql = $tableStatements['dependent'];
-        $this->assertRegExp('/CONSTRAINT\s`DEPENDENT_PAGE_ID_ON_TEST_TABLE_PAGE_ID`/', $tableSql);
-        $this->assertRegExp('/CONSTRAINT\s`DEPENDENT_SCOPE_ID_ON_TEST_SCOPE_TABLE_SCOPE_ID`/', $tableSql);
+        $this->assertMatchesRegularExpression('/CONSTRAINT\s`DEPENDENT_PAGE_ID_ON_TEST_TABLE_PAGE_ID`/', $tableSql);
+        $this->assertMatchesRegularExpression('/CONSTRAINT\s`DEPENDENT_SCOPE_ID_ON_TEST_SCOPE_TABLE_SCOPE_ID`/', $tableSql);
     }
 
     /**
@@ -420,7 +420,7 @@ class DeclarativeInstallerTest extends SetupTestCase
         $this->cliCommand->upgrade();
         $tableStatements = $this->describeTable->describeShard('default');
         $tableSql = $tableStatements['test_table'];
-        $this->assertNotRegExp(
+        $this->assertDoesNotMatchRegularExpression(
             '/KEY\s+`TEST_TABLE_VARCHAR`\s+\(`varchar`\)/',
             $tableSql,
             'Index is not being disabled by external module'

@@ -26,39 +26,39 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceContextMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataPoolMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $adapterMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->resourceContextMock = $this->createMock(Context::class);
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
         $this->resourceContextMock->expects($this->any())
             ->method('getResources')
             ->willReturn($this->resourceConnectionMock);
-        $this->adapterMock = $this->createMock(AdapterInterface::class);
+        $this->adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->any())->method('getConnection')->willReturn($this->adapterMock);
         $this->metadataPoolMock = $this->createMock(MetadataPool::class);
 
@@ -86,7 +86,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     public function testGetPriceIndexDataUsesFrontendPriceIndexerTable()
     {
         $storeId = 1;
-        $storeMock = $this->createMock(StoreInterface::class);
+        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
         $storeMock->expects($this->any())->method('getId')->willReturn($storeId);
         $storeMock->method('getWebsiteId')->willReturn(1);
         $this->storeManagerMock->expects($this->once())->method('getStore')->with($storeId)->willReturn($storeMock);

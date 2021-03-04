@@ -16,7 +16,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Config\Dom\UrnResolver */
     protected $urnResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         /** @var \Magento\Framework\Config\Dom\UrnResolver $urnResolverMock */
@@ -40,6 +40,6 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
 
     public function testGetPerFileSchema()
     {
-        $this->assertEquals(null, $this->schemaLocator->getPerFileSchema());
+        $this->assertNull($this->schemaLocator->getPerFileSchema());
     }
 }

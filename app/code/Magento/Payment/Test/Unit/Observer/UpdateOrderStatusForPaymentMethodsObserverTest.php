@@ -16,26 +16,26 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends \PHPUnit\Framework\
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Sales\Model\Order\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Sales\Model\Order\Config|\PHPUnit\Framework\MockObject\MockObject */
     protected $orderConfigMock;
 
-    /** @var \Magento\Payment\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Payment\Model\Config|\PHPUnit\Framework\MockObject\MockObject */
     protected $paymentConfigMock;
 
-    /** @var \Magento\Config\Model\ResourceModel\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Config\Model\ResourceModel\Config|\PHPUnit\Framework\MockObject\MockObject */
     protected $coreResourceConfigMock;
 
-    /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject */
     protected $observerMock;
 
-    /** @var \Magento\Framework\Event|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Event|\PHPUnit\Framework\MockObject\MockObject */
     protected $eventMock;
 
     const ORDER_STATUS = 'status';
 
     const METHOD_CODE = 'method_code';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderConfigMock = $this->createMock(\Magento\Sales\Model\Order\Config::class);
         $this->paymentConfigMock = $this->createMock(\Magento\Payment\Model\Config::class);
@@ -59,27 +59,27 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends \PHPUnit\Framework\
     public function testUpdateOrderStatusForPaymentMethodsNotNewState()
     {
         $this->_prepareEventMockWithMethods(['getState']);
-        $this->eventMock->expects($this->once())->method('getState')->will($this->returnValue('NotNewState'));
+        $this->eventMock->expects($this->once())->method('getState')->willReturn('NotNewState');
         $this->updateOrderStatusForPaymentMethodsObserver->execute($this->observerMock);
     }
 
     public function testUpdateOrderStatusForPaymentMethodsNewState()
     {
         $this->_prepareEventMockWithMethods(['getState', 'getStatus']);
-        $this->eventMock->expects($this->once())->method('getState')->will(
-            $this->returnValue(\Magento\Sales\Model\Order::STATE_NEW)
+        $this->eventMock->expects($this->once())->method('getState')->willReturn(
+            \Magento\Sales\Model\Order::STATE_NEW
         );
-        $this->eventMock->expects($this->once())->method('getStatus')->will(
-            $this->returnValue(self::ORDER_STATUS)
+        $this->eventMock->expects($this->once())->method('getStatus')->willReturn(
+            self::ORDER_STATUS
         );
 
         $defaultStatus = 'defaultStatus';
         $this->orderConfigMock->expects($this->once())->method('getStateDefaultStatus')->with(
             \Magento\Sales\Model\Order::STATE_NEW
-        )->will($this->returnValue($defaultStatus));
+        )->willReturn($defaultStatus);
 
-        $this->paymentConfigMock->expects($this->once())->method('getActiveMethods')->will(
-            $this->returnValue($this->_getPreparedActiveMethods())
+        $this->paymentConfigMock->expects($this->once())->method('getActiveMethods')->willReturn(
+            $this->_getPreparedActiveMethods()
         );
 
         $this->coreResourceConfigMock->expects($this->once())->method('saveConfig')->with(
@@ -101,7 +101,7 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends \PHPUnit\Framework\
         $this->eventMock = $this->getMockBuilder(
             \Magento\Framework\Event::class
         )->disableOriginalConstructor()->setMethods($methodsList)->getMock();
-        $this->observerMock->expects($this->any())->method('getEvent')->will($this->returnValue($this->eventMock));
+        $this->observerMock->expects($this->any())->method('getEvent')->willReturn($this->eventMock);
     }
 
     /**
@@ -114,18 +114,18 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends \PHPUnit\Framework\
         $method1 = $this->getMockBuilder(
             \Magento\Payment\Model\MethodInterface::class
         )->getMockForAbstractClass();
-        $method1->expects($this->once())->method('getConfigData')->with('order_status')->will(
-            $this->returnValue(self::ORDER_STATUS)
+        $method1->expects($this->once())->method('getConfigData')->with('order_status')->willReturn(
+            self::ORDER_STATUS
         );
-        $method1->expects($this->once())->method('getCode')->will(
-            $this->returnValue(self::METHOD_CODE)
+        $method1->expects($this->once())->method('getCode')->willReturn(
+            self::METHOD_CODE
         );
 
         $method2 = $this->getMockBuilder(
             \Magento\Payment\Model\MethodInterface::class
         )->getMockForAbstractClass();
-        $method2->expects($this->once())->method('getConfigData')->with('order_status')->will(
-            $this->returnValue('not_a_status')
+        $method2->expects($this->once())->method('getConfigData')->with('order_status')->willReturn(
+            'not_a_status'
         );
 
         return [$method1, $method2];

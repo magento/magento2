@@ -13,12 +13,12 @@ class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ResourceModel\Product
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\ResourceModel\Product
      */
     protected $resourceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Api\ProductRepositoryInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Api\ProductRepositoryInterface
      */
     protected $subjectMock;
 
@@ -33,7 +33,7 @@ class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
     protected $rollbackClosureMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
@@ -44,7 +44,7 @@ class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
 
     const ERROR_MSG = "error occurred";
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
         $this->subjectMock = $this->createMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
@@ -72,11 +72,12 @@ class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage error occurred
      */
     public function testAroundSaveRollBack()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('error occurred');
+
         $this->resourceMock->expects($this->once())->method('beginTransaction');
         $this->resourceMock->expects($this->once())->method('rollBack');
 
@@ -95,11 +96,12 @@ class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage error occurred
      */
     public function testAroundDeleteRollBack()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('error occurred');
+
         $this->resourceMock->expects($this->once())->method('beginTransaction');
         $this->resourceMock->expects($this->once())->method('rollBack');
 
@@ -123,11 +125,12 @@ class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage error occurred
      */
     public function testAroundDeleteByIdRollBack()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('error occurred');
+
         $this->resourceMock->expects($this->once())->method('beginTransaction');
         $this->resourceMock->expects($this->once())->method('rollBack');
 

@@ -13,11 +13,11 @@ class UpdateQuoteItemsTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\ResourceModel\Quote
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Quote\Model\ResourceModel\Quote
      */
     private $quoteResource ;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->quoteResource = $this->getMockBuilder(\Magento\Quote\Model\ResourceModel\Quote::class)
             ->disableOriginalConstructor()

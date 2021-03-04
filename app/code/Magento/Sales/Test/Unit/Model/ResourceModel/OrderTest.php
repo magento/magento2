@@ -26,69 +26,69 @@ class OrderTest extends \PHPUnit\Framework\TestCase
     protected $resource;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\SalesSequence\Model\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $salesSequenceManagerMock;
 
     /**
-     * @var \Magento\SalesSequence\Model\Sequence|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\Sequence|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $salesSequenceMock;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderItemMock;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
     /**
-     * @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Website|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $websiteMock;
 
     /**
-     * @var \Magento\Store\Model\Group|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Group|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeGroupMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entitySnapshotMock;
 
     /**
-     * @var RelationComposite|\PHPUnit_Framework_MockObject_MockObject
+     * @var RelationComposite|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $relationCompositeMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectRelationProcessorMock;
 
     /**
      * Mock class dependencies
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
@@ -218,18 +218,18 @@ class OrderTest extends \PHPUnit\Framework\TestCase
             ->method('quoteInto');
         $this->connectionMock->expects($this->any())
             ->method('describeTable')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->connectionMock->expects($this->any())
             ->method('update');
         $this->connectionMock->expects($this->any())
             ->method('lastInsertId');
         $this->orderMock->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->entitySnapshotMock->expects($this->once())
             ->method('isModified')
             ->with($this->orderMock)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->resource->save($this->orderMock);
     }
 }

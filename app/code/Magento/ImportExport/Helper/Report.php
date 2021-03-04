@@ -124,7 +124,9 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getReportSize($filename)
     {
-        return $this->varDirectory->stat($this->getFilePath($filename))['size'];
+        $statResult = $this->varDirectory->stat($this->getFilePath($filename));
+
+        return $statResult['size'] ?? null;
     }
 
     /**

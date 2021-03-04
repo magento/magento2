@@ -21,28 +21,28 @@ class AbstractCarrierOnlineTest extends \PHPUnit\Framework\TestCase
     protected $productId = 1;
 
     /**
-     * @var AbstractCarrierOnline|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractCarrierOnline|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $carrier;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockRegistry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockItemData;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stockRegistry = $this->createMock(\Magento\CatalogInventory\Model\StockRegistry::class);
         $this->stockItemData = $this->createMock(\Magento\CatalogInventory\Model\Stock\Item::class);
 
         $this->stockRegistry->expects($this->any())->method('getStockItem')
             ->with($this->productId, 10)
-            ->will($this->returnValue($this->stockItemData));
+            ->willReturn($this->stockItemData);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $carrierArgs = $objectManagerHelper->getConstructArguments(
@@ -63,28 +63,28 @@ class AbstractCarrierOnlineTest extends \PHPUnit\Framework\TestCase
      */
     public function testComposePackages()
     {
-        $this->carrier->expects($this->any())->method('getConfigData')->will($this->returnCallback(function ($key) {
+        $this->carrier->expects($this->any())->method('getConfigData')->willReturnCallback(function ($key) {
             $configData = [
                 'max_package_weight' => 10,
                 'showmethod'         => 1,
             ];
             return isset($configData[$key]) ? $configData[$key] : 0;
-        }));
+        });
 
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $product->expects($this->any())->method('getId')->will($this->returnValue($this->productId));
+        $product->expects($this->any())->method('getId')->willReturn($this->productId);
 
         $item = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getProduct', 'getQty', 'getWeight', '__wakeup', 'getStore'])
             ->getMock();
-        $item->expects($this->any())->method('getProduct')->will($this->returnValue($product));
+        $item->expects($this->any())->method('getProduct')->willReturn($product);
 
         $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getWebsiteId']);
         $store->expects($this->any())
             ->method('getWebsiteId')
-            ->will($this->returnValue(10));
-        $item->expects($this->any())->method('getStore')->will($this->returnValue($store));
+            ->willReturn(10);
+        $item->expects($this->any())->method('getStore')->willReturn($store);
 
         $request = new RateRequest();
         $request->setData('all_items', [$item]);
@@ -93,12 +93,12 @@ class AbstractCarrierOnlineTest extends \PHPUnit\Framework\TestCase
         /** Testable service calls to CatalogInventory module */
         $this->stockRegistry->expects($this->atLeastOnce())->method('getStockItem')->with($this->productId);
         $this->stockItemData->expects($this->atLeastOnce())->method('getEnableQtyIncrements')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->stockItemData->expects($this->atLeastOnce())->method('getQtyIncrements')
-            ->will($this->returnValue(5));
-        $this->stockItemData->expects($this->atLeastOnce())->method('getIsQtyDecimal')->will($this->returnValue(true));
+            ->willReturn(5);
+        $this->stockItemData->expects($this->atLeastOnce())->method('getIsQtyDecimal')->willReturn(true);
         $this->stockItemData->expects($this->atLeastOnce())->method('getIsDecimalDivided')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->carrier->processAdditionalValidation($request);
     }
@@ -118,11 +118,12 @@ class AbstractCarrierOnlineTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The security validation of the XML document has failed.
      */
     public function testParseXmlXXEXml()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The security validation of the XML document has failed.');
+
         $xmlString = '<!DOCTYPE scan [
             <!ENTITY test SYSTEM "php://filter/read=convert.base64-encode/resource='
             . __DIR__ . '/AbstractCarrierOnline/xxe-xml.txt">]><scan>&test;</scan>';
@@ -134,11 +135,12 @@ class AbstractCarrierOnlineTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The security validation of the XML document has failed.
      */
     public function testParseXmlXQBXml()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The security validation of the XML document has failed.');
+
         $xmlString = '<?xml version="1.0"?>
             <!DOCTYPE test [
               <!ENTITY value "value">

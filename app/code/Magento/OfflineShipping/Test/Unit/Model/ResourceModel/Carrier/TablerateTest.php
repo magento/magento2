@@ -23,26 +23,26 @@ class TablerateTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $resource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $importMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $contextMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\Context::class);
         $loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);

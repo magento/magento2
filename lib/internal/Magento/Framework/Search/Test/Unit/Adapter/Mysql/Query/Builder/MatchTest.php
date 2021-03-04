@@ -8,7 +8,7 @@ namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Query\Builder;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use \PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class MatchTest extends \PHPUnit\Framework\TestCase
 {
@@ -37,7 +37,7 @@ class MatchTest extends \PHPUnit\Framework\TestCase
      */
     private $preprocessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 
@@ -72,7 +72,7 @@ class MatchTest extends \PHPUnit\Framework\TestCase
 
     public function testBuild()
     {
-        /** @var Select|\PHPUnit_Framework_MockObject_MockObject $select */
+        /** @var Select|\PHPUnit\Framework\MockObject\MockObject $select */
         $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->setMethods(['getMatchQuery', 'match', 'where'])
             ->disableOriginalConstructor()
@@ -80,11 +80,11 @@ class MatchTest extends \PHPUnit\Framework\TestCase
         $this->preprocessor->expects($this->once())
             ->method('process')
             ->with($this->equalTo('some_value '))
-            ->will($this->returnValue('some_value '));
+            ->willReturn('some_value ');
         $this->fulltextHelper->expects($this->once())
             ->method('getMatchQuery')
             ->with($this->equalTo(['some_field' => 'some_field']), $this->equalTo('-some_value*'))
-            ->will($this->returnValue('matchedQuery'));
+            ->willReturn('matchedQuery');
         $select->expects($this->once())
             ->method('where')
             ->with('matchedQuery')
@@ -106,7 +106,7 @@ class MatchTest extends \PHPUnit\Framework\TestCase
                 return $resolvedFields;
             });
 
-        /** @var \Magento\Framework\Search\Request\Query\Match|\PHPUnit_Framework_MockObject_MockObject $query */
+        /** @var \Magento\Framework\Search\Request\Query\Match|\PHPUnit\Framework\MockObject\MockObject $query */
         $query = $this->getMockBuilder(\Magento\Framework\Search\Request\Query\Match::class)
             ->setMethods(['getMatches', 'getValue'])
             ->disableOriginalConstructor()

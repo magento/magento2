@@ -11,31 +11,31 @@ namespace Magento\ProductAlert\Test\Unit\Block\Product\View;
 class StockTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ProductAlert\Helper\Data
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\ProductAlert\Helper\Data
      */
     protected $_helper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product
      */
     protected $_product;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Registry
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Registry
      */
     protected $_registry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ProductAlert\Block\Product\View\Stock
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\ProductAlert\Block\Product\View\Stock
      */
     protected $_block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Layout
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Layout
      */
     protected $_layout;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_helper = $this->createPartialMock(
@@ -46,7 +46,7 @@ class StockTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Product::class,
             ['isAvailable', 'getId', '__wakeup']
         );
-        $this->_product->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $this->_product->expects($this->any())->method('getId')->willReturn(1);
         $this->_registry = $this->getMockBuilder(
             \Magento\Framework\Registry::class
         )->disableOriginalConstructor()->setMethods(
@@ -61,18 +61,18 @@ class StockTest extends \PHPUnit\Framework\TestCase
 
     public function testSetTemplateStockUrlAllowed()
     {
-        $this->_helper->expects($this->once())->method('isStockAlertAllowed')->will($this->returnValue(true));
+        $this->_helper->expects($this->once())->method('isStockAlertAllowed')->willReturn(true);
         $this->_helper->expects(
             $this->once()
         )->method(
             'getSaveUrl'
         )->with(
             'stock'
-        )->will(
-            $this->returnValue('http://url')
+        )->willReturn(
+            'http://url'
         );
 
-        $this->_product->expects($this->once())->method('isAvailable')->will($this->returnValue(false));
+        $this->_product->expects($this->once())->method('isAvailable')->willReturn(false);
 
         $this->_registry->expects(
             $this->any()
@@ -80,8 +80,8 @@ class StockTest extends \PHPUnit\Framework\TestCase
             'registry'
         )->with(
             'current_product'
-        )->will(
-            $this->returnValue($this->_product)
+        )->willReturn(
+            $this->_product
         );
 
         $this->_block->setLayout($this->_layout);
@@ -102,12 +102,12 @@ class StockTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'isStockAlertAllowed'
-        )->will(
-            $this->returnValue($stockAlertAllowed)
+        )->willReturn(
+            $stockAlertAllowed
         );
         $this->_helper->expects($this->never())->method('getSaveUrl');
 
-        $this->_product->expects($this->any())->method('isAvailable')->will($this->returnValue($productAvailable));
+        $this->_product->expects($this->any())->method('isAvailable')->willReturn($productAvailable);
 
         $this->_registry->expects(
             $this->any()
@@ -115,8 +115,8 @@ class StockTest extends \PHPUnit\Framework\TestCase
             'registry'
         )->with(
             'current_product'
-        )->will(
-            $this->returnValue($this->_product)
+        )->willReturn(
+            $this->_product
         );
 
         $this->_block->setLayout($this->_layout);
@@ -140,7 +140,7 @@ class StockTest extends \PHPUnit\Framework\TestCase
 
     public function testSetTemplateNoProduct()
     {
-        $this->_helper->expects($this->once())->method('isStockAlertAllowed')->will($this->returnValue(true));
+        $this->_helper->expects($this->once())->method('isStockAlertAllowed')->willReturn(true);
         $this->_helper->expects($this->never())->method('getSaveUrl');
 
         $this->_registry->expects(
@@ -149,8 +149,8 @@ class StockTest extends \PHPUnit\Framework\TestCase
             'registry'
         )->with(
             'current_product'
-        )->will(
-            $this->returnValue(null)
+        )->willReturn(
+            null
         );
 
         $this->_block->setLayout($this->_layout);

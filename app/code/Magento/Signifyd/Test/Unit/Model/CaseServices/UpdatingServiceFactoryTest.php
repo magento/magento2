@@ -13,7 +13,7 @@ use Magento\Signifyd\Model\CaseServices\UpdatingServiceFactory;
 use Magento\Signifyd\Model\Config;
 use Magento\Signifyd\Model\MessageGenerators\GeneratorFactory;
 use Magento\Signifyd\Model\MessageGenerators\GeneratorInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Contains tests for case updating service factory.
@@ -43,7 +43,7 @@ class UpdatingServiceFactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -114,11 +114,12 @@ class UpdatingServiceFactoryTest extends \PHPUnit\Framework\TestCase
      * Checks exception type and message for unknown case type.
      *
      * @covers \Magento\Signifyd\Model\CaseServices\UpdatingServiceFactory::create
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Specified message type does not supported.
      */
     public function testCreateWithException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Specified message type does not supported.');
+
         $type = 'cases/unknown';
         $this->config->expects(self::once())
             ->method('isActive')
@@ -146,7 +147,7 @@ class UpdatingServiceFactoryTest extends \PHPUnit\Framework\TestCase
 
         $messageGenerator = $this->getMockBuilder(GeneratorInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->generatorFactory->expects(self::once())
             ->method('create')
             ->with($type)

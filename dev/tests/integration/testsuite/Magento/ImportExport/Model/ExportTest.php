@@ -5,6 +5,8 @@
  */
 namespace Magento\ImportExport\Model;
 
+use ReflectionClass;
+
 class ExportTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -14,7 +16,7 @@ class ExportTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\ImportExport\Model\Export::class
@@ -33,12 +35,13 @@ class ExportTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->setData(['entity' => $entity]);
         $this->_model->getEntityAttributeCollection();
-        $this->assertAttributeInstanceOf(
-            $expectedEntityType,
-            '_entityAdapter',
-            $this->_model,
-            'Entity adapter property has wrong type'
-        );
+        $this->assertClassHasAttribute('_entityAdapter', get_class($this->_model));
+        $object = new ReflectionClass(get_class($this->_model));
+        $attribute = $object->getProperty('_entityAdapter');
+        $attribute->setAccessible(true);
+        $propertyObject = $attribute->getValue($this->_model);
+        $attribute->setAccessible(false);
+        $this->assertInstanceOf($expectedEntityType, $propertyObject);
     }
 
     /**
@@ -65,11 +68,11 @@ class ExportTest extends \PHPUnit\Framework\TestCase
     /**
      * Test method '_getEntityAdapter' in case when entity is invalid
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @covers \Magento\ImportExport\Model\Export::_getEntityAdapter
      */
     public function testGetEntityAdapterWithInvalidEntity()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->_model->setData(['entity' => 'test']);
         $this->_model->getEntityAttributeCollection();
     }

@@ -10,16 +10,16 @@ namespace Magento\Framework\DataObject\Test\Unit\Copy;
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\DataObject\Copy\Config\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject\Copy\Config\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_storageMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject\Copy\Config
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DataObject\Copy\Config
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_storageMock = $this->createPartialMock(\Magento\Framework\DataObject\Copy\Config\Data::class, ['get']);
 
@@ -35,7 +35,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 'street' => ['to_customer_address' => '*'],
             ],
         ];
-        $this->_storageMock->expects($this->once())->method('get')->will($this->returnValue($expected));
+        $this->_storageMock->expects($this->once())->method('get')->willReturn($expected);
         $result = $this->_model->getFieldsets('global');
         $this->assertEquals($expected, $result);
     }
@@ -44,7 +44,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $expectedFieldset = ['aspect' => 'firstAspect'];
         $fieldsets = ['test' => $expectedFieldset, 'test_second' => ['aspect' => 'secondAspect']];
-        $this->_storageMock->expects($this->once())->method('get')->will($this->returnValue($fieldsets));
+        $this->_storageMock->expects($this->once())->method('get')->willReturn($fieldsets);
         $result = $this->_model->getFieldset('test');
         $this->assertEquals($expectedFieldset, $result);
     }
@@ -52,8 +52,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetFieldsetIfFieldsetIsEmpty()
     {
         $this->_storageMock->expects($this->once())->method('get')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $result = $this->_model->getFieldset('test');
-        $this->assertEquals(null, $result);
+        $this->assertNull($result);
     }
 }

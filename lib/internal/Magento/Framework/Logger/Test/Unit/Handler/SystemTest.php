@@ -9,7 +9,7 @@ use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Logger\Handler\Exception;
 use Magento\Framework\Logger\Handler\System;
 use Monolog\Logger;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 class SystemTest extends \PHPUnit\Framework\TestCase
 {
@@ -31,7 +31,7 @@ class SystemTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filesystemMock = $this->getMockBuilder(DriverInterface::class)
             ->getMockForAbstractClass();

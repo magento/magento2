@@ -8,7 +8,7 @@ namespace Magento\Authorizenet\Test\Unit\Observer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Class AddFieldsToResponseObserverTest
+ * Test for AddFieldsToResponseObserver
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -17,32 +17,32 @@ class AddFieldsToResponseObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $coreRegistryMock;
 
     /**
-     * @var \Magento\Authorizenet\Model\Directpost|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Authorizenet\Model\Directpost|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $paymentMock;
 
     /**
-     * @var \Magento\Authorizenet\Model\Directpost\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Authorizenet\Model\Directpost\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Checkout\Controller\Onepage\SaveOrder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Checkout\Controller\Onepage\SaveOrder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $actionMock;
 
     /**
-     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultMock;
 
@@ -56,7 +56,7 @@ class AddFieldsToResponseObserverTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 

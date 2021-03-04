@@ -16,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class SystemBackupTest extends TestCase
 {
     /**
-     * @var Helper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Helper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $helperMock;
 
@@ -28,7 +28,7 @@ class SystemBackupTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->helperMock = $this->getMockBuilder(Helper::class)->disableOriginalConstructor()->getMock();

@@ -14,10 +14,10 @@ use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection;
 
 class CollectionFactoryTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\ObjectManagerInterface | \PHPUnit\Framework\MockObject\MockObject */
     protected $objectManagerMock;
 
-    /** @var ConfigInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var ConfigInterface | \PHPUnit\Framework\MockObject\MockObject */
     protected $securityConfigMock;
 
     /** @var  \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory */
@@ -27,14 +27,14 @@ class CollectionFactoryTest extends \PHPUnit\Framework\TestCase
      * Init mocks for tests
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->securityConfigMock = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->model = (new ObjectManager($this))->getObject(
             CollectionFactory::class,
             [

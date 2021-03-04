@@ -13,11 +13,11 @@ class FileTest extends \PHPUnit\Framework\TestCase
     private $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $_theme;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
         $this->_model = new \Magento\Framework\View\File(__FILE__, 'Fixture_TestModule', $this->_theme, true);
@@ -45,7 +45,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
 
     public function testGetFileIdentifier()
     {
-        $this->_theme->expects($this->once())->method('getFullPath')->will($this->returnValue('theme_name'));
+        $this->_theme->expects($this->once())->method('getFullPath')->willReturn('theme_name');
         $this->assertSame(
             'base|theme:theme_name|module:Fixture_TestModule|file:FileTest.php',
             $this->_model->getFileIdentifier()

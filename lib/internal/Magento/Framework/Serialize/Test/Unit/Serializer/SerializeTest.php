@@ -16,7 +16,7 @@ class SerializeTest extends \PHPUnit\Framework\TestCase
      */
     private $serialize;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->serialize = $objectManager->getObject(Serialize::class);
@@ -75,21 +75,23 @@ class SerializeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unable to serialize value.
      */
     public function testSerializeException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unable to serialize value.');
+
         $this->serialize->serialize(STDOUT);
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unable to unserialize value.
      * @dataProvider unserializeExceptionDataProvider
      */
     public function testUnserializeException($value)
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unable to unserialize value.');
+
         $this->serialize->unserialize($value);
     }
 
@@ -106,11 +108,12 @@ class SerializeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unable to unserialize value, string is corrupted.
      */
     public function testUnserializeExceptionCorruptedString()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unable to unserialize value, string is corrupted.');
+
         $this->serialize->unserialize('a:');
     }
 }

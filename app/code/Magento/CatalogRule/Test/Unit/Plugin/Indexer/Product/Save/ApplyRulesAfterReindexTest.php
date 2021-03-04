@@ -23,16 +23,16 @@ class ApplyRulesAfterReindexTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ProductRuleProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRuleProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productRuleProcessorMock;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productRuleProcessorMock = $this->getMockBuilder(ProductRuleProcessor::class)
             ->disableOriginalConstructor()

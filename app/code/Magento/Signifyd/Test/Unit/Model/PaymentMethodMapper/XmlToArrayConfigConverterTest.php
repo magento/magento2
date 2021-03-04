@@ -21,7 +21,7 @@ class XmlToArrayConfigConverterTest extends \PHPUnit\Framework\TestCase
      */
     private $filePath;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->filePath = realpath(__DIR__) . '/_files/';
 
@@ -43,11 +43,12 @@ class XmlToArrayConfigConverterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Config\Dom\ValidationSchemaException
-     * @expectedExceptionMessage Only single entrance of "magento_code" node is required.
      */
     public function testConvertEmptyPaymentMethodException()
     {
+        $this->expectException(\Magento\Framework\Config\Dom\ValidationSchemaException::class);
+        $this->expectExceptionMessage('Only single entrance of "magento_code" node is required.');
+
         $dom = new \DOMDocument();
         $element = $dom->createElement('payment_method');
         $subelement = $dom->createElement('signifyd_code', 'test');
@@ -58,11 +59,12 @@ class XmlToArrayConfigConverterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Config\Dom\ValidationSchemaException
-     * @expectedExceptionMessage Not empty value for "signifyd_code" node is required.
      */
     public function testConvertEmptySygnifydPaymentMethodException()
     {
+        $this->expectException(\Magento\Framework\Config\Dom\ValidationSchemaException::class);
+        $this->expectExceptionMessage('Not empty value for "signifyd_code" node is required.');
+
         $dom = new \DOMDocument();
         $element = $dom->createElement('payment_method');
         $subelement = $dom->createElement('magento_code', 'test');

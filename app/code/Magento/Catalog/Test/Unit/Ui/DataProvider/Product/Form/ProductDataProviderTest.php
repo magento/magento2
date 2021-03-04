@@ -23,22 +23,22 @@ class ProductDataProviderTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionMock;
 
     /**
-     * @var ModifierInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModifierInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $modifierMockOne;
 
     /**
-     * @var Pool|\PHPUnit_Framework_MockObject_MockObject
+     * @var Pool|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $poolMock;
 
@@ -47,7 +47,7 @@ class ProductDataProviderTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->collectionMock = $this->getMockBuilder(Collection::class)

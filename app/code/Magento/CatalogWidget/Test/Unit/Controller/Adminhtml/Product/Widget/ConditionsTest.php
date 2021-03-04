@@ -16,33 +16,33 @@ class ConditionsTest extends \PHPUnit\Framework\TestCase
     protected $controller;
 
     /**
-     * @var \Magento\CatalogWidget\Model\Rule|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogWidget\Model\Rule|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rule;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $response;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->rule = $this->createMock(\Magento\CatalogWidget\Model\Rule::class);
         $this->response = $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)
             ->setMethods(['setBody', 'sendResponse'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->response->expects($this->once())->method('setBody')->will($this->returnSelf());
+        $this->response->expects($this->once())->method('setBody')->willReturnSelf();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $arguments = $objectManagerHelper->getConstructArguments(
@@ -64,10 +64,10 @@ class ConditionsTest extends \PHPUnit\Framework\TestCase
     public function testExecute()
     {
         $type = 'Magento\CatalogWidget\Model\Rule\Condition\Product|attribute_set_id';
-        $this->request->expects($this->at(0))->method('getParam')->with('id')->will($this->returnValue('1--1'));
-        $this->request->expects($this->at(1))->method('getParam')->with('type')->will($this->returnValue($type));
+        $this->request->expects($this->at(0))->method('getParam')->with('id')->willReturn('1--1');
+        $this->request->expects($this->at(1))->method('getParam')->with('type')->willReturn($type);
         $this->request->expects($this->at(2))->method('getParam')->with('form')
-            ->will($this->returnValue('request_form_param_value'));
+            ->willReturn('request_form_param_value');
 
         $condition = $this->getMockBuilder(\Magento\CatalogWidget\Model\Rule\Condition\Product::class)
             ->setMethods([
@@ -80,20 +80,20 @@ class ConditionsTest extends \PHPUnit\Framework\TestCase
                 'setJsFormObject',
             ])->disableOriginalConstructor()
             ->getMock();
-        $condition->expects($this->once())->method('setId')->with('1--1')->will($this->returnSelf());
+        $condition->expects($this->once())->method('setId')->with('1--1')->willReturnSelf();
         $condition->expects($this->once())->method('setType')
             ->with(\Magento\CatalogWidget\Model\Rule\Condition\Product::class)
-            ->will($this->returnSelf());
-        $condition->expects($this->once())->method('setRule')->with($this->rule)->will($this->returnSelf());
-        $condition->expects($this->once())->method('setPrefix')->with('conditions')->will($this->returnSelf());
+            ->willReturnSelf();
+        $condition->expects($this->once())->method('setRule')->with($this->rule)->willReturnSelf();
+        $condition->expects($this->once())->method('setPrefix')->with('conditions')->willReturnSelf();
         $condition->expects($this->once())->method('setJsFormObject')->with('request_form_param_value')
-            ->will($this->returnSelf());
-        $condition->expects($this->once())->method('setAttribute')->with('attribute_set_id')->will($this->returnSelf());
-        $condition->expects($this->once())->method('asHtmlRecursive')->will($this->returnValue('<some_html>'));
+            ->willReturnSelf();
+        $condition->expects($this->once())->method('setAttribute')->with('attribute_set_id')->willReturnSelf();
+        $condition->expects($this->once())->method('asHtmlRecursive')->willReturn('<some_html>');
 
-        $this->objectManager->expects($this->once())->method('create')->will($this->returnValue($condition));
+        $this->objectManager->expects($this->once())->method('create')->willReturn($condition);
 
-        $this->response->expects($this->once())->method('setBody')->with('<some_html>')->will($this->returnSelf());
+        $this->response->expects($this->once())->method('setBody')->with('<some_html>')->willReturnSelf();
         $this->controller->execute();
     }
 }

@@ -14,39 +14,39 @@ namespace Magento\AsynchronousOperations\Test\Unit\Model;
 class BulkManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\EntityManager\EntityManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\EntityManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $entityManager;
 
     /**
      * @var \Magento\AsynchronousOperations\Api\Data\BulkSummaryInterfaceFactory
-     *      |\PHPUnit_Framework_MockObject_MockObject
+     *      |\PHPUnit\Framework\MockObject\MockObject
      */
     private $bulkSummaryFactory;
 
     /**
      * @var \Magento\AsynchronousOperations\Model\ResourceModel\Operation\CollectionFactory
-     *      |\PHPUnit_Framework_MockObject_MockObject
+     *      |\PHPUnit\Framework\MockObject\MockObject
      */
     private $operationCollectionFactory;
 
     /**
-     * @var \Magento\Framework\MessageQueue\BulkPublisherInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\BulkPublisherInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $publisher;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataPool;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnection;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $logger;
 
@@ -60,7 +60,7 @@ class BulkManagementTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->entityManager = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityManager::class)
             ->disableOriginalConstructor()->getMock();

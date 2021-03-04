@@ -21,11 +21,11 @@ class SqlCollectorTest extends \PHPUnit\Framework\TestCase
     private $unit;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceConnection = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()

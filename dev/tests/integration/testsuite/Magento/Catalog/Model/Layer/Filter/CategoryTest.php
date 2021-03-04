@@ -24,7 +24,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_category;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Category::class
@@ -135,7 +135,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
         $items = $model->getItems();
 
-        $this->assertInternalType('array', $items);
+        $this->assertIsArray($items);
         $this->assertEquals(2, count($items));
 
         /** @var $item \Magento\Catalog\Model\Layer\Filter\Item */

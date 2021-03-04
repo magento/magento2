@@ -21,17 +21,17 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         $this->_translateModelMock = null;
         $this->_requestMock->expects($this->any())
             ->method('getPostValue')
-            ->will($this->returnValue([IntegrationController::PARAM_INTEGRATION_ID => self::INTEGRATION_ID]));
-        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(self::INTEGRATION_ID));
+            ->willReturn([IntegrationController::PARAM_INTEGRATION_ID => self::INTEGRATION_ID]);
+        $this->_requestMock->expects($this->any())->method('getParam')->willReturn(self::INTEGRATION_ID);
         $intData = $this->_getSampleIntegrationData();
         $this->_integrationSvcMock->expects($this->any())
             ->method('get')
             ->with(self::INTEGRATION_ID)
-            ->will($this->returnValue($intData));
+            ->willReturn($intData);
         $this->_integrationSvcMock->expects($this->any())
             ->method('update')
             ->with($this->anything())
-            ->will($this->returnValue($intData));
+            ->willReturn($intData);
         // verify success message
         $this->_messageManager->expects($this->once())
             ->method('addSuccess')
@@ -47,7 +47,7 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
 
     public function testSaveActionException()
     {
-        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(self::INTEGRATION_ID));
+        $this->_requestMock->expects($this->any())->method('getParam')->willReturn(self::INTEGRATION_ID);
 
         // Have integration service throw an exception to test exception path
         $exceptionMessage = 'Internal error. Check exception log for details.';
@@ -63,7 +63,7 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
 
     public function testSaveActionIntegrationException()
     {
-        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(self::INTEGRATION_ID));
+        $this->_requestMock->expects($this->any())->method('getParam')->willReturn(self::INTEGRATION_ID);
 
         // Have integration service throw an exception to test exception path
         $exceptionMessage = 'Internal error. Check exception log for details.';
@@ -95,8 +95,8 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             $this->any()
         )->method(
             'getPostValue'
-        )->will(
-            $this->returnValue($integration->getData())
+        )->willReturn(
+            $integration->getData()
         );
         $integration->setData('id', self::INTEGRATION_ID);
         $this->_integrationSvcMock->expects(
@@ -105,8 +105,8 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             'create'
         )->with(
             $this->anything()
-        )->will(
-            $this->returnValue($integration)
+        )->willReturn(
+            $integration
         );
         $this->_integrationSvcMock->expects(
             $this->any()
@@ -114,8 +114,8 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             'get'
         )->with(
             self::INTEGRATION_ID
-        )->will(
-            $this->returnValue(null)
+        )->willReturn(
+            null
         );
         // Use real translate model
         $this->_translateModelMock = null;
@@ -145,8 +145,8 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             $this->any()
         )->method(
             'getPostValue'
-        )->will(
-            $this->returnValue($integration->getData())
+        )->willReturn(
+            $integration->getData()
         );
         $integration->setData('id', self::INTEGRATION_ID);
         $this->_integrationSvcMock->expects(
@@ -164,8 +164,8 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             'get'
         )->with(
             self::INTEGRATION_ID
-        )->will(
-            $this->returnValue(null)
+        )->willReturn(
+            null
         );
 
         $this->_escaper->expects($this->once())
@@ -193,12 +193,12 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             ]
         );
 
-        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(self::INTEGRATION_ID));
+        $this->_requestMock->expects($this->any())->method('getParam')->willReturn(self::INTEGRATION_ID);
         $this->_integrationSvcMock
             ->expects($this->once())
             ->method('get')
             ->with(self::INTEGRATION_ID)
-            ->will($this->returnValue($intData));
+            ->willReturn($intData);
 
         $this->_escaper->expects($this->once())
             ->method('escapeHtml')

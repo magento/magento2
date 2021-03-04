@@ -24,12 +24,12 @@ class LocaleResolverTest extends \PHPUnit\Framework\TestCase
     private $localeResolver;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resolverMock;
 
@@ -38,10 +38,10 @@ class LocaleResolverTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->createMock(Config::class);
-        $this->resolverMock = $this->createMock(ResolverInterface::class);
+        $this->resolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
         $this->localeResolver = new LocaleResolver($this->resolverMock, $this->configMock);
     }
 

@@ -20,7 +20,7 @@ class CompiledTest extends \PHPUnit\Framework\TestCase
      */
     private $compiled;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -163,7 +163,7 @@ class CompiledTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetArgumentsNotDefined()
     {
-        $this->assertSame(null, $this->compiled->getArguments('class_not_stored_in_config'));
+        $this->assertNull($this->compiled->getArguments('class_not_stored_in_config'));
     }
 
     /**

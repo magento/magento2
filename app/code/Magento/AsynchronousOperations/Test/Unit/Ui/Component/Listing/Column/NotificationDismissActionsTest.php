@@ -12,12 +12,12 @@ use Magento\Framework\Bulk\BulkSummaryInterface;
 class NotificationDismissActionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $context;
 
     /**
-     * @var \Magento\Framework\View\Element\UiComponentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\UiComponentFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $uiComponentFactory;
 
@@ -29,7 +29,7 @@ class NotificationDismissActionsTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->createMock(\Magento\Framework\View\Element\UiComponent\ContextInterface::class);
         $this->uiComponentFactory = $this->createMock(\Magento\Framework\View\Element\UiComponentFactory::class);
@@ -37,7 +37,7 @@ class NotificationDismissActionsTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\View\Element\UiComponent\Processor::class,
             ['getProcessor']
         );
-        $this->context->expects($this->never())->method('getProcessor')->will($this->returnValue($processor));
+        $this->context->expects($this->never())->method('getProcessor')->willReturn($processor);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->actionColumn = $objectManager->getObject(
             \Magento\AsynchronousOperations\Ui\Component\Listing\Column\NotificationDismissActions::class,

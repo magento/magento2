@@ -13,14 +13,14 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     /**
      * Indexer processor mock
      *
-     * @var \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $ruleProductProcessor;
 
     /**
      * Website mock
      *
-     * @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Website|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $subject;
 
@@ -31,7 +31,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
      */
     protected $plugin;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->ruleProductProcessor = $this->createMock(
             \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor::class

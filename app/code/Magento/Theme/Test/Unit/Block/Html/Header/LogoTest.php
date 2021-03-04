@@ -18,19 +18,19 @@ class LogoTest extends \PHPUnit\Framework\TestCase
 
         $urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);
 
-        $scopeConfig->expects($this->once())->method('getValue')->will($this->returnValue('default/image.gif'));
+        $scopeConfig->expects($this->once())->method('getValue')->willReturn('default/image.gif');
         $urlBuilder->expects(
             $this->once()
         )->method(
             'getBaseUrl'
-        )->will(
-            $this->returnValue('http://localhost/pub/media/')
+        )->willReturn(
+            'http://localhost/pub/media/'
         );
-        $mediaDirectory->expects($this->any())->method('isFile')->will($this->returnValue(true));
+        $mediaDirectory->expects($this->any())->method('isFile')->willReturn(true);
 
-        $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($mediaDirectory));
+        $filesystem->expects($this->any())->method('getDirectoryRead')->willReturn($mediaDirectory);
         $helper = $this->createPartialMock(\Magento\MediaStorage\Helper\File\Storage\Database::class, ['checkDbUsage']);
-        $helper->expects($this->once())->method('checkDbUsage')->will($this->returnValue(false));
+        $helper->expects($this->once())->method('checkDbUsage')->willReturn(false);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -59,7 +59,7 @@ class LogoTest extends \PHPUnit\Framework\TestCase
         ];
         $block = $objectManager->getObject(\Magento\Theme\Block\Html\Header\Logo::class, $arguments);
 
-        $this->assertEquals(null, $block->getLogoHeight());
+        $this->assertEquals(0, $block->getLogoHeight());
     }
 
     /**

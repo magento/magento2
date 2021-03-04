@@ -18,17 +18,17 @@ use Magento\SalesSequence\Model\Manager;
 class QuoteTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteMock;
 
     /**
-     * @var Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sequenceManagerMock;
 
     /**
-     * @var SequenceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SequenceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sequenceMock;
 
@@ -40,12 +40,12 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
         $this->quoteMock = $this->createMock(Quote::class);
         $this->sequenceManagerMock = $this->createMock(Manager::class);
-        $this->sequenceMock = $this->createMock(SequenceInterface::class);
+        $this->sequenceMock = $this->getMockForAbstractClass(SequenceInterface::class);
         $this->model = $objectManagerHelper->getObject(
             QuoteResource::class,
             [

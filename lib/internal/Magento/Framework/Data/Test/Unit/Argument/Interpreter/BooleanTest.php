@@ -15,22 +15,23 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_booleanUtils;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_booleanUtils = $this->createMock(\Magento\Framework\Stdlib\BooleanUtils::class);
         $this->_model = new Boolean($this->_booleanUtils);
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Boolean value is missing
      */
     public function testEvaluateException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Boolean value is missing');
+
         $this->_model->evaluate([]);
     }
 
@@ -44,8 +45,8 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
             'toBoolean'
         )->with(
             $this->identicalTo($input)
-        )->will(
-            $this->returnValue($expected)
+        )->willReturn(
+            $expected
         );
         $actual = $this->_model->evaluate(['value' => $input]);
         $this->assertSame($expected, $actual);

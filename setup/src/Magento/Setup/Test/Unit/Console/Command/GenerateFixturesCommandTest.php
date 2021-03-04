@@ -13,16 +13,16 @@ use Symfony\Component\Console\Tester\CommandTester;
 class GenerateFixturesCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var FixtureModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var FixtureModel|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fixtureModel;
 
     /**
-     * @var GenerateFixturesCommand|\PHPUnit_Framework_MockObject_MockObject
+     * @var GenerateFixturesCommand|\PHPUnit\Framework\MockObject\MockObject
      */
     private $command;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->fixtureModel = $this->createMock(\Magento\Setup\Fixtures\FixtureModel::class);
         $this->command = new GenerateFixturesCommand($this->fixtureModel);
@@ -39,11 +39,12 @@ class GenerateFixturesCommandTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Not enough arguments
      */
     public function testExecuteInvalidLanguageArgument()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Not enough arguments');
+
 
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);

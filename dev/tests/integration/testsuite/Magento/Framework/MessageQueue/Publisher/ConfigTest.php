@@ -17,7 +17,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -75,12 +75,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($connection->isDisabled(), 'Incorrect connection status');
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Publisher 'topic.message.queue.config.03' is not declared.
-     */
     public function testGetDisabledPublisherThrowsException()
     {
+        $this->expectExceptionMessage("Publisher 'topic.message.queue.config.03' is not declared.");
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         /** @var \Magento\Framework\MessageQueue\Publisher\ConfigInterface $config */
         $config = $this->objectManager->create(\Magento\Framework\MessageQueue\Publisher\ConfigInterface::class);
         $config->getPublisher('topic.message.queue.config.03');

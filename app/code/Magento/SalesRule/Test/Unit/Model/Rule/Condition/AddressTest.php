@@ -23,7 +23,7 @@ class AddressTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $context = $this->createMock(\Magento\Rule\Model\Condition\Context::class);

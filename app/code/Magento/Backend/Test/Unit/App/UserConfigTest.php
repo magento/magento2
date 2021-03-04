@@ -18,7 +18,7 @@ class UserConfigTest extends \PHPUnit\Framework\TestCase
         $value = 'value';
         $request = [$key => $value];
         $model = new \Magento\Backend\App\UserConfig($factoryMock, $responseMock, $request);
-        $factoryMock->expects($this->once())->method('create')->will($this->returnValue($configMock));
+        $factoryMock->expects($this->once())->method('create')->willReturn($configMock);
         $configMock->expects($this->once())->method('setDataByPath')->with($key, $value);
         $configMock->expects($this->once())->method('save');
 

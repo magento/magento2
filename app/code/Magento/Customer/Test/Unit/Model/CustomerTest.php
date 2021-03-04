@@ -26,76 +26,76 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     /** @var Customer */
     protected $_model;
 
-    /** @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\Website|\PHPUnit\Framework\MockObject\MockObject */
     protected $_website;
 
-    /** @var \Magento\Store\Model\StoreManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManager|\PHPUnit\Framework\MockObject\MockObject */
     protected $_storeManager;
 
-    /** @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject */
     protected $_config;
 
-    /** @var \Magento\Eav\Model\Attribute|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Eav\Model\Attribute|\PHPUnit\Framework\MockObject\MockObject */
     protected $_attribute;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $_scopeConfigMock;
 
-    /** @var \Magento\Framework\Mail\Template\TransportBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Mail\Template\TransportBuilder|\PHPUnit\Framework\MockObject\MockObject */
     protected $_transportBuilderMock;
 
-    /** @var \Magento\Framework\Mail\TransportInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Mail\TransportInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $_transportMock;
 
-    /** @var \Magento\Framework\Encryption\EncryptorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Encryption\EncryptorInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $_encryptor;
 
-    /** @var \Magento\Customer\Model\AttributeFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\AttributeFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $attributeFactoryMock;
 
-    /** @var  \Magento\Customer\Model\Attribute|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Customer\Model\Attribute|\PHPUnit\Framework\MockObject\MockObject */
     protected $attributeCustomerMock;
 
-    /** @var  \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject */
     protected $registryMock;
 
-    /** @var \Magento\Customer\Model\ResourceModel\Customer|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\ResourceModel\Customer|\PHPUnit\Framework\MockObject\MockObject */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\Reflection\DataObjectProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Reflection\DataObjectProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataObjectProcessor;
 
     /**
-     * @var AccountConfirmation|\PHPUnit_Framework_MockObject_MockObject
+     * @var AccountConfirmation|\PHPUnit\Framework\MockObject\MockObject
      */
     private $accountConfirmation;
 
     /**
-     * @var AddressCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AddressCollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $addressesFactory;
 
     /**
-     * @var CustomerInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerDataFactory;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataObjectHelper;
 
     /**
-     * @var Random|\PHPUnit_Framework_MockObject_MockObject
+     * @var Random|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mathRandom;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_website = $this->createMock(\Magento\Store\Model\Website::class);
         $this->_config = $this->createMock(\Magento\Eav\Model\Config::class);
@@ -122,7 +122,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
 
         $this->resourceMock->expects($this->any())
             ->method('getIdFieldName')
-            ->will($this->returnValue('id'));
+            ->willReturn('id');
         $this->registryMock = $this->createPartialMock(\Magento\Framework\Registry::class, ['registry']);
         $this->_encryptor = $this->createMock(\Magento\Framework\Encryption\EncryptorInterface::class);
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -171,18 +171,19 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         )->with(
             'password',
             'salt'
-        )->will(
-            $this->returnValue('hash')
+        )->willReturn(
+            'hash'
         );
         $this->assertEquals('hash', $this->_model->hashPassword('password', 'salt'));
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The transactional account email type is incorrect. Verify and try again.
      */
     public function testSendNewAccountEmailException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The transactional account email type is incorrect. Verify and try again.');
+
         $this->_model->sendNewAccountEmail('test');
     }
 
@@ -192,23 +193,23 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $website = $this->createMock(\Magento\Store\Model\Website::class);
         $website->expects($this->once())
             ->method('getStoreIds')
-            ->will($this->returnValue([1, 2, 3, 4]));
+            ->willReturn([1, 2, 3, 4]);
         $this->_storeManager->expects($this->once())
             ->method('getWebsite')
             ->with(1)
-            ->will($this->returnValue($website));
+            ->willReturn($website);
         $this->_storeManager->expects($this->once())
             ->method('getStore')
             ->with(1)
-            ->will($this->returnValue($store));
+            ->willReturn($store);
 
         $this->_config->expects($this->exactly(3))
             ->method('getAttribute')
-            ->will($this->returnValue($this->_attribute));
+            ->willReturn($this->_attribute);
 
         $this->_attribute->expects($this->exactly(3))
             ->method('getIsVisible')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $methods = [
             'setTemplateIdentifier',
@@ -220,15 +221,15 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         foreach ($methods as $method) {
             $this->_transportBuilderMock->expects($this->once())
                 ->method($method)
-                ->will($this->returnSelf());
+                ->willReturnSelf();
         }
         $transportMock = $this->createMock(\Magento\Framework\Mail\TransportInterface::class);
         $transportMock->expects($this->once())
             ->method('sendMessage')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->_transportBuilderMock->expects($this->once())
             ->method('getTransport')
-            ->will($this->returnValue($transportMock));
+            ->willReturn($transportMock);
 
         $this->_model->setData(
             [

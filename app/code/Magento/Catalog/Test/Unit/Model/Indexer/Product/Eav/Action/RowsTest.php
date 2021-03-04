@@ -14,18 +14,19 @@ class RowsTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->_model = $objectManager->getObject(\Magento\Catalog\Model\Indexer\Product\Eav\Action\Rows::class);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Bad value was supplied.
      */
     public function testEmptyIds()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Bad value was supplied.');
+
         $this->_model->execute(null);
     }
 }

@@ -12,11 +12,11 @@ use Magento\Customer\Model\Metadata\Form\Postcode;
 class PostcodeTest extends AbstractFormTestCase
 {
     /**
-     * @var DirectoryHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var DirectoryHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

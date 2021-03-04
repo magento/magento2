@@ -22,19 +22,20 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subjectReader = new SubjectReader();
     }
 
     /**
      * @covers \Magento\Braintree\Gateway\SubjectReader::readCustomerId
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The "customerId" field does not exists
      * @return void
      */
     public function testReadCustomerIdWithException(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The "customerId" field does not exists');
+
         $this->subjectReader->readCustomerId([]);
     }
 
@@ -50,12 +51,13 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Braintree\Gateway\SubjectReader::readPublicHash
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The "public_hash" field does not exists
      * @return void
      */
     public function testReadPublicHashWithException(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The "public_hash" field does not exists');
+
         $this->subjectReader->readPublicHash([]);
     }
 
@@ -71,12 +73,13 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Braintree\Gateway\SubjectReader::readPayPal
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Transaction has't paypal attribute
      * @return void
      */
     public function testReadPayPalWithException(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Transaction has\'t paypal attribute');
+
         $transaction = Transaction::factory([
             'id' => 'u38rf8kg6vn',
         ]);
@@ -123,11 +126,12 @@ class SubjectReaderTest extends \PHPUnit\Framework\TestCase
      * @param array $response
      * @param string $expectedMessage
      * @dataProvider invalidTransactionResponseDataProvider
-     * @expectedException \InvalidArgumentException
      * @return void
      */
     public function testReadTransactionWithInvalidResponse(array $response, string $expectedMessage): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->expectExceptionMessage($expectedMessage);
         $this->subjectReader->readTransaction($response);
     }

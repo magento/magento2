@@ -28,7 +28,7 @@ class BehaviorAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Source\
         ['value' => 'key_2', 'label' => 'label_2'],
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -41,7 +41,7 @@ class BehaviorAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Source\
             true,
             ['toArray']
         );
-        $model->expects($this->any())->method('toArray')->will($this->returnValue($this->_sourceArray));
+        $model->expects($this->any())->method('toArray')->willReturn($this->_sourceArray);
 
         $this->_model = $model;
     }

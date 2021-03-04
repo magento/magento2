@@ -13,11 +13,11 @@ class CustomerManagementTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customersFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customersFactoryMock = $this->createPartialMock(
             \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory::class,

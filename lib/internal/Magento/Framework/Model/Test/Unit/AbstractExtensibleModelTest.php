@@ -19,33 +19,33 @@ class AbstractExtensibleModelTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registryMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\Data\Collection\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\AbstractDb|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceCollectionMock;
 
-    /** @var \Magento\Framework\Api\MetadataServiceInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Api\MetadataServiceInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $metadataServiceMock;
 
-    /** @var \Magento\Framework\Api\AttributeValueFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Api\AttributeValueFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $attributeValueFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $actionValidatorMock;
 
@@ -54,7 +54,7 @@ class AbstractExtensibleModelTest extends \PHPUnit\Framework\TestCase
      */
     protected $customAttribute;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->actionValidatorMock = $this->createMock(\Magento\Framework\Model\ActionValidator\RemoveAction::class);
         $this->contextMock = new \Magento\Framework\Model\Context(
@@ -129,8 +129,7 @@ class AbstractExtensibleModelTest extends \PHPUnit\Framework\TestCase
             $this->model->getCustomAttributes(),
             "Empty array is expected as a result of getCustomAttributes() when custom attributes are not set."
         );
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $this->model->getCustomAttribute('not_existing_custom_attribute'),
             "Null is expected as a result of getCustomAttribute(\$code) when custom attribute is not set."
         );
@@ -211,10 +210,11 @@ class AbstractExtensibleModelTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testRestrictedCustomAttributesGet()
     {
+        $this->expectException(\LogicException::class);
+
         $this->model->getData(\Magento\Framework\Api\CustomAttributesDataInterface::CUSTOM_ATTRIBUTES);
     }
 
@@ -229,11 +229,11 @@ class AbstractExtensibleModelTest extends \PHPUnit\Framework\TestCase
         $attributeMock->expects($this->never())
             ->method('setAttributeCode')
             ->with($attributeCode)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $attributeMock->expects($this->never())
             ->method('setValue')
             ->with($attributeValue)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->attributeValueFactoryMock->expects($this->never())->method('create')
             ->willReturn($attributeMock);
         $this->model->setData(

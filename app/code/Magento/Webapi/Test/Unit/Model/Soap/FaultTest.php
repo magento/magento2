@@ -15,7 +15,7 @@ class FaultTest extends \PHPUnit\Framework\TestCase
     const WSDL_URL = 'http://host.com/?wsdl&services=customerV1';
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
@@ -25,15 +25,15 @@ class FaultTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Webapi\Model\Soap\Fault */
     protected $_soapFault;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_localeResolverMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_appStateMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         /** Initialize SUT. */
@@ -48,7 +48,7 @@ class FaultTest extends \PHPUnit\Framework\TestCase
         $this->_soapServerMock = $this->getMockBuilder(
             \Magento\Webapi\Model\Soap\Server::class
         )->disableOriginalConstructor()->getMock();
-        $this->_soapServerMock->expects($this->any())->method('generateUri')->will($this->returnValue(self::WSDL_URL));
+        $this->_soapServerMock->expects($this->any())->method('generateUri')->willReturn(self::WSDL_URL);
 
         $this->_localeResolverMock = $this->getMockBuilder(
             \Magento\Framework\Locale\Resolver::class
@@ -57,8 +57,8 @@ class FaultTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getLocale'
-        )->will(
-            $this->returnValue('en_US')
+        )->willReturn(
+            'en_US'
         );
 
         $this->_appStateMock = $this->createMock(\Magento\Framework\App\State::class);
@@ -73,7 +73,7 @@ class FaultTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_soapFault);
         unset($this->_requestMock);
@@ -82,7 +82,7 @@ class FaultTest extends \PHPUnit\Framework\TestCase
 
     public function testToXmlDeveloperModeOff()
     {
-        $this->_appStateMock->expects($this->any())->method('getMode')->will($this->returnValue('production'));
+        $this->_appStateMock->expects($this->any())->method('getMode')->willReturn('production');
         $wsdlUrl = urlencode(self::WSDL_URL);
         $expectedResult = <<<XML
 <?xml version="1.0" encoding="utf-8" ?>
@@ -124,9 +124,9 @@ XML;
 
     public function testToXmlDeveloperModeOn()
     {
-        $this->_appStateMock->expects($this->any())->method('getMode')->will($this->returnValue('developer'));
+        $this->_appStateMock->expects($this->any())->method('getMode')->willReturn('developer');
         $actualXml = $this->_soapFault->toXml();
-        $this->assertContains('<m:Trace>', $actualXml, 'Exception trace is not found in XML.');
+        $this->assertStringContainsString('<m:Trace>', $actualXml, 'Exception trace is not found in XML.');
     }
 
     /**

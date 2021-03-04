@@ -10,7 +10,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
     protected $_objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
@@ -29,8 +29,8 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         )->with(
             null,
             'some-type'
-        )->will(
-            $this->returnValue('some-block-name')
+        )->willReturn(
+            'some-block-name'
         );
         $layout->expects(
             $this->at(1)
@@ -38,8 +38,8 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
             'getBlock'
         )->with(
             'some-block-name'
-        )->will(
-            $this->returnValue($renderer)
+        )->willReturn(
+            $renderer
         );
 
         /** @var $block \Magento\Sales\Block\Adminhtml\Items\AbstractItems */
@@ -57,11 +57,12 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Renderer for type "some-type" does not exist.
      */
     public function testGetItemRendererThrowsExceptionForNonexistentRenderer()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Renderer for type "some-type" does not exist.');
+
         $renderer = $this->createMock(\stdClass::class);
         $layout = $this->createPartialMock(
             \Magento\Framework\View\Layout::class,
@@ -74,8 +75,8 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         )->with(
             null,
             'some-type'
-        )->will(
-            $this->returnValue('some-block-name')
+        )->willReturn(
+            'some-block-name'
         );
         $layout->expects(
             $this->at(1)
@@ -83,8 +84,8 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
             'getBlock'
         )->with(
             'some-block-name'
-        )->will(
-            $this->returnValue($renderer)
+        )->willReturn(
+            $renderer
         );
 
         /** @var $block \Magento\Sales\Block\Adminhtml\Items\AbstractItems */

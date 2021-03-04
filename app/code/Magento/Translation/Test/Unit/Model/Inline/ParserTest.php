@@ -31,51 +31,51 @@ class ParserTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var InlineInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var InlineInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $translateInlineMock;
 
     /**
-     * @var TypeListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TypeListInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $appCacheMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
     /**
-     * @var \Zend_Filter_Interface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Zend_Filter_Interface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $inputFilterMock;
 
     /**
-     * @var StringUtilsFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var StringUtilsFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
      */
     private $appStateMock;
 
     /**
-     * @var StringUtils|\PHPUnit_Framework_MockObject_MockObject
+     * @var StringUtils|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceMock;
 
     /**
-     * @var CacheManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var CacheManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->translateInlineMock =
@@ -172,7 +172,11 @@ class ParserTest extends \PHPUnit\Framework\TestCase
 
         $processedContent = $this->model->processResponseBodyString($testContent);
         foreach ($processedAttributes as $attribute) {
-            $this->assertContains($attribute, $processedContent, "data-translate attribute not processed correctly");
+            $this->assertStringContainsString(
+                $attribute,
+                $processedContent,
+                "data-translate attribute not processed correctly"
+            );
         }
     }
 }

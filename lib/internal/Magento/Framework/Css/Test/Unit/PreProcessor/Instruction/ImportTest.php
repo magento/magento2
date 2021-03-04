@@ -15,12 +15,12 @@ use Magento\Framework\Css\PreProcessor\Instruction\Import;
 class ImportTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\View\Asset\NotationResolver\Module|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\NotationResolver\Module|\PHPUnit\Framework\MockObject\MockObject
      */
     private $notationResolver;
 
     /**
-     * @var \Magento\Framework\View\Asset\File|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\File|\PHPUnit\Framework\MockObject\MockObject
      */
     private $asset;
 
@@ -34,7 +34,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
      */
     private $relatedFileGeneratorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
 
         $this->notationResolver = $this->createMock(\Magento\Framework\View\Asset\NotationResolver\Module::class);
@@ -46,7 +46,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
         );
         $contextMock->expects($this->any())->method('getPath')->willReturn('');
         $this->asset = $this->createMock(\Magento\Framework\View\Asset\File::class);
-        $this->asset->expects($this->any())->method('getContentType')->will($this->returnValue('css'));
+        $this->asset->expects($this->any())->method('getContentType')->willReturn('css');
         $this->asset->expects($this->any())->method('getContext')->willReturn($contextMock);
 
         $this->relatedFileGeneratorMock = $this->getMockBuilder(RelatedGenerator::class)
@@ -79,7 +79,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
         $this->notationResolver->expects($invoke)
             ->method('convertModuleNotationToPath')
             ->with($this->asset, $foundPath)
-            ->will($this->returnValue($resolvedPath));
+            ->willReturn($resolvedPath);
         $this->object->process($chain);
         $this->assertEquals($expectedContent, $chain->getContent());
         $this->assertEquals('less', $chain->getContentType());
@@ -187,7 +187,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
         $this->notationResolver->expects($this->once())
             ->method('convertModuleNotationToPath')
             ->with($this->asset, 'Magento_Module::something.css')
-            ->will($this->returnValue('Magento_Module/something.css'));
+            ->willReturn('Magento_Module/something.css');
         $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain(
             $this->asset,
             '@import (type) "Magento_Module::something.css" media;',

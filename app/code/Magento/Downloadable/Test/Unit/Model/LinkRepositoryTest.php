@@ -14,42 +14,42 @@ use Magento\Downloadable\Model\LinkRepository;
 class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $repositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $contentValidatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $contentUploaderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $jsonEncoderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $linkFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productTypeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $linkDataObjectFactory;
 
@@ -59,21 +59,21 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $service;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataPoolMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $linkHandlerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $entityMetadataMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->repositoryMock = $this->createMock(\Magento\Catalog\Model\ProductRepository::class);
         $this->productTypeMock = $this->createMock(\Magento\Downloadable\Model\Product\Type::class);
@@ -150,7 +150,7 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $linkData
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getLinkMock(array $linkData)
     {
@@ -175,50 +175,50 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
             $linkMock->expects($this->any())->method('getId')->willReturn($linkData['id']);
         }
 
-        $linkMock->expects($this->any())->method('getPrice')->will(
-            $this->returnValue(
+        $linkMock->expects($this->any())->method('getPrice')->willReturn(
+            
                 $linkData['price']
-            )
+            
         );
-        $linkMock->expects($this->any())->method('getTitle')->will(
-            $this->returnValue(
+        $linkMock->expects($this->any())->method('getTitle')->willReturn(
+            
                 $linkData['title']
-            )
+            
         );
-        $linkMock->expects($this->any())->method('getSortOrder')->will(
-            $this->returnValue(
+        $linkMock->expects($this->any())->method('getSortOrder')->willReturn(
+            
                 $linkData['sort_order']
-            )
+            
         );
-        $linkMock->expects($this->any())->method('getNumberOfDownloads')->will(
-            $this->returnValue(
+        $linkMock->expects($this->any())->method('getNumberOfDownloads')->willReturn(
+            
                 $linkData['number_of_downloads']
-            )
+            
         );
-        $linkMock->expects($this->any())->method('getIsShareable')->will(
-            $this->returnValue(
+        $linkMock->expects($this->any())->method('getIsShareable')->willReturn(
+            
                 $linkData['is_shareable']
-            )
+            
         );
         if (isset($linkData['link_type'])) {
-            $linkMock->expects($this->any())->method('getLinkType')->will(
-                $this->returnValue(
+            $linkMock->expects($this->any())->method('getLinkType')->willReturn(
+                
                     $linkData['link_type']
-                )
+                
             );
         }
         if (isset($linkData['link_url'])) {
-            $linkMock->expects($this->any())->method('getLinkUrl')->will(
-                $this->returnValue(
+            $linkMock->expects($this->any())->method('getLinkUrl')->willReturn(
+                
                     $linkData['link_url']
-                )
+                
             );
         }
         if (isset($linkData['link_file'])) {
-            $linkMock->expects($this->any())->method('getLinkFile')->will(
-                $this->returnValue(
+            $linkMock->expects($this->any())->method('getLinkFile')->willReturn(
+                
                     $linkData['link_file']
-                )
+                
             );
         }
         return $linkMock;
@@ -237,11 +237,11 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
             'link_url' => 'http://example.com/',
         ];
         $this->repositoryMock->expects($this->any())->method('get')->with($productSku, true)
-            ->will($this->returnValue($this->productMock));
-        $this->productMock->expects($this->any())->method('getTypeId')->will($this->returnValue('downloadable'));
+            ->willReturn($this->productMock);
+        $this->productMock->expects($this->any())->method('getTypeId')->willReturn('downloadable');
         $linkMock = $this->getLinkMock($linkData);
         $this->contentValidatorMock->expects($this->any())->method('isValid')->with($linkMock)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $downloadableData = [
             'link' => [
                 [
@@ -263,11 +263,12 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The link title is empty. Enter the link title and try again.
      */
     public function testCreateThrowsExceptionIfTitleIsEmpty()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('The link title is empty. Enter the link title and try again.');
+
         $productSku = 'simple';
         $linkData = [
             'title' => '',
@@ -279,12 +280,12 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
             'link_url' => 'http://example.com/',
         ];
 
-        $this->productMock->expects($this->any())->method('getTypeId')->will($this->returnValue('downloadable'));
+        $this->productMock->expects($this->any())->method('getTypeId')->willReturn('downloadable');
         $this->repositoryMock->expects($this->any())->method('get')->with($productSku, true)
-            ->will($this->returnValue($this->productMock));
+            ->willReturn($this->productMock);
         $linkMock = $this->getLinkMock($linkData);
         $this->contentValidatorMock->expects($this->any())->method('isValid')->with($linkMock)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->productMock->expects($this->never())->method('save');
 
@@ -308,11 +309,11 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
             'link_url' => 'http://example.com/',
         ];
         $this->repositoryMock->expects($this->any())->method('get')->with($productSku, true)
-            ->will($this->returnValue($this->productMock));
-        $this->productMock->expects($this->any())->method('getData')->will($this->returnValue($productId));
+            ->willReturn($this->productMock);
+        $this->productMock->expects($this->any())->method('getData')->willReturn($productId);
         $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
-        $storeMock->expects($this->any())->method('getWebsiteId')->will($this->returnValue($websiteId));
-        $this->productMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
+        $storeMock->expects($this->any())->method('getWebsiteId')->willReturn($websiteId);
+        $this->productMock->expects($this->any())->method('getStore')->willReturn($storeMock);
         $existingLinkMock = $this->createPartialMock(
             \Magento\Downloadable\Model\Link::class,
             [
@@ -322,14 +323,14 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
                 'getProductId',
             ]
         );
-        $this->linkFactoryMock->expects($this->once())->method('create')->will($this->returnValue($existingLinkMock));
+        $this->linkFactoryMock->expects($this->once())->method('create')->willReturn($existingLinkMock);
         $linkMock = $this->getLinkMock($linkData);
         $this->contentValidatorMock->expects($this->any())->method('isValid')->with($linkMock)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
-        $existingLinkMock->expects($this->any())->method('getId')->will($this->returnValue($linkId));
-        $existingLinkMock->expects($this->any())->method('getProductId')->will($this->returnValue($productId));
-        $existingLinkMock->expects($this->once())->method('load')->with($linkId)->will($this->returnSelf());
+        $existingLinkMock->expects($this->any())->method('getId')->willReturn($linkId);
+        $existingLinkMock->expects($this->any())->method('getProductId')->willReturn($productId);
+        $existingLinkMock->expects($this->once())->method('load')->with($linkId)->willReturnSelf();
 
         $this->linkHandlerMock->expects($this->once())->method('save')
             ->with(
@@ -373,11 +374,11 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
             'link_file' => $linkFile,
         ];
         $this->repositoryMock->expects($this->any())->method('get')->with($productSku, true)
-            ->will($this->returnValue($this->productMock));
-        $this->productMock->expects($this->any())->method('getData')->will($this->returnValue($productId));
+            ->willReturn($this->productMock);
+        $this->productMock->expects($this->any())->method('getData')->willReturn($productId);
         $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
-        $storeMock->expects($this->any())->method('getWebsiteId')->will($this->returnValue($websiteId));
-        $this->productMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
+        $storeMock->expects($this->any())->method('getWebsiteId')->willReturn($websiteId);
+        $this->productMock->expects($this->any())->method('getStore')->willReturn($storeMock);
         $existingLinkMock = $this->createPartialMock(
             \Magento\Downloadable\Model\Link::class,
             [
@@ -387,14 +388,14 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
                 'getProductId',
             ]
         );
-        $this->linkFactoryMock->expects($this->once())->method('create')->will($this->returnValue($existingLinkMock));
+        $this->linkFactoryMock->expects($this->once())->method('create')->willReturn($existingLinkMock);
         $linkMock = $this->getLinkMock($linkData);
         $this->contentValidatorMock->expects($this->any())->method('isValid')->with($linkMock)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
-        $existingLinkMock->expects($this->any())->method('getId')->will($this->returnValue($linkId));
-        $existingLinkMock->expects($this->any())->method('getProductId')->will($this->returnValue($productId));
-        $existingLinkMock->expects($this->once())->method('load')->with($linkId)->will($this->returnSelf());
+        $existingLinkMock->expects($this->any())->method('getId')->willReturn($linkId);
+        $existingLinkMock->expects($this->any())->method('getProductId')->willReturn($productId);
+        $existingLinkMock->expects($this->once())->method('load')->with($linkId)->willReturnSelf();
 
         $this->jsonEncoderMock->expects($this->once())
             ->method('encode')
@@ -431,11 +432,12 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The link title is empty. Enter the link title and try again.
      */
     public function testUpdateThrowsExceptionIfTitleIsEmptyAndScopeIsGlobal()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('The link title is empty. Enter the link title and try again.');
+
         $linkId = 1;
         $productSku = 'simple';
         $productId = 1;
@@ -450,19 +452,19 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
             'link_url' => 'https://google.com',
         ];
         $this->repositoryMock->expects($this->any())->method('get')->with($productSku, true)
-            ->will($this->returnValue($this->productMock));
-        $this->productMock->expects($this->any())->method('getData')->will($this->returnValue($productId));
+            ->willReturn($this->productMock);
+        $this->productMock->expects($this->any())->method('getData')->willReturn($productId);
         $existingLinkMock = $this->createPartialMock(
             \Magento\Downloadable\Model\Link::class,
             ['__wakeup', 'getId', 'load', 'save', 'getProductId']
         );
-        $existingLinkMock->expects($this->any())->method('getId')->will($this->returnValue($linkId));
-        $existingLinkMock->expects($this->any())->method('getProductId')->will($this->returnValue($productId));
-        $existingLinkMock->expects($this->once())->method('load')->with($linkId)->will($this->returnSelf());
-        $this->linkFactoryMock->expects($this->once())->method('create')->will($this->returnValue($existingLinkMock));
+        $existingLinkMock->expects($this->any())->method('getId')->willReturn($linkId);
+        $existingLinkMock->expects($this->any())->method('getProductId')->willReturn($productId);
+        $existingLinkMock->expects($this->once())->method('load')->with($linkId)->willReturnSelf();
+        $this->linkFactoryMock->expects($this->once())->method('create')->willReturn($existingLinkMock);
         $linkContentMock = $this->getLinkMock($linkData);
         $this->contentValidatorMock->expects($this->any())->method('isValid')->with($linkContentMock)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->linkHandlerMock->expects($this->never())->method('save');
         $this->service->save($productSku, $linkContentMock, true);
@@ -472,24 +474,25 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $linkId = 1;
         $linkMock = $this->createMock(\Magento\Downloadable\Model\Link::class);
-        $this->linkFactoryMock->expects($this->once())->method('create')->will($this->returnValue($linkMock));
-        $linkMock->expects($this->once())->method('load')->with($linkId)->will($this->returnSelf());
-        $linkMock->expects($this->any())->method('getId')->will($this->returnValue($linkId));
+        $this->linkFactoryMock->expects($this->once())->method('create')->willReturn($linkMock);
+        $linkMock->expects($this->once())->method('load')->with($linkId)->willReturnSelf();
+        $linkMock->expects($this->any())->method('getId')->willReturn($linkId);
         $linkMock->expects($this->once())->method('delete');
 
         $this->assertTrue($this->service->delete($linkId));
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No downloadable link with the provided ID was found. Verify the ID and try again.
      */
     public function testDeleteThrowsExceptionIfLinkIdIsNotValid()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('No downloadable link with the provided ID was found. Verify the ID and try again.');
+
         $linkId = 1;
         $linkMock = $this->createMock(\Magento\Downloadable\Model\Link::class);
-        $this->linkFactoryMock->expects($this->once())->method('create')->will($this->returnValue($linkMock));
-        $linkMock->expects($this->once())->method('load')->with($linkId)->will($this->returnSelf());
+        $this->linkFactoryMock->expects($this->once())->method('create')->willReturn($linkMock);
+        $linkMock->expects($this->once())->method('load')->with($linkId)->willReturnSelf();
         $linkMock->expects($this->once())->method('getId');
         $linkMock->expects($this->never())->method('delete');
 
@@ -542,12 +545,12 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->repositoryMock->expects($this->once())
             ->method('get')
             ->with($productSku)
-            ->will($this->returnValue($this->productMock));
+            ->willReturn($this->productMock);
 
         $this->productTypeMock->expects($this->once())
             ->method('getLinks')
             ->with($this->productMock)
-            ->will($this->returnValue([$linkMock]));
+            ->willReturn([$linkMock]);
 
         $this->setLinkAssertions($linkMock, $linkData);
         $this->linkDataObjectFactory->expects($this->once())->method('create')->willReturn($linkInterfaceMock);
@@ -561,30 +564,30 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     protected function setLinkAssertions($resource, $inputData)
     {
-        $resource->expects($this->any())->method('getId')->will($this->returnValue($inputData['id']));
+        $resource->expects($this->any())->method('getId')->willReturn($inputData['id']);
         $resource->expects($this->any())->method('getStoreTitle')
-            ->will($this->returnValue($inputData['store_title']));
+            ->willReturn($inputData['store_title']);
         $resource->expects($this->any())->method('getTitle')
-            ->will($this->returnValue($inputData['title']));
+            ->willReturn($inputData['title']);
         $resource->expects($this->any())->method('getSampleType')
-            ->will($this->returnValue($inputData['sample_type']));
+            ->willReturn($inputData['sample_type']);
         $resource->expects($this->any())->method('getSampleFile')
-            ->will($this->returnValue($inputData['sample_file']));
+            ->willReturn($inputData['sample_file']);
         $resource->expects($this->any())->method('getSampleUrl')
-            ->will($this->returnValue($inputData['sample_url']));
+            ->willReturn($inputData['sample_url']);
         $resource->expects($this->any())->method('getPrice')
-            ->will($this->returnValue($inputData['price']));
+            ->willReturn($inputData['price']);
         $resource->expects($this->once())->method('getNumberOfDownloads')
-            ->will($this->returnValue($inputData['number_of_downloads']));
+            ->willReturn($inputData['number_of_downloads']);
         $resource->expects($this->once())->method('getSortOrder')
-            ->will($this->returnValue($inputData['sort_order']));
+            ->willReturn($inputData['sort_order']);
         $resource->expects($this->once())->method('getIsShareable')
-            ->will($this->returnValue($inputData['is_shareable']));
+            ->willReturn($inputData['is_shareable']);
         $resource->expects($this->any())->method('getLinkType')
-            ->will($this->returnValue($inputData['link_type']));
+            ->willReturn($inputData['link_type']);
         $resource->expects($this->any())->method('getlinkFile')
-            ->will($this->returnValue($inputData['link_file']));
+            ->willReturn($inputData['link_file']);
         $resource->expects($this->any())->method('getLinkUrl')
-            ->will($this->returnValue($inputData['link_url']));
+            ->willReturn($inputData['link_url']);
     }
 }

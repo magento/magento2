@@ -16,11 +16,11 @@ class LabelTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ListInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $labelList;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->labelList = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\Label\ListInterface::class)
             ->getMockForAbstractClass();
@@ -43,8 +43,8 @@ class LabelTest extends \PHPUnit\Framework\TestCase
             ->willReturn([$data]);
 
         $result = $this->model->toOptionArray();
-        $this->assertTrue(is_array($result));
-        $this->assertEquals(2, count($result));
+        $this->assertIsArray($result);
+        $this->assertCount(2, $result);
         $this->assertEquals($defaultLabel, $result[0]['label']);
         $this->assertEquals($data['label'], $result[1]['label']);
     }
@@ -62,8 +62,8 @@ class LabelTest extends \PHPUnit\Framework\TestCase
             ->willReturn([$data]);
 
         $result = $this->model->getLabelsCollectionForSystemConfiguration();
-        $this->assertTrue(is_array($result));
-        $this->assertEquals(2, count($result));
+        $this->assertIsArray($result);
+        $this->assertCount(2, $result);
         $this->assertEquals($defaultLabel, $result[0]['label']);
         $this->assertEquals($data['label'], $result[1]['label']);
     }

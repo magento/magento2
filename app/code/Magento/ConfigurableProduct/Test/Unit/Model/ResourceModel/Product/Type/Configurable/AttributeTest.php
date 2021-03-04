@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 
 class AttributeTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject */
     protected $connection;
 
     /**
@@ -27,21 +27,21 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Relation|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Relation|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $relation;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)->getMock();
 
         $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
-        $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($this->connection));
+        $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
         $this->resource->expects($this->any())->method('getTableName')->willReturnArgument(0);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);

@@ -11,7 +11,7 @@ use Magento\Signifyd\Model\Config;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\Json\EncoderInterface;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use \PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class HttpClientFactoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -50,7 +50,7 @@ class HttpClientFactoryTest extends \PHPUnit\Framework\TestCase
      */
     private $httpClient;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -74,7 +74,7 @@ class HttpClientFactoryTest extends \PHPUnit\Framework\TestCase
 
         $this->dataEncoder = $this->getMockBuilder(EncoderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->httpClient = $this->objectManager->getObject(HttpClientFactory::class, [
             'config'        => $this->config,

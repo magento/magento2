@@ -55,7 +55,7 @@ class LinksTest extends \PHPUnit\Framework\TestCase
      */
     protected $urlBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->urlBuilder = $this->createPartialMock(\Magento\Backend\Model\Url::class, ['getUrl']);
@@ -137,47 +137,47 @@ class LinksTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->productModel->expects($this->any())->method('getTypeId')
-            ->will($this->returnValue('downloadable'));
+            ->willReturn('downloadable');
         $this->productModel->expects($this->any())->method('getTypeInstance')
-            ->will($this->returnValue($this->downloadableProductModel));
+            ->willReturn($this->downloadableProductModel);
         $this->productModel->expects($this->any())->method('getStoreId')
-            ->will($this->returnValue(0));
+            ->willReturn(0);
         $this->downloadableProductModel->expects($this->any())->method('getLinks')
-            ->will($this->returnValue([$this->downloadableLinkModel]));
+            ->willReturn([$this->downloadableLinkModel]);
         $this->coreRegistry->expects($this->any())->method('registry')
-            ->will($this->returnValue($this->productModel));
+            ->willReturn($this->productModel);
         $this->downloadableLinkModel->expects($this->any())->method('getId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->downloadableLinkModel->expects($this->any())->method('getTitle')
-            ->will($this->returnValue('Link Title'));
+            ->willReturn('Link Title');
         $this->downloadableLinkModel->expects($this->any())->method('getPrice')
-            ->will($this->returnValue('10'));
+            ->willReturn('10');
         $this->downloadableLinkModel->expects($this->any())->method('getNumberOfDownloads')
-            ->will($this->returnValue('6'));
+            ->willReturn('6');
         $this->downloadableLinkModel->expects($this->any())->method('getLinkUrl')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->downloadableLinkModel->expects($this->any())->method('getLinkType')
-            ->will($this->returnValue('file'));
+            ->willReturn('file');
         $this->downloadableLinkModel->expects($this->any())->method('getSampleFile')
-            ->will($this->returnValue('file/sample.gif'));
+            ->willReturn('file/sample.gif');
         $this->downloadableLinkModel->expects($this->any())->method('getSampleType')
-            ->will($this->returnValue('file'));
+            ->willReturn('file');
         $this->downloadableLinkModel->expects($this->any())->method('getSortOrder')
-            ->will($this->returnValue(0));
+            ->willReturn(0);
         $this->downloadableLinkModel->expects($this->any())->method('getLinkFile')
-            ->will($this->returnValue('file/link.gif'));
+            ->willReturn('file/link.gif');
         $this->downloadableLinkModel->expects($this->any())->method('getStoreTitle')
-            ->will($this->returnValue('Store Title'));
+            ->willReturn('Store Title');
         $this->escaper->expects($this->any())->method('escapeHtml')
-            ->will($this->returnValue('Link Title'));
+            ->willReturn('Link Title');
         $this->fileHelper->expects($this->any())->method('getFilePath')
-            ->will($this->returnValue('/file/path/link.gif'));
+            ->willReturn('/file/path/link.gif');
         $this->fileHelper->expects($this->any())->method('ensureFileInFilesystem')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->fileHelper->expects($this->any())->method('getFileSize')
-            ->will($this->returnValue('1.1'));
+            ->willReturn('1.1');
         $this->urlBuilder->expects($this->any())->method('getUrl')
-            ->will($this->returnValue('final_url'));
+            ->willReturn('final_url');
         $linkData = $this->block->getLinkData();
         foreach ($linkData as $link) {
             $fileSave = $link->getFileSave(0);

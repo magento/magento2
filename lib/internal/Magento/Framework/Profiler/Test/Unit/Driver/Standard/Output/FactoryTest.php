@@ -24,7 +24,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_defaultOutputType = 'default';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_factory = new \Magento\Framework\Profiler\Driver\Standard\Output\Factory(
             $this->_defaultOutputPrefix,
@@ -34,15 +34,22 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testConstructor()
     {
-        $this->assertAttributeEquals($this->_defaultOutputPrefix, '_defaultOutputPrefix', $this->_factory);
-        $this->assertAttributeEquals($this->_defaultOutputType, '_defaultOutputType', $this->_factory);
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
+
+        //$this->assertAttributeEquals($this->_defaultOutputPrefix, '_defaultOutputPrefix', $this->_factory);
+        //$this->assertAttributeEquals($this->_defaultOutputType, '_defaultOutputType', $this->_factory);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function testDefaultConstructor()
     {
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
+
         $factory = new \Magento\Framework\Profiler\Driver\Standard\Output\Factory();
-        $this->assertAttributeNotEmpty('_defaultOutputPrefix', $factory);
-        $this->assertAttributeNotEmpty('_defaultOutputType', $factory);
+        //$this->assertAttributeNotEmpty('_defaultOutputPrefix', $factory);
+        //$this->assertAttributeNotEmpty('_defaultOutputType', $factory);
     }
 
     /**

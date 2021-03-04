@@ -22,46 +22,46 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     protected $context;
 
     /**
-     * @var \Magento\Framework\App\Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\App\View|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\View|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $viewMock;
 
     /**
-     * @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\Backend\Block\Menu|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Block\Menu|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $menuBlockMock;
 
     /**
-     * @var \Magento\Backend\Block\Widget\Breadcrumbs|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Block\Widget\Breadcrumbs|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $breadcrumbsBlockMock;
 
     /**
-     * @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\Page|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultPageMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageConfigMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Title|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageTitleMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->registryMock = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->disableOriginalConstructor()
@@ -125,13 +125,13 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         $this->layoutMock->expects($this->at(0))
             ->method('getBlock')
             ->with('menu')
-            ->will($this->returnValue($this->menuBlockMock));
+            ->willReturn($this->menuBlockMock);
         $this->menuBlockMock->expects($this->any())
             ->method('getMenuModel')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->menuBlockMock->expects($this->any())
             ->method('getParentItems')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->viewMock->expects($this->once())
             ->method('getPage')
             ->willReturn($this->resultPageMock);
@@ -147,7 +147,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         $this->layoutMock->expects($this->at(1))
             ->method('getBlock')
             ->with('breadcrumbs')
-            ->will($this->returnValue($this->breadcrumbsBlockMock));
+            ->willReturn($this->breadcrumbsBlockMock);
         $this->breadcrumbsBlockMock->expects($this->any())
             ->method('addLink')
             ->willReturnSelf();
@@ -167,7 +167,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $indexController->expects($this->once())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
         $indexController->expects($this->once())
             ->method('_forward')
             ->with('grid');

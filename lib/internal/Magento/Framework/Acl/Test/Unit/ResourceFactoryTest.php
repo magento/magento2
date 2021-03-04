@@ -24,7 +24,7 @@ class ResourceFactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_expectedObject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -48,8 +48,8 @@ class ResourceFactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             \Magento\Framework\Acl\AclResource::class,
             $arguments
-        )->will(
-            $this->returnValue($this->_expectedObject)
+        )->willReturn(
+            $this->_expectedObject
         );
         $this->assertEquals($this->_expectedObject, $this->_model->createResource($arguments));
     }

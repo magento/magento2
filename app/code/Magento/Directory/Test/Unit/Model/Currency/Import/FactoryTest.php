@@ -13,16 +13,16 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Directory\Model\Currency\Import\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\Currency\Import\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_importConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_importConfig = $this->createMock(\Magento\Directory\Model\Currency\Import\Config::class);
@@ -41,8 +41,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             'getServiceClass'
         )->with(
             'test'
-        )->will(
-            $this->returnValue('Test_Class')
+        )->willReturn(
+            'Test_Class'
         );
         $this->_objectManager->expects(
             $this->once()
@@ -51,47 +51,48 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             'Test_Class',
             ['argument' => 'value']
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
         $actualResult = $this->_model->create('test', ['argument' => 'value']);
         $this->assertSame($expectedResult, $actualResult);
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Currency import service 'test' is not defined
      */
     public function testCreateUndefinedServiceClass()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Currency import service \'test\' is not defined');
+
         $this->_importConfig->expects(
             $this->once()
         )->method(
             'getServiceClass'
         )->with(
             'test'
-        )->will(
-            $this->returnValue(null)
+        )->willReturn(
+            null
         );
         $this->_objectManager->expects($this->never())->method('create');
         $this->_model->create('test');
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Class 'stdClass' has to implement
-     * \Magento\Directory\Model\Currency\Import\ImportInterface
      */
     public function testCreateIrrelevantServiceClass()
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Class \'stdClass\' has to implement \\Magento\\Directory\\Model\\Currency\\Import\\ImportInterface');
+
         $this->_importConfig->expects(
             $this->once()
         )->method(
             'getServiceClass'
         )->with(
             'test'
-        )->will(
-            $this->returnValue('stdClass')
+        )->willReturn(
+            'stdClass'
         );
         $this->_objectManager->expects(
             $this->once()
@@ -99,8 +100,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             'stdClass'
-        )->will(
-            $this->returnValue(new \stdClass())
+        )->willReturn(
+            new \stdClass()
         );
         $this->_model->create('test');
     }

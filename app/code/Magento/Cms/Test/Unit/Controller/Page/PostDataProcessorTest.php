@@ -18,17 +18,17 @@ use Magento\Framework\View\Model\Layout\Update\ValidatorFactory;
 class PostDataProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Date|\PHPUnit_Framework_MockObject_MockObject
+     * @var Date|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dateFilterMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageManagerMock;
 
     /**
-     * @var ValidatorFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ValidatorFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $validatorFactoryMock;
 
@@ -37,7 +37,7 @@ class PostDataProcessorTest extends \PHPUnit\Framework\TestCase
      */
     protected $postDataProcessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dateFilterMock = $this->getMockBuilder(Date::class)
             ->disableOriginalConstructor()

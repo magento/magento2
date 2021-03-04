@@ -37,7 +37,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
      */
     protected $optionSkuList = ['Simple for Grouped 1', 'Simple for Grouped 2'];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->model = $this->objectManager->create(\Magento\CatalogImportExport\Model\Import\Product::class);
@@ -76,7 +76,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
 
         $resource = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class);
         $productId = $resource->getIdBySku('Test Grouped');
-        $this->assertTrue(is_numeric($productId));
+        $this->assertIsNumeric($productId);
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
         $product->load($productId);
@@ -88,7 +88,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         $childProductCollection = $product->getTypeInstance()->getAssociatedProducts($product);
 
         foreach ($childProductCollection as $childProduct) {
-            $this->assertContains($childProduct->getSku(), $this->optionSkuList);
+            $this->assertContains($childProduct->getSku(),$this->optionSkuList);
         }
     }
 }

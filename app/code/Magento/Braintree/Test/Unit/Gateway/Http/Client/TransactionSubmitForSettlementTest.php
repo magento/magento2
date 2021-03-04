@@ -11,7 +11,7 @@ use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -34,7 +34,7 @@ class TransactionSubmitForSettlementTest extends \PHPUnit\Framework\TestCase
      */
     private $adapterMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var LoggerInterface|MockObject $criticalLoggerMock */
         $criticalLoggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
@@ -63,11 +63,12 @@ class TransactionSubmitForSettlementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Braintree\Gateway\Http\Client\TransactionSubmitForSettlement::placeRequest
-     * @expectedException \Magento\Payment\Gateway\Http\ClientException
-     * @expectedExceptionMessage Transaction has been declined
      */
     public function testPlaceRequestWithException()
     {
+        $this->expectException(\Magento\Payment\Gateway\Http\ClientException::class);
+        $this->expectExceptionMessage('Transaction has been declined');
+
         $exception = new \Exception('Transaction has been declined');
         $this->adapterMock->expects(static::once())
             ->method('submitForSettlement')
@@ -91,7 +92,7 @@ class TransactionSubmitForSettlementTest extends \PHPUnit\Framework\TestCase
         /** @var TransferInterface|MockObject $transferObject */
         $transferObject = $this->getTransferObjectMock();
         $response = $this->client->placeRequest($transferObject);
-        static::assertTrue(is_object($response['object']));
+        static::assertIsObject($response['object']);
         static::assertEquals(['object' => $data], $response);
     }
 
@@ -102,7 +103,7 @@ class TransactionSubmitForSettlementTest extends \PHPUnit\Framework\TestCase
      */
     private function getTransferObjectMock()
     {
-        $mock = $this->createMock(TransferInterface::class);
+        $mock = $this->getMockForAbstractClass(TransferInterface::class);
         $mock->expects($this->once())
             ->method('getBody')
             ->willReturn([

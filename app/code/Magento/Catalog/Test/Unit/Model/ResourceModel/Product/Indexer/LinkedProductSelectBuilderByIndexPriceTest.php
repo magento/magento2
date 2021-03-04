@@ -13,27 +13,27 @@ use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
 class LinkedProductSelectBuilderByIndexPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceMock;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerSessionMock;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataPoolMock;
 
     /**
-     * @var BaseSelectProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BaseSelectProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $baseSelectProcessorMock;
 
@@ -42,7 +42,7 @@ class LinkedProductSelectBuilderByIndexPriceTest extends \PHPUnit\Framework\Test
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()

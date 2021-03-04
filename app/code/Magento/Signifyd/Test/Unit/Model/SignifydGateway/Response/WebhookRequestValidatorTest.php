@@ -21,19 +21,19 @@ class WebhookRequestValidatorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $config;
 
     /**
-     * @var DecoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DecoderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $decoder;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -209,7 +209,7 @@ class WebhookRequestValidatorTest extends \PHPUnit\Framework\TestCase
      * @param string $body
      * @param string $topic
      * @param string $hash
-     * @return WebhookRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @return WebhookRequest|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createWebhookRequest($body, $topic, $hash)
     {

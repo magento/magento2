@@ -8,21 +8,21 @@ namespace Magento\Setup\Test\Unit\Module\Dependency\Report\Builder;
 class AbstractBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Setup\Module\Dependency\ParserInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\Dependency\ParserInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dependenciesParserMock;
 
     /**
-     * @var \Magento\Setup\Module\Dependency\Report\WriterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\Dependency\Report\WriterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $reportWriterMock;
 
     /**
-     * @var \Magento\Setup\Module\Dependency\Report\Builder\AbstractBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\Dependency\Report\Builder\AbstractBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $builder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dependenciesParserMock = $this->createMock(\Magento\Setup\Module\Dependency\ParserInterface::class);
         $this->reportWriterMock = $this->createMock(\Magento\Setup\Module\Dependency\Report\WriterInterface::class);
@@ -35,12 +35,13 @@ class AbstractBuilderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $options
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Passed option section "parse" is wrong.
      * @dataProvider dataProviderWrongParseOptions
      */
     public function testBuildWithWrongParseOptions($options)
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Passed option section "parse" is wrong.');
+
         $this->builder->build($options);
     }
 
@@ -54,12 +55,13 @@ class AbstractBuilderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $options
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Passed option section "write" is wrong.
      * @dataProvider dataProviderWrongWriteOptions
      */
     public function testBuildWithWrongWriteOptions($options)
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Passed option section "write" is wrong.');
+
         $this->builder->build($options);
     }
 
@@ -87,8 +89,8 @@ class AbstractBuilderTest extends \PHPUnit\Framework\TestCase
             'parse'
         )->with(
             $options['parse']
-        )->will(
-            $this->returnValue($parseResult)
+        )->willReturn(
+            $parseResult
         );
         $this->builder->expects(
             $this->once()
@@ -96,8 +98,8 @@ class AbstractBuilderTest extends \PHPUnit\Framework\TestCase
             'buildData'
         )->with(
             $parseResult
-        )->will(
-            $this->returnValue($configMock)
+        )->willReturn(
+            $configMock
         );
         $this->reportWriterMock->expects($this->once())->method('write')->with($options['write'], $configMock);
 

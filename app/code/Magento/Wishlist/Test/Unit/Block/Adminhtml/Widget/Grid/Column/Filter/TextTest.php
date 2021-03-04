@@ -10,10 +10,10 @@ use \Magento\Wishlist\Block\Adminhtml\Widget\Grid\Column\Filter\Text;
 
 class TextTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var Text | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var Text | \PHPUnit\Framework\MockObject\MockObject */
     private $textFilterBlock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->textFilterBlock = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
             \Magento\Wishlist\Block\Adminhtml\Widget\Grid\Column\Filter\Text::class

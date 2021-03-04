@@ -12,17 +12,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ReadHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataPoolMock;
 
     /**
-     * @var EntityMetadataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityMetadataInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataMock;
 
@@ -32,18 +32,18 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     private $readHandler;
 
     /**
-     * @var \Magento\Framework\Model\Entity\ScopeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Entity\ScopeResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $args = $objectManager->getConstructArguments(\Magento\Eav\Model\ResourceModel\ReadHandler::class);
         $this->metadataPoolMock = $args['metadataPool'];
         $this->metadataMock = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->metadataPoolMock->expects($this->any())
             ->method('getMetadata')
             ->willReturn($this->metadataMock);
@@ -136,10 +136,11 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testExecuteWithException()
     {
+        $this->expectException(\Exception::class);
+
         $this->metadataPoolMock->expects($this->once())
             ->method('getMetadata')
             ->willThrowException(new \Exception('Unknown entity type'));

@@ -25,33 +25,33 @@ class ResultTest extends \PHPUnit\Framework\TestCase
             ['loadLayout', 'renderLayout', 'getPage', 'getLayout']
         );
         $update = $this->createPartialMock(\Magento\Framework\View\Model\Layout\Merge::class, ['getHandles']);
-        $update->expects($this->once())->method('getHandles')->will($this->returnValue([]));
+        $update->expects($this->once())->method('getHandles')->willReturn([]);
         $layout = $this->createPartialMock(\Magento\Framework\View\Result\Layout::class, ['getUpdate']);
-        $layout->expects($this->once())->method('getUpdate')->will($this->returnValue($update));
-        $view->expects($this->once())->method('getLayout')->will($this->returnValue($layout));
+        $layout->expects($this->once())->method('getUpdate')->willReturn($update);
+        $view->expects($this->once())->method('getLayout')->willReturn($layout);
         $page = $this->createPartialMock(\Magento\Framework\View\Result\Page::class, ['initLayout']);
-        $view->expects($this->once())->method('getPage')->will($this->returnValue($page));
-        $view->expects($this->once())->method('loadLayout')->will(
-            $this->returnCallback(
+        $view->expects($this->once())->method('getPage')->willReturn($page);
+        $view->expects($this->once())->method('loadLayout')->willReturnCallback(
+            
                 function () use (&$filters, $expectedQuery) {
                     $this->assertEquals($expectedQuery, $filters);
                 }
-            )
+            
         );
 
         $request = $this->createPartialMock(\Magento\Framework\App\Console\Request::class, ['getQueryValue']);
-        $request->expects($this->once())->method('getQueryValue')->will($this->returnValue($expectedQuery));
+        $request->expects($this->once())->method('getQueryValue')->willReturn($expectedQuery);
 
         $catalogSearchAdvanced = $this->createPartialMock(
             \Magento\CatalogSearch\Model\Advanced::class,
             ['addFilters', '__wakeup']
         );
-        $catalogSearchAdvanced->expects($this->once())->method('addFilters')->will(
-            $this->returnCallback(
+        $catalogSearchAdvanced->expects($this->once())->method('addFilters')->willReturnCallback(
+            
                 function ($added) use (&$filters) {
                     $filters = $added;
                 }
-            )
+            
         );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -144,7 +144,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $urlFactoryMock = $this->createMock(\Magento\Framework\UrlFactory::class);
         $urlFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($urlMock));
+            ->willReturn($urlMock);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -170,10 +170,10 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $expectedQuery = 'notExistTerm';
 
         $update = $this->createPartialMock(\Magento\Framework\View\Model\Layout\Merge::class, ['getHandles']);
-        $update->expects($this->once())->method('getHandles')->will($this->returnValue([]));
+        $update->expects($this->once())->method('getHandles')->willReturn([]);
 
         $layout = $this->createPartialMock(\Magento\Framework\View\Result\Layout::class, ['getUpdate']);
-        $layout->expects($this->once())->method('getUpdate')->will($this->returnValue($update));
+        $layout->expects($this->once())->method('getUpdate')->willReturn($update);
 
         $page = $this->createPartialMock(\Magento\Framework\View\Result\Page::class, ['initLayout']);
 
@@ -185,11 +185,11 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $view->expects($this->once())->method('loadLayout')
             ->with([\Magento\CatalogSearch\Controller\Advanced\Result::DEFAULT_NO_RESULT_HANDLE]);
 
-        $view->expects($this->once())->method('getPage')->will($this->returnValue($page));
-        $view->expects($this->once())->method('getLayout')->will($this->returnValue($layout));
+        $view->expects($this->once())->method('getPage')->willReturn($page);
+        $view->expects($this->once())->method('getLayout')->willReturn($layout);
 
         $request = $this->createPartialMock(\Magento\Framework\App\Console\Request::class, ['getQueryValue']);
-        $request->expects($this->once())->method('getQueryValue')->will($this->returnValue($expectedQuery));
+        $request->expects($this->once())->method('getQueryValue')->willReturn($expectedQuery);
 
         $catalogSearchAdvanced = $this->createPartialMock(
             \Magento\CatalogSearch\Model\Advanced::class,

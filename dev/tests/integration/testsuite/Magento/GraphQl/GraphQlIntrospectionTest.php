@@ -19,7 +19,7 @@ class GraphQlIntrospectionTest extends \PHPUnit\Framework\TestCase
     /** @var  ObjectManagerInterface */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->schemaFactory = $this->objectManager->get(\Magento\Framework\GraphQl\SchemaFactory::class);
@@ -91,7 +91,7 @@ QUERY;
                     ]
                 ]
             ];
-        $this->assertContains($expectedFragment, $output['types']);
+        $this->assertContains($expectedFragment,$output['types']);
     }
 
     /**
@@ -230,7 +230,7 @@ QUERY;
                 ]
             ];
         $output = $response->toArray()['data']['__schema']['types'];
-        $this->assertContains($expectedResult, $output);
+        $this->assertContains($expectedResult,$output);
     }
 
     /**
@@ -272,10 +272,10 @@ QUERY;
       description
       isDeprecated
       deprecationReason
-      
+
     }
   }
-}           
+}
 
 QUERY;
         $response = \GraphQL\GraphQL::executeQuery($testSchema, $request);

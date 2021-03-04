@@ -12,12 +12,12 @@ namespace Magento\Paypal\Test\Unit\Block\Billing\Agreement;
 class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderCollectionFactory;
 
     /**
-     * @var \Magento\Sales\Model\Order\Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Config | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderConfig;
 
@@ -26,7 +26,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
      */
     protected $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -55,24 +55,24 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         );
         $orderCollection->expects($this->at(0))
             ->method('addFieldToSelect')
-            ->will($this->returnValue($orderCollection));
+            ->willReturn($orderCollection);
         $orderCollection->expects($this->at(1))
             ->method('addFieldToFilter')
-            ->will($this->returnValue($orderCollection));
+            ->willReturn($orderCollection);
         $orderCollection->expects($this->at(2))
             ->method('addFieldToFilter')
             ->with('status', ['in' => $visibleStatuses])
-            ->will($this->returnValue($orderCollection));
+            ->willReturn($orderCollection);
         $orderCollection->expects($this->at(3))
             ->method('setOrder')
-            ->will($this->returnValue($orderCollection));
+            ->willReturn($orderCollection);
 
         $this->orderCollectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($orderCollection));
+            ->willReturn($orderCollection);
         $this->orderConfig->expects($this->once())
             ->method('getVisibleOnFrontStatuses')
-            ->will($this->returnValue($visibleStatuses));
+            ->willReturn($visibleStatuses);
 
         $this->block->getRelatedOrders();
     }

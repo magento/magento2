@@ -16,42 +16,42 @@ class QueueTest extends \PHPUnit\Framework\TestCase
     protected $queue;
 
     /**
-     * @var \Magento\Newsletter\Model\Template\Filter|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Newsletter\Model\Template\Filter|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $templateFilter;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $date;
 
     /**
-     * @var \Magento\Newsletter\Model\TemplateFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Newsletter\Model\TemplateFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $templateFactory;
 
     /**
-     * @var \Magento\Newsletter\Model\ProblemFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Newsletter\Model\ProblemFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $problemFactory;
 
     /**
-     * @var \Magento\Newsletter\Model\ResourceModel\Subscriber\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Newsletter\Model\ResourceModel\Subscriber\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $subscribersCollection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $subscribersCollectionFactory;
 
     /**
-     * @var \Magento\Newsletter\Model\Queue\TransportBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Newsletter\Model\Queue\TransportBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $transportBuilder;
 
     /**
-     * @var \Magento\Newsletter\Model\ResourceModel\Queue|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Newsletter\Model\ResourceModel\Queue|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resource;
 
@@ -60,7 +60,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->templateFilter = $this->getMockBuilder(\Magento\Newsletter\Model\Template\Filter::class)
             ->disableOriginalConstructor()

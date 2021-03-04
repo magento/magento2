@@ -28,7 +28,7 @@ class ResultTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->productAttributeRepository = $this->_objectManager->create(ProductAttributeRepositoryInterface::class);
@@ -65,7 +65,7 @@ class ResultTest extends AbstractController
         );
         $this->dispatch('catalogsearch/advanced/result');
         $responseBody = $this->getResponse()->getBody();
-        $this->assertContains('Simple product name', $responseBody);
+        $this->assertStringContainsString('Simple product name', $responseBody);
     }
 
     /**

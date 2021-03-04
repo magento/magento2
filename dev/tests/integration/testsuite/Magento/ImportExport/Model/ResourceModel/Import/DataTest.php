@@ -17,7 +17,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -46,10 +46,10 @@ class DataTest extends \PHPUnit\Framework\TestCase
     /**
      * Test getUniqueColumnData() in case when in data stored in requested column is NOT unique
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testGetUniqueColumnDataException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->_model->getUniqueColumnData('data');
     }
 

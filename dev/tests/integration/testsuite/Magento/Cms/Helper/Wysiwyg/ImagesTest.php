@@ -15,7 +15,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -92,8 +92,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
                         '/backend/cms/wysiwyg/directive/___directive/' .
                         'e3ttZWRpYSB1cmw9Ind5c2l3eWcvaGVsbG8ucG5nIn19/'
                     );
-
-                    $this->assertContains($expectedResult, parse_url($actualResult, PHP_URL_PATH));
+                    $this->assertStringContainsString($expectedResult,parse_url($actualResult, PHP_URL_PATH));
                 }
             ],
             [true, 'wysiwyg/hello.png', false, 'http://example.com/pub/media/wysiwyg/hello.png'],

@@ -11,12 +11,12 @@ use \Magento\Setup\Model\Navigation;
 class NavigationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Zend\ServiceManager\ServiceLocatorInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Zend\ServiceManager\ServiceLocatorInterface
      */
     private $serviceLocatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\DeploymentConfig
      */
     private $deploymentConfig;
 
@@ -25,15 +25,15 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
      */
     private $navigation;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->serviceLocatorMock =
-            $this->getMockForAbstractClass(\Zend\ServiceManager\ServiceLocatorInterface::class, ['get']);
+            $this->createMock(\Zend\ServiceManager\ServiceLocatorInterface::class);
         $this->serviceLocatorMock
             ->expects($this->exactly(2))
             ->method('get')
             ->with('config')
-            ->will($this->returnValue([
+            ->willReturn([
                 'navInstallerTitles' => [
                     'install' => 'SomeTitle'
                  ],
@@ -47,7 +47,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
                     ['main' => ''],
                     ['main' => false],
                 ]
-            ]));
+            ]);
         $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $this->navigation = new Navigation($this->serviceLocatorMock, $this->deploymentConfig);
     }

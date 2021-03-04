@@ -8,6 +8,9 @@ namespace Magento\Backend\Test\Unit\Block\Widget\Grid;
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
 use Magento\Framework\DataObject;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ColumnTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -16,16 +19,16 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
     protected $_block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_layoutMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_blockMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
         $this->_blockMock = $this->createPartialMock(
@@ -65,8 +68,8 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             'createBlock'
         )->with(
             \Magento\Backend\Block\Widget\Grid\Column\Filter\Text::class
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->_block->getFilter();
@@ -118,8 +121,8 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             'createBlock'
         )->with(
             \Magento\Backend\Block\Widget\Grid\Column\Filter\Text::class
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->_block->getFilter();
@@ -139,8 +142,8 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             'createBlock'
         )->with(
             'StdClass'
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->_block->getFilter();
@@ -158,8 +161,8 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             'createBlock'
         )->with(
             'StdClass'
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->_block->setFilter('StdClass');
@@ -168,7 +171,7 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
 
     public function testGetFilterHtmlWhenFilterExist()
     {
-        $this->_blockMock->expects($this->once())->method('getHtml')->will($this->returnValue('test'));
+        $this->_blockMock->expects($this->once())->method('getHtml')->willReturn('test');
 
         $this->_layoutMock->expects(
             $this->once()
@@ -176,8 +179,8 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             'createBlock'
         )->with(
             'StdClass'
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->_block->setFilter('StdClass');
@@ -195,7 +198,7 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
     {
         $this->_block->setData('renderer', 'StdClass');
 
-        $this->_blockMock->expects($this->once())->method('setColumn')->will($this->returnSelf());
+        $this->_blockMock->expects($this->once())->method('setColumn')->willReturnSelf();
 
         $this->_layoutMock->expects(
             $this->once()
@@ -203,8 +206,8 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             'createBlock'
         )->with(
             'StdClass'
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->assertNotEmpty($this->_block->getRenderer());
@@ -217,7 +220,7 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
     {
         $this->_block->setData('renderer', false);
 
-        $this->_blockMock->expects($this->once())->method('setColumn')->will($this->returnSelf());
+        $this->_blockMock->expects($this->once())->method('setColumn')->willReturnSelf();
 
         $this->_layoutMock->expects(
             $this->once()
@@ -225,8 +228,8 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             'createBlock'
         )->with(
             \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text::class
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->assertEquals($this->_blockMock, $this->_block->getRenderer());
@@ -241,7 +244,7 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
         $this->_block->setData('type', 'custom_type');
         $this->_block->setRendererType('custom_type', 'StdClass');
 
-        $this->_blockMock->expects($this->once())->method('setColumn')->will($this->returnSelf());
+        $this->_blockMock->expects($this->once())->method('setColumn')->willReturnSelf();
 
         $this->_layoutMock->expects(
             $this->once()
@@ -249,8 +252,8 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             'createBlock'
         )->with(
             'StdClass'
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->assertEquals($this->_blockMock, $this->_block->getRenderer());
@@ -348,8 +351,8 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             'createBlock'
         )->with(
             'StdClass'
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->_block->setFilter('StdClass');
@@ -431,11 +434,12 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Frame callback host must be instance of Magento\Backend\Block\Widget
      */
     public function testGetRowFieldExportWithInvalidCallback()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Frame callback host must be instance of Magento\\Backend\\Block\\Widget');
+
         $row = new DataObject(['id' => '2', 'title' => 'some item']);
         /** @var  $rendererMock */
         $rendererMock = $this->getMockBuilder(AbstractRenderer::class)
@@ -455,11 +459,12 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Frame callback host must be instance of Magento\Backend\Block\Widget
      */
     public function testGetRowFieldWithInvalidCallback()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Frame callback host must be instance of Magento\\Backend\\Block\\Widget');
+
         $row = new DataObject(['id' => '2', 'title' => 'some item']);
         /** @var  $rendererMock */
         $rendererMock = $this->getMockBuilder(AbstractRenderer::class)

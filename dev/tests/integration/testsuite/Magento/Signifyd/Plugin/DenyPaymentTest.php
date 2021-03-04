@@ -51,7 +51,7 @@ class DenyPaymentTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
 
@@ -68,7 +68,7 @@ class DenyPaymentTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager->removeSharedInstance(ApiClient::class);
     }

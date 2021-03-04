@@ -22,12 +22,12 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assetRepoMock;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlMock;
 
@@ -42,31 +42,31 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     private $jsPluginSourceUrl = 'js-plugin-source';
 
     /**
-     * @var Variables|\PHPUnit_Framework_MockObject_MockObject
+     * @var Variables|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeVariablesMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customVarsCollectionFactoryMock;
 
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customVarsCollectionMock;
 
     /**
      * Set up before tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->assetRepoMock = $this->getMockBuilder(Repository::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->urlMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->assetRepoMock->expects($this->any())
             ->method('getUrl')
             ->willReturn($this->jsPluginSourceUrl);
@@ -125,8 +125,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         // Verify custom plugin config is present
         $this->assertSame($customVal, $customPluginConfig[$customKey]);
         // Verify added plugin config is present
-        $this->assertContains($this->actionUrl, $addedPluginConfig['options']['onclick']['subject']);
-        $this->assertContains($this->actionUrl, $addedPluginConfig['options']['url']);
-        $this->assertContains($this->jsPluginSourceUrl, $addedPluginConfig['src']);
+        $this->assertStringContainsString($this->actionUrl, $addedPluginConfig['options']['onclick']['subject']);
+        $this->assertStringContainsString($this->actionUrl, $addedPluginConfig['options']['url']);
+        $this->assertStringContainsString($this->jsPluginSourceUrl, $addedPluginConfig['src']);
     }
 }

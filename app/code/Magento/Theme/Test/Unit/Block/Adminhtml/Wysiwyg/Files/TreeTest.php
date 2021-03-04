@@ -8,21 +8,21 @@ namespace Magento\Theme\Test\Unit\Block\Adminhtml\Wysiwyg\Files;
 class TreeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Backend\Model\Url|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Url|PHPUnit\Framework\MockObject\MockObject
      */
     protected $_urlBuilder;
 
     /**
-     * @var \Magento\Theme\Helper\Storage|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Helper\Storage|PHPUnit\Framework\MockObject\MockObject
      */
     protected $_helperStorage;
 
     /**
-     * @var \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Tree|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Tree|PHPUnit\Framework\MockObject\MockObject
      */
     protected $_filesTree;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_helperStorage = $this->createMock(\Magento\Theme\Helper\Storage::class);
         $this->_urlBuilder = $this->createMock(\Magento\Backend\Model\Url::class);
@@ -47,8 +47,8 @@ class TreeTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getRequestParams'
-        )->will(
-            $this->returnValue($requestParams)
+        )->willReturn(
+            $requestParams
         );
 
         $this->_urlBuilder->expects(
@@ -58,8 +58,8 @@ class TreeTest extends \PHPUnit\Framework\TestCase
         )->with(
             'adminhtml/*/treeJson',
             $requestParams
-        )->will(
-            $this->returnValue($expectedUrl)
+        )->willReturn(
+            $expectedUrl
         );
 
         $this->assertEquals($expectedUrl, $this->_filesTree->getTreeLoaderUrl());

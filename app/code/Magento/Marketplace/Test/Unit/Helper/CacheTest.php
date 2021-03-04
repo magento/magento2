@@ -11,12 +11,12 @@ use Magento\Framework\Serialize\SerializerInterface;
 class CacheTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cache;
 
     /**
-     * @var  SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var  SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializer;
 
@@ -25,7 +25,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
      */
     private $cacheHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cache = $this->getMockForAbstractClass(\Magento\Framework\Config\CacheInterface::class);
         $this->serializer = $this->getMockForAbstractClass(SerializerInterface::class);
@@ -64,7 +64,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->serializer->expects($this->never())
             ->method('unserialize');
 
-        $this->assertSame(false, $this->cacheHelper->loadPartnersFromCache());
+        $this->assertFalse($this->cacheHelper->loadPartnersFromCache());
     }
 
     public function testSavePartnersToCache()

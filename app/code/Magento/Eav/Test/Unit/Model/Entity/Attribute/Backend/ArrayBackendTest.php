@@ -17,14 +17,13 @@ class ArrayBackendTest extends \PHPUnit\Framework\TestCase
      */
     protected $_attribute;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_attribute = $this->createPartialMock(
             \Magento\Eav\Model\Entity\Attribute::class,
             ['getAttributeCode', '__wakeup']
         );
-        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $this->_model = new \Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend($logger);
+        $this->_model = new \Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend();
         $this->_model->setAttribute($this->_attribute);
     }
 
@@ -33,11 +32,11 @@ class ArrayBackendTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidate($data)
     {
-        $this->_attribute->expects($this->atLeastOnce())->method('getAttributeCode')->will($this->returnValue('code'));
+        $this->_attribute->expects($this->atLeastOnce())->method('getAttributeCode')->willReturn('code');
         $product = new \Magento\Framework\DataObject(['code' => $data, 'empty' => '']);
         $this->_model->validate($product);
         $this->assertEquals('1,2,3', $product->getCode());
-        $this->assertEquals(null, $product->getEmpty());
+        $this->assertEquals('', $product->getEmpty());
     }
 
     /**

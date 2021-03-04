@@ -18,21 +18,21 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $countryFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $countryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->countryFactoryMock = $this->createMock(\Magento\Directory\Model\CountryFactory::class);
@@ -44,7 +44,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->countryFactoryMock
             ->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->countryMock));
+            ->willReturn($this->countryMock);
         $this->model = $objectManager->getObject(
             \Magento\Quote\Model\Quote\Address\Validator::class,
             [
@@ -55,16 +55,16 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testValidateWithEmptyObject()
     {
-        $this->itemMock->expects($this->once())->method('getEmail')->will($this->returnValue(null));
-        $this->itemMock->expects($this->once())->method('getCountryId')->will($this->returnValue(null));
+        $this->itemMock->expects($this->once())->method('getEmail')->willReturn(null);
+        $this->itemMock->expects($this->once())->method('getCountryId')->willReturn(null);
         $this->assertTrue($this->model->isValid($this->itemMock));
         $this->assertEmpty($this->model->getMessages());
     }
 
     public function testValidateWithInvalidEmail()
     {
-        $this->itemMock->expects($this->once())->method('getEmail')->will($this->returnValue('invalid_email'));
-        $this->itemMock->expects($this->once())->method('getCountryId')->will($this->returnValue(null));
+        $this->itemMock->expects($this->once())->method('getEmail')->willReturn('invalid_email');
+        $this->itemMock->expects($this->once())->method('getCountryId')->willReturn(null);
         $this->assertFalse($this->model->isValid($this->itemMock));
         $messages = ['invalid_email_format' => 'Invalid email format'];
         $this->assertEquals($messages, $this->model->getMessages());
@@ -72,11 +72,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testValidateWithInvalidCountryId()
     {
-        $this->itemMock->expects($this->once())->method('getEmail')->will($this->returnValue(null));
-        $this->itemMock->expects($this->once())->method('getCountryId')->will($this->returnValue(100));
+        $this->itemMock->expects($this->once())->method('getEmail')->willReturn(null);
+        $this->itemMock->expects($this->once())->method('getCountryId')->willReturn(100);
 
         $this->countryMock->expects($this->once())->method('load')->with(100);
-        $this->countryMock->expects($this->once())->method('getId')->will($this->returnValue(null));
+        $this->countryMock->expects($this->once())->method('getId')->willReturn(null);
 
         $this->assertFalse($this->model->isValid($this->itemMock));
         $messages = ['invalid_country_code' => 'Invalid country code'];
@@ -85,11 +85,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testValidateWithInvalidData()
     {
-        $this->itemMock->expects($this->once())->method('getEmail')->will($this->returnValue('invalid_email'));
-        $this->itemMock->expects($this->once())->method('getCountryId')->will($this->returnValue(100));
+        $this->itemMock->expects($this->once())->method('getEmail')->willReturn('invalid_email');
+        $this->itemMock->expects($this->once())->method('getCountryId')->willReturn(100);
 
         $this->countryMock->expects($this->once())->method('load')->with(100);
-        $this->countryMock->expects($this->once())->method('getId')->will($this->returnValue(null));
+        $this->countryMock->expects($this->once())->method('getId')->willReturn(null);
 
         $this->assertFalse($this->model->isValid($this->itemMock));
         $messages = [
@@ -101,11 +101,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testValidateWithValidData()
     {
-        $this->itemMock->expects($this->once())->method('getEmail')->will($this->returnValue('test@example.com'));
-        $this->itemMock->expects($this->once())->method('getCountryId')->will($this->returnValue(100));
+        $this->itemMock->expects($this->once())->method('getEmail')->willReturn('test@example.com');
+        $this->itemMock->expects($this->once())->method('getCountryId')->willReturn(100);
 
         $this->countryMock->expects($this->once())->method('load')->with(100);
-        $this->countryMock->expects($this->once())->method('getId')->will($this->returnValue(100));
+        $this->countryMock->expects($this->once())->method('getId')->willReturn(100);
 
         $this->assertTrue($this->model->isValid($this->itemMock));
         $this->assertEmpty($this->model->getMessages());

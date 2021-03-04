@@ -25,7 +25,7 @@ class ViewActionTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilder;
 
@@ -39,7 +39,7 @@ class ViewActionTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->urlBuilder = $this->getMockForAbstractClass(\Magento\Framework\UrlInterface::class);

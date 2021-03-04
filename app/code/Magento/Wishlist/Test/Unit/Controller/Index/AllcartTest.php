@@ -13,51 +13,51 @@ use Magento\Framework\Controller\ResultFactory;
 class AllcartTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Wishlist\Controller\WishlistProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Wishlist\Controller\WishlistProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $wishlistProvider;
 
     /**
-     * @var \Magento\Wishlist\Model\ItemCarrier|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Wishlist\Model\ItemCarrier|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemCarrier;
 
     /**
-     * @var \Magento\Framework\Data\Form\FormKey\Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\FormKey\Validator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $formKeyValidator;
 
     /**
-     * @var \Magento\Framework\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $response;
 
     /**
-     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultFactoryMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultRedirectMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Forward|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\Forward|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultForwardMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->createMock(\Magento\Framework\App\Action\Context::class);
         $this->wishlistProvider = $this->createMock(\Magento\Wishlist\Controller\WishlistProvider::class);
@@ -98,39 +98,39 @@ class AllcartTest extends \PHPUnit\Framework\TestCase
         $this->context
             ->expects($this->any())
             ->method('getObjectManager')
-            ->will($this->returnValue($om));
+            ->willReturn($om);
         $this->context
             ->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->request));
+            ->willReturn($this->request);
         $this->context
             ->expects($this->any())
             ->method('getResponse')
-            ->will($this->returnValue($this->response));
+            ->willReturn($this->response);
         $this->context
             ->expects($this->any())
             ->method('getEventManager')
-            ->will($this->returnValue($eventManager));
+            ->willReturn($eventManager);
         $this->context
             ->expects($this->any())
             ->method('getUrl')
-            ->will($this->returnValue($url));
+            ->willReturn($url);
         $this->context
             ->expects($this->any())
             ->method('getActionFlag')
-            ->will($this->returnValue($actionFlag));
+            ->willReturn($actionFlag);
         $this->context
             ->expects($this->any())
             ->method('getRedirect')
-            ->will($this->returnValue($redirect));
+            ->willReturn($redirect);
         $this->context
             ->expects($this->any())
             ->method('getView')
-            ->will($this->returnValue($view));
+            ->willReturn($view);
         $this->context
             ->expects($this->any())
             ->method('getMessageManager')
-            ->will($this->returnValue($messageManager));
+            ->willReturn($messageManager);
         $this->context->expects($this->any())
             ->method('getResultFactory')
             ->willReturn($this->resultFactoryMock);
@@ -156,7 +156,7 @@ class AllcartTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('validate')
             ->with($this->request)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->resultForwardMock->expects($this->once())
             ->method('forward')
             ->with('noroute')
@@ -172,11 +172,11 @@ class AllcartTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('validate')
             ->with($this->request)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->wishlistProvider
             ->expects($this->once())
             ->method('getWishlist')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->resultForwardMock->expects($this->once())
             ->method('forward')
             ->with('noroute')
@@ -193,14 +193,14 @@ class AllcartTest extends \PHPUnit\Framework\TestCase
         $this->formKeyValidator->expects($this->once())
             ->method('validate')
             ->with($this->request)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('qty')
-            ->will($this->returnValue(2));
+            ->willReturn(2);
         $this->wishlistProvider->expects($this->once())
             ->method('getWishlist')
-            ->will($this->returnValue($wishlist));
+            ->willReturn($wishlist);
         $this->itemCarrier->expects($this->once())
             ->method('moveAllToCart')
             ->with($wishlist, 2)

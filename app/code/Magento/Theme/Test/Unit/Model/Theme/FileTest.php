@@ -17,31 +17,31 @@ class FileTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registry;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\FlyweightFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\Theme\FlyweightFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $themeFactory;
 
     /**
-     * @var FileServiceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileServiceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileServiceFactory;
 
     /**
-     * @var \Magento\Theme\Model\ResourceModel\Theme\File|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ResourceModel\Theme\File|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Theme\Model\ResourceModel\Theme\File\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ResourceModel\Theme\File\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceCollection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $context = $this->getMockBuilder(
             \Magento\Framework\Model\Context::class
@@ -101,10 +101,11 @@ class FileTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      * @return void
-     * @expectedException \UnexpectedValueException
      */
     public function testGetFullPathWithoutFileType()
     {
+        $this->expectException(\UnexpectedValueException::class);
+
         $this->model->getFullPath();
     }
 
@@ -171,11 +172,12 @@ class FileTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Theme id should be set
      */
     public function testGetThemeException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Theme id should be set');
+
         $this->themeFactory->expects($this->once())
             ->method('create')
             ->with(null, DesignInterface::DEFAULT_AREA)
