@@ -32,6 +32,23 @@ class CurlHelpers extends Helper
     }
 
     /**
+     * Assert a that a curl request's response does not contain an expected string
+     *
+     * @param string $url
+     * @param string $expectedString
+     * @param string $postBody
+     * @param string $cookieName
+     * @return void
+     *
+     */
+    public function assertCurlResponseDoesNotContainString($url, $expectedString, $postBody = null, $cookieName = 'admin'): void
+    {
+        $cookie = $this->getCookie($cookieName);
+        $curlResponse = $this->getCurlResponse($url, $cookie, $postBody);
+        $this->assertStringNotContainsString($expectedString, $curlResponse);
+    }
+
+    /**
      * Sends a curl request with the provided URL & cookie. Returns the response
      *
      * @param string $url

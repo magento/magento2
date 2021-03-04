@@ -59,8 +59,8 @@
         <data key="urlKey" unique="suffix">api-simple-product</data>
     </entity>
     <entity name="SimpleProduct" type="product">
-        <data key="name" unique="suffix">SimpleProduct</data>
-        <data key="sku" unique="suffix">SimpleProduct</data>
+        <data key="name" unique="suffix">Simple Product</data>
+        <data key="sku" unique="suffix">simple-product-</data>
         <data key="urlKey" unique="suffix">simpleproduct</data>
         <data key="type_id">simple</data>
         <data key="attribute_set_id">4</data>
@@ -135,8 +135,8 @@
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
     <entity name="SimpleProduct2" type="product">
-        <data key="name" unique="suffix">SimpleProduct</data>
-        <data key="sku" unique="suffix">SimpleProduct</data>
+        <data key="name" unique="suffix">Simple Product 2 </data>
+        <data key="sku" unique="suffix">simple-product-2-</data>
         <data key="type_id">simple</data>
         <data key="attribute_set_id">4</data>
         <data key="price">123.00</data>
@@ -147,8 +147,8 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
     </entity>
     <entity name="SimpleProduct3" type="product">
-        <data key="name" unique="suffix">simple</data>
-        <data key="sku" unique="suffix">simple</data>
+        <data key="name" unique="suffix">Simple Product 3 </data>
+        <data key="sku" unique="suffix">simple-product-3-</data>
         <data key="type_id">simple</data>
         <data key="attribute_set_id">4</data>
         <data key="price">123.00</data>

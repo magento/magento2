@@ -205,7 +205,7 @@ class LocalFileAssertions extends Helper
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function assertFileDoesNotContain($filePath, $text, $message = ""): void
+    public function assertFileDoesNotContainString($filePath, $text, $message = ""): void
     {
         $realPath = $this->expandPath($filePath);
         $this->assertStringNotContainsString($text, $this->driver->fileGetContents($realPath), $message);

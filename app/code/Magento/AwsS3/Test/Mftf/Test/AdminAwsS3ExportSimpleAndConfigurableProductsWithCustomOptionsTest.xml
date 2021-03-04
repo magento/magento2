@@ -8,14 +8,15 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminAwsS3ExportGroupedProductWithSpecialPriceTest" extends="AdminExportGroupedProductWithSpecialPriceTest">
+    <test name="AdminAwsS3ExportSimpleAndConfigurableProductsWithCustomOptionsTest" extends="AdminExportSimpleAndConfigurableProductsWithCustomOptionsTest">
         <annotations>
             <features value="AwsS3"/>
             <stories value="Export Products"/>
-            <title value="S3 - Export Grouped Products with Special Price"/>
-            <description value="Verifies that a user can export a Grouped product with a special price and Simple child
-            products. Verifies that exported file and the downloadable copy of the exported file contain the expected
-            products. Note that MFTF cannot simply download a file and have access to it due to the test not having
+            <title value="S3 - Export Simple and Configurable Products with Custom Options"/>
+            <description value="Verifies that a user can export a Configurable product with child simple products with
+            custom options. Verifies that the exported file and the downloadable copy of the exported file contain the
+            expected product (a filter is applied when exporting such that ONLY the configurable product should be in
+            the export). Note that MFTF cannot simply download a file and have access to it due to the test not having
             access to the server that is running the test browser. Therefore, this test verifies that the Download
             button can be successfully clicked, grabs the request URL from the Download button, executes the request on
             the magento machine via a curl request, and verifies the contents of the downloaded file. Uses S3 for the
@@ -28,7 +29,7 @@
 
         <before>
             <!-- Enable AWS S3 Remote Storage -->
-            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage" before="createFirstSimpleProduct"/>
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage" before="createCategory"/>
         </before>
 
         <after>
@@ -44,25 +45,25 @@
         <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileExists" stepKey="assertExportFileExists">
             <argument name="filePath">import_export/export/{$grabNameFile}</argument>
         </helper>
-        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFirstSimpleProduct">
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsConfigurableProduct">
             <argument name="filePath">import_export/export/{$grabNameFile}</argument>
-            <argument name="text">$$createFirstSimpleProduct.name$$</argument>
+            <argument name="text">$$createConfigProduct.name$$</argument>
         </helper>
-        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsSecondSimpleProduct">
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFirstChildSimpleProductOption">
             <argument name="filePath">import_export/export/{$grabNameFile}</argument>
-            <argument name="text">$$createSecondSimpleProduct.name$$</argument>
+            <argument name="text">sku=$$createConfigFirstChildProduct.sku$$,$$createConfigProductAttribute.attribute_code$$=option1</argument>
         </helper>
-        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsGroupedProduct">
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsSecondChildSimpleProductOption">
             <argument name="filePath">import_export/export/{$grabNameFile}</argument>
-            <argument name="text">$$createGroupedProduct.name$$</argument>
+            <argument name="text">sku=$$createConfigSecondChildProduct.sku$$,$$createConfigProductAttribute.attribute_code$$=option2</argument>
         </helper>
-        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFirstChildGroupedProduct">
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileDoesNotContainString" stepKey="assertExportFileDoesNotContainFirstSimpleProduct">
             <argument name="filePath">import_export/export/{$grabNameFile}</argument>
-            <argument name="text">$$createFirstSimpleProduct.sku$$=$$createFirstSimpleProduct.quantity$$</argument>
+            <argument name="text">$$createConfigFirstChildProduct.name$$</argument>
         </helper>
-        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsSecondChildGroupedProduct">
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileDoesNotContainString" stepKey="assertExportFileDoesNotContainSecondSimpleProduct">
             <argument name="filePath">import_export/export/{$grabNameFile}</argument>
-            <argument name="text">$$createSecondSimpleProduct.sku$$=$$createSecondSimpleProduct.quantity$$</argument>
+            <argument name="text">$$createConfigSecondChildProduct.name$$</argument>
         </helper>
 
         <!-- Delete Export File -->

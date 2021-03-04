@@ -91,15 +91,23 @@
         </helper>
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFirstSimpleProduct">
             <argument name="filePath">var/export/{$grabNameFile}</argument>
-            <argument name="text">$$createFirstSimpleProduct.sku$$</argument>
+            <argument name="text">$$createFirstSimpleProduct.name$$</argument>
         </helper>
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsSecondSimpleProduct">
             <argument name="filePath">var/export/{$grabNameFile}</argument>
-            <argument name="text">$$createSecondSimpleProduct.sku$$</argument>
+            <argument name="text">$$createSecondSimpleProduct.name$$</argument>
         </helper>
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsGroupedProduct">
             <argument name="filePath">var/export/{$grabNameFile}</argument>
-            <argument name="text">$$createGroupedProduct.sku$$</argument>
+            <argument name="text">$$createGroupedProduct.name$$</argument>
+        </helper>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFirstChildGroupedProduct">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+            <argument name="text">$$createFirstSimpleProduct.sku$$=$$createFirstSimpleProduct.quantity$$</argument>
+        </helper>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsSecondChildGroupedProduct">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+            <argument name="text">$$createSecondSimpleProduct.sku$$=$$createSecondSimpleProduct.quantity$$</argument>
         </helper>
 
         <!-- Download Export File -->
@@ -111,15 +119,23 @@
         <grabAttributeFrom userInput="href" selector="{{AdminExportAttributeSection.download('0')}}" stepKey="grabExportUrl"/>
         <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsFirstSimpleProductc">
             <argument name="url">{$grabExportUrl}</argument>
-            <argument name="expectedString">$$createFirstSimpleProduct.sku$$</argument>
+            <argument name="expectedString">$$createFirstSimpleProduct.name$$</argument>
         </helper>
         <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsSecondSimpleProduct">
             <argument name="url">{$grabExportUrl}</argument>
-            <argument name="expectedString">$$createSecondSimpleProduct.sku$$</argument>
+            <argument name="expectedString">$$createSecondSimpleProduct.name$$</argument>
         </helper>
         <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsGroupedProduct">
             <argument name="url">{$grabExportUrl}</argument>
-            <argument name="expectedString">$$createGroupedProduct.sku$$</argument>
+            <argument name="expectedString">$$createGroupedProduct.name$$</argument>
+        </helper>
+        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsFirstChildGroupedProduct">
+            <argument name="url">{$grabExportUrl}</argument>
+            <argument name="expectedString">$$createFirstSimpleProduct.sku$$=$$createFirstSimpleProduct.quantity$$</argument>
+        </helper>
+        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsSecondChildGroupedProduct">
+            <argument name="url">{$grabExportUrl}</argument>
+            <argument name="expectedString">$$createSecondSimpleProduct.sku$$=$$createSecondSimpleProduct.quantity$$</argument>
         </helper>
 
         <!-- Delete Export File -->
