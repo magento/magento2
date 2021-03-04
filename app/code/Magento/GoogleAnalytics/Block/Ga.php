@@ -63,6 +63,14 @@ class Ga extends \Magento\Framework\View\Element\Template
     {
         return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
+    
+    /**
+     * @return \Magento\GoogleAnalaytics\Helper\Data
+     */
+    public function getHelper()
+    {
+        return $this->_googleAnalyticsData;
+    }
 
     /**
      * Get a specific page name (may be customized via layout)
@@ -207,7 +215,8 @@ class Ga extends \Magento\Framework\View\Element\Template
         return [
             'optPageUrl' => $this->getOptPageUrl(),
             'isAnonymizedIpActive' => $this->_googleAnalyticsData->isAnonymizedIpActive(),
-            'accountId' => $this->escapeHtmlAttr($accountId, false)
+            'accountId' => $this->escapeHtmlAttr($accountId, false),
+            'accountType' => $this->_googleAnalyticsData->getAccountType()
         ];
     }
 

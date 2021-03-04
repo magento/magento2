@@ -23,14 +23,26 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     const XML_PATH_ACCOUNT_TYPE = 'google/analytics/account_type';
 
-    const XML_PATH_ACCOUNT = 'google/analytics/account';
+    // const XML_PATH_ACCOUNT = 'google/analytics/account';
+    const XML_PATH_TRACKING_ID = 'google/analytics/tracking_id';
+
+    const XML_PATH_MEASUREMENT_ID = 'google/analytics/measurement_id';
 
     const XML_PATH_ANONYMIZE = 'google/analytics/anonymize';
+
+    const XML_PATH_ANONYMIZE_DEFAULT_YES = 'google/analytics/anonymize_default_yes';
 
     /**
     * Account Types
     */
-    const ACCOUNT_TYPE_GOOGLE_ANALYTICS = 0;
+    const ACCOUNT_TYPE_UNIVERSAL_ANALYTICS = 0;
+
+    const ACCOUNT_TYPE_GOOGLE_ANALYTICS = 1;
+
+    /**
+     * Anonymize IP Default Yes
+     */
+    const DEFAULT_YES = 0;
 
     /**
      * Whether GA is ready to use
@@ -40,35 +52,42 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isGoogleAnalyticsAvailable($store = null)
     {
-        $accountId = $this->scopeConfig->getValue(self::XML_PATH_ACCOUNT, ScopeInterface::SCOPE_STORE, $store);
-        return $accountId && $this->scopeConfig->isSetFlag(self::XML_PATH_ACTIVE, ScopeInterface::SCOPE_STORE, $store);
+
+        // $accountId = $this->scopeConfig->getValue(self::XML_PATH_ACCOUNT, ScopeInterface::SCOPE_STORE, $store);
+        $accountId = $this->getAccountId();
+        return $accountId && $this->scopeConfig->isSetFlag(
+            self::XML_PATH_ACTIVE, ScopeInterface::SCOPE_STORE, $store);
     }
 
     /**
      * Whether anonymized IPs are active
-     *
+     * Google Analytics Accounts(GA4) is always true
      * @param null|string|bool|int|Store $store
      * @return bool
      * @since 100.2.0
      */
     public function isAnonymizedIpActive($store = null)
     {
-        return (bool)$this->scopeConfig->getValue(self::XML_PATH_ANONYMIZE, ScopeInterface::SCOPE_STORE, $store);
+        if ($this->isGoogleAnalyticsAccount()) {
+            return true;
+        } else {
+            return (bool)$this->scopeConfig->getValue(
+                self::XML_PATH_ANONYMIZE, ScopeInterface::SCOPE_STORE, $store);
+        }
+
     }
 
     /**
-    * Get Google Analytics Account Type
+    * Get Account Type
     *
-    * @return string
+    * @return int
     */
     public function getAccountType()
     {
  	    return $this->scopeConfig->getValue(
-    	    self::XML_PATH_ACCOUNT_TYPE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+ 	        self::XML_PATH_ACCOUNT_TYPE,\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
-    
+
     /**
      * Checks if Account Type is Google Analytics Account
      *
@@ -77,5 +96,37 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function isGoogleAnalyticsAccount()
     {
         return $this->getAccountType() == self::ACCOUNT_TYPE_GOOGLE_ANALYTICS;
+    }
+
+    /**
+     * Checks if Account Type is Universal Analytics Account
+     *
+     * @return bool
+     */
+    public function isUniversalAnalyticsAccount()
+    {
+        return $this->getAccountType() == self::ACCOUNT_TYPE_UNIVERSAL_ANALYTICS;
+    }
+
+    /**
+     * Get Tracking or Measurement Id
+     *
+     * @return string
+     */
+    public function getAccountId()
+    {
+        if ($this->isGoogleAnalyticsAccount()) {
+            return (string)$this->scopeConfig->getValue(
+                self::XML_PATH_MEASUREMENT_ID,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+        } else {
+            return (string)$this->scopeConfig->getValue(
+                self::XML_PATH_TRACKING_ID,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+
+        }
+
     }
 }

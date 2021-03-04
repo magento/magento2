@@ -20,7 +20,10 @@ define([
         var DEVELOPER_ID = 'dYjhlMD';
         var allowServices = false,
             allowedCookies,
-            allowedWebsites;
+            allowedWebsites,
+            accountId,
+            accountType,
+            anonymizedIp;
 
         if (config.isCookieRestrictionModeEnabled) {
             allowedCookies = $.mage.cookies.get(config.cookieName);
@@ -38,42 +41,86 @@ define([
 
         if (allowServices) {
             /* Global site tag (gtag.js) - Google Analytics */
-            var src_url = `https://www.googletagmanager.com/gtag/js?id=${config.pageTrackingData.accountId}`;
-            document.head.insertAdjacentHTML("beforeend", <script async src={src_url}></script>);
+            console.log("~~~~~~~~~~~~~~~~~~~~~ START ~~~~~~~~~~~~~~~~~~~~~~~");
+            accountId = config.pageTrackingData.accountId;
+            accountType = config.pageTrackingData.accountType;
+            anonymizedIp = config.pageTrackingData.isAnonymizedIpActive;
+            console.log("~~~~~ accountId:", accountId); //test_logging
+            console.log("~~~~~ accountType:", accountType); //test_logging
+            console.log("~~~~~ isAnonymizedIpActive:", anonymizedIp); //test_logging
             
+            var gtagScript = document.createElement('script');
+            var src_url = 'https://www.googletagmanager.com/gtag/js?id=' + accountId;
+            gtagScript.type = 'text/javascript';
+            gtagScript.async = true;
+            gtagScript.src = src_url;
+            document.head.appendChild(gtagScript);
             window.dataLayer = window.dataLayer || [];
+
+            // TODO - add validation for gtag isPresent
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('set', DEVELOPER_ID, true);
-
-            gtag('config', config.pageTrackingData.accountId, { 'anonymize_ip': 'true'});
+            gtag('config', accountId, { 'anonymize_ip': anonymizedIp });
             // gtag('config', 'conversion-id') // this will be conversion-id for google ads if available
-
-            // TODO: Finish GTAG for Enhanced Ecommerce 
+            var currency = config.ordersTrackingData.hasOwnProperty('currency'); //test_logging
+            console.log("~~~~~ Currency:", currency);//test_logging
+            console.log("~~~~~ config.ordersTrackingData.products:", config.ordersTrackingData.products);
             // Process orders data
-            if (config.ordersTrackingData.hasOwnProperty('currency')) {
-                ga('require', 'ec', 'ec.js');
-
-                ga('set', 'currencyCode', config.ordersTrackingData.currency);
-
+            if (currency) {
                 // Collect product data for GA
                 if (config.ordersTrackingData.products) {
-                    $.each(config.ordersTrackingData.products, function (index, value) {
-                        ga('ec:addProduct', value);
-                    });
+                    var products = config.ordersTrackingData.products;
+                    console.log("~~~ PRODUCTS:", products);//test_logging
+                    // Universal Analytics Account Type
+                    if (accountType === '0') {
+                        gtag('event', 'add_to_cart', {
+                            'items' : products
+                        });
+                    // Google Analytics Account Type
+                    } else { 
+                        let updatedProducts = [];
+                        let tempProduct = {};
+                        for(let i = 0; i < products.length; i++) {
+                            tempProduct = Object.fromEntries(Object.entries(products[i]).map((entry) => { 
+                                if (entry[0] === 'id' || entry[0] === 'name') entry[0] = 'item_' + entry[0];
+                                return entry;
+                            }));
+                            updatedProducts.push(tempProduct);
+                        }
+                        console.log("~~~ GA4 - updatedProducts:", updatedProducts);//test_logging
+                        gtag('event', 'add_to_cart', {
+                            'items' : updatedProducts
+                        });
+                    }
                 }
-
+               
                 // Collect orders data for GA
                 if (config.ordersTrackingData.orders) {
-                    $.each(config.ordersTrackingData.orders, function (index, value) {
-                        ga('ec:setAction', 'purchase', value);
-                    });
+                    var orders = config.ordersTrackingData.orders;
+                    console.log("~~~ ORDERS:", orders);
+                    // Universal Analytics Account Type
+                    if (accountType === '0') {
+                        gtag('event', 'purchase', {
+                            'items': orders
+                        });
+                    // Google Analytics Account Type
+                    } else {
+                        let updatedOrders = [];
+                        let tempOrder = {};
+                        for(let i = 0; i < orders.length; i++) {
+                            tempOrder = Object.fromEntries(Object.entries(orders[i]).map((entry) => { 
+                                if (entry[0] === 'id' || entry[0] === 'name') entry[0] = 'item_' + entry[0];
+                                return entry;
+                            }));
+                            updatedOrders.push(tempOrder);
+                        }
+                        console.log("~~~ GA4 - updatedOrders:", updatedOrders);
+                        gtag('event', 'purchase', {
+                            'items' : updatedOrders
+                        });
+                    }
                 }
-
-                // ga('send', 'pageview');
-            } else {
-                // Process Data if not orders
-                ga('send', 'pageview' + config.pageTrackingData.optPageUrl);
             }
         }
     }
