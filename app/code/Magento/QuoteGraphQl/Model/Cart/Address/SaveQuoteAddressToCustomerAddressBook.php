@@ -56,10 +56,10 @@ class SaveQuoteAddressToCustomerAddressBook
      * @param QuoteAddress $quoteAddress
      * @param int $customerId
      *
-     * @return void
+     * @return int|null
      * @throws GraphQlInputException
      */
-    public function execute(QuoteAddress $quoteAddress, int $customerId): void
+    public function execute(QuoteAddress $quoteAddress, int $customerId): ?int
     {
         try {
             /** @var AddressInterface $customerAddress */
@@ -88,8 +88,10 @@ class SaveQuoteAddressToCustomerAddressBook
             $customerAddress->setRegion($region);
 
             $this->addressRepository->save($customerAddress);
+            return (int)$customerAddress->getId();
         } catch (LocalizedException $e) {
             throw new GraphQlInputException(__($e->getMessage()), $e);
         }
+        return null;
     }
 }

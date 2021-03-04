@@ -119,11 +119,17 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
         $customerId = $context->getUserId();
 
         if (null === $customerAddressId) {
-            $shippingAddress = $this->quoteAddressFactory->createBasedOnInputData($shippingAddressInput);
+            $shippingAddress = $this->quoteAddressFactory->createBasedOnInputData($shippingAddressInput['address']);
 
             // need to save address only for registered user and if save_in_address_book = true
-            if (0 !== $customerId && !empty($addressInput['save_in_address_book'])) {
-                $this->saveQuoteAddressToCustomerAddressBook->execute($shippingAddress, $customerId);
+            if (0 !== $customerId && !empty($shippingAddressInput['address']['save_in_address_book'])) {
+                $customerAddressId = $this->saveQuoteAddressToCustomerAddressBook->execute($shippingAddress, $customerId);
+                if ($customerAddressId) {
+                    $shippingAddress = $this->quoteAddressFactory->createBasedOnCustomerAddress(
+                        (int)$customerAddressId,
+                        $customerId
+                    );
+                }
             }
         } else {
             if (false === $context->getExtensionAttributes()->getIsCustomer()) {

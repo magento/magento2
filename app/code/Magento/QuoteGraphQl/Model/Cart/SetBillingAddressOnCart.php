@@ -137,7 +137,13 @@ class SetBillingAddressOnCart
             $customerId = $context->getUserId();
             // need to save address only for registered user and if save_in_address_book = true
             if (0 !== $customerId && !empty($addressInput['save_in_address_book'])) {
-                $this->saveQuoteAddressToCustomerAddressBook->execute($billingAddress, $customerId);
+                $customerAddressId = $this->saveQuoteAddressToCustomerAddressBook->execute($billingAddress, $customerId);
+                if ($customerAddressId) {
+                    $billingAddress = $this->quoteAddressFactory->createBasedOnCustomerAddress(
+                        (int)$customerAddressId,
+                        (int)$context->getUserId()
+                    );
+                }
             }
         } else {
             if (false === $context->getExtensionAttributes()->getIsCustomer()) {
