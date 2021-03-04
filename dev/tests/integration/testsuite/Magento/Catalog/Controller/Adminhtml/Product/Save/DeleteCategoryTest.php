@@ -15,8 +15,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
- * @magentoDbIsolation disabled
- * @magentoAppArea adminhtml
+ * Class DeleteCategoryTest
+ * Checks product saving with deleted category before reindex is done
  */
 class DeleteCategoryTest extends AbstractBackendController
 {
@@ -35,8 +35,9 @@ class DeleteCategoryTest extends AbstractBackendController
     }
 
     /**
-     * Checks product saving with deleted category before reindex is done
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
+     * @magentoDbIsolation disabled
+     * @magentoAppArea adminhtml
      */
     public function testDeleteCustomOptionWithTypeField(): void
     {
