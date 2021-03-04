@@ -41,13 +41,9 @@ define([
 
         if (allowServices) {
             /* Global site tag (gtag.js) - Google Analytics */
-            console.log("~~~~~~~~~~~~~~~~~~~~~ START ~~~~~~~~~~~~~~~~~~~~~~~");
             accountId = config.pageTrackingData.accountId;
             accountType = config.pageTrackingData.accountType;
             anonymizedIp = config.pageTrackingData.isAnonymizedIpActive;
-            console.log("~~~~~ accountId:", accountId); //test_logging
-            console.log("~~~~~ accountType:", accountType); //test_logging
-            console.log("~~~~~ isAnonymizedIpActive:", anonymizedIp); //test_logging
             
             var gtagScript = document.createElement('script');
             var src_url = 'https://www.googletagmanager.com/gtag/js?id=' + accountId;
@@ -64,14 +60,12 @@ define([
             gtag('config', accountId, { 'anonymize_ip': anonymizedIp });
             // gtag('config', 'conversion-id') // this will be conversion-id for google ads if available
             var currency = config.ordersTrackingData.hasOwnProperty('currency'); //test_logging
-            console.log("~~~~~ Currency:", currency);//test_logging
-            console.log("~~~~~ config.ordersTrackingData.products:", config.ordersTrackingData.products);
+            
             // Process orders data
             if (currency) {
                 // Collect product data for GA
                 if (config.ordersTrackingData.products) {
                     var products = config.ordersTrackingData.products;
-                    console.log("~~~ PRODUCTS:", products);//test_logging
                     // Universal Analytics Account Type
                     if (accountType === '0') {
                         gtag('event', 'add_to_cart', {
@@ -88,7 +82,6 @@ define([
                             }));
                             updatedProducts.push(tempProduct);
                         }
-                        console.log("~~~ GA4 - updatedProducts:", updatedProducts);//test_logging
                         gtag('event', 'add_to_cart', {
                             'items' : updatedProducts
                         });
@@ -98,7 +91,6 @@ define([
                 // Collect orders data for GA
                 if (config.ordersTrackingData.orders) {
                     var orders = config.ordersTrackingData.orders;
-                    console.log("~~~ ORDERS:", orders);
                     // Universal Analytics Account Type
                     if (accountType === '0') {
                         gtag('event', 'purchase', {
@@ -115,7 +107,6 @@ define([
                             }));
                             updatedOrders.push(tempOrder);
                         }
-                        console.log("~~~ GA4 - updatedOrders:", updatedOrders);
                         gtag('event', 'purchase', {
                             'items' : updatedOrders
                         });
