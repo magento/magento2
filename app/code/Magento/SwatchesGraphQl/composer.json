@@ -8,7 +8,6 @@
         "magento/module-swatches": "*",
         "magento/module-catalog": "*",
         "magento/module-catalog-graph-ql": "*"
-
     },
     "suggest": {
         "magento/module-configurable-product-graph-ql": "*"
