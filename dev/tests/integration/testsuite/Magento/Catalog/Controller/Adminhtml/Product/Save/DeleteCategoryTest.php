@@ -8,13 +8,14 @@ declare(strict_types=1);
 namespace Magento\Catalog\Controller\Adminhtml\Product\Save;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Category;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
  * @magentoDbIsolation disabled
- * @magentoDataFixture Magento/Catalog/_files/category_product.php
  * @magentoAppArea adminhtml
  */
 class DeleteCategoryTest extends AbstractBackendController
@@ -25,21 +26,21 @@ class DeleteCategoryTest extends AbstractBackendController
     private $productRepository;
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
         parent::setUp();
         $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
-
     }
 
     /**
      * Checks product saving with deleted category before reindex is done
+     * @magentoDataFixture Magento/Catalog/_files/category_product.php
      */
     public function testDeleteCustomOptionWithTypeField(): void
     {
-        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Category::class);
+        $category = Bootstrap::getObjectManager()->create(Category::class);
         $category->load(333);
         $category->delete();
         $product = $this->productRepository->get('simple333');
