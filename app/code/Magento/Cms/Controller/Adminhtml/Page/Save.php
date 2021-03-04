@@ -3,13 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
-use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Cms\Api\Data\PageInterface;
+use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Cms\Model\Page;
+use Magento\Cms\Model\PageFactory;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -17,7 +24,7 @@ use Magento\Framework\Exception\LocalizedException;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends \Magento\Backend\App\Action implements HttpPostActionInterface
+class Save extends Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -37,12 +44,12 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
     protected $dataPersistor;
 
     /**
-     * @var \Magento\Cms\Model\PageFactory
+     * @var PageFactory
      */
     private $pageFactory;
 
     /**
-     * @var \Magento\Cms\Api\PageRepositoryInterface
+     * @var PageRepositoryInterface
      */
     private $pageRepository;
 
@@ -50,21 +57,20 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
      * @param Action\Context $context
      * @param PostDataProcessor $dataProcessor
      * @param DataPersistorInterface $dataPersistor
-     * @param \Magento\Cms\Model\PageFactory|null $pageFactory
-     * @param \Magento\Cms\Api\PageRepositoryInterface|null $pageRepository
+     * @param PageFactory|null $pageFactory
+     * @param PageRepositoryInterface|null $pageRepository
      */
     public function __construct(
         Action\Context $context,
         PostDataProcessor $dataProcessor,
         DataPersistorInterface $dataPersistor,
-        \Magento\Cms\Model\PageFactory $pageFactory = null,
-        \Magento\Cms\Api\PageRepositoryInterface $pageRepository = null
+        PageFactory $pageFactory = null,
+        PageRepositoryInterface $pageRepository = null
     ) {
         $this->dataProcessor = $dataProcessor;
         $this->dataPersistor = $dataPersistor;
-        $this->pageFactory = $pageFactory ?: ObjectManager::getInstance()->get(\Magento\Cms\Model\PageFactory::class);
-        $this->pageRepository = $pageRepository
-            ?: ObjectManager::getInstance()->get(\Magento\Cms\Api\PageRepositoryInterface::class);
+        $this->pageFactory = $pageFactory ?: ObjectManager::getInstance()->get(PageFactory::class);
+        $this->pageRepository = $pageRepository ?: ObjectManager::getInstance()->get(PageRepositoryInterface::class);
         parent::__construct($context);
     }
 
@@ -72,12 +78,12 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
      * Save action
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      */
     public function execute()
     {
         $data = $this->getRequest()->getPostValue();
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
             $data = $this->dataProcessor->filter($data);
@@ -88,7 +94,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
                 $data['page_id'] = null;
             }
 
-            /** @var \Magento\Cms\Model\Page $model */
+            /** @var Page $model */
             $model = $this->pageFactory->create();
 
             $id = $this->getRequest()->getParam('page_id');
@@ -117,7 +123,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
             } catch (LocalizedException $e) {
                 $this->messageManager->addExceptionMessage($e->getPrevious() ?: $e);
             } catch (\Throwable $e) {
-                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the page.'));
+                $this->messageManager->addErrorMessage(__('Something went wrong while saving the page.'));
             }
 
             $this->dataPersistor->set('cms_page', $data);
@@ -129,10 +135,10 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
     /**
      * Process result redirect
      *
-     * @param \Magento\Cms\Api\Data\PageInterface $model
-     * @param \Magento\Backend\Model\View\Result\Redirect $resultRedirect
+     * @param PageInterface $model
+     * @param Redirect $resultRedirect
      * @param array $data
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return Redirect
      * @throws LocalizedException
      */
     private function processResultRedirect($model, $resultRedirect, $data)
@@ -149,7 +155,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
                 '*/*/edit',
                 [
                     'page_id' => $newPage->getId(),
-                    '_current' => true
+                    '_current' => true,
                 ]
             );
         }
