@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Block\Address;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
@@ -13,7 +15,6 @@ use Magento\Customer\Block\Address\Grid as AddressesGrid;
  * Customer address book block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Book extends \Magento\Framework\View\Element\Template

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Block\Account;
 
@@ -15,7 +16,7 @@ namespace Magento\Customer\Block\Account;
 class Delimiter extends \Magento\Framework\View\Element\Template implements SortLinkInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function getSortOrder()

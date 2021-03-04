@@ -3,11 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Block\Account;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
+ * Class for account customer block
+ *
  * @api
  * @since 100.0.2
  */

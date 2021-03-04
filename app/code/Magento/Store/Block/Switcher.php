@@ -3,10 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * Store and language switcher block
- */
 namespace Magento\Store\Block;
 
 use Magento\Directory\Helper\Data;

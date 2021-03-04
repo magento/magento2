@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images;
 
 /**
@@ -73,7 +75,7 @@ class Tree extends \Magento\Backend\Block\Template
             $data = [
                 'text' => $this->_cmsWysiwygImages->getShortFilename($item->getBasename(), 20),
                 'id' => $this->_cmsWysiwygImages->convertPathToId($item->getFilename()),
-                'path' => substr($item->getFilename(), strlen($storageRoot)),
+                'path' => substr($item->getFilename(), strlen((string) $storageRoot)),
                 'cls' => 'folder',
             ];
             $nestedDirectories = $this->getMediaDirectory()->readRecursively($item->getFilename());
@@ -100,7 +102,7 @@ class Tree extends \Magento\Backend\Block\Template
 
         $currentTreePath = $this->getRequest()->getParam('current_tree_path');
 
-        if (strlen($currentTreePath)) {
+        if (strlen((string) $currentTreePath)) {
             $params['current_tree_path'] = $currentTreePath;
         }
 
@@ -135,7 +137,7 @@ class Tree extends \Magento\Backend\Block\Template
             $path = $this->_coreRegistry->registry('storage')->getSession()->getCurrentPath();
         }
 
-        if (strlen($path)) {
+        if (strlen((string) $path)) {
             $path = str_replace($this->_cmsWysiwygImages->getStorageRoot(), '', $path);
             $relative = [];
             foreach (explode('/', $path) as $dirName) {

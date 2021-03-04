@@ -3,15 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * Currency dropdown block
- */
 namespace Magento\Directory\Block;
 
 use Magento\Framework\Locale\Bundle\CurrencyBundle as CurrencyBundle;
 
 /**
+ * Currency dropdown block
+ *
  * @api
  * @since 100.0.2
  */
