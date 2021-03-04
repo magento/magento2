@@ -93,7 +93,6 @@ class SaveHandlerTest extends TestCase
                 'sessionMaxSizeConfig' => $this->sessionMaxSizeConfigMock,
             ]
         );
-
     }
 
     public function testWriteSessionMaxSizeValid()

@@ -58,7 +58,7 @@
                     <comment>Limit the maximum session size in bytes. Use 0 to disable.</comment>
                 </field>
             </group>
-        </section>s
+        </section>
         <section id="customer">
             <group id="password">
                 <field id="password_reset_protection_type" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">

@@ -19,6 +19,8 @@ use Magento\Framework\App\Config\Value;
 class SessionSize extends Value
 {
     /**
+     * Handles the before save event
+     *
      * @return $this
      */
     public function beforeSave()
