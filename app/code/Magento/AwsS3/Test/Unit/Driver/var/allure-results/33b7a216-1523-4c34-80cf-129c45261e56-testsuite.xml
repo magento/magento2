@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alr:test-suite xmlns:alr="urn:model.allure.qatools.yandex.ru" start="1614355190826" stop="1614355190894" version="1.4.0">
+  <name>Magento\AwsS3\Test\Unit\Driver\AwsS3Test</name>
+  <test-cases>
+    <test-case start="1614355190829" stop="1614355190888" status="failed">
+      <name>testIsDirectory with data set "empty metadata"</name>
+      <failure>
+        <message>Failed asserting that true is identical to false.</message>
+        <stack-trace>#0 /Users/rganin/www/magento/ce/vendor/phpunit/phpunit/src/Framework/Constraint/IsIdentical.php(93): PHPUnit\Framework\Constraint\Constraint-&gt;fail(true, '', NULL)
+#1 /Users/rganin/www/magento/ce/vendor/phpunit/phpunit/src/Framework/Assert.php(2228): PHPUnit\Framework\Constraint\IsIdentical-&gt;evaluate(true, '')
+#2 /Users/rganin/www/magento/ce/vendor/phpunit/phpunit/src/Framework/Assert.php(1288): PHPUnit\Framework\Assert::assertThat(true, Object(PHPUnit\Framework\Constraint\IsIdentical), '')
+#3 /Users/rganin/www/magento/ce/app/code/Magento/AwsS3/Test/Unit/Driver/AwsS3Test.php(237): PHPUnit\Framework\Assert::assertSame(false, true)
+#4 /Users/rganin/www/magento/ce/vendor/phpunit/phpunit/src/Framework/TestCase.php(1414): Magento\AwsS3\Test\Unit\Driver\AwsS3Test-&gt;testIsDirectory('some_directory/', 'some_directory', false, Array, false, Object(League\Flysystem\UnableToRetrieveMetadata))
+#5 /Users/rganin/www/magento/ce/vendor/phpunit/phpunit/src/Framework/TestCase.php(1031): PHPUnit\Framework\TestCase-&gt;runTest()
+#6 /Users/rganin/www/magento/ce/vendor/phpunit/phpunit/src/Framework/TestResult.php(688): PHPUnit\Framework\TestCase-&gt;runBare()
+#7 /Users/rganin/www/magento/ce/vendor/phpunit/phpunit/src/Framework/TestCase.php(772): PHPUnit\Framework\TestResult-&gt;run(Object(Magento\AwsS3\Test\Unit\Driver\AwsS3Test))
+#8 /Users/rganin/www/magento/ce/vendor/phpunit/phpunit/src/Framework/TestSuite.php(639): PHPUnit\Framework\TestCase-&gt;run(Object(PHPUnit\Framework\TestResult))
+#9 /Users/rganin/www/magento/ce/vendor/phpunit/phpunit/src/Framework/TestSuite.php(639): PHPUnit\Framework\TestSuite-&gt;run(Object(PHPUnit\Framework\TestResult))
+#10 /Users/rganin/www/magento/ce/vendor/phpunit/phpunit/src/Framework/TestSuite.php(639): PHPUnit\Framework\TestSuite-&gt;run(Object(PHPUnit\Framework\TestResult))
+#11 /Users/rganin/www/magento/ce/vendor/phpunit/phpunit/src/TextUI/TestRunner.php(653): PHPUnit\Framework\TestSuite-&gt;run(Object(PHPUnit\Framework\TestResult))
+#12 /Users/rganin/www/magento/ce/vendor/phpunit/phpunit/src/TextUI/Command.php(108): PHPUnit\TextUI\TestRunner-&gt;run(Object(PHPUnit\Framework\TestSuite), Array, Array, true)
+#13 /Users/rganin/www/magento/ce/vendor/phpunit/phpunit/src/TextUI/Command.php(68): PHPUnit\TextUI\Command-&gt;run(Array, true)
+#14 /Users/rganin/www/magento/ce/vendor/phpunit/phpunit/phpunit(61): PHPUnit\TextUI\Command::main()
+#15 {main}</stack-trace>
+      </failure>
+    </test-case>
+    <test-case start="1614355190888" stop="1614355190889" status="passed">
+      <name>testIsDirectory with data set #0</name>
+    </test-case>
+    <test-case start="1614355190889" stop="1614355190890" status="passed">
+      <name>testIsDirectory with data set #1</name>
+    </test-case>
+    <test-case start="1614355190890" stop="1614355190892" status="passed">
+      <name>testIsDirectory with data set #2</name>
+    </test-case>
+    <test-case start="1614355190892" stop="1614355190892" status="passed">
+      <name>testIsDirectory with data set #3</name>
+    </test-case>
+    <test-case start="1614355190893" stop="1614355190893" status="passed">
+      <name>testIsDirectory with data set #4</name>
+    </test-case>
+  </test-cases>
+</alr:test-suite>

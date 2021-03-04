@@ -182,7 +182,7 @@ class CachedAdapter implements FilesystemAdapter
      */
     public function listContents(string $path, bool $deep): iterable
     {
-        yield $this->adapter->listContents($path, $deep);
+        return $this->adapter->listContents($path, $deep);
     }
 
     /**

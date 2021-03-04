@@ -919,14 +919,12 @@ class AwsS3 implements RemoteDriverInterface
     {
         $relativePath = $this->normalizeRelativePath($path);
         $itemsList = [];
-        foreach ($this->adapter->listContents($this->fixPath($relativePath), $isRecursive) as $listing) {
-            foreach ($listing as $item) {
-                $path = $item->path();
-                if (!empty($path)
-                    && $path !== $relativePath
-                    && (!$relativePath || strpos($path, $relativePath) === 0)) {
-                    $itemsList[] = $this->getAbsolutePath(dirname($path), $path);
-                }
+        foreach ($this->adapter->listContents($this->fixPath($relativePath), $isRecursive) as $item) {
+            $path = $item->path();
+            if (!empty($path)
+                && $path !== $relativePath
+                && (!$relativePath || strpos($path, $relativePath) === 0)) {
+                $itemsList[] = $this->getAbsolutePath(dirname($path), $path);
             }
         }
 
