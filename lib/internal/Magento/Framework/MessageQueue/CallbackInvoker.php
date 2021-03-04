@@ -71,6 +71,7 @@ class CallbackInvoker implements CallbackInvokerInterface
     ) {
         $this->poisonPillVersion = $this->poisonPillRead->getLatestVersion();
         $sleep = (int) $sleep ?: 1;
+        $isMaxIdleTimeSet = $maxIdleTime !== null;
         $maxIdleTime = $maxIdleTime ? (int) $maxIdleTime : PHP_INT_MAX;
         for ($i = $maxNumberOfMessages; $i > 0; $i--) {
             $idleStartTime = microtime(true);
@@ -80,7 +81,7 @@ class CallbackInvoker implements CallbackInvokerInterface
                     break 2;
                 }
                 // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            } while ($message === null && $this->isWaitingNextMessage() && (sleep($sleep) === 0));
+            } while ($message === null && $this->isWaitingNextMessage($isMaxIdleTimeSet) && (sleep($sleep) === 0));
 
             if ($message === null) {
                 break;
@@ -101,8 +102,12 @@ class CallbackInvoker implements CallbackInvokerInterface
      *
      * @return bool
      */
-    private function isWaitingNextMessage(): bool
+    private function isWaitingNextMessage(bool $isMaxIdleTimeSet): bool
     {
+        if ($isMaxIdleTimeSet) {
+            return true;
+        }
+
         return $this->deploymentConfig->get('queue/consumers_wait_for_messages', 1) === 1;
     }
 }
