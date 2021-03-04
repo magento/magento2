@@ -53,7 +53,7 @@
         "laminas/laminas-mail": "^2.9.0",
         "laminas/laminas-mime": "^2.5.0",
         "laminas/laminas-modulemanager": "^2.7",
-        "laminas/laminas-mvc": "~2.7.0",
+        "laminas/laminas-mvc": "^3.2.0",
         "laminas/laminas-serializer": "^2.7.2",
         "laminas/laminas-server": "^2.6.1",
         "laminas/laminas-servicemanager": "^3.6.0",

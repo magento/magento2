@@ -5,13 +5,13 @@
  */
 
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
-use Laminas\Mvc\Service\DiAbstractServiceFactoryFactory;
-use Laminas\ServiceManager\Di\DiAbstractServiceFactory;
+use Laminas\Di\ConfigInterface;
+use Laminas\Di\InjectorInterface;
+use Laminas\Di\Container\ConfigFactory;
+use Laminas\Di\Container\InjectorFactory;
 
 return [
-    'modules' => [
-        'Magento\Setup',
-    ],
+    'modules' => require __DIR__ . '/modules.config.php',
     'module_listener_options' => [
         'module_paths' => [
             __DIR__ . '/../src',
@@ -25,12 +25,9 @@ return [
     ],
     'service_manager' => [
         'factories' => [
-            DiAbstractServiceFactory::class => DiAbstractServiceFactoryFactory::class,
-            InitParamListener::BOOTSTRAP_PARAM => InitParamListener::class,
+//            ConfigInterface::class => ConfigFactory::class,
+//            InjectorInterface::class => InjectorFactory::class,
+            InitParamListener::BOOTSTRAP_PARAM => InitParamListener::class
         ],
-    ],
-    // list of Magento specific required services, like default abstract factory
-    'required_services' => [
-        DiAbstractServiceFactory::class
     ]
 ];
