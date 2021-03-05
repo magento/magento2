@@ -10,8 +10,6 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class Navigation implements the data model for the navigation menu
- *
- * @package Magento\Setup\Model
  */
 class Navigation
 {
