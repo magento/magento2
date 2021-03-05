@@ -11,8 +11,7 @@ use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
 /**
- * Class Navigation
- *
+ * Class Navigation builds the navigation view
  */
 class Navigation extends AbstractActionController
 {
@@ -38,6 +37,8 @@ class Navigation extends AbstractActionController
     }
 
     /**
+     * Set values for the index action
+     *
      * @return JsonModel
      */
     public function indexAction()
@@ -51,6 +52,8 @@ class Navigation extends AbstractActionController
     }
 
     /**
+     * Set values for the view action
+     *
      * @return array|ViewModel
      */
     public function menuAction()

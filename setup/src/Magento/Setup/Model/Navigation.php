@@ -8,6 +8,11 @@ namespace Magento\Setup\Model;
 
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class Navigation implements the data model for the navigation menu
+ *
+ * @package Magento\Setup\Model
+ */
 class Navigation
 {
     /**
@@ -41,6 +46,8 @@ class Navigation
     }
 
     /**
+     * Type getter method
+     *
      * @return string
      */
     public function getType()
@@ -49,6 +56,8 @@ class Navigation
     }
 
     /**
+     * Data getter method
+     *
      * @return array
      */
     public function getData()
