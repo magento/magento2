@@ -33,119 +33,119 @@ class DynamicStorageTest extends TestCase
     /**
      * @var UrlRewriteFactory|MockObject
      */
-    private $urlRewriteFactory;
+    private $urlRewriteFactoryMock;
 
     /**
      * @var DataObjectHelper|MockObject
      */
-    private $dataObjectHelper;
+    private $dataObjectHelperMock;
 
     /**
      * @var AdapterInterface|MockObject
      */
-    private $connection;
+    private $connectionMock;
 
     /**
      * @var Select|MockObject
      */
-    private $select;
+    private $selectMock;
 
     /**
      * @var ResourceConnection|MockObject
      */
-    private $resourceConnection;
+    private $resourceConnectionMock;
 
     /**
      * @var ScopeConfigInterface|MockObject
      */
-    private $scopeConfig;
+    private $scopeConfigMock;
 
     /**
      * @var Product|MockObject
      */
-    private $productResource;
+    private $productResourceMock;
 
     /**
      * @var ProductFactory|MockObject
      */
-    private $productFactory;
+    private $productFactoryMock;
 
     /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->urlRewriteFactory = $this->getMockBuilder(UrlRewriteFactory::class)
+        $this->urlRewriteFactoryMock = $this->getMockBuilder(UrlRewriteFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->dataObjectHelper = $this->getMockBuilder(DataObjectHelper::class)
+        $this->dataObjectHelperMock = $this->getMockBuilder(DataObjectHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->connection = $this->getMockBuilder(AdapterInterface::class)
+        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->select = $this->getMockBuilder(Select::class)
+        $this->selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resourceConnection = $this->getMockBuilder(ResourceConnection::class)
+        $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->connection
+        $this->connectionMock
             ->method('select')
-            ->willReturn($this->select);
+            ->willReturn($this->selectMock);
 
-        $this->resourceConnection
+        $this->resourceConnectionMock
             ->method('getConnection')
-            ->willReturn($this->connection);
+            ->willReturn($this->connectionMock);
 
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMock();
 
-        $this->productResource = $this->getMockBuilder(Product::class)
+        $this->productResourceMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->productFactory = $this->getMockBuilder(ProductFactory::class)
+        $this->productFactoryMock = $this->getMockBuilder(ProductFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->productFactory
+        $this->productFactoryMock
             ->method('create')
-            ->willReturn($this->productResource);
+            ->willReturn($this->productResourceMock);
 
         $this->object = new DynamicStorage(
-            $this->urlRewriteFactory,
-            $this->dataObjectHelper,
-            $this->resourceConnection,
-            $this->scopeConfig,
-            $this->productFactory
+            $this->urlRewriteFactoryMock,
+            $this->dataObjectHelperMock,
+            $this->resourceConnectionMock,
+            $this->scopeConfigMock,
+            $this->productFactoryMock
         );
     }
 
     /**
-     * @param $data
-     * @param $productFromDb
-     * @param $categorySuffix
-     * @param $categoryFromDb
-     * @param $canBeShownInCategory
-     * @param $expectedProductRewrite
-     * @throws \ReflectionException
      * @dataProvider findProductRewriteByRequestPathDataProvider
+     * @param array $data
+     * @param array|false $productFromDb
+     * @param string $categorySuffix
+     * @param array|false $categoryFromDb
+     * @param bool $canBeShownInCategory
+     * @param array|null $expectedProductRewrite
+     * @throws \ReflectionException
      */
     public function testFindProductRewriteByRequestPath(
-        $data,
+        array $data,
         $productFromDb,
-        $categorySuffix,
+        string $categorySuffix,
         $categoryFromDb,
-        $canBeShownInCategory,
-        $expectedProductRewrite
-    ) {
-        $this->connection->expects($this->any())
+        bool $canBeShownInCategory,
+        ?array $expectedProductRewrite
+    ): void {
+        $this->connectionMock->expects($this->any())
             ->method('fetchRow')
             ->will($this->onConsecutiveCalls($productFromDb, $categoryFromDb));
 
@@ -158,11 +158,11 @@ class DynamicStorageTest extends TestCase
             ]
         ];
 
-        $this->scopeConfig
+        $this->scopeConfigMock
             ->method('getValue')
             ->willReturnMap($scopeConfigMap);
 
-        $this->productResource
+        $this->productResourceMock
             ->method('canBeShowInCategory')
             ->willReturn($canBeShownInCategory);
 
@@ -185,9 +185,9 @@ class DynamicStorageTest extends TestCase
                     'store_id' => 1
                 ],
                 false,
+                '',
                 null,
-                null,
-                null,
+                true,
                 null
             ],
             [
@@ -205,7 +205,7 @@ class DynamicStorageTest extends TestCase
                 ],
                 '.html',
                 false,
-                null,
+                true,
                 null
             ],
             [
