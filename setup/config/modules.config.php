@@ -1,11 +1,8 @@
 <?php
-
 /**
- * @see       https://github.com/laminas/laminas-mvc-skeleton for the canonical source repository
- * @copyright https://github.com/laminas/laminas-mvc-skeleton/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-mvc-skeleton/blob/master/LICENSE.md New BSD License
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
-
 /**
  * List of enabled modules for this application.
  *

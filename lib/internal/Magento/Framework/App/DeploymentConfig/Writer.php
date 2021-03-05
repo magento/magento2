@@ -71,7 +71,7 @@ class Writer
         ConfigFilePool $configFilePool,
         DeploymentConfig $deploymentConfig,
         Writer\FormatterInterface $formatter = null,
-        CommentParser $commentParser = null
+        $commentParser = null
     ) {
         $this->reader = $reader;
         $this->filesystem = $filesystem;

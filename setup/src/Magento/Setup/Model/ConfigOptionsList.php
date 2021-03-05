@@ -72,8 +72,8 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     public function __construct(
         ConfigGenerator $configGenerator,
         DbValidator $dbValidator,
-        KeyValidator $encryptionKeyValidator = null,
-        DriverOptions $driverOptions = null
+        $encryptionKeyValidator = null,
+        $driverOptions = null
     ) {
         $this->configGenerator = $configGenerator;
         $this->dbValidator = $dbValidator;

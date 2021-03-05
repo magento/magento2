@@ -48,7 +48,7 @@ class MaintenanceMode
      * @param \Magento\Framework\Filesystem $filesystem
      * @param Manager|null $eventManager
      */
-    public function __construct(Filesystem $filesystem, ?Manager $eventManager = null)
+    public function __construct(Filesystem $filesystem, $eventManager = null)
     {
         $this->flagDir = $filesystem->getDirectoryWrite(self::FLAG_DIR);
         $this->eventManager = $eventManager ?: ObjectManager::getInstance()->get(Manager::class);

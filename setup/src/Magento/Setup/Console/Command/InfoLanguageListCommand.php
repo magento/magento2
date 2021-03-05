@@ -34,7 +34,7 @@ class InfoLanguageListCommand extends Command
      * @param Lists $lists
      * @param TableFactory $tableHelperFactory
      */
-    public function __construct(Lists $lists, TableFactory $tableHelperFactory = null)
+    public function __construct(Lists $lists, $tableHelperFactory = null)
     {
         $this->lists = $lists;
         $this->tableHelperFactory = $tableHelperFactory ?: ObjectManager::getInstance()->create(TableFactory::class);

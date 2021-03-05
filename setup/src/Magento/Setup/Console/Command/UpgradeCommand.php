@@ -70,9 +70,9 @@ class UpgradeCommand extends AbstractSetupCommand
     public function __construct(
         InstallerFactory $installerFactory,
         SearchConfigFactory $searchConfigFactory,
-        DeploymentConfig $deploymentConfig = null,
-        AppState $appState = null,
-        CacheInterface $cache = null
+        $deploymentConfig = null,
+        $appState = null,
+        $cache = null
     ) {
         $this->installerFactory = $installerFactory;
         $this->searchConfigFactory = $searchConfigFactory;

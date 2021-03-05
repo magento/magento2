@@ -48,7 +48,7 @@ class InfoBackupsListCommand extends Command
     public function __construct(
         DirectoryList $directoryList,
         File $file,
-        TableFactory $tableHelperFactory = null
+        $tableHelperFactory = null
     ) {
         $this->directoryList = $directoryList;
         $this->file = $file;

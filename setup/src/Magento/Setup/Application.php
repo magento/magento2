@@ -5,11 +5,9 @@
  */
 namespace Magento\Setup;
 
-use Laminas\Di\InjectorInterface;
 use Laminas\Mvc\Application as LaminasApplication;
 use Laminas\Mvc\Service\ServiceManagerConfig;
 use Laminas\ServiceManager\ServiceManager;
-use Magento\Setup\Di\InjectorFactory;
 
 /**
  * This class is wrapper on \Laminas\Mvc\Application
@@ -37,7 +35,6 @@ class Application
         $serviceManager->setService('ApplicationConfig', $configuration);
 
         $serviceManager->get('ModuleManager')->loadModules();
-        $serviceManager->setFactory(InjectorInterface::class, InjectorFactory::class);
 
         // load specific services
         if (!empty($configuration['required_services'])) {
