@@ -18,7 +18,7 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="account_type" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Account Type Test</label>
+                    <label>Property Type</label>
                     <source_model>Magento\GoogleAnalytics\Model\Config\Source\AccountType</source_model>
                     <depends>
                         <field id="*/*/active">1</field>

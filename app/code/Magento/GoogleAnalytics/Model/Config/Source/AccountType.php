@@ -27,7 +27,7 @@ class AccountType implements \Magento\Framework\Option\ArrayInterface
             ],
             [
                 'value' => \Magento\GoogleAnalytics\Helper\Data::ACCOUNT_TYPE_GOOGLE_ANALYTICS,
-                'label' => __('Google Analytics'),
+                'label' => __('Google Analytics 4'),
             ]
         ];
     }
