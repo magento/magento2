@@ -648,16 +648,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      */
     public function getMethodPrice($cost, $method = '')
     {
-        if ($method == $this->getConfigData(
-                $this->_freeMethod
-            ) && $this->getConfigFlag(
-                'free_shipping_enable'
-            ) && $this->getConfigData(
-                'free_shipping_subtotal'
-            ) <= $this->_request->getBaseSubtotalWithDiscountInclTax()) {
-            return '0.00';
-        }
-
         return $method == $this->getConfigData(
             $this->_freeMethod
         ) && $this->getConfigFlag(
