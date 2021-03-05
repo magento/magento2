@@ -55,7 +55,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->filesystem = $this->objectManager->get(Filesystem::class);
