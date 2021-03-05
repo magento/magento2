@@ -15,7 +15,7 @@
             <title value="Inline translation with quote symbols"/>
             <description value="As merchant I want to be able to rename text labels using quote symbols in it"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-"/>
+            <testCaseId value="MC-41175"/>
             <useCaseId value="MC-23989"/>
             <group value="translation"/>
             <group value="developer_mode_only"/>
