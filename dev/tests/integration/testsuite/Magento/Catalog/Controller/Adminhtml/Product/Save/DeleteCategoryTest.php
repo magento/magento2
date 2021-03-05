@@ -15,7 +15,6 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
- * Class DeleteCategoryTest
  * Checks product saving with deleted category before reindex is done
  */
 class DeleteCategoryTest extends AbstractBackendController
