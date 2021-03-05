@@ -6,10 +6,12 @@
 namespace Magento\Backend\Controller\Adminhtml\Auth;
 
 use Magento\Backend\App\Area\FrontNameResolver;
+use Magento\Backend\App\BackendAppList;
 use Magento\Backend\Model\UrlFactory;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGet;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPost;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Request\Http;
 
 /**
  * @api
@@ -28,6 +30,11 @@ class Login extends \Magento\Backend\Controller\Adminhtml\Auth implements HttpGe
     private $frontNameResolver;
 
     /**
+     * @var BackendAppList
+     */
+    private $backendAppList;
+
+    /**
      * @var UrlFactory
      */
     private $backendUrlFactory;
@@ -44,11 +51,13 @@ class Login extends \Magento\Backend\Controller\Adminhtml\Auth implements HttpGe
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         FrontNameResolver $frontNameResolver = null,
+        BackendAppList $backendAppList = null,
         UrlFactory $backendUrlFactory = null
     ) {
         $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context);
         $this->frontNameResolver = $frontNameResolver ?? ObjectManager::getInstance()->get(FrontNameResolver::class);
+        $this->backendAppList = $backendAppList ?? ObjectManager::getInstance()->get(BackendAppList::class);
         $this->backendUrlFactory = $backendUrlFactory ?? ObjectManager::getInstance()->get(UrlFactory::class);
     }
 
@@ -96,9 +105,17 @@ class Login extends \Magento\Backend\Controller\Adminhtml\Auth implements HttpGe
      */
     private function isValidBackendUri(): bool
     {
-        $backendFrontName = $this->frontNameResolver->getFrontName();
         $requestUri = $this->getRequest()->getRequestUri();
+        $backendApp = $this->backendAppList->getCurrentApp();
         $baseUrl = parse_url($this->backendUrlFactory->create()->getBaseUrl(), PHP_URL_PATH);
+        if (!$backendApp) {
+            $backendFrontName = $this->frontNameResolver->getFrontName();
+        } else {
+            //In case of application authenticating through the admin login, the script name should be removed
+            //from the path, because application has own script.
+            $baseUrl = Http::getUrlNoScript($baseUrl);
+            $backendFrontName = $backendApp->getCookiePath();
+        }
 
         return strpos($requestUri, $baseUrl . $backendFrontName) === 0;
     }
