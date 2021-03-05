@@ -80,7 +80,8 @@ $product->setTypeId(Type::TYPE_CODE)
                     'selection_qty' => 1,
                     'selection_can_change_qty' => 1,
                     'delete' => '',
-                    'selection_price_type' => 0
+                    'selection_price_type' => 0,
+                    'selection_price_value' => 5
                 ],
             ],
             [
@@ -89,7 +90,8 @@ $product->setTypeId(Type::TYPE_CODE)
                     'selection_qty' => 1,
                     'selection_can_change_qty' => 1,
                     'delete' => '',
-                    'selection_price_type' => 0
+                    'selection_price_type' => 0,
+                    'selection_price_value' => 5
                 ],
             ],
         ],
@@ -116,6 +118,8 @@ if ($product->getBundleOptionsData()) {
                         if (isset($linkData['selection_can_change_qty'])) {
                             $link->setCanChangeQuantity($linkData['selection_can_change_qty']);
                         }
+                        $link->setPriceType($linkData['selection_price_type']);
+                        $link->setPrice($linkData['selection_price_value']);
                         $links[] = $link;
                     }
                 }
