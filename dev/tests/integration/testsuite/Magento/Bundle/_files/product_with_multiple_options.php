@@ -97,14 +97,18 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
                     'selection_qty' => 1,
                     'selection_can_change_qty' => 1,
                     'delete' => '',
-                    'option_id' => 1
+                    'option_id' => 1,
+                    'selection_price_type' => 0,
+                    'selection_price_value' => 5
                 ],
                 [
                     'product_id' => 11,
                     'selection_qty' => 1,
                     'selection_can_change_qty' => 1,
                     'delete' => '',
-                    'option_id' => 1
+                    'option_id' => 1,
+                    'selection_price_type' => 0,
+                    'selection_price_value' => 5
                 ]
             ],
             [
@@ -113,14 +117,18 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
                     'selection_qty' => 1,
                     'selection_can_change_qty' => 1,
                     'delete' => '',
-                    'option_id' => 2
+                    'option_id' => 2,
+                    'selection_price_type' => 0,
+                    'selection_price_value' => 5
                 ],
                 [
                     'product_id' => 11,
                     'selection_qty' => 1,
                     'selection_can_change_qty' => 1,
                     'delete' => '',
-                    'option_id' => 2
+                    'option_id' => 2,
+                    'selection_price_type' => 0,
+                    'selection_price_value' => 5
                 ]
             ],
             [
@@ -128,13 +136,17 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
                     'product_id' => 10,
                     'selection_qty' => 1,
                     'delete' => '',
-                    'option_id' => 3
+                    'option_id' => 3,
+                    'selection_price_type' => 0,
+                    'selection_price_value' => 5
                 ],
                 [
                     'product_id' => 11,
                     'selection_qty' => 1,
                     'delete' => '',
-                    'option_id' => 3
+                    'option_id' => 3,
+                    'selection_price_type' => 0,
+                    'selection_price_value' => 5
                 ]
             ],
             [
@@ -142,13 +154,17 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
                     'product_id' => 10,
                     'selection_qty' => 1,
                     'delete' => '',
-                    'option_id' => 4
+                    'option_id' => 4,
+                    'selection_price_type' => 0,
+                    'selection_price_value' => 5
                 ],
                 [
                     'product_id' => 11,
                     'selection_qty' => 1,
                     'delete' => '',
-                    'option_id' => 4
+                    'option_id' => 4,
+                    'selection_price_type' => 0,
+                    'selection_price_value' => 5
                 ]
             ],
             [
@@ -156,13 +172,17 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
                     'product_id' => 10,
                     'selection_qty' => 1,
                     'delete' => '',
-                    'option_id' => 5
+                    'option_id' => 5,
+                    'selection_price_type' => 0,
+                    'selection_price_value' => 5
                 ],
                 [
                     'product_id' => 11,
                     'selection_qty' => 1,
                     'delete' => '',
-                    'option_id' => 5
+                    'option_id' => 5,
+                    'selection_price_type' => 0,
+                    'selection_price_value' => 5
                 ]
             ]
         ]
@@ -188,6 +208,8 @@ if ($product->getBundleOptionsData()) {
                         $linkProduct = $productRepository->getById($linkData['product_id']);
                         $link->setSku($linkProduct->getSku());
                         $link->setQty($linkData['selection_qty']);
+                        $link->setPriceType($linkData['selection_price_type']);
+                        $link->setPrice($linkData['selection_price_value']);
                         $links[] = $link;
                     }
                 }

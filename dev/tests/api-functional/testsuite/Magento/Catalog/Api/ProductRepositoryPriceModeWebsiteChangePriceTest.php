@@ -12,6 +12,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 class ProductRepositoryPriceModeWebsiteChangePriceTest extends WebapiAbstract
 {
     const SERVICE_NAME = 'catalogProductRepositoryV1';
+    const PRICE_SERVICE_NAME = 'catalogBasePriceStorageV1';
     const SERVICE_VERSION = 'V1';
     const PRODUCTS_RESOURCE_PATH = '/V1/products';
     const PRICES_RESOURCE_PATH = '/V1/products/base-prices';
@@ -61,6 +62,11 @@ class ProductRepositoryPriceModeWebsiteChangePriceTest extends WebapiAbstract
             'rest' => [
                 'resourcePath' => self::PRICES_RESOURCE_PATH,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST
+            ],
+            'soap' => [
+                'service' => self::PRICE_SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::PRICE_SERVICE_NAME . 'Update',
             ]
         ];
 
