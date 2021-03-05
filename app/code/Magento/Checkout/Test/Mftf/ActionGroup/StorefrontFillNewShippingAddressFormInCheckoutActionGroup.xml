@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontFillNewShippingAddressFormInCheckoutActionGroup">
+        <annotations>
+            <description>Fills in the provided Address details in the New Address form on the Storefront Checkout pages. By default, this works for the Shipping Address but this can be used for Billing Addresses as well if you pass in the correct 'section' argument value</description>
+        </annotations>
+        <arguments>
+            <argument name="address"/>
+            <argument name="section" defaultValue="StorefrontCheckoutShippingNewAddressModalSection"/>
+        </arguments>
+        <fillField stepKey="fillFirstName" selector="{{section.firstName}}" userInput="{{address.firstname}}"/>
+        <fillField stepKey="fillLastName" selector="{{section.lastName}}" userInput="{{address.lastname}}"/>
+        <fillField stepKey="fillCompany" selector="{{section.company}}" userInput="{{address.company}}"/>
+        <fillField stepKey="fillStreetAddress" selector="{{section.street('0')}}" userInput="{{address.street[0]}}"/>
+        <selectOption stepKey="selectCounty" selector="{{section.country}}" userInput="{{address.country_id}}"/>
+        <selectOption stepKey="selectRegion" selector="{{section.region}}" userInput="{{address.state}}"/>
+        <fillField stepKey="fillCityName" selector="{{section.city}}" userInput="{{address.city}}"/>
+        <fillField stepKey="fillZip" selector="{{section.postcode}}" userInput="{{address.postcode}}"/>
+        <fillField stepKey="fillPhoneNumber" selector="{{section.telephone}}" userInput="{{address.telephone}}"/>
+    </actionGroup>
+</actionGroups>

@@ -105,7 +105,11 @@ use Magento\Customer\Block\Widget\Name;
             </div>
         </div>
     </fieldset>
-    <?= $block->getChildHtml('form_additional_info') ?>
+
+    <fieldset class="fieldset additional_info">
+        <?= $block->getChildHtml('form_additional_info') ?>
+    </fieldset>
+
     <div class="actions-toolbar">
         <div class="primary">
             <button type="submit" class="action save primary" title="<?= $block->escapeHtmlAttr(__('Save')) ?>">

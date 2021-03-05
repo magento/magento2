@@ -12,11 +12,26 @@
         <data key="type">Catalog Products List</data>
         <data key="design_theme">Magento Luma</data>
         <data key="name" unique="suffix">TestWidget</data>
+        <data key="sort_order">0</data>
         <array key="store_ids">
             <item>All Store Views</item>
         </array>
         <data key="condition">SKU</data>
         <data key="display_on">All Pages</data>
+        <data key="container">Main Content Area</data>
+    </entity>
+    <entity name="CatalogCategoryLinkSpecifiedCategory" type="widget">
+        <data key="type">Catalog Category Link</data>
+        <data key="design_theme">Magento Luma</data>
+        <data key="name" unique="suffix">TestCategoryLinkWidgetOnSpecifiedCategory</data>
+        <array key="store_ids">
+            <item>All Store Views</item>
+        </array>
+        <data key="sort_order">0</data>
+        <data key="page">catalog_category_view</data>
+        <data key="template">Category Link Block Template</data>
+        <data key="condition">SKU</data>
+        <data key="display_on">Anchor Categories</data>
         <data key="container">Main Content Area</data>
     </entity>
     <entity name="DynamicBlocksRotatorWidget" type="widget">

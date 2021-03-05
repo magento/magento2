@@ -5,12 +5,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Session;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Session\Config\ConfigInterface;
+use Magento\Framework\Session\Config\Validator\CookieSameSiteValidator;
 
 /**
  * Magento session configuration
@@ -27,6 +30,18 @@ class Config implements ConfigInterface
 
     /** Configuration path for session cache limiter */
     const PARAM_SESSION_CACHE_LIMITER = 'session/cache_limiter';
+
+    /** Configuration path for session garbage collection probability */
+    private const PARAM_SESSION_GC_PROBABILITY = 'session/gc_probability';
+
+    /** Configuration path for session garbage collection divisor */
+    private const PARAM_SESSION_GC_DIVISOR = 'session/gc_divisor';
+
+    /**
+     * Configuration path for session garbage collection max lifetime.
+     * The number of seconds after which data will be seen as 'garbage'.
+     */
+    private const PARAM_SESSION_GC_MAXLIFETIME = 'session/gc_maxlifetime';
 
     /** Configuration path for cookie domain */
     const XML_PATH_COOKIE_DOMAIN = 'web/cookie/cookie_domain';
@@ -102,6 +117,7 @@ class Config implements ConfigInterface
      * @param string $scopeType
      * @param string $lifetimePath
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function __construct(
         \Magento\Framework\ValidatorFactory $validatorFactory,
@@ -150,6 +166,30 @@ class Config implements ConfigInterface
         }
 
         /**
+         * Session garbage collection probability
+         */
+        $gcProbability = $deploymentConfig->get(self::PARAM_SESSION_GC_PROBABILITY);
+        if ($gcProbability) {
+            $this->setOption('session.gc_probability', $gcProbability);
+        }
+
+        /**
+         * Session garbage collection divisor
+         */
+        $gcDivisor = $deploymentConfig->get(self::PARAM_SESSION_GC_DIVISOR);
+        if ($gcDivisor) {
+            $this->setOption('session.gc_divisor', $gcDivisor);
+        }
+
+        /**
+         * Session garbage collection max lifetime
+         */
+        $gcMaxlifetime = $deploymentConfig->get(self::PARAM_SESSION_GC_MAXLIFETIME);
+        if ($gcMaxlifetime) {
+            $this->setOption('session.gc_maxlifetime', $gcMaxlifetime);
+        }
+
+        /**
          * Cookie settings: lifetime, path, domain, httpOnly. These govern settings for the session cookie.
          */
         $lifetime = $this->_scopeConfig->getValue($this->lifetimePath, $this->_scopeType);
@@ -171,6 +211,7 @@ class Config implements ConfigInterface
         $unsecureURL = $this->_scopeConfig->getValue('web/unsecure/base_url', $this->_scopeType);
         $isFullySecuredURL = $secureURL == $unsecureURL;
         $this->setCookieSecure($isFullySecuredURL && $this->_httpRequest->isSecure());
+        $this->setCookieSameSite('Lax');
     }
 
     /**
@@ -534,5 +575,37 @@ class Config implements ConfigInterface
         } else {
             throw new \BadMethodCallException(sprintf('Method "%s" does not exist in %s', $method, get_class($this)));
         }
+    }
+
+    /**
+     * Set session.cookie_samesite
+     *
+     * @param string $cookieSameSite
+     * @return $this
+     */
+    public function setCookieSameSite(string $cookieSameSite = 'Lax'): ConfigInterface
+    {
+        $validator = $this->_validatorFactory->create(
+            [],
+            CookieSameSiteValidator::class
+        );
+        if (!$validator->isValid($cookieSameSite) ||
+            !$this->getCookieSecure() && strtolower($cookieSameSite) === 'none') {
+            throw new \InvalidArgumentException(
+                'Invalid Samesite attribute.'
+            );
+        }
+        $this->setOption('session.cookie_samesite', $cookieSameSite);
+        return $this;
+    }
+
+    /**
+     * Get session.cookie_samesite
+     *
+     * @return string
+     */
+    public function getCookieSameSite(): string
+    {
+        return (string)$this->getOption('session.cookie_samesite');
     }
 }

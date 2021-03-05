@@ -7,16 +7,19 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminMediaGalleryCatalogUiVerifyUsedInLinkCategoryGridTest">
+    <test name="AdminMediaGalleryCatalogUiVerifyUsedInLinkCategoryGridTest" deprecated="Use AdminMediaGalleryCatalogUiVerifyUsedInLinkCategoryGridTest instead">
         <annotations>
             <features value="AdminMediaGalleryCategoryGrid"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1503"/>
-            <title value="User can open each entity the asset is associated with in a separate tab to manage association"/>
+            <title value="DEPRECATED. User can open each entity the asset is associated with in a separate tab to manage association"/>
             <stories value="Story 58: User sees entities where asset is used in" />
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/943908/scenarios/4523889"/>
             <description value="User can open each entity the asset is associated with in a separate tab to manage association"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminMediaGalleryCatalogUiVerifyUsedInLinkCategoryGridTest instead</issueId>
+            </skip>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>

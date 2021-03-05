@@ -18,10 +18,11 @@
         <element name="FilterByAttributeCode" type="input" selector="#attributeGrid_filter_attribute_code"/>
         <element name="attributeLabelFilter" type="input" selector="//input[@name='frontend_label']"/>
         <element name="attributeCodeColumn" type="text" selector="//div[@id='attributeGrid']//td[contains(@class,'col-attr-code col-attribute_code')]"/>
-        <element name="defaultLabelColumn" type="text" selector="//div[@id='attributeGrid']//td[contains(@class,'col-label col-frontend_label')]"/>
+        <element name="defaultLabelColumn" type="text" selector="//div[@id='attributeGrid']//table[@id='attributeGrid_table']//tbody//td[contains(@class,'col-label col-frontend_label')]"/>
         <element name="isVisibleColumn" type="text" selector="//div[@id='attributeGrid']//td[contains(@class,'a-center col-is_visible')]"/>
         <element name="scopeColumn" type="text" selector="//div[@id='attributeGrid']//td[contains(@class,'a-center col-is_global')]"/>
         <element name="isSearchableColumn" type="text" selector="//div[@id='attributeGrid']//td[contains(@class,'a-center col-is_searchable')]"/>
         <element name="isComparableColumn" type="text" selector="//div[@id='attributeGrid']//td[contains(@class,'a-center col-is_comparable')]"/>
     </section>
 </sections>
+

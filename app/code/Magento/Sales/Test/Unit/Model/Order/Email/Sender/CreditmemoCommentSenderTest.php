@@ -97,7 +97,7 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
         $this->assertFalse($result);
     }
 
-    public function testSendTrueWithCustomerCopy()
+    public function testSendTrueWithoutCustomerCopy()
     {
         $billingAddress = $this->addressMock;
         $comment = 'comment_test';
@@ -140,7 +140,7 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
         $this->assertTrue($result);
     }
 
-    public function testSendTrueWithoutCustomerCopy()
+    public function testSendTrueWithCustomerCopy()
     {
         $billingAddress = $this->addressMock;
         $comment = 'comment_test';
@@ -161,6 +161,9 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
         $this->identityContainerMock->expects($this->once())
             ->method('isEnabled')
             ->willReturn(true);
+        $this->identityContainerMock->expects($this->once())
+            ->method('getCopyMethod')
+            ->willReturn('copy');
         $this->templateContainerMock->expects($this->once())
             ->method('setTemplateVars')
             ->with(

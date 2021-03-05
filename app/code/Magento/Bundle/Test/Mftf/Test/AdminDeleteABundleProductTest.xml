@@ -58,9 +58,7 @@
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
 
-        <!--Go to catalog deletion page-->
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogPage"/>
-        <waitForPageLoad stepKey="Loading"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogPage"/>
 
         <!--Apply Name Filter-->
         <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterBundleProductOptionsDownToName">
