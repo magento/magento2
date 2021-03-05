@@ -4,11 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\Setup\Mvc\Bootstrap\InitParamListener;
-use Laminas\Di\ConfigInterface;
 use Laminas\Di\InjectorInterface;
-use Laminas\Di\Container\ConfigFactory;
-use Laminas\Di\Container\InjectorFactory;
+use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 
 return [
     'modules' => require __DIR__ . '/modules.config.php',
@@ -25,9 +22,7 @@ return [
     ],
     'service_manager' => [
         'factories' => [
-//            ConfigInterface::class => ConfigFactory::class,
-//            InjectorInterface::class => InjectorFactory::class,
-            InitParamListener::BOOTSTRAP_PARAM => InitParamListener::class
+            InitParamListener::BOOTSTRAP_PARAM => InitParamListener::class,
         ],
     ]
 ];
