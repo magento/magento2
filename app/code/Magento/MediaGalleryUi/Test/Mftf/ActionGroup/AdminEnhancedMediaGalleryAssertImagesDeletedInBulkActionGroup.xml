@@ -15,6 +15,6 @@
         <arguments>
             <argument name="numberOfAssetsDeleted" type="string"/>
         </arguments>
-        <see userInput='{{numberOfAssetsDeleted}} assets have been successfully deleted.' stepKey="verifyDeleteImages"/>
+        <waitForText userInput='{{numberOfAssetsDeleted}} assets have been successfully deleted.' stepKey="verifyDeleteImages"/>
     </actionGroup>
 </actionGroups>

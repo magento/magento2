@@ -89,10 +89,7 @@
             <!-- Customer is created -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
 
-            <!-- Reindex and flush the cache to display products on the category page -->
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
             <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
                 <argument name="tags" value=""/>
             </actionGroup>
@@ -213,8 +210,7 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
 
         <!-- Go to My Account > My Orders page -->
-        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="onMyAccount"/>
-        <waitForPageLoad stepKey="waitForAccountPage"/>
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="onMyAccount"/>
         <click selector="{{StorefrontCustomerSidebarSection.sidebarTab('My Orders')}}" stepKey="clickOnMyOrders"/>
         <waitForPageLoad stepKey="waitForOrdersLoad"/>
 

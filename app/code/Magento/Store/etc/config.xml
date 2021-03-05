@@ -133,6 +133,8 @@
                     <phpt>phpt</phpt>
                     <pht>pht</pht>
                     <svg>svg</svg>
+                    <xml>xml</xml>
+                    <xhtml>xhtml</xhtml>
                 </protected_extensions>
                 <public_files_valid_paths>
                     <protected>

@@ -18,6 +18,7 @@
             <testCaseId value="MC-15794"/>
             <useCaseId value="MC-11050"/>
             <group value="email"/>
+            <group value="WYSIWYGDisabled"/>
         </annotations>
 
         <before>
@@ -28,7 +29,7 @@
         <after>
             <!--Delete created Template-->
             <actionGroup ref="DeleteEmailTemplateActionGroup" stepKey="deleteTemplate"/>
-            <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clearFilters"/>
+            <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clearFilters"/>
             <!--Logout from Admin Area-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>

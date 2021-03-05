@@ -15,7 +15,7 @@
         <arguments>
             <argument name="customer" type="entity"/>
         </arguments>
-        
+
         <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.email}}" stepKey="waitEmailFieldVisible"/>
         <fillField selector="{{StorefrontCustomerSignInPopupFormSection.email}}" userInput="{{customer.email}}" stepKey="fillCustomerEmail"/>
         <fillField selector="{{StorefrontCustomerSignInPopupFormSection.password}}" userInput="{{customer.password}}" stepKey="fillCustomerPassword"/>

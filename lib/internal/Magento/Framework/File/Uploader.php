@@ -8,9 +8,13 @@ namespace Magento\Framework\File;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\TargetDirectory;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Filter\ArrayFilter;
 use Magento\Framework\Validation\ValidationException;
+use Psr\Log\LoggerInterface;
 
 /**
  * File upload class
@@ -19,6 +23,7 @@ use Magento\Framework\Validation\ValidationException;
  * validation by protected file extension list to extended class
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
  * @since 100.0.2
@@ -43,8 +48,7 @@ class Uploader
 
     /**
      * Upload type. Used to right handle $_FILES array.
-     *
-     * @var \Magento\Framework\File\Uploader::SINGLE_STYLE|\Magento\Framework\File\Uploader::MULTIPLE_STYLE
+     * @var Uploader::SINGLE_STYLE|\Magento\Framework\File\Uploader::MULTIPLE_STYLE
      * @access protected
      */
     protected $_uploadType;
@@ -131,6 +135,16 @@ class Uploader
      */
     private $fileMime;
 
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
     /**#@+
      * File upload type (multiple or single)
      */
@@ -181,22 +195,32 @@ class Uploader
     private $fileDriver;
 
     /**
+     * @var TargetDirectory
+     */
+    private $targetDirectory;
+
+    /**
      * Init upload
      *
      * @param string|array $fileId
      * @param \Magento\Framework\File\Mime|null $fileMime
      * @param DirectoryList|null $directoryList
      * @param DriverPool|null $driverPool
+     * @param TargetDirectory|null $targetDirectory
+     * @param Filesystem|null $filesystem
      * @throws \DomainException
      */
     public function __construct(
         $fileId,
         Mime $fileMime = null,
         DirectoryList $directoryList = null,
-        DriverPool $driverPool = null
+        DriverPool $driverPool = null,
+        TargetDirectory $targetDirectory = null,
+        Filesystem $filesystem = null
     ) {
-        $this->directoryList= $directoryList ?: ObjectManager::getInstance()->get(DirectoryList::class);
+        $this->directoryList = $directoryList ?: ObjectManager::getInstance()->get(DirectoryList::class);
 
+        $this->filesystem = $filesystem ?: ObjectManager::getInstance()->get(FileSystem::class);
         $this->_setUploadFileId($fileId);
         if (!file_exists($this->_file['tmp_name'])) {
             $code = empty($this->_file['tmp_name']) ? self::TMP_NAME_EMPTY : 0;
@@ -205,7 +229,8 @@ class Uploader
             $this->_fileExists = true;
         }
         $this->fileMime = $fileMime ?: ObjectManager::getInstance()->get(Mime::class);
-        $this->driverPool = $driverPool;
+        $this->driverPool = $driverPool ?: ObjectManager::getInstance()->get(DriverPool::class);
+        $this->targetDirectory = $targetDirectory ?: ObjectManager::getInstance()->get(TargetDirectory::class);
     }
 
     /**
@@ -290,9 +315,17 @@ class Uploader
      */
     private function validateDestination(string $destinationFolder): void
     {
+        if (strlen($this->getFileDriver()->getRealPathSafety($destinationFolder)) > 4096) {
+            throw new \InvalidArgumentException(
+                'Destination folder path is too long; must be 255 characters or less'
+            );
+        }
         if ($this->_allowCreateFolders) {
             $this->createDestinationFolder($destinationFolder);
-        } elseif (!$this->getFileDriver()->isWritable($destinationFolder)) {
+        } elseif (!$this->getTargetDirectory()
+            ->getDirectoryWrite(DirectoryList::ROOT)
+            ->isWritable($destinationFolder)
+        ) {
             throw new FileSystemException(__('Destination folder is not writable or does not exists.'));
         }
     }
@@ -315,15 +348,71 @@ class Uploader
      *
      * @param string $tmpPath
      * @param string $destPath
-     * @return bool|void
+     * @return bool
      */
     protected function _moveFile($tmpPath, $destPath)
     {
-        if (is_uploaded_file($tmpPath)) {
-            return move_uploaded_file($tmpPath, $destPath);
-        } elseif (is_file($tmpPath)) {
-            return rename($tmpPath, $destPath);
+        $rootCode = DirectoryList::PUB;
+
+        try {
+            if (strpos($destPath, $this->getDirectoryList()->getPath($rootCode)) !== 0) {
+                $rootCode = DirectoryList::ROOT;
+            }
+
+            $destPath = str_replace($this->getDirectoryList()->getPath($rootCode), '', $destPath);
+            $directory = $this->getTargetDirectory()->getDirectoryWrite($rootCode);
+
+            return $this->getFileDriver()->rename(
+                $tmpPath,
+                $directory->getAbsolutePath($destPath),
+                $directory->getDriver()
+            );
+        } catch (FileSystemException $exception) {
+            $this->getLogger()->critical($exception->getMessage());
+            return false;
         }
+    }
+
+    /**
+     * Get logger instance.
+     *
+     * @deprecated
+     * @return LoggerInterface
+     */
+    private function getLogger(): LoggerInterface
+    {
+        if (!$this->logger) {
+            $this->logger = ObjectManager::getInstance()->get(LoggerInterface::class);
+        }
+        return $this->logger;
+    }
+
+    /**
+     * Retrieves target directory.
+     *
+     * @return TargetDirectory
+     */
+    private function getTargetDirectory(): TargetDirectory
+    {
+        if (!isset($this->targetDirectory)) {
+            $this->targetDirectory = ObjectManager::getInstance()->get(TargetDirectory::class);
+        }
+
+        return $this->targetDirectory;
+    }
+
+    /**
+     * Retrieves directory list.
+     *
+     * @return DirectoryList
+     */
+    private function getDirectoryList(): DirectoryList
+    {
+        if (!isset($this->directoryList)) {
+            $this->directoryList = ObjectManager::getInstance()->get(DirectoryList::class);
+        }
+
+        return $this->directoryList;
     }
 
     /**
@@ -407,8 +496,12 @@ class Uploader
         $fileInfo['extension'] = $fileInfo['extension'] ?? '';
 
         // account for excessively long filenames that cannot be stored completely in database
-        if (strlen($fileInfo['basename']) > 90) {
-            throw new \InvalidArgumentException('Filename is too long; must be 90 characters or less');
+        $maxFilenameLength = 200;
+
+        if (strlen($fileInfo['basename']) > $maxFilenameLength) {
+            throw new \LengthException(
+                __('Filename is too long; must be %1 characters or less', $maxFilenameLength)
+            );
         }
 
         if (preg_match('/^_+$/', $fileInfo['filename'])) {
@@ -663,7 +756,7 @@ class Uploader
      * Create destination folder
      *
      * @param string $destinationFolder
-     * @return \Magento\Framework\File\Uploader
+     * @return Uploader
      * @throws FileSystemException
      */
     private function createDestinationFolder(string $destinationFolder)
@@ -676,8 +769,10 @@ class Uploader
             $destinationFolder = substr($destinationFolder, 0, -1);
         }
 
-        if (!$this->getFileDriver()->isDirectory($destinationFolder)) {
-            $result = $this->getFileDriver()->createDirectory($destinationFolder);
+        $rootDirectory = $this->getTargetDirectory()->getDirectoryWrite(DirectoryList::ROOT);
+
+        if (!$rootDirectory->isDirectory($destinationFolder)) {
+            $result = $rootDirectory->getDriver()->createDirectory($destinationFolder);
             if (!$result) {
                 throw new FileSystemException(__('Unable to create directory %1.', $destinationFolder));
             }
@@ -694,20 +789,24 @@ class Uploader
      */
     public static function getNewFileName($destinationFile)
     {
+        /** @var Filesystem $fileSystem */
+        $fileSystem = ObjectManager::getInstance()->get(Filesystem::class);
+        $local = $fileSystem->getDirectoryRead(DirectoryList::ROOT);
+        /** @var TargetDirectory $targetDirectory */
+        $targetDirectory = ObjectManager::getInstance()->get(TargetDirectory::class);
+        $remote = $targetDirectory->getDirectoryRead(DirectoryList::ROOT);
+
+        $fileExists = function ($path) use ($local, $remote) {
+            return $local->isExist($path) || $remote->isExist($path);
+        };
+
         $fileInfo = pathinfo($destinationFile);
-        if (file_exists($destinationFile)) {
-            $index = 1;
-            $baseName = $fileInfo['filename'] . '.' . $fileInfo['extension'];
-            while (file_exists($fileInfo['dirname'] . '/' . $baseName)) {
-                $baseName = $fileInfo['filename'] . '_' . $index . '.' . $fileInfo['extension'];
-                $index++;
-            }
-            $destFileName = $baseName;
-        } else {
-            return $fileInfo['basename'];
+        $index = 1;
+        while ($fileExists($fileInfo['dirname'] . '/' . $fileInfo['basename'])) {
+            $fileInfo['basename'] = $fileInfo['filename'] . '_' . $index++ . '.' . $fileInfo['extension'];
         }
 
-        return $destFileName;
+        return $fileInfo['basename'];
     }
 
     /**

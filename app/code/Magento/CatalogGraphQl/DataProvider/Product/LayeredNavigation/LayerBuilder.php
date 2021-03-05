@@ -36,7 +36,7 @@ class LayerBuilder implements LayerBuilderInterface
         foreach ($this->builders as $builder) {
             $layers[] = $builder->build($aggregation, $storeId);
         }
-        $layers = \array_merge(...$layers);
+        $layers = \array_merge([], ...$layers);
 
         return \array_filter($layers);
     }
