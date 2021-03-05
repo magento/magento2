@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Rule\Test\Mftf\Helper;
+namespace Magento\Tax\Test\Mftf\Helper;
 
 use Facebook\WebDriver\Remote\RemoteWebDriver as FacebookWebDriver;
 use Facebook\WebDriver\WebDriverBy;
@@ -13,50 +13,50 @@ use Magento\FunctionalTestingFramework\Helper\Helper;
 use Magento\FunctionalTestingFramework\Module\MagentoWebDriver;
 
 /**
- * Class for MFTF helpers for CatalogRule module.
+ * Class for MFTF helpers for Tax module.
  */
-class RuleHelper extends Helper
+class TaxHelpers extends Helper
 {
     /**
-     * Deletes all Catalog Price Rules one by one.
+     * Delete all specified Tax Rules one by one from the Tax Zones and Rates page.
      *
-     * @param string $emptyRow
-     * @param string $modalAceptButton
+     * @param string $rowsToDelete
      * @param string $deleteButton
-     * @param string $successMessageContainer
+     * @param string $modalAcceptButton
      * @param string $successMessage
+     * @param string $successMessageContainer
      *
      * @return void
      */
-    public function deleteAllRulesOneByOne(
-        string $firstNotEmptyRow,
-        string $modalAcceptButton,
+    public function deleteAllSpecifiedTaxRuleRows(
+        string $rowsToDelete,
         string $deleteButton,
-        string $successMessageContainer,
-        string $successMessage
+        string $modalAcceptButton,
+        string $successMessage,
+        string $successMessageContainer
     ): void {
         try {
             /** @var MagentoWebDriver $webDriver */
             $magentoWebDriver = $this->getModule('\Magento\FunctionalTestingFramework\Module\MagentoWebDriver');
             /** @var FacebookWebDriver $webDriver */
             $webDriver = $magentoWebDriver->webDriver;
-            $rows = $webDriver->findElements(WebDriverBy::cssSelector($firstNotEmptyRow));
+
+            $magentoWebDriver->waitForPageLoad(30);
+            $rows = $webDriver->findElements(WebDriverBy::xpath($rowsToDelete));
             while (!empty($rows)) {
                 $rows[0]->click();
                 $magentoWebDriver->waitForPageLoad(30);
+                $magentoWebDriver->waitForElementVisible($deleteButton, 10);
                 $magentoWebDriver->click($deleteButton);
                 $magentoWebDriver->waitForPageLoad(30);
                 $magentoWebDriver->waitForElementVisible($modalAcceptButton, 10);
-                $magentoWebDriver->waitForPageLoad(60);
                 $magentoWebDriver->click($modalAcceptButton);
                 $magentoWebDriver->waitForPageLoad(60);
-                $magentoWebDriver->waitForLoadingMaskToDisappear();
-                $magentoWebDriver->waitForElementVisible($successMessageContainer, 10);
-                $magentoWebDriver->see($successMessage, $successMessageContainer);
-                $rows = $webDriver->findElements(WebDriverBy::cssSelector($firstNotEmptyRow));
+                $magentoWebDriver->waitForText($successMessage, 10, $successMessageContainer);
+                $rows = $webDriver->findElements(WebDriverBy::xpath($rowsToDelete));
             }
-        } catch (\Exception $e) {
-            $this->fail($e->getMessage());
+        } catch (\Exception $exception) {
+            $this->fail($exception->getMessage());
         }
     }
 }
