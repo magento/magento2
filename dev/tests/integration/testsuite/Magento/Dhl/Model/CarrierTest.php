@@ -443,14 +443,7 @@ class CarrierTest extends TestCase
     public function testCollectRates()
     {
         $requestData = $this->getRequestData();
-        //phpcs:disable Magento2.Functions.DiscouragedFunction
-        $response = new Response(
-            200,
-            [],
-            file_get_contents(__DIR__ . '/../_files/dhl_quote_response.xml')
-        );
-        //phpcs:enable Magento2.Functions.DiscouragedFunction
-        $this->httpClient->nextResponses(array_fill(0, Carrier::UNAVAILABLE_DATE_LOOK_FORWARD + 1, $response));
+        $this->setNextResponse(__DIR__ . '/../_files/dhl_quote_response.xml');
         /** @var RateRequest $request */
         $request = Bootstrap::getObjectManager()->create(RateRequest::class, $requestData);
         $expectedRates = [
@@ -564,6 +557,80 @@ class CarrierTest extends TestCase
     }
 
     /**
+     * Tests that the free rate is returned when sending a quotes request
+     *
+     * @param array $addRequestData
+     * @param bool $freeShippingExpects
+     * @magentoConfigFixture default_store carriers/dhl/active 1
+     * @magentoConfigFixture default_store carriers/dhl/id some ID
+     * @magentoConfigFixture default_store carriers/dhl/shipment_days Mon,Tue,Wed,Thu,Fri,Sat
+     * @magentoConfigFixture default_store carriers/dhl/intl_shipment_days Mon,Tue,Wed,Thu,Fri,Sat
+     * @magentoConfigFixture default_store carriers/dhl/allowed_methods IE
+     * @magentoConfigFixture default_store carriers/dhl/international_service IE
+     * @magentoConfigFixture default_store carriers/dhl/gateway_url https://xmlpi-ea.dhl.com/XMLShippingServlet
+     * @magentoConfigFixture default_store carriers/dhl/id some ID
+     * @magentoConfigFixture default_store carriers/dhl/password some password
+     * @magentoConfigFixture default_store carriers/dhl/content_type N
+     * @magentoConfigFixture default_store carriers/dhl/nondoc_methods 1,3,4,8,P,Q,E,F,H,J,M,V,Y
+     * @magentoConfigFixture default_store carriers/dhl/showmethod' => 1,
+     * @magentoConfigFixture default_store carriers/dhl/title DHL Title
+     * @magentoConfigFixture default_store carriers/dhl/specificerrmsg dhl error message
+     * @magentoConfigFixture default_store carriers/dhl/unit_of_measure K
+     * @magentoConfigFixture default_store carriers/dhl/size 1
+     * @magentoConfigFixture default_store carriers/dhl/height 1.6
+     * @magentoConfigFixture default_store carriers/dhl/width 1.6
+     * @magentoConfigFixture default_store carriers/dhl/depth 1.6
+     * @magentoConfigFixture default_store carriers/dhl/debug 1
+     * @magentoConfigFixture default_store carriers/dhl/free_method_nondoc P
+     * @magentoConfigFixture default_store carriers/dhl/free_shipping_enable 1
+     * @magentoConfigFixture default_store carriers/dhl/free_shipping_subtotal 25
+     * @magentoConfigFixture default_store shipping/origin/country_id GB
+     * @magentoAppIsolation enabled
+     * @dataProvider collectRatesWithFreeShippingDataProvider
+     */
+    public function testCollectRatesWithFreeShipping(array $addRequestData, bool $freeShippingExpects): void
+    {
+        $this->setNextResponse(__DIR__ . '/../_files/dhl_quote_response.xml');
+
+        $requestData = $this->getRequestData();
+        $requestData['data'] += $addRequestData;
+        /** @var RateRequest $request */
+        $request = Bootstrap::getObjectManager()->create(RateRequest::class, $requestData);
+
+        $actualRates = $this->dhlCarrier->collectRates($request)->getAllRates();
+        $freeRateExists = false;
+        foreach ($actualRates as $i => $actualRate) {
+            $actualRate = $actualRate->getData();
+            if ($actualRate['method'] === 'P' && $actualRate['price'] === 0.0) {
+                $freeRateExists = true;
+            }
+        }
+
+        self::assertEquals($freeShippingExpects, $freeRateExists);
+    }
+
+    /**
+     * @return array
+     */
+    public function collectRatesWithFreeShippingDataProvider(): array
+    {
+        return [
+            [
+                ['base_subtotal_incl_tax' => 25, 'base_subtotal_with_discount_incl_tax' => 22],
+                false
+            ],
+            [
+                ['base_subtotal_incl_tax' => 25, 'base_subtotal_with_discount_incl_tax' => 25],
+                true
+            ],
+            [
+                ['base_subtotal_incl_tax' => 28, 'base_subtotal_with_discount_incl_tax' => 25],
+                true
+            ],
+        ];
+    }
+
+    /**
      * Returns request data.
      *
      * @return array
@@ -613,5 +680,24 @@ class CarrierTest extends TestCase
                 'all_items' => [],
             ]
         ];
+    }
+
+    /**
+     * Set next response content from file
+     *
+     * @param string $file
+     */
+    private function setNextResponse(string $file): void
+    {
+        //phpcs:disable Magento2.Functions.DiscouragedFunction
+        $response = new Response(
+            200,
+            [],
+            file_get_contents($file)
+        );
+        //phpcs:enable Magento2.Functions.DiscouragedFunction
+        $this->httpClient->nextResponses(
+            array_fill(0, Carrier::UNAVAILABLE_DATE_LOOK_FORWARD + 1, $response)
+        );
     }
 }
