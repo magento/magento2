@@ -101,7 +101,7 @@
         </before>
 
         <after>
-            <!-- Delete configurable product creation -->
+            <!-- Delete Data -->
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigFirstChildProduct" stepKey="deleteConfigFirstChildProduct"/>
             <deleteData createDataKey="createConfigSecondChildProduct" stepKey="deleteConfigSecondChildProduct"/>
@@ -160,7 +160,7 @@
             <argument name="text">$$createConfigSecondChildProduct.name$$</argument>
         </helper>
 
-        <!-- Download product -->
+        <!-- Download Export File -->
         <actionGroup ref="DownloadFileActionGroup" stepKey="downloadCreatedProducts">
             <argument name="fileName" value="{$grabNameFile}"/>
         </actionGroup>
@@ -192,7 +192,7 @@
             <argument name="expectedString">$$createConfigSecondChildProduct.name$$</argument>
         </helper>
 
-        <!-- Delete exported file -->
+        <!-- Delete Export File -->
         <actionGroup ref="DeleteExportedFileActionGroup" stepKey="deleteExportedFile">
             <argument name="fileName" value="{$grabNameFile}"/>
         </actionGroup>
