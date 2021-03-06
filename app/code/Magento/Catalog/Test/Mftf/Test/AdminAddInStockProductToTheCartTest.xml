@@ -67,7 +67,7 @@
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="clickOnCategory"/>
         <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="seeProductNameInCategoryPage"/>
         <!--Verify Product In Store Front-->
-        <amOnPage url="$$createSimpleProduct.urlKey$$.html" stepKey="goToStorefrontPage"/>
+        <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="goToStorefrontPage"/>
         <waitForPageLoad stepKey="waitForProductFrontPageToLoad"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="seeProductNameInStoreFront"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{SimpleProduct.price}}" stepKey="seeProductPriceInStoreFront"/>

@@ -205,7 +205,7 @@
         <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createConfigProduct.name$$-Updated)}}" stepKey="assertProductNameInCategoryPage"/>
         <!--Assert product options in Storefront product page-->
         <comment userInput="Assert product options in Storefront product page" stepKey="commentAssertProductOptions"/>
-        <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.urlKey$$-1)}}" stepKey="amOnSimpleProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.custom_attributes[url_key]$$-1)}}" stepKey="amOnSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoadOnStorefront"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createConfigProduct.name$$-Updated"  stepKey="seeConfigurableProductName"/>
         <see userInput="{{productAttributeColor.default_label}}" selector="{{StorefrontProductInfoMainSection.productAttributeTitle1}}" stepKey="seeColorAttributeName"/>
