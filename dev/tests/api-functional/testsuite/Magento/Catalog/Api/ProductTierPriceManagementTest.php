@@ -82,7 +82,7 @@ class ProductTierPriceManagementTest extends WebapiAbstract
             ],
         ];
         $requestData = ['sku' => $productSku, 'customerGroupId' => $customerGroupId, 'qty' => $qty];
-        $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
+        $this->assertTrue($this->_webApiCall($serviceInfo, $requestData, null, "all"));
     }
 
     public function deleteDataProvider()
@@ -198,7 +198,7 @@ class ProductTierPriceManagementTest extends WebapiAbstract
             'qty' => $qty,
             'price' => $price,
         ];
-        $this->_webApiCall($serviceInfo, $requestData);
+        $this->_webApiCall($serviceInfo, $requestData, null, "all");
         $objectManager = \Magento\TestFramework\ObjectManager::getInstance();
         /** @var \Magento\Catalog\Api\ProductTierPriceManagementInterface $service */
         $service = $objectManager->get(\Magento\Catalog\Api\ProductTierPriceManagementInterface::class);
