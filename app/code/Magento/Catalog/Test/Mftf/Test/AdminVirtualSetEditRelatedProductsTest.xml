@@ -38,6 +38,6 @@
         </actionGroup>
 
         <!--See related product in storefront-->
-        <amOnPage url="{{defaultVirtualProduct.sku}}.html" stepKey="goToStorefront"/>
+        <amOnPage url="{{defaultVirtualProduct.urlKey}}.html" stepKey="goToStorefront"/>
     </test>
 </tests>

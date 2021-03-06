@@ -47,7 +47,7 @@
         </helper>
         <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsDownloadableProduct">
             <argument name="filePath">import_export/export/{$grabNameFile}</argument>
-            <argument name="text">$$createDownloadableProduct.name$$</argument>
+            <argument name="text">$$createProduct.name$$</argument>
         </helper>
         <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsDownloadableLink">
             <argument name="filePath">import_export/export/{$grabNameFile}</argument>

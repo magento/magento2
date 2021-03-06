@@ -73,7 +73,7 @@
         <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
 
         <!--See related product in storefront-->
-        <amOnPage url="{{BundleProduct.sku}}.html" stepKey="goToStorefront"/>
+        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForStorefront"/>
         <see userInput="$$simpleProduct1.sku$$" stepKey="seeRelatedProductInStorefront"/>
     </test>
