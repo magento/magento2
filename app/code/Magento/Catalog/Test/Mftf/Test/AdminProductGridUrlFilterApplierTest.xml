@@ -37,7 +37,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
 
-        <amOnPage url="{{AdminProductIndexPage.url}}?filters[sku]=$createSimpleProduct.sku$" stepKey="navigateToProductGridWithFilters"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}?filters[sku]=$createSimpleProduct.custom_attributes[url_key]$" stepKey="navigateToProductGridWithFilters"/>
         <waitForPageLoad stepKey="waitForProductGrid"/>
         <see selector="{{AdminProductGridSection.productGridNameProduct($createSimpleProduct.name$)}}" userInput="$createSimpleProduct.name$" stepKey="seeProduct"/>
         <waitForElementVisible selector="{{AdminProductGridFilterSection.enabledFilters}}" stepKey="waitForEnabledFilters"/>

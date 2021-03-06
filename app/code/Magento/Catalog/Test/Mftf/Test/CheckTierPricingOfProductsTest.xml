@@ -166,19 +166,19 @@
         <click stepKey="addProductsToOrder" selector="{{OrdersGridSection.addProductsToOrder}}"/>
         <waitForLoadingMaskToDisappear stepKey="wait6"/>
         <!--Verify tier price values-->
-        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product1.sku$$)}}" stepKey="checkProductPrice1"/>
+        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product1.name$$)}}" stepKey="checkProductPrice1"/>
         <assertEquals stepKey="verifyPrice1">
             <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice1</actualResult>
         </assertEquals>
 
-        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product2.sku$$)}}" stepKey="checkProductPrice2"/>
+        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product2.name$$)}}" stepKey="checkProductPrice2"/>
         <assertEquals stepKey="verifyPrice2">
             <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice2</actualResult>
         </assertEquals>
 
-        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product3.sku$$)}}" stepKey="checkProductPrice3"/>
+        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product3.name$$)}}" stepKey="checkProductPrice3"/>
         <assertEquals stepKey="verifyPrice3">
             <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice3</actualResult>
@@ -186,32 +186,32 @@
 
         <!--Edit order and verify values-->
         <waitForPageLoad stepKey="waitForPageLoaded2"/>
-        <click selector="{{OrdersGridSection.customPrice($$product1.sku$$)}}" stepKey="ClickOnCustomPrice"/>
-        <fillField selector="{{OrdersGridSection.customQuantity($$product1.sku$$)}}" userInput="5" stepKey="ClickOnQuantity"/>
+        <click selector="{{OrdersGridSection.customPrice($$product1.name$$)}}" stepKey="ClickOnCustomPrice"/>
+        <fillField selector="{{OrdersGridSection.customQuantity($$product1.name$$)}}" userInput="5" stepKey="ClickOnQuantity"/>
         <waitForLoadingMaskToDisappear stepKey="wait1"/>
         <click selector="{{OrdersGridSection.update}}" stepKey="ClickToUpdate"/>
         <waitForLoadingMaskToDisappear stepKey="wait2"/>
-        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product1.sku$$)}}" stepKey="checkProductPrice4"/>
+        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product1.name$$)}}" stepKey="checkProductPrice4"/>
         <assertEquals stepKey="verifyPrice4">
             <expectedResult type="string">{{testDataTierPrice.goldenPrice2}}</expectedResult>
             <actualResult type="variable">$checkProductPrice4</actualResult>
         </assertEquals>
 
-        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product2.sku$$)}}" stepKey="checkProductPrice5"/>
+        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product2.name$$)}}" stepKey="checkProductPrice5"/>
         <assertEquals stepKey="verifyPrice5">
             <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice5</actualResult>
         </assertEquals>
-        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product3.sku$$)}}" stepKey="checkProductPrice6"/>
+        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product3.name$$)}}" stepKey="checkProductPrice6"/>
         <assertEquals stepKey="verifyPrice6">
             <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice3</actualResult>
         </assertEquals>
 
         <!--Remove products from order-->
-        <selectOption selector="{{OrdersGridSection.removeItems($$product1.sku$$)}}" userInput="Remove" stepKey="clickToRemove1"/>
-        <selectOption selector="{{OrdersGridSection.removeItems($$product2.sku$$)}}" userInput="Remove" stepKey="clickToRemove2"/>
-        <selectOption selector="{{OrdersGridSection.removeItems($$product3.sku$$)}}" userInput="Remove" stepKey="clickToRemove3"/>
+        <selectOption selector="{{OrdersGridSection.removeItems($$product1.name$$)}}" userInput="Remove" stepKey="clickToRemove1"/>
+        <selectOption selector="{{OrdersGridSection.removeItems($$product2.name$$)}}" userInput="Remove" stepKey="clickToRemove2"/>
+        <selectOption selector="{{OrdersGridSection.removeItems($$product3.name$$)}}" userInput="Remove" stepKey="clickToRemove3"/>
         <waitForLoadingMaskToDisappear stepKey="wait3"/>
         <click selector="{{OrdersGridSection.update}}" stepKey="ClickToUpdate1"/>
         <waitForPageLoad stepKey="WaitProductsDeleted"/>
@@ -231,19 +231,19 @@
         <click stepKey="addProductsToOrder1" selector="{{OrdersGridSection.addProductsToOrder}}"/>
         <waitForLoadingMaskToDisappear stepKey="wait7"/>
         <!--Verify tier price values-->
-        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product1.sku$$)}}" stepKey="checkProductPrice7"/>
+        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product1.name$$)}}" stepKey="checkProductPrice7"/>
         <assertEquals stepKey="verifyPrice7">
             <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice7</actualResult>
         </assertEquals>
 
-        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product2.sku$$)}}" stepKey="checkProductPrice8"/>
+        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product2.name$$)}}" stepKey="checkProductPrice8"/>
         <assertEquals stepKey="verifyPrice8">
             <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice8</actualResult>
         </assertEquals>
 
-        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product3.sku$$)}}" stepKey="checkProductPrice9"/>
+        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product3.name$$)}}" stepKey="checkProductPrice9"/>
         <assertEquals stepKey="verifyPrice9">
             <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice9</actualResult>
@@ -257,33 +257,33 @@
         <fillField selector="{{OrdersGridSection.setQuantity($$product4.sku$$)}}" userInput="10" stepKey="AddProductQuantity9"/>
         <click selector="{{OrdersGridSection.addProductsToOrder}}" stepKey="addProductsToOrder2"/>
         <waitForLoadingMaskToDisappear stepKey="wait9"/>
-        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product4.sku$$)}}" stepKey="checkProductPrice10"/>
+        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product4.name$$)}}" stepKey="checkProductPrice10"/>
         <assertEquals stepKey="verifyPrice10">
             <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice10</actualResult>
         </assertEquals>
 
-        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product1.sku$$)}}" stepKey="checkProductPrice11"/>
+        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product1.name$$)}}" stepKey="checkProductPrice11"/>
         <assertEquals stepKey="verifyPrice11">
             <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice11</actualResult>
         </assertEquals>
 
-        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product2.sku$$)}}" stepKey="checkProductPrice12"/>
+        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product2.name$$)}}" stepKey="checkProductPrice12"/>
         <assertEquals stepKey="verifyPrice12">
             <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice12</actualResult>
         </assertEquals>
 
-        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product3.sku$$)}}" stepKey="checkProductPrice13"/>
+        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product3.name$$)}}" stepKey="checkProductPrice13"/>
         <assertEquals stepKey="verifyPrice13">
             <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice13</actualResult>
         </assertEquals>
 
-        <selectOption selector="{{OrdersGridSection.removeItems($$product1.sku$$)}}" userInput="Remove" stepKey="clickToRemove4"/>
-        <selectOption selector="{{OrdersGridSection.removeItems($$product2.sku$$)}}" userInput="Remove" stepKey="clickToRemove5"/>
-        <selectOption selector="{{OrdersGridSection.removeItems($$product3.sku$$)}}" userInput="Remove" stepKey="clickToRemove6"/>
+        <selectOption selector="{{OrdersGridSection.removeItems($$product1.name$$)}}" userInput="Remove" stepKey="clickToRemove4"/>
+        <selectOption selector="{{OrdersGridSection.removeItems($$product2.name$$)}}" userInput="Remove" stepKey="clickToRemove5"/>
+        <selectOption selector="{{OrdersGridSection.removeItems($$product3.name$$)}}" userInput="Remove" stepKey="clickToRemove6"/>
         <waitForLoadingMaskToDisappear stepKey="wait4"/>
         <click selector="{{OrdersGridSection.update}}" stepKey="ClickToUpdate2"/>
         <waitForLoadingMaskToDisappear stepKey="wait10"/>
@@ -300,8 +300,8 @@
         <waitForLoadingMaskToDisappear stepKey="wait5"/>
         <click selector="{{OrdersGridSection.update}}" stepKey="ClickToUpdate3"/>
         <waitForLoadingMaskToDisappear stepKey="wait12"/>
-        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product1.sku$$)}}" stepKey="checkProductPrice14"/>
-        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product4.sku$$)}}" stepKey="checkProductPrice15"/>
+        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product1.name$$)}}" stepKey="checkProductPrice14"/>
+        <grabTextFrom selector="{{OrdersGridSection.productPrice($$product4.name$$)}}" stepKey="checkProductPrice15"/>
         <assertEquals stepKey="verifyPrice14">
             <expectedResult type="string">{{testDataTierPrice.goldenPrice1}}</expectedResult>
             <actualResult type="variable">$checkProductPrice14</actualResult>

@@ -46,7 +46,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear" />
         <seeElement selector=".message-success" stepKey="assertSuccess"/>
         <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache"/>
-        <amOnPage url="{{StorefrontProductPage.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="goProductPageOnStorefront1"/>
+        <amOnPage url="{{StorefrontProductPage.NavigationCategoryByName($$createCategory.custom_attributes[url_key]$$)}}" stepKey="goProductPageOnStorefront1"/>
         <!-- View Simple Product 1 -->
         <comment userInput="View simple product 1" stepKey="commentViewSimpleProduct1" after="goProductPageOnStorefront1"/>
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="browseClickCategorySimpleProduct1View" after="commentViewSimpleProduct1"/>
@@ -54,7 +54,7 @@
         <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="compareAddSimpleProduct1ToCompare">
             <argument name="productVar" value="$$createSimpleProduct1$$"/>
         </actionGroup>
-        <amOnPage url="{{StorefrontProductPage.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="goProductPageOnStorefront2"/>
+        <amOnPage url="{{StorefrontProductPage.NavigationCategoryByName($$createCategory.custom_attributes[url_key]$$)}}" stepKey="goProductPageOnStorefront2"/>
         <!-- View Simple Product 2 -->
         <comment userInput="View simple product 2" stepKey="commentViewSimpleProduct2" after="goProductPageOnStorefront2"/>
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct2.name$$)}}" stepKey="browseClickCategorySimpleProduct2View" after="commentViewSimpleProduct2"/>
@@ -62,7 +62,7 @@
         <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="compareAddSimpleProduct2ToCompare">
             <argument name="productVar" value="$$createSimpleProduct2$$"/>
         </actionGroup>
-        <amOnPage url="{{StorefrontProductPage.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="goProductPageOnStorefront3"/>
+        <amOnPage url="{{StorefrontProductPage.NavigationCategoryByName($$createCategory.custom_attributes[url_key]$$)}}" stepKey="goProductPageOnStorefront3"/>
         <!-- Check products in comparison sidebar -->
         <!-- Check simple product 1 in comparison sidebar -->
         <comment userInput="Check simple product 1 in comparison sidebar" stepKey="commentCheckSimpleProduct1InComparisonSidebar" after="goProductPageOnStorefront3"/>

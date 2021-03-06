@@ -104,7 +104,7 @@
         </actionGroup>
 
         <!--Assert configurable product in category -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
         <actionGroup ref="StorefrontCheckCategoryConfigurableProductActionGroup" stepKey="assertConfigurableProductInCategory">
             <argument name="product" value="ApiConfigurableProduct"/>

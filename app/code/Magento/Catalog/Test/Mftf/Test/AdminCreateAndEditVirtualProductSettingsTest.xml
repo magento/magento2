@@ -97,7 +97,7 @@
 
         <!-- Open product page -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
-            <argument name="productUrl" value="{{defaultVirtualProduct.name}}"/>
+            <argument name="productUrl" value="{{defaultVirtualProduct.urlKey}}"/>
         </actionGroup>
 
         <!-- Assert two related products at the storefront -->
@@ -166,7 +166,7 @@
 
         <!-- Verify Url Key after changing -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
-            <argument name="productUrl" value="{{SimpleProduct.name}}"/>
+            <argument name="productUrl" value="{{SimpleProduct.urlKey}}"/>
         </actionGroup>
 
         <!-- Assert three related products at the storefront -->

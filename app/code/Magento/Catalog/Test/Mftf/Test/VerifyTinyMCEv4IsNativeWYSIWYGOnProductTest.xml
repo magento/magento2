@@ -52,7 +52,7 @@
         <dontSee selector="{{TinyMCESection.InsertVariableBtn}}" stepKey="insertVariable2" />
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
         <!-- Go to storefront product page, assert product content -->
-        <amOnPage url="{{_defaultProduct.name}}.html" stepKey="navigateToProductPage"/>
+        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <scrollTo selector="{{StorefrontProductInfoMainSection.stock}}" stepKey="scrollToStock"/>
         <see userInput="Hello World!" selector="{{StorefrontProductInfoMainSection.productDescription}}" stepKey="assertProductDescription"/>

@@ -39,7 +39,7 @@
         <dontSee selector="{{TinyMCESection.InsertVariableBtn}}" stepKey="insertVariable" />
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCatalog"/>
         <!-- Go to storefront product page, assert product content -->
-        <amOnPage url="/{{SimpleSubCategory.name_lwr}}.html" stepKey="goToCategoryFrontPage"/>
+        <amOnPage url="/{{SimpleSubCategory.urlKey}}.html" stepKey="goToCategoryFrontPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.CatalogDescription}}"  stepKey="waitForDesVisible" />
         <see userInput="Hello World!" selector="{{StorefrontCategoryMainSection.CatalogDescription}}" stepKey="assertCatalogDescription"/>

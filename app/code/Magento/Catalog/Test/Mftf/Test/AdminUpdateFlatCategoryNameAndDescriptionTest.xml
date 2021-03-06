@@ -70,7 +70,7 @@
         <actionGroup ref="AdminOpenIndexManagementPageActionGroup" stepKey="openIndexManagementPage"/>
         <see stepKey="seeIndexStatus"  selector="{{AdminIndexManagementSection.indexerStatus('Category Flat Data')}}" userInput="READY"/>
         <!--Verify Category In Store Front-->
-        <amOnPage url="{{SimpleSubCategory.name}}.html" stepKey="goToStorefrontPage"/>
+        <amOnPage url="{{SimpleSubCategory.urlKey}}.html" stepKey="goToStorefrontPage"/>
         <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
         <!--Verify category is visible in First Store View -->
         <click stepKey="selectStoreSwitcher" selector="{{StorefrontHeaderSection.storeViewSwitcher}}"/>

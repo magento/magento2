@@ -60,10 +60,10 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSplitButtonMenuVisible"/>
         <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSavePage"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSuccessMessage"/>
-        <amOnPage url="$$createPreReqProduct.name$$.html" stepKey="amOnProductPage" />
+        <amOnPage url="$$createPreReqProduct.custom_attributes[url_key]$$.html" stepKey="amOnProductPage" />
         <waitForPageLoad stepKey="waitForPage" />
         <click selector="{{WidgetSection.CompareBtn}}" stepKey="clickCompareBtn" />
-        <amOnPage url="$$createPreReqCategory.name$$.html" stepKey="amOnCatalogPage" />
+        <amOnPage url="$$createPreReqCategory.custom_attributes[url_key]$$.html" stepKey="amOnCatalogPage" />
         <waitForPageLoad stepKey="waitForPage1" />
         <waitForPageLoad stepKey="waitForPage2" />
         <waitForElementVisible selector="{{WidgetSection.ClearCompare}}" stepKey="waitForClearBtn" />

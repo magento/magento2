@@ -103,7 +103,7 @@
         <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.OkBtn}}" stepKey="clickOkBtn2" />
         <waitForPageLoad stepKey="waitForPageLoad6"/>
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
-        <amOnPage url="{{_defaultProduct.name}}.html" stepKey="navigateToProductPage"/>
+        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad7"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.mediaDescription}}" stepKey="assertMediaDescription"/>
         <seeElementInDOM selector="{{StorefrontCategoryMainSection.imageSource(ImageUpload3.fileName)}}" stepKey="assertMediaSource3"/>
