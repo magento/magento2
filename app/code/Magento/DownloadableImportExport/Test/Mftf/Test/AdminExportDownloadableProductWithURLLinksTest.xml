@@ -34,12 +34,12 @@
                 <argument name="tags" value="config full_page"/>
             </actionGroup>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
-            <createData entity="ApiDownloadableProduct" stepKey="createDownloadableProduct"/>
+            <createData entity="ApiDownloadableProduct" stepKey="createProduct"/>
             <createData entity="downloadableLink1" stepKey="addDownloadableLink">
-                <requiredEntity createDataKey="createDownloadableProduct"/>
+                <requiredEntity createDataKey="createProduct"/>
             </createData>
             <createData entity="DownloadableSample" stepKey="addDownloadableSamples">
-                <requiredEntity createDataKey="createDownloadableProduct"/>
+                <requiredEntity createDataKey="createProduct"/>
             </createData>
             <magentoCron groups="index" stepKey="runCronIndex"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -51,7 +51,7 @@
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
                 <argument name="tags" value="config full_page"/>
             </actionGroup>
-            <deleteData createDataKey="createDownloadableProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteExportFileDirectory">
                 <argument name="path">var/export</argument>
@@ -64,7 +64,7 @@
         <actionGroup ref="AdminNavigateToExportPageActionGroup" stepKey="goToExportIndexPage"/>
         <actionGroup ref="ExportProductsFilterByAttributeActionGroup" stepKey="exportProductBySku">
             <argument name="attribute" value="sku"/>
-            <argument name="attributeData" value="$$createDownloadableProduct.sku$$"/>
+            <argument name="attributeData" value="$$createProduct.sku$$"/>
         </actionGroup>
 
         <!-- Start Message Queue for Export Consumer -->
@@ -83,7 +83,7 @@
         </helper>
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsDownloadableProduct">
             <argument name="filePath">var/export/{$grabNameFile}</argument>
-            <argument name="text">$$createDownloadableProduct.name$$</argument>
+            <argument name="text">$$createProduct.name$$</argument>
         </helper>
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsDownloadableLink">
             <argument name="filePath">var/export/{$grabNameFile}</argument>
@@ -95,7 +95,7 @@
         </helper>
 
         <!-- Download Export File -->
-        <actionGroup ref="DownloadFileActionGroup" stepKey="downloadCreatedProducts">
+        <actionGroup ref="DownloadFileActionGroup" stepKey="downloadExport">
             <argument name="fileName" value="{$grabNameFile}"/>
         </actionGroup>
 
@@ -103,7 +103,7 @@
         <grabAttributeFrom userInput="href" selector="{{AdminExportAttributeSection.download('0')}}" stepKey="grabExportUrl"/>
         <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsDownloadableProduct">
             <argument name="url">{$grabExportUrl}</argument>
-            <argument name="expectedString">$$createDownloadableProduct.name$$</argument>
+            <argument name="expectedString">$$createProduct.name$$</argument>
         </helper>
         <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsDownloadableLink">
             <argument name="url">{$grabExportUrl}</argument>
