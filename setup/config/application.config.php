@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-use Laminas\Di\InjectorInterface;
+use Magento\Setup\Di\MagentoDiFactory;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 
 return [
@@ -23,6 +23,12 @@ return [
     'service_manager' => [
         'factories' => [
             InitParamListener::BOOTSTRAP_PARAM => InitParamListener::class,
+            \Magento\Framework\App\MaintenanceMode::class => MagentoDiFactory::class,
+            \Magento\Setup\Model\ConfigGenerator::class => MagentoDiFactory::class,
+            \Magento\Indexer\Console\Command\IndexerReindexCommand::class => MagentoDiFactory::class,
+            \Symfony\Component\Console\Helper\TableFactory::class => MagentoDiFactory::class,
+            \Magento\Deploy\Console\InputValidator::class => MagentoDiFactory::class,
+            \Magento\Framework\App\State::class => MagentoDiFactory::class,
         ],
     ]
 ];

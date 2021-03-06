@@ -99,7 +99,7 @@ class DiCompileCommand extends Command
         Filesystem $filesystem,
         DriverInterface $fileDriver,
         ComponentRegistrar $componentRegistrar,
-        $file = null
+        File $file = null
     ) {
         $this->deploymentConfig = $deploymentConfig;
         $this->directoryList    = $directoryList;

@@ -72,7 +72,7 @@ class InputValidator
      */
     public function __construct(
         Locale $localeValidator,
-        $versionValidatorFactory = null
+        ?RegexFactory $versionValidatorFactory = null
     ) {
         $this->localeValidator = $localeValidator;
         $this->versionValidatorFactory = $versionValidatorFactory ?:

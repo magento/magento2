@@ -75,7 +75,7 @@ class FilePermissions
     public function __construct(
         Filesystem $filesystem,
         DirectoryList $directoryList,
-        $state = null
+        State $state = null
     ) {
         $this->filesystem = $filesystem;
         $this->directoryList = $directoryList;
