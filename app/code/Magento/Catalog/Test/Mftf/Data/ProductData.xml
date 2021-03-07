@@ -72,6 +72,11 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
+    <entity name="SimpleProduct_NoSpaces" extends="SimpleProduct" type="product">
+        <data key="name" unique="suffix">SimpleProduct</data>
+        <data key="sku" unique="suffix">SimpleProduct</data>
+        <data key="urlKey" unique="suffix">simpleproduct</data>
+    </entity>
     <entity name="ProductForPartialSearch" extends="SimpleProduct" type="product">
         <data key="sku">partialTestSku</data>
     </entity>

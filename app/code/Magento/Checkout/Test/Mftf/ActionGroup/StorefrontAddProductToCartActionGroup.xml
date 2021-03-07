@@ -18,6 +18,7 @@
         </arguments>
 
         <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="clickAddToCart"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" stepKey="waitForSuccessMessage"/>
         <see selector="{{StorefrontProductPageSection.messagesBlock}}" userInput="You added {{product.name}} to your shopping cart." stepKey="assertSuccessMessage"/>
         <seeLink stepKey="assertLinkToShoppingCart" url="{{_ENV.MAGENTO_BASE_URL}}checkout/cart/" userInput="shopping cart"/>
