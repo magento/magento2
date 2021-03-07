@@ -67,8 +67,8 @@
     </entity>
     <entity name="FifthLevelCat" type="category">
         <data key="name" unique="suffix">FifthLevelCategory</data>
-        <data key="name_lwr" unique="suffix">fifthlevelsubcategory</data>
-        <data key="urlKey" unique="suffix">fifthlevelsubcategory</data>
+        <data key="name_lwr" unique="suffix">fifthlevelcategory</data>
+        <data key="urlKey" unique="suffix">fifthlevelcategory</data>
     </entity>
     <entity name="SimpleRootSubCategory" type="category">
         <data key="name" unique="suffix">SimpleRootSubCategory</data>

@@ -92,7 +92,7 @@
         <actionGroup ref="AssertProductDetailsInWishlistActionGroup" stepKey="assertProductDetails">
             <argument name="productName" value="$$createBundleProduct.name$$"/>
             <argument name="label" value="$$createBundleOption1_1.title$$"/>
-            <argument name="labelValue" value="$$simpleProduct1.sku$$ $100.00"/>
+            <argument name="labelValue" value="$$simpleProduct1.name$$ $100.00"/>
         </actionGroup>
 
         <actionGroup ref="AssertShoppingCartIsEmptyActionGroup" stepKey="assertCartIsEmpty"/>

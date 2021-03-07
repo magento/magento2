@@ -15,7 +15,7 @@
             <argument name="product" defaultValue="SimpleProduct" />
         </arguments>
 
-        <amOnPage url="{{category}}/{{product.urlKey}}.html" stepKey="goToProductPage"/>
+        <amOnPage url="{{category}}/{{product.urlKey}}2.html" stepKey="goToProductPage"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{product.name}}" stepKey="seeProductNameInStoreFront"/>
     </actionGroup>
 </actionGroups>

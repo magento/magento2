@@ -105,6 +105,6 @@
         <!--See related product in storefront-->
         <amOnPage url="{{SimpleProduct3.urlKey}}.html" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForStorefront"/>
-        <seeElement selector="{{StorefrontProductRelatedProductsSection.relatedProductName($$simpleProduct1.sku$$)}}" stepKey="seeRelatedProductInStorefront"/>
+        <seeElement selector="{{StorefrontProductRelatedProductsSection.relatedProductName($$simpleProduct1.name$$)}}" stepKey="seeRelatedProductInStorefront"/>
     </test>
 </tests>

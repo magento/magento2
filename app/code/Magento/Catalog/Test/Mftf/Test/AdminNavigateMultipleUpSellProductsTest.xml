@@ -158,7 +158,7 @@
         <!--Go to SimpleProduct store front page-->
         <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="goToSimpleProductFrontPage"/>
         <waitForPageLoad stepKey="waitForProduct"/>
-        <see stepKey="seeProductName" userInput="$$createSimpleProduct.sku$$" selector="{{StorefrontProductInfoMainSection.productName}}"/>
+        <see stepKey="seeProductName" userInput="$$createSimpleProduct.name$$" selector="{{StorefrontProductInfoMainSection.productName}}"/>
         <scrollTo stepKey="scrollToTheUpSellHeading" selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}"/>
 
         <!--Verify Up Sell Products displayed in SimpleProduct page-->
