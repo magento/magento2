@@ -56,8 +56,7 @@ $product->setTypeId('bundle')
                     'selection_qty' => 1,
                     'selection_can_change_qty' => 1,
                     'delete' => '',
-                    'selection_price_type' => 0,
-                    'selection_price_value' => 5
+                    'selection_price_type' => 0
                 ],
             ],
         ]
