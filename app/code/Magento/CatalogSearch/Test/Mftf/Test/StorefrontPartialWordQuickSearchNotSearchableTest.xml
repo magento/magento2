@@ -27,7 +27,7 @@
                 <requiredEntity createDataKey="newCategory"/>
             </createData>
             <!--Create product2-->
-            <createData entity="SimpleProductBeforeUpdate" stepKey="product2">
+            <createData entity="SimpleProduct" stepKey="product2">
                 <requiredEntity createDataKey="newCategory"/>
             </createData>
             <!--Create product3-->
@@ -114,8 +114,9 @@
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="search2">
             <argument name="phrase" value="simple"/>
         </actionGroup>
-        <!--Assert that product1 is not present in the search result-->
-        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProduct1">
+        <!--Assert that product1 is present in the search result-->
+        <comment userInput="BIC workaround" stepKey="dontSeeProduct1"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProduct1c">
             <argument name="productName" value="$$product1.name$$"/>
         </actionGroup>
         <!--Assert that product2 is present in the search result-->
