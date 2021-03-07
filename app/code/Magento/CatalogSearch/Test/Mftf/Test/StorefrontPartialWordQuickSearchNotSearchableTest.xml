@@ -27,7 +27,7 @@
                 <requiredEntity createDataKey="newCategory"/>
             </createData>
             <!--Create product2-->
-            <createData entity="SimpleProduct" stepKey="product2">
+            <createData entity="SimpleProductBeforeUpdate" stepKey="product2">
                 <requiredEntity createDataKey="newCategory"/>
             </createData>
             <!--Create product3-->
@@ -105,7 +105,7 @@
         <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProduct2">
             <argument name="productName" value="$$product2.name$$"/>
         </actionGroup>
-        <!--Assert that product2 is not present in the search result-->
+        <!--Assert that product3 is not present in the search result-->
         <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProduct3">
             <argument name="productName" value="$$product3.name$$"/>
         </actionGroup>
