@@ -143,6 +143,7 @@ function (
          */
         updateAddress: function () {
             var addressData, newBillingAddress;
+
             addressUpadated = true;
 
             if (this.selectedAddress() && !this.isAddressFormVisible()) {
@@ -222,9 +223,12 @@ function (
          * Restore billing address
          */
         restoreBillingAddress: function () {
+            var lastBillingAddress;
+
             if (lastSelectedBillingAddress != null) {
                 selectBillingAddress(lastSelectedBillingAddress);
-                var lastBillingAddress = addressConverter.quoteAddressToFormAddressData(lastSelectedBillingAddress);
+                lastBillingAddress = addressConverter.quoteAddressToFormAddressData(lastSelectedBillingAddress);
+
                 checkoutData.setNewCustomerBillingAddress(lastBillingAddress);
             }
         },

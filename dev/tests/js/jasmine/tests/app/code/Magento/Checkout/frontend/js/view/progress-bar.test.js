@@ -10,7 +10,7 @@ define([
     'use strict';
 
     var injector = new Squire(),
-        billingAddress = jasmine.createSpyObj('billingAddress',['needCancelBillingAddressChanges']),
+        billingAddress = jasmine.createSpyObj('billingAddress', ['needCancelBillingAddressChanges']),
         mocks = {
             'Magento_Checkout/js/view/billing-address': jasmine.createSpy().and.returnValue(
                 billingAddress
@@ -39,6 +39,7 @@ define([
                 var step = {
                     code: 'billing'
                 };
+
                 progressbar.navigateTo(step);
                 expect(billingAddress.needCancelBillingAddressChanges).not.toHaveBeenCalled();
             });
@@ -47,6 +48,7 @@ define([
                 var step = {
                     code: 'shipping'
                 };
+
                 progressbar.navigateTo(step);
                 expect(billingAddress.needCancelBillingAddressChanges).toHaveBeenCalled();
             });

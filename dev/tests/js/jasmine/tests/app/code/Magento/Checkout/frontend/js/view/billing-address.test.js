@@ -11,21 +11,27 @@ define([
     'use strict';
 
     var injector = new Squire(),
-        checkoutData = jasmine.createSpyObj('checkoutData',['setNewCustomerBillingAddress']),
+        checkoutData = jasmine.createSpyObj('checkoutData', ['setNewCustomerBillingAddress']),
         mocks = {
             'Magento_Checkout/js/checkout-data': checkoutData,
             'Magento_Customer/js/customer-data': {
+                /** Stub */
                 get: function () {}
             },
             'Magento_Checkout/js/model/quote': {
+                /** Stub */
                 getQuoteId: function () {},
+
                 billingAddress: ko.observable(null),
+
+                /** Stub */
                 isVirtual: function () {
                     return false;
                 },
+
                 shippingAddress: ko.observable(null),
                 paymentMethod: ko.observable(null)
-            },
+            }
         },
         lastSelectedBillingAddress = {
             city: 'Culver City',
@@ -56,13 +62,17 @@ define([
         injector.require(['Magento_Checkout/js/view/billing-address'], function (Constr) {
             billingAddress = new Constr;
 
-            /** Stub */
             billingAddress.source = {
+                /** Stub */
                 get: function () {
                     return [];
                 },
+
+                /** Stub */
                 set: function () {},
-                trigger: function () {},
+
+                /** Stub */
+                trigger: function () {}
             };
 
             done();
@@ -72,7 +82,7 @@ define([
     describe('Magento_Checkout/js/view/billing-address', function () {
         describe('"needCancelBillingAddressChanges" method', function () {
             it('Test negative scenario', function () {
-                spyOn(billingAddress,'cancelAddressEdit');
+                spyOn(billingAddress, 'cancelAddressEdit');
                 billingAddress.editAddress();
                 billingAddress.updateAddress();
                 billingAddress.needCancelBillingAddressChanges();
@@ -80,7 +90,7 @@ define([
             });
 
             it('Test that billing address editing was canceled automatically', function () {
-                spyOn(billingAddress,'cancelAddressEdit');
+                spyOn(billingAddress, 'cancelAddressEdit');
                 billingAddress.editAddress();
                 billingAddress.needCancelBillingAddressChanges();
                 expect(billingAddress.cancelAddressEdit).toHaveBeenCalled();
