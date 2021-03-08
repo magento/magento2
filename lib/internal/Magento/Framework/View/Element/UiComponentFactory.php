@@ -31,12 +31,12 @@ class UiComponentFactory extends DataObject
     /**
      * The key arguments in the data component
      */
-    const COMPONENT_ARGUMENTS_KEY = 'arguments';
+    private const COMPONENT_ARGUMENTS_KEY = 'arguments';
 
     /**
      * The key attributes in the data component
      */
-    const COMPONENT_ATTRIBUTES_KEY = 'attributes';
+    private const COMPONENT_ATTRIBUTES_KEY = 'attributes';
 
     /**
      * Object manager

@@ -22,9 +22,9 @@ use Magento\Store\Api\StoreRepositoryInterface;
 class StoreTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * Session ID in query param
+     * Test ID in query param
      */
-    const SESSION_ID_QUERY_PARAM = 'SID';
+    private const TEST_ID_QUERY_PARAM = 'TID';
 
     /**
      * @var array
@@ -308,11 +308,11 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
         $this->model
             ->expects($this->any())->method('getUrl')
-            ->willReturn('http://localhost/index.php?' . self::SESSION_ID_QUERY_PARAM . '=12345');
-        $this->request->setParams([self::SESSION_ID_QUERY_PARAM, '12345']);
-        $this->request->setQueryValue(self::SESSION_ID_QUERY_PARAM, '12345');
+            ->willReturn('http://localhost/index.php?' . self::TEST_ID_QUERY_PARAM . '=12345');
+        $this->request->setParams([self::TEST_ID_QUERY_PARAM, '12345']);
+        $this->request->setQueryValue(self::TEST_ID_QUERY_PARAM, '12345');
         $this->assertStringContainsString(
-            self::SESSION_ID_QUERY_PARAM . '=12345',
+            self::TEST_ID_QUERY_PARAM . '=12345',
             $this->model->getCurrentUrl()
         );
 
@@ -330,11 +330,11 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             $url
         );
         $this->assertEquals(
-            $secondStore->getBaseUrl() . '?SID=12345&___from_store=default',
+            $secondStore->getBaseUrl() . '?' . self::TEST_ID_QUERY_PARAM . '=12345&___from_store=default',
             $secondStore->getCurrentUrl()
         );
         $this->assertEquals(
-            $secondStore->getBaseUrl() . '?SID=12345',
+            $secondStore->getBaseUrl() . '?' . self::TEST_ID_QUERY_PARAM . '=12345',
             $secondStore->getCurrentUrl(false)
         );
     }

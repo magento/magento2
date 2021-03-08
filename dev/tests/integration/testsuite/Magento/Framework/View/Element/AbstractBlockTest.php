@@ -18,7 +18,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
     /**
      * Session ID in query param
      */
-    const SESSION_ID_QUERY_PARAM = 'SID';
+    private const SESSION_ID_QUERY_PARAM = 'SID';
 
     /**
      * @var AbstractBlock
