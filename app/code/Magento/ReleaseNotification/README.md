@@ -14,7 +14,7 @@ The **Release Notification Module** serves to provide a notification delivery pl
 
 Release notification content is maintained by Magento for each Magento version, edition, and locale. To retrieve the content, a response is returned from a request with the following parameters:
 
-*  **version** = The Magento version that the client has installed (ex. 2.3.0).
+*  **version** = The Magento version that the client has installed (ex. 2.4.0).
 *  **edition** = The Magento edition that the client has installed (ex. Community).
 *  **locale** = The chosen locale of the admin user (ex. en_US).
 

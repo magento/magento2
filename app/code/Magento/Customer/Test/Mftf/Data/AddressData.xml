@@ -198,6 +198,9 @@
         </array>
         <data key="state">California</data>
     </entity>
+    <entity name="US_With_Vat_Number" type="address" extends="US_Address_CA">
+        <data key="vat_id">U1234567891</data>
+    </entity>
     <entity name="US_Default_Billing_Address_TX" type="address" extends="US_Address_TX">
         <data key="default_billing">false</data>
         <data key="default_shipping">true</data>
