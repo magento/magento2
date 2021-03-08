@@ -35,7 +35,7 @@
         <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnCmsList"/>
         <waitForPageLoad stepKey="waitForCmsList"/>
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
-        <click selector="{{CmsPagesPageActionsSection.addNewPageButton}}" stepKey="clickAddNewPageButton"/>
+        <actionGroup ref="AdminClickAddNewPageOnPagesGridActionGroup" stepKey="clickAddNewPageButton"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_newDefaultCmsPage.title}}" stepKey="fillPageTitle"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="expandContentSection"/>
         <waitForPageLoad stepKey="waitForContentSection"/>
@@ -51,7 +51,7 @@
         <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createCategory.name$$)}}" stepKey="clickCategoryToEditInitial"/>
         <click selector="{{AdminNewWidgetSection.applyParameter}}" stepKey="clickApplyRuleParameter"/>
-        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget"/>
+        <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidget"/>
         <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn"/>
         <click selector="{{CmsNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveAndClose"/>
         <waitForPageLoad stepKey="waitForCmsList2"/>

@@ -21,5 +21,6 @@
         <element name="useAsDefaultBillingAddressCheckBox" type="input" selector="//form[@class='form-address-edit']//input[@name='default_billing']"/>
         <element name="useAsDefaultShippingAddressCheckBox" type="input" selector="//form[@class='form-address-edit']//input[@name='default_shipping']"/>
         <element name="saveAddress" type="button" selector="//button[@title='Save Address']" timeout="30"/>
+        <element name="formTitle" type="text" selector="//h1[@class='page-title']/span[text() = 'Edit Address']" timeout="30"/>
     </section>
 </sections>
