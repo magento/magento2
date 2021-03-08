@@ -21,7 +21,7 @@
         <before>
             <createData entity="Simple_US_Customer" stepKey="createFirstCustomer"/>
             <createData entity="Simple_US_Customer" stepKey="createSecondCustomer">
-                <field key="firstname">&quot;Jane Doe&quot;</field>
+                <field key="firstname">Jane Doe</field>
             </createData>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
