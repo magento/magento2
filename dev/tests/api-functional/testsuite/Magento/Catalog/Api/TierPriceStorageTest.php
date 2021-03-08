@@ -63,6 +63,7 @@ class TierPriceStorageTest extends WebapiAbstract
      * Test update method.
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoConfigFixture default_store catalog/price/scope 0
      */
     public function testUpdate()
     {
