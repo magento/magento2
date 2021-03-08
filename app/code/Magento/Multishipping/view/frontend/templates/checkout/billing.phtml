@@ -184,20 +184,21 @@ script;
             quote.billingAddress({
 
 script;
-$scriptString .= "city: '" . /* @noEscape */ $block->getAddress()->getCity() . "'," . PHP_EOL;
-$scriptString .= "company: '" . /* @noEscape */ $block->getAddress()->getCompany() . "'," . PHP_EOL;
-$scriptString .= "countryId: '" . /* @noEscape */ $block->getAddress()->getCountryId() . "'," . PHP_EOL;
-$scriptString .= "customerAddressId: '" . /* @noEscape */ $block->getAddress()->getCustomerAddressId() . "'," . PHP_EOL;
-$scriptString .= "customerId: '" . /* @noEscape */ $block->getAddress()->getCustomerId() . "'," . PHP_EOL;
-$scriptString .= "fax: '" . /* @noEscape */ $block->getAddress()->getFax() . "'," . PHP_EOL;
-$scriptString .= "firstname: '" . /* @noEscape */ $block->getAddress()->getFirstname() . "'," . PHP_EOL;
-$scriptString .= "lastname: '" . /* @noEscape */ $block->getAddress()->getLastname() . "'," . PHP_EOL;
-$scriptString .= "postcode: '" . /* @noEscape */ $block->getAddress()->getPostcode() . "'," . PHP_EOL;
-$scriptString .= "regionId: '" . /* @noEscape */ $block->getAddress()->getRegionId() . "'," . PHP_EOL;
-$scriptString .= "regionCode: '" . /* @noEscape */ $block->getAddress()->getRegionCode() . "'," . PHP_EOL;
-$scriptString .= "region: '" . /* @noEscape */ $block->getAddress()->getRegion() . "'," . PHP_EOL;
+$scriptString .= "city: '" . $escaper->escapeJs($block->getAddress()->getCity()) . "'," . PHP_EOL;
+$scriptString .= "company: '" . $escaper->escapeJs($block->getAddress()->getCompany()) . "'," . PHP_EOL;
+$scriptString .= "countryId: '" . $escaper->escapeJs($block->getAddress()->getCountryId()) . "'," . PHP_EOL;
+$scriptString .= "customerAddressId: '" . $escaper->escapeJs($block->getAddress()->getCustomerAddressId()) . "',"
+    . PHP_EOL;
+$scriptString .= "customerId: '" . $escaper->escapeJs($block->getAddress()->getCustomerId()) . "'," . PHP_EOL;
+$scriptString .= "fax: '" . $escaper->escapeJs($block->getAddress()->getFax()) . "'," . PHP_EOL;
+$scriptString .= "firstname: '" . $escaper->escapeJs($block->getAddress()->getFirstname()) . "'," . PHP_EOL;
+$scriptString .= "lastname: '" . $escaper->escapeJs($block->getAddress()->getLastname()) . "'," . PHP_EOL;
+$scriptString .= "postcode: '" . $escaper->escapeJs($block->getAddress()->getPostcode()) . "'," . PHP_EOL;
+$scriptString .= "regionId: '" . $escaper->escapeJs($block->getAddress()->getRegionId()) . "'," . PHP_EOL;
+$scriptString .= "regionCode: '" . $escaper->escapeJs($block->getAddress()->getRegionCode()) . "'," . PHP_EOL;
+$scriptString .= "region: '" . $escaper->escapeJs($block->getAddress()->getRegion()) . "'," . PHP_EOL;
 $scriptString .= "street: " . /* @noEscape */ json_encode($block->getAddress()->getStreet()) . "," . PHP_EOL;
-$scriptString .= "telephone: '" . /* @noEscape */ $block->getAddress()->getTelephone() . "'" . PHP_EOL;
+$scriptString .= "telephone: '" . $escaper->escapeJs($block->getAddress()->getTelephone()) . "'" . PHP_EOL;
 $scriptString .= <<<script
             });
         });

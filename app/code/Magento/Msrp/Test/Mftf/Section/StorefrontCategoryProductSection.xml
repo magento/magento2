@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCategoryProductSection">
+        <element name="clickForPrice" type="button" selector="//a[normalize-space() = '{{productName}}']/following::div[@data-role='priceBox']/a[@class='action map-show-info']" parameterized="true" timeout="30"/>
+        <element name="mapPrice" type="button" selector="//a[normalize-space() = '{{productName}}']/following::div[@data-role='priceBox']//span[contains(@class, 'price-msrp_price')]" parameterized="true" timeout="30"/>
+    </section>
+</sections>
