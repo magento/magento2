@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddSimpleProductToCartWithRedirectToShoppingCartTest">
+        <annotations>
+            <stories value="Shopping Cart"/>
+            <features value="Checkout"/>
+            <title value="Add simple product to shopping cart with 'redirect to shopping cart' enabled."/>
+            <description value="Verify, user able add simple product to shopping cart from category page and compare products page when 'redirect to shopping cart' is enabled."/>
+            <testCaseId value="MC-41079"/>
+            <useCaseId value="MC-40983"/>
+            <severity value="CRITICAL"/>
+            <group value="shoppingCart"/>
+            <group value="checkout"/>
+        </annotations>
+
+        <before>
+            <!--Enable redirect to shopping cart.-->
+            <magentoCLI command="config:set {{EnableRedirectToShoppingCart.path}} {{EnableRedirectToShoppingCart.value}}" stepKey="enableRedirectToShippingCart"/>
+            <!--Create test data.-->
+            <createData entity="_defaultCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="product">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+        </before>
+        <after>
+            <!--Disable redirect to shopping cart.-->
+            <magentoCLI command="config:set {{DisableRedirectToShoppingCart.path}} {{DisableRedirectToShoppingCart.value}}" stepKey="disableRedirectToShippingCart"/>
+            <!--Delete test data.-->
+            <deleteData createDataKey="product" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </after>
+
+        <!--Try to add simple product to shopping cart.-->
+        <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="goToCategoryPage">
+            <argument name="categoryUrl" value="$category.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$product$"/>
+        </actionGroup>
+        <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="verifyCartRedirectAfterAddingProductFromCategoryPage"/>
+        <!-- Add product to compare list -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$product.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="addProductToCompare">
+            <argument name="productVar" value="$product$"/>
+        </actionGroup>
+        <!--Try to add simple product to shopping cart from compare products page.-->
+        <actionGroup ref="SeeProductInComparisonListActionGroup" stepKey="checkProductInComparisonList">
+            <argument name="productVar" value="$product$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddSimpleProductToCartFromComparisonListActionGroup" stepKey="addProductToCartFromComparisonList">
+            <argument name="productName" value="$product.name$"/>
+        </actionGroup>
+        <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="verifyCartRedirectAfterAddingProductFromComparisonList"/>
+    </test>
+</tests>
