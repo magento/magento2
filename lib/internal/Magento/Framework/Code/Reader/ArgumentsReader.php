@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Code\Reader;
 
+use ReflectionClass;
+use ReflectionException;
+use ReflectionParameter;
+
 /**
  * The class arguments reader
  */
@@ -98,15 +102,13 @@ class ArgumentsReader
      */
     private function processType(\ReflectionClass $class, \Laminas\Code\Reflection\ParameterReflection $parameter)
     {
+        $parameterClass = $this->getParameterClass($parameter);
+
+        if ($parameterClass) {
+            return NamespaceResolver::NS_SEPARATOR . $parameterClass->getName();
+        }
+
         $type = $parameter->detectType();
-
-        if (in_array($type, $this->scalarTypesProvider->getTypes())) {
-            return $type;
-        }
-
-        if ($parameter->getClass()) {
-            return NamespaceResolver::NS_SEPARATOR . $parameter->getClass()->getName();
-        }
 
         if ($type === 'null') {
             return null;
@@ -123,6 +125,22 @@ class ArgumentsReader
         }
 
         return $type;
+    }
+
+    /**
+     * Get class by reflection parameter
+     *
+     * @param ReflectionParameter $reflectionParameter
+     * @return ReflectionClass|null
+     * @throws ReflectionException
+     */
+    private function getParameterClass(ReflectionParameter $reflectionParameter): ?ReflectionClass
+    {
+        $parameterType = $reflectionParameter->getType();
+
+        return $parameterType && !$parameterType->isBuiltin()
+            ? new ReflectionClass($parameterType->getName())
+            : null;
     }
 
     /**
