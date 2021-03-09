@@ -6,19 +6,21 @@
 
 namespace Magento\Setup\Model;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Magento\Framework\App\DeploymentConfig;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class Navigation implements the data model for the navigation menu
+ */
 class Navigation
 {
-    /**#@+
-     * Types of wizards
+    /**
+     * Type of navigation
      */
-    const NAV_INSTALLER = 'navInstaller';
-    const NAV_UPDATER = 'navUpdater';
-    /**#@- */
+    const NAV_LANDING = 'navLanding';
 
-    /**#@- */
+    /**
+     * @var string
+     */
     private $navStates;
 
     /**
@@ -33,22 +35,17 @@ class Navigation
 
     /**
      * @param ServiceLocatorInterface $serviceLocator
-     * @param DeploymentConfig $deploymentConfig
      */
-    public function __construct(ServiceLocatorInterface $serviceLocator, DeploymentConfig $deploymentConfig)
+    public function __construct(ServiceLocatorInterface $serviceLocator)
     {
-        if ($deploymentConfig->isAvailable()) {
-            $this->navStates = $serviceLocator->get('config')[self::NAV_UPDATER];
-            $this->navType = self::NAV_UPDATER;
-            $this->titles = $serviceLocator->get('config')[self::NAV_UPDATER . 'Titles'];
-        } else {
-            $this->navStates = $serviceLocator->get('config')[self::NAV_INSTALLER];
-            $this->navType = self::NAV_INSTALLER;
-            $this->titles = $serviceLocator->get('config')[self::NAV_INSTALLER . 'Titles'];
-        }
+        $this->navStates = $serviceLocator->get('config')[self::NAV_LANDING];
+        $this->navType = self::NAV_LANDING;
+        $this->titles = $serviceLocator->get('config')[self::NAV_LANDING . 'Titles'];
     }
 
     /**
+     * Type getter method
+     *
      * @return string
      */
     public function getType()
@@ -57,6 +54,8 @@ class Navigation
     }
 
     /**
+     * Data getter method
+     *
      * @return array
      */
     public function getData()
