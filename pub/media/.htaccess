@@ -111,7 +111,7 @@ AddType application/xml xml
     ExpiresByType text/css "access plus 1 year"
     ExpiresByType application/javascript "access plus 1 year"
 
-    # Favicon, images, flash
+    # Favicon, images
     <FilesMatch \.(ico|gif|png|jpg|jpeg|svg|webp|avif|avifs?)$>
         ExpiresDefault "access plus 1 year"
     </FilesMatch>
