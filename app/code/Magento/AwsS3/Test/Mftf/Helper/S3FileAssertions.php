@@ -236,7 +236,7 @@ class S3FileAssertions extends Helper
     public function assertGlobbedFileContainsString($path, $pattern, $text, $fileIndex = 0, $message = ""): void
     {
         $files = $this->driver->search($pattern, $path);
-        $this->assertStringContainsString($text, $this->driver->fileGetContents($files[$fileIndex]), $message);
+        $this->assertStringContainsString($text, $this->driver->fileGetContents($files[$fileIndex] ?? ''), $message);
     }
 
     /**
