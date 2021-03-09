@@ -48,12 +48,8 @@ class CustomLayoutValidator
      */
     public function validate(array $data) : bool
     {
-        $layoutUpdate = isset($data['layout_update_xml']) ? $data['layout_update_xml'] : null;
-        $customLayoutUpdate = isset($data['custom_layout_update_xml']) ? $data['custom_layout_update_xml'] : null;
+        [$layoutUpdate, $customLayoutUpdate, $oldLayoutUpdate, $oldCustomLayoutUpdate] = $this->getLayoutUpdates($data);
         if (isset($data['page_id'])) {
-            $page = $this->pageFactory->getById($data['page_id']);
-            $oldLayoutUpdate = $page->getId() ? $page->getLayoutUpdateXml() : null;
-            $oldCustomLayoutUpdate = $page->getId() ? $page->getCustomLayoutUpdateXml() : null;
             if ($layoutUpdate && $oldLayoutUpdate !== $layoutUpdate
                 || $customLayoutUpdate && $oldCustomLayoutUpdate !== $customLayoutUpdate
             ) {
@@ -65,5 +61,27 @@ class CustomLayoutValidator
             }
         }
         return true;
+    }
+
+    /**
+     * Gets page layout update values
+     *
+     * @param array $data
+     * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function getLayoutUpdates(array $data) : array
+    {
+        $layoutUpdate = $data['layout_update_xml'] ?? null;
+        $customLayoutUpdate = $data['custom_layout_update_xml'] ?? null;
+        $oldLayoutUpdate = null;
+        $oldCustomLayoutUpdate = null;
+        if (isset($data['page_id'])) {
+            $page = $this->pageFactory->getById($data['page_id']);
+            $oldLayoutUpdate = $page->getId() ? $page->getLayoutUpdateXml() : null;
+            $oldCustomLayoutUpdate = $page->getId() ? $page->getCustomLayoutUpdateXml() : null;
+        }
+
+        return [$layoutUpdate, $customLayoutUpdate, $oldLayoutUpdate, $oldCustomLayoutUpdate];
     }
 }
