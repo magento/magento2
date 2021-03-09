@@ -154,15 +154,13 @@ $_helper = $block->getData('outputHelper');
         </ol>
     </div>
     <?= $block->getToolbarHtml() ?>
-    <?php if (!$block->isRedirectToCartEnabled()): ?>
-        <script type="text/x-magento-init">
-        {
-            "[data-role=tocart-form], .form.map.checkout": {
-                "catalogAddToCart": {
-                    "product_sku": "<?= $escaper->escapeJs($_product->getSku()) ?>"
-                }
+    <script type="text/x-magento-init">
+    {
+        "[data-role=tocart-form], .form.map.checkout": {
+            "catalogAddToCart": {
+                "product_sku": "<?= $escaper->escapeJs($_product->getSku()) ?>"
             }
         }
-        </script>
-    <?php endif; ?>
+    }
+    </script>
 <?php endif; ?>
