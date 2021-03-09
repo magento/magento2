@@ -23,4 +23,5 @@ return [
     'Laminas\Serializer',
     'Laminas\Session',
     'Laminas\Validator',
+    'Laminas\Mvc\Console'
 ];
