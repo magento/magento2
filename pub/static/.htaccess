@@ -68,6 +68,9 @@ AddType font/opentype
 # Flash
 AddType application/x-shockwave-flash swf
 
+# Manifest
+AddType application/manifest+json webmanifest
+
 # Archives and exports
 AddType application/zip gzip
 AddType application/x-gzip gz gzip
