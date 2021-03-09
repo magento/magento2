@@ -13,6 +13,7 @@ use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\InvoiceInterfaceFactory;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Container\InvoiceIdentity;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -176,6 +177,27 @@ class InvoiceSenderTest extends TestCase
             $this->transportBuilderMock->getSentMessage(),
             'The message is not expected to be received.'
         );
+    }
+
+    /**
+     * Verify invoice will be marked send email on non default store in case default store email sent is disabled.
+     *
+     * @magentoDataFixture Magento/Sales/_files/order_fixture_store.php
+     * @magentoConfigFixture sales_email/general/async_sending 1
+     * @magentoConfigFixture default_store sales_email/invoice/enabled 0
+     * @magentoConfigFixture fixturestore_store sales_email/invoice/enabled 1
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation disabled
+     */
+    public function testSendInvoiceEmailFromNonDefaultStore()
+    {
+        $order = Bootstrap::getObjectManager()->create(Order::class);
+        $order->loadByIncrementId('100000004');
+        $order->setCustomerEmail('customer@example.com');
+        $invoice = $this->createInvoice($order);
+        $result = $this->invoiceSender->send($invoice);
+        $this->assertFalse($result);
+        $this->assertTrue($invoice->getSendEmail());
     }
 
     /**

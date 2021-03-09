@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Wishlist\Controller\Index;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Checkout\Model\CartFactory;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Request\Http as HttpRequest;
@@ -35,6 +36,9 @@ class CartTest extends AbstractController
     /** @var Escaper */
     private $escaper;
 
+    /** @var ProductRepositoryInterface */
+    private $productRepository;
+
     /**
      * @inheritdoc
      */
@@ -46,6 +50,7 @@ class CartTest extends AbstractController
         $this->getWishlistByCustomerId = $this->_objectManager->get(GetWishlistByCustomerId::class);
         $this->cartFactory = $this->_objectManager->get(CartFactory::class);
         $this->escaper = $this->_objectManager->get(Escaper::class);
+        $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
     }
 
     /**
@@ -105,6 +110,38 @@ class CartTest extends AbstractController
         $this->customerSession->setCustomerId(1);
         $this->performAddToCartRequest(['item' => 989]);
         $this->assertRedirect($this->stringContains('wishlist/index/'));
+    }
+
+    /**
+     * Add wishlist item with related Products to Cart.
+     *
+     * @return void
+     * @magentoDataFixture Magento/Wishlist/_files/wishlist_with_simple_product.php
+     * @magentoDataFixture Magento/Catalog/_files/products.php
+     */
+    public function testAddItemWithRelatedProducts(): void
+    {
+        $firstProductId = $this->productRepository->get('simple')->getId();
+        $secondProductID = $this->productRepository->get('custom-design-simple-product')->getId();
+        $relatedIds = $expectedAddedIds = [$firstProductId, $secondProductID];
+
+        $this->customerSession->setCustomerId(1);
+        $item = $this->getWishlistByCustomerId->getItemBySku(1, 'simple-1');
+        $this->assertNotNull($item);
+
+        $this->performAddToCartRequest([
+            'item' => $item->getId(),
+            'qty' => 1,
+            'related_product' => implode(',', $relatedIds),
+        ]);
+
+        $this->assertCount(0, $this->getWishlistByCustomerId->execute(1)->getItemCollection());
+        $cart = $this->cartFactory->create();
+        $this->assertEquals(3, $cart->getItemsCount());
+        $expectedAddedIds[] = $item->getProductId();
+        foreach ($expectedAddedIds as $addedId) {
+            $this->assertContains($addedId, $cart->getProductIds());
+        }
     }
 
     /**

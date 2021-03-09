@@ -58,7 +58,7 @@ class AuthorizationTest extends TestCase
     /**
      * Verify AuthorizedSavingOf
      *
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_design_attributes.php
      * @param array $data
      *
      * @dataProvider postRequestData
@@ -68,7 +68,7 @@ class AuthorizationTest extends TestCase
         $this->request->setPost(new Parameters($data));
 
         /** @var Product $product */
-        $product = $this->productRepository->get('simple');
+        $product = $this->productRepository->get('simple_design_attribute');
 
         $product = $this->initializationHelper->initialize($product);
         $this->assertEquals('simple_new', $product->getName());
@@ -88,12 +88,12 @@ class AuthorizationTest extends TestCase
                 [
                     'product' => [
                         'name' => 'simple_new',
-                        'custom_design' => '',
-                        'page_layout' => '',
+                        'custom_design' => '3',
+                        'page_layout' => '1column',
                         'options_container' => 'container2',
                         'custom_layout_update' => '',
-                        'custom_design_from' => '',
-                        'custom_design_to' => '',
+                        'custom_design_from' => '2021-02-19 00:00:00',
+                        'custom_design_to' => '2021-02-09 00:00:00',
                         'custom_layout_update_file' => '',
                     ],
                     'use_default' => [
@@ -114,8 +114,8 @@ class AuthorizationTest extends TestCase
                         'page_layout' => '',
                         'options_container' => 'container2',
                         'custom_design' => '',
-                        'custom_design_from' => '',
-                        'custom_design_to' => '',
+                        'custom_design_from' => '2020-01-02',
+                        'custom_design_to' => '2020-01-03',
                         'custom_layout' => '',
                         'custom_layout_update_file' => '__no_update__',
                     ],
