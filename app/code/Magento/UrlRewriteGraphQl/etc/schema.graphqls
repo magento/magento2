@@ -29,11 +29,6 @@ type HttpQueryParameter @doc(description: "The object details of target path par
 }
 
 interface RoutableInterface @typeResolver(class: "Magento\\UrlRewriteGraphQl\\Model\\RoutableInterfaceTypeResolver") @doc(description: "Routable entities serve as the model for a rendered page") {
-    display_metadata: DisplayMetadata @doc(description: "Display Meta-Data details") @resolver(class: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\DisplayMetaData")
-}
-
-type DisplayMetadata {
-    title: String @doc(description: "Meta Title")
-    keywords: String @doc(description: "Meta Keywords")
-    description: String @doc(description: "Meta Description")
+    relative_url: String @doc(description: "The internal relative URL. If the specified  url is a redirect, the query returns the redirected URL, not the original.")
+    redirect_code: Int! @doc(description: "301 or 302 HTTP code for url permanent or temporary redirect or 0 for the 200 no redirect")
 }

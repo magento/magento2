@@ -7,32 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\UrlRewriteGraphQl\Model\Resolver;
 
-use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
-use Magento\UrlRewriteGraphQl\Model\Resolver\AbstractEntityUrl;
 
 /**
  * UrlRewrite field resolver, used for GraphQL request processing.
  */
 class EntityUrl extends AbstractEntityUrl implements ResolverInterface
 {
-    /**
-     * @inheritdoc
-     */
-    public function resolve(
-        Field $field,
-        $context,
-        ResolveInfo $info,
-        array $value = null,
-        array $args = null
-    ) {
-        return parent::resolve(
-            $field,
-            $context,
-            $info,
-            $value,
-            $args
-        );
-    }
 }

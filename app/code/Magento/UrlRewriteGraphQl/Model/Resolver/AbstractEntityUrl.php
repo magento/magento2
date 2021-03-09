@@ -10,49 +10,52 @@ namespace Magento\UrlRewriteGraphQl\Model\Resolver;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewriteGraphQl\Model\Resolver\UrlRewrite\CustomUrlLocatorInterface;
+use Magento\Framework\GraphQl\Query\Uid;
 
-abstract class AbstractEntityUrl {
-    /**
-     * @var CustomUrlLocatorInterface
-     */
-    private $customUrlLocator;
-
+abstract class AbstractEntityUrl implements ResolverInterface
+{
     /**
      * @var UrlFinderInterface
      */
     private $urlFinder;
 
     /**
-     * @var int
+     * @var CustomUrlLocatorInterface
      */
-    protected $redirectType = 0;
+    private $customUrlLocator;
 
     /**
-     * AbstractUrlHelper constructor.
-     * @param CustomUrlLocatorInterface $customUrlLocator
-     * @param UrlFinderInterface $urlFinder
+     * @var int
      */
-    public function __construct (
+    private $redirectType;
+
+    /**
+     * @var Uid
+     */
+    private $idEncoder;
+
+    /**
+     * @param UrlFinderInterface $urlFinder
+     * @param CustomUrlLocatorInterface $customUrlLocator
+     * @param Uid $idEncoder
+     */
+    public function __construct(
+        UrlFinderInterface $urlFinder,
         CustomUrlLocatorInterface $customUrlLocator,
-        UrlFinderInterface $urlFinder
+        Uid $idEncoder
     ) {
-        $this->customUrlLocator = $customUrlLocator;
         $this->urlFinder = $urlFinder;
+        $this->customUrlLocator = $customUrlLocator;
+        $this->idEncoder = $idEncoder;
     }
 
     /**
-     * @param Field $field
-     * @param $context
-     * @param ResolveInfo $info
-     * @param array|null $value
-     * @param array|null $args
-     * @return array|null
-     * @throws GraphQlInputException
-     * @throws GraphQlNoSuchEntityException
+     * @inheritdoc
      */
     public function resolve(
         Field $field,
@@ -67,7 +70,9 @@ abstract class AbstractEntityUrl {
 
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
         $result = null;
-        $url = $args['url'];
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $urlParts = parse_url($args['url']);
+        $url = $urlParts['path'] ?? $args['url'];
         if (substr($url, 0, 1) === '/' && $url !== '/') {
             $url = ltrim($url, '/');
         }
@@ -79,11 +84,15 @@ abstract class AbstractEntityUrl {
             $relativeUrl = $finalUrlRewrite->getRequestPath();
             $resultArray = $this->rewriteCustomUrls($finalUrlRewrite, $storeId) ?? [
                     'id' => $finalUrlRewrite->getEntityId(),
+                    'entity_uid' => $this->idEncoder->encode((string)$finalUrlRewrite->getEntityId()),
                     'canonical_url' => $relativeUrl,
                     'relative_url' => $relativeUrl,
                     'redirectCode' => $this->redirectType,
                     'type' => $this->sanitizeType($finalUrlRewrite->getEntityType())
                 ];
+            if (!empty($urlParts['query'])) {
+                $resultArray['relative_url'] .= '?' . $urlParts['query'];
+            }
 
             if (empty($resultArray['id'])) {
                 throw new GraphQlNoSuchEntityException(
@@ -103,7 +112,7 @@ abstract class AbstractEntityUrl {
      * @param int $storeId
      * @return array|null
      */
-    protected function rewriteCustomUrls(UrlRewrite $finalUrlRewrite, int $storeId): ?array
+    private function rewriteCustomUrls(UrlRewrite $finalUrlRewrite, int $storeId): ?array
     {
         if ($finalUrlRewrite->getEntityType() === 'custom' || !($finalUrlRewrite->getEntityId() > 0)) {
             $finalCustomUrlRewrite = clone $finalUrlRewrite;
@@ -113,6 +122,7 @@ abstract class AbstractEntityUrl {
                     ? $finalCustomUrlRewrite->getRequestPath() : $finalUrlRewrite->getRequestPath();
             return [
                 'id' => $finalUrlRewrite->getEntityId(),
+                'entity_uid' => $this->idEncoder->encode((string)$finalUrlRewrite->getEntityId()),
                 'canonical_url' => $relativeUrl,
                 'relative_url' => $relativeUrl,
                 'redirectCode' => $finalCustomUrlRewrite->getRedirectType(),
@@ -130,7 +140,7 @@ abstract class AbstractEntityUrl {
      * @param bool $findCustom
      * @return UrlRewrite|null
      */
-    protected function findFinalUrl(string $requestPath, int $storeId, bool $findCustom = false): ?UrlRewrite
+    private function findFinalUrl(string $requestPath, int $storeId, bool $findCustom = false): ?UrlRewrite
     {
         $urlRewrite = $this->findUrlFromRequestPath($requestPath, $storeId);
         if ($urlRewrite) {
@@ -155,7 +165,7 @@ abstract class AbstractEntityUrl {
      * @param int $storeId
      * @return UrlRewrite|null
      */
-    protected function findUrlFromRequestPath(string $requestPath, int $storeId): ?UrlRewrite
+    private function findUrlFromRequestPath(string $requestPath, int $storeId): ?UrlRewrite
     {
         return $this->urlFinder->findOneByData(
             [
@@ -172,7 +182,7 @@ abstract class AbstractEntityUrl {
      * @param int $storeId
      * @return UrlRewrite|null
      */
-    protected function findUrlFromTargetPath(string $targetPath, int $storeId): ?UrlRewrite
+    private function findUrlFromTargetPath(string $targetPath, int $storeId): ?UrlRewrite
     {
         return $this->urlFinder->findOneByData(
             [
@@ -188,7 +198,7 @@ abstract class AbstractEntityUrl {
      * @param string $type
      * @return string
      */
-    protected function sanitizeType(string $type) : string
+    private function sanitizeType(string $type) : string
     {
         return strtoupper(str_replace('-', '_', $type));
     }

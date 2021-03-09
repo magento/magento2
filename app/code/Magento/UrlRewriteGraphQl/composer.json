@@ -5,10 +5,7 @@
     "require": {
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "*",
-        "magento/module-url-rewrite": "*",
-        "magento/module-catalog": "*",
-        "magento/module-cms-graph-ql": "*",
-        "magento/module-catalog-graph-ql": "*"
+        "magento/module-url-rewrite": "*"
     },
     "suggest": {
         "magento/module-graph-ql": "*"

@@ -155,9 +155,6 @@ QUERY;
         $response = $this->getRouteQueryResponse($urlPath);
 
         $this->assertArrayHasKey('route', $response);
-        $this->assertEquals($category->getMetaTitle(), $response['route']['display_metadata']['title']);
-        $this->assertEquals($category->getMetaDescription(), $response['route']['display_metadata']['description']);
-        $this->assertEquals($category->getMetaKeyword(), $response['route']['display_metadata']['keywords']);
         $this->assertEquals($category->getName(), $response['route']['name']);
         $this->assertEquals($category->getId(), $response['route']['id']);
     }
@@ -181,9 +178,6 @@ QUERY;
         $response = $this->getRouteQueryResponse($targetPath);
 
         $this->assertArrayHasKey('route', $response);
-        $this->assertEquals($cmsPageData['meta_title'], $response['route']['display_metadata']['title']);
-        $this->assertEquals($cmsPageData['meta_description'], $response['route']['display_metadata']['description']);
-        $this->assertEquals($cmsPageData['meta_keywords'], $response['route']['display_metadata']['keywords']);
         $this->assertEquals($cmsPageData['identifier'], $response['route']['url_key']);
         $this->assertEquals($cmsPageData['title'], $response['route']['title']);
         $this->assertEquals($cmsPageData['content'], $response['route']['content']);
@@ -204,11 +198,6 @@ QUERY;
   route(url:"{$urlKey}")
   {
     __typename
-    display_metadata {
-      title
-      description
-      keywords
-    }
     ...on SimpleProduct {
       name
       sku
@@ -260,9 +249,6 @@ QUERY;
     private function productTestAssertion(\Magento\Catalog\Api\Data\ProductInterface $product, array $response)
     {
         $this->assertArrayHasKey('route', $response);
-        $this->assertEquals($product->getMetaTitle(), $response['route']['display_metadata']['title']);
-        $this->assertEquals($product->getMetaDescription(), $response['route']['display_metadata']['description']);
-        $this->assertEquals($product->getMetaKeyword(), $response['route']['display_metadata']['keywords']);
         $this->assertEquals($product->getName(), $response['route']['name']);
         $this->assertEquals($product->getSku(), $response['route']['sku']);
     }
