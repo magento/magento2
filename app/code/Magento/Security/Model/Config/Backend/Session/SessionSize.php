@@ -25,10 +25,14 @@ class SessionSize extends Value
      */
     public function beforeSave()
     {
-        $value = (int)$this->getValue();
-
-        if ($value === null || $value < 0) {
+        $value = $this->getValue();
+        if ($value === '0') {
             $value = 0;
+        } else {
+            $value = (int)$value;
+            if ($value === null || $value <= 0) {
+                $value = 256000;
+            }
         }
         $this->setValue((string)$value);
         return $this;
