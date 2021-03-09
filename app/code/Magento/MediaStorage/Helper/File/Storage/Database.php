@@ -143,6 +143,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
     public function saveFile($filename)
     {
         if ($this->checkDbUsage()) {
+            trigger_error('Database media storage function is deprecated', E_USER_DEPRECATED);
             $this->getStorageDatabaseModel()->saveFile($this->_removeAbsPathFromFileName($filename));
         }
     }
@@ -174,6 +175,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
     public function copyFile($oldName, $newName)
     {
         if ($this->checkDbUsage()) {
+            trigger_error('Database media storage function is deprecated', E_USER_DEPRECATED);
             $this->getStorageDatabaseModel()->copyFile(
                 $this->_removeAbsPathFromFileName($oldName),
                 $this->_removeAbsPathFromFileName($newName)
