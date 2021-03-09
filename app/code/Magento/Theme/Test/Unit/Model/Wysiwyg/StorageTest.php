@@ -9,6 +9,7 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Wysiwyg;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverInterface;
 
 /**
@@ -75,11 +76,9 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $file->expects($this->any())
             ->method('getPathInfo')
             ->willReturnCallback(
-
-                    function ($path) {
-                        return pathinfo($path);
-                    }
-
+                function ($path) {
+                    return pathinfo($path);
+                }
             );
 
         $this->_helperStorage = $this->createPartialMock(
@@ -200,7 +199,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      */
     public function testUploadInvalidFile()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(LocalizedException::class);
 
         $uploader = $this->_prepareUploader();
 
@@ -302,7 +301,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateFolderWithInvalidName()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(LocalizedException::class);
 
         $newDirectoryName = 'dir2!#$%^&';
         $this->_storageModel->createFolder($newDirectoryName, $this->_storageRoot);
@@ -313,7 +312,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateFolderDirectoryAlreadyExist()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(LocalizedException::class);
 
         $newDirectoryName = 'mew';
         $fullNewPath = $this->_storageRoot . '/' . $newDirectoryName;
@@ -370,7 +369,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDirsCollectionWrongDirName()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(LocalizedException::class);
 
         $this->directoryWrite->expects(
             $this->once()
@@ -567,7 +566,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeleteRootDirectory()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(LocalizedException::class);
 
         $directoryPath = $this->_storageRoot;
 
@@ -592,11 +591,12 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * cover \Magento\Theme\Model\Wysiwyg\Storage::deleteDirectory
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage We can't delete root directory fake/relative/path right now.
      */
     public function testDeleteRootDirectoryRelative()
     {
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('We can\'t delete root directory fake/relative/path right now.');
+
         $directoryPath = $this->_storageRoot;
         $fakePath = 'fake/relative/path';
         $this->directoryWrite->method('getAbsolutePath')
