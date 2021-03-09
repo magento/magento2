@@ -9,8 +9,10 @@ use Magento\Backend\App\Action;
 
 /**
  * Catalog product controller
- * @SuppressWarnings(PHPMD.NumberOfChildren)
+ *
  * @api
+ *
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class Product extends \Magento\Backend\App\Action
 {
