@@ -62,6 +62,8 @@ AddType application/x-font-ttf ttf
 AddType application/x-font-otf otf
 AddType application/x-font-woff woff
 AddType application/font-woff2 woff2
+AddType font/truetype
+AddType font/opentype
 
 # Flash
 AddType application/x-shockwave-flash swf
