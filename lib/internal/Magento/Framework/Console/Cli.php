@@ -28,9 +28,9 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
  *
  * This is the hood for all command line tools supported by Magento.
  *
- * @inheritdoc
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Cli extends Console\Application
 {
