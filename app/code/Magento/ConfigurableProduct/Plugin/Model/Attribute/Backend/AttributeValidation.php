@@ -33,7 +33,7 @@ class AttributeValidation
      */
     public function __construct(
         Configurable $configurableProductType,
-        ?array $unskippableAttributes = []
+        array $unskippableAttributes = []
     ) {
         $this->configurableProductType = $configurableProductType;
         $this->unskippableAttributes = $unskippableAttributes;
