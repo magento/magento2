@@ -227,7 +227,7 @@ class LocalFileAssertions extends Helper
     {
         $realPath = $this->expandPath($path);
         $files = $this->driver->search($pattern, $realPath);
-        $this->assertStringContainsString($text, $this->driver->fileGetContents($files[$fileIndex]), $message);
+        $this->assertStringContainsString($text, $this->driver->fileGetContents($files[$fileIndex] ?? ''), $message);
     }
 
     /**
