@@ -442,10 +442,8 @@ class CarrierTest extends TestCase
      */
     public function testCollectRates()
     {
-        $requestData = $this->getRequestData();
         $this->setNextResponse(__DIR__ . '/../_files/dhl_quote_response.xml');
-        /** @var RateRequest $request */
-        $request = Bootstrap::getObjectManager()->create(RateRequest::class, $requestData);
+        $request = $this->createRequest();
         $expectedRates = [
             ['carrier' => 'dhl', 'carrier_title' => 'DHL Title', 'cost' => 45.85, 'method' => 'E', 'price' => 45.85],
             ['carrier' => 'dhl', 'carrier_title' => 'DHL Title', 'cost' => 35.26, 'method' => 'Q', 'price' => 35.26],
@@ -480,11 +478,9 @@ class CarrierTest extends TestCase
      */
     public function testCollectRatesWithoutDimensions(?string $size, ?string $height, ?string $width, ?string $depth)
     {
-        $requestData = $this->getRequestData();
         $this->setDhlConfig(['size' => $size, 'height' => $height, 'width' => $width, 'depth' => $depth]);
 
-        /** @var RateRequest $request */
-        $request = Bootstrap::getObjectManager()->create(RateRequest::class, $requestData);
+        $request = $this->createRequest();
         $this->dhlCarrier = Bootstrap::getObjectManager()->create(Carrier::class);
         $this->dhlCarrier->collectRates($request)->getAllRates();
 
@@ -504,15 +500,13 @@ class CarrierTest extends TestCase
     public function testGetRatesWithHttpException(): void
     {
         $this->setDhlConfig(['showmethod' => 1]);
-        $requestData = $this->getRequestData();
         $deferredResponse = $this->getMockBuilder(HttpResponseDeferredInterface::class)
             ->onlyMethods(['get'])
             ->getMockForAbstractClass();
         $exception = new HttpException('Exception message');
         $deferredResponse->method('get')->willThrowException($exception);
         $this->httpClient->setDeferredResponseMock($deferredResponse);
-        /** @var RateRequest $request */
-        $request = Bootstrap::getObjectManager()->create(RateRequest::class, $requestData);
+        $request = $this->createRequest();
         $this->dhlCarrier = Bootstrap::getObjectManager()->create(Carrier::class);
         $resultRate = $this->dhlCarrier->collectRates($request)->getAllRates()[0];
         $error = Bootstrap::getObjectManager()->get(Error::class);
@@ -591,18 +585,15 @@ class CarrierTest extends TestCase
     public function testCollectRatesWithFreeShipping(array $addRequestData, bool $freeShippingExpects): void
     {
         $this->setNextResponse(__DIR__ . '/../_files/dhl_quote_response.xml');
-
-        $requestData = $this->getRequestData();
-        $requestData['data'] += $addRequestData;
-        /** @var RateRequest $request */
-        $request = Bootstrap::getObjectManager()->create(RateRequest::class, $requestData);
+        $request = $this->createRequest($addRequestData);
 
         $actualRates = $this->dhlCarrier->collectRates($request)->getAllRates();
         $freeRateExists = false;
-        foreach ($actualRates as $i => $actualRate) {
+        foreach ($actualRates as $actualRate) {
             $actualRate = $actualRate->getData();
-            if ($actualRate['method'] === 'P' && $actualRate['price'] === 0.0) {
+            if ($actualRate['method'] === 'P' && (float)$actualRate['price'] === 0.0) {
                 $freeRateExists = true;
+                break;
             }
         }
 
@@ -616,15 +607,15 @@ class CarrierTest extends TestCase
     {
         return [
             [
-                ['base_subtotal_incl_tax' => 25, 'base_subtotal_with_discount_incl_tax' => 22],
+                ['package_value' => 25, 'package_value_with_discount' => 22],
                 false
             ],
             [
-                ['base_subtotal_incl_tax' => 25, 'base_subtotal_with_discount_incl_tax' => 25],
+                ['package_value' => 25, 'package_value_with_discount' => 25],
                 true
             ],
             [
-                ['base_subtotal_incl_tax' => 28, 'base_subtotal_with_discount_incl_tax' => 25],
+                ['package_value' => 28, 'package_value_with_discount' => 25],
                 true
             ],
         ];
@@ -638,47 +629,45 @@ class CarrierTest extends TestCase
     private function getRequestData(): array
     {
         return [
-            'data' => [
-                'dest_country_id' => 'DE',
-                'dest_region_id' => '82',
-                'dest_region_code' => 'BER',
-                'dest_street' => 'Turmstraße 17',
-                'dest_city' => 'Berlin',
-                'dest_postcode' => '10559',
-                'dest_postal' => '10559',
-                'package_value' => '5',
-                'package_value_with_discount' => '5',
-                'package_weight' => '8.2657',
-                'package_qty' => '1',
-                'package_physical_value' => '5',
-                'free_method_weight' => '5',
-                'store_id' => '1',
-                'website_id' => '1',
-                'free_shipping' => '0',
-                'limit_carrier' => null,
-                'base_subtotal_incl_tax' => '5',
-                'orig_country_id' => 'US',
-                'orig_region_id' => '12',
-                'orig_city' => 'Fremont',
-                'orig_postcode' => '94538',
-                'dhl_id' => 'MAGEN_8501',
-                'dhl_password' => 'QR2GO1U74X',
-                'dhl_account' => '799909537',
-                'dhl_shipping_intl_key' => '54233F2B2C4E5C4B4C5E5A59565530554B405641475D5659',
-                'girth' => null,
-                'height' => null,
-                'length' => null,
-                'width' => null,
-                'weight' => 1,
-                'dhl_shipment_type' => 'P',
-                'dhl_duitable' => 0,
-                'dhl_duty_payment_type' => 'R',
-                'dhl_content_desc' => 'Big Box',
-                'limit_method' => 'IE',
-                'ship_date' => '2014-01-09',
-                'action' => 'RateEstimate',
-                'all_items' => [],
-            ]
+            'dest_country_id' => 'DE',
+            'dest_region_id' => '82',
+            'dest_region_code' => 'BER',
+            'dest_street' => 'Turmstraße 17',
+            'dest_city' => 'Berlin',
+            'dest_postcode' => '10559',
+            'dest_postal' => '10559',
+            'package_value' => '5',
+            'package_value_with_discount' => '5',
+            'package_weight' => '8.2657',
+            'package_qty' => '1',
+            'package_physical_value' => '5',
+            'free_method_weight' => '5',
+            'store_id' => '1',
+            'website_id' => '1',
+            'free_shipping' => '0',
+            'limit_carrier' => null,
+            'base_subtotal_incl_tax' => '5',
+            'orig_country_id' => 'US',
+            'orig_region_id' => '12',
+            'orig_city' => 'Fremont',
+            'orig_postcode' => '94538',
+            'dhl_id' => 'MAGEN_8501',
+            'dhl_password' => 'QR2GO1U74X',
+            'dhl_account' => '799909537',
+            'dhl_shipping_intl_key' => '54233F2B2C4E5C4B4C5E5A59565530554B405641475D5659',
+            'girth' => null,
+            'height' => null,
+            'length' => null,
+            'width' => null,
+            'weight' => 1,
+            'dhl_shipment_type' => 'P',
+            'dhl_duitable' => 0,
+            'dhl_duty_payment_type' => 'R',
+            'dhl_content_desc' => 'Big Box',
+            'limit_method' => 'IE',
+            'ship_date' => '2014-01-09',
+            'action' => 'RateEstimate',
+            'all_items' => [],
         ];
     }
 
@@ -699,5 +688,21 @@ class CarrierTest extends TestCase
         $this->httpClient->nextResponses(
             array_fill(0, Carrier::UNAVAILABLE_DATE_LOOK_FORWARD + 1, $response)
         );
+    }
+
+    /**
+     * Create Rate Request
+     *
+     * @param array $addRequestData
+     * @return RateRequest
+     */
+    private function createRequest(array $addRequestData = []): RateRequest
+    {
+        $requestData = $this->getRequestData();
+        if (!empty($addRequestData)) {
+            $requestData = array_merge($requestData, $addRequestData);
+        }
+
+        return Bootstrap::getObjectManager()->create(RateRequest::class, ['data' => $requestData]);
     }
 }
