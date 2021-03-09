@@ -16,7 +16,6 @@ use Magento\UrlRewriteGraphQl\Model\DataProvider\EntityDataProviderInterface;
 
 class CatalogTreeDataProvider implements EntityDataProviderInterface
 {
-    const CATEGORY = 'CATEGORY';
     /**
      * @var ExtractDataFromCategoryTree
      */
