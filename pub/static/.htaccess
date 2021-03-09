@@ -37,7 +37,6 @@ AddType application/javascript js jsonp
 AddType application/json json
 
 # HTML
-
 AddType text/html html
 
 # CSS
@@ -62,8 +61,6 @@ AddType application/x-font-ttf ttf
 AddType application/x-font-otf otf
 AddType application/x-font-woff woff
 AddType application/font-woff2 woff2
-AddType font/truetype
-AddType font/opentype
 
 # Manifest
 AddType application/manifest+json webmanifest
