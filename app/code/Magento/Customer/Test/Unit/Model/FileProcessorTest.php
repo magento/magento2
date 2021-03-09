@@ -324,7 +324,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
     public function testMoveTemporaryFileUnableToCreateDirectory()
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('Unable to create directory customer/f/i');
+        $this->expectExceptionMessage('Unable to create directory /f/i');
 
         $filePath = '/filename.ext1';
 
