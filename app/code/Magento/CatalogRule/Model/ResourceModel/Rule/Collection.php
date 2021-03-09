@@ -5,8 +5,8 @@
  */
 namespace Magento\CatalogRule\Model\ResourceModel\Rule;
 
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 
 class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection
 {
@@ -21,6 +21,16 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * @var Json
      */
     protected $serializer;
+
+    /**
+     * @var string
+     */
+    protected $_eventPrefix = 'catalog_rule_collection';
+
+    /**
+     * @var string
+     */
+    protected $_eventObject = 'catalog_rule';
 
     /**
      * Collection constructor.
