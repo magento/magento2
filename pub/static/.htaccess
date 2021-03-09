@@ -65,9 +65,6 @@ AddType application/font-woff2 woff2
 AddType font/truetype
 AddType font/opentype
 
-# Flash
-AddType application/x-shockwave-flash swf
-
 # Manifest
 AddType application/manifest+json webmanifest
 
@@ -80,7 +77,7 @@ AddType application/xml xml
 
 <IfModule mod_headers.c>
 
-    <FilesMatch .*\.(ico|jpg|jpeg|png|gif|svg|webp|avif|avifs?|js|css|swf|eot|ttf|otf|woff|woff2|html|json)$>
+    <FilesMatch .*\.(ico|jpg|jpeg|png|gif|svg|webp|avif|avifs?|js|css|eot|ttf|otf|woff|woff2|html|json)$>
         Header append Cache-Control public
     </FilesMatch>
 
@@ -125,7 +122,7 @@ AddType application/xml xml
     ExpiresByType application/json "access plus 1 year"
 
     # Favicon, images, flash
-    <FilesMatch \.(ico|gif|png|jpg|jpeg|swf|svg|webp|avif|avifs?)$>
+    <FilesMatch \.(ico|gif|png|jpg|jpeg|svg|webp|avif|avifs?)$>
         ExpiresDefault "access plus 1 year"
     </FilesMatch>
     ExpiresByType image/gif "access plus 1 year"
