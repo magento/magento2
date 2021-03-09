@@ -110,7 +110,7 @@ class Country implements ValidatorInterface
             $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'region']);
         } elseif (
             $allowedRegions &&
-            !\Zend_Validate::is($address->getRegionId(), 'NotEmpty', [
+            !\Zend_Validate::is($regionId, 'NotEmpty', [
                 'type' => \Zend_Validate_NotEmpty::ZERO | \Zend_Validate_NotEmpty::INTEGER
             ])
             && $isRegionRequired
