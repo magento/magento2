@@ -22,9 +22,9 @@ interface CacheInterface
      * Check if file data exists in cache.
      *
      * @param string $path
-     * @return bool
+     * @return bool|null
      */
-    public function exists(string $path): bool;
+    public function exists(string $path): ?bool;
 
     /**
      * Get metadata for path.

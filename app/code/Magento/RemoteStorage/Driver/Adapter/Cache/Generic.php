@@ -115,13 +115,13 @@ class Generic implements CacheInterface
     /**
      * @inheritdoc
      */
-    public function exists(string $path): bool
+    public function exists(string $path): ?bool
     {
         if (!isset($this->cacheData[$path])) {
             $fileMeta = $this->cacheAdapter->load($this->prefix . $path);
 
             if ($fileMeta === false) {
-                return false;
+                return null;
             }
 
             $this->setFromStorage($fileMeta);

@@ -11,8 +11,6 @@ use League\Flysystem\Config;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use Magento\RemoteStorage\Driver\Adapter\Cache\CacheInterface;
-use phpDocumentor\Reflection\Types\Iterable_;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\iterator;
 
 /**
  * Cached adapter implementation for filesystem storage.
@@ -149,16 +147,26 @@ class CachedAdapter implements FilesystemAdapter
             return $cacheHas;
         }
 
-        $adapterResponse = $this->adapter->fileExists($path);
+        $exists = $this->adapter->fileExists($path);
 
-        if (! $adapterResponse) {
+        if (!$exists) {
+            try {
+                // check if target is a directory
+                $exists = iterator_count($this->adapter->listContents($path, false)) > 0;
+            } catch (\Throwable $e) {
+                // catch closed iterator
+                $exists = false;
+            }
+        }
+
+        if (! $exists) {
             $this->cache->resetData($path);
         } else {
-            $cacheEntry = is_array($adapterResponse) ? $adapterResponse : ['path' => $path];
+            $cacheEntry = is_array($exists) ? $exists : ['path' => $path];
             $this->cache->updateMetadata($path, $cacheEntry, true);
         }
 
-        return $adapterResponse;
+        return $exists;
     }
 
     /**

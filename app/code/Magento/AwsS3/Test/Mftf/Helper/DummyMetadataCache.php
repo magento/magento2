@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\AwsS3\Test\Mftf\Helper;
 
+use Magento\RemoteStorage\Driver\Adapter\Cache\CacheMissException;
+
 /**
  * Cache mock for metadata provider.
  */
@@ -15,9 +17,9 @@ class DummyMetadataCache implements \Magento\RemoteStorage\Driver\Adapter\Cache\
     /**
      * @inheirtDoc
      */
-    public function exists(string $path): bool
+    public function exists(string $path): ?bool
     {
-        return false;
+        return null;
     }
 
     /**
