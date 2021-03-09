@@ -105,6 +105,12 @@ AddType application/xml xml
     ExpiresByType application/zip "access plus 0 seconds"
     ExpiresByType application/x-gzip "access plus 0 seconds"
     ExpiresByType application/x-bzip2 "access plus 0 seconds"
+    
+    # Manifest
+    <FilesMatch \.(webmanifest)$>
+        ExpiresDefault "access plus 0 seconds"
+    </FilesMatch>
+    ExpiresByType application/manifest+json "access plus 0 seconds"
 
     # CSS, JavaScript, html
     <FilesMatch \.(css|js|html|json)$>
