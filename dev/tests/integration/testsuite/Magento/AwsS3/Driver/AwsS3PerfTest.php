@@ -146,6 +146,8 @@ class AwsS3PerfTest extends \PHPUnit\Framework\TestCase
 
     public static function tearDownAfterClass(): void
     {
-        self::$awsDriver->deleteDirectory(self::TEST_FILE_DIR);
+        if (self::$awsDriver) {
+            self::$awsDriver->deleteDirectory(self::TEST_FILE_DIR);
+        }
     }
 }
