@@ -53,6 +53,7 @@ AddType image/png png
 AddType image/jpeg jpg
 AddType image/jpeg jpeg
 AddType image/webp webp
+AddType image/avif avif
 
 # SVG
 AddType image/svg+xml svg
@@ -76,7 +77,7 @@ AddType application/xml xml
 
 <IfModule mod_headers.c>
 
-    <FilesMatch .*\.(ico|jpg|jpeg|png|gif|svg|webp|js|css|swf|eot|ttf|otf|woff|woff2)$>
+    <FilesMatch .*\.(ico|jpg|jpeg|png|gif|svg|webp|avif|js|css|swf|eot|ttf|otf|woff|woff2)$>
         Header append Cache-Control public
     </FilesMatch>
 
@@ -113,7 +114,7 @@ AddType application/xml xml
     ExpiresByType application/javascript "access plus 1 year"
 
     # Favicon, images, flash
-    <FilesMatch \.(ico|gif|png|jpg|jpeg|swf|svg|webp)$>
+    <FilesMatch \.(ico|gif|png|jpg|jpeg|swf|svg|webp|avif)$>
         ExpiresDefault "access plus 1 year"
     </FilesMatch>
     ExpiresByType image/gif "access plus 1 year"
@@ -122,6 +123,7 @@ AddType application/xml xml
     ExpiresByType image/jpeg "access plus 1 year"
     ExpiresByType image/svg+xml "access plus 1 year"
     ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/avif "access plus 1 year"
 
     # Fonts
     <FilesMatch \.(eot|ttf|otf|svg|woff|woff2)$>
