@@ -108,7 +108,13 @@ class Country implements ValidatorInterface
             //If region is required for country and country doesn't provide regions list
             //region must be provided.
             $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'region']);
-        } elseif ($allowedRegions && !\Zend_Validate::is($regionId, 'NotEmpty') && $isRegionRequired) {
+        } elseif (
+            $allowedRegions &&
+            !\Zend_Validate::is($regionId, 'NotEmpty', [
+                'type' => \Zend_Validate_NotEmpty::ZERO | \Zend_Validate_NotEmpty::INTEGER
+            ])
+            && $isRegionRequired
+        ) {
             //If country actually has regions and requires you to
             //select one then it must be selected.
             $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'regionId']);
