@@ -26,11 +26,8 @@
                 <argument name="product" value="_defaultProduct"/>
                 <argument name="category" value="$$createCategory$$"/>
             </actionGroup>
-            <!-- TODO: REMOVE AFTER FIX MC-21717 -->
             <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value="eav"/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
 
         <after>
@@ -38,6 +35,16 @@
             <actionGroup stepKey="deleteProduct" ref="DeleteProductBySkuActionGroup">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFiltersVirtual"/>
+            <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="addSkuFilterVirtual">
+                <argument name="filterInputName" value="sku"/>
+                <argument name="filterValue" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="applyGridFilterVirtual"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteVirtualProducts">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 

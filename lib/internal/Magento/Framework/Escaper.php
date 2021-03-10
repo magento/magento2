@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework;
 
@@ -257,10 +258,17 @@ class Escaper
      */
     public function escapeHtmlAttr($string, $escapeSingleQuote = true)
     {
+        $string = (string)$string;
+
         if ($escapeSingleQuote) {
-            return $this->getEscaper()->escapeHtmlAttr((string) $string);
+            $translateInline = $this->getTranslateInline();
+
+            return $translateInline->isAllowed()
+                ? $this->inlineSensitiveEscapeHthmlAttr($string)
+                : $this->getEscaper()->escapeHtmlAttr($string);
         }
-        return htmlspecialchars((string)$string, $this->htmlSpecialCharsFlag, 'UTF-8', false);
+
+        return htmlspecialchars($string, $this->htmlSpecialCharsFlag, 'UTF-8', false);
     }
 
     /**
@@ -475,5 +483,38 @@ class Escaper
         }
 
         return $this->translateInline;
+    }
+
+    /**
+     * Inline sensitive escape attribute value.
+     *
+     * @param string $text
+     * @return string
+     */
+    private function inlineSensitiveEscapeHthmlAttr(string $text): string
+    {
+        $escaper = $this->getEscaper();
+        $textLength = strlen($text);
+
+        if ($textLength < 6) {
+            return $escaper->escapeHtmlAttr($text);
+        }
+
+        $firstCharacters = substr($text, 0, 3);
+        $lastCharacters = substr($text, -3, 3);
+
+        if ($firstCharacters !== '{{{' || $lastCharacters !== '}}}') {
+            return $escaper->escapeHtmlAttr($text);
+        }
+
+        $text = substr($text, 3, $textLength - 6);
+        $strings = explode('}}{{', $text);
+        $escapedStrings = [];
+
+        foreach ($strings as $string) {
+            $escapedStrings[] = $escaper->escapeHtmlAttr($string);
+        }
+
+        return '{{{' . implode('}}{{', $escapedStrings) . '}}}';
     }
 }

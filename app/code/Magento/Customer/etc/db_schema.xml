@@ -536,4 +536,19 @@
             <column name="customer_id"/>
         </constraint>
     </table>
+    <table name="customer_group_excluded_website" resource="default" engine="innodb"
+           comment="Excluded Websites From Customer Group">
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="int" name="customer_group_id" unsigned="true" nullable="false" identity="false"
+                comment="Customer Group ID"/>
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
+                comment="Excluded Website ID from Customer Group"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <index referenceId="CUSTOMER_GROUP_EXCLUDED_WEBSITE_CUSTOMER_GROUP_ID_WEBSITE_ID" indexType="btree">
+            <column name="customer_group_id"/>
+            <column name="website_id"/>
+        </index>
+    </table>
 </schema>

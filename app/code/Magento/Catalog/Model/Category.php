@@ -1159,7 +1159,10 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function afterDeleteCommit()
     {
-        $this->reindex();
+        if ($this->getIsActive() || $this->getDeletedChildrenIds()) {
+            $this->reindex();
+        }
+
         return parent::afterDeleteCommit();
     }
 

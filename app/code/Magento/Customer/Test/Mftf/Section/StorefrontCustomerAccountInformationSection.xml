@@ -18,6 +18,7 @@
         <element name="currentPassword" type="input" selector="#current-password"/>
         <element name="newPassword" type="input" selector="#password"/>
         <element name="confirmNewPassword" type="input" selector="#password-confirmation"/>
+        <element name="showPasswordCheckbox" type="input" selector="#show-password"/>
         <element name="confirmNewPasswordError" type="text" selector="#password-confirmation-error"/>
         <element name="email" type="input" selector=".form-edit-account input[name='email']" />
         <element name="emailErrorMessage" type="text" selector="#email-error"/>

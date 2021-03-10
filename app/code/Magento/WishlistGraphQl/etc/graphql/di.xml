@@ -14,4 +14,14 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\WishlistGraphQl\Model\CartItems\CartItemsRequestBuilder">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="customizable_option" xsi:type="object">Magento\WishlistGraphQl\Model\CartItems\CustomizableOptionDataProvider</item>
+                <item name="downloadable" xsi:type="object">Magento\WishlistGraphQl\Model\CartItems\DownloadableLinkDataProvider</item>
+                <item name="bundle" xsi:type="object">Magento\WishlistGraphQl\Model\CartItems\BundleDataProvider</item>
+                <item name="configurable" xsi:type="object">Magento\WishlistGraphQl\Model\CartItems\ConfigurableDataProvider</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
