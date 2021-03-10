@@ -1343,6 +1343,7 @@
                 "console",
                 "laminas"
             ],
+            "abandoned": "laminas/laminas-cli",
             "time": "2019-12-31T16:31:45+00:00"
         },
         {
@@ -1510,37 +1511,49 @@
         },
         {
             "name": "laminas/laminas-di",
-            "version": "2.6.1",
+            "version": "3.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-di.git",
-                "reference": "239b22408a1f8eacda6fc2b838b5065c4cf1d88e"
+                "reference": "feee971d50ea327a0cac987f5de313a988203b9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-di/zipball/239b22408a1f8eacda6fc2b838b5065c4cf1d88e",
-                "reference": "239b22408a1f8eacda6fc2b838b5065c4cf1d88e",
+                "url": "https://api.github.com/repos/laminas/laminas-di/zipball/feee971d50ea327a0cac987f5de313a988203b9f",
+                "reference": "feee971d50ea327a0cac987f5de313a988203b9f",
                 "shasum": ""
             },
             "require": {
-                "container-interop/container-interop": "^1.1",
-                "laminas/laminas-code": "^2.6 || ^3.0",
-                "laminas/laminas-stdlib": "^2.7 || ^3.0",
+                "laminas/laminas-stdlib": "^3.3",
                 "laminas/laminas-zendframework-bridge": "^0.4.5 || ^1.0",
-                "php": "^5.5 || ^7.0"
+                "php": "^7.3 || ~8.0.0",
+                "psr/container": "^1.0",
+                "psr/log": "^1.0"
+            },
+            "conflict": {
+                "laminas/laminas-servicemanager-di": "*",
+                "phpspec/prophecy": "<1.9.0"
             },
             "replace": {
-                "zendframework/zend-di": "self.version"
+                "zendframework/zend-di": "^3.1.2"
             },
             "require-dev": {
-                "fabpot/php-cs-fixer": "1.7.*",
-                "phpunit/phpunit": "~4.0"
+                "container-interop/container-interop": "^1.2.0",
+                "laminas/laminas-coding-standard": "^2",
+                "laminas/laminas-servicemanager": "^3.4",
+                "mikey179/vfsstream": "^1.6.7",
+                "phpspec/prophecy-phpunit": "^2.0",
+                "phpstan/phpstan": "^0.12.64",
+                "phpunit/phpunit": "^9.3"
+            },
+            "suggest": {
+                "laminas/laminas-servicemanager": "An IoC container without auto wiring capabilities"
             },
             "type": "library",
             "extra": {
-                "branch-alias": {
-                    "dev-master": "2.6-dev",
-                    "dev-develop": "2.7-dev"
+                "laminas": {
+                    "component": "Laminas\\Di",
+                    "config-provider": "Laminas\\Di\\ConfigProvider"
                 }
             },
             "autoload": {
@@ -1552,87 +1565,20 @@
             "license": [
                 "BSD-3-Clause"
             ],
+            "description": "Automated dependency injection for PSR-11 containers",
             "homepage": "https://laminas.dev",
             "keywords": [
+                "PSR-11",
                 "di",
                 "laminas"
             ],
-            "time": "2019-12-31T15:17:33+00:00"
-        },
-        {
-            "name": "laminas/laminas-diactoros",
-            "version": "1.8.7p2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laminas/laminas-diactoros.git",
-                "reference": "6991c1af7c8d2c8efee81b22ba97024781824aaa"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-diactoros/zipball/6991c1af7c8d2c8efee81b22ba97024781824aaa",
-                "reference": "6991c1af7c8d2c8efee81b22ba97024781824aaa",
-                "shasum": ""
-            },
-            "require": {
-                "laminas/laminas-zendframework-bridge": "^1.0",
-                "php": "^5.6 || ^7.0",
-                "psr/http-message": "^1.0"
-            },
-            "provide": {
-                "psr/http-message-implementation": "1.0"
-            },
-            "replace": {
-                "zendframework/zend-diactoros": "~1.8.7.0"
-            },
-            "require-dev": {
-                "ext-dom": "*",
-                "ext-libxml": "*",
-                "laminas/laminas-coding-standard": "~1.0",
-                "php-http/psr7-integration-tests": "dev-master",
-                "phpunit/phpunit": "^5.7.16 || ^6.0.8 || ^7.2.7"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-release-1.8": "1.8.x-dev"
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
                 }
-            },
-            "autoload": {
-                "files": [
-                    "src/functions/create_uploaded_file.php",
-                    "src/functions/marshal_headers_from_sapi.php",
-                    "src/functions/marshal_method_from_sapi.php",
-                    "src/functions/marshal_protocol_version_from_sapi.php",
-                    "src/functions/marshal_uri_from_sapi.php",
-                    "src/functions/normalize_server.php",
-                    "src/functions/normalize_uploaded_files.php",
-                    "src/functions/parse_cookie_header.php",
-                    "src/functions/create_uploaded_file.legacy.php",
-                    "src/functions/marshal_headers_from_sapi.legacy.php",
-                    "src/functions/marshal_method_from_sapi.legacy.php",
-                    "src/functions/marshal_protocol_version_from_sapi.legacy.php",
-                    "src/functions/marshal_uri_from_sapi.legacy.php",
-                    "src/functions/normalize_server.legacy.php",
-                    "src/functions/normalize_uploaded_files.legacy.php",
-                    "src/functions/parse_cookie_header.legacy.php"
-                ],
-                "psr-4": {
-                    "Laminas\\Diactoros\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
             ],
-            "description": "PSR HTTP Message implementations",
-            "homepage": "https://laminas.dev",
-            "keywords": [
-                "http",
-                "laminas",
-                "psr",
-                "psr-7"
-            ],
-            "time": "2020-03-23T15:28:28+00:00"
+            "time": "2020-12-24T12:46:22+00:00"
         },
         {
             "name": "laminas/laminas-escaper",
@@ -2681,85 +2627,57 @@
         },
         {
             "name": "laminas/laminas-mvc",
-            "version": "2.7.15",
+            "version": "3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-mvc.git",
-                "reference": "7e7198b03556a57fb5fd3ed919d9e1cf71500642"
+                "reference": "88da7200cf8f5a970c35d91717a5c4db94981e5e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-mvc/zipball/7e7198b03556a57fb5fd3ed919d9e1cf71500642",
-                "reference": "7e7198b03556a57fb5fd3ed919d9e1cf71500642",
+                "url": "https://api.github.com/repos/laminas/laminas-mvc/zipball/88da7200cf8f5a970c35d91717a5c4db94981e5e",
+                "reference": "88da7200cf8f5a970c35d91717a5c4db94981e5e",
                 "shasum": ""
             },
             "require": {
-                "container-interop/container-interop": "^1.1",
-                "laminas/laminas-console": "^2.7",
-                "laminas/laminas-eventmanager": "^2.6.4 || ^3.0",
-                "laminas/laminas-form": "^2.11",
-                "laminas/laminas-hydrator": "^1.1 || ^2.4",
-                "laminas/laminas-psr7bridge": "^0.2",
-                "laminas/laminas-servicemanager": "^2.7.10 || ^3.0.3",
-                "laminas/laminas-stdlib": "^2.7.5 || ^3.0",
+                "container-interop/container-interop": "^1.2",
+                "laminas/laminas-eventmanager": "^3.2",
+                "laminas/laminas-http": "^2.7",
+                "laminas/laminas-modulemanager": "^2.8",
+                "laminas/laminas-router": "^3.0.2",
+                "laminas/laminas-servicemanager": "^3.3",
+                "laminas/laminas-stdlib": "^3.2.1",
+                "laminas/laminas-view": "^2.11.3",
                 "laminas/laminas-zendframework-bridge": "^1.0",
-                "php": "^5.5 || ^7.0"
+                "php": "^7.3 || ~8.0.0"
             },
             "replace": {
-                "zendframework/zend-mvc": "self.version"
+                "zendframework/zend-mvc": "^3.1.1"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "1.7.*",
-                "laminas/laminas-authentication": "^2.6",
-                "laminas/laminas-cache": "^2.8",
-                "laminas/laminas-di": "^2.6",
-                "laminas/laminas-filter": "^2.8",
-                "laminas/laminas-http": "^2.8",
-                "laminas/laminas-i18n": "^2.8",
-                "laminas/laminas-inputfilter": "^2.8",
-                "laminas/laminas-json": "^2.6.1",
-                "laminas/laminas-log": "^2.9.3",
-                "laminas/laminas-modulemanager": "^2.8",
-                "laminas/laminas-serializer": "^2.8",
-                "laminas/laminas-session": "^2.8.1",
-                "laminas/laminas-text": "^2.7",
-                "laminas/laminas-uri": "^2.6",
-                "laminas/laminas-validator": "^2.10",
-                "laminas/laminas-view": "^2.9",
-                "phpunit/phpunit": "^4.8.36",
-                "sebastian/comparator": "^1.2.4",
-                "sebastian/version": "^1.0.4"
+                "http-interop/http-middleware": "^0.4.1",
+                "laminas/laminas-coding-standard": "^1.0.0",
+                "laminas/laminas-json": "^2.6.1 || ^3.0",
+                "laminas/laminas-psr7bridge": "^1.0",
+                "laminas/laminas-stratigility": ">=2.0.1 <2.2",
+                "phpspec/prophecy-phpunit": "^2.0",
+                "phpunit/phpunit": "^9.4.2"
             },
             "suggest": {
-                "laminas/laminas-authentication": "Laminas\\Authentication component for Identity plugin",
-                "laminas/laminas-config": "Laminas\\Config component",
-                "laminas/laminas-di": "Laminas\\Di component",
-                "laminas/laminas-filter": "Laminas\\Filter component",
-                "laminas/laminas-http": "Laminas\\Http component",
-                "laminas/laminas-i18n": "Laminas\\I18n component for translatable segments",
-                "laminas/laminas-inputfilter": "Laminas\\Inputfilter component",
-                "laminas/laminas-json": "Laminas\\Json component",
-                "laminas/laminas-log": "Laminas\\Log component",
-                "laminas/laminas-modulemanager": "Laminas\\ModuleManager component",
-                "laminas/laminas-serializer": "Laminas\\Serializer component",
-                "laminas/laminas-servicemanager-di": "^1.0.1, if using laminas-servicemanager v3 and requiring the laminas-di integration",
-                "laminas/laminas-session": "Laminas\\Session component for FlashMessenger, PRG, and FPRG plugins",
-                "laminas/laminas-text": "Laminas\\Text component",
-                "laminas/laminas-uri": "Laminas\\Uri component",
-                "laminas/laminas-validator": "Laminas\\Validator component",
-                "laminas/laminas-view": "Laminas\\View component"
+                "laminas/laminas-json": "(^2.6.1 || ^3.0) To auto-deserialize JSON body content in AbstractRestfulController extensions, when json_decode is unavailable",
+                "laminas/laminas-log": "^2.9.1  To provide log functionality via LogFilterManager, LogFormatterManager, and LogProcessorManager",
+                "laminas/laminas-mvc-console": "laminas-mvc-console provides the ability to expose laminas-mvc as a console application",
+                "laminas/laminas-mvc-i18n": "laminas-mvc-i18n provides integration with laminas-i18n, including a translation bridge and translatable route segments",
+                "laminas/laminas-mvc-middleware": "To dispatch middleware in your laminas-mvc application",
+                "laminas/laminas-mvc-plugin-fileprg": "To provide Post/Redirect/Get functionality around forms that container file uploads",
+                "laminas/laminas-mvc-plugin-flashmessenger": "To provide flash messaging capabilities between requests",
+                "laminas/laminas-mvc-plugin-identity": "To access the authenticated identity (per laminas-authentication) in controllers",
+                "laminas/laminas-mvc-plugin-prg": "To provide Post/Redirect/Get functionality within controllers",
+                "laminas/laminas-paginator": "^2.7 To provide pagination functionality via PaginatorPluginManager",
+                "laminas/laminas-servicemanager-di": "laminas-servicemanager-di provides utilities for integrating laminas-di and laminas-servicemanager in your laminas-mvc application"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.7-dev",
-                    "dev-develop": "3.0-dev"
-                }
-            },
             "autoload": {
-                "files": [
-                    "src/autoload.php"
-                ],
                 "psr-4": {
                     "Laminas\\Mvc\\": "src/"
                 }
@@ -2768,66 +2686,161 @@
             "license": [
                 "BSD-3-Clause"
             ],
+            "description": "Laminas's event-driven MVC layer, including MVC Applications, Controllers, and Plugins",
             "homepage": "https://laminas.dev",
             "keywords": [
                 "laminas",
                 "mvc"
             ],
-            "time": "2019-12-31T17:32:15+00:00"
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2020-12-14T21:54:40+00:00"
         },
         {
-            "name": "laminas/laminas-psr7bridge",
-            "version": "0.2.2",
+            "name": "laminas/laminas-mvc-console",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/laminas/laminas-psr7bridge.git",
-                "reference": "14780ef1d40effd59d77ab29c6d439b2af42cdfa"
+                "url": "https://github.com/laminas/laminas-mvc-console.git",
+                "reference": "90338c7b61a5fa8445c0a41925a4ae351459fa79"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-psr7bridge/zipball/14780ef1d40effd59d77ab29c6d439b2af42cdfa",
-                "reference": "14780ef1d40effd59d77ab29c6d439b2af42cdfa",
+                "url": "https://api.github.com/repos/laminas/laminas-mvc-console/zipball/90338c7b61a5fa8445c0a41925a4ae351459fa79",
+                "reference": "90338c7b61a5fa8445c0a41925a4ae351459fa79",
                 "shasum": ""
             },
             "require": {
-                "laminas/laminas-diactoros": "^1.1",
-                "laminas/laminas-http": "^2.5",
+                "container-interop/container-interop": "^1.1",
+                "laminas/laminas-console": "^2.6",
+                "laminas/laminas-eventmanager": "^3.3",
+                "laminas/laminas-modulemanager": "^2.7.1",
+                "laminas/laminas-mvc": "^3.0.3",
+                "laminas/laminas-router": "^3.0",
+                "laminas/laminas-servicemanager": "^3.3",
+                "laminas/laminas-stdlib": "^3.3",
+                "laminas/laminas-text": "^2.6",
+                "laminas/laminas-view": "^2.11.3",
                 "laminas/laminas-zendframework-bridge": "^1.0",
-                "php": ">=5.5",
-                "psr/http-message": "^1.0"
+                "php": "^7.3 || ~8.0.0"
+            },
+            "conflict": {
+                "laminas/laminas-mvc": "<3.0.0"
             },
             "replace": {
-                "zendframework/zend-psr7bridge": "self.version"
+                "zendframework/zend-mvc-console": "^1.2.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.7",
-                "squizlabs/php_codesniffer": "^2.3"
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-filter": "^2.6.1",
+                "phpspec/prophecy": "^1.12.0",
+                "phpspec/prophecy-phpunit": "^2.0",
+                "phpunit/phpunit": "^9.3"
+            },
+            "suggest": {
+                "laminas/laminas-filter": "^2.6.1, to filter rendered results"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0-dev",
-                    "dev-develop": "1.1-dev"
+                    "dev-master": "1.2.x-dev",
+                    "dev-develop": "1.3.x-dev"
+                },
+                "laminas": {
+                    "component": "Laminas\\Mvc\\Console"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Laminas\\Psr7Bridge\\": "src/"
+                    "Laminas\\Mvc\\Console\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
-            "description": "PSR-7 <-> Laminas\\Http bridge",
+            "description": "Integration between laminas-mvc and laminas-console",
             "homepage": "https://laminas.dev",
             "keywords": [
-                "http",
+                "console",
                 "laminas",
-                "psr",
-                "psr-7"
+                "mvc"
             ],
-            "time": "2019-12-31T17:38:47+00:00"
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "abandoned": "laminas/laminas-cli",
+            "time": "2020-12-28T09:19:48+00:00"
+        },
+        {
+            "name": "laminas/laminas-router",
+            "version": "3.4.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laminas/laminas-router.git",
+                "reference": "2a7068508af4de67d80ea292e0cc7c37563a33c6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laminas/laminas-router/zipball/2a7068508af4de67d80ea292e0cc7c37563a33c6",
+                "reference": "2a7068508af4de67d80ea292e0cc7c37563a33c6",
+                "shasum": ""
+            },
+            "require": {
+                "container-interop/container-interop": "^1.2",
+                "laminas/laminas-http": "^2.8.1",
+                "laminas/laminas-servicemanager": "^2.7.8 || ^3.3",
+                "laminas/laminas-stdlib": "^3.3",
+                "laminas/laminas-zendframework-bridge": "^1.0",
+                "php": "^7.3 || ~8.0.0"
+            },
+            "replace": {
+                "zendframework/zend-router": "^3.3.0"
+            },
+            "require-dev": {
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-i18n": "^2.7.4",
+                "phpunit/phpunit": "^9.4"
+            },
+            "suggest": {
+                "laminas/laminas-i18n": "^2.7.4, if defining translatable HTTP path segments"
+            },
+            "type": "library",
+            "extra": {
+                "laminas": {
+                    "component": "Laminas\\Router",
+                    "config-provider": "Laminas\\Router\\ConfigProvider"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laminas\\Router\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Flexible routing system for HTTP and console applications",
+            "homepage": "https://laminas.dev",
+            "keywords": [
+                "laminas",
+                "routing"
+            ],
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2020-12-16T22:10:51+00:00"
         },
         {
             "name": "laminas/laminas-serializer",
@@ -2945,44 +2958,55 @@
         },
         {
             "name": "laminas/laminas-servicemanager",
-            "version": "2.7.11",
+            "version": "3.6.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-servicemanager.git",
-                "reference": "841abb656c6018afebeec1f355be438426d6a3dd"
+                "reference": "b1445e1a7077c21b0fad0974a1b7a11b9dbe0828"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-servicemanager/zipball/841abb656c6018afebeec1f355be438426d6a3dd",
-                "reference": "841abb656c6018afebeec1f355be438426d6a3dd",
+                "url": "https://api.github.com/repos/laminas/laminas-servicemanager/zipball/b1445e1a7077c21b0fad0974a1b7a11b9dbe0828",
+                "reference": "b1445e1a7077c21b0fad0974a1b7a11b9dbe0828",
                 "shasum": ""
             },
             "require": {
-                "container-interop/container-interop": "~1.0",
+                "container-interop/container-interop": "^1.2",
+                "laminas/laminas-stdlib": "^3.2.1",
                 "laminas/laminas-zendframework-bridge": "^1.0",
-                "php": "^5.5 || ^7.0"
+                "php": "^7.3 || ~8.0.0",
+                "psr/container": "^1.0"
+            },
+            "conflict": {
+                "laminas/laminas-code": "<3.3.1",
+                "zendframework/zend-code": "<3.3.1"
+            },
+            "provide": {
+                "container-interop/container-interop-implementation": "^1.2",
+                "psr/container-implementation": "^1.0"
             },
             "replace": {
-                "zendframework/zend-servicemanager": "self.version"
+                "zendframework/zend-servicemanager": "^3.4.0"
             },
             "require-dev": {
-                "athletic/athletic": "dev-master",
-                "fabpot/php-cs-fixer": "1.7.*",
-                "laminas/laminas-di": "~2.5",
-                "laminas/laminas-mvc": "~2.5",
-                "phpunit/phpunit": "~4.0"
+                "composer/package-versions-deprecated": "^1.0",
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-container-config-test": "^0.3",
+                "laminas/laminas-dependency-plugin": "^2.1",
+                "mikey179/vfsstream": "^1.6.8",
+                "ocramius/proxy-manager": "^2.2.3",
+                "phpbench/phpbench": "^1.0.0-alpha3",
+                "phpspec/prophecy-phpunit": "^2.0",
+                "phpunit/phpunit": "^9.4"
             },
             "suggest": {
-                "laminas/laminas-di": "Laminas\\Di component",
-                "ocramius/proxy-manager": "ProxyManager 0.5.* to handle lazy initialization of services"
+                "ocramius/proxy-manager": "ProxyManager ^2.1.1 to handle lazy initialization of services"
             },
+            "bin": [
+                "bin/generate-deps-for-config-factory",
+                "bin/generate-factory-for-class"
+            ],
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.7-dev",
-                    "dev-develop": "3.0-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Laminas\\ServiceManager\\": "src/"
@@ -2992,12 +3016,24 @@
             "license": [
                 "BSD-3-Clause"
             ],
+            "description": "Factory-Driven Dependency Injection Container",
             "homepage": "https://laminas.dev",
             "keywords": [
+                "PSR-11",
+                "dependency-injection",
+                "di",
+                "dic",
                 "laminas",
+                "service-manager",
                 "servicemanager"
             ],
-            "time": "2019-12-31T17:44:16+00:00"
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2021-02-03T08:44:41+00:00"
         },
         {
             "name": "laminas/laminas-session",
@@ -8486,6 +8522,135 @@
                 "xml"
             ],
             "time": "2020-02-22T20:59:37+00:00"
+        },
+        {
+            "name": "laminas/laminas-diactoros",
+            "version": "1.8.7p2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laminas/laminas-diactoros.git",
+                "reference": "6991c1af7c8d2c8efee81b22ba97024781824aaa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laminas/laminas-diactoros/zipball/6991c1af7c8d2c8efee81b22ba97024781824aaa",
+                "reference": "6991c1af7c8d2c8efee81b22ba97024781824aaa",
+                "shasum": ""
+            },
+            "require": {
+                "laminas/laminas-zendframework-bridge": "^1.0",
+                "php": "^5.6 || ^7.0",
+                "psr/http-message": "^1.0"
+            },
+            "provide": {
+                "psr/http-message-implementation": "1.0"
+            },
+            "replace": {
+                "zendframework/zend-diactoros": "~1.8.7.0"
+            },
+            "require-dev": {
+                "ext-dom": "*",
+                "ext-libxml": "*",
+                "laminas/laminas-coding-standard": "~1.0",
+                "php-http/psr7-integration-tests": "dev-master",
+                "phpunit/phpunit": "^5.7.16 || ^6.0.8 || ^7.2.7"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-release-1.8": "1.8.x-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/functions/create_uploaded_file.php",
+                    "src/functions/marshal_headers_from_sapi.php",
+                    "src/functions/marshal_method_from_sapi.php",
+                    "src/functions/marshal_protocol_version_from_sapi.php",
+                    "src/functions/marshal_uri_from_sapi.php",
+                    "src/functions/normalize_server.php",
+                    "src/functions/normalize_uploaded_files.php",
+                    "src/functions/parse_cookie_header.php",
+                    "src/functions/create_uploaded_file.legacy.php",
+                    "src/functions/marshal_headers_from_sapi.legacy.php",
+                    "src/functions/marshal_method_from_sapi.legacy.php",
+                    "src/functions/marshal_protocol_version_from_sapi.legacy.php",
+                    "src/functions/marshal_uri_from_sapi.legacy.php",
+                    "src/functions/normalize_server.legacy.php",
+                    "src/functions/normalize_uploaded_files.legacy.php",
+                    "src/functions/parse_cookie_header.legacy.php"
+                ],
+                "psr-4": {
+                    "Laminas\\Diactoros\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "PSR HTTP Message implementations",
+            "homepage": "https://laminas.dev",
+            "keywords": [
+                "http",
+                "laminas",
+                "psr",
+                "psr-7"
+            ],
+            "time": "2020-03-23T15:28:28+00:00"
+        },
+        {
+            "name": "laminas/laminas-psr7bridge",
+            "version": "0.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laminas/laminas-psr7bridge.git",
+                "reference": "14780ef1d40effd59d77ab29c6d439b2af42cdfa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laminas/laminas-psr7bridge/zipball/14780ef1d40effd59d77ab29c6d439b2af42cdfa",
+                "reference": "14780ef1d40effd59d77ab29c6d439b2af42cdfa",
+                "shasum": ""
+            },
+            "require": {
+                "laminas/laminas-diactoros": "^1.1",
+                "laminas/laminas-http": "^2.5",
+                "laminas/laminas-zendframework-bridge": "^1.0",
+                "php": ">=5.5",
+                "psr/http-message": "^1.0"
+            },
+            "replace": {
+                "zendframework/zend-psr7bridge": "self.version"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.7",
+                "squizlabs/php_codesniffer": "^2.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev",
+                    "dev-develop": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laminas\\Psr7Bridge\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "PSR-7 <-> Laminas\\Http bridge",
+            "homepage": "https://laminas.dev",
+            "keywords": [
+                "http",
+                "laminas",
+                "psr",
+                "psr-7"
+            ],
+            "time": "2019-12-31T17:38:47+00:00"
         },
         {
             "name": "lusitanian/oauth",

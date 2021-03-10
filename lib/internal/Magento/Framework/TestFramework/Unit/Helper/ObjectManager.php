@@ -6,6 +6,9 @@
 namespace Magento\Framework\TestFramework\Unit\Helper;
 
 use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionParameter;
 
 /**
  * Helper class for basic object retrieving, such as blocks, models etc...
@@ -222,7 +225,8 @@ class ObjectManager
                                 } elseif ($parameter->allowsNull()) {
                                     $args[] = null;
                                 } else {
-                                    $mock = $this->_getMockWithoutConstructorCall($parameter->getClass()->getName());
+                                    $parameterClass = $this->getParameterClass($parameter);
+                                    $mock = $this->_getMockWithoutConstructorCall($parameterClass->getName());
                                     $args[] = $mock;
                                 }
                             }
@@ -235,6 +239,22 @@ class ObjectManager
         }
 
         return new $className(...array_values($this->getConstructArguments($className, $arguments)));
+    }
+
+    /**
+     * Get class by reflection parameter
+     *
+     * @param ReflectionParameter $reflectionParameter
+     * @return ReflectionClass|null
+     * @throws ReflectionException
+     */
+    private function getParameterClass(ReflectionParameter $reflectionParameter): ?ReflectionClass
+    {
+        $parameterType = $reflectionParameter->getType();
+
+        return $parameterType && !$parameterType->isBuiltin()
+            ? new ReflectionClass($parameterType->getName())
+            : null;
     }
 
     /**
@@ -268,8 +288,8 @@ class ObjectManager
 
             $object = null;
             try {
-                if ($parameter->getClass()) {
-                    $argClassName = $parameter->getClass()->getName();
+                if ($parameterClass = $this->getParameterClass($parameter)) {
+                    $argClassName = $parameterClass->getName();
                 }
                 $object = $this->_getMockObject($argClassName, $arguments);
             } catch (\ReflectionException $e) {
