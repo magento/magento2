@@ -118,7 +118,7 @@ class PriceTiersTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/simple_product_without_tier_price.php
+     * @magentoApiDataFixture Magento/Catalog/_files/second_product_simple.php
      * @magentoApiDataFixture Magento/Catalog/_files/three_simple_products_with_tier_price.php
      */
     public function testGetCorrectDisplaingTierPriceForProducts()
@@ -141,12 +141,13 @@ class PriceTiersTest extends GraphQlAbstract
 }
 QUERY;
         $response = $this->graphQlQuery($query);
+        $productsWithTierPrices = ['simple_1','simple_2','simple_3'];
+
         foreach ($response['products']['items'] as $key => $item) {
-            if ($item['sku'] == 'simple_19') {
-                $this->assertCount(0, $response['products']['items'][$key]['price_tiers']);
-            }
-            if (in_array($item['sku'], ['simple_1','simple_2','simple_3'])) {
+            if (in_array($item['sku'], $productsWithTierPrices)) {
                 $this->assertCount(1, $response['products']['items'][$key]['price_tiers']);
+            } else {
+                $this->assertCount(0, $response['products']['items'][$key]['price_tiers']);
             }
         }
     }
