@@ -8,6 +8,9 @@ namespace Magento\TestFramework\Integrity\Library;
 use Laminas\Code\Reflection\ClassReflection;
 use Laminas\Code\Reflection\FileReflection;
 use Laminas\Code\Reflection\ParameterReflection;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionParameter;
 
 /**
  * Provide dependencies for the file
@@ -39,7 +42,7 @@ class Injectable
                 foreach ($method->getParameters() as $parameter) {
                     try {
                         /** @var ParameterReflection $parameter */
-                        $dependency = $parameter->getClass();
+                        $dependency = $this->getParameterClass($parameter);
                         if ($dependency instanceof ClassReflection) {
                             $this->dependencies[] = $dependency->getName();
                         }
@@ -55,5 +58,21 @@ class Injectable
         }
 
         return $this->dependencies;
+    }
+
+    /**
+     * Get class by reflection parameter
+     *
+     * @param ReflectionParameter $reflectionParameter
+     * @return ReflectionClass|null
+     * @throws ReflectionException
+     */
+    private function getParameterClass(ReflectionParameter $reflectionParameter): ?ReflectionClass
+    {
+        $parameterType = $reflectionParameter->getType();
+
+        return $parameterType && !$parameterType->isBuiltin()
+            ? new ReflectionClass($parameterType->getName())
+            : null;
     }
 }
