@@ -9,6 +9,13 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminEditCustomerGroupSection">
+        <element name="groupName" type="input" selector="#customer_group_code"/>
+        <element name="taxClass" type="select" selector="#tax_class_id"/>
+        <element name="saveCustomerGroup" type="button" selector="#save"/>
+        <element name="resetBtn" type="button" selector="#reset"/>
+        <element name="backBtn" type="button" selector="#back"/>
+        <element name="excludeWebsite" type="multiselect" selector="#customer_group_excluded_website_ids"/>
+        <element name="selectedExcludedWebsites" type="multiselect" selector="//select[@id='customer_group_excluded_website_ids']/option[contains(@selected, 'selected')]"/>
         <element name="deleteButton" type="button" selector=".page-actions-buttons button#delete"/>
     </section>
 </sections>
