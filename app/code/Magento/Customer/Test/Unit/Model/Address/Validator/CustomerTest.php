@@ -29,7 +29,7 @@ class CustomerTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->addressFactoryMock = $this->createMock(AddressFactory::class);
         $objectManager = new ObjectManager($this);

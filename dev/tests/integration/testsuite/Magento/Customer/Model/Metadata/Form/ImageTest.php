@@ -55,7 +55,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->filesystem = $this->objectManager->get(Filesystem::class);
@@ -199,7 +199,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      * @inheritdoc
      * @throws FileSystemException
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(

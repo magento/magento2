@@ -149,7 +149,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $this->processor->_indexDir = __DIR__ . '/version1/magento2';
         $this->processor->_errorDir = __DIR__ . '/version2/magento2';
 
-        $this->assertNotContains('version2/magento2', $this->processor->getViewFileUrl());
-        $this->assertContains('pub/errors/', $this->processor->getViewFileUrl());
+        $this->assertStringNotContainsString('version2/magento2', $this->processor->getViewFileUrl());
+        $this->assertStringContainsString('pub/errors/', $this->processor->getViewFileUrl());
     }
 }

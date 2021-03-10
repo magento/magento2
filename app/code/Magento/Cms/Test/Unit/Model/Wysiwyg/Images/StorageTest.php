@@ -7,6 +7,7 @@ namespace Magento\Cms\Test\Unit\Model\Wysiwyg\Images;
 
 use Magento\Cms\Model\Wysiwyg\Images\Storage\Collection as StorageCollection;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\DataObject;
 
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
@@ -166,11 +167,9 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         )->method(
             'getPathInfo'
         )->willReturnCallback(
-
-                function ($path) {
-                    return pathinfo($path);
-                }
-
+            function ($path) {
+                 return pathinfo($path);
+            }
         );
 
         $this->adapterFactoryMock = $this->createMock(\Magento\Framework\Image\AdapterFactory::class);
@@ -359,7 +358,10 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $collection = [];
         foreach ($fileNames as $filename) {
             /** @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject $objectMock */
-            $objectMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getFilename']);
+            $objectMock = $this->getMockBuilder(DataObject::class)
+                ->addMethods(['getFilename'])
+                ->disableOriginalConstructor()
+                ->getMock();
             $objectMock->expects($this->any())
                 ->method('getFilename')
                 ->willReturn(self::STORAGE_ROOT_DIR . $filename);
@@ -539,10 +541,14 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
+     *
      */
     public function testUploadFileWithExcessivePath()
     {
+        $this->expectException(
+            \Magento\Framework\Exception\LocalizedException::class
+        );
+
         $path = 'target/path';
         $targetPath = self::STORAGE_ROOT_DIR .str_repeat('a', 255) . $path;
         $type = 'image';

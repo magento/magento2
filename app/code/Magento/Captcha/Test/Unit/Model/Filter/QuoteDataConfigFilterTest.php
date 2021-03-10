@@ -30,7 +30,7 @@ class QuoteDataConfigFilterTest extends TestCase
     /**
      * Initialize Class Dependencies
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
