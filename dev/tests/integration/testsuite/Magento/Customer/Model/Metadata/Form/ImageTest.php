@@ -157,12 +157,15 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      * Test for processCustomerValue method with invalid value
      *
      * @magentoAppIsolation enabled
-     * @expectedException \Magento\Framework\Exception\ValidatorException
      * @throws FileSystemException
      * @throws \ReflectionException
      */
     public function testProcessCustomerInvalidValue()
     {
+        $this->expectException(
+            \Magento\Framework\Exception\ValidatorException::class
+        );
+
         $this->mediaDirectory->delete('customer');
         $this->mediaDirectory->create($this->mediaDirectory->getRelativePath('customer/tmp/'));
         $tmpFilePath = $this->mediaDirectory->getAbsolutePath('customer/tmp/' . $this->fileName);
