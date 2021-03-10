@@ -39,10 +39,10 @@ class FileScanner extends \Laminas\Code\Scanner\FileScanner
         }
 
         // ensure php backwards compatibility (from laminas code 3.5.x)
-        if (! defined('T_NAME_QUALIFIED')) {
+        if (!defined('T_NAME_QUALIFIED')) {
             define('T_NAME_QUALIFIED', 24001);
         }
-        if (! defined('T_NAME_FULLY_QUALIFIED')) {
+        if (!defined('T_NAME_FULLY_QUALIFIED')) {
             define('T_NAME_FULLY_QUALIFIED', 24002);
         }
 
