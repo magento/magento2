@@ -573,8 +573,12 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
 
         $optionIds = $this->connection->fetchAssoc(
             $this->connection->select()->from(
-                $this->_resource->getTableName('catalog_product_bundle_option'),
+                ['bo' => $this->_resource->getTableName('catalog_product_bundle_option')],
                 ['option_id', 'position', 'parent_id']
+            )->joinLeft(
+                ['bov' => $this->_resource->getTableName('catalog_product_bundle_option_value')],
+                'bo.option_id = bov.option_id',
+                ['title']
             )->where(
                 'parent_id IN (?)',
                 $productIds
@@ -600,8 +604,10 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         foreach ($this->_cachedOptions as $entityId => $options) {
             foreach ($options as $key => $option) {
                 foreach ($optionIds as $optionId => $assoc) {
-                    if ($assoc['position'] == $this->_cachedOptions[$entityId][$key]['index']
-                        && $assoc['parent_id'] == $entityId) {
+                    if ($assoc['position'] == $this->_cachedOptions[$entityId][$key]['index'] &&
+                        $assoc['parent_id'] == $entityId &&
+                        (empty($assoc['title']) || $assoc['title'] == $this->_cachedOptions[$entityId][$key]['name'])
+                    ) {
                         $option['parent_id'] = $entityId;
                         $optionValues[] = $this->populateOptionValueTemplate($option, $optionId);
                         $this->_cachedOptions[$entityId][$key]['option_id'] = $optionId;
