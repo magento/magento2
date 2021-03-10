@@ -20,12 +20,13 @@ use Laminas\Log\FormatterPluginManager as LogFormatterManager;
 use Laminas\Log\ProcessorPluginManager as LogProcessorManager;
 use Laminas\Log\WriterPluginManager as LogWriterManager;
 use Laminas\Serializer\AdapterPluginManager as SerializerAdapterManager;
-use Laminas\ServiceManager\AbstractFactoryInterface;
+use Laminas\ServiceManager\Factory\AbstractFactoryInterface;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Stdlib\DispatchableInterface;
 use Laminas\Validator\ValidatorPluginManager;
 use ReflectionClass;
+use ReflectionException;
 use ReflectionParameter;
 
 /**
@@ -168,11 +169,12 @@ class LazyControllerAbstractFactory implements AbstractFactoryInterface
                 return [];
             }
 
-            if (! $parameter->getClass()) {
+            $parameterClass = $this->getParameterClass($parameter);
+            if (!$parameterClass) {
                 return null;
             }
 
-            $type = $parameter->getClass()->getName();
+            $type = $parameterClass->getName();
             $type = isset($this->aliases[$type]) ? $this->aliases[$type] : $type;
 
             if (! $container->has($type)) {
@@ -186,6 +188,22 @@ class LazyControllerAbstractFactory implements AbstractFactoryInterface
 
             return $container->get($type);
         };
+    }
+
+    /**
+     * Get class by reflection parameter
+     *
+     * @param ReflectionParameter $reflectionParameter
+     * @return ReflectionClass|null
+     * @throws ReflectionException
+     */
+    private function getParameterClass(ReflectionParameter $reflectionParameter): ?ReflectionClass
+    {
+        $parameterType = $reflectionParameter->getType();
+
+        return $parameterType && !$parameterType->isBuiltin()
+            ? new ReflectionClass($parameterType->getName())
+            : null;
     }
 
     /**
