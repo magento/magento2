@@ -1392,9 +1392,34 @@
     <entity name="SimpleProductUpdatePrice16" type="product2">
         <data key="price">16.00</data>
     </entity>
+    <entity name="SimpleProductUpdatePrice90" type="product2">
+        <data key="price">90.00</data>
+    </entity>
+    <entity name="SimpleProductUpdatePrice95" type="product2">
+        <data key="price">95.00</data>
+    </entity>
+    <entity name="SimpleProductUpdatePrice80" type="product2">
+        <data key="price">80.00</data>
+    </entity>
     <entity name="ProductWithTwoTextFieldOptions" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionField</requiredEntity>
         <requiredEntity type="product_option">ProductOptionField2</requiredEntity>
+    </entity>
+    <entity name="SimpleProductWithCustomSku24MB01" type="product" extends="SimpleProduct2">
+        <data key="name" unique="suffix">ProductWithSku24MB01-</data>
+        <data key="sku" unique="suffix">24 MB01</data>
+    </entity>
+    <entity name="SimpleProductWithCustomSku24MB02" type="product" extends="SimpleProduct2">
+        <data key="name" unique="suffix">ProductWithSku24MB02-</data>
+        <data key="sku" unique="suffix">24 MB02 </data>
+    </entity>
+    <entity name="SimpleProductWithCustomSku24MB04" type="product" extends="SimpleProduct2">
+        <data key="name" unique="suffix">ProductWithSku24MB04-</data>
+        <data key="sku" unique="suffix">24 MB04 </data>
+    </entity>
+    <entity name="SimpleProductWithCustomSku24MB06" type="product" extends="SimpleProduct2">
+        <data key="name" unique="suffix">ProductWithSku24MB06-</data>
+        <data key="sku" unique="suffix">24 MB06 </data>
     </entity>
 </entities>
