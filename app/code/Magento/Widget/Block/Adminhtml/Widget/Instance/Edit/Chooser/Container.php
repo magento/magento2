@@ -3,7 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
+
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Element\Context;
+use Magento\Framework\View\Element\Html\Select;
+use Magento\Framework\View\Layout\ProcessorFactory;
+use Magento\Framework\View\Model\PageLayout\Config\BuilderInterface as PageLayoutConfigBuilder;
+use Magento\Theme\Model\ResourceModel\Theme\CollectionFactory;
 
 /**
  * A chooser for container for widget instances
@@ -13,10 +22,12 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
  * @method \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container setTheme($theme)
  * @method \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container setArea($area)
  */
-class Container extends \Magento\Framework\View\Element\Html\Select
+class Container extends Select
 {
     /**#@+
      * Frontend page layouts
+     * @deprecated hardcoded list was replaced with checking actual existing layouts
+     * @see \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface::getPageLayoutsConfig
      */
     const PAGE_LAYOUT_1COLUMN = '1column-center';
     const PAGE_LAYOUT_2COLUMNS_LEFT = '2columns-left';
@@ -24,29 +35,40 @@ class Container extends \Magento\Framework\View\Element\Html\Select
     const PAGE_LAYOUT_3COLUMNS = '3columns';
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var ProcessorFactory
+     */
     protected $_layoutProcessorFactory;
 
     /**
-     * @var \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory
+     * @var CollectionFactory
      */
     protected $_themesFactory;
 
     /**
-     * @param \Magento\Framework\View\Element\Context $context
-     * @param \Magento\Framework\View\Layout\ProcessorFactory $layoutProcessorFactory
-     * @param \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $themesFactory
+     * @var PageLayoutConfigBuilder
+     */
+    private $pageLayoutConfigBuilder;
+
+    /**
+     * @param Context $context
+     * @param ProcessorFactory $layoutProcessorFactory
+     * @param CollectionFactory $themesFactory
      * @param array $data
+     * @param PageLayoutConfigBuilder|null $pageLayoutConfigBuilder
      */
     public function __construct(
-        \Magento\Framework\View\Element\Context $context,
-        \Magento\Framework\View\Layout\ProcessorFactory $layoutProcessorFactory,
-        \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $themesFactory,
-        array $data = []
+        Context $context,
+        ProcessorFactory $layoutProcessorFactory,
+        CollectionFactory $themesFactory,
+        array $data = [],
+        PageLayoutConfigBuilder $pageLayoutConfigBuilder = null
     ) {
+        parent::__construct($context, $data);
         $this->_layoutProcessorFactory = $layoutProcessorFactory;
         $this->_themesFactory = $themesFactory;
-        parent::__construct($context, $data);
+        $this->pageLayoutConfigBuilder = $pageLayoutConfigBuilder
+            ?? ObjectManager::getInstance()->get(PageLayoutConfigBuilder::class);
     }
 
     /**
@@ -101,6 +123,7 @@ class Container extends \Magento\Framework\View\Element\Html\Select
                 $this->addOption($containerName, $containerLabel);
             }
         }
+
         return parent::_beforeToHtml();
     }
 
@@ -108,12 +131,14 @@ class Container extends \Magento\Framework\View\Element\Html\Select
      * Retrieve theme instance by its identifier
      *
      * @param int $themeId
+     *
      * @return \Magento\Theme\Model\Theme|null
      */
     protected function _getThemeInstance($themeId)
     {
         /** @var \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection */
         $themeCollection = $this->_themesFactory->create();
+
         return $themeCollection->getItemById($themeId);
     }
 
@@ -124,11 +149,8 @@ class Container extends \Magento\Framework\View\Element\Html\Select
      */
     protected function getPageLayouts()
     {
-        return [
-            self::PAGE_LAYOUT_1COLUMN,
-            self::PAGE_LAYOUT_2COLUMNS_LEFT,
-            self::PAGE_LAYOUT_2COLUMNS_RIGHT,
-            self::PAGE_LAYOUT_3COLUMNS,
-        ];
+        $pageLayoutsConfig = $this->pageLayoutConfigBuilder->getPageLayoutsConfig();
+
+        return array_keys($pageLayoutsConfig->getPageLayouts());
     }
 }
