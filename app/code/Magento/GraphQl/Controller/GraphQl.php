@@ -8,20 +8,21 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Controller;
 
 use Magento\Framework\App\FrontControllerInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\GraphQl\Exception\ExceptionFormatter;
+use Magento\Framework\GraphQl\Query\Fields as QueryFields;
 use Magento\Framework\GraphQl\Query\QueryProcessor;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\SchemaGeneratorInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\Response;
-use Magento\Framework\App\Response\Http as HttpResponse;
-use Magento\Framework\GraphQl\Query\Fields as QueryFields;
-use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Framework\App\ObjectManager;
 use Magento\GraphQl\Model\Query\ContextFactoryInterface;
+use Magento\NewRelicReporting\Model\NewRelicWrapper;
 
 /**
  * Front controller for web API GraphQL area.
@@ -90,6 +91,11 @@ class GraphQl implements FrontControllerInterface
     private $contextFactory;
 
     /**
+     * @var NewRelicWrapper
+     */
+    private $newRelicWrapper;
+
+    /**
      * @param Response $response
      * @param SchemaGeneratorInterface $schemaGenerator
      * @param SerializerInterface $jsonSerializer
@@ -98,6 +104,7 @@ class GraphQl implements FrontControllerInterface
      * @param ContextInterface $resolverContext Deprecated. $contextFactory is used for creating Context object.
      * @param HttpRequestProcessor $requestProcessor
      * @param QueryFields $queryFields
+     * @param NewRelicWrapper $newRelicWrapper
      * @param JsonFactory|null $jsonFactory
      * @param HttpResponse|null $httpResponse
      * @param ContextFactoryInterface $contextFactory
@@ -112,6 +119,7 @@ class GraphQl implements FrontControllerInterface
         ContextInterface $resolverContext,
         HttpRequestProcessor $requestProcessor,
         QueryFields $queryFields,
+        NewRelicWrapper $newRelicWrapper = null,
         JsonFactory $jsonFactory = null,
         HttpResponse $httpResponse = null,
         ContextFactoryInterface $contextFactory = null
@@ -124,6 +132,7 @@ class GraphQl implements FrontControllerInterface
         $this->resolverContext = $resolverContext;
         $this->requestProcessor = $requestProcessor;
         $this->queryFields = $queryFields;
+        $this->newRelicWrapper = $newRelicWrapper ?: ObjectManager::getInstance()->get(NewRelicWrapper::class);
         $this->jsonFactory = $jsonFactory ?: ObjectManager::getInstance()->get(JsonFactory::class);
         $this->httpResponse = $httpResponse ?: ObjectManager::getInstance()->get(HttpResponse::class);
         $this->contextFactory = $contextFactory ?: ObjectManager::getInstance()->get(ContextFactoryInterface::class);
@@ -136,7 +145,7 @@ class GraphQl implements FrontControllerInterface
      * @return ResponseInterface
      * @since 100.3.0
      */
-    public function dispatch(RequestInterface $request) : ResponseInterface
+    public function dispatch(RequestInterface $request): ResponseInterface
     {
         $statusCode = 200;
         $jsonResult = $this->jsonFactory->create();
@@ -151,6 +160,8 @@ class GraphQl implements FrontControllerInterface
             // We must extract queried field names to avoid instantiation of unnecessary fields in webonyx schema
             // Temporal coupling is required for performance optimization
             $this->queryFields->setQuery($query, $variables);
+            $this->newRelicWrapper->setTransactionName('GraphQL-' . $this->getOperationName($data));
+
             $schema = $this->schemaGenerator->generate();
 
             $result = $this->queryProcessor->process(
@@ -172,12 +183,28 @@ class GraphQl implements FrontControllerInterface
     }
 
     /**
+     * Get GraphQL query operation name
+     *
+     * @param array $data
+     * @return string
+     */
+    private function getOperationName(array $data): string
+    {
+        if (isset($data['operationName']) && is_string($data['operationName']) && $data['operationName'] !== '') {
+            return $data['operationName'];
+        }
+
+        $fields = $this->queryFields->getFieldsUsedInQuery();
+        return current($fields) ?: 'operationNameNotFound';
+    }
+
+    /**
      * Get data from request body or query string
      *
      * @param RequestInterface $request
      * @return array
      */
-    private function getDataFromRequest(RequestInterface $request) : array
+    private function getDataFromRequest(RequestInterface $request): array
     {
         /** @var Http $request */
         if ($request->isPost()) {

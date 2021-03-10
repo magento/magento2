@@ -10,6 +10,7 @@
         <sequence>
             <module name="Magento_Authorization"/>
             <module name="Magento_Eav"/>
+            <module name="Magento_NewRelicReporting"/>
         </sequence>
     </module>
 </config>

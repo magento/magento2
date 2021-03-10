@@ -6,7 +6,8 @@
         "php": "~7.3.0||~7.4.0",
         "magento/module-eav": "*",
         "magento/framework": "*",
-        "magento/module-webapi": "*"
+        "magento/module-webapi": "*",
+        "magento/module-new-relic-reporting": "*"
     },
     "suggest": {
         "magento/module-graph-ql-cache": "*"
