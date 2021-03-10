@@ -143,8 +143,6 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
     public function saveFile($filename)
     {
         if ($this->checkDbUsage()) {
-            //phpcs:ignore Magento2.Functions.DiscouragedFunction
-            trigger_error('Database media storage function is deprecated', E_USER_DEPRECATED);
             $this->getStorageDatabaseModel()->saveFile($this->_removeAbsPathFromFileName($filename));
         }
     }
