@@ -127,7 +127,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
     }
 
     /**
-     * Run import replace with pagination tests.
+     * Run import-replace with pagination test.
      *
      * @magentoAppArea adminhtml
      * @magentoDbIsolation disabled
@@ -139,7 +139,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
      * @dataProvider importReplaceDataProvider
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function testImportReplaceWithPagination(array $fixtures, array $skus, array $skippedAttributes = []): void
+    public function testImportReplaceWithPagination(array $fixtures, array $skus, array $skippedAttributes = [])
     {
         $this->fixtures = $fixtures;
         $this->executeFixtures($fixtures);
@@ -149,7 +149,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
     }
 
     /**
-     * Data provider for import replaces tests.
+     * Provide data for import-replace with pagination test.
      *
      * @return array
      */

@@ -38,7 +38,7 @@ class ParamOverriderCustomerWebsiteIdTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->userContextMock = $this->createMock(UserContextInterface::class);
         $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
