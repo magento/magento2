@@ -6,7 +6,7 @@
 namespace Magento\MediaStorage\Model\ResourceModel\File\Storage;
 
 /**
- * Class Database
+ * Class responsible for database media storage CRUD operations.
  *
  * @api
  * @since 100.0.2
@@ -81,7 +81,7 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
         )->addColumn(
             'filename',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            100,
+            255,
             ['nullable' => false],
             'Filename'
         )->addColumn(
@@ -93,7 +93,7 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
         )->addColumn(
             'directory',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            512,
             ['default' => null],
             'Directory Path'
         )->addIndex(

@@ -38,19 +38,19 @@ use Magento\Framework\App\DeploymentConfig;
 class User extends AbstractModel implements StorageInterface, UserInterface
 {
     /**
-     * @deprecated
+     * @deprecated Notificator is now responsible for sending messages to admin users.
      * @see \Magento\User\Model\Spi\NotificatorInterface
      */
     const XML_PATH_FORGOT_EMAIL_TEMPLATE = 'admin/emails/forgot_email_template';
 
     /**
-     * @deprecated
+     * @deprecated Notificator is now responsible for sending messages to admin users.
      * @see \Magento\User\Model\Spi\NotificatorInterface
      */
     const XML_PATH_FORGOT_EMAIL_IDENTITY = 'admin/emails/forgot_email_identity';
 
     /**
-     * @deprecated
+     * @deprecated Notificator is now responsible for sending messages to admin users.
      * @see \Magento\User\Model\Spi\NotificatorInterface
      */
     const XML_PATH_USER_NOTIFICATION_TEMPLATE = 'admin/emails/user_notification_template';
@@ -58,11 +58,17 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     /**
      * Configuration paths for admin user reset password email template
      *
-     * @deprecated
+     * @deprecated Notificator is now responsible for sending messages to admin users.
+     * @see \Magento\User\Model\Spi\NotificatorInterface
      */
     const XML_PATH_RESET_PASSWORD_TEMPLATE = 'admin/emails/reset_password_template';
 
     const MESSAGE_ID_PASSWORD_EXPIRED = 'magento_user_password_expired';
+
+    /**
+     * Tag to use for user assigned role caching.
+     */
+    private const CACHE_TAG = 'user_assigned_role';
 
     /**
      * Model event prefix
@@ -147,6 +153,14 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @deprecated 101.1.0
      */
     private $deploymentConfig;
+
+    /**
+     * @var array
+     */
+    protected $_cacheTag = [
+        \Magento\Backend\Block\Menu::CACHE_TAGS,
+        self::CACHE_TAG,
+    ];
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -329,9 +343,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function validate()
     {
-        /** @var $validator \Magento\Framework\Validator\DataObject */
-        $validator = $this->_validatorObject->create();
-        $this->validationRules->addUserInfoRules($validator);
+        $validator = $this->_getValidationRulesBeforeSave();
 
         if (!$validator->isValid($this)) {
             return $validator->getMessages();
@@ -683,7 +695,27 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function hasAssigned2Role($user)
     {
-        return $this->getResource()->hasAssigned2Role($user);
+        if ($user instanceof AbstractModel) {
+            $userId = $user->getUserId();
+        } elseif (is_numeric($user) && (int)$user !== 0) {
+            $userId = $user;
+        } else {
+            return null;
+        }
+        $data = $this->_cacheManager->load('assigned_role_' . $userId);
+        if (false === $data) {
+            $data = $this->getResource()->hasAssigned2Role($user);
+
+            $this->_cacheManager->save(
+                $this->serializer->serialize($data),
+                'assigned_role_' . $userId,
+                [self::CACHE_TAG]
+            );
+        } else {
+            $data = $this->serializer->unserialize($data);
+        }
+
+        return $data;
     }
 
     /**

@@ -162,6 +162,29 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     private $_rawTrackingRequest;
 
     /**
+     * ISO 4217 to Fedex currency codes matching
+     *
+     * @var string[]
+     */
+    private $codes = [
+        'DOP' => 'RDD',
+        'XCD' => 'ECD',
+        'ARS' => 'ARN',
+        'SGD' => 'SID',
+        'KRW' => 'WON',
+        'JMD' => 'JAD',
+        'CHF' => 'SFR',
+        'JPY' => 'JYE',
+        'KWD' => 'KUD',
+        'GBP' => 'UKL',
+        'AED' => 'DHS',
+        'MXN' => 'NMP',
+        'UYU' => 'UYP',
+        'CLP' => 'CHP',
+        'TWD' => 'NTD',
+    ];
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -678,6 +701,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     private function getBaseCurrencyRate(string $currencyCode): float
     {
+        $currencyCode = array_search($currencyCode, $this->codes) ?: $currencyCode;
         if (!isset($this->baseCurrencyRate[$currencyCode])) {
             $baseCurrencyCode = $this->_request->getBaseCurrency()->getCode();
             $rate = $this->_currencyFactory->create()
@@ -1033,26 +1057,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     public function getCurrencyCode()
     {
-        $codes = [
-            'DOP' => 'RDD',
-            'XCD' => 'ECD',
-            'ARS' => 'ARN',
-            'SGD' => 'SID',
-            'KRW' => 'WON',
-            'JMD' => 'JAD',
-            'CHF' => 'SFR',
-            'JPY' => 'JYE',
-            'KWD' => 'KUD',
-            'GBP' => 'UKL',
-            'AED' => 'DHS',
-            'MXN' => 'NMP',
-            'UYU' => 'UYP',
-            'CLP' => 'CHP',
-            'TWD' => 'NTD',
-        ];
         $currencyCode = $this->_storeManager->getStore()->getBaseCurrencyCode();
 
-        return $codes[$currencyCode] ?? $currencyCode;
+        return $this->codes[$currencyCode] ?? $currencyCode;
     }
 
     /**

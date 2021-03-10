@@ -78,7 +78,7 @@ class FileProcessor
     }
 
     /**
-     * Save file to temp media directory
+     * Save file to temp media directory.
      *
      * @param  string $fileId
      *
@@ -92,11 +92,12 @@ class FileProcessor
         } catch (\Exception $e) {
             $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
         }
+
         return $result;
     }
 
     /**
-     * Retrieve temp media url
+     * Retrieve temp media url.
      *
      * @param string $file
      * @return string
@@ -104,28 +105,28 @@ class FileProcessor
     protected function getTmpMediaUrl($file)
     {
         return $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA)
-            . 'tmp/' . self::FILE_DIR . '/' . $this->prepareFile($file);
+            . 'tmp' . DIRECTORY_SEPARATOR . self::FILE_DIR . DIRECTORY_SEPARATOR . $this->prepareFile($file);
     }
 
     /**
-     * Prepare file
+     * Prepare file.
      *
      * @param string $file
      * @return string
      */
     protected function prepareFile($file)
     {
-        return ltrim(str_replace('\\', '/', $file), '/');
+        return ltrim(str_replace('\\', DIRECTORY_SEPARATOR, $file), DIRECTORY_SEPARATOR);
     }
 
     /**
-     * Retrieve absolute temp media path
+     * Retrieve absolute temp media path.
      *
      * @return string
      */
     protected function getAbsoluteTmpMediaPath()
     {
-        return $this->mediaDirectory->getAbsolutePath('tmp/' . self::FILE_DIR);
+        return $this->mediaDirectory->getAbsolutePath('tmp' . DIRECTORY_SEPARATOR . self::FILE_DIR);
     }
 
     /**

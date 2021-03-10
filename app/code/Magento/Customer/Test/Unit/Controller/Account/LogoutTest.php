@@ -3,54 +3,67 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Controller\Account;
 
+use Magento\Customer\Api\SessionCleanerInterface;
 use Magento\Customer\Controller\Account\Logout;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Stdlib\Cookie\CookieMetadata;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class LogoutTest extends \PHPUnit\Framework\TestCase
+class LogoutTest extends TestCase
 {
     /** @var Logout */
     protected $controller;
 
-    /** @var \Magento\Framework\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Context|MockObject */
     protected $contextMock;
 
-    /** @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Session|MockObject */
     protected $sessionMock;
 
-    /** @var CookieMetadataFactory|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var CookieMetadataFactory|MockObject */
     protected $cookieMetadataFactory;
 
-    /** @var PhpCookieManager|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var PhpCookieManager|MockObject */
     protected $cookieManager;
 
-    /** @var CookieMetadata|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var CookieMetadata|MockObject */
     protected $cookieMetadata;
 
-    /** @var Redirect|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Redirect|MockObject */
     protected $resultRedirect;
 
-    /** @var RedirectFactory|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var RedirectFactory|MockObject */
     protected $redirectFactory;
 
-    /** @var RedirectInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var RedirectInterface|MockObject */
     protected $redirect;
+
+    /**
+     * @var SessionCleanerInterface|MockObject
+     */
+    private $sessionCleanerMock;
 
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
+        $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
+        $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'logout', 'setBeforeAuthUrl', 'setLastCustomerId'])
             ->getMock();
+        $this->sessionCleanerMock = $this->createMock(SessionCleanerInterface::class);
 
         $this->cookieMetadataFactory = $this->getMockBuilder(CookieMetadataFactory::class)
             ->disableOriginalConstructor()
@@ -77,7 +90,7 @@ class LogoutTest extends \PHPUnit\Framework\TestCase
             ->method('getRedirect')
             ->willReturn($this->redirect);
 
-        $this->controller = new Logout($this->contextMock, $this->sessionMock);
+        $this->controller = new Logout($this->contextMock, $this->sessionMock, $this->sessionCleanerMock);
 
         $refClass = new \ReflectionClass(Logout::class);
         $cookieMetadataManagerProperty = $refClass->getProperty('cookieMetadataManager');
@@ -110,6 +123,11 @@ class LogoutTest extends \PHPUnit\Framework\TestCase
         $this->sessionMock->expects($this->once())
             ->method('setLastCustomerId')
             ->with($customerId);
+
+        $this->sessionCleanerMock->expects($this->once())
+            ->method('clearFor')
+            ->with($customerId)
+            ->willReturnSelf();
 
         $this->cookieManager->expects($this->once())
             ->method('getCookie')

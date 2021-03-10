@@ -32,7 +32,8 @@ define([
     //TODO: remove global change, in this case made for initNamespaceStorage
     $.cookieStorage.setConf({
         path: '/',
-        expires: 1
+        expires: 1,
+        samesite: 'lax'
     });
 
     storage = $.initNamespaceStorage('mage-cache-storage').localStorage;

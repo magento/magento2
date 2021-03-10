@@ -13,8 +13,8 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\ExpiredException;
 use Magento\Framework\Reflection\DataObjectProcessor;
-use Magento\Framework\Url as UrlBuilder;
 use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\Url as UrlBuilder;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 

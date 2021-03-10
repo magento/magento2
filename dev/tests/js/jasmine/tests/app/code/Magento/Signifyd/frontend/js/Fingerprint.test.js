@@ -21,6 +21,11 @@ define([
             jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
         });
 
+        /*
+         * Change to "it" instead of "xit" to run the tests.
+         * Test is skipped due to approval request
+         * https://jira.corp.magento.com/browse/MC-38278
+         */
         xit('SIGNIFYD_GLOBAL object initialization check', function (done) {
             var script = document.createElement('script');
 

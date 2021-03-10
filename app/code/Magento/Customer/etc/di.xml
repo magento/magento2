@@ -366,6 +366,15 @@
     <type name="Magento\PageCache\Observer\FlushFormKey">
         <plugin name="customerFlushFormKey" type="Magento\Customer\Model\Plugin\CustomerFlushFormKey"/>
     </type>
+    <type name="Magento\Customer\Model\Customer\Attribute\CompositeValidator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="file" xsi:type="object">
+                    Magento\Customer\Model\Customer\Attribute\Validator\File
+                </item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Customer\Model\Customer\NotificationStorage">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Customer\Model\Cache\Type\Notification</argument>
@@ -457,6 +466,7 @@
             <argument name="validators" xsi:type="array">
                 <item name="general" xsi:type="object">Magento\Customer\Model\Address\Validator\General</item>
                 <item name="country" xsi:type="object">Magento\Customer\Model\Address\Validator\Country</item>
+                <item name="customer" xsi:type="object">Magento\Customer\Model\Address\Validator\Customer</item>
             </argument>
         </arguments>
     </type>
@@ -474,6 +484,15 @@
             <argument name="eventPrefix" xsi:type="string">customer_address_entity_grid_collection</argument>
             <argument name="eventObject" xsi:type="string">customer_address_entity_grid_collection</argument>
             <argument name="resourceModel" xsi:type="string">Magento\Customer\Model\ResourceModel\Address</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
+        <arguments>
+            <argument name="paramOverriders" xsi:type="array">
+                <item name="%customer_group_id%" xsi:type="object">Magento\Customer\Model\Webapi\ParamOverriderCustomerGroupId</item>
+                <item name="%customer_website_id%" xsi:type="object">Magento\Customer\Model\Webapi\ParamOverriderCustomerWebsiteId</item>
+                <item name="%customer_store_id%" xsi:type="object">Magento\Customer\Model\Webapi\ParamOverriderCustomerStoreId</item>
+            </argument>
         </arguments>
     </type>
     <preference
