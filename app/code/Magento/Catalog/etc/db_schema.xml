@@ -1693,7 +1693,7 @@
         <constraint xsi:type="foreign" referenceId="CAT_PRD_ENTT_MDA_GLR_VAL_TO_ENTT_ENTT_ID_CAT_PRD_ENTT_ENTT_ID"
                     table="catalog_product_entity_media_gallery_value_to_entity" column="entity_id"
                     referenceTable="catalog_product_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" referenceId="CAT_PRD_ENTT_MDA_GLR_VAL_TO_ENTT_VAL_ID_ENTT_ID">
+        <constraint xsi:type="primary" referenceId="CAT_PRD_ENTT_MDA_GLR_VAL_TO_ENTT_VAL_ID_ENTT_ID">
             <column name="value_id"/>
             <column name="entity_id"/>
         </constraint>
