@@ -16,7 +16,7 @@
             <description value="Check country drop-down with one allowed country"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-28511"/>
-            <group value="config"/>
+            <group value="configuration"/>
         </annotations>
         <before>
             <createData entity="EnableAdminAccountAllowCountry" stepKey="setAllowedCountries"/>
