@@ -8,6 +8,7 @@ namespace Magento\Framework\EntityManager;
 
 /**
  * Interface EntityMetadataInterface
+ * @deprecated 103.0.1
  */
 interface EntityMetadataInterface
 {
