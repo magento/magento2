@@ -121,17 +121,17 @@ class InitParamListenerTest extends TestCase
     public function testCreateServiceNotConsole()
     {
         /**
-         * @var ServiceLocatorInterface|MockObject $serviceLocator
+         * @var ServiceLocatorInterface|MockObject $container
          */
-        $serviceLocator = $this->getMockForAbstractClass(ServiceLocatorInterface::class);
+        $container = $this->getMockForAbstractClass(ServiceLocatorInterface::class);
         $mvcApplication = $this->getMockBuilder(Application::class)
             ->disableOriginalConstructor()
             ->getMock();
         $request = $this->getMockForAbstractClass(RequestInterface::class);
         $mvcApplication->expects($this->any())->method('getRequest')->willReturn($request);
-        $serviceLocator->expects($this->once())->method('get')->with('Application')
+        $container->expects($this->once())->method('get')->with('Application')
             ->willReturn($mvcApplication);
-        $this->assertEquals([], $this->listener->createService($serviceLocator));
+        $this->assertEquals([], $this->listener->createService($container));
     }
 
     /**

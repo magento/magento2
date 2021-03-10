@@ -5,10 +5,9 @@
  */
 namespace Magento\Setup\Mvc\Bootstrap;
 
+use Interop\Container\ContainerInterface;
 use Magento\Framework\App\Bootstrap as AppBootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\State;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Shell\ComplexParameter;
@@ -17,11 +16,9 @@ use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\Mvc\Application;
 use Laminas\Mvc\MvcEvent;
-use Laminas\Router\Http\RouteMatch;
-use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Stdlib\RequestInterface;
-use Laminas\Uri\UriInterface;
 
 /**
  * A listener that injects relevant Magento initialization parameters and initializes filesystem
@@ -37,7 +34,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     const BOOTSTRAP_PARAM = 'magento-init-params';
 
     /**
-     * @var \Laminas\Stdlib\CallbackHandler[]
+     * @var callable[]
      */
     private $listeners = [];
 
@@ -97,14 +94,25 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @inheritdoc
+     * Create service. Proxy to the __invoke method
+     *
+     * @deprecared use the __invoke method instead
      *
      * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
+     * @return array
+     * @throws \Interop\Container\Exception\ContainerException
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return $this->extractInitParameters($serviceLocator->get('Application'));
+        return $this($serviceLocator, 'Application');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        return $this->extractInitParameters($container->get('Application'));
     }
 
     /**
