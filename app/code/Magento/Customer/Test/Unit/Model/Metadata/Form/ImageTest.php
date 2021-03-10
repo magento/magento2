@@ -76,27 +76,27 @@ class ImageTest extends AbstractFormTestCase
     private $fileProcessorFactoryMock;
 
     /**
-     * @var File|PHPUnit_Framework_MockObject_MockObject
+     * @var File|\PHPUnit\Framework\MockObject\MockObject
      */
     private $ioFileSystemMock;
 
     /**
-     * @var DirectoryList|PHPUnit_Framework_MockObject_MockObject
+     * @var DirectoryList|\PHPUnit\Framework\MockObject\MockObject
      */
     private $directoryListMock;
 
     /**
-     * @var WriteFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var WriteFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $writeFactoryMock;
 
     /**
-     * @var Write|PHPUnit_Framework_MockObject_MockObject
+     * @var Write|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mediaEntityTmpDirectoryMock;
 
     /**
-     * @var Driver|PHPUnit_Framework_MockObject_MockObject
+     * @var Driver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $driverMock;
 
@@ -251,6 +251,14 @@ class ImageTest extends AbstractFormTestCase
             ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
             ->willReturn(true);
 
+        $this->ioFileSystemMock->expects($this->any())
+            ->method('getPathInfo')
+            ->with($value['name'])
+            ->willReturn([
+                'extension' => 'gif',
+                'filename' => 'logo'
+            ]);
+
         $model = $this->initialize([
             'value' => $value,
             'isAjax' => false,
@@ -304,6 +312,14 @@ class ImageTest extends AbstractFormTestCase
             ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
             ->willReturn(true);
 
+        $this->ioFileSystemMock->expects($this->any())
+            ->method('getPathInfo')
+            ->with($value['name'])
+            ->willReturn([
+                'extension' => 'gif',
+                'filename' => 'logo'
+            ]);
+
         $model = $this->initialize([
             'value' => $value,
             'isAjax' => false,
@@ -356,6 +372,14 @@ class ImageTest extends AbstractFormTestCase
             ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
             ->willReturn(true);
 
+        $this->ioFileSystemMock->expects($this->any())
+            ->method('getPathInfo')
+            ->with($value['name'])
+            ->willReturn([
+                'extension' => 'gif',
+                'filename' => 'logo'
+            ]);
+
         $model = $this->initialize([
             'value' => $value,
             'isAjax' => false,
@@ -407,6 +431,14 @@ class ImageTest extends AbstractFormTestCase
             ->method('isExist')
             ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
             ->willReturn(true);
+
+        $this->ioFileSystemMock->expects($this->any())
+            ->method('getPathInfo')
+            ->with($value['name'])
+            ->willReturn([
+                'extension' => 'gif',
+                'filename' => 'logo'
+            ]);
 
         $model = $this->initialize([
             'value' => $value,

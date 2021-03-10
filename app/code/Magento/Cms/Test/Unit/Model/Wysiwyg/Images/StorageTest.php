@@ -541,10 +541,14 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
+     *
      */
     public function testUploadFileWithExcessivePath()
     {
+        $this->expectException(
+            \Magento\Framework\Exception\LocalizedException::class
+        );
+
         $path = 'target/path';
         $targetPath = self::STORAGE_ROOT_DIR .str_repeat('a', 255) . $path;
         $type = 'image';
