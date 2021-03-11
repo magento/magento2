@@ -44,7 +44,13 @@
             <span><!-- ko i18n: 'Credit Card Number'--><!-- /ko --></span>
         </label>
         <div class="control">
-            <input type="number" name="payment[cc_number]" class="input-text" value=""
+            <input type="number"
+                   name="payment[cc_number]"
+                   oncopy="return false;"
+                   oncut="return false;"
+                   onpaste="return false;"
+                   class="input-text"
+                   value=""
                    data-bind="attr: {
                                     autocomplete: off,
                                     id: getCode() + '_cc_number',
@@ -101,6 +107,9 @@
         <div class="control _with-tooltip">
             <input type="number"
                    autocomplete="off"
+                   oncopy="return false;"
+                   oncut="return false;"
+                   onpaste="return false;"
                    class="input-text cvv"
                    name="payment[cc_cid]"
                    value=""
@@ -119,7 +128,7 @@
                 </span>
                 <div class="field-tooltip-content"
                      data-target="dropdown"
-                     data-bind="html: getCvvImageHtml()"></div>
+                     data-bind="html: getCvvImageUnsanitizedHtml()"></div>
             </div>
         </div>
     </div>
