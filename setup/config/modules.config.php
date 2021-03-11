@@ -12,6 +12,8 @@ return [
     'Magento\Setup',
     'Laminas\Db',
     'Laminas\Di',
+    'Laminas\Filter',
+    'Laminas\Hydrator',
     'Laminas\I18n',
     'Laminas\Log',
     'Laminas\Mail',
