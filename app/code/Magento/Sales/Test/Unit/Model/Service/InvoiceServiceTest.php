@@ -15,35 +15,35 @@ class InvoiceServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Repository
      *
-     * @var \Magento\Sales\Api\InvoiceRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\InvoiceRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $repositoryMock;
 
     /**
      * Repository
      *
-     * @var \Magento\Sales\Api\InvoiceCommentRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\InvoiceCommentRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $commentRepositoryMock;
 
     /**
      * Search Criteria Builder
      *
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchCriteriaBuilderMock;
 
     /**
      * Filter Builder
      *
-     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filterBuilderMock;
 
     /**
      * Invoice Notifier
      *
-     * @var \Magento\Sales\Model\Order\InvoiceNotifier|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\InvoiceNotifier|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $invoiceNotifierMock;
 
@@ -55,7 +55,7 @@ class InvoiceServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * SetUp
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManagerHelper($this);
 
@@ -109,10 +109,10 @@ class InvoiceServiceTest extends \PHPUnit\Framework\TestCase
         $this->repositoryMock->expects($this->once())
             ->method('get')
             ->with($id)
-            ->will($this->returnValue($invoiceMock));
+            ->willReturn($invoiceMock);
         $invoiceMock->expects($this->once())
             ->method('capture')
-            ->will($this->returnValue($returnValue));
+            ->willReturn($returnValue);
 
         $this->assertTrue($this->invoiceService->setCapture($id));
     }
@@ -131,28 +131,28 @@ class InvoiceServiceTest extends \PHPUnit\Framework\TestCase
         $this->filterBuilderMock->expects($this->once())
             ->method('setField')
             ->with('parent_id')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())
             ->method('setValue')
             ->with($id)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())
             ->method('setConditionType')
             ->with('eq')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($filterMock));
+            ->willReturn($filterMock);
         $this->searchCriteriaBuilderMock->expects($this->once())
             ->method('addFilters')
             ->with([$filterMock]);
         $this->searchCriteriaBuilderMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($searchCriteriaMock));
+            ->willReturn($searchCriteriaMock);
         $this->commentRepositoryMock->expects($this->once())
             ->method('getList')
             ->with($searchCriteriaMock)
-            ->will($this->returnValue($returnValue));
+            ->willReturn($returnValue);
 
         $this->assertEquals($returnValue, $this->invoiceService->getCommentsList($id));
     }
@@ -175,11 +175,11 @@ class InvoiceServiceTest extends \PHPUnit\Framework\TestCase
         $this->repositoryMock->expects($this->once())
             ->method('get')
             ->with($id)
-            ->will($this->returnValue($modelMock));
+            ->willReturn($modelMock);
         $this->invoiceNotifierMock->expects($this->once())
             ->method('notify')
             ->with($modelMock)
-            ->will($this->returnValue($returnValue));
+            ->willReturn($returnValue);
 
         $this->assertEquals($returnValue, $this->invoiceService->notify($id));
     }
@@ -197,10 +197,10 @@ class InvoiceServiceTest extends \PHPUnit\Framework\TestCase
         $this->repositoryMock->expects($this->once())
             ->method('get')
             ->with($id)
-            ->will($this->returnValue($invoiceMock));
+            ->willReturn($invoiceMock);
         $invoiceMock->expects($this->once())
             ->method('void')
-            ->will($this->returnValue($returnValue));
+            ->willReturn($returnValue);
 
         $this->assertTrue($this->invoiceService->setVoid($id));
     }

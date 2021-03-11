@@ -51,7 +51,7 @@ class SaveTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->customerRepository = $this->_objectManager->get(CustomerRepositoryInterface::class);
@@ -150,8 +150,9 @@ class SaveTest extends AbstractBackendController
             $this->equalTo($expectedMessage),
             MessageInterface::TYPE_ERROR
         );
-        $this->assertNotEmpty($this->session->getCustomerFormData());
-        $this->assertArraySubset($expectedData, $this->session->getCustomerFormData());
+        $customerFormData = $this->session->getCustomerFormData();
+        unset($customerFormData['form_key']);
+        $this->assertEquals($expectedData, $customerFormData);
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new/key/'));
     }
 
@@ -381,10 +382,12 @@ class SaveTest extends AbstractBackendController
             ]),
             MessageInterface::TYPE_ERROR
         );
-        $this->assertArraySubset(
+        $customerFormData = $this->session->getCustomerFormData();
+        $this->assertNotEmpty($customerFormData);
+        unset($customerFormData['form_key']);
+        $this->assertEquals(
             $postFormatted,
-            $this->session->getCustomerFormData(),
-            true,
+            $customerFormData,
             'Customer form data should be formatted'
         );
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new/key/'));
@@ -504,7 +507,7 @@ class SaveTest extends AbstractBackendController
      * @param array $sender
      * @param int $customerId
      * @param string|null $newEmail
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function prepareEmailMock(
         int $occurrenceNumber,
@@ -512,7 +515,7 @@ class SaveTest extends AbstractBackendController
         array $sender,
         int $customerId,
         $newEmail = null
-    ) : \PHPUnit_Framework_MockObject_MockObject {
+    ) : \PHPUnit\Framework\MockObject\MockObject {
         $area = Area::AREA_FRONTEND;
         $customer = $this->customerRepository->getById($customerId);
         $storeId = $customer->getStoreId();
@@ -560,12 +563,12 @@ class SaveTest extends AbstractBackendController
     /**
      * Add email mock to class
      *
-     * @param \PHPUnit_Framework_MockObject_MockObject $transportBuilderMock
+     * @param \PHPUnit\Framework\MockObject\MockObject $transportBuilderMock
      * @param string $className
      * @return void
      */
     private function addEmailMockToClass(
-        \PHPUnit_Framework_MockObject_MockObject $transportBuilderMock,
+        \PHPUnit\Framework\MockObject\MockObject $transportBuilderMock,
         $className
     ): void {
         $mocked = $this->_objectManager->create(

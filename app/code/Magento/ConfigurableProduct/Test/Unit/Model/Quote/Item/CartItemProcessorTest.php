@@ -6,7 +6,7 @@
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Quote\Item;
 
 use Magento\ConfigurableProduct\Test\Unit\Model\Product\ProductOptionExtensionAttributes;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -43,10 +43,10 @@ class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
      */
     private $productOptionExtensionAttributes;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectFactoryMock = $this->createPartialMock(\Magento\Framework\DataObject\Factory::class, ['create']);
         $this->optionFactoryMock = $this->createPartialMock(

@@ -24,12 +24,12 @@ class ModuleListTest extends \PHPUnit\Framework\TestCase
     private static $enabledFixture = ['foo' => 1, 'bar' => 0];
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $config;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $loader;
 
@@ -38,7 +38,7 @@ class ModuleListTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $this->loader = $this->createMock(\Magento\Framework\Module\ModuleList\Loader::class);

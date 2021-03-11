@@ -16,7 +16,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = new Queue();
     }
@@ -24,7 +24,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
     public function testInstall()
     {
         $channel = $this->createMock(AMQPChannel::class);
-        $binding = $this->createMock(BindingInterface::class);
+        $binding = $this->getMockForAbstractClass(BindingInterface::class);
         $binding->expects($this->once())->method('getDestination')->willReturn('queue01');
         $binding->expects($this->once())->method('getTopic')->willReturn('topic01');
         $binding->expects($this->once())->method('getArguments')->willReturn(['some' => 'value']);

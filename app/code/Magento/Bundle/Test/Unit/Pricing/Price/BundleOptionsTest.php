@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Bundle\Test\Unit\Pricing\Price;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Magento\Framework\Pricing\Amount\AmountFactory;
 use Magento\Framework\Pricing\Adjustment\Calculator as AdjustmentCalculator;
 use Magento\Framework\Pricing\PriceInfo\Base as BasePriceInfo;
@@ -71,7 +71,7 @@ class BundleOptionsTest extends \PHPUnit\Framework\TestCase
      */
     private $priceInfoMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->priceInfoMock = $this->getMockBuilder(BasePriceInfo::class)
             ->disableOriginalConstructor()

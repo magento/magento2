@@ -18,11 +18,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     protected $helper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $className = \Magento\Shipping\Helper\Carrier::class;
@@ -47,8 +47,8 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         )->with(
             'carriers',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        )->will(
-            $this->returnValue($carriers)
+        )->willReturn(
+            $carriers
         );
         $this->assertEquals($result, $this->helper->getOnlineCarrierCodes());
     }
@@ -82,8 +82,8 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         )->with(
             sprintf('carriers/%s/%s', $carrierCode, $configPath),
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        )->will(
-            $this->returnValue($configValue)
+        )->willReturn(
+            $configValue
         );
         $this->assertEquals($configValue, $this->helper->getCarrierConfigValue($carrierCode, $configPath));
     }
@@ -97,11 +97,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         )->with(
             'general/country/eu_countries',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        )->will(
-            $this->returnValue("GB")
+        )->willReturn(
+            "GB"
         );
 
-        $this->assertEquals(true, $this->helper->isCountryInEU("GB"));
-        $this->assertEquals(false, $this->helper->isCountryInEU("US"));
+        $this->assertTrue($this->helper->isCountryInEU("GB"));
+        $this->assertFalse($this->helper->isCountryInEU("US"));
     }
 }

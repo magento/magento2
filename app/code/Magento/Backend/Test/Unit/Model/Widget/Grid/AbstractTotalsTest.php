@@ -8,17 +8,17 @@ namespace Magento\Backend\Test\Unit\Model\Widget\Grid;
 class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var $_model \PHPUnit_Framework_MockObject_MockObject
+     * @var $_model \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_parserMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_factoryMock;
 
@@ -29,7 +29,7 @@ class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
      */
     protected $_columnsValueMap;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_prepareParserMock();
         $this->_prepareFactoryMock();
@@ -44,13 +44,13 @@ class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
             true,
             []
         );
-        $this->_model->expects($this->any())->method('_countSum')->will($this->returnValue(2));
-        $this->_model->expects($this->any())->method('_countAverage')->will($this->returnValue(2));
+        $this->_model->expects($this->any())->method('_countSum')->willReturn(2);
+        $this->_model->expects($this->any())->method('_countAverage')->willReturn(2);
 
         $this->_setUpColumns();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_parserMock);
         unset($this->_factoryMock);
@@ -115,8 +115,8 @@ class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'parseExpression'
-        )->will(
-            $this->returnValueMap($columnsValueMap)
+        )->willReturnMap(
+            $columnsValueMap
         );
 
         $isOperationValueMap = [
@@ -132,8 +132,8 @@ class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'isOperation'
-        )->will(
-            $this->returnValueMap($isOperationValueMap)
+        )->willReturnMap(
+            $isOperationValueMap
         );
     }
 
@@ -169,7 +169,7 @@ class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
             ],
             [[], new \Magento\Framework\DataObject()],
         ];
-        $this->_factoryMock->expects($this->any())->method('create')->will($this->returnValueMap($createValueMap));
+        $this->_factoryMock->expects($this->any())->method('create')->willReturnMap($createValueMap);
     }
 
     public function testColumns()

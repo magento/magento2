@@ -24,22 +24,22 @@ class NotifyStockTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Backend\Block\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Block\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\Catalog\Model\Rss\Product\NotifyStock|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Rss\Product\NotifyStock|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rssModel;
 
     /**
-     * @var \Magento\Framework\App\Rss\UrlBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Rss\UrlBuilderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rssUrlBuilder;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilder;
 
@@ -61,7 +61,7 @@ class NotifyStockTest extends \PHPUnit\Framework\TestCase
         ],
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->rssModel = $this->getMockBuilder(\Magento\Catalog\Model\Rss\Product\NotifyStock::class)
             ->setMethods(['getProductsCollection', '__wakeup'])
@@ -82,25 +82,25 @@ class NotifyStockTest extends \PHPUnit\Framework\TestCase
     public function testGetRssData()
     {
         $this->rssUrlBuilder->expects($this->once())->method('getUrl')
-            ->will($this->returnValue('http://magento.com/rss/feeds/index/type/notifystock'));
+            ->willReturn('http://magento.com/rss/feeds/index/type/notifystock');
         $item = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['__sleep', '__wakeup', 'getId', 'getQty', 'getName'])
             ->disableOriginalConstructor()
             ->getMock();
-        $item->expects($this->once())->method('getId')->will($this->returnValue(1));
-        $item->expects($this->once())->method('getQty')->will($this->returnValue(1));
-        $item->expects($this->any())->method('getName')->will($this->returnValue('Low Stock Product'));
+        $item->expects($this->once())->method('getId')->willReturn(1);
+        $item->expects($this->once())->method('getQty')->willReturn(1);
+        $item->expects($this->any())->method('getName')->willReturn('Low Stock Product');
 
         $this->rssModel->expects($this->once())->method('getProductsCollection')
-            ->will($this->returnValue([$item]));
+            ->willReturn([$item]);
         $this->urlBuilder->expects($this->once())->method('getUrl')
             ->with('catalog/product/edit', ['id' => 1, '_secure' => true, '_nosecret' => true])
-            ->will($this->returnValue('http://magento.com/catalog/product/edit/id/1'));
+            ->willReturn('http://magento.com/catalog/product/edit/id/1');
 
         $data = $this->block->getRssData();
-        $this->assertTrue(is_string($data['title']));
-        $this->assertTrue(is_string($data['description']));
-        $this->assertTrue(is_string($data['entries'][0]['description']));
+        $this->assertIsString($data['title']);
+        $this->assertIsString($data['description']);
+        $this->assertIsString($data['entries'][0]['description']);
         $this->assertEquals($this->rssFeed, $data);
     }
 

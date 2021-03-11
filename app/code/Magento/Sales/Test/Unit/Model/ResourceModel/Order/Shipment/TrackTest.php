@@ -16,34 +16,34 @@ class TrackTest extends \PHPUnit\Framework\TestCase
     protected $trackResource;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment\Track|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Shipment\Track|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $trackModelMock;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $appResourceMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment\Track\Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Shipment\Track\Validator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $validatorMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entitySnapshotMock;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->trackModelMock = $this->createMock(\Magento\Sales\Model\Order\Shipment\Track::class);
         $this->appResourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
@@ -54,16 +54,16 @@ class TrackTest extends \PHPUnit\Framework\TestCase
         );
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
         $this->connectionMock->expects($this->any())
             ->method('describeTable')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->connectionMock->expects($this->any())
             ->method('insert');
         $this->connectionMock->expects($this->any())
             ->method('lastInsertId');
-        $this->trackModelMock->expects($this->any())->method('hasDataChanges')->will($this->returnValue(true));
-        $this->trackModelMock->expects($this->any())->method('isSaveAllowed')->will($this->returnValue(true));
+        $this->trackModelMock->expects($this->any())->method('hasDataChanges')->willReturn(true);
+        $this->trackModelMock->expects($this->any())->method('isSaveAllowed')->willReturn(true);
 
         $relationProcessorMock = $this->createMock(
             \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class
@@ -96,7 +96,7 @@ class TrackTest extends \PHPUnit\Framework\TestCase
         $this->validatorMock->expects($this->once())
             ->method('validate')
             ->with($this->equalTo($this->trackModelMock))
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->trackModelMock->expects($this->any())->method('getData')->willReturn([]);
         $this->trackResource->save($this->trackModelMock);
         $this->assertTrue(true);
@@ -105,11 +105,12 @@ class TrackTest extends \PHPUnit\Framework\TestCase
     /**
      * Test _beforeSaveMethod via save() with failed validation
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Cannot save track:
      */
     public function testSaveValidationFailed()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Cannot save track:');
+
         $this->entitySnapshotMock->expects($this->once())
             ->method('isModified')
             ->with($this->trackModelMock)
@@ -117,7 +118,7 @@ class TrackTest extends \PHPUnit\Framework\TestCase
         $this->validatorMock->expects($this->once())
             ->method('validate')
             ->with($this->equalTo($this->trackModelMock))
-            ->will($this->returnValue(['warning message']));
+            ->willReturn(['warning message']);
         $this->trackModelMock->expects($this->any())->method('getData')->willReturn([]);
         $this->trackResource->save($this->trackModelMock);
         $this->assertTrue(true);

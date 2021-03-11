@@ -9,12 +9,12 @@ use Magento\Backend\App\Action\Plugin\Authentication;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Class AuthenticationTest
+ * Test for Authentication
  */
 class AuthenticationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Backend\Model\Auth | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Auth | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $auth;
 
@@ -23,7 +23,7 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
      */
     protected $plugin;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->auth = $this->createPartialMock(
             \Magento\Backend\Model\Auth::class,
@@ -36,7 +36,7 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->auth = null;
         $this->plugin = null;
@@ -55,17 +55,17 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
 
         $this->auth->expects($this->any())
             ->method('getUser')
-            ->will($this->returnValue($user));
+            ->willReturn($user);
         $this->auth->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue($loggedIn));
+            ->willReturn($loggedIn);
         $this->auth->expects($this->any())
             ->method('getAuthStorage')
-            ->will($this->returnValue($storage));
+            ->willReturn($storage);
 
         $request->expects($this->once())
             ->method('getActionName')
-            ->will($this->returnValue($action));
+            ->willReturn($action);
 
         $user->expects($this->once())
             ->method('reload');
@@ -101,10 +101,10 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         // Stubs to control the flow of execution in aroundDispatch
-        $this->auth->expects($this->any())->method('getAuthStorage')->will($this->returnValue($storage));
-        $request->expects($this->once())->method('getActionName')->will($this->returnValue('non/open/action/name'));
+        $this->auth->expects($this->any())->method('getAuthStorage')->willReturn($storage);
+        $request->expects($this->once())->method('getActionName')->willReturn('non/open/action/name');
         $this->auth->expects($this->any())->method('getUser')->willReturn(false);
-        $this->auth->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
+        $this->auth->expects($this->once())->method('isLoggedIn')->willReturn(false);
         $request->expects($this->any())->method('getPost')->willReturn(false);
 
         // Test cases and expectations based on provided data

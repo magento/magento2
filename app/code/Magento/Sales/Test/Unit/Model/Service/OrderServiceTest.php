@@ -21,66 +21,66 @@ class OrderServiceTest extends \PHPUnit\Framework\TestCase
     protected $orderService;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Api\OrderRepositoryInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Api\OrderRepositoryInterface
      */
     protected $orderRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Api\OrderStatusHistoryRepositoryInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Api\OrderStatusHistoryRepositoryInterface
      */
     protected $orderStatusHistoryRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\SearchCriteriaBuilder
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Api\SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\SearchCriteria
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Api\SearchCriteria
      */
     protected $searchCriteriaMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\FilterBuilder
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Api\FilterBuilder
      */
     protected $filterBuilderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\Filter
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Api\Filter
      */
     protected $filterMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\OrderNotifier
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Model\OrderNotifier
      */
     protected $orderNotifierMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Model\Order
      */
     protected $orderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order\Status\History
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Model\Order\Status\History
      */
     protected $orderStatusHistoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Api\Data\OrderStatusHistorySearchResultInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Api\Data\OrderStatusHistorySearchResultInterface
      */
     protected $orderSearchResultMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event\ManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Event\ManagerInterface
      */
     protected $eventManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order\Email\Sender\OrderCommentSender
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Model\Order\Email\Sender\OrderCommentSender
      */
     protected $orderCommentSender;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderRepositoryMock = $this->getMockBuilder(
             \Magento\Sales\Api\OrderRepositoryInterface::class
@@ -143,11 +143,11 @@ class OrderServiceTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var PaymentFailuresInterface|\PHPUnit_Framework_MockObject_MockObject  $paymentFailures */
-        $paymentFailures = $this->createMock(PaymentFailuresInterface::class);
+        /** @var PaymentFailuresInterface|\PHPUnit\Framework\MockObject\MockObject  $paymentFailures */
+        $paymentFailures = $this->getMockForAbstractClass(PaymentFailuresInterface::class);
 
-        /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $logger */
-        $logger = $this->createMock(LoggerInterface::class);
+        /** @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject $logger */
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->orderService = new \Magento\Sales\Model\Service\OrderService(
             $this->orderRepositoryMock,

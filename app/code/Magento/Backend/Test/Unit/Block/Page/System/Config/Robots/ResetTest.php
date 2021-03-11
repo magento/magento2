@@ -10,9 +10,8 @@
 namespace Magento\Backend\Test\Unit\Block\Page\System\Config\Robots;
 
 /**
- * Class ResetTest
- * @deprecated
- * @package Magento\Backend\Test\Unit\Block\Page\System\Config\Robots
+ * Test for Reset
+ * @deprecated no alternative defined
  */
 class ResetTest extends \PHPUnit\Framework\TestCase
 {
@@ -22,11 +21,11 @@ class ResetTest extends \PHPUnit\Framework\TestCase
     private $_resetRobotsBlock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
@@ -45,7 +44,7 @@ class ResetTest extends \PHPUnit\Framework\TestCase
     public function testGetRobotsDefaultCustomInstructions()
     {
         $expectedInstructions = 'User-agent: *';
-        $this->configMock->expects($this->once())->method('getValue')->will($this->returnValue($expectedInstructions));
+        $this->configMock->expects($this->once())->method('getValue')->willReturn($expectedInstructions);
         $this->assertEquals($expectedInstructions, $this->_resetRobotsBlock->getRobotsDefaultCustomInstructions());
     }
 }

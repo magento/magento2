@@ -21,11 +21,11 @@ class ActionsTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\AbstractElement|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\Element\AbstractElement|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_element;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->actions = $this->objectManagerHelper->getObject(\Magento\Rule\Model\Renderer\Actions::class);
@@ -45,15 +45,15 @@ class ActionsTest extends \PHPUnit\Framework\TestCase
 
         $this->_element->expects($this->any())
             ->method('getRule')
-            ->will($this->returnValue($rule));
+            ->willReturn($rule);
 
         $rule->expects($this->any())
             ->method('getActions')
-            ->will($this->returnValue($actions));
+            ->willReturn($actions);
 
         $actions->expects($this->once())
             ->method('asHtmlRecursive')
-            ->will($this->returnValue('action html'));
+            ->willReturn('action html');
 
         $this->assertEquals('action html', $this->actions->render($this->_element));
     }

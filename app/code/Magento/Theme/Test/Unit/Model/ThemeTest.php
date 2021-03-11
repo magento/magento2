@@ -19,51 +19,51 @@ use Magento\Theme\Model\Theme;
 class ThemeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Theme\Model\Theme|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\Theme|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_imageFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Design\Theme\FlyweightFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Design\Theme\FlyweightFactory
      */
     protected $themeFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Theme\Model\ResourceModel\Theme\Collection
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Theme\Model\ResourceModel\Theme\Collection
      */
     protected $resourceCollection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Design\Theme\Domain\Factory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Design\Theme\Domain\Factory
      */
     protected $domainFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Design\Theme\Validator
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Design\Theme\Validator
      */
     protected $validator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Design\Theme\CustomizationFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Design\Theme\CustomizationFactory
      */
     protected $customizationFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\State
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\State
      */
     protected $appState;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Theme\Model\ThemeFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Theme\Model\ThemeFactory
      */
     private $themeModelFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $customizationConfig = $this->createMock(\Magento\Theme\Model\Config\Customization::class);
         $this->customizationFactory = $this->createPartialMock(
@@ -106,7 +106,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
         $this->_model = $objectManagerHelper->getObject(\Magento\Theme\Model\Theme::class, $arguments);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_model = null;
     }
@@ -203,7 +203,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     public function testIsDeletable($themeType, $isDeletable)
     {
         $themeModel = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['getType']);
-        $themeModel->expects($this->once())->method('getType')->will($this->returnValue($themeType));
+        $themeModel->expects($this->once())->method('getType')->willReturn($themeType);
         /** @var $themeModel \Magento\Theme\Model\Theme */
         $this->assertEquals($isDeletable, $themeModel->isDeletable());
     }
@@ -354,22 +354,24 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
      * @return void
      */
     public function testGetDomainModelWithIncorrectType()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->_model->getDomainModel('bla-bla-bla');
     }
 
     /**
      * @test
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage testMessage
      * @return void
      */
     public function testValidate()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('testMessage');
+
         $this->validator->expects($this->once())
             ->method('validate')
             ->with($this->_model)

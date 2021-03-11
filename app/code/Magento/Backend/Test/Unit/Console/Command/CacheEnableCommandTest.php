@@ -11,7 +11,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class CacheEnableCommandTest extends AbstractCacheSetCommandTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->command = new CacheEnableCommand($this->cacheManagerMock);

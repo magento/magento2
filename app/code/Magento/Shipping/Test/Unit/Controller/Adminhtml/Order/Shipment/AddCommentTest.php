@@ -13,47 +13,47 @@ namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 class AddCommentTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $shipmentLoaderMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $shipmentCommentSenderMock;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultPageMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Shipment|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $shipmentMock;
 
     /**
-     * @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ViewInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $viewInterfaceMock;
 
     /**
-     * @var \Magento\Framework\View\Result\LayoutFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\LayoutFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultLayoutFactoryMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
@@ -62,7 +62,7 @@ class AddCommentTest extends \PHPUnit\Framework\TestCase
      */
     protected $controller;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->shipmentLoaderMock = $this->createPartialMock(
             \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class,
@@ -100,16 +100,16 @@ class AddCommentTest extends \PHPUnit\Framework\TestCase
             \Magento\Backend\App\Action\Context::class,
             ['getRequest', 'getResponse', 'getTitle', 'getView', 'getObjectManager', '__wakeup']
         );
-        $this->viewInterfaceMock->expects($this->any())->method('getPage')->will(
-            $this->returnValue($this->resultPageMock)
+        $this->viewInterfaceMock->expects($this->any())->method('getPage')->willReturn(
+            $this->resultPageMock
         );
 
-        $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
-        $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
-        $contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewInterfaceMock));
+        $contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
+        $contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
+        $contextMock->expects($this->any())->method('getView')->willReturn($this->viewInterfaceMock);
         $contextMock->expects($this->any())
             ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManagerMock));
+            ->willReturn($this->objectManagerMock);
 
         $this->controller = new \Magento\Shipping\Controller\Adminhtml\Order\Shipment\AddComment(
             $contextMock,
@@ -128,8 +128,8 @@ class AddCommentTest extends \PHPUnit\Framework\TestCase
     {
         $dataMock = $this->createPartialMock(\Magento\Framework\Json\Helper\Data::class, ['jsonEncode']);
 
-        $this->objectManagerMock->expects($this->once())->method('get')->will($this->returnValue($dataMock));
-        $dataMock->expects($this->once())->method('jsonEncode')->will($this->returnValue('{json-data}'));
+        $this->objectManagerMock->expects($this->once())->method('get')->willReturn($dataMock);
+        $dataMock->expects($this->once())->method('jsonEncode')->willReturn('{json-data}');
         $this->responseMock->expects($this->once())->method('representJson')->with('{json-data}');
     }
 
@@ -154,11 +154,11 @@ class AddCommentTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getPost')
             ->with('comment')
-            ->will($this->returnValue($data));
+            ->willReturn($data);
         $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         ['id', null, $shipmentId],
                         ['order_id', null, $orderId],
@@ -166,7 +166,7 @@ class AddCommentTest extends \PHPUnit\Framework\TestCase
                         ['shipment', null, $shipment],
                         ['tracking', null, $tracking],
                     ]
-                )
+                
             );
         $this->shipmentLoaderMock->expects($this->once())->method('setOrderId')->with($orderId);
         $this->shipmentLoaderMock->expects($this->once())->method('setShipmentId')->with($shipmentId);
@@ -174,7 +174,7 @@ class AddCommentTest extends \PHPUnit\Framework\TestCase
         $this->shipmentLoaderMock->expects($this->once())->method('setTracking')->with($tracking);
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($this->shipmentMock));
+            ->willReturn($this->shipmentMock);
         $this->shipmentMock->expects($this->once())->method('addComment');
         $this->shipmentCommentSenderMock->expects($this->once())->method('send');
         $this->shipmentMock->expects($this->once())->method('save');
@@ -186,7 +186,7 @@ class AddCommentTest extends \PHPUnit\Framework\TestCase
         $resultLayoutMock->expects($this->once())->method('getLayout')->willReturn($layoutMock);
         $resultLayoutMock->expects($this->once())->method('addDefaultHandle');
         $this->resultLayoutFactoryMock->expects($this->once())->method('create')
-            ->will($this->returnValue($resultLayoutMock));
+            ->willReturn($resultLayoutMock);
         $this->responseMock->expects($this->once())->method('setBody')->with($result);
 
         $this->assertNull($this->controller->execute());
@@ -205,8 +205,8 @@ class AddCommentTest extends \PHPUnit\Framework\TestCase
 
         $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         ['id', null, $shipmentId],
                         ['order_id', null, $orderId],
@@ -214,10 +214,10 @@ class AddCommentTest extends \PHPUnit\Framework\TestCase
                         ['shipment', null, $shipment],
                         ['tracking', null, $tracking],
                     ]
-                )
+                
             );
         $this->requestMock->expects($this->once())->method('setParam')->with('shipment_id', $shipmentId);
-        $this->requestMock->expects($this->once())->method('getPost')->with('comment')->will($this->returnValue($data));
+        $this->requestMock->expects($this->once())->method('getPost')->with('comment')->willReturn($data);
         $this->shipmentLoaderMock->expects($this->once())->method('setOrderId')->with($orderId);
         $this->shipmentLoaderMock->expects($this->once())->method('setShipmentId')->with($shipmentId);
         $this->shipmentLoaderMock->expects($this->once())->method('setShipment')->with($shipment);
@@ -239,9 +239,9 @@ class AddCommentTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('id')
-            ->will($this->returnValue($shipmentId));
+            ->willReturn($shipmentId);
         $this->requestMock->expects($this->once())->method('setParam')->with('shipment_id', $shipmentId);
-        $this->requestMock->expects($this->once())->method('getPost')->with('comment')->will($this->returnValue([]));
+        $this->requestMock->expects($this->once())->method('getPost')->with('comment')->willReturn([]);
         $this->exceptionResponse();
 
         $this->assertNull($this->controller->execute());
@@ -262,11 +262,11 @@ class AddCommentTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getPost')
             ->with('comment')
-            ->will($this->returnValue($data));
+            ->willReturn($data);
         $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         ['id', null, $shipmentId],
                         ['order_id', null, $orderId],
@@ -274,7 +274,7 @@ class AddCommentTest extends \PHPUnit\Framework\TestCase
                         ['shipment', null, $shipment],
                         ['tracking', null, $tracking],
                     ]
-                )
+                
             );
         $this->shipmentLoaderMock->expects($this->once())->method('setOrderId')->with($orderId);
         $this->shipmentLoaderMock->expects($this->once())->method('setShipmentId')->with($shipmentId);
@@ -282,7 +282,7 @@ class AddCommentTest extends \PHPUnit\Framework\TestCase
         $this->shipmentLoaderMock->expects($this->once())->method('setTracking')->with($tracking);
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($this->shipmentMock));
+            ->willReturn($this->shipmentMock);
         $this->shipmentMock->expects($this->once())->method('addComment');
         $this->shipmentCommentSenderMock->expects($this->once())->method('send');
         $this->shipmentMock->expects($this->once())->method('save')->will($this->throwException(new \Exception()));

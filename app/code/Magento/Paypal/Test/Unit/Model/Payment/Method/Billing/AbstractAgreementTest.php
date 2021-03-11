@@ -22,12 +22,12 @@ use Magento\Quote\Model\Quote\Payment;
 class AbstractAgreementTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var \Magento\Paypal\Model\Billing\AgreementFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Paypal\Model\Billing\AgreementFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $agreementFactory;
 
@@ -36,7 +36,7 @@ class AbstractAgreementTest extends \PHPUnit\Framework\TestCase
      */
     private $payment;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 

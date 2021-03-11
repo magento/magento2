@@ -15,10 +15,10 @@ class StoreGroupTest extends \PHPUnit\Framework\TestCase
     /** @var StoreGroup */
     protected $model;
 
-    /** @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject */
     protected $indexerRegistryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->indexerRegistryMock = $this->getMockBuilder(\Magento\Framework\Indexer\IndexerRegistry::class)
             ->disableOriginalConstructor()
@@ -29,12 +29,12 @@ class StoreGroupTest extends \PHPUnit\Framework\TestCase
 
     public function testAfterDelete()
     {
-        /** @var \Magento\Store\Model\Group|\PHPUnit_Framework_MockObject_MockObject $subjectMock */
+        /** @var \Magento\Store\Model\Group|\PHPUnit\Framework\MockObject\MockObject $subjectMock */
         $subjectMock = $this->getMockBuilder(\Magento\Store\Model\Group::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var IndexerInterface|\PHPUnit_Framework_MockObject_MockObject $indexerMock */
+        /** @var IndexerInterface|\PHPUnit\Framework\MockObject\MockObject $indexerMock */
         $indexerMock = $this->getMockBuilder(\Magento\Framework\Indexer\IndexerInterface::class)
             ->getMockForAbstractClass();
         $indexerMock->expects($this->once())

@@ -15,7 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class GroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var GroupSourceLoggedInOnlyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupSourceLoggedInOnlyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $groupSource;
 
@@ -25,18 +25,18 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $groupServiceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $converterMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->groupServiceMock = $this->createMock(GroupManagementInterface::class);
+        $this->groupServiceMock = $this->getMockForAbstractClass(GroupManagementInterface::class);
         $this->converterMock = $this->createMock(DataObject::class);
         $this->groupSource = $this->getMockBuilder(GroupSourceLoggedInOnlyInterface::class)
             ->getMockForAbstractClass();

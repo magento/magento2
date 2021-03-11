@@ -16,7 +16,7 @@ class SerializedToJsonTest extends \PHPUnit\Framework\TestCase
      */
     private $serializedToJson;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->serializedToJson =  new SerializedToJson(
             new Serialize(),

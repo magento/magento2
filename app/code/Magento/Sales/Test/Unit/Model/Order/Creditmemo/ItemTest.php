@@ -10,14 +10,14 @@ use Magento\Sales\Api\Data\CreditmemoItemInterface;
 class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderItemFactoryMock;
 
     /** @var \Magento\Sales\Model\Order\Creditmemo\Item */
     protected $item;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->orderItemFactoryMock = $this->getMockBuilder(\Magento\Sales\Model\Order\ItemFactory::class)
@@ -149,11 +149,12 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage We found an invalid quantity to refund item "test".
      */
     public function testRegisterWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('We found an invalid quantity to refund item "test".');
+
         $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getQtyRefunded'])
@@ -221,11 +222,11 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $creditmemoMock->expects($this->exactly(4))
             ->method('roundPrice')
-            ->will($this->returnCallback(
+            ->willReturnCallback(
                 function ($arg) {
                     return round($arg, 2);
                 }
-            ));
+            );
 
         $qtyInvoiced = 10;
         $qtyRefunded = 2;

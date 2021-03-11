@@ -33,7 +33,7 @@ class IoTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Code\Generator\Io */
     protected $_object;
 
-    /** @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject */
     protected $_filesystemDriverMock;
 
     /** @var string */
@@ -42,7 +42,7 @@ class IoTest extends \PHPUnit\Framework\TestCase
     /** @var string */
     protected $nonExistingFile = '/Magento/Class/Does/Not/Exists.php';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_generationDirectory = rtrim(self::GENERATION_DIRECTORY, '/') . '/';
 
@@ -54,7 +54,7 @@ class IoTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_generationDirectory);
         unset($this->_filesystemMock);
@@ -147,8 +147,8 @@ class IoTest extends \PHPUnit\Framework\TestCase
             'isWritable'
         )->with(
             $this->equalTo($this->_generationDirectory)
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $this->assertTrue($this->_object->makeGenerationDirectory());
@@ -162,8 +162,8 @@ class IoTest extends \PHPUnit\Framework\TestCase
             'isWritable'
         )->with(
             $this->equalTo($this->_generationDirectory)
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
 
         $this->_filesystemDriverMock->expects(
@@ -173,8 +173,8 @@ class IoTest extends \PHPUnit\Framework\TestCase
         )->with(
             $this->equalTo($this->_generationDirectory),
             $this->anything()
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $this->assertTrue($this->_object->makeGenerationDirectory());
@@ -198,8 +198,8 @@ class IoTest extends \PHPUnit\Framework\TestCase
             'isExists'
         )->with(
             $this->equalTo($fileName)
-        )->will(
-            $this->returnValue($exists)
+        )->willReturn(
+            $exists
         );
 
         $this->assertSame($exists, $this->_object->fileExists($fileName));

@@ -15,7 +15,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
      */
     private $responseModel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->responseModel = $objectManager->getObject(
@@ -32,7 +32,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
      */
     protected function generateHash($merchantMd5, $merchantApiLogin, $amount, $transactionId)
     {
-        return strtoupper(md5($merchantMd5 . $merchantApiLogin . $transactionId . $amount));
+        return strtoupper(md5($merchantMd5 . $merchantApiLogin . $transactionId . $amount));//phpcs:ignore
     }
 
     /**

@@ -18,7 +18,7 @@ use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 class DocumentRootTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
@@ -27,7 +27,7 @@ class DocumentRootTest extends \PHPUnit\Framework\TestCase
      */
     private $documentRoot;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
@@ -54,7 +54,7 @@ class DocumentRootTest extends \PHPUnit\Framework\TestCase
     {
         $this->configMockSetForDocumentRootIsPub();
 
-        $this->assertSame(true, $this->documentRoot->isPub());
+        $this->assertTrue($this->documentRoot->isPub());
     }
 
     private function configMockSetForDocumentRootIsPub()

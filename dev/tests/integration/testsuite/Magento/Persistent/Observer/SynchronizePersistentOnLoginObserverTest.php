@@ -68,7 +68,7 @@ class SynchronizePersistentOnLoginObserverTest extends TestCase
     /**
      * @inheritDoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -84,7 +84,7 @@ class SynchronizePersistentOnLoginObserverTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->persistentSessionHelper->setRememberMeChecked(null);
         $this->customerSession->logout();

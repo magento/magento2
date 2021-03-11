@@ -27,80 +27,82 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class CategoryTest extends \PHPUnit\Framework\TestCase
 {
+    private const STUB_PRIMARY_KEY = 'PK';
+
     /**
      * @var Category
      */
     protected $category;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|\PHPUnit\Framework\MockObject\MockObject
      */
     private $selectMock;
 
     /**
-     * @var Adapter|\PHPUnit_Framework_MockObject_MockObject
+     * @var Adapter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceMock;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eavConfigMock;
 
     /**
-     * @var Type|\PHPUnit_Framework_MockObject_MockObject
+     * @var Type|\PHPUnit\Framework\MockObject\MockObject
      */
     private $entityType;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $factoryMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $managerMock;
 
     /**
-     * @var Category\TreeFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Category\TreeFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $treeFactoryMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
     /**
-     * @var Processor|\PHPUnit_Framework_MockObject_MockObject
+     * @var Processor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $indexerProcessorMock;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->selectMock = $this->getMockBuilder(Select::class)->disableOriginalConstructor()->getMock();
         $this->selectMock->expects($this->at(2))->method('where')->willReturnSelf();
@@ -160,12 +162,20 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->connectionMock->expects($this->once())->method('fetchCol')->willReturn(['result']);
         $this->serializerMock->expects($this->once())
             ->method('serialize')
-            ->will(
-                $this->returnCallback(
-                    function ($value) {
-                        return json_encode($value);
-                    }
-                )
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
+            );
+
+        $this->connectionMock->method('getPrimaryKeyName')->willReturn(self::STUB_PRIMARY_KEY);
+        $this->connectionMock->method('getIndexList')
+            ->willReturn(
+                [
+                    self::STUB_PRIMARY_KEY => [
+                        'COLUMNS_LIST' => ['Column']
+                    ]
+                ]
             );
 
         $result = $this->category->findWhereAttributeIs($entityIdsFilter, $attribute, $expectedValue);

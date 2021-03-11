@@ -11,17 +11,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ImageMagickTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject |\Magento\Framework\Filesystem
+     * @var \PHPUnit\Framework\MockObject\MockObject |\Magento\Framework\Filesystem
      */
     protected $filesystemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject |\Psr\Log\LoggerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject |\Psr\Log\LoggerInterface
      */
     protected $loggerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Filesystem\Directory\WriteInterface
      */
     protected $writeMock;
 
@@ -30,7 +30,7 @@ class ImageMagickTest extends \PHPUnit\Framework\TestCase
      */
     protected $imageMagic;
 
-    public function setup()
+    protected function setup(): void
     {
         $objectManager = new ObjectManager($this);
         $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)->getMock();
@@ -79,11 +79,12 @@ class ImageMagickTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Unable to write file into directory product/cache. Access forbidden.
      */
     public function testSaveWithException()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Unable to write file into directory product/cache. Access forbidden.');
+
         $exception = new FileSystemException(
             new \Magento\Framework\Phrase('Unable to write file into directory product/cache. Access forbidden.')
         );
@@ -93,10 +94,11 @@ class ImageMagickTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testOpenInvalidUrl()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->imageMagic->open('bar://foo.bar');
     }
 }

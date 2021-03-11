@@ -20,21 +20,21 @@ use Symfony\Component\Console\Tester\CommandTester;
 class AdminUserCreateCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Console\Helper\QuestionHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\Console\Helper\QuestionHelper
      */
     private $questionHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\InstallerFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\InstallerFactory
      */
     private $installerFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|AdminUserCreateCommand
+     * @var \PHPUnit\Framework\MockObject\MockObject|AdminUserCreateCommand
      */
     private $command;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->installerFactoryMock = $this->createMock(\Magento\Setup\Model\InstallerFactory::class);
         $this->command = new AdminUserCreateCommand($this->installerFactoryMock, new UserValidationRules());
@@ -76,23 +76,23 @@ class AdminUserCreateCommandTest extends \PHPUnit\Framework\TestCase
 
         $this->questionHelperMock->expects($this->at(0))
             ->method('ask')
-            ->will($this->returnValue('admin'));
+            ->willReturn('admin');
 
         $this->questionHelperMock->expects($this->at(1))
             ->method('ask')
-            ->will($this->returnValue('Password123'));
+            ->willReturn('Password123');
 
         $this->questionHelperMock->expects($this->at(2))
             ->method('ask')
-            ->will($this->returnValue('john.doe@example.com'));
+            ->willReturn('john.doe@example.com');
 
         $this->questionHelperMock->expects($this->at(3))
             ->method('ask')
-            ->will($this->returnValue('John'));
+            ->willReturn('John');
 
         $this->questionHelperMock->expects($this->at(4))
             ->method('ask')
-            ->will($this->returnValue('Doe'));
+            ->willReturn('Doe');
 
         // We override the standard helper with our mock
         $this->command->getHelperSet()->set($this->questionHelperMock, 'question');

@@ -38,7 +38,7 @@ class HistoryTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -51,7 +51,7 @@ class HistoryTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->customerSession->logout();
 
@@ -66,7 +66,7 @@ class HistoryTest extends TestCase
     public function testCustomerOrderGridWithoutOrders(): void
     {
         $this->customerSession->loginById(1);
-        $this->assertContains((string)__('You have placed no orders.'), strip_tags($this->block->toHtml()));
+        $this->assertStringContainsString((string)__('You have placed no orders.'), strip_tags($this->block->toHtml()));
     }
 
     /**

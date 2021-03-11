@@ -38,7 +38,7 @@ class CacheIdentifierPluginTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up data for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->designExceptionsMock = $this->createPartialMock(
             \Magento\Framework\View\DesignExceptions::class,
@@ -73,13 +73,13 @@ class CacheIdentifierPluginTest extends \PHPUnit\Framework\TestCase
 
         $this->pageCacheConfigMock->expects($this->once())
             ->method('getType')
-            ->will($this->returnValue($cacheType));
+            ->willReturn($cacheType);
         $this->pageCacheConfigMock->expects($this->any())
             ->method('isEnabled')
-            ->will($this->returnValue($isPageCacheEnabled));
+            ->willReturn($isPageCacheEnabled);
         $this->designExceptionsMock->expects($this->any())
             ->method('getThemeByRequest')
-            ->will($this->returnValue($uaException));
+            ->willReturn($uaException);
 
         $this->assertEquals($expected, $this->plugin->afterGetValue($identifierMock, $result));
     }

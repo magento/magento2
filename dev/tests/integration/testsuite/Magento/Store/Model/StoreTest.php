@@ -28,7 +28,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     protected $modelParams;
 
     /**
-     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
@@ -37,13 +37,13 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      */
     private $request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = $this->_getStoreModel();
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Store
+     * @return \PHPUnit\Framework\MockObject\MockObject|Store
      */
     protected function _getStoreModel()
     {
@@ -79,7 +79,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->getMock();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->model = null;
     }
@@ -306,7 +306,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->willReturn('http://localhost/index.php?' .SidResolverInterface::SESSION_ID_QUERY_PARAM .'=12345');
         $this->request->setParams([SidResolverInterface::SESSION_ID_QUERY_PARAM, '12345']);
         $this->request->setQueryValue(SidResolverInterface::SESSION_ID_QUERY_PARAM, '12345');
-        $this->assertContains(SidResolverInterface::SESSION_ID_QUERY_PARAM .'=12345', $this->model->getCurrentUrl());
+        $this->assertStringContainsString(SidResolverInterface::SESSION_ID_QUERY_PARAM . '=12345', $this->model->getCurrentUrl());
 
         /** @var \Magento\Store\Model\Store $secondStore */
         $secondStore = $objectManager->get(StoreRepositoryInterface::class)->get('secondstore');
@@ -405,10 +405,11 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      * @magentoAppIsolation enabled
      * @magentoAppArea adminhtml
      * @magentoDbIsolation enabled
-     * @expectedException \Magento\Framework\Exception\LocalizedException
+     *
      */
     public function testSaveValidation($badStoreData)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $normalStoreData = [
             'code' => 'test',
             'website_id' => 1,

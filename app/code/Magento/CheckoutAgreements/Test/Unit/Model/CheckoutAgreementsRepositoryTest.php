@@ -20,17 +20,17 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $factoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
@@ -40,41 +40,41 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $agrFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $agreementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $extensionAttributesJoinProcessorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $agreementsListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $agreementsFilterMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -124,7 +124,7 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
             ->with('checkout/options/enable_agreements', ScopeInterface::SCOPE_STORE, null)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->factoryMock->expects($this->never())->method('create');
         $this->assertEmpty($this->model->getList());
     }
@@ -134,7 +134,7 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
             ->with('checkout/options/enable_agreements', ScopeInterface::SCOPE_STORE, null)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
         $this->agreementsFilterMock->expects($this->once())
@@ -181,10 +181,11 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSaveWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+
         $this->agreementMock->expects($this->exactly(2))->method('getAgreementId')->willReturn(null);
         $this->agrFactoryMock->expects($this->never())->method('create');
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
@@ -212,10 +213,11 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function testDeleteByIdWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotDeleteException::class);
+
         $agreementId = 1;
         $this->agrFactoryMock->expects($this->once())->method('create')->willReturn($this->agreementMock);
         $this->resourceMock

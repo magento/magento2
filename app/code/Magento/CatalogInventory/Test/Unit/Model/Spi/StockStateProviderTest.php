@@ -24,32 +24,32 @@ class StockStateProviderTest extends \PHPUnit\Framework\TestCase
     protected $stockStateProvider;
 
     /**
-     * @var \Magento\Catalog\Model\ProductFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ProductFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $product;
 
     /**
-     * @var \Magento\Framework\Math\Division|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Math\Division|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mathDivision;
 
     /**
-     * @var \Magento\Framework\Locale\FormatInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Locale\FormatInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeFormat;
 
     /**
-     * @var \Magento\Framework\DataObject\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectFactory;
 
     /**
-     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $object;
 
@@ -105,15 +105,14 @@ class StockStateProviderTest extends \PHPUnit\Framework\TestCase
         'getProductName',
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->mathDivision = $this->createPartialMock(\Magento\Framework\Math\Division::class, ['getExactDivision']);
 
-        $this->localeFormat = $this->getMockForAbstractClass(
-            \Magento\Framework\Locale\FormatInterface::class,
-            ['getNumber']
+        $this->localeFormat = $this->createMock(
+            \Magento\Framework\Locale\FormatInterface::class
         );
         $this->localeFormat->expects($this->any())
             ->method('getNumber')
@@ -142,7 +141,7 @@ class StockStateProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->stockStateProvider = null;
     }

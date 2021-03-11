@@ -15,16 +15,16 @@ class LocaleQuantityProcessorTest extends \PHPUnit\Framework\TestCase
     protected $processor;
 
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resolver;
 
     /**
-     * @var \Magento\Framework\Filter\LocalizedToNormalized|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filter\LocalizedToNormalized|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resolver = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)->getMock();
         $this->filter   = $this->getMockBuilder(\Magento\Framework\Filter\LocalizedToNormalized::class)

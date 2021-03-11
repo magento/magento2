@@ -14,40 +14,40 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  */
 class ShowTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\App\Action\Context */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\App\Action\Context */
     protected $contextMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Response */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Response */
     protected $responseMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Swatches\Helper\Media */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Swatches\Helper\Media */
     protected $swatchHelperMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Image\AdapterFactory */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Image\AdapterFactory */
     protected $adapterFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Image\Adapter */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Image\Adapter */
     protected $adapterMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Media\Config */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Media\Config */
     protected $configMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem */
     protected $filesystemMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\Read */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\Read */
     protected $mediaDirectoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\MediaStorage\Model\File\UploaderFactory */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\MediaStorage\Model\File\UploaderFactory */
     protected $uploaderFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\MediaStorage\Model\File\Uploader */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\MediaStorage\Model\File\Uploader */
     protected $uploaderMock;
 
     /** @var ObjectManager|\Magento\Swatches\Controller\Adminhtml\Iframe\Show */
     protected $controller;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(\Magento\Backend\App\Action\Context::class);
         $observerMock = $this->createMock(\Magento\Framework\Event\Manager::class);

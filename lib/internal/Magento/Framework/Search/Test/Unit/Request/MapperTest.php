@@ -23,46 +23,46 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     private $helper;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\Search\Request\Query\Match|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Query\Match|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryMatch;
 
     /**
-     * @var \Magento\Framework\Search\Request\Query\BoolExpression|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Query\BoolExpression|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryBool;
 
     /**
-     * @var \Magento\Framework\Search\Request\Query\Filter|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Query\Filter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryFilter;
 
     /**
-     * @var \Magento\Framework\Search\Request\Filter\Term|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Filter\Term|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filterTerm;
 
     /**
-     * @var \Magento\Framework\Search\Request\Filter\Wildcard|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Filter\Wildcard|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filterWildcard;
 
     /**
-     * @var \Magento\Framework\Search\Request\Filter\Range|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Filter\Range|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filterRange;
 
     /**
-     * @var \Magento\Framework\Search\Request\Filter\Bool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Filter\Bool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filterBool;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helper = new ObjectManager($this);
 
@@ -116,7 +116,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             )
-            ->will($this->returnValue($this->queryMatch));
+            ->willReturn($this->queryMatch);
 
         /** @var \Magento\Framework\Search\Request\Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -134,10 +134,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
      */
     public function testGetQueryNotUsedStateException()
     {
+        $this->expectException(\Magento\Framework\Exception\StateException::class);
+
         $queries = [
             self::ROOT_QUERY => [
                 'type' => QueryInterface::TYPE_MATCH,
@@ -167,7 +168,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             )
-            ->will($this->returnValue($this->queryMatch));
+            ->willReturn($this->queryMatch);
 
         /** @var \Magento\Framework\Search\Request\Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -185,10 +186,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
      */
     public function testGetQueryUsedStateException()
     {
+        $this->expectException(\Magento\Framework\Exception\StateException::class);
+
         /** @var \Magento\Framework\Search\Request\Mapper $mapper */
         $mapper = $this->helper->getObject(
             \Magento\Framework\Search\Request\Mapper::class,
@@ -234,7 +236,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             )
-            ->will($this->returnValue($this->queryMatch));
+            ->willReturn($this->queryMatch);
         $query = $queries[self::ROOT_QUERY];
         $this->objectManager->expects($this->at(1))->method('create')
             ->with(
@@ -248,7 +250,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             )
-            ->will($this->returnValue($this->queryFilter));
+            ->willReturn($this->queryFilter);
 
         /** @var \Magento\Framework\Search\Request\Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -266,11 +268,12 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Reference is not provided
      */
     public function testGetQueryFilterReferenceException()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Reference is not provided');
+
         /** @var \Magento\Framework\Search\Request\Mapper $mapper */
         $mapper = $this->helper->getObject(
             \Magento\Framework\Search\Request\Mapper::class,
@@ -309,7 +312,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             )
-            ->will($this->returnValue($this->queryMatch));
+            ->willReturn($this->queryMatch);
         $query = $queries[self::ROOT_QUERY];
         $this->objectManager->expects($this->at(1))->method('create')
             ->with(
@@ -322,7 +325,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             )
-            ->will($this->returnValue($this->queryBool));
+            ->willReturn($this->queryBool);
 
         /** @var \Magento\Framework\Search\Request\Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -339,11 +342,9 @@ class MapperTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->queryBool, $mapper->getRootQuery());
     }
 
-    /**
-     * #@expectedException \InvalidArgumentException
-     */
     public function testGetQueryInvalidArgumentException()
     {
+        $this->expectException(\InvalidArgumentException::class);
         /** @var \Magento\Framework\Search\Request\Mapper $mapper */
         $mapper = $this->helper->getObject(
             \Magento\Framework\Search\Request\Mapper::class,
@@ -364,10 +365,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testGetQueryException()
     {
+        $this->expectException(\Exception::class);
+
         /** @var \Magento\Framework\Search\Request\Mapper $mapper */
         $mapper = $this->helper->getObject(
             \Magento\Framework\Search\Request\Mapper::class,
@@ -416,7 +418,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             )
-            ->will($this->returnValue($this->filterTerm));
+            ->willReturn($this->filterTerm);
         $query = $queries[self::ROOT_QUERY];
         $this->objectManager->expects($this->at(1))->method('create')
             ->with(
@@ -430,7 +432,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             )
-            ->will($this->returnValue($this->queryFilter));
+            ->willReturn($this->queryFilter);
 
         /** @var \Magento\Framework\Search\Request\Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -481,7 +483,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             )
-            ->will($this->returnValue($this->filterTerm));
+            ->willReturn($this->filterTerm);
         $query = $queries[self::ROOT_QUERY];
         $this->objectManager->expects($this->at(1))->method('create')
             ->with(
@@ -495,7 +497,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             )
-            ->will($this->returnValue($this->queryFilter));
+            ->willReturn($this->queryFilter);
 
         /** @var \Magento\Framework\Search\Request\Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -548,7 +550,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             )
-            ->will($this->returnValue($this->filterRange));
+            ->willReturn($this->filterRange);
         $query = $queries[self::ROOT_QUERY];
         $this->objectManager->expects($this->at(1))->method('create')
             ->with(
@@ -562,7 +564,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             )
-            ->will($this->returnValue($this->queryFilter));
+            ->willReturn($this->queryFilter);
 
         /** @var \Magento\Framework\Search\Request\Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -623,7 +625,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             )
-            ->will($this->returnValue($this->filterTerm));
+            ->willReturn($this->filterTerm);
         $filter = $filters['someFilter'];
         $this->objectManager->expects($this->at(1))->method('create')
             ->with(
@@ -635,7 +637,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             )
-            ->will($this->returnValue($this->filterBool));
+            ->willReturn($this->filterBool);
         $query = $queries[self::ROOT_QUERY];
         $this->objectManager->expects($this->at(2))->method('create')
             ->with(
@@ -649,7 +651,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             )
-            ->will($this->returnValue($this->queryFilter));
+            ->willReturn($this->queryFilter);
 
         /** @var \Magento\Framework\Search\Request\Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -667,10 +669,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
      */
     public function testGetFilterNotUsedStateException()
     {
+        $this->expectException(\Magento\Framework\Exception\StateException::class);
+
         $queries = [
             self::ROOT_QUERY => [
                 'type' => QueryInterface::TYPE_FILTER,
@@ -709,7 +712,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             )
-            ->will($this->returnValue($this->filterTerm));
+            ->willReturn($this->filterTerm);
         $query = $queries[self::ROOT_QUERY];
         $this->objectManager->expects($this->at(1))->method('create')
             ->with(
@@ -723,7 +726,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             )
-            ->will($this->returnValue($this->queryFilter));
+            ->willReturn($this->queryFilter);
 
         /** @var \Magento\Framework\Search\Request\Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -741,10 +744,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
      */
     public function testGetFilterUsedStateException()
     {
+        $this->expectException(\Magento\Framework\Exception\StateException::class);
+
         /** @var \Magento\Framework\Search\Request\Mapper $mapper */
         $mapper = $this->helper->getObject(
             \Magento\Framework\Search\Request\Mapper::class,
@@ -782,11 +786,12 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid filter type
      */
     public function testGetFilterInvalidArgumentException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid filter type');
+
         $queries = [
             self::ROOT_QUERY => [
                 'type' => QueryInterface::TYPE_FILTER,
@@ -820,10 +825,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testGetFilterException()
     {
+        $this->expectException(\Exception::class);
+
         $queries = [
             self::ROOT_QUERY => [
                 'type' => QueryInterface::TYPE_FILTER,
@@ -1027,7 +1033,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 [$this->equalTo($metricClass), $this->equalTo(['type' => $bucket['metric'][3]['type']])],
                 [$this->equalTo($bucketClass), $this->equalTo($arguments)]
             )
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         /** @var \Magento\Framework\Search\Request\Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -1109,7 +1115,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                     $this->equalTo($arguments)
                 ]
             )
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         /** @var \Magento\Framework\Search\Request\Mapper $mapper */
         $mapper = $this->helper->getObject(

@@ -15,16 +15,16 @@ class ResponseFactoryTest extends \PHPUnit\Framework\TestCase
     private $factory;
 
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\DocumentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Adapter\Mysql\DocumentFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $documentFactory;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 
@@ -54,17 +54,17 @@ class ResponseFactoryTest extends \PHPUnit\Framework\TestCase
 
         $this->documentFactory->expects($this->at(0))->method('create')
             ->with($this->equalTo($rawResponse['documents'][0]))
-            ->will($this->returnValue('document1'));
+            ->willReturn('document1');
         $this->documentFactory->expects($this->at(1))->method('create')
             ->with($rawResponse['documents'][1])
-            ->will($this->returnValue('document2'));
+            ->willReturn('document2');
 
         $this->objectManager->expects($this->once())->method('create')
             ->with(
                 $this->equalTo(\Magento\Framework\Search\Response\QueryResponse::class),
                 $this->equalTo(['documents' => ['document1', 'document2'], 'aggregations' => null, 'total' => 2])
             )
-            ->will($this->returnValue('QueryResponseObject'));
+            ->willReturn('QueryResponseObject');
 
         $result = $this->factory->create($rawResponse);
         $this->assertEquals('QueryResponseObject', $result);

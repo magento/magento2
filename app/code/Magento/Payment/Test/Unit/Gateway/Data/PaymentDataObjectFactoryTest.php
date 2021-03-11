@@ -20,26 +20,26 @@ class PaymentDataObjectFactoryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Payment\Gateway\Data\Order\OrderAdapterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Gateway\Data\Order\OrderAdapterFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderAdapterFactoryMock;
 
     /**
-     * @var \Magento\Payment\Gateway\Data\Quote\QuoteAdapterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Gateway\Data\Quote\QuoteAdapterFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteAdapterFactoryMock;
 
     /**
-     * @var \Magento\Payment\Gateway\Data\PaymentDataObject|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Gateway\Data\PaymentDataObject|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $paymentDataObjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->getMockForAbstractClass();

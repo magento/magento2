@@ -18,7 +18,7 @@ class CcTest extends \PHPUnit\Framework\TestCase
      */
     private $ccModel;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->ccModel = $objectManager->getObject(Cc::class);

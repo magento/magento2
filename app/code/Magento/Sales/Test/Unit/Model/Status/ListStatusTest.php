@@ -14,7 +14,7 @@ class ListStatusTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Sales\Model\Status\ListStatus */
     private $listStatus;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->listStatus = new ListStatus();
     }

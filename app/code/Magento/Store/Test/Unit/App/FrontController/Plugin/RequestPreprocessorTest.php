@@ -13,46 +13,46 @@ class RequestPreprocessorTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_urlMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $closureMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_storeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 
     /**
-     * @var \Magento\Store\Model\BaseUrlChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\BaseUrlChecker|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $baseUrlChecker;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_storeMock = $this->createMock(\Magento\Store\Model\Store::class);
         $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
@@ -102,8 +102,8 @@ class RequestPreprocessorTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getStore'
-        )->will(
-            $this->returnValue($this->_storeMock)
+        )->willReturn(
+            $this->_storeMock
         );
         $this->_storeMock->expects($this->once())->method('getBaseUrl');
         $this->_requestMock->expects($this->never())->method('getRequestUri');
@@ -121,10 +121,10 @@ class RequestPreprocessorTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getStore'
-        )->will(
-            $this->returnValue($this->_storeMock)
+        )->willReturn(
+            $this->_storeMock
         );
-        $this->_storeMock->expects($this->once())->method('getBaseUrl')->will($this->returnValue(false));
+        $this->_storeMock->expects($this->once())->method('getBaseUrl')->willReturn(false);
         $this->_requestMock->expects($this->never())->method('getRequestUri');
         $this->baseUrlChecker->expects($this->any())->method('isEnabled')->willReturn(true);
         $this->assertEquals(

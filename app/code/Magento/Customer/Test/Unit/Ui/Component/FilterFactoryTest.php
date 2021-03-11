@@ -12,25 +12,25 @@ use Magento\Customer\Ui\Component\FilterFactory;
  */
 class FilterFactoryTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Customer\Api\Data\OptionInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\Data\OptionInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $attributeOption;
 
-    /** @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $context;
 
-    /** @var \Magento\Framework\View\Element\UiComponentFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\UiComponentFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $componentFactory;
 
-    /** @var \Magento\Customer\Api\Data\AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\Data\AttributeMetadataInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $attributeMetadata;
 
-    /** @var \Magento\Ui\Component\Listing\Columns\ColumnInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Ui\Component\Listing\Columns\ColumnInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $filter;
 
     /** @var FilterFactory */
     protected $filterFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->getMockForAbstractClass(
             \Magento\Framework\View\Element\UiComponent\ContextInterface::class,

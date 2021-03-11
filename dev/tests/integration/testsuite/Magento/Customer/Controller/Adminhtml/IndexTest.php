@@ -47,7 +47,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_baseControllerUrl = 'http://localhost/index.php/backend/customer/index/';
@@ -73,7 +73,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     /**
      * @inheritDoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /**
          * Unset customer data
@@ -142,7 +142,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $body = $this->getResponse()->getBody();
 
         // verify
-        $this->assertContains('<h1 class="page-title">test firstname test lastname</h1>', $body);
+        $this->assertStringContainsString('<h1 class="page-title">test firstname test lastname</h1>', $body);
     }
 
     /**
@@ -154,7 +154,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $body = $this->getResponse()->getBody();
 
         // verify
-        $this->assertContains('<h1 class="page-title">New Customer</h1>', $body);
+        $this->assertStringContainsString('<h1 class="page-title">New Customer</h1>', $body);
     }
 
     /**
@@ -188,7 +188,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->getRequest()->setParam('id', 1);
         $this->dispatch('backend/customer/index/productReviews');
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<div id="reviwGrid"', $body);
+        $this->assertStringContainsString('<div id="reviwGrid"', $body);
     }
 
     /**
@@ -237,7 +237,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
      * @param array $sender
      * @param int $customerId
      * @param string|null $newEmail
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
     protected function prepareEmailMock(
@@ -246,7 +246,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         array $sender,
         int $customerId,
         $newEmail = null
-    ) : \PHPUnit_Framework_MockObject_MockObject {
+    ) : \PHPUnit\Framework\MockObject\MockObject {
         $area = \Magento\Framework\App\Area::AREA_FRONTEND;
         $customer = $this->customerRepository->getById($customerId);
         $storeId = $customer->getStoreId();
@@ -292,11 +292,11 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $transportBuilderMock
+     * @param \PHPUnit\Framework\MockObject\MockObject $transportBuilderMock
      * @param string $className
      */
     protected function addEmailMockToClass(
-        \PHPUnit_Framework_MockObject_MockObject $transportBuilderMock,
+        \PHPUnit\Framework\MockObject\MockObject $transportBuilderMock,
         $className
     ) {
         $mocked = $this->_objectManager->create(

@@ -13,7 +13,7 @@ use Magento\Setup\Model\ObjectManagerProvider;
 class NavigationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Navigation
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Navigation
      */
     private $navigationModel;
 
@@ -23,22 +23,16 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
     private $controller;
 
     /**
-     * @var \Magento\Setup\Model\Cron\Status|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $status;
-
-    /**
-     * @var \Magento\Setup\Model\ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Model\ObjectManagerProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerProvider;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->navigationModel = $this->createMock(\Magento\Setup\Model\Navigation::class);
-        $this->status = $this->createMock(\Magento\Setup\Model\Cron\Status::class);
         $this->objectManagerProvider =
             $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
-        $this->controller = new Navigation($this->navigationModel, $this->status, $this->objectManagerProvider);
+        $this->controller = new Navigation($this->navigationModel, $this->objectManagerProvider);
     }
 
     public function testIndexAction()
@@ -70,29 +64,5 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('main', $variables);
         $this->assertTrue($viewModel->terminate());
         $this->assertSame('/magento/setup/navigation/menu.phtml', $viewModel->getTemplate());
-    }
-
-    public function testHeaderBarInstaller()
-    {
-        $this->navigationModel->expects($this->once())->method('getType')->willReturn(NavModel::NAV_INSTALLER);
-        $viewModel = $this->controller->headerBarAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
-        $variables = $viewModel->getVariables();
-        $this->assertArrayHasKey('menu', $variables);
-        $this->assertArrayHasKey('main', $variables);
-        $this->assertTrue($viewModel->terminate());
-        $this->assertSame('/magento/setup/navigation/header-bar.phtml', $viewModel->getTemplate());
-    }
-
-    public function testHeaderBarUpdater()
-    {
-        $this->navigationModel->expects($this->once())->method('getType')->willReturn(NavModel::NAV_UPDATER);
-        $viewModel = $this->controller->headerBarAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
-        $variables = $viewModel->getVariables();
-        $this->assertArrayHasKey('menu', $variables);
-        $this->assertArrayHasKey('main', $variables);
-        $this->assertTrue($viewModel->terminate());
-        $this->assertSame('/magento/setup/navigation/header-bar.phtml', $viewModel->getTemplate());
     }
 }

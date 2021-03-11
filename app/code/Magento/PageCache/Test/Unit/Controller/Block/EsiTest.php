@@ -13,17 +13,17 @@ namespace Magento\PageCache\Test\Unit\Controller\Block;
 class EsiTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseMock;
 
     /**
-     * @var \Magento\Framework\App\View|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\View|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $viewMock;
 
@@ -33,24 +33,24 @@ class EsiTest extends \PHPUnit\Framework\TestCase
     protected $action;
 
     /**
-     * @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\Framework\View\Layout\LayoutCacheKeyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout\LayoutCacheKeyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutCacheKeyMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Translate\InlineInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Translate\InlineInterface
      */
     protected $translateInline;
 
     /**
      * Set up before test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
             ->disableOriginalConstructor()->getMock();
@@ -70,9 +70,9 @@ class EsiTest extends \PHPUnit\Framework\TestCase
         $this->viewMock = $this->getMockBuilder(\Magento\Framework\App\View::class)
             ->disableOriginalConstructor()->getMock();
 
-        $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
-        $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
-        $contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewMock));
+        $contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
+        $contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
+        $contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
 
         $this->translateInline = $this->createMock(\Magento\Framework\Translate\InlineInterface::class);
 
@@ -103,14 +103,14 @@ class EsiTest extends \PHPUnit\Framework\TestCase
 
         $blockInstance1 = $this->createPartialMock($blockClass, ['toHtml']);
 
-        $blockInstance1->expects($this->once())->method('toHtml')->will($this->returnValue($html));
+        $blockInstance1->expects($this->once())->method('toHtml')->willReturn($html);
         $blockInstance1->setTtl(360);
 
-        $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap($mapData));
+        $this->requestMock->expects($this->any())->method('getParam')->willReturnMap($mapData);
 
         $this->viewMock->expects($this->once())->method('loadLayout')->with($this->equalTo($handles));
 
-        $this->viewMock->expects($this->once())->method('getLayout')->will($this->returnValue($this->layoutMock));
+        $this->viewMock->expects($this->once())->method('getLayout')->willReturn($this->layoutMock);
 
         $this->layoutMock->expects($this->never())
             ->method('getUpdate');
@@ -120,7 +120,7 @@ class EsiTest extends \PHPUnit\Framework\TestCase
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with($this->equalTo($block))
-            ->will($this->returnValue($blockInstance1));
+            ->willReturn($blockInstance1);
 
         if ($shouldSetHeaders) {
             $this->responseMock->expects($this->once())
@@ -162,8 +162,8 @@ class EsiTest extends \PHPUnit\Framework\TestCase
             ['handles', '', $handles],
         ];
 
-        $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap($mapData));
-        $this->viewMock->expects($this->never())->method('getLayout')->will($this->returnValue($this->layoutMock));
+        $this->requestMock->expects($this->any())->method('getParam')->willReturnMap($mapData);
+        $this->viewMock->expects($this->never())->method('getLayout')->willReturn($this->layoutMock);
 
         $this->action->execute();
     }

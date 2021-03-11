@@ -19,26 +19,26 @@ class CronEventTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\NewRelicReporting\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Framework\HTTP\ZendClientFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\HTTP\ZendClientFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $zendClientFactoryMock;
 
     /**
-     * @var \Magento\Framework\HTTP\ZendClient|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\HTTP\ZendClient|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $zendClientMock;
 
     /**
-     * @var \Magento\Framework\Json\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Json\EncoderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $jsonEncoderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->zendClientFactoryMock = $this->getMockBuilder(\Magento\Framework\HTTP\ZendClientFactory::class)
             ->setMethods(['create'])
@@ -129,9 +129,7 @@ class CronEventTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->zendClientMock);
 
-        $this->assertInternalType(
-            'bool',
-            $this->model->sendRequest()
+        $this->assertIsBool($this->model->sendRequest()
         );
     }
 
@@ -190,9 +188,7 @@ class CronEventTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->zendClientMock);
 
-        $this->assertInternalType(
-            'bool',
-            $this->model->sendRequest()
+        $this->assertIsBool($this->model->sendRequest()
         );
     }
 

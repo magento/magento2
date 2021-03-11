@@ -12,7 +12,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldN
     as FieldNameResolver;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort;
 
 /**
@@ -38,7 +38,7 @@ class SortTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attributeAdapterProvider = $this->getMockBuilder(AttributeProvider::class)
             ->disableOriginalConstructor()
@@ -104,7 +104,7 @@ class SortTest extends \PHPUnit\Framework\TestCase
         $this->fieldNameResolver->expects($this->any())
             ->method('getFieldName')
             ->with($this->anything())
-            ->will($this->returnCallback(
+            ->willReturnCallback(
                 function ($attribute, $context) use ($fieldName) {
                     if (empty($context)) {
                         return $fieldName;
@@ -112,7 +112,7 @@ class SortTest extends \PHPUnit\Framework\TestCase
                         return 'sort_' . $fieldName;
                     }
                 }
-            ));
+            );
 
         $this->assertEquals(
             $expected,

@@ -9,10 +9,10 @@ use Magento\Catalog\Model\Product;
 
 class ExtendTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject */
     protected $registry;
 
-    /** @var \Magento\Framework\Data\FormFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Data\FormFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $formFactory;
 
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
@@ -21,7 +21,7 @@ class ExtendTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend */
     protected $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->registry = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->disableOriginalConstructor()
@@ -37,7 +37,7 @@ class ExtendTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     public function getProduct()
     {
@@ -45,8 +45,8 @@ class ExtendTest extends \PHPUnit\Framework\TestCase
         $this->registry->expects($this->once())
             ->method('registry')
             ->with('product')
-            ->will(
-                $this->returnValue($product)
+            ->willReturn(
+                $product
             );
         return $product;
     }
@@ -62,10 +62,10 @@ class ExtendTest extends \PHPUnit\Framework\TestCase
             $hasKey
         );
 
-        $this->formFactory->expects($this->once())->method('create')->with()->will($this->returnValue($form));
+        $this->formFactory->expects($this->once())->method('create')->with()->willReturn($form);
         $product = $this->getProduct();
-        $product->expects($this->once())->method('getData')->with($switchAttributeCode)->will(
-            $this->returnValue(123)
+        $product->expects($this->once())->method('getData')->with($switchAttributeCode)->willReturn(
+            123
         );
         $this->object->setIsDisabledField(true);
         $this->object->getExtendedElement($switchAttributeCode);

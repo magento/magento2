@@ -31,26 +31,26 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
     /**
-     * @var ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productRepositoryMock;
 
     /**
-     * @var VariationHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var VariationHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $variationHandlerMock;
 
     /**
-     * @var ProductInitializationHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductInitializationHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMockForAbstractClass();
@@ -144,7 +144,7 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
                 'quantity_and_stock_status' => ['qty' => '3']
             ]
         ];
-        /** @var Product[]|\PHPUnit_Framework_MockObject_MockObject[] $productMocks */
+        /** @var Product[]|\PHPUnit\Framework\MockObject\MockObject[] $productMocks */
         $productMocks = [
             'product2' => $this->getProductMock($configurations['product2'], true, true),
             'product3' => $this->getProductMock($configurations['product3'], false, true),
@@ -188,7 +188,7 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
      * @param array $expectedData
      * @param bool $hasDataChanges
      * @param bool $wasChanged
-     * @return Product|\PHPUnit_Framework_MockObject_MockObject
+     * @return Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getProductMock(array $expectedData = null, $hasDataChanges = false, $wasChanged = false)
     {

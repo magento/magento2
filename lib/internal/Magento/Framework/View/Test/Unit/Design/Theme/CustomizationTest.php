@@ -19,35 +19,35 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileProvider;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customizationPath;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $theme;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fileProvider = $this->createMock(\Magento\Framework\View\Design\Theme\FileProviderInterface::class);
         $collectionFactory = $this->createPartialMock(
             \Magento\Theme\Model\ResourceModel\Theme\File\CollectionFactory::class,
             ['create']
         );
-        $collectionFactory->expects($this->any())->method('create')->will($this->returnValue($this->fileProvider));
+        $collectionFactory->expects($this->any())->method('create')->willReturn($this->fileProvider);
         $this->customizationPath = $this->createMock(\Magento\Framework\View\Design\Theme\Customization\Path::class);
         $this->theme = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['__wakeup', 'save', 'load']);
 
         $this->model = new Customization($this->fileProvider, $this->customizationPath, $this->theme);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->model = null;
         $this->fileProvider = null;
@@ -67,8 +67,8 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
             'getItems'
         )->with(
             $this->theme
-        )->will(
-            $this->returnValue([])
+        )->willReturn(
+            []
         );
         $this->assertEquals([], $this->model->getFiles());
     }
@@ -86,8 +86,8 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
         )->with(
             $this->theme,
             ['file_type' => $type]
-        )->will(
-            $this->returnValue([])
+        )->willReturn(
+            []
         );
         $this->assertEquals([], $this->model->getFilesByType($type));
     }
@@ -98,7 +98,7 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
     public function testGenerationOfFileInfo()
     {
         $file = $this->createPartialMock(\Magento\Theme\Model\Theme\File::class, ['__wakeup', 'getFileInfo']);
-        $file->expects($this->once())->method('getFileInfo')->will($this->returnValue(['sample-generation']));
+        $file->expects($this->once())->method('getFileInfo')->willReturn(['sample-generation']);
         $this->assertEquals([['sample-generation']], $this->model->generateFileInfo([$file]));
     }
 
@@ -113,8 +113,8 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
             'getCustomizationPath'
         )->with(
             $this->theme
-        )->will(
-            $this->returnValue('path')
+        )->willReturn(
+            'path'
         );
         $this->assertEquals('path', $this->model->getCustomizationPath());
     }
@@ -134,8 +134,8 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
             $expectedMethod
         )->with(
             $this->theme
-        )->will(
-            $this->returnValue('path')
+        )->willReturn(
+            'path'
         );
         $this->assertEquals('path', $this->model->getThemeFilesPath());
     }
@@ -163,8 +163,8 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
             'getCustomViewConfigPath'
         )->with(
             $this->theme
-        )->will(
-            $this->returnValue('path')
+        )->willReturn(
+            'path'
         );
         $this->assertEquals('path', $this->model->getCustomViewConfigPath());
     }
@@ -179,7 +179,7 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
         $type = 'sample-type';
         foreach ($filesContent as $fileContent) {
             $file = $this->createPartialMock(\Magento\Theme\Model\Theme\File::class, ['__wakeup', 'save']);
-            $file->expects($fileContent['isCalled'])->method('save')->will($this->returnSelf());
+            $file->expects($fileContent['isCalled'])->method('save')->willReturnSelf();
             $file->setData($fileContent['content']);
             $files[] = $file;
         }
@@ -190,8 +190,8 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
         )->with(
             $this->theme,
             ['file_type' => $type]
-        )->will(
-            $this->returnValue($files)
+        )->willReturn(
+            $files
         );
         $this->assertInstanceOf(
             \Magento\Framework\View\Design\Theme\CustomizationInterface::class,
@@ -251,7 +251,7 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
     public function testDelete()
     {
         $file = $this->createPartialMock(\Magento\Theme\Model\Theme\File::class, ['__wakeup', 'delete']);
-        $file->expects($this->once())->method('delete')->will($this->returnSelf());
+        $file->expects($this->once())->method('delete')->willReturnSelf();
         $file->setData(
             [
                 'id' => 1,
@@ -267,8 +267,8 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
             'getItems'
         )->with(
             $this->theme
-        )->will(
-            $this->returnValue([$file])
+        )->willReturn(
+            [$file]
         );
 
         $this->assertInstanceOf(

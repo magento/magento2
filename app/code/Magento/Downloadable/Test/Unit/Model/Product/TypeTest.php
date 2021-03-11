@@ -22,17 +22,17 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     private $target;
 
     /**
-     * @var TypeHandlerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TypeHandlerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $typeHandler;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     private $product;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
@@ -42,14 +42,14 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $linksFactory;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
@@ -77,7 +77,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\ResourceModel\Product::class,
             ['getEntityType']
         );
-        $resourceProductMock->expects($this->any())->method('getEntityType')->will($this->returnValue($entityTypeMock));
+        $resourceProductMock->expects($this->any())->method('getEntityType')->willReturn($entityTypeMock);
 
         $this->serializerMock = $this->getMockBuilder(Json::class)
             ->setConstructorArgs(['serialize', 'unserialize'])
@@ -115,12 +115,12 @@ class TypeTest extends \PHPUnit\Framework\TestCase
                 'addCustomOption',
                 'getEntityId'
             ]);
-        $this->product->expects($this->any())->method('getResource')->will($this->returnValue($resourceProductMock));
-        $this->product->expects($this->any())->method('setTypeHasRequiredOptions')->with($this->equalTo(true))->will(
-            $this->returnSelf()
+        $this->product->expects($this->any())->method('getResource')->willReturn($resourceProductMock);
+        $this->product->expects($this->any())->method('setTypeHasRequiredOptions')->with($this->equalTo(true))->willReturnSelf(
+            
         );
-        $this->product->expects($this->any())->method('setRequiredOptions')->with($this->equalTo(true))->will(
-            $this->returnSelf()
+        $this->product->expects($this->any())->method('setRequiredOptions')->with($this->equalTo(true))->willReturnSelf(
+            
         );
         $this->product->expects($this->any())->method('setTypeHasOptions')->with($this->equalTo(false));
         $this->product->expects($this->any())->method('setLinksExist')->with($this->equalTo(false));
@@ -130,7 +130,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $eavConfigMock->expects($this->any())
             ->method('getEntityAttributes')
             ->with($this->equalTo($entityTypeMock), $this->equalTo($this->product))
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->typeHandler = $this->getMockBuilder(\Magento\Downloadable\Model\Product\TypeHandler\TypeHandler::class)
             ->disableOriginalConstructor()
@@ -172,7 +172,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 
     public function testHasLinks()
     {
-        $this->product->expects($this->any())->method('getLinksPurchasedSeparately')->will($this->returnValue(true));
+        $this->product->expects($this->any())->method('getLinksPurchasedSeparately')->willReturn(true);
         $this->product->expects($this->exactly(2))
             ->method('getDownloadableLinks')
             ->willReturn(['link1', 'link2']);
@@ -186,20 +186,20 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $optionMock->expects($this->any())->method('getValue')->will($this->returnValue('{}'));
+        $optionMock->expects($this->any())->method('getValue')->willReturn('{}');
 
         $this->product->expects($this->any())
             ->method('getCustomOption')
             ->with('info_buyRequest')
-            ->will($this->returnValue($optionMock));
+            ->willReturn($optionMock);
 
         $this->product->expects($this->any())
             ->method('getLinksPurchasedSeparately')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->product->expects($this->any())
             ->method('getEntityId')
-            ->will($this->returnValue(123));
+            ->willReturn(123);
 
         $linksCollectionMock = $this->createPartialMock(
             \Magento\Downloadable\Model\ResourceModel\Link\Collection::class,
@@ -209,15 +209,15 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $linksCollectionMock->expects($this->once())
             ->method('addProductToFilter')
             ->with(123)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $linksCollectionMock->expects($this->once())
             ->method('getAllIds')
-            ->will($this->returnValue([1, 2, 3]));
+            ->willReturn([1, 2, 3]);
 
         $this->linksFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($linksCollectionMock));
+            ->willReturn($linksCollectionMock);
 
         $this->product->expects($this->once())
             ->method('addCustomOption')
@@ -227,23 +227,24 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please specify product link(s).
      */
     public function testCheckProductBuyStateException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Please specify product link(s).');
+
         $optionMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Item\Option::class, ['getValue']);
 
-        $optionMock->expects($this->any())->method('getValue')->will($this->returnValue('{}'));
+        $optionMock->expects($this->any())->method('getValue')->willReturn('{}');
 
         $this->product->expects($this->any())
             ->method('getCustomOption')
             ->with('info_buyRequest')
-            ->will($this->returnValue($optionMock));
+            ->willReturn($optionMock);
 
         $this->product->expects($this->any())
             ->method('getLinksPurchasedSeparately')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->target->checkProductBuyState($this->product);
     }

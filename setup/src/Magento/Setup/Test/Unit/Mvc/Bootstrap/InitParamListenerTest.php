@@ -34,7 +34,7 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
     /** callable[][] */
     private $callbacks = [];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->listener = new InitParamListener();
     }
@@ -55,7 +55,7 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
 
     public function testOnBootstrap()
     {
-        /** @var MvcEvent|\PHPUnit_Framework_MockObject_MockObject $mvcEvent */
+        /** @var MvcEvent|\PHPUnit\Framework\MockObject\MockObject $mvcEvent */
         $mvcEvent = $this->createMock(MvcEvent::class);
         $mvcApplication = $this->getMockBuilder(Application::class)->disableOriginalConstructor()->getMock();
         $mvcEvent->expects($this->once())->method('getApplication')->willReturn($mvcApplication);
@@ -93,22 +93,23 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Magento root directory is not specified.
      */
     public function testCreateDirectoryListException()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Magento root directory is not specified.');
+
         $this->listener->createDirectoryList([]);
     }
 
     public function testCreateServiceNotConsole()
     {
         /**
-         * @var ServiceLocatorInterface|\PHPUnit_Framework_MockObject_MockObject $serviceLocator
+         * @var ServiceLocatorInterface|\PHPUnit\Framework\MockObject\MockObject $serviceLocator
          */
-        $serviceLocator = $this->createMock(ServiceLocatorInterface::class);
+        $serviceLocator = $this->getMockForAbstractClass(ServiceLocatorInterface::class);
         $mvcApplication = $this->getMockBuilder(Application::class)->disableOriginalConstructor()->getMock();
-        $request = $this->createMock(RequestInterface::class);
+        $request = $this->getMockForAbstractClass(RequestInterface::class);
         $mvcApplication->expects($this->any())->method('getRequest')->willReturn($request);
         $serviceLocator->expects($this->once())->method('get')->with('Application')
             ->willReturn($mvcApplication);
@@ -130,9 +131,9 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
         }
         $listener = new InitParamListener();
         /**
-         * @var ServiceLocatorInterface|\PHPUnit_Framework_MockObject_MockObject $serviceLocator
+         * @var ServiceLocatorInterface|\PHPUnit\Framework\MockObject\MockObject $serviceLocator
          */
-        $serviceLocator = $this->createMock(ServiceLocatorInterface::class);
+        $serviceLocator = $this->getMockForAbstractClass(ServiceLocatorInterface::class);
         $mvcApplication = $this->getMockBuilder(Application::class)->disableOriginalConstructor()->getMock();
         $request = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->getMock();
         $request->expects($this->any())
@@ -219,7 +220,7 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
 
         /**
          * @var \Magento\Framework\App\Filesystem\DirectoryList|
-         * \PHPUnit_Framework_MockObject_MockObject $directoryList
+         * \PHPUnit\Framework\MockObject\MockObject $directoryList
          */
         $directoryList = $this->getMockBuilder(\Magento\Framework\App\Filesystem\DirectoryList::class)
             ->disableOriginalConstructor()->getMock();
@@ -233,14 +234,14 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
     /**
      * Prepare the event manager with a SharedEventManager, it will expect attach() to be called once.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function prepareEventManager()
     {
         $this->callbacks[] =  [$this->listener, 'onBootstrap'];
 
-        /** @var EventManagerInterface|\PHPUnit_Framework_MockObject_MockObject $events */
-        $eventManager = $this->createMock(EventManagerInterface::class);
+        /** @var EventManagerInterface|\PHPUnit\Framework\MockObject\MockObject $events */
+        $eventManager = $this->getMockForAbstractClass(EventManagerInterface::class);
 
         $sharedManager = $this->createMock(SharedEventManager::class);
         $sharedManager->expects($this->once())->method('attach')->with(
@@ -253,245 +254,5 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
         $eventManager->expects($this->once())->method('getSharedManager')->willReturn($sharedManager);
 
         return $eventManager;
-    }
-
-    /**
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function testAuthPreDispatch()
-    {
-        $cookiePath = 'test';
-        $eventMock = $this->getMockBuilder(MvcEvent::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $routeMatchMock = $this->getMockBuilder(RouteMatch::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $applicationMock = $this->getMockBuilder(Application::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceManagerMock = $this->getMockBuilder(ServiceManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $deploymentConfigMock = $this->getMockBuilder(\Magento\Framework\App\DeploymentConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $deploymentConfigMock->expects($this->once())
-            ->method('isAvailable')
-            ->willReturn(true);
-        $omProvider = $this->getMockBuilder(\Magento\Setup\Model\ObjectManagerProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $objectManagerMock = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
-        $adminAppStateMock = $this->getMockBuilder(\Magento\Framework\App\State::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $sessionConfigMock = $this->getMockBuilder(\Magento\Backend\Model\Session\AdminConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $backendAppListMock = $this->getMockBuilder(\Magento\Backend\App\BackendAppList::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $backendAppMock = $this->getMockBuilder(\Magento\Backend\App\BackendApp::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $urlMock = $this->getMockBuilder(\Magento\Backend\Model\Url::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $authenticationMock = $this->getMockBuilder(\Magento\Backend\Model\Auth::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $adminSessionMock = $this->getMockBuilder(\Magento\Backend\Model\Auth\Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $responseMock = $this->getMockBuilder(Response::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $headersMock = $this->getMockBuilder(Headers::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $userMock = $this->getMockBuilder(\Magento\User\Model\User::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setReloadAclFlag'])
-            ->getMock();
-
-        $routeMatchMock->expects($this->exactly(2))
-            ->method('getParam')
-            ->willReturnMap(
-                [
-                    [
-                        'controller',
-                        null,
-                        'testController'
-                    ],
-                    [
-                        'action',
-                        null,
-                        'testAction'
-                    ]
-                ]
-            );
-        $eventMock->expects($this->once())
-            ->method('getRouteMatch')
-            ->willReturn($routeMatchMock);
-        $eventMock->expects($this->once())
-            ->method('getApplication')
-            ->willReturn($applicationMock);
-        $serviceManagerMock->expects($this->any())
-            ->method('get')
-            ->willReturnMap(
-                [
-                    [
-                        \Magento\Framework\App\DeploymentConfig::class,
-                        true,
-                        $deploymentConfigMock,
-                    ],
-                    [
-                        \Magento\Setup\Model\ObjectManagerProvider::class,
-                        true,
-                        $omProvider,
-                    ],
-                ]
-            );
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->willReturnMap(
-                [
-                    [
-                        \Magento\Framework\App\State::class,
-                        $adminAppStateMock,
-                    ],
-                    [
-                        \Magento\Backend\Model\Session\AdminConfig::class,
-                        $sessionConfigMock,
-                    ],
-                    [
-                        \Magento\Backend\App\BackendAppList::class,
-                        $backendAppListMock,
-                    ],
-                    [
-                        \Magento\Backend\Model\Auth::class,
-                        $authenticationMock,
-                    ],
-                ]
-            );
-        $objectManagerMock->expects($this->any())
-            ->method('create')
-            ->willReturnMap(
-                [
-                    [
-                        \Magento\Backend\Model\Auth\Session::class,
-                        [
-                            'sessionConfig' => $sessionConfigMock,
-                            'appState' => $adminAppStateMock
-                        ],
-                        $adminSessionMock,
-                    ],
-                    [
-                        \Magento\Backend\Model\Url::class,
-                        [],
-                        $urlMock,
-                    ],
-                ]
-            );
-        $omProvider->expects($this->once())
-            ->method('get')
-            ->willReturn($objectManagerMock);
-        $adminAppStateMock->expects($this->once())
-            ->method('setAreaCode')
-            ->with(\Magento\Framework\App\Area::AREA_ADMINHTML);
-        $applicationMock->expects($this->once())
-            ->method('getServiceManager')
-            ->willReturn($serviceManagerMock);
-        $backendAppMock->expects($this->once())
-            ->method('getCookiePath')
-            ->willReturn($cookiePath);
-        $urlMock->expects($this->once())
-            ->method('getBaseUrl')
-            ->willReturn('http://base-url/');
-        $sessionConfigMock->expects($this->once())
-            ->method('setCookiePath')
-            ->with('/' . $cookiePath);
-        $backendAppListMock->expects($this->once())
-            ->method('getBackendApp')
-            ->willReturn($backendAppMock);
-        $authenticationMock->expects($this->once())
-            ->method('isLoggedIn')
-            ->willReturn(true);
-        $authenticationMock->expects($this->any())
-            ->method('getUser')
-            ->willReturn($userMock);
-        $userMock->expects($this->once())
-            ->method('setReloadAclFlag')
-            ->with(1);
-        $adminSessionMock->expects($this->once())
-            ->method('refreshAcl')
-            ->with($userMock);
-        $adminSessionMock->expects($this->once())
-            ->method('isAllowed')
-            ->with('Magento_Backend::setup_wizard', null)
-            ->willReturn(false);
-        $adminSessionMock->expects($this->once())
-            ->method('destroy');
-        $eventMock->expects($this->once())
-            ->method('getResponse')
-            ->willReturn($responseMock);
-        $responseMock->expects($this->once())
-            ->method('getHeaders')
-            ->willReturn($headersMock);
-        $headersMock->expects($this->once())
-            ->method('addHeaderLine');
-        $responseMock->expects($this->once())
-            ->method('setStatusCode')
-            ->with(302);
-        $eventMock->expects($this->once())
-            ->method('stopPropagation');
-
-        $this->assertSame(
-            $this->listener->authPreDispatch($eventMock),
-            $responseMock
-        );
-    }
-
-    public function testAuthPreDispatchSkip()
-    {
-        $eventMock = $this->getMockBuilder(MvcEvent::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $routeMatchMock = $this->getMockBuilder(RouteMatch::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $deploymentConfigMock = $this->getMockBuilder(\Magento\Framework\App\DeploymentConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $deploymentConfigMock->expects($this->never())
-            ->method('isAvailable');
-        $routeMatchMock->expects($this->exactly(2))
-            ->method('getParam')
-            ->willReturnMap(
-                [
-                    [
-                        'controller',
-                        null,
-                        \Magento\Setup\Controller\Session::class
-                    ],
-                    [
-                        'action',
-                        null,
-                        'unlogin'
-                    ]
-                ]
-            );
-        $eventMock->expects($this->once())
-            ->method('getRouteMatch')
-            ->willReturn($routeMatchMock);
-        $eventMock->expects($this->never())
-            ->method('getApplication');
-
-        $this->assertSame(
-            $this->listener->authPreDispatch($eventMock),
-            false
-        );
     }
 }

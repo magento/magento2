@@ -21,44 +21,44 @@ class AttributeSetRepositoryTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $setFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $eavConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $resultFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $extensionAttributesJoinProcessorMock;
 
     /**
-     * @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionProcessor;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceMock = $this->createMock(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set::class);
         $this->setFactoryMock = $this->createPartialMock(
@@ -100,22 +100,23 @@ class AttributeSetRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $attributeSetId = 1;
         $attributeSetMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Set::class);
-        $this->setFactoryMock->expects($this->once())->method('create')->will($this->returnValue($attributeSetMock));
+        $this->setFactoryMock->expects($this->once())->method('create')->willReturn($attributeSetMock);
         $this->resourceMock->expects($this->once())->method('load')->with($attributeSetMock, $attributeSetId, null);
-        $attributeSetMock->expects($this->any())->method('getId')->will($this->returnValue($attributeSetId));
+        $attributeSetMock->expects($this->any())->method('getId')->willReturn($attributeSetId);
         $this->assertEquals($attributeSetMock, $this->model->get($attributeSetId));
     }
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with id = 9999
      */
     public function testGetThrowsExceptionIfRequestedAttributeSetDoesNotExist()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('No such entity with id = 9999');
+
         $attributeSetId = 9999;
         $attributeSetMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Set::class);
-        $this->setFactoryMock->expects($this->once())->method('create')->will($this->returnValue($attributeSetMock));
+        $this->setFactoryMock->expects($this->once())->method('create')->willReturn($attributeSetMock);
         $this->resourceMock->expects($this->once())->method('load')->with($attributeSetMock, $attributeSetId, null);
         $this->model->get($attributeSetId);
     }
@@ -132,10 +133,11 @@ class AttributeSetRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSaveThrowsExceptionIfGivenEntityCannotBeSaved()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+
         $attributeSetMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Set::class);
         $this->resourceMock->expects($this->once())->method('save')->with($attributeSetMock)->willThrowException(
             new \Exception('Some internal exception message.')
@@ -160,10 +162,11 @@ class AttributeSetRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function testDeleteThrowsExceptionIfGivenEntityCannotBeDeleted()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotDeleteException::class);
+
         $attributeSetMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Set::class);
         $this->resourceMock->expects($this->once())->method('delete')->with($attributeSetMock)->willThrowException(
             new \Magento\Framework\Exception\CouldNotDeleteException(__('Some internal exception message.'))
@@ -178,11 +181,12 @@ class AttributeSetRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage The default attribute set can't be deleted.
      */
     public function testDeleteThrowsExceptionIfGivenAttributeSetIsDefault()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotDeleteException::class);
+        $this->expectExceptionMessage('The default attribute set can\'t be deleted.');
+
         $attributeSetMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Set::class);
         $this->resourceMock->expects($this->once())->method('delete')->with($attributeSetMock)->willThrowException(
             new \Magento\Framework\Exception\StateException(__('Some internal exception message.'))
@@ -197,8 +201,8 @@ class AttributeSetRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $attributeSetId = 1;
         $attributeSetMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Set::class);
-        $attributeSetMock->expects($this->any())->method('getId')->will($this->returnValue($attributeSetId));
-        $this->setFactoryMock->expects($this->once())->method('create')->will($this->returnValue($attributeSetMock));
+        $attributeSetMock->expects($this->any())->method('getId')->willReturn($attributeSetId);
+        $this->setFactoryMock->expects($this->once())->method('create')->willReturn($attributeSetMock);
         $this->resourceMock->expects($this->once())->method('load')->with($attributeSetMock, $attributeSetId, null);
         $this->resourceMock->expects($this->once())->method('delete')->with($attributeSetMock);
         $this->assertTrue($this->model->deleteById($attributeSetId));

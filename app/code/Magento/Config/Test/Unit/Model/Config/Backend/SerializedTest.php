@@ -19,17 +19,17 @@ class SerializedTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Config\Model\Config\Backend\Serialized */
     private $serializedConfig;
 
-    /** @var Json|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Json|\PHPUnit\Framework\MockObject\MockObject */
     private $serializerMock;
 
-    /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->serializerMock = $this->createMock(Json::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $contextMock = $this->createMock(Context::class);
         $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $contextMock->method('getEventDispatcher')

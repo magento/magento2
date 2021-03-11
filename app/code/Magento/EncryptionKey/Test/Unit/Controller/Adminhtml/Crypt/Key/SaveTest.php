@@ -12,28 +12,28 @@ namespace Magento\EncryptionKey\Test\Unit\Controller\Adminhtml\Crypt\Key;
  */
 class SaveTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\Encryption\EncryptorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Encryption\EncryptorInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $encryptMock;
 
-    /** @var \Magento\EncryptionKey\Model\ResourceModel\Key\Change|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\EncryptionKey\Model\ResourceModel\Key\Change|\PHPUnit\Framework\MockObject\MockObject */
     protected $changeMock;
 
-    /** @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\CacheInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $cacheMock;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $requestMock;
 
-    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $managerMock;
 
-    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $responseMock;
 
     /** @var \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key\Save */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->encryptMock = $this->getMockBuilder(\Magento\Framework\Encryption\EncryptorInterface::class)
             ->disableOriginalConstructor()

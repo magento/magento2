@@ -11,8 +11,8 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\Builder\InvocationMocker as InvocationMocker;
-use PHPUnit\Framework\MockObject\Matcher\InvokedCount as InvokedCount;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCount;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Magento\Checkout\Helper\Data;
 use Magento\Quote\Model\Quote;
 use Magento\Framework\View\Result\Page;
@@ -110,7 +110,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
      */
     private $resultRedirectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         // mock objects
         $this->objectManager = new ObjectManager($this);
@@ -172,7 +172,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         ];
         $this->objectManagerMock->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap($objectManagerReturns));
+            ->willReturnMap($objectManagerReturns);
         $this->basicStub($this->objectManagerMock, 'create')
             ->willReturn($this->basicMock(\Magento\Framework\UrlInterface::class));
         // context stubs
@@ -201,11 +201,11 @@ class IndexTest extends \PHPUnit\Framework\TestCase
      * Checks a case when session should be or not regenerated during the request.
      *
      * @param bool $secure
-     * @param string $referer
+     * @param string|null $referer
      * @param InvokedCount $expectedCall
      * @dataProvider sessionRegenerationDataProvider
      */
-    public function testRegenerateSessionIdOnExecute(bool $secure, string $referer, InvokedCount $expectedCall)
+    public function testRegenerateSessionIdOnExecute(bool $secure, ?string $referer, InvokedCount $expectedCall)
     {
         $this->data->method('canOnepageCheckout')
             ->willReturn(true);
@@ -243,7 +243,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'secure' => true,
-                'referer' => false,
+                'referer' => null,
                 'expectedCall' => self::once()
             ],
             [

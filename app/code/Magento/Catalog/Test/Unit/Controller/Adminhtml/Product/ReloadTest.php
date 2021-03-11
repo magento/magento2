@@ -35,51 +35,51 @@ class ReloadTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultFactoryMock;
 
     /**
-     * @var LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var Builder|\PHPUnit_Framework_MockObject_MockObject
+     * @var Builder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productBuilderMock;
 
     /**
-     * @var ResultInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultMock;
 
     /**
-     * @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var UiComponent|\PHPUnit_Framework_MockObject_MockObject
+     * @var UiComponent|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $uiComponentMock;
 
     /**
-     * @var ProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $processorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -91,7 +91,7 @@ class ReloadTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMockForAbstractClass();
         $this->productBuilderMock = $this->getMockBuilder(Builder::class)
@@ -147,7 +147,7 @@ class ReloadTest extends \PHPUnit\Framework\TestCase
             ->with('noroute')
             ->willReturn(true);
 
-        $this->assertSame(true, $this->model->execute());
+        $this->assertTrue($this->model->execute());
     }
 
     public function testExecute()

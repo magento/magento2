@@ -60,7 +60,7 @@ class EmailNotificationTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -82,7 +82,7 @@ class EmailNotificationTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if ($this->moduleManager->isEnabled('Magento_Email')) {
             $this->mutableScopeConfig->clean();
@@ -182,7 +182,7 @@ class EmailNotificationTest extends TestCase
         $message = $this->transportBuilder->getSentMessage();
         $this->assertNotNull($message);
         $this->assertMessageSender($message, $expectedSender);
-        $this->assertContains(
+        $this->assertStringContainsString(
             'Text specially for check in test.',
             $message->getBody()->getParts()[0]->getRawContent(),
             'Expected text wasn\'t found in message.'

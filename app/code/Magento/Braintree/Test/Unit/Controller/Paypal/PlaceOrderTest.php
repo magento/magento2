@@ -21,7 +21,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class PlaceOrderTest
+ * Test for PlaceOrder
  *
  * @see \Magento\Braintree\Controller\Paypal\PlaceOrder
  *
@@ -72,7 +72,7 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var Context|MockObject $context */
         $context = $this->getMockBuilder(Context::class)
@@ -105,7 +105,7 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
 
         $this->logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->placeOrder = new PlaceOrder(
             $context,
             $this->config,

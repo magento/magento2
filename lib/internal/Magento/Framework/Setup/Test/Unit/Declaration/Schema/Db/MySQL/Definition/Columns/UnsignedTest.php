@@ -21,7 +21,7 @@ class UnsignedTest extends \PHPUnit\Framework\TestCase
      */
     private $unsigned;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->unsigned = $this->objectManager->getObject(
@@ -34,7 +34,7 @@ class UnsignedTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinition()
     {
-        /** @var IntegerColumnDto|\PHPUnit_Framework_MockObject_MockObject $column */
+        /** @var IntegerColumnDto|\PHPUnit\Framework\MockObject\MockObject $column */
         $column = $this->getMockBuilder(IntegerColumnDto::class)
             ->disableOriginalConstructor()
             ->setMethods(['isUnsigned'])
@@ -53,7 +53,7 @@ class UnsignedTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinitionNotUnsigned()
     {
-        /** @var IntegerColumnDto|\PHPUnit_Framework_MockObject_MockObject $column */
+        /** @var IntegerColumnDto|\PHPUnit\Framework\MockObject\MockObject $column */
         $column = $this->getMockBuilder(IntegerColumnDto::class)
             ->disableOriginalConstructor()
             ->setMethods(['isUnsigned'])

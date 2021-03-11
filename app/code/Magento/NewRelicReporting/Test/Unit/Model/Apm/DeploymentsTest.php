@@ -19,26 +19,26 @@ class DeploymentsTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\NewRelicReporting\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Framework\HTTP\ZendClientFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\HTTP\ZendClientFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $zendClientFactoryMock;
 
     /**
-     * @var \Magento\Framework\HTTP\ZendClient|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\HTTP\ZendClient|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $zendClientMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->zendClientFactoryMock = $this->getMockBuilder(\Magento\Framework\HTTP\ZendClientFactory::class)
             ->setMethods(['create'])
@@ -125,9 +125,7 @@ class DeploymentsTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->zendClientMock);
 
-        $this->assertInternalType(
-            'string',
-            $this->model->setDeployment($data['description'], $data['change'], $data['user'])
+        $this->assertIsString($this->model->setDeployment($data['description'], $data['change'], $data['user'])
         );
     }
 
@@ -188,9 +186,7 @@ class DeploymentsTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->zendClientMock);
 
-        $this->assertInternalType(
-            'bool',
-            $this->model->setDeployment($data['description'], $data['change'], $data['user'])
+        $this->assertIsBool($this->model->setDeployment($data['description'], $data['change'], $data['user'])
         );
     }
 
@@ -246,9 +242,7 @@ class DeploymentsTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->zendClientMock);
 
-        $this->assertInternalType(
-            'bool',
-            $this->model->setDeployment($data['description'], $data['change'], $data['user'])
+        $this->assertIsBool($this->model->setDeployment($data['description'], $data['change'], $data['user'])
         );
     }
 

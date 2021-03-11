@@ -16,16 +16,16 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     protected $image;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $backendHelperMock;
 
     /**
-     * @var \Magento\Framework\Url\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url\EncoderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlEncoder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->backendHelperMock = $this->getMockBuilder(\Magento\Backend\Helper\Data::class)
@@ -56,12 +56,12 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->urlEncoder->expects($this->once())
             ->method('encode')
             ->with($value)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
         $this->backendHelperMock->expects($this->once())
             ->method('getUrl')
             ->with('customer/index/viewfile', ['image' => $value])
-            ->will($this->returnValue($url));
+            ->willReturn($url);
 
-        $this->assertContains($url, $this->image->getElementHtml());
+        $this->assertStringContainsString($url, $this->image->getElementHtml());
     }
 }

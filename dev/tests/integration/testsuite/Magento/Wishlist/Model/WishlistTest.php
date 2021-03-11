@@ -47,7 +47,7 @@ class WishlistTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = ObjectManager::getInstance();
         $this->wishlistFactory = $this->objectManager->get(WishlistFactory::class);

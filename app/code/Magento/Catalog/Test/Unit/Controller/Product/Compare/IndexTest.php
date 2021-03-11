@@ -20,52 +20,52 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Catalog\Controller\Product\Compare\Index */
     protected $index;
 
-    /** @var \Magento\Framework\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $contextMock;
 
-    /** @var \Magento\Catalog\Model\Product\Compare\ItemFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\Product\Compare\ItemFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $itemFactoryMock;
 
-    /** @var Item\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Item\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $collectionFactoryMock;
 
-    /** @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject */
     protected $sessionMock;
 
-    /** @var \Magento\Customer\Model\Visitor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\Visitor|\PHPUnit\Framework\MockObject\MockObject */
     protected $visitorMock;
 
-    /** @var \Magento\Catalog\Model\Product\Compare\ListCompare|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\Product\Compare\ListCompare|\PHPUnit\Framework\MockObject\MockObject */
     protected $listCompareMock;
 
-    /** @var \Magento\Catalog\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\Session|\PHPUnit\Framework\MockObject\MockObject */
     protected $catalogSession;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $storeManagerMock;
 
-    /** @var \Magento\Framework\Data\Form\FormKey\Validator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Data\Form\FormKey\Validator|\PHPUnit\Framework\MockObject\MockObject */
     protected $formKeyValidatorMock;
 
-    /** @var \Magento\Framework\Controller\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Controller\Result\RedirectFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $redirectFactoryMock;
 
-    /** @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Result\PageFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $pageFactoryMock;
 
-    /** @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $productRepositoryMock;
 
-    /** @var \Magento\Framework\Url\DecoderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Url\DecoderInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $decoderMock;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $request;
 
-    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $response;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createPartialMock(
             \Magento\Framework\App\Action\Context::class,

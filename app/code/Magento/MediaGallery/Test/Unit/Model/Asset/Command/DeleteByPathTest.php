@@ -44,7 +44,7 @@ class DeleteByPathTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $resourceConnection = $this->createMock(ResourceConnection::class);
 
         $this->deleteMediaAssetByPath = (new ObjectManager($this))->getObject(
@@ -55,7 +55,7 @@ class DeleteByPathTest extends TestCase
             ]
         );
 
-        $this->adapter = $this->createMock(AdapterInterface::class);
+        $this->adapter = $this->getMockForAbstractClass(AdapterInterface::class);
         $resourceConnection->expects($this->once())
             ->method('getConnection')
             ->willReturn($this->adapter);

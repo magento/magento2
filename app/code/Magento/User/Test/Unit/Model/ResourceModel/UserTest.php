@@ -18,36 +18,36 @@ class UserTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\User\Model\ResourceModel\User */
     protected $model;
 
-    /** @var \Magento\User\Model\User|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\User\Model\User|\PHPUnit\Framework\MockObject\MockObject */
     protected $userMock;
 
-    /** @var \Magento\Framework\Model\ResourceModel\Db\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Model\ResourceModel\Db\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $contextMock;
 
-    /** @var \Magento\Authorization\Model\RoleFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Authorization\Model\RoleFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $roleFactoryMock;
 
-    /** @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Stdlib\DateTime|\PHPUnit\Framework\MockObject\MockObject */
     protected $dateTimeMock;
 
-    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject */
     protected $resourceMock;
 
-    /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $dbAdapterMock;
 
-    /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject */
     protected $selectMock;
 
-    /** @var \Magento\Authorization\Model\Role|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Authorization\Model\Role|\PHPUnit\Framework\MockObject\MockObject */
     protected $roleMock;
 
     /**
-     * @var \Magento\Framework\Acl\Data\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Acl\Data\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $aclDataCacheMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->userMock = $this->getMockBuilder(\Magento\User\Model\User::class)
             ->disableOriginalConstructor()
@@ -417,11 +417,11 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $serializerMock->expects($this->once())
             ->method('unserialize')
             ->with(json_encode($extraData))
-            ->will($this->returnValue($extraData));
+            ->willReturn($extraData);
 
         $methodUserMock->expects($this->once())
             ->method('getExtra')
-            ->will($this->returnValue(json_encode($extraData)));
+            ->willReturn(json_encode($extraData));
 
         $methodUserMock->expects($this->once())
             ->method('setExtra')
@@ -455,11 +455,11 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $serializerMock->expects($this->once())
             ->method('unserialize')
             ->with(json_encode($extraData))
-            ->will($this->returnValue($extraData));
+            ->willReturn($extraData);
 
         $methodUserMock->expects($this->exactly(2))
             ->method('getExtra')
-            ->will($this->returnValue(json_encode($extraData)));
+            ->willReturn(json_encode($extraData));
 
         $methodUserMock->expects($this->once())
             ->method('setExtra')
@@ -489,7 +489,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
 
         $methodUserMock->expects($this->exactly(1))
             ->method('getExtra')
-            ->will($this->returnValue($extraData));
+            ->willReturn($extraData);
 
         $methodUserMock->expects($this->never())
             ->method('setExtra');

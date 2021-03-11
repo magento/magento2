@@ -13,14 +13,14 @@ class DataTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\App\Config\MetadataProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\MetadataProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_metaDataProcessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_metaDataProcessor = $this->createMock(\Magento\Framework\App\Config\MetadataProcessor::class);
-        $this->_metaDataProcessor->expects($this->any())->method('process')->will($this->returnArgument(0));
+        $this->_metaDataProcessor->expects($this->any())->method('process')->willReturnArgument(0);
         $this->_model = new \Magento\Framework\App\Config\Data($this->_metaDataProcessor, []);
     }
 

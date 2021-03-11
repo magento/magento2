@@ -10,24 +10,24 @@ class BackendModelFactoryTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Theme\Model\Design\BackendModelFactory */
     protected $model;
 
-    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $objectManagerMock;
 
-    /** @var \Magento\Theme\Model\Design\Config\MetadataProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Model\Design\Config\MetadataProvider|\PHPUnit\Framework\MockObject\MockObject */
     protected $metadataProviderMock;
 
     /**
-     * @var \Magento\Theme\Model\ResourceModel\Design\Config\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ResourceModel\Design\Config\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactoryMock;
 
-    /** @var \Magento\Theme\Model\ResourceModel\Design\Config\Collection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Model\ResourceModel\Design\Config\Collection|\PHPUnit\Framework\MockObject\MockObject */
     protected $collection;
 
-    /** @var \Magento\Framework\App\Config\Value|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Config\Value|\PHPUnit\Framework\MockObject\MockObject */
     protected $backendModel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->getMockForAbstractClass();

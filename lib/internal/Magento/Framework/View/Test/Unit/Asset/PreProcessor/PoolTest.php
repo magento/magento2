@@ -26,12 +26,12 @@ class PoolTest extends \PHPUnit\Framework\TestCase
     const PREPROCESSOR_CLASS = \Magento\Framework\View\Asset\PreProcessorInterface::class;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var SortInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SortInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sorterMock;
 
@@ -40,7 +40,7 @@ class PoolTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->getMockForAbstractClass();
@@ -50,11 +50,11 @@ class PoolTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Chain|\PHPUnit_Framework_MockObject_MockObject
+     * @return Chain|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getChainMock($type)
     {
-        /** @var Chain|\PHPUnit_Framework_MockObject_MockObject $chainMock */
+        /** @var Chain|\PHPUnit\Framework\MockObject\MockObject $chainMock */
         $chainMock = $this->getMockBuilder(\Magento\Framework\View\Asset\PreProcessor\Chain::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -67,12 +67,12 @@ class PoolTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param Chain|\PHPUnit_Framework_MockObject_MockObject $chainMock
-     * @return PreProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @param Chain|\PHPUnit\Framework\MockObject\MockObject $chainMock
+     * @return PreProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getPreprocessorMock($chainMock)
     {
-        /** @var PreProcessorInterface|\PHPUnit_Framework_MockObject_MockObject $preprocessorMock */
+        /** @var PreProcessorInterface|\PHPUnit\Framework\MockObject\MockObject $preprocessorMock */
         $preprocessorMock = $this->getMockBuilder(self::PREPROCESSOR_CLASS)
             ->getMockForAbstractClass();
 
@@ -150,11 +150,12 @@ class PoolTest extends \PHPUnit\Framework\TestCase
     /**
      * Run test for process method (exception)
      *
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage "stdClass" has to implement the PreProcessorInterface.
      */
     public function testProcessBadInterface()
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('"stdClass" has to implement the PreProcessorInterface.');
+
         $preprocessors = [
             self::CONTENT_TYPE => [
                 'test' => [

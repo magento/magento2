@@ -16,17 +16,17 @@ use Magento\Store\Model\StoreManagerInterface;
 class CountryWithWebsitesTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $countriesFactoryMock;
 
     /**
-     * @var \Magento\Directory\Model\AllowedCountries | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\AllowedCountries | \PHPUnit\Framework\MockObject\MockObject
      */
     private $allowedCountriesMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
@@ -36,11 +36,11 @@ class CountryWithWebsitesTest extends \PHPUnit\Framework\TestCase
     private $countryByWebsite;
 
     /**
-     * @var Share | \PHPUnit_Framework_MockObject_MockObject
+     * @var Share | \PHPUnit\Framework\MockObject\MockObject
      */
     private $shareConfigMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->countriesFactoryMock =
             $this->getMockBuilder(\Magento\Directory\Model\ResourceModel\Country\CollectionFactory::class)
@@ -58,7 +58,7 @@ class CountryWithWebsitesTest extends \PHPUnit\Framework\TestCase
             $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory::class)
                 ->disableOriginalConstructor()
                 ->getMock();
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->shareConfigMock = $this->getMockBuilder(Share::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -74,8 +74,8 @@ class CountryWithWebsitesTest extends \PHPUnit\Framework\TestCase
 
     public function testGetAllOptions()
     {
-        $website1 = $this->createMock(WebsiteInterface::class);
-        $website2 = $this->createMock(WebsiteInterface::class);
+        $website1 = $this->getMockForAbstractClass(WebsiteInterface::class);
+        $website2 = $this->getMockForAbstractClass(WebsiteInterface::class);
 
         $website1->expects($this->atLeastOnce())
             ->method('getId')

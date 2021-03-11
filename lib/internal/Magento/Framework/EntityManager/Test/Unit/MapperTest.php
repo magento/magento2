@@ -12,7 +12,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
      */
     private $mapper;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $config = [
             \Magento\Customer\Api\Data\CustomerInterface::class => ['entity_id' => 'id'],
@@ -41,11 +41,12 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Incorrect configuration for Magento\Customer\Api\Data\AddressInterface
      */
     public function testEntityToDatabaseException()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Incorrect configuration for Magento\\Customer\\Api\\Data\\AddressInterface');
+
         $inputData = [
             'group_id' => 1,
             'extension_attributes' => ['extension_attribute' => ['value' => 'some value']],
@@ -73,11 +74,12 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Incorrect configuration for Magento\Customer\Api\Data\AddressInterface
      */
     public function testDatabaseToEntityException()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Incorrect configuration for Magento\\Customer\\Api\\Data\\AddressInterface');
+
         $inputData = [
             'group_id' => 1,
             'extension_attributes' => ['extension_attribute' => ['value' => 'some value']],

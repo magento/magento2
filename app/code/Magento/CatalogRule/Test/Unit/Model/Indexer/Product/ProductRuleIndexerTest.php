@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ProductRuleIndexerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\IndexBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogRule\Model\Indexer\IndexBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexBuilder;
 
@@ -20,11 +20,11 @@ class ProductRuleIndexerTest extends \PHPUnit\Framework\TestCase
     protected $indexer;
 
     /**
-     * @var \Magento\Framework\Indexer\CacheContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\CacheContext|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cacheContextMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->indexBuilder = $this->createMock(\Magento\CatalogRule\Model\Indexer\IndexBuilder::class);
 

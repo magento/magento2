@@ -14,14 +14,14 @@ use Magento\SwaggerWebapiAsync\Model\SchemaType\Async;
 class AsyncTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var SchemaTypeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SchemaTypeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $async;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->async = new Async('async');
     }

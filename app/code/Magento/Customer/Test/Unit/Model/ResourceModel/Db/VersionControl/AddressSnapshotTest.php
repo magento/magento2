@@ -15,11 +15,11 @@ class AddressSnapshotTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->metadataMock = $this->getMockBuilder(
             \Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata::class
@@ -124,6 +124,6 @@ class AddressSnapshotTest extends \PHPUnit\Framework\TestCase
 
         $this->model->registerSnapshot($dataObjectMock);
 
-        $this->assertEquals(true, $this->model->isModified($dataObjectMock));
+        $this->assertTrue($this->model->isModified($dataObjectMock));
     }
 }

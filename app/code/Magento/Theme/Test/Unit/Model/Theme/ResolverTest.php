@@ -13,31 +13,31 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\DesignInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $designMock;
 
     /**
-     * @var \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $themeCollectionFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $appStateMock;
 
     /**
-     * @var \Magento\Theme\Model\ResourceModel\Theme\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ResourceModel\Theme\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $themeCollectionMock;
 
     /**
-     * @var \Magento\Framework\View\Design\ThemeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\ThemeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $themeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->designMock = $this->getMockForAbstractClass(\Magento\Framework\View\DesignInterface::class);
         $this->themeCollectionFactoryMock = $this->createPartialMock(
@@ -61,8 +61,8 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
             $this->exactly(2)
         )->method(
             'getDesignTheme'
-        )->will(
-            $this->returnValue($this->themeMock)
+        )->willReturn(
+            $this->themeMock
         );
         $this->designMock->expects($this->never())->method('getArea');
         $this->designMock->expects($this->never())->method('getConfigurationDesignTheme');
@@ -71,8 +71,8 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getArea'
-        )->will(
-            $this->returnValue('theme_area')
+        )->willReturn(
+            'theme_area'
         );
 
         $this->themeCollectionFactoryMock->expects($this->never())->method('create');
@@ -81,8 +81,8 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getAreaCode'
-        )->will(
-            $this->returnValue('theme_area')
+        )->willReturn(
+            'theme_area'
         );
 
         $this->assertEquals($this->themeMock, $this->model->get());
@@ -94,15 +94,15 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
             $this->exactly(2)
         )->method(
             'getDesignTheme'
-        )->will(
-            $this->returnValue($this->themeMock)
+        )->willReturn(
+            $this->themeMock
         );
         $this->designMock->expects(
             $this->once()
         )->method(
             'getArea'
-        )->will(
-            $this->returnValue('design_area')
+        )->willReturn(
+            'design_area'
         );
         $this->designMock->expects($this->never())->method('getConfigurationDesignTheme');
 
@@ -110,8 +110,8 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getArea'
-        )->will(
-            $this->returnValue('theme_area')
+        )->willReturn(
+            'theme_area'
         );
 
         $this->themeCollectionFactoryMock->expects($this->never())->method('create');
@@ -120,8 +120,8 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getAreaCode'
-        )->will(
-            $this->returnValue('design_area')
+        )->willReturn(
+            'design_area'
         );
 
         $this->assertEquals($this->themeMock, $this->model->get());
@@ -133,38 +133,38 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getDesignTheme'
-        )->will(
-            $this->returnValue($this->themeMock)
+        )->willReturn(
+            $this->themeMock
         );
         $this->designMock->expects(
             $this->once()
         )->method(
             'getArea'
-        )->will(
-            $this->returnValue('design_area')
+        )->willReturn(
+            'design_area'
         );
         $this->designMock->expects(
             $this->once()
         )->method(
             'getConfigurationDesignTheme'
-        )->will(
-            $this->returnValue('other_theme')
+        )->willReturn(
+            'other_theme'
         );
 
         $this->themeMock->expects(
             $this->once()
         )->method(
             'getArea'
-        )->will(
-            $this->returnValue('theme_area')
+        )->willReturn(
+            'theme_area'
         );
 
         $this->themeCollectionFactoryMock->expects(
             $this->once()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($this->themeCollectionMock)
+        )->willReturn(
+            $this->themeCollectionMock
         );
 
         $this->themeCollectionMock->expects(
@@ -173,16 +173,16 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
             'getThemeByFullPath'
         )->with(
             'other_area' . \Magento\Framework\View\Design\ThemeInterface::PATH_SEPARATOR . 'other_theme'
-        )->will(
-            $this->returnValue($this->themeMock)
+        )->willReturn(
+            $this->themeMock
         );
 
         $this->appStateMock->expects(
             $this->once()
         )->method(
             'getAreaCode'
-        )->will(
-            $this->returnValue('other_area')
+        )->willReturn(
+            'other_area'
         );
 
         $this->assertEquals($this->themeMock, $this->model->get());
@@ -194,38 +194,38 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getDesignTheme'
-        )->will(
-            $this->returnValue($this->themeMock)
+        )->willReturn(
+            $this->themeMock
         );
         $this->designMock->expects(
             $this->once()
         )->method(
             'getArea'
-        )->will(
-            $this->returnValue('design_area')
+        )->willReturn(
+            'design_area'
         );
         $this->designMock->expects(
             $this->once()
         )->method(
             'getConfigurationDesignTheme'
-        )->will(
-            $this->returnValue(12)
+        )->willReturn(
+            12
         );
 
         $this->themeMock->expects(
             $this->once()
         )->method(
             'getArea'
-        )->will(
-            $this->returnValue('theme_area')
+        )->willReturn(
+            'theme_area'
         );
 
         $this->themeCollectionFactoryMock->expects(
             $this->once()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($this->themeCollectionMock)
+        )->willReturn(
+            $this->themeCollectionMock
         );
 
         $this->themeCollectionMock->expects(
@@ -234,16 +234,16 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
             'getItemById'
         )->with(
             12
-        )->will(
-            $this->returnValue($this->themeMock)
+        )->willReturn(
+            $this->themeMock
         );
 
         $this->appStateMock->expects(
             $this->once()
         )->method(
             'getAreaCode'
-        )->will(
-            $this->returnValue('other_area')
+        )->willReturn(
+            'other_area'
         );
 
         $this->assertEquals($this->themeMock, $this->model->get());

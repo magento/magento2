@@ -10,11 +10,11 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class AggregationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Search\Response\Aggregation |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Response\Aggregation |\PHPUnit\Framework\MockObject\MockObject
      */
     private $aggregation;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 
@@ -23,8 +23,8 @@ class AggregationTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $bucket->expects($this->any())->method('getName')->will($this->returnValue('1'));
-        $bucket->expects($this->any())->method('getValues')->will($this->returnValue(1));
+        $bucket->expects($this->any())->method('getName')->willReturn('1');
+        $bucket->expects($this->any())->method('getValues')->willReturn(1);
         $buckets[1] = $bucket;
 
         $this->aggregation = $helper->getObject(

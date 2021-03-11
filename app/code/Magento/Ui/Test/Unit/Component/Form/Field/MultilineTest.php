@@ -26,12 +26,12 @@ class MultilineTest extends \PHPUnit\Framework\TestCase
     protected $multiline;
 
     /**
-     * @var UiComponentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var UiComponentFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $uiComponentFactoryMock;
 
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
@@ -40,7 +40,7 @@ class MultilineTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->uiComponentFactoryMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentFactory::class)
             ->disableOriginalConstructor()
@@ -82,7 +82,7 @@ class MultilineTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param int $exactly
-     * @return UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return UiComponentInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getComponentMock($exactly)
     {

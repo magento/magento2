@@ -21,7 +21,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $eventManager = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->disableOriginalConstructor()

@@ -27,27 +27,27 @@ class RecurringDataTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $indexer;
 
     /**
-     * @var StateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StateInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $state;
 
     /**
-     * @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $indexerRegistry;
 
     /**
-     * @var ModuleDataSetupInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModuleDataSetupInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $setup;
 
     /**
-     * @var ModuleContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModuleContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $context;
 
@@ -59,7 +59,7 @@ class RecurringDataTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->state = $this->getMockBuilder(StateInterface::class)

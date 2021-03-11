@@ -22,21 +22,21 @@ class PoolTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var ModifierFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModifierFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $factoryMock;
 
     /**
-     * @var ModifierInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModifierInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataProviderMockOne;
 
     /**
-     * @var ModifierInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModifierInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataProviderMockTwo;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->factoryMock = $this->getMockBuilder(ModifierFactory::class)
@@ -100,11 +100,12 @@ class PoolTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The parameter "sortOrder" is missing. Set the "sortOrder" and try again.
      */
     public function testWithSortOrderException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The parameter "sortOrder" is missing. Set the "sortOrder" and try again.');
+
         /** @var Pool $model */
         $model = $this->objectManager->getObject(Pool::class, [
             'factory' => $this->factoryMock,
@@ -119,11 +120,12 @@ class PoolTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The parameter "class" is missing. Set the "class" and try again.
      */
     public function testWithClassException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The parameter "class" is missing. Set the "class" and try again.');
+
         /** @var Pool $model */
         $model = $this->objectManager->getObject(Pool::class, [
             'factory' => $this->factoryMock,

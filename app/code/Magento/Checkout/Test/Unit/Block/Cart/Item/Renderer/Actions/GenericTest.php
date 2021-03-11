@@ -16,7 +16,7 @@ class GenericTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -29,7 +29,7 @@ class GenericTest extends \PHPUnit\Framework\TestCase
     public function testGetItem()
     {
         /**
-         * @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock
+         * @var Item|\PHPUnit\Framework\MockObject\MockObject $itemMock
          */
         $itemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
@@ -42,14 +42,14 @@ class GenericTest extends \PHPUnit\Framework\TestCase
     public function testIsProductVisibleInSiteVisibility()
     {
         /**
-         * @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock
+         * @var Item|\PHPUnit\Framework\MockObject\MockObject $itemMock
          */
         $itemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         /**
-         * @var Product|\PHPUnit_Framework_MockObject_MockObject $productMock
+         * @var Product|\PHPUnit\Framework\MockObject\MockObject $productMock
          */
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
@@ -70,7 +70,7 @@ class GenericTest extends \PHPUnit\Framework\TestCase
     public function testIsVirtual()
     {
         /**
-         * @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock
+         * @var Item|\PHPUnit\Framework\MockObject\MockObject $itemMock
          */
         $itemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()

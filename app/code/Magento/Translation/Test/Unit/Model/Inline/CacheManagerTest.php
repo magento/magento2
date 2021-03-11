@@ -17,26 +17,26 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \Magento\Framework\Translate\ResourceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Translate\ResourceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $translateResourceMock;
 
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeResolverMock;
 
     /**
-     * @var \Magento\Translation\Model\FileManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Translation\Model\FileManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->disableOriginalConstructor()

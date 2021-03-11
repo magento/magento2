@@ -16,16 +16,16 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $rendererOne;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $rendererTwo;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->rendererOne = $this->createMock(\Magento\Framework\Phrase\RendererInterface::class);
         $this->rendererTwo = $this->createMock(\Magento\Framework\Phrase\RendererInterface::class);
@@ -33,11 +33,12 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Instance of the phrase renderer is expected, got stdClass instead
      */
     public function testConstructorException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Instance of the phrase renderer is expected, got stdClass instead');
+
         new \Magento\Framework\Phrase\Renderer\Composite([new \stdClass()]);
     }
 
@@ -55,8 +56,8 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
         )->with(
             [$text],
             $arguments
-        )->will(
-            $this->returnValue($resultAfterFirst)
+        )->willReturn(
+            $resultAfterFirst
         );
 
         $this->rendererTwo->expects(
@@ -69,8 +70,8 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
                 $resultAfterFirst,
             ],
             $arguments
-        )->will(
-            $this->returnValue($resultAfterSecond)
+        )->willReturn(
+            $resultAfterSecond
         );
 
         $this->assertEquals($resultAfterSecond, $this->object->render([$text], $arguments));

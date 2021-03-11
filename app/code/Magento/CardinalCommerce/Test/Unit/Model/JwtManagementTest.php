@@ -28,7 +28,7 @@ class JwtManagementTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = new JwtManagement(new Json());
     }

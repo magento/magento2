@@ -22,7 +22,7 @@ class ClassesScannerTest extends \PHPUnit\Framework\TestCase
 
     private $generation;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->generation = realpath(__DIR__ . '/../../_files/var/generation');
         $mock = $this->getMockBuilder(DirectoryList::class)->disableOriginalConstructor()->setMethods(
@@ -36,7 +36,7 @@ class ClassesScannerTest extends \PHPUnit\Framework\TestCase
     {
         $pathToScan = str_replace('\\', '/', realpath(__DIR__ . '/../../') . '/_files/app/code/Magento/SomeModule');
         $actual = $this->model->getList($pathToScan);
-        $this->assertTrue(is_array($actual));
+        $this->assertIsArray($actual);
         $this->assertCount(5, $actual);
     }
 }

@@ -24,7 +24,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var CategoryCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryCollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $categoryCollectionFactoryMock;
 
@@ -39,7 +39,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
         Category::KEY_IS_ACTIVE => 'getIsActive'
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->categoryCollectionFactoryMock = $this->getMockBuilder(CategoryCollectionFactory::class)
             ->setMethods(['create'])
@@ -141,7 +141,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $categories
-     * @return CategoryCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @return CategoryCollection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getCategoryCollectionMock($categories)
     {
@@ -168,7 +168,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $data
-     * @return Category|\PHPUnit_Framework_MockObject_MockObject
+     * @return Category|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getCategoryMock($data)
     {

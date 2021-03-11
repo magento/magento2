@@ -14,17 +14,17 @@ class RawTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Controller\Result\Raw */
     protected $raw;
 
-    /** @var HttpResponseInterface|\PHPUnit_Framework_MockObject_MockObject*/
+    /** @var HttpResponseInterface|\PHPUnit\Framework\MockObject\MockObject*/
     protected $response;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->response = $this->createMock(HttpResponseInterface::class);
+        $this->response = $this->getMockForAbstractClass(HttpResponseInterface::class);
         $this->raw = $this->objectManagerHelper->getObject(\Magento\Framework\Controller\Result\Raw::class);
     }
 

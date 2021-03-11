@@ -11,11 +11,11 @@ use Magento\Framework\Config\File\ConfigFilePool;
 class ConfigFilePoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Config\File\ConfigFilePool
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Config\File\ConfigFilePool
      */
     private $configFilePool;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $newPath = [
             'new_key' => 'new_config.php'
@@ -39,11 +39,12 @@ class ConfigFilePoolTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage File config key does not exist.
      */
     public function testGetPathException()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('File config key does not exist.');
+
         $fileKey = 'not_existing';
         $this->configFilePool->getPath($fileKey);
     }

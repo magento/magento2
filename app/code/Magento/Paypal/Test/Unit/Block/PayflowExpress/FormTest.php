@@ -12,7 +12,7 @@ use Magento\Paypal\Model\Config;
 class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_paypalConfig;
 
@@ -21,33 +21,33 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_paypalConfig = $this->createMock(\Magento\Paypal\Model\Config::class);
         $this->_paypalConfig
             ->expects($this->once())
             ->method('setMethod')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $paypalConfigFactory = $this->createPartialMock(\Magento\Paypal\Model\ConfigFactory::class, ['create']);
         $paypalConfigFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->_paypalConfig));
+            ->willReturn($this->_paypalConfig);
 
         $mark = $this->createMock(\Magento\Framework\View\Element\Template::class);
         $mark->expects($this->once())
             ->method('setTemplate')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $mark->expects($this->any())
             ->method('__call')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $layout = $this->getMockForAbstractClass(
             \Magento\Framework\View\LayoutInterface::class
         );
         $layout->expects($this->once())
             ->method('createBlock')
             ->with(\Magento\Framework\View\Element\Template::class)
-            ->will($this->returnValue($mark));
+            ->willReturn($mark);
 
         $localeResolver = $this->createMock(\Magento\Framework\Locale\ResolverInterface::class);
 

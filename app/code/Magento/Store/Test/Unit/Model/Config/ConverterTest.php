@@ -10,7 +10,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Store\Model\Config\Converter */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new \Magento\Store\Model\Config\Converter();
     }

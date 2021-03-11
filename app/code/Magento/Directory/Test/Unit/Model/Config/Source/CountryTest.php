@@ -17,7 +17,7 @@ class CountryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_collectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_collectionMock = $this->createMock(\Magento\Directory\Model\ResourceModel\Country\Collection::class);
@@ -36,17 +36,17 @@ class CountryTest extends \PHPUnit\Framework\TestCase
      */
     public function testToOptionArray($isMultiselect, $foregroundCountries, $expectedResult)
     {
-        $this->_collectionMock->expects($this->once())->method('loadData')->will($this->returnSelf());
+        $this->_collectionMock->expects($this->once())->method('loadData')->willReturnSelf();
         $this->_collectionMock->expects(
             $this->once()
         )->method(
             'setForegroundCountries'
         )->with(
             $foregroundCountries
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
+            
         );
-        $this->_collectionMock->expects($this->once())->method('toOptionArray')->will($this->returnValue([]));
+        $this->_collectionMock->expects($this->once())->method('toOptionArray')->willReturn([]);
         $this->assertEquals($this->_model->toOptionArray($isMultiselect, $foregroundCountries), $expectedResult);
     }
 

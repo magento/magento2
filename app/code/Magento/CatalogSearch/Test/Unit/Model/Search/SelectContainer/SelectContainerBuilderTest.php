@@ -27,37 +27,37 @@ use Magento\Framework\Search\Request\Filter\Term;
 class SelectContainerBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var SelectContainerFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var SelectContainerFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $selectContainerFactoryMock;
 
     /**
-     * @var FullTextSearchCheck|\PHPUnit_Framework_MockObject_MockObject
+     * @var FullTextSearchCheck|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fullTextSearchCheckMock;
 
     /**
-     * @var CustomAttributeFilterCheck|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomAttributeFilterCheck|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customAttributeFilterCheckMock;
 
     /**
-     * @var FiltersExtractor|\PHPUnit_Framework_MockObject_MockObject
+     * @var FiltersExtractor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filtersExtractorMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigInterfaceMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
@@ -66,7 +66,7 @@ class SelectContainerBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $selectContainerBuilder;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->selectContainerFactoryMock = $this->getMockBuilder(SelectContainerFactory::class)
             ->disableOriginalConstructor()
@@ -191,7 +191,7 @@ class SelectContainerBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function mockQuery()
     {

@@ -20,12 +20,12 @@ class ResourceConnectionTest extends \PHPUnit\Framework\TestCase
     private $unit;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $deploymentConfigMock;
 
     /**
-     * @var ConnectionFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConnectionFactoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionFactoryMock;
 
@@ -35,11 +35,11 @@ class ResourceConnectionTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()

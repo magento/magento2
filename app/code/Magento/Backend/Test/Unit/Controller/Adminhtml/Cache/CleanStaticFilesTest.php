@@ -9,22 +9,22 @@ namespace Magento\Backend\Test\Unit\Controller\Adminhtml\Cache;
 class CleanStaticFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var  \Magento\Framework\Event\ManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var  \Magento\Framework\Event\ManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\ManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $messageManagerMock;
 
     /**
-     * @var \Magento\Framework\Controller\ResultFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\ResultFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $resultFactoryMock;
 
@@ -33,7 +33,7 @@ class CleanStaticFilesTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
@@ -69,7 +69,7 @@ class CleanStaticFilesTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $cleanupFilesMock->expects($this->once())
             ->method('clearMaterializedViewFiles');
-        $this->objectManagerMock->expects($this->once())->method('get')->will($this->returnValue($cleanupFilesMock));
+        $this->objectManagerMock->expects($this->once())->method('get')->willReturn($cleanupFilesMock);
 
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch')

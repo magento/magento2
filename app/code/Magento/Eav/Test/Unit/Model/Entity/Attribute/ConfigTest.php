@@ -17,31 +17,31 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_readerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_cacheMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_cacheId;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Entity\Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_attribute;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_entityType;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_attribute = $this->createMock(\Magento\Eav\Model\Entity\Attribute::class);
         $this->_entityType = $this->createMock(\Magento\Eav\Model\Entity\Type::class);
@@ -67,21 +67,21 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testGetLockedFieldsEmpty()
     {
-        $this->_entityType->expects($this->once())->method('getEntityTypeCode')->will($this->returnValue('test_code'));
+        $this->_entityType->expects($this->once())->method('getEntityTypeCode')->willReturn('test_code');
         $this->_attribute->expects(
             $this->once()
         )->method(
             'getEntityType'
-        )->will(
-            $this->returnValue($this->_entityType)
+        )->willReturn(
+            $this->_entityType
         );
 
         $this->_attribute->expects(
             $this->once()
         )->method(
             'getAttributeCode'
-        )->will(
-            $this->returnValue('attribute_code')
+        )->willReturn(
+            'attribute_code'
         );
         $result = $this->_model->getLockedFields($this->_attribute);
         $this->assertEquals([], $result);
@@ -93,18 +93,18 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getEntityTypeCode'
-        )->will(
-            $this->returnValue('test_code1/test_code2')
+        )->willReturn(
+            'test_code1/test_code2'
         );
         $this->_attribute->expects(
             $this->once()
         )->method(
             'getEntityType'
-        )->will(
-            $this->returnValue($this->_entityType)
+        )->willReturn(
+            $this->_entityType
         );
 
-        $this->_attribute->expects($this->once())->method('getAttributeCode')->will($this->returnValue('test_code'));
+        $this->_attribute->expects($this->once())->method('getAttributeCode')->willReturn('test_code');
         $data = [
             'test_code1' => [
                 'test_code2' => ['attributes' => ['test_code' => ['test_code1' => 'test_code1']]],

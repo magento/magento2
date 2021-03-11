@@ -26,58 +26,59 @@ use Magento\Framework\Setup\Patch\PatchRegistryFactory;
 
 /**
  * Class PatchApplierTest
- * @package Magento\Framework\Setup\Test\Unit\Patch
+ * Test for PatchApplier
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PatchApplierTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var PatchRegistryFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PatchRegistryFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $patchRegistryFactoryMock;
 
     /**
-     * @var PatchReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var PatchReader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataPatchReaderMock;
 
     /**
-     * @var PatchReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var PatchReader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $schemaPatchReaderMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var ModuleResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModuleResource|\PHPUnit\Framework\MockObject\MockObject
      */
     private $moduleResourceMock;
 
     /**
-     * @var PatchHistory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PatchHistory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $patchHistoryMock;
 
     /**
-     * @var PatchFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PatchFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $patchFactoryMock;
 
     /**
-     * @var \Magento\Framework\Setup\SetupInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Setup\SetupInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $schemaSetupMock;
 
     /**
-     * @var ModuleDataSetupInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModuleDataSetupInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $moduleDataSetupMock;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
@@ -87,16 +88,16 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
     private $patchApllier;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var PatchBackwardCompatability |\PHPUnit_Framework_MockObject_MockObject
+     * @var PatchBackwardCompatability |\PHPUnit\Framework\MockObject\MockObject
      */
     private $patchBackwardCompatability;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->patchRegistryFactoryMock = $this->createMock(PatchRegistryFactory::class);
         $this->dataPatchReaderMock = $this->createMock(PatchReader::class);
@@ -105,10 +106,10 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
         $this->moduleResourceMock = $this->createMock(ModuleResource::class);
         $this->patchHistoryMock = $this->createMock(PatchHistory::class);
         $this->patchFactoryMock = $this->createMock(PatchFactory::class);
-        $this->schemaSetupMock = $this->createMock(SchemaSetupInterface::class);
-        $this->moduleDataSetupMock = $this->createMock(ModuleDataSetupInterface::class);
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
-        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->schemaSetupMock = $this->getMockForAbstractClass(SchemaSetupInterface::class);
+        $this->moduleDataSetupMock = $this->getMockForAbstractClass(ModuleDataSetupInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->moduleDataSetupMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
 
         $objectManager = new ObjectManager($this);
@@ -159,7 +160,9 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
         );
 
         $patches = [
+            // @phpstan-ignore-next-line
             \SomeDataPatch::class,
+            // @phpstan-ignore-next-line
             \OtherDataPatch::class
         ];
         $patchRegistryMock = $this->createAggregateIteratorMock(PatchRegistry::class, $patches, ['registerPatch']);
@@ -170,15 +173,17 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($patchRegistryMock);
 
-        $patch1 = $this->createMock(\SomeDataPatch::class);
+        $patch1 = $this->createMock(\SomeDataPatch::class);// @phpstan-ignore-line
         $patch1->expects($this->once())->method('apply');
         $patch1->expects($this->once())->method('getAliases')->willReturn([]);
-        $patch2 = $this->createMock(\OtherDataPatch::class);
+        $patch2 = $this->createMock(\OtherDataPatch::class);// @phpstan-ignore-line
         $patch2->expects($this->once())->method('apply');
         $patch2->expects($this->once())->method('getAliases')->willReturn([]);
         $this->objectManagerMock->expects($this->any())->method('create')->willReturnMap(
             [
+                // @phpstan-ignore-next-line
                 ['\\' . \SomeDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch1],
+                // @phpstan-ignore-next-line
                 ['\\' . \OtherDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch2],
             ]
         );
@@ -200,11 +205,12 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider applyDataPatchDataNewModuleProvider()
      *
-     * @expectedException Exception
-     * @expectedExceptionMessageRegExp "Unable to apply data patch .+ cannot be applied twice"
      */
     public function testApplyDataPatchForAlias($moduleName, $dataPatches, $moduleVersionInDb)
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessageMatches('"Unable to apply data patch .+ cannot be applied twice"');
+
         $this->dataPatchReaderMock->expects($this->once())
             ->method('read')
             ->with($moduleName)
@@ -216,7 +222,7 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $patch1 = $this->createMock(DataPatchInterface::class);
+        $patch1 = $this->getMockForAbstractClass(DataPatchInterface::class);
         $patch1->expects($this->once())->method('getAliases')->willReturn(['PatchAlias']);
         $patchClass = get_class($patch1);
 
@@ -235,14 +241,12 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
         );
         $this->connectionMock->expects($this->exactly(1))->method('beginTransaction');
         $this->connectionMock->expects($this->never())->method('commit');
-        $this->patchHistoryMock->expects($this->any())->method('fixPatch')->will(
-            $this->returnCallback(
-                function ($param1) {
-                    if ($param1 == 'PatchAlias') {
-                        throw new \LogicException(sprintf("Patch %s cannot be applied twice", $param1));
-                    }
+        $this->patchHistoryMock->expects($this->any())->method('fixPatch')->willReturnCallback(
+            function ($param1) {
+                if ($param1 == 'PatchAlias') {
+                    throw new \LogicException(sprintf("Patch %s cannot be applied twice", $param1));
                 }
-            )
+            }
         );
         $this->patchApllier->applyDataPatch($moduleName);
     }
@@ -256,7 +260,9 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
             'newly installed module' => [
                 'moduleName' => 'Module1',
                 'dataPatches' => [
+                    // @phpstan-ignore-next-line
                     \SomeDataPatch::class,
+                    // @phpstan-ignore-next-line
                     \OtherDataPatch::class
                 ],
                 'moduleVersionInDb' => null,
@@ -285,7 +291,9 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
         );
 
         $patches = [
+            // @phpstan-ignore-next-line
             \SomeDataPatch::class,
+            // @phpstan-ignore-next-line
             \OtherDataPatch::class
         ];
         $patchRegistryMock = $this->createAggregateIteratorMock(
@@ -300,15 +308,17 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($patchRegistryMock);
 
-        $patch1 = $this->createMock(\SomeDataPatch::class);
+        $patch1 = $this->createMock(\SomeDataPatch::class);// @phpstan-ignore-line
         $patch1->expects(self::never())->method('apply');
         $patch1->expects(self::any())->method('getAliases')->willReturn([]);
-        $patch2 = $this->createMock(\OtherDataPatch::class);
+        $patch2 = $this->createMock(\OtherDataPatch::class);// @phpstan-ignore-line
         $patch2->expects(self::once())->method('apply');
         $patch2->expects(self::any())->method('getAliases')->willReturn([]);
         $this->objectManagerMock->expects(self::any())->method('create')->willReturnMap(
             [
+                // @phpstan-ignore-next-line
                 ['\\' . \SomeDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch1],
+                // @phpstan-ignore-next-line
                 ['\\' . \OtherDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch2],
             ]
         );
@@ -327,7 +337,9 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
             'upgrade module iwth only OtherDataPatch' => [
                 'moduleName' => 'Module1',
                 'dataPatches' => [
+                    // @phpstan-ignore-next-line
                     \SomeDataPatch::class,
+                    // @phpstan-ignore-next-line
                     \OtherDataPatch::class
                 ],
                 'moduleVersionInDb' => '2.0.0',
@@ -340,13 +352,14 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
      * @param $dataPatches
      * @param $moduleVersionInDb
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage Patch Apply Error
      *
      * @dataProvider applyDataPatchDataInstalledModuleProvider()
      */
     public function testApplyDataPatchRollback($moduleName, $dataPatches, $moduleVersionInDb)
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Patch Apply Error');
+
         $this->dataPatchReaderMock->expects($this->once())
             ->method('read')
             ->with($moduleName)
@@ -359,7 +372,9 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
         );
 
         $patches = [
+            // @phpstan-ignore-next-line
             \SomeDataPatch::class,
+            // @phpstan-ignore-next-line
             \OtherDataPatch::class
         ];
         $patchRegistryMock = $this->createAggregateIteratorMock(PatchRegistry::class, $patches, ['registerPatch']);
@@ -370,14 +385,16 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($patchRegistryMock);
 
-        $patch1 = $this->createMock(\SomeDataPatch::class);
+        $patch1 = $this->createMock(\SomeDataPatch::class);// @phpstan-ignore-line
         $patch1->expects($this->never())->method('apply');
-        $patch2 = $this->createMock(\OtherDataPatch::class);
+        $patch2 = $this->createMock(\OtherDataPatch::class);// @phpstan-ignore-line
         $exception = new \Exception('Patch Apply Error');
         $patch2->expects($this->once())->method('apply')->willThrowException($exception);
         $this->objectManagerMock->expects($this->any())->method('create')->willReturnMap(
             [
+                // @phpstan-ignore-next-line
                 ['\\' . \SomeDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch1],
+                // @phpstan-ignore-next-line
                 ['\\' . \OtherDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch2],
             ]
         );
@@ -389,11 +406,12 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException Exception
-     * @expectedExceptionMessageRegExp "Patch [a-zA-Z0-9\_]+ should implement DataPatchInterface"
      */
     public function testNonDataPatchApply()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessageMatches('"Patch [a-zA-Z0-9\\_]+ should implement DataPatchInterface"');
+
         $this->dataPatchReaderMock->expects($this->once())
             ->method('read')
             ->with('module1')
@@ -425,7 +443,7 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
 
     public function testNonTransactionablePatch()
     {
-        $patches = [\NonTransactionableDataPatch::class];
+        $patches = [\NonTransactionableDataPatch::class];// @phpstan-ignore-line
         $this->dataPatchReaderMock->expects($this->once())
             ->method('read')
             ->with('module1')
@@ -482,7 +500,9 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
         );
 
         $patches = [
+            // @phpstan-ignore-next-line
             \SomeSchemaPatch::class,
+            // @phpstan-ignore-next-line
             \OtherSchemaPatch::class
         ];
         $patchRegistryMock = $this->createAggregateIteratorMock(PatchRegistry::class, $patches, ['registerPatch']);
@@ -493,15 +513,17 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($patchRegistryMock);
 
-        $patch1 = $this->createMock(\SomeSchemaPatch::class);
+        $patch1 = $this->createMock(\SomeSchemaPatch::class);// @phpstan-ignore-line
         $patch1->expects($this->never())->method('apply');
         $patch1->expects($this->any())->method('getAliases')->willReturn([]);
-        $patch2 = $this->createMock(\OtherSchemaPatch::class);
+        $patch2 = $this->createMock(\OtherSchemaPatch::class);// @phpstan-ignore-line
         $patch2->expects($this->once())->method('apply');
         $patch2->expects($this->any())->method('getAliases')->willReturn([]);
         $this->patchFactoryMock->expects($this->any())->method('create')->willReturnMap(
             [
+                // @phpstan-ignore-next-line
                 [\SomeSchemaPatch::class, ['schemaSetup' => $this->schemaSetupMock], $patch1],
+                // @phpstan-ignore-next-line
                 [\OtherSchemaPatch::class, ['schemaSetup' => $this->schemaSetupMock], $patch2],
             ]
         );
@@ -518,11 +540,12 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider schemaPatchDataProvider()
      *
-     * @expectedException Exception
-     * @expectedExceptionMessageRegExp "Unable to apply patch .+ cannot be applied twice"
      */
     public function testSchemaPatchApplyForPatchAlias($moduleName, $schemaPatches, $moduleVersionInDb)
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessageMatches('"Unable to apply patch .+ cannot be applied twice"');
+
         $this->schemaPatchReaderMock->expects($this->once())
             ->method('read')
             ->with($moduleName)
@@ -534,7 +557,7 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $patch1 = $this->createMock(PatchInterface::class);
+        $patch1 = $this->getMockForAbstractClass(PatchInterface::class);
         $patch1->expects($this->once())->method('getAliases')->willReturn(['PatchAlias']);
         $patchClass = get_class($patch1);
 
@@ -547,14 +570,12 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
             ->willReturn($patchRegistryMock);
 
         $this->patchFactoryMock->expects($this->any())->method('create')->willReturn($patch1);
-        $this->patchHistoryMock->expects($this->any())->method('fixPatch')->will(
-            $this->returnCallback(
-                function ($param1) {
-                    if ($param1 == 'PatchAlias') {
-                        throw new \LogicException(sprintf("Patch %s cannot be applied twice", $param1));
-                    }
+        $this->patchHistoryMock->expects($this->any())->method('fixPatch')->willReturnCallback(
+            function ($param1) {
+                if ($param1 == 'PatchAlias') {
+                    throw new \LogicException(sprintf("Patch %s cannot be applied twice", $param1));
                 }
-            )
+            }
         );
 
         $this->patchApllier->applySchemaPatch($moduleName);
@@ -562,7 +583,7 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
 
     public function testRevertDataPatches()
     {
-        $patches = [\RevertableDataPatch::class];
+        $patches = [\RevertableDataPatch::class];// @phpstan-ignore-line
         $this->dataPatchReaderMock->expects($this->once())
             ->method('read')
             ->with('module1')
@@ -609,7 +630,9 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
             'upgrade module iwth only OtherSchemaPatch' => [
                 'moduleName' => 'Module1',
                 'schemaPatches' => [
+                    // @phpstan-ignore-next-line
                     \SomeSchemaPatch::class,
+                    // @phpstan-ignore-next-line
                     \OtherSchemaPatch::class
                 ],
                 'moduleVersionInDb' => '2.0.0',
@@ -622,7 +645,7 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
      * @param string $className
      * @param array $items
      * @param array $methods
-     * @return \PHPUnit_Framework_MockObject_MockObject|\IteratorAggregate
+     * @return \PHPUnit\Framework\MockObject\MockObject|\IteratorAggregate
      * @throws \Exception
      */
     private function createAggregateIteratorMock($className, array $items = [], array $methods = [])
@@ -631,7 +654,7 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
             throw new \Exception('Mock possible only for classes that implement IteratorAggregate interface.');
         }
         /**
-         * PHPUnit_Framework_MockObject_MockObject
+         * PHPUnit\Framework\MockObject\MockObject
          */
         $someIterator = $this->createMock(\ArrayIterator::class);
 

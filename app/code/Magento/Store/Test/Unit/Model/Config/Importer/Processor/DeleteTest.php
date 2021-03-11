@@ -19,7 +19,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreRepository;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\WebsiteRepository;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * Test for Delete processor.
@@ -97,7 +97,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->registryMock = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
@@ -307,11 +307,12 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessage Some exception
      */
     public function testRunWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\RuntimeException::class);
+        $this->expectExceptionMessage('Some exception');
+
         $data = [
             ScopeInterface::SCOPE_WEBSITES => [],
             ScopeInterface::SCOPE_STORES => []

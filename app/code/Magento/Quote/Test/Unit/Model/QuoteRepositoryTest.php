@@ -9,7 +9,7 @@ use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
-use PHPUnit\Framework\MockObject\Matcher\InvokedCount as InvokedCountMatch;
+use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCountMatch;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\Data\CartInterface;
@@ -38,74 +38,74 @@ class QuoteRepositoryTest extends TestCase
     private $model;
 
     /**
-     * @var CartInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CartInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cartFactoryMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
     /**
-     * @var Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteMock;
 
     /**
-     * @var CartSearchResultsInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CartSearchResultsInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $searchResultsDataFactory;
 
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteCollectionMock;
 
     /**
-     * @var JoinProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var JoinProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $extensionAttributesJoinProcessorMock;
 
     /**
-     * @var LoadHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoadHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loadHandlerMock;
 
     /**
-     * @var LoadHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoadHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $saveHandlerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionProcessor;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteCollectionFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerMock);
 
         $this->cartFactoryMock = $this->createPartialMock(CartInterfaceFactory::class, ['create']);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->quoteMock = $this->createPartialMock(
             Quote::class,
             [
@@ -169,11 +169,12 @@ class QuoteRepositoryTest extends TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with cartId = 14
      */
     public function testGetWithExceptionById()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('No such entity with cartId = 14');
+
         $cartId = 14;
 
         $this->cartFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteMock);
@@ -344,11 +345,12 @@ class QuoteRepositoryTest extends TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with cartId = 14
      */
     public function testGetActiveWithExceptionById()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('No such entity with cartId = 14');
+
         $cartId = 14;
 
         $this->cartFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteMock);
@@ -366,11 +368,12 @@ class QuoteRepositoryTest extends TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with cartId = 15
      */
     public function testGetActiveWithExceptionByIsActive()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('No such entity with cartId = 15');
+
         $cartId = 15;
 
         $this->cartFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteMock);
@@ -517,12 +520,12 @@ class QuoteRepositoryTest extends TestCase
         $this->quoteCollectionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->quoteCollectionMock);
-        $cartMock = $this->createMock(CartInterface::class);
+        $cartMock = $this->getMockForAbstractClass(CartInterface::class);
         $this->loadHandlerMock->expects($this->once())
             ->method('load')
             ->with($cartMock);
 
-        $searchResult = $this->createMock(CartSearchResultsInterface::class);
+        $searchResult = $this->getMockForAbstractClass(CartSearchResultsInterface::class);
         $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->searchResultsDataFactory
             ->expects($this->once())

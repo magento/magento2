@@ -29,11 +29,11 @@ use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepository;
 use PHPUnit\Framework\MockObject_MockBuilder;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 
 /**
- * Class DirectpostTest
+ * Test for Directpost
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DirectpostTest extends TestCase
@@ -48,64 +48,64 @@ class DirectpostTest extends TestCase
     protected $directpost;
 
     /**
-     * @var ScopeConfigInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var InfoInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var InfoInterface|PHPUnit\Framework\MockObject\MockObject
      */
     protected $paymentMock;
 
     /**
-     * @var HelperData|PHPUnit_Framework_MockObject_MockObject
+     * @var HelperData|PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataHelperMock;
 
     /**
-     * @var ResponseFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseFactory|PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseFactoryMock;
 
     /**
-     * @var TransactionRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var TransactionRepository|PHPUnit\Framework\MockObject\MockObject
      */
     protected $transactionRepositoryMock;
 
     /**
-     * @var Response|PHPUnit_Framework_MockObject_MockObject
+     * @var Response|PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseMock;
 
     /**
-     * @var TransactionService|PHPUnit_Framework_MockObject_MockObject
+     * @var TransactionService|PHPUnit\Framework\MockObject\MockObject
      */
     protected $transactionServiceMock;
 
     /**
-     * @var ZendClient|PHPUnit_Framework_MockObject_MockObject
+     * @var ZendClient|PHPUnit\Framework\MockObject\MockObject
      */
     protected $httpClientMock;
 
     /**
-     * @var Factory|PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestFactory;
 
     /**
-     * @var PaymentFailuresInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentFailuresInterface|PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentFailures;
 
     /**
-     * @var ZendClientFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var ZendClientFactory|PHPUnit\Framework\MockObject\MockObject
      */
     private $httpClientFactoryMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initPaymentMock();
         $this->initResponseFactoryMock();
@@ -123,7 +123,7 @@ class DirectpostTest extends TestCase
             ->getMock();
         $this->paymentFailures = $this->getMockBuilder(PaymentFailuresInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->requestFactory = $this->getMockBuilder(Factory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -282,13 +282,14 @@ class DirectpostTest extends TestCase
 
     /**
      * @dataProvider dataProviderCaptureWithInvalidAmount
-     * @expectedExceptionMessage Invalid amount for capture.
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      *
      * @param int $invalidAmount
      */
     public function testCaptureWithInvalidAmount($invalidAmount)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Invalid amount for capture.');
+
         $this->directpost->capture($this->paymentMock, $invalidAmount);
     }
 
@@ -309,10 +310,11 @@ class DirectpostTest extends TestCase
     /**
      * Test capture has parent transaction id.
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCaptureHasParentTransactionId()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $amount = 10;
 
         $this->paymentMock->expects($this->once())->method('setAmount')->with($amount);
@@ -337,10 +339,11 @@ class DirectpostTest extends TestCase
     }
 
     /**
-     * @@expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCaptureWithoutParentTransactionId()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $amount = 10;
 
         $this->paymentMock->expects($this->once())->method('setAmount')->with($amount);
@@ -471,14 +474,15 @@ class DirectpostTest extends TestCase
     public function testValidateResponseSuccess()
     {
         $this->prepareTestValidateResponse('some_md5', 'login', true);
-        $this->assertEquals(true, $this->directpost->validateResponse());
+        $this->assertTrue($this->directpost->validateResponse());
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateResponseFailure()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->prepareTestValidateResponse('some_md5', 'login', false);
         $this->directpost->validateResponse();
     }
@@ -510,14 +514,15 @@ class DirectpostTest extends TestCase
             ->method('getXTransId')
             ->willReturn('111');
 
-        $this->assertEquals(true, $this->directpost->checkTransId());
+        $this->assertTrue($this->directpost->checkTransId());
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCheckTransIdFailure()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->responseMock->expects($this->once())
             ->method('getXTransId')
             ->willReturn(null);
@@ -536,7 +541,7 @@ class DirectpostTest extends TestCase
             ->method('getXResponseCode')
             ->willReturn($responseCode);
 
-        $this->assertEquals(true, $this->directpost->checkResponseCode());
+        $this->assertTrue($this->directpost->checkResponseCode());
     }
 
     /**
@@ -554,10 +559,11 @@ class DirectpostTest extends TestCase
      * Checks response failures behaviour.
      *
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCheckResponseCodeFailureDefault()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $responseCode = 999999;
         $this->responseMock->expects($this->once())->method('getXResponseCode')->willReturn($responseCode);
 
@@ -571,11 +577,12 @@ class DirectpostTest extends TestCase
      * @param int $failuresHandlerCalls
      * @return void
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @dataProvider checkResponseCodeFailureDataProvider
      */
     public function testCheckResponseCodeFailureDeclinedOrError(int $responseCode, int $failuresHandlerCalls): void
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $reasonText = 'reason text';
 
         $this->responseMock->expects($this->once())
@@ -836,7 +843,7 @@ class DirectpostTest extends TestCase
 
     /**
      * Get mock for order
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @return PHPUnit\Framework\MockObject\MockObject
      */
     private function getOrderMock()
     {

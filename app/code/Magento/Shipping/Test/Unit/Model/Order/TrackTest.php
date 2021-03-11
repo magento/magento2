@@ -16,10 +16,10 @@ class TrackTest extends \PHPUnit\Framework\TestCase
             ['setStore', 'getTrackingInfo']
         );
         $carrier->expects($this->once())->method('setStore')->with('');
-        $carrier->expects($this->once())->method('getTrackingInfo')->will($this->returnValue('trackingInfo'));
+        $carrier->expects($this->once())->method('getTrackingInfo')->willReturn('trackingInfo');
 
         $carrierFactory = $this->createPartialMock(\Magento\Shipping\Model\CarrierFactory::class, ['create']);
-        $carrierFactory->expects($this->once())->method('create')->will($this->returnValue($carrier));
+        $carrierFactory->expects($this->once())->method('create')->willReturn($carrier);
 
         $shipment = $this->createMock(\Magento\OfflineShipping\Model\Carrier\Freeshipping::class);
 

@@ -17,42 +17,42 @@ use Magento\MediaStorage\Helper\File\Storage\Database;
 class ContentTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileSystemMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $readMock;
 
     /**
-     * @var Content|\PHPUnit_Framework_MockObject_MockObject
+     * @var Content|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $content;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Media\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Media\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mediaConfigMock;
 
     /**
-     * @var \Magento\Framework\Json\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Json\EncoderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $jsonEncoderMock;
 
     /**
-     * @var \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $galleryMock;
 
     /**
-     * @var \Magento\Catalog\Helper\Image|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Image|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $imageHelper;
 
     /**
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $databaseMock;
 
@@ -61,7 +61,7 @@ class ContentTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->fileSystemMock = $this->createPartialMock(
             \Magento\Framework\Filesystem::class,
@@ -156,10 +156,10 @@ class ContentTest extends \PHPUnit\Framework\TestCase
 
         $this->readMock->expects($this->any())
             ->method('isFile')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->databaseMock->expects($this->any())
             ->method('checkDbUsage')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->assertSame(json_encode($imagesResult), $this->content->getImagesJson());
     }
@@ -231,10 +231,10 @@ class ContentTest extends \PHPUnit\Framework\TestCase
 
         $this->readMock->expects($this->any())
             ->method('isFile')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->databaseMock->expects($this->any())
             ->method('checkDbUsage')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->readMock->expects($this->any())->method('stat')->willReturnOnConsecutiveCalls(
             $this->throwException(
@@ -369,7 +369,7 @@ class ContentTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $label
      * @param string $attributeCode
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getMediaAttribute(string $label, string $attributeCode)
     {
@@ -428,10 +428,13 @@ class ContentTest extends \PHPUnit\Framework\TestCase
 
         $this->readMock->expects($this->any())
             ->method('isFile')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
+        $this->readMock->expects($this->any())
+            ->method('stat')
+            ->willReturn(['size' => 0]);
         $this->databaseMock->expects($this->any())
             ->method('checkDbUsage')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->databaseMock->expects($this->once())
             ->method('saveFileToFilesystem')

@@ -17,7 +17,7 @@ class PayflowExpressTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $transactionRepository;
 
@@ -26,7 +26,7 @@ class PayflowExpressTest extends \PHPUnit\Framework\TestCase
      */
     const TRANSPORT_PAYFLOW_TXN_ID = 'Payflow pro transaction key';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $proFactory = $this->getMockBuilder(
@@ -40,9 +40,9 @@ class PayflowExpressTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getByTransactionType'])
             ->getMockForAbstractClass();
-        $paypalPro->expects($this->any())->method('getApi')->will($this->returnValue($api));
+        $paypalPro->expects($this->any())->method('getApi')->willReturn($api);
 
-        $proFactory->expects($this->once())->method('create')->will($this->returnValue($paypalPro));
+        $proFactory->expects($this->once())->method('create')->willReturn($paypalPro);
 
         $this->_model = $objectManager->getObject(
             \Magento\Paypal\Model\PayflowExpress::class,
@@ -67,7 +67,7 @@ class PayflowExpressTest extends \PHPUnit\Framework\TestCase
         $captureTransaction = $this->_getCaptureTransaction();
         $captureTransaction->expects($this->once())->method('getAdditionalInformation')->with(
             Payflow\Pro::TRANSPORT_PAYFLOW_TXN_ID
-        )->will($this->returnValue(null));
+        )->willReturn(null);
         $paymentInfo->expects($this->once())->method('getOrder')->willReturnSelf();
         $this->transactionRepository->expects($this->once())
             ->method('getByTransactionType')
@@ -82,7 +82,7 @@ class PayflowExpressTest extends \PHPUnit\Framework\TestCase
         $captureTransaction = $this->_getCaptureTransaction();
         $captureTransaction->expects($this->once())->method('getAdditionalInformation')->with(
             Payflow\Pro::TRANSPORT_PAYFLOW_TXN_ID
-        )->will($this->returnValue(self::TRANSPORT_PAYFLOW_TXN_ID));
+        )->willReturn(self::TRANSPORT_PAYFLOW_TXN_ID);
         $paymentInfo->expects($this->once())->method('getOrder')->willReturnSelf();
         $this->transactionRepository->expects($this->once())
             ->method('getByTransactionType')
@@ -94,7 +94,7 @@ class PayflowExpressTest extends \PHPUnit\Framework\TestCase
     /**
      * Prepares payment info mock and adds it to the model
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getPreparedPaymentInfo()
     {
@@ -108,7 +108,7 @@ class PayflowExpressTest extends \PHPUnit\Framework\TestCase
     /**
      * Prepares capture transaction
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getCaptureTransaction()
     {
@@ -119,11 +119,11 @@ class PayflowExpressTest extends \PHPUnit\Framework\TestCase
 
     public function testCanFetchTransactionInfo()
     {
-        $this->assertEquals(false, $this->_model->canFetchTransactionInfo());
+        $this->assertFalse($this->_model->canFetchTransactionInfo());
     }
 
     public function testCanReviewPayment()
     {
-        $this->assertEquals(false, $this->_model->canReviewPayment());
+        $this->assertFalse($this->_model->canReviewPayment());
     }
 }

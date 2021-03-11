@@ -68,7 +68,7 @@ class CaptureStrategyCommandTest extends TestCase
      */
     private $transactionsResult;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         // Simple mocks
         $this->paymentDOMock = $this->createMock(PaymentDataObject::class);
@@ -76,9 +76,9 @@ class CaptureStrategyCommandTest extends TestCase
         $this->paymentDOMock->method('getPayment')
             ->willReturn($this->paymentMock);
         $this->commandMock = $this->createMock(GatewayCommand::class);
-        $this->commandPoolMock = $this->createMock(CommandPoolInterface::class);
+        $this->commandPoolMock = $this->getMockForAbstractClass(CommandPoolInterface::class);
         $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
-        $this->transactionRepositoryMock = $this->createMock(TransactionRepositoryInterface::class);
+        $this->transactionRepositoryMock = $this->getMockForAbstractClass(TransactionRepositoryInterface::class);
 
         // The search criteria builder should return the criteria with the specified filters
         $this->filterBuilderMock = $this->createMock(FilterBuilder::class);
@@ -93,7 +93,7 @@ class CaptureStrategyCommandTest extends TestCase
         $this->searchCriteriaBuilderMock->method('create')
             ->willReturn($searchCriteria);
         // The transaction result can be customized per test to simulate different scenarios
-        $this->transactionsResult = $this->createMock(TransactionSearchResultInterface::class);
+        $this->transactionsResult = $this->getMockForAbstractClass(TransactionSearchResultInterface::class);
         $this->transactionRepositoryMock->method('getList')
             ->with($searchCriteria)
             ->willReturn($this->transactionsResult);

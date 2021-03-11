@@ -17,27 +17,27 @@ use Magento\Framework\FlagFactory;
 class HashTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Generator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Generator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configHashGeneratorMock;
 
     /**
-     * @var DataCollector|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataCollector|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataConfigCollectorMock;
 
     /**
-     * @var FlagFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var FlagFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $flagFactoryMock;
 
     /**
-     * @var FlagResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var FlagResource|\PHPUnit\Framework\MockObject\MockObject
      */
     private $flagResourceMock;
 
     /**
-     * @var Flag|\PHPUnit_Framework_MockObject_MockObject
+     * @var Flag|\PHPUnit\Framework\MockObject\MockObject
      */
     private $flagMock;
 
@@ -49,7 +49,7 @@ class HashTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->flagResourceMock = $this->getMockBuilder(FlagResource::class)
             ->disableOriginalConstructor()
@@ -137,11 +137,12 @@ class HashTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The hash isn't saved.
      */
     public function testRegenerateWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The hash isn\'t saved.');
+
         $section = 'section';
         $config = 'some config';
         $fullConfig = ['section' => $config];

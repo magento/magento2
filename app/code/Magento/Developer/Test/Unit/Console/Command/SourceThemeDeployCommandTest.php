@@ -40,24 +40,24 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
     private $sourceThemeDeployCommand;
 
     /**
-     * @var Locale|\PHPUnit_Framework_MockObject_MockObject
+     * @var Locale|\PHPUnit\Framework\MockObject\MockObject
      */
     private $validatorMock;
 
     /**
-     * @var Publisher|\PHPUnit_Framework_MockObject_MockObject
+     * @var Publisher|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assetPublisherMock;
 
     /**
-     * @var Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assetRepositoryMock;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->validatorMock = $this->getMockBuilder(Locale::class)
             ->disableOriginalConstructor()
@@ -81,7 +81,7 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecute()
     {
-        /** @var OutputInterface|\PHPUnit_Framework_MockObject_MockObject $outputMock */
+        /** @var OutputInterface|\PHPUnit\Framework\MockObject\MockObject $outputMock */
         $outputMock = $this->getMockBuilder(OutputInterface::class)
             ->getMockForAbstractClass();
         $assetMock = $this->getMockBuilder(LocalInterface::class)
@@ -135,12 +135,13 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * Run test for execute method with incorrect theme value
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Value "theme-value" of the option "theme" has invalid format. The format should be
      */
     public function testExecuteIncorrectThemeFormat()
     {
-        /** @var OutputInterface|\PHPUnit_Framework_MockObject_MockObject $outputMock */
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Value "theme-value" of the option "theme" has invalid format. The format should be');
+
+        /** @var OutputInterface|\PHPUnit\Framework\MockObject\MockObject $outputMock */
         $outputMock = $this->getMockBuilder(OutputInterface::class)
             ->getMockForAbstractClass();
         $this->validatorMock->expects(self::once())
@@ -164,12 +165,13 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * Run test for execute method with non existing theme
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Verify entered values of the argument and options.
      */
     public function testExecuteNonExistingValue()
     {
-        /** @var OutputInterface|\PHPUnit_Framework_MockObject_MockObject $outputMock */
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Verify entered values of the argument and options.');
+
+        /** @var OutputInterface|\PHPUnit\Framework\MockObject\MockObject $outputMock */
         $outputMock = $this->getMockBuilder(OutputInterface::class)
             ->getMockForAbstractClass();
         $assetMock = $this->getMockBuilder(LocalInterface::class)
@@ -210,7 +212,7 @@ class SourceThemeDeployCommandTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return InputInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return InputInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getInputMock(array $valueMap = [])
     {

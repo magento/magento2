@@ -13,26 +13,26 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_duplicateMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_linkMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_linkCollectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new \Magento\GroupedProduct\Model\Product\CopyConstructor\Grouped();
 
@@ -55,14 +55,14 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getLinkInstance'
-        )->will(
-            $this->returnValue($this->_linkMock)
+        )->willReturn(
+            $this->_linkMock
         );
     }
 
     public function testBuildWithNonGroupedProductType()
     {
-        $this->_productMock->expects($this->once())->method('getTypeId')->will($this->returnValue('some value'));
+        $this->_productMock->expects($this->once())->method('getTypeId')->willReturn('some value');
 
         $this->_duplicateMock->expects($this->never())->method('setGroupedLinkData');
 
@@ -78,13 +78,13 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getTypeId'
-        )->will(
-            $this->returnValue(\Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE)
+        )->willReturn(
+            \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE
         );
 
         $attributes = ['attributeOne' => ['code' => 'one'], 'attributeTwo' => ['code' => 'two']];
 
-        $this->_linkMock->expects($this->once())->method('getAttributes')->will($this->returnValue($attributes));
+        $this->_linkMock->expects($this->once())->method('getAttributes')->willReturn($attributes);
 
         $productLinkMock = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Product\Link::class,
@@ -98,15 +98,15 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED
         );
 
-        $productLinkMock->expects($this->once())->method('getLinkedProductId')->will($this->returnValue('100500'));
+        $productLinkMock->expects($this->once())->method('getLinkedProductId')->willReturn('100500');
         $productLinkMock->expects(
             $this->once()
         )->method(
             'toArray'
         )->with(
             ['one', 'two']
-        )->will(
-            $this->returnValue(['some' => 'data'])
+        )->willReturn(
+            ['some' => 'data']
         );
 
         $collectionMock = $helper->getCollectionMock(
@@ -122,8 +122,8 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getLinkCollection'
-        )->will(
-            $this->returnValue($collectionMock)
+        )->willReturn(
+            $collectionMock
         );
 
         $this->_duplicateMock->expects($this->once())->method('setGroupedLinkData')->with($expectedData);

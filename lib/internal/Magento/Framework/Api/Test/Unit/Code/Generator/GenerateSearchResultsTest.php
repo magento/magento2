@@ -11,14 +11,14 @@ namespace Magento\Framework\Api\Test\Unit\Code\Generator;
 class GenerateSearchResultsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $ioObjectMock;
 
     /**
      * Create mock for class \Magento\Framework\Code\Generator\Io
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->ioObjectMock = $this->createMock(\Magento\Framework\Code\Generator\Io::class);
     }
@@ -45,14 +45,14 @@ class GenerateSearchResultsTest extends \PHPUnit\Framework\TestCase
         $this->ioObjectMock->expects($this->once())
             ->method('generateResultFileName')
             ->with('\\' . \Magento\Framework\Api\Code\Generator\SampleSearchResults::class)
-            ->will($this->returnValue('SampleSearchResults.php'));
+            ->willReturn('SampleSearchResults.php');
         $this->ioObjectMock->expects($this->once())
             ->method('writeResultFile')
             ->with('SampleSearchResults.php', $sampleSearchResultBuilderCode);
 
         $model->expects($this->once())
             ->method('_validateData')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertEquals('SampleSearchResults.php', $model->generate());
     }
 }

@@ -16,11 +16,11 @@ class ProductMetadataTest extends \PHPUnit\Framework\TestCase
     private $productMetadata;
 
     /**
-     * @var \Magento\Framework\Composer\ComposerInformation|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Composer\ComposerInformation|\PHPUnit\Framework\MockObject\MockObject
      */
     private $composerInformationMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->composerInformationMock = $this->getMockBuilder(\Magento\Framework\Composer\ComposerInformation::class)
             ->disableOriginalConstructor()->getMock();

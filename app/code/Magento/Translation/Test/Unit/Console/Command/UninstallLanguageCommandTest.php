@@ -17,27 +17,27 @@ use Magento\Framework\Setup\BackupRollbackFactory;
 class UninstallLanguageCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var DependencyChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var DependencyChecker|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dependencyChecker;
 
     /**
-     * @var Remove|\PHPUnit_Framework_MockObject_MockObject
+     * @var Remove|\PHPUnit\Framework\MockObject\MockObject
      */
     private $remove;
 
     /**
-     * @var ComposerInformation|\PHPUnit_Framework_MockObject_MockObject
+     * @var ComposerInformation|\PHPUnit\Framework\MockObject\MockObject
      */
     private $composerInfo;
 
     /**
-     * @var Cache|\PHPUnit_Framework_MockObject_MockObject
+     * @var Cache|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cache;
 
     /**
-     * @var BackupRollbackFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var BackupRollbackFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $backupRollbackFactory;
 
@@ -51,7 +51,7 @@ class UninstallLanguageCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $tester;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dependencyChecker = $this->createMock(\Magento\Framework\Composer\DependencyChecker::class);
         $this->remove = $this->createMock(\Magento\Framework\Composer\Remove::class);
@@ -122,7 +122,10 @@ class UninstallLanguageCommandTest extends \PHPUnit\Framework\TestCase
         $this->cache->expects($this->once())->method('clean');
 
         $this->tester->execute(['package' => ['vendor/language-ua_ua']]);
-        $this->assertContains('You are removing language package without a code backup.', $this->tester->getDisplay());
+        $this->assertStringContainsString(
+            'You are removing language package without a code backup.',
+            $this->tester->getDisplay()
+        );
     }
 
     public function testExecutePackageHasDependency()
@@ -146,11 +149,11 @@ class UninstallLanguageCommandTest extends \PHPUnit\Framework\TestCase
         $this->cache->expects($this->never())->method('clean');
 
         $this->tester->execute(['package' => ['vendor/language-ua_ua']]);
-        $this->assertContains(
+        $this->assertStringContainsString(
             'Package vendor/language-ua_ua has dependencies and will be skipped',
             $this->tester->getDisplay()
         );
-        $this->assertContains('Nothing is removed.', $this->tester->getDisplay());
+        $this->assertStringContainsString('Nothing is removed.', $this->tester->getDisplay());
     }
 
     public function testExecutePackageNoLanguage()
@@ -174,10 +177,10 @@ class UninstallLanguageCommandTest extends \PHPUnit\Framework\TestCase
         $this->cache->expects($this->never())->method('clean');
 
         $this->tester->execute(['package' => ['vendor/language-ua_ua']]);
-        $this->assertContains(
+        $this->assertStringContainsString(
             'Package vendor/language-ua_ua is not a Magento language and will be skipped',
             $this->tester->getDisplay()
         );
-        $this->assertContains('Nothing is removed.', $this->tester->getDisplay());
+        $this->assertStringContainsString('Nothing is removed.', $this->tester->getDisplay());
     }
 }

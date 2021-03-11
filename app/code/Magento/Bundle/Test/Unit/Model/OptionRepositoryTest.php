@@ -21,32 +21,32 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $typeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $optionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $optionResourceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $linkManagementMock;
 
@@ -56,21 +56,21 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $optionListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataObjectHelperMock;
 
     /**
-     * @var \Magento\Bundle\Model\Option\SaveAction|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Model\Option\SaveAction|\PHPUnit\Framework\MockObject\MockObject
      */
     private $optionSaveActionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->productRepositoryMock = $this->createMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
@@ -105,11 +105,12 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage This is implemented for bundle products only.
      */
     public function testGetThrowsExceptionIfProductIsSimple()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('This is implemented for bundle products only.');
+
         $productSku = 'sku';
         $productMock = $this->createMock(\Magento\Catalog\Api\Data\ProductInterface::class);
         $productMock->expects($this->once())
@@ -123,11 +124,12 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The option that was requested doesn't exist. Verify the entity and try again.
      */
     public function testGetThrowsExceptionIfOptionDoesNotExist()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('The option that was requested doesn\'t exist. Verify the entity and try again.');
+
         $productSku = 'sku';
         $optionId = 100;
         $productMock = $this->createMock(\Magento\Catalog\Api\Data\ProductInterface::class);
@@ -214,11 +216,12 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The option with "1" ID can't be deleted.
      */
     public function testDeleteThrowsExceptionIfCannotDelete()
     {
+        $this->expectException(\Magento\Framework\Exception\StateException::class);
+        $this->expectExceptionMessage('The option with "1" ID can\'t be deleted.');
+
         $optionMock = $this->createMock(\Magento\Bundle\Model\Option::class);
         $optionMock->expects($this->once())->method('getOptionId')->willReturn(1);
         $this->optionResourceMock->expects($this->once())
@@ -399,11 +402,12 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage This is implemented for bundle products only.
      */
     public function testGetListException()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('This is implemented for bundle products only.');
+
         $productSku = 'simple';
         $productMock = $this->createMock(\Magento\Catalog\Api\Data\ProductInterface::class);
         $productMock->expects($this->once())->method('getTypeId')->willReturn('simple');

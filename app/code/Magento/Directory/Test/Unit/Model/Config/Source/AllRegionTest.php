@@ -22,7 +22,7 @@ class AllRegionTest extends \PHPUnit\Framework\TestCase
      */
     protected $regionCollection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -37,10 +37,10 @@ class AllRegionTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $countryCollectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->countryCollection));
+            ->willReturn($this->countryCollection);
         $this->countryCollection->expects($this->once())
             ->method('load')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $regionCollectionFactory = $this->getMockBuilder(
             \Magento\Directory\Model\ResourceModel\Region\CollectionFactory::class
@@ -51,10 +51,10 @@ class AllRegionTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $regionCollectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->regionCollection));
+            ->willReturn($this->regionCollection);
         $this->regionCollection->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($this->regionCollection));
+            ->willReturn($this->regionCollection);
 
         $this->model = $objectManagerHelper->getObject(
             \Magento\Directory\Model\Config\Source\Allregion::class,
@@ -77,10 +77,10 @@ class AllRegionTest extends \PHPUnit\Framework\TestCase
         $this->countryCollection->expects($this->once())
             ->method('toOptionArray')
             ->with(false)
-            ->will($this->returnValue(new \ArrayIterator($countries)));
+            ->willReturn(new \ArrayIterator($countries));
         $this->regionCollection->expects($this->once())
             ->method('getIterator')
-            ->will($this->returnValue(new \ArrayIterator($regions)));
+            ->willReturn(new \ArrayIterator($regions));
 
         $this->assertEquals($expectedResult, $this->model->toOptionArray($isMultiselect));
     }
@@ -207,13 +207,13 @@ class AllRegionTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $region->expects($this->once())
             ->method('getCountryId')
-            ->will($this->returnValue($countryId));
+            ->willReturn($countryId);
         $region->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($id));
+            ->willReturn($id);
         $region->expects($this->once())
             ->method('getDefaultName')
-            ->will($this->returnValue($defaultName));
+            ->willReturn($defaultName);
 
         return $region;
     }

@@ -125,7 +125,7 @@
         <grabValueFrom selector="{{AdminProductCustomizableOptionsSection.optionPrice(optionIndex)}}" stepKey="grabOptionPrice"/>
         <grabValueFrom selector="{{AdminProductCustomizableOptionsSection.optionSku(optionIndex)}}" stepKey="grabOptionSku"/>
         <assertEquals expected="{{option.title}}" expectedType="string" actual="$grabOptionTitle" stepKey="assertOptionTitle"/>
-        <assertEquals expected="{{option.price}}" expectedType="string" actual="$grabOptionPrice" stepKey="assertOptionPrice"/>
+        <assertEquals expected="{{option.priceWithDecimals}}" expectedType="string" actual="$grabOptionPrice" stepKey="assertOptionPrice"/>
         <assertEquals expected="{{option.title}}" expectedType="string" actual="$grabOptionSku" stepKey="assertOptionSku"/>
     </actionGroup>
     <!-- Assumes we are on product edit page -->

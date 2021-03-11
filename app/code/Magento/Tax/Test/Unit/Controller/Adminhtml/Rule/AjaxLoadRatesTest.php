@@ -15,7 +15,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tax\Model\Rate\Provider as RatesProvider;
 use Magento\Tax\Controller\Adminhtml\Rule\AjaxLoadRates;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Test for AjaxLoadTest
@@ -50,7 +50,7 @@ class AjaxLoadRatesTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()

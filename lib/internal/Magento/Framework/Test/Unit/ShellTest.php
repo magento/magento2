@@ -9,16 +9,16 @@ namespace Magento\Framework\Test\Unit;
 class ShellTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Shell\CommandRendererInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Shell\CommandRendererInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $commandRenderer;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $logger;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()
@@ -114,12 +114,13 @@ class ShellTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Command returned non-zero exit code:
-     * @expectedExceptionCode 0
      */
     public function testExecuteFailure()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Command returned non-zero exit code:');
+        $this->expectExceptionCode(0);
+
         $shell = new \Magento\Framework\Shell($this->commandRenderer, $this->logger);
         $shell->execute('non_existing_command');
     }

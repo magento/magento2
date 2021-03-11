@@ -13,7 +13,7 @@ class PagerTest extends \PHPUnit\Framework\TestCase
     /**
      * Prepare helper object
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $sessionMock = $this->getMockBuilder(
             \Magento\Backend\Model\Session::class
@@ -34,8 +34,8 @@ class PagerTest extends \PHPUnit\Framework\TestCase
             'getData'
         )->with(
             $this->equalTo('search_result_idsreviews')
-        )->will(
-            $this->returnValue([3, 2, 6, 5])
+        )->willReturn(
+            [3, 2, 6, 5]
         );
 
         $contextMock = $this->createPartialMock(

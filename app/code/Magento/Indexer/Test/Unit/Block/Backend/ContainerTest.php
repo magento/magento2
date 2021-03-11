@@ -22,8 +22,8 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
             ['getUrlBuilder', 'getButtonList']
         );
 
-        $contextMock->expects($this->once())->method('getUrlBuilder')->will($this->returnValue($urlBuilderMock));
-        $contextMock->expects($this->once())->method('getButtonList')->will($this->returnValue($buttonList));
+        $contextMock->expects($this->once())->method('getUrlBuilder')->willReturn($urlBuilderMock);
+        $contextMock->expects($this->once())->method('getButtonList')->willReturn($buttonList);
 
         $block = new \Magento\Indexer\Block\Backend\Container($contextMock);
 

@@ -13,7 +13,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_moduleReader;
 
@@ -22,7 +22,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
      */
     protected $_xsdDir = 'schema_dir';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_moduleReader = $this->createPartialMock(\Magento\Framework\Module\Dir\Reader::class, ['getModuleDir']);
         $this->_moduleReader->expects(
@@ -32,8 +32,8 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
         )->with(
             'etc',
             'Magento_Sales'
-        )->will(
-            $this->returnValue($this->_xsdDir)
+        )->willReturn(
+            $this->_xsdDir
         );
 
         $this->_model = new \Magento\Sales\Model\Order\Pdf\Config\SchemaLocator($this->_moduleReader);

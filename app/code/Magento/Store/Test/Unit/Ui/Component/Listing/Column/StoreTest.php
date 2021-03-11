@@ -14,32 +14,32 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\View\Element\UiComponent\Processor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\UiComponent\Processor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $processorMock;
 
     /**
-     * @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\View\Element\UiComponentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\UiComponentFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $uiComponentFactoryMock;
 
     /**
-     * @var \Magento\Store\Model\System\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\System\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $systemStoreMock;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $escaperMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
@@ -48,7 +48,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      */
     protected $name = 'anyname';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
@@ -89,7 +89,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     /**
      * Inject mocked object dependency
      *
-     * @param \PHPUnit_Framework_MockObject_MockObject $mockObject
+     * @param \PHPUnit\Framework\MockObject\MockObject $mockObject
      * @param string $propertyName
      * @return void
      *

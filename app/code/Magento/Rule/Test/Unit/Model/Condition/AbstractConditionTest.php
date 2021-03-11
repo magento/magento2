@@ -9,11 +9,11 @@ namespace Magento\Rule\Test\Unit\Model\Condition;
 class AbstractConditionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var AbstractCondition|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractCondition|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_condition;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_condition = $this->getMockForAbstractClass(
             \Magento\Rule\Model\Condition\AbstractCondition::class,
@@ -208,7 +208,7 @@ class AbstractConditionTest extends \PHPUnit\Framework\TestCase
         $this->_condition
             ->expects($this->any())
             ->method('getInputType')
-            ->will($this->returnValue($inputType));
+            ->willReturn($inputType);
 
         $this->assertEquals(
             $expectedResult,

@@ -43,7 +43,7 @@ class ItemsTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -57,7 +57,7 @@ class ItemsTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->registry->unregister('current_invoice');
 
@@ -78,7 +78,7 @@ class ItemsTest extends TestCase
         $this->block->toHtml();
         $button = $this->block->getChildBlock('update_button');
         $this->assertEquals((string)__('Update Qty\'s'), (string)$button->getLabel());
-        $this->assertContains(
+        $this->assertStringContainsString(
             sprintf('sales/index/updateQty/order_id/%u/', (int)$order->getEntityId()),
             $button->getOnClick()
         );

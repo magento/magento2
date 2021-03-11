@@ -93,7 +93,7 @@ class CleanMediaTest extends \PHPUnit\Framework\TestCase
             [\Magento\Framework\View\Asset\MergeService::class, $mergeService],
             [\Magento\Framework\Session\SessionManager::class, $session],
         ];
-        $objectManager->expects($this->any())->method('get')->will($this->returnValueMap($valueMap));
+        $objectManager->expects($this->any())->method('get')->willReturnMap($valueMap);
 
         $resultRedirect->expects($this->once())
             ->method('setPath')

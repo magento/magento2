@@ -12,7 +12,7 @@ namespace Magento\Framework\Data\Test\Unit\Form\Element;
 class SubmitTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManagerMock;
 
@@ -21,7 +21,7 @@ class SubmitTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
         $collectionFactoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
@@ -52,7 +52,7 @@ class SubmitTest extends \PHPUnit\Framework\TestCase
     public function testGetHtml()
     {
         $html = $this->_model->getHtml();
-        $this->assertContains('type="submit"', $html);
+        $this->assertStringContainsString('type="submit"', $html);
         $this->assertTrue(preg_match('/class=\".*submit.*\"/i', $html) > 0);
     }
 }

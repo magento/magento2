@@ -14,20 +14,21 @@ class LockValidatorCompositeTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testCompositionsWithInvalidValidatorInstance()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $validators = [\Magento\Catalog\Model\Attribute\Backend\Startdate::class];
         $this->model = new \Magento\Catalog\Model\Attribute\LockValidatorComposite(
             $this->objectManagerMock,
@@ -45,8 +46,8 @@ class LockValidatorCompositeTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             \Magento\Catalog\Model\Attribute\LockValidatorComposite::class
-        )->will(
-            $this->returnValue($lockValidatorMock)
+        )->willReturn(
+            $lockValidatorMock
         );
 
         $this->model = new \Magento\Catalog\Model\Attribute\LockValidatorComposite(

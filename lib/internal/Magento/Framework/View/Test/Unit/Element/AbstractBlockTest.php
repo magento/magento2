@@ -29,44 +29,44 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
     private $block;
 
     /**
-     * @var EventManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EventManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var CacheStateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CacheStateInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheStateMock;
 
     /**
-     * @var SidResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SidResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sidResolverMock;
 
     /**
-     * @var SessionManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SessionManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sessionMock;
 
     /**
-     * @var Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $escaperMock;
 
     /**
-     * @var LockGuardedCacheLoader|\PHPUnit_Framework_MockObject_MockObject
+     * @var LockGuardedCacheLoader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $lockQuery;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eventManagerMock = $this->getMockForAbstractClass(EventManagerInterface::class);
         $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
@@ -179,10 +179,10 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $configManager = $this->createMock(ConfigInterface::class);
+        $configManager = $this->getMockForAbstractClass(ConfigInterface::class);
         $configManager->expects($this->exactly(2))->method('getViewConfig')->willReturn($config);
 
-        /** @var $block AbstractBlock|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $block AbstractBlock|\PHPUnit\Framework\MockObject\MockObject */
         $params = ['viewConfig' => $configManager];
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $block = $this->getMockForAbstractClass(

@@ -18,26 +18,26 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $multiShippingMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrencyMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxHelperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
@@ -60,9 +60,9 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
     public function testGetAddresses()
     {
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
-        $this->multiShippingMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
+        $this->multiShippingMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
         $quoteMock->expects($this->once())
-            ->method('getAllShippingAddresses')->will($this->returnValue(['expected array']));
+            ->method('getAllShippingAddresses')->willReturn(['expected array']);
         $this->assertEquals(['expected array'], $this->model->getAddresses());
     }
 
@@ -73,7 +73,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
             ['getShippingMethod', '__wakeup']
         );
         $addressMock->expects($this->once())
-            ->method('getShippingMethod')->will($this->returnValue('expected shipping method'));
+            ->method('getShippingMethod')->willReturn('expected shipping method');
         $this->assertEquals('expected shipping method', $this->model->getAddressShippingMethod($addressMock));
     }
 
@@ -85,7 +85,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         );
 
         $addressMock->expects($this->once())
-            ->method('getGroupedAllShippingRates')->will($this->returnValue(['expected array']));
+            ->method('getGroupedAllShippingRates')->willReturn(['expected array']);
         $this->assertEquals(['expected array'], $this->model->getShippingRates($addressMock));
     }
 
@@ -96,7 +96,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigMock->expects($this->once())->method('getValue')->with(
             'carriers/' . $carrierCode . '/title',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        )->will($this->returnValue($name));
+        )->willReturn($name);
 
         $this->assertEquals($name, $this->model->getCarrierName($carrierCode));
     }
@@ -107,7 +107,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigMock->expects($this->once())->method('getValue')->with(
             'carriers/' . $carrierCode . '/title',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        )->will($this->returnValue(null));
+        )->willReturn(null);
 
         $this->assertEquals($carrierCode, $this->model->getCarrierName($carrierCode));
     }
@@ -121,9 +121,9 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         $flag = true;
         $shippingPrice = 11.11;
         $this->taxHelperMock->expects($this->once())
-            ->method('getShippingPrice')->with($price, $flag, $addressMock)->will($this->returnValue($shippingPrice));
-        $addressMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
-        $quoteMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
+            ->method('getShippingPrice')->with($price, $flag, $addressMock)->willReturn($shippingPrice);
+        $addressMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
+        $quoteMock->expects($this->once())->method('getStore')->willReturn($storeMock);
 
         $this->priceCurrencyMock->expects($this->once())
             ->method('convertAndFormat')

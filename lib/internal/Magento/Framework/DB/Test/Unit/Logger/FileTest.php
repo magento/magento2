@@ -12,12 +12,12 @@ class FileTest extends \PHPUnit\Framework\TestCase
     const DEBUG_FILE = 'debug.file.log';
 
     /**
-     * @var \Magento\Framework\Filesystem\File\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\File\WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stream;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dir;
 
@@ -26,18 +26,18 @@ class FileTest extends \PHPUnit\Framework\TestCase
      */
     private $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stream = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\File\WriteInterface::class);
         $this->dir = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
         $this->dir->expects($this->any())
             ->method('openFile')
             ->with(self::DEBUG_FILE, 'a')
-            ->will($this->returnValue($this->stream));
+            ->willReturn($this->stream);
         $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $filesystem->expects($this->any())
             ->method('getDirectoryWrite')
-            ->will($this->returnValue($this->dir));
+            ->willReturn($this->dir);
 
         $this->object = new File(
             $filesystem,
@@ -110,7 +110,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $result = $this->createMock(\Zend_Db_Statement_Pdo::class);
         $result->expects($this->once())
             ->method('rowCount')
-            ->will($this->returnValue(10));
+            ->willReturn(10);
         $this->stream->expects($this->once())
             ->method('write')
             ->with($this->logicalNot($this->matches('%aSQL: SELECT something%aAFF: 10')));

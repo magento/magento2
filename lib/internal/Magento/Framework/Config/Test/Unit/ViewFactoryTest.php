@@ -15,21 +15,21 @@ class ViewFactoryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\View\Design\ThemeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\ThemeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $theme;
 
     /**
-     * @var \Magento\Framework\Config\View|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\View|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $view;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->model = new \Magento\Framework\Config\ViewFactory($this->objectManager);
@@ -48,13 +48,13 @@ class ViewFactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateWithArguments()
     {
-        /** @var \Magento\Theme\Model\View\Design|\PHPUnit_Framework_MockObject_MockObject $design */
+        /** @var \Magento\Theme\Model\View\Design|\PHPUnit\Framework\MockObject\MockObject $design */
         $design = $this->createMock(\Magento\Theme\Model\View\Design::class);
         $design->expects($this->once())
             ->method('setDesignTheme')
             ->with($this->theme, self::AREA);
 
-        /** @var \Magento\Framework\Config\FileResolver|\PHPUnit_Framework_MockObject_MockObject $fileResolver */
+        /** @var \Magento\Framework\Config\FileResolver|\PHPUnit\Framework\MockObject\MockObject $fileResolver */
         $fileResolver = $this->createMock(\Magento\Framework\Config\FileResolver::class);
 
         $valueMap = [
@@ -70,11 +70,12 @@ class ViewFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage wrong theme doesn't implement ThemeInterface
      */
     public function testCreateException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('wrong theme doesn\'t implement ThemeInterface');
+
         $this->model->create(
             [
                 'themeModel' => 'wrong theme',

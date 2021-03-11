@@ -11,14 +11,14 @@ namespace Magento\Framework\Api\Test\Unit\Code\Generator;
 class GenerateMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $ioObjectMock;
 
     /**
      * Prepare test env
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->ioObjectMock = $this->createMock(\Magento\Framework\Code\Generator\Io::class);
     }
@@ -45,14 +45,14 @@ class GenerateMapperTest extends \PHPUnit\Framework\TestCase
         $this->ioObjectMock->expects($this->once())
             ->method('generateResultFileName')
             ->with('\\' . \Magento\Framework\Api\Code\Generator\SampleMapper::class)
-            ->will($this->returnValue('SampleMapper.php'));
+            ->willReturn('SampleMapper.php');
         $this->ioObjectMock->expects($this->once())
             ->method('writeResultFile')
             ->with('SampleMapper.php', $sampleMapperCode);
 
         $model->expects($this->once())
             ->method('_validateData')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertEquals('SampleMapper.php', $model->generate());
     }
 }

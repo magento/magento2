@@ -9,44 +9,44 @@ class BackendAuthenticationTest extends \PHPUnit\Framework\TestCase
 {
     public function testAroundDispatch()
     {
-        /** @var \Magento\Backend\App\AbstractAction|\PHPUnit_Framework_MockObject_MockObject $subject */
+        /** @var \Magento\Backend\App\AbstractAction|\PHPUnit\Framework\MockObject\MockObject $subject */
         $subject = $this->createMock(\Magento\Backend\App\AbstractAction::class);
 
-        /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject $response */
+        /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit\Framework\MockObject\MockObject $response */
         $response = $this->createMock(\Magento\Framework\App\ResponseInterface::class);
 
         $proceed = function () use ($response) {
             return $response;
         };
 
-        /** @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject $request */
+        /** @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject $request */
         $request = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $request->expects($this->atLeastOnce())->method('getControllerName')->will($this->returnValue('feed'));
-        $request->expects($this->atLeastOnce())->method('getActionName')->will($this->returnValue('index'));
-        $request->expects($this->once())->method('getParam')->with('type')->will($this->returnValue('notifystock'));
+        $request->expects($this->atLeastOnce())->method('getControllerName')->willReturn('feed');
+        $request->expects($this->atLeastOnce())->method('getActionName')->willReturn('index');
+        $request->expects($this->once())->method('getParam')->with('type')->willReturn('notifystock');
 
-        /** @var \Magento\Backend\Model\Auth\StorageInterface|\PHPUnit_Framework_MockObject_MockObject $session */
+        /** @var \Magento\Backend\Model\Auth\StorageInterface|\PHPUnit\Framework\MockObject\MockObject $session */
         $session = $this->createMock(\Magento\Backend\Model\Auth\StorageInterface::class);
-        $session->expects($this->at(0))->method('isLoggedIn')->will($this->returnValue(false));
-        $session->expects($this->at(1))->method('isLoggedIn')->will($this->returnValue(true));
+        $session->expects($this->at(0))->method('isLoggedIn')->willReturn(false);
+        $session->expects($this->at(1))->method('isLoggedIn')->willReturn(true);
 
         $username = 'admin';
         $password = '123123qa';
         $auth = $this->createMock(\Magento\Backend\Model\Auth::class);
-        $auth->expects($this->once())->method('getAuthStorage')->will($this->returnValue($session));
+        $auth->expects($this->once())->method('getAuthStorage')->willReturn($session);
         $auth->expects($this->once())->method('login')->with($username, $password);
 
-        /** @var \Magento\Framework\HTTP\Authentication|\PHPUnit_Framework_MockObject_MockObject $httpAuthentication */
+        /** @var \Magento\Framework\HTTP\Authentication|\PHPUnit\Framework\MockObject\MockObject $httpAuthentication */
         $httpAuthentication = $this->createMock(\Magento\Framework\HTTP\Authentication::class);
         $httpAuthentication->expects($this->once())->method('getCredentials')
-            ->will($this->returnValue([$username, $password]));
+            ->willReturn([$username, $password]);
         $httpAuthentication->expects($this->once())->method('setAuthenticationFailed')->with('RSS Feeds');
 
         $authorization = $this->createMock(\Magento\Framework\AuthorizationInterface::class);
         $authorization->expects($this->at(0))->method('isAllowed')->with('Magento_Rss::rss')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $authorization->expects($this->at(1))->method('isAllowed')->with('Magento_Catalog::catalog_inventory')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $aclResources = [
             'feed' => 'Magento_Rss::rss',

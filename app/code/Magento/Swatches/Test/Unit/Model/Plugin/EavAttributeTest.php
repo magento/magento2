@@ -128,7 +128,7 @@ class EavAttributeTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->abstractSource = $this->createMock(AbstractSource::class);
@@ -215,11 +215,12 @@ class EavAttributeTest extends TestCase
     /**
      * Test beforeSave plugin on empty label
      *
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Admin is a required field in each row
      */
     public function testBeforeSaveWithFailedValidation()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Admin is a required field in each row');
+
         $options = self::VISUAL_ATTRIBUTE_OPTIONS;
         $options['value'][self::NEW_OPTION_KEY][self::ADMIN_STORE_ID] = '';
         $this->attribute->setData(
@@ -299,13 +300,14 @@ class EavAttributeTest extends TestCase
     /**
      * Test afterSave plugin for visual swatch
      *
-     * @param string $swatchType
+     * @param int $swatchType
      * @param string $swatch1
      * @param string $swatch2
      *
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @dataProvider visualSwatchProvider
      */
-    public function testAfterAfterSaveVisualSwatch(string $swatchType, string $swatch1, string $swatch2)
+    public function testAfterAfterSaveVisualSwatch(int $swatchType, string $swatch1, string $swatch2)
     {
         $options = self::VISUAL_SWATCH_OPTIONS;
         $options['value'][self::OPTION_1_ID] = $swatch1;

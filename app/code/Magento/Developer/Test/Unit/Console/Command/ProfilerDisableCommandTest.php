@@ -19,7 +19,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 class ProfilerDisableCommandTest extends TestCase
 {
     /**
-     * @var File|\PHPUnit_Framework_MockObject_MockObject
+     * @var File|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystemMock;
 
@@ -68,7 +68,7 @@ class ProfilerDisableCommandTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filesystemMock = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()

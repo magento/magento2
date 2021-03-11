@@ -30,26 +30,26 @@ class QuoteItemProductOptionTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var QuoteToOrderItem|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuoteToOrderItem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectMock;
 
     /**
-     * @var AbstractQuoteItem|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractQuoteItem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteItemMock;
 
     /**
-     * @var QuoteItemOption|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuoteItemOption|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteItemOptionMock;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subjectMock = $this->getMockBuilder(QuoteToOrderItem::class)
             ->disableOriginalConstructor()

@@ -16,17 +16,17 @@ use Psr\Log\LoggerInterface;
 class EnabledTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var SubscriptionHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubscriptionHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subscriptionHandlerMock;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var Value|\PHPUnit_Framework_MockObject_MockObject
+     * @var Value|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
@@ -53,7 +53,7 @@ class EnabledTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subscriptionHandlerMock = $this->getMockBuilder(SubscriptionHandler::class)
             ->disableOriginalConstructor()
@@ -61,11 +61,11 @@ class EnabledTest extends \PHPUnit\Framework\TestCase
 
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -158,10 +158,11 @@ class EnabledTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testExecuteAfterSaveFailedWithLocalizedException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $exception = new \Exception('Message');
         $this->enabledModel->setData('value', $this->valueEnabled);
 

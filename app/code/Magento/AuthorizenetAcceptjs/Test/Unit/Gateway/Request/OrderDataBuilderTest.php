@@ -38,13 +38,13 @@ class OrderDataBuilderTest extends TestCase
      */
     private $orderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
+        $this->paymentDOMock = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
         $this->paymentMock = $this->createMock(Payment::class);
         $this->paymentDOMock->method('getPayment')
             ->willReturn($this->paymentMock);
-        $this->orderMock = $this->createMock(OrderAdapterInterface::class);
+        $this->orderMock = $this->getMockForAbstractClass(OrderAdapterInterface::class);
         $this->paymentDOMock->method('getOrder')
             ->willReturn($this->orderMock);
 

@@ -13,21 +13,21 @@ class TabsTest extends \PHPUnit\Framework\TestCase
     protected $_object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_structureMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_urlBuilderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->_requestMock->expects(
@@ -36,11 +36,11 @@ class TabsTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             'section'
-        )->will(
-            $this->returnValue('currentSectionId')
+        )->willReturn(
+            'currentSectionId'
         );
         $this->_structureMock = $this->createMock(\Magento\Config\Model\Config\Structure::class);
-        $this->_structureMock->expects($this->once())->method('getTabs')->will($this->returnValue([]));
+        $this->_structureMock->expects($this->once())->method('getTabs')->willReturn([]);
         $this->_urlBuilderMock = $this->createMock(\Magento\Backend\Model\Url::class);
 
         $data = [
@@ -52,7 +52,7 @@ class TabsTest extends \PHPUnit\Framework\TestCase
         $this->_object = $helper->getObject(\Magento\Config\Block\System\Config\Tabs::class, $data);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_object);
         unset($this->_requestMock);
@@ -69,12 +69,12 @@ class TabsTest extends \PHPUnit\Framework\TestCase
         )->with(
             '*/*/*',
             ['_current' => true, 'section' => 'testSectionId']
-        )->will(
-            $this->returnValue('testSectionUrl')
+        )->willReturn(
+            'testSectionUrl'
         );
 
         $sectionMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Section::class);
-        $sectionMock->expects($this->once())->method('getId')->will($this->returnValue('testSectionId'));
+        $sectionMock->expects($this->once())->method('getId')->willReturn('testSectionId');
 
         $this->assertEquals('testSectionUrl', $this->_object->getSectionUrl($sectionMock));
     }
@@ -82,14 +82,14 @@ class TabsTest extends \PHPUnit\Framework\TestCase
     public function testIsSectionActiveReturnsTrueForActiveSection()
     {
         $sectionMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Section::class);
-        $sectionMock->expects($this->once())->method('getId')->will($this->returnValue('currentSectionId'));
+        $sectionMock->expects($this->once())->method('getId')->willReturn('currentSectionId');
         $this->assertTrue($this->_object->isSectionActive($sectionMock));
     }
 
     public function testIsSectionActiveReturnsFalseForNonActiveSection()
     {
         $sectionMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Section::class);
-        $sectionMock->expects($this->once())->method('getId')->will($this->returnValue('nonCurrentSectionId'));
+        $sectionMock->expects($this->once())->method('getId')->willReturn('nonCurrentSectionId');
         $this->assertFalse($this->_object->isSectionActive($sectionMock));
     }
 }

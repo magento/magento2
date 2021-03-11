@@ -28,46 +28,46 @@ class ForgotPasswordPostTest extends \PHPUnit\Framework\TestCase
     protected $controller;
 
     /**
-     * @var Context | \PHPUnit_Framework_MockObject_MockObject
+     * @var Context | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var Session | \PHPUnit_Framework_MockObject_MockObject
+     * @var Session | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $session;
 
     /**
-     * @var AccountManagementInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var AccountManagementInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $accountManagement;
 
     /**
-     * @var Escaper | \PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $escaper;
 
     /**
-     * @var ResultRedirect | \PHPUnit_Framework_MockObject_MockObject
+     * @var ResultRedirect | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultRedirect;
 
     /**
-     * @var ResultRedirectFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var ResultRedirectFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultRedirectFactory;
 
     /**
-     * @var Request | \PHPUnit_Framework_MockObject_MockObject
+     * @var Request | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var ManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->prepareContext();
 

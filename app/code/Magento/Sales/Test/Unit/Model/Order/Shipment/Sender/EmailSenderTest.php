@@ -39,89 +39,89 @@ class EmailSenderTest extends TestCase
     private $subject;
 
     /**
-     * @var Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var Order|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderMock;
 
     /**
-     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
     /**
-     * @var Sender|\PHPUnit_Framework_MockObject_MockObject
+     * @var Sender|\PHPUnit\Framework\MockObject\MockObject
      */
     private $senderMock;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var ShipmentInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shipmentMock;
 
     /**
-     * @var ShipmentCommentCreationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentCommentCreationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $commentMock;
 
     /**
-     * @var Address|\PHPUnit_Framework_MockObject_MockObject
+     * @var Address|\PHPUnit\Framework\MockObject\MockObject
      */
     private $addressMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $globalConfigMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var Info|\PHPUnit_Framework_MockObject_MockObject
+     * @var Info|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentInfoMock;
 
     /**
-     * @var Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentHelperMock;
 
     /**
-     * @var Shipment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Shipment|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shipmentResourceMock;
 
     /**
-     * @var Renderer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Renderer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $addressRendererMock;
 
     /**
-     * @var Template|\PHPUnit_Framework_MockObject_MockObject
+     * @var Template|\PHPUnit\Framework\MockObject\MockObject
      */
     private $templateContainerMock;
 
     /**
-     * @var ShipmentIdentity|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentIdentity|\PHPUnit\Framework\MockObject\MockObject
      */
     private $identityContainerMock;
 
     /**
-     * @var SenderBuilderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var SenderBuilderFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $senderBuilderFactoryMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()

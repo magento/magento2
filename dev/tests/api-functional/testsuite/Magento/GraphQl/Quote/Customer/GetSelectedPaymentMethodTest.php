@@ -80,10 +80,11 @@ class GetSelectedPaymentMethodTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
      */
     public function testGetSelectedPaymentMethodFromNonExistentCart()
     {
+        $this->expectException(\Exception::class);
+
         $maskedQuoteId = 'non_existent_masked_id';
         $query = $this->getQuery($maskedQuoteId);
 
@@ -137,7 +138,7 @@ class GetSelectedPaymentMethodTest extends GraphQlAbstract
         $this->graphQlQuery($query, [], '', $this->getHeaderMap('customer3@search.example.com'));
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);

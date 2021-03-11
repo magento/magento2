@@ -20,22 +20,22 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class ShowTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ReportUrlProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReportUrlProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $reportUrlProviderMock;
 
     /**
-     * @var Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var Redirect|\PHPUnit\Framework\MockObject\MockObject
      */
     private $redirectMock;
 
     /**
-     * @var ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultFactoryMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageManagerMock;
 
@@ -52,7 +52,7 @@ class ShowTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->reportUrlProviderMock = $this->getMockBuilder(ReportUrlProvider::class)
             ->disableOriginalConstructor()
@@ -68,7 +68,7 @@ class ShowTest extends \PHPUnit\Framework\TestCase
 
         $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

@@ -15,26 +15,26 @@ class DataTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Payment\Helper\Data */
     private $helper;
 
-    /**  @var \PHPUnit_Framework_MockObject_MockObject */
+    /**  @var \PHPUnit\Framework\MockObject\MockObject */
     private $scopeConfig;
 
-    /**  @var \PHPUnit_Framework_MockObject_MockObject */
+    /**  @var \PHPUnit\Framework\MockObject\MockObject */
     private $initialConfig;
 
-    /**  @var \PHPUnit_Framework_MockObject_MockObject */
+    /**  @var \PHPUnit\Framework\MockObject\MockObject */
     private $methodFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $layoutMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $appEmulation;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $className = \Magento\Payment\Helper\Data::class;
@@ -61,10 +61,10 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getValue'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 $class
-            )
+            
         );
         $this->methodFactory->expects(
             $this->any()
@@ -72,20 +72,21 @@ class DataTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             $class
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 $methodInstance
-            )
+            
         );
 
         $this->assertEquals($methodInstance, $this->helper->getMethodInstance($code));
     }
 
     /**
-     * @expectedException \UnexpectedValueException
      */
     public function testGetMethodInstanceWithException()
     {
+        $this->expectException(\UnexpectedValueException::class);
+
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->willReturn(null);
@@ -103,8 +104,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $this->initialConfig->expects($this->once())
             ->method('getData')
-            ->will(
-                $this->returnValue(
+            ->willReturn(
+                
                     [
                         \Magento\Payment\Helper\Data::XML_PATH_PAYMENT_METHODS => [
                             $methodA['code'] => $methodA['data'],
@@ -113,51 +114,51 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
                         ]
                     ]
-                )
+                
             );
 
         $this->scopeConfig->expects(new MethodInvokedAtIndex(0))
             ->method('getValue')
             ->with(sprintf('%s/%s/model', Data::XML_PATH_PAYMENT_METHODS, $methodA['code']))
-            ->will($this->returnValue(\Magento\Payment\Model\Method\AbstractMethod::class));
+            ->willReturn(\Magento\Payment\Model\Method\AbstractMethod::class);
         $this->scopeConfig->expects(new MethodInvokedAtIndex(1))
             ->method('getValue')
             ->with(
                 sprintf('%s/%s/model', Data::XML_PATH_PAYMENT_METHODS, $methodB['code'])
             )
-            ->will($this->returnValue(\Magento\Payment\Model\Method\AbstractMethod::class));
+            ->willReturn(\Magento\Payment\Model\Method\AbstractMethod::class);
         $this->scopeConfig->expects(new MethodInvokedAtIndex(2))
             ->method('getValue')
             ->with(sprintf('%s/%s/model', Data::XML_PATH_PAYMENT_METHODS, 'empty'))
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $methodInstanceMockA = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
             ->getMockForAbstractClass();
         $methodInstanceMockA->expects($this->any())
             ->method('isAvailable')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $methodInstanceMockA->expects($this->any())
             ->method('getConfigData')
             ->with('sort_order', null)
-            ->will($this->returnValue($methodA['data']['sort_order']));
+            ->willReturn($methodA['data']['sort_order']);
 
         $methodInstanceMockB = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
             ->getMockForAbstractClass();
         $methodInstanceMockB->expects($this->any())
             ->method('isAvailable')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $methodInstanceMockB->expects($this->any())
             ->method('getConfigData')
             ->with('sort_order', null)
-            ->will($this->returnValue($methodB['data']['sort_order']));
+            ->willReturn($methodB['data']['sort_order']);
 
         $this->methodFactory->expects($this->at(0))
             ->method('create')
-            ->will($this->returnValue($methodInstanceMockA));
+            ->willReturn($methodInstanceMockA);
 
         $this->methodFactory->expects($this->at(1))
             ->method('create')
-            ->will($this->returnValue($methodInstanceMockB));
+            ->willReturn($methodInstanceMockB);
 
         $sortedMethods = $this->helper->getStoreMethods();
         $this->assertTrue(

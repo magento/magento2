@@ -16,46 +16,46 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     private $sequenceBuilder;
 
     /**
-     * @var \Magento\SalesSequence\Model\ResourceModel\Meta | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\ResourceModel\Meta | \PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceSequenceMeta;
 
     /**
-     * @var \Magento\SalesSequence\Model\Meta | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\Meta | \PHPUnit\Framework\MockObject\MockObject
      */
     private $meta;
 
     /**
-     * @var \Magento\SalesSequence\Model\Profile | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\Profile | \PHPUnit\Framework\MockObject\MockObject
      */
     private $profile;
 
     /**
-     * @var \Magento\SalesSequence\Model\MetaFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\MetaFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $metaFactory;
 
     /**
-     * @var \Magento\SalesSequence\Model\ProfileFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\ProfileFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $profileFactory;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var \Magento\Framework\DB\Ddl\Sequence | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Ddl\Sequence | \PHPUnit\Framework\MockObject\MockObject
      */
     private $sequence;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection | \PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connectionMock = $this->getMockForAbstractClass(
             \Magento\Framework\DB\Adapter\AdapterInterface::class,

@@ -21,29 +21,29 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     private $config;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
      */
     private $coreConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Cache\StateInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Cache\StateInterface
      */
     private $cacheState;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Module\Dir\Reader
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Module\Dir\Reader
      */
     private $moduleReader;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Json
+     * @var \PHPUnit\Framework\MockObject\MockObject|Json
      */
     private $serializerMock;
 
     /**
      * setUp all mocks and data function
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $readFactoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
@@ -55,22 +55,22 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($modulesDirectoryMock)
+        )->willReturn(
+            $modulesDirectoryMock
         );
         $modulesDirectoryMock->expects(
             $this->any()
         )->method(
             'readFile'
-        )->will(
-            $this->returnValue(file_get_contents(__DIR__ . '/_files/test.vcl'))
+        )->willReturn(
+            file_get_contents(__DIR__ . '/_files/test.vcl')
         );
         $this->coreConfigMock->expects(
             $this->any()
         )->method(
             'getValue'
-        )->will(
-            $this->returnValueMap(
+        )->willReturnMap(
+            
                 [
                     [
                         \Magento\PageCache\Model\Config::XML_VARNISH_PAGECACHE_BACKEND_HOST,
@@ -109,21 +109,21 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                         120
                     ],
                 ]
-            )
+            
         );
 
         $this->moduleReader = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
         $this->serializerMock = $this->createMock(Json::class);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $vclTemplateLocator */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $vclTemplateLocator */
         $vclTemplateLocator = $this->getMockBuilder(\Magento\PageCache\Model\Varnish\VclTemplateLocator::class)
             ->disableOriginalConstructor()
             ->setMethods(['getTemplate'])
             ->getMock();
         $vclTemplateLocator->expects($this->any())
             ->method('getTemplate')
-            ->will($this->returnValue(file_get_contents(__DIR__ . '/_files/test.vcl')));
-        /** @var \PHPUnit_Framework_MockObject_MockObject $vclTemplateLocator */
+            ->willReturn(file_get_contents(__DIR__ . '/_files/test.vcl'));
+        /** @var \PHPUnit\Framework\MockObject\MockObject $vclTemplateLocator */
         $vclGeneratorFactory = $this->getMockBuilder(\Magento\PageCache\Model\Varnish\VclGeneratorFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -139,7 +139,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $vclGeneratorFactory->expects($this->any())
             ->method('create')
             ->with($expectedParams)
-            ->will($this->returnValue(new \Magento\PageCache\Model\Varnish\VclGenerator(
+            ->willReturn(new \Magento\PageCache\Model\Varnish\VclGenerator(
                 $vclTemplateLocator,
                 'example.com',
                 '8080',
@@ -147,7 +147,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 120,
                 'X_Forwarded_Proto: https',
                 [['regexp' => '(?i)pattern', 'value' => 'value_for_pattern']]
-            )));
+            ));
         $this->config = $objectManager->getObject(
             \Magento\PageCache\Model\Config::class,
             [
@@ -188,11 +188,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->cacheState->expects($this->at(0))
             ->method('isEnabled')
             ->with(\Magento\PageCache\Model\Cache\Type::TYPE_IDENTIFIER)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->cacheState->expects($this->at(1))
             ->method('isEnabled')
             ->with(\Magento\PageCache\Model\Cache\Type::TYPE_IDENTIFIER)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->assertTrue($this->config->isEnabled());
         $this->assertFalse($this->config->isEnabled());
     }

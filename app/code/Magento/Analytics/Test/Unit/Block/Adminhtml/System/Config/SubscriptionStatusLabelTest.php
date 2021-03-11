@@ -20,26 +20,26 @@ class SubscriptionStatusLabelTest extends \PHPUnit\Framework\TestCase
     private $subscriptionStatusLabel;
 
     /**
-     * @var AbstractElement|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractElement|\PHPUnit\Framework\MockObject\MockObject
      */
     private $abstractElementMock;
 
     /**
-     * @var SubscriptionStatusProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubscriptionStatusProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subscriptionStatusProviderMock;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var Form|\PHPUnit_Framework_MockObject_MockObject
+     * @var Form|\PHPUnit\Framework\MockObject\MockObject
      */
     private $formMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subscriptionStatusProviderMock = $this->getMockBuilder(SubscriptionStatusProvider::class)
             ->disableOriginalConstructor()
@@ -82,7 +82,7 @@ class SubscriptionStatusLabelTest extends \PHPUnit\Framework\TestCase
         $this->abstractElementMock->expects($this->any())
             ->method('getComment')
             ->willReturn('Subscription status: Enabled');
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             "/Subscription status: Enabled/",
             $this->subscriptionStatusLabel->render($this->abstractElementMock)
         );

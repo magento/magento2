@@ -16,11 +16,11 @@ class GroupRegistryTest extends \PHPUnit\Framework\TestCase
     private $unit;
 
     /**
-     * @var \Magento\Customer\Model\CustomerGroupFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\CustomerGroupFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $groupFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->groupFactory = $this->getMockBuilder(\Magento\Customer\Model\GroupFactory::class)
             ->disableOriginalConstructor()
@@ -44,13 +44,13 @@ class GroupRegistryTest extends \PHPUnit\Framework\TestCase
         $group->expects($this->once())
             ->method('load')
             ->with($groupId)
-            ->will($this->returnValue($group));
+            ->willReturn($group);
         $group->expects($this->exactly(2))
             ->method('getId')
-            ->will($this->returnValue($groupId));
+            ->willReturn($groupId);
         $this->groupFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($group));
+            ->willReturn($group);
         $actual = $this->unit->retrieve($groupId);
         $this->assertEquals($group, $actual);
         $actualCached = $this->unit->retrieve($groupId);
@@ -61,10 +61,11 @@ class GroupRegistryTest extends \PHPUnit\Framework\TestCase
      * Tests that attempting to retrieve a non-existing entity will result in an exception.
      *
      * @return void
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testRetrieveException()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $groupId = 1;
         $group = $this->getMockBuilder(\Magento\Customer\Model\Group::class)
             ->setMethods(['load', 'getId', '__wakeup'])
@@ -73,13 +74,13 @@ class GroupRegistryTest extends \PHPUnit\Framework\TestCase
         $group->expects($this->once())
             ->method('load')
             ->with($groupId)
-            ->will($this->returnValue($group));
+            ->willReturn($group);
         $group->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->groupFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($group));
+            ->willReturn($group);
         $this->unit->retrieve($groupId);
     }
 
@@ -98,13 +99,13 @@ class GroupRegistryTest extends \PHPUnit\Framework\TestCase
         $group->expects($this->exactly(2))
             ->method('load')
             ->with($groupId)
-            ->will($this->returnValue($group));
+            ->willReturn($group);
         $group->expects($this->exactly(4))
             ->method('getId')
-            ->will($this->returnValue($groupId));
+            ->willReturn($groupId);
         $this->groupFactory->expects($this->exactly(2))
             ->method('create')
-            ->will($this->returnValue($group));
+            ->willReturn($group);
         $actual = $this->unit->retrieve($groupId);
         $this->assertSame($group, $actual);
         $this->unit->remove($groupId);

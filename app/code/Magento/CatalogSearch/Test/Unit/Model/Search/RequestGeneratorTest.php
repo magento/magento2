@@ -20,10 +20,10 @@ class RequestGeneratorTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\CatalogSearch\Model\Search\RequestGenerator */
     protected $object;
 
-    /** @var  CollectionFactory | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  CollectionFactory | \PHPUnit\Framework\MockObject\MockObject */
     protected $productAttributeCollectionFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productAttributeCollectionFactory =
             $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class)
@@ -146,7 +146,7 @@ class RequestGeneratorTest extends \PHPUnit\Framework\TestCase
                 ['is_searchable', 'is_visible_in_advanced_search', 'is_filterable', 'is_filterable_in_search'],
                 [1, 1, [1, 2], 1]
             )
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->productAttributeCollectionFactory->expects($this->any())
             ->method('create')
@@ -189,11 +189,11 @@ class RequestGeneratorTest extends \PHPUnit\Framework\TestCase
      * Create attribute mock
      *
      * @param $attributeOptions
-     * @return \Magento\Catalog\Model\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Catalog\Model\Entity\Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createAttributeMock($attributeOptions)
     {
-        /** @var \Magento\Catalog\Model\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject $attribute */
+        /** @var \Magento\Catalog\Model\Entity\Attribute|\PHPUnit\Framework\MockObject\MockObject $attribute */
         $attribute = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->disableOriginalConstructor()
             ->setMethods(

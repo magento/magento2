@@ -14,17 +14,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class AnchorRendererTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var Item|\PHPUnit\Framework\MockObject\MockObject
      */
     private $activeMenuItemMock;
 
     /**
-     * @var Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var Item|\PHPUnit\Framework\MockObject\MockObject
      */
     private $menuItemMock;
 
     /**
-     * @var Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $escaperMock;
 
@@ -34,7 +34,7 @@ class AnchorRendererTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var MenuItemChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var MenuItemChecker|\PHPUnit\Framework\MockObject\MockObject
      */
     private $menuItemCheckerMock;
 
@@ -43,7 +43,12 @@ class AnchorRendererTest extends \PHPUnit\Framework\TestCase
      */
     private $anchorRenderer;
 
-    protected function setUp()
+    /**
+     * @var Item|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $menuItemWithoutChildrenMock;
+
+    protected function setUp(): void
     {
         $this->activeMenuItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()

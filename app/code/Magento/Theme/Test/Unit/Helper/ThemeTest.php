@@ -16,12 +16,12 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     public function testGetCssAssets($layoutStr, $expectedResult)
     {
         $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
-        $theme->expects($this->once())->method('getArea')->will($this->returnValue('area'));
+        $theme->expects($this->once())->method('getArea')->willReturn('area');
         $layoutMergeFactory = $this->_getLayoutMergeFactory($theme, $layoutStr);
         $assetRepo = $this->createPartialMock(\Magento\Framework\View\Asset\Repository::class, ['createAsset']);
         $assetRepo->expects($this->any())
             ->method('createAsset')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
         $helper = new \Magento\Theme\Helper\Theme(
             $this->createMock(\Magento\Framework\App\Helper\Context::class),
             $layoutMergeFactory,
@@ -107,9 +107,9 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $theme
+     * @param \PHPUnit\Framework\MockObject\MockObject $theme
      * @param string $layoutStr
-     * @return \Magento\Framework\View\Layout\ProcessorFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\View\Layout\ProcessorFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getLayoutMergeFactory($theme, $layoutStr)
     {
@@ -122,8 +122,8 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getFileLayoutUpdatesXml'
-        )->will(
-            $this->returnValue($layoutElement)
+        )->willReturn(
+            $layoutElement
         );
 
         /** @var $processorFactory \Magento\Framework\View\Layout\ProcessorFactory */
@@ -134,7 +134,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
         $processorFactory->expects($this->any())
             ->method('create')
             ->with(['theme' => $theme])
-            ->will($this->returnValue($layoutProcessor));
+            ->willReturn($layoutProcessor);
 
         return $processorFactory;
     }

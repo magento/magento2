@@ -15,7 +15,7 @@ use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Store\Model\ScopeInterface;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * Test for ShareProcessor.
@@ -58,7 +58,7 @@ class LockConfigProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->preparedValueFactory = $this->getMockBuilder(PreparedValueFactory::class)
             ->disableOriginalConstructor()
@@ -162,11 +162,12 @@ class LockConfigProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Filesystem is not writable.
      */
     public function testProcessNotReadableFs()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Filesystem is not writable.');
+
         $path = 'test/test/test';
         $value = 'value';
 
@@ -191,11 +192,12 @@ class LockConfigProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Invalid values
      */
     public function testCustomException()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Invalid values');
+
         $path = 'test/test/test';
         $value = 'value';
 

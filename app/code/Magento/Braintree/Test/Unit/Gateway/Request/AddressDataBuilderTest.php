@@ -10,7 +10,7 @@ use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Data\AddressAdapterInterface;
 use Magento\Braintree\Gateway\SubjectReader;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Tests \Magento\Braintree\Gateway\Request\AddressDataBuilder.
@@ -37,10 +37,10 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $subjectReaderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
-        $this->orderMock = $this->createMock(OrderAdapterInterface::class);
+        $this->paymentDOMock = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
+        $this->orderMock = $this->getMockForAbstractClass(OrderAdapterInterface::class);
         $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -49,10 +49,11 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testBuildReadPaymentException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $buildSubject = [
             'payment' => null,
         ];
@@ -176,7 +177,7 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private function getAddressMock($addressData)
     {
-        $addressMock = $this->createMock(AddressAdapterInterface::class);
+        $addressMock = $this->getMockForAbstractClass(AddressAdapterInterface::class);
 
         $addressMock->expects(self::exactly(2))
             ->method('getFirstname')

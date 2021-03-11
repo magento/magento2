@@ -40,7 +40,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->driver = new File();
         $this->absolutePath = dirname(__DIR__) . '/_files/';
@@ -51,7 +51,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->removeGeneratedDirectory();
     }
@@ -77,10 +77,10 @@ class FileTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests directory reading exception.
      *
-     * @expectedException \Magento\Framework\Exception\FileSystemException
      */
     public function testReadDirectoryRecursivelyFailure()
     {
+        $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
         $this->driver->readDirectoryRecursively($this->getTestPath('not-existing-directory'));
     }
 

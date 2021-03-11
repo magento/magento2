@@ -9,7 +9,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Payment\Api\PaymentVerificationInterface;
 use Magento\Signifyd\Model\PaymentVerificationFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Magento\Payment\Gateway\ConfigInterface;
 
 class PaymentVerificationFactoryTest extends \PHPUnit\Framework\TestCase
@@ -47,25 +47,25 @@ class PaymentVerificationFactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
         $this->fakeObjectManager = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->config = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->avsDefaultAdapter = $this->getMockBuilder(PaymentVerificationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->cvvDefaultAdapter = $this->getMockBuilder(PaymentVerificationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->factory = $this->objectManager->getObject(PaymentVerificationFactory::class, [
             'objectManager' => $this->fakeObjectManager,
@@ -97,7 +97,7 @@ class PaymentVerificationFactoryTest extends \PHPUnit\Framework\TestCase
         /** @var PaymentVerificationInterface|MockObject $cvvAdapter */
         $cvvAdapter = $this->getMockBuilder(PaymentVerificationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->fakeObjectManager->expects(self::once())
             ->method('create')
@@ -138,11 +138,12 @@ class PaymentVerificationFactoryTest extends \PHPUnit\Framework\TestCase
      * Checks a test case, when mapper implementation does not corresponding to PaymentVerificationInterface.
      *
      * @covers \Magento\Signifyd\Model\PaymentVerificationFactory::createPaymentCvv
-     * @expectedException \Magento\Framework\Exception\ConfigurationMismatchException
-     * @expectedExceptionMessage stdClass must implement Magento\Payment\Api\PaymentVerificationInterface
      */
     public function testCreateWithUnsupportedImplementation()
     {
+        $this->expectException(\Magento\Framework\Exception\ConfigurationMismatchException::class);
+        $this->expectExceptionMessage('stdClass must implement Magento\\Payment\\Api\\PaymentVerificationInterface');
+
         $paymentMethodCode = 'exists_payment';
 
         $this->config->expects(self::once())
@@ -185,7 +186,7 @@ class PaymentVerificationFactoryTest extends \PHPUnit\Framework\TestCase
 
         $avsAdapter = $this->getMockBuilder(PaymentVerificationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->fakeObjectManager->expects(self::once())
             ->method('create')

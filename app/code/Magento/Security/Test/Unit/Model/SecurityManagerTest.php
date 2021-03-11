@@ -39,7 +39,7 @@ class SecurityManagerTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
@@ -57,7 +57,7 @@ class SecurityManagerTest extends \PHPUnit\Framework\TestCase
      * Init mocks for tests
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -153,7 +153,7 @@ class SecurityManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->remoteAddressMock->expects($this->once())
             ->method('getRemoteAddress')
-            ->will($this->returnValue($longIp));
+            ->willReturn($longIp);
 
         $this->passwordResetRequestEventFactoryMock->expects($this->once())
             ->method('create')

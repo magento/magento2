@@ -29,7 +29,7 @@ class WrapperFactoryTest extends \PHPUnit\Framework\TestCase
         $objectManagerMock->expects($this->once())
             ->method('create')
             ->with($expectedInstance, $arguments)
-            ->will($this->returnValue($observerInstanceMock));
+            ->willReturn($observerInstanceMock);
 
         $this->assertInstanceOf($expectedInstance, $wrapperFactory->create($arguments));
     }

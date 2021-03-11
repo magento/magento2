@@ -19,11 +19,11 @@ class ImportTest extends \PHPUnit\Framework\TestCase
     protected $_object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_formMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_formMock = $this->createPartialMock(
             \Magento\Framework\Data\Form::class,
@@ -43,7 +43,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
 
     public function testGetNameWhenFormFiledNameSuffixIsEmpty()
     {
-        $this->_formMock->expects($this->once())->method('getFieldNameSuffix')->will($this->returnValue(false));
+        $this->_formMock->expects($this->once())->method('getFieldNameSuffix')->willReturn(false);
         $this->_formMock->expects($this->never())->method('addSuffixToName');
         $actual = $this->_object->getName();
         $this->assertEquals('test_name', $actual);
@@ -51,8 +51,8 @@ class ImportTest extends \PHPUnit\Framework\TestCase
 
     public function testGetNameWhenFormFiledNameSuffixIsNotEmpty()
     {
-        $this->_formMock->expects($this->once())->method('getFieldNameSuffix')->will($this->returnValue(true));
-        $this->_formMock->expects($this->once())->method('addSuffixToName')->will($this->returnValue('test_suffix'));
+        $this->_formMock->expects($this->once())->method('getFieldNameSuffix')->willReturn(true);
+        $this->_formMock->expects($this->once())->method('addSuffixToName')->willReturn('test_suffix');
         $actual = $this->_object->getName();
         $this->assertEquals('test_suffix', $actual);
     }
@@ -63,15 +63,15 @@ class ImportTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getHtmlIdPrefix'
-        )->will(
-            $this->returnValue('test_name_prefix')
+        )->willReturn(
+            'test_name_prefix'
         );
         $this->_formMock->expects(
             $this->any()
         )->method(
             'getHtmlIdSuffix'
-        )->will(
-            $this->returnValue('test_name_suffix')
+        )->willReturn(
+            'test_name_suffix'
         );
         $testString = $this->_object->getElementHtml();
         $this->assertStringStartsWith(

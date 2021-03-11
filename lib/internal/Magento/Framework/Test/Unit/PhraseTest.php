@@ -15,7 +15,7 @@ class PhraseTest extends \PHPUnit\Framework\TestCase
     protected $defaultRenderer;
 
     /**
-     * @var \Magento\Framework\Phrase\RendererInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Phrase\RendererInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rendererMock;
 
@@ -24,7 +24,7 @@ class PhraseTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->defaultRenderer = Phrase::getRenderer();
         $this->rendererMock = $this->getMockBuilder(\Magento\Framework\Phrase\RendererInterface::class)
@@ -36,7 +36,7 @@ class PhraseTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Phrase::setRenderer($this->defaultRenderer);
     }

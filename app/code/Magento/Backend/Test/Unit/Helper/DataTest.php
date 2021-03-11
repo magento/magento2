@@ -13,11 +13,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
     protected $_helper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_frontResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_frontResolverMock = $this->createMock(\Magento\Backend\App\Area\FrontNameResolver::class);
         $this->_helper = new \Magento\Backend\Helper\Data(
@@ -38,8 +38,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getFrontName'
-        )->will(
-            $this->returnValue('custom_backend')
+        )->willReturn(
+            'custom_backend'
         );
 
         $this->assertEquals('custom_backend', $this->_helper->getAreaFrontName());

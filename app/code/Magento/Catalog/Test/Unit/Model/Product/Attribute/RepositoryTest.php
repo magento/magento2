@@ -22,59 +22,59 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeResourceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $filterManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $eavAttributeRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $eavConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $validatorFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchCriteriaBuilderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchResultMock;
 
     /**
-     * @var \Magento\Eav\Api\AttributeOptionManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Api\AttributeOptionManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $optionManagementMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attributeResourceMock =
             $this->createMock(\Magento\Catalog\Model\ResourceModel\Attribute::class);
@@ -156,7 +156,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $attributeMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
         $this->attributeResourceMock->expects($this->once())->method('delete')->with($attributeMock);
 
-        $this->assertEquals(true, $this->model->delete($attributeMock));
+        $this->assertTrue($this->model->delete($attributeMock));
     }
 
     /**
@@ -174,7 +174,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             )->willReturn($attributeMock);
         $this->attributeResourceMock->expects($this->once())->method('delete')->with($attributeMock);
 
-        $this->assertEquals(true, $this->model->deleteById($attributeCode));
+        $this->assertTrue($this->model->deleteById($attributeCode));
     }
 
     /**
@@ -198,11 +198,12 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with attribute_code = test attribute code
      */
     public function testSaveNoSuchEntityException()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('No such entity with attribute_code = test attribute code');
+
         $attributeMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
         $existingModelMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
         $attributeMock->expects($this->once())->method('getAttributeId')->willReturn('12');
@@ -222,11 +223,12 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage "frontend_label" is required. Enter and try again.
      */
     public function testSaveInputExceptionRequiredField()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('"frontend_label" is required. Enter and try again.');
+
         $attributeMock = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
             ['getFrontendLabels', 'getDefaultFrontendLabel', '__wakeup', 'getAttributeId', 'setAttributeId']
@@ -240,11 +242,12 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Invalid value of "" provided for the frontend_label field.
      */
     public function testSaveInputExceptionInvalidFieldValue()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Invalid value of "" provided for the frontend_label field.');
+
         $attributeMock = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
             ['getFrontendLabels', 'getDefaultFrontendLabel', 'getAttributeId', '__wakeup', 'setAttributeId']

@@ -54,7 +54,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
     protected $catalogOutputMock;
 
     /**
-     * @var \Magento\Catalog\Helper\Output|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Output|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 
@@ -68,7 +68,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->catalogOutputMock = $this->createMock(\Magento\Catalog\Helper\Output::class);
         $this->rssFactoryMock = $this->createPartialMock(\Magento\Rss\Model\RssFactory::class, ['create']);
@@ -97,7 +97,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
 
         $requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $requestMock->expects($this->any())->method('getParam')->with('sharing_code')
-            ->will($this->returnValue('somesharingcode'));
+            ->willReturn('somesharingcode');
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -135,27 +135,27 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
         $customer = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->setMethods(['getName', '__wakeup', 'load'])
             ->disableOriginalConstructor()->getMock();
-        $customer->expects($this->once())->method('load')->will($this->returnSelf());
-        $customer->expects($this->once())->method('getName')->will($this->returnValue('Customer Name'));
+        $customer->expects($this->once())->method('load')->willReturnSelf();
+        $customer->expects($this->once())->method('getName')->willReturn('Customer Name');
 
-        $this->customerFactory->expects($this->once())->method('create')->will($this->returnValue($customer));
+        $this->customerFactory->expects($this->once())->method('create')->willReturn($customer);
 
         $this->wishlistHelperMock->expects($this->any())
             ->method('getWishlist')
-            ->will($this->returnValue($wishlistModelMock));
+            ->willReturn($wishlistModelMock);
         $this->wishlistHelperMock->expects($this->any())
             ->method('getCustomer')
-            ->will($this->returnValue($customerServiceMock));
+            ->willReturn($customerServiceMock);
         $wishlistModelMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($wishlistId));
+            ->willReturn($wishlistId);
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
-            ->will($this->returnValue($wishlistSharingUrl));
+            ->willReturn($wishlistSharingUrl);
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         [
                             'advanced/modules_disable_output/Magento_Rss',
@@ -170,7 +170,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
                             $locale
                         ],
                     ]
-                )
+                
             );
 
         $staticArgs = [
@@ -225,48 +225,48 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
 
         $wishlistModelMock->expects($this->once())
             ->method('getItemCollection')
-            ->will($this->returnValue($wishlistItemsCollection));
+            ->willReturn($wishlistItemsCollection);
         $wishlistItem->expects($this->once())
             ->method('getProduct')
-            ->will($this->returnValue($productMock));
+            ->willReturn($productMock);
         $productMock->expects($this->once())
             ->method('getAllowedPriceInRss')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $productMock->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue($staticArgs['productName']));
+            ->willReturn($staticArgs['productName']);
         $productMock->expects($this->once())
             ->method('getAllowedInRss')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->imageHelperMock->expects($this->once())
             ->method('init')
             ->with($productMock, 'rss_thumbnail')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->imageHelperMock->expects($this->once())
             ->method('getUrl')
-            ->will($this->returnValue($imgThumbSrc));
+            ->willReturn($imgThumbSrc);
         $priceRendererMock = $this->createPartialMock(\Magento\Framework\Pricing\Render::class, ['render']);
 
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
-            ->will($this->returnValue($priceRendererMock));
+            ->willReturn($priceRendererMock);
         $priceRendererMock->expects($this->once())
             ->method('render')
-            ->will($this->returnValue($priceHtmlForTest));
+            ->willReturn($priceHtmlForTest);
         $productMock->expects($this->any())
             ->method('getDescription')
-            ->will($this->returnValue($productDescription));
+            ->willReturn($productDescription);
         $productMock->expects($this->any())
             ->method('getShortDescription')
-            ->will($this->returnValue($productShortDescription));
+            ->willReturn($productShortDescription);
         $this->catalogOutputMock->expects($this->any())
             ->method('productAttribute')
-            ->will($this->returnArgument(1));
+            ->willReturnArgument(1);
         $this->wishlistBlock
             ->expects($this->any())
             ->method('getProductUrl')
             ->with($productMock, ['_rss' => true])
-            ->will($this->returnValue($staticArgs['productUrl']));
+            ->willReturn($staticArgs['productUrl']);
 
         $description = '<table><tr><td><a href="' . $staticArgs['productUrl'] . '"><img src="' . $imgThumbSrc .
             '" border="0" align="left" height="75" width="75"></a></td><td style="text-decoration:none;">' .
@@ -285,14 +285,14 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
         )->disableOriginalConstructor()->getMock();
         $wishlist->expects($this->once())->method('getCustomerId')->willReturn($customerId);
         $this->wishlistHelperMock->expects($this->any())->method('getWishlist')
-            ->will($this->returnValue($wishlist));
+            ->willReturn($wishlist);
         $this->wishlistHelperMock->expects($this->any())
             ->method('getCustomer')
-            ->will($this->returnValue($customerServiceMock));
+            ->willReturn($customerServiceMock);
         $customerServiceMock->expects($this->once())->method('getId')->willReturn($customerId);
         $this->scopeConfig->expects($this->once())->method('isSetFlag')
             ->with('rss/wishlist/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertTrue($this->model->isAllowed());
     }
@@ -305,7 +305,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
         )->disableOriginalConstructor()->getMock();
         $wishlist->expects($this->once())->method('getId')->willReturn($wishlistId);
         $this->wishlistHelperMock->expects($this->any())->method('getWishlist')
-            ->will($this->returnValue($wishlist));
+            ->willReturn($wishlist);
         $this->assertEquals('rss_wishlist_data_1', $this->model->getCacheKey());
     }
 
@@ -320,10 +320,10 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             ['getId', '__wakeup', 'getCustomerId', 'getItemCollection', 'getSharingCode']
         )->disableOriginalConstructor()->getMock();
         $wishlist->expects($this->any())->method('getSharingCode')
-            ->will($this->returnValue('somesharingcode'));
+            ->willReturn('somesharingcode');
         $this->wishlistHelperMock->expects($this->any())->method('getWishlist')
-            ->will($this->returnValue($wishlist));
-        $this->assertEquals(false, $this->model->isAuthRequired());
+            ->willReturn($wishlist);
+        $this->assertFalse($this->model->isAuthRequired());
     }
 
     public function testGetProductPriceHtmlBlockDoesntExists()

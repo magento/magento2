@@ -20,16 +20,16 @@ class UrlBuilderTest extends \PHPUnit\Framework\TestCase
     protected $urlBuilder;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlInterface;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigInterface;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->urlInterface = $this->createMock(\Magento\Framework\UrlInterface::class);
         $this->scopeConfigInterface = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
@@ -48,7 +48,7 @@ class UrlBuilderTest extends \PHPUnit\Framework\TestCase
     {
         $this->scopeConfigInterface->expects($this->once())->method('getValue')
             ->with('rss/config/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->assertEquals('', $this->urlBuilder->getUrl());
     }
 
@@ -56,10 +56,10 @@ class UrlBuilderTest extends \PHPUnit\Framework\TestCase
     {
         $this->scopeConfigInterface->expects($this->once())->method('getValue')
             ->with('rss/config/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->urlInterface->expects($this->once())->method('getUrl')
             ->with('rss/feed/index', ['type' => 'rss_feed'])
-            ->will($this->returnValue('http://magento.com/rss/feed/index/type/rss_feed'));
+            ->willReturn('http://magento.com/rss/feed/index/type/rss_feed');
         $this->assertEquals(
             'http://magento.com/rss/feed/index/type/rss_feed',
             $this->urlBuilder->getUrl(['type' => 'rss_feed'])

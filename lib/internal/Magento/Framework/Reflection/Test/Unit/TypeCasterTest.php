@@ -8,7 +8,7 @@ namespace Magento\Framework\Reflection\Test\Unit;
 use Magento\Framework\Reflection\TypeCaster;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use \PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Type caster Test
@@ -28,7 +28,7 @@ class TypeCasterTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up helper.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->serializer = $this->getMockBuilder(Json::class)

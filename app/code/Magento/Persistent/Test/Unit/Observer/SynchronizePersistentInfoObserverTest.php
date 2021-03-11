@@ -15,41 +15,41 @@ class SynchronizePersistentInfoObserverTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $observerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $this->helperMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
@@ -68,32 +68,32 @@ class SynchronizePersistentInfoObserverTest extends \PHPUnit\Framework\TestCase
 
     public function testSynchronizePersistentInfoWhenPersistentDataNotEnabled()
     {
-        $this->helperMock->expects($this->once())->method('isEnabled')->will($this->returnValue(false));
+        $this->helperMock->expects($this->once())->method('isEnabled')->willReturn(false);
         $this->sessionHelperMock->expects($this->never())->method('getSession');
         $this->model->execute($this->observerMock);
     }
 
     public function testSynchronizePersistentInfoWhenPersistentDataIsEnabled()
     {
-        $this->helperMock->expects($this->once())->method('isEnabled')->will($this->returnValue(true));
-        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
+        $this->helperMock->expects($this->once())->method('isEnabled')->willReturn(true);
+        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->sessionHelperMock
             ->expects($this->once())
             ->method('getSession')
-            ->will($this->returnValue($this->sessionMock));
+            ->willReturn($this->sessionMock);
         $this->observerMock
             ->expects($this->once())
             ->method('getEvent')
-            ->will($this->returnValue($this->eventManagerMock));
+            ->willReturn($this->eventManagerMock);
         $this->eventManagerMock
             ->expects($this->once())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
+            ->willReturn($this->requestMock);
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
         $this->requestMock
             ->expects($this->once())
             ->method('getFullActionName')
-            ->will($this->returnValue('customer_account_logout'));
+            ->willReturn('customer_account_logout');
         $this->sessionMock->expects($this->once())->method('save');
         $this->model->execute($this->observerMock);
     }

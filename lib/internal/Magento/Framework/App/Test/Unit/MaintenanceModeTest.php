@@ -36,7 +36,7 @@ class MaintenanceModeTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setup()
+    protected function setup(): void
     {
         $this->flagDir = $this->getMockForAbstractClass(WriteInterface::class);
         $filesystem = $this->createMock(Filesystem::class);

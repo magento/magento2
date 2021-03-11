@@ -12,12 +12,12 @@ namespace Magento\Sales\Test\Unit\Block\Order\Create;
 class TotalsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $shippingAddressMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $billingAddressMock;
 
@@ -32,19 +32,19 @@ class TotalsTest extends \PHPUnit\Framework\TestCase
     protected $helperManager;
 
     /**
-     * @var \Magento\Backend\Model\Session\Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Session\Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionQuoteMock;
 
     /**
-     * @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteMock;
 
     /**
      * Init
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helperManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->sessionQuoteMock = $this->getMockBuilder(\Magento\Backend\Model\Session\Quote::class)

@@ -33,7 +33,7 @@ class UpdatingServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
 
@@ -87,7 +87,7 @@ class UpdatingServiceTest extends \PHPUnit\Framework\TestCase
         self::assertEquals('2017-01-05 22:23:26', $caseEntity->getCreatedAt());
         self::assertEquals(CaseInterface::GUARANTEE_APPROVED, $caseEntity->getGuaranteeDisposition());
         self::assertEquals('AnyTeam', $caseEntity->getAssociatedTeam()['teamName']);
-        self::assertEquals(true, $caseEntity->isGuaranteeEligible());
+        self::assertTrue($caseEntity->isGuaranteeEligible());
         self::assertEquals(CaseInterface::STATUS_PROCESSING, $caseEntity->getStatus());
         self::assertEquals($orderEntityId, $caseEntity->getOrderId());
         self::assertEquals(

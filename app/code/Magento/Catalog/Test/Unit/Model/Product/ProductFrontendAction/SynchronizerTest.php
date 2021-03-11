@@ -20,25 +20,25 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject */
     protected $sessionMock;
 
-    /** @var \Magento\Customer\Model\Visitor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\Visitor|\PHPUnit\Framework\MockObject\MockObject */
     protected $visitorMock;
 
-    /** @var \Magento\Catalog\Model\ProductFrontendActionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ProductFrontendActionFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $productFrontendActionFactoryMock;
 
-    /** @var \Magento\Framework\EntityManager\EntityManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\EntityManager\EntityManager|\PHPUnit\Framework\MockObject\MockObject */
     protected $entityManagerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $collectionFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $frontendStorageConfigurationPoolMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
@@ -111,7 +111,7 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
         $action2 = $this->getMockBuilder(ProductFrontendActionInterface::class)
             ->getMockForAbstractClass();
 
-        $frontendAction = $this->createMock(ProductFrontendActionInterface::class);
+        $frontendAction = $this->getMockForAbstractClass(ProductFrontendActionInterface::class);
         $collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();

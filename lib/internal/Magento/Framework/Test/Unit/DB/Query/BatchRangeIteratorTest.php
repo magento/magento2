@@ -18,17 +18,17 @@ class BatchRangeIteratorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $selectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $wrapperSelectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
@@ -62,7 +62,7 @@ class BatchRangeIteratorTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->batchSize = 10;
         $this->currentBatch = 0;
@@ -72,7 +72,7 @@ class BatchRangeIteratorTest extends \PHPUnit\Framework\TestCase
 
         $this->selectMock = $this->createMock(Select::class);
         $this->wrapperSelectMock = $this->createMock(Select::class);
-        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->connectionMock->expects($this->any())->method('select')->willReturn($this->wrapperSelectMock);
         $this->selectMock->expects($this->once())->method('getConnection')->willReturn($this->connectionMock);
         $this->connectionMock->expects($this->any())->method('quoteIdentifier')->willReturnArgument(0);
@@ -96,6 +96,16 @@ class BatchRangeIteratorTest extends \PHPUnit\Framework\TestCase
     {
         $this->selectMock->expects($this->once())->method('limit')->with($this->batchSize, $this->currentBatch);
         $this->selectMock->expects($this->once())->method('order')->with('correlationName.rangeField' . ' ASC');
+        $this->wrapperSelectMock->expects($this->once())
+            ->method('from')
+            ->with(
+                $this->selectMock,
+                [new \Zend_Db_Expr('COUNT(*) as cnt')]
+            );
+        $this->connectionMock->expects($this->once())
+            ->method('fetchRow')
+            ->with($this->wrapperSelectMock)
+            ->willReturn(['cnt' => 10]);
         $this->assertEquals($this->selectMock, $this->model->current());
         $this->assertEquals(0, $this->model->key());
     }

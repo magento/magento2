@@ -17,26 +17,26 @@ class DirectorTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_commandFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_builderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_logger;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_commandMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_builderMock = $this->createMock(\Magento\Backend\Model\Menu\Builder::class);
         $this->_logger = $this->createMock(\Psr\Log\LoggerInterface::class);
@@ -52,11 +52,11 @@ class DirectorTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($this->_commandMock)
+        )->willReturn(
+            $this->_commandMock
         );
 
-        $this->_commandMock->expects($this->any())->method('getId')->will($this->returnValue(true));
+        $this->_commandMock->expects($this->any())->method('getId')->willReturn(true);
         $this->_model = new \Magento\Backend\Model\Menu\Director\Director($this->_commandFactoryMock);
     }
 

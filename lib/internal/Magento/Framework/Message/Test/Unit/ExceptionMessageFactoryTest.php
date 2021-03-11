@@ -11,7 +11,7 @@ use Magento\Framework\Message\MessageInterface;
 class ExceptionMessageFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Message\Factory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\Factory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $messageFactoryMock;
 
@@ -20,7 +20,7 @@ class ExceptionMessageFactoryTest extends \PHPUnit\Framework\TestCase
      */
     private $exceptionMessageFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->messageFactoryMock = $this->createPartialMock(
             \Magento\Framework\Message\Factory::class,
@@ -35,7 +35,7 @@ class ExceptionMessageFactoryTest extends \PHPUnit\Framework\TestCase
     public function testCreateMessageDefaultType()
     {
         $exception = new \Exception('message');
-        $message = $this->createMock(MessageInterface::class);
+        $message = $this->getMockForAbstractClass(MessageInterface::class);
 
         $message->expects($this->once())
             ->method('setText')

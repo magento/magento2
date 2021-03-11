@@ -32,7 +32,7 @@ class SessionTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

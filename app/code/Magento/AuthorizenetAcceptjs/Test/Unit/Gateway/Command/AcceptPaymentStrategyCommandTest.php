@@ -44,12 +44,12 @@ class AcceptPaymentStrategyCommandTest extends TestCase
      */
     private $transactionResultMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->transactionDetailsCommandMock = $this->createMock(CommandInterface::class);
-        $this->commandMock = $this->createMock(CommandInterface::class);
-        $this->transactionResultMock = $this->createMock(ResultInterface::class);
-        $this->commandPoolMock = $this->createMock(CommandPoolInterface::class);
+        $this->transactionDetailsCommandMock = $this->getMockForAbstractClass(CommandInterface::class);
+        $this->commandMock = $this->getMockForAbstractClass(CommandInterface::class);
+        $this->transactionResultMock = $this->getMockForAbstractClass(ResultInterface::class);
+        $this->commandPoolMock = $this->getMockForAbstractClass(CommandPoolInterface::class);
         $this->command = new AcceptPaymentStrategyCommand(
             $this->commandPoolMock,
             new SubjectReader()

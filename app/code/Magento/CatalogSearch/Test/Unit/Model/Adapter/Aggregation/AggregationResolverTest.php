@@ -20,27 +20,27 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class AggregationResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var AttributeSetFinderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeSetFinderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeSetFinder;
 
     /**
-     * @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $searchCriteriaBuilder;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $request;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $config;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeCollection;
 
@@ -50,11 +50,11 @@ class AggregationResolverTest extends \PHPUnit\Framework\TestCase
     private $aggregationResolver;
 
     /**
-     * @var RequestCheckerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestCheckerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $aggregationChecker;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attributeSetFinder = $this->getMockBuilder(AttributeSetFinderInterface::class)
             ->disableOriginalConstructor()
@@ -73,7 +73,7 @@ class AggregationResolverTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->aggregationChecker = $this->getMockBuilder(RequestCheckerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->aggregationResolver = (new ObjectManager($this))->getObject(
             AggregationResolver::class,

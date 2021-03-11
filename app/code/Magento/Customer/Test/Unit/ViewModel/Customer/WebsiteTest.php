@@ -37,10 +37,10 @@ class WebsiteTest extends TestCase
      */
     private $scopeConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->systemStore = $this->createMock(SystemStore::class);
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->customerWebsite = $this->objectManagerHelper->getObject(
             CustomerWebsite::class,

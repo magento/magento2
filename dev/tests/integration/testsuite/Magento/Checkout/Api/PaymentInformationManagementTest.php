@@ -19,7 +19,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class PaymentInformationManagementTest
@@ -41,7 +41,7 @@ class PaymentInformationManagementTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
 
@@ -54,7 +54,7 @@ class PaymentInformationManagementTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager->removeSharedInstance(TransactionSale::class);
         parent::tearDown();
@@ -69,7 +69,7 @@ class PaymentInformationManagementTest extends TestCase
      * @magentoDataFixture Magento/Checkout/_files/quote_with_shipping_method.php
      * @magentoConfigFixture current_store payment/braintree/active 1
      * @dataProvider getErrorPerAreaDataProvider
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
+     *
      * @param string $area
      * @param array $testErrorCodes
      * @param string $expectedOutput
@@ -80,6 +80,7 @@ class PaymentInformationManagementTest extends TestCase
         array $testErrorCodes,
         string $expectedOutput
     ) {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
         /** @var State $state */
         $state = $this->objectManager->get(State::class);
         $state->setAreaCode($area);

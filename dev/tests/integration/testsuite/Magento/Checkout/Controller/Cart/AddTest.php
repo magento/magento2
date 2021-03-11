@@ -44,7 +44,7 @@ class AddTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -80,7 +80,7 @@ class AddTest extends AbstractController
             $this->getResponse()->getBody()
         );
         $this->assertSessionMessages(
-            $this->contains((string)__('You added %1 to your shopping cart.', 'Simple Product')),
+            $this->containsEqual((string)__('You added %1 to your shopping cart.', 'Simple Product')),
             MessageInterface::TYPE_SUCCESS
         );
         $this->assertCount(1, $checkoutSession->getQuote()->getItemsCollection());
@@ -113,7 +113,7 @@ class AddTest extends AbstractController
             'http://localhost/checkout/cart/'
         );
         $this->assertSessionMessages(
-            $this->contains("\n" . $message),
+            $this->containsEqual("\n" . $message),
             MessageInterface::TYPE_SUCCESS
         );
         $this->assertCount(1, $checkoutSession->getQuote()->getItemsCollection());
@@ -159,7 +159,7 @@ class AddTest extends AbstractController
         $message = $this->escaper->escapeHtml(
             (string)__('The product wasn\'t found. Verify the product and try again.')
         );
-        $this->assertSessionMessages($this->contains($message), MessageInterface::TYPE_ERROR);
+        $this->assertSessionMessages($this->containsEqual($message), MessageInterface::TYPE_ERROR);
     }
 
     /**
@@ -170,11 +170,11 @@ class AddTest extends AbstractController
     public function testAddProductWithUnavailableQty(): void
     {
         $product = $this->productRepository->get('simple-1');
-        $postData = ['product' => $product->getId(), 'qty' => 1000];
+        $postData = ['product' => $product->getId(), 'qty' => '1000'];
         $this->dispatchAddToCartRequest($postData);
-        $this->assertRedirect($this->stringContains($product->getProductUrl()));
         $message = (string)__('The requested qty is not available');
-        $this->assertSessionMessages($this->contains($message), MessageInterface::TYPE_ERROR);
+        $this->assertSessionMessages($this->containsEqual($message), MessageInterface::TYPE_ERROR);
+        $this->assertRedirect($this->stringContains($product->getProductUrl()));
     }
 
     /**
@@ -199,7 +199,7 @@ class AddTest extends AbstractController
             'http://localhost/checkout/cart/'
         );
         $this->assertSessionMessages(
-            $this->contains("\n" . $message),
+            $this->containsEqual("\n" . $message),
             MessageInterface::TYPE_SUCCESS
         );
     }

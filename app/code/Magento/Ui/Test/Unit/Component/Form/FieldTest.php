@@ -28,12 +28,12 @@ class FieldTest extends \PHPUnit\Framework\TestCase
     protected $field;
 
     /**
-     * @var UiComponentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var UiComponentFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $uiComponentFactoryMock;
 
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
@@ -50,7 +50,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->uiComponentFactoryMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentFactory::class)
             ->disableOriginalConstructor()
@@ -125,7 +125,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|UiComponentInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|UiComponentInterface
      */
     protected function getWrappedComponentMock()
     {
@@ -154,7 +154,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject[]|UiComponentInterface[]
+     * @return \PHPUnit\Framework\MockObject\MockObject[]|UiComponentInterface[]
      */
     protected function getComponentsMock()
     {
@@ -169,11 +169,12 @@ class FieldTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The "formElement" configuration parameter is required for the "test-name" field.
      */
     public function testPrepareException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The "formElement" configuration parameter is required for the "test-name" field.');
+
         $this->contextMock->expects($this->never())->method('getProcessor');
         $this->uiComponentFactoryMock->expects($this->never())
             ->method('create');

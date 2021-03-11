@@ -13,7 +13,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->markTestSkipped('MAGETWO-34751: Test fails after being moved.  Might have hidden dependency.');
         $timezoneMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
@@ -56,13 +56,13 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $expectedResult
     ) {
         $entityMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
-        $entityMock->expects($this->any())->method('getData')->will($this->returnValue($originalValue));
+        $entityMock->expects($this->any())->method('getData')->willReturn($originalValue);
 
         $attributeMock = $this->createMock(\Magento\Eav\Model\Attribute::class);
-        $attributeMock->expects($this->any())->method('getStoreLabel')->will($this->returnValue('Label'));
-        $attributeMock->expects($this->any())->method('getIsRequired')->will($this->returnValue($isRequired));
-        $attributeMock->expects($this->any())->method('getIsAjaxRequest')->will($this->returnValue($isAjaxRequest));
-        $attributeMock->expects($this->any())->method('getValidateRules')->will($this->returnValue($rules));
+        $attributeMock->expects($this->any())->method('getStoreLabel')->willReturn('Label');
+        $attributeMock->expects($this->any())->method('getIsRequired')->willReturn($isRequired);
+        $attributeMock->expects($this->any())->method('getIsAjaxRequest')->willReturn($isAjaxRequest);
+        $attributeMock->expects($this->any())->method('getValidateRules')->willReturn($rules);
 
         $this->model->setEntity($entityMock);
         $this->model->setAttribute($attributeMock);

@@ -36,7 +36,7 @@ class TransportBuilderTest extends TestCase
      */
     protected $template;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->di = Bootstrap::getObjectManager();
         $this->builder = $this->di->get(TransportBuilder::class);
@@ -81,7 +81,7 @@ class TransportBuilderTest extends TestCase
         /** @var EmailMessage $emailMessage */
         $emailMessage = $this->builder->getTransport()->getMessage();
 
-        $this->assertContains($templateType, $emailMessage->getHeaders()['Content-Type']);
+        $this->assertStringContainsString($templateType, $emailMessage->getHeaders()['Content-Type']);
 
         $addresses = $emailMessage->getTo();
 

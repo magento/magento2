@@ -28,54 +28,54 @@ use Magento\Framework\EntityManager\MetadataPool;
 class AttributeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|\PHPUnit\Framework\MockObject\MockObject
      */
     private $selectMock;
 
     /**
-     * @var Adapter|\PHPUnit_Framework_MockObject_MockObject
+     * @var Adapter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Type|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Type|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eavEntityTypeMock;
 
     /**
-     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eavConfigMock;
 
     /**
-     * @var LockValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LockValidatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $lockValidatorMock;
 
     /**
-     * @var EntityMetadataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityMetadataInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $entityMetaDataInterfaceMock;
 
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
@@ -108,10 +108,10 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->lockValidatorMock = $this->getMockBuilder(LockValidatorInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['validate'])
-            ->getMock();
+            ->getMockForAbstractClass();
          $this->entityMetaDataInterfaceMock = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
     }
 
     /**

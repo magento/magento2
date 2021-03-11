@@ -24,7 +24,7 @@ class CspWhitelistXmlCollectorTest extends TestCase
     /**
      * @inheritDoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->collector = Bootstrap::getObjectManager()->get(CspWhitelistXmlCollector::class);
     }
@@ -65,6 +65,66 @@ class CspWhitelistXmlCollectorTest extends TestCase
             } elseif ($policy->getId() === 'media-src') {
                 $this->assertInstanceOf(FetchPolicy::class, $policy);
                 $this->assertEquals(['https://magento.com', 'https://devdocs.magento.com'], $policy->getHostSources());
+                $this->assertEmpty($policy->getHashes());
+                $mediaSrcChecked = true;
+            }
+        }
+        $this->assertTrue($objectSrcChecked);
+        $this->assertTrue($mediaSrcChecked);
+    }
+
+    /**
+     * Test collecting configurations from multiple XML files for adminhtml area.
+     *
+     * @magentoAppArea adminhtml
+     * @return void
+     */
+    public function testCollectingForAdminhtmlArea(): void
+    {
+        $policies = $this->collector->collect([]);
+
+        $mediaSrcChecked = false;
+        $objectSrcChecked = false;
+        $this->assertNotEmpty($policies);
+        /** @var FetchPolicy $policy */
+        foreach ($policies as $policy) {
+            $this->assertFalse($policy->isNoneAllowed());
+            $this->assertFalse($policy->isSelfAllowed());
+            $this->assertFalse($policy->isInlineAllowed());
+            $this->assertFalse($policy->isEvalAllowed());
+            $this->assertFalse($policy->isDynamicAllowed());
+            $this->assertEmpty($policy->getSchemeSources());
+            $this->assertEmpty($policy->getNonceValues());
+            if ($policy->getId() === 'object-src') {
+                $this->assertInstanceOf(FetchPolicy::class, $policy);
+                $this->assertEquals(
+                    [
+                        'https://admin.magento.com',
+                        'https://devdocs.magento.com',
+                        'example.magento.com'
+                    ],
+                    $policy->getHostSources()
+                );
+                $this->assertEquals(
+                    [
+                        'B2yPHKaXnvFWtRChIbabYmUBFZdVfKKXHbWtWidDVF8=' => 'sha256',
+                        'B3yPHKaXnvFWtRChIbabYmUBFZdVfKKXHbWtWidDVF8=' => 'sha256',
+                        'B4yPHKaXnvFWtRChIbabYmUBFZdVfKKXHbWtWidDVF8=' => 'sha256'
+                    ],
+                    $policy->getHashes()
+                );
+                $objectSrcChecked = true;
+            } elseif ($policy->getId() === 'media-src') {
+                $this->assertInstanceOf(FetchPolicy::class, $policy);
+                $this->assertEquals(
+                    [
+                        'https://admin.magento.com',
+                        'https://devdocs.magento.com',
+                        '*.adobe.com',
+                        'example.magento.com'
+                    ],
+                    $policy->getHostSources()
+                );
                 $this->assertEmpty($policy->getHashes());
                 $mediaSrcChecked = true;
             }

@@ -26,7 +26,7 @@ class SectionConfigConverterTest extends \PHPUnit\Framework\TestCase
     /**  @var ValidationState */
     private $validationStateMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->source = new \DOMDocument();
         $this->objectManagerHelper = new ObjectManagerHelper($this);

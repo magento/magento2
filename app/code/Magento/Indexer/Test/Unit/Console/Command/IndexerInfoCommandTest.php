@@ -18,7 +18,7 @@ class IndexerInfoCommandTest extends AbstractIndexerCommandCommonSetup
      */
     private $command;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->stateMock->expects($this->once())->method('setAreaCode')->with(FrontNameResolver::AREA_CODE);

@@ -82,10 +82,10 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
-        $this->productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
+        $this->quoteRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
+        $this->productRepositoryMock = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
         $this->itemDataFactoryMock = $this->createPartialMock(CartItemInterfaceFactory::class, ['create']);
         $this->itemMock = $this->createMock(Item::class);
         $this->quoteMock = $this->createMock(Quote::class);
@@ -144,17 +144,18 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The 11 Cart doesn't contain the 5 item.
      */
     public function testDeleteWithInvalidQuoteItem()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('The 11 Cart doesn\'t contain the 5 item.');
+
         $cartId = 11;
         $itemId = 5;
         $this->quoteRepositoryMock->expects($this->once())
-            ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
+            ->method('getActive')->with($cartId)->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->once())
-            ->method('getItemById')->with($itemId)->will($this->returnValue(false));
+            ->method('getItemById')->with($itemId)->willReturn(false);
         $this->quoteMock->expects($this->never())->method('removeItem');
 
         $this->repository->deleteById($cartId, $itemId);
@@ -162,11 +163,12 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The item couldn't be removed from the quote.
      */
     public function testDeleteWithCouldNotSaveException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+        $this->expectExceptionMessage('The item couldn\'t be removed from the quote.');
+
         $cartId = 11;
         $itemId = 5;
         $this->quoteRepositoryMock->expects($this->once())
@@ -200,9 +202,9 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $quoteMock = $this->createMock(Quote::class);
         $this->quoteRepositoryMock->expects($this->once())->method('getActive')
             ->with(33)
-            ->will($this->returnValue($quoteMock));
+            ->willReturn($quoteMock);
         $itemMock = $this->createMock(Item::class);
-        $quoteMock->expects($this->once())->method('getAllVisibleItems')->will($this->returnValue([$itemMock]));
+        $quoteMock->expects($this->once())->method('getAllVisibleItems')->willReturn([$itemMock]);
         $itemMock->expects($this->once())->method('getProductType')->willReturn($productType);
 
         $this->optionsProcessorMock->expects($this->once())

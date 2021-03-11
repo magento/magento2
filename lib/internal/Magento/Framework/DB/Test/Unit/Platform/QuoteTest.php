@@ -19,12 +19,12 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Zend_Db_Expr|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Zend_Db_Expr|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $zendDbExprMock;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $selectMock;
 
@@ -33,7 +33,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(\Magento\Framework\DB\Platform\Quote::class);

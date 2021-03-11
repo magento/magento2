@@ -18,10 +18,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
     /** @var bool Result of file_put_contents() function */
     public static $filePutContents;
 
-    /**
-     * @inheritdoc
-     */
-    public function setUp()
+    protected function setUp(): void
     {
         self::$fileGetContents = '';
         self::$filePutContents = true;

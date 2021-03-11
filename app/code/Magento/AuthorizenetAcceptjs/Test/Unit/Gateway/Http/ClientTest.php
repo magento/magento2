@@ -53,18 +53,18 @@ class ClientTest extends TestCase
      */
     private $logger;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->paymentLogger = $this->createMock(Logger::class);
         $this->httpClientFactory = $this->createMock(ZendClientFactory::class);
         $this->httpClient = $this->createMock(Zend_Http_Client::class);
         $this->httpResponse = $this->createMock(Zend_Http_Response::class);
-        $this->httpClientFactory->method('create')->will($this->returnValue($this->httpClient));
+        $this->httpClientFactory->method('create')->willReturn($this->httpClient);
         $this->httpClient->method('request')
             ->willReturn($this->httpResponse);
         /** @var MockObject $logger */
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
     }
 
     public function testCanSendRequest()
@@ -107,11 +107,12 @@ class ClientTest extends TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Something went wrong in the payment gateway.
      */
     public function testExceptionIsThrownWhenEmptyResponseIsReceived()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Something went wrong in the payment gateway.');
+
         // Assert the client has the raw data set
         $this->httpClient->expects($this->once())
             ->method('setRawData')
@@ -155,11 +156,12 @@ class ClientTest extends TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Something went wrong in the payment gateway.
      */
     public function testExceptionIsThrownWhenInvalidResponseIsReceived()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Something went wrong in the payment gateway.');
+
         // Assert the client was given the raw data
         $this->httpClient->expects($this->once())
             ->method('setRawData')
@@ -209,7 +211,7 @@ class ClientTest extends TestCase
      */
     private function getTransferObjectMock(array $data)
     {
-        $transferObjectMock = $this->createMock(TransferInterface::class);
+        $transferObjectMock = $this->getMockForAbstractClass(TransferInterface::class);
         $transferObjectMock->method('getBody')
             ->willReturn($data);
 

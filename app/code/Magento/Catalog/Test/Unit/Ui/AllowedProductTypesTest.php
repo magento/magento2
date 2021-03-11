@@ -49,7 +49,7 @@ class AllowedProductTypesTest extends \PHPUnit\Framework\TestCase
     public function testIsAllowedProductType($typeId, $expectedResult)
     {
         $productTypes = ['simple', 'virtual'];
-        $productMock = $this->createMock(ProductInterface::class);
+        $productMock = $this->getMockForAbstractClass(ProductInterface::class);
         $productMock->expects($this->once())
             ->method('getTypeId')
             ->willReturn($typeId);

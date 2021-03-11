@@ -34,101 +34,101 @@ use Psr\Log\LoggerInterface;
 class ShipOrderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderRepositoryMock;
 
     /**
-     * @var ShipmentDocumentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentDocumentFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shipmentDocumentFactoryMock;
 
     /**
-     * @var ShipOrderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipOrderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shipOrderValidatorMock;
 
     /**
-     * @var OrderRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderRegistrarInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderRegistrarMock;
 
     /**
-     * @var OrderStateResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderStateResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderStateResolverMock;
 
     /**
-     * @var OrderConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var ShipmentRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shipmentRepositoryMock;
 
     /**
-     * @var NotifierInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var NotifierInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $notifierInterfaceMock;
 
     /**
-     * @var ShipOrder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipOrder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $model;
 
     /**
-     * @var ShipmentCreationArgumentsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentCreationArgumentsInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shipmentCommentCreationMock;
 
     /**
-     * @var ShipmentCommentCreationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentCommentCreationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shipmentCreationArgumentsMock;
 
     /**
-     * @var OrderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderMock;
 
     /**
-     * @var ShipmentInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shipmentMock;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $adapterMock;
 
     /**
-     * @var ShipmentTrackCreationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentTrackCreationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $trackMock;
 
     /**
-     * @var ShipmentPackageInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentPackageInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $packageMock;
 
     /**
-     * @var ValidatorResultInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ValidatorResultInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $validationMessagesMock;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
@@ -180,11 +180,11 @@ class ShipOrderTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->shipOrderValidatorMock = $this->getMockBuilder(ShipOrderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->validationMessagesMock = $this->getMockBuilder(ValidatorResultInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['hasMessages', 'getMessages', 'addMessage'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->model = $helper->getObject(
@@ -304,10 +304,11 @@ class ShipOrderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Sales\Api\Exception\DocumentValidationExceptionInterface
      */
     public function testDocumentValidationException()
     {
+        $this->expectException(\Magento\Sales\Api\Exception\DocumentValidationExceptionInterface::class);
+
         $orderId = 1;
         $items = [1 => 2];
         $notify = true;
@@ -362,10 +363,11 @@ class ShipOrderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Sales\Api\Exception\CouldNotShipExceptionInterface
      */
     public function testCouldNotShipException()
     {
+        $this->expectException(\Magento\Sales\Api\Exception\CouldNotShipExceptionInterface::class);
+
         $orderId = 1;
         $items = [1 => 2];
         $notify = true;

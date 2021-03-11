@@ -15,11 +15,11 @@ class FilterFactoryTest extends \PHPUnit\Framework\TestCase
     protected $factory;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->getMockForAbstractClass();
@@ -47,10 +47,11 @@ class FilterFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateWithException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $filterClassPrefix = 'Magento\\Framework\\Data\\Form\\Filter\\';
         $filterCode = 'Undefined';
         $data = [];

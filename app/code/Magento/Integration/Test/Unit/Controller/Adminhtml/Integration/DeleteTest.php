@@ -17,7 +17,7 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
      */
     protected $integrationController;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

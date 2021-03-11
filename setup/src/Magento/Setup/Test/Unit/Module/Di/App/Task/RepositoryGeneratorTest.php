@@ -13,17 +13,17 @@ use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
 class RepositoryGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Scanner\RepositoryScanner | \PHPUnit_Framework_MockObject_MockObject
+     * @var Scanner\RepositoryScanner | \PHPUnit\Framework\MockObject\MockObject
      */
     private $repositoryScannerMock;
 
     /**
-     * @var ClassesScanner | \PHPUnit_Framework_MockObject_MockObject
+     * @var ClassesScanner | \PHPUnit\Framework\MockObject\MockObject
      */
     private $classesScannerMock;
 
     /**
-     * @var \Magento\Setup\Module\Di\Code\Scanner\ConfigurationScanner | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\Di\Code\Scanner\ConfigurationScanner | \PHPUnit\Framework\MockObject\MockObject
      */
     private $configurationScannerMock;
 
@@ -32,7 +32,7 @@ class RepositoryGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->repositoryScannerMock =
             $this->getMockBuilder(\Magento\Setup\Module\Di\Code\Scanner\RepositoryScanner::class)

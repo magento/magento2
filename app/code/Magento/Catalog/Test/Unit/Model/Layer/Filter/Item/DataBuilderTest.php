@@ -15,7 +15,7 @@ class DataBuilderTest extends \PHPUnit\Framework\TestCase
      */
     protected $dataBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->dataBuilder = $objectManagerHelper->getObject(

@@ -13,7 +13,7 @@ class FullTextSearchCheckTest extends \PHPUnit\Framework\TestCase
      */
     private $fullTextSearchCheck;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->fullTextSearchCheck = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
             ->getObject(\Magento\CatalogSearch\Model\Search\QueryChecker\FullTextSearchCheck::class);
@@ -48,10 +48,11 @@ class FullTextSearchCheckTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testInvalidArgumentException1()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $matchQueryMock = $this->getMockBuilder(\Magento\Framework\Search\Request\QueryInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getType'])
@@ -65,10 +66,11 @@ class FullTextSearchCheckTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testInvalidArgumentException2()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $filterMock = $this->getFilterQueryMock();
 
         $filterMock->expects($this->any())
@@ -154,7 +156,7 @@ class FullTextSearchCheckTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getMatchQueryMock()
     {
@@ -171,7 +173,7 @@ class FullTextSearchCheckTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getBoolQueryMock()
     {
@@ -188,7 +190,7 @@ class FullTextSearchCheckTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getFilterQueryMock()
     {

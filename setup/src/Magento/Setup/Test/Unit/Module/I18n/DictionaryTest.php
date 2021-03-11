@@ -12,7 +12,7 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_dictionary;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_dictionary = $objectManagerHelper->getObject(\Magento\Setup\Module\I18n\Dictionary::class);
@@ -32,11 +32,11 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
     public function testGetDuplicates()
     {
         $phraseFirstMock = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
-        $phraseFirstMock->expects($this->once())->method('getKey')->will($this->returnValue('key_1'));
+        $phraseFirstMock->expects($this->once())->method('getKey')->willReturn('key_1');
         $phraseSecondMock = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
-        $phraseSecondMock->expects($this->once())->method('getKey')->will($this->returnValue('key_1'));
+        $phraseSecondMock->expects($this->once())->method('getKey')->willReturn('key_1');
         $phraseThirdMock = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
-        $phraseThirdMock->expects($this->once())->method('getKey')->will($this->returnValue('key_3'));
+        $phraseThirdMock->expects($this->once())->method('getKey')->willReturn('key_3');
 
         $this->_dictionary->addPhrase($phraseFirstMock);
         $this->_dictionary->addPhrase($phraseSecondMock);

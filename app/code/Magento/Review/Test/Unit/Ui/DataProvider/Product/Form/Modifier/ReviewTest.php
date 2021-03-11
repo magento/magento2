@@ -17,16 +17,16 @@ use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 class ReviewTest extends AbstractModifierTest
 {
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $moduleManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)

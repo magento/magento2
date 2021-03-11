@@ -44,7 +44,7 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
     public function testAdd(
         array $data,
         array $payload,
-        string $expectedSwatchType,
+        int $expectedSwatchType,
         string $expectedLabel,
         string $expectedValue
     ) {

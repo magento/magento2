@@ -23,32 +23,32 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class FilterContextTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var FilterContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterContext|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filterContext;
 
     /**
-     * @var AliasResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var AliasResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $aliasResolver;
 
     /**
-     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eavConfig;
 
     /**
-     * @var ExclusionStrategy|\PHPUnit_Framework_MockObject_MockObject
+     * @var ExclusionStrategy|\PHPUnit\Framework\MockObject\MockObject
      */
     private $exclusionStrategy;
 
     /**
-     * @var TermDropdownStrategy|\PHPUnit_Framework_MockObject_MockObject
+     * @var TermDropdownStrategy|\PHPUnit\Framework\MockObject\MockObject
      */
     private $termDropdownStrategy;
 
     /**
-     * @var StaticAttributeStrategy|\PHPUnit_Framework_MockObject_MockObject
+     * @var StaticAttributeStrategy|\PHPUnit\Framework\MockObject\MockObject
      */
     private $staticAttributeStrategy;
 
@@ -60,7 +60,7 @@ class FilterContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eavConfig = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
             ->disableOriginalConstructor()
@@ -201,7 +201,7 @@ class FilterContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $field
      * @param string $type
-     * @return FilterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return FilterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createFilterMock($field = null, $type = null)
     {
@@ -221,7 +221,7 @@ class FilterContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string|null $frontendInput
      * @param string|null $backendType
-     * @return Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @return Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createAttributeMock($frontendInput = null, $backendType = null)
     {

@@ -25,8 +25,8 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             'handlerInstance'
-        )->will(
-            $this->returnValue($constructorMock)
+        )->willReturn(
+            $constructorMock
         );
 
         $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);

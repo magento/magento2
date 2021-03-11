@@ -29,7 +29,7 @@ class CheckoutTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->quote = $this->_objectManager->create(\Magento\Quote\Model\Quote::class);
@@ -60,13 +60,10 @@ class CheckoutTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()->setPostValue('payment', ['method' => 'checkmo']);
         $this->dispatch('multishipping/checkout/overview');
         $html = $this->getResponse()->getBody();
-        $this->assertContains('<div class="box box-billing-method">', $html);
-        $this->assertContains('<div class="box box-shipping-method">', $html);
-        $this->assertContains(
-            '<dt class="title">' . $this->quote->getPayment()->getMethodInstance()->getTitle() . '</dt>',
-            $html
-        );
-        $this->assertContains('<span class="price">$10.00</span>', $html);
-        $this->assertContains('<input name="form_key" type="hidden" value="' . $formKey->getFormKey(), $html);
+        $this->assertStringContainsString('<div class="box box-billing-method">', $html);
+        $this->assertStringContainsString('<div class="box box-shipping-method">', $html);
+        $this->assertStringContainsString('<dt class="title">' . $this->quote->getPayment()->getMethodInstance()->getTitle() . '</dt>', $html);
+        $this->assertStringContainsString('<span class="price">$10.00</span>', $html);
+        $this->assertStringContainsString('<input name="form_key" type="hidden" value="' . $formKey->getFormKey(), $html);
     }
 }

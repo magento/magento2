@@ -19,7 +19,7 @@ class ExportTest extends \PHPUnit\Framework\TestCase
     protected $_exportFileExtension = 'csv';
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_exportConfigMock;
 
@@ -54,8 +54,8 @@ class ExportTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getFileExtension'
-        )->will(
-            $this->returnValue($this->_exportFileExtension)
+        )->willReturn(
+            $this->_exportFileExtension
         );
 
         $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
@@ -71,17 +71,17 @@ class ExportTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getEntityAdapter'
-        )->will(
-            $this->returnValue($abstractMockEntity)
+        )->willReturn(
+            $abstractMockEntity
         );
         $mockModelExport->expects(
             $this->any()
         )->method(
             '_getEntityAdapter'
-        )->will(
-            $this->returnValue($abstractMockEntity)
+        )->willReturn(
+            $abstractMockEntity
         );
-        $mockModelExport->expects($this->any())->method('_getWriter')->will($this->returnValue($mockAdapterTest));
+        $mockModelExport->expects($this->any())->method('_getWriter')->willReturn($mockAdapterTest);
 
         return $mockModelExport;
     }

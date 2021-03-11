@@ -24,7 +24,7 @@ class GiftMessageTest extends AbstractModifierTest
      */
     protected $scopeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)

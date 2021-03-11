@@ -13,7 +13,7 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
 class TokenFormatterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var PaymentTokenInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentTokenInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentTokenMock;
 
@@ -34,7 +34,7 @@ class TokenFormatterTest extends \PHPUnit\Framework\TestCase
     /**
      * Test setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->paymentTokenMock = $this->getMockBuilder(PaymentTokenInterface::class)
             ->getMockForAbstractClass();

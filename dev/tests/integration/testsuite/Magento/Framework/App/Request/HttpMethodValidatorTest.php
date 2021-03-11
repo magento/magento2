@@ -34,7 +34,7 @@ class HttpMethodValidatorTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->validator = $objectManager->get(HttpMethodValidator::class);
@@ -85,21 +85,19 @@ class HttpMethodValidatorTest extends TestCase
     /**
      * Test negative case.
      *
-     * @expectedException \Magento\Framework\App\Request\InvalidRequestException
      */
     public function testNotAllowedMethod()
     {
+        $this->expectException(\Magento\Framework\App\Request\InvalidRequestException::class);
         $this->request->setMethod('method' .rand(0, 1000));
         $action = $this->getMockForAbstractClass(ActionInterface::class);
 
         $this->validator->validate($this->request, $action);
     }
 
-    /**
-     * @expectedException \Magento\Framework\App\Request\InvalidRequestException
-     */
     public function testRestrictedMethod()
     {
+        $this->expectException(\Magento\Framework\App\Request\InvalidRequestException::class);
         $map = $this->getMap();
 
         $this->request->setMethod($map[1]['method']);

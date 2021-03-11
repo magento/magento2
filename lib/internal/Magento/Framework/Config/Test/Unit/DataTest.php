@@ -9,21 +9,21 @@ namespace Magento\Framework\Config\Test\Unit;
 class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Config\ReaderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\ReaderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $readerMock;
 
     /**
-     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheMock;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->readerMock = $this->createMock(\Magento\Framework\Config\ReaderInterface::class);
         $this->cacheMock = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
@@ -51,7 +51,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertEquals($data, $config->get());
         $this->assertEquals('b', $config->get('a'));
-        $this->assertEquals(null, $config->get('a/b'));
+        $this->assertNull($config->get('a/b'));
         $this->assertEquals(33, $config->get('a/b', 33));
     }
 
