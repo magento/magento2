@@ -23,59 +23,59 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Customer\Api\AddressRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\AddressRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $addressRepositoryMock;
 
     /**
-     * @var \Magento\Customer\Model\Metadata\FormFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Metadata\FormFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $formFactoryMock;
 
     /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerRepositoryMock;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataObjectHelperMock;
 
     /**
-     * @var \Magento\Customer\Api\Data\AddressInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\Data\AddressInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $addressDataFactoryMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
     /**
-     * @var AddressInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AddressInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $address;
 
     /**
-     * @var JsonFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var JsonFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultJsonFactory;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $json;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->addressRepositoryMock = $this->createMock(\Magento\Customer\Api\AddressRepositoryInterface::class);
         $this->formFactoryMock = $this->createMock(\Magento\Customer\Model\Metadata\FormFactory::class);
@@ -177,7 +177,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $addressMock = $this->getMockBuilder(AddressInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->addressDataFactoryMock->expects($this->once())->method('create')->willReturn($addressMock);
 

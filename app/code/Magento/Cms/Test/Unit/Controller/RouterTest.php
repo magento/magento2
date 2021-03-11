@@ -16,31 +16,31 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     private $router;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var \Magento\Cms\Model\PageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cms\Model\PageFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $pageFactoryMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
     /**
-     * @var \Magento\Framework\App\ActionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ActionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $actionFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->getMockForAbstractClass();
@@ -82,7 +82,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $pageId = 1;
         $storeId = 1;
 
-        /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject $requestMock */
+        /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject $requestMock */
         $requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->setMethods([
                 'getPathInfo',

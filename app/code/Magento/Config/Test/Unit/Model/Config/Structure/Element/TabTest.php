@@ -15,11 +15,11 @@ class TabTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_iteratorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_iteratorMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Iterator\Field::class);
 
@@ -29,7 +29,7 @@ class TabTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
         unset($this->_iteratorMock);
@@ -38,8 +38,8 @@ class TabTest extends \PHPUnit\Framework\TestCase
     public function testIsVisibleOnlyChecksPresenceOfChildren()
     {
         $this->_model->setData(['showInStore' => 0, 'showInWebsite' => 0, 'showInDefault' => 0], 'store');
-        $this->_iteratorMock->expects($this->once())->method('current')->will($this->returnValue(true));
-        $this->_iteratorMock->expects($this->once())->method('valid')->will($this->returnValue(true));
+        $this->_iteratorMock->expects($this->once())->method('current')->willReturn(true);
+        $this->_iteratorMock->expects($this->once())->method('valid')->willReturn(true);
         $this->assertTrue($this->_model->isVisible());
     }
 }

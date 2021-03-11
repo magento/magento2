@@ -13,17 +13,17 @@ class CmsPageUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
-     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlRewriteFactory;
 
     /**
-     * @var \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlPathGenerator;
 
@@ -35,7 +35,7 @@ class CmsPageUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)

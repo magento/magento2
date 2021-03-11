@@ -14,17 +14,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class AnalyticsTokenTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ReinitableConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReinitableConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $reinitableConfigMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var WriterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configWriterMock;
 
@@ -46,19 +46,19 @@ class AnalyticsTokenTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->reinitableConfigMock = $this->getMockBuilder(ReinitableConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->configWriterMock = $this->getMockBuilder(WriterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

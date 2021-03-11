@@ -21,7 +21,7 @@ class ConfigTest extends TestCase
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
     }

@@ -15,12 +15,12 @@ use \Magento\Setup\Module\Di\Code\Reader\Decorator\Area;
 class AreaTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Setup\Module\Di\Code\Reader\ClassesScanner | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\Di\Code\Reader\ClassesScanner | \PHPUnit\Framework\MockObject\MockObject
      */
     private $classesScannerMock;
 
     /**
-     * @var \Magento\Setup\Module\Di\Code\Reader\ClassReaderDecorator | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\Di\Code\Reader\ClassReaderDecorator | \PHPUnit\Framework\MockObject\MockObject
      */
     private $classReaderDecoratorMock;
 
@@ -29,7 +29,7 @@ class AreaTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->classesScannerMock = $this->getMockBuilder(\Magento\Setup\Module\Di\Code\Reader\ClassesScanner::class)
             ->disableOriginalConstructor()
@@ -67,9 +67,9 @@ class AreaTest extends \PHPUnit\Framework\TestCase
 
         $this->classReaderDecoratorMock->expects($this->exactly(count($classes)))
             ->method('getConstructor')
-            ->will($this->returnValueMap(
+            ->willReturnMap(
                 $constructors
-            ));
+            );
 
         $result = $this->model->getList($path);
 

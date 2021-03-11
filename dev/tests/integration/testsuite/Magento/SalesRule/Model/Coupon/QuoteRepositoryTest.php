@@ -49,7 +49,7 @@ class QuoteRepositoryTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var ObjectManager $objectManager */
         $objectManager = Bootstrap::getObjectManager();
@@ -94,10 +94,10 @@ class QuoteRepositoryTest extends TestCase
      * @magentoDataFixture Magento/Sales/_files/quote.php
      * @magentoDataFixture Magento/SalesRule/_files/coupon_cart_fixed_discount.php
      *
-     * @expectedException \Magento\SalesRule\Api\Exception\CodeRequestLimitException
      */
     public function testAboveLimitFail()
     {
+        $this->expectException(\Magento\SalesRule\Api\Exception\CodeRequestLimitException::class);
         //Making number of requests above limit.
         try {
             $this->repo->save($this->getCart()->setCouponCode('fake20'));

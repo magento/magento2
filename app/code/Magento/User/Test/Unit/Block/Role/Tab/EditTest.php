@@ -15,28 +15,28 @@ class EditTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\User\Block\Role\Tab\Edit */
     protected $model;
 
-    /** @var \Magento\Framework\Acl\RootResource|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Acl\RootResource|\PHPUnit\Framework\MockObject\MockObject */
     protected $rootResourceMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $rulesCollectionFactoryMock;
 
-    /** @var \Magento\Authorization\Model\Acl\AclRetriever|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Authorization\Model\Acl\AclRetriever|\PHPUnit\Framework\MockObject\MockObject */
     protected $aclRetrieverMock;
 
-    /** @var \Magento\Framework\Acl\AclResource\ProviderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Acl\AclResource\ProviderInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $aclResourceProviderMock;
 
-    /** @var \Magento\Integration\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Integration\Helper\Data|\PHPUnit\Framework\MockObject\MockObject */
     protected $integrationDataMock;
 
-    /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject */
     protected $coreRegistryMock;
 
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->rootResourceMock = $this->getMockBuilder(\Magento\Framework\Acl\RootResource::class)
             ->disableOriginalConstructor()

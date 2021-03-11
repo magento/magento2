@@ -54,7 +54,7 @@ class LogoutTest extends TestCase
      */
     private $sessionCleanerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()

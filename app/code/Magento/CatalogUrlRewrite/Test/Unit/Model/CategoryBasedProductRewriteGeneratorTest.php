@@ -16,7 +16,7 @@ use Magento\CatalogUrlRewrite\Model\ProductScopeRewriteGenerator;
 class CategoryBasedProductRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ProductScopeRewriteGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductScopeRewriteGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productScopeRewriteGeneratorMock;
 
@@ -25,7 +25,7 @@ class CategoryBasedProductRewriteGeneratorTest extends \PHPUnit\Framework\TestCa
      */
     private $generator;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->productScopeRewriteGeneratorMock = $this->getMockBuilder(ProductScopeRewriteGenerator::class)
             ->disableOriginalConstructor()

@@ -17,16 +17,16 @@ class DataTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Math\Random|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Math\Random|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mathRandomMock;
 
     /**
-     * @var \Magento\Backend\App\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\App\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mathRandomMock = $this->getMockBuilder(\Magento\Framework\Math\Random::class)
             ->disableOriginalConstructor()

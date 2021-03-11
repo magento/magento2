@@ -7,6 +7,10 @@ namespace Magento\Customer\Test\Unit\Model\Renderer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * Class RegionTest
+ * Test for Region
+ */
 class RegionTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -40,25 +44,23 @@ class RegionTest extends \PHPUnit\Framework\TestCase
         );
         $formMock = $this->createPartialMock(\Magento\Framework\Data\Form::class, ['getElement']);
 
-        $elementMock->expects($this->any())->method('getForm')->will($this->returnValue($formMock));
+        $elementMock->expects($this->any())->method('getForm')->willReturn($formMock);
         $elementMock->expects(
             $this->any()
         )->method(
             'getHtmlAttributes'
-        )->will(
-            $this->returnValue(
-                [
-                    'title',
-                    'class',
-                    'style',
-                    'onclick',
-                    'onchange',
-                    'disabled',
-                    'readonly',
-                    'tabindex',
-                    'placeholder',
-                ]
-            )
+        )->willReturn(
+            [
+                'title',
+                'class',
+                'style',
+                'onclick',
+                'onchange',
+                'disabled',
+                'readonly',
+                'tabindex',
+                'placeholder',
+            ]
         );
 
         $objectManager = new ObjectManager($this);
@@ -72,21 +74,21 @@ class RegionTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getElement'
-        )->will(
-            $this->returnValueMap([['country_id', $countryMock], ['region_id', $regionMock]])
+        )->willReturnMap(
+            [['country_id', $countryMock], ['region_id', $regionMock]]
         );
-        $countryMock->expects($this->any())->method('getValue')->will($this->returnValue('GE'));
+        $countryMock->expects($this->any())->method('getValue')->willReturn('GE');
         $directoryHelperMock->expects(
             $this->any()
         )->method(
             'isRegionRequired'
-        )->will(
-            $this->returnValueMap([['GE', true]])
+        )->willReturnMap(
+            [['GE', true]]
         );
-        $countryFactoryMock->expects($this->once())->method('create')->will($this->returnValue($countryModelMock));
-        $countryModelMock->expects($this->any())->method('setId')->will($this->returnSelf());
-        $countryModelMock->expects($this->any())->method('getLoadedRegionCollection')->will($this->returnSelf());
-        $countryModelMock->expects($this->any())->method('toOptionArray')->will($this->returnValue($regionCollection));
+        $countryFactoryMock->expects($this->once())->method('create')->willReturn($countryModelMock);
+        $countryModelMock->expects($this->any())->method('setId')->willReturnSelf();
+        $countryModelMock->expects($this->any())->method('getLoadedRegionCollection')->willReturnSelf();
+        $countryModelMock->expects($this->any())->method('toOptionArray')->willReturn($regionCollection);
 
         $model = new \Magento\Customer\Model\Renderer\Region($countryFactoryMock, $directoryHelperMock, $escaperMock);
 
@@ -96,8 +98,8 @@ class RegionTest extends \PHPUnit\Framework\TestCase
 
         $html = $model->render($elementMock);
 
-        $this->assertContains('required', $html);
-        $this->assertContains('required-entry', $html);
+        $this->assertStringContainsString('required', $html);
+        $this->assertStringContainsString('required-entry', $html);
     }
 
     /**

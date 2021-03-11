@@ -13,32 +13,32 @@ namespace Magento\Eav\Test\Unit\Model\ResourceModel\Attribute;
 class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Attribute\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entityFactoryMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fetchStrategyMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eavConfigMock;
 
@@ -48,31 +48,31 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     protected $entityTypeMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $select;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $selectRenderer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->entityFactoryMock = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
         $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
@@ -86,10 +86,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->entityTypeMock->setAdditionalAttributeTable('some_extra_table');
         $this->eavConfigMock->expects($this->any())
             ->method('getEntityType')
-            ->will($this->returnValue($this->entityTypeMock));
+            ->willReturn($this->entityTypeMock);
 
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnSelf());
+        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturnSelf();
 
         $this->connectionMock = $this->createPartialMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
@@ -111,11 +111,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ['__wakeup', 'getConnection', 'getMainTable', 'getTable']
         );
 
-        $this->connectionMock->expects($this->any())->method('select')->will($this->returnValue($this->select));
-        $this->connectionMock->expects($this->any())->method('quoteIdentifier')->will($this->returnArgument(0));
+        $this->connectionMock->expects($this->any())->method('select')->willReturn($this->select);
+        $this->connectionMock->expects($this->any())->method('quoteIdentifier')->willReturnArgument(0);
         $this->connectionMock->expects($this->any())
             ->method('describeTable')
-            ->will($this->returnValueMap(
+            ->willReturnMap(
                 [
                     [
                         'some_main_table',
@@ -143,8 +143,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                         ]
                     ],
                 ]
-            ));
-        $this->connectionMock->expects($this->any())->method('_quote')->will($this->returnArgument(0));
+            );
+        $this->connectionMock->expects($this->any())->method('_quote')->willReturnArgument(0);
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
         $this->resourceMock->expects($this->any())->method('getMainTable')->willReturn('some_main_table');
         $this->resourceMock->expects($this->any())->method('getTable')->willReturn('some_extra_table');

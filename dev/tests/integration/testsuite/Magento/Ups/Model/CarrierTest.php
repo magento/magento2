@@ -55,7 +55,7 @@ class CarrierTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->logs = [];
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
@@ -224,7 +224,6 @@ class CarrierTest extends TestCase
 
     /**
      * Test shipping a package.
-     *
      *
      * @magentoConfigFixture default_store shipping/origin/country_id GB
      * @magentoConfigFixture default_store carriers/ups/type UPS_XML

@@ -12,13 +12,13 @@ class RendererFactoryTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Webapi\Rest\Response\RendererFactory */
     protected $_factory;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_requestMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_requestMock = $this->getMockBuilder(
@@ -48,7 +48,7 @@ class RendererFactoryTest extends \PHPUnit\Framework\TestCase
         $acceptTypes = ['application/json'];
 
         /** Mock request getAcceptTypes method to return specified value. */
-        $this->_requestMock->expects($this->once())->method('getAcceptTypes')->will($this->returnValue($acceptTypes));
+        $this->_requestMock->expects($this->once())->method('getAcceptTypes')->willReturn($acceptTypes);
         /** Mock renderer. */
         $rendererMock = $this->getMockBuilder(
             \Magento\Framework\Webapi\Rest\Response\Renderer\Json::class
@@ -60,8 +60,8 @@ class RendererFactoryTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             \Magento\Framework\Webapi\Rest\Response\Renderer\Json::class
-        )->will(
-            $this->returnValue($rendererMock)
+        )->willReturn(
+            $rendererMock
         );
         $this->_factory->get();
     }
@@ -72,7 +72,7 @@ class RendererFactoryTest extends \PHPUnit\Framework\TestCase
     public function testGetWithWrongAcceptHttpHeader()
     {
         /** Mock request to return empty Accept Types. */
-        $this->_requestMock->expects($this->once())->method('getAcceptTypes')->will($this->returnValue(''));
+        $this->_requestMock->expects($this->once())->method('getAcceptTypes')->willReturn('');
         try {
             $this->_factory->get();
             $this->fail("Exception is expected to be raised");
@@ -96,7 +96,7 @@ class RendererFactoryTest extends \PHPUnit\Framework\TestCase
     {
         $acceptTypes = ['application/json'];
         /** Mock request getAcceptTypes method to return specified value. */
-        $this->_requestMock->expects($this->once())->method('getAcceptTypes')->will($this->returnValue($acceptTypes));
+        $this->_requestMock->expects($this->once())->method('getAcceptTypes')->willReturn($acceptTypes);
         /** Mock object to return \Magento\Framework\DataObject */
         $this->_objectManagerMock->expects(
             $this->once()
@@ -104,8 +104,8 @@ class RendererFactoryTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             \Magento\Framework\Webapi\Rest\Response\Renderer\Json::class
-        )->will(
-            $this->returnValue(new \Magento\Framework\DataObject())
+        )->willReturn(
+            new \Magento\Framework\DataObject()
         );
 
         $this->expectException('LogicException');

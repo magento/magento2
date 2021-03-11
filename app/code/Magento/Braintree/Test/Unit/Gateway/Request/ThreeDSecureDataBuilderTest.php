@@ -11,7 +11,7 @@ use Magento\Braintree\Gateway\Request\ThreeDSecureDataBuilder;
 use Magento\Payment\Gateway\Data\Order\AddressAdapter;
 use Magento\Payment\Gateway\Data\Order\OrderAdapter;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Tests \Magento\Braintree\Gateway\Request\ThreeDSecureDataBuilder.
@@ -44,7 +44,7 @@ class ThreeDSecureDataBuilderTest extends \PHPUnit\Framework\TestCase
     private $billingAddressMock;
 
     /**
-     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubjectReader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectReaderMock;
 
@@ -56,14 +56,14 @@ class ThreeDSecureDataBuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initOrderMock();
 
         $this->paymentDOMock = $this->getMockBuilder(PaymentDataObjectInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getOrder', 'getPayment'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->paymentDOMock->expects(static::once())
             ->method('getOrder')
             ->willReturn($this->orderMock);

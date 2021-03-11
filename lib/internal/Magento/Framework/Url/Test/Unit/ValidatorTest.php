@@ -18,7 +18,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     /** @var string[] */
     protected $expectedValidationMessages = ['invalidUrl' => "Invalid URL '%value%'."];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 

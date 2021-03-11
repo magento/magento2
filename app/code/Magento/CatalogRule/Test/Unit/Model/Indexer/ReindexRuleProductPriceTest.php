@@ -49,12 +49,12 @@ class ReindexRuleProductPriceTest extends \PHPUnit\Framework\TestCase
      */
     private $pricesPersistorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->ruleProductsSelectBuilderMock = $this->createMock(RuleProductsSelectBuilder::class);
         $this->productPriceCalculatorMock = $this->createMock(ProductPriceCalculator::class);
-        $this->localeDate = $this->createMock(TimezoneInterface::class);
+        $this->localeDate = $this->getMockForAbstractClass(TimezoneInterface::class);
         $this->pricesPersistorMock = $this->createMock(RuleProductPricesPersistor::class);
 
         $this->model = new ReindexRuleProductPrice(
@@ -73,7 +73,7 @@ class ReindexRuleProductPriceTest extends \PHPUnit\Framework\TestCase
         $defaultStoreId = 22;
         $productId = 55;
 
-        $websiteMock = $this->createMock(WebsiteInterface::class);
+        $websiteMock = $this->getMockForAbstractClass(WebsiteInterface::class);
         $websiteMock->expects($this->once())
             ->method('getId')
             ->willReturn($websiteId);
@@ -83,7 +83,7 @@ class ReindexRuleProductPriceTest extends \PHPUnit\Framework\TestCase
         $this->storeManagerMock->expects($this->once())
             ->method('getWebsites')
             ->willReturn([$websiteMock]);
-        $groupMock = $this->createMock(GroupInterface::class);
+        $groupMock = $this->getMockForAbstractClass(GroupInterface::class);
         $groupMock->method('getId')
             ->willReturn($defaultStoreId);
         $groupMock->expects($this->once())

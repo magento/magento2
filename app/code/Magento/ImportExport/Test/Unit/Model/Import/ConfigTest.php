@@ -8,12 +8,12 @@ namespace Magento\ImportExport\Test\Unit\Model\Import;
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\ImportExport\Model\Import\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Import\Config\Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $readerMock;
 
     /**
-     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cacheMock;
 
@@ -32,7 +32,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->readerMock = $this->createMock(\Magento\ImportExport\Model\Import\Config\Reader::class);
         $this->cacheMock = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
@@ -52,10 +52,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'load'
         )->with(
             $this->cacheId
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
-        $this->readerMock->expects($this->any())->method('read')->will($this->returnValue($value));
+        $this->readerMock->expects($this->any())->method('read')->willReturn($value);
         $this->model = new \Magento\ImportExport\Model\Import\Config(
             $this->readerMock,
             $this->cacheMock,
@@ -90,10 +90,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'load'
         )->with(
             $this->cacheId
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
-        $this->readerMock->expects($this->any())->method('read')->will($this->returnValue($configData));
+        $this->readerMock->expects($this->any())->method('read')->willReturn($configData);
         $this->model = new \Magento\ImportExport\Model\Import\Config(
             $this->readerMock,
             $this->cacheMock,

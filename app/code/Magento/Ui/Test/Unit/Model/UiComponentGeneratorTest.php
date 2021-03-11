@@ -17,13 +17,13 @@ class UiComponentGeneratorTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\View\Element\UiComponent\ContextFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\UiComponent\ContextFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $contextFactoryMock;
 
-    /** @var \Magento\Framework\View\Element\UiComponentFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\UiComponentFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $uiComponentFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextFactoryMock = $this
             ->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextFactory::class)
@@ -47,9 +47,9 @@ class UiComponentGeneratorTest extends \PHPUnit\Framework\TestCase
 
     public function testGenerateUiComponent()
     {
-        $uiComponentMock = $this->createMock(UiComponentInterface::class);
-        $uiComponentMockChild1 = $this->createMock(UiComponentInterface::class);
-        $uiComponentMockChild2 = $this->createMock(UiComponentInterface::class);
+        $uiComponentMock = $this->getMockForAbstractClass(UiComponentInterface::class);
+        $uiComponentMockChild1 = $this->getMockForAbstractClass(UiComponentInterface::class);
+        $uiComponentMockChild2 = $this->getMockForAbstractClass(UiComponentInterface::class);
         $uiComponentMockChild1->expects($this->once())
             ->method('prepare');
         $uiComponentMockChild2->expects($this->once())

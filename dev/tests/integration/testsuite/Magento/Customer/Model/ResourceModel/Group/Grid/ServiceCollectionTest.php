@@ -13,7 +13,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
     /** @var ServiceCollection */
     protected $collection;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Customer\Model\ResourceModel\Group\Grid\ServiceCollection::class
@@ -96,21 +96,17 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('3', $items[0]->getTaxClassId());
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The array of fields failed to pass. The array must include at one field.
-     */
     public function testAddToFilterException()
     {
+        $this->expectExceptionMessage("The array of fields failed to pass. The array must include at one field.");
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->collection->addFieldToFilter([], 'not_array');
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The field array failed to pass. The array must have a matching condition array.
-     */
     public function testAddToFilterExceptionArrayNotSymmetric()
     {
+        $this->expectExceptionMessage("The field array failed to pass. The array must have a matching condition array.");
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->collection->addFieldToFilter(['field2', 'field2'], ['condition1']);
     }
 }

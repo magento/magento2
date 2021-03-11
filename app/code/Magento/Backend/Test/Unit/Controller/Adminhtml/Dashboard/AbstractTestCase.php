@@ -27,11 +27,11 @@ class AbstractTestCase extends \PHPUnit\Framework\TestCase
             $this->createPartialMock(\Magento\Framework\Controller\Result\RawFactory::class, ['create']);
         $layoutFactoryMock = $this->createPartialMock(\Magento\Framework\View\LayoutFactory::class, ['create']);
         $layoutMock = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['createBlock', 'toHtml']);
-        $layoutFactoryMock->expects($this->once())->method('create')->will($this->returnValue($layoutMock));
-        $layoutMock->expects($this->once())->method('createBlock')->with($blockName)->will($this->returnSelf());
-        $layoutMock->expects($this->once())->method('toHtml')->will($this->returnValue($outPut));
-        $resultRawFactoryMock->expects($this->once())->method('create')->will($this->returnValue($resultRawMock));
-        $resultRawMock->expects($this->once())->method('setContents')->with($outPut)->will($this->returnSelf());
+        $layoutFactoryMock->expects($this->once())->method('create')->willReturn($layoutMock);
+        $layoutMock->expects($this->once())->method('createBlock')->with($blockName)->willReturnSelf();
+        $layoutMock->expects($this->once())->method('toHtml')->willReturn($outPut);
+        $resultRawFactoryMock->expects($this->once())->method('create')->willReturn($resultRawMock);
+        $resultRawMock->expects($this->once())->method('setContents')->with($outPut)->willReturnSelf();
 
         $controller = $objectManager->getObject(
             $controllerName,

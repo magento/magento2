@@ -22,27 +22,27 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Stdlib\CookieManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\CookieManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cookieManagerMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cookieMetadataFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\Http\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Http\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\App\Http\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Http\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dateTimeMock;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
@@ -52,7 +52,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sessionConfigMock;
 
@@ -64,7 +64,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
@@ -105,10 +105,10 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->model);
-        /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManagerMock*/
+        /** @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject $objectManagerMock*/
         $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
@@ -125,11 +125,11 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $sensitiveCookieMetadataMock->expects($this->once())
             ->method('setPath')
             ->with('/')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->contextMock->expects($this->once())
             ->method('getVaryString')
-            ->will($this->returnValue($expectedCookieValue));
+            ->willReturn($expectedCookieValue);
 
         $this->sessionConfigMock->expects($this->once())
             ->method('getCookieLifetime')
@@ -158,7 +158,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $cookieMetadataMock->expects($this->once())
             ->method('setPath')
             ->with('/')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->contextMock->expects($this->once())
             ->method('getVaryString')
             ->willReturn(null);
@@ -297,11 +297,12 @@ class HttpTest extends \PHPUnit\Framework\TestCase
 
     /**
      *
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage ObjectManager isn't initialized
      */
     public function testWakeUpWithException()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('ObjectManager isn\'t initialized');
+
         /* ensure that the test preconditions are met */
         $objectManagerClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
         $instanceProperty = $objectManagerClass->getProperty('_instance');
@@ -324,11 +325,11 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $objectManagerMock->expects($this->once())
             ->method('create')
             ->with(\Magento\Framework\Stdlib\CookieManagerInterface::class)
-            ->will($this->returnValue($this->cookieManagerMock));
+            ->willReturn($this->cookieManagerMock);
         $objectManagerMock->expects($this->at(1))
             ->method('get')
             ->with(\Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class)
-            ->will($this->returnValue($this->cookieMetadataFactoryMock));
+            ->willReturn($this->cookieMetadataFactoryMock);
 
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
         $this->model->__wakeup();

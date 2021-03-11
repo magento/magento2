@@ -32,7 +32,7 @@ class RequestPreprocessorTest extends \Magento\TestFramework\TestCase\AbstractCo
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->config = [];
@@ -41,7 +41,7 @@ class RequestPreprocessorTest extends \Magento\TestFramework\TestCase\AbstractCo
     /**
      * @inheritDoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->setConfig($this->config);
         parent::tearDown();

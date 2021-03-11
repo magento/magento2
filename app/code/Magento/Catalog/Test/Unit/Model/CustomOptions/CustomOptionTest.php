@@ -17,18 +17,18 @@ class CustomOptionTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    /** @var \Magento\Framework\Api\ExtensionAttributesFactory | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Api\ExtensionAttributesFactory | \PHPUnit\Framework\MockObject\MockObject */
     private $extensionAttributesFactoryMock;
 
-    /** @var \Magento\Catalog\Api\Data\CustomOptionExtensionInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Api\Data\CustomOptionExtensionInterface | \PHPUnit\Framework\MockObject\MockObject */
     private $extensionMock;
 
     /**
-     * @var FileProcessor | \PHPUnit_Framework_MockObject_MockObject
+     * @var FileProcessor | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileProcessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $context = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
             ->disableOriginalConstructor()

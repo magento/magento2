@@ -37,8 +37,8 @@ class IframeTest extends \PHPUnit\Framework\TestCase
 
         $content = $block->toHtml();
 
-        $this->assertNotContains($xssString, $content, 'Params must be escaped');
-        $this->assertContains($block->escapeXssInUrl($xssString), $content, 'Content must be present');
+        $this->assertStringNotContainsString($xssString, $content, 'Params must be escaped');
+        $this->assertStringContainsString($block->escapeXssInUrl($xssString), $content, 'Content must be present');
     }
 
     /**

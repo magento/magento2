@@ -24,49 +24,49 @@ use Magento\Sales\Api\PaymentFailuresInterface;
  */
 class ResponseTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var Response|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Response|\PHPUnit\Framework\MockObject\MockObject */
     private $object;
 
-    /** @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $requestMock;
 
-    /** @var Registry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Registry|\PHPUnit\Framework\MockObject\MockObject */
     private $coreRegistryMock;
 
-    /** @var LayoutFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var LayoutFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $resultLayoutFactoryMock;
 
-    /** @var Layout|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Layout|\PHPUnit\Framework\MockObject\MockObject */
     private $resultLayoutMock;
 
-    /** @var Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Context|\PHPUnit\Framework\MockObject\MockObject */
     private $contextMock;
 
-    /** @var Transaction|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Transaction|\PHPUnit\Framework\MockObject\MockObject */
     private $transactionMock;
 
-    /** @var ResponseValidator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ResponseValidator|\PHPUnit\Framework\MockObject\MockObject */
     private $responseValidatorMock;
 
     /**
-     * @var Transparent | \PHPUnit_Framework_MockObject_MockObject
+     * @var Transparent | \PHPUnit\Framework\MockObject\MockObject
      */
     private $payflowFacade;
 
     /**
-     * @var PaymentFailuresInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentFailuresInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentFailures;
 
     /**
-     * @var Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var Session|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sessionTransparent;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->setMethods(['getPostValue'])
@@ -113,7 +113,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $this->paymentFailures = $this->getMockBuilder(PaymentFailuresInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['handle'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->sessionTransparent = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['getQuoteId'])
@@ -192,7 +192,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \Magento\Framework\View\Layout | \PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\View\Layout | \PHPUnit\Framework\MockObject\MockObject
      */
     private function getLayoutMock()
     {

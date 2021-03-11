@@ -10,16 +10,16 @@ use Magento\Developer\Model\View\Page\Config\ClientSideLessCompilation\Renderer;
 
 class RendererTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject | Renderer */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | Renderer */
     private $model;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\View\Asset\GroupedCollection */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\View\Asset\GroupedCollection */
     private $assetCollectionMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\View\Asset\Repository */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\View\Asset\Repository */
     private $assetRepo;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $pageConfigMock = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
@@ -80,7 +80,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ['less/config.less.js', [], $lessConfigFile],
             ['less/less.min.js', [], $lessMinFile]
         ];
-        $this->assetRepo->expects($this->exactly(2))->method('createAsset')->will($this->returnValueMap($assetMap));
+        $this->assetRepo->expects($this->exactly(2))->method('createAsset')->willReturnMap($assetMap);
 
         $resultGroups = "<script src=\"$lessConfigUrl\"></script>\n<script src=\"$lessMinUrl\"></script>\n";
 

@@ -15,7 +15,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     /**
      * \Magento\Framework\Filesystem\Driver
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $driver;
 
@@ -27,7 +27,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     /**
      * \Magento\Framework\Filesystem\File\ReadFactory
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileFactory;
 
@@ -39,7 +39,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->driver = $this->createMock(\Magento\Framework\Filesystem\Driver\File::class);
         $this->fileFactory = $this->createMock(\Magento\Framework\Filesystem\File\WriteFactory::class);
@@ -55,7 +55,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     /**
      * Tear down
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->driver = null;
         $this->fileFactory = null;
@@ -73,15 +73,15 @@ class WriteTest extends \PHPUnit\Framework\TestCase
 
     public function testCreate()
     {
-        $this->driver->expects($this->once())->method('isDirectory')->will($this->returnValue(false));
-        $this->driver->expects($this->once())->method('createDirectory')->will($this->returnValue(true));
+        $this->driver->expects($this->once())->method('isDirectory')->willReturn(false);
+        $this->driver->expects($this->once())->method('createDirectory')->willReturn(true);
 
         $this->assertTrue($this->write->create('correct-path'));
     }
 
     public function testIsWritable()
     {
-        $this->driver->expects($this->once())->method('isWritable')->will($this->returnValue(true));
+        $this->driver->expects($this->once())->method('isWritable')->willReturn(true);
         $this->assertTrue($this->write->isWritable('correct-path'));
     }
 
@@ -118,10 +118,11 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\FileSystemException
      */
     public function testOpenFileNonWritable()
     {
+        $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
+
         $targetPath = '/path/to/target.file';
         $this->driver->expects($this->once())->method('isExists')->willReturn(true);
         $this->driver->expects($this->once())->method('isWritable')->willReturn(false);

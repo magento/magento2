@@ -13,7 +13,7 @@ class GenerationDirectoryAccessExceptionTest extends \PHPUnit\Framework\TestCase
     {
         $exception = new GenerationDirectoryAccessException();
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             'Command line user does not have read and write permissions on generated directory.',
             $exception->getMessage()
         );

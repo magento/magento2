@@ -16,11 +16,11 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     protected $testable;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $storeManager = $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->getMock();
@@ -35,7 +35,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getId'])
             ->getMock();
 
-        $object->expects($this->once())->method('getId')->will($this->returnValue(1));
+        $object->expects($this->once())->method('getId')->willReturn(1);
         /** @var \Magento\Framework\DataObject $object */
 
         $this->assertInstanceOf(
@@ -56,22 +56,22 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $store = $this->getMockBuilder(
             \Magento\Framework\DataObject::class
         )->setMethods(['getId', 'getName'])->getMock();
-        $store->expects($this->once())->method('getId')->will($this->returnValue($storeId));
-        $store->expects($this->once())->method('getName')->will($this->returnValue($storeName));
+        $store->expects($this->once())->method('getId')->willReturn($storeId);
+        $store->expects($this->once())->method('getName')->willReturn($storeName);
 
         $this->storeManager->expects($this->exactly(2))
             ->method('getStore')
-            ->will($this->returnValue($store));
+            ->willReturn($store);
 
-        $object->expects($this->once())->method('getId')->will($this->returnValue(false));
-        $object->expects($this->once())->method('hasStoreId')->will($this->returnValue(false));
-        $object->expects($this->once())->method('setStoreId')->with($storeId)->will($this->returnValue(false));
-        $object->expects($this->once())->method('getStoreId')->will($this->returnValue($storeId));
-        $object->expects($this->once())->method('hasData')->with('created_in')->will($this->returnValue(false));
+        $object->expects($this->once())->method('getId')->willReturn(false);
+        $object->expects($this->once())->method('hasStoreId')->willReturn(false);
+        $object->expects($this->once())->method('setStoreId')->with($storeId)->willReturn(false);
+        $object->expects($this->once())->method('getStoreId')->willReturn($storeId);
+        $object->expects($this->once())->method('hasData')->with('created_in')->willReturn(false);
         $object->expects($this->once())
             ->method('setData')
             ->with($this->logicalOr('created_in', $storeName))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         /** @var \Magento\Framework\DataObject $object */
 
         $this->assertInstanceOf(

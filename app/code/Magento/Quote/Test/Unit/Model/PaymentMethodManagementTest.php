@@ -20,21 +20,21 @@ class PaymentMethodManagementTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $methodListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $zeroTotalMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->quoteRepositoryMock = $this->getMockForAbstractClass(
@@ -64,13 +64,13 @@ class PaymentMethodManagementTest extends \PHPUnit\Framework\TestCase
         $cartId = 11;
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
         $paymentMock = $this->createMock(\Magento\Quote\Model\Quote\Payment::class);
-        $quoteMock->expects($this->once())->method('getPayment')->will($this->returnValue($paymentMock));
-        $paymentMock->expects($this->once())->method('getId')->will($this->returnValue(null));
+        $quoteMock->expects($this->once())->method('getPayment')->willReturn($paymentMock);
+        $paymentMock->expects($this->once())->method('getId')->willReturn(null);
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('get')
             ->with($cartId)
-            ->will($this->returnValue($quoteMock));
+            ->willReturn($quoteMock);
 
         $this->assertNull($this->model->get($cartId));
     }
@@ -80,15 +80,15 @@ class PaymentMethodManagementTest extends \PHPUnit\Framework\TestCase
         $cartId = 11;
 
         $paymentMock = $this->createMock(\Magento\Quote\Model\Quote\Payment::class);
-        $paymentMock->expects($this->once())->method('getId')->will($this->returnValue(1));
+        $paymentMock->expects($this->once())->method('getId')->willReturn(1);
 
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
-        $quoteMock->expects($this->once())->method('getPayment')->will($this->returnValue($paymentMock));
+        $quoteMock->expects($this->once())->method('getPayment')->willReturn($paymentMock);
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('get')
             ->with($cartId)
-            ->will($this->returnValue($quoteMock));
+            ->willReturn($quoteMock);
         $this->assertEquals($paymentMock, $this->model->get($cartId));
     }
 
@@ -99,13 +99,13 @@ class PaymentMethodManagementTest extends \PHPUnit\Framework\TestCase
         $this->quoteRepositoryMock->expects($this->once())
             ->method('get')
             ->with($cartId)
-            ->will($this->returnValue($quoteMock));
+            ->willReturn($quoteMock);
 
         $paymentMethod = $this->createMock(\Magento\Quote\Api\Data\PaymentMethodInterface::class);
         $this->methodListMock->expects($this->once())
             ->method('getAvailableMethods')
             ->with($quoteMock)
-            ->will($this->returnValue([$paymentMethod]));
+            ->willReturn([$paymentMethod]);
         $this->assertEquals([$paymentMethod], $this->model->getList($cartId));
     }
 
@@ -173,11 +173,12 @@ class PaymentMethodManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
-     * @expectedExceptionMessage The requested Payment Method is not available.
      */
     public function testSetVirtualProductThrowsExceptionIfPaymentMethodNotAvailable()
     {
+        $this->expectException(\Magento\Framework\Exception\State\InvalidTransitionException::class);
+        $this->expectExceptionMessage('The requested Payment Method is not available.');
+
         $cartId = 100;
         $methodData = ['method' => 'data'];
         $paymentMethod = 'checkmo';
@@ -299,11 +300,12 @@ class PaymentMethodManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
-     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
      */
     public function testSetSimpleProductTrowsExceptionIfShippingAddressNotSet()
     {
+        $this->expectException(\Magento\Framework\Exception\State\InvalidTransitionException::class);
+        $this->expectExceptionMessage('The shipping address is missing. Set the address and try again.');
+
         $cartId = 100;
 
         $quoteMock = $this->createPartialMock(
@@ -312,7 +314,7 @@ class PaymentMethodManagementTest extends \PHPUnit\Framework\TestCase
         );
         $this->quoteRepositoryMock->expects($this->once())->method('get')->with($cartId)->willReturn($quoteMock);
 
-        /** @var \Magento\Quote\Model\Quote\Payment|\PHPUnit_Framework_MockObject_MockObject $methodMock */
+        /** @var \Magento\Quote\Model\Quote\Payment|\PHPUnit\Framework\MockObject\MockObject $methodMock */
         $methodMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Payment::class, ['setChecks', 'getData']);
         $methodMock->expects($this->once())
             ->method('setChecks')

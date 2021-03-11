@@ -14,22 +14,22 @@ use Magento\Framework\Math\Random;
 class TemporaryTableServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var TemporaryTableService|\PHPUnit_Framework_MockObject_MockObject
+     * @var TemporaryTableService|\PHPUnit\Framework\MockObject\MockObject
      */
     private $temporaryTableService;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $adapterMock;
 
     /**
-     * @var Random|\PHPUnit_Framework_MockObject_MockObject
+     * @var Random|\PHPUnit\Framework\MockObject\MockObject
      */
     private $randomMock;
 
     /**
-     * @var Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|\PHPUnit\Framework\MockObject\MockObject
      */
     private $selectMock;
 
@@ -38,9 +38,9 @@ class TemporaryTableServiceTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->adapterMock = $this->createMock(AdapterInterface::class);
+        $this->adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->selectMock = $this->createMock(Select::class);
         $this->randomMock = $this->createMock(Random::class);
         $this->temporaryTableService = (new ObjectManager($this))->getObject(

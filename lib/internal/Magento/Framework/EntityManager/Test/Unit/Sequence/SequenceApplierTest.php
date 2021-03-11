@@ -19,47 +19,47 @@ use Magento\Framework\DB\Sequence\SequenceInterface;
 class SequenceApplierTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataPoolMock;
 
     /**
-     * @var TypeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var TypeResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $typeResolverMock;
 
     /**
-     * @var SequenceManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var SequenceManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sequenceManagerMock;
 
     /**
-     * @var SequenceRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var SequenceRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sequenceRegistryMock;
 
     /**
-     * @var HydratorPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var HydratorPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $hydratorPoolMock;
 
     /**
-     * @var DataObject|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataObject|\PHPUnit\Framework\MockObject\MockObject
      */
     private $entityMock;
 
     /**
-     * @var HydratorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var HydratorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $hydratorMock;
 
     /**
-     * @var EntityMetadataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityMetadataInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataMock;
 
     /**
-     * @var SequenceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SequenceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sequenceMock;
 
@@ -68,7 +68,7 @@ class SequenceApplierTest extends \PHPUnit\Framework\TestCase
      */
     private $sequenceApplier;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -92,13 +92,13 @@ class SequenceApplierTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->hydratorMock = $this->getMockBuilder(HydratorInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->metadataMock = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->sequenceMock = $this->getMockBuilder(SequenceInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->sequenceApplier = $helper->getObject(
             SequenceApplier::class,
@@ -133,7 +133,7 @@ class SequenceApplierTest extends \PHPUnit\Framework\TestCase
             ->method('resolve')
             ->with($this->entityMock)
             ->willReturn($entityType);
-        $this->sequenceRegistryMock->expects($this->once())
+        $this->sequenceRegistryMock->expects($this->exactly(2))
             ->method('retrieve')
             ->with($entityType)
             ->willReturn($sequenceInfo);
@@ -171,7 +171,7 @@ class SequenceApplierTest extends \PHPUnit\Framework\TestCase
             ->method('resolve')
             ->with($this->entityMock)
             ->willReturn($entityType);
-        $this->sequenceRegistryMock->expects($this->once())
+        $this->sequenceRegistryMock->expects($this->exactly(2))
             ->method('retrieve')
             ->with($entityType)
             ->willReturn($sequenceInfo);

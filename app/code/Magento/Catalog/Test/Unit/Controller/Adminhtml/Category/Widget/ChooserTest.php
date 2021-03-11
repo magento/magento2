@@ -18,41 +18,41 @@ class ChooserTest extends \PHPUnit\Framework\TestCase
     protected $controller;
 
     /**
-     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseMock;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\App\View|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\View|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $viewMock;
 
     /**
-     * @var \Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $chooserBlockMock;
 
     /**
-     * @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Raw|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\Raw|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultRaw;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
@@ -95,8 +95,8 @@ class ChooserTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->layoutMock);
 
-        $context->expects($this->once())->method('getRequest')->will($this->returnValue($this->requestMock));
-        $context->expects($this->once())->method('getResponse')->will($this->returnValue($this->responseMock));
+        $context->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
+        $context->expects($this->once())->method('getResponse')->willReturn($this->responseMock);
         $this->controller = new \Magento\Catalog\Controller\Adminhtml\Category\Widget\Chooser(
             $context,
             $layoutFactory,
@@ -108,8 +108,8 @@ class ChooserTest extends \PHPUnit\Framework\TestCase
     {
         $this->chooserBlockMock = $this->createMock(\Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser::class);
 
-        $this->layoutMock->expects($this->once())->method('createBlock')->will(
-            $this->returnValue($this->chooserBlockMock)
+        $this->layoutMock->expects($this->once())->method('createBlock')->willReturn(
+            $this->chooserBlockMock
         );
     }
 
@@ -117,7 +117,7 @@ class ChooserTest extends \PHPUnit\Framework\TestCase
     {
         $this->_getTreeBlock();
         $testHtml = '<div>Some test html</div>';
-        $this->chooserBlockMock->expects($this->once())->method('toHtml')->will($this->returnValue($testHtml));
+        $this->chooserBlockMock->expects($this->once())->method('toHtml')->willReturn($testHtml);
         $this->resultRaw->expects($this->once())->method('setContents')->with($testHtml);
         $this->controller->execute();
     }

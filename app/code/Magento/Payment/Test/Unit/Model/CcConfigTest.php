@@ -12,22 +12,22 @@ class CcConfigTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Payment\Model\CcConfig */
     protected $model;
 
-    /** @var \Magento\Payment\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Payment\Model\Config|\PHPUnit\Framework\MockObject\MockObject */
     protected $configMock;
 
-    /** @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Asset\Repository|\PHPUnit\Framework\MockObject\MockObject */
     protected $repositoryMock;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $requestMock;
 
-    /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $urlMock;
 
-    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->createMock(\Magento\Payment\Model\Config::class);
         $this->repositoryMock = $this->createMock(\Magento\Framework\View\Asset\Repository::class);
@@ -76,7 +76,7 @@ class CcConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testHasVerification()
     {
-        $this->assertEquals(true, $this->model->hasVerification());
+        $this->assertTrue($this->model->hasVerification());
     }
 
     public function testGetCvvImageUrl()

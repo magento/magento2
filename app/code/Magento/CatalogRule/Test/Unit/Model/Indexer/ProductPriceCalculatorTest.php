@@ -14,11 +14,11 @@ class ProductPriceCalculatorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $priceCurrencyMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->priceCurrencyMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
             ->disableOriginalConstructor()

@@ -24,7 +24,7 @@ class FieldsFilterTest extends \PHPUnit\Framework\TestCase
     protected $sampleResponseValue;
 
     /**
-     * @var \Magento\Framework\Webapi\Rest\Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Webapi\Rest\Request|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
@@ -36,7 +36,7 @@ class FieldsFilterTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup SUT
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->createMock(\Magento\Framework\Webapi\Rest\Request::class);
         $this->processor = new FieldsFilter($this->requestMock);
@@ -113,7 +113,7 @@ class FieldsFilterTest extends \PHPUnit\Framework\TestCase
         $expected = ['customer' => $this->sampleResponseValue['customer']];
 
         $simpleFilter = 'customer';
-        $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValue($simpleFilter));
+        $this->requestMock->expects($this->any())->method('getParam')->willReturn($simpleFilter);
         $filteredResponse = $this->processor->filter($this->sampleResponseValue);
 
         $this->assertEquals($expected, $filteredResponse);
@@ -130,7 +130,7 @@ class FieldsFilterTest extends \PHPUnit\Framework\TestCase
 
         $simpleFilter = "customer[email,id]";
 
-        $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValue($simpleFilter));
+        $this->requestMock->expects($this->any())->method('getParam')->willReturn($simpleFilter);
         $filteredResponse = $this->processor->filter($this->sampleResponseValue);
 
         $this->assertEquals($expected, $filteredResponse);
@@ -165,7 +165,7 @@ class FieldsFilterTest extends \PHPUnit\Framework\TestCase
 
         $nestedFilter = 'customer[id,email],addresses[city,postcode,region[region_code,region]]';
 
-        $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValue($nestedFilter));
+        $this->requestMock->expects($this->any())->method('getParam')->willReturn($nestedFilter);
         $filteredResponse = $this->processor->filter($this->sampleResponseValue);
 
         $this->assertEquals($expected, $filteredResponse);
@@ -204,7 +204,7 @@ class FieldsFilterTest extends \PHPUnit\Framework\TestCase
         $this->requestMock
             ->expects($this->any())
             ->method('getParam')
-            ->will($this->returnValue($nonExistentFieldFilter));
+            ->willReturn($nonExistentFieldFilter);
         $filteredResponse = $this->processor->filter($this->sampleResponseValue);
 
         $this->assertEquals($expected, $filteredResponse);
@@ -215,7 +215,7 @@ class FieldsFilterTest extends \PHPUnit\Framework\TestCase
      */
     public function testInvalidFilters($invalidFilter)
     {
-        $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValue($invalidFilter));
+        $this->requestMock->expects($this->any())->method('getParam')->willReturn($invalidFilter);
         $filteredResponse = $this->processor->filter($this->sampleResponseValue);
 
         $this->assertEmpty($filteredResponse);

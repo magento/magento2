@@ -88,7 +88,7 @@ class CommonTaxCollectorTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -109,7 +109,7 @@ class CommonTaxCollectorTest extends TestCase
 
         $this->quote->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->store));
+            ->willReturn($this->store);
 
         $this->address = $this->getMockBuilder(QuoteAddress::class)
             ->disableOriginalConstructor()
@@ -117,7 +117,7 @@ class CommonTaxCollectorTest extends TestCase
 
         $this->address->expects($this->any())
             ->method('getQuote')
-            ->will($this->returnValue($this->quote));
+            ->willReturn($this->quote);
         $methods = ['create'];
         $this->quoteDetailsItemDataObject = $objectManager->getObject(ItemDetails::class);
         $this->taxClassKeyDataObject = $objectManager->getObject(TaxClassKey::class);
@@ -162,7 +162,7 @@ class CommonTaxCollectorTest extends TestCase
         $shippingTaxClass,
         $shippingPriceInclTax
     ): void {
-        $shippingAssignmentMock = $this->createMock(ShippingAssignmentInterface::class);
+        $shippingAssignmentMock = $this->getMockForAbstractClass(ShippingAssignmentInterface::class);
         $methods = [
             'getShippingDiscountAmount',
             'getShippingTaxCalculationAmount',
@@ -174,7 +174,7 @@ class CommonTaxCollectorTest extends TestCase
         ];
         /** @var MockObject|QuoteAddressTotal $totalsMock */
         $totalsMock = $this->createPartialMock(QuoteAddressTotal::class, $methods);
-        $shippingMock = $this->createMock(ShippingInterface::class);
+        $shippingMock = $this->getMockForAbstractClass(ShippingInterface::class);
         /** @var MockObject|ShippingAssignmentInterface $shippingAssignmentMock */
         $shippingAssignmentMock->expects($this->once())->method('getShipping')->willReturn($shippingMock);
         $shippingMock->expects($this->once())->method('getAddress')->willReturn($this->address);
@@ -184,11 +184,11 @@ class CommonTaxCollectorTest extends TestCase
         $this->taxConfig->expects($this->any())
             ->method('getShippingTaxClass')
             ->with($this->store)
-            ->will($this->returnValue($shippingTaxClass));
+            ->willReturn($shippingTaxClass);
         $this->taxConfig->expects($this->any())
             ->method('shippingPriceIncludesTax')
             ->with($this->store)
-            ->will($this->returnValue($shippingPriceInclTax));
+            ->willReturn($shippingPriceInclTax);
         $totalsMock
              ->expects($this->atLeastOnce())
              ->method('getShippingDiscountAmount')
@@ -235,11 +235,11 @@ class CommonTaxCollectorTest extends TestCase
         /** @var MockObject|TaxDetailsItemInterface $itemTaxDetails */
         $itemTaxDetails = $this->getMockBuilder(TaxDetailsItemInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         /** @var MockObject|TaxDetailsItemInterface $baseItemTaxDetails */
         $baseItemTaxDetails = $this->getMockBuilder(TaxDetailsItemInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $quoteItem->expects($this->once())->method('setCustomPrice');
 

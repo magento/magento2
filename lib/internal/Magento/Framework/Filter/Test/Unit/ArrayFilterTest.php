@@ -17,24 +17,24 @@ class ArrayFilterTest extends \PHPUnit\Framework\TestCase
         /** @var \Zend_Filter_Interface $filterMock */
         /** This filter should be applied to all fields values */
         $filterMock = $this->createMock(\Zend_Filter_Interface::class);
-        $filterMock->expects($this->exactly(3))->method('filter')->will(
-            $this->returnCallback(
+        $filterMock->expects($this->exactly(3))->method('filter')->willReturnCallback(
+            
                 function ($input) {
                     return '(' . $input . ')';
                 }
-            )
+            
         );
         $arrayFilter->addFilter($filterMock);
 
         /** @var \Zend_Filter_Interface $fieldFilterMock */
         /** This filter should be applied to 'field2' field value only */
         $fieldFilterMock = $this->createMock(\Zend_Filter_Interface::class);
-        $fieldFilterMock->expects($this->exactly(1))->method('filter')->will(
-            $this->returnCallback(
+        $fieldFilterMock->expects($this->exactly(1))->method('filter')->willReturnCallback(
+            
                 function ($input) {
                     return '[' . $input . ']';
                 }
-            )
+            
         );
         $arrayFilter->addFilter($fieldFilterMock, 'field2');
 

@@ -18,16 +18,16 @@ class StateTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Config\ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\ScopeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeMock;
 
     /**
-     * @var AreaList|\PHPUnit_Framework_MockObject_MockObject
+     * @var AreaList|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $areaListMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManagerHelper($this);
         $this->scopeMock = $this->getMockForAbstractClass(
@@ -127,11 +127,12 @@ class StateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Some error
      */
     public function testEmulateAreaCodeException()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Some error');
+
         $areaCode = Area::AREA_FRONTEND;
         $emulatedCode = Area::AREA_ADMINHTML;
         $this->scopeMock->expects($this->once())->method('setCurrentScope')->with($areaCode);
@@ -171,11 +172,12 @@ class StateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Unknown application mode: unknown mode
      */
     public function testConstructorException()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Unknown application mode: unknown mode');
+
         new \Magento\Framework\App\State(
             $this->getMockForAbstractClass(\Magento\Framework\Config\ScopeInterface::class, [], '', false),
             "unknown mode"
@@ -183,11 +185,12 @@ class StateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Area code "any code" does not exist
      */
     public function testCheckAreaCodeException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Area code "any code" does not exist');
+
         $this->model->setAreaCode('any code');
     }
 }

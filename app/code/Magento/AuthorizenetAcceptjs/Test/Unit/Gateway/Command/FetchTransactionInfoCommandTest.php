@@ -63,7 +63,7 @@ class FetchTransactionInfoCommandTest extends TestCase
      */
     private $handlerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->paymentDOMock = $this->createMock(PaymentDataObject::class);
         $this->paymentMock = $this->createMock(Payment::class);
@@ -75,10 +75,10 @@ class FetchTransactionInfoCommandTest extends TestCase
         $orderMock = $this->createMock(Order::class);
         $this->paymentDOMock->method('getOrder')
             ->willReturn($orderMock);
-        $this->transactionDetailsCommandMock = $this->createMock(CommandInterface::class);
-        $this->transactionResultMock = $this->createMock(ResultInterface::class);
-        $this->commandPoolMock = $this->createMock(CommandPoolInterface::class);
-        $this->handlerMock = $this->createMock(HandlerInterface::class);
+        $this->transactionDetailsCommandMock = $this->getMockForAbstractClass(CommandInterface::class);
+        $this->transactionResultMock = $this->getMockForAbstractClass(ResultInterface::class);
+        $this->commandPoolMock = $this->getMockForAbstractClass(CommandPoolInterface::class);
+        $this->handlerMock = $this->getMockForAbstractClass(HandlerInterface::class);
         $this->command = new FetchTransactionInfoCommand(
             $this->commandPoolMock,
             new SubjectReader(),

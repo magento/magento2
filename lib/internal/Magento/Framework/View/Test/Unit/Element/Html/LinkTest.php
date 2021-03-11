@@ -10,7 +10,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
 {
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
@@ -39,7 +39,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
 
         $escaperMock->expects($this->any())
             ->method('escapeHtml')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->setMethods(['getUrl'])->disableOriginalConstructor()->getMockForAbstractClass();

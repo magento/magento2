@@ -16,16 +16,16 @@ class FilterTest extends \PHPUnit\Framework\TestCase
     protected $filter;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $appState;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $scopeConfig = $this->getMockForAbstractClass(
             \Magento\Framework\App\Config\ScopeConfigInterface::class,

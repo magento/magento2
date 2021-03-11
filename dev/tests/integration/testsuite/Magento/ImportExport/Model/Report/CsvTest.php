@@ -44,7 +44,7 @@ class CsvTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $filesystem = Bootstrap::getObjectManager()->create(Filesystem::class);
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
@@ -54,7 +54,7 @@ class CsvTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         foreach ([$this->importFilePath, $this->reportPath] as $path) {
             if ($path && $this->directory->isExist($path)) {

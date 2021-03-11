@@ -14,7 +14,7 @@ class JsonTest extends \PHPUnit\Framework\TestCase
      */
     protected $parser;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
         $this->parser = $objectManagerHelper->getObject(\Magento\Setup\Module\Dependency\Parser\Composer\Json::class);
@@ -22,12 +22,13 @@ class JsonTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $options
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Parse error: Option "files_for_parse" is wrong.
      * @dataProvider dataProviderWrongOptionFilesForParse
      */
     public function testParseWithWrongOptionFilesForParse($options)
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Parse error: Option "files_for_parse" is wrong.');
+
         $this->parser->parse($options);
     }
 

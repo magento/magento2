@@ -8,16 +8,16 @@ namespace Magento\SalesRule\Test\Unit\Observer;
 class CatalogAttributeSaveAfterObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\SalesRule\Observer\CatalogAttributeSaveAfterObserver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Observer\CatalogAttributeSaveAfterObserver|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\SalesRule\Observer\CheckSalesRulesAvailability|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Observer\CheckSalesRulesAvailability|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $checkSalesRulesAvailability;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->initMocks();
@@ -49,20 +49,20 @@ class CatalogAttributeSaveAfterObserverTest extends \PHPUnit\Framework\TestCase
 
         $observer->expects($this->once())
             ->method('getEvent')
-            ->will($this->returnValue($event));
+            ->willReturn($event);
         $event->expects($this->any())
             ->method('getAttribute')
-            ->will($this->returnValue($attribute));
+            ->willReturn($attribute);
         $attribute->expects($this->any())
             ->method('dataHasChangedFor')
             ->with('is_used_for_promo_rules')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $attribute->expects($this->any())
             ->method('getIsUsedForPromoRules')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $attribute->expects($this->any())
             ->method('getAttributeCode')
-            ->will($this->returnValue($attributeCode));
+            ->willReturn($attributeCode);
 
         $this->checkSalesRulesAvailability
             ->expects($this->once())

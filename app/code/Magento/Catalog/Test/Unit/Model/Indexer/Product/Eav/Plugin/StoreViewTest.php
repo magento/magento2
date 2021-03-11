@@ -30,14 +30,14 @@ class StoreViewTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $objectMock->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($data['object_id']));
+            ->willReturn($data['object_id']);
         $objectMock->expects($this->any())
             ->method('dataHasChangedFor')
             ->with('group_id')
-            ->will($this->returnValue($data['has_group_id_changed']));
+            ->willReturn($data['has_group_id_changed']);
         $objectMock->expects($this->any())
             ->method('getIsActive')
-            ->will($this->returnValue($data['is_active']));
+            ->willReturn($data['is_active']);
 
         $model = new \Magento\Catalog\Model\Indexer\Product\Eav\Plugin\StoreView($eavProcessorMock);
         $model->beforeSave($subjectMock, $objectMock);

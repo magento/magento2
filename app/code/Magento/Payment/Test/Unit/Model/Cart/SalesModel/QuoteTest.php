@@ -10,10 +10,10 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Payment\Model\Cart\SalesModel\Quote */
     protected $_model;
 
-    /** @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Quote\Model\Quote|\PHPUnit\Framework\MockObject\MockObject */
     protected $_quoteMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
         $this->_model = new \Magento\Payment\Model\Cart\SalesModel\Quote($this->_quoteMock);
@@ -28,8 +28,8 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         )->with(
             'any key',
             'any args'
-        )->will(
-            $this->returnValue('some value')
+        )->willReturn(
+            'some value'
         );
         $this->assertEquals('some value', $this->_model->getDataUsingMethod('any key', 'any args'));
     }
@@ -40,18 +40,18 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getBillingAddress'
-        )->will(
-            $this->returnValue('billing address')
+        )->willReturn(
+            'billing address'
         );
         $this->_quoteMock->expects(
             $this->any()
         )->method(
             'getShippingAddress'
-        )->will(
-            $this->returnValue('shipping address')
+        )->willReturn(
+            'shipping address'
         );
         $this->assertEquals('shipping address', $this->_model->getTaxContainer());
-        $this->_quoteMock->expects($this->any())->method('getIsVirtual')->will($this->returnValue(1));
+        $this->_quoteMock->expects($this->any())->method('getIsVirtual')->willReturn(1);
         $this->assertEquals('billing address', $this->_model->getTaxContainer());
     }
 
@@ -65,10 +65,10 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     public function testGetAllItems($pItem, $name, $qty, $price)
     {
         $itemMock = $this->createMock(\Magento\Quote\Model\Quote\Item\AbstractItem::class);
-        $itemMock->expects($this->any())->method('getParentItem')->will($this->returnValue($pItem));
-        $itemMock->expects($this->once())->method('__call')->with('getName')->will($this->returnValue($name));
-        $itemMock->expects($this->any())->method('getTotalQty')->will($this->returnValue($qty));
-        $itemMock->expects($this->any())->method('getBaseCalculationPrice')->will($this->returnValue($price));
+        $itemMock->expects($this->any())->method('getParentItem')->willReturn($pItem);
+        $itemMock->expects($this->once())->method('__call')->with('getName')->willReturn($name);
+        $itemMock->expects($this->any())->method('getTotalQty')->willReturn($qty);
+        $itemMock->expects($this->any())->method('getBaseCalculationPrice')->willReturn($price);
         $expected = [
             new \Magento\Framework\DataObject(
                 [
@@ -80,7 +80,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
                 ]
             ),
         ];
-        $this->_quoteMock->expects($this->once())->method('getAllItems')->will($this->returnValue([$itemMock]));
+        $this->_quoteMock->expects($this->once())->method('getAllItems')->willReturn([$itemMock]);
         $this->assertEquals($expected, $this->_model->getAllItems());
     }
 
@@ -104,8 +104,8 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             '__call'
         )->with(
             'getBaseSubtotal'
-        )->will(
-            $this->returnValue(100)
+        )->willReturn(
+            100
         );
         $this->assertEquals(100, $this->_model->getBaseSubtotal());
     }
@@ -124,16 +124,16 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             '__call'
         )->with(
             $getterMethod
-        )->will(
-            $this->returnValue($getterMethod)
+        )->willReturn(
+            $getterMethod
         );
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
-        $quoteMock->expects($this->any())->method('getIsVirtual')->will($this->returnValue($isVirtual));
+        $quoteMock->expects($this->any())->method('getIsVirtual')->willReturn($isVirtual);
         $method = 'getShippingAddress';
         if ($isVirtual) {
             $method = 'getBillingAddress';
         }
-        $quoteMock->expects($this->any())->method($method)->will($this->returnValue($address));
+        $quoteMock->expects($this->any())->method($method)->willReturn($address);
         $model = new \Magento\Payment\Model\Cart\SalesModel\Quote($quoteMock);
         $this->assertEquals($getterMethod, $model->{$getterMethod}());
     }

@@ -16,30 +16,30 @@ class FileTest extends \PHPUnit\Framework\TestCase
     /**
      * Core file storage database
      *
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit\Framework\MockObject\MockObject
      */
     private $coreFileStorageDatabase;
 
     /**
      * Filesystem object.
      *
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystem;
 
     /**
      * Media Directory object (writable).
      *
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mediaDirectory;
 
     /**
-     * @var \Magento\Framework\App\Helper\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Helper\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $appContext;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mediaDirectory = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
             ->getMockForAbstractClass();

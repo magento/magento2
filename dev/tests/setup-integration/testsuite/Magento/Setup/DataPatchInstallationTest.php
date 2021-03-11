@@ -47,7 +47,7 @@ class DataPatchInstallationTest extends SetupTestCase
      */
     private $tableData;
 
-    public function setUp()
+    public function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->moduleManager = $objectManager->get(TestModuleManager::class);
@@ -93,10 +93,11 @@ class DataPatchInstallationTest extends SetupTestCase
 
     /**
      * @moduleName Magento_TestSetupDeclarationModule3
-     * @expectedException \Magento\Framework\Exception\LocalizedException
+     *
      */
     public function testCyclomaticDependency()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->moduleManager->updateRevision(
             'Magento_TestSetupDeclarationModule3',
             'cyclomatic_and_bic_revision',

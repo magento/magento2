@@ -20,7 +20,7 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | ConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject | ConfigInterface
      */
     protected $securityConfigMock;
 
@@ -38,7 +38,7 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
      * Init mocks for tests
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->securityConfigMock =  $this->getMockBuilder(\Magento\Security\Model\ConfigInterface::class)
@@ -68,7 +68,7 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
         $this->dateTimeMock->expects($this->once())
             ->method('gmtTimestamp')
             ->willReturn(1000);
-        $this->assertEquals(true, $this->model->isLoggedInStatus());
+        $this->assertTrue($this->model->isLoggedInStatus());
     }
 
     /**
@@ -82,7 +82,7 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
         $this->dateTimeMock->expects($this->once())
             ->method('gmtTimestamp')
             ->willReturn(1000);
-        $this->assertEquals(false, $this->model->isLoggedInStatus());
+        $this->assertFalse($this->model->isLoggedInStatus());
         $this->assertEquals(\Magento\Security\Model\AdminSessionInfo::LOGGED_OUT, $this->model->getStatus());
     }
 
@@ -97,7 +97,7 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
 
         $this->securityConfigMock->expects($this->once())
             ->method('getAdminSessionLifetime')
-            ->will($this->returnValue($sessionLifetime));
+            ->willReturn($sessionLifetime);
 
         $this->dateTimeMock->expects($this->once())
             ->method('gmtTimestamp')
@@ -137,7 +137,7 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsOtherSessionsTerminated()
     {
-        $this->assertEquals(false, $this->model->isOtherSessionsTerminated());
+        $this->assertFalse($this->model->isOtherSessionsTerminated());
     }
 
     /**

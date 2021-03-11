@@ -40,7 +40,7 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->escaperMock = $this->createMock(Escaper::class);
         $urlModel = $this->createPartialMock(Url::class, ['getUrl']);

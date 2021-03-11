@@ -24,7 +24,7 @@ class CmsPageUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|FilterManager
+     * @var \PHPUnit\Framework\MockObject\MockObject|FilterManager
      */
     private $filterManagerMock;
 
@@ -36,7 +36,7 @@ class CmsPageUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup environment for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManagerHelper($this);
         $this->filterManagerMock = $this->getMockBuilder(FilterManager::class)
@@ -60,7 +60,7 @@ class CmsPageUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
         /* @var PageInterface $cmsPageMock*/
         $cmsPageMock = $this->getMockBuilder(PageInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $cmsPageMock->expects($this->any())
             ->method('getIdentifier')
@@ -77,7 +77,7 @@ class CmsPageUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
         /* @var PageInterface $cmsPageMock*/
         $cmsPageMock = $this->getMockBuilder(PageInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $cmsPageMock->expects($this->any())
             ->method('getId')
@@ -102,7 +102,7 @@ class CmsPageUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
         /* @var PageInterface $cmsPageMock*/
         $cmsPageMock = $this->getMockBuilder(PageInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $cmsPageMock->expects($this->any())
             ->method('getIdentifier')
@@ -136,7 +136,7 @@ class CmsPageUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
         /* @var PageInterface $cmsPageMock*/
         $cmsPageMock = $this->getMockBuilder(PageInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $cmsPageMock->expects($this->any())
             ->method('getIdentifier')

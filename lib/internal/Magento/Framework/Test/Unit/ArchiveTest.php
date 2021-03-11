@@ -35,14 +35,14 @@ class ArchiveTest extends \PHPUnit\Framework\TestCase
      */
     protected $unpacked;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->archive = new Archive();
         $this->sourceFilePath = __DIR__ . '/_files/source.txt';
         $this->destinationDir = __DIR__ . '/_files/archives/';
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (!empty($this->packed) && file_exists($this->packed)) {
             unlink($this->packed);

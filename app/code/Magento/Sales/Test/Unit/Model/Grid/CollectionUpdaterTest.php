@@ -14,11 +14,11 @@ class CollectionUpdaterTest extends \PHPUnit\Framework\TestCase
     protected $collectionUpdater;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $registryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
 
@@ -36,13 +36,13 @@ class CollectionUpdaterTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('registry')
             ->with('current_order')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $collectionMock->expects($this->never())->method('setOrderFilter');
         $collectionMock
             ->expects($this->once())
             ->method('addOrderInformation')
             ->with(['increment_id'])
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->assertEquals($collectionMock, $this->collectionUpdater->update($collectionMock));
     }
 
@@ -56,14 +56,14 @@ class CollectionUpdaterTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('registry')
             ->with('current_order')
-            ->will($this->returnValue($orderMock));
-        $orderMock->expects($this->once())->method('getId')->will($this->returnValue('orderId'));
-        $collectionMock->expects($this->once())->method('setOrderFilter')->with('orderId')->will($this->returnSelf());
+            ->willReturn($orderMock);
+        $orderMock->expects($this->once())->method('getId')->willReturn('orderId');
+        $collectionMock->expects($this->once())->method('setOrderFilter')->with('orderId')->willReturnSelf();
         $collectionMock
             ->expects($this->once())
             ->method('addOrderInformation')
             ->with(['increment_id'])
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->assertEquals($collectionMock, $this->collectionUpdater->update($collectionMock));
     }
 }

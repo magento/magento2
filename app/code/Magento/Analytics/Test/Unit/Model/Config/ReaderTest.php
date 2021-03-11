@@ -16,17 +16,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Mapper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Mapper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mapperMock;
 
     /**
-     * @var ReaderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReaderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $readerXmlMock;
 
     /**
-     * @var ReaderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReaderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $readerDbMock;
 
@@ -43,7 +43,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mapperMock = $this->getMockBuilder(Mapper::class)
             ->disableOriginalConstructor()
@@ -51,11 +51,11 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
 
         $this->readerXmlMock = $this->getMockBuilder(ReaderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->readerDbMock = $this->getMockBuilder(ReaderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

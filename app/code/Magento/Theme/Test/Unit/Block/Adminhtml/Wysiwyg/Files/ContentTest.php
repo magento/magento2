@@ -10,26 +10,26 @@ use Magento\Theme\Model\Wysiwyg\Storage;
 class ContentTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Backend\Model\Url|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Url|PHPUnit\Framework\MockObject\MockObject
      */
     protected $_urlBuilder;
 
     /**
-     * @var \Magento\Theme\Helper\Storage|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Helper\Storage|PHPUnit\Framework\MockObject\MockObject
      */
     protected $_helperStorage;
 
     /**
-     * @var \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content|PHPUnit\Framework\MockObject\MockObject
      */
     protected $_filesContent;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|PHPUnit\Framework\MockObject\MockObject
      */
     protected $_request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_helperStorage = $this->createMock(\Magento\Theme\Helper\Storage::class);
         $this->_urlBuilder = $this->createMock(\Magento\Backend\Model\Url::class);
@@ -62,8 +62,8 @@ class ContentTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getRequestParams'
-        )->will(
-            $this->returnValue($requestParams)
+        )->willReturn(
+            $requestParams
         );
 
         $this->_urlBuilder->expects(
@@ -73,8 +73,8 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         )->with(
             'adminhtml/*/newFolder',
             $requestParams
-        )->will(
-            $this->returnValue($expectedUrl)
+        )->willReturn(
+            $expectedUrl
         );
 
         $this->assertEquals($expectedUrl, $this->_filesContent->getNewfolderUrl());
@@ -92,8 +92,8 @@ class ContentTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getRequestParams'
-        )->will(
-            $this->returnValue($requestParams)
+        )->willReturn(
+            $requestParams
         );
 
         $this->_urlBuilder->expects(
@@ -103,8 +103,8 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         )->with(
             'adminhtml/*/deleteFiles',
             $requestParams
-        )->will(
-            $this->returnValue($expectedUrl)
+        )->willReturn(
+            $expectedUrl
         );
 
         $this->assertEquals($expectedUrl, $this->_filesContent->getDeleteFilesUrl());
@@ -122,8 +122,8 @@ class ContentTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getRequestParams'
-        )->will(
-            $this->returnValue($requestParams)
+        )->willReturn(
+            $requestParams
         );
 
         $this->_urlBuilder->expects(
@@ -133,8 +133,8 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         )->with(
             'adminhtml/*/onInsert',
             $requestParams
-        )->will(
-            $this->returnValue($expectedUrl)
+        )->willReturn(
+            $expectedUrl
         );
 
         $this->assertEquals($expectedUrl, $this->_filesContent->getOnInsertUrl());
@@ -167,8 +167,8 @@ class ContentTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             'target_element_id'
-        )->will(
-            $this->returnValue($expectedRequest)
+        )->willReturn(
+            $expectedRequest
         );
 
         $this->assertEquals($expectedRequest, $this->_filesContent->getTargetElementId());
@@ -193,8 +193,8 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         )->with(
             'adminhtml/*/contents',
             ['type' => $expectedRequest] + $requestParams
-        )->will(
-            $this->returnValue($expectedUrl)
+        )->willReturn(
+            $expectedUrl
         );
 
         $this->_request->expects(
@@ -203,16 +203,16 @@ class ContentTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             'type'
-        )->will(
-            $this->returnValue($expectedRequest)
+        )->willReturn(
+            $expectedRequest
         );
 
         $this->_helperStorage->expects(
             $this->once()
         )->method(
             'getRequestParams'
-        )->will(
-            $this->returnValue($requestParams)
+        )->willReturn(
+            $requestParams
         );
 
         $this->assertEquals($expectedUrl, $this->_filesContent->getContentsUrl());

@@ -13,16 +13,16 @@ class TypeTransitionManagerTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $weightResolver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
@@ -50,7 +50,7 @@ class TypeTransitionManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function testProcessProduct($hasWeight, $currentTypeId, $expectedTypeId)
     {
-        $this->productMock->expects($this->once())->method('getTypeId')->will($this->returnValue($currentTypeId));
+        $this->productMock->expects($this->once())->method('getTypeId')->willReturn($currentTypeId);
         $this->productMock->expects($this->once())->method('setTypeInstance')->with(null);
         $this->weightResolver->expects($this->once())->method('resolveProductHasWeight')->willReturn($hasWeight);
         $this->productMock->expects($this->once())->method('setTypeId')->with($expectedTypeId);
@@ -62,7 +62,7 @@ class TypeTransitionManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function testProcessProductWithWrongTypeId()
     {
-        $this->productMock->expects($this->once())->method('getTypeId')->will($this->returnValue('wrong-type'));
+        $this->productMock->expects($this->once())->method('getTypeId')->willReturn('wrong-type');
         $this->weightResolver->expects($this->never())->method('resolveProductHasWeight');
         $this->model->processProduct($this->productMock);
     }

@@ -14,7 +14,7 @@ class LayoutTestWithExceptions extends \PHPUnit\Framework\TestCase
      */
     protected $layout;
 
-    public function setUp()
+    public function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $layoutFactory = $objectManager->get(\Magento\Framework\View\LayoutFactory::class);
@@ -29,12 +29,10 @@ class LayoutTestWithExceptions extends \PHPUnit\Framework\TestCase
         $objectManager->get(\Magento\Framework\App\Cache\Type\Layout::class)->clean();
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Construction problem.
-     */
     public function testProcessWithExceptionsDeveloperMode()
     {
+        $this->expectExceptionMessage("Construction problem.");
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->layout->generateElements();
     }
 

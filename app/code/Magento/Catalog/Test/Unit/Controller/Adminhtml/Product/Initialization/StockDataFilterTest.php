@@ -13,12 +13,12 @@ use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
 class StockDataFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
@@ -27,14 +27,14 @@ class StockDataFilterTest extends \PHPUnit\Framework\TestCase
      */
     protected $stockDataFilter;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $stockConfiguration;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
-        $this->scopeConfigMock->expects($this->any())->method('getValue')->will($this->returnValue(1));
+        $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn(1);
 
         $this->stockConfiguration = $this->createPartialMock(
             \Magento\CatalogInventory\Model\Configuration::class,
@@ -56,7 +56,7 @@ class StockDataFilterTest extends \PHPUnit\Framework\TestCase
         if (isset($inputStockData['use_config_manage_stock']) && $inputStockData['use_config_manage_stock'] === 1) {
             $this->stockConfiguration->expects($this->once())
                 ->method('getManageStock')
-                ->will($this->returnValue($outputStockData['manage_stock']));
+                ->willReturn($outputStockData['manage_stock']);
         }
 
         $this->assertEquals($outputStockData, $this->stockDataFilter->filter($inputStockData));

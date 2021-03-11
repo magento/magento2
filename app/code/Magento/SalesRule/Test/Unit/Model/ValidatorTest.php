@@ -99,7 +99,7 @@ class ValidatorTest extends TestCase
      */
     private $cartFixedDiscountHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helper = new ObjectManager($this);
         $this->rulesApplier = $this->createPartialMock(
@@ -197,14 +197,14 @@ class ValidatorTest extends TestCase
             Item::class,
             ['getAddress', '__wakeup']
         );
-        $itemDownloadable->expects($this->any())->method('getAddress')->will($this->returnValue($this->addressMock));
+        $itemDownloadable->expects($this->any())->method('getAddress')->willReturn($this->addressMock);
 
         $itemSimple = $this->createPartialMock(Item::class, ['getAddress', '__wakeup']);
-        $itemSimple->expects($this->any())->method('getAddress')->will($this->returnValue($this->addressMock));
+        $itemSimple->expects($this->any())->method('getAddress')->willReturn($this->addressMock);
 
         /** @var $quote Quote */
         $quote = $this->createPartialMock(Quote::class, ['getStoreId', '__wakeup']);
-        $quote->expects($this->any())->method('getStoreId')->will($this->returnValue(1));
+        $quote->expects($this->any())->method('getStoreId')->willReturn(1);
 
         $itemData = include $fixturePath . 'quote_item_downloadable.php';
         $itemDownloadable->addData($itemData);
@@ -321,7 +321,7 @@ class ValidatorTest extends TestCase
                 $this->anything(),
                 $this->anything()
             )
-            ->will($this->returnValue($expectedRuleIds));
+            ->willReturn($expectedRuleIds);
         $this->rulesApplier->expects($this->once())
             ->method('setAppliedRuleIds')
             ->with(
@@ -469,10 +469,10 @@ class ValidatorTest extends TestCase
         $this->ruleCollection->expects($this->any())
             ->method('addFieldToFilter')
             ->with('is_active', 1)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->ruleCollection->expects($this->any())
             ->method('load')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $ruleCollectionFactoryMock =
             $this->getMockBuilder(CollectionFactory::class)
@@ -481,7 +481,7 @@ class ValidatorTest extends TestCase
             ->getMock();
         $ruleCollectionFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($ruleCollection));
+            ->willReturn($ruleCollection);
         return $ruleCollectionFactoryMock;
     }
 

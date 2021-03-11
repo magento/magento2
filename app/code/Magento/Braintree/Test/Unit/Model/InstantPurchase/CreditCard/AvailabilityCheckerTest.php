@@ -23,7 +23,7 @@ class AvailabilityCheckerTest extends \PHPUnit\Framework\TestCase
     private $availabilityChecker;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
@@ -32,7 +32,7 @@ class AvailabilityCheckerTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->createMock(Config::class);
         $this->availabilityChecker = new AvailabilityChecker($this->configMock);

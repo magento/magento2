@@ -18,27 +18,27 @@ class ReportModulesInfoTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\NewRelicReporting\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $config;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\Module\Collect|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\NewRelicReporting\Model\Module\Collect|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectMock;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\SystemFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\NewRelicReporting\Model\SystemFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $systemFactoryMock;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\System|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\NewRelicReporting\Model\System|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $systemModelMock;
 
     /**
-     * @var \Magento\Framework\Json\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Json\EncoderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $jsonEncoderMock;
 
@@ -47,7 +47,7 @@ class ReportModulesInfoTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->getMockBuilder(\Magento\NewRelicReporting\Model\Config::class)
             ->disableOriginalConstructor()

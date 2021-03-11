@@ -21,21 +21,21 @@ class CreditmemoRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $creditmemo;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Metadata|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Metadata|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\CreditmemoSearchResultInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\Data\CreditmemoSearchResultInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchResultFactoryMock;
 
     /**
-     * @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionProcessorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->metadataMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Metadata::class);
@@ -80,20 +80,22 @@ class CreditmemoRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage An ID is needed. Set the ID and try again.
      */
     public function testGetNoId()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('An ID is needed. Set the ID and try again.');
+
         $this->creditmemo->get(null);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The entity that was requested doesn't exist. Verify the entity and try again.
      */
     public function testGetEntityNoId()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('The entity that was requested doesn\'t exist. Verify the entity and try again.');
+
         $id = 1;
         $entity = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo::class)
             ->disableOriginalConstructor()
@@ -166,11 +168,12 @@ class CreditmemoRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage The credit memo couldn't be deleted.
      */
     public function testDeleteWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotDeleteException::class);
+        $this->expectExceptionMessage('The credit memo couldn\'t be deleted.');
+
         $entity = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -215,11 +218,12 @@ class CreditmemoRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The credit memo couldn't be saved.
      */
     public function testSaveWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+        $this->expectExceptionMessage('The credit memo couldn\'t be saved.');
+
         $entity = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo::class)
             ->disableOriginalConstructor()
             ->getMock();

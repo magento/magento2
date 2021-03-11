@@ -23,8 +23,8 @@ class SaveHandlerFactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             $this->equalTo($saveClass),
             $this->equalTo([])
-        )->will(
-            $this->returnValue($saveHandler)
+        )->willReturn(
+            $saveHandler
         );
         $model = new SaveHandlerFactory($objectManager, $handlers);
         $result = $model->create($saveMethod);
@@ -42,11 +42,12 @@ class SaveHandlerFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Magento\Framework\Session\SaveHandler\Native doesn't implement \SessionHandlerInterface
      */
     public function testCreateInvalid()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Magento\\Framework\\Session\\SaveHandler\\Native doesn\'t implement \\SessionHandlerInterface');
+
         $invalidSaveHandler = new \Magento\Framework\DataObject();
         $objectManager = $this->getMockBuilder(\Magento\Framework\ObjectManager\ObjectManager::class)
             ->disableOriginalConstructor()

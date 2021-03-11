@@ -13,17 +13,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ToOrderAddressTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\DataObject\Copy | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject\Copy | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectCopyMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\AddressRepository | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\AddressRepository | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderAddressRepositoryMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\Data\OrderInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderInterfaceMock;
 
@@ -37,7 +37,7 @@ class ToOrderAddressTest extends \PHPUnit\Framework\TestCase
      */
     protected $dataObjectHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderAddressRepositoryMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\AddressRepository::class,

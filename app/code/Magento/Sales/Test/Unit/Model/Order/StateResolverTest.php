@@ -15,7 +15,7 @@ use Magento\Sales\Model\Order\StateResolver;
 class StateResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Order
+     * @var \PHPUnit\Framework\MockObject\MockObject|Order
      */
     private $orderMock;
 
@@ -24,7 +24,7 @@ class StateResolverTest extends \PHPUnit\Framework\TestCase
      */
     private $orderStateResolver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()

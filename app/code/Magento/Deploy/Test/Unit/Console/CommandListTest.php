@@ -21,14 +21,14 @@ class CommandListTest extends TestCase
     private $model;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMockForAbstractClass();

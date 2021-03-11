@@ -19,17 +19,17 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Range|\PHPUnit_Framework_MockObject_MockObject
+     * @var Range|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $range;
 
     /**
-     * @var Term|\PHPUnit_Framework_MockObject_MockObject
+     * @var Term|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $term;
 
     /**
-     * @var Wildcard|\PHPUnit_Framework_MockObject_MockObject
+     * @var Wildcard|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $wildcard;
 
@@ -38,7 +38,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->range = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\Filter\Builder\Range::class)
             ->disableOriginalConstructor()
@@ -67,10 +67,11 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test build() method failure
-     * @expectedException \InvalidArgumentException
      */
     public function testBuildFailure()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $filter = $this->getMockBuilder(\Magento\Framework\Search\Request\FilterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();

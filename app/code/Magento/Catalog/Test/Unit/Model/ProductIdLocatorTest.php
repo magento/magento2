@@ -12,12 +12,12 @@ namespace Magento\Catalog\Test\Unit\Model;
 class ProductIdLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataPool;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionFactory;
 
@@ -31,7 +31,7 @@ class ProductIdLocatorTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->metadataPool = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
             ->setMethods(['getMetadata'])

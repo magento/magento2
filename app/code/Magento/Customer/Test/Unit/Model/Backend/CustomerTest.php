@@ -13,7 +13,7 @@ namespace Magento\Customer\Test\Unit\Model\Backend;
 
 class CustomerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Store\Model\StoreManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManager|\PHPUnit\Framework\MockObject\MockObject */
     protected $_storeManager;
 
     /** @var \Magento\Customer\Model\Backend\Customer */
@@ -22,7 +22,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     /**
      * Create model
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_storeManager = $this->createMock(\Magento\Store\Model\StoreManager::class);
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -44,7 +44,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         if ($websiteId * 1) {
             $this->_model->setWebsiteId($websiteId);
             $website = new \Magento\Framework\DataObject(['store_ids' => [$websiteStoreId]]);
-            $this->_storeManager->expects($this->once())->method('getWebsite')->will($this->returnValue($website));
+            $this->_storeManager->expects($this->once())->method('getWebsite')->willReturn($website);
         } else {
             $this->_model->setStoreId($storeId);
             $this->_storeManager->expects($this->never())->method('getWebsite');

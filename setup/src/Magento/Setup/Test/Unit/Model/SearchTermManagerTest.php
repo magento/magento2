@@ -48,7 +48,7 @@ class SearchTermManagerTest extends \PHPUnit\Framework\TestCase
         ]
     ];
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->searchTermManager = new \Magento\Setup\Model\SearchTermManager(
             $this->searchTermConfiguration,

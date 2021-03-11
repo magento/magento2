@@ -11,22 +11,22 @@ use \Magento\Framework\Data\Form\AbstractForm;
 class AbstractFormTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $factoryElementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $factoryCollectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $elementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $allElementsMock;
 
@@ -35,7 +35,7 @@ class AbstractFormTest extends \PHPUnit\Framework\TestCase
      */
     protected $abstractForm;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->factoryElementMock =
             $this->createPartialMock(\Magento\Framework\Data\Form\Element\Factory::class, ['create']);
@@ -54,7 +54,7 @@ class AbstractFormTest extends \PHPUnit\Framework\TestCase
         $this->factoryCollectionMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->allElementsMock));
+            ->willReturn($this->allElementsMock);
         $this->elementMock->expects($this->once())->method('setForm');
         $this->allElementsMock->expects($this->once())->method('add')->with($this->elementMock, false);
         $this->abstractForm->addElement($this->elementMock, false);
@@ -67,12 +67,12 @@ class AbstractFormTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('create')
             ->with('hidden', ['data' => $config])
-            ->will($this->returnValue($this->elementMock));
+            ->willReturn($this->elementMock);
         $this->elementMock->expects($this->once())->method('setId')->with('store_type');
         $this->factoryCollectionMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->allElementsMock));
+            ->willReturn($this->allElementsMock);
         $this->allElementsMock->expects($this->once())->method('add')->with($this->elementMock, false);
         $this->assertEquals($this->elementMock, $this->abstractForm->addField('store_type', 'hidden', $config));
         $this->abstractForm->removeField('hidden');
@@ -85,14 +85,14 @@ class AbstractFormTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('create')
             ->with('fieldset', ['data' => $config])
-            ->will($this->returnValue($this->elementMock));
+            ->willReturn($this->elementMock);
         $this->elementMock->expects($this->once())->method('setId')->with('hidden');
         $this->elementMock->expects($this->once())->method('setAdvanced')->with(false);
         $this->elementMock->expects($this->once())->method('setForm');
         $this->factoryCollectionMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->allElementsMock));
+            ->willReturn($this->allElementsMock);
         $this->allElementsMock->expects($this->once())->method('add')->with($this->elementMock, false);
         $this->abstractForm->addFieldset('hidden', $config);
     }
@@ -104,13 +104,13 @@ class AbstractFormTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('create')
             ->with('column', ['data' => $config])
-            ->will($this->returnValue($this->elementMock));
+            ->willReturn($this->elementMock);
         $this->elementMock->expects($this->once())->method('setId')->with('hidden');
-        $this->elementMock->expects($this->exactly(2))->method('setForm')->will($this->returnSelf());
+        $this->elementMock->expects($this->exactly(2))->method('setForm')->willReturnSelf();
         $this->factoryCollectionMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->allElementsMock));
+            ->willReturn($this->allElementsMock);
         $this->allElementsMock->expects($this->once())->method('add')->with($this->elementMock, false);
         $this->abstractForm->addColumn('hidden', $config);
     }

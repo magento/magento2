@@ -12,22 +12,22 @@ use Magento\Catalog\Controller\Adminhtml\Product\ShowUpdateResult;
  */
 class ShowUpdateResultTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $context;
 
-    /** @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Layout|\PHPUnit\Framework\MockObject\MockObject */
     protected $layout;
 
-    /** @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Model\Session|\PHPUnit\Framework\MockObject\MockObject */
     protected $session;
 
-    /** @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject */
     protected $request;
 
     /**
      * Init session object
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getSession()
     {
@@ -50,7 +50,7 @@ class ShowUpdateResultTest extends \PHPUnit\Framework\TestCase
     /**
      * Init context object
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getContext()
     {

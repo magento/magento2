@@ -18,24 +18,24 @@ use Magento\Framework\View\Element\Template\Context;
 class RequireCookieTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RequireCookie
+     * @var \PHPUnit\Framework\MockObject\MockObject|RequireCookie
      */
     private $block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ScopeConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|ScopeConfigInterface
      */
     private $scopeConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Context
+     * @var \PHPUnit\Framework\MockObject\MockObject|Context
      */
     private $context;
 
     /**
      * Setup Environment
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()

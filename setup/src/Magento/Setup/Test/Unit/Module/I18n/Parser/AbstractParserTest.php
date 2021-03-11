@@ -8,11 +8,11 @@ namespace Magento\Setup\Test\Unit\Module\I18n\Parser;
 class AbstractParserTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Setup\Module\I18n\Parser\AbstractParser|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\I18n\Parser\AbstractParser|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_parserMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_parserMock = $this->getMockForAbstractClass(
             \Magento\Setup\Module\I18n\Parser\AbstractParser::class,
@@ -58,6 +58,6 @@ class AbstractParserTest extends \PHPUnit\Framework\TestCase
 
     public function getPhrases()
     {
-        $this->assertInternalType('array', $this->_parserMock->getPhrases());
+        $this->assertIsArray($this->_parserMock->getPhrases());
     }
 }

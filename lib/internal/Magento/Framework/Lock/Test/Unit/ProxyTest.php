@@ -36,7 +36,7 @@ class ProxyTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->factoryMock = $this->createMock(LockBackendFactory::class);
         $this->lockerMock = $this->getMockForAbstractClass(LockManagerInterface::class);

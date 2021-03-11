@@ -19,23 +19,23 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
     private $validation;
 
     /**
-     * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configurableMock;
 
-    /** @var \Magento\CatalogRule\Model\Rule|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\CatalogRule\Model\Rule|\PHPUnit\Framework\MockObject\MockObject */
     private $ruleMock;
 
-    /** @var \Magento\Rule\Model\Condition\Combine|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Rule\Model\Condition\Combine|\PHPUnit\Framework\MockObject\MockObject */
     private $ruleConditionsMock;
 
-    /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject */
     private $productMock;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configurableMock = $this->createPartialMock(
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,

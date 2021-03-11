@@ -18,28 +18,29 @@ use Magento\Framework\DB\TemporaryTableService;
 
 /**
  * Class DataCategoryUrlRewriteDatabaseMapTest
+ * Test for DataCategoryUrlRewriteDatabaseMap
  */
 class DataCategoryUrlRewriteDatabaseMapTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var HashMapPool|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var HashMapPool|\PHPUnit\Framework\MockObject\MockObject */
     private $hashMapPoolMock;
 
-    /** @var DataCategoryHashMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataCategoryHashMap|\PHPUnit\Framework\MockObject\MockObject */
     private $dataCategoryMapMock;
 
-    /** @var DataCategoryUsedInProductsHashMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataCategoryUsedInProductsHashMap|\PHPUnit\Framework\MockObject\MockObject */
     private $dataCategoryUsedInProductsMapMock;
 
-    /** @var TemporaryTableService|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var TemporaryTableService|\PHPUnit\Framework\MockObject\MockObject */
     private $temporaryTableServiceMock;
 
-    /** @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject */
     private $connectionMock;
 
-    /** @var DataCategoryUrlRewriteDatabaseMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataCategoryUrlRewriteDatabaseMap|\PHPUnit\Framework\MockObject\MockObject */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->hashMapPoolMock = $this->createMock(HashMapPool::class);
         $this->dataCategoryMapMock = $this->createMock(DataProductHashMap::class);
@@ -74,7 +75,7 @@ class DataCategoryUrlRewriteDatabaseMapTest extends \PHPUnit\Framework\TestCase
             '5' => ['store_id' => 2, 'category_id' => 2],
         ];
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $selectMock = $this->createMock(Select::class);
 
         $this->connectionMock->expects($this->any())
@@ -103,7 +104,7 @@ class DataCategoryUrlRewriteDatabaseMapTest extends \PHPUnit\Framework\TestCase
             ->willReturn([]);
         $this->temporaryTableServiceMock->expects($this->any())
             ->method('createFromSelect')
-            ->withConsecutive(
+            ->with(
                 $selectMock,
                 $connectionMock,
                 [

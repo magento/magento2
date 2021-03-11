@@ -12,27 +12,27 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice
-     *      |\PHPUnit_Framework_MockObject_MockObject
+     *      |\PHPUnit\Framework\MockObject\MockObject
      */
     private $productAttributeBackendTierprice;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attribute;
 
     /**
-     * @var \Magento\Framework\Locale\FormatInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Locale\FormatInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $localeFormat;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
-     * @var \Magento\Customer\Api\GroupManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\GroupManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $groupManagement;
 
@@ -46,7 +46,7 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productAttributeBackendTierprice = $this
             ->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice::class)
@@ -111,11 +111,12 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
      * Test for validate method with exception.
      *
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Percentage value must be a number between 0 and 100.
      */
     public function testValidateWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Percentage value must be a number between 0 and 100.');
+
         $attributeName = 'tier_price';
         $tierPrices = [
             [

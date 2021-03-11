@@ -17,7 +17,7 @@ use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\State;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Config\File\ConfigFilePool;
@@ -84,7 +84,7 @@ class ModeTest extends \PHPUnit\Framework\TestCase
      */
     private $emulatedAreaProcessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->inputMock = $this->getMockBuilder(InputInterface::class)
             ->getMockForAbstractClass();
@@ -139,7 +139,7 @@ class ModeTest extends \PHPUnit\Framework\TestCase
                 [State::PARAM_MODE => State::MODE_DEVELOPER]
             );
 
-        $this->assertSame(null, $this->model->getMode());
+        $this->assertNull($this->model->getMode());
         $this->assertSame(State::MODE_DEVELOPER, $this->model->getMode());
     }
 
@@ -182,10 +182,11 @@ class ModeTest extends \PHPUnit\Framework\TestCase
      * Test that previous mode will be enabled after error during static generation call.
      * We need this to be sure that mode will be reverted to it previous tate.
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testEnableDeveloperModeOnFail()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $mode = State::MODE_DEVELOPER;
         $dataStorage = [
             ConfigFilePool::APP_ENV => [

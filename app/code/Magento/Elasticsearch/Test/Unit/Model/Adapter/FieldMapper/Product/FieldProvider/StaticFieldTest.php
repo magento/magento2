@@ -74,7 +74,7 @@ class StaticFieldTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eavConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()

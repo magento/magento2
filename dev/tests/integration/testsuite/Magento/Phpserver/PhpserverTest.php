@@ -29,7 +29,7 @@ class PhpserverTest extends \PHPUnit\Framework\TestCase
     /**
      * Instantiate phpserver in the pub folder
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         if (!(defined('TRAVIS') && TRAVIS === true)) {
             self::markTestSkipped('Travis environment test');
@@ -51,7 +51,7 @@ class PhpserverTest extends \PHPUnit\Framework\TestCase
         return sprintf('http://%s/%s', self::BASE_URL, ltrim($url, '/'));
     }
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->httpClient = new \Zend\Http\Client(null, ['timeout' => 10]);
     }
@@ -86,7 +86,7 @@ class PhpserverTest extends \PHPUnit\Framework\TestCase
         $this->assertStringStartsWith('image/gif', $response->getHeaders()->get('Content-Type')->getMediaType());
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         posix_kill(static::$serverPid, SIGKILL);
     }

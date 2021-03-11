@@ -14,7 +14,7 @@ use Magento\Framework\AuthorizationInterface;
 use Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized;
 
 /**
- * Class PluginTest
+ * Test for Plugin
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -26,47 +26,47 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     private $plugin;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $messagefactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $bulkStatusMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $bulkNotificationMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $userContextMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $operationsDetailsMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $authorizationMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $messageMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $statusMapper;
 
@@ -75,17 +75,17 @@ class PluginTest extends \PHPUnit\Framework\TestCase
      */
     private $resourceName = 'Magento_Logging::system_magento_logging_bulk_operations';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->messagefactoryMock = $this->createPartialMock(
             \Magento\AdminNotification\Model\System\MessageFactory::class,
             ['create']
         );
-        $this->bulkStatusMock = $this->createMock(BulkStatusInterface::class);
+        $this->bulkStatusMock = $this->getMockForAbstractClass(BulkStatusInterface::class);
 
-        $this->userContextMock = $this->createMock(UserContextInterface::class);
+        $this->userContextMock = $this->getMockForAbstractClass(UserContextInterface::class);
         $this->operationsDetailsMock = $this->createMock(Details::class);
-        $this->authorizationMock = $this->createMock(AuthorizationInterface::class);
+        $this->authorizationMock = $this->getMockForAbstractClass(AuthorizationInterface::class);
         $this->messageMock = $this->createMock(\Magento\AdminNotification\Model\System\Message::class);
         $this->collectionMock = $this->createMock(Synchronized::class);
         $this->bulkNotificationMock = $this->createMock(BulkNotificationManagement::class);
@@ -159,13 +159,19 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     public function afterToDataProvider()
     {
         return [
-            ['operations_successful' => 0,
-                'operations_failed' => 0,
-                'operations_total' => 10
+            [
+                [
+                    'operations_successful' => 0,
+                    'operations_failed' => 0,
+                    'operations_total' => 10
+                ]
             ],
-            ['operations_successful' => 1,
-                'operations_failed' => 2,
-                'operations_total' => 10
+            [
+                [
+                    'operations_successful' => 1,
+                    'operations_failed' => 2,
+                    'operations_total' => 10
+                ]
             ],
         ];
     }

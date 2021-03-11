@@ -27,7 +27,7 @@ class ResetMethodTest extends \PHPUnit\Framework\TestCase
      * Init mocks for tests
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->model = $this->objectManager->getObject(\Magento\Security\Model\Config\Source\ResetMethod::class);

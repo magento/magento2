@@ -21,7 +21,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $templateFactoryMock;
 
@@ -30,7 +30,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      */
     private $templateModel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get(\Magento\Framework\App\AreaList::class)
@@ -56,10 +56,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Email/Model/_files/email_template.php
-     * @expectedException \Magento\Framework\Exception\LocalizedException
+     *
      */
     public function testValidateHasRecursiveReference()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         if (!$this->templateModel->getId()) {
             $this->fail('Cannot load Template model');
         }

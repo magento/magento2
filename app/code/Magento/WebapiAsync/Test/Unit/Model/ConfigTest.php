@@ -22,27 +22,27 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     private $config;
 
     /**
-     * @var Webapi|\PHPUnit_Framework_MockObject_MockObject
+     * @var Webapi|\PHPUnit\Framework\MockObject\MockObject
      */
     private $webapiCacheMock;
 
     /**
-     * @var WebapiConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebapiConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->webapiCacheMock = $this->createMock(\Magento\Webapi\Model\Cache\Type\Webapi::class);
         $this->configMock = $this->createMock(WebapiConfig::class);
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
 
         $this->config = $objectManager->getObject(
             Config::class,

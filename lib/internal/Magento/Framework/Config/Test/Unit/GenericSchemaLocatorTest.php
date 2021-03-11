@@ -26,7 +26,7 @@ class GenericSchemaLocatorTest extends \PHPUnit\Framework\TestCase
     private $schemaLocator;
 
     /**
-     * @var ModuleDirReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModuleDirReader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $moduleReaderMock;
 
@@ -42,7 +42,7 @@ class GenericSchemaLocatorTest extends \PHPUnit\Framework\TestCase
         return new GenericSchemaLocator($reader, $moduleName, $mergeSchema, $perFileSchema);
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->moduleReaderMock = $this->createMock(ModuleDirReader::class);
         $this->schemaLocator = $this->createNewSchemaLocatorInstance(

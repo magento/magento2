@@ -97,7 +97,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
      *
      * @param int $callCount
      * @param string|null $returnValue
-     * @return \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getConnectionMockWithMockedQuote($callCount, $returnValue = null)
     {
@@ -107,7 +107,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         );
         $method = $connection->expects($this->exactly($callCount))->method('quote');
         if ($callCount > 0) {
-            $method->will($this->returnValue($returnValue));
+            $method->willReturn($returnValue);
         }
         return $connection;
     }

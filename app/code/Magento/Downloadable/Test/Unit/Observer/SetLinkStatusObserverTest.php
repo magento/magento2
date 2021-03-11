@@ -17,39 +17,39 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  */
 class SetLinkStatusObserverTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Model\Order */
     private $orderMock;
 
     /** @var SetLinkStatusObserver */
     private $setLinkStatusObserver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Config
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\Config
      */
     private $scopeConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | CollectionFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject | CollectionFactory
      */
     private $itemsFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\DataObject
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\DataObject
      */
     private $resultMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\DataObject
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\DataObject
      */
     private $storeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Event
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Event
      */
     private $eventMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Event\Observer
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Event\Observer
      */
     private $observerMock;
 
@@ -57,7 +57,7 @@ class SetLinkStatusObserverTest extends \PHPUnit\Framework\TestCase
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config::class)
             ->disableOriginalConstructor()
@@ -149,7 +149,7 @@ class SetLinkStatusObserverTest extends \PHPUnit\Framework\TestCase
     {
         $this->observerMock->expects($this->once())
             ->method('getEvent')
-            ->will($this->returnValue($this->eventMock));
+            ->willReturn($this->eventMock);
 
         $this->eventMock->expects($this->once())
             ->method('getOrder')
@@ -203,7 +203,7 @@ class SetLinkStatusObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->observerMock->expects($this->once())
             ->method('getEvent')
-            ->will($this->returnValue($this->eventMock));
+            ->willReturn($this->eventMock);
 
         $this->eventMock->expects($this->once())
             ->method('getOrder')
@@ -266,7 +266,7 @@ class SetLinkStatusObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->observerMock->expects($this->once())
             ->method('getEvent')
-            ->will($this->returnValue($this->eventMock));
+            ->willReturn($this->eventMock);
 
         $this->eventMock->expects($this->once())
             ->method('getOrder')
@@ -320,7 +320,7 @@ class SetLinkStatusObserverTest extends \PHPUnit\Framework\TestCase
     {
         $this->observerMock->expects($this->once())
             ->method('getEvent')
-            ->will($this->returnValue($this->eventMock));
+            ->willReturn($this->eventMock);
 
         $this->eventMock->expects($this->once())
             ->method('getOrder')
@@ -339,7 +339,7 @@ class SetLinkStatusObserverTest extends \PHPUnit\Framework\TestCase
      * @param int $statusId
      * @param string $productType
      * @param string $realProductType
-     * @return \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Sales\Model\Order\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createOrderItem(
         $id,
@@ -370,7 +370,7 @@ class SetLinkStatusObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array $expectedOrderItemIds
      * @param array $items
-     * @return LinkItemCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @return LinkItemCollection|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createLinkItemCollection(array $expectedOrderItemIds, array $items)
     {
@@ -393,7 +393,7 @@ class SetLinkStatusObserverTest extends \PHPUnit\Framework\TestCase
      * @param $orderItemId
      * @param bool $isSaved
      * @param null|string $expectedStatus
-     * @return \Magento\Downloadable\Model\Link\Purchased\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Downloadable\Model\Link\Purchased\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createLinkItem($status, $orderItemId, $isSaved = false, $expectedStatus = null)
     {

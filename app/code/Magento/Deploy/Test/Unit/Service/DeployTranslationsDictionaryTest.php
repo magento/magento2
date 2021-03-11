@@ -13,7 +13,7 @@ use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
 
 use Psr\Log\LoggerInterface;
 
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * Translation Dictionaries deploy service class unit tests
@@ -48,7 +48,7 @@ class DeployTranslationsDictionaryTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $dictionary = 'js-translation.json';
         $area = 'adminhtml';

@@ -10,7 +10,7 @@ use Magento\Theme\Model\Theme\ThemePackageInfo;
 class ThemePackageInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dirRead;
 
@@ -20,19 +20,19 @@ class ThemePackageInfoTest extends \PHPUnit\Framework\TestCase
     private $themePackageInfo;
 
     /**
-     * @var \Magento\Framework\Component\ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Component\ComponentRegistrar|\PHPUnit\Framework\MockObject\MockObject
      */
     private $componentRegistrar;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dirReadFactory;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->componentRegistrar = $this->createMock(\Magento\Framework\Component\ComponentRegistrar::class);
         $this->dirRead = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);

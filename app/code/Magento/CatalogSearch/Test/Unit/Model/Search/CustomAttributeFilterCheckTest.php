@@ -15,13 +15,13 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
 class CustomAttributeFilterCheckTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Config|\PHPUnit\Framework\MockObject\MockObject */
     private $eavConfig;
 
     /** @var CustomAttributeFilterCheck */
     private $customAttributeFilterCheck;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->eavConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()

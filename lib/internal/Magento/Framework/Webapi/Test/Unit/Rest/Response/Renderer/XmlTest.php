@@ -12,7 +12,7 @@ class XmlTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Webapi\Rest\Response\Renderer\Xml */
     protected $_restXmlRenderer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** Prepare object for SUT constructor. */
         $xmlGenerator = new \Magento\Framework\Xml\Generator();
@@ -21,7 +21,7 @@ class XmlTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_restXmlRenderer);
         parent::tearDown();

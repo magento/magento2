@@ -19,18 +19,18 @@ class ClassModelRegistryTest extends \PHPUnit\Framework\TestCase
     private $taxRuleRegistry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Tax\Model\ClassModelFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Tax\Model\ClassModelFactory
      */
     private $classModelFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Tax\Model\ClassModel
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Tax\Model\ClassModel
      */
     private $classModelMock;
 
     const CLASS_MODEL = 1;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->classModelFactoryMock = $this->getMockBuilder(\Magento\Tax\Model\ClassModelFactory::class)
@@ -46,25 +46,26 @@ class ClassModelRegistryTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->classModelFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->classModelMock));
+            ->willReturn($this->classModelMock);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testUpdateTaxClassNotExistingEntity()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $taxClassId = 1;
 
         $this->classModelMock
             ->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->classModelMock->expects($this->once())
             ->method('load')
             ->with($taxClassId)
-            ->will($this->returnValue($this->classModelMock));
+            ->willReturn($this->classModelMock);
 
         $this->taxRuleRegistry->retrieve($taxClassId);
     }
@@ -76,12 +77,12 @@ class ClassModelRegistryTest extends \PHPUnit\Framework\TestCase
         $this->classModelMock
             ->expects($this->exactly(2))
             ->method('getId')
-            ->will($this->returnValue($taxClassId));
+            ->willReturn($taxClassId);
 
         $this->classModelMock->expects($this->once())
             ->method('load')
             ->with($taxClassId)
-            ->will($this->returnValue($this->classModelMock));
+            ->willReturn($this->classModelMock);
 
         $this->assertEquals($this->classModelMock, $this->taxRuleRegistry->retrieve($taxClassId));
     }

@@ -16,16 +16,16 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $setFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $typeFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -62,19 +62,19 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
         $entityTypeMock = $this->createMock(\Magento\Eav\Model\Entity\Type::class);
 
-        $this->typeFactoryMock->expects($this->once())->method('create')->will($this->returnValue($entityTypeMock));
+        $this->typeFactoryMock->expects($this->once())->method('create')->willReturn($entityTypeMock);
         $entityTypeMock->expects($this->once())->method('loadByCode')->with('catalog_product')->willReturnSelf();
 
         $productAttributeSetId = 4;
         $productMock->expects($this->once())->method('getAttributeSetId')
-            ->will($this->returnValue($productAttributeSetId));
+            ->willReturn($productAttributeSetId);
 
-        $this->setFactoryMock->expects($this->once())->method('create')->will($this->returnValue($attributeSetMock));
+        $this->setFactoryMock->expects($this->once())->method('create')->willReturn($attributeSetMock);
         $attributeSetMock->expects($this->once())->method('load')->with($productAttributeSetId)->willReturnSelf();
 
         //attribute set of wrong type
-        $attributeSetMock->expects($this->once())->method('getEntityTypeId')->will($this->returnValue(3));
-        $entityTypeMock->expects($this->once())->method('getId')->will($this->returnValue($productTypeId));
+        $attributeSetMock->expects($this->once())->method('getEntityTypeId')->willReturn(3);
+        $entityTypeMock->expects($this->once())->method('getId')->willReturn($productTypeId);
 
         $this->assertEquals($expectedErrorMessage, $this->model->validate($productMock));
     }

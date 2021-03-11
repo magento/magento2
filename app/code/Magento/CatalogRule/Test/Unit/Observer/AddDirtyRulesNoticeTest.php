@@ -18,11 +18,11 @@ class AddDirtyRulesNoticeTest extends \PHPUnit\Framework\TestCase
     private $observer;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
             ->disableOriginalConstructor()

@@ -15,7 +15,7 @@ class CanUseInternalTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new CanUseInternal();
     }
@@ -32,8 +32,8 @@ class CanUseInternalTest extends \PHPUnit\Framework\TestCase
         $paymentMethod = $this->getMockBuilder(
             \Magento\Payment\Model\MethodInterface::class
         )->disableOriginalConstructor()->setMethods([])->getMock();
-        $paymentMethod->expects($this->once())->method('canUseInternal')->will(
-            $this->returnValue($expectation)
+        $paymentMethod->expects($this->once())->method('canUseInternal')->willReturn(
+            $expectation
         );
         $this->assertEquals($expectation, $this->_model->isApplicable($paymentMethod, $quote));
     }

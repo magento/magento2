@@ -26,7 +26,7 @@ class WeeeTaxTest extends \PHPUnit\Framework\TestCase
     protected $weeeCollector;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Quote\Model\Quote
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Quote\Model\Quote
      */
     protected $quoteMock;
 
@@ -35,7 +35,7 @@ class WeeeTaxTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
@@ -45,14 +45,14 @@ class WeeeTaxTest extends \PHPUnit\Framework\TestCase
      * Setup tax helper with an array of methodName, returnValue
      *
      * @param array $taxConfig
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Tax\Helper\Data
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Tax\Helper\Data
      */
     protected function setupTaxHelper($taxConfig)
     {
         $taxHelper = $this->createMock(\Magento\Tax\Helper\Data::class);
 
         foreach ($taxConfig as $method => $value) {
-            $taxHelper->expects($this->any())->method($method)->will($this->returnValue($value));
+            $taxHelper->expects($this->any())->method($method)->willReturn($value);
         }
 
         return $taxHelper;
@@ -62,14 +62,14 @@ class WeeeTaxTest extends \PHPUnit\Framework\TestCase
      * Setup weee helper with an array of methodName, returnValue
      *
      * @param array $weeeConfig
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Weee\Helper\Data
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Weee\Helper\Data
      */
     protected function setupWeeeHelper($weeeConfig)
     {
         $weeeHelper = $this->createMock(\Magento\Weee\Helper\Data::class);
 
         foreach ($weeeConfig as $method => $value) {
-            $weeeHelper->expects($this->any())->method($method)->will($this->returnValue($value));
+            $weeeHelper->expects($this->any())->method($method)->willReturn($value);
         }
 
         return $weeeHelper;
@@ -79,7 +79,7 @@ class WeeeTaxTest extends \PHPUnit\Framework\TestCase
      * Setup an item mock
      *
      * @param float $itemQty
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote\Item
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Quote\Model\Quote\Item
      */
     protected function setupItemMock($itemQty)
     {
@@ -92,8 +92,8 @@ class WeeeTaxTest extends \PHPUnit\Framework\TestCase
             ]);
 
         $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $itemMock->expects($this->any())->method('getProduct')->will($this->returnValue($productMock));
-        $itemMock->expects($this->any())->method('getTotalQty')->will($this->returnValue($itemQty));
+        $itemMock->expects($this->any())->method('getProduct')->willReturn($productMock);
+        $itemMock->expects($this->any())->method('getTotalQty')->willReturn($itemQty);
 
         return $itemMock;
     }
@@ -101,11 +101,11 @@ class WeeeTaxTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup address mock
      *
-     * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote\Item $itemMock
+     * @param \PHPUnit\Framework\MockObject\MockObject|\Magento\Quote\Model\Quote\Item $itemMock
      * @param boolean $isWeeeTaxable
      * @param array   $itemWeeeTaxDetails
      * @param array   $addressData
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function setupTotalMock($itemMock, $isWeeeTaxable, $itemWeeeTaxDetails, $addressData)
     {
@@ -158,25 +158,25 @@ class WeeeTaxTest extends \PHPUnit\Framework\TestCase
             }
         }
 
-        $totalMock->expects($this->any())->method('getWeeeCodeToItemMap')->will($this->returnValue($map));
-        $totalMock->expects($this->any())->method('getExtraTaxableDetails')->will($this->returnValue($extraDetails));
+        $totalMock->expects($this->any())->method('getWeeeCodeToItemMap')->willReturn($map);
+        $totalMock->expects($this->any())->method('getExtraTaxableDetails')->willReturn($extraDetails);
         $totalMock
             ->expects($this->any())
             ->method('getWeeeTotalExclTax')
-            ->will($this->returnValue($weeeTotals));
+            ->willReturn($weeeTotals);
         $totalMock
             ->expects($this->any())
             ->method('getWeeeBaseTotalExclTax')
-            ->will($this->returnValue($weeeBaseTotals));
+            ->willReturn($weeeBaseTotals);
 
         return $totalMock;
     }
 
     /**
      * Setup shipping assignment mock.
-     * @param \PHPUnit_Framework_MockObject_MockObject $addressMock
-     * @param \PHPUnit_Framework_MockObject_MockObject $itemMock
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @param \PHPUnit\Framework\MockObject\MockObject $addressMock
+     * @param \PHPUnit\Framework\MockObject\MockObject $itemMock
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function setupShippingAssignmentMock($addressMock, $itemMock)
     {
@@ -193,7 +193,7 @@ class WeeeTaxTest extends \PHPUnit\Framework\TestCase
     /**
      * Verify that correct fields of item has been set
      *
-     * @param \PHPUnit_Framework_MockObject_MockObject|null $item
+     * @param \PHPUnit\Framework\MockObject\MockObject|null $item
      * @param array $itemData
      */
     public function verifyItem($item, $itemData)
@@ -209,7 +209,7 @@ class WeeeTaxTest extends \PHPUnit\Framework\TestCase
     /**
      * Verify that correct fields of address has been set
      *
-     * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote\Address $address
+     * @param \PHPUnit\Framework\MockObject\MockObject|\Magento\Quote\Model\Quote\Address $address
      * @param array $addressData
      */
     public function verifyTotals($address, $addressData)

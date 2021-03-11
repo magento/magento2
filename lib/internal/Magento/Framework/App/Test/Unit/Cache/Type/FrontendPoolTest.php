@@ -15,21 +15,21 @@ class FrontendPoolTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $deploymentConfig;
 
     /**
-     * @var \Magento\Framework\App\Cache\Frontend\Pool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Cache\Frontend\Pool|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_cachePool;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
@@ -57,8 +57,8 @@ class FrontendPoolTest extends \PHPUnit\Framework\TestCase
             'getConfigData'
         )->with(
             FrontendPool::KEY_CACHE
-        )->will(
-            $this->returnValue($fixtureConfigData)
+        )->willReturn(
+            $fixtureConfigData
         );
 
         $cacheFrontend = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
@@ -68,8 +68,8 @@ class FrontendPoolTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             $expectedFrontendId
-        )->will(
-            $this->returnValue($cacheFrontend)
+        )->willReturn(
+            $cacheFrontend
         );
 
         $accessProxy = $this->createMock(\Magento\Framework\App\Cache\Type\AccessProxy::class);
@@ -80,8 +80,8 @@ class FrontendPoolTest extends \PHPUnit\Framework\TestCase
         )->with(
             \Magento\Framework\App\Cache\Type\AccessProxy::class,
             $this->identicalTo(['frontend' => $cacheFrontend, 'identifier' => $inputCacheType])
-        )->will(
-            $this->returnValue($accessProxy)
+        )->willReturn(
+            $accessProxy
         );
 
         $this->assertSame($accessProxy, $this->_model->get($inputCacheType));

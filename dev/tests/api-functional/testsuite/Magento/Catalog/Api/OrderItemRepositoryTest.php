@@ -21,7 +21,7 @@ class OrderItemRepositoryTest extends WebapiAbstract
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -50,7 +50,7 @@ class OrderItemRepositoryTest extends WebapiAbstract
 
         $response = $this->_webApiCall($serviceInfo, ['id' => $orderItem->getId()]);
 
-        $this->assertTrue(is_array($response));
+        $this->assertIsArray($response);
         $this->assertOrderItem($orderItem, $response);
     }
 
@@ -92,10 +92,10 @@ class OrderItemRepositoryTest extends WebapiAbstract
 
         $response = $this->_webApiCall($serviceInfo, $requestData);
 
-        $this->assertTrue(is_array($response));
+        $this->assertIsArray($response);
         $this->assertArrayHasKey('items', $response);
         $this->assertCount(1, $response['items']);
-        $this->assertTrue(is_array($response['items'][0]));
+        $this->assertIsArray($response['items'][0]);
         $this->assertOrderItem(current($order->getItems()), $response['items'][0]);
     }
 

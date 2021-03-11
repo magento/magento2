@@ -17,16 +17,16 @@ class BackButtonTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initContext();
 

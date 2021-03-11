@@ -13,22 +13,22 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     protected $plugin;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $typeInstanceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 
@@ -37,7 +37,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
      */
     protected $closureMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->itemMock = $this->createMock(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface::class);
         $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
@@ -45,7 +45,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,
             ['getSelectedAttributesInfo', '__wakeup']
         );
-        $this->itemMock->expects($this->once())->method('getProduct')->will($this->returnValue($this->productMock));
+        $this->itemMock->expects($this->once())->method('getProduct')->willReturn($this->productMock);
         $this->closureMock = function () {
             return ['options'];
         };
@@ -59,15 +59,15 @@ class PluginTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getTypeId'
-        )->will(
-            $this->returnValue(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE)
+        )->willReturn(
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE
         );
         $this->productMock->expects(
             $this->once()
         )->method(
             'getTypeInstance'
-        )->will(
-            $this->returnValue($this->typeInstanceMock)
+        )->willReturn(
+            $this->typeInstanceMock
         );
         $this->typeInstanceMock->expects(
             $this->once()
@@ -75,8 +75,8 @@ class PluginTest extends \PHPUnit\Framework\TestCase
             'getSelectedAttributesInfo'
         )->with(
             $this->productMock
-        )->will(
-            $this->returnValue(['attributes'])
+        )->willReturn(
+            ['attributes']
         );
         $this->assertEquals(
             ['attributes', 'options'],
@@ -86,7 +86,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
 
     public function testAroundGetOptionsWhenProductTypeIsSimple()
     {
-        $this->productMock->expects($this->once())->method('getTypeId')->will($this->returnValue('simple'));
+        $this->productMock->expects($this->once())->method('getTypeId')->willReturn('simple');
         $this->productMock->expects($this->never())->method('getTypeInstance');
         $this->assertEquals(
             ['options'],

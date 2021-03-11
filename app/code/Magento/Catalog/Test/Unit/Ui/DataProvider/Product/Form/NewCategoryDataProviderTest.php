@@ -26,7 +26,7 @@ class NewCategoryDataProviderTest extends \PHPUnit\Framework\TestCase
      */
     protected $collectionFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->collectionFactoryMock = $this->createPartialMock(CollectionFactory::class, ['create']);

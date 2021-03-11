@@ -18,7 +18,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Setup\Module\Di\Definition\Collection | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\Di\Definition\Collection | \PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionMock;
 
@@ -52,7 +52,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         return [self::INSTANCE_1 => $this->getArgument()];
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->collectionMock = $this->getMockBuilder(\Magento\Setup\Module\Di\Definition\Collection::class)
             ->setMethods([])->getMock();

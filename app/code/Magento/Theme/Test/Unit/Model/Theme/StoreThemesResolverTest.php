@@ -30,13 +30,13 @@ class StoreThemesResolverTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->resolvers = [];
-        $this->resolvers[] = $this->createMock(StoreThemesResolverInterface::class);
-        $this->resolvers[] = $this->createMock(StoreThemesResolverInterface::class);
-        $this->resolvers[] = $this->createMock(StoreThemesResolverInterface::class);
+        $this->resolvers[] = $this->getMockForAbstractClass(StoreThemesResolverInterface::class);
+        $this->resolvers[] = $this->getMockForAbstractClass(StoreThemesResolverInterface::class);
+        $this->resolvers[] = $this->getMockForAbstractClass(StoreThemesResolverInterface::class);
         $this->model = new StoreThemesResolver($this->resolvers);
     }
 
@@ -45,7 +45,7 @@ class StoreThemesResolverTest extends TestCase
      */
     public function testInvalidConstructorArguments()
     {
-        $resolver = $this->createMock(StoreInterface::class);
+        $resolver = $this->getMockForAbstractClass(StoreInterface::class);
         $this->expectExceptionObject(
             new \InvalidArgumentException(
                 sprintf(
@@ -71,7 +71,7 @@ class StoreThemesResolverTest extends TestCase
      */
     public function testGetThemes(array $themes, array $expected)
     {
-        $store = $this->createMock(StoreInterface::class);
+        $store = $this->getMockForAbstractClass(StoreInterface::class);
         foreach ($this->resolvers as $key => $resolver) {
             $resolver->expects($this->once())
                 ->method('getThemes')

@@ -13,25 +13,25 @@ class FilterRendererTest extends \PHPUnit\Framework\TestCase
     /** @var FilterRenderer|\Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $plugin;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Swatches\Helper\Data */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Swatches\Helper\Data */
     protected $swatchHelperMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Layout */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Layout */
     protected $layoutMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Layer\Filter\AbstractFilter */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Layer\Filter\AbstractFilter */
     protected $filterMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\LayeredNavigation\Block\Navigation\FilterRenderer */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\LayeredNavigation\Block\Navigation\FilterRenderer */
     protected $filterRendererMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Swatches\Block\LayeredNavigation\RenderLayered */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Swatches\Block\LayeredNavigation\RenderLayered */
     protected $blockMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $closureMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->layoutMock = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['createBlock']);
 
@@ -77,7 +77,7 @@ class FilterRendererTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $this->layoutMock->expects($this->once())->method('createBlock')->willReturn($this->blockMock);
-        $this->blockMock->expects($this->once())->method('setSwatchFilter')->will($this->returnSelf());
+        $this->blockMock->expects($this->once())->method('setSwatchFilter')->willReturnSelf();
 
         $this->plugin->aroundRender($this->filterRendererMock, $this->closureMock, $this->filterMock);
     }

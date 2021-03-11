@@ -44,7 +44,6 @@ class CommandList
             \Magento\Setup\Console\Command\AdminUserCreateCommand::class,
             \Magento\Setup\Console\Command\BackupCommand::class,
             \Magento\Setup\Console\Command\ConfigSetCommand::class,
-            \Magento\Setup\Console\Command\CronRunCommand::class,
             \Magento\Setup\Console\Command\DbDataUpgradeCommand::class,
             \Magento\Setup\Console\Command\DbSchemaUpgradeCommand::class,
             \Magento\Setup\Console\Command\DbStatusCommand::class,

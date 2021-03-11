@@ -25,42 +25,42 @@ use PHPUnit\Framework\TestCase;
 class AttributeMetadataResolverTest extends TestCase
 {
     /**
-     * @var CountryWithWebsites | \PHPUnit_Framework_MockObject_MockObject
+     * @var CountryWithWebsites | \PHPUnit\Framework\MockObject\MockObject
      */
     private $countryWithWebsiteSource;
 
     /**
-     * @var EavValidationRules | \PHPUnit_Framework_MockObject_MockObject
+     * @var EavValidationRules | \PHPUnit\Framework\MockObject\MockObject
      */
     private $eavValidationRules;
 
     /**
-     * @var FileUploaderDataResolver | \PHPUnit_Framework_MockObject_MockObject
+     * @var FileUploaderDataResolver | \PHPUnit\Framework\MockObject\MockObject
      */
     private $fileUploaderDataResolver;
 
     /**
-     * @var ShareConfig | \PHPUnit_Framework_MockObject_MockObject
+     * @var ShareConfig | \PHPUnit\Framework\MockObject\MockObject
      */
     private $shareConfig;
 
     /**
-     * @var GroupManagement | \PHPUnit_Framework_MockObject_MockObject
+     * @var GroupManagement | \PHPUnit\Framework\MockObject\MockObject
      */
     private $groupManagement;
 
     /**
-     * @var ContextInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $context;
 
     /** @var  AttributeMetadataResolver */
     private $model;
 
-    /** @var  Attribute | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Attribute | \PHPUnit\Framework\MockObject\MockObject */
     private $attribute;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->countryWithWebsiteSource = $this->getMockBuilder(CountryWithWebsites::class)
             ->setMethods(['getAllOptions'])
@@ -76,7 +76,7 @@ class AttributeMetadataResolverTest extends TestCase
             ->getMock();
         $this->context =  $this->getMockBuilder(ContextInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->shareConfig =  $this->getMockBuilder(ShareConfig::class)
             ->disableOriginalConstructor()
             ->getMock();

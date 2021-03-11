@@ -14,17 +14,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class CryptographerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var AnalyticsToken|\PHPUnit_Framework_MockObject_MockObject
+     * @var AnalyticsToken|\PHPUnit\Framework\MockObject\MockObject
      */
     private $analyticsTokenMock;
 
     /**
-     * @var EncodedContextFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var EncodedContextFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $encodedContextFactoryMock;
 
     /**
-     * @var EncodedContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var EncodedContext|\PHPUnit\Framework\MockObject\MockObject
      */
     private $encodedContextMock;
 
@@ -61,7 +61,7 @@ class CryptographerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->analyticsTokenMock = $this->getMockBuilder(AnalyticsToken::class)
             ->disableOriginalConstructor()
@@ -170,11 +170,12 @@ class CryptographerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @dataProvider encodeNotValidSourceDataProvider
      */
     public function testEncodeNotValidSource($source)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->cryptographer->encode($source);
     }
 
@@ -190,10 +191,11 @@ class CryptographerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testEncodeNotValidCipherMethod()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $source = 'Some string';
         $cryptographer = $this->objectManagerHelper->getObject(
             Cryptographer::class,
@@ -206,10 +208,11 @@ class CryptographerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testEncodeTokenNotValid()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $source = 'Some string';
 
         $this->analyticsTokenMock

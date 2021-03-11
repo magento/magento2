@@ -36,54 +36,54 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     protected $builder;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $registryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $wysiwygConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var StoreFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeFactoryMock;
 
     /**
-     * @var ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productRepositoryMock;
 
     /**
-     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->productFactoryMock = $this->createPartialMock(ProductFactory::class, ['create']);
         $this->registryMock = $this->createMock(Registry::class);
         $this->wysiwygConfigMock = $this->createPartialMock(WysiwygConfig::class, ['setStoreId']);
@@ -190,7 +190,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
 
         $this->productFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->productMock));
+            ->willReturn($this->productMock);
 
         $this->productMock->expects($this->any())
             ->method('setData')
@@ -262,7 +262,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
 
         $this->productFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->productMock));
+            ->willReturn($this->productMock);
 
         $this->productMock->expects($this->any())
             ->method('setData')

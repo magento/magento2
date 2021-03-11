@@ -15,13 +15,13 @@ class IntervalFactoryTest extends \PHPUnit\Framework\TestCase
     /** @var IntervalFactory */
     private $model;
 
-    /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $objectManagerMock;
 
-    /** @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var EngineResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $engineResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMockForAbstractClass();
@@ -60,11 +60,12 @@ class IntervalFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Interval not found by config current_interval
      */
     public function testCreateWithoutIntervals()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Interval not found by config current_interval');
+
         $dataProvider = 'current_interval';
         $dataProviders = [];
 
@@ -80,11 +81,12 @@ class IntervalFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Interval not instance of interface
      */
     public function testCreateWithWrongInterval()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Interval not instance of interface');
+
         $dataProvider = 'current_interval';
         $dataProviderClass = \stdClass::class;
         $dataProviders = [

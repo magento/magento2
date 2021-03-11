@@ -18,7 +18,7 @@ class HttpPluginTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeSendResponse($responseInstanceClass, $sendVaryCalled)
     {
-        /** @var \Magento\Framework\App\Response\Http | \PHPUnit_Framework_MockObject_MockObject $responseMock */
+        /** @var \Magento\Framework\App\Response\Http | \PHPUnit\Framework\MockObject\MockObject $responseMock */
         $responseMock = $this->createMock($responseInstanceClass);
         $responseMock->expects($this->exactly($sendVaryCalled))
             ->method('sendVary');

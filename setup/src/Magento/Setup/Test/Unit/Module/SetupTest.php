@@ -14,7 +14,7 @@ class SetupTest extends \PHPUnit\Framework\TestCase
     const CONNECTION_NAME = 'connection';
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connection;
 
@@ -24,18 +24,18 @@ class SetupTest extends \PHPUnit\Framework\TestCase
     private $setup;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceModelMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceModelMock = $this->createMock(ResourceConnection::class);
         $this->connection = $this->getMockForAbstractClass(\Magento\Framework\DB\Adapter\AdapterInterface::class);
         $this->resourceModelMock->expects($this->any())
             ->method('getConnection')
             ->with(self::CONNECTION_NAME)
-            ->will($this->returnValue($this->connection));
+            ->willReturn($this->connection);
         $this->resourceModelMock->expects($this->any())
             ->method('getConnectionByName')
             ->with(ResourceConnection::DEFAULT_CONNECTION)
@@ -53,12 +53,12 @@ class SetupTest extends \PHPUnit\Framework\TestCase
         $this->resourceModelMock->expects($this->once())
             ->method('getTableName')
             ->with($tableName)
-            ->will($this->returnValue($tableName));
+            ->willReturn($tableName);
 
         $this->connection->expects($this->once())
             ->method('getIndexName')
             ->with($tableName, $fields, $indexType)
-            ->will($this->returnValue($expectedIdxName));
+            ->willReturn($expectedIdxName);
 
         $this->assertEquals('idxName', $this->setup->getIdxName($tableName, $fields, $indexType));
     }
@@ -73,12 +73,12 @@ class SetupTest extends \PHPUnit\Framework\TestCase
         $this->resourceModelMock->expects($this->once())
             ->method('getTableName')
             ->with($tableName)
-            ->will($this->returnValue($tableName));
+            ->willReturn($tableName);
 
         $this->connection->expects($this->once())
             ->method('getForeignKeyName')
             ->with($tableName, $columnName, $refTable, $refColumnName)
-            ->will($this->returnValue('fkName'));
+            ->willReturn('fkName');
 
         $this->assertEquals('fkName', $this->setup->getFkName($tableName, $columnName, $refTable, $refColumnName));
     }

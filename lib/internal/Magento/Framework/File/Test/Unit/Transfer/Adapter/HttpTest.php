@@ -40,7 +40,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->response = $this->createPartialMock(
             Response::class,
@@ -111,22 +111,24 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->object->send(['filepath' => $file, 'headers' => $headers]);
     }
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Filename is not set
      * @return void
      */
     public function testSendNoFileSpecifiedException(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Filename is not set');
+
         $this->object->send([]);
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage File 'nonexistent.file' does not exists
      * @return void
      */
     public function testSendNoFileExistException(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('File \'nonexistent.file\' does not exists');
+
         $this->object->send('nonexistent.file');
     }
 
@@ -155,6 +157,6 @@ class HttpTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $this->object->send($file);
-        $this->assertEquals(false, $this->hasOutput());
+        $this->assertFalse($this->hasOutput());
     }
 }

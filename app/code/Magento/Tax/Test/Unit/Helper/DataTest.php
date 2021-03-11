@@ -20,19 +20,19 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected $helper;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject */
     protected $orderTaxManagementMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject */
     protected $priceCurrencyMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject */
     protected $taxConfigMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject */
     protected $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -117,7 +117,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         ];
         $this->priceCurrencyMock->expects($this->exactly(2))
             ->method('round')
-            ->will($this->returnValueMap($roundValues));
+            ->willReturnMap($roundValues);
 
         $appliedTaxes = [$orderDetailsItem];
 
@@ -151,7 +151,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      * Create OrderTaxDetails mock from array of data
      *
      * @param $inputArray
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Tax\Api\Data\OrderTaxDetailsInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Tax\Api\Data\OrderTaxDetailsInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function mapOrderTaxItemDetail($inputArray)
@@ -173,41 +173,41 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 )->getMock();
                 $appliedTaxesMock->expects($this->any())
                     ->method('getAmount')
-                    ->will($this->returnValue($appliedTaxData['amount']));
+                    ->willReturn($appliedTaxData['amount']);
                 $appliedTaxesMock->expects($this->any())
                     ->method('getBaseAmount')
-                    ->will($this->returnValue($appliedTaxData['base_amount']));
+                    ->willReturn($appliedTaxData['base_amount']);
                 $appliedTaxesMock->expects($this->any())
                     ->method('getCode')
-                    ->will($this->returnValue($appliedTaxData['code']));
+                    ->willReturn($appliedTaxData['code']);
                 $appliedTaxesMock->expects($this->any())
                     ->method('getTitle')
-                    ->will($this->returnValue($appliedTaxData['title']));
+                    ->willReturn($appliedTaxData['title']);
                 $appliedTaxesMock->expects($this->any())
                     ->method('getPercent')
-                    ->will($this->returnValue($appliedTaxData['percent']));
+                    ->willReturn($appliedTaxData['percent']);
                 $appliedTaxesMocks[] = $appliedTaxesMock;
             }
             $orderTaxDetailsItemMock = $this->getMockBuilder(\Magento\Tax\Api\Data\OrderTaxDetailsItemInterface::class)
                 ->getMock();
             $orderTaxDetailsItemMock->expects($this->any())
                 ->method('getItemId')
-                ->will($this->returnValue($itemId));
+                ->willReturn($itemId);
             $orderTaxDetailsItemMock->expects($this->any())
                 ->method('getAssociatedItemId')
-                ->will($this->returnValue($associatedItemId));
+                ->willReturn($associatedItemId);
             $orderTaxDetailsItemMock->expects($this->any())
                 ->method('getType')
-                ->will($this->returnValue($itemType));
+                ->willReturn($itemType);
             $orderTaxDetailsItemMock->expects($this->any())
                 ->method('getAppliedTaxes')
-                ->will($this->returnValue($appliedTaxesMocks));
+                ->willReturn($appliedTaxesMocks);
 
             $itemMocks[] = $orderTaxDetailsItemMock;
         }
         $orderTaxItemDetailsMock->expects($this->any())
             ->method('getItems')
-            ->will($this->returnValue($itemMocks));
+            ->willReturn($itemMocks);
 
         return $orderTaxItemDetailsMock;
     }
@@ -221,7 +221,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $orderShippingTaxAmount = isset($orderData['shipping_tax_amount']) ? $orderData['shipping_tax_amount'] : 0;
         $orderTaxDetails = $orderData['order_tax_details'];
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order $orderMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Model\Order $orderMock */
         $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -236,12 +236,12 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->orderTaxManagementMock->expects($this->any())
             ->method('getOrderTaxDetails')
             ->with($orderId)
-            ->will($this->returnValue($orderTaxDetailsMock));
+            ->willReturn($orderTaxDetailsMock);
 
         $invoiceShippingTaxAmount =
             isset($invoiceData['shipping_tax_amount']) ? $invoiceData['shipping_tax_amount'] : 0;
         $invoiceItems = $invoiceData['invoice_items'];
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order\Invoice $source */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Model\Order\Invoice $source */
         $source = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -257,12 +257,12 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $this->priceCurrencyMock->expects($this->any())
             ->method('round')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($arg) {
                         return round($arg, 2);
                     }
-                )
+                
             );
 
         $result = $this->helper->getCalculatedTaxes($source);

@@ -17,22 +17,22 @@ use Magento\Eav\Model\Entity\Attribute;
 class AttributeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cacheMock;
 
     /**
-     * @var StateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StateInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cacheStateMock;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
     /**
-     * @var AttributeResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeResource|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeResourceMock;
 
@@ -41,13 +41,13 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     private $attributeResourcePlugin;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->cacheMock = $this->createMock(CacheInterface::class);
-        $this->cacheStateMock = $this->createMock(StateInterface::class);
+        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
+        $this->cacheStateMock = $this->getMockForAbstractClass(StateInterface::class);
         $this->attributeResourceMock = $this->createMock(AttributeResource::class);
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $this->attributeResourcePlugin = $objectManager->getObject(
             AttributeResourcePlugin::class,
             [

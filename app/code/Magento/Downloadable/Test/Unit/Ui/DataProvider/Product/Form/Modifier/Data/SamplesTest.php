@@ -30,32 +30,32 @@ class SamplesTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var LocatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LocatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $locatorMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $escaperMock;
 
     /**
-     * @var DownloadableFile|\PHPUnit_Framework_MockObject_MockObject
+     * @var DownloadableFile|\PHPUnit\Framework\MockObject\MockObject
      */
     private $downloadableFileMock;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlBuilderMock;
 
     /**
-     * @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productMock;
 
@@ -67,17 +67,17 @@ class SamplesTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->productMock = $this->getMockBuilder(ProductInterface::class)
             ->setMethods(['getSamplesTitle', 'getId', 'getTypeId'])
             ->getMockForAbstractClass();
-        $this->locatorMock = $this->createMock(LocatorInterface::class);
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->locatorMock = $this->getMockForAbstractClass(LocatorInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->escaperMock = $this->createMock(Escaper::class);
         $this->downloadableFileMock = $this->createMock(DownloadableFile::class);
-        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->samples = $this->objectManagerHelper->getObject(
             Samples::class,
             [

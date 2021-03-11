@@ -25,7 +25,7 @@ class DataObjectHelperTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\Api\ObjectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\ObjectFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectFactoryMock;
 
@@ -35,26 +35,26 @@ class DataObjectHelperTest extends \PHPUnit\Framework\TestCase
     protected $typeProcessor;
 
     /**
-     * @var \Magento\Framework\Reflection\DataObjectProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Reflection\DataObjectProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectProcessorMock;
 
     /**
-     * @var \Magento\Framework\Api\AttributeValueFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\AttributeValueFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeValueFactoryMock;
 
     /**
-     * @var \Magento\Framework\Reflection\MethodsMap|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Reflection\MethodsMap|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $methodsMapProcessor;
 
     /**
-     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $joinProcessorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

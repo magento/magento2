@@ -10,12 +10,12 @@ use Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreView;
 class StoreViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Indexer\IndexerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Indexer\IndexerInterface
      */
     protected $indexerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Indexer\Category\Flat\State
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Indexer\Category\Flat\State
      */
     protected $stateMock;
 
@@ -25,16 +25,16 @@ class StoreViewTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexerRegistryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->indexerMock = $this->getMockForAbstractClass(
             \Magento\Framework\Indexer\IndexerInterface::class,
@@ -65,7 +65,7 @@ class StoreViewTest extends \PHPUnit\Framework\TestCase
             \Magento\Store\Model\Store::class,
             ['isObjectNew', 'dataHasChangedFor', '__wakeup']
         );
-        $storeMock->expects($this->once())->method('isObjectNew')->will($this->returnValue(true));
+        $storeMock->expects($this->once())->method('isObjectNew')->willReturn(true);
         $this->model->beforeSave($this->subjectMock, $storeMock);
         $this->assertSame(
             $this->subjectMock,
@@ -106,12 +106,12 @@ class StoreViewTest extends \PHPUnit\Framework\TestCase
         $this->indexerRegistryMock->expects($this->once())
             ->method('get')
             ->with(\Magento\Catalog\Model\Indexer\Category\Flat\State::INDEXER_ID)
-            ->will($this->returnValue($this->indexerMock));
+            ->willReturn($this->indexerMock);
     }
 
     protected function mockConfigFlatEnabled()
     {
-        $this->stateMock->expects($this->once())->method('isFlatEnabled')->will($this->returnValue(true));
+        $this->stateMock->expects($this->once())->method('isFlatEnabled')->willReturn(true);
     }
 
     protected function mockConfigFlatEnabledNever()

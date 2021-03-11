@@ -18,7 +18,7 @@ class ClassLoaderWrapperTest extends \PHPUnit\Framework\TestCase
     const DEFAULT_PREPEND = false;
 
     /**
-     * @var ClassLoader | \PHPUnit_Framework_MockObject_MockObject
+     * @var ClassLoader | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $autoloaderMock;
 
@@ -27,7 +27,7 @@ class ClassLoaderWrapperTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->autoloaderMock = $this->createMock(\Composer\Autoload\ClassLoader::class);
         $this->model = (new ObjectManager($this))->getObject(

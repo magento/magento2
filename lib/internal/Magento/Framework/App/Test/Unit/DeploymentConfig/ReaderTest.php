@@ -15,26 +15,26 @@ use Magento\Framework\Filesystem\DriverPool;
 class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dirList;
 
     /**
-     * @var DriverPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var DriverPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $driverPool;
 
     /**
-     * @var File|\PHPUnit_Framework_MockObject_MockObject
+     * @var File|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileDriver;
 
     /**
-     * @var ConfigFilePool|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigFilePool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configFilePool;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dirList = $this->createMock(\Magento\Framework\App\Filesystem\DirectoryList::class);
         $this->dirList->expects($this->any())
@@ -77,12 +77,11 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['customOne.php'], $object->getFiles());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid file name: invalid_name
-     */
     public function testWrongFile()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid file name: invalid_name');
+
         new Reader($this->dirList, $this->driverPool, $this->configFilePool, 'invalid_name');
     }
 
@@ -92,7 +91,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         $this->configFilePool
             ->expects($this->any())
             ->method('getPath')
-            ->will($this->returnValueMap($files));
+            ->willReturnMap($files);
         $object = new Reader($this->dirList, $this->driverPool, $this->configFilePool);
         $this->assertSame(['fooKey' =>'foo', 'barKey' => 'bar', 'envKey' => 'env'], $object->load());
     }
@@ -114,19 +113,20 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     /**
      * Test Reader::load() will throw exception in case of invalid configuration file(single file).
      *
-     * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessageRegExp /Invalid configuration file: \'.*\/\_files\/emptyConfig\.php\'/
      * @return void
      */
     public function testLoadInvalidConfigurationFileWithFileKey()
     {
+        $this->expectException(\Magento\Framework\Exception\RuntimeException::class);
+        $this->expectExceptionMessageMatches('/Invalid configuration file: \\\'.*\\/\\_files\\/emptyConfig\\.php\\\'/');
+
         $fileDriver = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
             ->getMock();
         $fileDriver->expects($this->once())
             ->method('isExists')
             ->willReturn(true);
-        /** @var DriverPool|\PHPUnit_Framework_MockObject_MockObject $driverPool */
+        /** @var DriverPool|\PHPUnit\Framework\MockObject\MockObject $driverPool */
         $driverPool = $this->getMockBuilder(DriverPool::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -134,7 +134,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getDriver')
             ->willReturn($fileDriver);
-        /** @var ConfigFilePool|\PHPUnit_Framework_MockObject_MockObject $configFilePool */
+        /** @var ConfigFilePool|\PHPUnit\Framework\MockObject\MockObject $configFilePool */
         $configFilePool = $this->getMockBuilder(ConfigFilePool::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -150,20 +150,21 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     /**
      * Test Reader::load() will throw exception in case of invalid configuration file(multiple files).
      *
-     * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessageRegExp /Invalid configuration file: \'.*\/\_files\/emptyConfig\.php\'/
      * @return void
      * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function testLoadInvalidConfigurationFile(): void
     {
+        $this->expectException(\Magento\Framework\Exception\RuntimeException::class);
+        $this->expectExceptionMessageMatches('/Invalid configuration file: \\\'.*\\/\\_files\\/emptyConfig\\.php\\\'/');
+
         $fileDriver = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
             ->getMock();
         $fileDriver->expects($this->exactly(2))
             ->method('isExists')
             ->willReturn(true);
-        /** @var DriverPool|\PHPUnit_Framework_MockObject_MockObject $driverPool */
+        /** @var DriverPool|\PHPUnit\Framework\MockObject\MockObject $driverPool */
         $driverPool = $this->getMockBuilder(DriverPool::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -171,7 +172,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getDriver')
             ->willReturn($fileDriver);
-        /** @var ConfigFilePool|\PHPUnit_Framework_MockObject_MockObject $configFilePool */
+        /** @var ConfigFilePool|\PHPUnit\Framework\MockObject\MockObject $configFilePool */
         $configFilePool = $this->getMockBuilder(ConfigFilePool::class)
             ->disableOriginalConstructor()
             ->getMock();

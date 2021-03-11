@@ -42,7 +42,7 @@ class JobTest extends \PHPUnit\Framework\TestCase
         };
         $ruleProcessorMock->expects($this->once())
             ->method('markIndexerAsInvalid')
-            ->will($this->returnCallback($exceptionCallback));
+            ->willReturnCallback($exceptionCallback);
         $jobModel = new Job($ruleProcessorMock);
         $jobModel->applyAll();
         $this->assertEquals($exceptionMessage, $jobModel->getError());

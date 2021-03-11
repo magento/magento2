@@ -12,59 +12,59 @@ namespace Magento\Reports\Test\Unit\Controller\Adminhtml\Report;
 abstract class AbstractControllerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\Http\FileFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ViewInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $viewMock;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\Framework\View\Element\BlockInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\BlockInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $breadcrumbsBlockMock;
 
     /**
-     * @var \Magento\Framework\View\Element\BlockInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\BlockInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $menuBlockMock;
 
     /**
-     * @var \Magento\Framework\View\Element\BlockInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\BlockInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $switcherBlockMock;
 
     /**
-     * @var \Magento\Backend\Model\Menu|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Menu|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $menuModelMock;
 
     /**
-     * @var \Magento\Framework\View\Element\AbstractBlock|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\AbstractBlock|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $abstractBlockMock;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->getMockForAbstractClassBuilder(
             \Magento\Framework\App\RequestInterface::class,
@@ -108,14 +108,14 @@ abstract class AbstractControllerTest extends \PHPUnit\Framework\TestCase
         $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
         $this->contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
 
-        $this->layoutMock->expects($this->any())->method('getBlock')->will(
-            $this->returnValueMap(
+        $this->layoutMock->expects($this->any())->method('getBlock')->willReturnMap(
+            
                 [
                     ['breadcrumbs', $this->breadcrumbsBlockMock],
                     ['menu', $this->menuBlockMock],
                     ['store_switcher', $this->switcherBlockMock]
                 ]
-            )
+            
         );
         $this->layoutMock->expects($this->any())->method('getChildBlock')->willReturn($this->abstractBlockMock);
     }
@@ -124,7 +124,7 @@ abstract class AbstractControllerTest extends \PHPUnit\Framework\TestCase
      * Custom mock for abstract class
      * @param string $className
      * @param array $mockedMethods
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getMockForAbstractClassBuilder($className, $mockedMethods = [])
     {

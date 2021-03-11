@@ -79,7 +79,6 @@
             <item>Magento_Backend::main_actions</item>
             <item>Magento_Backend::mass_actions</item>
             <item>Magento_Backend::additional_cache_management</item>
-            <item>Magento_Backend::setup_wizard</item>
             <item>Magento_Backup::backup</item>
             <item>Magento_Indexer::index</item>
             <item>Magento_Indexer::changeMode</item>

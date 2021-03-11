@@ -15,16 +15,16 @@ class AbstractCollectionTest extends \Magento\Eav\Test\Unit\Model\Entity\Collect
     /**
      * Subject of testing.
      *
-     * @var AbstractCollectionStub|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractCollectionStub|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $subject;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entitySnapshot;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -60,7 +60,7 @@ class AbstractCollectionTest extends \Magento\Eav\Test\Unit\Model\Entity\Collect
         if (!$data) {
             $this->entitySnapshot->expects($this->never())->method('registerSnapshot');
 
-            $this->assertEquals(false, $this->subject->fetchItem());
+            $this->assertFalse($this->subject->fetchItem());
         } else {
             $this->entitySnapshot->expects($this->once())->method('registerSnapshot')->with($item);
 

@@ -36,11 +36,12 @@ MUTATION;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Mutation requests allowed only for POST requests
      */
     public function testMutationIsNotAllowedViaGetRequest()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Mutation requests allowed only for POST requests');
+
         $id = 3;
 
         $query = <<<MUTATION

@@ -10,10 +10,10 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files */
     protected $controller;
 
-    /** @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ViewInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $view;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->view = $this->createMock(\Magento\Framework\App\ViewInterface::class);
 

@@ -16,7 +16,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $config = [];
         $fileStorageMock = $this->createMock(\Magento\MediaStorage\Model\File\Storage::class);
-        $fileStorageMock->expects($this->once())->method('getScriptConfig')->will($this->returnValue($config));
+        $fileStorageMock->expects($this->once())->method('getScriptConfig')->willReturn($config);
 
         $file = $this->getMockBuilder(\Magento\Framework\Filesystem\File\Write::class)
             ->setMethods(['lock', 'write', 'unlock', 'close'])
@@ -30,8 +30,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Filesystem\Directory\Write::class,
             ['openFile', 'getRelativePath']
         );
-        $directory->expects($this->once())->method('getRelativePath')->will($this->returnArgument(0));
-        $directory->expects($this->once())->method('openFile')->with('cacheFile')->will($this->returnValue($file));
+        $directory->expects($this->once())->method('getRelativePath')->willReturnArgument(0);
+        $directory->expects($this->once())->method('openFile')->with('cacheFile')->willReturn($file);
         $filesystem = $this->createPartialMock(\Magento\Framework\Filesystem::class, ['getDirectoryWrite']);
         $filesystem->expects(
             $this->once()
@@ -39,8 +39,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'getDirectoryWrite'
         )->with(
             DirectoryList::ROOT
-        )->will(
-            $this->returnValue($directory)
+        )->willReturn(
+            $directory
         );
         $model = new \Magento\MediaStorage\Model\File\Storage\Config($fileStorageMock, $filesystem, 'cacheFile');
         $model->save();

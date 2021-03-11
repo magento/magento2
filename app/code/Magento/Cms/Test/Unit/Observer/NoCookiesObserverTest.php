@@ -13,31 +13,31 @@ class NoCookiesObserverTest extends \PHPUnit\Framework\TestCase
     protected $noCookiesObserver;
 
     /**
-     * @var \Magento\Cms\Helper\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cms\Helper\Page|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cmsPageMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $observerMock;
 
     /**
-     * @var \Magento\Framework\Event|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventMock;
 
     /**
-     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cmsPageMock = $this
             ->getMockBuilder(\Magento\Cms\Helper\Page::class)

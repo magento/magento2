@@ -15,7 +15,7 @@ class SalesEventQuoteSubmitBeforeObserverTest extends \PHPUnit\Framework\TestCas
      */
     protected $salesEventQuoteSubmitBeforeObserver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->salesEventQuoteSubmitBeforeObserver = new Observer();
     }

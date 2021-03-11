@@ -13,26 +13,26 @@ class CrossSellTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_duplicateMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_linkMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_linkCollectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new \Magento\Catalog\Model\Product\CopyConstructor\CrossSell();
 
@@ -52,8 +52,8 @@ class CrossSellTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getLinkInstance'
-        )->will(
-            $this->returnValue($this->_linkMock)
+        )->willReturn(
+            $this->_linkMock
         );
     }
 
@@ -66,22 +66,22 @@ class CrossSellTest extends \PHPUnit\Framework\TestCase
 
         $this->_linkMock->expects($this->once())->method('useCrossSellLinks');
 
-        $this->_linkMock->expects($this->once())->method('getAttributes')->will($this->returnValue($attributes));
+        $this->_linkMock->expects($this->once())->method('getAttributes')->willReturn($attributes);
 
         $productLinkMock = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Product\Link::class,
             ['__wakeup', 'getLinkedProductId', 'toArray']
         );
 
-        $productLinkMock->expects($this->once())->method('getLinkedProductId')->will($this->returnValue('100500'));
+        $productLinkMock->expects($this->once())->method('getLinkedProductId')->willReturn('100500');
         $productLinkMock->expects(
             $this->once()
         )->method(
             'toArray'
         )->with(
             ['one', 'two']
-        )->will(
-            $this->returnValue(['some' => 'data'])
+        )->willReturn(
+            ['some' => 'data']
         );
 
         $collectionMock = $helper->getCollectionMock(
@@ -92,8 +92,8 @@ class CrossSellTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getCrossSellLinkCollection'
-        )->will(
-            $this->returnValue($collectionMock)
+        )->willReturn(
+            $collectionMock
         );
 
         $this->_duplicateMock->expects($this->once())->method('setCrossSellLinkData')->with($expectedData);

@@ -72,7 +72,7 @@ class CopyCurrentConfigTest extends TestCase
             ->willReturn(null);
 
         $this->context = $this->createMock(ModuleContext::class);
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->website = $this->createMock(Website::class);
     }
 

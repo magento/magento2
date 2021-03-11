@@ -15,7 +15,7 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $timezoneMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
         $loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
@@ -38,13 +38,14 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Entity object is undefined
      *
      * @covers \Magento\Eav\Model\Attribute\Data\AbstractData::getEntity
      */
     public function testGetEntityWhenEntityNotSet()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Entity object is undefined');
+
         $this->model->getEntity();
     }
 
@@ -99,19 +100,19 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
     public function testGetRequestValue($requestScope, $value, $params, $requestScopeOnly, $expectedResult, $filter)
     {
         $requestMock = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getParams', 'getParam']);
-        $requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap([
+        $requestMock->expects($this->any())->method('getParam')->willReturnMap([
             ['attributeCode', false, $value],
             [$requestScope, $value],
-        ]));
-        $requestMock->expects($this->any())->method('getParams')->will($this->returnValue($params));
+        ]);
+        $requestMock->expects($this->any())->method('getParams')->willReturn($params);
 
         $attributeMock = $this->createPartialMock(
             \Magento\Eav\Model\Attribute::class,
             ['getInputFilter', 'getAttributeCode']
         );
-        $attributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('attributeCode'));
+        $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn('attributeCode');
         if ($filter) {
-            $attributeMock->expects($this->any())->method('getInputFilter')->will($this->returnValue($filter));
+            $attributeMock->expects($this->any())->method('getInputFilter')->willReturn($filter);
         }
 
         $this->model->setAttribute($attributeMock);

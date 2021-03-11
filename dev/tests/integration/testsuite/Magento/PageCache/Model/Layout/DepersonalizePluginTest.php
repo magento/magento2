@@ -40,7 +40,7 @@ class DepersonalizePluginTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->messageSession = Bootstrap::getObjectManager()->create(Session::class);
         $this->layout = Bootstrap::getObjectManager()->get(LayoutFactory::class)->create();
@@ -50,7 +50,7 @@ class DepersonalizePluginTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->messageSession->clearStorage();
     }

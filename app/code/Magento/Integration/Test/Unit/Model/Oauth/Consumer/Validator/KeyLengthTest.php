@@ -20,7 +20,7 @@ class KeyLengthTest extends \PHPUnit\Framework\TestCase
      */
     protected $keyLengthValidator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $options = ['length' => KeyLengthTest::KEY_LENGTH];
         $this->keyLengthValidator = new KeyLength($options);
@@ -59,11 +59,12 @@ class KeyLengthTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Invalid type given for Key. String expected
      */
     public function testIsValidInvalidType()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Invalid type given for Key. String expected');
+
         $invalidTokenType = 1;
         $this->keyLengthValidator->isValid($invalidTokenType);
     }

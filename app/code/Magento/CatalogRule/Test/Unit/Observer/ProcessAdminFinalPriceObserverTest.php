@@ -60,7 +60,7 @@ class ProcessAdminFinalPriceObserverTest extends TestCase
     private $rulePricesStorageMock;
 
     /**
-     * @var Event|\PHPUnit_Framework_MockObject_MockObject
+     * @var Event|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventMock;
 
@@ -69,7 +69,7 @@ class ProcessAdminFinalPriceObserverTest extends TestCase
      */
     private $observerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->observerMock = $this
             ->getMockBuilder(Observer::class)

@@ -8,7 +8,7 @@ namespace Magento\Store\Test\Unit\Url\Plugin;
 class SecurityInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_scopeConfigMock;
 
@@ -17,7 +17,7 @@ class SecurityInfoTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->_model = new \Magento\Store\Url\Plugin\SecurityInfo($this->_scopeConfigMock);
@@ -32,7 +32,7 @@ class SecurityInfoTest extends \PHPUnit\Framework\TestCase
                 \Magento\Store\Model\Store::XML_PATH_SECURE_IN_FRONTEND,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->assertFalse(
             $this->_model->aroundIsSecure(
                 $this->createMock(\Magento\Framework\Url\SecurityInfo::class),
@@ -52,7 +52,7 @@ class SecurityInfoTest extends \PHPUnit\Framework\TestCase
                 \Magento\Store\Model\Store::XML_PATH_SECURE_IN_FRONTEND,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertTrue(
             $this->_model->aroundIsSecure(
                 $this->createMock(\Magento\Framework\Url\SecurityInfo::class),

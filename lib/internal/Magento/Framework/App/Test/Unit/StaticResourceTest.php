@@ -19,7 +19,7 @@ use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\App\StaticResource;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Psr\Log\LoggerInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Magento\Framework\Filesystem\Driver\File;
 
 /**
@@ -87,7 +87,7 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
      */
     private $driverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stateMock = $this->createMock(State::class);
         $this->responseMock = $this->getMockForAbstractClass(FileInterface::class);
@@ -258,14 +258,15 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Requested path 'short/path.js' is wrong
      */
     public function testLaunchWrongPath()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Requested path \'short/path.js\' is wrong');
+
         $this->stateMock->expects($this->once())
             ->method('getMode')
-            ->will($this->returnValue(\Magento\Framework\App\State::MODE_DEVELOPER));
+            ->willReturn(\Magento\Framework\App\State::MODE_DEVELOPER);
         $this->requestMock->expects($this->once())
             ->method('get')
             ->with('resource')
@@ -300,14 +301,15 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testLaunchPathAbove()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $path = 'frontend/..\..\folder_above/././Magento_Ui/template/messages.html';
         $this->stateMock->expects($this->once())
             ->method('getMode')
-            ->will($this->returnValue(State::MODE_DEVELOPER));
+            ->willReturn(State::MODE_DEVELOPER);
         $this->requestMock->expects($this->once())
             ->method('get')
             ->with('resource')

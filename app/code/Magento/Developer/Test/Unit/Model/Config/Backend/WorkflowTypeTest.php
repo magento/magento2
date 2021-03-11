@@ -20,12 +20,12 @@ class WorkflowTypeTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|\PHPUnit\Framework\MockObject\MockObject
      */
     private $appStateMock;
 
     /**
-     * @var CleanupFiles|\PHPUnit_Framework_MockObject_MockObject
+     * @var CleanupFiles|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cleanerMock;
 
@@ -34,7 +34,7 @@ class WorkflowTypeTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManagerHelper;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->appStateMock = $this->createMock(State::class);
         $this->objectManagerHelper = new ObjectManager($this);
@@ -57,11 +57,12 @@ class WorkflowTypeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Client side compilation doesn't work in production mode
      */
     public function testBeforeSaveSwitchedToClientSideInProductionShouldThrowException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Client side compilation doesn\'t work in production mode');
+
         $this->appStateMock->expects($this->once())
             ->method('getMode')
             ->willReturn(State::MODE_PRODUCTION);

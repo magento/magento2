@@ -31,41 +31,41 @@ class ExpressTest extends TestCase
     private $express;
 
     /**
-     * @var Payment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Payment|\PHPUnit\Framework\MockObject\MockObject
      */
     private $payment;
 
     /**
-     * @var MethodInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var MethodInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentInstance;
 
     /**
-     * @var Pro|\PHPUnit_Framework_MockObject_MockObject
+     * @var Pro|\PHPUnit\Framework\MockObject\MockObject
      */
     private $pro;
 
     /**
-     * @var Nvp|\PHPUnit_Framework_MockObject_MockObject
+     * @var Nvp|\PHPUnit\Framework\MockObject\MockObject
      */
     private $nvp;
 
     /**
-     * @var Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var Order|\PHPUnit\Framework\MockObject\MockObject
      */
     private $order;
 
     /**
-     * @var TransactionRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var TransactionRepository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $transactionRepository;
 
     /**
-     * @var TransactionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TransactionInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $transaction;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->nvp = $this->createPartialMock(

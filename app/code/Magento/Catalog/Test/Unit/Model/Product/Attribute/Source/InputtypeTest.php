@@ -16,10 +16,10 @@ class InputtypeTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject */
     protected $registry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->registry = $this->createMock(\Magento\Framework\Registry::class);
 

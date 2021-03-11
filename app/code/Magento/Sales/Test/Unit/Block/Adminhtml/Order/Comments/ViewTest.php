@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Comments;
 class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Sales\Helper\Admin|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Helper\Admin|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $adminHelperMock;
 
@@ -17,7 +17,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
      */
     protected $commentsView;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->adminHelperMock = $this->getMockBuilder(\Magento\Sales\Helper\Admin::class)
             ->disableOriginalConstructor()
@@ -42,7 +42,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->adminHelperMock
             ->expects($this->any())
             ->method('escapeHtmlWithLinks')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
         $actual = $this->commentsView->escapeHtml($data, $allowedTags);
         $this->assertEquals($expected, $actual);
     }

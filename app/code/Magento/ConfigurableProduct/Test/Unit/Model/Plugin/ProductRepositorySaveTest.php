@@ -15,7 +15,7 @@ use Magento\ConfigurableProduct\Model\Plugin\ProductRepositorySave;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Test\Unit\Model\Product\ProductExtensionAttributes;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Test for ProductRepositorySave plugin
@@ -69,7 +69,7 @@ class ProductRepositorySaveTest extends \PHPUnit\Framework\TestCase
      */
     private $plugin;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productAttributeRepository = $this->getMockForAbstractClass(ProductAttributeRepositoryInterface::class);
 
@@ -157,11 +157,12 @@ class ProductRepositorySaveTest extends \PHPUnit\Framework\TestCase
     /**
      * Test saving a configurable product with same set of attribute values
      *
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Products "5" and "4" have the same set of attribute values.
      */
     public function testBeforeSaveWithLinks()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Products "5" and "4" have the same set of attribute values.');
+
         $links = [4, 5];
         $this->product->expects(static::once())
             ->method('getTypeId')
@@ -203,11 +204,12 @@ class ProductRepositorySaveTest extends \PHPUnit\Framework\TestCase
     /**
      * Test saving a configurable product with missing attribute
      *
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Product with id "4" does not contain required attribute "color".
      */
     public function testBeforeSaveWithLinksWithMissingAttribute()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Product with id "4" does not contain required attribute "color".');
+
         $simpleProductId = 4;
         $links = [$simpleProductId, 5];
         $attributeCode = 'color';
@@ -264,11 +266,12 @@ class ProductRepositorySaveTest extends \PHPUnit\Framework\TestCase
     /**
      * Test saving a configurable product with duplicate attributes
      *
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Products "5" and "4" have the same set of attribute values.
      */
     public function testBeforeSaveWithLinksWithDuplicateAttributes()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Products "5" and "4" have the same set of attribute values.');
+
         $links = [4, 5];
         $attributeCode = 'color';
         $attributeId = 23;

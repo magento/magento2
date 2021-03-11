@@ -22,7 +22,7 @@ class SimpleActionOptionsProviderTest extends TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 

@@ -18,7 +18,7 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
     /**
      * Abstract import entity model
      *
-     * @var AbstractEntity|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractEntity|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
@@ -33,7 +33,7 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
         \Magento\ImportExport\Model\Import::BEHAVIOR_CUSTOM,
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -43,7 +43,7 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
             ->getMockForAbstractClass();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }
@@ -172,14 +172,14 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
         $property->setValue($this->_model, $skippedRows);
 
         $modelForValidateRow = clone $this->_model;
-        $modelForValidateRow->expects($this->any())->method('validateRow')->will($this->returnValue(false));
+        $modelForValidateRow->expects($this->any())->method('validateRow')->willReturn(false);
 
         for ($i = 1; $i <= $rows; $i++) {
             $this->assertFalse($modelForValidateRow->isRowAllowedToImport([], $i));
         }
 
         $modelForIsAllowed = clone $this->_model;
-        $modelForIsAllowed->expects($this->any())->method('validateRow')->will($this->returnValue(true));
+        $modelForIsAllowed->expects($this->any())->method('validateRow')->willReturn(true);
 
         for ($i = 1; $i <= $rows; $i++) {
             $expected = true;
@@ -562,11 +562,11 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
      * Create source adapter mock and set it into model object which tested in this class
      *
      * @param array $columns value which will be returned by method getColNames()
-     * @return \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function _createSourceAdapterMock(array $columns)
     {
-        /** @var $source \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $source \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit\Framework\MockObject\MockObject */
         $source = $this->getMockForAbstractClass(
             \Magento\ImportExport\Model\Import\AbstractSource::class,
             [],
@@ -576,7 +576,7 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
             true,
             ['getColNames']
         );
-        $source->expects($this->any())->method('getColNames')->will($this->returnValue($columns));
+        $source->expects($this->any())->method('getColNames')->willReturn($columns);
         $this->_model->setSource($source);
 
         return $source;

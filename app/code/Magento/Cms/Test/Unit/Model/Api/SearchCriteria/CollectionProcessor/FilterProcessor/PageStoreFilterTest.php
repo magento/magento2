@@ -14,7 +14,7 @@ class PageStoreFilterTest extends \PHPUnit\Framework\TestCase
      */
     private $filter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filter = new PageStoreFilter();
     }

@@ -12,27 +12,27 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class FileManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\RequireJs\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\RequireJs\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileSystem;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dir;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
      */
     private $appState;
 
     /**
-     * @var \Magento\Framework\View\Asset\File|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\File|\PHPUnit\Framework\MockObject\MockObject
      */
     private $asset;
 
@@ -42,11 +42,11 @@ class FileManagerTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assetRepoMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->createMock(\Magento\Framework\RequireJs\Config::class);
         $this->fileSystem = $this->createMock(\Magento\Framework\Filesystem::class);
@@ -65,27 +65,27 @@ class FileManagerTest extends \PHPUnit\Framework\TestCase
     {
         $this->configMock->expects($this->once())
             ->method('getConfigFileRelativePath')
-            ->will($this->returnValue('requirejs/file.js'));
+            ->willReturn('requirejs/file.js');
         $this->fileSystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::STATIC_VIEW)
-            ->will($this->returnValue($this->dir));
+            ->willReturn($this->dir);
         $this->assetRepoMock->expects($this->once())
             ->method('createArbitrary')
             ->with('requirejs/file.js', '')
-            ->will($this->returnValue($this->asset));
+            ->willReturn($this->asset);
 
-        $this->appState->expects($this->once())->method('getMode')->will($this->returnValue('anything'));
+        $this->appState->expects($this->once())->method('getMode')->willReturn('anything');
         $this->dir->expects($this->once())
             ->method('isExist')
             ->with('requirejs/file.js')
-            ->will($this->returnValue($exists));
+            ->willReturn($exists);
         if ($exists) {
             $this->configMock->expects($this->never())->method('getConfig');
             $this->dir->expects($this->never())->method('writeFile');
         } else {
             $data = 'requirejs config data';
-            $this->configMock->expects($this->once())->method('getConfig')->will($this->returnValue($data));
+            $this->configMock->expects($this->once())->method('getConfig')->willReturn($data);
             $this->dir->expects($this->once())->method('writeFile')->with('requirejs/file.js', $data);
         }
         $this->assertSame($this->asset, $this->object->createRequireJsConfigAsset());
@@ -103,22 +103,22 @@ class FileManagerTest extends \PHPUnit\Framework\TestCase
     {
         $this->configMock->expects($this->once())
             ->method('getConfigFileRelativePath')
-            ->will($this->returnValue('requirejs/file.js'));
+            ->willReturn('requirejs/file.js');
         $this->fileSystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::STATIC_VIEW)
-            ->will($this->returnValue($this->dir));
+            ->willReturn($this->dir);
         $this->assetRepoMock->expects($this->once())
             ->method('createArbitrary')
             ->with('requirejs/file.js', '')
-            ->will($this->returnValue($this->asset));
+            ->willReturn($this->asset);
 
         $this->appState->expects($this->once())
             ->method('getMode')
-            ->will($this->returnValue(\Magento\Framework\App\State::MODE_DEVELOPER));
+            ->willReturn(\Magento\Framework\App\State::MODE_DEVELOPER);
         $this->dir->expects($this->never())->method('isExist');
         $data = 'requirejs config data';
-        $this->configMock->expects($this->once())->method('getConfig')->will($this->returnValue($data));
+        $this->configMock->expects($this->once())->method('getConfig')->willReturn($data);
         $this->dir->expects($this->once())->method('writeFile')->with('requirejs/file.js', $data);
         $this->assertSame($this->asset, $this->object->createRequireJsConfigAsset());
     }
@@ -206,7 +206,7 @@ class FileManagerTest extends \PHPUnit\Framework\TestCase
         $this->fileSystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::STATIC_VIEW)
-            ->will($this->returnValue($this->dir));
+            ->willReturn($this->dir);
 
         $this->object->createMinResolverAsset();
     }
@@ -217,7 +217,7 @@ class FileManagerTest extends \PHPUnit\Framework\TestCase
         $this->configMock
             ->expects($this->once())
             ->method('getMixinsFileRelativePath')
-            ->will($this->returnValue($path));
+            ->willReturn($path);
         $this->assetRepoMock
             ->expects($this->once())
             ->method('createArbitrary')

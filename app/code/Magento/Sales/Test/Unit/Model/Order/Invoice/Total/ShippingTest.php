@@ -18,7 +18,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
      */
     private $total;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->total = new Shipping();
     }
@@ -75,7 +75,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $prevInvoicesData
      * @param float $orderShipping
-     * @return \Magento\Sales\Model\Order\Invoice|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Sales\Model\Order\Invoice|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createInvoiceStub(array $prevInvoicesData, $orderShipping)
     {
@@ -85,11 +85,11 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $order->expects($this->any())
             ->method('getInvoiceCollection')
-            ->will($this->returnValue($this->getInvoiceCollection($prevInvoicesData)));
+            ->willReturn($this->getInvoiceCollection($prevInvoicesData));
         $order->expects($this->any())
             ->method('getShippingAmount')
             ->willReturn($orderShipping);
-        /** @var $invoice \Magento\Sales\Model\Order\Invoice|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $invoice \Magento\Sales\Model\Order\Invoice|\PHPUnit\Framework\MockObject\MockObject */
         $invoice = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
             ->disableOriginalConstructor()
             ->getMock();

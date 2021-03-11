@@ -12,7 +12,7 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection;
 class AttributeProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eavConfig;
 
@@ -21,7 +21,7 @@ class AttributeProviderTest extends \PHPUnit\Framework\TestCase
      */
     protected $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eavConfig = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
             ->disableOriginalConstructor()
@@ -50,19 +50,19 @@ class AttributeProviderTest extends \PHPUnit\Framework\TestCase
         $attrBackendType = 'b_type';
         $attrFrontendInput = 'int';
 
-        /** @var \Magento\Eav\Model\Entity\Type|\PHPUnit_Framework_MockObject_MockObject $collectionMock $entityType */
+        /** @var \Magento\Eav\Model\Entity\Type|\PHPUnit\Framework\MockObject\MockObject $collectionMock $entityType */
         $entityType = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
+        /** @var Collection|\PHPUnit\Framework\MockObject\MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \Magento\Customer\Model\ResourceModel\Customer|\PHPUnit_Framework_MockObject_MockObject $entity */
+        /** @var \Magento\Customer\Model\ResourceModel\Customer|\PHPUnit\Framework\MockObject\MockObject $entity */
         $entity = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \Magento\Customer\Model\Attribute|\PHPUnit_Framework_MockObject_MockObject $attribute */
+        /** @var \Magento\Customer\Model\Attribute|\PHPUnit\Framework\MockObject\MockObject $attribute */
         $attribute = $this->getMockBuilder(\Magento\Customer\Model\Attribute::class)
             ->disableOriginalConstructor()
             ->setMethods(
@@ -153,19 +153,19 @@ class AttributeProviderTest extends \PHPUnit\Framework\TestCase
         $attrBackendType = 'static';
         $attrFrontendInput = 'text';
 
-        /** @var \Magento\Eav\Model\Entity\Type|\PHPUnit_Framework_MockObject_MockObject $collectionMock $entityType */
+        /** @var \Magento\Eav\Model\Entity\Type|\PHPUnit\Framework\MockObject\MockObject $collectionMock $entityType */
         $entityType = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
+        /** @var Collection|\PHPUnit\Framework\MockObject\MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \Magento\Customer\Model\ResourceModel\Customer|\PHPUnit_Framework_MockObject_MockObject $entity */
+        /** @var \Magento\Customer\Model\ResourceModel\Customer|\PHPUnit\Framework\MockObject\MockObject $entity */
         $entity = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \Magento\Customer\Model\Attribute|\PHPUnit_Framework_MockObject_MockObject $attribute */
+        /** @var \Magento\Customer\Model\Attribute|\PHPUnit\Framework\MockObject\MockObject $attribute */
         $attribute = $this->getMockBuilder(\Magento\Customer\Model\Attribute::class)
             ->disableOriginalConstructor()
             ->setMethods(
@@ -252,19 +252,19 @@ class AttributeProviderTest extends \PHPUnit\Framework\TestCase
         $attrBackendType = 'varchar';
         $attrFrontendInput = 'text';
 
-        /** @var \Magento\Eav\Model\Entity\Type|\PHPUnit_Framework_MockObject_MockObject $collectionMock $entityType */
+        /** @var \Magento\Eav\Model\Entity\Type|\PHPUnit\Framework\MockObject\MockObject $collectionMock $entityType */
         $entityType = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
+        /** @var Collection|\PHPUnit\Framework\MockObject\MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \Magento\Customer\Model\ResourceModel\Customer|\PHPUnit_Framework_MockObject_MockObject $entity */
+        /** @var \Magento\Customer\Model\ResourceModel\Customer|\PHPUnit\Framework\MockObject\MockObject $entity */
         $entity = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \Magento\Customer\Model\Attribute|\PHPUnit_Framework_MockObject_MockObject $attribute */
+        /** @var \Magento\Customer\Model\Attribute|\PHPUnit\Framework\MockObject\MockObject $attribute */
         $attribute = $this->getMockBuilder(\Magento\Customer\Model\Attribute::class)
             ->disableOriginalConstructor()
             ->setMethods(

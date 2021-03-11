@@ -16,11 +16,11 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $saleableItem;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->saleableItem = $this->createMock(\Magento\Framework\Pricing\SaleableInterface::class);
 
@@ -48,33 +48,33 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
 
         $this->saleableItem->expects($this->atLeastOnce())
             ->method('getPriceInfo')
-            ->will($this->returnValue($priceInfo));
+            ->willReturn($priceInfo);
 
         $priceInfo->expects($this->at(0))
             ->method('getPrice')
             ->with(\Magento\Bundle\Pricing\Price\FinalPrice::PRICE_CODE)
-            ->will($this->returnValue($bundlePrice));
+            ->willReturn($bundlePrice);
         if ($enableCustomOptionMocks) {
             $priceInfo->expects($this->at(1))
                 ->method('getPrice')
                 ->with(CustomOptionPrice::PRICE_CODE)
-                ->will($this->returnValue($customOptionPrice));
+                ->willReturn($customOptionPrice);
         }
 
         $bundlePrice->expects($this->once())
             ->method('getMinimalPrice')
-            ->will($this->returnValue($optMinValue));
+            ->willReturn($optMinValue);
         $bundlePrice->expects($this->once())
             ->method('getMaximalPrice')
-            ->will($this->returnValue($optMaxValue));
+            ->willReturn($optMaxValue);
 
         if ($enableCustomOptionMocks) {
             $customOptionPrice->expects($this->at(0))
                 ->method('getCustomOptionRange')
-                ->will($this->returnValue($custMinValue));
+                ->willReturn($custMinValue);
             $customOptionPrice->expects($this->at(1))
                 ->method('getCustomOptionRange')
-                ->will($this->returnValue($custMaxValue));
+                ->willReturn($custMaxValue);
         }
 
         $this->assertEquals($expectedShowRange, $this->model->showRangePrice());

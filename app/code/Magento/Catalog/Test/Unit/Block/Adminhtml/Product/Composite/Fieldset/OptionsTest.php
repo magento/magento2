@@ -28,7 +28,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
      */
     protected $_optionResource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_optionResource = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Option::class);
@@ -58,11 +58,11 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
             ->setConstructorArgs(['context' => $context, 'option' => $option])
             ->disableOriginalConstructor()
             ->getMock();
-        $dateBlock->expects($this->any())->method('setSkipJsReloadPrice')->will($this->returnValue($dateBlock));
+        $dateBlock->expects($this->any())->method('setSkipJsReloadPrice')->willReturn($dateBlock);
 
-        $layout->expects($this->any())->method('getChildName')->will($this->returnValue('date'));
-        $layout->expects($this->any())->method('getBlock')->with('date')->will($this->returnValue($dateBlock));
-        $layout->expects($this->any())->method('renderElement')->with('date', false)->will($this->returnValue('html'));
+        $layout->expects($this->any())->method('getChildName')->willReturn('date');
+        $layout->expects($this->any())->method('getBlock')->with('date')->willReturn($dateBlock);
+        $layout->expects($this->any())->method('renderElement')->with('date', false)->willReturn('html');
 
         $this->_optionsBlock = $this->_objectHelper->getObject(
             \Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Options::class,

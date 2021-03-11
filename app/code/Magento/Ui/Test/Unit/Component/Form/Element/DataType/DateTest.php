@@ -14,29 +14,29 @@ use Magento\Ui\Component\Form\Element\DataType\Date;
 
 class DateTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $contextMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $localeDateMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $localeResolverMock;
 
     /** @var \Magento\Ui\Component\Form\Element\DataType\Date  */
     private $date;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject */
     private $processorMock;
 
     /** @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     private $objectManagerHelper;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
-        $this->localeDateMock = $this->createMock(TimezoneInterface::class);
-        $this->localeResolverMock = $this->createMock(ResolverInterface::class);
+        $this->localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $this->localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
         $this->objectManagerHelper = new ObjectManager($this);
         $this->processorMock = $this->createMock(Processor::class);
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($this->processorMock);
@@ -65,7 +65,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
         $this->date->prepare();
 
         $config = $this->date->getConfig();
-        $this->assertTrue(is_array($config));
+        $this->assertIsArray($config);
 
         $this->assertArrayHasKey('options', $config);
         $this->assertArrayHasKey('dateFormat', $config['options']);
@@ -103,7 +103,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
         $this->date->prepare();
 
         $config = $this->date->getConfig();
-        $this->assertTrue(is_array($config));
+        $this->assertIsArray($config);
 
         $this->assertArrayHasKey('options', $config);
         $this->assertArrayHasKey('dateFormat', $config['options']);

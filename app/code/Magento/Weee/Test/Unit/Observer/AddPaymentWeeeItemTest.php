@@ -18,7 +18,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Weee\Helper\Data;
 use Magento\Weee\Observer\AddPaymentWeeeItem;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class AddPaymentWeeeItemTest
@@ -45,10 +45,10 @@ class AddPaymentWeeeItemTest extends TestCase
     /**
      * Set Up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->weeeHelperMock = $this->createMock(Data::class);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
         $this->observer = new AddPaymentWeeeItem(
             $this->weeeHelperMock,
@@ -69,7 +69,7 @@ class AddPaymentWeeeItemTest extends TestCase
         /** @var Observer|MockObject $observerMock */
         $observerMock = $this->createMock(Observer::class);
         $cartModelMock = $this->createMock(Cart::class);
-        $salesModelMock = $this->createMock(SalesModelInterface::class);
+        $salesModelMock = $this->getMockForAbstractClass(SalesModelInterface::class);
         $itemMock = $this->createPartialMock(Item::class, ['getOriginalItem']);
         $originalItemMock = $this->createPartialMock(Item::class, ['getParentItem']);
         $parentItemMock = $this->createMock(Item::class);

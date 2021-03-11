@@ -43,12 +43,12 @@ class SoapTest extends \PHPUnit\Framework\TestCase
     protected $_errorProcessorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Locale\ResolverInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Locale\ResolverInterface
      */
     protected $_localeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\State
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\State
      */
     protected $_appStateMock;
 
@@ -57,7 +57,7 @@ class SoapTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up Controller object.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         
@@ -94,13 +94,13 @@ class SoapTest extends \PHPUnit\Framework\TestCase
         )->disableOriginalConstructor()->setMethods(
             ['getLocale']
         )->getMock();
-        $localeResolverMock->expects($this->any())->method('getLocale')->will($this->returnValue('en'));
+        $localeResolverMock->expects($this->any())->method('getLocale')->willReturn('en');
 
-        $this->_responseMock->expects($this->any())->method('clearHeaders')->will($this->returnSelf());
+        $this->_responseMock->expects($this->any())->method('clearHeaders')->willReturnSelf();
         $this->_responseMock
             ->expects($this->any())
             ->method('getHeaders')
-            ->will($this->returnValue(new \Zend\Http\Headers()));
+            ->willReturn(new \Zend\Http\Headers());
 
         $appconfig = $this->createMock(\Magento\Framework\App\Config::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
@@ -109,13 +109,13 @@ class SoapTest extends \PHPUnit\Framework\TestCase
             $appconfig
         );
 
-        $this->_soapServerMock->expects($this->any())->method('setWSDL')->will($this->returnSelf());
-        $this->_soapServerMock->expects($this->any())->method('setEncoding')->will($this->returnSelf());
-        $this->_soapServerMock->expects($this->any())->method('setReturnResponse')->will($this->returnSelf());
+        $this->_soapServerMock->expects($this->any())->method('setWSDL')->willReturnSelf();
+        $this->_soapServerMock->expects($this->any())->method('setEncoding')->willReturnSelf();
+        $this->_soapServerMock->expects($this->any())->method('setReturnResponse')->willReturnSelf();
         $pathProcessorMock = $this->createMock(\Magento\Webapi\Controller\PathProcessor::class);
         $areaListMock = $this->createMock(\Magento\Framework\App\AreaList::class);
         $areaMock = $this->createMock(\Magento\Framework\App\AreaInterface::class);
-        $areaListMock->expects($this->any())->method('getArea')->will($this->returnValue($areaMock));
+        $areaListMock->expects($this->any())->method('getArea')->willReturn($areaMock);
 
         $rendererMock = $this->getMockBuilder(\Magento\Framework\Webapi\Rest\Response\RendererFactory::class)
             ->disableOriginalConstructor()
@@ -146,9 +146,9 @@ class SoapTest extends \PHPUnit\Framework\TestCase
         $this->_mockGetParam(\Magento\Webapi\Model\Soap\Server::REQUEST_PARAM_WSDL, 1);
         $this->_requestMock->expects($this->once())
             ->method('getParams')
-            ->will($this->returnValue($params));
+            ->willReturn($params);
         $wsdl = 'Some WSDL content';
-        $this->_wsdlGeneratorMock->expects($this->any())->method('generate')->will($this->returnValue($wsdl));
+        $this->_wsdlGeneratorMock->expects($this->any())->method('generate')->willReturn($wsdl);
 
         $this->_soapController->dispatch($this->_requestMock);
         $this->assertEquals($wsdl, $this->_responseMock->getBody());
@@ -164,18 +164,18 @@ class SoapTest extends \PHPUnit\Framework\TestCase
         $this->_mockGetParam(\Magento\Webapi\Model\Soap\Server::REQUEST_PARAM_WSDL, 1);
         $this->_requestMock->expects($this->once())
             ->method('getParams')
-            ->will($this->returnValue($params));
+            ->willReturn($params);
         $this->_errorProcessorMock->expects(
             $this->any()
         )->method(
             'maskException'
-        )->will(
-            $this->returnValue(new \Magento\Framework\Webapi\Exception(__('message')))
+        )->willReturn(
+            new \Magento\Framework\Webapi\Exception(__('message'))
         );
         $wsdl = 'Some WSDL content';
-        $this->_wsdlGeneratorMock->expects($this->any())->method('generate')->will($this->returnValue($wsdl));
+        $this->_wsdlGeneratorMock->expects($this->any())->method('generate')->willReturn($wsdl);
         $encoding = "utf-8";
-        $this->_soapServerMock->expects($this->any())->method('getApiCharset')->will($this->returnValue($encoding));
+        $this->_soapServerMock->expects($this->any())->method('getApiCharset')->willReturn($encoding);
         $this->_soapController->dispatch($this->_requestMock);
 
         $expectedMessage = <<<EXPECTED_MESSAGE
@@ -218,11 +218,11 @@ EXPECTED_MESSAGE;
             $this->any()
         )->method(
             'maskException'
-        )->will(
-            $this->returnValue($exception)
+        )->willReturn(
+            $exception
         );
         $encoding = "utf-8";
-        $this->_soapServerMock->expects($this->any())->method('getApiCharset')->will($this->returnValue($encoding));
+        $this->_soapServerMock->expects($this->any())->method('getApiCharset')->willReturn($encoding);
 
         $this->_soapController->dispatch($this->_requestMock);
 
@@ -258,8 +258,8 @@ EXPECTED_MESSAGE;
             'getParam'
         )->with(
             $param
-        )->will(
-            $this->returnValue($value)
+        )->willReturn(
+            $value
         );
     }
 }

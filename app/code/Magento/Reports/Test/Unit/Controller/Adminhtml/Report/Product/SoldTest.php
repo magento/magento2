@@ -18,14 +18,14 @@ class SoldTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\Ab
     protected $sold;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dateMock;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

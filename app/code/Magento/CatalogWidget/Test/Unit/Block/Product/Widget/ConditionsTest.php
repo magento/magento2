@@ -25,27 +25,27 @@ class ConditionsTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $registryMock;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var Rule|\PHPUnit_Framework_MockObject_MockObject
+     * @var Rule|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $ruleMock;
 
     /**
-     * @var LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $layoutMock;
 
     /**
-     * @var BlockInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BlockInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $blockMock;
 
@@ -57,7 +57,7 @@ class ConditionsTest extends \PHPUnit\Framework\TestCase
     /**
      * return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->ruleMock = $this->getMockBuilder(Rule::class)
@@ -113,7 +113,7 @@ class ConditionsTest extends \PHPUnit\Framework\TestCase
     {
         $widgetParams = ['conditions' => 'some conditions'];
 
-        /** @var \Magento\Widget\Model\Widget\Instance|\PHPUnit_Framework_MockObject_MockObject $widgetMock */
+        /** @var \Magento\Widget\Model\Widget\Instance|\PHPUnit\Framework\MockObject\MockObject $widgetMock */
         $widgetMock = $this->getMockBuilder(\Magento\Widget\Model\Widget\Instance::class)
             ->disableOriginalConstructor()
             ->getMock();

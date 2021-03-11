@@ -29,10 +29,10 @@ class SearchResultTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $document1 = $this->createMock(DocumentInterface::class);
-        $document2 = $this->createMock(DocumentInterface::class);
+        $document1 = $this->getMockForAbstractClass(DocumentInterface::class);
+        $document2 = $this->getMockForAbstractClass(DocumentInterface::class);
 
         $this->items = [ $document1,  $document2];
         $document1->expects($this->any())

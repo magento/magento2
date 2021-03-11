@@ -27,21 +27,21 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     protected $_eavProcessor;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eavConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_processor = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\Processor::class);
 
@@ -52,7 +52,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $cacheInterfaceMock = $this->createMock(\Magento\Framework\App\CacheInterface::class);
 
         $actionValidatorMock = $this->createMock(\Magento\Framework\Model\ActionValidator\RemoveAction::class);
-        $actionValidatorMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
+        $actionValidatorMock->expects($this->any())->method('isAllowed')->willReturn(true);
 
         $this->contextMock = $this->createPartialMock(
             \Magento\Framework\Model\Context::class,
@@ -61,16 +61,16 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
 
         $this->contextMock->expects($this->any())
             ->method('getEventDispatcher')
-            ->will($this->returnValue($eventManagerMock));
+            ->willReturn($eventManagerMock);
         $this->contextMock->expects($this->any())
             ->method('getCacheManager')
-            ->will($this->returnValue($cacheInterfaceMock));
+            ->willReturn($cacheInterfaceMock);
         $this->contextMock->expects($this->any())->method('getActionValidator')
-            ->will($this->returnValue($actionValidatorMock));
+            ->willReturn($actionValidatorMock);
 
         $dbAdapterMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
 
-        $dbAdapterMock->expects($this->any())->method('getTransactionLevel')->will($this->returnValue(1));
+        $dbAdapterMock->expects($this->any())->method('getTransactionLevel')->willReturn(1);
 
         $this->resourceMock = $this->createPartialMock(
             \Magento\Framework\Model\ResourceModel\AbstractResource::class,
@@ -92,7 +92,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
 
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($dbAdapterMock));
+            ->willReturn($dbAdapterMock);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $objectManager->getObject(

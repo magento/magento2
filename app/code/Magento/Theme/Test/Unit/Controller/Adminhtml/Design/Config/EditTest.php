@@ -18,36 +18,36 @@ class EditTest extends \PHPUnit\Framework\TestCase
     protected $controller;
 
     /**
-     * @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\Page|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultPage;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultRedirect;
 
     /**
-     * @var \Magento\Framework\App\ScopeResolverPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ScopeResolverPool|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeResolverPool;
 
     /**
-     * @var \Magento\Framework\App\ScopeValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ScopeValidatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeValidator;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initContext();
         $resultPageFactory = $this->initResultPage();
@@ -97,7 +97,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\View\Result\PageFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function initResultPage()
     {

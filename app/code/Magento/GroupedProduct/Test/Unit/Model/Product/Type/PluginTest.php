@@ -9,7 +9,7 @@ namespace Magento\GroupedProduct\Test\Unit\Model\Product\Type;
 class PluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $moduleManagerMock;
 
@@ -19,11 +19,11 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->moduleManagerMock = $this->createMock(\Magento\Framework\Module\Manager::class);
         $this->subjectMock = $this->createMock(\Magento\Catalog\Model\Product\Type::class);
@@ -32,7 +32,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
 
     public function testAfterGetOptionArray()
     {
-        $this->moduleManagerMock->expects($this->any())->method('isOutputEnabled')->will($this->returnValue(false));
+        $this->moduleManagerMock->expects($this->any())->method('isOutputEnabled')->willReturn(false);
         $this->assertEquals(
             [],
             $this->object->afterGetOptionArray($this->subjectMock, ['grouped' => 'test'])

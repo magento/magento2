@@ -14,7 +14,7 @@ class CheckboxTest extends \PHPUnit\Framework\TestCase
      */
     protected $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->block = (new ObjectManager($this))
             ->getObject(
@@ -29,7 +29,7 @@ class CheckboxTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->block->setValidationContainer($elementId, $containerId);
 
-        $this->assertContains($elementId, $result);
-        $this->assertContains($containerId, $result);
+        $this->assertStringContainsString($elementId, $result);
+        $this->assertStringContainsString($containerId, $result);
     }
 }

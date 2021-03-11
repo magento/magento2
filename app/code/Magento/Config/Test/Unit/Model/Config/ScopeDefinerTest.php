@@ -16,11 +16,11 @@ class ScopeDefinerTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $objectManager = new ObjectManager($this);
@@ -41,8 +41,8 @@ class ScopeDefinerTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getParam'
-        )->will(
-            $this->returnValueMap([['website', null, 'someWebsite'], ['store', null, 'someStore']])
+        )->willReturnMap(
+            [['website', null, 'someWebsite'], ['store', null, 'someStore']]
         );
         $this->assertEquals(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $this->_model->getScope());
     }
@@ -53,8 +53,8 @@ class ScopeDefinerTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getParam'
-        )->will(
-            $this->returnValueMap([['website', null, 'someWebsite'], ['store', null, null]])
+        )->willReturnMap(
+            [['website', null, 'someWebsite'], ['store', null, null]]
         );
         $this->assertEquals(\Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE, $this->_model->getScope());
     }

@@ -21,26 +21,26 @@ use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 class AttributeSetTest extends AbstractModifierTest
 {
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeSetCollectionFactoryMock;
 
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeSetCollectionMock;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var ProductResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductResource|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productResourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->attributeSetCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
@@ -52,7 +52,7 @@ class AttributeSetTest extends AbstractModifierTest
             ->getMock();
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->productResourceMock = $this->getMockBuilder(ProductResource::class)
             ->disableOriginalConstructor()
             ->getMock();

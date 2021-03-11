@@ -13,26 +13,26 @@ class FormTest extends \PHPUnit\Framework\TestCase
     /**
      * Basic import model
      *
-     * @var \Magento\ImportExport\Model\Import|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Import|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_importModel;
 
     /**
-     * @var \Magento\ImportExport\Model\Source\Import\EntityFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Source\Import\EntityFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_entityFactory;
 
     /**
-     * @var \Magento\ImportExport\Model\Source\Import\Behavior\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Source\Import\Behavior\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_behaviorFactory;
 
     /**
-     * @var \Magento\ImportExport\Block\Adminhtml\Import\Edit\Form|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Block\Adminhtml\Import\Edit\Form|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $form;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $context = $this->getMockBuilder(\Magento\Backend\Block\Template\Context::class)
             ->disableOriginalConstructor()

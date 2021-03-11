@@ -26,32 +26,32 @@ abstract class AbstractDataProviderTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productRepositoryMock;
 
     /**
-     * @var ProductLinkRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductLinkRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productLinkRepositoryMock;
 
     /**
-     * @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionMock;
 
@@ -60,7 +60,7 @@ abstract class AbstractDataProviderTest extends \PHPUnit\Framework\TestCase
      */
     abstract protected function getModel();
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)

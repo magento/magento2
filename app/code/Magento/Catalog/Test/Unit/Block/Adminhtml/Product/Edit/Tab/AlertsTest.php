@@ -13,11 +13,11 @@ class AlertsTest extends \PHPUnit\Framework\TestCase
     protected $alerts;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
@@ -51,7 +51,7 @@ class AlertsTest extends \PHPUnit\Framework\TestCase
                 $stockAllow
             ],
         ];
-        $this->scopeConfigMock->expects($this->any())->method('getValue')->will($this->returnValueMap($valueMap));
+        $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturnMap($valueMap);
         $this->assertEquals($canShowTab, $this->alerts->canShowTab());
     }
 

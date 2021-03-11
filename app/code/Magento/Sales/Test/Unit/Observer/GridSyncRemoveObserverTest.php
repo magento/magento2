@@ -17,21 +17,21 @@ class GridSyncRemoveObserverTest extends \PHPUnit\Framework\TestCase
     protected $unit;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\GridInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\GridInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $gridAggregatorMock;
 
     /**
-     * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventObserverMock;
 
     /**
-     * @var \Magento\Sales\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\AbstractModel|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $salesModelMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->gridAggregatorMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\GridInterface::class)
             ->getMockForAbstractClass();

@@ -33,129 +33,129 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     protected $context;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultForwardFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultForwardMock;
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultPageFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\Page|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultPageMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageConfigMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Title|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageTitleMock;
 
     /**
-     * @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionMock;
 
     /**
-     * @var \Magento\Customer\Model\Metadata\FormFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Metadata\FormFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $formFactoryMock;
 
     /**
-     * @var \Magento\Framework\DataObjectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObjectFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectFactoryMock;
 
     /**
-     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerDataFactoryMock;
 
     /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerRepositoryMock;
 
     /**
-     * @var \Magento\Customer\Model\Customer\Mapper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Customer\Mapper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerMapperMock;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataHelperMock;
 
     /**
-     * @var \Magento\Framework\AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\AuthorizationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $authorizationMock;
 
     /**
-     * @var \Magento\Newsletter\Model\SubscriberFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Newsletter\Model\SubscriberFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $subscriberFactoryMock;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registryMock;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageManagerMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $redirectFactoryMock;
 
     /**
-     * @var \Magento\Customer\Model\AccountManagement|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\AccountManagement|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $managementMock;
 
     /**
-     * @var \Magento\Customer\Api\Data\AddressInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\Data\AddressInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressDataFactoryMock;
 
     /**
-     * @var EmailNotificationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EmailNotificationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $emailNotificationMock;
 
     /**
-     * @var \Magento\Customer\Model\Address\Mapper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Address\Mapper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerAddressMapperMock;
 
     /**
-     * @var \Magento\Customer\Api\AddressRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\AddressRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerAddressRepositoryMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
@@ -239,7 +239,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->emailNotificationMock = $this->getMockBuilder(EmailNotificationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -324,7 +324,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             'id' => $customerId,
         ];
 
-        /** @var AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject $customerFormMock */
+        /** @var AttributeMetadataInterface|\PHPUnit\Framework\MockObject\MockObject $customerFormMock */
         $attributeMock = $this->getMockBuilder(
             \Magento\Customer\Api\Data\AttributeMetadataInterface::class
         )->disableOriginalConstructor()->getMock();
@@ -353,7 +353,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject $objectMock */
+        /** @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject $objectMock */
         $objectMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -400,7 +400,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        /** @var CustomerInterface|\PHPUnit_Framework_MockObject_MockObject $customerMock */
+        /** @var CustomerInterface|\PHPUnit\Framework\MockObject\MockObject $customerMock */
         $customerMock = $this->getMockBuilder(
             \Magento\Customer\Api\Data\CustomerInterface::class
         )->disableOriginalConstructor()->getMock();
@@ -453,7 +453,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->with(null)
             ->willReturn(true);
 
-        /** @var \Magento\Newsletter\Model\Subscriber|\PHPUnit_Framework_MockObject_MockObject $subscriberMock */
+        /** @var \Magento\Newsletter\Model\Subscriber|\PHPUnit\Framework\MockObject\MockObject $subscriberMock */
         $subscriberMock = $this->getMockBuilder(\Magento\Newsletter\Model\Subscriber::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -486,7 +486,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->with('back', false)
             ->willReturn(true);
 
-        /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $redirectMock */
+        /** @var Redirect|\PHPUnit\Framework\MockObject\MockObject $redirectMock */
         $redirectMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -533,7 +533,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             CustomerInterface::DEFAULT_SHIPPING => null,
             'confirmation' => false,
         ];
-        /** @var AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject $customerFormMock */
+        /** @var AttributeMetadataInterface|\PHPUnit\Framework\MockObject\MockObject $customerFormMock */
         $attributeMock = $this->getMockBuilder(
             \Magento\Customer\Api\Data\AttributeMetadataInterface::class
         )->disableOriginalConstructor()->getMock();
@@ -562,7 +562,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject $objectMock */
+        /** @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject $objectMock */
         $objectMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -610,7 +610,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        /** @var CustomerInterface|\PHPUnit_Framework_MockObject_MockObject $customerMock */
+        /** @var CustomerInterface|\PHPUnit\Framework\MockObject\MockObject $customerMock */
         $customerMock = $this->getMockBuilder(
             \Magento\Customer\Api\Data\CustomerInterface::class
         )->disableOriginalConstructor()->getMock();
@@ -645,7 +645,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->with(null)
             ->willReturn(true);
 
-        /** @var \Magento\Newsletter\Model\Subscriber|\PHPUnit_Framework_MockObject_MockObject $subscriberMock */
+        /** @var \Magento\Newsletter\Model\Subscriber|\PHPUnit\Framework\MockObject\MockObject $subscriberMock */
         $subscriberMock = $this->getMockBuilder(\Magento\Newsletter\Model\Subscriber::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -678,7 +678,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->with('back', false)
             ->willReturn(false);
 
-        /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $redirectMock */
+        /** @var Redirect|\PHPUnit\Framework\MockObject\MockObject $redirectMock */
         $redirectMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -716,7 +716,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             'dob' => '1996-03-12',
         ];
 
-        /** @var AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject $customerFormMock */
+        /** @var AttributeMetadataInterface|\PHPUnit\Framework\MockObject\MockObject $customerFormMock */
         $attributeMock = $this->getMockBuilder(
             \Magento\Customer\Api\Data\AttributeMetadataInterface::class
         )->disableOriginalConstructor()->getMock();
@@ -744,7 +744,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject $objectMock */
+        /** @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject $objectMock */
         $objectMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -783,7 +783,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                 Form::DONT_IGNORE_INVISIBLE
             )->willReturn($customerFormMock);
 
-        /** @var CustomerInterface|\PHPUnit_Framework_MockObject_MockObject $customerMock */
+        /** @var CustomerInterface|\PHPUnit\Framework\MockObject\MockObject $customerMock */
         $customerMock = $this->getMockBuilder(
             \Magento\Customer\Api\Data\CustomerInterface::class
         )->disableOriginalConstructor()->getMock();
@@ -828,7 +828,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $redirectMock */
+        /** @var Redirect|\PHPUnit\Framework\MockObject\MockObject $redirectMock */
         $redirectMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -867,7 +867,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             'dob' => '1996-03-12',
         ];
 
-        /** @var AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject $customerFormMock */
+        /** @var AttributeMetadataInterface|\PHPUnit\Framework\MockObject\MockObject $customerFormMock */
         $attributeMock = $this->getMockBuilder(
             \Magento\Customer\Api\Data\AttributeMetadataInterface::class
         )->disableOriginalConstructor()->getMock();
@@ -895,7 +895,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject $objectMock */
+        /** @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject $objectMock */
         $objectMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -909,7 +909,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->with(['data' => $postValue])
             ->willReturn($objectMock);
 
-        /** @var Form|\PHPUnit_Framework_MockObject_MockObject $formMock */
+        /** @var Form|\PHPUnit\Framework\MockObject\MockObject $formMock */
         $customerFormMock = $this->getMockBuilder(
             \Magento\Customer\Model\Metadata\Form::class
         )->disableOriginalConstructor()->getMock();
@@ -979,7 +979,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $redirectMock */
+        /** @var Redirect|\PHPUnit\Framework\MockObject\MockObject $redirectMock */
         $redirectMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -1018,7 +1018,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             'dob' => '1996-03-12',
         ];
 
-        /** @var AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject $customerFormMock */
+        /** @var AttributeMetadataInterface|\PHPUnit\Framework\MockObject\MockObject $customerFormMock */
         $attributeMock = $this->getMockBuilder(
             \Magento\Customer\Api\Data\AttributeMetadataInterface::class
         )->disableOriginalConstructor()->getMock();
@@ -1046,7 +1046,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject $objectMock */
+        /** @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject $objectMock */
         $objectMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -1085,7 +1085,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                 Form::DONT_IGNORE_INVISIBLE
             )->willReturn($customerFormMock);
 
-        /** @var CustomerInterface|\PHPUnit_Framework_MockObject_MockObject $customerMock */
+        /** @var CustomerInterface|\PHPUnit\Framework\MockObject\MockObject $customerMock */
         $customerMock = $this->getMockBuilder(
             \Magento\Customer\Api\Data\CustomerInterface::class
         )->disableOriginalConstructor()->getMock();
@@ -1131,7 +1131,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $redirectMock */
+        /** @var Redirect|\PHPUnit\Framework\MockObject\MockObject $redirectMock */
         $redirectMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();

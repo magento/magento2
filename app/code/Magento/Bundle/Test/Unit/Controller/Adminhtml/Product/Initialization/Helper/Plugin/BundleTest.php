@@ -15,17 +15,17 @@ class BundleTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 
@@ -44,7 +44,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
      */
     protected $bundleOptionsCleaned;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $methods = [
@@ -112,21 +112,21 @@ class BundleTest extends \PHPUnit\Framework\TestCase
             ['bundle_options', null, $this->bundleOptionsRaw],
             ['affect_bundle_product_selections', null, 1],
         ];
-        $this->requestMock->expects($this->any())->method('getPost')->will($this->returnValueMap($valueMap));
-        $this->productMock->expects($this->any())->method('getCompositeReadonly')->will($this->returnValue(false));
+        $this->requestMock->expects($this->any())->method('getPost')->willReturnMap($valueMap);
+        $this->productMock->expects($this->any())->method('getCompositeReadonly')->willReturn(false);
         $this->productMock->expects($this->once())
             ->method('setBundleOptionsData')
             ->with($this->bundleOptionsCleaned);
         $this->productMock->expects($this->once())->method('setBundleSelectionsData')->with([$this->bundleSelections]);
-        $this->productMock->expects($this->once())->method('getPriceType')->will($this->returnValue(0));
-        $this->productMock->expects($this->any())->method('getOptionsReadonly')->will($this->returnValue(false));
+        $this->productMock->expects($this->once())->method('getPriceType')->willReturn(0);
+        $this->productMock->expects($this->any())->method('getOptionsReadonly')->willReturn(false);
         $this->productMock->expects($this->once())->method('setCanSaveCustomOptions')->with(true);
         $this->productMock->expects(
             $this->once()
         )->method(
             'getProductOptions'
-        )->will(
-            $this->returnValue($productOptionsBefore)
+        )->willReturn(
+            $productOptionsBefore
         );
         $this->productMock->expects($this->once())->method('setOptions')->with(null);
         $this->productMock->expects($this->once())->method('setCanSaveBundleSelections')->with(true);
@@ -152,14 +152,14 @@ class BundleTest extends \PHPUnit\Framework\TestCase
             ['bundle_options', null, $bundleOptionsRawWithoutSelections],
             ['affect_bundle_product_selections', null, false],
         ];
-        $this->requestMock->expects($this->any())->method('getPost')->will($this->returnValueMap($valueMap));
-        $this->productMock->expects($this->any())->method('getCompositeReadonly')->will($this->returnValue(false));
+        $this->requestMock->expects($this->any())->method('getPost')->willReturnMap($valueMap);
+        $this->productMock->expects($this->any())->method('getCompositeReadonly')->willReturn(false);
         $this->productMock->expects($this->never())
             ->method('setBundleOptionsData')
             ->with($this->bundleOptionsCleaned);
         $this->productMock->expects($this->never())->method('setBundleSelectionsData');
-        $this->productMock->expects($this->once())->method('getPriceType')->will($this->returnValue(2));
-        $this->productMock->expects($this->any())->method('getOptionsReadonly')->will($this->returnValue(true));
+        $this->productMock->expects($this->once())->method('getPriceType')->willReturn(2);
+        $this->productMock->expects($this->any())->method('getOptionsReadonly')->willReturn(true);
         $this->productMock->expects($this->once())->method('setCanSaveBundleSelections')->with(false);
         $this->model->afterInitialize($this->subjectMock, $this->productMock);
     }
@@ -173,13 +173,13 @@ class BundleTest extends \PHPUnit\Framework\TestCase
             ['bundle_options', null, null],
             ['affect_bundle_product_selections', null, false],
         ];
-        $this->requestMock->expects($this->any())->method('getPost')->will($this->returnValueMap($valueMap));
+        $this->requestMock->expects($this->any())->method('getPost')->willReturnMap($valueMap);
         $extentionAttribute = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setBundleProductOptions'])
             ->getMockForAbstractClass();
         $extentionAttribute->expects($this->once())->method('setBundleProductOptions')->with([]);
-        $this->productMock->expects($this->any())->method('getCompositeReadonly')->will($this->returnValue(false));
+        $this->productMock->expects($this->any())->method('getCompositeReadonly')->willReturn(false);
         $this->productMock->expects($this->once())->method('getExtensionAttributes')->willReturn($extentionAttribute);
         $this->productMock->expects($this->once())->method('setExtensionAttributes')->with($extentionAttribute);
         $this->productMock->expects($this->once())->method('setCanSaveBundleSelections')->with(false);

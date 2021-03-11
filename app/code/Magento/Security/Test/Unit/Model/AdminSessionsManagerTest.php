@@ -59,7 +59,7 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
      * Init mocks for tests
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -343,7 +343,7 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->currentSessionMock);
         $this->currentSessionMock->expects($this->once())
             ->method('getStatus')
-            ->will($this->returnValue($sessionStatus));
+            ->willReturn($sessionStatus);
 
         $this->assertEquals($expectedResult, $this->model->getLogoutReasonMessage());
     }

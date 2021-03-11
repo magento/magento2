@@ -9,25 +9,25 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Backend\Media;
 class ImageEntryConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      * |\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory
      */
     protected $mediaGalleryEntryFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      * |\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntry
      */
     protected $mediaGalleryEntryMock;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataObjectHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product
      */
     protected $productMock;
 
@@ -37,7 +37,7 @@ class ImageEntryConverterTest extends \PHPUnit\Framework\TestCase
      */
     protected $modelObject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mediaGalleryEntryFactoryMock =
             $this->createPartialMock(

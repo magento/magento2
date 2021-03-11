@@ -70,7 +70,7 @@ class MediaTest extends TestCase
     /**
      * @inheridoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mediaGallery = [
             'image' => '/m/a/magento.png',
@@ -170,7 +170,8 @@ class MediaTest extends TestCase
         $this->jsonMock
             ->expects($this->once())
             ->method('setData')
-            ->with($this->mediaGallery)->willReturnSelf();
+            ->with($this->mediaGallery)
+            ->willReturnSelf();
 
         $result = $this->controller->execute();
 

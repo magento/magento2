@@ -12,7 +12,7 @@ namespace Magento\Payment\Test\Unit\Block\Info;
 class InstructionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Payment\Model\Info|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Model\Info|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_info;
 
@@ -21,7 +21,7 @@ class InstructionsTest extends \PHPUnit\Framework\TestCase
      */
     protected $_instructions;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $this->_instructions = new \Magento\Payment\Block\Info\Instructions($context);

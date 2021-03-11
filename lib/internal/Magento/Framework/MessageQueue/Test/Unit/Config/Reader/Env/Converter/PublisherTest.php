@@ -15,7 +15,7 @@ class PublisherTest extends \PHPUnit\Framework\TestCase
      */
     private $converter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $connectionToExchangeMap =  [
             'amqp' => 'magento',

@@ -24,21 +24,21 @@ class BackupTest extends \PHPUnit\Framework\TestCase
     protected $backupModel;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesystemMock;
 
     /**
-     * @var \Magento\Backup\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backup\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataHelperMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filesystemMock = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->disableOriginalConstructor()

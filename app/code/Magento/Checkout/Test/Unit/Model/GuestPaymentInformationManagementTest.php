@@ -35,27 +35,27 @@ use Psr\Log\LoggerInterface;
 class GuestPaymentInformationManagementTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $billingAddressManagementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $paymentMethodManagementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $cartManagementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $cartRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteIdMaskFactoryMock;
 
@@ -65,7 +65,7 @@ class GuestPaymentInformationManagementTest extends TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
@@ -79,7 +79,7 @@ class GuestPaymentInformationManagementTest extends TestCase
      */
     private $saveLimiterMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->billingAddressManagementMock = $this->createMock(
@@ -133,10 +133,11 @@ class GuestPaymentInformationManagementTest extends TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSavePaymentInformationAndPlaceOrderException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+
         $cartId = 100;
         $email = 'email@magento.com';
         $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
@@ -197,11 +198,12 @@ class GuestPaymentInformationManagementTest extends TestCase
     }
 
     /**
-     * @expectedExceptionMessage DB exception
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSavePaymentInformationAndPlaceOrderWithLocalizedException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+        $this->expectExceptionMessage('DB exception');
+
         $cartId = 100;
         $email = 'email@magento.com';
         $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
@@ -228,12 +230,12 @@ class GuestPaymentInformationManagementTest extends TestCase
 
     /**
      * @param int $cartId
-     * @param \PHPUnit_Framework_MockObject_MockObject $billingAddressMock
+     * @param \PHPUnit\Framework\MockObject\MockObject $billingAddressMock
      * @return void
      */
     private function getMockForAssignBillingAddress(
         int $cartId,
-        \PHPUnit_Framework_MockObject_MockObject $billingAddressMock
+        \PHPUnit\Framework\MockObject\MockObject $billingAddressMock
     ) : void {
         $quoteIdMask = $this->createPartialMock(QuoteIdMask::class, ['getQuoteId', 'load']);
         $this->quoteIdMaskFactoryMock->method('create')

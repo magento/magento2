@@ -51,8 +51,8 @@ class FullTest extends \PHPUnit\Framework\TestCase
         $productsIds = array_keys($result);
         foreach ($productsIds as $productId) {
             $product = $productRepository->getById($productId);
-            $this->assertContains($product->getVisibility(), $allowedVisibility);
-            $this->assertContains($product->getStatus(), $allowedStatuses);
+            $this->assertContainsEquals($product->getVisibility(), $allowedVisibility);
+            $this->assertContainsEquals($product->getStatus(), $allowedStatuses);
         }
 
         $expectedData = $this->getExpectedIndexData();

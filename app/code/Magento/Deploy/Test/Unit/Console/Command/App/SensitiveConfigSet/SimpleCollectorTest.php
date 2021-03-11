@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Question\QuestionFactory;
 use Symfony\Component\Console\Helper\QuestionHelper;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class SimpleCollectorTest extends \PHPUnit\Framework\TestCase
 {
@@ -45,7 +45,7 @@ class SimpleCollectorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->questionFactoryMock = $this->getMockBuilder(QuestionFactory::class)
             ->disableOriginalConstructor()
@@ -110,11 +110,12 @@ class SimpleCollectorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage A configuration with this path does not exist or is not sensitive
      */
     public function testWrongConfigPath()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('A configuration with this path does not exist or is not sensitive');
+
         $configPaths = [
             'some/config/path1',
             'some/config/path2'
@@ -140,10 +141,11 @@ class SimpleCollectorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testEmptyValue()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $configPaths = [
             'some/config/path1',
             'some/config/path2'

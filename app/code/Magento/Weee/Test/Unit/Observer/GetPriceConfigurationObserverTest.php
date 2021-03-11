@@ -42,13 +42,13 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
         $weeeHelper=$this->createMock(\Magento\Weee\Helper\Data::class);
         $weeeHelper->expects($this->any())
             ->method('isEnabled')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $observerObject=$this->createMock(\Magento\Framework\Event\Observer::class);
         $observerObject->expects($this->any())
             ->method('getData')
             ->with('configObj')
-            ->will($this->returnValue($configObj));
+            ->willReturn($configObj);
 
         $productInstance=$this->createMock(\Magento\Catalog\Model\Product\Type\Simple::class);
 
@@ -58,34 +58,34 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
         );
         $product->expects($this->any())
             ->method('getTypeInstance')
-            ->will($this->returnValue($productInstance));
+            ->willReturn($productInstance);
         $product->expects($this->any())
             ->method('getTypeId')
-            ->will($this->returnValue('simple'));
+            ->willReturn('simple');
         $product->expects($this->any())
             ->method('getStoreId')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $registry=$this->createMock(\Magento\Framework\Registry::class);
         $registry->expects($this->any())
             ->method('registry')
             ->with('current_product')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
 
         if ($hasWeeeAttributes) {
             $weeeHelper->expects($this->any())
                 ->method('getWeeeAttributesForBundle')
-                ->will($this->returnValue([
+                ->willReturn([
                     1 => ['fpt1' => $weeeObject1],
                     2 => [
                         'fpt1' => $weeeObject1,
                         'fpt2' => $weeeObject2
                     ]
-                ]));
+                ]);
         } else {
             $weeeHelper->expects($this->any())
                 ->method('getWeeeAttributesForBundle')
-                ->will($this->returnValue(null));
+                ->willReturn(null);
         }
 
         $objectManager = new ObjectManager($this);

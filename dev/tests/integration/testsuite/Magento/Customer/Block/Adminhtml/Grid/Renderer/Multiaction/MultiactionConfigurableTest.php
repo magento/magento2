@@ -21,7 +21,7 @@ class MultiactionConfigurableTest extends AbstractMultiactionTest
     /**
      * @inheritdoc
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         /** @var Manager $moduleManager */

@@ -29,12 +29,12 @@ class CoreTest extends \PHPUnit\Framework\TestCase
      */
     protected $_mockBackend;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_mockBackend = $this->createMock(\Zend_Cache_Backend_File::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_mockBackend);
     }
@@ -53,10 +53,11 @@ class CoreTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider setBackendExceptionProvider
-     * @expectedException \Zend_Cache_Exception
      */
     public function testSetBackendException($decorators)
     {
+        $this->expectException(\Zend_Cache_Exception::class);
+
         $core = new \Magento\Framework\Cache\Core(['backend_decorators' => $decorators]);
         $core->setBackend($this->_mockBackend);
     }
@@ -106,7 +107,10 @@ class CoreTest extends \PHPUnit\Framework\TestCase
         $backendMock->expects($this->once())
             ->method('save')
             ->with($data, $this->anything(), $prefixedTags)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
+        $backendMock->expects($this->once())
+            ->method('getCapabilities')
+            ->willReturn(['priority' => null]);
         $frontend = new \Magento\Framework\Cache\Core([
             'disable_save'              => false,
             'caching'                   => true,
@@ -131,7 +135,7 @@ class CoreTest extends \PHPUnit\Framework\TestCase
         $backendMock->expects($this->once())
             ->method('clean')
             ->with($mode, $prefixedTags)
-            ->will($this->returnValue($expectedResult));
+            ->willReturn($expectedResult);
         $frontend = new \Magento\Framework\Cache\Core([
             'caching'         => true,
             'cache_id_prefix' => $prefix,
@@ -153,10 +157,10 @@ class CoreTest extends \PHPUnit\Framework\TestCase
         $backendMock->expects($this->once())
             ->method('getIdsMatchingTags')
             ->with($prefixedTags)
-            ->will($this->returnValue($ids));
+            ->willReturn($ids);
         $backendMock->expects($this->any())
             ->method('getCapabilities')
-            ->will($this->returnValue(['tags' => true]));
+            ->willReturn(['tags' => true]);
         $frontend = new \Magento\Framework\Cache\Core([
             'caching'         => true,
             'cache_id_prefix' => $prefix,
@@ -178,10 +182,10 @@ class CoreTest extends \PHPUnit\Framework\TestCase
         $backendMock->expects($this->once())
             ->method('getIdsNotMatchingTags')
             ->with($prefixedTags)
-            ->will($this->returnValue($ids));
+            ->willReturn($ids);
         $backendMock->expects($this->any())
             ->method('getCapabilities')
-            ->will($this->returnValue(['tags' => true]));
+            ->willReturn(['tags' => true]);
         $frontend = new \Magento\Framework\Cache\Core([
             'caching'         => true,
             'cache_id_prefix' => $prefix,

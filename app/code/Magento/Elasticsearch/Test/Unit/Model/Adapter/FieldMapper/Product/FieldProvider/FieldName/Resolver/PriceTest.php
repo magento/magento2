@@ -38,7 +38,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerSession = $this->getMockBuilder(CustomerSession::class)
             ->disableOriginalConstructor()

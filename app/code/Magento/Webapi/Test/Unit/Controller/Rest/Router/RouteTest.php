@@ -20,11 +20,11 @@ class RouteTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var Request|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 

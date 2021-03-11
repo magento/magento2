@@ -18,41 +18,41 @@ class SetQuotePersistentDataObserverTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $observerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $quoteMethods = ['setIsActive', 'setIsPersistent', '__wakeUp'];
         $eventMethods = ['getQuote', '__wakeUp'];
@@ -73,35 +73,35 @@ class SetQuotePersistentDataObserverTest extends \PHPUnit\Framework\TestCase
 
     public function testExecuteWhenSessionIsNotPersistent()
     {
-        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->will($this->returnValue(false));
+        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->willReturn(false);
         $this->observerMock->expects($this->never())->method('getEvent');
         $this->model->execute($this->observerMock);
     }
 
     public function testExecuteWhenQuoteNotExist()
     {
-        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
+        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->observerMock
             ->expects($this->once())
             ->method('getEvent')
-            ->will($this->returnValue($this->eventManagerMock));
+            ->willReturn($this->eventManagerMock);
         $this->eventManagerMock->expects($this->once())->method('getQuote');
         $this->model->execute($this->observerMock);
     }
 
     public function testExecuteWhenSessionIsPersistent()
     {
-        $this->sessionHelperMock->expects($this->exactly(2))->method('isPersistent')->will($this->returnValue(true));
+        $this->sessionHelperMock->expects($this->exactly(2))->method('isPersistent')->willReturn(true);
         $this->observerMock
             ->expects($this->once())
             ->method('getEvent')
-            ->will($this->returnValue($this->eventManagerMock));
+            ->willReturn($this->eventManagerMock);
         $this->eventManagerMock
             ->expects($this->once())
             ->method('getQuote')
-            ->will($this->returnValue($this->quoteMock));
-        $this->helperMock->expects($this->once())->method('isShoppingCartPersist')->will($this->returnValue(true));
-        $this->quoteManagerMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
+            ->willReturn($this->quoteMock);
+        $this->helperMock->expects($this->once())->method('isShoppingCartPersist')->willReturn(true);
+        $this->quoteManagerMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->quoteMock->expects($this->once())->method('setIsPersistent')->with(true);
         $this->model->execute($this->observerMock);
     }

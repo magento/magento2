@@ -14,16 +14,16 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
     private $additionalBlock;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var \Magento\Framework\App\State | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $appStateMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);
         $this->appStateMock = $this->getMockBuilder(\Magento\Framework\App\State::class)
@@ -51,7 +51,7 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
             ->with('*/*/cleanImages')
-            ->will($this->returnValue($expectedUrl));
+            ->willReturn($expectedUrl);
         $this->assertEquals($expectedUrl, $this->additionalBlock->getCleanImagesUrl());
     }
 
@@ -61,7 +61,7 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
             ->with('*/*/cleanMedia')
-            ->will($this->returnValue($expectedUrl));
+            ->willReturn($expectedUrl);
         $this->assertEquals($expectedUrl, $this->additionalBlock->getCleanMediaUrl());
     }
 
@@ -71,7 +71,7 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
             ->with('*/*/cleanStaticFiles')
-            ->will($this->returnValue($expectedUrl));
+            ->willReturn($expectedUrl);
         $this->assertEquals($expectedUrl, $this->additionalBlock->getCleanStaticFilesUrl());
     }
 

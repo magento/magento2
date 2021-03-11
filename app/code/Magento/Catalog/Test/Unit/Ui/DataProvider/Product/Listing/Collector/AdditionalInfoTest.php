@@ -15,13 +15,13 @@ class AdditionalInfoTest extends \PHPUnit\Framework\TestCase
     /** @var  AdditionalInfo */
     private $model;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->model = new AdditionalInfo();
     }
     public function testGet()
     {
-        $productRenderInfo = $this->createMock(ProductRenderInterface::class);
+        $productRenderInfo = $this->getMockForAbstractClass(ProductRenderInterface::class);
         $productRenderInfo->expects($this->once())
             ->method('setIsSalable')
             ->with(true);

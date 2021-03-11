@@ -18,34 +18,34 @@ class PreProcessorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var DataProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataProviderMock;
 
     /**
-     * @var \Magento\Framework\App\AreaList|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\AreaList|\PHPUnit\Framework\MockObject\MockObject
      */
     private $areaListMock;
 
     /**
-     * @var \Magento\Framework\TranslateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\TranslateInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $translateMock;
 
     /**
-     * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\DesignInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $designMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->createMock(\Magento\Translation\Model\Js\Config::class);
         $this->dataProviderMock = $this->createMock(\Magento\Translation\Model\Js\DataProvider::class);

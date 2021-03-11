@@ -22,11 +22,11 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     private $domXpath;
 
     /**
-     * @var ConverterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConverterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlConverter;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->load(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files/test.xml');

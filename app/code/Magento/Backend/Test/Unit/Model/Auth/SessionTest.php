@@ -186,19 +186,24 @@ class SessionTest extends TestCase
         $cookieMetadata = $this->createMock(PublicCookieMetadata::class);
         $cookieMetadata->expects($this->once())
             ->method('setDuration')
-            ->with($lifetime)->willReturnSelf();
+            ->with($lifetime)
+            ->willReturnSelf();
         $cookieMetadata->expects($this->once())
             ->method('setPath')
-            ->with($path)->willReturnSelf();
+            ->with($path)
+            ->willReturnSelf();
         $cookieMetadata->expects($this->once())
             ->method('setDomain')
-            ->with($domain)->willReturnSelf();
+            ->with($domain)
+            ->willReturnSelf();
         $cookieMetadata->expects($this->once())
             ->method('setSecure')
-            ->with($secure)->willReturnSelf();
+            ->with($secure)
+            ->willReturnSelf();
         $cookieMetadata->expects($this->once())
             ->method('setHttpOnly')
-            ->with($httpOnly)->willReturnSelf();
+            ->with($httpOnly)
+            ->willReturnSelf();
         $cookieMetadata->expects($this->once())
             ->method('setSameSite')
             ->willReturnSelf();

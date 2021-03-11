@@ -30,7 +30,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
      */
     protected $productRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 

@@ -32,82 +32,82 @@ class RenderTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $responseMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $uiFactoryMock;
 
     /**
-     * @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var \Magento\Framework\AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\AuthorizationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $authorizationMock;
 
     /**
-     * @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sessionMock;
 
     /**
-     * @var \Magento\Framework\App\ActionFlag|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ActionFlag|\PHPUnit\Framework\MockObject\MockObject
      */
     private $actionFlagMock;
 
     /**
-     * @var \Magento\Backend\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     private $helperMock;
 
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $uiComponentContextMock;
 
     /**
      * @var \Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface|
-     *      \PHPUnit_Framework_MockObject_MockObject
+     *      \PHPUnit\Framework\MockObject\MockObject
      */
     private $dataProviderMock;
 
     /**
-     * @var \Magento\Framework\View\Element\UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\UiComponentInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $uiComponentMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|UiComponentTypeResolver
+     * @var \PHPUnit\Framework\MockObject\MockObject|UiComponentTypeResolver
      */
     private $uiComponentTypeResolverMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultJsonFactoryMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $escaperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()

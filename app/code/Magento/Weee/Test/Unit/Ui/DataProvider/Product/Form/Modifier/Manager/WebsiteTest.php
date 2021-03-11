@@ -29,31 +29,31 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var LocatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LocatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $locatorMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var DirectoryHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var DirectoryHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryHelperMock;
 
     /**
-     * @var EavAttribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var EavAttribute|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eavAttributeMock;
 
     /**
-     * @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->locatorMock = $this->getMockBuilder(LocatorInterface::class)
@@ -103,6 +103,6 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
             ->method('hasSingleStore')
             ->willReturn(true);
 
-        $this->assertSame(false, $this->model->isMultiWebsites());
+        $this->assertFalse($this->model->isMultiWebsites());
     }
 }

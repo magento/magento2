@@ -22,52 +22,52 @@ class EditTest extends \PHPUnit\Framework\TestCase
     protected $context;
 
     /**
-     * @var \Magento\Framework\App\Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\App\View|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\View|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $viewMock;
 
     /**
-     * @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\Backend\Block\Menu|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Block\Menu|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $menuBlockMock;
 
     /**
-     * @var \Magento\Backend\Block\Widget\Breadcrumbs|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Block\Widget\Breadcrumbs|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $breadcrumbsBlockMock;
 
     /**
-     * @var \Magento\Backend\Block\Widget\Breadcrumbs|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Block\Widget\Breadcrumbs|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $editBlockMock;
 
     /**
-     * @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\Page|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultPageMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageConfigMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Title|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageTitleMock;
 
     /**
-     * @var \Magento\Email\Model\Template|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Email\Model\Template|\PHPUnit\Framework\MockObject\MockObject
      */
     private $templateMock;
 
@@ -75,7 +75,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
@@ -138,10 +138,10 @@ class EditTest extends \PHPUnit\Framework\TestCase
             );
         $this->menuBlockMock->expects($this->any())
             ->method('getMenuModel')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->menuBlockMock->expects($this->any())
             ->method('getParentItems')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->viewMock->expects($this->any())
             ->method('getPage')
             ->willReturn($this->resultPageMock);

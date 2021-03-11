@@ -12,7 +12,7 @@ use Magento\Quote\Api\Data\ShippingInterface;
 use Magento\Quote\Model\Quote\ShippingAssignment\ShippingProcessor;
 use Magento\Quote\Model\ShippingAddressManagement;
 use Magento\Quote\Model\ShippingMethodManagement;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class ShippingProcessorTest
@@ -34,7 +34,7 @@ class ShippingProcessorTest extends \PHPUnit\Framework\TestCase
      */
     private $shippingProcessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->shippingAddressManagement = $this->getMockBuilder(ShippingAddressManagement::class)
             ->disableOriginalConstructor()

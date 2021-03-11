@@ -16,7 +16,7 @@ class PropertiesTest extends \PHPUnit\Framework\TestCase
      */
     protected $_object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_object = $this->createPartialMock(
             \Magento\Framework\Model\AbstractModel::class,
@@ -24,7 +24,7 @@ class PropertiesTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_object);
     }
@@ -32,11 +32,12 @@ class PropertiesTest extends \PHPUnit\Framework\TestCase
     /**
      * Testing \Magento\Framework\Validator\Entity\Properties::isValid on invalid argument passed
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Instance of \Magento\Framework\Model\AbstractModel is expected.
      */
     public function testIsValidException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Instance of \\Magento\\Framework\\Model\\AbstractModel is expected.');
+
         $validator = new \Magento\Framework\Validator\Entity\Properties();
         $validator->isValid([]);
     }
@@ -46,9 +47,9 @@ class PropertiesTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsValidSuccessWithInvokedSetter()
     {
-        $this->_object->expects($this->once())->method('hasDataChanges')->will($this->returnValue(true));
-        $this->_object->expects($this->once())->method('getData')->with('attr1')->will($this->returnValue(1));
-        $this->_object->expects($this->once())->method('getOrigData')->with('attr1')->will($this->returnValue(1));
+        $this->_object->expects($this->once())->method('hasDataChanges')->willReturn(true);
+        $this->_object->expects($this->once())->method('getData')->with('attr1')->willReturn(1);
+        $this->_object->expects($this->once())->method('getOrigData')->with('attr1')->willReturn(1);
 
         $validator = new \Magento\Framework\Validator\Entity\Properties();
         $validator->setReadOnlyProperties(['attr1']);
@@ -69,7 +70,7 @@ class PropertiesTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsValidSuccessWithoutHasDataChanges()
     {
-        $this->_object->expects($this->once())->method('hasDataChanges')->will($this->returnValue(false));
+        $this->_object->expects($this->once())->method('hasDataChanges')->willReturn(false);
         $validator = new \Magento\Framework\Validator\Entity\Properties();
         $validator->setReadOnlyProperties(['attr1']);
         $this->assertTrue($validator->isValid($this->_object));
@@ -80,9 +81,9 @@ class PropertiesTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsValidFailed()
     {
-        $this->_object->expects($this->once())->method('hasDataChanges')->will($this->returnValue(true));
-        $this->_object->expects($this->once())->method('getData')->with('attr1')->will($this->returnValue(1));
-        $this->_object->expects($this->once())->method('getOrigData')->with('attr1')->will($this->returnValue(2));
+        $this->_object->expects($this->once())->method('hasDataChanges')->willReturn(true);
+        $this->_object->expects($this->once())->method('getData')->with('attr1')->willReturn(1);
+        $this->_object->expects($this->once())->method('getOrigData')->with('attr1')->willReturn(2);
 
         $validator = new \Magento\Framework\Validator\Entity\Properties();
         $validator->setReadOnlyProperties(['attr1']);

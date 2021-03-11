@@ -42,7 +42,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up mocks for tested class
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createPartialMock(
             \Magento\Framework\View\Element\Template\Context::class,
@@ -70,13 +70,13 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
 
         $this->contextMock->expects($this->any())
             ->method('getEventManager')
-            ->will($this->returnValue($eventManagerMock));
+            ->willReturn($eventManagerMock);
         $this->contextMock->expects($this->any())
             ->method('getStoreConfig')
-            ->will($this->returnValue($storeConfigMock));
+            ->willReturn($storeConfigMock);
         $this->contextMock->expects($this->any())
             ->method('getScopeConfig')
-            ->will($this->returnValue($scopeConfigMock));
+            ->willReturn($scopeConfigMock);
 
         $this->model = new Adjustment(
             $this->contextMock,
@@ -101,7 +101,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
         $this->priceCurrencyMock->expects($this->once())
             ->method('format')
             ->with(10, true, 2)
-            ->will($this->returnValue("$10.00"));
+            ->willReturn("$10.00");
 
         $displayValue = 10;
         $expectedValue = "$10.00";
@@ -113,8 +113,8 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $amountRender->expects($this->any())
             ->method('getDisplayValue')
-            ->will($this->returnValue($displayValue));
-        $this->weeeHelperMock->expects($this->any())->method('typeOfDisplay')->will($this->returnValue($typeOfDisplay));
+            ->willReturn($displayValue);
+        $this->weeeHelperMock->expects($this->any())->method('typeOfDisplay')->willReturn($typeOfDisplay);
         /** @var \Magento\Framework\Pricing\Amount\Base $baseAmount */
         $baseAmount = $this->getMockBuilder(\Magento\Framework\Pricing\Amount\Base::class)
             ->disableOriginalConstructor()
@@ -122,7 +122,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $amountRender->expects($this->any())
             ->method('getAmount')
-            ->will($this->returnValue($baseAmount));
+            ->willReturn($baseAmount);
 
         $this->model->render($amountRender);
         $result = $this->model->getFinalAmount();
@@ -155,11 +155,11 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
 
         $baseAmount->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($amount));
+            ->willReturn($amount);
 
         $amountRender->expects($this->any())
             ->method('getAmount')
-            ->will($this->returnValue($baseAmount));
+            ->willReturn($baseAmount);
 
         $callback = function ($argument) use ($typeOfDisplay) {
             if (is_array($argument)) {
@@ -169,9 +169,9 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
             }
         };
 
-        $this->weeeHelperMock->expects($this->any())->method('typeOfDisplay')->will($this->returnCallback($callback));
-        $this->weeeHelperMock->expects($this->any())->method('getAmountExclTax')->will($this->returnValue($amount));
-        $amountRender->expects($this->any())->method('getSaleableItem')->will($this->returnValue($saleable));
+        $this->weeeHelperMock->expects($this->any())->method('typeOfDisplay')->willReturnCallback($callback);
+        $this->weeeHelperMock->expects($this->any())->method('getAmountExclTax')->willReturn($amount);
+        $amountRender->expects($this->any())->method('getSaleableItem')->willReturn($saleable);
 
         $this->model->render($amountRender);
         $result = $this->model->showInclDescr();
@@ -227,10 +227,10 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $baseAmount->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($amount));
+            ->willReturn($amount);
         $amountRender->expects($this->any())
             ->method('getAmount')
-            ->will($this->returnValue($baseAmount));
+            ->willReturn($baseAmount);
 
         $callback = function ($argument) use ($typeOfDisplay) {
             if (is_array($argument)) {
@@ -240,9 +240,9 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
             }
         };
 
-        $this->weeeHelperMock->expects($this->any())->method('typeOfDisplay')->will($this->returnCallback($callback));
-        $this->weeeHelperMock->expects($this->any())->method('getAmountExclTax')->will($this->returnValue($amount));
-        $amountRender->expects($this->any())->method('getSaleableItem')->will($this->returnValue($saleable));
+        $this->weeeHelperMock->expects($this->any())->method('typeOfDisplay')->willReturnCallback($callback);
+        $this->weeeHelperMock->expects($this->any())->method('getAmountExclTax')->willReturn($amount);
+        $amountRender->expects($this->any())->method('getSaleableItem')->willReturn($saleable);
 
         $this->model->render($amountRender);
         $result = $this->model->showExclDescrIncl();
@@ -298,7 +298,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $amountRender->expects($this->any())
             ->method('getAmount')
-            ->will($this->returnValue($baseAmount));
+            ->willReturn($baseAmount);
         $callback = function ($argument) use ($typeOfDisplay) {
             if (is_array($argument)) {
                 return in_array($typeOfDisplay, $argument);
@@ -306,11 +306,11 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
                 return $argument == $typeOfDisplay;
             }
         };
-        $this->weeeHelperMock->expects($this->any())->method('typeOfDisplay')->will($this->returnCallback($callback));
+        $this->weeeHelperMock->expects($this->any())->method('typeOfDisplay')->willReturnCallback($callback);
         $this->weeeHelperMock->expects($this->any())
             ->method('getProductWeeeAttributesForDisplay')
-            ->will($this->returnValue($attributes));
-        $amountRender->expects($this->any())->method('getSaleableItem')->will($this->returnValue($saleable));
+            ->willReturn($attributes);
+        $amountRender->expects($this->any())->method('getSaleableItem')->willReturn($saleable);
 
         $this->model->render($amountRender);
         $result = $this->model->getWeeeTaxAttributes();
@@ -343,7 +343,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
      */
     public function testRenderWeeeTaxAttributeAmount($attribute, $expectedResult)
     {
-        $this->priceCurrencyMock->expects($this->any())->method('convertAndFormat')->will($this->returnArgument(0));
+        $this->priceCurrencyMock->expects($this->any())->method('convertAndFormat')->willReturnArgument(0);
 
         $result = $this->model->renderWeeeTaxAttribute($attribute);
         $this->assertEquals($expectedResult, $result);
@@ -371,7 +371,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
      */
     public function testRenderWeeeTaxAttributeName($attribute, $expectedResult)
     {
-        $this->priceCurrencyMock->expects($this->any())->method('convertAndFormat')->will($this->returnArgument(0));
+        $this->priceCurrencyMock->expects($this->any())->method('convertAndFormat')->willReturnArgument(0);
 
         $result = $this->model->renderWeeeTaxAttributeName($attribute);
         $this->assertEquals($expectedResult, $result);
@@ -399,7 +399,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
      */
     public function testRenderWeeeTaxAttributeWithTax($attribute, $expectedResult)
     {
-        $this->priceCurrencyMock->expects($this->any())->method('convertAndFormat')->will($this->returnArgument(0));
+        $this->priceCurrencyMock->expects($this->any())->method('convertAndFormat')->willReturnArgument(0);
 
         $result = $this->model->renderWeeeTaxAttributeWithTax($attribute);
         $this->assertEquals($expectedResult, $result);

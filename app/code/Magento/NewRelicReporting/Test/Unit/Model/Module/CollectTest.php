@@ -22,32 +22,32 @@ class CollectTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ModuleListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModuleListInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $moduleListMock;
 
     /**
-     * @var Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $moduleManagerMock;
 
     /**
-     * @var fullModuleList|\PHPUnit_Framework_MockObject_MockObject
+     * @var fullModuleList|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fullModuleListMock;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\ModuleFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\NewRelicReporting\Model\ModuleFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $moduleFactoryMock;
 
     /**
      * @var \Magento\NewRelicReporting\Model\ResourceModel\Module\CollectionFactory
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $moduleCollectionFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->moduleListMock = $this->getMockBuilder(\Magento\Framework\Module\ModuleListInterface::class)
             ->setMethods(['getNames', 'has', 'getAll', 'getOne'])
@@ -162,9 +162,7 @@ class CollectTest extends \PHPUnit\Framework\TestCase
             ->method('getNames')
             ->willReturn($enabledModulesMockArray);
 
-        $this->assertInternalType(
-            'array',
-            $this->model->getModuleData()
+        $this->assertIsArray($this->model->getModuleData()
         );
     }
 
@@ -181,7 +179,7 @@ class CollectTest extends \PHPUnit\Framework\TestCase
         )
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \Magento\NewRelicReporting\Model\Module|\PHPUnit_Framework_MockObject_MockObject $itemMock */
+        /** @var \Magento\NewRelicReporting\Model\Module|\PHPUnit\Framework\MockObject\MockObject $itemMock */
         $itemMock = $this->createPartialMock(
             \Magento\NewRelicReporting\Model\Module::class,
             ['getName', 'getData', 'setData', 'getState', 'save']
@@ -252,9 +250,7 @@ class CollectTest extends \PHPUnit\Framework\TestCase
             ->method('getNames')
             ->willReturn($enabledModulesMockArray);
 
-        $this->assertInternalType(
-            'array',
-            $this->model->getModuleData()
+        $this->assertIsArray($this->model->getModuleData()
         );
     }
 
@@ -271,7 +267,7 @@ class CollectTest extends \PHPUnit\Framework\TestCase
         )
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \Magento\NewRelicReporting\Model\Module|\PHPUnit_Framework_MockObject_MockObject $itemMock */
+        /** @var \Magento\NewRelicReporting\Model\Module|\PHPUnit\Framework\MockObject\MockObject $itemMock */
         $itemMock = $this->createPartialMock(
             \Magento\NewRelicReporting\Model\Module::class,
             ['getName', 'getData', 'setData', 'getState', 'save']
@@ -342,9 +338,7 @@ class CollectTest extends \PHPUnit\Framework\TestCase
             ->method('getNames')
             ->willReturn($enabledModulesMockArray);
 
-        $this->assertInternalType(
-            'array',
-            $this->model->getModuleData()
+        $this->assertIsArray($this->model->getModuleData()
         );
     }
 

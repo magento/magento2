@@ -28,7 +28,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
      */
     protected $taxData;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -67,13 +67,13 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $order->expects(static::any())
             ->method('getPayment')
-            ->will($this->returnValue($payment));
+            ->willReturn($payment);
         $order->expects(static::any())
             ->method('getBillingAddress')
-            ->will($this->returnValue($billing));
+            ->willReturn($billing);
         $order->expects(static::any())
             ->method('getShippingAddress')
-            ->will($this->returnValue($shipping));
+            ->willReturn($shipping);
         $this->_model->setOrder($order);
         static::assertEquals($billingState, $this->_model->getData('billing_state'));
         static::assertEquals($state, $this->_model->getData('state'));

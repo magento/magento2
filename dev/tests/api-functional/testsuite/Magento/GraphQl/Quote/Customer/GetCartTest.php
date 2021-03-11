@@ -40,7 +40,7 @@ class GetCartTest extends GraphQlAbstract
      */
     private $customerRegistry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -113,11 +113,12 @@ class GetCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_id" is missing
      */
     public function testGetCartIfCartIdIsEmpty()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Required parameter "cart_id" is missing');
+
         $maskedQuoteId = '';
         $query = $this->getQuery($maskedQuoteId);
 
@@ -126,11 +127,12 @@ class GetCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException Exception
-     * @expectedExceptionMessage Field "cart" argument "cart_id" of type "String!" is required but not provided.
      */
     public function testGetCartIfCartIdIsMissed()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Field "cart" argument "cart_id" of type "String!" is required but not provided.');
+
         $query = <<<QUERY
 {
   cart {
@@ -145,11 +147,12 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testGetNonExistentCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a cart with ID "non_existent_masked_id"');
+
         $maskedQuoteId = 'non_existent_masked_id';
         $query = $this->getQuery($maskedQuoteId);
 
@@ -161,11 +164,12 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/make_cart_inactive.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage Current user does not have an active cart.
      */
     public function testGetInactiveCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Current user does not have an active cart.');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId);
 
@@ -193,12 +197,12 @@ QUERY;
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      * @magentoApiDataFixture Magento/Store/_files/second_store.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage The account sign-in was incorrect or your account is disabled temporarily.
-     * Please wait and try again later.
      */
     public function testGetCartWithWrongStore()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later.');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
         $query = $this->getQuery($maskedQuoteId);
 
@@ -211,11 +215,12 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote_customer_not_default_store.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage Requested store is not found
      */
     public function testGetCartWithNotExistingStore()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Requested store is not found');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1_not_default_store');
         $query = $this->getQuery($maskedQuoteId);
 

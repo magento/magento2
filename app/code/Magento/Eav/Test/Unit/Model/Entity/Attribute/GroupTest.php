@@ -16,16 +16,16 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceMock = $this->createMock(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Group::class);
         $translitFilter = $this->getMockBuilder(\Magento\Framework\Filter\Translit::class)

@@ -55,7 +55,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->filesystem = $this->objectManager->get(Filesystem::class);
@@ -157,12 +157,15 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      * Test for processCustomerValue method with invalid value
      *
      * @magentoAppIsolation enabled
-     * @expectedException \Magento\Framework\Exception\ValidatorException
      * @throws FileSystemException
      * @throws \ReflectionException
      */
     public function testProcessCustomerInvalidValue()
     {
+        $this->expectException(
+            \Magento\Framework\Exception\ValidatorException::class
+        );
+
         $this->mediaDirectory->delete('customer');
         $this->mediaDirectory->create($this->mediaDirectory->getRelativePath('customer/tmp/'));
         $tmpFilePath = $this->mediaDirectory->getAbsolutePath('customer/tmp/' . $this->fileName);
@@ -199,7 +202,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      * @inheritdoc
      * @throws FileSystemException
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(

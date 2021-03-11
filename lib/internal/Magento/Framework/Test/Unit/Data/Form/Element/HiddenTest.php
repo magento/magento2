@@ -18,7 +18,7 @@ class HiddenTest extends \PHPUnit\Framework\TestCase
      */
     private $element;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $escaper = $objectManager->getObject(
@@ -46,11 +46,11 @@ class HiddenTest extends \PHPUnit\Framework\TestCase
 
         if (is_array($value)) {
             foreach ($value as $item) {
-                $this->assertContains($item, $html);
+                $this->assertStringContainsString($item, $html);
             }
             return;
         }
-        $this->assertContains($value, $html);
+        $this->assertStringContainsString($value, $html);
     }
 
     /**

@@ -8,37 +8,37 @@ namespace Magento\ProductVideo\Test\Unit\Block\Adminhtml\Product\Edit;
 class NewVideoTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Backend\Block\Template\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Block\Template\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /*
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\UrlInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\UrlInterface
      */
     protected $urlBuilder;
 
     /**
-     * @var \Magento\Framework\Math\Random|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Math\Random|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mathRandom;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registryMock;
 
     /**
-     * @var \Magento\Framework\Data\FormFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\FormFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $formFactoryMock;
 
     /**
-     * @var \Magento\Framework\Json\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Json\EncoderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $jsonEncoderMock;
 
     /**
-     * @var \Magento\ProductVideo\Helper\Media|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ProductVideo\Helper\Media|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mediaHelper;
 
@@ -48,7 +48,7 @@ class NewVideoTest extends \PHPUnit\Framework\TestCase
      */
     protected $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(\Magento\Backend\Block\Template\Context::class);
         $this->mediaHelper = $this->createMock(\Magento\ProductVideo\Helper\Media::class);

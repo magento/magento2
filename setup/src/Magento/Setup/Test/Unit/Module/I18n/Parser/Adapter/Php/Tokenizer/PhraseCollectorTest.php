@@ -26,11 +26,11 @@ class PhraseCollectorTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var Tokenizer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Tokenizer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $tokenizerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->tokenizerMock = $this->getMockBuilder(\Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer::class)
@@ -170,7 +170,7 @@ class PhraseCollectorTest extends \PHPUnit\Framework\TestCase
      * @param bool $isConstantEncapsedString
      * @param string $value
      * @param int|null $line
-     * @return Token|\PHPUnit_Framework_MockObject_MockObject
+     * @return Token|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function createToken(
         $isEqualFunctionReturnValue,

@@ -22,29 +22,29 @@ class GroupedProductDataProviderTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionMock;
 
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 

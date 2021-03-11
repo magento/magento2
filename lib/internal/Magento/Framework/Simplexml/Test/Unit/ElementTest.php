@@ -23,11 +23,12 @@ class ElementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider xmlDataProvider
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Root node could not be unset.
      */
     public function testGetParent($xmlData)
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Root node could not be unset.');
+
         /** @var $xml \Magento\Framework\Simplexml\Element */
         $xml = simplexml_load_file($xmlData[0], $xmlData[1]);
         $this->assertTrue($xml->getName() == 'root');

@@ -12,31 +12,31 @@ use Magento\Customer\Ui\Component\Listing\AttributeRepository;
  */
 class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Customer\Api\CustomerMetadataManagementInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\CustomerMetadataManagementInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerMetadataManagement;
 
-    /** @var \Magento\Customer\Api\AddressMetadataManagementInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\AddressMetadataManagementInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $addressMetadataManagement;
 
-    /** @var \Magento\Customer\Api\CustomerMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\CustomerMetadataInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerMetadata;
 
-    /** @var \Magento\Customer\Api\AddressMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\AddressMetadataInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $addressMetadata;
 
-    /** @var \Magento\Customer\Api\Data\AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\Data\AttributeMetadataInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $attribute;
 
-    /** @var \Magento\Customer\Api\Data\OptionInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\Data\OptionInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $option;
 
-    /** @var \Magento\Customer\Model\Indexer\Attribute\Filter|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\Indexer\Attribute\Filter|\PHPUnit\Framework\MockObject\MockObject */
     protected $attributeFilter;
 
     /** @var AttributeRepository */
     protected $component;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerMetadataManagement = $this->getMockForAbstractClass(
             \Magento\Customer\Api\CustomerMetadataManagementInterface::class,

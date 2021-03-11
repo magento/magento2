@@ -21,7 +21,7 @@ class ConditionsTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->block = $this->objectManager->create(
@@ -63,16 +63,13 @@ class ConditionsTest extends \PHPUnit\Framework\TestCase
         $result = $this->block->render($element);
 
         /* Assert HTML contains form elements */
-        $this->assertContains('name="parameters[conditions][1][type]"', $result);
-        $this->assertContains('name="parameters[conditions][1][value]"', $result);
+        $this->assertStringContainsString('name="parameters[conditions][1][type]"', $result);
+        $this->assertStringContainsString('name="parameters[conditions][1][value]"', $result);
         /* Assert HTML contains child url */
-        $this->assertContains(
-            'catalog_widget/product_widget/conditions/form/options_fieldset67a77e971a7c331b6eaefcaf2f596097',
-            $result
-        );
+        $this->assertStringContainsString('catalog_widget/product_widget/conditions/form/options_fieldset67a77e971a7c331b6eaefcaf2f596097', $result);
         /* Assert HTML contains html id */
-        $this->assertContains('window.options_fieldset67a77e971a7c331b6eaefcaf2f596097', $result);
+        $this->assertStringContainsString('window.options_fieldset67a77e971a7c331b6eaefcaf2f596097', $result);
         /* Assert HTML contains required JS code */
-        $this->assertContains("VarienRulesForm('options_fieldset67a77e971a7c331b6eaefcaf2f596097", $result);
+        $this->assertStringContainsString("VarienRulesForm('options_fieldset67a77e971a7c331b6eaefcaf2f596097", $result);
     }
 }

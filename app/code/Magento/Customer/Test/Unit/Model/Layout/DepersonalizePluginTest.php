@@ -32,44 +32,44 @@ class DepersonalizePluginTest extends TestCase
     private $plugin;
 
     /**
-     * @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout|\PHPUnit\Framework\MockObject\MockObject
      */
     private $layoutMock;
 
     /**
-     * @var GenericSession|\PHPUnit_Framework_MockObject_MockObject
+     * @var GenericSession|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sessionMock;
 
     /**
-     * @var CustomerSession|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerSession|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerSessionMock;
 
     /**
-     * @var CustomerFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerFactoryMock;
 
     /**
-     * @var Customer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Customer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerMock;
 
     /**
-     * @var VisitorModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var VisitorModel|\PHPUnit\Framework\MockObject\MockObject
      */
     private $visitorMock;
 
     /**
-     * @var DepersonalizeChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var DepersonalizeChecker|\PHPUnit\Framework\MockObject\MockObject
      */
     private $depersonalizeCheckerMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->sessionMock = $this->createPartialMock(

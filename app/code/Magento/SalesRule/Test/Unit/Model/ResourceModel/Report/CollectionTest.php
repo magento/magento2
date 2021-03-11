@@ -14,46 +14,46 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $entityFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * \PHPUnit_Framework_MockObject_MockObject
+     * \PHPUnit\Framework\MockObject\MockObject
      */
     protected $fetchStrategy;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $reportResource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $ruleFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $connection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $selectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->entityFactory = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
 
@@ -77,14 +77,14 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->connection->expects($this->any())
             ->method('select')
-            ->will($this->returnValue($this->selectMock));
+            ->willReturn($this->selectMock);
 
         $this->reportResource->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connection));
+            ->willReturn($this->connection);
         $this->reportResource->expects($this->any())
             ->method('getMainTable')
-            ->will($this->returnValue('test_main_table'));
+            ->willReturn('test_main_table');
 
         $this->ruleFactory = $this->createPartialMock(
             \Magento\SalesRule\Model\ResourceModel\Report\RuleFactory::class,
@@ -138,11 +138,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $ruleMock = $this->getRuleMock();
         $ruleMock->expects($this->once())
             ->method('getUniqRulesNamesList')
-            ->will($this->returnValue($rulesList));
+            ->willReturn($rulesList);
 
         $this->ruleFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($ruleMock));
+            ->willReturn($ruleMock);
 
         $ruleFilter = [1,2,3];
         $this->object->addRuleFilter($ruleFilter);
@@ -155,27 +155,27 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->connection->expects($this->at(1))
             ->method('quoteInto')
             ->with($this->equalTo('rule_name = ?'), $this->equalTo($rulesList[1]))
-            ->will($this->returnValue('test_1'));
+            ->willReturn('test_1');
         $this->connection->expects($this->at(2))
             ->method('quoteInto')
             ->with($this->equalTo('rule_name = ?'), $this->equalTo($rulesList[30]))
-            ->will($this->returnValue('test_2'));
+            ->willReturn('test_2');
 
         $this->selectMock->expects($this->at(3))
             ->method('where')
-            ->with($this->equalTo(implode([
+            ->with($this->equalTo(implode(' OR ', [
                 'test_1',
                 'test_2',
-            ], ' OR ')));
+            ])));
 
         $ruleMock = $this->getRuleMock();
         $ruleMock->expects($this->once())
             ->method('getUniqRulesNamesList')
-            ->will($this->returnValue($rulesList));
+            ->willReturn($rulesList);
 
         $this->ruleFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($ruleMock));
+            ->willReturn($ruleMock);
 
         $ruleFilter = [1,2,30];
         $this->object->addRuleFilter($ruleFilter);
@@ -183,7 +183,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getRuleMock()
     {

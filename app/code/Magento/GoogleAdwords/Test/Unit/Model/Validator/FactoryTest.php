@@ -13,27 +13,27 @@ use Magento\Framework\Validator\Regex;
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_configurationMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_helperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_vbFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_vbMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_validatorMock;
 
@@ -42,7 +42,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_factory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_vbFactoryMock = $this->createPartialMock(
             \Magento\Framework\Validator\UniversalFactory::class,
@@ -92,16 +92,16 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
                     ],
                 ]
             ]
-        )->will(
-            $this->returnValue($this->_vbMock)
+        )->willReturn(
+            $this->_vbMock
         );
 
         $this->_vbMock->expects(
             $this->once()
         )->method(
             'createValidator'
-        )->will(
-            $this->returnValue($this->_validatorMock)
+        )->willReturn(
+            $this->_validatorMock
         );
 
         $this->assertEquals($this->_validatorMock, $this->_factory->createColorValidator($currentColor));
@@ -138,16 +138,16 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
                     ],
                 ]
             ]
-        )->will(
-            $this->returnValue($this->_vbMock)
+        )->willReturn(
+            $this->_vbMock
         );
 
         $this->_vbMock->expects(
             $this->once()
         )->method(
             'createValidator'
-        )->will(
-            $this->returnValue($this->_validatorMock)
+        )->willReturn(
+            $this->_validatorMock
         );
 
         $this->assertEquals($this->_validatorMock, $this->_factory->createConversionIdValidator($conversionId));

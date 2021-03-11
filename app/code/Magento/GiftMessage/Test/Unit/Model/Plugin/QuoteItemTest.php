@@ -13,7 +13,7 @@ class QuoteItemTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteItemMock;
 
@@ -23,21 +23,21 @@ class QuoteItemTest extends \PHPUnit\Framework\TestCase
     protected $closureMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderItemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderItemMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Item::class,
@@ -65,13 +65,13 @@ class QuoteItemTest extends \PHPUnit\Framework\TestCase
         $giftMessageId = 1;
         $isMessageAvailable = true;
 
-        $this->quoteItemMock->expects($this->any())->method('getStoreId')->will($this->returnValue($storeId));
+        $this->quoteItemMock->expects($this->any())->method('getStoreId')->willReturn($storeId);
         $this->quoteItemMock->expects(
             $this->any()
         )->method(
             'getGiftMessageId'
-        )->will(
-            $this->returnValue($giftMessageId)
+        )->willReturn(
+            $giftMessageId
         );
 
         $this->helperMock->expects(
@@ -82,8 +82,8 @@ class QuoteItemTest extends \PHPUnit\Framework\TestCase
             'item',
             $this->quoteItemMock,
             $storeId
-        )->will(
-            $this->returnValue($isMessageAvailable)
+        )->willReturn(
+            $isMessageAvailable
         );
         $this->orderItemMock->expects($this->once())->method('setGiftMessageId')->with($giftMessageId);
         $this->orderItemMock->expects($this->once())->method('setGiftMessageAvailable')->with($isMessageAvailable);

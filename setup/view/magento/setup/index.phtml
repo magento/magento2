@@ -3,15 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate
 ?>
-<div ng-include="'index.php/navigation/side-menu'" style="display: inline-block"></div>
-<div class="{{$state.current.type == 'install' && !$state.current.wrapper ?  'container' : 'page-wrapper'}}">
-    <div ng-include="'index.php/navigation/header-bar'"></div>
+<div class="container"
     <main id="anchor-content" class="page-content">
-        <?= $this->render('navigation/menu.phtml') ?>
+        <?= /* @noEscape */ $this->render('navigation/menu.phtml') ?>
         <div
             id="main"
-            class="{{class}}"
             ng-controller="mainController"
             >
             <div ui-view="root">

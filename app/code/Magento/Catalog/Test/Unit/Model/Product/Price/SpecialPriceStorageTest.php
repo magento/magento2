@@ -12,33 +12,33 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Price;
 class SpecialPriceStorageTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Api\SpecialPriceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\SpecialPriceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $specialPriceResource;
 
     /**
-     * @var \Magento\Catalog\Api\Data\SpecialPriceInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\Data\SpecialPriceInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $specialPriceFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ProductIdLocatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ProductIdLocatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productIdLocator;
 
     /**
-     * @var \Magento\Store\Api\StoreRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Api\StoreRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeRepository;
 
     /**
      * @var \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor
-     *      |\PHPUnit_Framework_MockObject_MockObject
+     *      |\PHPUnit\Framework\MockObject\MockObject
      */
     private $invalidSkuProcessor;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Price\Validation\Result|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Price\Validation\Result|\PHPUnit\Framework\MockObject\MockObject
      */
     private $validationResult;
 
@@ -52,7 +52,7 @@ class SpecialPriceStorageTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->specialPriceResource = $this->getMockBuilder(\Magento\Catalog\Api\SpecialPriceInterface::class)
             ->disableOriginalConstructor()->setMethods(['get', 'update', 'delete', 'getEntityLinkField'])->getMock();

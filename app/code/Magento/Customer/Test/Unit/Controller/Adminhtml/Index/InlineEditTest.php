@@ -25,55 +25,55 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Backend\App\Action\Context */
     private $context;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject*/
+    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject*/
     private $request;
 
-    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject*/
+    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject*/
     private $messageManager;
 
-    /** @var \Magento\Customer\Api\Data\CustomerInterface|\PHPUnit_Framework_MockObject_MockObject*/
+    /** @var \Magento\Customer\Api\Data\CustomerInterface|\PHPUnit\Framework\MockObject\MockObject*/
     protected $customerData;
 
-    /** @var \Magento\Customer\Api\Data\AddressInterface|\PHPUnit_Framework_MockObject_MockObject*/
+    /** @var \Magento\Customer\Api\Data\AddressInterface|\PHPUnit\Framework\MockObject\MockObject*/
     private $address;
 
-    /** @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject*/
+    /** @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit\Framework\MockObject\MockObject*/
     private $resultJsonFactory;
 
-    /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject*/
+    /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit\Framework\MockObject\MockObject*/
     private $resultJson;
 
-    /** @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject*/
+    /** @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject*/
     private $customerRepository;
 
-    /** @var \Magento\Customer\Model\Address\Mapper|\PHPUnit_Framework_MockObject_MockObject*/
+    /** @var \Magento\Customer\Model\Address\Mapper|\PHPUnit\Framework\MockObject\MockObject*/
     private $addressMapper;
 
-    /** @var \Magento\Customer\Model\Customer\Mapper|\PHPUnit_Framework_MockObject_MockObject*/
+    /** @var \Magento\Customer\Model\Customer\Mapper|\PHPUnit\Framework\MockObject\MockObject*/
     private $customerMapper;
 
-    /** @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject*/
+    /** @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit\Framework\MockObject\MockObject*/
     private $dataObjectHelper;
 
-    /** @var \Magento\Customer\Api\Data\AddressInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject*/
+    /** @var \Magento\Customer\Api\Data\AddressInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject*/
     private $addressDataFactory;
 
-    /** @var \Magento\Customer\Api\AddressRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject*/
+    /** @var \Magento\Customer\Api\AddressRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject*/
     private $addressRepository;
 
-    /** @var \Magento\Framework\Message\Collection|\PHPUnit_Framework_MockObject_MockObject*/
+    /** @var \Magento\Framework\Message\Collection|\PHPUnit\Framework\MockObject\MockObject*/
     private $messageCollection;
 
-    /** @var \Magento\Framework\Message\MessageInterface|\PHPUnit_Framework_MockObject_MockObject*/
+    /** @var \Magento\Framework\Message\MessageInterface|\PHPUnit\Framework\MockObject\MockObject*/
     private $message;
 
-    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject*/
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject*/
     private $logger;
 
-    /** @var EmailNotificationInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var EmailNotificationInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $emailNotification;
 
-    /** @var AddressRegistry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AddressRegistry|\PHPUnit\Framework\MockObject\MockObject */
     private $addressRegistry;
 
     /** @var array */
@@ -87,7 +87,7 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->escaper = new Escaper();
@@ -154,7 +154,7 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
         );
         $this->emailNotification = $this->getMockBuilder(EmailNotificationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->context = $objectManager->getObject(
             \Magento\Backend\App\Action\Context::class,

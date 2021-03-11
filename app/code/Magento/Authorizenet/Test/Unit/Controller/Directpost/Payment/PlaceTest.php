@@ -24,7 +24,7 @@ use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Model\Quote;
 
 /**
- * Class PlaceTest
+ * Test for Place
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -42,71 +42,71 @@ class PlaceTest extends \PHPUnit\Framework\TestCase
     protected $placeOrderController;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $coreRegistryMock;
 
     /**
-     * @var DataFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataFactoryMock;
 
     /**
-     * @var CartManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CartManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cartManagementMock;
 
     /**
-     * @var Onepage|\PHPUnit_Framework_MockObject_MockObject
+     * @var Onepage|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $onepageCheckout;
 
     /**
-     * @var Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $jsonHelperMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseMock;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var DirectpostSession|\PHPUnit_Framework_MockObject_MockObject
+     * @var DirectpostSession|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directpostSessionMock;
 
     /**
-     * @var Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var CheckoutSession|\PHPUnit_Framework_MockObject_MockObject
+     * @var CheckoutSession|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $checkoutSessionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->directpostSessionMock = $this
             ->getMockBuilder(\Magento\Authorizenet\Model\Directpost\Session::class)
@@ -122,7 +122,7 @@ class PlaceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->checkoutSessionMock->expects($this->any())
             ->method('getQuote')
-            ->will($this->returnValue($this->quoteMock));
+            ->willReturn($this->quoteMock);
         $this->objectManagerMock = $this
             ->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->getMockForAbstractClass();
@@ -198,20 +198,20 @@ class PlaceTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->at(0))
             ->method('getParam')
             ->with('payment')
-            ->will($this->returnValue($paymentMethod));
+            ->willReturn($paymentMethod);
 
         $this->requestMock->expects($this->at(1))
             ->method('getParam')
             ->with('controller')
-            ->will($this->returnValue($controller));
+            ->willReturn($controller);
 
         $this->quoteMock->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($quoteId));
+            ->willReturn($quoteId);
 
         $this->cartManagementMock->expects($this->any())
             ->method('placeOrder')
-            ->will($this->returnValue($orderId));
+            ->willReturn($orderId);
 
         $this->jsonHelperMock->expects($this->any())
             ->method('jsonEncode')
@@ -238,16 +238,16 @@ class PlaceTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->at(0))
             ->method('getParam')
             ->with('payment')
-            ->will($this->returnValue($paymentMethod));
+            ->willReturn($paymentMethod);
 
         $this->requestMock->expects($this->at(1))
             ->method('getParam')
             ->with('controller')
-            ->will($this->returnValue($controller));
+            ->willReturn($controller);
 
         $this->quoteMock->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($quoteId));
+            ->willReturn($quoteId);
 
         $this->cartManagementMock->expects($this->once())
             ->method('placeOrder')

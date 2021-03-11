@@ -14,11 +14,12 @@ use \Magento\Framework\View\Design\Fallback\Rule\Simple;
 class SimpleTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Required parameter 'required_parameter' was not passed
      */
     public function testGetPatternDirsException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Required parameter \'required_parameter\' was not passed');
+
         $model = new Simple('<required_parameter> other text');
         $model->getPatternDirs([]);
     }

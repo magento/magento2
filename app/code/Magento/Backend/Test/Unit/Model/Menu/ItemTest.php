@@ -16,32 +16,32 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_aclMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_menuFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_urlModelMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_moduleManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_moduleListMock;
 
@@ -61,7 +61,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         'toolTip' => 'Item tooltip',
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_aclMock = $this->createMock(\Magento\Framework\AuthorizationInterface::class);
         $this->_scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
@@ -106,8 +106,8 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             'getUrl'
         )->with(
             $this->equalTo('/system/config')
-        )->will(
-            $this->returnValue('Url')
+        )->willReturn(
+            'Url'
         );
         $this->assertEquals('Url', $this->_model->getUrl());
     }
@@ -144,35 +144,35 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
     public function testIsDisabledReturnsTrueIfModuleOutputIsDisabled()
     {
-        $this->_moduleManager->expects($this->once())->method('isOutputEnabled')->will($this->returnValue(false));
+        $this->_moduleManager->expects($this->once())->method('isOutputEnabled')->willReturn(false);
         $this->assertTrue($this->_model->isDisabled());
     }
 
     public function testIsDisabledReturnsTrueIfModuleDependenciesFail()
     {
-        $this->_moduleManager->expects($this->once())->method('isOutputEnabled')->will($this->returnValue(true));
+        $this->_moduleManager->expects($this->once())->method('isOutputEnabled')->willReturn(true);
 
-        $this->_moduleListMock->expects($this->once())->method('has')->will($this->returnValue(true));
+        $this->_moduleListMock->expects($this->once())->method('has')->willReturn(true);
 
         $this->assertTrue($this->_model->isDisabled());
     }
 
     public function testIsDisabledReturnsTrueIfConfigDependenciesFail()
     {
-        $this->_moduleManager->expects($this->once())->method('isOutputEnabled')->will($this->returnValue(true));
+        $this->_moduleManager->expects($this->once())->method('isOutputEnabled')->willReturn(true);
 
-        $this->_moduleListMock->expects($this->once())->method('has')->will($this->returnValue(true));
+        $this->_moduleListMock->expects($this->once())->method('has')->willReturn(true);
 
         $this->assertTrue($this->_model->isDisabled());
     }
 
     public function testIsDisabledReturnsFalseIfNoDependenciesFail()
     {
-        $this->_moduleManager->expects($this->once())->method('isOutputEnabled')->will($this->returnValue(true));
+        $this->_moduleManager->expects($this->once())->method('isOutputEnabled')->willReturn(true);
 
-        $this->_moduleListMock->expects($this->once())->method('has')->will($this->returnValue(true));
+        $this->_moduleListMock->expects($this->once())->method('has')->willReturn(true);
 
-        $this->_scopeConfigMock->expects($this->once())->method('isSetFlag')->will($this->returnValue(true));
+        $this->_scopeConfigMock->expects($this->once())->method('isSetFlag')->willReturn(true);
 
         $this->assertFalse($this->_model->isDisabled());
     }
@@ -185,8 +185,8 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             'isAllowed'
         )->with(
             'Magento_Config::config'
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
         $this->assertTrue($this->_model->isAllowed());
     }
@@ -209,7 +209,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     {
         $menuMock = $this->createMock(\Magento\Backend\Model\Menu::class);
 
-        $this->_menuFactoryMock->expects($this->once())->method('create')->will($this->returnValue($menuMock));
+        $this->_menuFactoryMock->expects($this->once())->method('create')->willReturn($menuMock);
 
         $this->_model->getChildren();
         $this->_model->getChildren();
@@ -223,7 +223,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     public function testToArray(array $data, array $expected)
     {
         $menuMock = $this->createMock(\Magento\Backend\Model\Menu::class);
-        $this->_menuFactoryMock->method('create')->will($this->returnValue($menuMock));
+        $this->_menuFactoryMock->method('create')->willReturn($menuMock);
         $menuMock->method('toArray')
             ->willReturn($data['sub_menu']);
 

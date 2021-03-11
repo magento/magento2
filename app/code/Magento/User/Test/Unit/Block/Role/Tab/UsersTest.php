@@ -17,26 +17,26 @@ class UsersTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $userCollectionFactoryMock $userCollectionMock */
+        /** @var Collection|\PHPUnit\Framework\MockObject\MockObject $userCollectionFactoryMock $userCollectionMock */
         $userCollectionMock = $this->getMockBuilder(\Magento\User\Model\ResourceModel\User\Collection::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        /** @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject $userCollectionFactoryMock */
+        /** @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject $userCollectionFactoryMock */
         $userCollectionFactoryMock = $this->getMockBuilder(
             \Magento\User\Model\ResourceModel\User\CollectionFactory::class
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject $requestMock */
+        /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject $requestMock */
         $requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])

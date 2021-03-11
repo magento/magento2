@@ -21,7 +21,7 @@ use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Tests \Magento\Braintree\Gateway\Command\CaptureStrategyCommand.
@@ -80,12 +80,12 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $braintreeSearchAdapter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->commandPoolMock = $this->getMockBuilder(CommandPoolInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['get', '__wakeup'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
@@ -341,7 +341,7 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
 
         $orderMock = $this->getMockBuilder(OrderAdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $mock->method('getOrder')
             ->willReturn($orderMock);
@@ -420,6 +420,6 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
         $this->transactionRepositoryMock = $this->getMockBuilder(TransactionRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getList', 'getTotalCount', 'delete', 'get', 'save', 'create', '__wakeup'])
-            ->getMock();
+            ->getMockForAbstractClass();
     }
 }

@@ -61,7 +61,7 @@ class SuffixTest extends \PHPUnit\Framework\TestCase
      */
     protected $suffixModel;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->eventDispatcher = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->disableOriginalConstructor()

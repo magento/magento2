@@ -24,42 +24,42 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     protected $_areaFrontName = 'backendArea';
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_menuMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_formKey;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_menuConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_backendHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_authSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $routeParamsResolverFactoryMock;
 
@@ -69,7 +69,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     protected $_encryptor;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
@@ -77,7 +77,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_menuMock = $this->createPartialMock(
@@ -86,22 +86,22 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->_menuConfigMock = $this->createMock(\Magento\Backend\Model\Menu\Config::class);
-        $this->_menuConfigMock->expects($this->any())->method('getMenu')->will($this->returnValue($this->_menuMock));
+        $this->_menuConfigMock->expects($this->any())->method('getMenu')->willReturn($this->_menuMock);
 
         $this->_formKey = $this->createPartialMock(\Magento\Framework\Data\Form\FormKey::class, ['getFormKey']);
-        $this->_formKey->expects($this->any())->method('getFormKey')->will($this->returnValue('salt'));
+        $this->_formKey->expects($this->any())->method('getFormKey')->willReturn('salt');
 
         $mockItem = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
-        $mockItem->expects($this->any())->method('isDisabled')->will($this->returnValue(false));
-        $mockItem->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
+        $mockItem->expects($this->any())->method('isDisabled')->willReturn(false);
+        $mockItem->expects($this->any())->method('isAllowed')->willReturn(true);
         $mockItem->expects(
             $this->any()
         )->method(
             'getId'
-        )->will(
-            $this->returnValue('Magento_Backend::system_acl_roles')
+        )->willReturn(
+            'Magento_Backend::system_acl_roles'
         );
-        $mockItem->expects($this->any())->method('getAction')->will($this->returnValue('adminhtml/user_role'));
+        $mockItem->expects($this->any())->method('getAction')->willReturn('adminhtml/user_role');
 
         $this->_menuMock->expects(
             $this->any()
@@ -109,8 +109,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             $this->equalTo('Magento_Backend::system_acl_roles')
-        )->will(
-            $this->returnValue($mockItem)
+        )->willReturn(
+            $mockItem
         );
 
         $helperMock = $this->createMock(\Magento\Backend\Helper\Data::class);
@@ -118,8 +118,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getAreaFrontName'
-        )->will(
-            $this->returnValue($this->_areaFrontName)
+        )->willReturn(
+            $this->_areaFrontName
         );
         $this->_scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->_scopeConfigMock->expects(
@@ -128,8 +128,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             \Magento\Backend\Model\Url::XML_PATH_STARTUP_MENU_ITEM
-        )->will(
-            $this->returnValue('Magento_Backend::system_acl_roles')
+        )->willReturn(
+            'Magento_Backend::system_acl_roles'
         );
 
         $this->_authSessionMock = $this->createMock(\Magento\Backend\Model\Auth\Session::class);
@@ -144,7 +144,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->routeParamsResolverFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($routeParamsResolver);
-        /** @var HostChecker|\PHPUnit_Framework_MockObject_MockObject $hostCheckerMock */
+        /** @var HostChecker|\PHPUnit\Framework\MockObject\MockObject $hostCheckerMock */
         $hostCheckerMock = $this->createMock(HostChecker::class);
         $this->serializerMock = $this->getMockBuilder(Json::class)
             ->setMethods(['serialize'])
@@ -153,12 +153,10 @@ class UrlTest extends \PHPUnit\Framework\TestCase
 
         $this->serializerMock->expects($this->any())
             ->method('serialize')
-            ->will(
-                $this->returnCallback(
-                    function ($value) {
-                        return json_encode($value);
-                    }
-                )
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
             );
         $this->_model = $objectManager->getObject(
             \Magento\Backend\Model\Url::class,
@@ -184,11 +182,11 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $user->expects($this->once())->method('setHasAvailableResources')->with($this->equalTo(false));
         $mockSession = $this->createPartialMock(\Magento\Backend\Model\Auth\Session::class, ['getUser', 'isAllowed']);
 
-        $mockSession->expects($this->any())->method('getUser')->will($this->returnValue($user));
+        $mockSession->expects($this->any())->method('getUser')->willReturn($user);
 
         $this->_model->setSession($mockSession);
 
-        $this->_menuMock->expects($this->any())->method('getFirstAvailableChild')->will($this->returnValue(null));
+        $this->_menuMock->expects($this->any())->method('getFirstAvailableChild')->willReturn(null);
 
         $this->assertEquals('*/*/denied', $this->_model->findFirstAvailableMenu());
     }
@@ -198,13 +196,13 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $user = $this->createMock(\Magento\User\Model\User::class);
         $mockSession = $this->createPartialMock(\Magento\Backend\Model\Auth\Session::class, ['getUser', 'isAllowed']);
 
-        $mockSession->expects($this->any())->method('getUser')->will($this->returnValue($user));
+        $mockSession->expects($this->any())->method('getUser')->willReturn($user);
 
         $this->_model->setSession($mockSession);
 
         $itemMock = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
-        $itemMock->expects($this->once())->method('getAction')->will($this->returnValue('adminhtml/user'));
-        $this->_menuMock->expects($this->any())->method('getFirstAvailable')->will($this->returnValue($itemMock));
+        $itemMock->expects($this->once())->method('getAction')->willReturn('adminhtml/user');
+        $this->_menuMock->expects($this->any())->method('getFirstAvailable')->willReturn($itemMock);
 
         $this->assertEquals('adminhtml/user', $this->_model->findFirstAvailableMenu());
     }
@@ -221,8 +219,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getAreaFrontName'
-        )->will(
-            $this->returnValue($this->_areaFrontName)
+        )->willReturn(
+            $this->_areaFrontName
         );
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -286,18 +284,18 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             $this->exactly(3)
         )->method(
             'getBeforeForwardInfo'
-        )->will(
-            $this->returnValue(null)
+        )->willReturn(
+            null
         );
-        $this->_requestMock->expects($this->once())->method('getRouteName')->will($this->returnValue($routeName));
+        $this->_requestMock->expects($this->once())->method('getRouteName')->willReturn($routeName);
         $this->_requestMock->expects(
             $this->once()
         )->method(
             'getControllerName'
-        )->will(
-            $this->returnValue($controllerName)
+        )->willReturn(
+            $controllerName
         );
-        $this->_requestMock->expects($this->once())->method('getActionName')->will($this->returnValue($actionName));
+        $this->_requestMock->expects($this->once())->method('getActionName')->willReturn($actionName);
         $this->_model->setRequest($this->_requestMock);
 
         $keyFromRequest = $this->_model->getSecretKey();
@@ -321,8 +319,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             'getBeforeForwardInfo'
         )->with(
             'route_name'
-        )->will(
-            $this->returnValue('adminhtml')
+        )->willReturn(
+            'adminhtml'
         );
 
         $this->_requestMock->expects(
@@ -331,8 +329,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             'getBeforeForwardInfo'
         )->with(
             'route_name'
-        )->will(
-            $this->returnValue('adminhtml')
+        )->willReturn(
+            'adminhtml'
         );
 
         $this->_requestMock->expects(
@@ -341,8 +339,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             'getBeforeForwardInfo'
         )->with(
             'controller_name'
-        )->will(
-            $this->returnValue('catalog')
+        )->willReturn(
+            'catalog'
         );
 
         $this->_requestMock->expects(
@@ -351,8 +349,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             'getBeforeForwardInfo'
         )->with(
             'controller_name'
-        )->will(
-            $this->returnValue('catalog')
+        )->willReturn(
+            'catalog'
         );
 
         $this->_requestMock->expects(
@@ -361,8 +359,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             'getBeforeForwardInfo'
         )->with(
             'action_name'
-        )->will(
-            $this->returnValue('index')
+        )->willReturn(
+            'index'
         );
 
         $this->_requestMock->expects(
@@ -371,8 +369,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             'getBeforeForwardInfo'
         )->with(
             'action_name'
-        )->will(
-            $this->returnValue('index')
+        )->willReturn(
+            'index'
         );
 
         $this->_model->setRequest($this->_requestMock);

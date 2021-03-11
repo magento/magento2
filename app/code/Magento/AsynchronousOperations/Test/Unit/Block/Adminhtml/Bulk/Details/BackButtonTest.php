@@ -13,11 +13,11 @@ class BackButtonTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->getMock();

@@ -9,7 +9,7 @@ use Magento\Integration\Model\Config\Integration\SchemaLocator;
 
 class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Module\Dir\Reader|\PHPUnit\Framework\MockObject\MockObject */
     protected $moduleReader;
 
     /** @var string */
@@ -18,7 +18,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
     /** @var SchemaLocator */
     protected $schemaLocator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->moduleDir = 'moduleDirectory';
         $this->moduleReader = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
