@@ -276,7 +276,7 @@ class CategoryTest extends AbstractController
      * @param int $storeId
      * @return CategoryInterface
      */
-    protected function loadCategory(string $categoryName, int $storeId): CategoryInterface
+    private function loadCategory(string $categoryName, int $storeId): CategoryInterface
     {
         /** @var Collection $categoryCollection */
         $categoryCollection = $this->categoryCollectionFactory->create();
