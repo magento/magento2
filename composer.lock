@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "59fe2257697b305e7a535fc8674b6bff",
+    "content-hash": "6c911b25d0dfce77e210dc1af68a85ef",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -3402,25 +3402,28 @@
         },
         {
             "name": "laminas/laminas-view",
-            "version": "2.11.5",
+            "version": "2.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-view.git",
-                "reference": "16611035d7b3a6ef2c636a9268c213146123b663"
+                "reference": "3ef103da6887809f08ecf52f42c31a76c9bf08b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-view/zipball/16611035d7b3a6ef2c636a9268c213146123b663",
-                "reference": "16611035d7b3a6ef2c636a9268c213146123b663",
+                "url": "https://api.github.com/repos/laminas/laminas-view/zipball/3ef103da6887809f08ecf52f42c31a76c9bf08b1",
+                "reference": "3ef103da6887809f08ecf52f42c31a76c9bf08b1",
                 "shasum": ""
             },
             "require": {
-                "laminas/laminas-eventmanager": "^2.6.2 || ^3.0",
+                "laminas/laminas-eventmanager": "^3.0",
                 "laminas/laminas-json": "^2.6.1 || ^3.0",
                 "laminas/laminas-loader": "^2.5",
-                "laminas/laminas-stdlib": "^2.7 || ^3.0",
+                "laminas/laminas-stdlib": "^3.2.1",
                 "laminas/laminas-zendframework-bridge": "^1.0",
-                "php": "^5.6 || ^7.0"
+                "php": "^7.3 || ~8.0.0"
+            },
+            "conflict": {
+                "laminas/laminas-servicemanager": "<3.3"
             },
             "replace": {
                 "zendframework/zend-view": "^2.11.4"
@@ -3444,10 +3447,12 @@
                 "laminas/laminas-permissions-acl": "^2.6",
                 "laminas/laminas-router": "^3.0.1",
                 "laminas/laminas-serializer": "^2.6.1",
-                "laminas/laminas-servicemanager": "^2.7.5 || ^3.0.3",
+                "laminas/laminas-servicemanager": "^3.3",
                 "laminas/laminas-session": "^2.8.1",
                 "laminas/laminas-uri": "^2.5",
-                "phpunit/phpunit": "^5.7.27 || ^6.5.14 || ^7.5.18"
+                "phpspec/prophecy": "^1.12",
+                "phpspec/prophecy-phpunit": "^2.0",
+                "phpunit/phpunit": "^9.3"
             },
             "suggest": {
                 "laminas/laminas-authentication": "Laminas\\Authentication component",
@@ -3489,7 +3494,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2020-12-15T14:57:08+00:00"
+            "time": "2021-01-01T14:07:41+00:00"
         },
         {
             "name": "laminas/laminas-zendframework-bridge",
