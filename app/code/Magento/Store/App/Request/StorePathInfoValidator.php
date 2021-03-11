@@ -7,8 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Store\App\Request;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Request\PathInfo;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreIsInactiveException;
+use Magento\Store\Model\Validation\StoreCodeValidator;
 
 /**
  * Gets the store from the path if valid
@@ -18,74 +24,74 @@ class StorePathInfoValidator
     /**
      * Store Config
      *
-     * @var \Magento\Framework\App\Config\ReinitableConfigInterface
+     * @var ScopeConfigInterface
      */
     private $config;
 
     /**
-     * @var \Magento\Store\Api\StoreRepositoryInterface
+     * @var StoreRepositoryInterface
      */
     private $storeRepository;
 
     /**
-     * @var \Magento\Framework\App\Request\PathInfo
+     * @var PathInfo
      */
     private $pathInfo;
 
     /**
-     * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
-     * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
-     * @param \Magento\Framework\App\Request\PathInfo $pathInfo
+     * @var StoreCodeValidator
+     */
+    private $storeCodeValidator;
+
+    /**
+     * @param ScopeConfigInterface $config
+     * @param StoreRepositoryInterface $storeRepository
+     * @param PathInfo $pathInfo
+     * @param StoreCodeValidator $storeCodeValidator
      */
     public function __construct(
-        \Magento\Framework\App\Config\ReinitableConfigInterface $config,
-        \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
-        \Magento\Framework\App\Request\PathInfo $pathInfo
+        ScopeConfigInterface $config,
+        StoreRepositoryInterface $storeRepository,
+        PathInfo $pathInfo,
+        StoreCodeValidator $storeCodeValidator
     ) {
         $this->config = $config;
         $this->storeRepository = $storeRepository;
         $this->pathInfo = $pathInfo;
+        $this->storeCodeValidator = $storeCodeValidator;
     }
 
     /**
      * Get store code from path info validate if config value. If path info is empty the try to calculate from request.
      *
-     * @param \Magento\Framework\App\Request\Http $request
+     * @param Http $request
      * @param string $pathInfo
      * @return string|null
      */
-    public function getValidStoreCode(
-        \Magento\Framework\App\Request\Http $request,
-        string $pathInfo = ''
-    ) : ?string {
+    public function getValidStoreCode(Http $request, string $pathInfo = '') : ?string
+    {
+        $useStoreCodeInUrl = (bool) $this->config->getValue(Store::XML_PATH_STORE_IN_URL);
+        if (!$useStoreCodeInUrl) {
+            return null;
+        }
+
         if (empty($pathInfo)) {
-            $pathInfo = $this->pathInfo->getPathInfo(
-                $request->getRequestUri(),
-                $request->getBaseUrl()
-            );
+            $pathInfo = $this->pathInfo->getPathInfo($request->getRequestUri(), $request->getBaseUrl());
         }
         $storeCode = $this->getStoreCode($pathInfo);
-        if (!empty($storeCode)
-            && $storeCode != Store::ADMIN_CODE
-            && (bool)$this->config->getValue(\Magento\Store\Model\Store::XML_PATH_STORE_IN_URL)
-        ) {
-            try {
-                $this->storeRepository->getActiveStoreByCode($storeCode);
-
-                if ((bool)$this->config->getValue(
-                    \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    $storeCode
-                )) {
-                    return $storeCode;
-                }
-            } catch (NoSuchEntityException $e) {
-                //return null;
-            } catch (\Magento\Store\Model\StoreIsInactiveException $e) {
-                //return null;
-            }
+        if (empty($storeCode) || $storeCode === Store::ADMIN_CODE || !$this->storeCodeValidator->isValid($storeCode)) {
+            return null;
         }
-        return null;
+
+        try {
+            $this->storeRepository->getActiveStoreByCode($storeCode);
+
+            return $storeCode;
+        } catch (NoSuchEntityException $e) {
+            return null;
+        } catch (StoreIsInactiveException $e) {
+            return null;
+        }
     }
 
     /**
