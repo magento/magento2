@@ -137,6 +137,10 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
             }
         }
 
+        if (!isset($result['argv'])) {
+            return $result;
+        }
+
         return array_replace_recursive($result, $this->extractFromCli($result['argv']));
     }
 
