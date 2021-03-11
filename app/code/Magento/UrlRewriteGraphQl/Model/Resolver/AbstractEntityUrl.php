@@ -88,6 +88,7 @@ abstract class AbstractEntityUrl implements ResolverInterface
                     'canonical_url' => $relativeUrl,
                     'relative_url' => $relativeUrl,
                     'redirectCode' => $this->redirectType,
+                    'redirect_code' => $this->redirectType,
                     'type' => $this->sanitizeType($finalUrlRewrite->getEntityType())
                 ];
             if (!empty($urlParts['query'])) {
@@ -126,6 +127,7 @@ abstract class AbstractEntityUrl implements ResolverInterface
                 'canonical_url' => $relativeUrl,
                 'relative_url' => $relativeUrl,
                 'redirectCode' => $finalCustomUrlRewrite->getRedirectType(),
+                'redirect_code' => $finalCustomUrlRewrite->getRedirectType(),
                 'type' => $this->sanitizeType($finalUrlRewrite->getEntityType())
             ];
         }

@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CmsGraphQl\Model\DataProvider\UrlRewrite;
+namespace Magento\CmsUrlRewriteGraphQl\Model\DataProvider\UrlRewrite;
 
 use Magento\CmsGraphQl\Model\Resolver\DataProvider\Page as PageDataProvider;
 use Magento\Framework\Exception\NoSuchEntityException;

@@ -30,4 +30,13 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\UrlRewriteGraphQl\Model\DataProvider\EntityDataProviderComposite">
+        <arguments>
+            <argument name="dataProviders" xsi:type="array">
+                <item name="category" xsi:type="object">Magento\CatalogUrlRewriteGraphQl\Model\DataProvider\UrlRewrite\CatalogTreeDataProvider</item>
+                <item name="product" xsi:type="object">Magento\CatalogUrlRewriteGraphQl\Model\DataProvider\UrlRewrite\ProductDataProvider</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

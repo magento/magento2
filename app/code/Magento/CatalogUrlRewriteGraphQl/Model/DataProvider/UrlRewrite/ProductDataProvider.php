@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogGraphQl\DataProvider\UrlRewrite;
+namespace Magento\CatalogUrlRewriteGraphQl\Model\DataProvider\UrlRewrite;
 
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
