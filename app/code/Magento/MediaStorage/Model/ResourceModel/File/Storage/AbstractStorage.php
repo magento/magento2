@@ -8,7 +8,7 @@ namespace Magento\MediaStorage\Model\ResourceModel\File\Storage;
 /**
  * Class AbstractStorage
  *
- * @deprecated Database Media storage is deprecated
+ * @deprecated Database MediaStorage is deprecated
  */
 abstract class AbstractStorage extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

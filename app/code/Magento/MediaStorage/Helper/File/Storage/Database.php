@@ -15,7 +15,7 @@ use Magento\Framework\Filesystem;
  * @api
  * @since 100.0.2
  *
- * @deprecated Database Media storage is deprecated
+ * @deprecated Database MediaStorage is deprecated
  *
  */
 class Database extends \Magento\Framework\App\Helper\AbstractHelper

@@ -13,7 +13,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 
 /**
- * @deprecated Database Media storage is deprecated
+ * @deprecated Database MediaStorage is deprecated
  **/
 class Database implements \Magento\Framework\Option\ArrayInterface
 {

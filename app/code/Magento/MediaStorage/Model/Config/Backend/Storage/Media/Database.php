@@ -5,7 +5,7 @@
  */
 namespace Magento\MediaStorage\Model\Config\Backend\Storage\Media;
 /**
-* @deprecated Database Media storage is deprecated
+* @deprecated Database MediaStorage is deprecated
 **/
 class Database extends \Magento\Framework\App\Config\Value
 {

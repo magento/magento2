@@ -9,10 +9,6 @@
  */
 namespace Magento\MediaStorage\Model\Config\Source\Storage\Media;
 
-
-/**
- * @deprecated Database Media storage is deprecated
- **/
 class Storage implements \Magento\Framework\Option\ArrayInterface
 {
     /**
