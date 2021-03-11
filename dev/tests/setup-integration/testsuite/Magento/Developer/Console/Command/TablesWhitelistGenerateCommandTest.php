@@ -51,7 +51,7 @@ class TablesWhitelistGenerateCommandTest extends SetupTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->command = $this->objectManager->create(
@@ -111,7 +111,7 @@ class TablesWhitelistGenerateCommandTest extends SetupTestCase
         $this->assertSame(Cli::RETURN_SUCCESS, $this->tester->getStatusCode());
 
         $this->assertFileExists($whiteListFileName);
-        $this->assertContains('', $this->tester->getDisplay());
+        $this->assertStringContainsString('', $this->tester->getDisplay());
 
         $whitelistFileContent = file_get_contents($whiteListFileName);
         $expectedWhitelistContent = file_get_contents(

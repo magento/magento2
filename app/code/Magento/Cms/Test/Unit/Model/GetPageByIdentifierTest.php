@@ -19,21 +19,21 @@ class GetPageByIdentifierTest extends \PHPUnit\Framework\TestCase
     protected $getPageByIdentifierCommand;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\Page
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Cms\Model\Page
      */
     protected $page;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\PageFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Cms\Model\PageFactory
      */
     protected $pageFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\ResourceModel\Page
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Cms\Model\ResourceModel\Page
      */
     protected $pageResource;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->pageFactory = $this->getMockBuilder(\Magento\Cms\Model\PageFactory::class)
             ->disableOriginalConstructor(true)

@@ -21,16 +21,16 @@ class RssTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $managerInterface;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $reviewFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->managerInterface = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $this->reviewFactory = $this->createPartialMock(\Magento\Review\Model\ReviewFactory::class, ['create']);
@@ -60,12 +60,12 @@ class RssTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $reviewModel->expects($this->once())->method('getProductCollection')
-            ->will($this->returnValue($productCollection));
-        $this->reviewFactory->expects($this->once())->method('create')->will($this->returnValue($reviewModel));
-        $productCollection->expects($this->once())->method('addStatusFilter')->will($this->returnSelf());
-        $productCollection->expects($this->once())->method('addAttributeToSelect')->will($this->returnSelf());
-        $productCollection->expects($this->once())->method('setDateOrder')->will($this->returnSelf());
-        $this->managerInterface->expects($this->once())->method('dispatch')->will($this->returnSelf());
+            ->willReturn($productCollection);
+        $this->reviewFactory->expects($this->once())->method('create')->willReturn($reviewModel);
+        $productCollection->expects($this->once())->method('addStatusFilter')->willReturnSelf();
+        $productCollection->expects($this->once())->method('addAttributeToSelect')->willReturnSelf();
+        $productCollection->expects($this->once())->method('setDateOrder')->willReturnSelf();
+        $this->managerInterface->expects($this->once())->method('dispatch')->willReturnSelf();
         $this->assertEquals($productCollection, $this->rss->getProductCollection());
     }
 }

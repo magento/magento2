@@ -12,7 +12,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $timezoneMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
         $loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
@@ -32,13 +32,13 @@ class SelectTest extends \PHPUnit\Framework\TestCase
     public function testOutputValue($format, $value, $expectedResult)
     {
         $entityMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
-        $entityMock->expects($this->once())->method('getData')->will($this->returnValue($value));
+        $entityMock->expects($this->once())->method('getData')->willReturn($value);
 
         $sourceMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class);
-        $sourceMock->expects($this->any())->method('getOptionText')->will($this->returnValue(123));
+        $sourceMock->expects($this->any())->method('getOptionText')->willReturn(123);
 
         $attributeMock = $this->createMock(\Magento\Eav\Model\Attribute::class);
-        $attributeMock->expects($this->any())->method('getSource')->will($this->returnValue($sourceMock));
+        $attributeMock->expects($this->any())->method('getSource')->willReturn($sourceMock);
 
         $this->model->setEntity($entityMock);
         $this->model->setAttribute($attributeMock);
@@ -81,11 +81,11 @@ class SelectTest extends \PHPUnit\Framework\TestCase
     public function testValidateValue($value, $originalValue, $isRequired, $expectedResult)
     {
         $entityMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
-        $entityMock->expects($this->any())->method('getData')->will($this->returnValue($originalValue));
+        $entityMock->expects($this->any())->method('getData')->willReturn($originalValue);
 
         $attributeMock = $this->createMock(\Magento\Eav\Model\Attribute::class);
-        $attributeMock->expects($this->any())->method('getStoreLabel')->will($this->returnValue('Label'));
-        $attributeMock->expects($this->any())->method('getIsRequired')->will($this->returnValue($isRequired));
+        $attributeMock->expects($this->any())->method('getStoreLabel')->willReturn('Label');
+        $attributeMock->expects($this->any())->method('getIsRequired')->willReturn($isRequired);
 
         $this->model->setEntity($entityMock);
         $this->model->setAttribute($attributeMock);
@@ -140,7 +140,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         $entityMock->expects($this->once())->method('setData')->with('attrCode', 'value');
 
         $attributeMock = $this->createMock(\Magento\Eav\Model\Attribute::class);
-        $attributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('attrCode'));
+        $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn('attrCode');
 
         $this->model->setAttribute($attributeMock);
         $this->model->setEntity($entityMock);

@@ -26,7 +26,7 @@ class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Tes
     /** @var \Magento\Framework\ObjectManagerInterface */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -51,7 +51,7 @@ class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Tes
         return $actualResults;
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $category = $this->objectManager->create(\Magento\Catalog\Model\Category::class);
         $category->load(3);
@@ -97,7 +97,7 @@ class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Tes
         ];
         $actual = $this->getActualResults($categoryFilter);
         foreach ($expected as $row) {
-            $this->assertContains($row, $actual);
+            $this->assertContains($row,$actual);
         }
         /** @var \Magento\Catalog\Model\Category $category */
         $category = $this->objectManager->create(\Magento\Catalog\Model\Category::class);
@@ -134,7 +134,7 @@ class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Tes
         ];
         $actual = $this->getActualResults($categoryFilter);
         foreach ($expected as $row) {
-            $this->assertContains($row, $actual);
+            $this->assertContains($row,$actual);
         }
     }
 
@@ -182,7 +182,7 @@ class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Tes
         ];
         $actual = $this->getActualResults($categoryFilter);
         foreach ($expected as $row) {
-            $this->assertContains($row, $actual);
+            $this->assertContains($row,$actual);
         }
     }
 }

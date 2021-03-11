@@ -12,37 +12,37 @@ namespace Magento\Swatches\Test\Unit\Helper;
  */
 class MediaTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Media\Config */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Media\Config */
     protected $mediaConfigMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem */
     protected $fileSystemMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\WriteInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\WriteInterface */
     protected $writeInstanceMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\MediaStorage\Helper\File\Storage\Database */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\MediaStorage\Helper\File\Storage\Database */
     protected $fileStorageDbMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManager */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\StoreManager */
     protected $storeManagerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Image\Factory */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Image\Factory */
     protected $imageFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Config */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Config */
     protected $viewConfigMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\Write */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\Write */
     protected $mediaDirectoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\Store */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\Store */
     protected $storeMock;
 
     /** @var \Magento\Swatches\Helper\Media|\Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $mediaHelperObject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -66,7 +66,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $this->fileSystemMock
             ->expects($this->any())
             ->method('getDirectoryWrite')
-            ->will($this->returnValue($this->mediaDirectoryMock));
+            ->willReturn($this->mediaDirectoryMock);
 
         $this->mediaHelperObject = $objectManager->getObject(
             \Magento\Swatches\Helper\Media::class,
@@ -127,15 +127,15 @@ class MediaTest extends \PHPUnit\Framework\TestCase
     {
         $this->fileStorageDbMock->method('checkDbUsage')->willReturn(1);
         $this->fileStorageDbMock->expects($this->atLeastOnce())->method('getUniqueFilename')->willReturn('file___1');
-        $this->fileStorageDbMock->method('renameFile')->will($this->returnSelf());
-        $this->mediaDirectoryMock->expects($this->exactly(2))->method('delete')->will($this->returnSelf());
+        $this->fileStorageDbMock->method('renameFile')->willReturnSelf();
+        $this->mediaDirectoryMock->expects($this->exactly(2))->method('delete')->willReturnSelf();
         $this->mediaHelperObject->moveImageFromTmp('file.tmp');
     }
 
     public function testMoveImageFromTmpNoDb()
     {
         $this->fileStorageDbMock->method('checkDbUsage')->willReturn(false);
-        $this->fileStorageDbMock->method('renameFile')->will($this->returnSelf());
+        $this->fileStorageDbMock->method('renameFile')->willReturnSelf();
         $result = $this->mediaHelperObject->moveImageFromTmp('file.tmp');
         $this->assertNotNull($result);
     }
@@ -160,7 +160,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
 
         $this->imageFactoryMock->expects($this->any())->method('create')->willReturn($image);
         $this->generateImageConfig();
-        $image->expects($this->any())->method('resize')->will($this->returnSelf());
+        $image->expects($this->any())->method('resize')->willReturnSelf();
         $image->expects($this->atLeastOnce())->method('backgroundColor')->with([255, 255, 255])->willReturnSelf();
         $this->mediaHelperObject->generateSwatchVariations('/e/a/earth.png');
     }

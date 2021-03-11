@@ -15,7 +15,7 @@ class JsonTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Json\Encoder */
     protected $encoderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** Prepare mocks and objects for SUT constructor. */
         $this->encoderMock = $this->getMockBuilder(\Magento\Framework\Json\Encoder::class)
@@ -27,7 +27,7 @@ class JsonTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->encoderMock);
         unset($this->_restJsonRenderer);

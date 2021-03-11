@@ -98,7 +98,7 @@ QUERY;
      */
     public function testGetCustomerIfUserIsNotAuthorized()
     {
-        $this->expectException(Exception::class);
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessage('The current customer isn\'t authorized.');
 
         $query = <<<QUERY
@@ -148,6 +148,9 @@ QUERY;
      */
     public function testGetCustomerIfAccountIsLocked()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The account is locked.');
+
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
         $customer = $this->customerRepository->get($currentEmail);

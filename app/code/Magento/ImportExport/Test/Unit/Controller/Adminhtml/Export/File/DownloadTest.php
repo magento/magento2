@@ -61,7 +61,7 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManagerHelper($this);
 
@@ -101,7 +101,7 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
 
         $this->processDownloadAction($fileName, $path);
         $this->directoryMock->expects($this->once())->method('readFile')->with($path)->willReturn($fileContent);
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->getMockForAbstractClass(ResponseInterface::class);
         $this->fileFactoryMock->expects($this->once())
             ->method('create')
             ->with($path, $fileContent, DirectoryList::VAR_DIR)
@@ -113,12 +113,13 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
     /**
      * Check behavior with incorrect filename.
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please provide valid export file name
      * @return void
      */
     public function testExecuteWithEmptyFileName(): void
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Please provide valid export file name');
+
         $this->requestMock->expects($this->once())->method('getParam')->with('filename')->willReturn('');
 
         $this->controller->execute();
@@ -127,12 +128,13 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
     /**
      * Check behavior when method throw exception.
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage There are no export file with such name customer.csv
      * @return void
      */
     public function testExecuteWithNonExistanceFile(): void
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('There are no export file with such name customer.csv');
+
         $fileName = 'customer.csv';
         $path = 'export/' . $fileName;
 

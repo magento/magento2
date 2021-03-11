@@ -15,17 +15,17 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     protected $converter;
 
     /**
-     * @var \Magento\Tax\Api\Data\TaxRateInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Api\Data\TaxRateInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxRateDataObjectFactory;
 
     /**
-     * @var \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxRateTitleDataObjectFactory;
 
     /**
-     * @var \Magento\Framework\Locale\FormatInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Locale\FormatInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $format;
 
@@ -34,7 +34,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->taxRateDataObjectFactory = $this->getMockBuilder(
             \Magento\Tax\Api\Data\TaxRateInterfaceFactory::class
@@ -96,7 +96,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
 
         $this->assertArrayHasKey('title[1]', $this->converter->createArrayFromServiceObject($taxRateMock, true));
         $this->assertArrayHasKey('title', $this->converter->createArrayFromServiceObject($taxRateMock));
-        $this->assertTrue(is_array($this->converter->createArrayFromServiceObject($taxRateMock)));
+        $this->assertIsArray($this->converter->createArrayFromServiceObject($taxRateMock));
     }
 
     public function testPopulateTaxRateData()

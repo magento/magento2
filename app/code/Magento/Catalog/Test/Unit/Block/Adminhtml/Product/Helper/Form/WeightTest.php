@@ -13,34 +13,34 @@ class WeightTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $weightSwitcher;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $factory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeFormat;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->weightSwitcher = $this->createPartialMock(
             \Magento\Framework\Data\Form\Element\Radios::class,
             ['setId', 'setName', 'setLabel', 'setForm']
         );
-        $this->weightSwitcher->expects($this->any())->method('setId')->will($this->returnSelf());
-        $this->weightSwitcher->expects($this->any())->method('setName')->will($this->returnSelf());
-        $this->weightSwitcher->expects($this->any())->method('setLabel')->will($this->returnSelf());
+        $this->weightSwitcher->expects($this->any())->method('setId')->willReturnSelf();
+        $this->weightSwitcher->expects($this->any())->method('setName')->willReturnSelf();
+        $this->weightSwitcher->expects($this->any())->method('setLabel')->willReturnSelf();
 
         $this->factory = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
         $this->factory->expects(
@@ -49,8 +49,8 @@ class WeightTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             $this->equalTo('radios')
-        )->will(
-            $this->returnValue($this->weightSwitcher)
+        )->willReturn(
+            $this->weightSwitcher
         );
         $this->localeFormat = $this->createMock(\Magento\Framework\Locale\Format::class);
 
@@ -78,8 +78,8 @@ class WeightTest extends \PHPUnit\Framework\TestCase
             'setForm'
         )->with(
             $this->equalTo($form)
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
+            
         );
 
         $this->_model->setForm($form);

@@ -17,13 +17,13 @@ class MediaTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    /** @var \Magento\Framework\Filesystem\Directory\ReadInterface | \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Framework\Filesystem\Directory\ReadInterface | \PHPUnit\Framework\MockObject\MockObject  */
     protected $dirMock;
 
     /** @var  Media */
     protected $helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->dirMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
@@ -35,13 +35,13 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $filesystemMock->expects($this->any())
             ->method('getDirectoryRead')
             ->with(DirectoryList::MEDIA)
-            ->will($this->returnValue($this->dirMock));
+            ->willReturn($this->dirMock);
         $dateMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
         $dateMock->expects($this->any())
             ->method('date')
-            ->will($this->returnValue(self::UPDATE_TIME));
+            ->willReturn(self::UPDATE_TIME);
         $this->helper = $this->objectManager->getObject(
             \Magento\MediaStorage\Helper\File\Media::class,
             ['filesystem' => $filesystemMock, 'date' => $dateMock]
@@ -63,19 +63,19 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $this->dirMock->expects($this->once())
             ->method('getRelativePath')
             ->with($mediaDirectory . '/' . $path)
-            ->will($this->returnValue($relativePath));
+            ->willReturn($relativePath);
         $this->dirMock->expects($this->once())
             ->method('isFile')
             ->with($relativePath)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->dirMock->expects($this->once())
             ->method('isReadable')
             ->with($relativePath)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->dirMock->expects($this->once())
             ->method('readFile')
             ->with($relativePath)
-            ->will($this->returnValue($content));
+            ->willReturn($content);
 
         $expected = [
             'filename' => $expectedFile,
@@ -99,11 +99,12 @@ class MediaTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The "mediaDir/path" file doesn't exist. Verify the file and try again.
      */
     public function testCollectFileInfoNotFile()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The "mediaDir/path" file doesn\'t exist. Verify the file and try again.');
+
         $content = 'content';
         $mediaDirectory = 'mediaDir';
         $relativePath = 'relativePath';
@@ -111,29 +112,30 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $this->dirMock->expects($this->once())
             ->method('getRelativePath')
             ->with($mediaDirectory . '/' . $path)
-            ->will($this->returnValue($relativePath));
+            ->willReturn($relativePath);
         $this->dirMock->expects($this->once())
             ->method('isFile')
             ->with($relativePath)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->dirMock->expects($this->never())
             ->method('isReadable')
             ->with($relativePath)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->dirMock->expects($this->never())
             ->method('readFile')
             ->with($relativePath)
-            ->will($this->returnValue($content));
+            ->willReturn($content);
 
         $this->helper->collectFileInfo($mediaDirectory, $path);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage File mediaDir/path is not readable
      */
     public function testCollectFileInfoNotReadable()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('File mediaDir/path is not readable');
+
         $content = 'content';
         $mediaDirectory = 'mediaDir';
         $relativePath = 'relativePath';
@@ -141,19 +143,19 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $this->dirMock->expects($this->once())
             ->method('getRelativePath')
             ->with($mediaDirectory . '/' . $path)
-            ->will($this->returnValue($relativePath));
+            ->willReturn($relativePath);
         $this->dirMock->expects($this->once())
             ->method('isFile')
             ->with($relativePath)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->dirMock->expects($this->once())
             ->method('isReadable')
             ->with($relativePath)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->dirMock->expects($this->never())
             ->method('readFile')
             ->with($relativePath)
-            ->will($this->returnValue($content));
+            ->willReturn($content);
 
         $this->helper->collectFileInfo($mediaDirectory, $path);
     }

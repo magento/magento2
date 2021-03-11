@@ -8,7 +8,7 @@ namespace Magento\Bundle\Test\Unit\Model\Plugin;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class ProductTest extends \PHPUnit\Framework\TestCase
 {
@@ -21,7 +21,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /** @var  MockObject|\Magento\Catalog\Model\Product */
     private $product;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -60,11 +60,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         ];
         $this->product->expects($this->once())
             ->method('getEntityId')
-            ->will($this->returnValue($id));
+            ->willReturn($id);
         $this->type->expects($this->once())
             ->method('getParentIdsByChild')
             ->with($id)
-            ->will($this->returnValue($parentIds));
+            ->willReturn($parentIds);
         $identities = $this->plugin->afterGetIdentities($this->product, $baseIdentities);
         $this->assertEquals($expectedIdentities, $identities);
     }

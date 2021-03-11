@@ -11,7 +11,7 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Model\PaymentTokenFactory;
 use Magento\Vault\Model\AccountPaymentTokenFactory;
 use Magento\Vault\Model\PaymentToken;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class AccountPaymentTokenFactoryTest
@@ -33,7 +33,7 @@ class AccountPaymentTokenFactoryTest extends \PHPUnit\Framework\TestCase
      */
     private $factory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -43,7 +43,7 @@ class AccountPaymentTokenFactoryTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->paymentToken = $objectManager->getObject(PaymentToken::class);
-        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $this->paymentTokenFactory = new PaymentTokenFactory($this->objectManager, $tokenTypes);
         $this->factory = new AccountPaymentTokenFactory($this->objectManager, $this->paymentTokenFactory);

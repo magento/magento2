@@ -10,22 +10,22 @@ namespace Magento\Swatches\Test\Unit\Observer;
  */
 class AddFieldsToAttributeObserverTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Module\Manager|\PHPUnit\Framework\MockObject\MockObject */
     protected $moduleManagerMock;
 
-    /** @var \Magento\Config\Model\Config\Source\Yesno|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Config\Model\Config\Source\Yesno|\PHPUnit\Framework\MockObject\MockObject */
     protected $yesNoMock;
 
-    /** @var \Magento\Framework\Data\Form|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Data\Form|\PHPUnit\Framework\MockObject\MockObject */
     protected $formMock;
 
-    /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject */
     protected $eventObserverMock;
 
-    /** @var \Magento\Swatches\Observer\AddFieldsToAttributeObserver|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Swatches\Observer\AddFieldsToAttributeObserver|\PHPUnit\Framework\MockObject\MockObject */
     protected $observerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->moduleManagerMock = $this->createMock(\Magento\Framework\Module\Manager::class);
 

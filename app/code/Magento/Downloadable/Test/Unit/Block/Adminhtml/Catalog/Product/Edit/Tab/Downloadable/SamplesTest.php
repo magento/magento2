@@ -55,7 +55,7 @@ class SamplesTest extends \PHPUnit\Framework\TestCase
      */
     protected $urlBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -121,37 +121,37 @@ class SamplesTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->productModel->expects($this->any())->method('getTypeId')
-            ->will($this->returnValue('downloadable'));
+            ->willReturn('downloadable');
         $this->productModel->expects($this->any())->method('getTypeInstance')
-            ->will($this->returnValue($this->downloadableProductModel));
+            ->willReturn($this->downloadableProductModel);
         $this->productModel->expects($this->any())->method('getStoreId')
-            ->will($this->returnValue(0));
+            ->willReturn(0);
         $this->downloadableProductModel->expects($this->any())->method('getSamples')
-            ->will($this->returnValue([$this->downloadableSampleModel]));
+            ->willReturn([$this->downloadableSampleModel]);
         $this->coreRegistry->expects($this->any())->method('registry')
-            ->will($this->returnValue($this->productModel));
+            ->willReturn($this->productModel);
         $this->downloadableSampleModel->expects($this->any())->method('getId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->downloadableSampleModel->expects($this->any())->method('getTitle')
-            ->will($this->returnValue('Sample Title'));
+            ->willReturn('Sample Title');
         $this->downloadableSampleModel->expects($this->any())->method('getSampleUrl')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->downloadableSampleModel->expects($this->any())->method('getSampleFile')
-            ->will($this->returnValue('file/sample.gif'));
+            ->willReturn('file/sample.gif');
         $this->downloadableSampleModel->expects($this->any())->method('getSampleType')
-            ->will($this->returnValue('file'));
+            ->willReturn('file');
         $this->downloadableSampleModel->expects($this->any())->method('getSortOrder')
-            ->will($this->returnValue(0));
+            ->willReturn(0);
         $this->escaper->expects($this->any())->method('escapeHtml')
-            ->will($this->returnValue('Sample Title'));
+            ->willReturn('Sample Title');
         $this->fileHelper->expects($this->any())->method('getFilePath')
-            ->will($this->returnValue('/file/path/sample.gif'));
+            ->willReturn('/file/path/sample.gif');
         $this->fileHelper->expects($this->any())->method('ensureFileInFilesystem')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->fileHelper->expects($this->any())->method('getFileSize')
-            ->will($this->returnValue('1.1'));
+            ->willReturn('1.1');
         $this->urlBuilder->expects($this->any())->method('getUrl')
-            ->will($this->returnValue('final_url'));
+            ->willReturn('final_url');
         $sampleData = $this->block->getSampleData();
         foreach ($sampleData as $sample) {
             $fileSave = $sample->getFileSave(0);

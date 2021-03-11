@@ -17,24 +17,24 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     protected $validator;
 
     /**
-     * @var \Magento\Sales\Model\Order\Address|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Address|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressMock;
 
     /**
-     * @var \Magento\Directory\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryHelperMock;
 
     /**
-     * @var \Magento\Directory\Model\CountryFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\CountryFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $countryFactoryMock;
 
     /**
      * Mock order address model
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->addressMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Address::class,
@@ -49,7 +49,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
         $eavConfigMock->expects($this->any())
             ->method('getAttribute')
-            ->will($this->returnValue($attributeMock));
+            ->willReturn($attributeMock);
         $this->validator = new \Magento\Sales\Model\Order\Address\Validator(
             $this->directoryHelperMock,
             $this->countryFactoryMock,
@@ -70,13 +70,13 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->addressMock->expects($this->any())
             ->method('hasData')
-            ->will($this->returnValueMap($addressData));
+            ->willReturnMap($addressData);
         $this->addressMock->expects($this->once())
             ->method('getEmail')
-            ->will($this->returnValue($email));
+            ->willReturn($email);
         $this->addressMock->expects($this->once())
             ->method('getAddressType')
-            ->will($this->returnValue($addressType));
+            ->willReturn($addressType);
         $actualWarnings = $this->validator->validate($this->addressMock);
         $this->assertEquals($expectedWarnings, $actualWarnings);
     }

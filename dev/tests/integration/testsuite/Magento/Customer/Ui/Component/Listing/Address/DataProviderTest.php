@@ -40,10 +40,10 @@ class DataProviderTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initLocaleResolverMock();
-        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->dataProvider = Bootstrap::getObjectManager()->create(
             DataProvider::class,
             [
@@ -107,7 +107,7 @@ class DataProviderTest extends TestCase
      */
     private function initLocaleResolverMock()
     {
-        $this->localeResolverMock = $this->createMock(ResolverInterface::class);
+        $this->localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
         Bootstrap::getObjectManager()->removeSharedInstance(ResolverInterface::class);
         Bootstrap::getObjectManager()->removeSharedInstance(Resolver::class);
         Bootstrap::getObjectManager()->addSharedInstance($this->localeResolverMock, ResolverInterface::class);

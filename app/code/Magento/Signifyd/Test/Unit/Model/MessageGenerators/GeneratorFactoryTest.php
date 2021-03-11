@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Signifyd\Model\MessageGenerators\PatternGenerator;
 use Magento\Signifyd\Model\MessageGenerators\CaseRescore;
 use Magento\Signifyd\Model\MessageGenerators\GeneratorFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Contains tests for messages generators factory.
@@ -30,7 +30,7 @@ class GeneratorFactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -88,11 +88,12 @@ class GeneratorFactoryTest extends \PHPUnit\Framework\TestCase
      * Checks correct exception message for unknown type of message generator.
      *
      * @covers \Magento\Signifyd\Model\MessageGenerators\GeneratorFactory::create
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Specified message type does not supported.
      */
     public function testCreateWithException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Specified message type does not supported.');
+
         $type = 'cases/unknown';
         $this->factory->create($type);
     }

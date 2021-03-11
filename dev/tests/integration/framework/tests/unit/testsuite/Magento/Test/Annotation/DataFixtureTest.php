@@ -15,11 +15,11 @@ use Magento\Framework\Component\ComponentRegistrar;
 class DataFixtureTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\TestFramework\Annotation\DataFixture|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\TestFramework\Annotation\DataFixture|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_object = $this->getMockBuilder(\Magento\TestFramework\Annotation\DataFixture::class)
             ->setMethods(['_applyOneFixture'])
@@ -39,11 +39,9 @@ class DataFixtureTest extends \PHPUnit\Framework\TestCase
     {
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     */
     public function testConstructorException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         new \Magento\TestFramework\Annotation\DataFixture(__DIR__ . '/non_existing_fixture_dir');
     }
 
@@ -99,10 +97,11 @@ class DataFixtureTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture fixture\path\must\not\contain\backslash.php
-     * @expectedException \Magento\Framework\Exception\LocalizedException
+     *
      */
     public function testStartTestTransactionRequestInvalidPath()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->_object->startTestTransactionRequest($this, new \Magento\TestFramework\Event\Param\Transaction());
     }
 

@@ -16,17 +16,17 @@ class EngineTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Visibility|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Visibility|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $catalogProductVisibility;
 
     /**
-     * @var \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $indexScopeResolver;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connection;
 
@@ -35,7 +35,7 @@ class EngineTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
@@ -47,11 +47,11 @@ class EngineTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $resource->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connection));
+            ->willReturn($this->connection);
 
         $resource->expects($this->any())
             ->method('getTableName')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->catalogProductVisibility = $this->getMockBuilder(\Magento\Catalog\Model\Product\Visibility::class)
             ->disableOriginalConstructor()
@@ -90,7 +90,7 @@ class EngineTest extends \PHPUnit\Framework\TestCase
      */
     public function testAllowAdvancedIndex()
     {
-        $this->assertEquals(false, $this->model->allowAdvancedIndex());
+        $this->assertFalse($this->model->allowAdvancedIndex());
     }
 
     /**
@@ -98,7 +98,7 @@ class EngineTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsAvailable()
     {
-        $this->assertEquals(true, $this->model->isAvailable());
+        $this->assertTrue($this->model->isAvailable());
     }
 
     /**

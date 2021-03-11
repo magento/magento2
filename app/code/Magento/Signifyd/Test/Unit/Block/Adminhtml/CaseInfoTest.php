@@ -12,7 +12,7 @@ use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Signifyd\Block\Adminhtml\CaseInfo;
 use Magento\Signifyd\Model\CaseManagement;
 use Magento\Signifyd\Model\Config;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Tests for Signifyd block information.
@@ -54,7 +54,7 @@ class CaseInfoTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 

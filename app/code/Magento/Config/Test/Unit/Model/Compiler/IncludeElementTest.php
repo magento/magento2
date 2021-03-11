@@ -16,12 +16,12 @@ class IncludeElementTest extends \PHPUnit\Framework\TestCase
     protected $includeElement;
 
     /**
-     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $moduleReaderMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $readFactoryMock;
 
@@ -30,7 +30,7 @@ class IncludeElementTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->moduleReaderMock = $this->getMockBuilder(\Magento\Framework\Module\Dir\Reader::class)
             ->disableOriginalConstructor()
@@ -81,11 +81,12 @@ class IncludeElementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The "adminhtml/path/to/file.xml" file doesn't exist.
      */
     public function testCompileException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The "adminhtml/path/to/file.xml" file doesn\'t exist.');
+
         $xmlContent = '<rootConfig><include path="Module_Name::path/to/file.xml"/></rootConfig>';
 
         $document = new \DOMDocument();

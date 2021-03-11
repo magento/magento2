@@ -13,12 +13,12 @@ use Symfony\Component\Console\Tester\CommandTester;
 class MaintenanceAllowIpsCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\MaintenanceMode|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\MaintenanceMode|\PHPUnit\Framework\MockObject\MockObject
      */
     private $maintenanceMode;
 
     /**
-     * @var IpValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var IpValidator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $ipValidator;
 
@@ -27,7 +27,7 @@ class MaintenanceAllowIpsCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $command;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->maintenanceMode = $this->createMock(\Magento\Framework\App\MaintenanceMode::class);
         $this->ipValidator = $this->createMock(\Magento\Setup\Validator\IpValidator::class);

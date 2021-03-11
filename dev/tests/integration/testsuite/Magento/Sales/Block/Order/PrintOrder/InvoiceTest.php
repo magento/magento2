@@ -58,7 +58,7 @@ class InvoiceTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -75,7 +75,7 @@ class InvoiceTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->registry->unregister('current_order');
         $this->registry->unregister('current_invoice');
@@ -156,7 +156,7 @@ class InvoiceTest extends TestCase
             ],
         ];
         foreach ($templates as $key => $data) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $data['expected_data'],
                 strip_tags($block->setTemplate($data['template'])->toHtml()),
                 sprintf('%s wasn\'t found.', $key)

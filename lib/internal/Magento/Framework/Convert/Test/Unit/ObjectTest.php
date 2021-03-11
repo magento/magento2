@@ -14,7 +14,7 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = new DataObject();
     }
@@ -24,17 +24,17 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
         $mockFirst = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getId', 'getCode']);
         $mockFirst->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $mockFirst->expects($this->once())
             ->method('getCode')
-            ->will($this->returnValue('code1'));
+            ->willReturn('code1');
         $mockSecond = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getId', 'getCode']);
         $mockSecond->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue(2));
+            ->willReturn(2);
         $mockSecond->expects($this->once())
             ->method('getCode')
-            ->will($this->returnValue('code2'));
+            ->willReturn('code2');
 
         $callable = function ($item) {
             return $item->getCode();
@@ -56,17 +56,17 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
         $mockFirst = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getSome', 'getId']);
         $mockFirst->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue(3));
+            ->willReturn(3);
         $mockFirst->expects($this->once())
             ->method('getSome')
-            ->will($this->returnValue('code3'));
+            ->willReturn('code3');
         $mockSecond = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getSome', 'getId']);
         $mockSecond->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue(4));
+            ->willReturn(4);
         $mockSecond->expects($this->once())
             ->method('getSome')
-            ->will($this->returnValue('code4'));
+            ->willReturn('code4');
 
         $callable = function ($item) {
             return $item->getId();
@@ -92,17 +92,17 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
 
         $mockFirst->expects($this->any())
             ->method('getData')
-            ->will($this->returnValue([
+            ->willReturn([
                 'id' => 1,
                 'o' => $mockSecond,
-            ]));
+            ]);
 
         $mockSecond->expects($this->any())
             ->method('getData')
-            ->will($this->returnValue([
+            ->willReturn([
                 'id' => 2,
                 'o' => $mockFirst,
-            ]));
+            ]);
 
         $data = [
             'object' => $mockFirst,

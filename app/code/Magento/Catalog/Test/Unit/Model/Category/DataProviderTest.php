@@ -27,62 +27,62 @@ use PHPUnit\Framework\MockObject\MockObject;
 class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var EavValidationRules|\PHPUnit_Framework_MockObject_MockObject
+     * @var EavValidationRules|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eavValidationRules;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $categoryCollectionFactory;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
-     * @var Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $registry;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eavConfig;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $request;
 
     /**
-     * @var CategoryFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $categoryFactory;
 
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collection;
 
     /**
-     * @var Type|\PHPUnit_Framework_MockObject_MockObject
+     * @var Type|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eavEntityMock;
 
     /**
-     * @var FileInfo|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileInfo|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileInfo;
 
     /**
-     * @var PoolInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PoolInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $modifierPool;
 
     /**
-     * @var ArrayUtils|\PHPUnit_Framework_MockObject_MockObject
+     * @var ArrayUtils|\PHPUnit\Framework\MockObject\MockObject
      */
     private $arrayUtils;
     /**
@@ -93,7 +93,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eavValidationRules = $this->getMockBuilder(EavValidationRules::class)
             ->disableOriginalConstructor()
@@ -132,7 +132,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->categoryFactory = $this->getMockBuilder(CategoryFactory::class)
             ->disableOriginalConstructor()
@@ -265,7 +265,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $model = $this->getModel();
         $result = $model->getData();
 
-        $this->assertTrue(is_array($result));
+        $this->assertIsArray($result);
         $this->assertArrayHasKey($categoryId, $result);
         $this->assertArrayNotHasKey('image', $result[$categoryId]);
     }
@@ -352,7 +352,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $model = $this->getModel();
         $result = $model->getData();
 
-        $this->assertTrue(is_array($result));
+        $this->assertIsArray($result);
         $this->assertArrayHasKey($categoryId, $result);
         $this->assertArrayHasKey('image', $result[$categoryId]);
 

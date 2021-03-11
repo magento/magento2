@@ -10,10 +10,10 @@ class TabsTest extends \PHPUnit\Framework\TestCase
     public function testAddTab()
     {
         $tabBlock = $this->createMock(\Magento\Framework\View\Element\Template::class);
-        $tabBlock->expects($this->once())->method('setTemplate')->with('template')->will($this->returnSelf());
+        $tabBlock->expects($this->once())->method('setTemplate')->with('template')->willReturnSelf();
 
         $layout = $this->createMock(\Magento\Framework\View\Layout::class);
-        $layout->expects($this->once())->method('createBlock')->with('block')->will($this->returnValue($tabBlock));
+        $layout->expects($this->once())->method('createBlock')->with('block')->willReturn($tabBlock);
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $block = $helper->getObject(\Magento\Catalog\Block\Product\View\Tabs::class, ['layout' => $layout]);

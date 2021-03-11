@@ -83,7 +83,7 @@ class QuoteTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -106,7 +106,7 @@ class QuoteTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if ($this->customerIdToDelete) {
             $this->customerRepository->deleteById($this->customerIdToDelete);
@@ -210,7 +210,7 @@ class QuoteTest extends TestCase
         $customer = $quote->getCustomer();
         $actual = $this->extensibleDataObjectConverter->toFlatArray($customer);
         foreach ($expected as $item) {
-            $this->assertContains($item, $actual);
+            $this->assertContainsEquals($item, $actual);
         }
         $this->assertEquals('test@example.com', $quote->getCustomerEmail());
     }
@@ -585,7 +585,7 @@ class QuoteTest extends TestCase
             (string)__('The fewest you may purchase is %1', 5),
         ];
         $this->expectException(LocalizedException::class);
-        $this->expectExceptionMessageRegExp('/' . implode('|', $messages) . '/');
+        $this->expectExceptionMessageMatches('/' . implode('|', $messages) . '/');
         $quote->addProduct($product, 1);
     }
 
@@ -603,7 +603,7 @@ class QuoteTest extends TestCase
             (string)__('The requested qty exceeds the maximum qty allowed in shopping cart'),
         ];
         $this->expectException(LocalizedException::class);
-        $this->expectExceptionMessageRegExp('/' . implode('|', $messages) . '/');
+        $this->expectExceptionMessageMatches('/' . implode('|', $messages) . '/');
         $quote->addProduct($product, 25);
     }
 
@@ -641,7 +641,7 @@ class QuoteTest extends TestCase
             (string)__('The fewest you may purchase is %1', 5),
         ];
         $this->expectException(LocalizedException::class);
-        $this->expectExceptionMessageRegExp('/' . implode('|', $messages) . '/');
+        $this->expectExceptionMessageMatches('/' . implode('|', $messages) . '/');
         $quote->addProduct($product, 1);
     }
 
@@ -661,7 +661,7 @@ class QuoteTest extends TestCase
             (string)__('The requested qty exceeds the maximum qty allowed in shopping cart'),
         ];
         $this->expectException(LocalizedException::class);
-        $this->expectExceptionMessageRegExp('/' . implode('|', $messages) . '/');
+        $this->expectExceptionMessageMatches('/' . implode('|', $messages) . '/');
         $quote->addProduct($product, 25);
     }
 

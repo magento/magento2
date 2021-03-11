@@ -23,32 +23,32 @@ class UiComponentTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var ScheduledStructure|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScheduledStructure|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scheduledStructureMock;
 
     /**
-     * @var Layout\Reader\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Layout\Reader\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $readerContextMock;
 
     /**
-     * @var \Magento\Framework\View\Element\UiComponentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\UiComponentFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $uiComponentFactoryMock;
 
     /**
-     * @var \Magento\Framework\Data\Argument\InterpreterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Argument\InterpreterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $argumentInterpreterMock;
 
     /**
-     * @var \Magento\Framework\View\Element\UiComponent\ContextFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\UiComponent\ContextFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\Element\BlockFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\BlockFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $blockFactoryMock;
 
@@ -57,7 +57,7 @@ class UiComponentTest extends \PHPUnit\Framework\TestCase
      */
     protected $uiComponent;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->argumentInterpreterMock = $this->getMockBuilder(
@@ -165,10 +165,10 @@ class UiComponentTest extends \PHPUnit\Framework\TestCase
 
         $this->argumentInterpreterMock->expects($this->any())
             ->method('evaluate')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [['key_1' => 'value_1'], 'value_1'],
                 [['key_2' => 'value_2'], 'value_2'],
-            ]));
+            ]);
 
         $layoutMock->expects($this->any())
             ->method('setBlock')

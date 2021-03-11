@@ -32,36 +32,36 @@ class AttributesTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var ProductAttributeRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductAttributeRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeRepositoryMock;
 
     /**
-     * @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $searchCriteriaBuilderMock;
 
     /**
-     * @var UiElementProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var UiElementProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $uiElementProcessorMock;
 
     /**
-     * @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteria|\PHPUnit\Framework\MockObject\MockObject
      */
     private $searchCriteriaMock;
 
     /**
-     * @var ProductAttributeSearchResultsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductAttributeSearchResultsInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $searchResultsMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(ContextInterface::class)
             ->getMockForAbstractClass();
@@ -192,7 +192,7 @@ class AttributesTest extends \PHPUnit\Framework\TestCase
      * @param string $attributeCode
      * @param string $defaultFrontendLabel
      * @param array $options
-     * @return ProductAttributeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductAttributeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createAttributeMock($attributeCode, $defaultFrontendLabel, array $options = [])
     {
@@ -217,7 +217,7 @@ class AttributesTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $value
      * @param string $label
-     * @return AttributeOptionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return AttributeOptionInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createAttributeOptionMock($value, $label)
     {

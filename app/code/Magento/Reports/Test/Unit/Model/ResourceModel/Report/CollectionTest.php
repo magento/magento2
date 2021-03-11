@@ -24,31 +24,31 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     protected $collection;
 
     /**
-     * @var EntityFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entityFactoryMock;
 
     /**
-     * @var TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $timezoneMock;
 
     /**
-     * @var ReportCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReportCollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $factoryMock;
 
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->entityFactoryMock = $this->createMock(EntityFactory::class);
-        $this->timezoneMock = $this->createMock(TimezoneInterface::class);
+        $this->timezoneMock = $this->getMockForAbstractClass(TimezoneInterface::class);
         $this->factoryMock = $this->createMock(ReportCollectionFactory::class);
 
         $this->timezoneMock->method('formatDate')
-            ->will($this->returnCallback([$this, 'formatDate']));
+            ->willReturnCallback([$this, 'formatDate']);
 
         $this->collection = new Collection(
             $this->entityFactoryMock,
@@ -72,7 +72,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testGetStoreIds()
     {
         $storeIds = [1];
-        $this->assertEquals(null, $this->collection->getStoreIds());
+        $this->assertNull($this->collection->getStoreIds());
         $this->collection->setStoreIds($storeIds);
         $this->assertEquals($storeIds, $this->collection->getStoreIds());
     }
@@ -98,7 +98,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testGetPageSize()
     {
         $pageSize = 1;
-        $this->assertEquals(null, $this->collection->getPageSize());
+        $this->assertNull($this->collection->getPageSize());
         $this->collection->setPageSize($pageSize);
         $this->assertEquals($pageSize, $this->collection->getPageSize());
     }
@@ -119,7 +119,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         foreach ($reports as $report) {
             $this->assertInstanceOf(\Magento\Framework\DataObject::class, $report);
             $reportData = $report->getData();
-            $this->assertTrue(empty($reportData['children']));
+            $this->assertEmpty($reportData['children']);
             $this->assertTrue($reportData['is_empty']);
         }
         $this->assertEquals($size, count($reports));

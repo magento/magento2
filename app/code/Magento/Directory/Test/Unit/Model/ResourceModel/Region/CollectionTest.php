@@ -17,7 +17,7 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\DataObject;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class CollectionTest
@@ -36,14 +36,14 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     private $allowedCountries;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $entityFactoryMock = $this->createMock(EntityFactory::class);
-        $loggerMock = $this->createMock(LoggerInterface::class);
-        $fetchStrategyMock = $this->createMock(FetchStrategyInterface::class);
-        $eventManagerMock = $this->createMock(ManagerInterface::class);
-        $localeResolverMock = $this->createMock(ResolverInterface::class);
+        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $fetchStrategyMock = $this->getMockForAbstractClass(FetchStrategyInterface::class);
+        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
         $connectionMock = $this->createMock(Mysql::class);
         $resourceMock = $this->getMockForAbstractClass(
             AbstractDb::class,
@@ -57,9 +57,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->allowedCountries = $this->createMock(AllowedCountries::class);
 
         $selectMock = $this->createMock(Select::class);
-        $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
-        $resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
-        $resourceMock->expects($this->any())->method('getTable')->will($this->returnArgument(0));
+        $connectionMock->expects($this->any())->method('select')->willReturn($selectMock);
+        $resourceMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
+        $resourceMock->expects($this->any())->method('getTable')->willReturnArgument(0);
 
         $this->collection = new Collection(
             $entityFactoryMock,

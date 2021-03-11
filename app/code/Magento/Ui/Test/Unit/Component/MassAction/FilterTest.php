@@ -25,17 +25,17 @@ use Magento\Ui\Component\MassAction\Filter;
 class FilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * \PHPUnit_Framework_MockObject_MockObject
+     * \PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
     /**
-     * \PHPUnit_Framework_MockObject_MockObject
+     * \PHPUnit\Framework\MockObject\MockObject
      */
     private $uiComponentFactoryMock;
 
     /**
-     * \PHPUnit_Framework_MockObject_MockObject
+     * \PHPUnit\Framework\MockObject\MockObject
      */
     private $filterBuilderMock;
 
@@ -48,34 +48,34 @@ class FilterTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * \PHPUnit_Framework_MockObject_MockObject
+     * \PHPUnit\Framework\MockObject\MockObject
      */
     private $dataProviderMock;
 
     /**
-     * \PHPUnit_Framework_MockObject_MockObject
+     * \PHPUnit\Framework\MockObject\MockObject
      */
     private $abstractDbMock;
 
     /**
-     * \PHPUnit_Framework_MockObject_MockObject
+     * \PHPUnit\Framework\MockObject\MockObject
      */
     private $searchResultMock;
 
     /**
-     * \PHPUnit_Framework_MockObject_MockObject
+     * \PHPUnit\Framework\MockObject\MockObject
      */
     private $uiComponentMock;
 
     /**
-     * \PHPUnit_Framework_MockObject_MockObject
+     * \PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->uiComponentFactoryMock = $this->createMock(UiComponentFactory::class);
@@ -83,13 +83,13 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             FilterBuilder::class,
             ['value', 'setConditionType', 'create', 'setField']
         );
-        $this->requestMock = $this->createMock(RequestInterface::class);
-        $this->dataProviderMock = $this->createMock(DataProviderInterface::class);
-        $this->uiComponentMock = $this->createMock(UiComponentInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->dataProviderMock = $this->getMockForAbstractClass(DataProviderInterface::class);
+        $this->uiComponentMock = $this->getMockForAbstractClass(UiComponentInterface::class);
         $this->abstractDbMock = $this->createMock(AbstractDb::class);
-        $this->contextMock = $this->createMock(ContextInterface::class);
-        $this->searchResultMock = $this->createMock(SearchResultInterface::class);
-        $uiComponentMockTwo = $this->createMock(UiComponentInterface::class);
+        $this->contextMock = $this->getMockForAbstractClass(ContextInterface::class);
+        $this->searchResultMock = $this->getMockForAbstractClass(SearchResultInterface::class);
+        $uiComponentMockTwo = $this->getMockForAbstractClass(UiComponentInterface::class);
         $this->filter = $this->objectManager->getObject(
             Filter::class,
             [
@@ -142,10 +142,11 @@ class FilterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @throws \Exception
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testApplySelectionOnTargetProviderException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->contextMock->expects($this->any())
             ->method('getDataProvider')
             ->willReturn($this->dataProviderMock);

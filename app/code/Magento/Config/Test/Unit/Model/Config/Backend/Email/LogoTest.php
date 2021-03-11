@@ -25,34 +25,34 @@ class LogoTest extends \PHPUnit\Framework\TestCase
     /** @var Logo */
     protected $model;
 
-    /** @var Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $contextMock;
 
-    /** @var Registry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Registry|\PHPUnit\Framework\MockObject\MockObject */
     protected $registryMock;
 
-    /** @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $scopeConfigMock;
 
-    /** @var TypeListInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var TypeListInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $typeListMock;
 
-    /** @var UploaderFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UploaderFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $uploaderFactoryMock;
 
-    /** @var RequestDataInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var RequestDataInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $requestDataMock;
 
-    /** @var Filesystem|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Filesystem|\PHPUnit\Framework\MockObject\MockObject */
     protected $filesystemMock;
 
-    /** @var WriteInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var WriteInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $writeMock;
 
-    /** @var Uploader|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Uploader|\PHPUnit\Framework\MockObject\MockObject */
     protected $uploaderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
             ->disableOriginalConstructor()
@@ -158,6 +158,9 @@ class LogoTest extends \PHPUnit\Framework\TestCase
             ->method('delete')
             ->with(Logo::UPLOAD_DIR . '/' . $oldValue)
             ->willReturn(true);
+
+        $this->uploaderMock->method('save')
+            ->willReturn(['file' => $oldValue]);
 
         $this->assertEquals($this->model, $this->model->beforeSave());
     }

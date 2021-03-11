@@ -82,17 +82,17 @@ class BulkStatusTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->bulkCollectionFactory = $this->createPartialMock(BulkCollectionFactory::class, ['create']);
         $this->operationCollectionFactory = $this->createPartialMock(OperationCollectionFactory::class, ['create']);
-        $this->operationMock = $this->createMock(OperationInterface::class);
-        $this->bulkMock = $this->createMock(BulkSummaryInterface::class);
+        $this->operationMock = $this->getMockForAbstractClass(OperationInterface::class);
+        $this->bulkMock = $this->getMockForAbstractClass(BulkSummaryInterface::class);
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
         $this->calculatedStatusSqlMock = $this->createMock(CalculatedStatusSql::class);
         $this->metadataPoolMock = $this->createMock(MetadataPool::class);
-        $this->entityMetadataMock = $this->createMock(EntityMetadataInterface::class);
-        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->entityMetadataMock = $this->getMockForAbstractClass(EntityMetadataInterface::class);
+        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $this->model = new BulkStatus(
             $this->bulkCollectionFactory,

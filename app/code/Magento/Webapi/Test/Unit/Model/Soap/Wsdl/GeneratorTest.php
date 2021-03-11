@@ -17,28 +17,28 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     protected $_wsdlGenerator;
 
     /**
-     * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customAttributeTypeLocator = null;
 
-    /**  @var \Magento\Webapi\Model\ServiceMetadata|\PHPUnit_Framework_MockObject_MockObject */
+    /**  @var \Magento\Webapi\Model\ServiceMetadata|\PHPUnit\Framework\MockObject\MockObject */
     protected $serviceMetadata;
 
-    /**  @var \Magento\Webapi\Model\Soap\WsdlFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /**  @var \Magento\Webapi\Model\Soap\WsdlFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $_wsdlFactoryMock;
 
-    /** @var \Magento\Webapi\Model\Cache\Type\Webapi|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Webapi\Model\Cache\Type\Webapi|\PHPUnit\Framework\MockObject\MockObject */
     protected $_cacheMock;
 
-    /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit\Framework\MockObject\MockObject */
     protected $_typeProcessor;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->serviceMetadata = $this->getMockBuilder(
             \Magento\Webapi\Model\ServiceMetadata::class
@@ -67,17 +67,17 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         )->setMethods(
             ['create']
         )->disableOriginalConstructor()->getMock();
-        $this->_wsdlFactoryMock->expects($this->any())->method('create')->will($this->returnValue($_wsdlMock));
+        $this->_wsdlFactoryMock->expects($this->any())->method('create')->willReturn($_wsdlMock);
 
         $this->_cacheMock = $this->getMockBuilder(
             \Magento\Webapi\Model\Cache\Type\Webapi::class
         )->disableOriginalConstructor()->getMock();
-        $this->_cacheMock->expects($this->any())->method('load')->will($this->returnValue(false));
-        $this->_cacheMock->expects($this->any())->method('save')->will($this->returnValue(true));
+        $this->_cacheMock->expects($this->any())->method('load')->willReturn(false);
+        $this->_cacheMock->expects($this->any())->method('save')->willReturn(true);
 
         $this->_typeProcessor = $this->createMock(\Magento\Framework\Reflection\TypeProcessor::class);
 
-        /** @var \Magento\Framework\Webapi\Authorization|\PHPUnit_Framework_MockObject_MockObject $authorizationMock */
+        /** @var \Magento\Framework\Webapi\Authorization|\PHPUnit\Framework\MockObject\MockObject $authorizationMock */
         $authorizationMock = $this->getMockBuilder(\Magento\Framework\Webapi\Authorization::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -182,11 +182,12 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
      * Test exception for handle
      *
      * @covers \Magento\Webapi\Model\AbstractSchemaGenerator::generate()
-     * @expectedException        \Magento\Framework\Webapi\Exception
-     * @expectedExceptionMessage exception message
      */
     public function testHandleWithException()
     {
+        $this->expectException(\Magento\Framework\Webapi\Exception::class);
+        $this->expectExceptionMessage('exception message');
+
         $genWSDL = 'generatedWSDL';
         $exceptionMsg = 'exception message';
         $requestedService = ['catalogProduct'];

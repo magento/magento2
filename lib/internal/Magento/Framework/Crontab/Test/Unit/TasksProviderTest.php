@@ -24,7 +24,6 @@ class TasksProviderTest extends \PHPUnit\Framework\TestCase
     {
         $tasks = [
             'magentoCron' => ['expressin' => '* * * * *', 'command' => 'bin/magento cron:run'],
-            'magentoSetup' => ['command' => 'bin/magento setup:cron:run'],
         ];
 
         /** @var $tasksProvider $tasksProvider */

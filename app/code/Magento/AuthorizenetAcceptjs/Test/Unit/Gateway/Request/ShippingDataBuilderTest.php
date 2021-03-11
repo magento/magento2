@@ -37,9 +37,9 @@ class ShippingDataBuilderTest extends TestCase
      */
     private $orderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
+        $this->paymentDOMock = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
         $this->paymentMock = $this->createMock(Payment::class);
         $this->orderMock = $this->createMock(Order::class);
         $this->paymentDOMock->method('getPayment')

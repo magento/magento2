@@ -17,15 +17,15 @@ class CompositeQueryModifierTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
     }
 
     public function testModify()
     {
-        $queryModifierMockOne = $this->createMock(QueryModifierInterface::class);
-        $queryModifierMockTwo = $this->createMock(QueryModifierInterface::class);
+        $queryModifierMockOne = $this->getMockForAbstractClass(QueryModifierInterface::class);
+        $queryModifierMockTwo = $this->getMockForAbstractClass(QueryModifierInterface::class);
         $selectMock = $this->createMock(Select::class);
         $queryModifierMockOne->expects($this->once())
             ->method('modify')

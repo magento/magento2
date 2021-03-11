@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class NameResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var NameResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var NameResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $nameResolverMock;
 
@@ -28,7 +28,7 @@ class NameResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->nameResolverMock = $this->getMockBuilder(NameResolver::class)
             ->disableOriginalConstructor()

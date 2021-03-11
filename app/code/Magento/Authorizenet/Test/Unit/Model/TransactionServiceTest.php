@@ -12,12 +12,12 @@ use Magento\Authorizenet\Model\TransactionService;
 class TransactionServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\HTTP\ZendClient|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\HTTP\ZendClient|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $httpClientMock;
 
     /**
-     * @var \Magento\Authorizenet\Model\Authorizenet|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Authorizenet\Model\Authorizenet|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $authorizenetMock;
 
@@ -26,7 +26,7 @@ class TransactionServiceTest extends \PHPUnit\Framework\TestCase
      */
     protected $transactionService;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $httpClientFactoryMock = $this->getHttpClientFactoryMock();
 
@@ -100,7 +100,7 @@ class TransactionServiceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Create and return mock for http client factory
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getHttpClientFactoryMock()
     {

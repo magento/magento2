@@ -26,16 +26,16 @@ class FrontendTest extends TestCase
     private $model;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
      * Setup Environment For Testing
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->configMock = $this->createMock(ScopeConfigInterface::class);
+        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

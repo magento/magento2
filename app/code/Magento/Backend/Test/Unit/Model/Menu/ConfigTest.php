@@ -10,27 +10,27 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\Cache\Type\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Cache\Type\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheInstanceMock;
 
     /**
-     * @var \Magento\Backend\Model\Menu\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Menu\Config\Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configReaderMock;
 
     /**
-     * @var \Magento\Backend\Model\Menu|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Menu|\PHPUnit\Framework\MockObject\MockObject
      */
     private $menuMock;
 
     /**
-     * @var \Magento\Backend\Model\Menu\Builder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Menu\Builder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $menuBuilderMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $logger;
 
@@ -39,7 +39,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cacheInstanceMock = $this->createMock(\Magento\Framework\App\Cache\Type\Config::class);
 
@@ -53,17 +53,17 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
         $this->menuBuilderMock = $this->createMock(\Magento\Backend\Model\Menu\Builder::class);
 
-        $menuFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->menuMock));
+        $menuFactoryMock->expects($this->any())->method('create')->willReturn($this->menuMock);
 
-        $this->configReaderMock->expects($this->any())->method('read')->will($this->returnValue([]));
+        $this->configReaderMock->expects($this->any())->method('read')->willReturn([]);
 
         $appState = $this->createPartialMock(\Magento\Framework\App\State::class, ['getAreaCode']);
         $appState->expects(
             $this->any()
         )->method(
             'getAreaCode'
-        )->will(
-            $this->returnValue(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
+        )->willReturn(
+            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         );
 
         $this->model = (new ObjectManager($this))->getObject(
@@ -87,8 +87,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'load'
         )->with(
             $this->equalTo(\Magento\Backend\Model\Menu\Config::CACHE_MENU_OBJECT)
-        )->will(
-            $this->returnValue('menu_cache')
+        )->willReturn(
+            'menu_cache'
         );
 
         $this->menuMock->expects($this->once())->method('unserialize')->with('menu_cache');
@@ -104,18 +104,18 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'load'
         )->with(
             $this->equalTo(\Magento\Backend\Model\Menu\Config::CACHE_MENU_OBJECT)
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
 
-        $this->configReaderMock->expects($this->once())->method('read')->will($this->returnValue([]));
+        $this->configReaderMock->expects($this->once())->method('read')->willReturn([]);
 
         $this->menuBuilderMock->expects(
             $this->exactly(1)
         )->method(
             'getResult'
-        )->will(
-            $this->returnValue($this->menuMock)
+        )->willReturn(
+            $this->menuMock
         );
 
         $this->assertEquals($this->menuMock, $this->model->getMenu());

@@ -14,37 +14,37 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class PriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\CatalogRule\Model\ResourceModel\RuleFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogRule\Model\ResourceModel\RuleFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $ruleFactoryMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $localeDateMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerSessionMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var \Magento\Catalog\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     private $catalogHelperMock;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
@@ -54,12 +54,12 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $priceCurrency;
 
     /**
-     * @var \Magento\Customer\Api\GroupManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\GroupManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $groupManagement;
 
@@ -75,7 +75,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->ruleFactoryMock = $this->createPartialMock(
             \Magento\CatalogRule\Model\ResourceModel\RuleFactory::class,
@@ -148,13 +148,13 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     public function testCalculateSpecialPrice($finalPrice, $specialPrice, $callsNumber, $dateInInterval, $expected)
     {
         $this->localeDateMock->expects($this->exactly($callsNumber))
-            ->method('isScopeDateInInterval')->will($this->returnValue($dateInInterval));
+            ->method('isScopeDateInInterval')->willReturn($dateInInterval);
 
         $this->storeManagerMock->expects($this->any())
-            ->method('getStore')->will($this->returnValue($this->storeMock));
+            ->method('getStore')->willReturn($this->storeMock);
 
         $this->storeMock->expects($this->any())
-            ->method('roundPrice')->will($this->returnArgument(0));
+            ->method('roundPrice')->willReturnArgument(0);
 
         $this->assertEquals(
             $expected,

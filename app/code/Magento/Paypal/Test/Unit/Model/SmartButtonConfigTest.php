@@ -21,28 +21,28 @@ class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $localeResolverMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject $scopeConfigMock */
+        /** @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject $scopeConfigMock */
         $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $scopeConfigMock->method('isSetFlag')
             ->willReturn(true);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $configFactoryMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $configFactoryMock */
         $configFactoryMock = $this->getMockBuilder(ConfigFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -88,34 +88,32 @@ class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
         string $color,
         string $installmentPeriodLabel,
         string $installmentPeriodLocale,
-        string $isPaypalGuestCheckoutEnabled,
+        bool $isPaypalGuestCheckoutEnabled,
         array $expected = []
     ) {
         $this->localeResolverMock->method('getLocale')->willReturn($locale);
-        $this->configMock->method('getValue')->will(
-            $this->returnValueMap(
+        $this->configMock->method('getValue')->willReturnMap(
+            [
+                ['merchant_id', null, 'merchant'],
                 [
-                    ['merchant_id', null, 'merchant'],
-                    [
-                        'solution_type',
-                        null,
-                        $isPaypalGuestCheckoutEnabled ? Config::EC_SOLUTION_TYPE_SOLE : Config::EC_SOLUTION_TYPE_MARK
-                    ],
-                    ['sandbox_flag', null, true],
-                    ['disable_funding_options', null, $disallowedFundings],
-                    ["{$page}_page_button_customize", null, $isCustomize],
-                    ["{$page}_page_button_layout", null, $layout],
-                    ["{$page}_page_button_size", null, $size],
-                    ["{$page}_page_button_color", null, $color],
-                    ["{$page}_page_button_shape", null, $shape],
-                    ["{$page}_page_button_label", null, $label],
-                    [
-                        $page . '_page_button_' . $installmentPeriodLocale . '_installment_period',
-                        null,
-                        $installmentPeriodLabel
-                    ]
+                    'solution_type',
+                    null,
+                    $isPaypalGuestCheckoutEnabled ? Config::EC_SOLUTION_TYPE_SOLE : Config::EC_SOLUTION_TYPE_MARK
+                ],
+                ['sandbox_flag', null, true],
+                ['disable_funding_options', null, $disallowedFundings],
+                ["{$page}_page_button_customize", null, $isCustomize],
+                ["{$page}_page_button_layout", null, $layout],
+                ["{$page}_page_button_size", null, $size],
+                ["{$page}_page_button_color", null, $color],
+                ["{$page}_page_button_shape", null, $shape],
+                ["{$page}_page_button_label", null, $label],
+                [
+                    $page . '_page_button_' . $installmentPeriodLocale . '_installment_period',
+                    null,
+                    $installmentPeriodLabel
                 ]
-            )
+            ]
         );
 
         self::assertEquals($expected, $this->model->getConfig($page));

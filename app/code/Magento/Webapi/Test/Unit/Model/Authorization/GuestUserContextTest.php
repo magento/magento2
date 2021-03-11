@@ -23,7 +23,7 @@ class GuestUserContextTest extends \PHPUnit\Framework\TestCase
      */
     protected $guestUserContext;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -34,7 +34,7 @@ class GuestUserContextTest extends \PHPUnit\Framework\TestCase
 
     public function testGetUserId()
     {
-        $this->assertEquals(null, $this->guestUserContext->getUserId());
+        $this->assertSame(0, $this->guestUserContext->getUserId());
     }
 
     public function testGetUserType()

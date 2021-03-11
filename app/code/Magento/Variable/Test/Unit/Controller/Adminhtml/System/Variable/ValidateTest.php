@@ -13,36 +13,36 @@ namespace Magento\Variable\Test\Unit\Controller\Adminhtml\System\Variable;
 class ValidateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Variable\Model\Variable|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Variable\Model\Variable|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $variableMock;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Variable\Controller\Adminhtml\System\Variable\Validate | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Variable\Controller\Adminhtml\System\Variable\Validate | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $validateMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Json | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\Json | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultJsonMock;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\ManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->validateMock = $this->getMockBuilder(
             \Magento\Variable\Controller\Adminhtml\System\Variable\Validate::class
@@ -85,11 +85,11 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $contextMock->expects($this->any())
-            ->method('getRequest')->will($this->returnValue($this->requestMock));
+            ->method('getRequest')->willReturn($this->requestMock);
         $contextMock->expects($this->any())
-            ->method('getResponse')->will($this->returnValue($responseMock));
+            ->method('getResponse')->willReturn($responseMock);
         $contextMock->expects($this->any())
-            ->method('getMessageManager')->will($this->returnValue($this->messageManagerMock));
+            ->method('getMessageManager')->willReturn($this->messageManagerMock);
 
         $this->resultJsonMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
             ->disableOriginalConstructor()
@@ -138,7 +138,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->any())
             ->method('getParam')->willReturnMap($getParamMap);
         $this->requestMock->expects($this->any())
-            ->method('getPost')->with('variable')->will($this->returnValue([]));
+            ->method('getPost')->with('variable')->willReturn([]);
 
         $this->variableMock->expects($this->any())
             ->method('validate')

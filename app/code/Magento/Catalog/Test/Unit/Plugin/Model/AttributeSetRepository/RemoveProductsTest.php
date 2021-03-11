@@ -25,14 +25,14 @@ class RemoveProductsTest extends TestCase
     private $testSubject;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionFactory;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
@@ -54,7 +54,7 @@ class RemoveProductsTest extends TestCase
     {
         $attributeSetId = '1';
 
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collection */
+        /** @var Collection|\PHPUnit\Framework\MockObject\MockObject $collection */
         $collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -68,12 +68,12 @@ class RemoveProductsTest extends TestCase
             ->method('create')
             ->willReturn($collection);
 
-        /** @var AttributeSetRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject $attributeSetRepository */
+        /** @var AttributeSetRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject $attributeSetRepository */
         $attributeSetRepository = $this->getMockBuilder(AttributeSetRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        /** @var AttributeSetInterface|\PHPUnit_Framework_MockObject_MockObject $attributeSet */
+        /** @var AttributeSetInterface|\PHPUnit\Framework\MockObject\MockObject $attributeSet */
         $attributeSet = $this->getMockBuilder(AttributeSetInterface::class)
             ->setMethods(['getId'])
             ->disableOriginalConstructor()

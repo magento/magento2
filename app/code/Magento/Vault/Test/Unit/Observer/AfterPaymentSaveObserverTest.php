@@ -18,7 +18,7 @@ use Magento\Vault\Model\PaymentToken;
 use Magento\Vault\Model\PaymentTokenManagement;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
 use Magento\Vault\Observer\AfterPaymentSaveObserver;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Test for payment observer.
@@ -68,7 +68,7 @@ class AfterPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var Random|MockObject $encryptorRandomGenerator */
         $encryptorRandomGenerator = $this->createMock(Random::class);

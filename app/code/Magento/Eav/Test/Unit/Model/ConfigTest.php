@@ -21,41 +21,41 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected $config;
 
     /**
-     * @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cacheMock;
 
     /**
-     * @var \Magento\Eav\Model\Entity\TypeFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Entity\TypeFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $typeFactoryMock;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\Cache\StateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Cache\StateInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cacheStateMock;
 
     /**
-     * @var \Magento\Framework\Validator\UniversalFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Validator\UniversalFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $universalFactoryMock;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
     /**
-     * @var Type|\PHPUnit_Framework_MockObject_MockObject
+     * @var Type|\PHPUnit\Framework\MockObject\MockObject
      */
     private $typeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cacheMock = $this->createMock(\Magento\Framework\App\CacheInterface::class);
         $this->typeFactoryMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\TypeFactory::class)
@@ -73,7 +73,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
 
         $this->typeMock = $this->createMock(Type::class);
 
@@ -100,7 +100,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $attributeCollectionMock->expects($this->any())
             ->method('setEntityTypeFilter')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $attributeCollectionMock->expects($this->any())
             ->method('getData')
             ->willReturn([$attributeData]);
@@ -153,7 +153,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->universalFactoryMock
             ->expects($this->atLeastOnce())
             ->method('create')
-            ->will($this->returnValueMap($factoryCalls));
+            ->willReturnMap($factoryCalls);
 
         $this->assertInstanceOf(Attribute::class, $this->config->getAttribute($entityType, 'attribute_code_1'));
     }
@@ -207,7 +207,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $attributeCollectionMock
             ->expects($this->any())
             ->method('setEntityTypeFilter')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $attributeCollectionMock
             ->expects($this->any())
             ->method('getData')
@@ -268,7 +268,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->universalFactoryMock
             ->expects($this->atLeastOnce())
             ->method('create')
-            ->will($this->returnValueMap($factoryCalls));
+            ->willReturnMap($factoryCalls);
 
         $this->assertEquals(['attribute_code_1' => $entityAttributeMock], $this->config->getAttributes($entityType));
     }

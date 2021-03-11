@@ -10,6 +10,9 @@ use Magento\Backend\App\Action;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
 
+/**
+ * Controller for save creditmemo
+ */
 class Save extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
     /**
@@ -54,6 +57,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
 
     /**
      * Save creditmemo
+     *
      * We can save only new creditmemo. Existing creditmemos are not editable
      *
      * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Backend\Model\View\Result\Forward
@@ -104,7 +108,8 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
                     \Magento\Sales\Api\CreditmemoManagementInterface::class
                 );
                 $creditmemo->getOrder()->setCustomerNoteNotify(!empty($data['send_email']));
-                $creditmemoManagement->refund($creditmemo, (bool)$data['do_offline']);
+                $doOffline = isset($data['do_offline']) ? (bool)$data['do_offline'] : false;
+                $creditmemoManagement->refund($creditmemo, $doOffline);
 
                 if (!empty($data['send_email'])) {
                     $this->creditmemoSender->send($creditmemo);

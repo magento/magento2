@@ -15,7 +15,7 @@ use Magento\Sales\Model\Order\Payment;
 use Magento\Signifyd\Api\CaseCreationServiceInterface;
 use Magento\Signifyd\Model\Config;
 use Magento\Signifyd\Observer\PlaceOrder;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Psr\Log\LoggerInterface;
 
 class PlaceOrderTest extends \PHPUnit\Framework\TestCase
@@ -58,7 +58,7 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -67,12 +67,12 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
 
         $this->logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->creationService = $this->getMockBuilder(CaseCreationServiceInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['createForOrder'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->observer = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
@@ -222,7 +222,7 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
     {
         $this->orderEntity = $this->getMockBuilder(OrderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->orderEntity->method('getEntityId')
             ->willReturn($orderId);
@@ -262,7 +262,7 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
         /** @var MethodInterface|MockObject $paymentMethod */
         $paymentMethod = $this->getMockBuilder(MethodInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         /**
          * The code depends on implementation but not interface

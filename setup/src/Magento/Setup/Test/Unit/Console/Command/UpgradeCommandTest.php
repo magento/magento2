@@ -16,22 +16,22 @@ use Symfony\Component\Console\Tester\CommandTester;
 class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $deploymentConfigMock;
 
     /**
-     * @var InstallerFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var InstallerFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $installerFactoryMock;
 
     /**
-     * @var Installer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Installer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $installerMock;
 
     /**
-     * @var AppState|\PHPUnit_Framework_MockObject_MockObject
+     * @var AppState|\PHPUnit\Framework\MockObject\MockObject
      */
     private $appStateMock;
 
@@ -47,7 +47,7 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()

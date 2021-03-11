@@ -10,12 +10,13 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\App\State;
 
 /**
- * @package Magento\Deploy\Test\Unit\Console\Command
+ * Class ShowModeCommandTest
+ * Test for ShowModeCommand
  */
 class ShowModeCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Deploy\Model\Mode|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Deploy\Model\Mode|\PHPUnit\Framework\MockObject\MockObject
      */
     private $modeMock;
 
@@ -25,11 +26,11 @@ class ShowModeCommandTest extends \PHPUnit\Framework\TestCase
     private $command;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         $this->modeMock = $this->createMock(\Magento\Deploy\Model\Mode::class);
@@ -50,9 +51,6 @@ class ShowModeCommandTest extends \PHPUnit\Framework\TestCase
 
         $tester = new CommandTester($this->command);
         $tester->execute([]);
-        $this->assertContains(
-            $currentMode,
-            $tester->getDisplay()
-        );
+        $this->assertStringContainsString($currentMode, $tester->getDisplay());
     }
 }

@@ -11,12 +11,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class CategoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productRuleProcessor;
 
     /**
-     * @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Category|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $subject;
 
@@ -25,7 +25,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $plugin;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productRuleProcessor = $this->createMock(
             \Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor::class
@@ -47,7 +47,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->subject->expects($this->any())
             ->method('getChangedProductIds')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->productRuleProcessor->expects($this->never())
             ->method('reindexList');
@@ -61,7 +61,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
         $this->subject->expects($this->any())
             ->method('getChangedProductIds')
-            ->will($this->returnValue($productIds));
+            ->willReturn($productIds);
 
         $this->productRuleProcessor->expects($this->once())
             ->method('reindexList')

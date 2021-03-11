@@ -566,7 +566,7 @@
             <description>Validates that the provided Product Tier Price is present and correct.</description>
         </annotations>
         <arguments>
-            <argument name="amount" type="string" defaultValue="45"/>
+            <argument name="amount" type="string" defaultValue="45.00"/>
         </arguments>
 
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton"/>

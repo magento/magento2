@@ -40,7 +40,7 @@ class MagentoStyleTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $input = new ArrayInput(['name' => 'foo'], new InputDefinition([new InputArgument('name')]));
         $this->testOutput = new TestOutput();
@@ -67,7 +67,11 @@ class MagentoStyleTest extends TestCase
             . PHP_EOL . '\<testBlockStyle\>testBlockPrefix \s+ test second message\s+'
             . PHP_EOL . PHP_EOL;
         // @codingStandardsIgnoreEnd
-        $this->assertRegExp('/' . $expected . '/', $this->testOutput->output, 'Block does not match output');
+        $this->assertMatchesRegularExpression(
+            '/' . $expected . '/',
+            $this->testOutput->output,
+            'Block does not match output'
+        );
     }
 
     /**
@@ -128,7 +132,11 @@ class MagentoStyleTest extends TestCase
     {
         $this->magentoStyle->comment('test comment');
         $expected = PHP_EOL . PHP_EOL . PHP_EOL . '\s+test comment\s+' . PHP_EOL . PHP_EOL;
-        $this->assertRegExp('/' . $expected . '/', $this->testOutput->output, 'Comment does not match output');
+        $this->assertMatchesRegularExpression(
+            '/' . $expected . '/',
+            $this->testOutput->output,
+            'Comment does not match output'
+        );
     }
 
     /**
@@ -140,7 +148,11 @@ class MagentoStyleTest extends TestCase
     {
         $this->magentoStyle->success('test success message');
         $expected = PHP_EOL . PHP_EOL . PHP_EOL . ' \[SUCCESS\] test success message\s+' . PHP_EOL . PHP_EOL;
-        $this->assertRegExp('/' . $expected . '/', $this->testOutput->output, 'Success message does not match output');
+        $this->assertMatchesRegularExpression(
+            '/' . $expected . '/',
+            $this->testOutput->output,
+            'Success message does not match output'
+        );
     }
 
     /**
@@ -152,7 +164,11 @@ class MagentoStyleTest extends TestCase
     {
         $this->magentoStyle->error('test error message');
         $expected = PHP_EOL . PHP_EOL . PHP_EOL . '\s+\[ERROR\] test error message\s+' . PHP_EOL . PHP_EOL;
-        $this->assertRegExp('/' . $expected . '/', $this->testOutput->output, 'Error message does not match output');
+        $this->assertMatchesRegularExpression(
+            '/' . $expected . '/',
+            $this->testOutput->output,
+            'Error message does not match output'
+        );
     }
 
     /**
@@ -164,7 +180,11 @@ class MagentoStyleTest extends TestCase
     {
         $this->magentoStyle->warning('test warning message');
         $expected = PHP_EOL . PHP_EOL . PHP_EOL . '\s+\[WARNING\] test warning message\s+' . PHP_EOL . PHP_EOL;
-        $this->assertRegExp('/' . $expected . '/', $this->testOutput->output, 'Warning message does not match output');
+        $this->assertMatchesRegularExpression(
+            '/' . $expected . '/',
+            $this->testOutput->output,
+            'Warning message does not match output'
+        );
     }
 
     /**
@@ -176,7 +196,11 @@ class MagentoStyleTest extends TestCase
     {
         $this->magentoStyle->note('test note message');
         $expected = PHP_EOL . PHP_EOL . PHP_EOL . '\s+\[NOTE\] test note message\s+' . PHP_EOL . PHP_EOL;
-        $this->assertRegExp('/' . $expected . '/', $this->testOutput->output, 'Note message does not match output');
+        $this->assertMatchesRegularExpression(
+            '/' . $expected . '/',
+            $this->testOutput->output,
+            'Note message does not match output'
+        );
     }
 
     /**
@@ -188,7 +212,11 @@ class MagentoStyleTest extends TestCase
     {
         $this->magentoStyle->caution('test caution message');
         $expected = PHP_EOL . PHP_EOL . PHP_EOL . '\s+! \[CAUTION\] test caution message\s+' . PHP_EOL . PHP_EOL;
-        $this->assertRegExp('/' . $expected . '/', $this->testOutput->output, 'Caution message does not match output');
+        $this->assertMatchesRegularExpression(
+            '/' . $expected . '/',
+            $this->testOutput->output,
+            'Caution message does not match output'
+        );
     }
 
     /**
@@ -230,6 +258,7 @@ class MagentoStyleTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $formatter = $this->getMockBuilder(OutputFormatter::class)
+            ->disableOriginalClone()
             ->disableOriginalConstructor()
             ->getMock();
         $input = $this->getMockBuilder(InputInterface::class)

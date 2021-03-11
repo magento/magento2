@@ -26,24 +26,24 @@ class LockTest extends \PHPUnit\Framework\TestCase
     private $lockResourceModel;
 
     /**
-     * @var DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var DateTime|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dateTimeMock;
 
     /**
-     * @var LockFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var LockFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $lockFactoryMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->dateTimeMock = $this->getMockBuilder(DateTime::class)->disableOriginalConstructor()->getMock();
@@ -64,8 +64,8 @@ class LockTest extends \PHPUnit\Framework\TestCase
 
     public function testReleaseOutdatedLocks()
     {
-        /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $adapterMock */
-        $adapterMock = $this->getMockBuilder(AdapterInterface::class)->disableOriginalConstructor()->getMock();
+        /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject $adapterMock */
+        $adapterMock = $this->getMockBuilder(AdapterInterface::class)->disableOriginalConstructor()->getMockForAbstractClass();
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($adapterMock);
         $tableName = 'queue_lock_mock';
         $this->resourceConnectionMock->expects($this->once())->method('getTableName')->willReturn($tableName);

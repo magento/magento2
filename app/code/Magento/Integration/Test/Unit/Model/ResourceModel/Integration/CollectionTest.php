@@ -11,16 +11,16 @@ namespace Magento\Integration\Test\Unit\Model\ResourceModel\Integration;
 class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $select;
 
     /**
-     * @var \Magento\Integration\Model\ResourceModel\Integration\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Integration\Model\ResourceModel\Integration\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
@@ -31,7 +31,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $connection->expects($this->any())
             ->method('select')
-            ->will($this->returnValue($this->select));
+            ->willReturn($this->select);
 
         $resource = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
             ->disableOriginalConstructor()
@@ -39,7 +39,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $resource->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($connection));
+            ->willReturn($connection);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = $objectManagerHelper->getConstructArguments(
@@ -59,12 +59,12 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection->expects($this->at(0))
             ->method('_translateCondition')
             ->with('endpoint', ['like' => 'http:%'])
-            ->will($this->returnValue('endpoint like \'http:%\''));
+            ->willReturn('endpoint like \'http:%\'');
 
         $this->collection->expects($this->at(1))
             ->method('_translateCondition')
             ->with('identity_link_url', ['like' => 'http:%'])
-            ->will($this->returnValue('identity_link_url like \'http:%\''));
+            ->willReturn('identity_link_url like \'http:%\'');
 
         $this->select->expects($this->once())
             ->method('where')

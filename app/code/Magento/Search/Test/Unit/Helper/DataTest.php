@@ -12,44 +12,44 @@ namespace Magento\Search\Test\Unit\Helper;
 class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Search\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Search\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\Helper\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Helper\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stringMock;
 
-    /** @var  \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $escaperMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlBuilderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stringMock = $this->createMock(\Magento\Framework\Stdlib\StringUtils::class);
         $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
@@ -86,7 +86,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 null
             )
-            ->will($this->returnValue($return));
+            ->willReturn($return);
         $this->assertEquals($return, $this->model->getMinQueryLength());
     }
 
@@ -100,7 +100,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 null
             )
-            ->will($this->returnValue($return));
+            ->willReturn($return);
         $this->assertEquals($return, $this->model->getMaxQueryLength());
     }
 
@@ -115,9 +115,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->stringMock
             ->expects($this->any())
             ->method('strlen')
-            ->will($this->returnCallback(function ($queryText) {
+            ->willReturnCallback(function ($queryText) {
                 return strlen($queryText);
-            }));
+            });
         $this->stringMock
             ->expects($this->any())
             ->method('substr')

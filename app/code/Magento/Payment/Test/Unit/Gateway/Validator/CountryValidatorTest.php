@@ -11,21 +11,21 @@ class CountryValidatorTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Payment\Gateway\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Gateway\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Payment\Gateway\Validator\ResultInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Gateway\Validator\ResultInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultFactoryMock;
 
     /**
-     * @var \Magento\Payment\Gateway\Validator\Result|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Gateway\Validator\Result|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(\Magento\Payment\Gateway\ConfigInterface::class)
             ->getMockForAbstractClass();

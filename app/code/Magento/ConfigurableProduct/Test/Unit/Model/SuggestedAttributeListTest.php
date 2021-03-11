@@ -14,22 +14,22 @@ class SuggestedAttributeListTest extends \PHPUnit\Framework\TestCase
     protected $suggestedListModel;
 
     /**
-     * @var \Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configurableAttributeHandler;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeMock;
 
@@ -38,7 +38,7 @@ class SuggestedAttributeListTest extends \PHPUnit\Framework\TestCase
      */
     protected $labelPart = 'labelPart';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configurableAttributeHandler = $this->createMock(
             \Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler::class
@@ -54,15 +54,15 @@ class SuggestedAttributeListTest extends \PHPUnit\Framework\TestCase
         )->with(
             $this->labelPart,
             ['position' => 'any']
-        )->will(
-            $this->returnValue($this->labelPart)
+        )->willReturn(
+            $this->labelPart
         );
         $this->configurableAttributeHandler->expects(
             $this->once()
         )->method(
             'getApplicableAttributes'
-        )->will(
-            $this->returnValue($this->collectionMock)
+        )->willReturn(
+            $this->collectionMock
         );
         $valueMap = [
             ['frontend_label', ['like' => $this->labelPart], $this->collectionMock],
@@ -71,8 +71,8 @@ class SuggestedAttributeListTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'addFieldToFilter'
-        )->will(
-            $this->returnValueMap($valueMap)
+        )->willReturnMap(
+            $valueMap
         );
         $this->attributeMock = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
@@ -82,8 +82,8 @@ class SuggestedAttributeListTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getItems'
-        )->will(
-            $this->returnValue(['id' => $this->attributeMock])
+        )->willReturn(
+            ['id' => $this->attributeMock]
         );
         $this->suggestedListModel = new \Magento\ConfigurableProduct\Model\SuggestedAttributeList(
             $this->configurableAttributeHandler,
@@ -95,11 +95,11 @@ class SuggestedAttributeListTest extends \PHPUnit\Framework\TestCase
     {
         $source = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class);
         $result['id'] = ['id' => 'id', 'label' => 'label', 'code' => 'code', 'options' => 'options'];
-        $this->attributeMock->expects($this->once())->method('getId')->will($this->returnValue('id'));
-        $this->attributeMock->expects($this->once())->method('getFrontendLabel')->will($this->returnValue('label'));
-        $this->attributeMock->expects($this->once())->method('getAttributeCode')->will($this->returnValue('code'));
-        $this->attributeMock->expects($this->once())->method('getSource')->will($this->returnValue($source));
-        $source->expects($this->once())->method('getAllOptions')->with(false)->will($this->returnValue('options'));
+        $this->attributeMock->expects($this->once())->method('getId')->willReturn('id');
+        $this->attributeMock->expects($this->once())->method('getFrontendLabel')->willReturn('label');
+        $this->attributeMock->expects($this->once())->method('getAttributeCode')->willReturn('code');
+        $this->attributeMock->expects($this->once())->method('getSource')->willReturn($source);
+        $source->expects($this->once())->method('getAllOptions')->with(false)->willReturn('options');
         $this->configurableAttributeHandler->expects($this->once())->method('isAttributeApplicable')
             ->with($this->attributeMock)->willReturn(true);
 

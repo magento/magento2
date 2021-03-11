@@ -20,11 +20,11 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Escaper
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Escaper
      */
     protected $escaper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)

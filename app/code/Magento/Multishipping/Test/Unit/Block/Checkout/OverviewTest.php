@@ -21,41 +21,41 @@ class OverviewTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrencyMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $totalsReaderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $totalsCollectorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $checkoutMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $urlBuilderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -92,7 +92,7 @@ class OverviewTest extends \PHPUnit\Framework\TestCase
     {
         $rateMock = $this->createMock(\Magento\Quote\Model\Quote\Address\Rate::class);
         $this->addressMock->expects($this->once())
-            ->method('getShippingMethod')->will($this->returnValue('shipping method'));
+            ->method('getShippingMethod')->willReturn('shipping method');
         $this->addressMock->expects($this->once())
             ->method('getShippingRateByCode')
             ->with('shipping method')
@@ -104,7 +104,7 @@ class OverviewTest extends \PHPUnit\Framework\TestCase
     public function testGetShippingRateByCodeWithEmptyRate()
     {
         $this->addressMock->expects($this->once())
-            ->method('getShippingMethod')->will($this->returnValue('shipping method'));
+            ->method('getShippingMethod')->willReturn('shipping method');
         $this->addressMock->expects($this->once())
             ->method('getShippingRateByCode')
             ->with('shipping method')
@@ -148,8 +148,8 @@ class OverviewTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $address
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @param \PHPUnit\Framework\MockObject\MockObject $address
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getTotalsMock($address)
     {

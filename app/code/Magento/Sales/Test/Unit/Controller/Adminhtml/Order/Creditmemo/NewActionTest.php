@@ -18,71 +18,71 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
     protected $controller;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\App\Action\Context
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\App\Action\Context
      */
     protected $contextMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader
      */
     protected $creditmemoLoaderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\RequestInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\RequestInterface
      */
     protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResponseInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ResponseInterface
      */
     protected $responseMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order\Creditmemo
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Model\Order\Creditmemo
      */
     protected $creditmemoMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order\Invoice
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Model\Order\Invoice
      */
     protected $invoiceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Page\Title
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Page\Title
      */
     protected $titleMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\ObjectManagerInterface
      */
     protected $objectManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Model\Session
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\Model\Session
      */
     protected $backendSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\LayoutInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\LayoutInterface
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultPageFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\Page|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultPageMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(\Magento\Backend\App\Action\Context::class);
         $this->creditmemoLoaderMock = $this->createPartialMock(
@@ -140,13 +140,13 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
 
         $this->contextMock->expects($this->once())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
         $this->contextMock->expects($this->once())
             ->method('getResponse')
-            ->will($this->returnValue($this->responseMock));
+            ->willReturn($this->responseMock);
         $this->contextMock->expects($this->once())
             ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManagerMock));
+            ->willReturn($this->objectManagerMock);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->controller = $objectManager->getObject(
@@ -166,12 +166,12 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
     {
         $this->requestMock->expects($this->exactly(4))
             ->method('getParam')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['order_id', null, 'order_id'],
                 ['creditmemo_id', null, 'creditmemo_id'],
                 ['creditmemo', null, 'creditmemo'],
                 ['invoice_id', null, 'invoice_id'],
-            ]));
+            ]);
         $this->creditmemoLoaderMock->expects($this->once())
             ->method('setOrderId')
             ->with($this->equalTo('order_id'));
@@ -186,33 +186,33 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo('invoice_id'));
         $this->creditmemoLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($this->creditmemoMock));
+            ->willReturn($this->creditmemoMock);
         $this->creditmemoMock->expects($this->exactly(2))
             ->method('getInvoice')
-            ->will($this->returnValue($this->invoiceMock));
+            ->willReturn($this->invoiceMock);
         $this->invoiceMock->expects($this->once())
             ->method('getIncrementId')
-            ->will($this->returnValue('invoice-increment-id'));
+            ->willReturn('invoice-increment-id');
         $this->titleMock->expects($this->exactly(2))
             ->method('prepend')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['Credit Memos', null],
                 ['New Memo for #invoice-increment-id', null],
                 ['item-title', null],
-            ]));
+            ]);
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with($this->equalTo(\Magento\Backend\Model\Session::class))
-            ->will($this->returnValue($this->backendSessionMock));
+            ->willReturn($this->backendSessionMock);
         $this->backendSessionMock->expects($this->once())
             ->method('getCommentText')
             ->with($this->equalTo(true))
-            ->will($this->returnValue('comment'));
+            ->willReturn('comment');
         $this->creditmemoMock->expects($this->once())
             ->method('setCommentText')
             ->with($this->equalTo('comment'));
-        $this->resultPageMock->expects($this->any())->method('getConfig')->will(
-            $this->returnValue($this->pageConfigMock)
+        $this->resultPageMock->expects($this->any())->method('getConfig')->willReturn(
+            $this->pageConfigMock
         );
         $this->pageConfigMock->expects($this->any())
             ->method('getTitle')

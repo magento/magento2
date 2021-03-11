@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 class GroupTest extends TestCase
 {
     /**
-     * @var StructureElementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StructureElementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $structureElementMock;
 
@@ -22,7 +22,7 @@ class GroupTest extends TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->structureElementMock = $this->getMockForAbstractClass(StructureElementInterface::class);
         $this->model = new Group();

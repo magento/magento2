@@ -17,16 +17,16 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     protected $plugin;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->messageMock = $this->createMock(\Magento\GiftMessage\Model\GiftMessageManager::class);
@@ -50,10 +50,10 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('giftmessage')
-            ->will($this->returnValue('Expected Value'));
+            ->willReturn('Expected Value');
         $subjectMock = $this->createMock(\Magento\Multishipping\Model\Checkout\Type\Multishipping::class);
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
-        $subjectMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
+        $subjectMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
         $this->messageMock->expects($this->once())->method('add')->with('Expected Value', $quoteMock);
 
         $this->plugin->beforeSetShippingMethods($subjectMock, $methods);

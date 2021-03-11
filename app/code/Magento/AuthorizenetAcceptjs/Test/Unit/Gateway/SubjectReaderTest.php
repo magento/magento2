@@ -22,33 +22,35 @@ class SubjectReaderTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subjectReader = new SubjectReader();
     }
 
     public function testReadPayment(): void
     {
-        $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
+        $paymentDO = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
 
         $this->assertSame($paymentDO, $this->subjectReader->readPayment(['payment' => $paymentDO]));
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Payment data object should be provided
      */
     public function testReadPaymentThrowsExceptionWhenNotAPaymentObject(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Payment data object should be provided');
+
         $this->subjectReader->readPayment(['payment' => 'nope']);
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Payment data object should be provided
      */
     public function testReadPaymentThrowsExceptionWhenNotSet(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Payment data object should be provided');
+
         $this->subjectReader->readPayment([]);
     }
 
@@ -60,11 +62,12 @@ class SubjectReaderTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Response does not exist
      */
     public function testReadResponseThrowsExceptionWhenNotAvailable(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Response does not exist');
+
         $this->subjectReader->readResponse([]);
     }
 
@@ -75,8 +78,8 @@ class SubjectReaderTest extends TestCase
 
     public function testReadStoreIdFromOrder(): void
     {
-        $paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
-        $orderMock = $this->createMock(OrderAdapterInterface::class);
+        $paymentDOMock = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
+        $orderMock = $this->getMockForAbstractClass(OrderAdapterInterface::class);
         $paymentDOMock->method('getOrder')
             ->willReturn($orderMock);
         $orderMock->method('getStoreID')
@@ -109,11 +112,12 @@ class SubjectReaderTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Amount should be provided
      */
     public function testReadAmountThrowsExceptionWhenNotAvailable(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Amount should be provided');
+
         $this->subjectReader->readAmount([]);
     }
 }

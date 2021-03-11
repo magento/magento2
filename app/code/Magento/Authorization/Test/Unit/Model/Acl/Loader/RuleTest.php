@@ -13,7 +13,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_resourceMock;
 
@@ -23,16 +23,16 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     protected $_rootResourceMock;
 
     /**
-     * @var \Magento\Framework\Acl\Data\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Acl\Data\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $aclDataCacheMock;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_resourceMock = $this->createPartialMock(
             \Magento\Framework\App\ResourceConnection::class,
@@ -44,22 +44,18 @@ class RuleTest extends \PHPUnit\Framework\TestCase
         );
         $this->serializerMock->expects($this->any())
             ->method('serialize')
-            ->will(
-                $this->returnCallback(
-                    function ($value) {
-                        return json_encode($value);
-                    }
-                )
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
             );
 
         $this->serializerMock->expects($this->any())
             ->method('unserialize')
-            ->will(
-                $this->returnCallback(
-                    function ($value) {
-                        return json_decode($value, true);
-                    }
-                )
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
             );
 
         $this->aclDataCacheMock = $this->createMock(\Magento\Framework\Acl\Data\CacheInterface::class);
@@ -83,20 +79,18 @@ class RuleTest extends \PHPUnit\Framework\TestCase
         $this->aclDataCacheMock->expects($this->once())
             ->method('load')
             ->with(\Magento\Authorization\Model\Acl\Loader\Rule::ACL_RULE_CACHE_KEY)
-            ->will(
-                $this->returnValue(
-                    json_encode(
-                        [
-                            ['role_id' => 1, 'resource_id' => 'Magento_Backend::all', 'permission' => 'allow'],
-                            ['role_id' => 2, 'resource_id' => 1, 'permission' => 'allow'],
-                            ['role_id' => 3, 'resource_id' => 1, 'permission' => 'deny'],
-                        ]
-                    )
+            ->willReturn(
+                json_encode(
+                    [
+                        ['role_id' => 1, 'resource_id' => 'Magento_Backend::all', 'permission' => 'allow'],
+                        ['role_id' => 2, 'resource_id' => 1, 'permission' => 'allow'],
+                        ['role_id' => 3, 'resource_id' => 1, 'permission' => 'deny'],
+                    ]
                 )
             );
 
         $aclMock = $this->createMock(\Magento\Framework\Acl::class);
-        $aclMock->expects($this->any())->method('has')->will($this->returnValue(true));
+        $aclMock->expects($this->any())->method('has')->willReturn(true);
         $aclMock->expects($this->at(1))->method('allow')->with('1', null, null);
         $aclMock->expects($this->at(2))->method('allow')->with('1', 'Magento_Backend::all', null);
         $aclMock->expects($this->at(4))->method('allow')->with('2', 1, null);

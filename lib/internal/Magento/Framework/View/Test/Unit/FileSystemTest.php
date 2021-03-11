@@ -12,42 +12,42 @@ namespace Magento\Framework\View\Test\Unit;
 class FileSystemTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\View\FileSystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\FileSystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
     /**
-     * @var \Magento\Framework\View\Design\FileResolution\Fallback\File|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\FileResolution\Fallback\File|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_fileResolution;
 
     /**
-     * @var \Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_templateFileResolution;
 
     /**
-     * @var \Magento\Framework\View\Design\FileResolution\Fallback\LocaleFile|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\FileResolution\Fallback\LocaleFile|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_localeFileResolution;
 
     /**
-     * @var \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_staticFileResolution;
 
     /**
      * @var \Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_emailTemplateFileResolution;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_assetRepo;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_fileResolution = $this->createMock(\Magento\Framework\View\Design\FileResolution\Fallback\File::class);
         $this->_templateFileResolution = $this->createMock(
@@ -91,12 +91,12 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
         $this->_fileResolution->expects($this->once())
             ->method('getFile')
             ->with($params['area'], $params['themeModel'], 'some_file.ext', 'Some_Module')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $this->_assetRepo->expects($this->any())
             ->method('extractScope')
             ->with($file, $params)
-            ->will($this->returnValue('some_file.ext'));
+            ->willReturn('some_file.ext');
 
         $actual = $this->_model->getFilename($file, $params);
         $this->assertEquals($expected, $actual);
@@ -116,12 +116,12 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
         $this->_templateFileResolution->expects($this->once())
             ->method('getFile')
             ->with($params['area'], $params['themeModel'], 'some_file.ext', 'Some_Module')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $this->_assetRepo->expects($this->any())
             ->method('extractScope')
             ->with($file, $params)
-            ->will($this->returnValue('some_file.ext'));
+            ->willReturn('some_file.ext');
 
         $actual = $this->_model->getTemplateFileName($file, $params);
         $this->assertEquals($expected, $actual);
@@ -140,7 +140,7 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
         $this->_localeFileResolution->expects($this->once())
             ->method('getFile')
             ->with($params['area'], $params['themeModel'], $params['locale'], 'some_file.ext')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $actual = $this->_model->getLocaleFileName($file, $params);
         $this->assertEquals($expected, $actual);
@@ -160,7 +160,7 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
         $this->_staticFileResolution->expects($this->once())
             ->method('getFile')
             ->with($params['area'], $params['themeModel'], $params['locale'], 'some_file.ext', 'Some_Module')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $actual = $this->_model->getStaticFileName($file, $params);
         $this->assertEquals($expected, $actual);
@@ -251,7 +251,7 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
         $this->_emailTemplateFileResolution->expects($this->once())
             ->method('getFile')
             ->with($params['area'], $params['themeModel'], $locale, $file, 'Some_Module')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $actual = $this->_model->getEmailTemplateFileName($file, $params, 'Some_Module');
         $this->assertEquals($expected, $actual);

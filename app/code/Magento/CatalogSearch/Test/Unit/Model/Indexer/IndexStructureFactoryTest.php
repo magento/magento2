@@ -15,13 +15,13 @@ class IndexStructureFactoryTest extends \PHPUnit\Framework\TestCase
     /** @var IndexStructureFactory */
     private $model;
 
-    /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $objectManagerMock;
 
-    /** @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var EngineResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $engineResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMockForAbstractClass();
@@ -60,11 +60,12 @@ class IndexStructureFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage There is no such index structure: current_structure
      */
     public function testCreateWithoutStructures()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('There is no such index structure: current_structure');
+
         $currentStructure = 'current_structure';
         $structures = [];
         $data = ['data'];
@@ -83,11 +84,12 @@ class IndexStructureFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage current_structure index structure doesn't implement
      */
     public function testCreateWithWrongStructure()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('current_structure index structure doesn\'t implement');
+
         $currentStructure = 'current_structure';
         $currentStructureClass = \stdClass::class;
         $structures = [

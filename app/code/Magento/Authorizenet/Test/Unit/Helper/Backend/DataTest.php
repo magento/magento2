@@ -6,7 +6,7 @@
 namespace Magento\Authorizenet\Test\Unit\Helper\Backend;
 
 /**
- * Class DataTest
+ * Test for Data
  */
 class DataTest extends \PHPUnit\Framework\TestCase
 {
@@ -16,21 +16,21 @@ class DataTest extends \PHPUnit\Framework\TestCase
     protected $dataHelper;
 
     /**
-     * @var \Magento\Backend\Model\Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Url|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var \Magento\Sales\Model\OrderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\OrderFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderFactoryMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

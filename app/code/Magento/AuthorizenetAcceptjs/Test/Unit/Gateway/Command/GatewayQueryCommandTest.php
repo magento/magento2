@@ -58,14 +58,14 @@ class GatewayQueryCommandTest extends TestCase
      */
     private $transferMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->requestBuilderMock = $this->createMock(BuilderInterface::class);
-        $this->transferFactoryMock = $this->createMock(TransferFactoryInterface::class);
-        $this->transferMock = $this->createMock(TransferInterface::class);
-        $this->clientMock = $this->createMock(ClientInterface::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
-        $this->validatorMock = $this->createMock(ValidatorInterface::class);
+        $this->requestBuilderMock = $this->getMockForAbstractClass(BuilderInterface::class);
+        $this->transferFactoryMock = $this->getMockForAbstractClass(TransferFactoryInterface::class);
+        $this->transferMock = $this->getMockForAbstractClass(TransferInterface::class);
+        $this->clientMock = $this->getMockForAbstractClass(ClientInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->validatorMock = $this->getMockForAbstractClass(ValidatorInterface::class);
 
         $this->command = new GatewayQueryCommand(
             $this->requestBuilderMock,
@@ -120,11 +120,12 @@ class GatewayQueryCommandTest extends TestCase
     }
 
     /**
-     * @expectedExceptionMessage There was an error while trying to process the request.
-     * @expectedException \Magento\Payment\Gateway\Command\CommandException
      */
     public function testExceptionIsThrownAndLoggedWhenRequestFails()
     {
+        $this->expectException(\Magento\Payment\Gateway\Command\CommandException::class);
+        $this->expectExceptionMessage('There was an error while trying to process the request.');
+
         $buildSubject = [
             'foo' => '123'
         ];
@@ -155,11 +156,12 @@ class GatewayQueryCommandTest extends TestCase
         $this->command->execute($buildSubject);
     }
     /**
-     * @expectedExceptionMessage There was an error while trying to process the request.
-     * @expectedException \Magento\Payment\Gateway\Command\CommandException
      */
     public function testExceptionIsThrownWhenResponseIsInvalid()
     {
+        $this->expectException(\Magento\Payment\Gateway\Command\CommandException::class);
+        $this->expectExceptionMessage('There was an error while trying to process the request.');
+
         $buildSubject = [
             'foo' => '123'
         ];

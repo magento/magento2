@@ -27,13 +27,13 @@ class ConfigGeneratorTest extends TestCase
      */
     private $configGeneratorObject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        /** @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject $deployConfig */
+        /** @var DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject $deployConfig */
         $deployConfig = $this->createMock(DeploymentConfig::class);
         $deployConfig->expects($this->any())->method('isAvailable')->willReturn(false);
 
-        /** @var Random|\PHPUnit_Framework_MockObject_MockObject $randomMock */
+        /** @var Random|\PHPUnit\Framework\MockObject\MockObject $randomMock */
         $randomMock = $this->createMock(Random::class);
         $randomMock->expects($this->any())->method('getRandomString')->willReturn('key');
 

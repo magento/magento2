@@ -13,21 +13,21 @@ class FileFactoryTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Filesystem
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Filesystem
      */
     protected $fileSystemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Response\Http
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\Response\Http
      */
     protected $responseMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $dirMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->fileSystemMock =
@@ -40,16 +40,16 @@ class FileFactoryTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getDirectoryWrite'
-        )->withAnyParameters()->will(
-            $this->returnValue($this->dirMock)
+        )->withAnyParameters()->willReturn(
+            $this->dirMock
         );
 
         $this->fileSystemMock->expects(
             $this->any()
         )->method(
             'isFile'
-        )->withAnyParameters()->will(
-            $this->returnValue(0)
+        )->withAnyParameters()->willReturn(
+            0
         );
         $this->responseMock = $this->createPartialMock(
             \Magento\Framework\App\Response\Http::class,
@@ -58,19 +58,21 @@ class FileFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateIfContentDoesntHaveRequiredKeys()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->getModel()->create('fileName', []);
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage File not found
      */
     public function testCreateIfFileNotExist()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('File not found');
+
         $file = 'some_file';
         $content = ['type' => 'filename', 'value' => $file];
 
@@ -78,15 +80,15 @@ class FileFactoryTest extends \PHPUnit\Framework\TestCase
             $this->never()
         )->method(
             'setHeader'
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
+            
         );
         $this->responseMock->expects(
             $this->never()
         )->method(
             'setHttpResponseCode'
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
+            
         );
         $this->getModel()->create('fileName', $content);
     }
@@ -98,35 +100,35 @@ class FileFactoryTest extends \PHPUnit\Framework\TestCase
 
         $this->dirMock->expects($this->once())
             ->method('isFile')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->dirMock->expects($this->once())
             ->method('stat')
-            ->will($this->returnValue(['size' => 100]));
+            ->willReturn(['size' => 100]);
         $this->responseMock->expects($this->exactly(6))
             ->method('setHeader')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->responseMock->expects($this->once())
             ->method('setHttpResponseCode')
             ->with(200)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->responseMock->expects($this->once())
             ->method('sendHeaders')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $streamMock = $this->getMockBuilder(\Magento\Framework\Filesystem\File\WriteInterface::class)
             ->disableOriginalConstructor()->getMock();
         $this->dirMock->expects($this->once())
             ->method('openFile')
-            ->will($this->returnValue($streamMock));
+            ->willReturn($streamMock);
         $this->dirMock->expects($this->never())
             ->method('delete')
-            ->will($this->returnValue($streamMock));
+            ->willReturn($streamMock);
         $streamMock->expects($this->at(1))
             ->method('eof')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $streamMock->expects($this->at(2))
             ->method('eof')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $streamMock->expects($this->once())
             ->method('read');
         $streamMock->expects($this->once())
@@ -141,35 +143,35 @@ class FileFactoryTest extends \PHPUnit\Framework\TestCase
 
         $this->dirMock->expects($this->once())
             ->method('isFile')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->dirMock->expects($this->once())
             ->method('stat')
-            ->will($this->returnValue(['size' => 100]));
+            ->willReturn(['size' => 100]);
         $this->responseMock->expects($this->exactly(6))
             ->method('setHeader')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->responseMock->expects($this->once())
             ->method('setHttpResponseCode')
             ->with(200)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->responseMock->expects($this->once())
             ->method('sendHeaders')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $streamMock = $this->getMockBuilder(\Magento\Framework\Filesystem\File\WriteInterface::class)
             ->disableOriginalConstructor()->getMock();
         $this->dirMock->expects($this->once())
             ->method('openFile')
-            ->will($this->returnValue($streamMock));
+            ->willReturn($streamMock);
         $this->dirMock->expects($this->once())
             ->method('delete')
-            ->will($this->returnValue($streamMock));
+            ->willReturn($streamMock);
         $streamMock->expects($this->at(1))
             ->method('eof')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $streamMock->expects($this->at(2))
             ->method('eof')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $streamMock->expects($this->once())
             ->method('read');
         $streamMock->expects($this->once())
@@ -181,20 +183,20 @@ class FileFactoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->dirMock->expects($this->never())
             ->method('isFile')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->dirMock->expects($this->never())
             ->method('stat')
-            ->will($this->returnValue(['size' => 100]));
+            ->willReturn(['size' => 100]);
         $this->responseMock->expects($this->exactly(6))
             ->method('setHeader')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->responseMock->expects($this->once())
             ->method('setHttpResponseCode')
             ->with(200)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->responseMock->expects($this->once())
             ->method('sendHeaders')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->dirMock->expects($this->once())
             ->method('writeFile')
             ->with('fileName', 'content', 'w+');
@@ -202,10 +204,10 @@ class FileFactoryTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->getMock();
         $this->dirMock->expects($this->once())
             ->method('openFile')
-            ->will($this->returnValue($streamMock));
+            ->willReturn($streamMock);
         $streamMock->expects($this->once())
             ->method('eof')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $streamMock->expects($this->once())
             ->method('close');
         $this->getModelMock()->create('fileName', 'content');
@@ -230,7 +232,7 @@ class FileFactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Get model mock
      *
-     * @return \Magento\Framework\App\Response\Http\FileFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\App\Response\Http\FileFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private function getModelMock()
     {

@@ -19,17 +19,17 @@ class DbTest extends \PHPUnit\Framework\TestCase
     protected $collection;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entityFactoryMock;
 
     /**
-     * @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fetchStrategyMock;
 
@@ -38,7 +38,7 @@ class DbTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->fetchStrategyMock =
@@ -53,7 +53,7 @@ class DbTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->collection);
     }
@@ -120,8 +120,8 @@ class DbTest extends \PHPUnit\Framework\TestCase
         )->with(
             $this->stringContains('is_imported'),
             $this->anything()
-        )->will(
-            $this->returnValue('is_imported = 1')
+        )->willReturn(
+            'is_imported = 1'
         );
         $renderer = $this->getSelectRenderer($this->objectManager);
         $select = new \Magento\Framework\DB\Select($adapter, $renderer);
@@ -198,8 +198,8 @@ class DbTest extends \PHPUnit\Framework\TestCase
         )->with(
             '`email`',
             ['like' => 'value?']
-        )->will(
-            $this->returnValue('email LIKE \'%value?%\'')
+        )->willReturn(
+            'email LIKE \'%value?%\''
         );
         $renderer = $this->getSelectRenderer($this->objectManager);
         $select = new \Magento\Framework\DB\Select($adapter, $renderer);
@@ -229,8 +229,8 @@ class DbTest extends \PHPUnit\Framework\TestCase
             'quoteIdentifier'
         )->with(
             'email'
-        )->will(
-            $this->returnValue('`email`')
+        )->willReturn(
+            '`email`'
         );
         $adapter->expects(
             $this->any()
@@ -239,8 +239,8 @@ class DbTest extends \PHPUnit\Framework\TestCase
         )->with(
             $this->stringContains('`email`'),
             $this->anything()
-        )->will(
-            $this->returnValue('`email` = "foo@example.com"')
+        )->willReturn(
+            '`email` = "foo@example.com"'
         );
         $renderer = $this->getSelectRenderer($this->objectManager);
         $select = new \Magento\Framework\DB\Select($adapter, $renderer);
@@ -341,9 +341,9 @@ class DbTest extends \PHPUnit\Framework\TestCase
         $statementMock = $this->createPartialMock(\Zend_Db_Statement_Pdo::class, ['fetch']);
         $statementMock->expects($this->exactly(2))
             ->method('fetch')
-            ->will($this->returnCallback(function () use (&$counter, $data) {
+            ->willReturnCallback(function () use (&$counter, $data) {
                 return ++$counter % 2 ? [] : $data;
-            }));
+            });
 
         $adapterMock = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['select', 'query']);
         $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
@@ -358,10 +358,10 @@ class DbTest extends \PHPUnit\Framework\TestCase
         $adapterMock->expects($this->once())
             ->method('query')
             ->with($selectMock, $this->anything())
-            ->will($this->returnValue($statementMock));
+            ->willReturn($statementMock);
         $adapterMock->expects($this->once())
             ->method('select')
-            ->will($this->returnValue($selectMock));
+            ->willReturn($selectMock);
 
         $this->collection->setConnection($adapterMock);
         $this->assertFalse($this->collection->fetchItem());
@@ -373,7 +373,7 @@ class DbTest extends \PHPUnit\Framework\TestCase
         $this->entityFactoryMock->expects($this->once())
             ->method('create')
             ->with(\Magento\Framework\DataObject::class)
-            ->will($this->returnValue($objectMock));
+            ->willReturn($objectMock);
 
         $this->assertEquals($objectMock, $this->collection->fetchItem());
     }
@@ -402,19 +402,19 @@ class DbTest extends \PHPUnit\Framework\TestCase
             ->with('COUNT(*)');
         $adapterMock->expects($this->once())
             ->method('select')
-            ->will($this->returnValue($selectMock));
+            ->willReturn($selectMock);
         $adapterMock->expects($this->exactly(2))
             ->method('quoteInto')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['testField1=?', 'testValue1', null, null, 'testField1=testValue1'],
                 ['testField4=?', 'testValue4', null, null, 'testField4=testValue4'],
-            ]));
+            ]);
         $selectMock->expects($this->once())
             ->method('orWhere')
             ->with('testField1=testValue1');
         $selectMock->expects($this->exactly(3))
             ->method('where')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['testValue2', $this->returnSelf()],
                 [
                     'testField3 = testValue3',
@@ -423,15 +423,15 @@ class DbTest extends \PHPUnit\Framework\TestCase
                     $this->returnSelf()
                 ],
                 ['testField4=testValue4', $this->returnSelf()],
-            ]));
+            ]);
         $adapterMock->expects($this->once())
             ->method('prepareSqlCondition')
             ->with('testField3', 'testValue3')
-            ->will($this->returnValue('testField3 = testValue3'));
+            ->willReturn('testField3 = testValue3');
         $adapterMock->expects($this->once())
             ->method('fetchOne')
             ->with($selectMock, [])
-            ->will($this->returnValue($countSql));
+            ->willReturn($countSql);
 
         $this->collection->addFilter('testField1', 'testValue1', 'or');
         $this->collection->addFilter('testField2', 'testValue2', 'string');
@@ -457,12 +457,12 @@ class DbTest extends \PHPUnit\Framework\TestCase
 
         $adapterMock->expects($this->once())
             ->method('select')
-            ->will($this->returnValue($selectMock));
+            ->willReturn($selectMock);
 
         $sql = 'query';
         $selectMock->expects($this->once())
             ->method('__toString')
-            ->will($this->returnValue($sql));
+            ->willReturn($sql);
 
         $this->collection->setConnection($adapterMock);
         $this->assertEquals($sql, $this->collection->getSelectSql(true));
@@ -488,15 +488,15 @@ class DbTest extends \PHPUnit\Framework\TestCase
         $selectMock->expects($this->once())
             ->method('where')
             ->with('aliasField3 = testValue3', null, \Magento\Framework\DB\Select::TYPE_CONDITION)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $adapterMock->expects($this->once())
             ->method('select')
-            ->will($this->returnValue($selectMock));
+            ->willReturn($selectMock);
         $adapterMock->expects($this->once())
             ->method('prepareSqlCondition')
             ->with('aliasField3', 'testValue3')
-            ->will($this->returnValue('aliasField3 = testValue3'));
+            ->willReturn('aliasField3 = testValue3');
 
         $this->collection->addFilter('testField3', 'testValue3', 'public');
         $this->collection->addFilterToMap('testFilter', 'testAlias', 'testGroup');
@@ -524,7 +524,7 @@ class DbTest extends \PHPUnit\Framework\TestCase
 
         $adapterMock->expects($this->once())
             ->method('select')
-            ->will($this->returnValue($selectMock));
+            ->willReturn($selectMock);
         $selectMock->expects($this->once())
             ->method('distinct')
             ->with($expectedFlag);
@@ -558,12 +558,12 @@ class DbTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $adapterMock->expects($this->once())
             ->method('select')
-            ->will($this->returnValue($selectMock));
+            ->willReturn($selectMock);
 
         $this->fetchStrategyMock->expects($this->once())
             ->method('fetchAll')
             ->with($selectMock, [])
-            ->will($this->returnValue([$data]));
+            ->willReturn([$data]);
 
         $objectMock = $this->createPartialMock(
             \Magento\Framework\DataObject::class,
@@ -574,14 +574,14 @@ class DbTest extends \PHPUnit\Framework\TestCase
             ->with($data);
         $objectMock->expects($this->any())
             ->method('getData')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [null, null, 10],
                 ['name', null, 'test'],
-            ]));
+            ]);
         $this->entityFactoryMock->expects($this->once())
             ->method('create')
             ->with(\Magento\Framework\DataObject::class)
-            ->will($this->returnValue($objectMock));
+            ->willReturn($objectMock);
 
         $this->collection->setConnection($adapterMock);
         $this->collection->loadData(false, false);

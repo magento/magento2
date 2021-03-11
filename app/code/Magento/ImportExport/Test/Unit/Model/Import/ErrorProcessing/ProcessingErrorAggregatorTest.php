@@ -11,7 +11,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $processingErrorFactoryMock;
 
@@ -39,7 +39,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
     /**
      * Preparing mock objects
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->processingErrorFactoryMock = $this->createPartialMock(
@@ -275,7 +275,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
         $this->model->addError('systemException', 'not-critical', 6, 'Some column name', 'Message', 'Description');
         $result = $this->model->getAllErrors();
         //check if is array of objects
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertCount(3, $result);
         $this->assertInstanceOf(\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError::class, $result[0]);
     }
@@ -290,7 +290,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
         $this->model->addError('systemException3', 'not-critical', 2);
         $result = $this->model->getErrorByRowNumber(1);
 
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertCount(2, $result);
         $this->assertInstanceOf(\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError::class, $result[0]);
         $this->assertInstanceOf(\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError::class, $result[1]);
@@ -415,7 +415,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
     public function testGetRowsGroupedByErrorCodeNoErrors()
     {
         $result = $this->model->getRowsGroupedByErrorCode();
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertCount(0, $result);
     }
 

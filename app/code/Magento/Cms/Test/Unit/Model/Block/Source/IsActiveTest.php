@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class IsActiveTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Block|\PHPUnit_Framework_MockObject_MockObject
+     * @var Block|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cmsBlockMock;
 
@@ -28,7 +28,7 @@ class IsActiveTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
         $this->cmsBlockMock = $this->getMockBuilder(\Magento\Cms\Model\Block::class)

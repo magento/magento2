@@ -93,13 +93,13 @@ class CustomerAssigmentTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->orderMock = $this->createMock(OrderInterface::class);
-        $this->customerMock = $this->createMock(CustomerInterface::class);
-        $this->orderRepositoryMock = $this->createMock(OrderRepositoryInterface::class);
-        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->orderMock = $this->getMockForAbstractClass(OrderInterface::class);
+        $this->customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
+        $this->orderRepositoryMock = $this->getMockForAbstractClass(OrderRepositoryInterface::class);
+        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->customerAssignment = $objectManager->getObject(
             CustomerAssignment::class,
             [

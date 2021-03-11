@@ -21,7 +21,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
 
         $order = new \stdClass();
         $source = $this->createMock(\Magento\Sales\Model\Order\Invoice::class);
-        $source->expects($this->any())->method('getOrder')->will($this->returnValue($order));
+        $source->expects($this->any())->method('getOrder')->willReturn($order);
 
         // Setup most constructor dependencies
         $paymentData = $this->createMock(\Magento\Payment\Helper\Data::class);
@@ -36,34 +36,34 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         // Setup config file totals
         $configTotals = ['item1' => [''], 'item2' => ['model' => 'custom_class']];
         $pdfConfig = $this->createMock(\Magento\Sales\Model\Order\Pdf\Config::class);
-        $pdfConfig->expects($this->once())->method('getTotals')->will($this->returnValue($configTotals));
+        $pdfConfig->expects($this->once())->method('getTotals')->willReturn($configTotals);
 
         // Setup total factory
         $total1 = $this->createPartialMock(
             \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal::class,
             ['setSource', 'setOrder', 'canDisplay', 'getTotalsForDisplay']
         );
-        $total1->expects($this->once())->method('setOrder')->with($order)->will($this->returnSelf());
-        $total1->expects($this->once())->method('setSource')->with($source)->will($this->returnSelf());
-        $total1->expects($this->once())->method('canDisplay')->will($this->returnValue(true));
+        $total1->expects($this->once())->method('setOrder')->with($order)->willReturnSelf();
+        $total1->expects($this->once())->method('setSource')->with($source)->willReturnSelf();
+        $total1->expects($this->once())->method('canDisplay')->willReturn(true);
         $total1->expects($this->once())
             ->method('getTotalsForDisplay')
-            ->will($this->returnValue([['label' => 'label1', 'font_size' => 1, 'amount' => '$1']]));
+            ->willReturn([['label' => 'label1', 'font_size' => 1, 'amount' => '$1']]);
 
         $total2 = $this->createPartialMock(
             \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal::class,
             ['setSource', 'setOrder', 'canDisplay', 'getTotalsForDisplay']
         );
-        $total2->expects($this->once())->method('setOrder')->with($order)->will($this->returnSelf());
-        $total2->expects($this->once())->method('setSource')->with($source)->will($this->returnSelf());
-        $total2->expects($this->once())->method('canDisplay')->will($this->returnValue(true));
+        $total2->expects($this->once())->method('setOrder')->with($order)->willReturnSelf();
+        $total2->expects($this->once())->method('setSource')->with($source)->willReturnSelf();
+        $total2->expects($this->once())->method('canDisplay')->willReturn(true);
         $total2->expects($this->once())
             ->method('getTotalsForDisplay')
-            ->will($this->returnValue([['label' => 'label2', 'font_size' => 2, 'amount' => '$2']]));
+            ->willReturn([['label' => 'label2', 'font_size' => 2, 'amount' => '$2']]);
 
         $valueMap = [[null, [], $total1], ['custom_class', [], $total2]];
         $pdfTotalFactory = $this->createMock(\Magento\Sales\Model\Order\Pdf\Total\Factory::class);
-        $pdfTotalFactory->expects($this->exactly(2))->method('create')->will($this->returnValueMap($valueMap));
+        $pdfTotalFactory->expects($this->exactly(2))->method('create')->willReturnMap($valueMap);
 
         // Test model
         /** @var \Magento\Sales\Model\Order\Pdf\AbstractPdf $model */
@@ -87,7 +87,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
             true,
             ['drawLineBlocks']
         );
-        $model->expects($this->once())->method('drawLineBlocks')->will($this->returnValue($page));
+        $model->expects($this->once())->method('drawLineBlocks')->willReturn($page);
 
         $reflectionMethod = new \ReflectionMethod(\Magento\Sales\Model\Order\Pdf\AbstractPdf::class, 'insertTotals');
         $reflectionMethod->setAccessible(true);

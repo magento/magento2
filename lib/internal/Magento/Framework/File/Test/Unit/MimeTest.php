@@ -18,17 +18,18 @@ class MimeTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->object = new \Magento\Framework\File\Mime();
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage File 'nonexistent.file' doesn't exist
      */
     public function testGetMimeTypeNonexistentFileException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('File \'nonexistent.file\' doesn\'t exist');
+
         $file = 'nonexistent.file';
         $this->object->getMimeType($file);
     }

@@ -20,7 +20,7 @@ class TypeListTest extends \PHPUnit\Framework\TestCase
     protected $_typeList;
 
     /**
-     * @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_cache;
 
@@ -30,7 +30,7 @@ class TypeListTest extends \PHPUnit\Framework\TestCase
     protected $_typesArray;
 
     /**
-     * @var \Magento\Framework\Cache\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Cache\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_config;
 
@@ -50,11 +50,11 @@ class TypeListTest extends \PHPUnit\Framework\TestCase
     const CACHE_TYPE = \Magento\Framework\Cache\FrontendInterface::class;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_typesArray = [
             self::TYPE_KEY => [
@@ -64,23 +64,23 @@ class TypeListTest extends \PHPUnit\Framework\TestCase
         ];
         $this->_config =
             $this->createPartialMock(\Magento\Framework\Cache\ConfigInterface::class, ['getTypes', 'getType']);
-        $this->_config->expects($this->any())->method('getTypes')->will($this->returnValue($this->_typesArray));
+        $this->_config->expects($this->any())->method('getTypes')->willReturn($this->_typesArray);
 
         $cacheState = $this->createPartialMock(
             \Magento\Framework\App\Cache\StateInterface::class,
             ['isEnabled', 'setEnabled', 'persist']
         );
-        $cacheState->expects($this->any())->method('isEnabled')->will($this->returnValue(self::IS_CACHE_ENABLED));
+        $cacheState->expects($this->any())->method('isEnabled')->willReturn(self::IS_CACHE_ENABLED);
         $cacheBlockMock = $this->createMock(self::CACHE_TYPE);
         $factory = $this->createPartialMock(\Magento\Framework\App\Cache\InstanceFactory::class, ['get']);
-        $factory->expects($this->any())->method('get')->with(self::CACHE_TYPE)->will(
-            $this->returnValue($cacheBlockMock)
+        $factory->expects($this->any())->method('get')->with(self::CACHE_TYPE)->willReturn(
+            $cacheBlockMock
         );
         $this->_cache = $this->createPartialMock(
             \Magento\Framework\App\CacheInterface::class,
             ['load', 'getFrontend', 'save', 'remove', 'clean']
         );
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
 
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_typeList = $objectHelper->getObject(
@@ -114,8 +114,8 @@ class TypeListTest extends \PHPUnit\Framework\TestCase
     public function testGetInvalidated()
     {
         $expectation = [self::TYPE_KEY => $this->_getPreparedType()];
-        $this->_cache->expects($this->once())->method('load')->with(TypeList::INVALIDATED_TYPES)->will(
-            $this->returnValue('serializedData')
+        $this->_cache->expects($this->once())->method('load')->with(TypeList::INVALIDATED_TYPES)->willReturn(
+            'serializedData'
         );
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
@@ -127,8 +127,8 @@ class TypeListTest extends \PHPUnit\Framework\TestCase
     public function testInvalidate()
     {
         // there are no invalidated types
-        $this->_cache->expects($this->once())->method('load')->with(TypeList::INVALIDATED_TYPES)->will(
-            $this->returnValue([])
+        $this->_cache->expects($this->once())->method('load')->with(TypeList::INVALIDATED_TYPES)->willReturn(
+            []
         );
         $expectedInvalidated = [
             self::TYPE_KEY => 1,
@@ -146,8 +146,8 @@ class TypeListTest extends \PHPUnit\Framework\TestCase
 
     public function testInvalidateList()
     {
-        $this->_cache->expects($this->once())->method('load')->with(TypeList::INVALIDATED_TYPES)->will(
-            $this->returnValue([])
+        $this->_cache->expects($this->once())->method('load')->with(TypeList::INVALIDATED_TYPES)->willReturn(
+            []
         );
         $expectedInvalidated = [
             self::TYPE_KEY => 1,
@@ -169,11 +169,11 @@ class TypeListTest extends \PHPUnit\Framework\TestCase
             ->method('unserialize')
             ->with('serializedData')
             ->willReturn($this->_typesArray);
-        $this->_cache->expects($this->once())->method('load')->with(TypeList::INVALIDATED_TYPES)->will(
-            $this->returnValue('serializedData')
+        $this->_cache->expects($this->once())->method('load')->with(TypeList::INVALIDATED_TYPES)->willReturn(
+            'serializedData'
         );
-        $this->_config->expects($this->once())->method('getType')->with(self::TYPE_KEY)->will(
-            $this->returnValue(['instance' => self::CACHE_TYPE])
+        $this->_config->expects($this->once())->method('getType')->with(self::TYPE_KEY)->willReturn(
+            ['instance' => self::CACHE_TYPE]
         );
         unset($this->_typesArray[self::TYPE_KEY]);
         $this->serializerMock->expects($this->once())

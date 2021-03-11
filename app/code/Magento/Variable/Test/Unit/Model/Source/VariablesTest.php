@@ -25,11 +25,11 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
     protected $configVariables;
 
     /**
-     * @var \Magento\Config\Model\Config\Structure\SearchInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Config\Model\Config\Structure\SearchInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
-    protected function setup()
+    protected function setup(): void
     {
         $this->configMock = $this->getMockBuilder(\Magento\Config\Model\Config\Structure\SearchInterface::class)
             ->setMethods(['getElementByConfigPath'])

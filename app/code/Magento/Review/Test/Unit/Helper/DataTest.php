@@ -32,29 +32,29 @@ class DataTest extends \PHPUnit\Framework\TestCase
     private $helper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Escaper
+     * @var \PHPUnit\Framework\MockObject\MockObject|Escaper
      */
     private $escaper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|FilterManager
+     * @var \PHPUnit\Framework\MockObject\MockObject|FilterManager
      */
     private $filter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Context
+     * @var \PHPUnit\Framework\MockObject\MockObject|Context
      */
     private $context;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ScopeConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|ScopeConfigInterface
      */
     private $scopeConfig;
 
     /**
      * Setup environment
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
@@ -62,7 +62,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->filter = $this->getMockBuilder(FilterManager::class)
             ->disableOriginalConstructor()
@@ -130,9 +130,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $this->scopeConfig->expects($this->any())->method('isSetFlag')
             ->with('catalog/review/allow_guest', ScopeInterface::SCOPE_STORE)
-            ->willReturn('1');
+            ->willReturn(true);
 
-        $this->assertEquals(true, $this->helper->getIsGuestAllowToWrite());
+        $this->assertTrue($this->helper->getIsGuestAllowToWrite());
     }
 
     /**

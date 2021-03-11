@@ -14,27 +14,27 @@ use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class GrandTotalDetailsPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Quote\Api\Data\TotalSegmentExtensionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Api\Data\TotalSegmentExtensionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $totalSegmentExtensionFactoryMock;
 
     /**
-     * @var \Magento\Tax\Api\Data\GrandTotalDetailsInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Api\Data\GrandTotalDetailsInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $detailsFactoryMock;
 
     /**
-     * @var \Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $ratesFactoryMock;
 
     /**
-     * @var \Magento\Tax\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxConfigMock;
 
     /**
-     * @var \Magento\Quote\Model\Cart\TotalsConverter|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Cart\TotalsConverter|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 
@@ -48,7 +48,7 @@ class GrandTotalDetailsPluginTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subjectMock = $this->getMockBuilder(\Magento\Quote\Model\Cart\TotalsConverter::class)
             ->disableOriginalConstructor()
@@ -110,7 +110,7 @@ class GrandTotalDetailsPluginTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $data
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function setupTaxTotal(array $data)
     {
@@ -127,7 +127,7 @@ class GrandTotalDetailsPluginTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $taxRate
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function setupTaxRateFactoryMock(array $taxRate)
     {
@@ -152,7 +152,7 @@ class GrandTotalDetailsPluginTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $taxDetails
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function setupTaxDetails(array $taxDetails)
     {

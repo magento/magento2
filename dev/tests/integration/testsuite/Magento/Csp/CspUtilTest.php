@@ -28,11 +28,11 @@ class CspUtilTest extends AbstractController
         $this->dispatch('csputil/csp/helper');
         $content = $this->getResponse()->getContent();
 
-        $this->assertContains('<script src="http://my.magento.com/static/script.js" />', $content);
-        $this->assertContains("<script>\n    let myVar = 1;\n</script>", $content);
+        $this->assertStringContainsString('<script src="http://my.magento.com/static/script.js" />', $content);
+        $this->assertStringContainsString("<script>\n    let myVar = 1;\n</script>", $content);
         $header = $this->getResponse()->getHeader('Content-Security-Policy');
         $this->assertNotEmpty($header);
-        $this->assertContains('http://my.magento.com', $header->getFieldValue());
-        $this->assertContains('\'sha256-H4RRnauTM2X2Xg/z9zkno1crqhsaY3uKKu97uwmnXXE=\'', $header->getFieldValue());
+        $this->assertStringContainsString('http://my.magento.com', $header->getFieldValue());
+        $this->assertStringContainsString('\'sha256-H4RRnauTM2X2Xg/z9zkno1crqhsaY3uKKu97uwmnXXE=\'', $header->getFieldValue());
     }
 }

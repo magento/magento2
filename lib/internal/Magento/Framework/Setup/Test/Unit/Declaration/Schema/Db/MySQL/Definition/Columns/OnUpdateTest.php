@@ -24,7 +24,7 @@ class OnUpdateTest extends \PHPUnit\Framework\TestCase
      */
     private $onUpdate;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->onUpdate = $this->objectManager->getObject(
@@ -37,7 +37,7 @@ class OnUpdateTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinition()
     {
-        /** @var Timestamp|\PHPUnit_Framework_MockObject_MockObject $column */
+        /** @var Timestamp|\PHPUnit\Framework\MockObject\MockObject $column */
         $column = $this->getMockBuilder(Timestamp::class)
             ->disableOriginalConstructor()
             ->setMethods(['getOnUpdate'])
@@ -56,7 +56,7 @@ class OnUpdateTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinitionNonUpdate()
     {
-        /** @var Timestamp|\PHPUnit_Framework_MockObject_MockObject $column */
+        /** @var Timestamp|\PHPUnit\Framework\MockObject\MockObject $column */
         $column = $this->getMockBuilder(Timestamp::class)
             ->disableOriginalConstructor()
             ->setMethods(['getOnUpdate'])
@@ -75,7 +75,7 @@ class OnUpdateTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinitionNonTimestamp()
     {
-        /** @var BooleanColumnDto|\PHPUnit_Framework_MockObject_MockObject $column */
+        /** @var BooleanColumnDto|\PHPUnit\Framework\MockObject\MockObject $column */
         $column = $this->getMockBuilder(BooleanColumnDto::class)
             ->disableOriginalConstructor()
             ->getMock();

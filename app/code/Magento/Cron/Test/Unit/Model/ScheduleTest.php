@@ -24,29 +24,29 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
     protected $helper;
 
     /**
-     * @var \Magento\Cron\Model\ResourceModel\Schedule|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cron\Model\ResourceModel\Schedule|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceJobMock;
 
     /**
-     * @var TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $timezoneConverter;
 
     /**
-     * @var DateTimeFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var DateTimeFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dateTimeFactory;
 
     /**
-     * @var DeadlockRetrierInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeadlockRetrierInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $retrierMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helper = new ObjectManager($this);
 
@@ -76,7 +76,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->retrierMock = $this->createMock(DeadlockRetrierInterface::class);
+        $this->retrierMock = $this->getMockForAbstractClass(DeadlockRetrierInterface::class);
     }
 
     /**
@@ -175,11 +175,12 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
      * @param string $cronExpression
      *
      * @return void
-     * @expectedException \Magento\Framework\Exception\CronException
      * @dataProvider setCronExprExceptionDataProvider
      */
     public function testSetCronExprException($cronExpression): void
     {
+        $this->expectException(\Magento\Framework\Exception\CronException::class);
+
         // 1. Create mocks
         /** @var Schedule $model */
         $model = $this->helper->getObject(Schedule::class);
@@ -378,11 +379,12 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
      * @param string $cronExpressionPart
      *
      * @return void
-     * @expectedException \Magento\Framework\Exception\CronException
      * @dataProvider matchCronExpressionExceptionDataProvider
      */
     public function testMatchCronExpressionException($cronExpressionPart): void
     {
+        $this->expectException(\Magento\Framework\Exception\CronException::class);
+
         $dateTimePart = 10;
 
         // 1 Create mocks
@@ -471,7 +473,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
         $jobCode = 'test_job';
         $tableName = 'cron_schedule';
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $connectionMock->expects($this->once())
             ->method('update')
             ->with(
@@ -529,7 +531,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
         $jobCode = 'test_job';
         $tableName = 'cron_schedule';
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $connectionMock->expects($this->once())
             ->method('update')
             ->with(

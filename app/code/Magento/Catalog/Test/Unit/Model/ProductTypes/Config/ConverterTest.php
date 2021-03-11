@@ -17,7 +17,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
      */
     protected $_filePath;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new \Magento\Catalog\Model\ProductTypes\Config\Converter();
         $this->_filePath = realpath(__DIR__) . '/_files/';

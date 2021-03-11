@@ -13,12 +13,12 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     protected $groupedPlugin;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 
@@ -27,7 +27,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
      */
     protected $closureMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $this->subjectMock = $this->createMock(\Magento\Catalog\Model\Product\CartConfiguration::class);
@@ -44,11 +44,10 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getTypeId'
-        )->will(
-            $this->returnValue(\Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE)
+        )->willReturn(
+            \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE
         );
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $this->groupedPlugin->aroundIsProductConfigured(
                 $this->subjectMock,
                 $this->closureMock,
@@ -61,7 +60,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     public function testAroundIsProductConfiguredWhenProductIsNotGrouped()
     {
         $config = ['super_group' => 'product'];
-        $this->productMock->expects($this->once())->method('getTypeId')->will($this->returnValue('product'));
+        $this->productMock->expects($this->once())->method('getTypeId')->willReturn('product');
         $this->assertEquals(
             'Expected',
             $this->groupedPlugin->aroundIsProductConfigured(

@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Test\Unit\Model\Layer\Filter;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -52,7 +52,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory */
         $this->filterItemFactory = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\ItemFactory::class)
@@ -84,7 +84,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
 
         $this->filterAttribute->expects($this->any())
             ->method('applyFilterToCollection')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->filterAttributeFactory = $this->getMockBuilder(
             \Magento\Catalog\Model\ResourceModel\Layer\Filter\AttributeFactory::class
@@ -95,7 +95,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
 
         $this->filterAttributeFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->filterAttribute));
+            ->willReturn($this->filterAttribute);
 
         $this->state = $this->getMockBuilder(\Magento\Catalog\Model\Layer\State::class)
             ->disableOriginalConstructor()
@@ -103,7 +103,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->layer->expects($this->any())
             ->method('getState')
-            ->will($this->returnValue($this->state));
+            ->willReturn($this->state);
 
         $this->frontend = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend::class)
             ->disableOriginalConstructor()
@@ -115,7 +115,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->attribute->expects($this->atLeastOnce())
             ->method('getFrontend')
-            ->will($this->returnValue($this->frontend));
+            ->willReturn($this->frontend);
 
         $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
@@ -128,7 +128,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $stripTagsFilter->expects($this->any())
             ->method('filter')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $string = $this->getMockBuilder(\Magento\Framework\Stdlib\StringUtils::class)
             ->disableOriginalConstructor()
@@ -136,12 +136,12 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $string->expects($this->any())
             ->method('strlen')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($value) {
                         return strlen($value);
                     }
-                )
+                
             );
 
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -167,46 +167,46 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
 
         $this->attribute->expects($this->any())
             ->method('getAttributeCode')
-            ->will($this->returnValue($attributeCode));
+            ->willReturn($attributeCode);
 
         $this->target->setAttributeModel($this->attribute);
 
         $this->request->expects($this->once())
             ->method('getParam')
             ->with($attributeCode)
-            ->will($this->returnValue($attributeValue));
+            ->willReturn($attributeValue);
 
         $this->frontend->expects($this->once())
             ->method('getOption')
             ->with($attributeValue)
-            ->will($this->returnValue($attributeLabel));
+            ->willReturn($attributeLabel);
 
         $filterItem = $this->createFilterItem(0, $attributeLabel, $attributeValue, 0);
 
         $filterItem->expects($this->once())
             ->method('setFilter')
             ->with($this->target)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $filterItem->expects($this->once())
             ->method('setLabel')
             ->with($attributeLabel)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $filterItem->expects($this->once())
             ->method('setValue')
             ->with($attributeValue)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $filterItem->expects($this->once())
             ->method('setCount')
             ->with(0)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->state->expects($this->once())
             ->method('addFilter')
             ->with($filterItem)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $result = $this->target->apply($this->request);
 
@@ -221,26 +221,26 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
 
         $this->attribute->expects($this->once())
             ->method('getAttributeCode')
-            ->will($this->returnValue($attributeCode));
+            ->willReturn($attributeCode);
 
         $this->target->setAttributeModel($this->attribute);
 
         $this->request->expects($this->once())
             ->method('getParam')
             ->with($attributeCode)
-            ->will($this->returnValue($attributeValue));
+            ->willReturn($attributeValue);
 
         $this->frontend->expects($this->once())
             ->method('getOption')
             ->with($attributeValue)
-            ->will($this->returnValue($attributeLabel));
+            ->willReturn($attributeLabel);
 
         $filterItem = $this->createFilterItem(0, $attributeLabel, $attributeValue, 0);
 
         $this->state->expects($this->once())
             ->method('addFilter')
             ->with($filterItem)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $expectedFilterItems = [];
 
@@ -266,26 +266,26 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $filterItem->expects($this->once())
             ->method('setFilter')
             ->with($this->target)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $filterItem->expects($this->once())
             ->method('setLabel')
             ->with($label)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $filterItem->expects($this->once())
             ->method('setValue')
             ->with($value)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $filterItem->expects($this->once())
             ->method('setCount')
             ->with($count)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->filterItemFactory->expects($this->at($index))
             ->method('create')
-            ->will($this->returnValue($filterItem));
+            ->willReturn($filterItem);
 
         return $filterItem;
     }

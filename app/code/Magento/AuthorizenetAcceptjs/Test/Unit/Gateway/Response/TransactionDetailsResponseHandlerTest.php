@@ -38,9 +38,9 @@ class TransactionDetailsResponseHandlerTest extends TestCase
      */
     private $configMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
+        $this->paymentDOMock = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
         $this->paymentMock = $this->createMock(Payment::class);
         $this->configMock = $this->createMock(Config::class);
         $this->paymentDOMock->method('getPayment')

@@ -22,23 +22,23 @@ use Symfony\Component\Console\Application;
 class ObjectManagerProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ServiceLocatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ServiceLocatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serviceLocatorMock;
 
     /**
-     * @var Bootstrap|\PHPUnit_Framework_MockObject_MockObject
+     * @var Bootstrap|\PHPUnit\Framework\MockObject\MockObject
      */
     private $bootstrapMock;
 
     /**
-     * @var ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $model;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->serviceLocatorMock = $this->createMock(ServiceLocatorInterface::class);
+        $this->serviceLocatorMock = $this->getMockForAbstractClass(ServiceLocatorInterface::class);
         $this->bootstrapMock = $this->createMock(Bootstrap::class);
 
         $this->model = new ObjectManagerProvider($this->serviceLocatorMock, $this->bootstrapMock);
@@ -69,12 +69,12 @@ class ObjectManagerProviderTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $commandListMock = $this->createMock(CommandListInterface::class);
+        $commandListMock = $this->getMockForAbstractClass(CommandListInterface::class);
         $commandListMock->expects($this->once())
             ->method('getCommands')
             ->willReturn($commands);
 
-        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $objectManagerMock->expects($this->once())
             ->method('create')
             ->with(CommandListInterface::class)

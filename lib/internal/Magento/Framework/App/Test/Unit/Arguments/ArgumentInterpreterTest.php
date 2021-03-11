@@ -14,7 +14,7 @@ class ArgumentInterpreterTest extends \PHPUnit\Framework\TestCase
      */
     private $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $const = $this->createPartialMock(\Magento\Framework\Data\Argument\Interpreter\Constant::class, ['evaluate']);
         $const->expects(
@@ -23,8 +23,8 @@ class ArgumentInterpreterTest extends \PHPUnit\Framework\TestCase
             'evaluate'
         )->with(
             ['value' => 'FIXTURE_INIT_PARAMETER']
-        )->will(
-            $this->returnValue('init_param_value')
+        )->willReturn(
+            'init_param_value'
         );
         $this->object = new ArgumentInterpreter($const);
     }

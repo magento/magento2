@@ -26,47 +26,47 @@ class SwitchActionTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var StoreCookieManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreCookieManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeCookieManagerMock;
 
     /**
-     * @var HttpContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpContext|\PHPUnit\Framework\MockObject\MockObject
      */
     private $httpContextMock;
 
     /**
-     * @var StoreRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeRepositoryMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $responseMock;
 
     /**
-     * @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $redirectMock;
 
-    /** @var StoreSwitcherInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var StoreSwitcherInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $storeSwitcher;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)->getMock();
         $this->storeCookieManagerMock =

@@ -13,32 +13,32 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     protected $plugin;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $jsonHelperMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseMock;
 
@@ -53,16 +53,16 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     protected $proceedResult = [1, 2, 3];
 
     /**
-     * @var \Magento\Catalog\Model\Product\Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Validator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\Manager::class);
         $this->productFactoryMock = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
         $this->jsonHelperMock = $this->createPartialMock(\Magento\Framework\Json\Helper\Data::class, ['jsonDecode']);
-        $this->jsonHelperMock->expects($this->any())->method('jsonDecode')->will($this->returnArgument(0));
+        $this->jsonHelperMock->expects($this->any())->method('jsonDecode')->willReturnArgument(0);
         $this->productMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
             ['getData', 'getAttributes', 'setTypeId']
@@ -115,8 +115,8 @@ class PluginTest extends \PHPUnit\Framework\TestCase
             $this->productMock,
             $matrix,
             $this->requestMock
-        )->will(
-            $this->returnValue(null)
+        )->willReturn(
+            null
         );
 
         $this->requestMock->expects(
@@ -125,8 +125,8 @@ class PluginTest extends \PHPUnit\Framework\TestCase
             'getPost'
         )->with(
             'variations-matrix'
-        )->will(
-            $this->returnValue($matrix)
+        )->willReturn(
+            $matrix
         );
 
         $this->responseMock->expects($this->never())->method('setError');
@@ -160,8 +160,8 @@ class PluginTest extends \PHPUnit\Framework\TestCase
             $this->productMock,
             $matrix,
             $this->requestMock
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $this->requestMock->expects(
@@ -170,13 +170,13 @@ class PluginTest extends \PHPUnit\Framework\TestCase
             'getPost'
         )->with(
             'variations-matrix'
-        )->will(
-            $this->returnValue($matrix)
+        )->willReturn(
+            $matrix
         );
 
-        $this->responseMock->expects($this->once())->method('setError')->with(true)->will($this->returnSelf());
-        $this->responseMock->expects($this->once())->method('setMessage')->will($this->returnSelf());
-        $this->responseMock->expects($this->once())->method('setAttributes')->will($this->returnSelf());
+        $this->responseMock->expects($this->once())->method('setError')->with(true)->willReturnSelf();
+        $this->responseMock->expects($this->once())->method('setMessage')->willReturnSelf();
+        $this->responseMock->expects($this->once())->method('setAttributes')->willReturnSelf();
         $this->assertEquals(
             $this->proceedResult,
             $plugin->afterValidate(
@@ -197,8 +197,8 @@ class PluginTest extends \PHPUnit\Framework\TestCase
             'getPost'
         )->with(
             'variations-matrix'
-        )->will(
-            $this->returnValue(null)
+        )->willReturn(
+            null
         );
         $this->eventManagerMock->expects($this->never())->method('dispatch');
         $this->plugin->afterValidate(
@@ -220,8 +220,8 @@ class PluginTest extends \PHPUnit\Framework\TestCase
 
         $this->productMock->expects($this->any())
             ->method('getData')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         ['code1', null, 'value_code_1'],
                         ['code2', null, 'value_code_2'],
@@ -229,7 +229,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
                         ['code4', null, 'value_code_4'],
                         ['code5', null, 'value_code_5'],
                     ]
-                )
+                
             );
 
         $this->requestMock->expects(
@@ -238,8 +238,8 @@ class PluginTest extends \PHPUnit\Framework\TestCase
             'getPost'
         )->with(
             'variations-matrix'
-        )->will(
-            $this->returnValue($matrix)
+        )->willReturn(
+            $matrix
         );
 
         $attribute1 = $this->createAttribute('code1', true, true);
@@ -265,33 +265,33 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $product1->expects($this->at(1))
             ->method('addData')
             ->with($requiredAttributes)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $product1->expects($this->at(2))
             ->method('addData')
             ->with($matrix[0])
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $product2 = $this->createProduct(1, 2);
         $product2->expects($this->at(1))
             ->method('addData')
             ->with($requiredAttributes)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $product2->expects($this->at(2))
             ->method('addData')
             ->with($matrix[1])
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $product3 = $this->createProduct(2, 3);
         $product3->expects($this->at(1))
             ->method('addData')
             ->with($requiredAttributes)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $product3->expects($this->at(2))
             ->method('addData')
             ->with($matrix[2])
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->productMock->expects($this->exactly(3))
             ->method('getAttributes')
-            ->will($this->returnValue($attributes));
+            ->willReturn($attributes);
 
         $this->responseMock->expects($this->never())->method('setError');
 
@@ -313,7 +313,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
      * @param $id
      * @param bool $isValid
      * @internal param array $attributes
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     private function createProduct($index, $id, $isValid = true)
@@ -324,10 +324,10 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         );
         $this->productFactoryMock->expects($this->at($index))
             ->method('create')
-            ->will($this->returnValue($productMock));
+            ->willReturn($productMock);
         $productMock->expects($this->once())
             ->method('validate')
-            ->will($this->returnValue($isValid));
+            ->willReturn($isValid);
 
         return $productMock;
     }
@@ -336,7 +336,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
      * @param $attributeCode
      * @param $isUserDefined
      * @param $isRequired
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Eav\Model\Entity\Attribute\AbstractAttribute
      */
     private function createAttribute($attributeCode, $isUserDefined, $isRequired)
     {
@@ -346,13 +346,13 @@ class PluginTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $attribute->expects($this->any())
             ->method('getAttributeCode')
-            ->will($this->returnValue($attributeCode));
+            ->willReturn($attributeCode);
         $attribute->expects($this->any())
             ->method('getIsRequired')
-            ->will($this->returnValue($isRequired));
+            ->willReturn($isRequired);
         $attribute->expects($this->any())
             ->method('getIsUserDefined')
-            ->will($this->returnValue($isUserDefined));
+            ->willReturn($isUserDefined);
 
         return $attribute;
     }

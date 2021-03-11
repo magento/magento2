@@ -12,7 +12,7 @@ use Magento\Catalog\Model\Category\Link\ReadHandler;
 use Magento\Catalog\Model\ResourceModel\Product\CategoryLink;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Catalog\Model\Product;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class ReadHandlerTest
@@ -42,7 +42,7 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->categoryLinkFactory = $this->getMockBuilder(CategoryLinkInterfaceFactory::class)
             ->disableOriginalConstructor()

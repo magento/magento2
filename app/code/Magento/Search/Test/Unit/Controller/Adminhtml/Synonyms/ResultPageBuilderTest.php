@@ -18,19 +18,19 @@ class ResultPageBuilderTest extends \PHPUnit\Framework\TestCase
     /** @var ResultPageBuilder */
     private $model;
 
-    /** @var PageFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var PageFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $resultPageFactoryMock;
 
-    /** @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var EngineResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $engineResolverMock;
 
-    /** @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $searchFeatureConfigMock;
 
-    /** @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $messageManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()

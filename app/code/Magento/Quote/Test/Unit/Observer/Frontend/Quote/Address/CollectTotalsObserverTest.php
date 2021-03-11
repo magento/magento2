@@ -19,57 +19,57 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerAddressMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSession;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerVatMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteAddressMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeId;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $vatValidatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $observerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerDataFactoryMock;
 
@@ -79,19 +79,19 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $groupManagementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $groupInterfaceMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->storeId = 1;
@@ -161,14 +161,14 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
         $this->observerMock->expects($this->once())->method('getQuote')->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->any())
             ->method('getCustomer')
-            ->will($this->returnValue($this->customerMock));
+            ->willReturn($this->customerMock);
 
         $this->addressRepository = $this->createMock(\Magento\Customer\Api\AddressRepositoryInterface::class);
         $this->customerSession = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->customerMock->expects($this->any())->method('getStoreId')->will($this->returnValue($this->storeId));
+        $this->customerMock->expects($this->any())->method('getStoreId')->willReturn($this->storeId);
 
         $this->model = new \Magento\Quote\Observer\Frontend\Quote\Address\CollectTotalsObserver(
             $this->customerAddressMock,
@@ -186,7 +186,7 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
         $this->vatValidatorMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->quoteAddressMock, $this->storeId)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->model->execute($this->observerMock);
     }
 
@@ -197,18 +197,18 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
     {
         $this->groupManagementMock->expects($this->once())
             ->method('getNotLoggedInGroup')
-            ->will($this->returnValue($this->groupInterfaceMock));
+            ->willReturn($this->groupInterfaceMock);
         $this->groupInterfaceMock->expects($this->once())
-            ->method('getId')->will($this->returnValue(null));
+            ->method('getId')->willReturn(null);
         $this->vatValidatorMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->quoteAddressMock, $this->storeId)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->quoteAddressMock->expects($this->once())
             ->method('getCountryId')
-            ->will($this->returnValue('customerCountryCode'));
-        $this->quoteAddressMock->expects($this->once())->method('getVatId')->will($this->returnValue('vatId'));
+            ->willReturn('customerCountryCode');
+        $this->quoteAddressMock->expects($this->once())->method('getVatId')->willReturn('vatId');
 
         $this->customerVatMock->expects(
             $this->once()
@@ -216,11 +216,11 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
             'isCountryInEU'
         )->with(
             'customerCountryCode'
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
 
-        $this->customerMock->expects($this->once())->method('getId')->will($this->returnValue(null));
+        $this->customerMock->expects($this->once())->method('getId')->willReturn(null);
 
         /** Assertions */
         $this->quoteAddressMock->expects($this->never())->method('setPrevQuoteCustomerGroupId');
@@ -236,22 +236,22 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
         $this->vatValidatorMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->quoteAddressMock, $this->storeId)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->quoteAddressMock->expects($this->once())
             ->method('getCountryId')
-            ->will($this->returnValue('customerCountryCode'));
-        $this->quoteAddressMock->expects($this->once())->method('getVatId')->will($this->returnValue(null));
+            ->willReturn('customerCountryCode');
+        $this->quoteAddressMock->expects($this->once())->method('getVatId')->willReturn(null);
 
         $this->quoteMock->expects($this->once())
             ->method('getCustomerGroupId')
-            ->will($this->returnValue('customerGroupId'));
-        $this->customerMock->expects($this->once())->method('getId')->will($this->returnValue('1'));
+            ->willReturn('customerGroupId');
+        $this->customerMock->expects($this->once())->method('getId')->willReturn('1');
         $this->groupManagementMock->expects($this->once())
             ->method('getDefaultGroup')
-            ->will($this->returnValue($this->groupInterfaceMock));
+            ->willReturn($this->groupInterfaceMock);
         $this->groupInterfaceMock->expects($this->once())
-            ->method('getId')->will($this->returnValue('defaultCustomerGroupId'));
+            ->method('getId')->willReturn('defaultCustomerGroupId');
         /** Assertions */
         $this->quoteAddressMock->expects($this->once())
             ->method('setPrevQuoteCustomerGroupId')
@@ -272,14 +272,14 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
         $this->vatValidatorMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->quoteAddressMock, $this->storeId)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->quoteAddressMock->expects($this->once())
             ->method('getCountryId')
-            ->will($this->returnValue('customerCountryCode'));
+            ->willReturn('customerCountryCode');
         $this->quoteAddressMock->expects($this->once())
             ->method('getVatId')
-            ->will($this->returnValue('vatID'));
+            ->willReturn('vatID');
 
         $this->customerVatMock->expects($this->once())
             ->method('isCountryInEU')
@@ -288,18 +288,18 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->quoteMock->expects($this->once())
             ->method('getCustomerGroupId')
-            ->will($this->returnValue('customerGroupId'));
+            ->willReturn('customerGroupId');
 
         $validationResult = ['some' => 'result'];
         $this->vatValidatorMock->expects($this->once())
             ->method('validate')
             ->with($this->quoteAddressMock, $this->storeId)
-            ->will($this->returnValue($validationResult));
+            ->willReturn($validationResult);
 
         $this->customerVatMock->expects($this->once())
             ->method('getCustomerGroupIdBasedOnVatNumber')
             ->with('customerCountryCode', $validationResult, $this->storeId)
-            ->will($this->returnValue('customerGroupId'));
+            ->willReturn('customerGroupId');
 
         /** Assertions */
         $this->quoteAddressMock->expects($this->once())
@@ -341,7 +341,7 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
         $this->vatValidatorMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->quoteAddressMock, $this->storeId)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->customerVatMock->expects($this->once())
             ->method('isCountryInEU')
@@ -377,14 +377,14 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
         $this->vatValidatorMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->quoteAddressMock, $this->storeId)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->quoteAddressMock->expects($this->once())
             ->method('getCountryId')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->quoteAddressMock->expects($this->once())
             ->method('getVatId')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->customerVatMock->expects($this->once())
             ->method('isCountryInEU')
@@ -393,12 +393,12 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->quoteMock->expects($this->once())
             ->method('getCustomerGroupId')
-            ->will($this->returnValue('customerGroupId'));
+            ->willReturn('customerGroupId');
         $validationResult = ['some' => 'result'];
         $this->customerVatMock->expects($this->once())
             ->method('getCustomerGroupIdBasedOnVatNumber')
             ->with($customerCountryCode, $validationResult, $this->storeId)
-            ->will($this->returnValue('customerGroupId'));
+            ->willReturn('customerGroupId');
         $this->customerSession->expects($this->once())
             ->method("setCustomerGroupId")
             ->with('customerGroupId');
@@ -406,7 +406,7 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
         $this->vatValidatorMock->expects($this->once())
             ->method('validate')
             ->with($this->quoteAddressMock, $this->storeId)
-            ->will($this->returnValue($validationResult));
+            ->willReturn($validationResult);
 
         /** Assertions */
         $this->quoteAddressMock->expects($this->once())

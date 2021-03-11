@@ -24,32 +24,32 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mediaConfig;
 
     /**
-     * @var EncryptorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EncryptorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $encryptor;
 
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assetRepo;
 
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->mediaConfig = $this->createMock(ConfigInterface::class);
-        $this->encryptor = $this->createMock(EncryptorInterface::class);
-        $this->context = $this->createMock(ContextInterface::class);
+        $this->mediaConfig = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->encryptor = $this->getMockForAbstractClass(EncryptorInterface::class);
+        $this->context = $this->getMockForAbstractClass(ContextInterface::class);
         $this->assetRepo = $this->createMock(Repository::class);
         $this->objectManager = new ObjectManager($this);
         $this->model = $this->objectManager->getObject(

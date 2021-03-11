@@ -21,8 +21,8 @@ class QueryTest extends \PHPUnit\Framework\TestCase
         )->with(
             $select,
             $bindParams
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
         $object = new \Magento\Framework\Data\Collection\Db\FetchStrategy\Query();
         $this->assertSame($expectedResult, $object->fetchAll($select, $bindParams));

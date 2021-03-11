@@ -22,7 +22,7 @@ class TextTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $locale = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
         $localeResolver = $this->createMock(\Magento\Framework\Locale\ResolverInterface::class);
@@ -45,7 +45,7 @@ class TextTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritDoc}
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->model = null;
     }
@@ -202,7 +202,7 @@ class TextTest extends \PHPUnit\Framework\TestCase
         );
 
         /** @var $attribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|
-         * \PHPUnit_Framework_MockObject_MockObject
+         * \PHPUnit\Framework\MockObject\MockObject
          */
         $attribute = $this->getMockBuilder($attributeClass)
             ->setMethods(['_init'])

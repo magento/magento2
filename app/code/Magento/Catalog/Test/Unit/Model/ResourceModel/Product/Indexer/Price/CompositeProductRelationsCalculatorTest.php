@@ -12,7 +12,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\CompositeProductRe
 class CompositeProductRelationsCalculatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|DefaultPrice
+     * @var \PHPUnit\Framework\MockObject\MockObject|DefaultPrice
      */
     private $defaultPriceMock;
 
@@ -21,7 +21,7 @@ class CompositeProductRelationsCalculatorTest extends \PHPUnit\Framework\TestCas
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->defaultPriceMock = $this->getMockBuilder(DefaultPrice::class)->disableOriginalConstructor()->getMock();
         $this->model = new CompositeProductRelationsCalculator($this->defaultPriceMock);

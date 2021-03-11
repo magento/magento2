@@ -36,74 +36,71 @@ use PHPUnit_Framework_MockObject_MockObject;
 class ImageTest extends AbstractFormTestCase
 {
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|EncoderInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|EncoderInterface
      */
     private $urlEncode;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|NotProtectedExtension
+     * @var \PHPUnit\Framework\MockObject\MockObject|NotProtectedExtension
      */
     private $fileValidatorMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|Filesystem
+     * @var \PHPUnit\Framework\MockObject\MockObject|Filesystem
      */
     private $fileSystemMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|Http
+     * @var \PHPUnit\Framework\MockObject\MockObject|Http
      */
     private $requestMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|UploaderFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|UploaderFactory
      */
     private $uploaderFactoryMock;
 
     /**
-     * @var FileProcessor|PHPUnit_Framework_MockObject_MockObject
+     * @var FileProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileProcessorMock;
 
     /**
-     * @var ImageContentInterfaceFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var ImageContentInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $imageContentFactory;
 
     /**
-     * @var FileProcessorFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var FileProcessorFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileProcessorFactoryMock;
 
     /**
-     * @var File|PHPUnit_Framework_MockObject_MockObject
+     * @var File|\PHPUnit\Framework\MockObject\MockObject
      */
     private $ioFileSystemMock;
 
     /**
-     * @var DirectoryList|PHPUnit_Framework_MockObject_MockObject
+     * @var DirectoryList|\PHPUnit\Framework\MockObject\MockObject
      */
     private $directoryListMock;
 
     /**
-     * @var WriteFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var WriteFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $writeFactoryMock;
 
     /**
-     * @var Write|PHPUnit_Framework_MockObject_MockObject
+     * @var Write|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mediaEntityTmpDirectoryMock;
 
     /**
-     * @var Driver|PHPUnit_Framework_MockObject_MockObject
+     * @var Driver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $driverMock;
 
-    /**
-     * @inheritdoc
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -254,6 +251,14 @@ class ImageTest extends AbstractFormTestCase
             ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
             ->willReturn(true);
 
+        $this->ioFileSystemMock->expects($this->any())
+            ->method('getPathInfo')
+            ->with($value['name'])
+            ->willReturn([
+                'extension' => 'gif',
+                'filename' => 'logo'
+            ]);
+
         $model = $this->initialize([
             'value' => $value,
             'isAjax' => false,
@@ -307,6 +312,14 @@ class ImageTest extends AbstractFormTestCase
             ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
             ->willReturn(true);
 
+        $this->ioFileSystemMock->expects($this->any())
+            ->method('getPathInfo')
+            ->with($value['name'])
+            ->willReturn([
+                'extension' => 'gif',
+                'filename' => 'logo'
+            ]);
+
         $model = $this->initialize([
             'value' => $value,
             'isAjax' => false,
@@ -359,6 +372,14 @@ class ImageTest extends AbstractFormTestCase
             ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
             ->willReturn(true);
 
+        $this->ioFileSystemMock->expects($this->any())
+            ->method('getPathInfo')
+            ->with($value['name'])
+            ->willReturn([
+                'extension' => 'gif',
+                'filename' => 'logo'
+            ]);
+
         $model = $this->initialize([
             'value' => $value,
             'isAjax' => false,
@@ -410,6 +431,14 @@ class ImageTest extends AbstractFormTestCase
             ->method('isExist')
             ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
             ->willReturn(true);
+
+        $this->ioFileSystemMock->expects($this->any())
+            ->method('getPathInfo')
+            ->with($value['name'])
+            ->willReturn([
+                'extension' => 'gif',
+                'filename' => 'logo'
+            ]);
 
         $model = $this->initialize([
             'value' => $value,

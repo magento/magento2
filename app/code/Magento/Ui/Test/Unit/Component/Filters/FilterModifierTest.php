@@ -13,17 +13,17 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterfac
 class FilterModifierTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var DataProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataProvider;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filterBuilder;
 
@@ -35,7 +35,7 @@ class FilterModifierTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
         $this->dataProvider = $this->getMockForAbstractClass(
@@ -66,11 +66,12 @@ class FilterModifierTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Condition type "not_allowed" is not allowed
      */
     public function testApplyFilterModifierWithNotAllowedCondition()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Condition type "not_allowed" is not allowed');
+
         $this->request->expects($this->once())->method('getParam')
             ->with(\Magento\Ui\Component\Filters\FilterModifier::FILTER_MODIFIER)
             ->willReturn([

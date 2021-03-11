@@ -28,31 +28,31 @@ class ExclusionStrategyTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $adapterMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $aliasResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
-        $this->adapterMock = $this->createMock(AdapterInterface::class);
+        $this->adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->any())->method('getConnection')->willReturn($this->adapterMock);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->aliasResolverMock = $this->createMock(AliasResolver::class);
 
         $this->indexScopeResolverMock = $this->createMock(
@@ -94,7 +94,7 @@ class ExclusionStrategyTest extends \PHPUnit\Framework\TestCase
         $searchFilterMock = $this->createMock(Term::class);
         $searchFilterMock->expects($this->any())->method('getField')->willReturn($attributeCode);
 
-        $websiteMock = $this->createMock(WebsiteInterface::class);
+        $websiteMock = $this->getMockForAbstractClass(WebsiteInterface::class);
         $websiteMock->expects($this->any())->method('getId')->willReturn($websiteId);
         $this->storeManagerMock->expects($this->any())->method('getWebsite')->willReturn($websiteMock);
 

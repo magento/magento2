@@ -19,7 +19,7 @@ class QuantityTest extends \PHPUnit\Framework\TestCase
      */
     private $quantity;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->quantity = new Quantity();
 

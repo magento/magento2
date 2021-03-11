@@ -36,7 +36,7 @@ class CommonTaxCollectorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->commonTaxCollectorPlugin = $this->objectManager->getObject(CommonTaxCollectorPlugin::class);
@@ -77,11 +77,11 @@ class CommonTaxCollectorTest extends \PHPUnit\Framework\TestCase
         $quoteItemMock->method('getChildren')->willReturn([$childQuoteItemMock]);
 
         /* @var TaxClassKeyInterface|MockObject $taxClassObjectMock */
-        $taxClassObjectMock = $this->createMock(TaxClassKeyInterface::class);
+        $taxClassObjectMock = $this->getMockForAbstractClass(TaxClassKeyInterface::class);
         $taxClassObjectMock->expects($this->once())->method('setValue')->with($childTaxClassId);
 
         /* @var QuoteDetailsItemInterface|MockObject $quoteDetailsItemMock */
-        $quoteDetailsItemMock = $this->createMock(QuoteDetailsItemInterface::class);
+        $quoteDetailsItemMock = $this->getMockForAbstractClass(QuoteDetailsItemInterface::class);
         $quoteDetailsItemMock->method('getTaxClassKey')->willReturn($taxClassObjectMock);
 
         $this->commonTaxCollectorPlugin->afterMapItem(

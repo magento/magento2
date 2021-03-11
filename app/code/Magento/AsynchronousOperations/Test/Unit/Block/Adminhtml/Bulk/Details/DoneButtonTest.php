@@ -15,16 +15,16 @@ class DoneButtonTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $bulkStatusMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->bulkStatusMock = $this->createMock(\Magento\Framework\Bulk\BulkStatusInterface::class);
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)

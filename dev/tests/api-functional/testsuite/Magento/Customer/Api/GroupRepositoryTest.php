@@ -19,7 +19,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Class GroupRepositoryTest
+ * Customer Group Repository API test
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -40,14 +40,14 @@ class GroupRepositoryTest extends WebapiAbstract
     private $groupRepository;
 
     /**
-     * @var \Magento\Customer\Api\Data\groupInterfaceFactory
+     * @var \Magento\Customer\Api\Data\GroupInterfaceFactory
      */
     private $customerGroupFactory;
 
     /**
      * Execute per test initialization.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->groupRegistry = $objectManager->get(\Magento\Customer\Model\GroupRegistry::class);
@@ -262,7 +262,7 @@ class GroupRepositoryTest extends WebapiAbstract
             $this->fail("Expected exception");
         } catch (\Exception $e) {
             // @codingStandardsIgnoreStart
-            $this->assertContains(
+            $this->assertStringContainsString(
                 '\"%fieldName\" is required. Enter and try again.","parameters":{"fieldName":"code"}',
                 $e->getMessage(),
                 "Exception does not contain expected message."
@@ -299,7 +299,7 @@ class GroupRepositoryTest extends WebapiAbstract
             $this->fail("Expected exception");
         } catch (\Exception $e) {
             // @codingStandardsIgnoreStart
-            $this->assertContains(
+            $this->assertStringContainsString(
                 '{"message":"Invalid value of \"%value\" provided for the %fieldName field.","parameters":{"fieldName":"taxClassId","value":9999}',
                 $e->getMessage(),
                 "Exception does not contain expected message."
@@ -332,7 +332,7 @@ class GroupRepositoryTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail('Expected exception');
         } catch (\Exception $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 '{"message":"No such entity with %fieldName = %fieldValue","parameters":{"fieldName":"id","fieldValue":88}',
                 $e->getMessage(),
                 "Exception does not contain expected message."
@@ -366,7 +366,7 @@ class GroupRepositoryTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 'No such entity with %fieldName = %fieldValue',
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
@@ -440,7 +440,7 @@ class GroupRepositoryTest extends WebapiAbstract
         } catch (\Exception $e) {
             $expectedMessage = '{"message":"No such entity with %fieldName = %fieldValue",'
              . '"parameters":{"fieldName":"id","fieldValue":9999}';
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "Exception does not contain expected message."
@@ -518,7 +518,7 @@ class GroupRepositoryTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "Exception does not contain expected message."
@@ -589,7 +589,7 @@ class GroupRepositoryTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 '"%fieldName" is required. Enter and try again.',
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
@@ -627,7 +627,7 @@ class GroupRepositoryTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
@@ -700,7 +700,7 @@ class GroupRepositoryTest extends WebapiAbstract
         } catch (\Exception $e) {
             $expectedMessage = 'No such entity with %fieldName = %fieldValue';
 
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "Exception does not contain expected message."
@@ -774,7 +774,7 @@ class GroupRepositoryTest extends WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo, $requestData);
         } catch (\SoapFault $e) {
-            $this->assertContains($expectedMessage, $e->getMessage(), "SoapFault does not contain expected message.");
+            $this->assertStringContainsString($expectedMessage, $e->getMessage(), "SoapFault does not contain expected message.");
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message']);
@@ -809,13 +809,13 @@ class GroupRepositoryTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
             );
         } catch (\Exception $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "Exception does not contain expected message."

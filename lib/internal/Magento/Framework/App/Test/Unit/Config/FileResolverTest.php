@@ -19,23 +19,23 @@ class FileResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * Filesystem
      *
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesystem;
 
     /**
      * File iterator factory
      *
-     * @var \Magento\Framework\Config\FileIteratorFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\FileIteratorFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $iteratorFactory;
 
     /**
-     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $moduleReader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->iteratorFactory = $this->getMockBuilder(\Magento\Framework\Config\FileIteratorFactory::class)
             ->disableOriginalConstructor()
@@ -72,8 +72,8 @@ class FileResolverTest extends \PHPUnit\Framework\TestCase
             'search'
         )->with(
             sprintf('{%1$s,*/%1$s}', $filename)
-        )->will(
-            $this->returnValue($fileList)
+        )->willReturn(
+            $fileList
         );
         $i = 1;
         foreach ($fileList as $file) {
@@ -85,8 +85,8 @@ class FileResolverTest extends \PHPUnit\Framework\TestCase
             'getDirectoryRead'
         )->with(
             DirectoryList::CONFIG
-        )->will(
-            $this->returnValue($directory)
+        )->willReturn(
+            $directory
         );
         $this->iteratorFactory->expects(
             $this->once()
@@ -94,8 +94,8 @@ class FileResolverTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             $fileList
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
         $this->assertTrue($this->model->get($filename, $scope));
     }
@@ -116,8 +116,8 @@ class FileResolverTest extends \PHPUnit\Framework\TestCase
             'getConfigurationFiles'
         )->with(
             $filename
-        )->will(
-            $this->returnValue($fileList)
+        )->willReturn(
+            $fileList
         );
         $this->assertEquals($fileList, $this->model->get($filename, $scope));
     }
@@ -138,8 +138,8 @@ class FileResolverTest extends \PHPUnit\Framework\TestCase
             'getConfigurationFiles'
         )->with(
             $scope . '/' . $filename
-        )->will(
-            $this->returnValue($fileList)
+        )->willReturn(
+            $fileList
         );
         $this->assertEquals($fileList, $this->model->get($filename, $scope));
     }

@@ -57,7 +57,7 @@ class RuntimeConfigSourceTest extends TestCase
      */
     private $deploymentConfig;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()

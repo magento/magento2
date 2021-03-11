@@ -13,26 +13,26 @@ class ModeTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Indexer\Model\Indexer\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Indexer\Model\Indexer\State|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexerStateMock;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexerRegistry;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $flatIndexer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->indexerStateMock = $this->createPartialMock(
@@ -79,8 +79,8 @@ class ModeTest extends \PHPUnit\Framework\TestCase
         )->with(
             null,
             'default'
-        )->will(
-            $this->returnValue($oldValue)
+        )->willReturn(
+            $oldValue
         );
 
         $this->model->setValue($value);
@@ -117,8 +117,8 @@ class ModeTest extends \PHPUnit\Framework\TestCase
         )->with(
             null,
             'default'
-        )->will(
-            $this->returnValue($oldValue)
+        )->willReturn(
+            $oldValue
         );
 
         $this->model->setValue($value);
@@ -129,8 +129,8 @@ class ModeTest extends \PHPUnit\Framework\TestCase
             'loadByIndexer'
         )->with(
             'catalog_category_flat'
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
+            
         );
         $this->indexerStateMock->expects(
             $this->once()
@@ -138,10 +138,10 @@ class ModeTest extends \PHPUnit\Framework\TestCase
             'setStatus'
         )->with(
             'invalid'
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
+            
         );
-        $this->indexerStateMock->expects($this->once())->method('save')->will($this->returnSelf());
+        $this->indexerStateMock->expects($this->once())->method('save')->willReturnSelf();
 
         $this->indexerRegistry->expects($this->never())->method('load');
         $this->indexerRegistry->expects($this->never())->method('setScheduled');
@@ -171,8 +171,8 @@ class ModeTest extends \PHPUnit\Framework\TestCase
         )->with(
             null,
             'default'
-        )->will(
-            $this->returnValue($oldValue)
+        )->willReturn(
+            $oldValue
         );
 
         $this->model->setValue($value);

@@ -14,7 +14,7 @@ class FullModuleListTest extends \PHPUnit\Framework\TestCase
      */
     private $moduleList;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $loaderMock = $this->createMock(\Magento\Framework\Module\ModuleList\Loader::class);
         $modules = [
@@ -22,7 +22,7 @@ class FullModuleListTest extends \PHPUnit\Framework\TestCase
             'Vendor_B' => ['data' => 'b'],
             'Vendor_C' => ['data' => 'c'],
         ];
-        $loaderMock->expects($this->once())->method('load')->will($this->returnValue($modules));
+        $loaderMock->expects($this->once())->method('load')->willReturn($modules);
         $this->moduleList = new FullModuleList($loaderMock);
     }
 

@@ -16,44 +16,44 @@ class CustomerLoginObserverTest extends \PHPUnit\Framework\TestCase
     protected $observer;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSessionMock;
 
     /**
-     * @var \Magento\Customer\Model\Visitor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Visitor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerVisitorMock;
 
     /**
-     * @var \Magento\Reports\Model\Product\Index\Viewed|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Reports\Model\Product\Index\Viewed|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productIndexMock;
 
     /**
-     * @var \Magento\Reports\Model\Event|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Reports\Model\Event|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $reportEventMock;
 
     /**
-     * @var \Magento\Reports\Model\Product\Index\ComparedFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Reports\Model\Product\Index\ComparedFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productCompFactoryMock;
 
     /**
-     * @var \Magento\Reports\Model\Product\Index\Compared|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Reports\Model\Product\Index\Compared|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productCompModelMock;
 
     /**
-     * @var \Magento\Reports\Model\Product\Index\ViewedFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Reports\Model\Product\Index\ViewedFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productIndexFactoryMock;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -155,7 +155,7 @@ class CustomerLoginObserverTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param int $productId
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getObserverMock($productId)
     {

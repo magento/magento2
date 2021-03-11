@@ -20,32 +20,32 @@ use Magento\Framework\Filesystem\Directory\WriteFactory;
 class FileProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystem;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\UploaderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Model\File\UploaderFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $uploaderFactory;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlBuilder;
 
     /**
-     * @var \Magento\Framework\Url\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url\EncoderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlEncoder;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mediaDirectory;
 
     /**
-     * @var \Magento\Framework\File\Mime|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\File\Mime|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mime;
 
@@ -59,7 +59,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
      */
     private $writeFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mediaDirectory = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
             ->getMockForAbstractClass();
@@ -133,7 +133,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
         $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
         $result = $model->getStat($fileName);
 
-        $this->assertTrue(is_array($result));
+        $this->assertIsArray($result);
         $this->assertArrayHasKey('size', $result);
         $this->assertEquals(1, $result['size']);
     }
@@ -266,11 +266,12 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage File can not be saved to the destination folder.
      */
     public function testSaveTemporaryFileWithError()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('File can not be saved to the destination folder.');
+
         $attributeCode = 'img1';
 
         $allowedExtensions = [
@@ -319,11 +320,12 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Unable to create directory /f/i
      */
     public function testMoveTemporaryFileUnableToCreateDirectory()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Unable to create directory /f/i');
+
         $filePath = '/filename.ext1';
 
         $destinationPath = '/f/i';
@@ -338,11 +340,12 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Destination folder is not writable or does not exists
      */
     public function testMoveTemporaryFileDestinationFolderDoesNotExists()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Destination folder is not writable or does not exists');
+
         $filePath = '/filename.ext1';
 
         $destinationPath = '/f/i';
@@ -392,11 +395,12 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Something went wrong while saving the file
      */
     public function testMoveTemporaryFileWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Something went wrong while saving the file');
+
         $filePath = '/filename.ext1';
 
         $destinationPath = '/f/i';

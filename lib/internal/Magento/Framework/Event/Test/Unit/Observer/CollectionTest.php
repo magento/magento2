@@ -17,12 +17,12 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected $observerCollection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->observerCollection = new Collection();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->observerCollection = null;
     }
@@ -33,14 +33,14 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $name
      * @param \Magento\Framework\Event | null $event
-     * @return \Magento\Framework\Event\Observer |\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Event\Observer |\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getObserverMock($name, $event = null)
     {
         $observer = $this->createMock(\Magento\Framework\Event\Observer::class);
         $observer->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue($name));
+            ->willReturn($name);
         if ($event) {
             $observer->expects($this->once())
                 ->method('dispatch')

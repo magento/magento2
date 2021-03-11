@@ -19,7 +19,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * SetUp method for unit test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
         $validate = $helper->getObject(\Magento\Framework\Validator\NotEmpty::class, ['options' => NotEmpty::ALL]);
@@ -49,7 +49,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsValid($title, $type, $isValid, $expectedMessages)
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Bundle\Model\Option $option */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Bundle\Model\Option $option */
         $option = $this->getMockBuilder(\Magento\Bundle\Model\Option::class)
             ->setMethods(['getTitle', 'getType'])
             ->disableOriginalConstructor()

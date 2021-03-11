@@ -8,7 +8,7 @@ namespace Magento\Cron\Test\Unit\Console\Command;
 use Magento\Cron\Console\Command\CronCommand;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManagerFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class CronCommandTest extends \PHPUnit\Framework\TestCase
@@ -23,7 +23,7 @@ class CronCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $deploymentConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerFactory = $this->createMock(ObjectManagerFactory::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);

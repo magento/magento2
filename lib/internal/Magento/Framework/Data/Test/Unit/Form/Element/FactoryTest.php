@@ -12,7 +12,7 @@ namespace Magento\Framework\Data\Test\Unit\Form\Element;
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManagerMock;
 
@@ -21,7 +21,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_factory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManagerMock =
             $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['create']);
@@ -43,8 +43,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             $className,
             []
-        )->will(
-            $this->returnValue($elementMock)
+        )->willReturn(
+            $elementMock
         );
         $element = $this->_factory->create($type);
         $this->assertSame($elementMock, $element);
@@ -67,8 +67,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             $className,
             $config
-        )->will(
-            $this->returnValue($elementMock)
+        )->willReturn(
+            $elementMock
         );
         $element = $this->_factory->create($type, $config);
         $this->assertSame($elementMock, $element);
@@ -115,10 +115,11 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $type
      * @dataProvider createExceptionReflectionExceptionDataProvider
-     * @expectedException \ReflectionException
      */
     public function testCreateExceptionReflectionException($type)
     {
+        $this->expectException(\ReflectionException::class);
+
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(
@@ -147,10 +148,11 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $type
      * @dataProvider createExceptionInvalidArgumentDataProvider
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateExceptionInvalidArgument($type)
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $elementMock = $this->createMock($type);
         $this->_objectManagerMock->expects(
             $this->once()
@@ -159,8 +161,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             $type,
             []
-        )->will(
-            $this->returnValue($elementMock)
+        )->willReturn(
+            $elementMock
         );
         $this->_factory->create($type);
     }

@@ -15,31 +15,31 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Filter\FilterManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filter\FilterManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filter;
 
     /**
-     * @var \Magento\UrlRewrite\Model\UrlFinderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\UrlRewrite\Model\UrlFinderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlFinder;
 
     /**
-     * @var \Magento\Catalog\Helper\Category|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Category|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $catalogCategory;
 
     /**
-     * @var \Magento\Framework\Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $url;
 
     /**
-     * @var \Magento\Framework\Session\SidResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Session\SidResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $sidResolver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filter = $this->getMockBuilder(
             \Magento\Framework\Filter\FilterManager::class
@@ -60,9 +60,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->sidResolver = $this->createMock(\Magento\Framework\Session\SidResolverInterface::class);
 
         $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId', '__wakeup']);
-        $store->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $store->expects($this->any())->method('getId')->willReturn(1);
         $storeManager = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
-        $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
         $urlFactory = $this->getMockBuilder(\Magento\Framework\UrlFactory::class)
             ->disableOriginalConstructor()
@@ -94,8 +94,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             'translitUrl'
         )->with(
             $strIn
-        )->will(
-            $this->returnValue($resultString)
+        )->willReturn(
+            $resultString
         );
 
         $this->assertEquals($resultString, $this->model->formatUrlKey($strIn));
@@ -135,21 +135,21 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             ['getStoreId', 'getEntityId', 'getId', 'getUrlKey', 'setRequestPath', 'hasUrlDataObject', 'getRequestPath',
                 'getCategoryId', 'getDoNotUseCategoryId', '__wakeup', ]
         )->getMock();
-        $product->expects($this->any())->method('getStoreId')->will($this->returnValue($storeId));
-        $product->expects($this->any())->method('getCategoryId')->will($this->returnValue($categoryId));
-        $product->expects($this->any())->method('getRequestPath')->will($this->returnValue($requestPathProduct));
+        $product->expects($this->any())->method('getStoreId')->willReturn($storeId);
+        $product->expects($this->any())->method('getCategoryId')->willReturn($categoryId);
+        $product->expects($this->any())->method('getRequestPath')->willReturn($requestPathProduct);
         $product->expects($this->any())
             ->method('setRequestPath')
             ->with(false)
-            ->will($this->returnSelf());
-        $product->expects($this->any())->method('getId')->will($this->returnValue($productId));
-        $product->expects($this->any())->method('getUrlKey')->will($this->returnValue($productUrlKey));
-        $this->url->expects($this->any())->method('setScope')->with($storeId)->will($this->returnSelf());
+            ->willReturnSelf();
+        $product->expects($this->any())->method('getId')->willReturn($productId);
+        $product->expects($this->any())->method('getUrlKey')->willReturn($productUrlKey);
+        $this->url->expects($this->any())->method('setScope')->with($storeId)->willReturnSelf();
         $this->url->expects($this->any())
             ->method('getUrl')
             ->with($routePath, $routeParamsUrl)
-            ->will($this->returnValue($requestPathProduct));
-        $this->urlFinder->expects($this->any())->method('findOneByData')->will($this->returnValue(false));
+            ->willReturn($requestPathProduct);
+        $this->urlFinder->expects($this->any())->method('findOneByData')->willReturn(false);
 
         switch ($getUrlMethod) {
             case 'getUrl':
@@ -163,7 +163,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
                 $this->sidResolver
                     ->expects($this->never())
                     ->method('getUseSessionInUrl')
-                    ->will($this->returnValue(true));
+                    ->willReturn(true);
                 break;
         }
     }

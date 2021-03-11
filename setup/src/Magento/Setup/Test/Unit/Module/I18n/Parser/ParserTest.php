@@ -11,21 +11,21 @@ use Magento\Setup\Module\I18n\Parser as Parser;
 class ParserTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Setup\Module\I18n\Parser\AbstractParser|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\I18n\Parser\AbstractParser|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $parser;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Module\I18n\FilesCollector
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Module\I18n\FilesCollector
      */
     protected $filesCollector;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Module\I18n\Factory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Module\I18n\Factory
      */
     protected $factory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filesCollector = $this->createMock(\Magento\Setup\Module\I18n\FilesCollector::class);
         $this->factory = $this->createMock(\Magento\Setup\Module\I18n\Factory::class);
@@ -65,10 +65,10 @@ class ParserTest extends \PHPUnit\Framework\TestCase
         //4. Set expectations
         $this->filesCollector->expects($this->any())
             ->method('getFiles')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [$options[0]['paths'], '', $phpFiles],
                 [$options[1]['paths'], '', $jsFiles],
-            ]));
+            ]);
 
         $result = $this->parser->parse($options);
         $this->assertEquals($expectedResult, $result);

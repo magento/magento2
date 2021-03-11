@@ -15,7 +15,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected $_collection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Authorization\Model\ResourceModel\Rules\Collection::class
@@ -40,6 +40,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->_collection->addSortByLength();
 
         $order = $this->_collection->getSelect()->getPart(\Magento\Framework\DB\Select::ORDER);
-        $this->assertContains(['length', 'DESC'], $order);
+        $this->assertContains(['length', 'DESC'],$order);
     }
 }

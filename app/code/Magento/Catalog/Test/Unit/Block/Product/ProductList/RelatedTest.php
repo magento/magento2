@@ -12,13 +12,13 @@ class RelatedTest extends \PHPUnit\Framework\TestCase
      */
     protected $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->block = $objectManager->getObject(\Magento\Catalog\Block\Product\ProductList\Related::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->block = null;
     }
@@ -27,7 +27,7 @@ class RelatedTest extends \PHPUnit\Framework\TestCase
     {
         $productTag = ['compare_item_1'];
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $product->expects($this->once())->method('getIdentities')->will($this->returnValue($productTag));
+        $product->expects($this->once())->method('getIdentities')->willReturn($productTag);
 
         $itemsCollection = new \ReflectionProperty(
             \Magento\Catalog\Block\Product\ProductList\Related::class,

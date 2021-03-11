@@ -33,7 +33,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = new Config();
         $this->factory = new Developer($this->config);
@@ -50,23 +50,24 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException        \UnexpectedValueException
-     * @expectedExceptionMessage Invalid parameter configuration provided for $firstParam argument
      */
     public function testResolveArgumentsException()
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Invalid parameter configuration provided for $firstParam argument');
+
         $configMock = $this->createMock(\Magento\Framework\ObjectManager\Config\Config::class);
-        $configMock->expects($this->once())->method('getArguments')->will(
-            $this->returnValue(
+        $configMock->expects($this->once())->method('getArguments')->willReturn(
+            
                 [
                     'firstParam' => 1,
                 ]
-            )
+            
         );
 
         $definitionsMock = $this->createMock(\Magento\Framework\ObjectManager\DefinitionInterface::class);
-        $definitionsMock->expects($this->once())->method('getParameters')->will(
-            $this->returnValue(
+        $definitionsMock->expects($this->once())->method('getParameters')->willReturn(
+            
                 [
                     [
                         'firstParam',
@@ -76,7 +77,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
                         false
                     ]
                 ]
-            )
+            
         );
 
         $this->factory = new Developer(
@@ -169,8 +170,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $type = \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Polymorphous::class;
         $definitions = $this->createMock(\Magento\Framework\ObjectManager\DefinitionInterface::class);
         // should be more than defined in "switch" of create() method
-        $definitions->expects($this->once())->method('getParameters')->with($type)->will(
-            $this->returnValue(
+        $definitions->expects($this->once())->method('getParameters')->with($type)->willReturn(
+            
                 [
                     ['one', null, false, null, false],
                     ['two', null, false, null, false],
@@ -183,7 +184,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
                     ['nine', null, false, null, false],
                     ['ten', null, false, null, false],
                 ]
-            )
+            
         );
         $factory = new Developer($this->config, null, $definitions);
         $result = $factory->create(
@@ -220,8 +221,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $type = \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Variadic::class;
         $definitions = $this->createMock(\Magento\Framework\ObjectManager\DefinitionInterface::class);
 
-        $definitions->expects($this->once())->method('getParameters')->with($type)->will(
-            $this->returnValue(
+        $definitions->expects($this->once())->method('getParameters')->with($type)->willReturn(
+            
                 [
                     [
                 'oneScalars',
@@ -231,7 +232,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
                 true
                     ],
                 ]
-            )
+            
         );
         $factory = new Developer($this->config, null, $definitions);
 
@@ -340,8 +341,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $type = \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\SemiVariadic::class;
         $definitions = $this->createMock(\Magento\Framework\ObjectManager\DefinitionInterface::class);
 
-        $definitions->expects($this->once())->method('getParameters')->with($type)->will(
-            $this->returnValue(
+        $definitions->expects($this->once())->method('getParameters')->with($type)->willReturn(
+            
                 [
                     [
                         'foo',
@@ -358,7 +359,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
                         true
                     ],
                 ]
-            )
+            
         );
         $factory = new Developer($this->config, null, $definitions);
 

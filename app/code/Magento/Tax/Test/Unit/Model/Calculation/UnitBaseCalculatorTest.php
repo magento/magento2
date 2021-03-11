@@ -26,16 +26,16 @@ class UnitBaseCalculatorTest extends \PHPUnit\Framework\TestCase
     const PRICE_INCL_TAX = 495.4954954955;
     const PRICE_INCL_TAX_ROUNDED = 495.50;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $taxDetailsItemDataObjectFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $mockCalculationTool;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $mockConfig;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $appliedTaxRateDataObjectFactoryMock;
 
     /** @var UnitBaseCalculator */
@@ -53,7 +53,7 @@ class UnitBaseCalculatorTest extends \PHPUnit\Framework\TestCase
      */
     protected $appliedTaxRate;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  $objectManager */
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -119,27 +119,27 @@ class UnitBaseCalculatorTest extends \PHPUnit\Framework\TestCase
         $mockItem = $this->getMockItem();
         $mockItem->expects($this->atLeastOnce())
             ->method('getIsTaxIncluded')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->mockConfig->expects($this->atLeastOnce())
             ->method('crossBorderTradeEnabled')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->mockConfig->expects($this->atLeastOnce())
             ->method('applyTaxAfterDiscount')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->mockCalculationTool->expects($this->atLeastOnce())
             ->method('getRate')
             ->with($this->addressRateRequest)
-            ->will($this->returnValue(self::RATE));
+            ->willReturn(self::RATE);
         $this->mockCalculationTool->expects($this->atLeastOnce())
             ->method('getStoreRate')
             ->with($this->addressRateRequest, self::STORE_ID)
-            ->will($this->returnValue(self::STORE_RATE));
+            ->willReturn(self::STORE_RATE);
         $this->mockCalculationTool->expects($this->atLeastOnce())
             ->method('getAppliedRates')
             ->withAnyParameters()
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->assertSame($this->taxDetailsItem, $this->model->calculate($mockItem, self::QUANTITY));
         $this->assertSame(self::CODE, $this->taxDetailsItem->getCode());
@@ -159,20 +159,20 @@ class UnitBaseCalculatorTest extends \PHPUnit\Framework\TestCase
         $mockItem = $this->getMockItem();
         $mockItem->expects($this->once())
             ->method('getIsTaxIncluded')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->mockConfig->expects($this->once())
             ->method('applyTaxAfterDiscount')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->mockCalculationTool->expects($this->once())
             ->method('getRate')
             ->with($this->addressRateRequest)
-            ->will($this->returnValue(self::RATE));
+            ->willReturn(self::RATE);
         $this->mockCalculationTool->expects($this->once())
             ->method('getAppliedRates')
             ->withAnyParameters()
-            ->will($this->returnValue([['id' => 0, 'percent' => 0, 'rates' => []]]));
+            ->willReturn([['id' => 0, 'percent' => 0, 'rates' => []]]);
 
         $this->assertSame($this->taxDetailsItem, $this->model->calculate($mockItem, self::QUANTITY));
         $this->assertEquals(self::CODE, $this->taxDetailsItem->getCode());
@@ -181,26 +181,26 @@ class UnitBaseCalculatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getMockItem()
     {
-        /** @var $mockItem \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $mockItem \PHPUnit\Framework\MockObject\MockObject */
         $mockItem = $this->getMockBuilder(\Magento\Tax\Api\Data\QuoteDetailsItemInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $mockItem->expects($this->atLeastOnce())
             ->method('getDiscountAmount')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $mockItem->expects($this->atLeastOnce())
             ->method('getCode')
-            ->will($this->returnValue(self::CODE));
+            ->willReturn(self::CODE);
         $mockItem->expects($this->atLeastOnce())
             ->method('getType')
-            ->will($this->returnValue(self::TYPE));
+            ->willReturn(self::TYPE);
         $mockItem->expects($this->atLeastOnce())
             ->method('getUnitPrice')
-            ->will($this->returnValue(self::UNIT_PRICE));
+            ->willReturn(self::UNIT_PRICE);
 
         return $mockItem;
     }

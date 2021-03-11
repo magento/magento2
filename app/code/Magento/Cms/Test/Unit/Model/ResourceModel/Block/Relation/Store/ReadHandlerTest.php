@@ -17,11 +17,11 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Block|\PHPUnit_Framework_MockObject_MockObject
+     * @var Block|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceBlock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceBlock = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Block::class)
             ->disableOriginalConstructor()

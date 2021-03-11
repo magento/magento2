@@ -12,7 +12,7 @@ class TrackTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = [
@@ -38,7 +38,7 @@ class TrackTest extends \PHPUnit\Framework\TestCase
         $storeObject = new \Magento\Framework\DataObject(['id' => $storeId]);
 
         $shipmentMock = $this->createPartialMock(\Magento\Sales\Model\Order\Shipment::class, ['getStore', '__wakeup']);
-        $shipmentMock->expects($this->once())->method('getStore')->will($this->returnValue($storeObject));
+        $shipmentMock->expects($this->once())->method('getStore')->willReturn($storeObject);
 
         $this->_model->setShipment($shipmentMock);
         $this->assertEquals($storeId, $this->_model->getStoreId());

@@ -20,17 +20,17 @@ class ResponseResolverTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ConverterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConverterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $converterMock;
 
     /**
-     * @var ResponseHandlerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseHandlerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $successResponseHandlerMock;
 
     /**
-     * @var ResponseHandlerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseHandlerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $notFoundResponseHandlerMock;
 
@@ -42,12 +42,12 @@ class ResponseResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->converterMock = $this->getMockBuilder(ConverterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->successResponseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
             ->getMockForAbstractClass();
         $this->notFoundResponseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)

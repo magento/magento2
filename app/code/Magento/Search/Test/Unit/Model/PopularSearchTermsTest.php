@@ -25,12 +25,12 @@ class PopularSearchTermsTest extends \PHPUnit\Framework\TestCase
     private $popularSearchTerms;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryCollectionMock;
 
@@ -39,9 +39,9 @@ class PopularSearchTermsTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->queryCollectionMock = $this->createMock(Collection::class);
         $this->popularSearchTerms = new PopularSearchTerms($this->scopeConfigMock, $this->queryCollectionMock);
     }

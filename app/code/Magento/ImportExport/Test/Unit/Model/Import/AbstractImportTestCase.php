@@ -15,7 +15,7 @@ abstract class AbstractImportTestCase extends \PHPUnit\Framework\TestCase
      */
     protected $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -24,7 +24,7 @@ abstract class AbstractImportTestCase extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array|null $methods
-     * @return ProcessingErrorAggregatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProcessingErrorAggregatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getErrorAggregatorObject($methods = null)
     {

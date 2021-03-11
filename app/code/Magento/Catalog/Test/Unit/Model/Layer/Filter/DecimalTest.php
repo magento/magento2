@@ -13,7 +13,7 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
             ['getAttributeCode', '__wakeup']
         );
-        $attributeModel->expects($this->once())->method('getAttributeCode')->will($this->returnValue('price1'));
+        $attributeModel->expects($this->once())->method('getAttributeCode')->willReturn('price1');
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

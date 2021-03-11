@@ -22,21 +22,21 @@ class BuilderTest extends TestCase
     protected $model;
 
     /**
-     * @var StructureElementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StructureElementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $structureElementMock;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var ElementBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ElementBuilderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $structureElementUrlParamsBuilderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->structureElementMock = $this->getMockForAbstractClass(StructureElementInterface::class);
@@ -49,7 +49,7 @@ class BuilderTest extends TestCase
         $this->structureElementMock
             ->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue(['_elementType' => 'not_declared_structure_element_type']));
+            ->willReturn(['_elementType' => 'not_declared_structure_element_type']);
         $this->model->add($this->structureElementMock, '');
         $this->assertEquals([], $this->model->getAll());
     }
@@ -92,7 +92,7 @@ class BuilderTest extends TestCase
             ->expects($this->once())
             ->method('getUrl')
             ->with('*/system_config/edit', $buildUrlParams)
-            ->will($this->returnValue($generatedUrl));
+            ->willReturn($generatedUrl);
 
         $this->model->add($this->structureElementMock, $structureElementLabel);
         $this->assertEquals($expectedSearchResult, $this->model->getAll());

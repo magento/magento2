@@ -28,24 +28,24 @@ class DependencyDecoratorTest extends \PHPUnit\Framework\TestCase
     private $dependencyDecorator;
 
     /**
-     * @var IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $indexerMock;
 
     /**
-     * @var DependencyInfoProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DependencyInfoProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dependencyInfoProviderMock;
 
     /**
-     * @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $indexerRegistryMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -305,7 +305,7 @@ class DependencyDecoratorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|IndexerInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|IndexerInterface
      */
     private function getIndexerMock()
     {

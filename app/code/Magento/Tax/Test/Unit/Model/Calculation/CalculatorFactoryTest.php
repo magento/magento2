@@ -20,7 +20,7 @@ class CalculatorFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
     }
@@ -53,7 +53,7 @@ class CalculatorFactoryTest extends \PHPUnit\Framework\TestCase
         $objectManagerMock->expects($this->once())
             ->method('create')
             ->with($expectedInstanceType, ['storeId' => $storeId])
-            ->will($this->returnValue($instanceMock));
+            ->willReturn($instanceMock);
 
         /** @var CalculatorFactory $calculatorFactory */
         $calculatorFactory = $this->objectManager->getObject(
@@ -176,11 +176,12 @@ class CalculatorFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unknown calculation type: NOT_A_TYPE
      */
     public function testCreateInvalid()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unknown calculation type: NOT_A_TYPE');
+
         /** @var CalculatorFactory $calculatorFactory */
         $calculatorFactory = $this->objectManager->getObject(
             \Magento\Tax\Model\Calculation\CalculatorFactory::class

@@ -13,11 +13,11 @@ class QueueInstallerTest extends \PHPUnit\Framework\TestCase
 {
     public function testInstall()
     {
-        $bindingInstaller = $this->createMock(QueueConfigItemInterface::class);
+        $bindingInstaller = $this->getMockForAbstractClass(QueueConfigItemInterface::class);
         $model = new QueueInstaller($bindingInstaller);
         $channel = $this->createMock(AMQPChannel::class);
 
-        $queue = $this->createMock(QueueConfigItemInterface::class);
+        $queue = $this->getMockForAbstractClass(QueueConfigItemInterface::class);
         $queue->expects($this->once())->method('getName')->willReturn('queue01');
         $queue->expects($this->once())->method('isDurable')->willReturn(true);
         $queue->expects($this->once())->method('isAutoDelete')->willReturn(false);

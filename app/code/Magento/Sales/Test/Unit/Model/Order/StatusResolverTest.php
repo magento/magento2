@@ -10,7 +10,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Config;
 use Magento\Sales\Model\Order\StatusResolver;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class StatusResolverTest extends \PHPUnit\Framework\TestCase
 {

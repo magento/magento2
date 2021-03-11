@@ -18,7 +18,7 @@ use Magento\Framework\Event\Config\Data;
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataContainerMock;
 
@@ -27,7 +27,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     protected $config;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dataContainerMock = $this->createPartialMock(\Magento\Framework\Event\Config\Data::class, ['get']);
         $this->config = new Config($this->dataContainerMock);
@@ -40,7 +40,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->dataContainerMock->expects($this->once())
             ->method('get')
             ->with($eventName, $this->equalTo([]))
-            ->will($this->returnValue($observers));
+            ->willReturn($observers);
 
         $result = $this->config->getObservers($eventName);
         $this->assertEquals($observers, $result);

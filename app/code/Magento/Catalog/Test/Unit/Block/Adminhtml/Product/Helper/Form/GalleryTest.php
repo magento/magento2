@@ -10,22 +10,22 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 class GalleryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registryMock;
 
     /**
-     * @var \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $gallery;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \Magento\Framework\Data\Form|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $formMock;
 
@@ -35,11 +35,11 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var DataPersistorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataPersistorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataPersistorMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
         $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getData']);

@@ -13,10 +13,10 @@ class ObjectRegistryTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\CatalogUrlRewrite\Model\ObjectRegistry */
     protected $objectRegistry;
 
-    /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject */
     protected $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->object = new \Magento\Framework\DataObject(['id' => 1]);
         $this->objectRegistry = (new ObjectManager($this))->getObject(
@@ -32,7 +32,7 @@ class ObjectRegistryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetNotExistObject()
     {
-        $this->assertEquals(null, $this->objectRegistry->get('no-id'));
+        $this->assertNull($this->objectRegistry->get('no-id'));
     }
 
     public function testGetList()

@@ -14,6 +14,7 @@ use Magento\Framework\Css\PreProcessor\Adapter\Less\Processor;
 
 /**
  * Class ProcessorTest
+ * Test for Processer
  */
 class ProcessorTest extends \PHPUnit\Framework\TestCase
 {
@@ -33,29 +34,29 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     private $processor;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|\PHPUnit\Framework\MockObject\MockObject
      */
     private $appStateMock;
 
     /**
-     * @var Source|\PHPUnit_Framework_MockObject_MockObject
+     * @var Source|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assetSourceMock;
 
     /**
-     * @var Temporary|\PHPUnit_Framework_MockObject_MockObject
+     * @var Temporary|\PHPUnit\Framework\MockObject\MockObject
      */
     private $temporaryFileMock;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->getMockForAbstractClass();
@@ -80,11 +81,12 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for processContent method (exception)
      *
-     * @expectedException \Magento\Framework\View\Asset\ContentProcessorException
-     * @expectedExceptionMessageRegExp (Test exception)
      */
     public function testProcessContentException()
     {
+        $this->expectException(\Magento\Framework\View\Asset\ContentProcessorException::class);
+        $this->expectExceptionMessageMatches('(Test exception)');
+
         $assetMock = $this->getAssetMock();
 
         $this->appStateMock->expects(self::once())
@@ -112,11 +114,12 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for processContent method (empty content)
      *
-     * @expectedException \Magento\Framework\View\Asset\ContentProcessorException
-     * @expectedExceptionMessageRegExp (Compilation from source: LESS file is empty: test-path)
      */
     public function testProcessContentEmpty()
     {
+        $this->expectException(\Magento\Framework\View\Asset\ContentProcessorException::class);
+        $this->expectExceptionMessageMatches('(Compilation from source: LESS file is empty: test-path)');
+
         $assetMock = $this->getAssetMock();
 
         $this->appStateMock->expects(self::once())
@@ -177,7 +180,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return File|\PHPUnit_Framework_MockObject_MockObject
+     * @return File|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getAssetMock()
     {

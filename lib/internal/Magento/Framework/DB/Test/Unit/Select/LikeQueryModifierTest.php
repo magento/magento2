@@ -13,7 +13,7 @@ class LikeQueryModifierTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManager */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
     }

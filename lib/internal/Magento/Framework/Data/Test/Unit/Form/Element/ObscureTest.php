@@ -18,7 +18,7 @@ class ObscureTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
         $collectionFactoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
@@ -52,9 +52,9 @@ class ObscureTest extends \PHPUnit\Framework\TestCase
     public function testGetEscapedValue()
     {
         $this->_model->setValue('Obscure Text');
-        $this->assertContains('value="******"', $this->_model->getElementHtml());
+        $this->assertStringContainsString('value="******"', $this->_model->getElementHtml());
         $this->_model->setValue('');
-        $this->assertContains('value=""', $this->_model->getElementHtml());
+        $this->assertStringContainsString('value=""', $this->_model->getElementHtml());
     }
 
     /**

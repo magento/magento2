@@ -15,59 +15,59 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  */
 class SaveDownloadableOrderItemObserverTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Model\Order */
     private $orderMock;
 
     /** @var SaveDownloadableOrderItemObserver */
     private $saveDownloadableOrderItemObserver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Config
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\Config
      */
     private $scopeConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Downloadable\Model\Link\PurchasedFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Downloadable\Model\Link\PurchasedFactory
      */
     private $purchasedFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Catalog\Model\ProductFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Catalog\Model\ProductFactory
      */
     private $productFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Downloadable\Model\Link\Purchased\ItemFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Downloadable\Model\Link\Purchased\ItemFactory
      */
     private $itemFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | CollectionFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject | CollectionFactory
      */
     private $itemsFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\DataObject\Copy
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\DataObject\Copy
      */
     private $objectCopyService;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\DataObject
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\DataObject
      */
     private $resultMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\DataObject
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\DataObject
      */
     private $storeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Event
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Event
      */
     private $eventMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Event\Observer
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Event\Observer
      */
     private $observerMock;
 
@@ -75,7 +75,7 @@ class SaveDownloadableOrderItemObserverTest extends \PHPUnit\Framework\TestCase
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config::class)
             ->disableOriginalConstructor()
@@ -335,7 +335,7 @@ class SaveDownloadableOrderItemObserverTest extends \PHPUnit\Framework\TestCase
      * @param $orderItemId
      * @param bool $isSaved
      * @param null|string $expectedStatus
-     * @return \Magento\Downloadable\Model\Link\Purchased\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Downloadable\Model\Link\Purchased\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createLinkItem($status, $orderItemId, $isSaved = false, $expectedStatus = null)
     {

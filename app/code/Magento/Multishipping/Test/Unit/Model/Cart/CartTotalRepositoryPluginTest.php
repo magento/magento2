@@ -14,11 +14,11 @@ class CartTotalRepositoryPluginTest extends \PHPUnit\Framework\TestCase
     private $modelRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteRepositoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->quoteRepositoryMock = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
         $this->modelRepository = new \Magento\Multishipping\Model\Cart\CartTotalRepositoryPlugin(

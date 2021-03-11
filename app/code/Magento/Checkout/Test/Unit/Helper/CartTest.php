@@ -15,32 +15,32 @@ use Magento\Quote\Model\Quote\Item;
 class CartTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $cartMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $checkoutSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Url\EncoderInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Url\EncoderInterface
      */
     protected $urlEncoder;
 
@@ -49,7 +49,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
      */
     protected $helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
@@ -86,9 +86,9 @@ class CartTest extends \PHPUnit\Framework\TestCase
     {
         $quoteItemId = 1;
         $quoteItemMock = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
-        $quoteItemMock->expects($this->any())->method('getId')->will($this->returnValue($quoteItemId));
+        $quoteItemMock->expects($this->any())->method('getId')->willReturn($quoteItemId);
         $currentUrl = 'http://www.example.com/';
-        $this->urlBuilderMock->expects($this->any())->method('getCurrentUrl')->will($this->returnValue($currentUrl));
+        $this->urlBuilderMock->expects($this->any())->method('getCurrentUrl')->willReturn($currentUrl);
         $params = [
             'id' => $quoteItemId,
             Action::PARAM_NAME_BASE64_URL => strtr(base64_encode($currentUrl), '+/=', '-_,'),
@@ -106,28 +106,28 @@ class CartTest extends \PHPUnit\Framework\TestCase
     public function testGetQuote()
     {
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
-        $this->checkoutSessionMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
+        $this->checkoutSessionMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
         $this->assertEquals($quoteMock, $this->helper->getQuote());
     }
 
     public function testGetItemsCount()
     {
         $itemsCount = 1;
-        $this->cartMock->expects($this->any())->method('getItemsCount')->will($this->returnValue($itemsCount));
+        $this->cartMock->expects($this->any())->method('getItemsCount')->willReturn($itemsCount);
         $this->assertEquals($itemsCount, $this->helper->getItemsCount());
     }
 
     public function testGetItemsQty()
     {
         $itemsQty = 1;
-        $this->cartMock->expects($this->any())->method('getItemsQty')->will($this->returnValue($itemsQty));
+        $this->cartMock->expects($this->any())->method('getItemsQty')->willReturn($itemsQty);
         $this->assertEquals($itemsQty, $this->helper->getItemsQty());
     }
 
     public function testGetSummaryCount()
     {
         $summaryQty = 1;
-        $this->cartMock->expects($this->any())->method('getSummaryQty')->will($this->returnValue($summaryQty));
+        $this->cartMock->expects($this->any())->method('getSummaryQty')->willReturn($summaryQty);
         $this->assertEquals($summaryQty, $this->helper->getSummaryCount());
     }
 
@@ -140,13 +140,13 @@ class CartTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Product::class,
             ['getEntityId', 'hasUrlDataObject', 'getUrlDataObject', '__wakeup']
         );
-        $productMock->expects($this->any())->method('getEntityId')->will($this->returnValue($productEntityId));
-        $productMock->expects($this->any())->method('hasUrlDataObject')->will($this->returnValue(true));
+        $productMock->expects($this->any())->method('getEntityId')->willReturn($productEntityId);
+        $productMock->expects($this->any())->method('hasUrlDataObject')->willReturn(true);
         $productMock->expects($this->any())->method('getUrlDataObject')
-            ->will($this->returnValue(new DataObject(['store_id' => $storeId])));
+            ->willReturn(new DataObject(['store_id' => $storeId]));
 
-        $this->requestMock->expects($this->any())->method('getRouteName')->will($this->returnValue('checkout'));
-        $this->requestMock->expects($this->any())->method('getControllerName')->will($this->returnValue('cart'));
+        $this->requestMock->expects($this->any())->method('getRouteName')->willReturn('checkout');
+        $this->requestMock->expects($this->any())->method('getControllerName')->willReturn('cart');
         $this->requestMock->expects($this->once())->method('isSecure')->willReturn($isRequestSecure);
 
         $params = [
@@ -167,8 +167,8 @@ class CartTest extends \PHPUnit\Framework\TestCase
     {
         $isVirtual = true;
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
-        $this->checkoutSessionMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
-        $quoteMock->expects($this->any())->method('isVirtual')->will($this->returnValue($isVirtual));
+        $this->checkoutSessionMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
+        $quoteMock->expects($this->any())->method('isVirtual')->willReturn($isVirtual);
         $this->assertEquals($isVirtual, $this->helper->getIsVirtualQuote());
     }
 
@@ -177,7 +177,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $storeId = 1;
         $this->scopeConfigMock->expects($this->once())->method('isSetFlag')
             ->with(Cart::XML_PATH_REDIRECT_TO_CART, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertTrue($this->helper->getShouldRedirectToCart($storeId));
     }
 
@@ -190,16 +190,16 @@ class CartTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Product::class,
             ['getEntityId', 'hasUrlDataObject', 'getUrlDataObject', '__wakeup']
         );
-        $productMock->expects($this->any())->method('getEntityId')->will($this->returnValue($productEntityId));
-        $productMock->expects($this->any())->method('hasUrlDataObject')->will($this->returnValue(true));
+        $productMock->expects($this->any())->method('getEntityId')->willReturn($productEntityId);
+        $productMock->expects($this->any())->method('hasUrlDataObject')->willReturn(true);
         $productMock->expects($this->any())->method('getUrlDataObject')
-            ->will($this->returnValue(new DataObject(['store_id' => $storeId])));
+            ->willReturn(new DataObject(['store_id' => $storeId]));
 
         $currentUrl = 'http://www.example.com/';
-        $this->urlBuilderMock->expects($this->any())->method('getCurrentUrl')->will($this->returnValue($currentUrl));
+        $this->urlBuilderMock->expects($this->any())->method('getCurrentUrl')->willReturn($currentUrl);
 
-        $this->requestMock->expects($this->any())->method('getRouteName')->will($this->returnValue('checkout'));
-        $this->requestMock->expects($this->any())->method('getControllerName')->will($this->returnValue('cart'));
+        $this->requestMock->expects($this->any())->method('getRouteName')->willReturn('checkout');
+        $this->requestMock->expects($this->any())->method('getControllerName')->willReturn('cart');
         $this->requestMock->expects($this->once())->method('isSecure')->willReturn($isRequestSecure);
 
         $params = [
@@ -231,19 +231,19 @@ class CartTest extends \PHPUnit\Framework\TestCase
 
         $item->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($id));
+            ->willReturn($id);
 
         $this->requestMock->expects($this->once())
             ->method('isAjax')
-            ->will($this->returnValue($isAjax));
+            ->willReturn($isAjax);
 
         $this->urlBuilderMock->expects($this->any())
             ->method('getCurrentUrl')
-            ->will($this->returnValue($url));
+            ->willReturn($url);
 
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
-            ->will($this->returnValue($url));
+            ->willReturn($url);
 
         $result = $this->helper->getDeletePostJson($item);
         $this->assertEquals($expectedPostData, $result);

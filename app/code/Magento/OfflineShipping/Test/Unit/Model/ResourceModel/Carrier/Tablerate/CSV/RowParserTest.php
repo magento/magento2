@@ -17,7 +17,7 @@ use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\LocationDirect
 class RowParserTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var  ColumnResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var  ColumnResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $columnResolverMock;
 
@@ -27,14 +27,14 @@ class RowParserTest extends \PHPUnit\Framework\TestCase
     private $rowParser;
 
     /**
-     * @var LocationDirectory|\PHPUnit_Framework_MockObject_MockObject
+     * @var LocationDirectory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $locationDirectoryMock;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->locationDirectoryMock = $this->getMockBuilder(LocationDirectory::class)
             ->setMethods(['hasCountryId', 'getCountryId', 'hasRegionId', 'getRegionIds'])
@@ -54,7 +54,7 @@ class RowParserTest extends \PHPUnit\Framework\TestCase
     public function testGetColumns()
     {
         $columns = $this->rowParser->getColumns();
-        $this->assertTrue(is_array($columns), 'Columns should be array, ' . gettype($columns) . ' given');
+        $this->assertIsArray($columns, 'Columns should be array, ' . gettype($columns) . ' given');
         $this->assertNotEmpty($columns);
     }
 
@@ -102,10 +102,11 @@ class RowParserTest extends \PHPUnit\Framework\TestCase
      * @param $expectedMessage
      * @throws null|RowException
      * @dataProvider parseWithExceptionDataProvider
-     * @expectedException \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\RowException
      */
     public function testParseWithException(array $rowData, $conditionFullName, array $columnValueMap, $expectedMessage)
     {
+        $this->expectException(\Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\RowException::class);
+
         $rowNumber = 120;
         $websiteId = 58;
         $conditionShortName = 'condition_short_name';

@@ -38,24 +38,24 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeResolver;
 
     /**
-     * @var ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $localeResolver;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfig;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->defaultTimeZone = date_default_timezone_get();
         date_default_timezone_set('UTC');
@@ -71,7 +71,7 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         date_default_timezone_set($this->defaultTimeZone);
     }
@@ -185,10 +185,8 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
             $this->scopeConfigWillReturnConfiguredTimezone($timezone);
 
             $this->assertEquals(
-                $expectedResult(),
-                $this->getTimezone()->date($date, null, true),
-                '',
-                1
+                $expectedResult()->format(\DateTime::ISO8601),
+                $this->getTimezone()->date($date)->setTimezone(new \DateTimeZone($timezone))->format(\DateTime::ISO8601)
             );
         }
     }
@@ -202,42 +200,42 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'now_datetime_utc' => [
-                function () {
+                function (): \DateTimeInterface {
                     return new \DateTime('now', new \DateTimeZone('UTC'));
                 },
                 'UTC',
                 null
             ],
             'fixed_datetime_utc' => [
-                function () {
+                function (): \DateTimeInterface {
                     return new \DateTime('2017-01-01 10:00:00', new \DateTimeZone('UTC'));
                 },
                 'UTC',
                 new \DateTime('2017-01-01 10:00:00')
             ],
             'now_datetime_vancouver' => [
-                function () {
+                function (): \DateTimeInterface {
                     return new \DateTime('now', new \DateTimeZone('America/Vancouver'));
                 },
                 'America/Vancouver',
                 null
             ],
             'now_datetimeimmutable_utc' => [
-                function () {
+                function (): \DateTimeInterface {
                     return new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
                 },
                 'UTC',
                 null
             ],
             'fixed_datetimeimmutable_utc' => [
-                function () {
+                function (): \DateTimeInterface {
                     return new \DateTime('2017-01-01 10:00:00', new \DateTimeZone('UTC'));
                 },
                 'UTC',
                 new \DateTimeImmutable('2017-01-01 10:00:00')
             ],
             'now_datetimeimmutable_vancouver' => [
-                function () {
+                function (): \DateTimeInterface {
                     return new \DateTimeImmutable('now', new \DateTimeZone('America/Vancouver'));
                 },
                 'America/Vancouver',
@@ -257,7 +255,7 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
             $this->createMock(DateTime::class),
             $this->scopeConfig,
             $this->scopeType,
-            $this->defaultTimezonePath
+            $this->defaultTimezonePath,
         );
     }
 

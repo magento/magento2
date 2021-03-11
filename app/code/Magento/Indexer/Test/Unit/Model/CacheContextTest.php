@@ -16,7 +16,7 @@ class CacheContextTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = new \Magento\Framework\Indexer\CacheContext();
     }

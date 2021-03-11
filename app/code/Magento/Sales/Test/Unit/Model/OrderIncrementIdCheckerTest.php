@@ -18,33 +18,33 @@ class OrderIncrementIdCheckerTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit\Framework\MockObject\MockObject
      */
     private $adapterMock;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
      */
     private $selectMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
-        $this->selectMock->expects($this->any())->method('from')->will($this->returnSelf());
+        $this->selectMock->expects($this->any())->method('from')->willReturnSelf();
         $this->selectMock->expects($this->any())->method('where');
 
         $this->adapterMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
-        $this->adapterMock->expects($this->any())->method('select')->will($this->returnValue($this->selectMock));
+        $this->adapterMock->expects($this->any())->method('select')->willReturn($this->selectMock);
 
         $this->resourceMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Order::class);
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->adapterMock);

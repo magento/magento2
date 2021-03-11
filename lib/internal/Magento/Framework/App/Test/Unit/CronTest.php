@@ -16,31 +16,31 @@ class CronTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_configScopeMock;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_stateMock;
 
     /**
-     * @var \Magento\Framework\App\Console\Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Console\Request|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_request;
 
     /**
-     * @var \Magento\Framework\App\Console\Response|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Console\Response|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_responseMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_stateMock = $this->createMock(\Magento\Framework\App\State::class);
         $this->_request = $this->createMock(\Magento\Framework\App\Console\Request::class);
@@ -57,7 +57,7 @@ class CronTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function prepareAreaListMock()
     {
@@ -82,10 +82,10 @@ class CronTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [\Magento\Framework\ObjectManager\ConfigLoaderInterface::class, $configLoader],
                 [\Magento\Framework\Event\ManagerInterface::class, $eventManagerMock]
-            ]));
+            ]);
         $crontabConfig = ['config'];
         $configLoader->expects($this->once())
             ->method('load')

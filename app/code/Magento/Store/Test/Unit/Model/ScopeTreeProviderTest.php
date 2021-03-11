@@ -30,25 +30,25 @@ class ScopeTreeProviderTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|WebsiteRepositoryInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|WebsiteRepositoryInterface
      */
     private $websiteRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|GroupRepositoryInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|GroupRepositoryInterface
      */
     private $groupRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|StoreRepositoryInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|StoreRepositoryInterface
      */
     private $storeRepositoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->websiteRepositoryMock = $this->createMock(WebsiteRepositoryInterface::class);
-        $this->groupRepositoryMock = $this->createMock(GroupRepositoryInterface::class);
-        $this->storeRepositoryMock = $this->createMock(StoreRepositoryInterface::class);
+        $this->websiteRepositoryMock = $this->getMockForAbstractClass(WebsiteRepositoryInterface::class);
+        $this->groupRepositoryMock = $this->getMockForAbstractClass(GroupRepositoryInterface::class);
+        $this->storeRepositoryMock = $this->getMockForAbstractClass(StoreRepositoryInterface::class);
 
         $this->model = new ScopeTreeProvider(
             $this->websiteRepositoryMock,
@@ -83,7 +83,7 @@ class ScopeTreeProviderTest extends \PHPUnit\Framework\TestCase
             'scopes' => [$websiteData],
         ];
 
-        $websiteMock = $this->createMock(WebsiteInterface::class);
+        $websiteMock = $this->getMockForAbstractClass(WebsiteInterface::class);
         $websiteMock->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($websiteId);
@@ -91,7 +91,7 @@ class ScopeTreeProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getList')
             ->willReturn([$websiteMock]);
 
-        $groupMock = $this->createMock(GroupInterface::class);
+        $groupMock = $this->getMockForAbstractClass(GroupInterface::class);
         $groupMock->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($groupId);
@@ -102,7 +102,7 @@ class ScopeTreeProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getList')
             ->willReturn([$groupMock, $groupMock]);
 
-        $storeMock = $this->createMock(StoreInterface::class);
+        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
         $storeMock->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($storeId);

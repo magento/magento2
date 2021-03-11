@@ -20,7 +20,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
      */
     protected $observer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->observer = new Observer();
     }
@@ -31,7 +31,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         $eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getName']);
         $eventMock->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue($eventName));
+            ->willReturn($eventName);
         $this->observer->setData('event_name', $eventName);
         $this->assertTrue($this->observer->isValidFor($eventMock));
     }
@@ -103,11 +103,11 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         $callbackMock = [$this->createPartialMock(\stdClass::class, [$callbackName]), $callbackName];
         $callbackMock[0]->expects($this->once())
             ->method('testCallback')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getName']);
         $eventMock->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue($eventName));
+            ->willReturn($eventName);
         $this->observer->setData('event_name', $eventName);
         $this->observer->setData('callback', $callbackMock);
 
@@ -121,7 +121,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         $eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getName']);
         $eventMock->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue($eventName));
+            ->willReturn($eventName);
         $this->observer->setData('event_name', $notValidName);
 
         $this->observer->dispatch($eventMock);

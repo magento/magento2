@@ -7,7 +7,7 @@
 namespace Magento\CatalogSearch\Test\Unit\Model\Layer\Filter;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Test for \Magento\CatalogSearch\Model\Layer\Filter\Decimal
@@ -43,7 +43,7 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Eav\Model\Entity\Attribute|MockObject */
     private $attribute;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
@@ -69,10 +69,10 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->filterItem->expects($this->any())
             ->method($this->anything())
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->filterItemFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->filterItem));
+            ->willReturn($this->filterItem);
 
         $this->fulltextCollection = $this->fulltextCollection = $this->getMockBuilder(
             \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection::class
@@ -82,7 +82,7 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
 
         $this->layer->expects($this->any())
             ->method('getProductCollection')
-            ->will($this->returnValue($this->fulltextCollection));
+            ->willReturn($this->fulltextCollection);
 
         $filterDecimalFactory =
             $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Layer\Filter\DecimalFactory::class)
@@ -95,7 +95,7 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $filterDecimalFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($resource));
+            ->willReturn($resource);
 
         $this->attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
             ->disableOriginalConstructor()
@@ -108,7 +108,7 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->layer->expects($this->any())
             ->method('getState')
-            ->will($this->returnValue($this->state));
+            ->willReturn($this->state);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(
@@ -139,8 +139,8 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->at(0))
             ->method('getParam')
             ->with($requestField)
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($field) use ($requestField, $idField, $requestValue, $idValue) {
                         switch ($field) {
                             case $requestField:
@@ -149,7 +149,7 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
                                 return $idValue;
                         }
                     }
-                )
+                
             );
 
         $result = $this->target->apply($this->request);
@@ -185,24 +185,24 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
         $this->target->setRequestVar($requestVar);
         $this->request->expects($this->exactly(1))
             ->method('getParam')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($field) use ($requestVar, $filter) {
                         $this->assertTrue(in_array($field, [$requestVar, 'id']));
                         return $filter;
                     }
-                )
+                
             );
 
         $attributeCode = 'AttributeCode';
         $this->attribute->expects($this->any())
             ->method('getAttributeCode')
-            ->will($this->returnValue($attributeCode));
+            ->willReturn($attributeCode);
 
         $this->fulltextCollection->expects($this->once())
             ->method('addFieldToFilter')
             ->with($attributeCode)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->target->apply($this->request);
     }

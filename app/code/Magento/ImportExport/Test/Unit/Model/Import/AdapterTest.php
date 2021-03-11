@@ -10,11 +10,11 @@ use Magento\ImportExport\Model\Import\Adapter as Adapter;
 class AdapterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Adapter|\PHPUnit_Framework_MockObject_MockObject
+     * @var Adapter|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $adapter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->adapter = $this->createMock(\Magento\ImportExport\Model\Import\Adapter::class);
     }

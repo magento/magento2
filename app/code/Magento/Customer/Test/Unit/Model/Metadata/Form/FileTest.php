@@ -64,7 +64,7 @@ class FileTest extends AbstractFormTestCase
      */
     private $fileProcessorFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->urlEncode = $this->getMockBuilder(EncoderInterface::class)

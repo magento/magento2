@@ -30,56 +30,56 @@ class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Vat |\PHPUnit_Framework_MockObject_MockObject
+     * @var Vat |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $vat;
 
     /**
-     * @var HelperAddress |\PHPUnit_Framework_MockObject_MockObject
+     * @var HelperAddress |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperAddress;
 
     /**
-     * @var Registry |\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registry;
 
     /**
-     * @var GroupManagementInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupManagementInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $groupManagement;
 
     /**
-     * @var ScopeConfigInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfig;
 
     /**
-     * @var ManagerInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageManager;
 
     /**
-     * @var Escaper |\PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $escaper;
 
     /**
-     * @var AppState |\PHPUnit_Framework_MockObject_MockObject
+     * @var AppState |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $appState;
 
     /**
-     * @var \Magento\Customer\Model\Customer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Customer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerMock;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSessionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->vat = $this->getMockBuilder(\Magento\Customer\Model\Vat::class)
             ->disableOriginalConstructor()

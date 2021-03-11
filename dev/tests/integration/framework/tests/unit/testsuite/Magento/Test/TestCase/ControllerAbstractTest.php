@@ -16,26 +16,26 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
 {
     protected $_bootstrap;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Message\Manager */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Message\Manager */
     private $messageManager;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | InterpretationStrategyInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | InterpretationStrategyInterface */
     private $interpretationStrategyMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | CookieManagerInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | CookieManagerInterface */
     private $cookieManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Serialize\Serializer\Json
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Serialize\Serializer\Json
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $testObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->messageManager = $this->createMock(\Magento\Framework\Message\Manager::class);
-        $this->cookieManagerMock = $this->createMock(CookieManagerInterface::class);
+        $this->cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
         $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -44,7 +44,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
                 return json_decode($serializedData, true);
             }
         );
-        $this->interpretationStrategyMock = $this->createMock(InterpretationStrategyInterface::class);
+        $this->interpretationStrategyMock = $this->getMockForAbstractClass(InterpretationStrategyInterface::class);
         $this->interpretationStrategyMock->expects($this->any())
             ->method('interpret')
             ->willReturnCallback(
@@ -119,11 +119,9 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
         $this->fail('Failed response body validation');
     }
 
-    /**
-     * @expectedException \PHPUnit\Framework\AssertionFailedError
-     */
     public function testAssertRedirectFailure()
     {
+        $this->expectException(\PHPUnit\Framework\AssertionFailedError::class);
         $this->assertRedirect();
     }
 
@@ -151,7 +149,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     public function testAssertSessionMessagesSuccess(array $expectedMessages, $messageTypeFilter)
     {
         $this->addSessionMessages();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\PHPUnit\Framework\Constraint\Constraint $constraint */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\PHPUnit\Framework\Constraint\Constraint $constraint */
         $constraint =
             $this->createPartialMock(\PHPUnit\Framework\Constraint\Constraint::class, ['toString', 'matches']);
         $constraint->expects(

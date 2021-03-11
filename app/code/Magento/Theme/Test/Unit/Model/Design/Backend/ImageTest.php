@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\Theme\Test\Unit\Model\Design\Backend;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\Io\File as IoFile;
 use Magento\Theme\Model\Design\Backend\Image;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
@@ -32,7 +33,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->ioFileSystem = $this->getMockObject(IoFile::class);
         $this->tmpDirectory = $this->getMockObject(ReadFactory::class);
@@ -46,7 +47,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->imageBackend);
     }
@@ -68,12 +69,12 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test for beforeSave method with invalid file extension.
-     *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid file provided.
      */
     public function testBeforeSaveWithInvalidExtensionFile()
     {
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('Invalid file provided.');
+
         $invalidFileName = 'fileName.invalidExtension';
         $this->imageBackend->setData(
             [

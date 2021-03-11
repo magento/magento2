@@ -38,7 +38,7 @@ abstract class AbstractItemTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->blockRendererItem = $this->objectManager->get(LayoutInterface::class)->createBlock(RendererItem::class);

@@ -14,7 +14,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
      */
     protected $renderer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

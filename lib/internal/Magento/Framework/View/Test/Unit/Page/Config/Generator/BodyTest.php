@@ -21,11 +21,11 @@ class BodyTest extends \PHPUnit\Framework\TestCase
     protected $bodyGenerator;
 
     /**
-     * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->pageConfigMock = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
             ->disableOriginalConstructor()
@@ -60,7 +60,7 @@ class BodyTest extends \PHPUnit\Framework\TestCase
         $bodyClasses = ['class_1', 'class--2'];
         $structureMock->expects($this->once())
             ->method('getBodyClasses')
-            ->will($this->returnValue($bodyClasses));
+            ->willReturn($bodyClasses);
         $this->pageConfigMock->expects($this->exactly(2))
             ->method('addBodyClass')
             ->withConsecutive(['class_1'], ['class--2']);

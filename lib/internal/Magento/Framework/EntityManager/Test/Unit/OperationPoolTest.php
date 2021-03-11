@@ -13,7 +13,7 @@ class OperationPoolTest extends TestCase
 {
     public function testGetOperationUsesDefaultValueForEntityThatDoesNotProvideCustomMapping()
     {
-        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $operationPool = new OperationPool(
             $objectManagerMock,
             []
@@ -28,7 +28,7 @@ class OperationPoolTest extends TestCase
     public function testGetOperationUsesOverriddenDefaultValueForEntityThatDoesNotProvideCustomMapping()
     {
         $customReadOperation = 'CustomReadOperation';
-        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $operationPool = new OperationPool(
             $objectManagerMock,
             [

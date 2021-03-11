@@ -17,26 +17,26 @@ class GridTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\RequestInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\RequestInterface
      */
     protected $request;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResponseInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ResponseInterface
      */
     protected $response;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ViewInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ViewInterface
      */
     protected $view;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\App\Action\Context
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\App\Action\Context
      */
     protected $context;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -55,13 +55,13 @@ class GridTest extends \PHPUnit\Framework\TestCase
 
         $this->context->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->request));
+            ->willReturn($this->request);
         $this->context->expects($this->any())
             ->method('getResponse')
-            ->will($this->returnValue($this->response));
+            ->willReturn($this->response);
         $this->context->expects($this->any())
             ->method('getView')
-            ->will($this->returnValue($this->view));
+            ->willReturn($this->view);
 
         $this->controller = $this->objectManagerHelper->getObject(
             \Magento\Bundle\Controller\Adminhtml\Bundle\Selection\Grid::class,
@@ -92,11 +92,12 @@ class GridTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid parameter "index"
      */
     public function testExecuteWithException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid parameter "index"');
+
         $this->request->expects($this->once())->method('getParam')->with('index')->willReturn('<index"');
 
         $this->controller->execute();

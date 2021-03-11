@@ -8,11 +8,12 @@ namespace Magento\Framework\DB\Test\Unit\Sql;
 class LimitExpressionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @expectedException \Zend_Db_Adapter_Exception
-     * @expectedExceptionMessage LIMIT argument count=0 is not valid
      */
     public function testToStringExceptionCount()
     {
+        $this->expectException(\Zend_Db_Adapter_Exception::class);
+        $this->expectExceptionMessage('LIMIT argument count=0 is not valid');
+
         $sql = 'test sql';
         $count = 0;
         $model = new \Magento\Framework\DB\Sql\LimitExpression($sql, $count);
@@ -20,11 +21,12 @@ class LimitExpressionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Zend_Db_Adapter_Exception
-     * @expectedExceptionMessage LIMIT argument offset=-1 is not valid
      */
     public function testToStringExceptionOffset()
     {
+        $this->expectException(\Zend_Db_Adapter_Exception::class);
+        $this->expectExceptionMessage('LIMIT argument offset=-1 is not valid');
+
         $sql = 'test sql';
         $count = 1;
         $offset = -1;

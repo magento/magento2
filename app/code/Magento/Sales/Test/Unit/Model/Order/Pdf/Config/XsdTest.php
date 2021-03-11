@@ -19,14 +19,14 @@ class XsdTest extends \PHPUnit\Framework\TestCase
      */
     protected static $_schemaFilePath;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         self::$_schemaPath = $urnResolver->getRealPath('urn:magento:module:Magento_Sales:etc/pdf.xsd');
         self::$_schemaFilePath = $urnResolver->getRealPath('urn:magento:module:Magento_Sales:etc/pdf_file.xsd');
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!function_exists('libxml_set_external_entity_loader')) {
             $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');

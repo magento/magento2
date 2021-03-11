@@ -17,7 +17,7 @@ class RegisterLinkTest extends \PHPUnit\Framework\TestCase
      */
     protected $_objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
@@ -40,7 +40,7 @@ class RegisterLinkTest extends \PHPUnit\Framework\TestCase
         $httpContext->expects($this->any())
             ->method('getValue')
             ->with(Context::CONTEXT_AUTH)
-            ->will($this->returnValue($isAuthenticated));
+            ->willReturn($isAuthenticated);
 
         $registrationMock = $this->getMockBuilder(\Magento\Customer\Model\Registration::class)
             ->disableOriginalConstructor()
@@ -48,7 +48,7 @@ class RegisterLinkTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $registrationMock->expects($this->any())
             ->method('isAllowed')
-            ->will($this->returnValue($isRegistrationAllowed));
+            ->willReturn($isRegistrationAllowed);
 
         /** @var \Magento\Customer\Block\Account\RegisterLink $link */
         $link = $this->_objectManager->getObject(
@@ -85,7 +85,7 @@ class RegisterLinkTest extends \PHPUnit\Framework\TestCase
             ['getRegisterUrl']
         )->getMock();
 
-        $helper->expects($this->any())->method('getRegisterUrl')->will($this->returnValue('register url'));
+        $helper->expects($this->any())->method('getRegisterUrl')->willReturn('register url');
 
         $context = $this->_objectManager->getObject(\Magento\Framework\View\Element\Template\Context::class);
 

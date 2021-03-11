@@ -9,20 +9,20 @@ namespace Magento\Webapi\Test\Unit\Model\Soap;
 
 class WsdlFactoryTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_objectManagerMock;
 
     /** @var \Magento\Webapi\Model\Soap\WsdlFactory */
     protected $_soapWsdlFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_soapWsdlFactory = new \Magento\Webapi\Model\Soap\WsdlFactory($this->_objectManagerMock);
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_objectManagerMock);
         unset($this->_soapWsdlFactory);

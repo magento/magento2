@@ -11,17 +11,17 @@ use Magento\Store\Model\Store;
 class AdminPathConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $coreConfig;
 
     /**
-     * @var \Magento\Backend\App\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\App\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $backendConfig;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $url;
 
@@ -30,7 +30,7 @@ class AdminPathConfigTest extends \PHPUnit\Framework\TestCase
      */
     protected $adminPathConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->coreConfig = $this->getMockForAbstractClass(
             \Magento\Framework\App\Config\ScopeConfigInterface::class,

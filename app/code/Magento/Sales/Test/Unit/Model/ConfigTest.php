@@ -13,16 +13,16 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $configDataMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $stateMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configDataMock = $this->getMockBuilder(\Magento\Sales\Model\Config\Data::class)
             ->disableOriginalConstructor()
@@ -50,11 +50,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
         $this->stateMock->expects($this->once())
             ->method('getAreaCode')
-            ->will($this->returnValue($areaCode));
+            ->willReturn($areaCode);
         $this->configDataMock->expects($this->once())
             ->method('get')
             ->with($this->equalTo($path))
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $result = $this->model->getTotalsRenderer($section, $group, $code);
         $this->assertEquals($expected, $result);
@@ -70,7 +70,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->configDataMock->expects($this->once())
             ->method('get')
             ->with($this->equalTo($path))
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $result = $this->model->getGroupTotals($section, $group);
         $this->assertEquals($expected, $result);
@@ -83,7 +83,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->configDataMock->expects($this->once())
             ->method('get')
             ->with($this->equalTo('order/available_product_types'))
-            ->will($this->returnValue($productTypes));
+            ->willReturn($productTypes);
         $result = $this->model->getAvailableProductTypes();
         $this->assertEquals($productTypes, $result);
     }

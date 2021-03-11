@@ -18,7 +18,7 @@ class AmountDataBuilderTest extends TestCase
      */
     private $builder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->builder = new AmountDataBuilder(
             new SubjectReader()

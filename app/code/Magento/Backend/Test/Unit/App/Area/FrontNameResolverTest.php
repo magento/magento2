@@ -19,22 +19,22 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\App\Config
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\App\Config
      */
     protected $configMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Zend\Uri\Uri
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Zend\Uri\Uri
      */
     protected $uri;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Request\Http
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Request\Http
      */
     protected $request;
 
@@ -43,14 +43,14 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
      */
     protected $_defaultFrontName = 'defaultFrontName';
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|DeploymentConfig $deploymentConfigMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|DeploymentConfig $deploymentConfigMock */
         $deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $deploymentConfigMock->expects($this->once())
             ->method('get')
             ->with(ConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME)
-            ->will($this->returnValue($this->_defaultFrontName));
+            ->willReturn($this->_defaultFrontName);
         $this->uri = $this->createMock(\Zend\Uri\Uri::class);
 
         $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
@@ -74,8 +74,8 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             'admin/url/use_custom_path'
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
         $this->configMock->expects(
             $this->at(1)
@@ -83,8 +83,8 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             'admin/url/custom_path'
-        )->will(
-            $this->returnValue('expectedValue')
+        )->willReturn(
+            'expectedValue'
         );
         $this->assertEquals('expectedValue', $this->model->getFrontName());
     }
@@ -97,8 +97,8 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             'admin/url/use_custom_path'
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
         $this->assertEquals($this->_defaultFrontName, $this->model->getFrontName());
     }
@@ -115,29 +115,27 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
     {
         $this->scopeConfigMock->expects($this->exactly(2))
             ->method('getValue')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                [
+                    [Store::XML_PATH_UNSECURE_BASE_URL, ScopeInterface::SCOPE_STORE, null, $url],
                     [
-                        [Store::XML_PATH_UNSECURE_BASE_URL, ScopeInterface::SCOPE_STORE, null, $url],
-                        [
-                            FrontNameResolver::XML_PATH_USE_CUSTOM_ADMIN_URL,
-                            ScopeInterface::SCOPE_STORE,
-                            null,
-                            $useCustomAdminUrl
-                        ],
-                        [
-                            FrontNameResolver::XML_PATH_CUSTOM_ADMIN_URL,
-                            ScopeInterface::SCOPE_STORE,
-                            null,
-                            $customAdminUrl
-                        ],
-                    ]
-                )
+                        FrontNameResolver::XML_PATH_USE_CUSTOM_ADMIN_URL,
+                        ScopeInterface::SCOPE_STORE,
+                        null,
+                        $useCustomAdminUrl
+                    ],
+                    [
+                        FrontNameResolver::XML_PATH_CUSTOM_ADMIN_URL,
+                        ScopeInterface::SCOPE_STORE,
+                        null,
+                        $customAdminUrl
+                    ],
+                ]
             );
 
         $this->request->expects($this->any())
             ->method('getServer')
-            ->will($this->returnValue($host));
+            ->willReturn($host);
 
         $urlParts = [];
         $this->uri->expects($this->once())

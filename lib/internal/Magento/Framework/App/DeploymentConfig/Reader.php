@@ -100,6 +100,7 @@ class Reader
         if ($fileKey) {
             $filePath = $path . '/' . $this->configFilePool->getPath($fileKey);
             if ($fileDriver->isExists($filePath)) {
+                $this->refreshCache($filePath);
                 $result = include $filePath;
                 if (!is_array($result)) {
                     throw new RuntimeException(new Phrase("Invalid configuration file: '%1'", [$filePath]));
@@ -109,6 +110,7 @@ class Reader
             $configFiles = $this->getFiles();
             foreach ($configFiles as $file) {
                 $configFile = $path . '/' . $file;
+                $this->refreshCache($configFile);
                 if ($fileDriver->isExists($configFile)) {
                     $fileData = include $configFile;
                     if (!is_array($fileData)) {
@@ -140,5 +142,18 @@ class Reader
     public function loadConfigFile($fileKey, $pathConfig, $ignoreInitialConfigFiles = false)
     {
         return $this->load($fileKey);
+    }
+
+    /**
+     * Invalidate cache
+     *
+     * @param string $filePath
+     */
+    private function refreshCache(string $filePath): void
+    {
+        if (function_exists('opcache_invalidate')
+            && filter_var(ini_get('opcache.enable'), FILTER_VALIDATE_BOOLEAN)) {
+            opcache_invalidate($filePath);
+        }
     }
 }

@@ -11,26 +11,26 @@ namespace Magento\Framework\Data\Test\Unit\Form\Element;
 class AbstractElementTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Data\Form\Element\AbstractElement|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\Element\AbstractElement|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\Element\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_factoryMock;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\Element\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_collectionFactoryMock;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_escaperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_factoryMock =
@@ -66,7 +66,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
         );
         $elementMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($elementId));
+            ->willReturn($elementId);
 
         $formMock = $this->createPartialMock(
             \Magento\Framework\Data\Form\AbstractForm::class,
@@ -83,7 +83,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
 
         $this->_collectionFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($collectionMock));
+            ->willReturn($collectionMock);
 
         $this->_model->setForm($formMock);
         $this->_model->addElement($elementMock);
@@ -104,10 +104,10 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
         );
         $formMock->expects($this->any())
             ->method('getHtmlIdPrefix')
-            ->will($this->returnValue($htmlIdPrefix));
+            ->willReturn($htmlIdPrefix);
         $formMock->expects($this->any())
             ->method('getHtmlIdSuffix')
-            ->will($this->returnValue($htmlIdSuffix));
+            ->willReturn($htmlIdSuffix);
 
         $this->_model->setId($htmlId);
         $this->_model->setForm($formMock);
@@ -125,7 +125,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
         );
         $formMock->expects($this->any())
             ->method('getFieldNameSuffix')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $formMock->expects($this->never())
             ->method('addSuffixToName');
 
@@ -146,10 +146,10 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
         );
         $formMock->expects($this->once())
             ->method('getFieldNameSuffix')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $formMock->expects($this->once())
             ->method('addSuffixToName')
-            ->will($this->returnValue($returnValue));
+            ->willReturn($returnValue);
 
         $this->_model->setForm($formMock);
 
@@ -175,7 +175,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
 
         $this->_collectionFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($collectionMock));
+            ->willReturn($collectionMock);
 
         $this->_model->setForm($formMock);
         $this->_model->removeField($elementId);
@@ -260,7 +260,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
         $filterMock->expects($this->once())
             ->method('filter')
             ->with($value)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->_model->setValueFilter($filterMock);
         $this->_model->setValue($value);
@@ -347,7 +347,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
         $rendererMock->expects($this->once())
             ->method('render')
             ->with($this->_model)
-            ->will($this->returnValue($expectedHtml));
+            ->willReturn($expectedHtml);
         $this->_model->setRenderer($rendererMock);
 
         $this->assertEquals($expectedHtml, $this->_model->getHtml());
@@ -408,7 +408,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
         );
         $formMock->expects($this->once())
             ->method('getFieldContainerIdPrefix')
-            ->will($this->returnValue($prefix));
+            ->willReturn($prefix);
 
         $this->_model->setId($id);
         $this->_model->setForm($formMock);

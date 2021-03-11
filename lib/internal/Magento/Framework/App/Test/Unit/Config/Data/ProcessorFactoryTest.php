@@ -22,7 +22,7 @@ class ProcessorFactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new \Magento\Framework\App\Config\Data\ProcessorFactory($this->_objectManager);
@@ -42,8 +42,8 @@ class ProcessorFactoryTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             \Magento\Framework\App\Config\Data\TestBackendModel::class
-        )->will(
-            $this->returnValue($this->_processorMock)
+        )->willReturn(
+            $this->_processorMock
         );
 
         $this->assertInstanceOf(
@@ -54,20 +54,21 @@ class ProcessorFactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Framework\App\Config\Data\ProcessorFactory::get
-     * @expectedException \InvalidArgumentException
      */
     public function testGetModelWithWrongInterface()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->_objectManager->expects(
             $this->once()
         )->method(
             'create'
         )->with(
             \Magento\Framework\App\Config\Data\WrongBackendModel::class
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 $this->getMockBuilder('WrongBackendModel')->getMock()
-            )
+            
         );
 
         $this->_model->get(\Magento\Framework\App\Config\Data\WrongBackendModel::class);
@@ -84,8 +85,8 @@ class ProcessorFactoryTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             \Magento\Framework\App\Config\Data\TestBackendModel::class
-        )->will(
-            $this->returnValue($this->_processorMock)
+        )->willReturn(
+            $this->_processorMock
         );
 
         $this->_model->get(\Magento\Framework\App\Config\Data\TestBackendModel::class);

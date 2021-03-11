@@ -23,31 +23,31 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $moduleManagerMock;
 
     /**
-     * @var GroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $groupRepositoryMock;
 
     /**
-     * @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $searchCriteriaBuilderMock;
 
     /**
-     * @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteria|\PHPUnit\Framework\MockObject\MockObject
      */
     private $searchCriteriaMock;
 
     /**
-     * @var GroupSearchResultsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupSearchResultsInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $searchResultMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->moduleManagerMock = $this->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
@@ -108,7 +108,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($customerGroups, $actualCustomerGroups);
 
         foreach ($actualCustomerGroups as $actualCustomerGroup) {
-            $this->assertInternalType('string', $actualCustomerGroup['value']);
+            $this->assertIsString($actualCustomerGroup['value']);
         }
     }
 }

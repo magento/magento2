@@ -12,7 +12,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $factory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->factory = $objectManagerHelper->getObject(\Magento\Setup\Module\I18n\Factory::class);

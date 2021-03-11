@@ -38,7 +38,7 @@ class ProductTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('Randomly fails due to known HHVM bug (DOMText mixed with DOMElement)');
@@ -91,16 +91,16 @@ class ProductTest extends AbstractController
 
         $responseBody = $this->getResponse()->getBody();
         /* Product info */
-        $this->assertContains($product->getName(), $responseBody);
-        $this->assertContains($product->getDescription(), $responseBody);
-        $this->assertContains($product->getShortDescription(), $responseBody);
-        $this->assertContains($product->getSku(), $responseBody);
+        $this->assertStringContainsString($product->getName(), $responseBody);
+        $this->assertStringContainsString($product->getDescription(), $responseBody);
+        $this->assertStringContainsString($product->getShortDescription(), $responseBody);
+        $this->assertStringContainsString($product->getSku(), $responseBody);
         /* Stock info */
-        $this->assertContains('$1,234.56', $responseBody);
-        $this->assertContains('In stock', $responseBody);
-        $this->assertContains((string)__('Add to Cart'), $responseBody);
+        $this->assertStringContainsString('$1,234.56', $responseBody);
+        $this->assertStringContainsString('In stock', $responseBody);
+        $this->assertStringContainsString((string)__('Add to Cart'), $responseBody);
         /* Meta info */
-        $this->assertContains('<title>Simple Product 1 Meta Title</title>', $responseBody);
+        $this->assertStringContainsString('<title>Simple Product 1 Meta Title</title>', $responseBody);
         $this->assertEquals(
             1,
             Xpath::getElementsCountForXpath(
@@ -164,8 +164,8 @@ class ProductTest extends AbstractController
         $product = $this->productRepository->get('simple_product_1');
         $this->dispatch(sprintf('catalog/product/gallery/id/%s', $product->getEntityId()));
 
-        $this->assertContains('http://localhost/pub/media/catalog/product/', $this->getResponse()->getBody());
-        $this->assertContains($this->getProductImageFile(), $this->getResponse()->getBody());
+        $this->assertStringContainsString('http://localhost/pub/media/catalog/product/', $this->getResponse()->getBody());
+        $this->assertStringContainsString($this->getProductImageFile(), $this->getResponse()->getBody());
     }
 
     /**

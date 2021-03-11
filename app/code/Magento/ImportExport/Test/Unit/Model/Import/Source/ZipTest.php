@@ -9,16 +9,16 @@ namespace Magento\ImportExport\Test\Unit\Model\Import\Source;
 class ZipTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directory;
 
     /**
-     * @var \Magento\ImportExport\Model\Import\Source\Zip|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Import\Source\Zip|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $zip;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->directory = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\Write::class)
             ->disableOriginalConstructor()

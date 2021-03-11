@@ -12,7 +12,7 @@ class ConfigsApplyFixtureTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Fixtures\FixtureModel
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Fixtures\FixtureModel
      */
     private $fixtureModelMock;
 
@@ -21,7 +21,7 @@ class ConfigsApplyFixtureTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->fixtureModelMock = $this->createMock(\Magento\Setup\Fixtures\FixtureModel::class);
 
@@ -46,10 +46,10 @@ class ConfigsApplyFixtureTest extends \PHPUnit\Framework\TestCase
         $this->fixtureModelMock
             ->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue(['config' => $valueMock]));
+            ->willReturn(['config' => $valueMock]);
         $this->fixtureModelMock
             ->method('getObjectManager')
-            ->will($this->returnValue($objectManagerMock));
+            ->willReturn($objectManagerMock);
 
         $cacheMock->method('clean');
         $configMock->method('clean');
@@ -72,7 +72,7 @@ class ConfigsApplyFixtureTest extends \PHPUnit\Framework\TestCase
         $this->fixtureModelMock
             ->expects($this->never())
             ->method('getObjectManager')
-            ->will($this->returnValue($objectManagerMock));
+            ->willReturn($objectManagerMock);
         $this->fixtureModelMock
             ->expects($this->once())
             ->method('getValue')

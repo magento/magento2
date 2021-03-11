@@ -12,22 +12,22 @@ use Magento\Sales\Model\CronJob\CleanExpiredOrders;
 class CleanExpiredOrdersTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storesConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderCollectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $orderManagementMock;
 
@@ -41,7 +41,7 @@ class CleanExpiredOrdersTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storesConfigMock = $this->createMock(\Magento\Store\Model\StoresConfig::class);
         $this->collectionFactoryMock = $this->createPartialMock(
@@ -85,11 +85,12 @@ class CleanExpiredOrdersTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Error500
      */
     public function testExecuteWithException()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Error500');
+
         $schedule = [
             1 => 20,
         ];

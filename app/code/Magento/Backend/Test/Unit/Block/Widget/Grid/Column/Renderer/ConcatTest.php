@@ -15,7 +15,7 @@ class ConcatTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Backend\Block\Widget\Grid\Column\Renderer\Concat */
     protected $renderer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->renderer = $this->objectManagerHelper->getObject(
@@ -43,10 +43,10 @@ class ConcatTest extends \PHPUnit\Framework\TestCase
         $column = $this->createPartialMock(\Magento\Backend\Block\Widget\Grid\Column::class, [$method, 'getSeparator']);
         $column->expects($this->any())
             ->method('getSeparator')
-            ->will($this->returnValue('-'));
+            ->willReturn('-');
         $column->expects($this->any())
             ->method($method)
-            ->will($this->returnValue($getters));
+            ->willReturn($getters);
         if ($method == 'getGetter') {
             $column->expects($this->any())
                 ->method('getGetter')

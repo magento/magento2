@@ -23,32 +23,32 @@ use Magento\Newsletter\Model\SubscriberFactory;
 class ProblemTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $registryMock;
 
     /**
-     * @var SubscriberFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubscriberFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subscriberFactoryMock;
 
     /**
-     * @var Subscriber|\PHPUnit_Framework_MockObject_MockObject
+     * @var Subscriber|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subscriberMock;
 
     /**
-     * @var ProblemResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProblemResource|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceModelMock;
 
     /**
-     * @var AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractDb|\PHPUnit\Framework\MockObject\MockObject
      */
     private $abstractDbMock;
 
@@ -65,7 +65,7 @@ class ProblemTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()

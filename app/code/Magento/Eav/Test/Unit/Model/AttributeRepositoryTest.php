@@ -18,37 +18,37 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eavConfig;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eavResource;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeCollectionFactory;
 
     /**
-     * @var AttributeSearchResultsInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeSearchResultsInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $searchResultsFactory;
 
     /**
-     * @var \Magento\Eav\Model\Entity\AttributeFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Entity\AttributeFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeFactory;
 
     /**
-     * @var JoinProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var JoinProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $joinProcessor;
 
     /**
-     * @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionProcessor;
 
@@ -57,7 +57,7 @@ class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eavConfig = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
             ->disableOriginalConstructor()
@@ -99,11 +99,12 @@ class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage "entity_type_code" is required. Enter and try again.
      */
     public function testGetListInputException()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('"entity_type_code" is required. Enter and try again.');
+
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
             ->getMockForAbstractClass();
 
@@ -220,14 +221,14 @@ class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock
-     * @param \PHPUnit_Framework_MockObject_MockObject $attributeMock
+     * @param \PHPUnit\Framework\MockObject\MockObject $searchCriteriaMock
+     * @param \PHPUnit\Framework\MockObject\MockObject $attributeMock
      * @param int $collectionSize
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function createSearchResultsMock($searchCriteriaMock, $attributeMock, $collectionSize)
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject $searchResultsMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $searchResultsMock */
         $searchResultsMock = $this->getMockBuilder(\Magento\Eav\Api\Data\AttributeSearchResultsInterface::class)
             ->getMockForAbstractClass();
 
@@ -250,11 +251,11 @@ class AttributeRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $attributeCode
      * @param int $attributeId
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function createAttributeMock($attributeCode, $attributeId)
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject $attributeMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $attributeMock */
         $attributeMock = $this->getMockBuilder(\Magento\Eav\Api\Data\AttributeInterface::class)
             ->setMethods([
                 'getAttributeCode',

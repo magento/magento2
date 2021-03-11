@@ -16,27 +16,27 @@ use Magento\Theme\Model\Theme\Registration;
 class ImporterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ThemeFilesystemCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ThemeFilesystemCollection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $themeFilesystemCollectionMock;
 
     /**
-     * @var ThemeDbCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ThemeDbCollection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $themeDbCollectionMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $themecollectionFactoryMock;
 
     /**
-     * @var Registration|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registration|\PHPUnit\Framework\MockObject\MockObject
      */
     private $themeRegistrationMock;
 
     /**
-     * @var ThemeResourceModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var ThemeResourceModel|\PHPUnit\Framework\MockObject\MockObject
      */
     private $themeResourceModelMock;
 
@@ -45,7 +45,7 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
      */
     private $importer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->themeFilesystemCollectionMock = $this->getMockBuilder(ThemeFilesystemCollection::class)
             ->disableOriginalConstructor()
@@ -73,11 +73,12 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
-     * @expectedExceptionMessage Some error
      */
     public function testImportWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\State\InvalidTransitionException::class);
+        $this->expectExceptionMessage('Some error');
+
         $this->themeRegistrationMock->expects($this->once())
             ->method('register')
             ->willThrowException(new \Exception('Some error'));
@@ -87,21 +88,21 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
 
     public function testImport()
     {
-        /** @var Data|\PHPUnit_Framework_MockObject_MockObject $firstThemeMock */
+        /** @var Data|\PHPUnit\Framework\MockObject\MockObject $firstThemeMock */
         $firstThemeMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
         $firstThemeMock->expects($this->atLeastOnce())
             ->method('getFullPath')
             ->willReturn('frontend/Magento/luma');
-        /** @var Data|\PHPUnit_Framework_MockObject_MockObject $secondThemeMock */
+        /** @var Data|\PHPUnit\Framework\MockObject\MockObject $secondThemeMock */
         $secondThemeMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
         $secondThemeMock->expects($this->once())
             ->method('getFullPath')
             ->willReturn('frontend/Magento/blank');
-        /** @var Data|\PHPUnit_Framework_MockObject_MockObject $thirdThemeMock */
+        /** @var Data|\PHPUnit\Framework\MockObject\MockObject $thirdThemeMock */
         $thirdThemeMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -160,7 +161,7 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
     {
         $themes = [];
         foreach ($inDb as $themePath) {
-            /** @var Data|\PHPUnit_Framework_MockObject_MockObject $themeMock */
+            /** @var Data|\PHPUnit\Framework\MockObject\MockObject $themeMock */
             $themeMock = $this->getMockBuilder(Data::class)
                 ->disableOriginalConstructor()
                 ->getMock();

@@ -16,14 +16,14 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
      */
     protected $_response;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** Initialize SUT. */
         $this->_response = new \Magento\Framework\Webapi\Response();
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_response);
         parent::tearDown();

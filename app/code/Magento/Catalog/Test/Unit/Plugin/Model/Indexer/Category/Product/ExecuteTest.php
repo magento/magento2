@@ -13,13 +13,13 @@ class ExecuteTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Catalog\Plugin\Model\Indexer\Category\Product\Execute */
     protected $execute;
 
-    /** @var \Magento\PageCache\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\PageCache\Model\Config|\PHPUnit\Framework\MockObject\MockObject */
     protected $config;
 
-    /** @var \Magento\Framework\App\Cache\TypeListInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Cache\TypeListInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $typeList;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->getMockBuilder(\Magento\PageCache\Model\Config::class)
             ->disableOriginalConstructor()

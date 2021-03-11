@@ -9,17 +9,17 @@ namespace Magento\Integration\Test\Unit\Block\Adminhtml\Widget\Grid\Column\Rende
 class LinkTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Backend\Block\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Block\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $escaperMock;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderMock;
 
@@ -33,7 +33,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
      */
     protected $linkRenderer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
         $this->escaperMock->expects($this->any())->method('escapeHtml')->willReturnArgument(0);
@@ -43,10 +43,10 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             \Magento\Backend\Block\Context::class,
             ['getEscaper', 'getUrlBuilder']
         );
-        $this->contextMock->expects($this->any())->method('getEscaper')->will($this->returnValue($this->escaperMock));
+        $this->contextMock->expects($this->any())->method('getEscaper')->willReturn($this->escaperMock);
         $this->contextMock->expects($this->any())
             ->method('getUrlBuilder')
-            ->will($this->returnValue($this->urlBuilderMock));
+            ->willReturn($this->urlBuilderMock);
 
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->linkRenderer = $this->objectManagerHelper->getObject(
@@ -67,7 +67,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $column->expects($this->any())
             ->method('getCaption')
-            ->will($this->returnValue('Link Caption'));
+            ->willReturn('Link Caption');
         $column->expects($this->any())
             ->method('getId')
             ->willReturn('1');

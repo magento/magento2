@@ -12,12 +12,12 @@ namespace Magento\MysqlMq\Test\Unit\Model\Driver\Bulk;
 class ExchangeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\MessageQueue\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageQueueConfig;
 
     /**
-     * @var \Magento\MysqlMq\Model\QueueManagement|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MysqlMq\Model\QueueManagement|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queueManagement;
 
@@ -26,7 +26,7 @@ class ExchangeTest extends \PHPUnit\Framework\TestCase
      */
     private $exchange;
     /**
-     * @var \Magento\MysqlMq\Model\ConnectionTypeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MysqlMq\Model\ConnectionTypeResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connnectionTypeResolver;
 
@@ -35,7 +35,7 @@ class ExchangeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->messageQueueConfig = $this->getMockBuilder(
             \Magento\Framework\MessageQueue\Topology\ConfigInterface::class

@@ -13,12 +13,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class WidgetTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Widget\Model\Config\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Widget\Model\Config\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataStorageMock;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $escaperMock;
 
@@ -35,7 +35,7 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dataStorageMock = $this->getMockBuilder(\Magento\Widget\Model\Config\Data::class)
             ->disableOriginalConstructor()
@@ -220,10 +220,10 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
             \Magento\CatalogWidget\Block\Product\ProductsList::class,
             $params
         );
-        $this->assertContains('{{widget type="Magento\CatalogWidget\Block\Product\ProductsList"', $result);
-        $this->assertContains('title="my &quot;widget&quot;"', $result);
-        $this->assertContains('conditions_encoded="encoded-conditions-string"', $result);
-        $this->assertContains('page_var_name="pasdf"', $result);
+        $this->assertStringContainsString('{{widget type="Magento\CatalogWidget\Block\Product\ProductsList"', $result);
+        $this->assertStringContainsString('title="my &quot;widget&quot;"', $result);
+        $this->assertStringContainsString('conditions_encoded="encoded-conditions-string"', $result);
+        $this->assertStringContainsString('page_var_name="pasdf"', $result);
     }
 
     /**
@@ -272,8 +272,8 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
             \Magento\CatalogWidget\Block\Product\ProductsList::class,
             $params
         );
-        $this->assertContains('{{widget type="Magento\CatalogWidget\Block\Product\ProductsList"', $result);
-        $this->assertContains('page_var_name="pasdf"', $result);
-        $this->assertContains('products_count=""', $result);
+        $this->assertStringContainsString('{{widget type="Magento\CatalogWidget\Block\Product\ProductsList"', $result);
+        $this->assertStringContainsString('page_var_name="pasdf"', $result);
+        $this->assertStringContainsString('products_count=""', $result);
     }
 }

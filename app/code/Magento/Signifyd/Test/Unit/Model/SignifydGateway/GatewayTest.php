@@ -9,7 +9,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Magento\Signifyd\Model\SignifydGateway\Gateway;
 use Magento\Signifyd\Model\SignifydGateway\GatewayException;
 use Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilderInterface;
@@ -43,7 +43,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
      */
     private $caseRepository;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->createCaseBuilder = $this->getMockBuilder(CreateCaseBuilderInterface::class)
             ->getMockForAbstractClass();
@@ -366,11 +366,12 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
      * Checks a case when API request returns unexpected guarantee disposition.
      *
      * @covers \Magento\Signifyd\Model\SignifydGateway\Gateway::cancelGuarantee
-     * @expectedException \Magento\Signifyd\Model\SignifydGateway\GatewayException
-     * @expectedExceptionMessage API returned unexpected disposition: DECLINED.
      */
     public function testCancelGuaranteeWithUnexpectedDisposition()
     {
+        $this->expectException(\Magento\Signifyd\Model\SignifydGateway\GatewayException::class);
+        $this->expectExceptionMessage('API returned unexpected disposition: DECLINED.');
+
         $caseId = 123;
         $dummyStoreId = 1;
 
@@ -415,7 +416,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
     {
         $orderEntity = $this->getMockBuilder(OrderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $orderEntity->method('getStoreId')
             ->willReturn($storeId);
         $this->orderRepository->method('get')
@@ -436,7 +437,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
 
         $caseEntity = $this->getMockBuilder(CaseInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $caseEntity->method('getOrderId')
             ->willReturn($orderId);
         $this->caseRepository->method('getByCaseId')

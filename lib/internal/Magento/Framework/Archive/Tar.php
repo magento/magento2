@@ -16,7 +16,7 @@ use Magento\Framework\Archive\Helper\File;
 class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento\Framework\Archive\ArchiveInterface
 {
     /**
-     * Tar block size
+     * Tar block size in bytes
      *
      * @const int
      */
@@ -85,8 +85,8 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      */
     protected static function _getFormatParseHeader()
     {
-        return 'a100name/a8mode/a8uid/a8gid/a12size/a12mtime/a8checksum/a1type/a100symlink/a6magic/a2version/' .
-            'a32uname/a32gname/a8devmajor/a8devminor/a155prefix/a12closer';
+        return 'Z100name/Z8mode/Z8uid/Z8gid/Z12size/Z12mtime/Z8checksum/Z1type/Z100symlink/Z6magic/Z2version/' .
+            'Z32uname/Z32gname/Z8devmajor/Z8devminor/Z155prefix/Z12closer';
     }
 
     /**
@@ -447,12 +447,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
 
         $header = unpack(self::_getFormatParseHeader(), $headerBlock);
 
-        $header['mode'] = octdec($header['mode']);
-        $header['uid'] = octdec($header['uid']);
-        $header['gid'] = octdec($header['gid']);
-        $header['size'] = octdec($header['size']);
-        $header['mtime'] = octdec($header['mtime']);
-        $header['checksum'] = octdec($header['checksum']);
+        $header = $this->convertOctToDec($header);
 
         if ($header['type'] == "5") {
             $header['size'] = 0;
@@ -484,6 +479,23 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
         }
 
         return false;
+    }
+
+    /**
+     * Converts octal numbers to decimal ones for specific header types.
+     *
+     * @param array $header
+     * @return array
+     */
+    private function convertOctToDec(array $header): array
+    {
+        $typesToConvert = ['mode', 'uid', 'gid', 'size', 'mtime', 'checksum'];
+        foreach ($typesToConvert as $type) {
+            $octNum = preg_replace('/[^0-7]/', '', $header[$type]);
+            $header[$type] = octdec($octNum);
+        }
+
+        return $header;
     }
 
     /**

@@ -15,17 +15,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ThemeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var RuleInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RuleInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $ruleMock;
 
     /**
-     * @var ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ComponentRegistrarInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $componentRegistrarMock;
 
     /**
-     * @var DirectoryList|\PHPUnit_Framework_MockObject_MockObject
+     * @var DirectoryList|\PHPUnit\Framework\MockObject\MockObject
      */
     private $directoryListMock;
 
@@ -34,7 +34,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->ruleMock = $this->getMockForAbstractClass(RuleInterface::class);
         $this->componentRegistrarMock = $this->getMockForAbstractClass(ComponentRegistrarInterface::class);
@@ -50,11 +50,12 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Parameter "theme" should be specified and should implement the theme interface
      */
     public function testGetPatternDirsException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Parameter "theme" should be specified and should implement the theme interface');
+
         $this->model->getPatternDirs([]);
     }
 

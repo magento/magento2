@@ -23,24 +23,24 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
     protected $quoteValidator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Quote\Model\Quote
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Quote\Model\Quote
      */
     protected $quoteMock;
 
     /**
-     * @var AllowedCountries|\PHPUnit_Framework_MockObject_MockObject
+     * @var AllowedCountries|\PHPUnit\Framework\MockObject\MockObject
      */
     private $allowedCountryReader;
 
     /**
-     * @var OrderAmountValidationMessage|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderAmountValidationMessage|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderAmountValidationMessage;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->allowedCountryReader = $this->getMockBuilder(AllowedCountries::class)
             ->disableOriginalConstructor()
@@ -75,7 +75,7 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->quoteMock->expects($this->once())
             ->method('getHasError')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->quoteMock->expects($this->never())
             ->method('setHasError');

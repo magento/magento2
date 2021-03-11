@@ -14,12 +14,12 @@ class MatrixTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->objectManagerHelper);
     }
@@ -52,7 +52,7 @@ class MatrixTest extends \PHPUnit\Framework\TestCase
             ->with($baseCurrencies, $allowCurrencies)
             ->willReturn($currencyRates);
 
-        /** @var $layoutMock \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $layoutMock \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject */
         $layoutMock = $this->getMockForAbstractClass(
             \Magento\Framework\View\LayoutInterface::class,
             [],

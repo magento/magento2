@@ -30,9 +30,9 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
             $containers[] = $block['container_name'];
         }
 
-        $this->assertContains('sidebar.main', $containers);
-        $this->assertContains('content', $containers);
-        $this->assertContains('sidebar.additional', $containers);
+        $this->assertContains('sidebar.main',$containers);
+        $this->assertContains('content',$containers);
+        $this->assertContains('sidebar.additional',$containers);
 
         // Verify that the correct id (code) is found for this widget instance type.
         $code = $model->setType($type)->getWidgetReference('type', $type, 'code');

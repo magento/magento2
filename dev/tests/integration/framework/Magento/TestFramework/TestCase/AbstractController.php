@@ -18,6 +18,8 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\Response\Http as HttpResponse;
 
 /**
+ * Set of methods useful for performing requests to Controllers.
+ *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -64,7 +66,7 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
     /**
      * Bootstrap application before any test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_assertSessionErrors = false;
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -75,7 +77,7 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_request = null;
         $this->_response = null;
@@ -85,7 +87,7 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
     /**
      * Ensure that there were no error messages displayed on the admin panel
      */
-    protected function assertPostConditions()
+    protected function assertPostConditions(): void
     {
         if ($this->_assertSessionErrors) {
             // equalTo() is intentionally used instead of isEmpty() to provide the informative diff
@@ -107,7 +109,7 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
         $request = $this->getRequest();
         $request->setRequestUri($uri);
         if ($request->isPost()
-            && !array_key_exists('form_key', $request->getPost())
+            && !property_exists($request->getPost(), 'form_key')
         ) {
             /** @var FormKey $formKey */
             $formKey = $this->_objectManager->get(FormKey::class);
@@ -148,7 +150,7 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
     public function assert404NotFound()
     {
         $this->assertEquals('noroute', $this->getRequest()->getControllerName());
-        $this->assertContains('404 Not Found', $this->getResponse()->getBody());
+        $this->assertStringContainsString('404 Not Found', $this->getResponse()->getBody());
     }
 
     /**

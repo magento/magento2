@@ -34,7 +34,7 @@ class UpdateQuoteStoreTest extends \PHPUnit\Framework\TestCase
      */
     private $quoteRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = BootstrapHelper::getObjectManager();
         $this->quoteRepository = $this->objectManager->create(CartRepositoryInterface::class);

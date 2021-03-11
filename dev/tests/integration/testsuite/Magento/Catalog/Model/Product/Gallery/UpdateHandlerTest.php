@@ -87,7 +87,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fileName = 'image.txt';
         $this->objectManager = Bootstrap::getObjectManager();
@@ -148,7 +148,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $this->updateHandler->execute($product);
         $productImages = $this->galleryResource->loadProductGalleryByAttributeId($product, $this->mediaAttributeId);
         $updatedImage = reset($productImages);
-        $this->assertTrue(is_array($updatedImage));
+        $this->assertIsArray($updatedImage);
         $this->assertEquals('New image', $updatedImage['label']);
         $this->assertEquals('New image', $updatedImage['label_default']);
         $this->assertEquals('1', $updatedImage['disabled']);
@@ -291,7 +291,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $this->updateHandler->execute($product);
         $productImages = $this->galleryResource->loadProductGalleryByAttributeId($product, $this->mediaAttributeId);
         $this->assertCount(0, $productImages);
-        $this->assertFileNotExists(
+        $this->assertFileDoesNotExist(
             $this->mediaDirectory->getAbsolutePath($this->config->getBaseMediaPath() . $image)
         );
         $defaultImages = $this->productResource->getAttributeRawValue(
@@ -359,7 +359,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->mediaDirectory->getDriver()->deleteFile($this->mediaDirectory->getAbsolutePath($this->fileName));
