@@ -8,12 +8,15 @@ declare(strict_types=1);
 namespace Magento\SalesGraphQl\Model\Resolver;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\SalesGraphQl\Model\Formatter\Order as OrderFormatter;
 use Magento\SalesGraphQl\Model\Resolver\CustomerOrders\Query\OrderFilter;
@@ -45,21 +48,29 @@ class CustomerOrders implements ResolverInterface
     private $orderFormatter;
 
     /**
+     * @var SortOrderBuilder
+     */
+    private $sortOrderBuilder;
+
+    /**
      * @param OrderRepositoryInterface $orderRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param OrderFilter $orderFilter
      * @param OrderFormatter $orderFormatter
+     * @param SortOrderBuilder $sortOrderBuilder
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         OrderFilter $orderFilter,
-        OrderFormatter $orderFormatter
+        OrderFormatter $orderFormatter,
+        SortOrderBuilder $sortOrderBuilder
     ) {
         $this->orderRepository = $orderRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->orderFilter = $orderFilter;
         $this->orderFormatter = $orderFormatter;
+        $this->sortOrderBuilder = $sortOrderBuilder;
     }
 
     /**
@@ -126,6 +137,23 @@ class CustomerOrders implements ResolverInterface
         if (isset($args['pageSize'])) {
             $this->searchCriteriaBuilder->setPageSize($args['pageSize']);
         }
+        $this->addDefaultSortOrder($this->searchCriteriaBuilder);
+
         return $this->orderRepository->getList($this->searchCriteriaBuilder->create());
+    }
+
+    /**
+     * Sort by created_at DESC by default
+     *
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     */
+    private function addDefaultSortOrder(SearchCriteriaBuilder $searchCriteriaBuilder): void
+    {
+        $defaultSortOrders[] = $this->sortOrderBuilder
+            ->setField(OrderInterface::CREATED_AT)
+            ->setDirection(SortOrder::SORT_DESC)
+            ->create();
+
+        $searchCriteriaBuilder->setSortOrders($defaultSortOrders);
     }
 }
