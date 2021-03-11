@@ -31,7 +31,7 @@ define(['squire', 'ko', 'jquery', 'jquery/validate'], function (Squire, ko, $) {
                         'getCheckedEmailValue'
                     ]
                 ),
-                'Magento_Checkout/js/model/full-screen-loader': jasmine.createSpy(),
+                'Magento_Checkout/js/model/full-screen-loader': jasmine.createSpy()
             },
             Component;
 
@@ -73,6 +73,7 @@ define(['squire', 'ko', 'jquery', 'jquery/validate'], function (Squire, ko, $) {
             it('Check if login form will be validated in case it is not visible', function () {
                 var loginFormSelector = 'form[data-role=email-with-possible-login]',
                     loginForm = $(loginFormSelector);
+
                 loginForm.hide();
                 Component.validateEmail();
                 expect(loginForm.is(':visible')).toBeFalsy();
