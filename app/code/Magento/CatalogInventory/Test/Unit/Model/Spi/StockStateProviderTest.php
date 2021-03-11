@@ -21,6 +21,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * Unit tests for \Magento\CatalogInventory\Model\StockStateProvider class.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StockStateProviderTest extends TestCase
@@ -115,6 +117,9 @@ class StockStateProviderTest extends TestCase
         'getProductName',
     ];
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -383,7 +388,7 @@ class StockStateProviderTest extends TestCase
                     'suggestQty' => 51,
                     'getStockQty' => $stockQty,
                     'checkQtyIncrements' => false,
-                    'checkQuoteItemQty' => false,
+                    'checkQuoteItemQty' => true,
                 ],
             ],
             [
@@ -411,7 +416,7 @@ class StockStateProviderTest extends TestCase
                     'getStockQty' => $stockQty,
                     'checkQtyIncrements' => false,
                     'checkQuoteItemQty' => true,
-                ]
+                ],
             ],
             [
                 'values' => [
@@ -438,8 +443,8 @@ class StockStateProviderTest extends TestCase
                     'getStockQty' => null,
                     'checkQtyIncrements' => false,
                     'checkQuoteItemQty' => true,
-                ]
-            ]
+                ],
+            ],
         ];
     }
 
