@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace Zend\Mvc\Controller;
 
 use Interop\Container\ContainerInterface;
-use Laminas\Console\Adapter\AdapterInterface as ConsoleAdapterInterface;
 use Laminas\Filter\FilterPluginManager;
 use Laminas\Hydrator\HydratorPluginManager;
 use Laminas\InputFilter\InputFilterPluginManager;
@@ -88,7 +87,6 @@ class LazyControllerAbstractFactory implements AbstractFactoryInterface
      * @var string[]
      */
     protected $aliases = [
-        ConsoleAdapterInterface::class  => 'ConsoleAdapter',
         FilterPluginManager::class      => 'FilterManager',
         HydratorPluginManager::class    => 'HydratorManager',
         InputFilterPluginManager::class => 'InputFilterManager',
