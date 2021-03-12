@@ -1228,6 +1228,7 @@
                 "console",
                 "laminas"
             ],
+            "abandoned": "laminas/laminas-cli",
             "time": "2019-12-31T16:31:45+00:00"
         },
         {
@@ -7763,16 +7764,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "3.3.0",
+            "version": "3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "ea93feb4da34749f40bb74b780ca4fb47508a35e"
+                "reference": "edd12c0dfef32fb9fc969c18a1d468b655d73bd6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/ea93feb4da34749f40bb74b780ca4fb47508a35e",
-                "reference": "ea93feb4da34749f40bb74b780ca4fb47508a35e",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/edd12c0dfef32fb9fc969c18a1d468b655d73bd6",
+                "reference": "edd12c0dfef32fb9fc969c18a1d468b655d73bd6",
                 "shasum": ""
             },
             "require": {
@@ -7782,7 +7783,7 @@
                 "codeception/module-asserts": "^1.1",
                 "codeception/module-sequence": "^1.0",
                 "codeception/module-webdriver": "^1.0",
-                "composer/composer": "^1.9",
+                "composer/composer": "^1.9||^2.0",
                 "csharpru/vault-php": "^4.1.0",
                 "csharpru/vault-php-guzzle6-transport": "^2.0",
                 "ext-curl": "*",
@@ -7851,7 +7852,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2021-02-15T21:57:12+00:00"
+            "time": "2021-03-10T21:07:00+00:00"
         },
         {
             "name": "mikey179/vfsstream",
@@ -11140,5 +11141,6 @@
         "ext-zip": "*",
         "lib-libxml": "*"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }
