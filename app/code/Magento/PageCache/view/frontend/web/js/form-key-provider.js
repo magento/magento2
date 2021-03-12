@@ -19,7 +19,7 @@ define(function () {
                 secure,
                 date = new Date(),
                 cookiesConfig = window.cookiesConfig || {},
-                isSecure = !!cookiesConfig.secure;
+                isSecure = !!cookiesConfig.secure,
                 samesite = cookiesConfig.samesite || 'lax';
 
             date.setTime(date.getTime() + 86400000);
