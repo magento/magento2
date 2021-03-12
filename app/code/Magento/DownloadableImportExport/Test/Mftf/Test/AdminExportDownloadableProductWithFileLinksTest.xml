@@ -15,7 +15,7 @@
             <title value="Export Downloadable Products with File Links"/>
             <description value="Verifies that a user can export a Downloadable product with downloadable and sample file
             links. Verifies that the exported file and the downloadable copy of the exported file contain the expected
-            product (a filter is applied when exporting such that ONLY the downloadable product should be in the
+            product (a filter is applied when exporting such that ONLY the downloadable product row should be in the
             export), the correct downloadable link with files, and the correct downloadable sample links with files.
             Note that MFTF cannot simply download a file and have access to it due to the test not having access to the
             server that is running the test browser. Therefore, this test verifies that the Download button can be

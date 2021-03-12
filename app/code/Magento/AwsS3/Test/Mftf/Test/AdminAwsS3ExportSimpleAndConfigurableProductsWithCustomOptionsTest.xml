@@ -15,12 +15,12 @@
             <title value="S3 - Export Simple and Configurable Products with Custom Options"/>
             <description value="Verifies that a user can export a Configurable product with child simple products with
             custom options. Verifies that the exported file and the downloadable copy of the exported file contain the
-            expected product (a filter is applied when exporting such that ONLY the configurable product should be in
-            the export). Note that MFTF cannot simply download a file and have access to it due to the test not having
-            access to the server that is running the test browser. Therefore, this test verifies that the Download
-            button can be successfully clicked, grabs the request URL from the Download button, executes the request on
-            the magento machine via a curl request, and verifies the contents of the downloaded file. Uses S3 for the
-            file system."/>
+            expected product (a filter is applied when exporting such that ONLY the configurable product row should be
+            in the export). Note that MFTF cannot simply download a file and have access to it due to the test not
+            having access to the server that is running the test browser. Therefore, this test verifies that the
+            Download button can be successfully clicked, grabs the request URL from the Download button, executes the
+            request on the magento machine via a curl request, and verifies the contents of the downloaded file. Uses
+            S3 for the file system."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-38558"/>
             <group value="importExport"/>
@@ -41,7 +41,7 @@
             <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage" after="logout"/>
         </after>
 
-        <!-- Validate Export File on S3 -->
+        <!-- Validate Export File on S3: Product with Custom Options -->
         <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileExists" stepKey="assertExportFileExists">
             <argument name="filePath">import_export/export/{$grabNameFile}</argument>
         </helper>

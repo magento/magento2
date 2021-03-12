@@ -40,7 +40,7 @@
             <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage" after="logout"/>
         </after>
 
-        <!-- Validate Export File on S3 -->
+        <!-- Validate Export File on S3: Grouped Product with Special Price  -->
         <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileExists" stepKey="assertExportFileExists">
             <argument name="filePath">import_export/export/{$grabNameFile}</argument>
         </helper>

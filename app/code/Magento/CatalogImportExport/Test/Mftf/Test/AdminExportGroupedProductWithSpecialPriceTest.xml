@@ -85,7 +85,7 @@
         <waitForElementVisible selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="waitForFileName"/>
         <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
 
-        <!-- Validate Export File on File System -->
+        <!-- Validate Export File on File System: Grouped Product with Special Price -->
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileExists" stepKey="assertExportFileExists">
             <argument name="filePath">var/export/{$grabNameFile}</argument>
         </helper>
@@ -115,9 +115,9 @@
             <argument name="fileName" value="{$grabNameFile}"/>
         </actionGroup>
 
-        <!-- Validate Downloaded Export File -->
+        <!-- Validate Downloaded Export File: Grouped Product with Special Price -->
         <grabAttributeFrom userInput="href" selector="{{AdminExportAttributeSection.download('0')}}" stepKey="grabExportUrl"/>
-        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsFirstSimpleProductc">
+        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsFirstSimpleProduct">
             <argument name="url">{$grabExportUrl}</argument>
             <argument name="expectedString">$$createFirstSimpleProduct.name$$</argument>
         </helper>

@@ -15,11 +15,11 @@
             <title value="Export Simple and Configurable Products with Custom Options"/>
             <description value="Verifies that a user can export a Configurable product with child simple products with
             custom options. Verifies that the exported file and the downloadable copy of the exported file contain the
-            expected product (a filter is applied when exporting such that ONLY the configurable product should be in
-            the export). Note that MFTF cannot simply download a file and have access to it due to the test not having
-            access to the server that is running the test browser. Therefore, this test verifies that the Download
-            button can be successfully clicked, grabs the request URL from the Download button, executes the request on
-            the magento machine via a curl request, and verifies the contents of the downloaded file."/>
+            expected product (a filter is applied when exporting such that ONLY the configurable product row should be
+            in the export). Note that MFTF cannot simply download a file and have access to it due to the test not
+            having access to the server that is running the test browser. Therefore, this test verifies that the
+            Download button can be successfully clicked, grabs the request URL from the Download button, executes the
+            request on the magento machine via a curl request, and verifies the contents of the downloaded file."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14005"/>
             <group value="catalog_import_export"/>
@@ -116,7 +116,7 @@
         <waitForElementVisible selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="waitForFileName"/>
         <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
 
-        <!-- Validate Export File on File System -->
+        <!-- Validate Export File on File System: Product with Custom Options -->
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileExists" stepKey="assertExportFileExists">
             <argument name="filePath">var/export/{$grabNameFile}</argument>
         </helper>
@@ -146,7 +146,7 @@
             <argument name="fileName" value="{$grabNameFile}"/>
         </actionGroup>
 
-        <!-- Validate Downloaded Export File -->
+        <!-- Validate Downloaded Export File: Product with Custom Options -->
         <grabAttributeFrom userInput="href" selector="{{AdminExportAttributeSection.download('0')}}" stepKey="grabExportUrl"/>
         <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsConfigurableProduct">
             <argument name="url">{$grabExportUrl}</argument>
