@@ -49,7 +49,6 @@ class DatabaseTest extends TestCase
 
     protected function setUp(): void
     {
-        set_error_handler(null);
         $this->dbStorageFactoryMock = $this->getMockBuilder(
             DatabaseFactory::class
         )->disableOriginalConstructor()
@@ -519,10 +518,5 @@ class DatabaseTest extends TestCase
 
         $this->assertEquals('media-dir', $this->helper->getMediaBaseDir());
         $this->assertEquals('media-dir', $this->helper->getMediaBaseDir());
-    }
-
-    protected function tearDown(): void
-    {
-        restore_error_handler();
     }
 }
