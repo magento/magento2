@@ -127,8 +127,9 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
                     'cacheable' => false,
                     'after' => '-',
                     'form_id' => CaptchaPaymentProcessingRateLimiter::CAPTCHA_FORM,
-                    'image_width' => 230,
-                    'image_height' => 230
+                    'img_width' => 230,
+                    'img_height' => 50,
+                    'frontend_validation' => false
                 ]
             );
         }
