@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontCustomWelcomeMessageActionGroup">
+        <annotations>
+            <description>Validates that the custom Welcome message is present on storefront header.</description>
+        </annotations>
+        <arguments>
+            <argument name="customMessage" type="string" defaultValue="Welcome to &quot;Food &amp; Drinks&quot; store"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="waitForWelcomeMessage"/>
+        <see userInput="{{customMessage}}" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="verifyCustomMessage"/>
+    </actionGroup>
+</actionGroups>

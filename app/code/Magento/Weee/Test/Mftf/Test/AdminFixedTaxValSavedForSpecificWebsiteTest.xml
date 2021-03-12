@@ -51,9 +51,7 @@
             <!--Set catalog price scope to Global-->
             <comment userInput="Set catalog price scope to Global" stepKey="commentSetPriceScope"/>
             <magentoCLI command="config:set catalog/price/scope 0" stepKey="setPriceScopeGlobal"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value="catalog_product_price"/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
             <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
                 <argument name="tags" value=""/>
             </actionGroup>
@@ -101,9 +99,7 @@
         <!--Set catalog price scope to Website-->
         <comment userInput="Set catalog price scope to Website" stepKey="commentSetPriceScope"/>
         <magentoCLI command="config:set catalog/price/scope 1" stepKey="setPriceScopeWebsite"/>
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value="catalog_product_price"/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
             <argument name="tags" value=""/>
         </actionGroup>

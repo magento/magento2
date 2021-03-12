@@ -226,7 +226,10 @@ class FrontControllerTest extends TestCase
         $this->routerList->expects($this->any())
             ->method('current')
             ->willReturn($this->router);
-
+        $this->appStateMock->expects($this->any())->method('getAreaCode')->willReturn('frontend');
+        $this->areaMock->expects($this->at(0))->method('load')->with(Area::PART_DESIGN)->willReturnSelf();
+        $this->areaMock->expects($this->at(1))->method('load')->with(Area::PART_TRANSLATE)->willReturnSelf();
+        $this->areaListMock->expects($this->any())->method('getArea')->willReturn($this->areaMock);
         $this->request->expects($this->at(0))->method('isDispatched')->willReturn(false);
         $this->request->expects($this->at(1))->method('setDispatched')->with(true);
         $this->request->expects($this->at(2))->method('isDispatched')->willReturn(true);
@@ -261,6 +264,10 @@ class FrontControllerTest extends TestCase
             ->method('current')
             ->willReturn($this->router);
 
+        $this->appStateMock->expects($this->any())->method('getAreaCode')->willReturn('frontend');
+        $this->areaMock->expects($this->at(0))->method('load')->with(Area::PART_DESIGN)->willReturnSelf();
+        $this->areaMock->expects($this->at(1))->method('load')->with(Area::PART_TRANSLATE)->willReturnSelf();
+        $this->areaListMock->expects($this->any())->method('getArea')->willReturn($this->areaMock);
         $this->request->expects($this->at(0))->method('isDispatched')->willReturn(false);
         $this->request->expects($this->at(1))->method('initForward');
         $this->request->expects($this->at(2))->method('setActionName')->with('noroute');
