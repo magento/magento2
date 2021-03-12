@@ -29,6 +29,7 @@
                 <id backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <password backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <content_type>N</content_type>
+                <include_tax>1</include_tax>
                 <specificerrmsg>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</specificerrmsg>
                 <divide_order_weight>1</divide_order_weight>
                 <unit_of_measure>K</unit_of_measure>

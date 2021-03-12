@@ -176,6 +176,7 @@ class CarrierTest extends TestCase
             'carriers/dhl/id' => 'some ID',
             'carriers/dhl/password' => 'some password',
             'carriers/dhl/content_type' => 'N',
+            'carriers/dhl/include_tax' => 1,
             'carriers/dhl/nondoc_methods' => '1,3,4,8,P,Q,E,F,H,J,M,V,Y',
             'carriers/dhl/showmethod' => 1,
             'carriers/dhl/title' => 'DHL Title',

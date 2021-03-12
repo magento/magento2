@@ -33,6 +33,11 @@
                     <comment>Whether to use Documents or NonDocuments service for non domestic shipments. (Shipments within the EU are classed as domestic)</comment>
                     <source_model>Magento\Dhl\Model\Source\Contenttype</source_model>
                 </field>
+                <field id="include_tax" translate="label comment" type="select" sortOrder="95" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Include TAX</label>
+                    <comment>DHL shipping quotes include taxes where applicable. Are these to be included in the price?</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
                 <field id="handling_type" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Calculate Handling Fee</label>
                     <source_model>Magento\Shipping\Model\Source\HandlingType</source_model>
