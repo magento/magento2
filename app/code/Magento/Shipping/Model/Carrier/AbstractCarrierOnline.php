@@ -654,7 +654,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
             'free_shipping_enable'
         ) && $this->getConfigData(
             'free_shipping_subtotal'
-        ) <= $this->_rawRequest->getBaseSubtotalInclTax() ? '0.00' : $this->getFinalPriceWithHandlingFee(
+        ) <= $this->_rawRequest->getValueWithDiscount() ? '0.00' : $this->getFinalPriceWithHandlingFee(
             $cost
         );
     }
