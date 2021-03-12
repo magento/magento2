@@ -8,7 +8,6 @@ namespace Magento\MediaStorage\Helper\File\Storage;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-trigger_error('Class is deprecated', E_USER_DEPRECATED);
 
 /**
  * Database saving file helper
