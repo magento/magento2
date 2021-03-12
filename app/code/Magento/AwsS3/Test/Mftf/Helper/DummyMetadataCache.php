@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\AwsS3\Test\Mftf\Helper;
 
-use Magento\RemoteStorage\Driver\Adapter\Cache\CacheMissException;
-
 /**
  * Cache mock for metadata provider.
  */
