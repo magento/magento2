@@ -17,14 +17,17 @@ define(function () {
         function setFormKeyCookie(value) {
             var expires,
                 secure,
+                samesite,
                 date = new Date(),
-                isSecure = !!window.cookiesConfig && window.cookiesConfig.secure;
+                cookiesConfig = window.cookiesConfig || {},
+                isSecure = !!cookiesConfig.secure;
 
             date.setTime(date.getTime() + 86400000);
             expires = '; expires=' + date.toUTCString();
             secure = isSecure ? '; secure' : '';
+            samesite = '; samesite=' + (cookiesConfig.samesite ? cookiesConfig.samesite : 'lax');
 
-            document.cookie = 'form_key=' + (value || '') + expires + secure + '; path=/';
+            document.cookie = 'form_key=' + (value || '') + expires + secure + '; path=/' + samesite;
         }
 
         /**
