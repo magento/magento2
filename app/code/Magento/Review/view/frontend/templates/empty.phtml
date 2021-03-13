@@ -4,6 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Review\Block\Rating\Entity\Detailed $block */
+/**
+ * @var \Magento\Review\Block\Rating\Entity\Detailed $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
-<p class="no-rating"><a href="#review-form"><?= $block->escapeHtml(__('Be the first to review this product')) ?></a></p>
+<p class="no-rating"><a href="#review-form"><?= $escaper->escapeHtml(__('Be the first to review this product')) ?></a></p>

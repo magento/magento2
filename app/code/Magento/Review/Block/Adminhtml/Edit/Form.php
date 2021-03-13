@@ -113,7 +113,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'text' => '<a href="' . $this->getUrl(
                     'catalog/product/edit',
                     ['id' => $product->getId()]
-                ) . '" onclick="this.target=\'blank\'">' . $this->escapeHtml(
+                ) . '" onclick="this.target=\'blank\'">' . $this->_escaper->escapeHtml(
                     $product->getName()
                 ) . '</a>'
             ]
@@ -124,9 +124,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $customerText = __(
                 '<a href="%1" onclick="this.target=\'blank\'">%2 %3</a> <a href="mailto:%4">(%4)</a>',
                 $this->getUrl('customer/index/edit', ['id' => $customer->getId(), 'active_tab' => 'review']),
-                $this->escapeHtml($customer->getFirstname()),
-                $this->escapeHtml($customer->getLastname()),
-                $this->escapeHtml($customer->getEmail())
+                $this->_escaper->escapeHtml($customer->getFirstname()),
+                $this->_escaper->escapeHtml($customer->getLastname()),
+                $this->_escaper->escapeHtml($customer->getEmail())
             );
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             $customerText = ($review->getStoreId() == \Magento\Store\Model\Store::DEFAULT_STORE_ID)

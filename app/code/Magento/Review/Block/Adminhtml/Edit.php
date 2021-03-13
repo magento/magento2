@@ -241,7 +241,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     {
         $reviewData = $this->_coreRegistry->registry('review_data');
         if ($reviewData && $reviewData->getId()) {
-            return __("Edit Review '%1'", $this->escapeHtml($reviewData->getTitle()));
+            return __("Edit Review '%1'", $this->_escaper->escapeHtml($reviewData->getTitle()));
         } else {
             return __('New Review');
         }
