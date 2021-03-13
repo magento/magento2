@@ -4,7 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block \Magento\Tax\Block\Adminhtml\Rule\Edit\Form */
+/**
+ * @var $block \Magento\Tax\Block\Adminhtml\Rule\Edit\Form
+ * @var \Magento\Framework\Escaper $escaper
+ */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <?php $formElementId = /* @noEscape */ \Magento\Tax\Block\Adminhtml\Rate\Form::FORM_ELEMENT_ID;
@@ -81,7 +84,7 @@ require([
             $.ajax({
                 type: "POST",
                 data: {id:id},
-                url: '{$block->escapeJs($block->getTaxRateLoadUrl())}',
+                url: '{$escaper->escapeJs($block->getTaxRateLoadUrl())}',
                 success: function(result, status) {
                     $('body').trigger('processStop');
                     if (result.success) {
@@ -98,14 +101,14 @@ require([
                             });
                         else
                             alert({
-                                content: '{$block->escapeJs(__('An error occurred'))}'
+                                content: '{$escaper->escapeJs(__('An error occurred'))}'
                             });
                     }
                 },
                 error: function () {
                     $('body').trigger('processStop');
                     alert({
-                        content: '{$block->escapeJs(__('An error occurred'))}'
+                        content: '{$escaper->escapeJs(__('An error occurred'))}'
                     });
                 },
                 dataType: "json"
@@ -116,9 +119,9 @@ require([
             var options = {
                 mselectContainer: '#tax_rate + section.mselect-list',
                 toggleAddButton:false,
-                addText: '{$block->escapeJs(__('Add New Tax Rate'))}',
+                addText: '{$escaper->escapeJs(__('Add New Tax Rate'))}',
                 parse: null,
-                nextPageUrl: '{$block->escapeJs($block->getTaxRatesPageUrl())}',
+                nextPageUrl: '{$escaper->escapeJs($block->getTaxRatesPageUrl())}',
                 selectedValues: this.settings.selected_values,
                 mselectInputSubmitCallback: function (value, options) {
                     var select = $('#tax_rate');
@@ -175,7 +178,7 @@ script;
                             rateValue = that.parent().find('input[type="checkbox"]').val();
 
                         confirm({
-                            content: '{$block->escapeJs(__('Do you really want to delete this tax rate?'))}',
+                            content: '{$escaper->escapeJs(__('Do you really want to delete this tax rate?'))}',
                             actions: {
                                 /**
                                  * Confirm action.
@@ -189,7 +192,7 @@ script;
                                             form_key: $('input[name="form_key"]').val()
                                         },
                                         dataType: 'json',
-                                        url: '{$block->escapeJs($block->getTaxRateDeleteUrl())}',
+                                        url: '{$escaper->escapeJs($block->getTaxRateDeleteUrl())}',
                                         success: function(result, status) {
                                             $('body').trigger('processStop');
                                             if (result.success) {
@@ -207,14 +210,14 @@ script;
                                                     });
                                                 else
                                                     alert({
-                                                        content: '{$block->escapeJs(__('An error occurred'))}'
+                                                        content: '{$escaper->escapeJs(__('An error occurred'))}'
                                                     });
                                             }
                                         },
                                         error: function () {
                                             $('body').trigger('processStop');
                                             alert({
-                                                content: '{$block->escapeJs(__('An error occurred'))}'
+                                                content: '{$escaper->escapeJs(__('An error occurred'))}'
                                             });
                                         }
                                     };
@@ -237,7 +240,7 @@ script;
             taxRateFormElement.mage('form').mage('validation');
 
             taxRateForm.dialogRates({
-                title: '{$block->escapeJs(__('Tax Rate'))}',
+                title: '{$escaper->escapeJs(__('Tax Rate'))}',
                 type: 'slide',
                 id: '{$jsId}',
                 modalClass: 'tax-rate-popup',
@@ -245,7 +248,7 @@ script;
                     taxRateFormElement.data('validation').clearError();
                 },
                 buttons: [{
-                    text: '{$block->escapeJs(__('Save'))}',
+                    text: '{$escaper->escapeJs(__('Save'))}',
                     'class': 'action-save action-primary',
                     click: function() {
                         this.updateItemRate();
@@ -270,7 +273,7 @@ $scriptString.= <<<script
                             type: 'POST',
                             data: itemRateData,
                             dataType: 'json',
-                            url: '{$block->escapeJs($block->getTaxRateSaveUrl())}',
+                            url: '{$escaper->escapeJs($block->getTaxRateSaveUrl())}',
                             success: function(result, status) {
                                 $('body').trigger('processStop');
                                 if (result.success) {
@@ -295,14 +298,14 @@ $scriptString.= <<<script
                                         });
                                     else
                                         alert({
-                                            content: '{$block->escapeJs(__('An error occurred'))}'
+                                            content: '{$escaper->escapeJs(__('An error occurred'))}'
                                         });
                                 }
                             },
                             error: function () {
                                 $('body').trigger('processStop');
                                 alert({
-                                    content: '{$block->escapeJs(__('An error occurred'))}'
+                                    content: '{$escaper->escapeJs(__('An error occurred'))}'
                                 });
                             }
                         };
