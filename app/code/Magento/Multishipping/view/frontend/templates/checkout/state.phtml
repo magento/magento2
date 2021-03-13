@@ -6,18 +6,17 @@
 
 // phpcs:disable Magento2.Files.LineLength
 
-?>
-<?php
 /**
  * Mustishipping state
  *
- * @see \Magento\Multishipping\Block\Checkout\State
+ * @var \Magento\Multishipping\Block\Checkout\State $block
+ * @var \Magento\Framework\Escaper $escaper
  */
 ?>
 <ol class="block multicheckout progress items" id="checkout-progress-state">
     <?php foreach ($block->getSteps() as $_step) : ?>
-        <li title="<?= $block->escapeHtmlAttr($_step->getLabel()) ?>" class="item<?= ($_step->getIsActive()) ? ' active' : '' ?>">
-            <span><?= $block->escapeHtml($_step->getLabel()) ?></span>
+        <li title="<?= $escaper->escapeHtmlAttr($_step->getLabel()) ?>" class="item<?= ($_step->getIsActive()) ? ' active' : '' ?>">
+            <span><?= $escaper->escapeHtml($_step->getLabel()) ?></span>
         </li>
     <?php endforeach; ?>
 </ol>
