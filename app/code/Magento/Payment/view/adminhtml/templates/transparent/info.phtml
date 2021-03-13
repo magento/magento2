@@ -6,14 +6,15 @@
 
 /**
  * @var \Magento\Payment\Block\Transparent\Info $block
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  * @see \Magento\Payment\Block\Transparent\Info
  */
 ?>
-<fieldset id="payment_form_<?= $block->escapeHtml($block->getMethodCode()) ?>" class="fieldset items redirect">
-    <div><?= $block->escapeHtml(__('We\'ll ask for your payment details before you place an order.')) ?></div>
+<fieldset id="payment_form_<?= $escaper->escapeHtml($block->getMethodCode()) ?>" class="fieldset items redirect">
+    <div><?= $escaper->escapeHtml(__('We\'ll ask for your payment details before you place an order.')) ?></div>
 </fieldset>
 <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
     "display:none",
-    'fieldset#payment_form_' . $block->escapeHtml($block->getMethodCode())
+    'fieldset#payment_form_' . $escaper->escapeHtml($block->getMethodCode())
 ) ?>

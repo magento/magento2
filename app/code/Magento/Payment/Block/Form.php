@@ -63,6 +63,6 @@ class Form extends \Magento\Framework\View\Element\Template
      */
     public function getInfoData($field)
     {
-        return $this->escapeHtml($this->getMethod()->getInfoInstance()->getData($field));
+        return $this->_escaper->escapeHtml($this->getMethod()->getInfoInstance()->getData($field));
     }
 }

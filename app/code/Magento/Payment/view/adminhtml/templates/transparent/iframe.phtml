@@ -6,6 +6,7 @@
 
 /**
  * @var \Magento\Payment\Block\Transparent\Iframe $block
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 $params = $block->getParams();
@@ -18,12 +19,12 @@ $jsonHelper = $block->getData('jsonHelper');
     <?php $scriptString = '' ?>
 <?php if (isset($params['redirect'])): ?>
     <?php $scriptString .= <<<script
-    window.location="{$block->escapeJs($params['redirect'])}";
+    window.location="{$escaper->escapeJs($params['redirect'])}";
 script;
     ?>
 <?php elseif (isset($params['redirect_parent'])): ?>
     <?php $scriptString .= <<<script
-    window.top.location="{$block->escapeJs($params['redirect_parent'])}";
+    window.top.location="{$escaper->escapeJs($params['redirect_parent'])}";
 script;
     ?>
 <?php elseif (isset($params['error_msg'])): ?>
@@ -34,7 +35,7 @@ script;
     ?>
 <?php elseif (isset($params['order_success'])): ?>
     <?php $scriptString .= <<<script
-    window.top.location = "{$block->escapeJs($params['order_success'])}";
+    window.top.location = "{$escaper->escapeJs($params['order_success'])}";
 script;
     ?>
 <?php else: ?>
