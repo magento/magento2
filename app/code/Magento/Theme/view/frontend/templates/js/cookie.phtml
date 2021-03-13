@@ -8,6 +8,7 @@
  * Cookie settings initialization script
  *
  * @var $block \Magento\Framework\View\Element\Js\Cookie
+ * @var \Magento\Framework\Escaper $escaper
  */
 ?>
 
@@ -16,10 +17,10 @@
         "*": {
             "mage/cookies": {
                 "expires": null,
-                "path": "<?= $block->escapeJs($block->getPath()) ?>",
-                "domain": "<?= $block->escapeJs($block->getDomain()) ?>",
+                "path": "<?= $escaper->escapeJs($block->getPath()) ?>",
+                "domain": "<?= $escaper->escapeJs($block->getDomain()) ?>",
                 "secure": false,
-                "lifetime": "<?= $block->escapeJs($block->getLifetime()) ?>"
+                "lifetime": "<?= $escaper->escapeJs($block->getLifetime()) ?>"
             }
         }
     }

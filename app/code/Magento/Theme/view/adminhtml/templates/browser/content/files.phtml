@@ -4,21 +4,24 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content\Files */
+/**
+ * @var $block \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content\Files
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 
 <?php if ($block->getFilesCount() > 0) : ?>
     <?php foreach ($block->getFiles() as $file) : ?>
-        <div class="filecnt file-font" id="<?= $block->escapeHtmlAttr($file['id']) ?>">
+        <div class="filecnt file-font" id="<?= $escaper->escapeHtmlAttr($file['id']) ?>">
             <p class="nm">
-                <?= $block->escapeHtml($file['text']) ?>
+                <?= $escaper->escapeHtml($file['text']) ?>
                 <?php if (isset($file['thumbnailParams'])) : ?>
-                    <img src="<?= $block->escapeUrl($block->getUrl('*/*/previewImage', $file['thumbnailParams'])) ?>"
-                         alt="<?= $block->escapeHtmlAttr(__('thumbnail')) ?>">
+                    <img src="<?= $escaper->escapeUrl($block->getUrl('*/*/previewImage', $file['thumbnailParams'])) ?>"
+                         alt="<?= $escaper->escapeHtmlAttr(__('thumbnail')) ?>">
                 <?php endif; ?>
             </p>
         </div>
     <?php endforeach; ?>
 <?php else : ?>
-    <?= $block->escapeHtml(__('We found no files.')) ?>
+    <?= $escaper->escapeHtml(__('We found no files.')) ?>
 <?php endif; ?>

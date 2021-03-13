@@ -6,6 +6,7 @@
 
 /**
  * @var $block \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Js
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
@@ -26,7 +27,7 @@ require([
         dataType: 'json',
         replaceFileInput: false,
         sequentialUploads: true,
-        url: '{$block->escapeJs($block->getJsUploadUrl())}',
+        url: '{$escaper->escapeJs($block->getJsUploadUrl())}',
 
         /**
          * Add data

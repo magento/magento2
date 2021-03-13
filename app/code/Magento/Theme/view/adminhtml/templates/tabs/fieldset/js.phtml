@@ -6,6 +6,7 @@
 
 /**
  * @var $block \Magento\Backend\Block\Widget\Form\Renderer\Fieldset
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 
@@ -41,7 +42,7 @@ $jsonHelper = $block->getData('jsonHelper');
                 id="remove_js_files_<%- data.id %>"
                 name="js_removed_files[]"
                 value="<%- data.id %>" />
-            <label for="remove_js_files_<%- data.id %>"><?= $block->escapeHtml(__('Remove')) ?></label>
+            <label for="remove_js_files_<%- data.id %>"><?= $escaper->escapeHtml(__('Remove')) ?></label>
         </div>
     </div>
 

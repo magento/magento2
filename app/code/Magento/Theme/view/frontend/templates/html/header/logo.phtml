@@ -6,11 +6,10 @@
 
 /**
  * @var \Magento\Theme\Block\Html\Header\Logo $block
- */
-$storeName = $block->getThemeName() ? $block->getThemeName() : $block->getLogoAlt();
-/**
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Theme\ViewModel\Block\Html\Header\LogoSizeResolverInterface|null $logoSizeResolver
  */
+$storeName = $block->getThemeName() ? $block->getThemeName() : $block->getLogoAlt();
 $logoSizeResolver = $block->getLogoSizeResolver();
 $logoWidth = $logoSizeResolver !== null && $logoSizeResolver->getWidth()
     ? $logoSizeResolver->getWidth()
@@ -19,16 +18,16 @@ $logoHeight = $logoSizeResolver !== null && $logoSizeResolver->getHeight()
     ? $logoSizeResolver->getHeight()
     : $block->getLogoHeight();
 ?>
-<span data-action="toggle-nav" class="action nav-toggle"><span><?= $block->escapeHtml(__('Toggle Nav')) ?></span></span>
+<span data-action="toggle-nav" class="action nav-toggle"><span><?= $escaper->escapeHtml(__('Toggle Nav')) ?></span></span>
 <a
     class="logo"
-    href="<?= $block->escapeUrl($block->getUrl('')) ?>"
-    title="<?= $block->escapeHtmlAttr($storeName) ?>"
+    href="<?= $escaper->escapeUrl($block->getUrl('')) ?>"
+    title="<?= $escaper->escapeHtmlAttr($storeName) ?>"
     aria-label="store logo">
-    <img src="<?= $block->escapeUrl($block->getLogoSrc()) ?>"
-         title="<?= $block->escapeHtmlAttr($block->getLogoAlt()) ?>"
-         alt="<?= $block->escapeHtmlAttr($block->getLogoAlt()) ?>"
-            <?= $logoWidth ? 'width="' . $block->escapeHtmlAttr($logoWidth) . '"' : '' ?>
-            <?= $logoHeight ? 'height="' . $block->escapeHtmlAttr($logoHeight) . '"' : '' ?>
+    <img src="<?= $escaper->escapeUrl($block->getLogoSrc()) ?>"
+         title="<?= $escaper->escapeHtmlAttr($block->getLogoAlt()) ?>"
+         alt="<?= $escaper->escapeHtmlAttr($block->getLogoAlt()) ?>"
+            <?= $logoWidth ? 'width="' . $escaper->escapeHtmlAttr($logoWidth) . '"' : '' ?>
+            <?= $logoHeight ? 'height="' . $escaper->escapeHtmlAttr($logoHeight) . '"' : '' ?>
     />
 </a>
