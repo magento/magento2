@@ -8,15 +8,13 @@
  * JS block for including Countries with Optional Zip
  *
  * @see \Magento\Backend\Block\Template
+ *
+ * @var \Magento\Backend\Block\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Directory\Helper\Data $directoryHelper
  */
 
-/**
- * @var \Magento\Backend\Block\Template $block
- * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
- */
-?>
-<?php
-/** @var \Magento\Directory\Helper\Data $directoryHelper */
 $directoryHelper = $block->getData('directoryHelper');
 $countriesWithOptionalZip = /* @noEscape */ $directoryHelper->getCountriesWithOptionalZip(true);
 $scriptString = <<<script
