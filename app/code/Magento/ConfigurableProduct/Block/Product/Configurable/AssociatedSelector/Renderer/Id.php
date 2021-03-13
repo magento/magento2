@@ -40,7 +40,7 @@ class Id extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRend
      */
     public function render(\Magento\Framework\DataObject $row)
     {
-        $imageUrl = $row->getImage() && $row->getImage() != 'no_selection' ? $this->escapeHtml(
+        $imageUrl = $row->getImage() && $row->getImage() != 'no_selection' ? $this->_escaper->escapeHtml(
             $this->_productHelper->getImageUrl($row)
         ) : '';
         return $this->_getValue($row) . '<input type="hidden" data-role="image-url" value="' . $imageUrl . '"/>';
