@@ -76,7 +76,7 @@ class Links extends \Magento\Framework\View\Element\Template
 
         $html = '';
         if ($this->getLinks()) {
-            $html = '<ul' . ($this->hasCssClass() ? ' class="' . $this->escapeHtml(
+            $html = '<ul' . ($this->hasCssClass() ? ' class="' . $this->_escaper->escapeHtml(
                 $this->getCssClass()
             ) . '"' : '') . '>';
             foreach ($this->getLinks() as $link) {

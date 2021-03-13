@@ -99,7 +99,7 @@ class Link extends \Magento\Framework\View\Element\Template
             }
             $value = $this->getDataUsingMethod($attribute);
             if ($value !== null) {
-                $attributes[$attribute] = $this->escapeHtml($value);
+                $attributes[$attribute] = $this->_escaper->escapeHtml($value);
             }
         }
 
@@ -144,7 +144,7 @@ class Link extends \Magento\Framework\View\Element\Template
             $this->setDataUsingMethod('id', 'id' .$this->random->getRandomString(8));
         }
 
-        return '<li><a ' . $this->getLinkAttributes() . ' >' . $this->escapeHtml($this->getLabel()) . '</a></li>'
+        return '<li><a ' . $this->getLinkAttributes() . ' >' . $this->_escaper->escapeHtml($this->getLabel()) . '</a></li>'
             .$this->renderSpecialAttributes();
     }
 
