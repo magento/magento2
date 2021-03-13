@@ -4,7 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Backend\Block\Template $block */
+/**
+ * @var \Magento\Backend\Block\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 
@@ -48,7 +51,7 @@ require([
          */
         getFilter: function() {
             if ($('entity') && \$F('entity')) {
-                var url    = "{$block->escapeJs($block->getUrl('*/*/getFilter'))}";
+                var url    = "{$escaper->escapeJs($block->getUrl('*/*/getFilter'))}";
                 var entity = \$F('entity');
                 if (entity != this.previousGridEntity) {
                     this.previousGridEntity = entity;
@@ -93,7 +96,7 @@ require([
             form.action   = oldAction;
         } else {
             alert({
-                content: '{$block->escapeHtml(__('Invalid data'))}'
+                content: '{$escaper->escapeHtml(__('Invalid data'))}'
             });
         }
     };

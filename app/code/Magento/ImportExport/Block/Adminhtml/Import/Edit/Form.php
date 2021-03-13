@@ -242,7 +242,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'required' => false,
                 'class' => 'input-text',
                 'note' => __(
-                    $this->escapeHtml(
+                    $this->_escaper->escapeHtml(
                         'For Type "Local Server" use relative path to &lt;Magento root directory&gt;/'
                         .$this->imagesDirectoryProvider->getDirectoryRelativePath()
                         .', e.g. <i>product_images</i>, <i>import_images/batch1</i>.<br><br>'
