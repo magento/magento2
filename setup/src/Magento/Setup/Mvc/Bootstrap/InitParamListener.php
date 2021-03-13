@@ -137,7 +137,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
             }
         }
 
-        if (!isset($result['argv'])) {
+        if (!isset($result['argv']) || !is_array($result['argv'])) {
             return $result;
         }
 

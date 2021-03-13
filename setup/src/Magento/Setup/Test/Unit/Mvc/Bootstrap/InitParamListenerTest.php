@@ -106,12 +106,12 @@ class InitParamListenerTest extends TestCase
     /**
      * @param array $zfAppConfig Data that comes from Laminas Framework Application config
      * @param array $env Config that comes from SetEnv
-     * @param string $cliParam Parameter string
+     * @param array|string|null $argv Argv
      * @param array $expectedArray Expected result array
      *
      * @dataProvider createServiceDataProvider
      */
-    public function testCreateService($zfAppConfig, $env, $cliParam, $expectedArray)
+    public function testCreateService($zfAppConfig, $env, $argv, $expectedArray)
     {
         foreach ($env as $envKey => $envValue) {
             $_SERVER[$envKey] = $envValue;
@@ -125,12 +125,10 @@ class InitParamListenerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $argv = ['bin/magento', 'setup:install'];
-        if ($cliParam) {
-            $argv[] = '--magento-init-params=' . $cliParam;
+        if ($argv !== null) {
+            $zfAppConfig['argv'] = $argv;
+            $expectedArray['argv'] = $argv;
         }
-        $zfAppConfig['argv'] = $argv;
-        $expectedArray['argv'] = $argv;
 
         $mvcApplication->expects($this->any())->method('getConfig')->willReturn(
             $zfAppConfig ? [InitParamListener::BOOTSTRAP_PARAM => $zfAppConfig] : []
@@ -148,36 +146,61 @@ class InitParamListenerTest extends TestCase
     public function createServiceDataProvider()
     {
         return [
-            'none' => [[], [], '', []],
-            'mage_mode App' => [['MAGE_MODE' => 'developer'], [], '', ['MAGE_MODE' => 'developer']],
-            'mage_mode Env' => [[], ['MAGE_MODE' => 'developer'], '', ['MAGE_MODE' => 'developer']],
-            'mage_mode CLI' => [[], [], 'MAGE_MODE=developer', ['MAGE_MODE' => 'developer']],
+            'none' => [
+                [], //zfAppConfig
+                [], //env
+                null, //argv
+                [] //expectedArray
+            ],
+            'mage_mode App' => [
+                ['MAGE_MODE' => 'developer'],
+                [],
+                '', //test non array value
+                ['MAGE_MODE' => 'developer']
+            ],
+            'mage_mode Env' => [
+                [],
+                ['MAGE_MODE' => 'developer'],
+                null,
+                ['MAGE_MODE' => 'developer']
+            ],
+            'mage_mode CLI' => [
+                [],
+                [],
+                ['bin/magento', 'setup:install', '--magento-init-params=MAGE_MODE=developer'],
+                ['MAGE_MODE' => 'developer']
+            ],
             'one MAGE_DIRS CLI' => [
                 [],
                 [],
-                'MAGE_MODE=developer&MAGE_DIRS[base][path]=/var/www/magento2',
+                ['bin/magento', 'setup:install', '--magento-init-params=MAGE_MODE=developer&MAGE_DIRS[base][path]=/var/www/magento2'],
                 ['MAGE_DIRS' => ['base' => ['path' => '/var/www/magento2']], 'MAGE_MODE' => 'developer'],
             ],
             'two MAGE_DIRS CLI' => [
                 [],
                 [],
-                'MAGE_MODE=developer&MAGE_DIRS[base][path]=/var/www/magento2&MAGE_DIRS[cache][path]=/tmp/cache',
+                ['bin/magento', 'setup:install', '--magento-init-params=MAGE_MODE=developer&MAGE_DIRS[base][path]=/var/www/magento2&MAGE_DIRS[cache][path]=/tmp/cache'],
                 [
                     'MAGE_DIRS' => ['base' => ['path' => '/var/www/magento2'], 'cache' => ['path' => '/tmp/cache']],
                     'MAGE_MODE' => 'developer',
                 ],
             ],
-            'mage_mode only' => [[], [], 'MAGE_MODE=developer', ['MAGE_MODE' => 'developer']],
+            'mage_mode only' => [
+                [],
+                [],
+                ['bin/magento', 'setup:install', '--magento-init-params=MAGE_MODE=developer'],
+                ['MAGE_MODE' => 'developer']
+            ],
             'MAGE_DIRS Env' => [
                 [],
                 ['MAGE_DIRS' => ['base' => ['path' => '/var/www/magento2']], 'MAGE_MODE' => 'developer'],
-                '',
+                null,
                 ['MAGE_DIRS' => ['base' => ['path' => '/var/www/magento2']], 'MAGE_MODE' => 'developer'],
             ],
             'two MAGE_DIRS' => [
                 [],
                 [],
-                'MAGE_MODE=developer&MAGE_DIRS[base][path]=/var/www/magento2&MAGE_DIRS[cache][path]=/tmp/cache',
+                ['bin/magento', 'setup:install', '--magento-init-params=MAGE_MODE=developer&MAGE_DIRS[base][path]=/var/www/magento2&MAGE_DIRS[cache][path]=/tmp/cache'],
                 [
                     'MAGE_DIRS' => ['base' => ['path' => '/var/www/magento2'], 'cache' => ['path' => '/tmp/cache']],
                     'MAGE_MODE' => 'developer',
@@ -186,19 +209,19 @@ class InitParamListenerTest extends TestCase
             'Env overwrites App' => [
                 ['MAGE_DIRS' => ['base' => ['path' => '/var/www/magento2/App']], 'MAGE_MODE' => 'developer'],
                 ['MAGE_DIRS' => ['base' => ['path' => '/var/www/magento2/Env']], 'MAGE_MODE' => 'developer'],
-                '',
+                ['bin/magento', 'setup:install'],
                 ['MAGE_DIRS' => ['base' => ['path' => '/var/www/magento2/Env']], 'MAGE_MODE' => 'developer'],
             ],
             'CLI overwrites Env' => [
                 ['MAGE_MODE' => 'developer'],
                 ['MAGE_DIRS' => ['base' => ['path' => '/var/www/magento2/Env']]],
-                'MAGE_DIRS[base][path]=/var/www/magento2/CLI',
+                ['bin/magento', 'setup:install', '--magento-init-params=MAGE_DIRS[base][path]=/var/www/magento2/CLI'],
                 ['MAGE_DIRS' => ['base' => ['path' => '/var/www/magento2/CLI']], 'MAGE_MODE' => 'developer'],
             ],
             'CLI overwrites All' => [
                 ['MAGE_DIRS' => ['base' => ['path' => '/var/www/magento2/App']], 'MAGE_MODE' => 'production'],
                 ['MAGE_DIRS' => ['base' => ['path' => '/var/www/magento2/Env']]],
-                'MAGE_DIRS[base][path]=/var/www/magento2/CLI',
+                ['bin/magento', 'setup:install', '--magento-init-params=MAGE_DIRS[base][path]=/var/www/magento2/CLI'],
                 ['MAGE_DIRS' => ['base' => ['path' => '/var/www/magento2/CLI']], 'MAGE_MODE' => 'developer'],
             ],
         ];
