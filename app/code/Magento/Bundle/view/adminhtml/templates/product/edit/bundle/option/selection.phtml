@@ -4,24 +4,27 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Selection */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/**
+ * @var \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Selection $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <script id="bundle-option-selection-box-template" type="text/x-magento-template">
     <table class="admin__control-table">
         <thead>
             <tr class="headings">
                 <th class="col-draggable"></th>
-                <th class="col-default"><?= $block->escapeHtml(__('Default')) ?></th>
-                <th class="col-name"><?= $block->escapeHtml(__('Name')) ?></th>
-                <th class="col-sku"><?= $block->escapeHtml(__('SKU')) ?></th>
+                <th class="col-default"><?= $escaper->escapeHtml(__('Default')) ?></th>
+                <th class="col-name"><?= $escaper->escapeHtml(__('Name')) ?></th>
+                <th class="col-sku"><?= $escaper->escapeHtml(__('SKU')) ?></th>
             <?php if ($block->getCanReadPrice() !== false): ?>
-                <th class="col-price price-type-box"><?= $block->escapeHtml(__('Price')) ?></th>
-                <th class="col-price price-type-box"><?= $block->escapeHtml(__('Price Type')) ?></th>
+                <th class="col-price price-type-box"><?= $escaper->escapeHtml(__('Price')) ?></th>
+                <th class="col-price price-type-box"><?= $escaper->escapeHtml(__('Price Type')) ?></th>
             <?php endif; ?>
-                <th class="col-qty"><?= $block->escapeHtml(__('Default Quantity')) ?></th>
-                <th class="col-uqty qty-box"><?= $block->escapeHtml(__('User Defined')) ?></th>
-                <th class="col-order type-order"><?= $block->escapeHtml(__('Position')) ?></th>
+                <th class="col-qty"><?= $escaper->escapeHtml(__('Default Quantity')) ?></th>
+                <th class="col-uqty qty-box"><?= $escaper->escapeHtml(__('User Defined')) ?></th>
+                <th class="col-order type-order"><?= $escaper->escapeHtml(__('Position')) ?></th>
                 <th class="col-actions"></th>
             </tr>
             <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display:none', 'th.col-order.type-order') ?>
@@ -34,20 +37,20 @@
     <td class="col-draggable">
         <span data-role="draggable-handle" class="draggable-handle"></span>
         <input type="hidden"
-               id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_id<%- data.index %>"
-               name="<?= $block->escapeHtmlAttr($block->getFieldName())
+               id="<?= $escaper->escapeHtmlAttr($block->getFieldId()) ?>_id<%- data.index %>"
+               name="<?= $escaper->escapeHtmlAttr($block->getFieldName())
                 ?>[<%- data.parentIndex %>][<%- data.index %>][selection_id]"
                value="<%- data.selection_id %>"/>
         <input type="hidden"
-               name="<?= $block->escapeHtmlAttr($block->getFieldName())
+               name="<?= $escaper->escapeHtmlAttr($block->getFieldName())
                 ?>[<%- data.parentIndex %>][<%- data.index %>][option_id]"
                value="<%- data.option_id %>"/>
         <input type="hidden"
                class="product"
-               name="<?= $block->escapeHtmlAttr($block->getFieldName())
+               name="<?= $escaper->escapeHtmlAttr($block->getFieldName())
                 ?>[<%- data.parentIndex %>][<%- data.index %>][product_id]"
                value="<%- data.product_id %>"/>
-        <input type="hidden" name="<?= $block->escapeHtmlAttr($block->getFieldName())
+        <input type="hidden" name="<?= $escaper->escapeHtmlAttr($block->getFieldName())
         ?>[<%- data.parentIndex %>][<%- data.index %>][delete]"
                value=""
                class="delete"/>
@@ -56,7 +59,7 @@
         <input onclick="bSelection.checkGroup(event)"
                type="<%- data.option_type %>"
                class="default"
-               name="<?= $block->escapeHtmlAttr($block->getFieldName())
+               name="<?= $escaper->escapeHtmlAttr($block->getFieldName())
                 ?>[<%- data.parentIndex %>][<%- data.index %>][is_default]"
                value="1" <%- data.checked %> />
     </td>
@@ -64,10 +67,10 @@
     <td class="col-sku"><%- data.sku %></td>
 <?php if ($block->getCanReadPrice() !== false): ?>
     <td class="col-price price-type-box">
-        <input id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>_price_value"
+        <input id="<?= $escaper->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>_price_value"
                class="input-text required-entry validate-zero-or-greater"
                type="text"
-               name="<?= $block->escapeHtmlAttr($block->getFieldName())
+               name="<?= $escaper->escapeHtmlAttr($block->getFieldName())
                 ?>[<%- data.parentIndex %>][<%- data.index %>][selection_price_value]"
                value="<%- data.selection_price_value %>"
             <?php if ($block->getCanEditPrice() === false): ?>
@@ -80,24 +83,24 @@
     </td>
 <?php else: ?>
     <input type="hidden"
-           id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>_price_value"
-           name="<?= $block->escapeHtmlAttr($block->getFieldName())
+           id="<?= $escaper->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>_price_value"
+           name="<?= $escaper->escapeHtmlAttr($block->getFieldName())
             ?>[<%- data.parentIndex %>][<%- data.index %>][selection_price_value]" value="0" />
     <input type="hidden"
-           id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>_price_type"
-           name="<?= $block->escapeHtmlAttr($block->getFieldName())
+           id="<?= $escaper->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>_price_type"
+           name="<?= $escaper->escapeHtmlAttr($block->getFieldName())
             ?>[<%- data.parentIndex %>][<%- data.index %>][selection_price_type]" value="0" />
     <?php if ($block->isUsedWebsitePrice()): ?>
     <input type="hidden"
-           id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>_price_scope"
-           name="<?= $block->escapeHtmlAttr($block->getFieldName())
+           id="<?= $escaper->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>_price_scope"
+           name="<?= $escaper->escapeHtmlAttr($block->getFieldName())
             ?>[<%- data.parentIndex %>][<%- data.index %>][default_price_scope]" value="1" />
     <?php endif; ?>
 <?php endif; ?>
     <td class="col-qty">
         <input class="input-text required-entry validate-greater-zero-based-on-option validate-zero-or-greater"
                type="text"
-               name="<?= $block->escapeHtmlAttr($block->getFieldName())
+               name="<?= $escaper->escapeHtmlAttr($block->getFieldName())
                 ?>[<%- data.parentIndex %>][<%- data.index %>][selection_qty]"
                value="<%- data.selection_qty %>" />
     </td>
@@ -109,7 +112,7 @@
     <td class="col-order type-order"">
         <input class="input-text required-entry validate-zero-or-greater"
                type="text"
-               name="<?= $block->escapeHtmlAttr($block->getFieldName())
+               name="<?= $escaper->escapeHtmlAttr($block->getFieldName())
                 ?>[<%- data.parentIndex %>][<%- data.index %>][position]"
                value="<%- data.position %>" />
     </td>
@@ -133,7 +136,7 @@ var bundleTemplateBox = jQuery('#bundle-option-selection-box-template').html(),
 
 Bundle.Selection = Class.create();
 Bundle.Selection.prototype = {
-    idLabel : '{$block->escapeJs($block->getFieldId())}',
+    idLabel : '{$escaper->escapeJs($block->getFieldId())}',
     scopePrice : {$isUsedWebsitePrice},
     templateBox : '',
     templateRow : '',
@@ -142,7 +145,7 @@ Bundle.Selection.prototype = {
     gridSelection: new Hash(),
     gridRemoval: new Hash(),
     gridSelectedProductSkus: [],
-    selectionSearchUrl: '{$block->escapeJs($block->getSelectionSearchUrl())}',
+    selectionSearchUrl: '{$escaper->escapeJs($block->getSelectionSearchUrl())}',
 
     initialize : function() {
         this.templateBox = '<div class="tier form-list"
