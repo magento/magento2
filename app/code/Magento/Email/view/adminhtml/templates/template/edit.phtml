@@ -8,28 +8,31 @@ use Magento\Framework\App\TemplateTypesInterface;
 
 // phpcs:disable Generic.Files.LineLength.TooLong
 
-/** @var $block \Magento\Email\Block\Adminhtml\Template\Edit */
+/**
+ * @var $block \Magento\Email\Block\Adminhtml\Template\Edit
+ * @var \Magento\Framework\Escaper $escaper
+ */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <?php if (!$block->getEditMode()): ?>
-<form action="<?= $block->escapeUrl($block->getLoadUrl()) ?>" method="post" id="email_template_load_form">
+<form action="<?= $escaper->escapeUrl($block->getLoadUrl()) ?>" method="post" id="email_template_load_form">
     <?= $block->getBlockHtml('formkey') ?>
     <fieldset class="admin__fieldset form-inline">
-        <legend class="admin__legend"><span><?= $block->escapeHtml(__('Load Default Template')) ?></span></legend><br>
+        <legend class="admin__legend"><span><?= $escaper->escapeHtml(__('Load Default Template')) ?></span></legend><br>
         <div class="admin__field required">
             <label class="admin__field-label" for="template_select">
-                <span><?= $block->escapeHtml(__('Template')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Template')) ?></span>
             </label>
             <div class="admin__field-control">
                 <select id="template_select" name="code" class="admin__control-select required-entry">
                     <?php foreach ($block->getTemplateOptions() as $group => $options): ?>
                         <?php if ($group): ?>
-                            <optgroup label="<?= $block->escapeHtmlAttr($group) ?>">
+                            <optgroup label="<?= $escaper->escapeHtmlAttr($group) ?>">
                         <?php endif; ?>
                         <?php foreach ($options as $option): ?>
-                            <option value="<?= $block->escapeHtmlAttr($option['value']) ?>"
+                            <option value="<?= $escaper->escapeHtmlAttr($option['value']) ?>"
                                 <?= /* @noEscape */ $block->getOrigTemplateCode() == $option['value'] ?
-                                    ' selected="selected"' : '' ?>><?= $block->escapeHtml($option['label']) ?>
+                                    ' selected="selected"' : '' ?>><?= $escaper->escapeHtml($option['label']) ?>
                             </option>
                         <?php endforeach; ?>
                         <?php if ($group): ?>
@@ -49,15 +52,15 @@ use Magento\Framework\App\TemplateTypesInterface;
 </form>
 <?php endif ?>
 
-<form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" id="email_template_edit_form">
+<form action="<?= $escaper->escapeUrl($block->getSaveUrl()) ?>" method="post" id="email_template_edit_form">
     <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
     <input type="hidden" id="change_flag_element" name="_change_type_flag" value="" />
     <input type="hidden" id="orig_template_code" name="orig_template_code"
-           value="<?= $block->escapeHtmlAttr($block->getOrigTemplateCode()) ?>" />
+           value="<?= $escaper->escapeHtmlAttr($block->getOrigTemplateCode()) ?>" />
     <?= /* @noEscape */ $block->getFormHtml() ?>
 </form>
 
-<form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="email_template_preview_form"
+<form action="<?= $escaper->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="email_template_preview_form"
       target="_blank">
     <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
     <div class="no-display">
@@ -132,7 +135,7 @@ require([
             var self = this;
 
             confirm({
-                content: "{$block->escapeJs(__('Are you sure you want to strip tags?'))}",
+                content: "{$escaper->escapeJs(__('Are you sure you want to strip tags?'))}",
                 actions: {
                     confirm: function () {
                         self.unconvertedText = $('template_text').value;
@@ -188,10 +191,10 @@ require([
 
         deleteTemplate: function() {
             confirm({
-                content: "{$block->escapeJs(__('Are you sure you want to delete this template?'))}",
+                content: "{$escaper->escapeJs(__('Are you sure you want to delete this template?'))}",
                 actions: {
                     confirm: function () {
-                        window.location.href = '{$block->escapeJs($block->getDeleteUrl())}';
+                        window.location.href = '{$escaper->escapeJs($block->getDeleteUrl())}';
                     }
                 }
             });
@@ -238,7 +241,7 @@ require([
                        }.bind(this));
                    } else {
                        alert({
-                           content: '{$block->escapeJs(__(
+                           content: '{$escaper->escapeJs(__(
                                'The template did not load. Please review the log for details.'
                             ))}'
                        });

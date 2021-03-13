@@ -8,27 +8,35 @@ declare(strict_types=1);
 
 namespace Magento\Email\Test\Unit\Block\Adminhtml\Template\Render;
 
+use Magento\Backend\Block\Context;
 use Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Sender;
 use Magento\Framework\DataObject;
+use Magento\Framework\Escaper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SenderTest extends TestCase
 {
     /**
-     * @var MockObject|Sender
+     * @var Sender
      */
-    protected $block;
+    private $block;
+
+    /**
+     * @var MockObject|Escaper
+     */
+    private $escaperMock;
 
     /**
      * Setup environment
      */
     protected function setUp(): void
     {
-        $this->block = $this->getMockBuilder(Sender::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['escapeHtml'])
-            ->getMock();
+        $this->escaperMock = $this->createMock(Escaper::class);
+        $contextMock = $this->createMock(Context::class);
+        $contextMock->method('getEscaper')->willReturn($this->escaperMock);
+
+        $this->block = new Sender($contextMock);
     }
 
     /**
@@ -37,8 +45,8 @@ class SenderTest extends TestCase
     public function testRenderWithSenderNameAndEmail()
     {
         $templateSenderEmail = 'test';
-        $this->block->expects($this->any())->method('escapeHtml')->with($templateSenderEmail)
-            ->willReturn('test');
+        $this->escaperMock->expects($this->any())->method('escapeHtml')->with($templateSenderEmail)
+            ->willReturn($templateSenderEmail);
         $actualResult = $this->block->render(
             new DataObject(
                 [
@@ -56,8 +64,8 @@ class SenderTest extends TestCase
     public function testRenderWithNoSenderNameAndEmail()
     {
         $templateSenderEmail = '';
-        $this->block->expects($this->any())->method('escapeHtml')->with($templateSenderEmail)
-            ->willReturn('');
+        $this->escaperMock->expects($this->any())->method('escapeHtml')->with($templateSenderEmail)
+            ->willReturn($templateSenderEmail);
         $actualResult = $this->block->render(
             new DataObject(
                 [
