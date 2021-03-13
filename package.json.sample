@@ -8,6 +8,9 @@
     "url": "https://github.com/magento/magento2.git"
   },
   "homepage": "http://magento.com/",
+  "dependencies": {
+    "less": "^3.0.4"
+  },
   "devDependencies": {
     "glob": "~7.1.1",
     "grunt": "~1.0.1",
@@ -19,7 +22,7 @@
     "grunt-contrib-cssmin": "~2.2.1",
     "grunt-contrib-imagemin": "~2.0.1",
     "grunt-contrib-jasmine": "~1.2.0",
-    "grunt-contrib-less": "~1.4.1",
+    "grunt-contrib-less": "~2.0.0",
     "grunt-contrib-watch": "~1.0.0",
     "grunt-eslint": "~20.1.0",
     "grunt-exec": "~3.0.0",
