@@ -80,11 +80,11 @@ class Window extends \Magento\Backend\Block\Template
     protected function _toHtml()
     {
         if ($this->canShow()) {
-            $this->setHeaderText($this->escapeHtml(__('Incoming Message')));
-            $this->setCloseText($this->escapeHtml(__('close')));
-            $this->setReadDetailsText($this->escapeHtml(__('Read Details')));
-            $this->setNoticeMessageText($this->escapeHtml($this->_getLatestItem()->getTitle()));
-            $this->setNoticeMessageUrl($this->escapeUrl($this->_getLatestItem()->getUrl()));
+            $this->setHeaderText($this->_escaper->escapeHtml(__('Incoming Message')));
+            $this->setCloseText($this->_escaper->escapeHtml(__('close')));
+            $this->setReadDetailsText($this->_escaper->escapeHtml(__('Read Details')));
+            $this->setNoticeMessageText($this->_escaper->escapeHtml($this->_getLatestItem()->getTitle()));
+            $this->setNoticeMessageUrl($this->_escaper->escapeUrl($this->_getLatestItem()->getUrl()));
             $this->setSeverityText('critical');
             return parent::_toHtml();
         }
