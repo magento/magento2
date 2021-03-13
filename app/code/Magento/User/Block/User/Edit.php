@@ -72,7 +72,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                 [
                     'label' => __('Force Sign-In'),
                     'class' => 'invalidate-token',
-                    'onclick' => "deleteConfirm('" . $this->escapeJs($this->escapeHtml($deleteConfirmMsg)) .
+                    'onclick' => "deleteConfirm('" . $this->_escaper->escapeJs($this->_escaper->escapeHtml($deleteConfirmMsg)) .
                         "', '" . $this->getInvalidateUrl() . "')",
                 ]
             );
@@ -126,7 +126,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     public function getHeaderText()
     {
         if ($this->_coreRegistry->registry('permissions_user')->getId()) {
-            $username = $this->escapeHtml($this->_coreRegistry->registry('permissions_user')->getUsername());
+            $username = $this->_escaper->escapeHtml($this->_coreRegistry->registry('permissions_user')->getUsername());
             return __("Edit User '%1'", $username);
         } else {
             return __('New User');
