@@ -252,7 +252,7 @@ class Links extends \Magento\Backend\Block\Template
         foreach ($links as $item) {
             $tmpLinkItem = [
                 'link_id' => $item->getId(),
-                'title' => $this->escapeHtml($item->getTitle()),
+                'title' => $this->_escaper->escapeHtml($item->getTitle()),
                 'price' => $this->getCanReadPrice() ? $this->getPriceValue($item->getPrice()) : '',
                 'number_of_downloads' => $item->getNumberOfDownloads(),
                 'is_shareable' => $item->getIsShareable(),

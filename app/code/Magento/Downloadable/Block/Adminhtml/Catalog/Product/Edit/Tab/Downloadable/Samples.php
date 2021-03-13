@@ -149,7 +149,7 @@ class Samples extends \Magento\Backend\Block\Widget
         foreach ($samples as $item) {
             $tmpSampleItem = [
                 'sample_id' => $item->getId(),
-                'title' => $this->escapeHtml($item->getTitle()),
+                'title' => $this->_escaper->escapeHtml($item->getTitle()),
                 'sample_url' => $item->getSampleUrl(),
                 'sample_type' => $item->getSampleType(),
                 'sort_order' => $item->getSortOrder(),
