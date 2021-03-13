@@ -144,7 +144,7 @@ class Button extends AbstractRenderer
             $attributes[] = sprintf(
                 '%s="%s"',
                 $attributeName,
-                $this->escapeHtmlAttr($attributeValue, false)
+                $this->_escaper->escapeHtmlAttr($attributeValue, false)
             );
         }
 
@@ -165,7 +165,7 @@ class Button extends AbstractRenderer
                 //Will render event handlers and style as separate tags
                 continue;
             }
-            $html .= ($html ? ' ' : '') ."{$attributeName}=\"{$this->escapeHtmlAttr($attributeValue)}\"";
+            $html .= ($html ? ' ' : '') ."{$attributeName}=\"{$this->_escaper->escapeHtmlAttr($attributeValue)}\"";
         }
 
         return $html;

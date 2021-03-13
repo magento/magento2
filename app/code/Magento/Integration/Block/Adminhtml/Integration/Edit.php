@@ -109,7 +109,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         } else {
             return __(
                 "Edit Integration '%1'",
-                $this->escapeHtml(
+                $this->_escaper->escapeHtml(
                     $this->_registry->registry(Integration::REGISTRY_KEY_CURRENT_INTEGRATION)[Info::DATA_NAME]
                 )
             );
