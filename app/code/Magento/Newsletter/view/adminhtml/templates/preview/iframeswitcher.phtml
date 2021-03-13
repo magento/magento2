@@ -4,7 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Backend\Block\Page $block */
+/**
+ * @var \Magento\Backend\Block\Page $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <div id="preview" class="cms-revision-preview">
@@ -20,7 +23,7 @@
         id="preview_iframe"
         class="preview_iframe"
         frameborder="0"
-        title="<?= $block->escapeHtmlAttr(__('Preview')) ?>"
+        title="<?= $escaper->escapeHtmlAttr(__('Preview')) ?>"
         width="100%"
         sandbox="allow-forms allow-pointer-lock allow-same-origin"
     >

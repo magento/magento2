@@ -26,15 +26,15 @@ class Sender extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     {
         $str = '';
         if ($row->getTemplateSenderName()) {
-            $str .= $this->escapeHtml($row->getTemplateSenderName()) . ' ';
+            $str .= $this->_escaper->escapeHtml($row->getTemplateSenderName()) . ' ';
         }
         if ($row->getTemplateSenderEmail()) {
-            $str .= '[' . $this->escapeHtml($row->getTemplateSenderEmail()) . ']';
+            $str .= '[' . $this->_escaper->escapeHtml($row->getTemplateSenderEmail()) . ']';
         }
         if ($str == '') {
             $str .= '---';
         }
-        
+
         return $str;
     }
 }

@@ -4,6 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Framework\View\Element\Template $block */
+/**
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
-<?= $block->escapeHtml(__($block->getData('message')), ['a']); ?>
+<?= $escaper->escapeHtml(__($block->getData('message')), ['a']); ?>
