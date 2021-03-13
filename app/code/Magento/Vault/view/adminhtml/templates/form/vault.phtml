@@ -6,9 +6,10 @@
 
 /**
  * @var Magento\Vault\Block\Form $block
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
-$code = $block->escapeHtml($block->getMethodCode());
+$code = $escaper->escapeHtml($block->getMethodCode());
 ?>
 <fieldset data-mage-init='{
         "Magento_Vault/js/vault": {
