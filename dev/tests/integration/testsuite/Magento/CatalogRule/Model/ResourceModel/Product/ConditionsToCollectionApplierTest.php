@@ -10,8 +10,6 @@ namespace Magento\CatalogRule\Model\ResourceModel\Product;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Model\Product;
 
-// @codingStandardsIgnoreFile
-
 class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
 {
     private $objectManager;

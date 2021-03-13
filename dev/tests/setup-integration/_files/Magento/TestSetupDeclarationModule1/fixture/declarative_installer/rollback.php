@@ -5,7 +5,6 @@
  */
 declare(strict_types=1);
 
-// @codingStandardsIgnoreFile
 return [
     'before' => [
         'store' => 'CREATE TABLE `store` (

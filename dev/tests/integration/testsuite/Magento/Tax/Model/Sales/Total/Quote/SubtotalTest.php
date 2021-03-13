@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
 use Magento\TestFramework\Helper\Bootstrap;
