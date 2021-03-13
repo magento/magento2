@@ -97,7 +97,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     public function getHeaderText()
     {
         if ($this->getWidgetInstance()->getId()) {
-            return __('Widget "%1"', $this->escapeHtml($this->getWidgetInstance()->getTitle()));
+            return __('Widget "%1"', $this->_escaper->escapeHtml($this->getWidgetInstance()->getTitle()));
         } else {
             return __('New Widget Instance');
         }

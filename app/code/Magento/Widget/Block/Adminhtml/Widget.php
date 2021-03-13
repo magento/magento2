@@ -47,7 +47,7 @@ require(['mage/adminhtml/wysiwyg/widget'], function() {
         'select_widget_type',
         'widget_options',
         '{$this->getUrl('adminhtml/*/loadOptions')}',
-        '{$this->escapeJs($this->getRequest()->getParam('widget_target_id'))}'
+        '{$this->_escaper->escapeJs($this->getRequest()->getParam('widget_target_id'))}'
     );
 });
 EOJS;
