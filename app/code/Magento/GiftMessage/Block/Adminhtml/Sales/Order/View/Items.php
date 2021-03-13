@@ -210,7 +210,7 @@ class Items extends \Magento\Backend\Block\Template
      */
     public function getSender()
     {
-        return $this->escapeHtml($this->getMessage()->getSender());
+        return $this->_escaper->escapeHtml($this->getMessage()->getSender());
     }
 
     /**
@@ -220,7 +220,7 @@ class Items extends \Magento\Backend\Block\Template
      */
     public function getRecipient()
     {
-        return $this->escapeHtml($this->getMessage()->getRecipient());
+        return $this->_escaper->escapeHtml($this->getMessage()->getRecipient());
     }
 
     /**
@@ -230,6 +230,6 @@ class Items extends \Magento\Backend\Block\Template
      */
     public function getMessageText()
     {
-        return $this->escapeHtml($this->getMessage()->getMessage());
+        return $this->_escaper->escapeHtml($this->getMessage()->getMessage());
     }
 }
