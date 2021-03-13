@@ -4,7 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Customer\Block\Adminhtml\Sales\Order\Address\Form\Renderer\Vat $block */
+/**
+ * @var \Magento\Customer\Block\Adminhtml\Sales\Order\Address\Form\Renderer\Vat $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 
 $_element = $block->getElement();
 $_note = $_element->getNote();
@@ -17,11 +20,11 @@ $_validateButton = $block->getValidateButton();
     <div class="hidden"><?= $_element->getElementHtml() ?></div>
     <?php else : ?>
     <?= $_element->getLabelHtml() ?>
-    <div class="admin__field-control <?= /* @noEscape */ $_element->hasValueClass() ? $block->escapeHtmlAttr($_element->getValueClass()) : 'value' ?><?= $_class ? $block->escapeHtmlAttr($_class) . '-value' : '' ?>">
+    <div class="admin__field-control <?= /* @noEscape */ $_element->hasValueClass() ? $escaper->escapeHtmlAttr($_element->getValueClass()) : 'value' ?><?= $_class ? $escaper->escapeHtmlAttr($_class) . '-value' : '' ?>">
         <?= $_element->getElementHtml() ?>
         <?php if ($_note) : ?>
-            <div class="admin__field-note<?= /* @noEscape */ $_class ? " {$block->escapeHtmlAttr($_class)}-note" : '' ?>" id="note_<?= $block->escapeHtmlAttr($_element->getId()) ?>">
-                <span><?= $block->escapeHtml($_note) ?></span>
+            <div class="admin__field-note<?= /* @noEscape */ $_class ? " {$escaper->escapeHtmlAttr($_class)}-note" : '' ?>" id="note_<?= $escaper->escapeHtmlAttr($_element->getId()) ?>">
+                <span><?= $escaper->escapeHtml($_note) ?></span>
             </div>
         <?php endif; ?>
         <div class="actions">

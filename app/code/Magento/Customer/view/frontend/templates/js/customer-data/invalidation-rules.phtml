@@ -4,7 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/* @var $block \Magento\Customer\Block\CustomerScopeData */
+/**
+ * @var $block \Magento\Customer\Block\CustomerScopeData
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <script type="text/x-magento-init">
     {
@@ -14,7 +17,7 @@
                     "website-rule": {
                         "Magento_Customer/js/invalidation-rules/website-rule": {
                             "scopeConfig": {
-                                "websiteId": "<?= $block->escapeJs($block->getWebsiteId()) ?>"
+                                "websiteId": "<?= $escaper->escapeJs($block->getWebsiteId()) ?>"
                             }
                         }
                     }

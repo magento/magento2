@@ -121,7 +121,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                 'invalidate_token',
                 [
                     'label' => __('Force Sign-In'),
-                    'onclick' => 'deleteConfirm(\'' . $this->escapeJs($this->escapeHtml($deleteConfirmMsg)) .
+                    'onclick' => 'deleteConfirm(\'' . $this->_escaper->escapeJs($this->_escaper->escapeHtml($deleteConfirmMsg)) .
                         '\', \'' . $url . '\')',
                     'class' => 'invalidate-token'
                 ],
@@ -161,7 +161,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $customerId = $this->getCustomerId();
         if ($customerId) {
             $customerData = $this->customerRepository->getById($customerId);
-            return $this->escapeHtml($this->_viewHelper->getCustomerName($customerData));
+            return $this->_escaper->escapeHtml($this->_viewHelper->getCustomerName($customerData));
         } else {
             return __('New Customer');
         }
