@@ -6,6 +6,7 @@
 
 /**
  * @var $block Magento\Shipping\Block\Adminhtml\Order\Tracking\View
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 
@@ -17,10 +18,10 @@ $shippingHelper = $block->getData('shippingHelper');
         <table class="data-table admin__control-table" id="shipment_tracking_info">
             <thead>
                 <tr class="headings">
-                    <th class="col-carrier"><?= $block->escapeHtml(__('Carrier')) ?></th>
-                    <th class="col-title"><?= $block->escapeHtml(__('Title')) ?></th>
-                    <th class="col-number"><?= $block->escapeHtml(__('Number')) ?></th>
-                    <th class="col-delete last"><?= $block->escapeHtml(__('Action')) ?></th>
+                    <th class="col-carrier"><?= $escaper->escapeHtml(__('Carrier')) ?></th>
+                    <th class="col-title"><?= $escaper->escapeHtml(__('Title')) ?></th>
+                    <th class="col-number"><?= $escaper->escapeHtml(__('Number')) ?></th>
+                    <th class="col-delete last"><?= $escaper->escapeHtml(__('Action')) ?></th>
                 </tr>
             </thead>
             <tfoot>
@@ -28,8 +29,8 @@ $shippingHelper = $block->getData('shippingHelper');
                     <td class="col-carrier">
                         <select name="carrier" class="select admin__control-select">
                             <?php foreach ($block->getCarriers() as $_code => $_name): ?>
-                            <option value="<?= $block->escapeHtmlAttr($_code) ?>">
-                                <?= $block->escapeHtml($_name) ?></option>
+                            <option value="<?= $escaper->escapeHtmlAttr($_code) ?>">
+                                <?= $escaper->escapeHtml($_name) ?></option>
                             <?php endforeach; ?>
                         </select>
                         <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
@@ -60,20 +61,20 @@ $shippingHelper = $block->getData('shippingHelper');
             <?php $i = 0; foreach ($_tracks as $_track): $i++ ?>
                 <tr class="<?= /* @noEscape */ ($i%2 == 0) ? 'even' : 'odd' ?>">
                     <td class="col-carrier">
-                        <?= $block->escapeHtml($block->getCarrierTitle($_track->getCarrierCode())) ?>
+                        <?= $escaper->escapeHtml($block->getCarrierTitle($_track->getCarrierCode())) ?>
                     </td>
-                    <td class="col-title"><?= $block->escapeHtml($_track->getTitle()) ?></td>
+                    <td class="col-title"><?= $escaper->escapeHtml($_track->getTitle()) ?></td>
                     <td class="col-number">
                         <?php if ($_track->isCustom()): ?>
-                            <?= $block->escapeHtml($_track->getNumber()) ?>
+                            <?= $escaper->escapeHtml($_track->getNumber()) ?>
                         <?php else: ?>
                         <a id="col-track-<?= (int) $_track->getId() ?>" href="#">
-                            <?= $block->escapeHtml($_track->getNumber()) ?>
+                            <?= $escaper->escapeHtml($_track->getNumber()) ?>
                          </a>
                             <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                                 'onclick',
                                 "event.preventDefault();
-                                popWin('{$block->escapeJs($shippingHelper->getTrackingPopupUrlBySalesModel($_track))}',
+                                popWin('{$escaper->escapeJs($shippingHelper->getTrackingPopupUrlBySalesModel($_track))}',
                                 'trackorder','width=800,height=600,resizable=yes,scrollbars=yes')",
                                 'a#col-track-' .  (int) $_track->getId()
                             ) ?>
@@ -82,12 +83,12 @@ $shippingHelper = $block->getData('shippingHelper');
                     </td>
                     <td class="col-delete last">
                         <button class="action-delete" type="button" id="del-track-<?= (int) $_track->getId() ?>">
-                            <span><?= $block->escapeHtml(__('Delete')) ?></span>
+                            <span><?= $escaper->escapeHtml(__('Delete')) ?></span>
                         </button>
                     </td>
                     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                         'onclick',
-                        "deleteTrackingNumber('{$block->escapeJs($block->getRemoveUrl($_track))}');
+                        "deleteTrackingNumber('{$escaper->escapeJs($block->getRemoveUrl($_track))}');
                          event.preventDefault();",
                         '#del-track-' . (int) $_track->getId()
                     ) ?>
@@ -117,7 +118,7 @@ function saveTrackingInfo(node, url) {
 
 function deleteTrackingNumber(url) {
     confirm({
-        content: '{$block->escapeJs(__('Are you sure?'))}',
+        content: '{$escaper->escapeJs(__('Are you sure?'))}',
         actions: {
             /**
              * Confirm action.
