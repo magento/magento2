@@ -6,6 +6,7 @@
 
 /**
  * @var $block \Magento\MediaStorage\Block\System\Config\System\Storage\Media\Synchronize
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
@@ -39,8 +40,8 @@ require([
         $('system_media_storage_configuration_media_database').value
     );
 
-    addAllowedStorage({$block->escapeJs($syncStorageParams['storage_type'])},
-     '{$block->escapeJs($syncStorageParams['connection_name'])}');
+    addAllowedStorage({$escaper->escapeJs($syncStorageParams['storage_type'])},
+     '{$escaper->escapeJs($syncStorageParams['connection_name'])}');
 
     defaultValues   = [];
     defaultValues['system_media_storage_configuration_media_storage']   =
@@ -100,7 +101,7 @@ require([
     }
 
     var checkStatus = function() {
-        u = new Ajax.PeriodicalUpdater('', '{$block->escapeJs($block->getAjaxStatusUpdateUrl())}', {
+        u = new Ajax.PeriodicalUpdater('', '{$escaper->escapeJs($block->getAjaxStatusUpdateUrl())}', {
             method:     'get',
             frequency:  5,
             loaderArea: false,
@@ -162,7 +163,7 @@ require([
             connection: $('system_media_storage_configuration_media_database').value
         };
 
-        new Ajax.Request('{$block->escapeJs($block->getAjaxSyncUrl())}', {
+        new Ajax.Request('{$escaper->escapeJs($block->getAjaxSyncUrl())}', {
             parameters:     params,
             loaderArea:     false,
             asynchronous:   true
@@ -188,7 +189,7 @@ script;
 
 <?= $block->getButtonHtml() ?>
 <span class="sync-indicator no-display" id="sync_span">
-    <img alt="Synchronize" src="<?= $block->escapeUrl($block->getViewFileUrl('images/process_spinner.gif')) ?>"/>
+    <img alt="Synchronize" src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/process_spinner.gif')) ?>"/>
     <span id="sync_message_span"></span>
 </span>
 <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("margin:0 5px", '#sync_span img') ?>
