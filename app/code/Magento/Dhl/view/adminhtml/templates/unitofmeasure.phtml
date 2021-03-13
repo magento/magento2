@@ -5,6 +5,7 @@
  */
 /**
  * @var \Magento\Dhl\Block\Adminhtml\Unitofmeasure $block
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
@@ -13,17 +14,17 @@
     //<![CDATA[
     require(["prototype"], function(){
         function changeDimensions() {
-            var dimensionUnit = "({$block->escapeHtml($block->getInch())})";
-            var dhlUnitOfMeasureNote = "{$block->escapeHtml($block->getDivideOrderWeightNoteLbp())}";
+            var dimensionUnit = "({$escaper->escapeHtml($block->getInch())})";
+            var dhlUnitOfMeasureNote = "{$escaper->escapeHtml($block->getDivideOrderWeightNoteLbp())}";
             if ($("carriers_dhl_unit_of_measure").value == "K") {
-                dimensionUnit = "({$block->escapeHtml($block->getCm())})";
-                dhlUnitOfMeasureNote = "{$block->escapeHtml($block->getDivideOrderWeightNoteKg())}";
+                dimensionUnit = "({$escaper->escapeHtml($block->getCm())})";
+                dhlUnitOfMeasureNote = "{$escaper->escapeHtml($block->getDivideOrderWeightNoteKg())}";
             }
-            \$$('[for="carriers_dhl_height"]')[0].innerHTML = "{$block->escapeHtml($block->getHeight())} " +
+            \$$('[for="carriers_dhl_height"]')[0].innerHTML = "{$escaper->escapeHtml($block->getHeight())} " +
              dimensionUnit;
-            \$$('[for="carriers_dhl_depth"]')[0].innerHTML = "{$block->escapeHtml($block->getDepth())} " +
+            \$$('[for="carriers_dhl_depth"]')[0].innerHTML = "{$escaper->escapeHtml($block->getDepth())} " +
              dimensionUnit;
-            \$$('[for="carriers_dhl_width"]')[0].innerHTML = "{$block->escapeHtml($block->getWidth())} " +
+            \$$('[for="carriers_dhl_width"]')[0].innerHTML = "{$escaper->escapeHtml($block->getWidth())} " +
              dimensionUnit;
 
             $("carriers_dhl_divide_order_weight").next().down().innerHTML = dhlUnitOfMeasureNote;
