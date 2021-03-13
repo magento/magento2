@@ -55,7 +55,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     public function getHeaderText()
     {
         if ($this->coreRegistry->registry('current_catalog_search')->getId()) {
-            $queryText = $this->escapeHtml($this->coreRegistry->registry('current_catalog_search')->getQueryText());
+            $queryText = $this->_escaper->escapeHtml($this->coreRegistry->registry('current_catalog_search')->getQueryText());
             return __("Edit Search '%1'", $queryText);
         } else {
             return __('New Search');

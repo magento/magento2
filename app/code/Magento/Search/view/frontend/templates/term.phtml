@@ -6,6 +6,7 @@
 
 /**
  * @var \Magento\Search\Block\Term $block
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
@@ -13,8 +14,8 @@
     <ul class="search-terms">
         <?php foreach ($block->getTerms() as $_term): ?>
             <li id="term-<?= /* @noEscape */ $_term->getId() ?>" class="item">
-                <a href="<?= $block->escapeUrl($block->getSearchUrl($_term)) ?>">
-                    <?= $block->escapeHtml($_term->getQueryText()) ?>
+                <a href="<?= $escaper->escapeUrl($block->getSearchUrl($_term)) ?>">
+                    <?= $escaper->escapeHtml($_term->getQueryText()) ?>
                 </a>
             </li>
             <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
@@ -25,6 +26,6 @@
     </ul>
 <?php else: ?>
     <div class="message notice">
-        <div><?= $block->escapeHtml(__('There are no search terms available.')) ?></div>
+        <div><?= $escaper->escapeHtml(__('There are no search terms available.')) ?></div>
     </div>
 <?php endif; ?>
