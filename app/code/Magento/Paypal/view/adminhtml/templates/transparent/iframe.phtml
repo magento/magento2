@@ -6,6 +6,7 @@
 
 /**
  * @var \Magento\Payment\Block\Transparent\Iframe $block
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 $params = $block->getParams();
@@ -18,14 +19,14 @@ $jsonHelper = $block->getData('jsonHelper');
 <?php
 $scriptString = '';
 if (isset($params['redirect'])):
-    $scriptString .= 'window.location="' . $block->escapeJs($params['redirect']) . '";' . PHP_EOL;
+    $scriptString .= 'window.location="' . $escaper->escapeJs($params['redirect']) . '";' . PHP_EOL;
 elseif (isset($params['redirect_parent'])):
-    $scriptString .= 'window.top.location="' . $block->escapeJs($params['redirect_parent']) . '";' . PHP_EOL;
+    $scriptString .= 'window.top.location="' . $escaper->escapeJs($params['redirect_parent']) . '";' . PHP_EOL;
 elseif (isset($params['error_msg'])):
     $scriptString .= 'window.top.alert(' . /* @noEscape */ $jsonHelper->jsonEncode($params['error_msg']) . ');' .
         PHP_EOL;
 elseif (isset($params['order_success'])):
-    $scriptString .= 'window.top.location = "' . $block->escapeJs($params['order_success']) . '";' . PHP_EOL;
+    $scriptString .= 'window.top.location = "' . $escaper->escapeJs($params['order_success']) . '";' . PHP_EOL;
 else:
     $scriptString .= <<<script
     var require = window.top.require;

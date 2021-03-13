@@ -132,7 +132,7 @@ class Agreements extends \Magento\Framework\View\Element\Template
                 $value = $item->getData($key) ? $item->getData($key) : __('N/A');
                 break;
         }
-        return $this->escapeHtml($value);
+        return $this->_escaper->escapeHtml($value);
     }
 
     /**

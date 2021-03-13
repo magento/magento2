@@ -4,10 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-
-
 /**
  * @var \Magento\Paypal\Block\Payflow\Link\Iframe $block
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
@@ -31,13 +30,13 @@
             }
         }
 
-        var cartUrl = '{$block->escapeJs($block->getUrl('checkout/cart'))}',
-            successUrl = '{$block->escapeJs($block->getUrl('checkout/onepage/success'))}',
-            goToSuccessPage = '{$block->escapeJs($block->getGotoSuccessPage())}',
+        var cartUrl = '{$escaper->escapeJs($block->getUrl('checkout/cart'))}',
+            successUrl = '{$escaper->escapeJs($block->getUrl('checkout/onepage/success'))}',
+            goToSuccessPage = '{$escaper->escapeJs($block->getGotoSuccessPage())}',
             require = window.top.require,
             windowContext = window,
             errorMessage = {
-                message: '{$block->escapeJs($block->getErrorMsg())}'
+                message: '{$escaper->escapeJs($block->getErrorMsg())}'
             };
 
         if(typeof(require) == "undefined") {

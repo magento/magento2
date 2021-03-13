@@ -44,7 +44,7 @@ use Magento\Paypal\Block\Express\Review;
                                                 ?>">
                                                     <?php foreach ($rates as $rate): ?>
                                                         <option value="<?=
-                                                                        $block->escapeHtml(
+                                                                        $escaper->escapeHtml(
                                                                             $block->renderShippingRateValue($rate)
                                                                         );
                                                                         ?>"
@@ -104,7 +104,7 @@ use Magento\Paypal\Block\Express\Review;
                     <?= $escaper->escapeHtml($block->getPaymentMethodTitle()) ?><br>
                     <?= $escaper->escapeHtml($block->getEmail()) ?> <br>
                     <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png"
-                         alt="<?= $block->escapeHtml(__('Buy now with PayPal')) ?>"/>
+                         alt="<?= $escaper->escapeHtml(__('Buy now with PayPal')) ?>"/>
                 </div>
                 <?php if ($block->getEditUrl()): ?>
                     <div class="box-actions">

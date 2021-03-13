@@ -4,28 +4,27 @@
  * See COPYING.txt for license details.
  */
 
-
 /**
  * @var \Magento\Paypal\Block\Logo $block
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
- * @see \Magento\Paypal\Block\Logo
  */
 ?>
 
 <div class="block paypal acceptance">
     <div class="block-content">
-        <a href="#" title="<?= $block->escapeHtml(__('Additional Options')) ?>"
+        <a href="#" title="<?= $escaper->escapeHtml(__('Additional Options')) ?>"
            class="action paypal additional">
-            <img src="<?= $block->escapeUrl($block->getLogoImageUrl()) ?>"
-                 alt="<?= $block->escapeHtml(__('Additional Options')) ?>"
-                 title="<?= $block->escapeHtml(__('Additional Options')) ?>" />
+            <img src="<?= $escaper->escapeUrl($block->getLogoImageUrl()) ?>"
+                 alt="<?= $escaper->escapeHtml(__('Additional Options')) ?>"
+                 title="<?= $escaper->escapeHtml(__('Additional Options')) ?>" />
         </a>
     </div>
 </div>
 <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
     'onclick',
     "window.open(
-               '" . $block->escapeJs($block->getAboutPaypalPageUrl()) . "',
+               '" . $escaper->escapeJs($block->getAboutPaypalPageUrl()) . "',
                'paypal',
                'width=600,height=350,left=0,top=0,location=no,status=yes,scrollbars=yes,resizable=yes'
                ); event.preventDefault();",

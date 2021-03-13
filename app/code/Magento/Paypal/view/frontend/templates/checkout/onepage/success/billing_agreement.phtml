@@ -4,14 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-
 /**
  * @var \Magento\Paypal\Block\Checkout\Onepage\Success\BillingAgreement $block
+ * @var \Magento\Framework\Escaper $escaper
  */
 ?>
 <p data-mage-init='{"Magento_Paypal/js/in-context/billing-agreement": {"invalidateOnLoad" : true}}'>
-    <?= $block->escapeHtml(__('Your billing agreement # is: ')) ?>
-    <a href="<?= $block->escapeUrl($block->getAgreementUrl()) ?>">
-        <?= $block->escapeHtml($block->getAgreementRefId()) ?>
+    <?= $escaper->escapeHtml(__('Your billing agreement # is: ')) ?>
+    <a href="<?= $escaper->escapeUrl($block->getAgreementUrl()) ?>">
+        <?= $escaper->escapeHtml($block->getAgreementRefId()) ?>
     </a>.
 </p>
