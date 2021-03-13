@@ -10,6 +10,7 @@
  * Template for displaying product price at product view page, gift registry and wishlist
  *
  * @var $block \Magento\Catalog\Block\Product\Price
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
@@ -41,13 +42,13 @@
         <a href="#"
            id="<?= /* @noEscape */ ($popupId) ?>"
            data-mage-init='{"addToCart":{"popupId": "#<?= /* @noEscape */ ($popupId) ?>",
-                                         "productName": "<?= /* @noEscape */ $block->escapeJs($_product->getName()) ?>",
+                                         "productName": "<?= /* @noEscape */ $escaper->escapeJs($_product->getName()) ?>",
                                          "realPrice": <?= /* @noEscape */ $block->getRealPriceJs($_product) ?>,
                                          "msrpPrice": "<?= /* @noEscape */ $_msrpPrice ?>",
                                          "priceElementId":"<?= /* @noEscape */ $priceElementId ?>",
                                          "popupCartButtonId": "#map-popup-button",
                                          "cartForm": "#wishlist-view-form"}}'>
-            <?= $block->escapeHtml(__('Click for price')) ?>
+            <?= $escaper->escapeHtml(__('Click for price')) ?>
         </a>
         <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
             'onclick',
@@ -56,15 +57,15 @@
         ) ?>
     <?php else: ?>
         <span class="msrp-message">
-            <?= $block->escapeHtml($_catalogHelper->getMsrpPriceMessage($_product)) ?>
+            <?= $escaper->escapeHtml($_catalogHelper->getMsrpPriceMessage($_product)) ?>
         </span>
     <?php endif; ?>
     <?php $helpLinkId = 'msrp-help-' . $_id . $block->getRandomString(20); ?>
     <a href="#" id="<?= /* @noEscape */ ($helpLinkId) ?>"
        data-mage-init='{"addToCart":{"helpLinkId": "#<?= /* @noEscape */ ($helpLinkId) ?>",
-                                     "productName": "<?= /* @noEscape */$block->escapeJs($_product->getName()) ?>"}}'
+                                     "productName": "<?= /* @noEscape */$escaper->escapeJs($_product->getName()) ?>"}}'
        class="link tip">
-        <?= $block->escapeHtml(__("What's this?")) ?>
+        <?= $escaper->escapeHtml(__("What's this?")) ?>
     </a>
     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
         'onclick',
