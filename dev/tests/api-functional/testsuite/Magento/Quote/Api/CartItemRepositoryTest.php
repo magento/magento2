@@ -45,6 +45,7 @@ class CartItemRepositoryTest extends WebapiAbstract
             $data = [
                 'item_id' => (int)$item->getItemId(),
                 'sku' => $item->getSku(),
+                'original_product_sku' => $item->getOriginalProductSku(),
                 'name' => $item->getName(),
                 'price' => (float)$item->getPrice(),
                 'qty' => (float)$item->getQty(),

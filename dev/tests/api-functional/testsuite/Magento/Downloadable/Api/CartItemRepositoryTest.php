@@ -247,6 +247,7 @@ class CartItemRepositoryTest extends WebapiAbstract
         $expectedResult = [[
             'item_id' => $item->getItemId(),
             'sku' => $item->getSku(),
+            'original_product_sku' => $item->getOriginalProductSku(),
             'name' => $item->getName(),
             'price' => $item->getPrice(),
             'qty' => $item->getQty(),

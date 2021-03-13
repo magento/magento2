@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyProductSKUInOrderTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Magento REST API returns not existing SKU when custom option was set #25461 #30667"/>
+            <title value="Verify that order contains real SKU of products and not options sku"/>
+            <description value="Verify that order contains real SKU of products and not options sku"/>
+            <severity value="MAJOR"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <!-- Create simple with options product -->
+            <createData entity="SimpleProduct" stepKey="createSimpleProductWithCustomOptions">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <updateData createDataKey="createSimpleProductWithCustomOptions" entity="productWithDropdownOption" stepKey="updateProductWithCustomOption"/>
+            <!-- Create configurable product -->
+            <createData entity="BaseConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <updateData createDataKey="createConfigProduct" entity="productWithOptionRadiobutton" stepKey="updateConfigurableProductWithCustomOption"/>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeFirstOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeSecondOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeFirstOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeSecondOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigFirstChildProduct">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeFirstOption"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigSecondChildProduct">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeSecondOption"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeFirstOption"/>
+                <requiredEntity createDataKey="getConfigAttributeSecondOption"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddFirstChild">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigFirstChildProduct"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddSecondChild">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigSecondChildProduct"/>
+            </createData>
+            <!-- Create the customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!-- Reindex and flush the cache to display products on the category page -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete created data -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridToDefaultView"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteAllProducts"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Login to Storefront as Customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$" />
+        </actionGroup>
+        <!-- Place the order -->
+        <!-- Add simple with options to cart -->
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProductWithCustomOptions.custom_attributes[url_key]$$)}}" stepKey="goSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForSecondProductPageLoad"/>
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectFirstOption">
+            <argument name="attributeLabel" value="{{ProductOptionValueDropdown.title}}"/>
+            <argument name="optionLabel" value="{{ProductOptionValueWithSkuDropdown1.title}}"/>
+        </actionGroup>
+        <!-- Add the product to the shopping cart -->
+        <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="productName" value="$$createSimpleProductWithCustomOptions.name$$"/>
+        </actionGroup>
+        <!-- Add configurable with options to cart -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goConfigurableProductPage">
+            <argument name="productUrl" value="$$createConfigProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductWithSelectedConfigurableAndCustomOptionsToCartActionGroup" stepKey="addConfigurableToCart">
+            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="option" value="$$getConfigAttributeSecondOption.label$$"/>
+            <argument name="customizableOption" value="{{ProductOptionValueRadioButtons1.title}}"/>
+        </actionGroup>
+        <!-- Place the Order -->
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="onCheckout"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
+        <waitForPageLoad stepKey="waitForSuccess"/>
+        <!--Open Order View Page-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="openOrdersGridPage"/>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="openOrderViewPage"/>
+        <!--Check if order has correct products sku-->
+        <actionGroup ref="SeeProductInItemsOrderedActionGroup" stepKey="verifySimpleProductSku">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="SeeProductInItemsOrderedActionGroup" stepKey="verifyConfigurableProductSku">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+    </test>
+</tests>

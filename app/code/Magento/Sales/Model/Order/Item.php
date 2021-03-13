@@ -2415,4 +2415,20 @@ class Item extends AbstractModel implements OrderItemInterface
     {
         return $this->getQtyToShip() > $this->getQtyToCancel();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getOriginalProductSku()
+    {
+        return $this->getData(OrderItemInterface::ORIGINAL_PRODUCT_SKU);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setOriginalProductSku($sku)
+    {
+        return $this->setData(OrderItemInterface::ORIGINAL_PRODUCT_SKU, $sku);
+    }
 }
