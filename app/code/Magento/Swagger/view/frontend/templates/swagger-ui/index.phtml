@@ -14,6 +14,7 @@
 
 /**
  * @var \Magento\Swagger\Block\Index $block
+ * @var \Magento\Framework\Escaper $escaper
  */
 
 $schemaUrl = $block->getSchemaUrl();
@@ -57,7 +58,7 @@ $schemaUrl = $block->getSchemaUrl();
     <div class="swagger-ui-wrap">
         <a id="logo" href="http://swagger.io">swagger</a>
         <form id='api_selector'>
-            <input id="input_baseUrl" type="hidden" value="<?= $block->escapeUrl($schemaUrl) ?>"/>
+            <input id="input_baseUrl" type="hidden" value="<?= $escaper->escapeUrl($schemaUrl) ?>"/>
             <div class='input'><input placeholder="api_key" id="input_apiKey" name="apiKey" type="text"/></div>
             <div class='input'><a id="explore" href="#" data-sw-translate>apply</a></div>
         </form>
