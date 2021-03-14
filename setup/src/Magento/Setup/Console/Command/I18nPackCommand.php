@@ -35,13 +35,14 @@ class I18nPackCommand extends Command
      * 'merge' mode value
      */
     const MODE_MERGE = 'merge';
+    const NAME = 'i18n:pack';
 
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
-        $this->setName('i18n:pack')
+        $this->setName(self::NAME)
             ->setDescription('Saves language package');
         $this->setDefinition([
             new InputArgument(

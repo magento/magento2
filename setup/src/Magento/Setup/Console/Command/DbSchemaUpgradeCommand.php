@@ -18,6 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class DbSchemaUpgradeCommand extends AbstractSetupCommand
 {
+    const NAME = 'setup:db-schema:upgrade';
     /**
      * Factory to create installer.
      *
@@ -53,7 +54,7 @@ class DbSchemaUpgradeCommand extends AbstractSetupCommand
     protected function configure()
     {
         $this
-            ->setName('setup:db-schema:upgrade')
+            ->setName(self::NAME)
             ->setDefinition(
                 [
                     new InputOption(

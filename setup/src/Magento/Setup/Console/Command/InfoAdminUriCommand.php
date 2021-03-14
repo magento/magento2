@@ -13,6 +13,7 @@ use \Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 
 class InfoAdminUriCommand extends Command
 {
+    const NAME = 'info:adminuri';
     /**
      * @var \Magento\Framework\App\DeploymentConfig
      */
@@ -38,7 +39,7 @@ class InfoAdminUriCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('info:adminuri')
+        $this->setName(self::NAME)
             ->setDescription('Displays the Magento Admin URI');
         parent::configure();
     }

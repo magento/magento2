@@ -25,6 +25,7 @@ class I18nCollectPhrasesCommand extends Command
     const SHORTCUT_KEY_OUTPUT = 'o';
     const INPUT_KEY_MAGENTO = 'magento';
     const SHORTCUT_KEY_MAGENTO = 'm';
+    const NAME = 'i18n:collect-phrases';
     /**#@- */
 
     /**
@@ -32,7 +33,7 @@ class I18nCollectPhrasesCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('i18n:collect-phrases')
+        $this->setName(self::NAME)
             ->setDescription('Discovers phrases in the codebase');
         $this->setDefinition([
             new InputArgument(

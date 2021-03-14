@@ -88,6 +88,7 @@ class InstallCommand extends AbstractSetupCommand
      * Regex for sales_order_increment_prefix validation.
      */
     const SALES_ORDER_INCREMENT_PREFIX_RULE = '/^.{0,20}$/';
+    const NAME = 'setup:install';
 
     /**
      * Installer service factory
@@ -215,7 +216,7 @@ class InstallCommand extends AbstractSetupCommand
                 false
             ),
         ]);
-        $this->setName('setup:install')
+        $this->setName(self::NAME)
             ->setDescription('Installs the Magento application')
             ->setDefinition($inputOptions);
         parent::configure();

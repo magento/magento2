@@ -29,6 +29,7 @@ class BackupCommand extends AbstractSetupCommand
     const INPUT_KEY_CODE = 'code';
     const INPUT_KEY_MEDIA = 'media';
     const INPUT_KEY_DB = 'db';
+    const NAME = 'setup:backup';
 
     /**
      * Object Manager
@@ -105,7 +106,7 @@ class BackupCommand extends AbstractSetupCommand
                 'Take complete database backup'
             ),
         ];
-        $this->setName('setup:backup')
+        $this->setName(self::NAME)
             ->setDescription('Takes backup of Magento Application code base, media and database')
             ->setDefinition($options);
         parent::configure();
@@ -155,7 +156,7 @@ class BackupCommand extends AbstractSetupCommand
             $output,
             false
         );
-        
+
         return $returnValue;
     }
 
