@@ -14,9 +14,11 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\Exception\StateException;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Phrase;
 
 /**
  * Repository for categories.
@@ -144,10 +146,12 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
 
     /**
      * @inheritdoc
+     *
+     * @throws SerializationException
      */
     public function get($categoryId, $storeId = null)
     {
-        $cacheKey = $storeId ?? 'all';
+        $cacheKey = $this->getScopeCacheKey($storeId);
         if (!isset($this->instances[$categoryId][$cacheKey])) {
             /** @var Category $category */
             $category = $this->categoryFactory->create();
@@ -253,5 +257,27 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
                 ->get(MetadataPool::class);
         }
         return $this->metadataPool;
+    }
+
+    /**
+     * Returns a cache key based on scope
+     *
+     * @param string|int|null $storeId
+     *
+     * @throws SerializationException
+     * @return int|string
+     */
+    private function getScopeCacheKey($storeId = null)
+    {
+        if (null !== $storeId && !is_numeric($storeId)) {
+            throw new SerializationException(
+                new Phrase(
+                    'The "%value" value\'s type is invalid. The "%type" type was expected. '
+                    . 'Verify and try again.',
+                    ['value' => $storeId, 'type' => 'int']
+                )
+            );
+        }
+        return $storeId === null ? 'all' : (int)$storeId;
     }
 }

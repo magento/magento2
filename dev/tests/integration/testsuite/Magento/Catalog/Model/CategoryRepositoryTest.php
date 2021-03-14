@@ -13,6 +13,7 @@ use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCo
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Cms\Api\GetBlockByIdentifierInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Api\StoreManagementInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -143,6 +144,14 @@ class CategoryRepositoryTest extends TestCase
         $fixtureStoreId = $this->storeManager->getStore('fixturestore')->getId();
         $categorySecondStore = $this->categoryRepository->get($categoryId, $fixtureStoreId);
         $this->assertSame('category-fixturestore', $categorySecondStore->getUrlKey());
+
+        $caughtException = false;
+        try {
+            $this->categoryRepository->get($categoryId, 'default');
+        } catch (SerializationException $exception) {
+            $caughtException = true;
+        }
+        $this->assertTrue($caughtException);
     }
 
     /**

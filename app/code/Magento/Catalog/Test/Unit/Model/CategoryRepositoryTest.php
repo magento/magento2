@@ -168,6 +168,17 @@ class CategoryRepositoryTest extends TestCase
         $this->assertEquals($categoryMock, $this->model->get($categoryId));
     }
 
+    public function testGetWithStoreCodeException()
+    {
+        $categoryId = 5;
+        $categoryMock = $this->createMock(CategoryModel::class);
+        $this->expectException('\Magento\Framework\Exception\SerializationException');
+        $this->expectExceptionMessage(
+            'The "default" value\'s type is invalid. The "int" type was expected. Verify and try again.'
+        );
+        $this->assertEquals($categoryMock, $this->model->get($categoryId, 'default'));
+    }
+
     /**
      * @return array
      */
