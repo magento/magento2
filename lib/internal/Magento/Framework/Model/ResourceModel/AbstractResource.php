@@ -7,7 +7,7 @@ namespace Magento\Framework\Model\ResourceModel;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
-use Magento\Framework\Model\CallbackPool;
+use Magento\Framework\DB\Adapter\Pdo\CallbackPool;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**

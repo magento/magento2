@@ -200,6 +200,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      *
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     protected function _loadScopedData()
     {
@@ -291,5 +292,27 @@ class PluginList extends Scoped implements InterceptionPluginList
     public function merge(array $config)
     {
         $this->_data = $this->pluginListGenerator->merge($config, $this->_data);
+    }
+
+    /**
+     * Get class of a plugin
+     *
+     * @param string $type
+     * @param string $code
+     * @return mixed
+     */
+    public function getPluginType(string $type, string $code)
+    {
+        return $this->_inherited[$type][$code]['instance'];
+    }
+
+    /**
+     * Set current scope
+     *
+     * @param ScopeInterface $scope
+     */
+    public function setScope(ScopeInterface $scope)
+    {
+        $this->_configScope = $scope;
     }
 }

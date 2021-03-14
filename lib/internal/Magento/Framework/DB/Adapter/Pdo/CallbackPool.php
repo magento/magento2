@@ -5,15 +5,17 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Framework\Model;
+namespace Magento\Framework\DB\Adapter\Pdo;
 
-use Magento\Framework\DB\Adapter\Pdo\CallbackPool as PdoCallbackPool;
-
-/**
- * @deprecated please use Magento\Framework\DB\Adapter\Pdo\CallbackPool.
- */
 class CallbackPool
 {
+    /**
+     * Array of callbacks subscribed to commit transaction commit
+     *
+     * @var array
+     */
+    private static $commitCallbacks = [];
+
     /**
      * Add callback by hash key.
      *
@@ -23,7 +25,7 @@ class CallbackPool
      */
     public static function attach($hashKey, $callback)
     {
-        PdoCallbackPool::attach($hashKey, $callback);
+        self::$commitCallbacks[$hashKey][] = $callback;
     }
 
     /**
@@ -34,7 +36,7 @@ class CallbackPool
      */
     public static function clear($hashKey)
     {
-        PdoCallbackPool::clear($hashKey);
+        self::$commitCallbacks[$hashKey] = [];
     }
 
     /**
@@ -45,6 +47,11 @@ class CallbackPool
      */
     public static function get($hashKey)
     {
-        return PdoCallbackPool::get($hashKey);
+        if (!isset(self::$commitCallbacks[$hashKey])) {
+            return [];
+        }
+        $callbacks = self::$commitCallbacks[$hashKey];
+        self::$commitCallbacks[$hashKey] = [];
+        return $callbacks;
     }
 }

@@ -788,7 +788,7 @@
                 <item name="extensionInterfaceFactory" xsi:type="string">\Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceFactoryGenerator</item>
                 <item name="factory" xsi:type="string">\Magento\Framework\ObjectManager\Code\Generator\Factory</item>
                 <item name="proxy" xsi:type="string">\Magento\Framework\ObjectManager\Code\Generator\Proxy</item>
-                <item name="interceptor" xsi:type="string">\Magento\Framework\Interception\Code\Generator\Interceptor</item>
+                <item name="interceptor" xsi:type="string">Magento\Framework\Interception\Code\Generator\InterceptorInterface</item>
                 <item name="logger" xsi:type="string">\Magento\Framework\ObjectManager\Profiler\Code\Generator\Logger</item>
                 <item name="mapper" xsi:type="string">\Magento\Framework\Api\Code\Generator\Mapper</item>
                 <item name="persistor" xsi:type="string">\Magento\Framework\ObjectManager\Code\Generator\Persistor</item>
@@ -802,6 +802,21 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Framework\CompiledInterception\PluginList\PluginList"
+                 type="Magento\Framework\Interception\PluginList\PluginList">
+        <arguments>
+            <argument name="cache" xsi:type="object">\Magento\Framework\CompiledInterception\Generator\FileCache</argument>
+            <argument name="cacheId" xsi:type="string">compiled_plugins</argument>
+            <argument name="serializer" xsi:type="object">\Magento\Framework\CompiledInterception\Generator\NoSerialize</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\CompiledInterception\Generator\CompiledPluginList">
+        <arguments>
+            <argument name="pluginList" xsi:type="object">\Magento\Framework\CompiledInterception\PluginList\PluginList</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Framework\Interception\Code\Generator\InterceptorInterface" type="Magento\Framework\Interception\Code\Generator\Interceptor"/>
+    <preference for="Magento\Setup\Module\Di\Compiler\Config\Chain\InterceptorSubstitutionInterface" type="Magento\Setup\Module\Di\Compiler\Config\Chain\InterceptorSubstitution"/>
     <type name="Magento\Framework\App\Cache\Frontend\Pool">
         <arguments>
             <argument name="frontendSettings" xsi:type="array">
@@ -1825,9 +1840,6 @@
                 type="Magento\Framework\Mail\MimeMessage" />
     <preference for="Magento\Framework\Mail\MimePartInterface"
                 type="Magento\Framework\Mail\MimePart" />
-    <type name="Magento\Framework\DB\Adapter\AdapterInterface">
-        <plugin name="execute_commit_callbacks" type="Magento\Framework\Model\ExecuteCommitCallbacks" />
-    </type>
     <preference for="Magento\Framework\GraphQl\Query\ErrorHandlerInterface" type="Magento\Framework\GraphQl\Query\ErrorHandler"/>
     <preference for="Magento\Framework\Filter\VariableResolverInterface" type="Magento\Framework\Filter\VariableResolver\StrategyResolver"/>
     <virtualType name="configured_block_cache" type="Magento\Framework\App\Cache">

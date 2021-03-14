@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Interception;
 
+use Magento\Framework\Code\Generator\Autoloader;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
@@ -54,6 +56,7 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
     protected function tearDown(): void
     {
         \Magento\Framework\App\ObjectManager::setInstance($this->applicationObjectManager);
+        $this->injectObjectManager($this->applicationObjectManager);
     }
 
     /**
@@ -128,10 +131,35 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
                 'preferences' => [
                     \Magento\Framework\Interception\PluginListInterface::class =>
                         \Magento\Framework\Interception\PluginList\PluginList::class,
+                    \Magento\Framework\Interception\ChainInterface::class =>
+                        \Magento\Framework\Interception\Chain\Chain::class,
+                    \Magento\Framework\Interception\Code\Generator\InterceptorInterface::class =>
+                        \Magento\Framework\Interception\Code\Generator\Interceptor::class,
                     \Magento\Framework\Interception\ConfigWriterInterface::class =>
                         \Magento\Framework\Interception\PluginListGenerator::class
                 ],
             ]
         );
+
+        $this->injectObjectManager($this->_objectManager);
+    }
+
+    /**
+     * Inject object manager into autoloader.
+     *
+     * @param ObjectManagerInterface $objectManager
+     * @throws \ReflectionException
+     */
+    private function injectObjectManager(ObjectManagerInterface $objectManager): void
+    {
+        foreach (spl_autoload_functions() as $autoloader) {
+            if (is_array($autoloader) && $autoloader[0] instanceof Autoloader) {
+                $autoloaderReflection = new \ReflectionClass($autoloader[0]);
+                $generatorProperty = $autoloaderReflection->getProperty('_generator');
+                $generatorProperty->setAccessible(true);
+                $generatorProperty->getValue($autoloader[0])->setObjectManager($objectManager);
+                break;
+            }
+        }
     }
 }

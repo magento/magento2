@@ -20,6 +20,7 @@ use Psr\Log\LoggerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * phpcs:disable Magento2.Functions.DiscouragedFunction
  */
 class Application
 {
@@ -725,6 +726,7 @@ class Application
             DirectoryList::STATIC_VIEW => [$path => "{$this->installDir}/pub/static"],
             DirectoryList::TMP_MATERIALIZATION_DIR => [$path => "{$var}/view_preprocessed/pub/static"],
             DirectoryList::GENERATED_CODE => [$path => "{$generated}/code"],
+            DirectoryList::STATIC_CACHE => [$path => "{$generated}/static_cache"],
             DirectoryList::CACHE => [$path => "{$var}/cache"],
             DirectoryList::LOG => [$path => "{$var}/log"],
             DirectoryList::SESSION => [$path => "{$var}/session"],

@@ -38,12 +38,14 @@ class CleanupFilesTest extends TestCase
     {
         $dir1 = $this->getDirectoryCleanMock();
         $dir2 = $this->getDirectoryCleanMock();
-        $this->filesystem->expects($this->exactly(2))
+        $dir3 = $this->getDirectoryCleanMock();
+        $this->filesystem->expects($this->exactly(3))
             ->method('getDirectoryWrite')
             ->willReturnMap(
                 [
                     [DirectoryList::GENERATED_CODE, DriverPool::FILE, $dir1],
                     [DirectoryList::GENERATED_METADATA, DriverPool::FILE, $dir2],
+                    [DirectoryList::STATIC_CACHE, DriverPool::FILE, $dir3],
                 ]
             );
         $this->object->clearCodeGeneratedClasses();

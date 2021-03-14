@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\Model;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\CallbackPool;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -31,14 +32,13 @@ class ExecuteCommitCallbacks
     /**
      * Execute callbacks after commit.
      *
-     * @param AdapterInterface $subject
-     * @param AdapterInterface $result
+     * @param AdapterInterface $adapter
      * @return AdapterInterface
      */
-    public function afterCommit(AdapterInterface $subject, AdapterInterface $result): AdapterInterface
+    public function afterCommit(AdapterInterface $adapter): AdapterInterface
     {
-        if ($result->getTransactionLevel() === 0) {
-            $callbacks = CallbackPool::get(spl_object_hash($subject));
+        if ($adapter->getTransactionLevel() === 0) {
+            $callbacks = CallbackPool::get(spl_object_hash($adapter));
             foreach ($callbacks as $callback) {
                 try {
                     call_user_func($callback);
@@ -48,20 +48,19 @@ class ExecuteCommitCallbacks
             }
         }
 
-        return $result;
+        return $adapter;
     }
 
     /**
      * Drop callbacks after rollBack.
      *
-     * @param AdapterInterface $subject
-     * @param AdapterInterface $result
+     * @param AdapterInterface $adapter
      * @return AdapterInterface
      */
-    public function afterRollBack(AdapterInterface $subject, AdapterInterface $result): AdapterInterface
+    public function afterRollBack(AdapterInterface $adapter): AdapterInterface
     {
-        CallbackPool::clear(spl_object_hash($subject));
+        CallbackPool::clear(spl_object_hash($adapter));
 
-        return $result;
+        return $adapter;
     }
 }

@@ -6,12 +6,9 @@
 
 namespace Magento\Framework\EntityManager;
 
-use Magento\Framework\Model\CallbackPool;
+use Magento\Framework\DB\Adapter\Pdo\CallbackPool;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class CallbackHandler
- */
 class CallbackHandler
 {
     /**
@@ -39,6 +36,8 @@ class CallbackHandler
     }
 
     /**
+     * Process entity type.
+     *
      * @param string $entityType
      * @throws \Exception
      * @return void
@@ -62,6 +61,8 @@ class CallbackHandler
     }
 
     /**
+     * Attach entity type to callback pool.
+     *
      * @param string $entityType
      * @param array $callback
      * @throws \Exception
@@ -74,6 +75,8 @@ class CallbackHandler
     }
 
     /**
+     * Remove entity type from callback pool.
+     *
      * @param string $entityType
      * @throws \Exception
      * @return void
