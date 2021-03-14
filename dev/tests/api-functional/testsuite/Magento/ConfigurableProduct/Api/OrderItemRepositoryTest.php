@@ -3,10 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Api;
 
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Webapi\Rest\Request;
+use Magento\Sales\Model\OrderFactory;
+use Magento\Sales\Model\Order\Item;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * Test for get order item
+ */
 class OrderItemRepositoryTest extends WebapiAbstract
 {
     const RESOURCE_PATH = '/V1/orders/items';
@@ -17,29 +31,47 @@ class OrderItemRepositoryTest extends WebapiAbstract
     const ORDER_INCREMENT_ID = '100000001';
 
     /**
-     * @var \Magento\TestFramework\ObjectManager
+     * @var ObjectManager
      */
-    protected $objectManager;
+    private $objectManager;
 
+    /**
+     * @var ProductResource
+     */
+    private $productResource;
+
+    /**
+     * @var OrderFactory
+     */
+    private $orderFactory;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->productResource = $this->objectManager->get(ProductResource::class);
+        $this->orderFactory = $this->objectManager->get(OrderFactory::class);
     }
 
     /**
-     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/order_item_with_configurable_and_options.php
+     * Test get order item
+     *
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/order_with_one_configurable_product_for_customer.php
+     *
+     * @return void
      */
-    public function testGet()
+    public function testGet(): void
     {
-        /** @var \Magento\Sales\Model\Order $order */
-        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
+        $order = $this->orderFactory->create();
         $order->loadByIncrementId(self::ORDER_INCREMENT_ID);
         $orderItem = current($order->getItems());
 
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $orderItem->getId(),
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -55,18 +87,21 @@ class OrderItemRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/order_item_with_configurable_and_options.php
+     * Test get order item list
+     *
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/order_with_one_configurable_product_for_customer.php
+     *
+     * @return void
      */
-    public function testGetList()
+    public function testGetList(): void
     {
-        /** @var \Magento\Sales\Model\Order $order */
-        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
+        $order = $this->orderFactory->create();
         $order->loadByIncrementId(self::ORDER_INCREMENT_ID);
 
-        /** @var $searchCriteriaBuilder  \Magento\Framework\Api\SearchCriteriaBuilder */
-        $searchCriteriaBuilder = $this->objectManager->create(\Magento\Framework\Api\SearchCriteriaBuilder::class);
-        /** @var $filterBuilder  \Magento\Framework\Api\FilterBuilder */
-        $filterBuilder = $this->objectManager->create(\Magento\Framework\Api\FilterBuilder::class);
+        /** @var $searchCriteriaBuilder  SearchCriteriaBuilder */
+        $searchCriteriaBuilder = $this->objectManager->create(SearchCriteriaBuilder::class);
+        /** @var $filterBuilder  FilterBuilder */
+        $filterBuilder = $this->objectManager->create(FilterBuilder::class);
 
         $searchCriteriaBuilder->addFilters(
             [
@@ -81,7 +116,7 @@ class OrderItemRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($requestData),
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -94,23 +129,30 @@ class OrderItemRepositoryTest extends WebapiAbstract
 
         $this->assertIsArray($response);
         $this->assertArrayHasKey('items', $response);
-        $this->assertCount(1, $response['items']);
+        $this->assertCount(2, $response['items']);
         $this->assertIsArray($response['items'][0]);
         $this->assertOrderItem(current($order->getItems()), $response['items'][0]);
     }
 
     /**
-     * @param \Magento\Sales\Model\Order\Item $orderItem
+     * Order item assert
+     *
+     * @param Item $orderItem
      * @param array $response
      * @return void
      */
-    protected function assertOrderItem(\Magento\Sales\Model\Order\Item $orderItem, array $response)
+    private function assertOrderItem(Item $orderItem, array $response): void
     {
         $expected = $orderItem->getBuyRequest()->getSuperAttribute();
 
+        $this->assertEquals($orderItem->getProductId(), $this->productResource->getIdBySku($response['sku']));
         $this->assertArrayHasKey('product_option', $response);
         $this->assertArrayHasKey('extension_attributes', $response['product_option']);
         $this->assertArrayHasKey('configurable_item_options', $response['product_option']['extension_attributes']);
+
+        $this->assertArrayHasKey('sku', $response);
+        $this->assertArrayHasKey('product_id', $response);
+        $this->assertEquals($response['product_id'], $this->productResource->getIdBySku($response['sku']));
 
         $actualOptions = $response['product_option']['extension_attributes']['configurable_item_options'];
 
