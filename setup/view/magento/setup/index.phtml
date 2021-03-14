@@ -7,15 +7,29 @@
 // phpcs:disable Magento2.Templates.ThisInTemplate
 ?>
 <div class="container">
-    <main id="anchor-content" class="page-content">
-        <?= /* @noEscape */ $this->render('navigation/menu.phtml') ?>
-        <div
-            id="main"
-            ng-controller="mainController"
-            >
-            <div ui-view="root">
-                <div ui-view></div>
+    <main class="page-content">
+        <section data-section="landing" class="page-landing">
+            <img class="logo" src="<?= $this->basePath() ?>/pub/images/magento-logo.svg" alt="Magento"/>
+            <p class="text-version">Version <?= htmlspecialchars($this->version, ENT_COMPAT) ?></p>
+            <p class="text-welcome">
+                Welcome to Magento Admin, your online store headquarters.
+                <br>
+                Please review <a href="javascript:showSection('license')">Terms & Agreement</a>
+                and read <a href="https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli.html" target="_blank">Getting Started</a>
+                to learn how to install Magento using the command line.
+            </p>
+        </section>
+        <section data-section="license" class="row page-license" style="display: none">
+            <div class="col-m-offset-2 col-m-8 col-xs-12">
+                <div class="license-text">
+                    <?= nl2br(htmlspecialchars($this->license, ENT_COMPAT)) ?>
+                </div>
+                <div class="page-license-footer">
+                    <div class="btn-wrap-triangle-left">
+                        <button type="button" class="btn" onclick="showSection('landing')">Go Back</button>
+                    </div>
+                </div>
             </div>
-        </div>
+        </section>
     </main>
 </div>
