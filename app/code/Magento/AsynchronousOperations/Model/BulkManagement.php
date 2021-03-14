@@ -151,28 +151,28 @@ class BulkManagement implements BulkManagementInterface
         // remove corresponding operations from database (i.e. move them to 'open' status)
         $connection->beginTransaction();
         try {
-            $operationIds = [];
+            $operationKeys = [];
             $currentBatchSize = 0;
             $maxBatchSize = 10000;
             /** @var OperationInterface $operation */
             foreach ($retriablyFailedOperations as $operation) {
                 if ($currentBatchSize === $maxBatchSize) {
-                    $whereCondition = $connection->quoteInto('operation_key IN (?)', $operationIds)
+                    $whereCondition = $connection->quoteInto('operation_key IN (?)', $operationKeys)
                         . " AND "
                         . $connection->quoteInto('bulk_uuid = ?', $bulkUuid);
                     $connection->delete(
                         $this->resourceConnection->getTableName('magento_operation'),
                         $whereCondition
                     );
-                    $operationIds = [];
+                    $operationKeys = [];
                     $currentBatchSize = 0;
                 }
                 $currentBatchSize++;
-                $operationIds[] = $operation->getId();
+                $operationKeys[] = $operation->getOperationKey();
             }
             // remove operations from the last batch
-            if (!empty($operationIds)) {
-                $whereCondition = $connection->quoteInto('operation_key IN (?)', $operationIds)
+            if (!empty($operationKeys)) {
+                $whereCondition = $connection->quoteInto('operation_key IN (?)', $operationKeys)
                     . " AND "
                     . $connection->quoteInto('bulk_uuid = ?', $bulkUuid);
                 $connection->delete(

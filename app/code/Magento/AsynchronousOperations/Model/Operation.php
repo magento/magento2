@@ -7,6 +7,7 @@ namespace Magento\AsynchronousOperations\Model;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Model\OperationStatusValidator;
+use Magento\Framework\Bulk\OperationInterface as BulkOperationInterface;
 use Magento\Framework\DataObject;
 
 /**
@@ -160,6 +161,23 @@ class Operation extends DataObject implements OperationInterface
     public function setErrorCode($errorCode)
     {
         return $this->setData(self::ERROR_CODE, $errorCode);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getOperationKey(): ?int
+    {
+        return $this->getData(self::OPERATION_KEY) ? (int) $this->getData(self::OPERATION_KEY) : null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setOperationKey(?int $operationKey): BulkOperationInterface
+    {
+        $this->setData(self::OPERATION_KEY, $operationKey);
+        return $this;
     }
 
     /**
