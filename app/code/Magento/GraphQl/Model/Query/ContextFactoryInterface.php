@@ -9,6 +9,8 @@ namespace Magento\GraphQl\Model\Query;
 
 /**
  * Context factory
+ *
+ * @deprecated 103.0.2
  */
 interface ContextFactoryInterface
 {

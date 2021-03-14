@@ -9,7 +9,7 @@ namespace Magento\CustomerGraphQl\Model\Customer\ValidateCustomerData;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Model\Data\AttributeMetadata;
-use Magento\CustomerGraphQl\Api\ValidateCustomerDataInterface;
+use Magento\CustomerGraphQl\Model\Customer\ValidateCustomerDataInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**

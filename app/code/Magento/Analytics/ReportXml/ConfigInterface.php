@@ -10,6 +10,9 @@ namespace Magento\Analytics\ReportXml;
  * Interface ConfigInterface
  *
  * Interface for ReportXml Config
+ *
+ * @deprecated 103.0.2
+ * @see \Magento\Framework\Config\DataInterface
  */
 interface ConfigInterface
 {

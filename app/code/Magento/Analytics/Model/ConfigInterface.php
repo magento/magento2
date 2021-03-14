@@ -8,6 +8,9 @@ namespace Magento\Analytics\Model;
 
 /**
  * Interface for Analytics Config.
+ *
+ * @deprecated 103.0.2
+ * @see \Magento\Framework\Config\DataInterface
  */
 interface ConfigInterface
 {

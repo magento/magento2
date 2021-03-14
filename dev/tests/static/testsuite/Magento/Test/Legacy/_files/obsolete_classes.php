@@ -1289,7 +1289,6 @@ return [
         'Magento\Eav\Model\Entity\Attribute\Backend\Array',
         'Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend',
     ],
-    ['Magento\Sales\Model\ResourceModel\Helper\HelperInterface', 'Magento\Sales\Model\ResourceModel\HelperInterface'],
     [
         'Magento\Reports\Model\ResourceModel\Helper\HelperInterface',
         'Magento\Reports\Model\ResourceModel\HelperInterface'

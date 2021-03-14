@@ -7,6 +7,9 @@ namespace Magento\Framework\Module;
 
 /**
  * Resource Model Interface
+ *
+ * @deprecated 103.0.2 Declarative schema and data patches replace old functionality and setup_module table
+ * So all resources related to this table, will be deprecated since 2.3.0
  */
 interface ResourceInterface
 {
