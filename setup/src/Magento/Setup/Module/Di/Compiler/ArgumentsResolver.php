@@ -60,6 +60,15 @@ class ArgumentsResolver
     ];
 
     /**
+     * Variadic pattern used for configuration
+     *
+     * @var array
+     */
+    private $variadicPattern = [
+        '_vdic_' => [],
+    ];
+
+    /**
      * Configured argument pattern used for configuration
      *
      * @var array
@@ -96,21 +105,14 @@ class ArgumentsResolver
         /** @var ConstructorArgument $constructorArgument */
         foreach ($constructor as $constructorArgument) {
             if ($constructorArgument->isVariadic()) {
+                $argument = $this->variadicPattern;
                 $variadicArguments = $configuredArguments[$constructorArgument->getName()] ?? [];
 
-                if (!is_array($variadicArguments) || !count($variadicArguments)) {
-                    // Variadic argument is always the last one
-                    break;
+                foreach ($variadicArguments as $variadicArgument) {
+                    $argument['_vdic_'][] = $this->getConfiguredArgument($variadicArgument, $constructorArgument);
                 }
 
-                foreach ($variadicArguments as $variadicArgumentKey => $variadicArgument) {
-                    $variadicArguments[$variadicArgumentKey] = $this->getConfiguredArgument(
-                        $variadicArgument,
-                        $constructorArgument
-                    );
-                }
-
-                array_push($arguments, ...array_values($variadicArguments));
+                $arguments[$constructorArgument->getName()] = $argument;
 
                 // Variadic argument is always the last one
                 break;
