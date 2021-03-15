@@ -36,11 +36,11 @@ class ArgumentsResolverTest extends TestCase
         $expectedResultDefault = $this->getResolvedSimpleConfigExpectation();
 
         $constructor = [
-            new ConstructorArgument(['type_dependency', 'Type\Dependency', true, null]),
-            new ConstructorArgument(['type_dependency_shared', 'Type\Dependency\Shared', true, null]),
-            new ConstructorArgument(['value', null, false, 'value']),
-            new ConstructorArgument(['value_array', null, false, ['default_value1', 'default_value2']]),
-            new ConstructorArgument(['value_null', null, false, null]),
+            new ConstructorArgument(['type_dependency', 'Type\Dependency', true, null, false]),
+            new ConstructorArgument(['type_dependency_shared', 'Type\Dependency\Shared', true, null, false]),
+            new ConstructorArgument(['value', null, false, 'value', false]),
+            new ConstructorArgument(['value_array', null, false, ['default_value1', 'default_value2', false]]),
+            new ConstructorArgument(['value_null', null, false, null, false]),
         ];
         $this->diContainerConfig->expects($this->any())
             ->method('isShared')
@@ -68,13 +68,13 @@ class ArgumentsResolverTest extends TestCase
         $expectedResultConfigured = $this->getResolvedConfigurableConfigExpectation();
 
         $constructor = [
-            new ConstructorArgument(['type_dependency_configured', 'Type\Dependency', true, null]),
-            new ConstructorArgument(['type_dependency_shared_configured', 'Type\Dependency\Shared', true, null]),
-            new ConstructorArgument(['global_argument', null, false, null]),
-            new ConstructorArgument(['global_argument_def', null, false, []]),
-            new ConstructorArgument(['value_configured', null, false, 'value']),
-            new ConstructorArgument(['value_array_configured', null, false, []]),
-            new ConstructorArgument(['value_null', null, false, null]),
+            new ConstructorArgument(['type_dependency_configured', 'Type\Dependency', true, null, false]),
+            new ConstructorArgument(['type_dependency_shared_configured', 'Type\Dependency\Shared', true, null, false]),
+            new ConstructorArgument(['global_argument', null, false, null, false]),
+            new ConstructorArgument(['global_argument_def', null, false, [], false]),
+            new ConstructorArgument(['value_configured', null, false, 'value', false]),
+            new ConstructorArgument(['value_array_configured', null, false, [], false]),
+            new ConstructorArgument(['value_null', null, false, null, false]),
         ];
 
         $this->diContainerConfig->expects($this->any())
