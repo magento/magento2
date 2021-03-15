@@ -22,6 +22,5 @@ return [
     'Laminas\Router',
     'Laminas\Serializer',
     'Laminas\Session',
-    'Laminas\Validator',
-    'Laminas\Mvc\Console'
+    'Laminas\Validator'
 ];

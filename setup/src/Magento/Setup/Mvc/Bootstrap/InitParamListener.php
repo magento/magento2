@@ -11,14 +11,12 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Shell\ComplexParameter;
-use Laminas\Console\Request;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\Mvc\Application;
 use Laminas\Mvc\MvcEvent;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use Laminas\Stdlib\RequestInterface;
 
 /**
  * A listener that injects relevant Magento initialization parameters and initializes filesystem
@@ -138,8 +136,12 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
                 $result[$initKey] = $_SERVER[$initKey];
             }
         }
-        $result = array_replace_recursive($result, $this->extractFromCli($application->getRequest()));
-        return $result;
+
+        if (!isset($result['argv']) || !is_array($result['argv'])) {
+            return $result;
+        }
+
+        return array_replace_recursive($result, $this->extractFromCli($result['argv']));
     }
 
     /**
@@ -147,16 +149,13 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      *
      * Uses format of a URL query
      *
-     * @param RequestInterface $request
+     * @param array $argv
      * @return array
      */
-    private function extractFromCli(RequestInterface $request)
+    private function extractFromCli(array $argv): array
     {
-        if (!($request instanceof Request)) {
-            return [];
-        }
         $bootstrapParam = new ComplexParameter(self::BOOTSTRAP_PARAM);
-        foreach ($request->getContent() as $paramStr) {
+        foreach ($argv as $paramStr) {
             $result = $bootstrapParam->getFromString($paramStr);
             if (!empty($result)) {
                 return $result;
