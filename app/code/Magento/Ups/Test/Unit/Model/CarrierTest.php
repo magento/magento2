@@ -226,7 +226,7 @@ class CarrierTest extends TestCase
             ->willReturn($freeShippingEnabled);
 
         $request = new RateRequest();
-        $request->setBaseSubtotalInclTax($requestSubtotal);
+        $request->setValueWithDiscount($requestSubtotal);
         $this->model->setRawRequest($request);
         $price = $this->model->getMethodPrice($cost, $shippingMethod);
         $this->assertEquals($expectedPrice, $price);
