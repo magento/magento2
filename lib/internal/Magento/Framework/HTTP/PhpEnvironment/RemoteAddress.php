@@ -17,19 +17,19 @@ class RemoteAddress
      *
      * @var RequestInterface
      */
-    protected $request;
+    private $request;
 
     /**
      * Remote address cache.
      *
      * @var string
      */
-    protected $remoteAddress;
+    private $remoteAddress;
 
     /**
      * @var array
      */
-    protected $alternativeHeaders;
+    private $alternativeHeaders;
 
     /**
      * @var string[]|null

@@ -17,6 +17,7 @@ use Magento\Framework\Stdlib\StringUtils;
 /**
  * Http request
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @api
  */
 class Http extends Request implements RequestContentInterface, RequestSafetyInterface, HttpRequestInterface
 {
@@ -33,7 +34,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     /**
      * @var string
      */
-    protected $route;
+    private $route;
 
     /**
      * PATH_INFO
@@ -47,49 +48,49 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      *
      * @var string
      */
-    protected $originalPathInfo = '';
+    private $originalPathInfo = '';
 
     /**
      * @var array
      */
-    protected $directFrontNames;
+    private $directFrontNames;
 
     /**
      * @var string
      */
-    protected $controllerModule;
+    private $controllerModule;
 
     /**
      * Request's original information before forward.
      *
      * @var array
      */
-    protected $beforeForwardInfo = [];
+    private $beforeForwardInfo = [];
 
     /**
      * @var ConfigInterface
      */
-    protected $routeConfig;
+    private $routeConfig;
 
     /**
      * @var PathInfoProcessorInterface
      */
-    protected $pathInfoProcessor;
+    private $pathInfoProcessor;
 
     /**
      * @var ObjectManagerInterface
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
      * @var bool|null
      */
-    protected $isSafeMethod = null;
+    private $isSafeMethod = null;
 
     /**
      * @var array
      */
-    protected $safeRequestTypes = ['GET', 'HEAD', 'TRACE', 'OPTIONS'];
+    private $safeRequestTypes = ['GET', 'HEAD', 'TRACE', 'OPTIONS'];
 
     /**
      * @var string

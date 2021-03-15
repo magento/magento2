@@ -13,23 +13,10 @@ use Magento\Framework\Phrase;
  * Filesystem client
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @api
  */
 class File extends AbstractIo
 {
-    /**
-     * Save initial working directory
-     *
-     * @var string
-     */
-    protected $_iwd;
-
-    /**
-     * Use virtual current working directory for application integrity
-     *
-     * @var string
-     */
-    protected $_cwd;
-
     /**
      * Used to grep ls() output
      *
@@ -54,37 +41,51 @@ class File extends AbstractIo
     protected $_allowCreateFolders = false;
 
     /**
+     * Save initial working directory
+     *
+     * @var string
+     */
+    private $iwd;
+
+    /**
+     * Use virtual current working directory for application integrity
+     *
+     * @var string
+     */
+    private $cwd;
+
+    /**
      * Stream open file pointer
      *
      * @var resource
      */
-    protected $_streamHandler;
+    private $streamHandler;
 
     /**
      * Stream mode filename
      *
      * @var string
      */
-    protected $_streamFileName;
+    private $streamFileName;
 
     /**
      * Stream mode chmod
      *
      * @var string
      */
-    protected $_streamChmod;
+    private $streamChmod;
 
     /**
      * Lock file
      *
      * @var bool
      */
-    protected $_streamLocked = false;
+    private $streamLocked = false;
 
     /**
      * @var \Exception
      */
-    private $_streamException;
+    private $streamException;
 
     /**
      * Destruct
@@ -93,7 +94,7 @@ class File extends AbstractIo
      */
     public function __destruct()
     {
-        if ($this->_streamHandler) {
+        if ($this->streamHandler) {
             $this->streamClose();
         }
     }
@@ -106,12 +107,12 @@ class File extends AbstractIo
      */
     public function streamLock($exclusive = true)
     {
-        if (!$this->_streamHandler) {
+        if (!$this->streamHandler) {
             return false;
         }
-        $this->_streamLocked = true;
+        $this->streamLocked = true;
         $lock = $exclusive ? LOCK_EX : LOCK_SH;
-        return flock($this->_streamHandler, $lock);
+        return flock($this->streamHandler, $lock);
     }
 
     /**
@@ -121,11 +122,11 @@ class File extends AbstractIo
      */
     public function streamUnlock()
     {
-        if (!$this->_streamHandler || !$this->_streamLocked) {
+        if (!$this->streamHandler || !$this->streamLocked) {
             return false;
         }
-        $this->_streamLocked = false;
-        return flock($this->_streamHandler, LOCK_UN);
+        $this->streamLocked = false;
+        return flock($this->streamHandler, LOCK_UN);
     }
 
     /**
@@ -136,13 +137,13 @@ class File extends AbstractIo
      */
     public function streamRead($length = 1024)
     {
-        if (!$this->_streamHandler) {
+        if (!$this->streamHandler) {
             return false;
         }
-        if (feof($this->_streamHandler)) {
+        if (feof($this->streamHandler)) {
             return false;
         }
-        return @fgets($this->_streamHandler, $length);
+        return @fgets($this->streamHandler, $length);
     }
 
     /**
@@ -154,10 +155,10 @@ class File extends AbstractIo
      */
     public function streamReadCsv($delimiter = ',', $enclosure = '"')
     {
-        if (!$this->_streamHandler) {
+        if (!$this->streamHandler) {
             return false;
         }
-        return @fgetcsv($this->_streamHandler, 0, $delimiter, $enclosure);
+        return @fgetcsv($this->streamHandler, 0, $delimiter, $enclosure);
     }
 
     /**
@@ -168,10 +169,10 @@ class File extends AbstractIo
      */
     public function streamWrite($str)
     {
-        if (!$this->_streamHandler) {
+        if (!$this->streamHandler) {
             return false;
         }
-        return @fwrite($this->_streamHandler, $str);
+        return @fwrite($this->streamHandler, $str);
     }
 
     /**
@@ -184,7 +185,7 @@ class File extends AbstractIo
      */
     public function streamWriteCsv(array $row, $delimiter = ',', $enclosure = '"')
     {
-        if (!$this->_streamHandler) {
+        if (!$this->streamHandler) {
             return false;
         }
         /**
@@ -201,7 +202,7 @@ class File extends AbstractIo
                 $row[$key] = ' ' . $value;
             }
         }
-        return @fputcsv($this->_streamHandler, $row, $delimiter, $enclosure);
+        return @fputcsv($this->streamHandler, $row, $delimiter, $enclosure);
     }
 
     /**
@@ -213,15 +214,15 @@ class File extends AbstractIo
      */
     public function streamClose()
     {
-        if (!$this->_streamHandler) {
+        if (!$this->streamHandler) {
             return false;
         }
 
-        if ($this->_streamLocked) {
+        if ($this->streamLocked) {
             $this->streamUnlock();
         }
-        @fclose($this->_streamHandler);
-        $this->chmod($this->_streamFileName, $this->_streamChmod);
+        @fclose($this->streamHandler);
+        $this->chmod($this->streamFileName, $this->streamChmod);
         return true;
     }
 
@@ -234,10 +235,10 @@ class File extends AbstractIo
      */
     public function streamStat($part = null, $default = null)
     {
-        if (!$this->_streamHandler) {
+        if (!$this->streamHandler) {
             return false;
         }
-        $stat = @fstat($this->_streamHandler);
+        $stat = @fstat($this->streamHandler);
         if ($part !== null) {
             return $stat[$part] ?? $default;
         }
@@ -251,7 +252,7 @@ class File extends AbstractIo
      */
     public function getStreamException()
     {
-        return $this->_streamException;
+        return $this->streamException;
     }
 
     /**
@@ -268,13 +269,13 @@ class File extends AbstractIo
         if (!empty($args['path'])) {
             if ($args['path']) {
                 if ($this->_allowCreateFolders) {
-                    $this->_createDestinationFolder($args['path']);
+                    $this->createDestinationFolder($args['path']);
                 }
             }
         }
 
-        $this->_iwd = getcwd();
-        $this->cd(!empty($args['path']) ? $args['path'] : $this->_iwd);
+        $this->iwd = getcwd();
+        $this->cd(!empty($args['path']) ? $args['path'] : $this->iwd);
         return true;
     }
 
@@ -311,9 +312,9 @@ class File extends AbstractIo
      */
     public function mkdir($dir, $mode = 0777, $recursive = true)
     {
-        $this->_cwd();
+        $this->cwd();
         $result = @mkdir($dir, $mode, $recursive);
-        $this->_iwd();
+        $this->iwd();
         return $result;
     }
 
@@ -326,9 +327,9 @@ class File extends AbstractIo
      */
     public function rmdir($dir, $recursive = false)
     {
-        $this->_cwd();
+        $this->cwd();
         $result = self::rmdirRecursive($dir, $recursive);
-        $this->_iwd();
+        $this->iwd();
         return $result;
     }
 
@@ -342,7 +343,7 @@ class File extends AbstractIo
     public static function rmdirRecursive($dir, $recursive = true)
     {
         if ($recursive) {
-            $result = self::_recursiveCallback($dir, ['unlink'], ['rmdir']);
+            $result = self::recursiveCallback($dir, ['unlink'], ['rmdir']);
         } else {
             $result = @rmdir($dir);
         }
@@ -364,7 +365,7 @@ class File extends AbstractIo
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected static function _recursiveCallback($dir, array $fileCallback, array $dirCallback = [])
+    private static function recursiveCallback($dir, array $fileCallback, array $dirCallback = [])
     {
         if (empty($fileCallback) || !is_array($fileCallback) || !is_array($dirCallback)) {
             throw new \InvalidArgumentException("file/dir callback is not specified");
@@ -377,7 +378,7 @@ class File extends AbstractIo
                 if (!strcmp($item, '.') || !strcmp($item, '..')) {
                     continue;
                 }
-                self::_recursiveCallback($dir . '/' . $item, $fileCallback, $dirCallback);
+                self::recursiveCallback($dir . '/' . $item, $fileCallback, $dirCallback);
             }
             $callback = $dirCallback[0];
             if (!is_callable($callback)) {
@@ -404,7 +405,7 @@ class File extends AbstractIo
      */
     public function pwd()
     {
-        return $this->_cwd;
+        return $this->cwd;
     }
 
     /**
@@ -418,8 +419,8 @@ class File extends AbstractIo
     public function cd($dir)
     {
         if (is_dir($dir)) {
-            $this->_iwd();
-            $this->_cwd = realpath($dir);
+            $this->iwd();
+            $this->cwd = realpath($dir);
             return true;
         } else {
             throw new LocalizedException(
@@ -441,8 +442,8 @@ class File extends AbstractIo
     public function read($filename, $dest = null)
     {
         $result = false;
-        
-        $this->_cwd();
+
+        $this->cwd();
         if ($dest === null) {
             $result = @file_get_contents($filename);
         } elseif (is_resource($dest)) {
@@ -451,7 +452,7 @@ class File extends AbstractIo
         } elseif (is_string($dest)) {
             $result = @copy($filename, $dest);
         }
-        $this->_iwd();
+        $this->iwd();
 
         return $result;
     }
@@ -475,7 +476,7 @@ class File extends AbstractIo
         } else {
             return false;
         }
-        $this->_cwd();
+        $this->cwd();
 
         if (file_exists($filename)) {
             if (!is_writeable($filename)) {
@@ -496,7 +497,7 @@ class File extends AbstractIo
         if ($mode !== null && $result !== false) {
             @chmod($filename, $mode);
         }
-        $this->_iwd();
+        $this->iwd();
         return $result;
     }
 
@@ -509,12 +510,12 @@ class File extends AbstractIo
      */
     public function fileExists($file, $onlyFile = true)
     {
-        $this->_cwd();
+        $this->cwd();
         $result = file_exists($file);
         if ($result && $onlyFile) {
             $result = is_file($file);
         }
-        $this->_iwd();
+        $this->iwd();
         return $result;
     }
 
@@ -526,9 +527,9 @@ class File extends AbstractIo
      */
     public function isWriteable($path)
     {
-        $this->_cwd();
+        $this->cwd();
         $result = is_writeable($path);
-        $this->_iwd();
+        $this->iwd();
         return $result;
     }
 
@@ -558,7 +559,7 @@ class File extends AbstractIo
         if (!$this->_allowCreateFolders) {
             return false;
         }
-        return $this->_createDestinationFolder($this->getCleanPath($path));
+        return $this->createDestinationFolder($this->getCleanPath($path));
     }
 
     /**
@@ -591,7 +592,7 @@ class File extends AbstractIo
      * @param string $destinationFolder
      * @return bool
      */
-    private function _createDestinationFolder($destinationFolder)
+    private function createDestinationFolder($destinationFolder)
     {
         return $this->checkAndCreateFolder($destinationFolder);
     }
@@ -605,9 +606,9 @@ class File extends AbstractIo
      */
     public function rm($filename)
     {
-        $this->_cwd();
+        $this->cwd();
         $result = @unlink($filename);
-        $this->_iwd();
+        $this->iwd();
         return $result;
     }
 
@@ -621,9 +622,9 @@ class File extends AbstractIo
      */
     public function mv($src, $destination)
     {
-        $this->_cwd();
+        $this->cwd();
         $result = @rename($src, $destination);
-        $this->_iwd();
+        $this->iwd();
         return $result;
     }
 
@@ -637,9 +638,9 @@ class File extends AbstractIo
      */
     public function cp($src, $destination)
     {
-        $this->_cwd();
+        $this->cwd();
         $result = @copy($src, $destination);
-        $this->_iwd();
+        $this->iwd();
         return $result;
     }
 
@@ -653,13 +654,13 @@ class File extends AbstractIo
      */
     public function chmod($filename, $mode, $recursive = false)
     {
-        $this->_cwd();
+        $this->cwd();
         if ($recursive) {
             $result = self::chmodRecursive($filename, $mode);
         } else {
             $result = @chmod($filename, $mode);
         }
-        $this->_iwd();
+        $this->iwd();
         return $result;
     }
 
@@ -673,7 +674,7 @@ class File extends AbstractIo
      */
     public static function chmodRecursive($dir, $mode)
     {
-        return self::_recursiveCallback($dir, ['chmod', [$mode]]);
+        return self::recursiveCallback($dir, ['chmod', [$mode]]);
     }
 
     /**
@@ -696,10 +697,10 @@ class File extends AbstractIo
     {
         $ignoredDirectories = ['.', '..'];
 
-        if (is_dir($this->_cwd)) {
-            $dir = $this->_cwd;
-        } elseif (is_dir($this->_iwd)) {
-            $dir = $this->_iwd;
+        if (is_dir($this->cwd)) {
+            $dir = $this->cwd;
+        } elseif (is_dir($this->iwd)) {
+            $dir = $this->iwd;
         } else {
             throw new LocalizedException(
                 new Phrase('Unable to list current working directory.')
@@ -725,8 +726,8 @@ class File extends AbstractIo
 
                 $listItem['text'] = $entry;
                 $listItem['mod_date'] = date('Y-m-d H:i:s', filectime($fullPath));
-                $listItem['permissions'] = $this->_parsePermissions(fileperms($fullPath));
-                $listItem['owner'] = $this->_getFileOwner($fullPath);
+                $listItem['permissions'] = $this->parsePermissions(fileperms($fullPath));
+                $listItem['owner'] = $this->getFileOwner($fullPath);
 
                 if (is_file($fullPath)) {
                     $pathInfo = pathinfo($fullPath);
@@ -773,10 +774,10 @@ class File extends AbstractIo
      *
      * @return void
      */
-    protected function _cwd()
+    private function cwd()
     {
-        if ($this->_cwd) {
-            chdir($this->_cwd);
+        if ($this->cwd) {
+            chdir($this->cwd);
         }
     }
 
@@ -785,10 +786,10 @@ class File extends AbstractIo
      *
      * @return void
      */
-    protected function _iwd()
+    private function iwd()
     {
-        if ($this->_iwd) {
-            chdir($this->_iwd);
+        if ($this->iwd) {
+            chdir($this->iwd);
         }
     }
 
@@ -796,12 +797,12 @@ class File extends AbstractIo
      * Convert integer permissions format into human readable
      *
      * @param int $mode
-     * @access protected
+     * @access private
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _parsePermissions($mode)
+    private function parsePermissions($mode)
     {
         if ($mode & 0x1000) {
             $type = 'p'; /* FIFO pipe */
@@ -856,7 +857,7 @@ class File extends AbstractIo
      * @param string $filename
      * @return string
      */
-    protected function _getFileOwner($filename)
+    private function getFileOwner($filename)
     {
         if (!function_exists('posix_getpwuid')) {
             return 'n/a';

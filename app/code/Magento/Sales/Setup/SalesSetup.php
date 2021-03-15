@@ -19,6 +19,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @codeCoverageIgnore
+ * @api
  */
 class SalesSetup extends EavSetup
 {
@@ -45,12 +46,12 @@ class SalesSetup extends EavSetup
     /**
      * @var ScopeConfigInterface
      */
-    protected $config;
+    private $config;
 
     /**
      * @var EncryptorInterface
      */
-    protected $encryptor;
+    private $encryptor;
 
     /**
      * @var string
@@ -81,9 +82,9 @@ class SalesSetup extends EavSetup
     /**
      * List of entities converted from EAV to flat data structure
      *
-     * @var $_flatEntityTables array
+     * @var array $flatEntityTables
      */
-    protected $_flatEntityTables = [
+    private $flatEntityTables = [
         'order' => 'sales_order',
         'order_payment' => 'sales_order_payment',
         'order_item' => 'sales_order_item',
@@ -104,9 +105,9 @@ class SalesSetup extends EavSetup
     /**
      * List of entities used with separate grid table
      *
-     * @var string[] $_flatEntitiesGrid
+     * @var string[] $flatEntitiesGrid
      */
-    protected $_flatEntitiesGrid = ['order', 'invoice', 'shipment', 'creditmemo'];
+    private $flatEntitiesGrid = ['order', 'invoice', 'shipment', 'creditmemo'];
 
     /**
      * Check if table exist for flat entity
@@ -114,7 +115,7 @@ class SalesSetup extends EavSetup
      * @param string $table
      * @return bool
      */
-    protected function _flatTableExist($table)
+    private function flatTableExist($table)
     {
         $tablesList = $this->getConnection()
             ->listTables();
@@ -135,13 +136,13 @@ class SalesSetup extends EavSetup
     public function addAttribute($entityTypeId, $code, array $attr)
     {
         if (isset(
-            $this->_flatEntityTables[$entityTypeId]
-        ) && $this->_flatTableExist(
-            $this->_flatEntityTables[$entityTypeId]
+            $this->flatEntityTables[$entityTypeId]
+        ) && $this->flatTableExist(
+            $this->flatEntityTables[$entityTypeId]
         )
         ) {
-            $this->_addFlatAttribute($this->_flatEntityTables[$entityTypeId], $code, $attr);
-            $this->_addGridAttribute($this->_flatEntityTables[$entityTypeId], $code, $attr, $entityTypeId);
+            $this->addFlatAttribute($this->flatEntityTables[$entityTypeId], $code, $attr);
+            $this->addGridAttribute($this->flatEntityTables[$entityTypeId], $code, $attr, $entityTypeId);
         } else {
             parent::addAttribute($entityTypeId, $code, $attr);
         }
@@ -156,14 +157,14 @@ class SalesSetup extends EavSetup
      * @param array $attr
      * @return $this
      */
-    protected function _addFlatAttribute($table, $attribute, $attr)
+    private function addFlatAttribute($table, $attribute, $attr)
     {
         $tableInfo = $this->getConnection()
             ->describeTable($this->getTable($table));
         if (isset($tableInfo[$attribute])) {
             return $this;
         }
-        $columnDefinition = $this->_getAttributeColumnDefinition($attribute, $attr);
+        $columnDefinition = $this->getAttributeColumnDefinition($attribute, $attr);
         $this->getConnection()->addColumn(
             $this->getTable($table),
             $attribute,
@@ -181,10 +182,10 @@ class SalesSetup extends EavSetup
      * @param string $entityTypeId
      * @return $this
      */
-    protected function _addGridAttribute($table, $attribute, $attr, $entityTypeId)
+    private function addGridAttribute($table, $attribute, $attr, $entityTypeId)
     {
-        if (in_array($entityTypeId, $this->_flatEntitiesGrid) && !empty($attr['grid'])) {
-            $columnDefinition = $this->_getAttributeColumnDefinition($attribute, $attr);
+        if (in_array($entityTypeId, $this->flatEntitiesGrid) && !empty($attr['grid'])) {
+            $columnDefinition = $this->getAttributeColumnDefinition($attribute, $attr);
             $this->getConnection()->addColumn(
                 $this->getTable($table . '_grid'),
                 $attribute,
@@ -203,7 +204,7 @@ class SalesSetup extends EavSetup
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _getAttributeColumnDefinition($code, $data)
+    private function getAttributeColumnDefinition($code, $data)
     {
         // Convert attribute type to column info
         $data['type'] = isset($data['type']) ? $data['type'] : 'varchar';

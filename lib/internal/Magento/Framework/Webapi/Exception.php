@@ -16,6 +16,8 @@ use Magento\Framework\Phrase;
  *
  * During web API requests, all exceptions are converted to this exception,
  * which is then used for proper error response generation.
+ *
+ * @api
  */
 class Exception extends LocalizedException
 {
@@ -49,35 +51,35 @@ class Exception extends LocalizedException
      *
      * @var array
      */
-    protected $_details;
+    private $details;
 
     /**
      * HTTP status code associated with current exception.
      *
      * @var int
      */
-    protected $_httpCode;
+    private $httpCode;
 
     /**
      * Exception name is used for SOAP faults generation.
      *
      * @var string
      */
-    protected $_name;
+    private $name;
 
     /**
      * Stacktrace
      *
      * @var string
      */
-    protected $_stackTrace;
+    private $stackTrace;
 
     /**
      * List of errors
      *
      * @var null|\Magento\Framework\Exception\LocalizedException[]
      */
-    protected $_errors;
+    private $errors;
 
     /**
      * Initialize exception with HTTP code.
@@ -107,11 +109,11 @@ class Exception extends LocalizedException
         }
         parent::__construct($phrase, null, $code);
         $this->code = $code;
-        $this->_httpCode = $httpCode;
-        $this->_details = $details;
-        $this->_name = $name;
-        $this->_errors = $errors;
-        $this->_stackTrace = $stackTrace;
+        $this->httpCode = $httpCode;
+        $this->details = $details;
+        $this->name = $name;
+        $this->errors = $errors;
+        $this->stackTrace = $stackTrace;
     }
 
     /**
@@ -121,7 +123,7 @@ class Exception extends LocalizedException
      */
     public function getHttpCode()
     {
-        return $this->_httpCode;
+        return $this->httpCode;
     }
 
     /**
@@ -141,7 +143,7 @@ class Exception extends LocalizedException
      */
     public function getDetails()
     {
-        return $this->_details;
+        return $this->details;
     }
 
     /**
@@ -151,7 +153,7 @@ class Exception extends LocalizedException
      */
     public function getName()
     {
-        return $this->_name;
+        return $this->name;
     }
 
     /**
@@ -161,7 +163,7 @@ class Exception extends LocalizedException
      */
     public function getErrors()
     {
-        return $this->_errors;
+        return $this->errors;
     }
 
     /**
@@ -171,6 +173,6 @@ class Exception extends LocalizedException
      */
     public function getStackTrace()
     {
-        return $this->_stackTrace;
+        return $this->stackTrace;
     }
 }

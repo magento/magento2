@@ -6,6 +6,11 @@
  */
 namespace Magento\Catalog\Model\Layer;
 
+/**
+ * Class Resolver
+ *
+ * @api
+ */
 class Resolver
 {
     const CATALOG_LAYER_CATEGORY = 'category';
@@ -16,19 +21,19 @@ class Resolver
      *
      * @var array
      */
-    protected $layersPool;
+    private $layersPool;
 
     /**
      * Filter factory
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
      * @var \Magento\Catalog\Model\Layer
      */
-    protected $layer = null;
+    private $layer = null;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager

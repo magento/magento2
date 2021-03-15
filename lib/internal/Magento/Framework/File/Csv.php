@@ -12,23 +12,24 @@ use Magento\Framework\Filesystem\Driver\File;
  * Csv parse
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Csv
 {
     /**
      * @var int
      */
-    protected $_lineLength = 0;
+    private $lineLength = 0;
 
     /**
      * @var string
      */
-    protected $_delimiter = ',';
+    private $delimiter = ',';
 
     /**
      * @var string
      */
-    protected $_enclosure = '"';
+    private $enclosure = '"';
 
     /**
      * @var string
@@ -38,7 +39,7 @@ class Csv
     /**
      * @var File
      */
-    protected $file;
+    private $file;
 
     /**
      * Constructor
@@ -58,7 +59,7 @@ class Csv
      */
     public function setLineLength($length)
     {
-        $this->_lineLength = $length;
+        $this->lineLength = $length;
         return $this;
     }
 
@@ -70,7 +71,7 @@ class Csv
      */
     public function setDelimiter($delimiter)
     {
-        $this->_delimiter = $delimiter;
+        $this->delimiter = $delimiter;
         return $this;
     }
 
@@ -82,7 +83,7 @@ class Csv
      */
     public function setEnclosure($enclosure)
     {
-        $this->_enclosure = $enclosure;
+        $this->enclosure = $enclosure;
         return $this;
     }
 
@@ -101,7 +102,7 @@ class Csv
         }
 
         $fh = fopen($file, 'r');
-        while ($rowData = fgetcsv($fh, $this->_lineLength, $this->_delimiter, $this->_enclosure, $this->escape)) {
+        while ($rowData = fgetcsv($fh, $this->lineLength, $this->delimiter, $this->enclosure, $this->escape)) {
             $data[] = $rowData;
         }
         fclose($fh);
@@ -158,7 +159,7 @@ class Csv
     {
         $fileHandler = fopen($file, $mode);
         foreach ($data as $dataRow) {
-            $this->file->filePutCsv($fileHandler, $dataRow, $this->_delimiter, $this->_enclosure);
+            $this->file->filePutCsv($fileHandler, $dataRow, $this->delimiter, $this->enclosure);
         }
         fclose($fileHandler);
 
