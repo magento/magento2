@@ -11,21 +11,25 @@
     <test name="CheckingCountryDropDownWithOneAllowedCountryTest">
         <annotations>
             <features value="Config"/>
-            <stories value="MAGETWO-96107: Additional blank option in country dropdown"/>
+            <stories value="Additional blank option in country dropdown"/>
             <title value="Checking country drop-down with one allowed country"/>
             <description value="Check country drop-down with one allowed country"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MAGETWO-96133"/>
+            <testCaseId value="MAGETWO-28511"/>
             <group value="configuration"/>
         </annotations>
         <before>
             <createData entity="EnableAdminAccountAllowCountry" stepKey="setAllowedCountries"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
         </before>
         <after>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
             <createData entity="DisableAdminAccountAllowCountry" stepKey="setDefaultValueForAllowCountries"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="CustomerEntityOne.email"/>
@@ -34,10 +38,7 @@
             <waitForPageLoad stepKey="WaitForPageToLoad"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-         <!--Flush Magento Cache-->
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
          <!--Create a customer account from Storefront-->
         <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
         <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
@@ -52,5 +53,12 @@
         <click selector="{{StorefrontCustomerAddressSection.country}}" stepKey="clickToExpandCountryDropDown"/>
         <see selector="{{StorefrontCustomerAddressSection.country}}" userInput="United States" stepKey="seeSelectedCountry"/>
         <dontSee selector="{{StorefrontCustomerAddressSection.country}}" userInput="Brazil" stepKey="canNotSeeSelectedCountry"/>
+        <createData entity="DisableAdminAccountAllowCountry" stepKey="setDefaultValueForAllowCountries"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+        <reloadPage stepKey="realoadPageAfterConfigChanged"/>
+        <see selector="{{StorefrontCustomerAddressSection.country}}" userInput="United States" stepKey="seeUnitedStatesCountry"/>
+        <see selector="{{StorefrontCustomerAddressSection.country}}" userInput="Brazil" stepKey="seeBrazilCountry"/>
     </test>
 </tests>
