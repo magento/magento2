@@ -31,13 +31,13 @@
                     <div class="rating-summary">
                          <span class="label"><span><?= $block->escapeHtml(__('Rating')) ?>:</span></span>
                          <div class="rating-result" title="<?= $block->escapeHtmlAttr($rating) ?>%">
-                             <span>
+                             <span class="rating_<?= $block->escapeUrl($_review->getReviewId())?>">
                                  <span><?= $block->escapeHtml($rating) ?>%</span>
                              </span>
                          </div>
                         <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
                             "width:". $block->escapeHtmlAttr($rating) . "%",
-                            'div.rating-result>span:first-child'
+                            'div.rating-result>span.rating_' . $block->escapeUrl($_review->getReviewId())
                         ) ?>
                      </div>
                 <?php endif; ?>
