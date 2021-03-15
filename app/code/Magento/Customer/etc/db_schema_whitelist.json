@@ -349,5 +349,19 @@
             "PRIMARY": true,
             "CUSTOMER_LOG_CUSTOMER_ID": true
         }
+    },
+    "customer_group_excluded_website": {
+        "column": {
+            "entity_id": true,
+            "customer_group_id": true,
+            "website_id": true
+        },
+        "index": {
+            "CUSTOMER_GROUP_EXCLUDED_WEBSITE_CUSTOMER_GROUP_ID": true,
+            "CUSTOMER_GROUP_EXCLUDED_WEBSITE_CUSTOMER_GROUP_ID_WEBSITE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
     }
 }
