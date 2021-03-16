@@ -8,14 +8,16 @@ declare(strict_types=1);
 namespace Magento\GraphQl\UrlRewrite;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Model\UrlRewrite;
 
 /**
- * Test the GraphQL endpoint's URLResolver query to verify canonical URL's are correctly returned.
+ * Test the GraphQL endpoint's URLResolver query to verify url route information is correctly returned.
  */
 class RouteTest extends GraphQlAbstract
 {
@@ -27,7 +29,7 @@ class RouteTest extends GraphQlAbstract
      */
     protected function setUp(): void
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = Bootstrap::getObjectManager();
     }
 
     /**
@@ -44,6 +46,10 @@ class RouteTest extends GraphQlAbstract
 
         $response = $this->getRouteQueryResponse($this->getProductUrlKey($productSku));
         $this->productTestAssertion($product, $response);
+        $expectedUrls = $this->getProductUrlRewriteData($productSku);
+        $this->assertEquals($expectedUrls->getRequestPath(), $response['route']['relative_url']);
+        $this->assertEquals($expectedUrls->getRedirectType(), $response['route']['redirect_code']);
+        $this->assertEquals(strtoupper($expectedUrls->getEntityType()), $response['route']['type']);
     }
 
     /**
@@ -57,18 +63,8 @@ class RouteTest extends GraphQlAbstract
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
-        $storeId = $product->getStoreId();
 
-        $urlPath = $this->getProductUrlKey($productSku);
-
-        /** @var  UrlFinderInterface $urlFinder */
-        $urlFinder = $this->objectManager->get(UrlFinderInterface::class);
-        $actualUrls = $urlFinder->findOneByData(
-            [
-                'request_path' => $urlPath,
-                'store_id' => $storeId
-            ]
-        );
+        $actualUrls = $this->getProductUrlRewriteData($productSku);
         $nonSeoFriendlyPath = $actualUrls->getTargetPath();
 
         $response = $this->getRouteQueryResponse($nonSeoFriendlyPath);
@@ -76,21 +72,34 @@ class RouteTest extends GraphQlAbstract
     }
 
     /**
-     * Test the use case where the url_key of the existing product is changed
+     * Test the use case where url_key of the existing product is changed and verify final url is redirected correctly
      *
-     * @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_with_category.php
      */
     public function testProductUrlRewriteResolver()
     {
-        $productSku = 'p002';
+        $productSku = 'in-stock-product';
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
-        $product->setUrlKey('p002-new')->save();
-        $urlPath = $this->getProductUrlKey($productSku);
+        $initialUrlPath = $this->getProductUrlKey($productSku);
+        $renamedKey = 'simple-product-in-stock-new';
+        $suffix = '.html';
+        $product->setUrlKey($renamedKey)->setData('save_rewrites_history', true)->save();
+        $newUrlPath = $renamedKey . $suffix;
 
-        $response = $this->getRouteQueryResponse($urlPath);
+        $response = $this->getRouteQueryResponse($newUrlPath);
         $this->productTestAssertion($product, $response);
+
+        $expectedUrls = $this->getProductUrlRewriteData($productSku);
+        $this->assertEquals($expectedUrls->getRequestPath(), $response['route']['relative_url']);
+        $this->assertEquals($expectedUrls->getRedirectType(), $response['route']['redirect_code']);
+        $this->assertEquals(strtoupper($expectedUrls->getEntityType()), $response['route']['type']);
+
+        // verify that product url is redirected to the final url with the correct redirectType
+        $response = $this->getRouteQueryResponse($initialUrlPath);
+        $this->assertEquals('simple-product-in-stock-new.html', $response['route']['relative_url']);
+        $this->assertEquals(301, $response['route']['redirect_code']);
     }
 
     /**
@@ -112,7 +121,11 @@ class RouteTest extends GraphQlAbstract
         $urlRewrite->load($urlPath, 'request_path');
 
         $response = $this->getRouteQueryResponse($urlPath);
+        $this->assertNotNull($response['route']);
         $this->productTestAssertion($product, $response);
+        $this->assertEquals($urlPath, $response['route']['relative_url']);
+        $this->assertEquals(0, $response['route']['redirect_code']);
+        $this->assertEquals('PRODUCT', $response['route']['type']);
     }
 
     /**
@@ -156,7 +169,10 @@ QUERY;
 
         $this->assertArrayHasKey('route', $response);
         $this->assertEquals($category->getName(), $response['route']['name']);
-        $this->assertEquals($category->getId(), $response['route']['id']);
+        $this->assertEquals(base64_encode($category->getId()), $response['route']['uid']);
+        $this->assertEquals($urlPath, $response['route']['relative_url']);
+        $this->assertEquals(0, $response['route']['redirect_code']);
+        $this->assertEquals('CATEGORY', $response['route']['type']);
     }
 
     /**
@@ -177,12 +193,17 @@ QUERY;
 
         $response = $this->getRouteQueryResponse($targetPath);
 
+        $urlPath = $urlPathGenerator->getUrlPath($page);
+
         $this->assertArrayHasKey('route', $response);
         $this->assertEquals($cmsPageData['identifier'], $response['route']['url_key']);
         $this->assertEquals($cmsPageData['title'], $response['route']['title']);
         $this->assertEquals($cmsPageData['content'], $response['route']['content']);
         $this->assertEquals($cmsPageData['content_heading'], $response['route']['content_heading']);
         $this->assertEquals($cmsPageData['page_layout'], $response['route']['page_layout']);
+        $this->assertEquals($urlPath, $response['route']['relative_url']);
+        $this->assertEquals(0, $response['route']['redirect_code']);
+        $this->assertEquals('CMS_PAGE', $response['route']['type']);
     }
 
     /**
@@ -201,10 +222,16 @@ QUERY;
     ...on SimpleProduct {
       name
       sku
+      relative_url
+      redirect_code
+      type
     }
     ...on CategoryTree {
         name
-        id
+        uid
+        relative_url
+        redirect_code
+        type
     }
     ...on CmsPage {
     	title
@@ -212,6 +239,9 @@ QUERY;
         page_layout
         content
         content_heading
+        relative_url
+        redirect_code
+        type
     }
   }
 }
@@ -243,13 +273,39 @@ QUERY;
     }
 
     /**
-     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @param ProductInterface $product
      * @param array $response
      */
-    private function productTestAssertion(\Magento\Catalog\Api\Data\ProductInterface $product, array $response)
+    private function productTestAssertion(ProductInterface $product, array $response)
     {
         $this->assertArrayHasKey('route', $response);
         $this->assertEquals($product->getName(), $response['route']['name']);
         $this->assertEquals($product->getSku(), $response['route']['sku']);
+    }
+
+    /**
+     * @param $productSku
+     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function getProductUrlRewriteData($productSku): \Magento\UrlRewrite\Service\V1\Data\UrlRewrite
+    {
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $product = $productRepository->get($productSku, false, null, true);
+        $storeId = $product->getStoreId();
+
+        $urlPath = $this->getProductUrlKey($productSku);
+
+        /** @var  UrlFinderInterface $urlFinder */
+        $urlFinder = $this->objectManager->get(UrlFinderInterface::class);
+        /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite $actualUrls */
+        $actualUrls = $urlFinder->findOneByData(
+            [
+                'request_path' => $urlPath,
+                'store_id' => $storeId
+            ]
+        );
+         return $actualUrls;
     }
 }
