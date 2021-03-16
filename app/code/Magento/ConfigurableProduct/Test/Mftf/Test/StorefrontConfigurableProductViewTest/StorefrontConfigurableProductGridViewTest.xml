@@ -49,7 +49,7 @@
         </after>
 
         <!-- Verify the storefront category grid view -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="amOnCategoryPage1"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="amOnCategoryPage1"/>
         <waitForPageLoad stepKey="wait1"/>
         <seeElement selector="{{StorefrontCategoryMainSection.productImage}}" stepKey="seePhoto"/>
         <see selector="{{StorefrontCategoryMainSection.productLink}}" userInput="{{_defaultProduct.name}}" stepKey="seeName"/>

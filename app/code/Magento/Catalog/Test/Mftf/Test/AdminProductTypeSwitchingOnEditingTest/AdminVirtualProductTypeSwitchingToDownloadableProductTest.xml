@@ -66,7 +66,7 @@
         <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearDownloadableProductFilters"/>
         <!--Assert downloadable product on storefront-->
         <comment userInput="Assert downloadable product on storefront" stepKey="commentAssertDownloadableProductOnStorefront"/>
-        <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="openDownloadableProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="openDownloadableProductPage"/>
         <waitForPageLoad stepKey="waitForStorefrontDownloadableProductPageLoad"/>
         <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertDownloadableProductInStock"/>
         <scrollTo selector="{{StorefrontDownloadableProductSection.downloadableLinkBlock}}" stepKey="scrollToLinksInStorefront"/>

@@ -114,7 +114,7 @@
         <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{updateVirtualTierPriceOutOfStock.urlKey}}" stepKey="seeUrlKey"/>
 
         <!--Verify customer don't see updated virtual product link on category page -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.name$$)}}" stepKey="openCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.custom_attributes[url_key]$$)}}" stepKey="openCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
         <dontSee selector="{{StorefrontCategoryMainSection.productLink}}" userInput="{{updateVirtualTierPriceOutOfStock.name}}" stepKey="dontSeeVirtualProductNameOnCategoryPage"/>
 
@@ -155,6 +155,6 @@
         <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeVirtualProductName">
             <argument name="productName" value="{{updateVirtualTierPriceOutOfStock.name}}"/>
         </actionGroup>
-        
+
     </test>
 </tests>

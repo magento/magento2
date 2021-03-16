@@ -158,15 +158,15 @@
         <seeNumberOfElements selector="{{AdminProductGridSection.productGridRows}}" userInput="0" stepKey="seeNoResults"/>
 
         <!-- after delete, assert product pages are 404 -->
-        <amOnPage url="$$createProduct1.sku$$.html" stepKey="gotoStorefront1"/>
+        <amOnPage url="$$createProduct1.custom_attributes[url_key]$$.html" stepKey="gotoStorefront1"/>
         <waitForPageLoad stepKey="waitForProduct1"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoops1"/>
         <dontSee selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createProduct1.name$$" stepKey="dontSeeProduct1"/>
-        <amOnPage url="$$createProduct1.sku$$.html" stepKey="gotoStorefront2"/>
+        <amOnPage url="$$createProduct1.custom_attributes[url_key]$$.html" stepKey="gotoStorefront2"/>
         <waitForPageLoad stepKey="waitForProduct2"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoops2"/>
         <dontSee selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createProduct1.name$$" stepKey="dontSeeProduct2"/>
-        <amOnPage url="$$createProduct1.sku$$.html" stepKey="gotoStorefront3"/>
+        <amOnPage url="$$createProduct1.custom_attributes[url_key]$$.html" stepKey="gotoStorefront3"/>
         <waitForPageLoad stepKey="waitForProduct3"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoops3"/>
         <dontSee selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createProduct1.name$$" stepKey="dontSeeProduct3"/>

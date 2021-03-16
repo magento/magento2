@@ -12,13 +12,18 @@
         <annotations>
             <description>Exports the unfiltered Products list. Validates that the Success Message is present.</description>
         </annotations>
-
+        <arguments>
+            <argument name="fileFormat" defaultValue="CSV" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminExportMainSection.entityType}}" stepKey="waitForEntityTypeDropDown"/>
         <selectOption selector="{{AdminExportMainSection.entityType}}" userInput="Products" stepKey="selectProductsOption"/>
-        <waitForElementVisible selector="{{AdminExportMainSection.entityAttributes}}" stepKey="waitForElementVisible" time="5"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementVisible selector="{{AdminExportMainSection.entityAttributes}}" stepKey="waitForElementVisible"/>
+        <selectOption selector="{{AdminExportMainSection.fileFormat}}" userInput="{{fileFormat}}" stepKey="selectFileFormat"/>
         <scrollTo selector="{{AdminExportAttributeSection.continueBtn}}" stepKey="scrollToContinue"/>
-        <wait stepKey="waitForScroll" time="5"/>
+        <waitForElementVisible selector="{{AdminExportAttributeSection.continueBtn}}" stepKey="waitForScroll"/>
         <click selector="{{AdminExportAttributeSection.continueBtn}}" stepKey="clickContinueButton"/>
-        <wait stepKey="waitForClick" time="5"/>
-        <see selector="{{AdminMessagesSection.success}}" userInput="Message is added to queue, wait to get your file soon. Make sure your cron job is running to export the file" stepKey="seeSuccessMessage"/>
+        <waitForPageLoad stepKey="waitForClick"/>
+        <waitForText userInput="Message is added to queue, wait to get your file soon. Make sure your cron job is running to export the file" selector="{{AdminMessagesSection.success}}" stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>

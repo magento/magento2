@@ -58,7 +58,7 @@
 
         <!--Open Product Page-->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
-            <argument name="productUrl" value="{{BundleProduct.name}}"/>
+            <argument name="productUrl" value="{{BundleProduct.urlKey}}"/>
         </actionGroup>
 
         <!-- Add bundle to cart -->
@@ -88,7 +88,7 @@
         <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startInvoice"/>
 
         <!-- Assert item options display -->
-        <see selector="{{AdminInvoiceItemsSection.bundleItem}}" userInput="50 x $firstSimpleProduct.sku$" stepKey="seeFirstProductInList"/>
-        <see selector="{{AdminInvoiceItemsSection.bundleItem}}" userInput="50 x $secondSimpleProduct.sku$" stepKey="seeSecondProductInList"/>
+        <see selector="{{AdminInvoiceItemsSection.bundleItem}}" userInput="50 x $firstSimpleProduct.name$" stepKey="seeFirstProductInList"/>
+        <see selector="{{AdminInvoiceItemsSection.bundleItem}}" userInput="50 x $secondSimpleProduct.name$" stepKey="seeSecondProductInList"/>
     </test>
 </tests>

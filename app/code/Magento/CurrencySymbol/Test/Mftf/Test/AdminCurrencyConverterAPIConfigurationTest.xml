@@ -56,7 +56,7 @@
         <see selector="{{AdminMessagesSection.warning}}" userInput='Please correct the input data for "USD => RHD" rate' stepKey="seeRHDMessageAfterSave"/>
         <see selector="{{AdminMessagesSection.warning}}" userInput='Please correct the input data for "USD => CHW" rate' stepKey="seeCHWMessageAfterSave"/>
         <!--Go to the Storefront and check currency rates-->
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="onCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
         <actionGroup ref="StorefrontSwitchCurrencyActionGroup" stepKey="switchAMDCurrency">
             <argument name="currency" value="AMD"/>

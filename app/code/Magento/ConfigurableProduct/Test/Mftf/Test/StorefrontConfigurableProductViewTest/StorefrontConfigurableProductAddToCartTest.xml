@@ -59,7 +59,7 @@
         </after>
 
         <!-- Should be taken to product details page when adding to cart because an option needs to be selected -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="amOnCategoryPage1"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="amOnCategoryPage1"/>
         <waitForPageLoad stepKey="wait1"/>
         <click selector="{{StorefrontCategoryMainSection.modeListButton}}" stepKey="clickListView"/>
         <waitForPageLoad stepKey="wait2"/>

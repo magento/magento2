@@ -37,6 +37,6 @@
         <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
 
         <!--See related product in storefront-->
-        <amOnPage url="{{DownloadableProduct.sku}}.html" stepKey="goToStorefront"/>
+        <amOnPage url="{{DownloadableProduct.urlKey}}.html" stepKey="goToStorefront"/>
     </test>
 </tests>

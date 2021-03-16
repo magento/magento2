@@ -75,7 +75,7 @@
         <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="seeSuccessMessage"/>
 
         <!--Go to Storefront > category-->
-        <amOnPage url="$$simplecategory.name$$.html" stepKey="goToStorefrontCategoryPage"/>
+        <amOnPage url="$$simplecategory.custom_attributes[url_key]$$.html" stepKey="goToStorefrontCategoryPage"/>
         <waitForPageLoad stepKey="waitForStorefrontPageLoaded"/>
 
         <!--Check operators Greater than-->
@@ -95,7 +95,7 @@
         </actionGroup>
 
         <!--Go to Storefront > category-->
-        <amOnPage url="$$simplecategory.name$$.html" stepKey="goToStorefrontCategoryPage2"/>
+        <amOnPage url="$$simplecategory.custom_attributes[url_key]$$.html" stepKey="goToStorefrontCategoryPage2"/>
         <waitForPageLoad stepKey="waitForStorefrontPageLoaded2"/>
 
         <!--Check operators Greater than-->
@@ -115,7 +115,7 @@
         </actionGroup>
 
         <!--Go to Storefront > category-->
-        <amOnPage url="$$simplecategory.name$$.html" stepKey="goToStorefrontCategoryPage3"/>
+        <amOnPage url="$$simplecategory.custom_attributes[url_key]$$.html" stepKey="goToStorefrontCategoryPage3"/>
         <waitForPageLoad stepKey="waitForStorefrontPageLoaded3"/>
 
         <!--Check operators Greater than-->
@@ -135,7 +135,7 @@
         </actionGroup>
 
         <!--Go to Storefront > category-->
-        <amOnPage url="$$simplecategory.name$$.html" stepKey="goToStorefrontCategoryPage4"/>
+        <amOnPage url="$$simplecategory.custom_attributes[url_key]$$.html" stepKey="goToStorefrontCategoryPage4"/>
         <waitForPageLoad stepKey="waitForStorefrontPageLoaded4"/>
 
         <!--Check operators Greater than-->

@@ -130,7 +130,7 @@
         <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
 
         <!-- Add the first product to the cart -->
-        <amOnPage url="$$createBundleProduct.sku$$.html" stepKey="goToProductPage1"/>
+        <amOnPage url="$$createBundleProduct.custom_attributes[url_key]$$.html" stepKey="goToProductPage1"/>
         <waitForPageLoad stepKey="waitForProductPageLoad1"/>
 
         <!--Click "Customize and Add to Cart" button-->

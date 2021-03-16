@@ -42,7 +42,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="goToProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
         <dontSeeElement selector="{{StorefrontProductInfoDetailsSection.productNameForReview}}" stepKey="dontSeeReviewTab"/>
         <click selector="{{StorefrontProductInfoMainSection.addReviewLink}}" stepKey="clickAddReview"/>
         <dontSeeJsError stepKey="dontSeeJsError"/>

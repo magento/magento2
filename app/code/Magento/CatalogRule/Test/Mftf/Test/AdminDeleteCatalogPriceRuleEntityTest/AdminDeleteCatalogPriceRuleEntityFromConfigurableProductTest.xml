@@ -116,7 +116,7 @@
         <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Assert that the rule isn't present on the Category page -->
-        <amOnPage url="$$createCategory1.name$$.html" stepKey="goToStorefrontCategoryPage1"/>
+        <amOnPage url="$$createCategory1.custom_attributes[url_key]$$.html" stepKey="goToStorefrontCategoryPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <see selector="{{StorefrontCategoryProductSection.ProductPriceByName($$createConfigProduct1.name$$)}}" userInput="$$createConfigChildProduct1.price$$" stepKey="seeRegularPriceText1"/>
 

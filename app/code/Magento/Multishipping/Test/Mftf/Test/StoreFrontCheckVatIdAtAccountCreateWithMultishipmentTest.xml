@@ -34,7 +34,7 @@
             <deleteData createDataKey="product" stepKey="deleteproduct"/>
         </after>
         <!-- Add product to the cart -->
-        <amOnPage url="$$product.name$$.html" stepKey="goToProductPage"/>
+        <amOnPage url="$$product.custom_attributes[url_key]$$.html" stepKey="goToProductPage"/>
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
             <argument name="productName" value="$$product.name$$"/>
         </actionGroup>

@@ -123,11 +123,11 @@
         <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
 
         <!-- Add the first product to the cart -->
-        <amOnPage url="$$createConfigChildProduct1.sku$$.html" stepKey="goToProductPage1"/>
+        <amOnPage url="$$createConfigChildProduct1.custom_attributes[url_key]$$.html" stepKey="goToProductPage1"/>
         <waitForPageLoad stepKey="waitForProductPageLoad1"/>
         <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
         <!-- Add the second product to the cart -->
-        <amOnPage url="$$createConfigChildProduct2.sku$$.html" stepKey="goToProductPage2"/>
+        <amOnPage url="$$createConfigChildProduct2.custom_attributes[url_key]$$.html" stepKey="goToProductPage2"/>
         <waitForPageLoad stepKey="waitForProductPageLoad2"/>
         <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage2"/>
 
