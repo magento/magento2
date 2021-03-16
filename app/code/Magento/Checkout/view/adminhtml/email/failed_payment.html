@@ -46,6 +46,7 @@
         <strong>{{trans "Billing Address:"}}</strong><br />
         {{var billingAddressHtml|raw}}
     </li>
+    {{depend shippingMethod}}
     <li>
         <strong>{{trans "Shipping Address:"}}</strong><br />
         {{var shippingAddressHtml|raw}}
@@ -54,6 +55,7 @@
         <strong>{{trans "Shipping Method:"}}</strong><br />
         {{var shippingMethod}}
     </li>
+    {{/depend}}
     <li>
         <strong>{{trans "Payment Method:"}}</strong><br />
         {{var paymentMethod}}
