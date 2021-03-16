@@ -949,8 +949,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $productIds = array_keys($rawData);
             $stockItemRows = $this->prepareCatalogInventory($productIds);
 
+            $entityCollection = clone $this->_getEntityCollection();
             $this->rowCustomizer->prepareData(
-                $this->_prepareEntityCollection($this->_entityCollectionFactory->create()),
+                $entityCollection,
                 $productIds
             );
 
