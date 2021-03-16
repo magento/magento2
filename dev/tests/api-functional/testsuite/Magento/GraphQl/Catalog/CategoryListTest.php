@@ -842,4 +842,49 @@ QUERY;
         $this->assertEquals($result['categoryList'][0]['uid'], base64_encode('6'));
         $this->assertEquals($result['categoryList'][0]['url_path'], 'category-2');
     }
+
+    /**
+     * Test when there is recursive category node fragment
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testFilterCategoryRecursiveFragment() : void
+    {
+        $query = <<<'QUERY'
+query GetCategoryTree($filters: CategoryFilterInput!) {
+    categoryList(filters: $filters) {
+        ...recursiveCategoryNode
+    }
+}
+
+fragment recursiveCategoryNode on CategoryTree {
+  ...categoryNode
+  children {
+    ...categoryNode
+  }
+}
+
+fragment categoryNode on CategoryTree {
+  id
+}
+QUERY;
+        $variables = [
+            'filters' => [
+                'ids' => [
+                    'eq' => '2',
+                ],
+            ],
+        ];
+        $result = $this->graphQlQuery($query, $variables);
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertCount(1, $result['categoryList']);
+        $this->assertCount(2, $result['categoryList'][0]);
+        $this->assertArrayHasKey('id', $result['categoryList'][0]);
+        $this->assertArrayHasKey('children', $result['categoryList'][0]);
+        $this->assertEquals($result['categoryList'][0]['id'], '2');
+        $this->assertCount(7, $result['categoryList'][0]['children']);
+        $this->assertCount(1, $result['categoryList'][0]['children'][0]);
+        $this->assertArrayHasKey('id', $result['categoryList'][0]['children'][0]);
+        $this->assertEquals($result['categoryList'][0]['children'][0]['id'], '3');
+    }
 }
