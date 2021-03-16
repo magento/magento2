@@ -64,6 +64,7 @@ input ConfigurableProductCartItemInput {
 type ConfigurableCartItem implements CartItemInterface {
     customizable_options: [SelectedCustomizableOption] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions")
     configurable_options: [SelectedConfigurableOption!]! @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\ConfigurableCartItemOptions")
+    configured_variant: ProductInterface! @doc(description: "Product details of the cart item") @resolver(class: "\\Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\ProductResolver")
 }
 
 type SelectedConfigurableOption {

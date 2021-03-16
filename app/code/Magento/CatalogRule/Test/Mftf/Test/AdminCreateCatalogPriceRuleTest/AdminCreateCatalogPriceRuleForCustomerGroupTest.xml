@@ -49,9 +49,7 @@
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="assertSuccess"/>
 
         <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- As a NOT LOGGED IN user, go to the storefront category page and should see the discount -->
         <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="goToCategory1">
