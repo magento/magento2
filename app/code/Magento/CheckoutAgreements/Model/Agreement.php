@@ -12,7 +12,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     /**
      * @var string
      */
-    protected $_eventPrefix = 'sales_agreement';
+    protected $_eventPrefix = 'checkout_agreement';
 
     /**
      * @var string
