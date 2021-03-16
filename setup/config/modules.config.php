@@ -12,7 +12,6 @@ return [
     'Magento\Setup',
     'Laminas\Db',
     'Laminas\Di',
-    'Laminas\I18n',
     'Laminas\Mail',
     'Laminas\Router',
 ];
