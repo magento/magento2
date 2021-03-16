@@ -119,7 +119,7 @@ class LazyControllerAbstractFactory implements AbstractFactoryInterface
         }
 
         $parameters = array_map(
-            $this->resolveParameter($container->getServiceLocator(), $requestedName),
+            $this->resolveParameter($container, $requestedName),
             $reflectionParameters
         );
 
