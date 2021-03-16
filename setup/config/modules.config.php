@@ -10,8 +10,6 @@
  */
 return [
     'Magento\Setup',
-    'Laminas\Db',
     'Laminas\Di',
-    'Laminas\Mail',
     'Laminas\Router',
 ];
