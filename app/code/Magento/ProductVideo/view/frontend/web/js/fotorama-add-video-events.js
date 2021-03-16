@@ -138,10 +138,9 @@ define([
          * @private
          */
         _create: function () {
-            $(this.element).on('gallery:loaded',  $.proxy(function () {
-                this.fotoramaItem = $(this.element).find('.fotorama-item');
-                this._initialize();
-            }, this));
+            $(this.element).data('gallery') ?
+                this._onGalleryLoaded() :
+                $(this.element).on('gallery:loaded', this._onGalleryLoaded.bind(this));
         },
 
         /**
@@ -169,6 +168,14 @@ define([
                 this._initFotoramaVideo();
                 this._attachFotoramaEvents();
             }
+        },
+
+        /**
+         * Callback which fired after gallery gets initialized.
+         */
+        _onGalleryLoaded: function () {
+            this.fotoramaItem = $(this.element).find('.fotorama-item');
+            this._initialize();
         },
 
         /**
