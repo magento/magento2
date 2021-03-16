@@ -15,5 +15,4 @@ return [
     'Laminas\I18n',
     'Laminas\Mail',
     'Laminas\Router',
-    'Laminas\Session',
 ];
