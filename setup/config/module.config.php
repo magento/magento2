@@ -29,8 +29,8 @@ return [
         ]
     ],
     'controllers' => [
-        'abstract_factories' => [
-            \Zend\Mvc\Controller\LazyControllerAbstractFactory::class,
+        'factories' => [
+            \Magento\Setup\Controller\Index::class => \Laminas\ServiceManager\AbstractFactory\ReflectionBasedAbstractFactory::class,
         ],
     ],
 ];

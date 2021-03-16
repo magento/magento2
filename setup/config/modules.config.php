@@ -12,15 +12,8 @@ return [
     'Magento\Setup',
     'Laminas\Db',
     'Laminas\Di',
-    'Laminas\Form',
-    'Laminas\Filter',
-    'Laminas\Hydrator',
     'Laminas\I18n',
-    'Laminas\InputFilter',
-    'Laminas\Log',
     'Laminas\Mail',
     'Laminas\Router',
-    'Laminas\Serializer',
     'Laminas\Session',
-    'Laminas\Validator'
 ];
