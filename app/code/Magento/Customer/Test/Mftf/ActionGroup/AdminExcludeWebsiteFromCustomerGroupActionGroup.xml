@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminExcludeWebsiteFromCustomerGroupActionGroup">
+        <annotations>
+            <description>Exclude Main Website from customer group.</description>
+        </annotations>
+        <arguments>
+            <argument name="customerGroupId" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminEditCustomerGroupPage.url(customerGroupId)}}" stepKey="goToEditCustomerGroupPage"/>
+        <selectOption selector="{{AdminEditCustomerGroupSection.excludeWebsite}}" userInput="Main Website" stepKey="selectExcludedWebsiteOption"/>
+        <click selector="{{AdminNewCustomerGroupSection.saveCustomerGroup}}" stepKey="clickToSaveCustomerGroup"/>
+        <waitForPageLoad stepKey="waitForCustomerGroupSaved"/>
+        <see stepKey="seeCustomerGroupSaveMessage" userInput="You saved the customer group."/>
+    </actionGroup>
+</actionGroups>

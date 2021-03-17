@@ -201,6 +201,21 @@ class Design extends \Magento\Framework\Model\AbstractModel
             $update = array_merge($categorySettings->getLayoutUpdates(), $productSettings->getLayoutUpdates());
             $categorySettings->setLayoutUpdates($update);
         }
+        if ($categorySettings->getPageLayoutHandles()) {
+            $handles = [];
+            foreach ($categorySettings->getPageLayoutHandles() as $key => $value) {
+                $handles[$key] = [
+                    'handle' => 'catalog_category_view',
+                    'value' => $value,
+                ];
+            }
+            $categorySettings->setPageLayoutHandles($handles);
+        }
+        if ($productSettings->getPageLayoutHandles()) {
+            $handle = array_merge($categorySettings->getPageLayoutHandles(), $productSettings->getPageLayoutHandles());
+            $categorySettings->setPageLayoutHandles($handle);
+        }
+
         return $categorySettings;
     }
 }
