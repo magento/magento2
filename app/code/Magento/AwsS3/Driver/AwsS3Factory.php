@@ -8,8 +8,9 @@ declare(strict_types=1);
 namespace Magento\AwsS3\Driver;
 
 use Aws\S3\S3Client;
-use League\Flysystem\AwsS3v3\AwsS3Adapter;
-use League\Flysystem\Cached\CachedAdapter;
+use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
+use League\Flysystem\PathPrefixer;
+use Magento\AwsS3\Model\Cached\CachedAdapter;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\RemoteStorage\Driver\Cache\CacheFactory;
@@ -91,7 +92,8 @@ class AwsS3Factory implements DriverFactoryInterface
         }
 
         $client = new S3Client($config);
-        $adapter = new AwsS3Adapter($client, $config['bucket'], $prefix);
+        $adapter = new AwsS3V3Adapter($client, $config['bucket'], $prefix);
+        $prefixer = new PathPrefixer($prefix);
 
         return $this->objectManager->create(
             AwsS3::class,
@@ -100,7 +102,7 @@ class AwsS3Factory implements DriverFactoryInterface
                     'adapter' => $adapter,
                     'cache' => $this->cacheFactory->create($cacheAdapter, $cacheConfig)
                 ]),
-                'objectUrl' => $client->getObjectUrl($adapter->getBucket(), $adapter->applyPathPrefix('.'))
+                'objectUrl' => $client->getObjectUrl($config['bucket'], $prefixer->prefixPath('.'))
             ]
         );
     }

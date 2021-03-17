@@ -6,6 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\RemoteStorage\Driver\Cache\CacheInterface" type="Magento\RemoteStorage\Model\Cache"/>
     <virtualType name="remoteWriteFactory" type="Magento\Framework\Filesystem\Directory\WriteFactory">
         <arguments>
             <argument name="driverPool" xsi:type="object">Magento\RemoteStorage\Driver\DriverPool</argument>
@@ -135,6 +136,11 @@
     <type name="Magento\RemoteStorage\Model\Synchronizer">
         <arguments>
             <argument name="filesystem" xsi:type="object">customRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\RemoteStorage\Model\Cache">
+        <arguments>
+            <argument name="mimeTypeDetector" xsi:type="object">League\MimeTypeDetection\FinfoMimeTypeDetector</argument>
         </arguments>
     </type>
 </config>

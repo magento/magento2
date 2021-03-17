@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\AwsS3\Test\Unit\Driver;
 
-use League\Flysystem\AdapterInterface;
-use League\Flysystem\AwsS3v3\AwsS3Adapter;
+use League\Flysystem\AwsS3v3\AwsS3V3Adapter;
+use League\Flysystem\DirectoryAttributes;
+use League\Flysystem\FileAttributes;
+use League\Flysystem\FilesystemAdapter;
 use Magento\AwsS3\Driver\AwsS3;
 use Magento\Framework\Exception\FileSystemException;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -28,7 +30,7 @@ class AwsS3Test extends TestCase
     private $driver;
 
     /**
-     * @var AwsS3Adapter|MockObject
+     * @var AwsS3V3Adapter|MockObject
      */
     private $adapterMock;
 
@@ -37,7 +39,10 @@ class AwsS3Test extends TestCase
      */
     protected function setUp(): void
     {
-        $this->adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->adapterMock = $this->getMockBuilder(FilesystemAdapter::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getMetadata'])
+            ->getMockForAbstractClass();
         $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->driver = new AwsS3($this->adapterMock, $loggerMock, self::URL);
@@ -64,82 +69,82 @@ class AwsS3Test extends TestCase
             [
                 null,
                 'test.png',
-                self::URL . 'test.png'
+                self::URL . 'test.png',
             ],
             [
                 self::URL . 'test/test.png',
                 null,
-                self::URL . 'test/test.png'
+                self::URL . 'test/test.png',
             ],
             [
                 '',
                 'test.png',
-                self::URL . 'test.png'
+                self::URL . 'test.png',
             ],
             [
                 '',
                 '/test/test.png',
-                self::URL . 'test/test.png'
+                self::URL . 'test/test.png',
             ],
             [
                 self::URL . 'test/test.png',
                 self::URL . 'test/test.png',
-                self::URL . 'test/test.png'
+                self::URL . 'test/test.png',
             ],
             [
                 self::URL,
                 self::URL . 'media/catalog/test.png',
-                self::URL . 'media/catalog/test.png'
+                self::URL . 'media/catalog/test.png',
             ],
             [
                 '',
                 self::URL . 'media/catalog/test.png',
-                self::URL . 'media/catalog/test.png'
+                self::URL . 'media/catalog/test.png',
             ],
             [
                 self::URL . 'test/',
                 'test.txt',
-                self::URL . 'test/test.txt'
+                self::URL . 'test/test.txt',
             ],
             [
                 self::URL . 'media/',
                 '/catalog/test.png',
-                self::URL . 'media/catalog/test.png'
+                self::URL . 'media/catalog/test.png',
             ],
             [
                 self::URL,
                 'var/import/images',
-                self::URL . 'var/import/images'
+                self::URL . 'var/import/images',
             ],
             [
                 self::URL . 'export/',
                 null,
-                self::URL . 'export/'
+                self::URL . 'export/',
             ],
             [
                 self::URL . 'var/import/images/product_images/',
                 self::URL . 'var/import/images/product_images/1.png',
-                self::URL . 'var/import/images/product_images/1.png'
+                self::URL . 'var/import/images/product_images/1.png',
             ],
             [
                 '',
                 self::URL . 'media/catalog/test.png',
-                self::URL . 'media/catalog/test.png'
+                self::URL . 'media/catalog/test.png',
             ],
             [
                 self::URL,
                 'var/import/images',
-                self::URL . 'var/import/images'
+                self::URL . 'var/import/images',
             ],
             [
                 self::URL . 'var/import/images/product_images/',
                 self::URL . 'var/import/images/product_images/1.png',
-                self::URL . 'var/import/images/product_images/1.png'
+                self::URL . 'var/import/images/product_images/1.png',
             ],
             [
                 self::URL . 'var/import/images/product_images/1.png',
                 '',
-                self::URL . 'var/import/images/product_images/1.png'
+                self::URL . 'var/import/images/product_images/1.png',
             ],
             [
                 self::URL . 'media/',
@@ -154,8 +159,8 @@ class AwsS3Test extends TestCase
             [
                 self::URL,
                 '',
-                self::URL
-            ]
+                self::URL,
+            ],
         ];
     }
 
@@ -180,17 +185,17 @@ class AwsS3Test extends TestCase
             [
                 '',
                 'test/test.txt',
-                'test/test.txt'
+                'test/test.txt',
             ],
             [
                 '',
                 '/test/test.txt',
-                '/test/test.txt'
+                '/test/test.txt',
             ],
             [
                 self::URL,
                 self::URL . 'test/test.txt',
-                'test/test.txt'
+                'test/test.txt',
             ],
 
         ];
@@ -198,9 +203,7 @@ class AwsS3Test extends TestCase
 
     /**
      * @param string $path
-     * @param string $normalizedPath
-     * @param bool $has
-     * @param array $metadata
+     * @param array $dirs
      * @param bool $expected
      * @throws FileSystemException
      *
@@ -208,17 +211,12 @@ class AwsS3Test extends TestCase
      */
     public function testIsDirectory(
         string $path,
-        string $normalizedPath,
-        bool $has,
-        array $metadata,
+        array $dirs,
         bool $expected
     ): void {
-        $this->adapterMock->method('has')
-            ->with($normalizedPath)
-            ->willReturn($has);
-        $this->adapterMock->method('getMetadata')
-            ->with($normalizedPath)
-            ->willReturn($metadata);
+        $directoryListing = $dirs;
+        $this->adapterMock->method('listContents')
+            ->willReturn($directoryListing);
 
         self::assertSame($expected, $this->driver->isDirectory($path));
     }
@@ -231,51 +229,40 @@ class AwsS3Test extends TestCase
         return [
             [
                 'some_directory/',
-                'some_directory',
+                [],
                 false,
-                [],
-                false
             ],
             [
                 'some_directory',
-                'some_directory',
-                true,
                 [
-                    'type' => AwsS3::TYPE_DIR
+                    new DirectoryAttributes('some_directory'),
                 ],
-                true
+                true,
             ],
             [
                 self::URL . 'some_directory',
-                'some_directory',
-                true,
                 [
-                    'type' => AwsS3::TYPE_DIR
+                    new DirectoryAttributes('some_directory'),
+                    new DirectoryAttributes('some_directory_1'),
                 ],
-                true
+                true,
             ],
             [
                 self::URL . 'some_directory',
-                'some_directory',
-                true,
                 [
-                    'type' => AwsS3::TYPE_FILE
+                    new DirectoryAttributes('some_directory_1'),
                 ],
-                false
+                false,
             ],
             [
                 '',
-                '',
-                true,
                 [],
-                true
+                true,
             ],
             [
                 '/',
-                '',
-                true,
                 [],
-                true
+                true,
             ],
         ];
     }
@@ -294,15 +281,11 @@ class AwsS3Test extends TestCase
         string $path,
         string $normalizedPath,
         bool $has,
-        array $metadata,
         bool $expected
     ): void {
-        $this->adapterMock->method('has')
+        $this->adapterMock->method('fileExists')
             ->with($normalizedPath)
             ->willReturn($has);
-        $this->adapterMock->method('getMetadata')
-            ->with($normalizedPath)
-            ->willReturn($metadata);
 
         self::assertSame($expected, $this->driver->isFile($path));
     }
@@ -317,50 +300,32 @@ class AwsS3Test extends TestCase
                 'some_file.txt',
                 'some_file.txt',
                 false,
-                [],
-                false
+                false,
             ],
             [
                 'some_file.txt/',
                 'some_file.txt',
                 true,
-                [
-                    'type' => AwsS3::TYPE_FILE
-                ],
-                true
+                true,
             ],
             [
                 self::URL . 'some_file.txt',
                 'some_file.txt',
                 true,
-                [
-                    'type' => AwsS3::TYPE_FILE
-                ],
-                true
-            ],
-            [
-                self::URL . 'some_file.txt/',
-                'some_file.txt',
                 true,
-                [
-                    'type' => AwsS3::TYPE_DIR
-                ],
-                false
             ],
             [
                 '',
                 '',
                 false,
-                [],
-                false
+                false,
             ],
             [
                 '/',
                 '',
                 false,
-                [],
-                false
-            ]
+                false,
+            ],
         ];
     }
 
@@ -383,20 +348,20 @@ class AwsS3Test extends TestCase
         return [
             [
                 self::URL,
-                self::URL
+                self::URL,
             ],
             [
                 'test.txt',
-                'test.txt'
+                'test.txt',
             ],
             [
                 self::URL . 'test/test/../test.txt',
-                self::URL . 'test/test.txt'
+                self::URL . 'test/test.txt',
             ],
             [
                 'test/test/../test.txt',
-                'test/test.txt'
-            ]
+                'test/test.txt',
+            ],
         ];
     }
 
@@ -408,21 +373,19 @@ class AwsS3Test extends TestCase
         $expression = '/*';
         $path = 'path';
         $subPaths = [
-            ['path' => 'path/1', 'dirname' => self::URL],
-            ['path' => 'path/2', 'dirname' => self::URL]
+            new DirectoryAttributes('path/1'),
+            new DirectoryAttributes('path/2'),
         ];
-        $expectedResult = [self::URL . 'path/1', self::URL . 'path/2'];
-        $this->adapterMock->expects(self::atLeastOnce())->method('has')
-            ->willReturnMap([
-                [$path, true]
-            ]);
-        $this->adapterMock->expects(self::atLeastOnce())->method('getMetadata')
-            ->willReturnMap([
-                [$path, ['type' => AwsS3::TYPE_DIR]]
-            ]);
-        $this->adapterMock->expects(self::atLeastOnce())->method('listContents')
-            ->with($path, false)
-            ->willReturn($subPaths);
+
+        $expectedResult = [self::URL . 'path/1/', self::URL . 'path/2/'];
+        $directoryListing = [new DirectoryAttributes('path')];
+        $this->adapterMock->expects(self::exactly(4))->method('listContents')
+            ->willReturnOnConsecutiveCalls(
+                $directoryListing,
+                $subPaths,
+                $subPaths,
+                $subPaths
+            );
 
         self::assertEquals($expectedResult, $this->driver->search($expression, $path));
     }
@@ -435,21 +398,18 @@ class AwsS3Test extends TestCase
         $expression = '/*';
         $path = 'path';
         $subPaths = [
-            ['path' => 'path/1.jpg', 'dirname' => self::URL],
-            ['path' => 'path/2.png', 'dirname' => self::URL]
+            new FileAttributes('path/1.jpg'),
+            new FileAttributes('path/2.png'),
         ];
         $expectedResult = [self::URL . 'path/1.jpg', self::URL . 'path/2.png'];
-
-        $this->adapterMock->expects(self::atLeastOnce())->method('has')
-            ->willReturnMap([
-                [$path, true],
-            ]);
-        $this->adapterMock->expects(self::atLeastOnce())->method('getMetadata')
-            ->willReturnMap([
-                [$path, ['type' => AwsS3::TYPE_DIR]],
-            ]);
-        $this->adapterMock->expects(self::atLeastOnce())->method('listContents')->with($path, false)
-            ->willReturn($subPaths);
+        $directoryListing = [new DirectoryAttributes('path')];
+        $this->adapterMock->expects(self::exactly(4))->method('listContents')
+            ->willReturnOnConsecutiveCalls(
+                $directoryListing,
+                $subPaths,
+                $subPaths,
+                $subPaths
+            );
 
         self::assertEquals($expectedResult, $this->driver->search($expression, $path));
     }
@@ -459,21 +419,15 @@ class AwsS3Test extends TestCase
      */
     public function testCreateDirectory(): void
     {
-        $this->adapterMock->expects(self::exactly(2))
-            ->method('has')
-            ->willReturnMap([
-                ['test', true],
-                ['test/test2', false]
-            ]);
         $this->adapterMock->expects(self::once())
-            ->method('getMetadata')
-            ->willReturnMap([
-                ['test', ['type' => AwsS3::TYPE_DIR]]
-            ]);
-        $this->adapterMock->expects(self::once())
-            ->method('createDir')
-            ->with('test/test2')
-            ->willReturn(true);
+            ->method('createDirectory')
+            ->with('test/test2');
+        $directoryListing = [new DirectoryAttributes('test')];
+        $this->adapterMock->expects(self::exactly(2))->method('listContents')
+            ->willReturnOnConsecutiveCalls(
+                $directoryListing,
+                [],
+            );
 
         self::assertTrue($this->driver->createDirectory(self::URL . 'test/test2/'));
     }

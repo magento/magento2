@@ -3,7 +3,8 @@
     "description": "N/A",
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*"
+        "magento/framework": "*",
+        "predis/predis": "*"
     },
     "suggest": {
         "magento/module-backend": "*",
@@ -14,8 +15,7 @@
         "magento/module-media-storage": "*",
         "magento/module-import-export": "*",
         "magento/module-catalog-import-export": "*",
-        "magento/module-downloadable-import-export": "*",
-        "predis/predis": "*"
+        "magento/module-downloadable-import-export": "*"
     },
     "type": "magento2-module",
     "license": [

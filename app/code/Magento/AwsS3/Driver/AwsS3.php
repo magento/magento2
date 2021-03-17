@@ -8,15 +8,14 @@ declare(strict_types=1);
 namespace Magento\AwsS3\Driver;
 
 use Generator;
-use Exception;
-use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
+use League\Flysystem\FilesystemAdapter;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Phrase;
-use Psr\Log\LoggerInterface;
 use Magento\RemoteStorage\Driver\DriverException;
 use Magento\RemoteStorage\Driver\RemoteDriverInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Driver for AWS S3 IO operations.
@@ -33,7 +32,7 @@ class AwsS3 implements RemoteDriverInterface
     private const CONFIG = ['ACL' => 'private'];
 
     /**
-     * @var AdapterInterface
+     * @var FilesystemAdapter
      */
     private $adapter;
 
@@ -53,12 +52,12 @@ class AwsS3 implements RemoteDriverInterface
     private $objectUrl;
 
     /**
-     * @param AdapterInterface $adapter
+     * @param FilesystemAdapter $adapter
      * @param LoggerInterface $logger
      * @param string $objectUrl
      */
     public function __construct(
-        AdapterInterface $adapter,
+        FilesystemAdapter $adapter,
         LoggerInterface $logger,
         string $objectUrl
     ) {
@@ -89,8 +88,8 @@ class AwsS3 implements RemoteDriverInterface
     {
         try {
             $this->adapter->write(self::TEST_FLAG, '', new Config(self::CONFIG));
-        } catch (Exception $exception) {
-            throw new DriverException(__($exception->getMessage()), $exception);
+        } catch (\League\Flysystem\FilesystemException $e) {
+            throw new DriverException(__($e->getMessage()), $e);
         }
     }
 
@@ -106,8 +105,14 @@ class AwsS3 implements RemoteDriverInterface
             return file_get_contents(stream_get_meta_data($this->streams[$path])['uri']);
             //phpcs:enable
         }
+        try {
+            $contents = $this->adapter->read($path);
+        } catch (\League\Flysystem\FilesystemException $e) {
+            $this->logger->error($e->getMessage());
+            return '';
+        }
 
-        return $this->adapter->read($path)['contents'] ?? '';
+        return $contents;
     }
 
     /**
@@ -125,7 +130,12 @@ class AwsS3 implements RemoteDriverInterface
             return true;
         }
 
-        return $this->adapter->has($path);
+        try {
+            return $this->adapter->fileExists($path);
+        } catch (\League\Flysystem\FilesystemException $e) {
+            $this->logger->error($e->getMessage());
+            return false;
+        }
     }
 
     /**
@@ -166,10 +176,12 @@ class AwsS3 implements RemoteDriverInterface
         }
 
         if (!$this->isDirectory($path)) {
-            return (bool)$this->adapter->createDir(
-                $this->fixPath($path),
-                new Config(self::CONFIG)
-            );
+            try {
+                $this->adapter->createDirectory($this->fixPath($path), new Config(self::CONFIG));
+            } catch (\League\Flysystem\FilesystemException $e) {
+                $this->logger->error($e->getMessage());
+                return false;
+            }
         }
 
         return true;
@@ -180,10 +192,19 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function copy($source, $destination, DriverInterface $targetDriver = null): bool
     {
-        return $this->adapter->copy(
-            $this->normalizeRelativePath($source, true),
-            $this->normalizeRelativePath($destination, true)
-        );
+        try {
+            $this->adapter->copy(
+                $this->normalizeRelativePath($source, true),
+                $this->normalizeRelativePath($destination, true),
+                new Config(self::CONFIG)
+            );
+        } catch (\League\Flysystem\FilesystemException $e) {
+            $this->logger->error($e->getMessage());
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -191,9 +212,17 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function deleteFile($path): bool
     {
-        return $this->adapter->delete(
-            $this->normalizeRelativePath($path, true)
-        );
+        try {
+            $this->adapter->delete(
+                $this->normalizeRelativePath($path, true)
+            );
+        } catch (\League\Flysystem\FilesystemException $e) {
+            $this->logger->error($e->getMessage());
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -201,9 +230,17 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function deleteDirectory($path): bool
     {
-        return $this->adapter->deleteDir(
-            $this->normalizeRelativePath($path, true)
-        );
+        try {
+            $this->adapter->deleteDirectory(
+                $this->normalizeRelativePath($path, true)
+            );
+        } catch (\League\Flysystem\FilesystemException $e) {
+            $this->logger->error($e->getMessage());
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -217,11 +254,20 @@ class AwsS3 implements RemoteDriverInterface
         if (false !== ($imageSize = @getimagesizefromstring($content))) {
             $config['Metadata'] = [
                 'image-width' => $imageSize[0],
-                'image-height' => $imageSize[1]
+                'image-height' => $imageSize[1],
             ];
         }
 
-        return $this->adapter->write($path, $content, new Config($config))['size'];
+        try {
+            $this->adapter->write($path, $content, new Config($config));
+            $size = $this->adapter->fileSize($path)->fileSize();
+        } catch (\League\Flysystem\FilesystemException $e) {
+            $this->logger->error($e->getMessage());
+
+            return 0;
+        }
+
+        return $size;
     }
 
     /**
@@ -361,11 +407,12 @@ class AwsS3 implements RemoteDriverInterface
 
         $path = $this->normalizeRelativePath($path, true);
 
-        if ($this->adapter->has($path) && ($meta = $this->adapter->getMetadata($path))) {
-            return ($meta['type'] ?? null) === self::TYPE_FILE;
+        try {
+            return $this->adapter->fileExists($path);
+        } catch (\League\Flysystem\FilesystemException $e) {
+            $this->logger->error($e);
+            return false;
         }
-
-        return false;
     }
 
     /**
@@ -383,10 +430,16 @@ class AwsS3 implements RemoteDriverInterface
             return true;
         }
 
-        if ($this->adapter->has($path)) {
-            $meta = $this->adapter->getMetadata($path);
-
-            return !($meta && $meta['type'] === self::TYPE_FILE);
+        try {
+            $contents = $this->adapter->listContents($path, false);
+            foreach ($contents as $content) {
+                if ($content->isDir() && $content->path() === $path) {
+                    return true;
+                }
+            }
+        } catch (\League\Flysystem\FilesystemException $e) {
+            $this->logger->error($e->getMessage());
+            return false;
         }
 
         return false;
@@ -434,10 +487,19 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function rename($oldPath, $newPath, DriverInterface $targetDriver = null): bool
     {
-        return $this->adapter->rename(
-            $this->normalizeRelativePath($oldPath, true),
-            $this->normalizeRelativePath($newPath, true)
-        );
+        try {
+            $this->adapter->move(
+                $this->normalizeRelativePath($oldPath, true),
+                $this->normalizeRelativePath($newPath, true),
+                new Config(self::CONFIG)
+            );
+        } catch (\League\Flysystem\FilesystemException $e) {
+            $this->logger->error($e->getMessage());
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -446,9 +508,12 @@ class AwsS3 implements RemoteDriverInterface
     public function stat($path): array
     {
         $path = $this->normalizeRelativePath($path, true);
-        $metaInfo = $this->adapter->getMetadata($path);
-
-        if (!$metaInfo) {
+        try {
+            $size = $this->adapter->fileSize($path)->fileSize();
+            $type = $this->adapter->mimeType($path)->mimeType();
+            $mtime = $this->adapter->lastModified($path)->lastModified();
+        } catch (\League\Flysystem\FilesystemException $e) {
+            $this->logger->error($e->getMessage());
             throw new FileSystemException(__('Cannot gather stats! %1', [$this->getWarningMessage()]));
         }
 
@@ -464,10 +529,10 @@ class AwsS3 implements RemoteDriverInterface
             'ctime' => 0,
             'blksize' => 0,
             'blocks' => 0,
-            'size' => $metaInfo['size'] ?? 0,
-            'type' => $metaInfo['type'] ?? '',
-            'mtime' => $metaInfo['timestamp'] ?? 0,
-            'disposition' => null
+            'size' => $size ?? 0,
+            'type' => $type ?? '',
+            'mtime' => $mtime ?? 0,
+            'disposition' => null,
         ];
     }
 
@@ -477,15 +542,16 @@ class AwsS3 implements RemoteDriverInterface
     public function getMetadata(string $path): array
     {
         $path = $this->normalizeRelativePath($path, true);
-        $metaInfo = $this->adapter->getMetadata($path);
 
-        if (!$metaInfo) {
+        try {
+            $mimeType = $this->adapter->mimeType($path)->mimeType();
+            $size = $this->adapter->fileSize($path)->fileSize();
+            $timestamp = $this->adapter->lastModified($path)->lastModified();
+            $metaInfo = $this->adapter->getMetadata($path);
+        } catch (\League\Flysystem\FilesystemException $e) {
+            $this->logger->error($e->getMessage());
             throw new FileSystemException(__('Cannot gather meta info! %1', [$this->getWarningMessage()]));
         }
-
-        $mimeType = $this->adapter->getMimetype($path)['mimetype'];
-        $size = $this->adapter->getSize($path)['size'];
-        $timestamp = $this->adapter->getTimestamp($path)['timestamp'];
 
         return [
             'path' => $metaInfo['path'],
@@ -498,8 +564,8 @@ class AwsS3 implements RemoteDriverInterface
             'mimetype' => $mimeType,
             'extra' => [
                 'image-width' => $metaInfo['metadata']['image-width'] ?? 0,
-                'image-height' => $metaInfo['metadata']['image-height'] ?? 0
-            ]
+                'image-height' => $metaInfo['metadata']['image-height'] ?? 0,
+            ],
         ];
     }
 
@@ -571,11 +637,16 @@ class AwsS3 implements RemoteDriverInterface
     {
         $path = $this->normalizeRelativePath($path, true);
 
-        $content = $this->adapter->has($path) ?
-            $this->adapter->read($path)['contents']
-            : '';
+        $content = $this->adapter->fileExists($path) ? $this->adapter->read($path) : '';
+        try {
+            $this->adapter->write($path, $content, new Config([]));
+        } catch (\League\Flysystem\FilesystemException $e) {
+            $this->logger->error($e->getMessage());
 
-        return (bool)$this->adapter->write($path, $content, new Config([]));
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -785,9 +856,9 @@ class AwsS3 implements RemoteDriverInterface
 
         if (!isset($this->streams[$path])) {
             $this->streams[$path] = tmpfile();
-            if ($this->adapter->has($path)) {
+            if ($this->adapter->fileExists($path)) {
                 //phpcs:ignore Magento2.Functions.DiscouragedFunction
-                fwrite($this->streams[$path], $this->adapter->read($path)['contents']);
+                fwrite($this->streams[$path], $this->adapter->read($path));
                 //phpcs:ignore Magento2.Functions.DiscouragedFunction
                 rewind($this->streams[$path]);
             }
@@ -839,10 +910,11 @@ class AwsS3 implements RemoteDriverInterface
 
         $itemsList = [];
         foreach ($contentsList as $item) {
+            $item = $item->jsonSerialize();
             if (isset($item['path'])
                 && $item['path'] !== $relativePath
                 && (!$relativePath || strpos($item['path'], $relativePath) === 0)) {
-                $itemsList[] = $this->getAbsolutePath($item['dirname'], $item['path']);
+                $itemsList[] = $this->getAbsolutePath($item['path'], $item['path']);
             }
         }
 
@@ -874,7 +946,7 @@ class AwsS3 implements RemoteDriverInterface
         $replacement = [
             '/\*/' => '.*',
             '/\?/' => '.',
-            '/\//' => '\/'
+            '/\//' => '\/',
         ];
 
         return preg_replace(array_keys($replacement), array_values($replacement), $searchPattern);

@@ -7,16 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\RemoteStorage\Driver\Cache;
 
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Cached\CacheInterface;
-use League\Flysystem\Cached\Storage\Memory;
-use League\Flysystem\Cached\Storage\Predis;
-use League\Flysystem\Cached\Storage\Adapter;
+use League\Flysystem\Local\LocalFilesystemAdapter;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\RemoteStorage\Driver\DriverException;
 use Magento\RemoteStorage\Driver\DriverPool;
+use Magento\RemoteStorage\Model\Storage\Handler\LocalFactory;
+use Magento\RemoteStorage\Model\Storage\Handler\MemoryFactory;
 use Predis\Client;
+use Magento\RemoteStorage\Model\Storage\Handler\PredisFactory;
 
 /**
  * Provides cache adapters.
@@ -41,14 +40,47 @@ class CacheFactory
     private $localCacheRoot;
 
     /**
-     * @param Filesystem $filesystem
+     * @var MemoryFactory
      */
-    public function __construct(Filesystem $filesystem)
-    {
+    private MemoryFactory $memoryFactory;
+
+    /**
+     * @var LocalFactory
+     */
+    private LocalFactory $localFactory;
+
+    /**
+     * @var PredisFactory
+     */
+    private PredisFactory $predisFactory;
+
+    /**
+     * @var CacheInterfaceFactory
+     */
+    private CacheInterfaceFactory $cacheFactory;
+
+    /**
+     * @param CacheInterfaceFactory $cacheFactory
+     * @param Filesystem $filesystem
+     * @param MemoryFactory $memoryFactory
+     * @param LocalFactory $localFactory
+     * @param PredisFactory $predisFactory
+     */
+    public function __construct(
+        CacheInterfaceFactory $cacheFactory,
+        Filesystem $filesystem,
+        MemoryFactory $memoryFactory,
+        LocalFactory $localFactory,
+        PredisFactory $predisFactory
+    ) {
         $this->localCacheRoot = $filesystem->getDirectoryRead(
             DirectoryList::VAR_DIR,
             DriverPool::FILE
         )->getAbsolutePath();
+        $this->memoryFactory = $memoryFactory;
+        $this->localFactory = $localFactory;
+        $this->predisFactory = $predisFactory;
+        $this->cacheFactory = $cacheFactory;
     }
 
     /**
@@ -63,15 +95,26 @@ class CacheFactory
     {
         switch ($adapter) {
             case self::ADAPTER_PREDIS:
-                if (!class_exists(Client::class)) {
-                    throw new DriverException(__('Predis client is not installed'));
-                }
-
-                return new Predis(new Client($config), self::CACHE_KEY, self::CACHE_EXPIRATION);
+                $predis =  $this->predisFactory->create(
+                    [
+                        'client' => new Client($config),
+                        'key' => self::CACHE_KEY,
+                        'expire' => self::CACHE_EXPIRATION,
+                    ]
+                );
+                return $this->cacheFactory->create(['cacheStorageHandler' => $predis]);
             case self::ADAPTER_MEMORY:
-                return new Memory();
+                $memory = $this->memoryFactory->create();
+                return $this->cacheFactory->create(['cacheStorageHandler' => $memory]);
             case self::ADAPTER_LOCAL:
-                return new Adapter(new Local($this->localCacheRoot), self::CACHE_FILE, self::CACHE_EXPIRATION);
+                $local = $this->localFactory->create(
+                    [
+                        'adapter' => new LocalFilesystemAdapter($this->localCacheRoot),
+                        'file' => self::CACHE_FILE,
+                        'expire' => self::CACHE_EXPIRATION,
+                    ]
+                );
+                return $this->cacheFactory->create(['cacheStorageHandler' => $local]);
         }
 
         throw new DriverException(__('Cache adapter %1 is not supported', $adapter));

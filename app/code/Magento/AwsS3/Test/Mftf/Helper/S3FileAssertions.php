@@ -9,7 +9,8 @@ namespace Magento\AwsS3\Test\Mftf\Helper;
 
 use Aws\S3\S3Client;
 use Codeception\Lib\ModuleContainer;
-use League\Flysystem\AwsS3v3\AwsS3Adapter;
+use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
+use League\Flysystem\PathPrefixer;
 use Magento\AwsS3\Driver\AwsS3;
 use Magento\FunctionalTestingFramework\Helper\Helper;
 use Magento\Framework\Filesystem\DriverInterface;
@@ -56,8 +57,9 @@ class S3FileAssertions extends Helper
         }
 
         $client = new S3Client($config);
-        $adapter = new AwsS3Adapter($client, $config['bucket'], $prefix);
-        $objectUrl = $client->getObjectUrl($adapter->getBucket(), $adapter->applyPathPrefix('.'));
+        $adapter = new AwsS3V3Adapter($client, $config['bucket'], $prefix);
+        $prefixer = new PathPrefixer($prefix);
+        $objectUrl = $client->getObjectUrl($config['bucket'], $prefixer->prefixPath('.'));
         $s3Driver = new AwsS3($adapter, new MockTestLogger(), $objectUrl);
 
         $this->driver = $s3Driver;
