@@ -150,6 +150,21 @@ class S3FileAssertions extends Helper
     }
 
     /**
+     * Asserts that a file with the given glob pattern exists in the given path on the remote storage system
+     *
+     * @param string $path
+     * @param string $pattern
+     * @param string $message
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function assertGlobbedFileExists($path, $pattern, $message = ""): void
+    {
+        $files = $this->driver->search($pattern, $path);
+        $this->assertNotEmpty($files, $message);
+    }
+
+    /**
      * Assert a file does not exist on the remote storage system
      *
      * @param string $filePath
@@ -204,6 +219,24 @@ class S3FileAssertions extends Helper
     public function assertFileContainsString($filePath, $text, $message = ""): void
     {
         $this->assertStringContainsString($text, $this->driver->fileGetContents($filePath), $message);
+    }
+
+    /**
+     * Asserts that a file with the given glob pattern at the given path on the remote storage system contains a given string
+     *
+     * @param string $path
+     * @param string $pattern
+     * @param string $text
+     * @param int $fileIndex
+     * @param string $message
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function assertGlobbedFileContainsString($path, $pattern, $text, $fileIndex = 0, $message = ""): void
+    {
+        $files = $this->driver->search($pattern, $path);
+        $this->assertStringContainsString($text, $this->driver->fileGetContents($files[$fileIndex] ?? ''), $message);
     }
 
     /**

@@ -153,7 +153,7 @@ $_helper = $block->getData('outputHelper');
             <?php endforeach; ?>
         </ol>
     </div>
-    <?= $block->getToolbarHtml() ?>
+    <?= $block->getChildBlock('toolbar')->setIsBottom(true)->toHtml() ?>
     <script type="text/x-magento-init">
     {
         "[data-role=tocart-form], .form.map.checkout": {
