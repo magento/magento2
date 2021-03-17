@@ -8,6 +8,7 @@
 namespace Magento\Framework\Filesystem\Driver;
 
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem\Driver\File\Mime;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\Glob;
 use Magento\Framework\Phrase;
@@ -1095,5 +1096,69 @@ class File implements DriverInterface
         }
 
         return rtrim(implode(DIRECTORY_SEPARATOR, $realPath), DIRECTORY_SEPARATOR);
+    }
+
+    /**
+     * Retrieve file metadata.
+     *
+     * @param string $path
+     *
+     * @return array
+     * @throws FileSystemException
+     */
+    public function getMetadata(string $path): array
+    {
+        if (!$this->isExists($path) || !$this->isFile($path)) {
+            throw new FileSystemException(__("File '$path' doesn't exist"));
+        }
+
+        $file = new \SplFileInfo($path);
+
+        $mimeType = $this->getFileMimeType($path);
+
+        if ($this->isFileAnImage($mimeType)) {
+            $imageInfo = getimagesize($path);
+            $mimeType = $imageInfo['mime'] ?? $mimeType;
+        }
+
+        return [
+            'path' => $file->getPath(),
+            'dirname' => dirname($file->getPath()),
+            'basename' => $file->getBasename(),
+            'extension' => $file->getExtension(),
+            'filename' => $file->getFilename(),
+            'timestamp' => $file->getMTime(),
+            'size' => $file->getSize(),
+            'mimetype' => $mimeType,
+            'extra' => [
+                'image-width' => $imageInfo[0] ?? 0,
+                'image-height' => $imageInfo[1] ?? 0
+            ]
+        ];
+    }
+
+    /**
+     * Checks whether file is an image
+     *
+     * @param string $mimeType
+     *
+     * @return bool
+     */
+    private function isFileAnImage(string $mimeType): bool
+    {
+        return strstr($mimeType, 'image/');
+    }
+
+    /**
+     * Returns file mime type
+     *
+     * @param string $path
+     *
+     * @return string
+     * @throws FileSystemException
+     */
+    private function getFileMimeType(string $path): string
+    {
+        return Mime::getMimeInstance()->getMimeType($path);
     }
 }

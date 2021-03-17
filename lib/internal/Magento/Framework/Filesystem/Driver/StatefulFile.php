@@ -565,4 +565,17 @@ class StatefulFile implements DriverInterface
     {
         return $this->driverFile->getRealPathSafety($path);
     }
+
+    /**
+     * Retrieve file metadata
+     *
+     * @param string $path
+     *
+     * @return array
+     * @throws FileSystemException
+     */
+    public function getMetadata(string $path): array
+    {
+        return $this->driverFile->getMetadata($path);
+    }
 }
