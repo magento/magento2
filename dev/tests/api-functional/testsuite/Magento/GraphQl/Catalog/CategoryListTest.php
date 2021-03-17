@@ -848,7 +848,7 @@ QUERY;
      *
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      */
-    public function testFilterCategoryRecursiveFragment() : void
+    public function testFilterCategoryRecursiveFragment(): void
     {
         $query = <<<'QUERY'
 query GetCategoryTree($filters: CategoryFilterInput!) {
