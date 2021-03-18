@@ -3,10 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor as PriceIndexerProcessor;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\Media\Config;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Setup\CategorySetup;
@@ -15,8 +17,11 @@ use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Framework\Api\Data\ImageContentInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 Resolver::getInstance()->requireDataFixture(
     'Magento/ConfigurableProduct/_files/configurable_attribute_first.php'
@@ -25,17 +30,30 @@ Resolver::getInstance()->requireDataFixture(
     'Magento/ConfigurableProduct/_files/configurable_attribute_second.php'
 );
 
+$objectManager = Bootstrap::getObjectManager();
+
 /** @var ProductRepositoryInterface $productRepository */
-$productRepository = Bootstrap::getObjectManager()
-    ->get(ProductRepositoryInterface::class);
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
 
 /** @var $installer CategorySetup */
-$installer = Bootstrap::getObjectManager()->create(CategorySetup::class);
+$installer = $objectManager->create(CategorySetup::class);
 
 /** @var \Magento\Eav\Model\Config $eavConfig */
-$eavConfig = Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
+$eavConfig = $objectManager->get(\Magento\Eav\Model\Config::class);
 $firstAttribute = $eavConfig->getAttribute(Product::ENTITY, 'test_configurable_first');
 $secondAttribute = $eavConfig->getAttribute(Product::ENTITY, 'test_configurable_second');
+
+/** @var Config $config */
+$config = $objectManager->get(Config::class);
+
+/** @var Filesystem $filesystem */
+$filesystem = $objectManager->get(Filesystem::class);
+
+/** @var WriteInterface $mediaDirectory */
+$mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+$mediaPath = $mediaDirectory->getAbsolutePath();
+$baseTmpMediaPath = $config->getBaseTmpMediaPath();
+$mediaDirectory->create($baseTmpMediaPath);
 
 /* Create simple products per each option value*/
 /** @var AttributeOptionInterface[] $firstAttributeOptions */
@@ -48,6 +66,8 @@ $associatedProductIds = [];
 $firstAttributeValues =  [];
 $secondAttributeValues = [];
 $testImagePath = __DIR__ . '/magento_image.jpg';
+$mediaImage = $mediaPath . '/' . $baseTmpMediaPath . '/magento_image.jpg';
+copy($testImagePath, $mediaImage);
 
 array_shift($firstAttributeOptions);
 array_shift($secondAttributeOptions);
@@ -65,7 +85,10 @@ foreach ($firstAttributeOptions as $i => $firstAttributeOption) {
             $qty = 100;
             $isInStock = 1;
         }
-        $product = Bootstrap::getObjectManager()->create(Product::class);
+
+        $image = '/m/a/magento_image.jpg';
+
+        $product = $objectManager->create(Product::class);
         $product->setTypeId(Type::TYPE_SIMPLE)
             ->setAttributeSetId($attributeSetId)
             ->setWebsiteIds([1])
@@ -79,15 +102,15 @@ foreach ($firstAttributeOptions as $i => $firstAttributeOption) {
             ->setStockData(
                 ['use_config_manage_stock' => 1, 'qty' => $qty, 'is_qty_decimal' => 0, 'is_in_stock' => $isInStock]
             )
-            ->setImage('/m/a/magento_image.jpg')
-            ->setSmallImage('/m/a/magento_image.jpg')
-            ->setThumbnail('/m/a/magento_image.jpg')
+            ->setImage($image)
+            ->setSmallImage($image)
+            ->setThumbnail($image)
             ->setData(
                 'media_gallery',
                 [
                     'images' => [
                         [
-                            'file' => '/m/a/magento_image.jpg',
+                            'file' => $image,
                             'position' => 1,
                             'label' => 'Image Alt Text',
                             'disabled' => 0,
@@ -113,11 +136,12 @@ foreach ($firstAttributeOptions as $i => $firstAttributeOption) {
         foreach ($customAttributes as $attributeCode => $attributeValue) {
             $product->setCustomAttributes($customAttributes);
         }
+
         $product = $productRepository->save($product);
         $associatedProductIds[] = $product->getId();
 
-        /** @var \Magento\CatalogInventory\Model\Stock\Item $stockItem */
-        $stockItem = Bootstrap::getObjectManager()->create(Item::class);
+        /** @var Item $stockItem */
+        $stockItem = $objectManager->create(Item::class);
         $stockItem->load($product->getId(), 'product_id');
 
         if (!$stockItem->getProductId()) {
@@ -135,17 +159,16 @@ foreach ($firstAttributeOptions as $i => $firstAttributeOption) {
             'value_index' => $secondAttributeOption->getValue(),
         ];
     }
-
 }
 
-$indexerProcessor = Bootstrap::getObjectManager()->get(PriceIndexerProcessor::class);
+$indexerProcessor = $objectManager->get(PriceIndexerProcessor::class);
 $indexerProcessor->reindexList($associatedProductIds, true);
 
 /** @var $product Product */
-$product = Bootstrap::getObjectManager()->create(Product::class);
+$product = $objectManager->create(Product::class);
 
 /** @var Factory $optionsFactory */
-$optionsFactory = Bootstrap::getObjectManager()->create(Factory::class);
+$optionsFactory = $objectManager->create(Factory::class);
 
 $configurableAttributesData = [
     [
@@ -180,9 +203,15 @@ $product->setTypeId(Configurable::TYPE_CODE)
     ->setSku('configurable_12345')
     ->setVisibility(Visibility::VISIBILITY_BOTH)
     ->setStatus(Status::STATUS_ENABLED)
-    ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1]);
+    ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
+    ->addImageToMediaGallery(
+        $mediaImage,
+        ['image', 'small_image', 'thumbnail'],
+        false,
+        false
+    );
 $productRepository->cleanCache();
 $product = $productRepository->save($product);
 
-$indexerProcessor = Bootstrap::getObjectManager()->get(PriceIndexerProcessor::class);
+$indexerProcessor = $objectManager->get(PriceIndexerProcessor::class);
 $indexerProcessor->reindexRow($product->getId(), true);
