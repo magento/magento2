@@ -107,20 +107,25 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitUntilSimpleProductPageIsOpened"/>
 
         <!-- Verify customer see updated simple product in the product form page -->
-        <seeInField selector="{{AdminProductFormSection.productName}}" userInput="{{simpleProductRegularPrice32501InStock.name}}" stepKey="seeSimpleProductName"/>
-        <seeInField selector="{{AdminProductFormSection.productSku}}" userInput="{{simpleProductRegularPrice32501InStock.sku}}" stepKey="seeSimpleProductSku"/>
-        <seeInField selector="{{AdminProductFormSection.productPrice}}" userInput="{{simpleProductRegularPrice32501InStock.price}}" stepKey="seeSimpleProductPrice"/>
-        <seeInField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{simpleProductRegularPrice32501InStock.quantity}}" stepKey="seeSimpleProductQuantity"/>
-        <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{simpleProductRegularPrice32501InStock.status}}" stepKey="seeSimpleProductStockStatus"/>
-        <seeInField selector="{{AdminProductFormSection.productWeight}}" userInput="{{simpleProductRegularPrice32501InStock.weight}}" stepKey="seeSimpleProductWeight"/>
-        <actionGroup ref="AssertAdminProductIsAssignedToCategoryActionGroup" stepKey="selectedCategories">
+        <actionGroup ref="AdminAssertProductInfoOnEditPageActionGroup" stepKey="seeSimpleProductName">
+            <argument name="productName" value="{{simpleProductRegularPrice32501InStock.name}}"/>
+            <argument name="productSku" value="{{simpleProductRegularPrice32501InStock.sku}}"/>
+            <argument name="productPrice" value="{{simpleProductRegularPrice32501InStock.price}}"/>
+            <argument name="productQuantity" value="{{simpleProductRegularPrice32501InStock.quantity}}"/>
+            <argument name="productWeight" value="{{simpleProductRegularPrice32501InStock.weight}}"/>
+            <argument name="productVisibility" value="{{simpleProductRegularPrice32501InStock.visibility}}"/>
             <argument name="categoryName" value="$$categoryEntity.name$$"/>
         </actionGroup>
-        <seeInField selector="{{AdminProductFormSection.visibility}}" userInput="{{simpleProductRegularPrice32501InStock.visibility}}" stepKey="seeVisibility"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSimpleProductSku"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSimpleProductPrice"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSimpleProductQuantity"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSimpleProductStockStatus"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSimpleProductWeight"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectedCategories"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeVisibility"/>
         <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSection1"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection1"/>
         <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{simpleProductRegularPrice32501InStock.urlKey}}" stepKey="seeUrlKey"/>
-
         <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
 
         <!--Verify customer see updated simple product link on category page -->
