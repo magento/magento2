@@ -75,6 +75,8 @@
                  stepKey="unselectInitialCategory"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility"
                  stepKey="fillSearchCategory"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility"
+                 stepKey="waitForCategory2"/>
         <actionGroup ref="SetCategoryByNameActionGroup" stepKey="clickOnCategory">
             <argument name="categoryName" value="$$categoryEntity.name$$"/>
         </actionGroup>
