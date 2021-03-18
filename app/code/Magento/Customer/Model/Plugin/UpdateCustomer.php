@@ -11,6 +11,8 @@ namespace Magento\Customer\Model\Plugin;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Update customer by id from request param
@@ -23,11 +25,21 @@ class UpdateCustomer
     private $request;
 
     /**
-     * @param RestRequest $request
+     * @var Session
      */
-    public function __construct(RestRequest $request)
-    {
+    private $session;
+
+    /**
+     * @param RestRequest $request
+     * @param Session|null $session
+     */
+    public function __construct(
+        RestRequest $request,
+        Session $session = null
+    ) {
         $this->request = $request;
+        $this->session = $session ?: ObjectManager::getInstance()
+            ->get(Session::class);
     }
 
     /**
@@ -45,7 +57,7 @@ class UpdateCustomer
     ): array {
         $customerId = $this->request->getParam('customerId');
 
-        if ($customerId) {
+        if ($customerId && $customerId === $this->session->getData('customer_id')) {
             $customer = $this->getUpdatedCustomer($customerRepository->getById($customerId), $customer);
         }
 
