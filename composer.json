@@ -83,7 +83,8 @@
         "wikimedia/less.php": "~1.8.0",
         "league/flysystem": "^1.0",
         "league/flysystem-aws-s3-v3": "^1.0",
-        "league/flysystem-cached-adapter": "^1.0"
+        "league/flysystem-cached-adapter": "^1.0",
+        "web-token/jwt-framework": "^v2.2.7"
     },
     "require-dev": {
         "allure-framework/allure-phpunit": "~1.2.0",
@@ -330,7 +331,8 @@
         "magento/module-tinymce-3": "*",
         "magento/module-csp": "*",
         "magento/module-aws-s3": "*",
-        "magento/module-remote-storage": "*"
+        "magento/module-remote-storage": "*",
+        "magento/module-jwt-framework-adapter": "*"
     },
     "conflict": {
         "gene/bluefoot": "*"
