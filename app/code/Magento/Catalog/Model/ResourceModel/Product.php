@@ -101,6 +101,11 @@ class Product extends AbstractResource
     private $eavAttributeManagement;
 
     /**
+     * @var MediaImageDeleteProcessor
+     */
+    private $mediaImageDeleteProcessor;
+
+    /**
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
@@ -114,6 +119,7 @@ class Product extends AbstractResource
      * @param TableMaintainer|null $tableMaintainer
      * @param UniqueValidationInterface|null $uniqueValidator
      * @param AttributeManagementInterface|null $eavAttributeManagement
+     * @param MediaImageDeleteProcessor|null $mediaImageDeleteProcessor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -129,7 +135,8 @@ class Product extends AbstractResource
         $data = [],
         TableMaintainer $tableMaintainer = null,
         UniqueValidationInterface $uniqueValidator = null,
-        AttributeManagementInterface $eavAttributeManagement = null
+        AttributeManagementInterface $eavAttributeManagement = null,
+        ?MediaImageDeleteProcessor $mediaImageDeleteProcessor = null
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_catalogCategory = $catalogCategory;
@@ -148,6 +155,8 @@ class Product extends AbstractResource
         $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
         $this->eavAttributeManagement = $eavAttributeManagement
             ?? ObjectManager::getInstance()->get(AttributeManagementInterface::class);
+        $this->mediaImageDeleteProcessor = $mediaImageDeleteProcessor
+            ?? ObjectManager::getInstance()->get(MediaImageDeleteProcessor::class);
     }
 
     /**
@@ -818,5 +827,17 @@ class Product extends AbstractResource
         $data = parent::getAttributeRow($entity, $object, $attribute);
         $data['store_id'] = $object->getStoreId();
         return $data;
+    }
+
+    /**
+     * After delete entity process
+     *
+     * @param DataObject $object
+     * @return $this
+     */
+    protected function _afterDelete(DataObject $object)
+    {
+        $this->mediaImageDeleteProcessor->execute($object);
+        return parent::_afterDelete($object);
     }
 }
