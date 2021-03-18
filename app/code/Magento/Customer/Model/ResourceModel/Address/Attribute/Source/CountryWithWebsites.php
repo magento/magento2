@@ -84,7 +84,7 @@ class CountryWithWebsites extends Table
             $websiteIds = [];
 
             if (!$this->shareConfig->isGlobalScope()) {
-                $allowedCountries = [[]];
+                $allowedCountries = [];
 
                 foreach ($this->storeManager->getWebsites() as $website) {
                     $countries = $this->allowedCountriesReader
@@ -96,7 +96,7 @@ class CountryWithWebsites extends Table
                     }
                 }
 
-                $allowedCountries = array_unique(array_merge(...$allowedCountries));
+                $allowedCountries = array_unique(array_merge([], ...$allowedCountries));
             } else {
                 $allowedCountries = $this->allowedCountriesReader->getAllowedCountries();
             }

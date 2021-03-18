@@ -8,7 +8,7 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="widget" resource="default" engine="innodb" comment="Preconfigured Widgets">
-        <column xsi:type="int" name="widget_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="widget_id" unsigned="true" nullable="false" identity="true"
                 comment="Widget ID"/>
         <column xsi:type="varchar" name="widget_code" nullable="true" length="255"
                 comment="Widget code for template directive"/>
@@ -22,15 +22,15 @@
         </index>
     </table>
     <table name="widget_instance" resource="default" engine="innodb" comment="Instances of Widget for Package Theme">
-        <column xsi:type="int" name="instance_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="instance_id" unsigned="true" nullable="false" identity="true"
                 comment="Instance ID"/>
         <column xsi:type="varchar" name="instance_type" nullable="true" length="255" comment="Instance Type"/>
-        <column xsi:type="int" name="theme_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="theme_id" unsigned="true" nullable="false" identity="false"
                 comment="Theme ID"/>
         <column xsi:type="varchar" name="title" nullable="true" length="255" comment="Widget Title"/>
         <column xsi:type="varchar" name="store_ids" nullable="false" length="255" default="0" comment="Store ids"/>
         <column xsi:type="text" name="widget_parameters" nullable="true" comment="Widget parameters"/>
-        <column xsi:type="smallint" name="sort_order" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="sort_order" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Sort order"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="instance_id"/>
@@ -39,9 +39,9 @@
                     column="theme_id" referenceTable="theme" referenceColumn="theme_id" onDelete="CASCADE"/>
     </table>
     <table name="widget_instance_page" resource="default" engine="innodb" comment="Instance of Widget on Page">
-        <column xsi:type="int" name="page_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="page_id" unsigned="true" nullable="false" identity="true"
                 comment="Page ID"/>
-        <column xsi:type="int" name="instance_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="instance_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Instance ID"/>
         <column xsi:type="varchar" name="page_group" nullable="true" length="25" comment="Block Group Type"/>
         <column xsi:type="varchar" name="layout_handle" nullable="true" length="255" comment="Layout Handle"/>
@@ -60,9 +60,9 @@
         </index>
     </table>
     <table name="widget_instance_page_layout" resource="default" engine="innodb" comment="Layout updates">
-        <column xsi:type="int" name="page_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"
+        <column xsi:type="int" name="page_id" unsigned="true" nullable="false" identity="false" default="0"
                 comment="Page ID"/>
-        <column xsi:type="int" name="layout_update_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="layout_update_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Layout Update ID"/>
         <constraint xsi:type="foreign" referenceId="WIDGET_INSTANCE_PAGE_LAYOUT_PAGE_ID_WIDGET_INSTANCE_PAGE_PAGE_ID"
                     table="widget_instance_page_layout" column="page_id" referenceTable="widget_instance_page"
@@ -70,7 +70,7 @@
         <constraint xsi:type="foreign" referenceId="WIDGET_INSTANCE_PAGE_LYT_LYT_UPDATE_ID_LYT_UPDATE_LYT_UPDATE_ID"
                     table="widget_instance_page_layout" column="layout_update_id" referenceTable="layout_update"
                     referenceColumn="layout_update_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" referenceId="WIDGET_INSTANCE_PAGE_LAYOUT_LAYOUT_UPDATE_ID_PAGE_ID">
+        <constraint xsi:type="primary" referenceId="WIDGET_INSTANCE_PAGE_LAYOUT_LAYOUT_UPDATE_ID_PAGE_ID">
             <column name="layout_update_id"/>
             <column name="page_id"/>
         </constraint>
@@ -79,11 +79,11 @@
         </index>
     </table>
     <table name="layout_update" resource="default" engine="innodb" comment="Layout Updates">
-        <column xsi:type="int" name="layout_update_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="layout_update_id" unsigned="true" nullable="false" identity="true"
                 comment="Layout Update ID"/>
         <column xsi:type="varchar" name="handle" nullable="true" length="255" comment="Handle"/>
         <column xsi:type="text" name="xml" nullable="true" comment="Xml"/>
-        <column xsi:type="smallint" name="sort_order" padding="6" unsigned="false" nullable="false" identity="false"
+        <column xsi:type="smallint" name="sort_order" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Sort Order"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="true" default="0"
                 comment="Last Update Timestamp"/>
@@ -95,13 +95,13 @@
         </index>
     </table>
     <table name="layout_link" resource="default" engine="innodb" comment="Layout Link">
-        <column xsi:type="int" name="layout_link_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="layout_link_id" unsigned="true" nullable="false" identity="true"
                 comment="Link ID"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Store ID"/>
-        <column xsi:type="int" name="theme_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="theme_id" unsigned="true" nullable="false" identity="false"
                 comment="Theme ID"/>
-        <column xsi:type="int" name="layout_update_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="layout_update_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Layout Update ID"/>
         <column xsi:type="boolean" name="is_temporary" nullable="false" default="false"
                 comment="Defines whether Layout Update is Temporary"/>

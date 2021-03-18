@@ -34,9 +34,7 @@
         </after>
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.sku$$)}}" stepKey="openProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart"/>
-        <waitForPageLoad stepKey="waitForAddToCart"/>
-        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
         <waitForText userInput="You added $$createSimpleProduct.name$$ to your shopping cart." stepKey="waitForText"/>
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickCart"/>
         <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
@@ -48,8 +46,10 @@
         <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.captchaField}}" stepKey="seeCaptchaField"/>
         <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.captchaImg}}" stepKey="seeCaptchaImage"/>
         <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.captchaReload}}" stepKey="seeCaptchaReloadButton"/>
-        <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
+
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForPageLoad2" />
+
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickCart2"/>
         <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout2"/>
         <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.email}}" stepKey="waitEmailFieldVisible2"/>

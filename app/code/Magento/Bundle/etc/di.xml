@@ -86,7 +86,7 @@
         <plugin name="bundle" type="Magento\Bundle\Model\Plugin\PriceBackend" sortOrder="100" />
     </type>
     <type name="Magento\Catalog\Model\Product">
-        <plugin name="bundle" type="Magento\Bundle\Model\Plugin\Product" sortOrder="100" />
+        <plugin name="add_bundle_parent_identities" type="Magento\Bundle\Model\Plugin\ProductIdentitiesExtender" sortOrder="100" />
     </type>
     <type name="Magento\Sales\Model\Order\Item">
         <plugin name="bundle" type="Magento\Bundle\Model\Sales\Order\Plugin\Item" sortOrder="100" />
@@ -233,5 +233,24 @@
                 </item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\Shipment\ShipmentItemsValidator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="shipment_type" xsi:type="object">Magento\Bundle\Model\Sales\Order\Shipment\BundleShipmentTypeValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\Quote\Item\Option\Comparator">
+        <arguments>
+            <argument name="customComparators" xsi:type="array">
+                <item name="bundle_selection_attributes" xsi:type="object">Magento\Bundle\Model\Quote\Item\Option\BundleSelectionAttributesComparator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\QuoteManagement">
+        <plugin name="update_bundle_quote_item_options"
+                type="Magento\Bundle\Plugin\Quote\UpdateBundleQuoteItemOptions"
+                sortOrder="10"/>
     </type>
 </config>

@@ -30,7 +30,9 @@ use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Copy;
 use Magento\Framework\DataObject\Factory;
 use Magento\Framework\Event\Manager;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\Context;
+use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote;
@@ -636,6 +638,48 @@ class QuoteTest extends TestCase
             ->with($groupId)
             ->willReturn($groupMock);
         $this->quote->setData('customer_group_id', $groupId);
+        $result = $this->quote->getCustomerTaxClassId();
+        $this->assertEquals($taxClassId, $result);
+    }
+
+    /**
+     * Test case when non-existent customer group is stored into the quote.
+     * In such a case we should get a NoSuchEntityException exception and try
+     * to get a valid customer group from the current customer object.
+     */
+    public function testGetCustomerTaxClassIdForNonExistentCustomerGroup()
+    {
+        $customerId = 1;
+        $nonExistentGroupId = 100;
+        $groupId = 1;
+        $taxClassId = 1;
+        $groupMock = $this->getMockForAbstractClass(GroupInterface::class, [], '', false);
+        $this->groupRepositoryMock->expects($this->at(0))
+            ->method('getById')
+            ->with($nonExistentGroupId)
+            ->willThrowException(new NoSuchEntityException(new Phrase('Entity Id does not exist')));
+        $customerMock = $this->getMockForAbstractClass(
+            CustomerInterface::class,
+            [],
+            '',
+            false
+        );
+        $customerMock->expects($this->once())
+            ->method('getGroupId')
+            ->willReturn($groupId);
+        $this->customerRepositoryMock->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($customerMock);
+        $this->groupRepositoryMock->expects($this->at(1))
+            ->method('getById')
+            ->with($groupId)
+            ->willReturn($groupMock);
+        $groupMock->expects($this->once())
+            ->method('getTaxClassId')
+            ->willReturn($taxClassId);
+        $this->quote->setData('customer_id', $customerId);
+        $this->quote->setData('customer_group_id', $nonExistentGroupId);
         $result = $this->quote->getCustomerTaxClassId();
         $this->assertEquals($taxClassId, $result);
     }

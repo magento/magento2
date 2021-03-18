@@ -11,7 +11,7 @@ Fields marked with (*) are required. Please don't remove the template.
 
 ### Preconditions (*)
 <!---
-Provide the exact Magento version (example: 2.3.2) and any important information on the environment where bug is reproducible.
+Provide the exact Magento version (example: 2.4.0) and any important information on the environment where bug is reproducible.
 -->
 1.
 2.
@@ -32,3 +32,12 @@ Important: Provide a set of clear steps to reproduce this bug. We can not provid
 <!--- Tell us what happened instead. Include error messages and issues. -->
 1. [Screenshots, logs or description]
 2.
+
+---
+Please provide [Severity](https://devdocs.magento.com/guides/v2.4/contributor-guide/contributing.html#backlog) assessment for the Issue as Reporter. This information will help during Confirmation and Issue triage processes.
+
+- [ ] Severity: **S0** _- Affects critical data or functionality and leaves users without workaround._
+- [ ] Severity: **S1** _- Affects critical data or functionality and forces users to employ a workaround._
+- [ ] Severity: **S2** _- Affects non-critical data or functionality and forces users to employ a workaround._
+- [ ] Severity: **S3** _- Affects non-critical data or functionality and does not force users to employ a workaround._
+- [ ] Severity: **S4** _- Affects aesthetics, professional look and feel, “quality” or “usability”._

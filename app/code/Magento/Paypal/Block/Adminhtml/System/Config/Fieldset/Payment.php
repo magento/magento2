@@ -5,6 +5,9 @@
  */
 namespace Magento\Paypal\Block\Adminhtml\System\Config\Fieldset;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 /**
  * Fieldset renderer for PayPal solution
  */
@@ -16,21 +19,30 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
     protected $_backendConfig;
 
     /**
+     * @var SecureHtmlRenderer
+     */
+    private $secureRenderer;
+
+    /**
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Framework\View\Helper\Js $jsHelper
      * @param \Magento\Config\Model\Config $backendConfig
      * @param array $data
+     * @param SecureHtmlRenderer|null $secureRenderer
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Framework\View\Helper\Js $jsHelper,
         \Magento\Config\Model\Config $backendConfig,
-        array $data = []
+        array $data = [],
+        ?SecureHtmlRenderer $secureRenderer = null
     ) {
         $this->_backendConfig = $backendConfig;
-        parent::__construct($context, $authSession, $jsHelper, $data);
+        $secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
+        parent::__construct($context, $authSession, $jsHelper, $data, $secureRenderer);
+        $this->secureRenderer = $secureRenderer;
     }
 
     /**
@@ -90,18 +102,19 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
             ' class="button action-configure' .
             (empty($groupConfig['paypal_ec_separate']) ? '' : ' paypal-ec-separate') .
             $disabledClassString .
-            '" id="' .
-            $htmlId .
-            '-head" onclick="paypalToggleSolution.call(this, \'' .
-            $htmlId .
-            "', '" .
-            $this->getUrl(
-                'adminhtml/*/state'
-            ) . '\'); return false;"><span class="state-closed">' . __(
+            '" id="' . $htmlId . '-head" >' .
+            '<span class="state-closed">' . __(
                 'Configure'
             ) . '</span><span class="state-opened">' . __(
                 'Close'
             ) . '</span></button>';
+
+        $html .= /* @noEscape */ $this->secureRenderer->renderEventListenerAsTag(
+            'onclick',
+            "paypalToggleSolution.call(this, '" . $htmlId . "', '" . $this->getUrl('adminhtml/*/state') .
+            "');event.preventDefault();",
+            'button#' . $htmlId . '-head'
+        );
 
         if (!empty($groupConfig['more_url'])) {
             $html .= '<a class="link-more" href="' . $groupConfig['more_url'] . '" target="_blank">' . __(
@@ -151,6 +164,8 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
     }
 
     /**
+     * Return extra Js.
+     *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -162,7 +177,7 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
                 var doScroll = false;
                 Fieldset.toggleCollapse(id, url);
                 if ($(this).hasClassName(\"open\")) {
-                    $$(\".with-button button.button\").each(function(anotherButton) {
+                    \$$(\".with-button button.button\").each(function(anotherButton) {
                         if (anotherButton != this && $(anotherButton).hasClassName(\"open\")) {
                             $(anotherButton).click();
                             doScroll = true;

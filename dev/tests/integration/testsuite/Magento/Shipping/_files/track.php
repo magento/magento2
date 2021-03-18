@@ -5,15 +5,19 @@
  */
 declare(strict_types=1);
 
+use Magento\Sales\Api\Data\OrderInterfaceFactory;
 use Magento\Sales\Api\ShipmentTrackRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Shipment\Track;
 use Magento\Sales\Model\Order\ShipmentFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../../Magento/Sales/_files/order.php';
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order.php');
 
+$objectManager = Bootstrap::getObjectManager();
+$order = $objectManager->get(OrderInterfaceFactory::class)->create()->loadByIncrementId('100000001');
 /** @var Order $order */
 $items = [];
 foreach ($order->getItems() as $orderItem) {
@@ -21,13 +25,13 @@ foreach ($order->getItems() as $orderItem) {
 }
 
 /** @var Shipment $shipment */
-$shipment = Bootstrap::getObjectManager()->get(ShipmentFactory::class)->create($order, $items);
+$shipment = $objectManager->get(ShipmentFactory::class)->create($order, $items);
 $shipment->setPackages([['1'], ['2']]);
 $shipment->setShipmentStatus(Shipment::STATUS_NEW);
 $shipment->save();
 
 /** @var Track $track */
-$track = Bootstrap::getObjectManager()->create(Track::class);
+$track = $objectManager->create(Track::class);
 $track->setOrderId($order->getId());
 $track->setParentId($shipment->getId());
 $track->setTitle('Shipment Title');
@@ -36,5 +40,5 @@ $track->setTrackNumber('track_number');
 $track->setDescription('Description of shipment');
 
 /** @var ShipmentTrackRepositoryInterface $shipmentTrackRepository */
-$shipmentTrackRepository = Bootstrap::getObjectManager()->get(ShipmentTrackRepositoryInterface::class);
+$shipmentTrackRepository = $objectManager->get(ShipmentTrackRepositoryInterface::class);
 $shipmentTrackRepository->save($track);

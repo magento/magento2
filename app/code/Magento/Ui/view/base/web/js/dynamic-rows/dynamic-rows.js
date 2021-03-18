@@ -620,15 +620,12 @@ define([
          * @param {Array} data
          */
         parsePagesData: function (data) {
-            var pages;
-
             this.relatedData = this.deleteProperty ?
                 _.filter(data, function (elem) {
                     return elem && elem[this.deleteProperty] !== this.deleteValue;
                 }, this) : data;
 
-            pages = Math.ceil(this.relatedData.length / this.pageSize) || 1;
-            this.pages(pages);
+            this._updatePagesQuantity();
         },
 
         /**
@@ -657,7 +654,7 @@ define([
 
             startIndex = page || this.startIndex;
 
-            return dataRecord.slice(startIndex, this.startIndex + this.pageSize);
+            return dataRecord.slice(startIndex, this.startIndex + parseInt(this.pageSize, 10));
         },
 
         /**
@@ -886,6 +883,18 @@ define([
         },
 
         /**
+         * Update number of pages.
+         *
+         * @private
+         * @return void
+         */
+        _updatePagesQuantity: function () {
+            var pages = Math.ceil(this.relatedData.length / this.pageSize) || 1;
+
+            this.pages(pages);
+        },
+
+        /**
          * Reduce the number of pages
          *
          * @private
@@ -960,6 +969,10 @@ define([
         reload: function () {
             this.clear();
             this.initChildren(false, true);
+            this._updatePagesQuantity();
+
+            /* After change page size need to check existing current page */
+            this._reducePages();
         },
 
         /**
@@ -1123,13 +1136,17 @@ define([
          * Update whether value differs from default value
          */
         setDifferedFromDefault: function () {
-            var recordData = utils.copy(this.recordData());
+            var recordData;
 
-            Array.isArray(recordData) && recordData.forEach(function (item) {
-                delete item['record_id'];
-            });
+            if (this.default) {
+                recordData = utils.copy(this.recordData());
 
-            this.isDifferedFromDefault(!_.isEqual(recordData, this.default));
+                Array.isArray(recordData) && recordData.forEach(function (item) {
+                    delete item['record_id'];
+                });
+
+                this.isDifferedFromDefault(!_.isEqual(recordData, this.default));
+            }
         },
 
         /**

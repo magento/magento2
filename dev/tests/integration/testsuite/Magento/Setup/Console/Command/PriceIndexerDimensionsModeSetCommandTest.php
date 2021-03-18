@@ -13,6 +13,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test command that sets indexer mode for catalog_product_price indexer
+ *
+ * @magentoDbIsolation disabled
  */
 class PriceIndexerDimensionsModeSetCommandTest extends \Magento\TestFramework\Indexer\TestCase
 {

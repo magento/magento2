@@ -11,12 +11,12 @@ use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Directory\Helper\Data as DirectoryData;
-use Magento\Framework\Api\DataObjectHelper;
+use Magento\Directory\Model\ResourceModel\Region\CollectionFactory as RegionCollectionFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
- * Create customer address
+ * Create customer and validate address
  */
 class CreateCustomerAddress
 {
@@ -36,33 +36,50 @@ class CreateCustomerAddress
     private $addressRepository;
 
     /**
-     * @var DataObjectHelper
-     */
-    private $dataObjectHelper;
-    /**
      * @var DirectoryData
      */
     private $directoryData;
 
     /**
+     * @var RegionCollectionFactory
+     */
+    private $regionCollectionFactory;
+
+    /**
+     * @var ValidateAddress
+     */
+    private $addressValidator;
+
+    /**
+     * @var PopulateCustomerAddressFromInput
+     */
+    private $populateCustomerAddressFromInput;
+
+    /**
      * @param GetAllowedAddressAttributes $getAllowedAddressAttributes
      * @param AddressInterfaceFactory $addressFactory
      * @param AddressRepositoryInterface $addressRepository
-     * @param DataObjectHelper $dataObjectHelper
      * @param DirectoryData $directoryData
+     * @param RegionCollectionFactory $regionCollectionFactory
+     * @param ValidateAddress $addressValidator
+     * @param PopulateCustomerAddressFromInput $populateCustomerAddressFromInput
      */
     public function __construct(
         GetAllowedAddressAttributes $getAllowedAddressAttributes,
         AddressInterfaceFactory $addressFactory,
         AddressRepositoryInterface $addressRepository,
-        DataObjectHelper $dataObjectHelper,
-        DirectoryData $directoryData
+        DirectoryData $directoryData,
+        RegionCollectionFactory $regionCollectionFactory,
+        ValidateAddress $addressValidator,
+        PopulateCustomerAddressFromInput $populateCustomerAddressFromInput
     ) {
         $this->getAllowedAddressAttributes = $getAllowedAddressAttributes;
         $this->addressFactory = $addressFactory;
         $this->addressRepository = $addressRepository;
-        $this->dataObjectHelper = $dataObjectHelper;
         $this->directoryData = $directoryData;
+        $this->regionCollectionFactory = $regionCollectionFactory;
+        $this->addressValidator = $addressValidator;
+        $this->populateCustomerAddressFromInput =$populateCustomerAddressFromInput;
     }
 
     /**
@@ -79,15 +96,13 @@ class CreateCustomerAddress
         if (isset($data['country_code'])) {
             $data['country_id'] = $data['country_code'];
         }
+
         $this->validateData($data);
 
         /** @var AddressInterface $address */
         $address = $this->addressFactory->create();
-        $this->dataObjectHelper->populateWithArray($address, $data, AddressInterface::class);
-
-        if (isset($data['region']['region_id'])) {
-            $address->setRegionId($address->getRegion()->getRegionId());
-        }
+        $this->populateCustomerAddressFromInput->execute($address, $data);
+        $this->addressValidator->execute($address);
         $address->setCustomerId($customerId);
 
         try {

@@ -10,8 +10,8 @@ namespace Magento\Wishlist\Test\Unit\Controller\Index;
 use Magento\Catalog\Helper\Product as ProductHelper;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Exception as ProductException;
-use Magento\Checkout\Model\Cart as CheckoutCart;
 use Magento\Checkout\Helper\Cart as CartHelper;
+use Magento\Checkout\Model\Cart as CheckoutCart;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\RedirectInterface;
@@ -25,6 +25,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
+use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Quote\Model\Quote;
@@ -270,18 +271,28 @@ class CartTest extends TestCase
 
         $this->cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
 
+        $cookieMetadataMock = $this->getMockBuilder(PublicCookieMetadata::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->cookieMetadataFactoryMock = $this->getMockBuilder(CookieMetadataFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['createPublicCookieMetadata', 'setDuration', 'setPath', 'setHttpOnly'])
+            ->setMethods(['createPublicCookieMetadata'])
             ->getMock();
         $this->cookieMetadataFactoryMock->expects($this->any())
             ->method('createPublicCookieMetadata')
-            ->willReturnSelf();
-        $this->cookieMetadataFactoryMock->expects($this->any())
+            ->willReturn($cookieMetadataMock);
+        $cookieMetadataMock->expects($this->any())
             ->method('setDuration')
             ->willReturnSelf();
-        $this->cookieMetadataFactoryMock->expects($this->any())
+        $cookieMetadataMock->expects($this->any())
             ->method('setPath')
+            ->willReturnSelf();
+        $cookieMetadataMock->expects($this->any())
+            ->method('setSameSite')
+            ->willReturnSelf();
+        $cookieMetadataMock->expects($this->any())
+            ->method('setHttpOnly')
             ->willReturnSelf();
 
         $this->model = new Cart(
@@ -620,14 +631,8 @@ class CartTest extends TestCase
             ->method('getName')
             ->willReturn($productName);
 
-        $this->escaperMock->expects($this->once())
-            ->method('escapeHtml')
-            ->with($productName, null)
-            ->willReturn($productName);
-
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccessMessage')
-            ->with('You added ' . $productName . ' to your shopping cart.', null)
+            ->method('addComplexSuccessMessage')
             ->willReturnSelf();
 
         $this->cartHelperMock->expects($this->once())

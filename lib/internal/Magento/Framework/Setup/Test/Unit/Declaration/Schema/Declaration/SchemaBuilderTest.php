@@ -8,6 +8,10 @@ declare(strict_types=1);
 namespace Magento\Framework\Setup\Test\Unit\Declaration\Schema\Declaration;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\SqlVersionProvider;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Stdlib\BooleanUtils;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Setup\Declaration\Schema\Declaration\SchemaBuilder;
 use Magento\Framework\Setup\Declaration\Schema\Declaration\ValidationComposite;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Columns\Integer;
@@ -19,15 +23,11 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Index;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Schema;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
 use Magento\Framework\Setup\Declaration\Schema\Sharding;
-use Magento\Framework\Setup\Exception;
-use Magento\Framework\Stdlib\BooleanUtils;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Test for SchemaBuilder.
- *
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -68,6 +68,11 @@ class SchemaBuilderTest extends TestCase
      */
     private $resourceConnectionMock;
 
+    /**
+     * @var SqlVersionProvider|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $sqlVersionProvider;
+
     protected function setUp(): void
     {
         $this->elementFactoryMock = $this->getMockBuilder(ElementFactory::class)
@@ -85,6 +90,9 @@ class SchemaBuilderTest extends TestCase
         $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->sqlVersionProvider = $this->getMockBuilder(SqlVersionProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -94,7 +102,8 @@ class SchemaBuilderTest extends TestCase
                 'booleanUtils' => new BooleanUtils(),
                 'sharding' => $this->shardingMock,
                 'validationComposite' => $this->validationCompositeMock,
-                'resourceConnection' => $this->resourceConnectionMock
+                'resourceConnection' => $this->resourceConnectionMock,
+                'sqlVersionProvider' => $this->sqlVersionProvider
             ]
         );
     }
@@ -302,7 +311,7 @@ class SchemaBuilderTest extends TestCase
      * @dataProvider tablesProvider
      * @param array $tablesData
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @throws Exception
+     * @throws LocalizedException
      */
     public function testBuild(array $tablesData)
     {

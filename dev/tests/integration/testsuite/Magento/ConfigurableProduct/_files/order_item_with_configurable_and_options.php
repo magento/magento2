@@ -4,7 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-require 'product_configurable.php';
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/product_configurable.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -19,9 +23,11 @@ $shippingAddress->setId(null)->setAddressType('shipping');
 $payment = $objectManager->create(\Magento\Sales\Model\Order\Payment::class);
 $payment->setMethod('checkmo');
 
-/** @var $product \Magento\Catalog\Model\Product */
-$product = $objectManager->create(\Magento\Catalog\Model\Product::class);
-$product->load(1);
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
+$product = $productRepository->get('configurable');
+/** @var ProductInterface $firstChildProduct */
+$firstChildProduct = current($product->getTypeInstance()->getUsedProducts($product));
 
 /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
 $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
@@ -37,6 +43,7 @@ $requestInfo = [
     'super_attribute' => [
         $attribute->getId() => $option->getId(),
     ],
+    'custom_price' => 300,
 ];
 /** @var \Magento\Sales\Model\Order $order */
 $order = $objectManager->create(\Magento\Sales\Model\Order::class);
@@ -53,7 +60,11 @@ $orderItem->setBasePrice($product->getPrice());
 $orderItem->setPrice($product->getPrice());
 $orderItem->setRowTotal($product->getPrice());
 $orderItem->setProductType($product->getTypeId());
-$orderItem->setProductOptions(['info_buyRequest' => $requestInfo]);
+$orderItem->setProductOptions([
+    'info_buyRequest' => $requestInfo,
+    'simple_sku' => $firstChildProduct->getSku(),
+    'simple_name' => $firstChildProduct->getName(),
+]);
 
 /** @var \Magento\Sales\Model\Order $order */
 $order = $objectManager->create(\Magento\Sales\Model\Order::class);

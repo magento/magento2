@@ -27,6 +27,7 @@ use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Customer\Model\AttributeMetadataDataProvider;
 
 /**
  * Sales address save
@@ -51,6 +52,11 @@ class AddressSave extends Order implements HttpPostActionInterface
      * @var OrderAddressRepositoryInterface
      */
     private $orderAddressRepository;
+
+    /**
+     * @var AttributeMetadataDataProvider
+     */
+    private $attributeMetadataDataProvider;
 
     /**
      * @param Context $context
@@ -82,7 +88,8 @@ class AddressSave extends Order implements HttpPostActionInterface
         OrderRepositoryInterface $orderRepository,
         LoggerInterface $logger,
         RegionFactory $regionFactory = null,
-        OrderAddressRepositoryInterface $orderAddressRepository = null
+        OrderAddressRepositoryInterface $orderAddressRepository = null,
+        AttributeMetadataDataProvider $attributeMetadataDataProvider = null
     ) {
         $this->regionFactory = $regionFactory ?: ObjectManager::getInstance()->get(RegionFactory::class);
         $this->orderAddressRepository = $orderAddressRepository ?: ObjectManager::getInstance()
@@ -100,6 +107,8 @@ class AddressSave extends Order implements HttpPostActionInterface
             $orderRepository,
             $logger
         );
+        $this->attributeMetadataDataProvider = $attributeMetadataDataProvider ?: ObjectManager::getInstance()
+            ->get(AttributeMetadataDataProvider::class);
     }
 
     /**
@@ -115,6 +124,7 @@ class AddressSave extends Order implements HttpPostActionInterface
             OrderAddressInterface::class
         )->load($addressId);
         $data = $this->getRequest()->getPostValue();
+        $data = $this->truncateCustomFileAttributes($data);
         $data = $this->updateRegionData($data);
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data && $address->getId()) {
@@ -139,7 +149,7 @@ class AddressSave extends Order implements HttpPostActionInterface
             return $resultRedirect->setPath('sales/*/');
         }
     }
-    
+
     /**
      * Update region data
      *
@@ -154,5 +164,41 @@ class AddressSave extends Order implements HttpPostActionInterface
             $attributeValues['region'] = $newRegion->getDefaultName();
         }
         return $attributeValues;
+    }
+
+    /**
+     * Truncates custom file attributes from a request.
+     *
+     * As custom file type attributes are not working workaround is introduced.
+     *
+     * @param array $data
+     * @return array
+     */
+    private function truncateCustomFileAttributes(array $data): array
+    {
+        $foundArrays = [];
+
+        foreach ($data as $value) {
+            if (is_array($value)) {
+                $foundArrays = $value;
+            }
+        }
+
+        if (empty($foundArrays)) {
+            return $data;
+        }
+
+        $attributesList = $this->attributeMetadataDataProvider->loadAttributesCollection(
+            'customer_address',
+            'adminhtml_customer_address'
+        );
+        $attributesList->addFieldToFilter('is_user_defined', 1);
+        $attributesList->addFieldToFilter('frontend_input', 'file');
+
+        foreach ($attributesList as $customFileAttribute) {
+            unset($data[$customFileAttribute->getAttributeCode()]);
+        }
+
+        return $data;
     }
 }

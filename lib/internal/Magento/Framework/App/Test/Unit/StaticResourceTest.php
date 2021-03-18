@@ -16,6 +16,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\App\StaticResource;
 use Magento\Framework\App\View\Asset\Publisher;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Module\ModuleList;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Asset\LocalInterface;
@@ -80,10 +81,18 @@ class StaticResourceTest extends TestCase
     private $deploymentConfigMock;
 
     /**
+     * @var File|MockObject
+     */
+    private $driverMock;
+
+    /**
      * @var StaticResource
      */
     private $object;
 
+    /**
+     * @inheridoc
+     */
     protected function setUp(): void
     {
         $this->stateMock = $this->createMock(State::class);
@@ -96,6 +105,7 @@ class StaticResourceTest extends TestCase
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->configLoaderMock = $this->createMock(ConfigLoader::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
+        $this->driverMock = $this->createMock(File::class);
         $this->object = new StaticResource(
             $this->stateMock,
             $this->responseMock,
@@ -105,10 +115,14 @@ class StaticResourceTest extends TestCase
             $this->moduleListMock,
             $this->objectManagerMock,
             $this->configLoaderMock,
-            $this->deploymentConfigMock
+            $this->deploymentConfigMock,
+            $this->driverMock
         );
     }
 
+    /**
+     * Test to lunch on production mode
+     */
     public function testLaunchProductionMode()
     {
         $this->stateMock->expects($this->once())
@@ -193,6 +207,9 @@ class StaticResourceTest extends TestCase
         $this->responseMock->expects($this->once())
             ->method('setFilePath')
             ->with('resource/file.css');
+        $this->driverMock->expects($this->once())
+            ->method('getRealPathSafety')
+            ->willReturnArgument(0);
         $this->object->launch();
     }
 
@@ -249,6 +266,9 @@ class StaticResourceTest extends TestCase
         ];
     }
 
+    /**
+     * Test to lunch with wrong path on developer mode
+     */
     public function testLaunchWrongPath()
     {
         $this->expectException('InvalidArgumentException');
@@ -260,9 +280,34 @@ class StaticResourceTest extends TestCase
             ->method('get')
             ->with('resource')
             ->willReturn('short/path.js');
+        $this->driverMock->expects($this->once())
+            ->method('getRealPathSafety')
+            ->willReturnArgument(0);
         $this->object->launch();
     }
 
+    /**
+     * Test to lunch with wrong path on production mode
+     */
+    public function testLaunchWrongPathProductionMode()
+    {
+        $mode = State::MODE_PRODUCTION;
+        $path = 'wrong/path.js';
+
+        $this->stateMock->method('getMode')->willReturn($mode);
+        $this->deploymentConfigMock->method('getConfigData')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION)
+            ->willReturn(true);
+        $this->requestMock->method('get')->with('resource')->willReturn($path);
+        $this->responseMock->expects($this->once())
+            ->method('setHttpResponseCode')
+            ->with(404);
+        $this->object->launch();
+    }
+
+    /**
+     * Test to Ability to handle exceptions on developer mode
+     */
     public function testCatchExceptionDeveloperMode()
     {
         $this->objectManagerMock->expects($this->once())
@@ -286,6 +331,9 @@ class StaticResourceTest extends TestCase
         $this->assertTrue($this->object->catchException($bootstrap, $exception));
     }
 
+    /**
+     * Test to lunch with wrong path
+     */
     public function testLaunchPathAbove()
     {
         $this->expectException('InvalidArgumentException');
@@ -297,6 +345,10 @@ class StaticResourceTest extends TestCase
             ->method('get')
             ->with('resource')
             ->willReturn('frontend/..\..\folder_above/././Magento_Ui/template/messages.html');
+        $this->driverMock->expects($this->once())
+            ->method('getRealPathSafety')
+            ->with('frontend/..\..\folder_above/././Magento_Ui/template/messages.html')
+            ->willReturn('folder_above/Magento_Ui/template/messages.html');
         $this->expectExceptionMessage("Requested path '$path' is wrong.");
 
         $this->object->launch();
