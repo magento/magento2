@@ -10,6 +10,7 @@ namespace Magento\AwsS3\Driver;
 use Generator;
 use League\Flysystem\Config;
 use League\Flysystem\FilesystemAdapter;
+use League\Flysystem\Visibility;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Phrase;
@@ -29,7 +30,7 @@ class AwsS3 implements RemoteDriverInterface
 
     private const TEST_FLAG = 'storage.flag';
 
-    private const CONFIG = ['ACL' => 'private'];
+    private const CONFIG = [Config::OPTION_VISIBILITY => Visibility::PRIVATE];
 
     /**
      * @var FilesystemAdapter
