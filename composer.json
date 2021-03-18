@@ -35,7 +35,7 @@
         "composer/composer": "^1.9 || ^2.0",
         "elasticsearch/elasticsearch": "~7.11.0",
         "guzzlehttp/guzzle": "^6.3.3",
-        "laminas/laminas-captcha": "^2.7.1",
+        "laminas/laminas-captcha": "^2.10",
         "laminas/laminas-code": "^3.5.1",
         "laminas/laminas-crypt": "^3.4.0",
         "laminas/laminas-db": "^2.12.0",

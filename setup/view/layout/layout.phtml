@@ -4,31 +4,24 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+/**
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ */
 
 ?>
 <?= $this->doctype() ?>
 <!--[if !IE]><!-->
-<html lang="en" ng-app="magento">
+<html lang="en">
 <!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{$state.current.title}}</title>
+    <title>Magento</title>
     <?= $this->headLink()
         ->appendStylesheet($this->basePath() . '/pub/styles/setup.css');
     ?>
     <?= $this->headScript()
-        ->appendFile($this->basePath() . '/pub/angular/angular.min.js')
-        ->appendFile($this->basePath() . '/pub/angular-ng-storage/angular-ng-storage.min.js')
-        ->appendFile($this->basePath() . '/pub/angular-ng-dialog/angular-ng-dialog.min.js')
-        ->appendFile($this->basePath() . '/pub/angular-clickout/angular-clickout.min.js')
-        ->appendFile($this->basePath() . '/pub/angular-ui-router/angular-ui-router.min.js')
-        ->appendFile($this->basePath() . '/pub/angular-ui-bootstrap/angular-ui-bootstrap.min.js')
-        ->appendFile($this->basePath() . '/pub/angular-sanitize/angular-sanitize.min.js')
-        ->appendFile($this->basePath() . '/pub/magento/setup/app.js')
-        ->appendFile($this->basePath() . '/pub/magento/setup/main.js')
-        ->appendFile($this->basePath() . '/pub/magento/setup/landing.js')
+        ->appendFile($this->basePath() . '/pub/scripts/main.js')
     ?>
     <link
         rel="icon"
