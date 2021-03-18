@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6b136172ae4f2bcbb7a33d554fea4913",
+    "content-hash": "5f8fbac022a9db92aff0c239e758fd49",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -1103,34 +1103,36 @@
         },
         {
             "name": "laminas/laminas-captcha",
-            "version": "2.9.0",
+            "version": "2.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-captcha.git",
-                "reference": "b88f650f3adf2d902ef56f6377cceb5cd87b9876"
+                "reference": "9a0134e434cd792934ecca42cb66f316be7bba50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-captcha/zipball/b88f650f3adf2d902ef56f6377cceb5cd87b9876",
-                "reference": "b88f650f3adf2d902ef56f6377cceb5cd87b9876",
+                "url": "https://api.github.com/repos/laminas/laminas-captcha/zipball/9a0134e434cd792934ecca42cb66f316be7bba50",
+                "reference": "9a0134e434cd792934ecca42cb66f316be7bba50",
                 "shasum": ""
             },
             "require": {
                 "laminas/laminas-math": "^2.7 || ^3.0",
-                "laminas/laminas-stdlib": "^3.2.1",
-                "laminas/laminas-zendframework-bridge": "^1.0",
-                "php": "^5.6 || ^7.0"
+                "laminas/laminas-stdlib": "^3.3",
+                "laminas/laminas-zendframework-bridge": "^1.1",
+                "php": "^7.3 || ~8.0.0"
             },
             "replace": {
-                "zendframework/zend-captcha": "self.version"
+                "zendframework/zend-captcha": "^2.9.0"
             },
             "require-dev": {
-                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-coding-standard": "~2.1.4",
                 "laminas/laminas-recaptcha": "^3.0",
-                "laminas/laminas-session": "^2.8",
-                "laminas/laminas-text": "^2.6",
-                "laminas/laminas-validator": "^2.10.1",
-                "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.2"
+                "laminas/laminas-session": "^2.10",
+                "laminas/laminas-text": "^2.8",
+                "laminas/laminas-validator": "^2.14",
+                "phpunit/phpunit": "^9.4.3",
+                "psalm/plugin-phpunit": "^0.15.1",
+                "vimeo/psalm": "^4.6"
             },
             "suggest": {
                 "laminas/laminas-i18n-resources": "Translations of captcha messages",
@@ -1140,12 +1142,6 @@
                 "laminas/laminas-validator": "Laminas\\Validator component"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.9.x-dev",
-                    "dev-develop": "2.10.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Laminas\\Captcha\\": "src/"
@@ -1161,7 +1157,13 @@
                 "captcha",
                 "laminas"
             ],
-            "time": "2019-12-31T16:24:14+00:00"
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2021-03-17T16:42:11+00:00"
         },
         {
             "name": "laminas/laminas-code",
