@@ -149,15 +149,15 @@ class CachedAdapter implements FilesystemAdapter
 
         $exists = $this->adapter->fileExists($path);
 
-        if (!$exists) {
-            try {
-                // check if target is a directory
-                $exists = iterator_count($this->adapter->listContents($path, false)) > 0;
-            } catch (\Throwable $e) {
-                // catch closed iterator
-                $exists = false;
-            }
-        }
+//        if (!$exists) {
+//            try {
+//                // check if target is a directory
+//                $exists = iterator_count($this->adapter->listContents($path, false)) > 0;
+//            } catch (\Throwable $e) {
+//                // catch closed iterator
+//                $exists = false;
+//            }
+//        }
 
         if (! $exists) {
             $this->cache->resetData($path);
