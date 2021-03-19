@@ -9,13 +9,14 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+use Magento\Sales\Model\Order\Email\Container\InvoiceIdentity;
+use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class responsive for sending order emails when it's created through storefront.
+ * Class responsive for sending invoice emails when order created through storefront.
  */
-class SubmitObserver implements ObserverInterface
+class SendInvoiceEmailObserver implements ObserverInterface
 {
     /**
      * @var LoggerInterface
@@ -23,24 +24,32 @@ class SubmitObserver implements ObserverInterface
     private $logger;
 
     /**
-     * @var OrderSender
+     * @var InvoiceSender
      */
-    private $orderSender;
+    private $invoiceSender;
+
+    /**
+     * @var InvoiceIdentity
+     */
+    private $invoiceIdentity;
 
     /**
      * @param LoggerInterface $logger
-     * @param OrderSender $orderSender
+     * @param InvoiceSender $invoiceSender
+     * @param InvoiceIdentity $invoiceIdentity
      */
     public function __construct(
         LoggerInterface $logger,
-        OrderSender $orderSender
+        InvoiceSender $invoiceSender,
+        InvoiceIdentity $invoiceIdentity
     ) {
         $this->logger = $logger;
-        $this->orderSender = $orderSender;
+        $this->invoiceSender = $invoiceSender;
+        $this->invoiceIdentity = $invoiceIdentity;
     }
 
     /**
-     * Send order email.
+     * Send invoice email if allowed.
      *
      * @param Observer $observer
      *
@@ -48,6 +57,10 @@ class SubmitObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
+        if (!$this->isInvoiceEmailAllowed()) {
+            return;
+        }
+
         /** @var  Quote $quote */
         $quote = $observer->getEvent()->getQuote();
         /** @var  Order $order */
@@ -59,10 +72,23 @@ class SubmitObserver implements ObserverInterface
         $redirectUrl = $quote->getPayment()->getOrderPlaceRedirectUrl();
         if (!$redirectUrl && $order->getCanSendNewEmailFlag()) {
             try {
-                $this->orderSender->send($order);
+                $invoice = current($order->getInvoiceCollection()->getItems());
+                if ($invoice) {
+                    $this->invoiceSender->send($invoice);
+                }
             } catch (\Exception $e) {
                 $this->logger->critical($e);
             }
         }
+    }
+
+    /**
+     * Is invoice email sending enabled
+     *
+     * @return bool
+     */
+    private function isInvoiceEmailAllowed(): bool
+    {
+        return $this->invoiceIdentity->isEnabled();
     }
 }
