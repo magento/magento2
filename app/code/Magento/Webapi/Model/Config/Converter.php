@@ -110,7 +110,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 self::KEY_DATA_PARAMETERS => $data
             ];
 
-            if ($description === '') {
+            if ($description !== '') {
                 $result[self::KEY_ROUTES][$url][$method][self::KEY_DESCRIPTION] = $description;
             }
 
