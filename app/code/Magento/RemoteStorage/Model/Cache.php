@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\RemoteStorage\Model;
 
 use League\Flysystem\DirectoryAttributes;
-use League\Flysystem\DirectoryListing;
 use League\Flysystem\FileAttributes;
 use League\MimeTypeDetection\MimeTypeDetector;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -24,32 +23,32 @@ class Cache implements CacheInterface
     /**
      * @var bool
      */
-    private bool $autoSave = true;
+    private $autoSave = true;
 
     /**
      * @var CacheStorageHandlerInterface
      */
-    private CacheStorageHandlerInterface $cacheStorageHandler;
+    private $cacheStorageHandler;
 
     /**
      * @var Json
      */
-    private Json $json;
+    private $json;
 
     /**
      * @var GetPathInfo
      */
-    private GetPathInfo $getPathInfo;
+    private $getPathInfo;
 
     /**
      * @var MimeTypeDetector
      */
-    private MimeTypeDetector $mimeTypeDetector;
+    private $mimeTypeDetector;
 
     /**
      * @var CacheStorage
      */
-    private CacheStorage $cacheStorage;
+    private $cacheStorage;
 
     /**
      * @param CacheStorageHandlerInterface $cacheStorageHandler
@@ -129,7 +128,7 @@ class Cache implements CacheInterface
      */
     public function updateObject(string $path, array $object, $autoSave = false): void
     {
-        if (!$this->fileExists($path)) {
+        if (!$this->has($path)) {
             $data = $this->getPathInfo->execute($path);
             $this->cacheStorage->setCacheDataByKey($path, $data);
         }
@@ -144,18 +143,9 @@ class Cache implements CacheInterface
     }
 
     /**
-     * @inheirtdoc
-     */
-    public function storeMiss(string $path): void
-    {
-        $this->cacheStorage->setCacheDataByKey($path, false);
-        $this->autosave();
-    }
-
-    /**
      * @ingeritdoc
      */
-    public function listContents(string $location, bool $deep = self::LIST_SHALLOW): DirectoryListing
+    public function listContents(string $location, bool $deep = self::LIST_SHALLOW): iterable
     {
         $result = [];
 
@@ -177,14 +167,14 @@ class Cache implements CacheInterface
                     $content['visibility'] ?? null,
                     $content['last_modified'] ?? null
                 );
-            if (($content['type'] === 'file' && $content['dirname'] === $location) || $content['path'] === $location) {
+            if ($content['dirname'] === $location || $content['path'] === $location) {
                 $result[] = $object;
             } elseif ($deep && $this->pathIsInDirectory($location, $content['path'])) {
                 $result[] = $object;
             }
         }
 
-        return new DirectoryListing($result);
+        return $result;
     }
 
     /**
@@ -192,7 +182,8 @@ class Cache implements CacheInterface
      */
     public function fileExists(string $location): bool
     {
-        return $location !== false && $this->cacheStorage->getCacheDataByKey($location);
+        return isset($this->cacheStorage->getCacheDataByKey($location)['type'])
+            && $this->cacheStorage->getCacheDataByKey($location)['type'] === 'file';
     }
 
     /**
@@ -250,7 +241,7 @@ class Cache implements CacheInterface
      */
     public function delete($path): void
     {
-        $this->storeMiss($path);
+        $this->cacheStorage->setCacheDataByKey($path, false);
     }
 
     /**
@@ -386,5 +377,17 @@ class Cache implements CacheInterface
     private function pathIsInDirectory(string $directory, string $path): bool
     {
         return $directory === '' || str_starts_with($path, $directory . '/');
+    }
+
+    /**
+     * Verify if cache has object.
+     *
+     * @param string $location
+     * @return bool
+     */
+    private function has(string $location): bool
+    {
+        return $this->cacheStorage->hasCacheData($location)
+            && $this->cacheStorage->getCacheDataByKey($location) !== false;
     }
 }

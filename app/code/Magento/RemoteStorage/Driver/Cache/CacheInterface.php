@@ -7,19 +7,88 @@ declare(strict_types=1);
 
 namespace Magento\RemoteStorage\Driver\Cache;
 
-use League\Flysystem\FilesystemReader;
+use League\Flysystem\FilesystemException;
+use League\Flysystem\StorageAttributes;
+use League\Flysystem\UnableToCheckFileExistence;
+use League\Flysystem\UnableToReadFile;
+use League\Flysystem\UnableToRetrieveMetadata;
 
 /**
  * Remote storage cache interface.
  */
-interface CacheInterface extends FilesystemReader
+interface CacheInterface
 {
+    public const LIST_SHALLOW = false;
+
+    /**
+     * Verify if file exists.
+     *
+     * @param string $location
+     * @return bool
+     */
+    public function fileExists(string $location): bool;
+
+    /**
+     * Read location.
+     *
+     * @param string $location
+     * @return string
+     */
+    public function read(string $location): string;
+
+    /**
+     * Read location.
+     *
+     * @param string $location
+     * @return resource
+     */
+    public function readStream(string $location);
+
+    /**
+     * Retrieve directory list contents.
+     *
+     * @param string $location
+     * @param bool $deep
+     * @return iterable<StorageAttributes>
+     */
+    public function listContents(string $location, bool $deep = self::LIST_SHALLOW): iterable;
+
+    /**
+     * Retrieve directory/file last update date.
+     * @param string $path
+     * @return int
+     */
+    public function lastModified(string $path): int;
+
+    /**
+     * Retrieve file size.
+     *
+     * @param string $path
+     * @return int
+     */
+    public function fileSize(string $path): int;
+
+    /**
+     * Retrieve file mimeType.
+     *
+     * @param string $path
+     * @return string
+     */
+    public function mimeType(string $path): string;
+
+    /**
+     * Get directory/file visibility status.
+     *
+     * @param string $path
+     * @return string
+     */
+    public function visibility(string $path): string;
+
     /**
      * Check whether the directory listing of a given directory is complete.
      *
      * @param string $dirname
      * @param bool $recursive
-     *
      * @return bool
      */
     public function isComplete(string $dirname, bool $recursive): bool;
@@ -115,12 +184,4 @@ interface CacheInterface extends FilesystemReader
      * @param bool $autoSave
      */
     public function updateObject(string $path, array $object, bool $autoSave = false): void;
-
-    /**
-     * Store object hit miss.
-     *
-     * @param string $path
-     * @return void
-     */
-    public function storeMiss(string $path): void;
 }

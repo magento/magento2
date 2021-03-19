@@ -20,32 +20,32 @@ class Predis implements CacheStorageHandlerInterface
     /**
      * @var string
      */
-    private string $key;
+    private $key;
 
     /**
      * @var int|null
      */
-    private ?int $expire;
+    private $expire;
 
     /**
      * @var Json
      */
-    private Json $json;
+    private $json;
 
     /**
      * @var GetCleanedContents
      */
-    private GetCleanedContents $getCleanedContents;
+    private $getCleanedContents;
 
     /**
      * @var CacheStorage
      */
-    private CacheStorage $cacheStorage;
+    private $cacheStorage;
 
     /**
      * @var Client
      */
-    private Client $client;
+    private $client;
 
     /**
      * @param CacheStorage $cacheStorage

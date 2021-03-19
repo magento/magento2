@@ -42,22 +42,22 @@ class CacheFactory
     /**
      * @var MemoryFactory
      */
-    private MemoryFactory $memoryFactory;
+    private $memoryFactory;
 
     /**
      * @var LocalFactory
      */
-    private LocalFactory $localFactory;
+    private $localFactory;
 
     /**
      * @var PredisFactory
      */
-    private PredisFactory $predisFactory;
+    private $predisFactory;
 
     /**
      * @var CacheInterfaceFactory
      */
-    private CacheInterfaceFactory $cacheFactory;
+    private $cacheFactory;
 
     /**
      * @param CacheInterfaceFactory $cacheFactory

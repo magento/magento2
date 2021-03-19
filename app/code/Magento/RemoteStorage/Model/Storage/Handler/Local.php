@@ -22,32 +22,32 @@ class Local implements CacheStorageHandlerInterface
     /**
      * @var FilesystemAdapter
      */
-    private FilesystemAdapter $adapter;
+    private $adapter;
 
     /**
      * @var string
      */
-    private string $file;
+    private $file;
 
     /**
      * @var int|null
      */
-    private ?int $expire = null;
+    private $expire = null;
 
     /**
      * @var GetCleanedContents
      */
-    private GetCleanedContents $getCleanedContents;
+    private $getCleanedContents;
 
     /**
      * @var CacheStorage
      */
-    private CacheStorage $cacheStorage;
+    private $cacheStorage;
 
     /**
      * @var Json
      */
-    private Json $json;
+    private $json;
 
     /**
      * @param GetCleanedContents $getCleanedContents

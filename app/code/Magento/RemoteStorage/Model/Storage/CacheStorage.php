@@ -15,12 +15,12 @@ class CacheStorage
     /**
      * @var array
      */
-    private array $cache = [];
+    private $cache = [];
 
     /**
      * @var array
      */
-    private array $complete = [];
+    private $complete = [];
 
     /**
      * Retrieve all cached data.

@@ -7,11 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\AwsS3\Driver;
 
+use Exception;
 use Generator;
 use League\Flysystem\Config;
 use League\Flysystem\FilesystemAdapter;
+use League\Flysystem\FilesystemException;
 use League\Flysystem\Visibility;
-use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\FileSystemException as MagentoFileSystemException;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Phrase;
 use Magento\RemoteStorage\Driver\DriverException;
@@ -76,7 +78,7 @@ class AwsS3 implements RemoteDriverInterface
             foreach ($this->streams as $stream) {
                 $this->fileClose($stream);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // log exception as throwing an exception from a destructor causes a fatal error
             $this->logger->critical($e);
         }
@@ -89,7 +91,7 @@ class AwsS3 implements RemoteDriverInterface
     {
         try {
             $this->adapter->write(self::TEST_FLAG, '', new Config(self::CONFIG));
-        } catch (\League\Flysystem\FilesystemException $e) {
+        } catch (FilesystemException | Exception $e) {
             throw new DriverException(__($e->getMessage()), $e);
         }
     }
@@ -108,7 +110,7 @@ class AwsS3 implements RemoteDriverInterface
         }
         try {
             $contents = $this->adapter->read($path);
-        } catch (\League\Flysystem\FilesystemException $e) {
+        } catch (FilesystemException | Exception $e) {
             $this->logger->error($e->getMessage());
             return '';
         }
@@ -132,11 +134,14 @@ class AwsS3 implements RemoteDriverInterface
         }
 
         try {
-            return $this->adapter->fileExists($path);
-        } catch (\League\Flysystem\FilesystemException $e) {
+            if ($this->adapter->fileExists($path) || $this->isDirectory($path)) {
+                return true;
+            }
+        } catch (FilesystemException | Exception $e) {
             $this->logger->error($e->getMessage());
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -164,7 +169,6 @@ class AwsS3 implements RemoteDriverInterface
      *
      * @param string $path
      * @return bool
-     * @throws FileSystemException
      */
     private function createDirectoryRecursively(string $path): bool
     {
@@ -179,7 +183,7 @@ class AwsS3 implements RemoteDriverInterface
         if (!$this->isDirectory($path)) {
             try {
                 $this->adapter->createDirectory($this->fixPath($path), new Config(self::CONFIG));
-            } catch (\League\Flysystem\FilesystemException $e) {
+            } catch (FilesystemException | Exception $e) {
                 $this->logger->error($e->getMessage());
                 return false;
             }
@@ -197,9 +201,9 @@ class AwsS3 implements RemoteDriverInterface
             $this->adapter->copy(
                 $this->normalizeRelativePath($source, true),
                 $this->normalizeRelativePath($destination, true),
-                new Config(self::CONFIG)
+                new Config([])
             );
-        } catch (\League\Flysystem\FilesystemException $e) {
+        } catch (FilesystemException | Exception $e) {
             $this->logger->error($e->getMessage());
 
             return false;
@@ -217,7 +221,7 @@ class AwsS3 implements RemoteDriverInterface
             $this->adapter->delete(
                 $this->normalizeRelativePath($path, true)
             );
-        } catch (\League\Flysystem\FilesystemException $e) {
+        } catch (FilesystemException | Exception $e) {
             $this->logger->error($e->getMessage());
 
             return false;
@@ -235,7 +239,7 @@ class AwsS3 implements RemoteDriverInterface
             $this->adapter->deleteDirectory(
                 $this->normalizeRelativePath($path, true)
             );
-        } catch (\League\Flysystem\FilesystemException $e) {
+        } catch (FilesystemException | Exception $e) {
             $this->logger->error($e->getMessage());
 
             return false;
@@ -262,7 +266,7 @@ class AwsS3 implements RemoteDriverInterface
         try {
             $this->adapter->write($path, $content, new Config($config));
             $size = $this->adapter->fileSize($path)->fileSize();
-        } catch (\League\Flysystem\FilesystemException $e) {
+        } catch (FilesystemException | Exception $e) {
             $this->logger->error($e->getMessage());
 
             return 0;
@@ -410,7 +414,7 @@ class AwsS3 implements RemoteDriverInterface
 
         try {
             return $this->adapter->fileExists($path);
-        } catch (\League\Flysystem\FilesystemException $e) {
+        } catch (FilesystemException $e) {
             $this->logger->error($e);
             return false;
         }
@@ -438,9 +442,8 @@ class AwsS3 implements RemoteDriverInterface
                     return true;
                 }
             }
-        } catch (\League\Flysystem\FilesystemException $e) {
+        } catch (FilesystemException | Exception $e) {
             $this->logger->error($e->getMessage());
-            return false;
         }
 
         return false;
@@ -492,9 +495,9 @@ class AwsS3 implements RemoteDriverInterface
             $this->adapter->move(
                 $this->normalizeRelativePath($oldPath, true),
                 $this->normalizeRelativePath($newPath, true),
-                new Config(self::CONFIG)
+                new Config([])
             );
-        } catch (\League\Flysystem\FilesystemException $e) {
+        } catch (FilesystemException | Exception $e) {
             $this->logger->error($e->getMessage());
 
             return false;
@@ -510,12 +513,14 @@ class AwsS3 implements RemoteDriverInterface
     {
         $path = $this->normalizeRelativePath($path, true);
         try {
-            $size = $this->adapter->fileSize($path)->fileSize();
-            $type = $this->adapter->mimeType($path)->mimeType();
-            $mtime = $this->adapter->lastModified($path)->lastModified();
-        } catch (\League\Flysystem\FilesystemException $e) {
+            if (!$this->isDirectory($path)) {
+                $size = $this->adapter->fileSize($path)->fileSize();
+                $type = $this->adapter->mimeType($path)->mimeType();
+                $mtime = $this->adapter->lastModified($path)->lastModified();
+            }
+        } catch (FilesystemException | Exception $e) {
             $this->logger->error($e->getMessage());
-            throw new FileSystemException(__('Cannot gather stats! %1', [$this->getWarningMessage()]));
+            throw new MagentoFileSystemException(__('Cannot gather stats! %1', [$this->getWarningMessage()]));
         }
 
         return [
@@ -549,9 +554,9 @@ class AwsS3 implements RemoteDriverInterface
             $size = $this->adapter->fileSize($path)->fileSize();
             $timestamp = $this->adapter->lastModified($path)->lastModified();
             $metaInfo = $this->adapter->getMetadata($path);
-        } catch (\League\Flysystem\FilesystemException $e) {
+        } catch (FilesystemException | Exception $e) {
             $this->logger->error($e->getMessage());
-            throw new FileSystemException(__('Cannot gather meta info! %1', [$this->getWarningMessage()]));
+            throw new MagentoFileSystemException(__('Cannot gather meta info! %1', [$this->getWarningMessage()]));
         }
 
         return [
@@ -641,7 +646,7 @@ class AwsS3 implements RemoteDriverInterface
         $content = $this->adapter->fileExists($path) ? $this->adapter->read($path) : '';
         try {
             $this->adapter->write($path, $content, new Config([]));
-        } catch (\League\Flysystem\FilesystemException $e) {
+        } catch (FilesystemException | Exception $e) {
             $this->logger->error($e->getMessage());
 
             return false;
@@ -659,7 +664,7 @@ class AwsS3 implements RemoteDriverInterface
         $result = @stream_get_line($resource, $length, $ending);
         // phpcs:enable
         if (false === $result) {
-            throw new FileSystemException(
+            throw new MagentoFileSystemException(
                 new Phrase('File cannot be read %1', [$this->getWarningMessage()])
             );
         }
@@ -675,7 +680,7 @@ class AwsS3 implements RemoteDriverInterface
         //phpcs:ignore Magento2.Functions.DiscouragedFunction
         $result = fread($resource, $length);
         if ($result === false) {
-            throw new FileSystemException(__('File cannot be read %1', [$this->getWarningMessage()]));
+            throw new MagentoFileSystemException(__('File cannot be read %1', [$this->getWarningMessage()]));
         }
 
         return $result;
@@ -689,7 +694,7 @@ class AwsS3 implements RemoteDriverInterface
         //phpcs:ignore Magento2.Functions.DiscouragedFunction
         $result = fgetcsv($resource, $length, $delimiter, $enclosure, $escape);
         if ($result === null) {
-            throw new FileSystemException(
+            throw new MagentoFileSystemException(
                 new Phrase(
                     'The "%1" CSV handle is incorrect. Verify the handle and try again.',
                     [$this->getWarningMessage()]
@@ -707,7 +712,7 @@ class AwsS3 implements RemoteDriverInterface
     {
         $result = @ftell($resource);
         if ($result === null) {
-            throw new FileSystemException(
+            throw new MagentoFileSystemException(
                 new Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
             );
         }
@@ -722,7 +727,7 @@ class AwsS3 implements RemoteDriverInterface
     {
         $result = @fseek($resource, $offset, $whence);
         if ($result === -1) {
-            throw new FileSystemException(
+            throw new MagentoFileSystemException(
                 new Phrase(
                     'An error occurred during "%1" fileSeek execution.',
                     [$this->getWarningMessage()]
@@ -757,7 +762,7 @@ class AwsS3 implements RemoteDriverInterface
     {
         $result = @fflush($resource);
         if (!$result) {
-            throw new FileSystemException(
+            throw new MagentoFileSystemException(
                 new Phrase(
                     'An error occurred during "%1" fileFlush execution.',
                     [$this->getWarningMessage()]
@@ -775,7 +780,7 @@ class AwsS3 implements RemoteDriverInterface
     {
         $result = @flock($resource, $lockMode);
         if (!$result) {
-            throw new FileSystemException(
+            throw new MagentoFileSystemException(
                 new Phrase(
                     'An error occurred during "%1" fileLock execution.',
                     [$this->getWarningMessage()]
@@ -793,7 +798,7 @@ class AwsS3 implements RemoteDriverInterface
     {
         $result = @flock($resource, LOCK_UN);
         if (!$result) {
-            throw new FileSystemException(
+            throw new MagentoFileSystemException(
                 new Phrase(
                     'An error occurred during "%1" fileUnlock execution.',
                     [$this->getWarningMessage()]

@@ -23,22 +23,22 @@ class CachedAdapter implements FilesystemAdapter
     /**
      * @var FilesystemAdapter
      */
-    private FilesystemAdapter $adapter;
+    private $adapter;
 
     /**
      * @var CacheInterface
      */
-    private CacheInterface $cache;
+    private $cache;
 
     /**
      * @var LoggerInterface
      */
-    private LoggerInterface $logger;
+    private $logger;
 
     /**
      * @var GetPathInfo
      */
-    private GetPathInfo $getPathInfo;
+    private $getPathInfo;
 
     /**
      * @param FilesystemAdapter $adapter
@@ -152,13 +152,12 @@ class CachedAdapter implements FilesystemAdapter
             return true;
         }
 
-        if (!$this->adapter->fileExists($path)) {
-            $this->cache->storeMiss($path);
-            return false;
+        if ($this->adapter->fileExists($path)) {
+            $this->cache->updateObject($path, $this->adapter->fileSize($path)->jsonSerialize(), true);
+            return true;
         }
-        $this->cache->updateObject($path, $this->adapter->fileSize($path)->jsonSerialize(), true);
 
-        return true;
+        return false;
     }
 
     /**
@@ -191,7 +190,7 @@ class CachedAdapter implements FilesystemAdapter
     public function listContents(string $path, bool $deep): iterable
     {
         if ($this->cache->isComplete($path, $deep)) {
-            return $this->cache->listContents($path, $deep)->getIterator();
+            return $this->cache->listContents($path, $deep);
         }
 
         $contents = $this->adapter->listContents($path, $deep);
@@ -289,8 +288,10 @@ class CachedAdapter implements FilesystemAdapter
     public function getMetadata(string $path): array
     {
         $fileAttributes = $this->adapter->fileSize($path)->jsonSerialize();
-        $width = (int)$fileAttributes['extra_metadata']['Metadata']['image-width'] ?? 0;
-        $height = (int)$fileAttributes['extra_metadata']['Metadata']['image-height'] ?? 0;
+        $width = isset($fileAttributes['extra_metadata']['Metadata']['image-width'])
+            ? (int)$fileAttributes['extra_metadata']['Metadata']['image-width'] : 0;
+        $height = isset($fileAttributes['extra_metadata']['Metadata']['image-height'])
+            ? (int)$fileAttributes['extra_metadata']['Metadata']['image-height'] : 0;
         $pathInfo = $this->getPathInfo->execute($fileAttributes['path']);
 
         return [
