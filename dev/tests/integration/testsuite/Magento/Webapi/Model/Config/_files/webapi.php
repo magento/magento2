@@ -138,7 +138,6 @@ return [
                 ],
                 'parameters' => [
                 ],
-                'description' => ''
             ],
         ],
         '/V1/testmoduleMSC' => [
@@ -153,7 +152,6 @@ return [
                 ],
                 'parameters' => [
                 ],
-                'description' => ''
             ],
         ],
         '/V1/testmodule1/:id' => [
@@ -168,7 +166,6 @@ return [
                 ],
                 'parameters' => [
                 ],
-                'description' => ''
             ],
         ],
         '/V1/testmodule1' => [
@@ -187,7 +184,6 @@ return [
                         'value' => null,
                     ],
                 ],
-                'description' => ''
             ],
             'POST' => [
                 'secure' => false,
@@ -204,7 +200,6 @@ return [
                         'value' => null,
                     ],
                 ],
-                'description' => ''
             ],
         ],
         '/V2/testmodule1/:id' => [
@@ -220,7 +215,6 @@ return [
                 ],
                 'parameters' => [
                 ],
-                'description' => ''
             ],
             'DELETE' => [
                 'secure' => false,
@@ -234,7 +228,6 @@ return [
                 ],
                 'parameters' => [
                 ],
-                'description' => ''
             ],
             'PUT' => [
                 'secure' => false,
@@ -248,7 +241,6 @@ return [
                 ],
                 'parameters' => [
                 ],
-                'description' => ''
             ],
         ],
         '/V2/testmodule1' => [
@@ -268,7 +260,6 @@ return [
                         'value' => null,
                     ],
                 ],
-                'description' => ''
             ],
         ],
         '/V2/testmoduleMSC/itemPreconfigured' => [
@@ -283,7 +274,6 @@ return [
                     'Magento_TestModuleMSC::resource2' => true,
                 ],
                 'parameters' => [],
-                'description' => ''
             ]
         ]
     ],

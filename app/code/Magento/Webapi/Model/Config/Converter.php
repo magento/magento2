@@ -107,9 +107,12 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     self::KEY_SERVICE_METHOD => $serviceMethod,
                 ],
                 self::KEY_ACL_RESOURCES => $resourceReferences,
-                self::KEY_DATA_PARAMETERS => $data,
-                self::KEY_DESCRIPTION => $description
+                self::KEY_DATA_PARAMETERS => $data
             ];
+
+            if ($description === '') {
+                $result[self::KEY_ROUTES][$url][$method][self::KEY_DESCRIPTION] = $description;
+            }
 
             $serviceSecure = false;
             if (isset($serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_SECURE])) {

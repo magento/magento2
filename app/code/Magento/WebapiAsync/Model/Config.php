@@ -116,7 +116,6 @@ class Config implements ConfigInterface
         return $services[$lookupKey][$attributeName];
     }
 
-
     /**
      * Generate topic data for all defined services
      *
@@ -133,7 +132,11 @@ class Config implements ConfigInterface
                 if ($httpMethod !== \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET) {
                     $serviceInterface = $httpMethodData[Converter::KEY_SERVICE][Converter::KEY_SERVICE_CLASS];
                     $serviceMethod = $httpMethodData[Converter::KEY_SERVICE][Converter::KEY_SERVICE_METHOD];
-                    $topicDescription = $httpMethodData[Converter::KEY_DESCRIPTION];
+
+                    $topicDescription = '';
+                    if (isset($httpMethodData[Converter::KEY_DESCRIPTION])) {
+                        $topicDescription = $httpMethodData[Converter::KEY_DESCRIPTION];
+                    }
 
                     $lookupKey = $this->generateLookupKeyByRouteData(
                         $routeUrl,
