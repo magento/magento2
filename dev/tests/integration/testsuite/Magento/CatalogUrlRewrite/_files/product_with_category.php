@@ -34,9 +34,6 @@ $category = $objectManager->create(Category::class);
 $category->setName('category 1')
     ->setUrlKey('cat-1')
     ->setIsActive(true)
-    ->setMetaTitle('Meta Title for Category-1')
-    ->setMetaKeyword('Meta Keywords for Category-1')
-    ->setMetaDescription('Meta Description for Category-1')
     ->setStoreId(1);
 
 /** @var CategoryRepositoryInterface $categoryRepository */
@@ -65,9 +62,6 @@ $product->setStoreId(0)
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])
     ->setPrice(10)
-    ->setMetaTitle('Meta Title for p002')
-    ->setMetaKeyword('Meta Keywords for p002')
-    ->setMetaDescription('Meta Description for p002')
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->setStockData(
