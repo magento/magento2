@@ -1325,5 +1325,8 @@
                 <item name="catalog" xsi:type="object">Magento\Catalog\Model\Media\Config</item>
             </argument>
         </arguments>
+    <type name="Magento\Catalog\Api\ProductRepositoryInterface">
+        <plugin name="remove_images_from_gallery_after_removing_product"
+                type="Magento\Catalog\Plugin\RemoveImagesFromGalleryAfterRemovingProduct"/>
     </type>
 </config>

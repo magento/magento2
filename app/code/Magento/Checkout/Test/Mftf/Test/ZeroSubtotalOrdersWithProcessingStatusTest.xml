@@ -79,8 +79,8 @@
         <waitForPageLoad stepKey="WaitForDiscountToBeAdded"/>
         <see userInput="Your coupon was successfully applied." stepKey="verifyText"/>
 
-        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPlaceOrderButton"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
 
         <!--Proceed to Admin panel > SALES > Orders. Created order should be in Processing status-->

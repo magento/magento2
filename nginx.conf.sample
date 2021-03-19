@@ -108,8 +108,8 @@ location /static/ {
     # expires max;
 
     # Remove signature of the static files that is used to overcome the browser cache
-    location ~ ^/static/version {
-        rewrite ^/static/(version\d*/)?(.*)$ /static/$2 last;
+    location ~ ^/static/version\d*/ {
+        rewrite ^/static/version\d*/(.*)$ /static/$1 last;
     }
 
     location ~* \.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2|html|json)$ {
@@ -140,7 +140,7 @@ location /media/ {
 
 ## The following section allows to offload image resizing from Magento instance to the Nginx.
 ## Catalog image URL format should be set accordingly.
-## See https://docs.magento.com/m2/ee/user_guide/configuration/general/web.html#url-options
+## See https://docs.magento.com/user-guide/configuration/general/web.html#url-options
 #   location ~* ^/media/catalog/.* {
 #
 #       # Replace placeholders and uncomment the line below to serve product images from public S3
