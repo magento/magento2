@@ -17,7 +17,7 @@ define([
                 'formId': formId
             }),
             global: false,
-            contentType: 'application/json',
+            contentType: 'application/json'
         }).done(
             function (response) {
                 if (response.imgSrc) {
