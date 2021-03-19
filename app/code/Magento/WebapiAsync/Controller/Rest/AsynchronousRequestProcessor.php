@@ -125,7 +125,6 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
      *
      * @param \Magento\Framework\Webapi\Rest\Request $request
      * @return string
-     * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function getTopicName($request)

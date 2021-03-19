@@ -49,7 +49,7 @@ interface ConfigInterface
      * @return array
      * @since 100.2.3
      */
-    public function getServices();
+    public function getServices(): array;
 
     /**
      * Get topic name from webapi_async_config services config array by route url and http method
@@ -60,7 +60,7 @@ interface ConfigInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @since 100.2.3
      */
-    public function getTopicName($routeUrl, $httpMethod);
+    public function getTopicName(string $routeUrl, string $httpMethod): string;
 
     /**
      * Get topic description from webapi_async_config services config array by route url and http method
@@ -70,5 +70,5 @@ interface ConfigInterface
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getTopicDescription($routeUrl, $httpMethod);
+    public function getTopicDescription(string $routeUrl, string $httpMethod): string;
 }

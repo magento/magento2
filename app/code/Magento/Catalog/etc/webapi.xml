@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
 
     <!-- Product Service -->
-    <route url="/V1/products" method="POST">
+    <route url="/V1/products" method="POST" description="Save Catalog Product Entity">
         <service class="Magento\Catalog\Api\ProductRepositoryInterface" method="save"/>
         <resources>
             <resource ref="Magento_Catalog::products" />

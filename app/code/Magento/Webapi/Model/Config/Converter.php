@@ -55,7 +55,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 $soapMethod = trim($soapOperationNode->nodeValue);
             }
             $url = trim($route->attributes->getNamedItem('url')->nodeValue);
-
             $description = '';
             if ($descriptionNode = $route->attributes->getNamedItem('description')) {
                 $description = trim($descriptionNode->nodeValue);
@@ -70,8 +69,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $resources = $route->getElementsByTagName('resource');
             $resourceReferences = [];
             $resourcePermissionSet = [];
-            $data = $this->convertMethodParameters($route->getElementsByTagName('parameter'));
-            $serviceData = $data;
             /** @var \DOMElement $resource */
             foreach ($resources as $resource) {
                 if ($resource->nodeType != XML_ELEMENT_NODE) {
@@ -81,13 +78,22 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 $resourceReferences[$ref] = true;
                 // For SOAP
                 $resourcePermissionSet[] = $ref;
-                $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_ACL_RESOURCES][] = $ref;
             }
+            $data = $this->convertMethodParameters($route->getElementsByTagName('parameter'));
+            $serviceData = $data;
 
-            $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_ACL_RESOURCES] =
-                array_unique(
-                    $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_ACL_RESOURCES]
-                );
+            if (!isset($serviceClassData[self::KEY_METHODS][$soapMethod])) {
+                $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_ACL_RESOURCES] = $resourcePermissionSet;
+            } else {
+                $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_ACL_RESOURCES] =
+                    array_unique(
+                        array_merge(
+                            $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_ACL_RESOURCES],
+                            $resourcePermissionSet
+                        )
+                    );
+                $serviceData = [];
+            }
 
             $method = $route->attributes->getNamedItem('method')->nodeValue;
             $secureNode = $route->attributes->getNamedItem('secure');
