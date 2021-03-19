@@ -314,4 +314,11 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\MediaStorage\Api\MediaConfigResolverInterface">
+        <arguments>
+            <argument name="resolvers" xsi:type="array">
+                <item name="wysiwyg" xsi:type="object">Magento\Cms\Model\Media\Config</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

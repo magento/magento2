@@ -10,23 +10,24 @@ namespace Magento\MediaStorage\Service;
 use Generator;
 use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Catalog\Model\Product\Image\ParamsBuilder;
+use Magento\Catalog\Model\Product\Media\ConfigInterface as MediaConfig;
+use Magento\Catalog\Model\ResourceModel\Product\Image as ProductImage;
 use Magento\Catalog\Model\View\Asset\ImageFactory as AssertImageFactory;
 use Magento\Framework\App\Area;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\State;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Image;
 use Magento\Framework\Image\Factory as ImageFactory;
-use Magento\Catalog\Model\Product\Media\ConfigInterface as MediaConfig;
-use Magento\Framework\App\State;
 use Magento\Framework\View\ConfigInterface as ViewConfig;
-use Magento\Catalog\Model\ResourceModel\Product\Image as ProductImage;
+use Magento\MediaStorage\Api\MediaConfigResolverInterface;
+use Magento\MediaStorage\Helper\File\Storage\Database as FileStorageDatabase;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Theme\Model\Config\Customization as ThemeCustomizationConfig;
 use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\MediaStorage\Helper\File\Storage\Database as FileStorageDatabase;
 use Magento\Theme\Model\Theme;
 
 /**
@@ -97,6 +98,16 @@ class ImageResize
     private $storeManager;
 
     /**
+     * @var MediaConfigResolverInterface
+     */
+    private $mediaConfigResolver;
+
+    /**
+     * @var GetRequestedResource
+     */
+    private $getRequestedResource;
+
+    /**
      * @param State $appState
      * @param MediaConfig $imageConfig
      * @param ProductImage $productImage
@@ -107,8 +118,10 @@ class ImageResize
      * @param ThemeCustomizationConfig $themeCustomizationConfig
      * @param ThemeCollection $themeCollection
      * @param Filesystem $filesystem
-     * @param FileStorageDatabase $fileStorageDatabase
-     * @param StoreManagerInterface $storeManager
+     * @param FileStorageDatabase|null $fileStorageDatabase
+     * @param StoreManagerInterface|null $storeManager
+     * @param MediaConfigResolverInterface|null $mediaConfigResolver
+     * @param GetRequestedResource|null $getRequestedResource
      * @throws \Magento\Framework\Exception\FileSystemException
      * @internal param ProductImage $gallery
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -125,7 +138,9 @@ class ImageResize
         ThemeCollection $themeCollection,
         Filesystem $filesystem,
         FileStorageDatabase $fileStorageDatabase = null,
-        StoreManagerInterface $storeManager = null
+        StoreManagerInterface $storeManager = null,
+        MediaConfigResolverInterface $mediaConfigResolver = null,
+        GetRequestedResource $getRequestedResource = null
     ) {
         $this->appState = $appState;
         $this->imageConfig = $imageConfig;
@@ -140,6 +155,10 @@ class ImageResize
         $this->fileStorageDatabase = $fileStorageDatabase ?:
             ObjectManager::getInstance()->get(FileStorageDatabase::class);
         $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->mediaConfigResolver = $mediaConfigResolver
+            ?? ObjectManager::getInstance()->get(MediaConfigResolverInterface::class);
+        $this->getRequestedResource = $getRequestedResource
+            ?? ObjectManager::getInstance()->get(GetRequestedResource::class);
     }
 
     /**
@@ -150,17 +169,21 @@ class ImageResize
      */
     public function resizeFromImageName(string $originalImageName)
     {
-        $mediastoragefilename = $this->imageConfig->getMediaPath($originalImageName);
-        $originalImagePath = $this->mediaDirectory->getAbsolutePath($mediastoragefilename);
+        $resource = $this->getRequestedResource->execute();
+        $imageConfig = $this->mediaConfigResolver->execute($resource);
+        $mediaStorageFilename = $imageConfig->getMediaPath($originalImageName);
+        $originalImagePath = $this->mediaDirectory->getAbsolutePath($mediaStorageFilename);
 
         if ($this->fileStorageDatabase->checkDbUsage() &&
-            !$this->mediaDirectory->isFile($mediastoragefilename)
+            !$this->mediaDirectory->isFile($mediaStorageFilename)
         ) {
-            $this->fileStorageDatabase->saveFileToFilesystem($mediastoragefilename);
+            $this->fileStorageDatabase->saveFileToFilesystem($mediaStorageFilename);
         }
 
         if (!$this->mediaDirectory->isFile($originalImagePath)) {
-            throw new NotFoundException(__('Cannot resize image "%1" - original image not found', $originalImagePath));
+            throw new NotFoundException(
+                __('Cannot resize image "%1" - original image not found', $originalImagePath)
+            );
         }
         foreach ($this->getViewImages($this->getThemesInUse()) as $viewImage) {
             $this->resize($viewImage, $originalImagePath, $originalImageName);
