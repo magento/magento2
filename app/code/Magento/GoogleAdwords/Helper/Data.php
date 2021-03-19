@@ -25,9 +25,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**#@+
      * Google AdWords conversion src
      */
-    const XML_PATH_CONVERSION_JS_SRC = 'google/adwords/conversion_js_src';
+    // const XML_PATH_CONVERSION_JS_SRC = 'google/adwords/conversion_js_src';
 
-    const XML_PATH_CONVERSION_IMG_SRC = 'google/adwords/conversion_img_src';
+    // const XML_PATH_CONVERSION_IMG_SRC = 'google/adwords/conversion_img_src';
+
+    const GTAG_GLOBAL_SITE_TAG_SRC = 'https://www.googletagmanager.com/gtag/js?id=';
 
     /**#@-*/
 
@@ -79,6 +81,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     const CONVERSION_VALUE_TYPE_CONSTANT = 0;
 
+    const DEVELOPER_ID = 'dYjhlMD';
+
     /**#@-*/
 
     /**#@-*/
@@ -115,6 +119,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Is Google AdWords congifurable
+     *
+     * @return bool
+     */
+    public function isGoogleAdwordsConfigurable()
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_ACTIVE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        ) && $this->getConversionId();
+    }
+
+    /**
      * Retrieve language codes from config
      *
      * @return string[]
@@ -141,33 +158,45 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return string
      */
-    public function getConversionJsSrc()
-    {
-        return (string)$this->scopeConfig->getValue(self::XML_PATH_CONVERSION_JS_SRC, 'default');
-    }
+    // public function getConversionJsSrc()
+    // {
+    //     return (string)$this->scopeConfig->getValue(self::XML_PATH_CONVERSION_JS_SRC, 'default');
+    // }
 
     /**
      * Get conversion img src
      *
      * @return string
      */
-    public function getConversionImgSrc()
+    // public function getConversionImgSrc()
+    // {
+    //     return sprintf(
+    //         $this->scopeConfig->getValue(self::XML_PATH_CONVERSION_IMG_SRC, 'default'),
+    //         $this->getConversionId(),
+    //         $this->getConversionLabel()
+    //     );
+    // }
+
+    /**
+     * Get conversion img src
+     *
+     * @return string
+     */
+    public function getConversionGtagGlobalSiteTagSrc()
     {
-        return sprintf(
-            $this->scopeConfig->getValue(self::XML_PATH_CONVERSION_IMG_SRC, 'default'),
-            $this->getConversionId(),
-            $this->getConversionLabel()
-        );
+        $siteSrc = self::GTAG_GLOBAL_SITE_TAG_SRC;
+        $cId = $this->getConversionId();
+        return $siteSrc . $cId;
     }
 
     /**
      * Get Google AdWords conversion id
      *
-     * @return int
+     * @return string
      */
     public function getConversionId()
     {
-        return (int)$this->scopeConfig->getValue(
+        return (string)$this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_ID,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
@@ -302,5 +331,25 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             return (string) $this->_registry->registry(self::CONVERSION_VALUE_CURRENCY_REGISTRY_NAME);
         }
         return false;
+    }
+
+    /**
+     * Get Developer Id for Gtag
+     *
+     * @return string
+     */
+    public function getDeveloperId()
+    {
+        return self::DEVELOPER_ID;
+    }
+
+    /**
+     * Get Gtag send_to value (i.e. conversionId/conversionLabel)
+     *
+     * @return string
+     */
+    public function getSendToValue()
+    {
+        return $this->getConversionId() . '/' . $this->getConversionLabel();
     }
 }
