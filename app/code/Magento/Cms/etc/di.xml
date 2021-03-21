@@ -294,6 +294,9 @@
                 <item name="button" xsi:type="string">button</item>
                 <item name="i" xsi:type="string">i</item>
                 <item name="u" xsi:type="string">u</item>
+                <item name="br" xsi:type="string">br</item>
+                <item name="b" xsi:type="string">b</item>
+                <item name="pre" xsi:type="string">pre</item>
             </argument>
             <argument name="allowedAttributes" xsi:type="array">
                 <item name="class" xsi:type="string">class</item>
