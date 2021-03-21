@@ -66,9 +66,7 @@
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage2"/>
 
         <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!--Open Category in store front page-->
         <amOnPage url="/$$createDefaultCategory.name$$/{{FirstLevelSubCat.name}}/{{SimpleSubCategory.name}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>

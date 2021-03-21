@@ -40,7 +40,7 @@ class OptionsSelectionMetadata implements ResolverInterface
             throw new LocalizedException(__('"model" value should be specified'));
         }
 
-        $selectedOptions = $args['selectedConfigurableOptionValues'] ?? [];
+        $selectedOptions = $args['configurableOptionValueUids'] ?? [];
         /** @var ProductInterface $product */
         $product = $value['model'];
 

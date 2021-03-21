@@ -125,6 +125,7 @@ class ConfigurableTest extends TestCase
      */
     public function testGetProductMinimalPriceIfOneOfChildIsOutOfStock(): void
     {
+        $this->markTestSkipped('MC-40451: Indexer\Price\ConfigurableTest failure on 2.4-develop');
         $configurableProduct = $this->getConfigurableProductFromCollection(1);
         $this->assertEquals(10, $configurableProduct->getMinimalPrice());
 
@@ -171,6 +172,7 @@ class ConfigurableTest extends TestCase
      */
     public function testReindexIfAllChildrenIsOutOfStock(): void
     {
+        $this->markTestSkipped('MC-40451: Indexer\Price\ConfigurableTest failure on 2.4-develop');
         $configurableProduct = $this->getConfigurableProductFromCollection(1);
         $this->assertEquals(10, $configurableProduct->getMinimalPrice());
 

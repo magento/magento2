@@ -8,6 +8,7 @@ namespace Magento\Sales\Model;
 use Magento\Config\Model\Config\Source\Nooptreq;
 use Magento\Directory\Model\Currency;
 use Magento\Directory\Model\RegionFactory;
+use Magento\Directory\Model\ResourceModel\Region as RegionResource;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -320,7 +321,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     private $regionItems;
 
     /**
-     * @var PricePrecisionInterface|null
+     * @var RegionResource
+     */
+    private $regionResource;
+
+    /**
+     * @var PricePrecisionInterface
      */
     private $pricePrecision;
 
@@ -358,6 +364,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
      * @param ScopeConfigInterface|null $scopeConfig
      * @param RegionFactory|null $regionFactory
+     * @param RegionResource|null $regionResource
      * @param PricePrecisionInterface|null $pricePrecision
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -395,7 +402,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         SearchCriteriaBuilder $searchCriteriaBuilder = null,
         ScopeConfigInterface $scopeConfig = null,
         RegionFactory $regionFactory = null,
-        ?PricePrecisionInterface $pricePrecision = null
+        RegionResource $regionResource = null,
+        PricePrecisionInterface $pricePrecision = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_orderConfig = $orderConfig;
@@ -425,8 +433,9 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             ->get(SearchCriteriaBuilder::class);
         $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
         $this->regionFactory = $regionFactory ?: ObjectManager::getInstance()->get(RegionFactory::class);
+        $this->regionResource = $regionResource ?: ObjectManager::getInstance()->get(RegionResource::class);
         $this->regionItems = [];
-        $this->pricePrecision = $pricePrecision ?? ObjectManager::getInstance()->get(PricePrecisionInterface::class);
+        $this->pricePrecision = $pricePrecision ?: ObjectManager::getInstance()->get(PricePrecisionInterface::class);
 
         parent::__construct(
             $context,
@@ -1370,7 +1379,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function getAddressesCollection()
     {
-        $region = $this->regionFactory->create();
         $collection = $this->_addressCollectionFactory->create()->setOrderFilter($this);
         if ($this->getId()) {
             foreach ($collection as $address) {
@@ -1379,7 +1387,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
                         $address->setRegion($this->regionItems[$address->getCountryId()][$address->getRegion()]);
                     }
                 } else {
-                    $region->loadByName($address->getRegion(), $address->getCountryId());
+                    $region = $this->regionFactory->create();
+                    $this->regionResource->loadByName($region, $address->getRegion(), $address->getCountryId());
                     $this->regionItems[$address->getCountryId()][$address->getRegion()] = $region->getName();
                     if ($region->getName()) {
                         $address->setRegion($region->getName());

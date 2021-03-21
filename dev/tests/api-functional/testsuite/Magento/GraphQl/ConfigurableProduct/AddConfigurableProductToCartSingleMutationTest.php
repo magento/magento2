@@ -349,7 +349,7 @@ QUERY;
             value_index
           }
         }
-        configurable_options_selection_metadata {
+        configurable_product_options_selection {
           options_available_for_selection {
             attribute_code
             option_value_uids

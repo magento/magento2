@@ -253,6 +253,8 @@ define([
                         }
                         this.element.val(this.responseList.selected.find('.qs-option-name').text());
                         this.element.attr('aria-activedescendant', this.responseList.selected.attr('id'));
+                        this._updateAriaHasPopup(true);
+                        this.autoComplete.show();
                     }
                     break;
 
@@ -269,6 +271,8 @@ define([
                         }
                         this.element.val(this.responseList.selected.find('.qs-option-name').text());
                         this.element.attr('aria-activedescendant', this.responseList.selected.attr('id'));
+                        this._updateAriaHasPopup(true);
+                        this.autoComplete.show();
                     }
                     break;
                 default:

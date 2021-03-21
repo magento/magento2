@@ -59,4 +59,8 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\ConfigurableProduct\Model\Product\Configuration\Item\ItemProductResolver">
+        <plugin name="configured_variant" type="Magento\ConfigurableProductGraphQl\Plugin\Product\Configuration\Item\ItemResolver"/>
+    </type>
 </config>

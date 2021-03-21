@@ -67,9 +67,7 @@
             <!-- Logout Admin -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterDeletion">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfterDeletion"/>
         </after>
 
         <!--Create widget for recently viewed products-->
@@ -90,9 +88,7 @@
             <argument name="buttonToShowSection2" value="3"/>
         </actionGroup>
 
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterWidgetCreated">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfterWidgetCreated"/>
 
         <!-- Navigate to product 3 on store front -->
         <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct2.name$)}}" stepKey="goToStore1ProductPage2"/>

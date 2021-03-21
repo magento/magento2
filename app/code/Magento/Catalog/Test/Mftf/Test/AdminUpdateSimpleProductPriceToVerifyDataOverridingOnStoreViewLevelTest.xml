@@ -69,20 +69,24 @@
         <!-- Verify customer see simple product with updated price on magento storefront page -->
         <amOnPage url="{{StorefrontProductPage.url($$initialSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="goToMagentoStorefrontPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
-        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="$$initialSimpleProduct.sku$$" stepKey="fillDefaultSimpleProductSkuInSearchTextBox"/>
-        <waitForPageLoad stepKey="waitForSearchTextBox"/>
-        <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextBoxButton"/>
-        <waitForPageLoad stepKey="waitForSearch"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillDefaultSimpleProductSkuInSearchTextBox">
+            <argument name="phrase" value="$$initialSimpleProduct.sku$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearchTextBox"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchTextBoxButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearch"/>
         <see selector="{{StorefrontQuickSearchResultsSection.regularPrice}}" userInput="{{simpleProductDataOverriding.price}}" stepKey="seeUpdatedProductPriceOnStorefrontPage"/>
 
         <!-- Verify customer see simple product with updated price on magento storefront page under store view section -->
         <click selector="{{StorefrontHeaderSection.storeViewSwitcher}}" stepKey="clickStoreViewSwitcher"/>
         <waitForPageLoad stepKey="waitForStoreSwitcherLoad"/>
         <click selector="{{StorefrontHeaderSection.storeView(customStoreFR.name)}}" stepKey="clickStoreViewOption"/>
-        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="$$initialSimpleProduct.sku$$" stepKey="fillDefaultSimpleProductSkuInSearch"/>
-        <waitForPageLoad stepKey="waitForSearchTextBoxLoad"/>
-        <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextButton"/>
-        <waitForPageLoad stepKey="waitForTextSearchLoad"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillDefaultSimpleProductSkuInSearch">
+            <argument name="phrase" value="$$initialSimpleProduct.sku$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearchTextBoxLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchTextButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForTextSearchLoad"/>
         <see selector="{{StorefrontQuickSearchResultsSection.regularPrice}}" userInput="{{simpleProductDataOverriding.price}}" stepKey="seeUpdatedProductPriceOnStorefrontPageUnderStoreViewSection"/>
     </test>
 </tests>

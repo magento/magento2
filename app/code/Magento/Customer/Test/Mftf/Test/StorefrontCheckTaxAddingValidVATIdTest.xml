@@ -87,8 +87,8 @@
         <!--Proceed to checkout-->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="GoToCheckoutFromMinicartActionGroup"/>
         <!-- Click next button to open payment section -->
-        <click selector="{{CheckoutShippingGuestInfoSection.next}}" stepKey="clickNext"/>
-        <waitForPageLoad stepKey="waitForShipmentPageLoad"/>
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForShipmentPageLoad"/>
 
         <!-- Check order summary in checkout -->
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
