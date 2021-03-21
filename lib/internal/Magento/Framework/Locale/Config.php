@@ -21,6 +21,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'ar_EG', /*Arabic (Egypt)*/
         'ar_KW', /*Arabic (Kuwait)*/
         'ar_MA', /*Arabic (Morocco)*/
+        'ar_OM', /*Arabic (Morocco)*/
         'ar_SA', /*Arabic (Saudi Arabia)*/
         'az_Latn_AZ', /*Azerbaijani (Azerbaijan)*/
         'be_BY', /*Belarusian (Belarus)*/

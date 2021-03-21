@@ -6,9 +6,9 @@
 
 namespace Magento\Framework\Pricing\Render;
 
-use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\View\Element\Template;
 
 /**
@@ -45,6 +45,7 @@ abstract class AbstractAdjustment extends Template implements AdjustmentRenderIn
     /**
      * @param AmountRenderInterface $amountRender
      * @param array $arguments
+     *
      * @return string
      */
     public function render(AmountRenderInterface $amountRender, array $arguments = [])
@@ -58,6 +59,7 @@ abstract class AbstractAdjustment extends Template implements AdjustmentRenderIn
 
         // restore original block arguments
         $this->setData($origArguments);
+
         return $html;
     }
 
@@ -71,6 +73,7 @@ abstract class AbstractAdjustment extends Template implements AdjustmentRenderIn
 
     /**
      * @param string $priceCode
+     *
      * @return PriceInterface
      */
     public function getPriceType($priceCode)
@@ -99,13 +102,14 @@ abstract class AbstractAdjustment extends Template implements AdjustmentRenderIn
      *
      * @param float $amount
      * @param bool $includeContainer
-     * @param int $precision
+     * @param int|null $precision
+     *
      * @return string
      */
     public function formatCurrency(
         $amount,
         $includeContainer = true,
-        $precision = PriceCurrencyInterface::DEFAULT_PRECISION
+        $precision = null
     ) {
         return $this->priceCurrency->format($amount, $includeContainer, $precision);
     }
@@ -115,13 +119,14 @@ abstract class AbstractAdjustment extends Template implements AdjustmentRenderIn
      *
      * @param float $amount
      * @param bool $includeContainer
-     * @param int $precision
+     * @param int|null $precision
+     *
      * @return string
      */
     public function convertAndFormatCurrency(
         $amount,
         $includeContainer = true,
-        $precision = PriceCurrencyInterface::DEFAULT_PRECISION
+        $precision = null
     ) {
         return $this->priceCurrency->convertAndFormat($amount, $includeContainer, $precision);
     }

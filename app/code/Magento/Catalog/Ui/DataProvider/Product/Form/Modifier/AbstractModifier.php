@@ -210,7 +210,7 @@ abstract class AbstractModifier implements ModifierInterface
      */
     protected function formatPrice($value)
     {
-        return $value !== null ? number_format((float)$value, PriceCurrencyInterface::DEFAULT_PRECISION, '.', '') : '';
+        return $value !== null ? number_format((float)$value, 2, '.', '') : '';
     }
 
     /**

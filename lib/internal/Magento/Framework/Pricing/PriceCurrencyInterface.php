@@ -14,6 +14,10 @@ namespace Magento\Framework\Pricing;
  */
 interface PriceCurrencyInterface
 {
+    /**
+     * @deprecated precision should be retrieved from current locale
+     * @see \Magento\Framework\Pricing\Price\PricePrecisionInterface::getPrecision
+     */
     const DEFAULT_PRECISION = 2;
 
     /**
@@ -32,17 +36,17 @@ interface PriceCurrencyInterface
      * @param float $amount
      * @param null|string|bool|int|\Magento\Framework\App\ScopeInterface $scope
      * @param \Magento\Framework\Model\AbstractModel|string|null $currency
-     * @param int $precision
+     * @param int|null $precision
      * @return float
      */
-    public function convertAndRound($amount, $scope = null, $currency = null, $precision = self::DEFAULT_PRECISION);
+    public function convertAndRound($amount, $scope = null, $currency = null, $precision = null);
 
     /**
      * Format price value
      *
      * @param float $amount
      * @param bool $includeContainer
-     * @param int $precision
+     * @param int|null $precision
      * @param null|string|bool|int|\Magento\Framework\App\ScopeInterface $scope
      * @param \Magento\Framework\Model\AbstractModel|string|null $currency
      * @return string
@@ -50,7 +54,7 @@ interface PriceCurrencyInterface
     public function format(
         $amount,
         $includeContainer = true,
-        $precision = self::DEFAULT_PRECISION,
+        $precision = null,
         $scope = null,
         $currency = null
     );
@@ -60,7 +64,7 @@ interface PriceCurrencyInterface
      *
      * @param float $amount
      * @param bool $includeContainer
-     * @param int $precision
+     * @param int|null $precision
      * @param null|string|bool|int|\Magento\Framework\App\ScopeInterface $scope
      * @param \Magento\Framework\Model\AbstractModel|string|null $currency
      * @return string
@@ -68,7 +72,7 @@ interface PriceCurrencyInterface
     public function convertAndFormat(
         $amount,
         $includeContainer = true,
-        $precision = self::DEFAULT_PRECISION,
+        $precision = null,
         $scope = null,
         $currency = null
     );

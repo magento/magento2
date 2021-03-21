@@ -61,7 +61,7 @@ class FormattedPriceInfoBuilder
                     ->format(
                         $value,
                         true,
-                        PriceCurrencyInterface::DEFAULT_PRECISION,
+                        null,
                         $storeId,
                         $currencyCode
                     );

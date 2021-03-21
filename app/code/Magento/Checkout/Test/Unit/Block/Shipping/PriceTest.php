@@ -69,7 +69,7 @@ class PriceTest extends TestCase
 
         $this->priceCurrency->expects($this->once())
             ->method('convertAndFormat')
-            ->with($shippingPrice, true, true)
+            ->with($shippingPrice, true, null)
             ->willReturn($convertedPrice);
 
         $this->priceObj->setShippingRate($shippingRateMock);

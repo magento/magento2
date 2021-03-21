@@ -7,9 +7,9 @@
 namespace Magento\Framework\Pricing\Render;
 
 use Magento\Framework\Pricing\Amount\AmountInterface;
-use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\View\Element\Template;
 
 /**
@@ -179,8 +179,8 @@ class Amount extends Template implements AmountRenderInterface
                 $this->adjustmentsHtml = $adjustmentHtml;
             }
         }
-        $html = parent::_toHtml();
-        return $html;
+
+        return parent::_toHtml();
     }
 
     /**
@@ -193,6 +193,7 @@ class Amount extends Template implements AmountRenderInterface
 
     /**
      * @param AdjustmentRenderInterface[] $adjustmentRenders
+     *
      * @return array
      */
     protected function getAdjustments($adjustmentRenders)
@@ -216,26 +217,29 @@ class Amount extends Template implements AmountRenderInterface
      *
      * @param float $amount
      * @param bool $includeContainer
-     * @param int $precision
+     * @param int|null $precision
+     *
      * @return float
      */
     public function formatCurrency(
         $amount,
         $includeContainer = true,
-        $precision = PriceCurrencyInterface::DEFAULT_PRECISION
+        $precision = null
     ) {
         return $this->priceCurrency->format($amount, $includeContainer, $precision);
     }
 
     /**
      * @param AdjustmentRenderInterface[] $adjustmentRenders
-     * @return array
+     *
+     * @return Amount
      */
     protected function setAdjustmentCssClasses($adjustmentRenders)
     {
         $cssClasses = $this->hasData('css_classes') ? explode(' ', $this->getData('css_classes')) : [];
         $cssClasses = array_merge($cssClasses, array_keys($adjustmentRenders));
         $this->setData('adjustment_css_classes', join(' ', $cssClasses));
+
         return $this;
     }
 }

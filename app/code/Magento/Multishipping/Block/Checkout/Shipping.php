@@ -217,7 +217,7 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
         return $this->priceCurrency->convertAndFormat(
             $this->_taxHelper->getShippingPrice($price, $flag, $address),
             true,
-            PriceCurrencyInterface::DEFAULT_PRECISION,
+            null,
             $address->getQuote()->getStore()
         );
     }

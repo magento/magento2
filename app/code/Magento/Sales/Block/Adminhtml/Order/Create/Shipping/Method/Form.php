@@ -178,7 +178,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
                 $this->getAddress()->getQuote()->getStore()
             ),
             true,
-            PriceCurrencyInterface::DEFAULT_PRECISION,
+            null,
             $this->getQuote()->getStore()
         );
     }

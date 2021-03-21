@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontProductsDisplayCorrectPricePrecisionTest">
+        <annotations>
+            <stories value="Check the price"/>
+            <title value="Storefront products display correct price precision test"/>
+            <description value="Check if price renders with correct precision on category  and product pages"/>
+            <severity value="MAJOR"/>
+            <group value="Catalog"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <magentoCLI command="config:set general/locale/code ar_KW" stepKey="setLocaleKw"/>
+            <magentoCLI command="config:set currency/options/allow USD,KWD" stepKey="setCurrencyAllowKwd"/>
+            <magentoCLI command="config:set currency/options/base KWD" stepKey="setCurrencyBaseKwd"/>
+            <magentoCLI command="config:set currency/options/default KWD" stepKey="setCurrencyDefaultKwd"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheBefore">
+                <argument name="tags" value="config"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <magentoCLI command="config:set general/locale/code en_US" stepKey="setLocaleUS"/>
+            <magentoCLI command="config:set currency/options/base USD" stepKey="setCurrencyBaseUsd"/>
+            <magentoCLI command="config:set currency/options/default USD" stepKey="setCurrencyDefaultUsd"/>
+            <magentoCLI command="config:set currency/options/allow USD" stepKey="setCurrencyAllowUsd"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfter">
+                <argument name="tags" value="config"/>
+            </actionGroup>
+        </after>
+
+        <!-- Check Product price precision on the Category page -->
+        <actionGroup ref="AssertStorefrontProductPriceInCategoryPageActionGroup" stepKey="assertProductPriceOnCategoryPage">
+            <argument name="categoryUrl" value="$createCategory.custom_attributes[url_key]$"/>
+            <argument name="productName" value="$createProduct.name$"/>
+            <argument name="productPrice" value="$createProduct.price$٫000"/>
+        </actionGroup>
+
+        <!-- Check Product price precision on the Product page -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrlKey" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPricesActionGroup" stepKey="assertProductPriceOnProductPage">
+            <argument name="productPrice" value="$createProduct.price$٫000"/>
+            <argument name="productFinalPrice" value="$createProduct.price$٫000"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -62,7 +62,7 @@ class Price extends \Magento\Checkout\Block\Shipping\Price
         return $this->priceCurrency->convertAndFormat(
             $price,
             true,
-            PriceCurrencyInterface::DEFAULT_PRECISION,
+            null,
             $this->getQuote()->getStore()
         );
     }

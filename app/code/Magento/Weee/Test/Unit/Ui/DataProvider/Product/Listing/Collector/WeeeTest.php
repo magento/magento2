@@ -161,7 +161,7 @@ class WeeeTest extends TestCase
             );
         $this->priceCurrencyMock->expects($this->exactly(5))
             ->method('format')
-            ->with(12.1, true, 2, 1, 'USD')
+            ->with(12.1, true, null, 1, 'USD')
             ->willReturnOnConsecutiveCalls(
                 '<span>$12</span>',
                 '<span>$12</span>',

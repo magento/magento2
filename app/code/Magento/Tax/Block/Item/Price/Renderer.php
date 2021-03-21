@@ -131,11 +131,10 @@ class Renderer extends \Magento\Framework\View\Element\Template
     public function displayPriceInclTax()
     {
         switch ($this->zone) {
-            case PricingRender::ZONE_CART:
-                return $this->taxHelper->displayCartPriceInclTax($this->storeId);
             case PricingRender::ZONE_EMAIL:
             case PricingRender::ZONE_SALES:
                 return $this->taxHelper->displaySalesPriceInclTax($this->storeId);
+            case PricingRender::ZONE_CART:
             default:
                 return $this->taxHelper->displayCartPriceInclTax($this->storeId);
         }
@@ -149,11 +148,10 @@ class Renderer extends \Magento\Framework\View\Element\Template
     public function displayPriceExclTax()
     {
         switch ($this->zone) {
-            case PricingRender::ZONE_CART:
-                return $this->taxHelper->displayCartPriceExclTax($this->storeId);
             case PricingRender::ZONE_EMAIL:
             case PricingRender::ZONE_SALES:
                 return $this->taxHelper->displaySalesPriceExclTax($this->storeId);
+            case PricingRender::ZONE_CART:
             default:
                 return $this->taxHelper->displayCartPriceExclTax($this->storeId);
         }
@@ -167,11 +165,10 @@ class Renderer extends \Magento\Framework\View\Element\Template
     public function displayBothPrices()
     {
         switch ($this->zone) {
-            case PricingRender::ZONE_CART:
-                return $this->taxHelper->displayCartBothPrices($this->storeId);
             case PricingRender::ZONE_EMAIL:
             case PricingRender::ZONE_SALES:
                 return $this->taxHelper->displaySalesBothPrices($this->storeId);
+            case PricingRender::ZONE_CART:
             default:
                 return $this->taxHelper->displayCartBothPrices($this->storeId);
         }
@@ -190,14 +187,16 @@ class Renderer extends \Magento\Framework\View\Element\Template
             return $this->priceCurrency->format(
                 $price,
                 true,
-                PriceCurrencyInterface::DEFAULT_PRECISION,
+                null,
                 $item->getStore()
             );
-        } elseif ($item instanceof OrderItem) {
-            return $item->getOrder()->formatPrice($price);
-        } else {
-            return $item->getOrderItem()->getOrder()->formatPrice($price);
         }
+
+        if ($item instanceof OrderItem) {
+            return $item->getOrder()->formatPrice($price);
+        }
+
+        return $item->getOrderItem()->getOrder()->formatPrice($price);
     }
 
     /**
@@ -209,11 +208,12 @@ class Renderer extends \Magento\Framework\View\Element\Template
     public function getItemDisplayPriceExclTax()
     {
         $item = $this->getItem();
+
         if ($item instanceof QuoteItem) {
             return $item->getCalculationPrice();
-        } else {
-            return $item->getPrice();
         }
+
+        return $item->getPrice();
     }
 
     /**

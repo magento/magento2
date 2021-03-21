@@ -86,7 +86,7 @@ class Weee implements ProductRenderCollectorInterface
             ->format(
                 (float) $value,
                 true,
-                PriceCurrencyInterface::DEFAULT_PRECISION,
+                null,
                 $storeId,
                 $currencyCode
             );

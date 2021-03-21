@@ -80,7 +80,7 @@ class DataTest extends TestCase
         if ($format) {
             $this->priceCurrencyMock->expects($this->once())
                 ->method('convertAndFormat')
-                ->with($amount, $includeContainer, PriceCurrencyInterface::DEFAULT_PRECISION, $store)
+                ->with($amount, $includeContainer, null, $store)
                 ->willReturn($result);
         } else {
             $this->priceCurrencyMock->expects($this->once())

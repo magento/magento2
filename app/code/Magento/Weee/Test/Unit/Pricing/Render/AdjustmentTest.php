@@ -106,7 +106,7 @@ class AdjustmentTest extends TestCase
     {
         $this->priceCurrencyMock->expects($this->once())
             ->method('format')
-            ->with(10, true, 2)
+            ->with(10, true, null)
             ->willReturn("$10.00");
 
         $displayValue = 10;

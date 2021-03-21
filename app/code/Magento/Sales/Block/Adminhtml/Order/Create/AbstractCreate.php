@@ -127,7 +127,7 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
         return $this->priceCurrency->format(
             $value,
             true,
-            PriceCurrencyInterface::DEFAULT_PRECISION,
+            null,
             $this->getStore()
         );
     }
@@ -155,7 +155,7 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
             ? $this->priceCurrency->convertAndFormat(
                 $value,
                 true,
-                PriceCurrencyInterface::DEFAULT_PRECISION,
+                null,
                 $this->getStore()
             )
             : $this->priceCurrency->convert($value, $this->getStore());

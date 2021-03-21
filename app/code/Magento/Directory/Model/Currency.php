@@ -6,9 +6,10 @@
 
 namespace Magento\Directory\Model;
 
+use Magento\Directory\Model\Currency\Filter;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
-use Magento\Directory\Model\Currency\Filter;
+use Magento\Framework\Pricing\Price\PricePrecisionInterface;
 
 /**
  * Currency model
@@ -72,6 +73,11 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     private $currencyConfig;
 
     /**
+     * @var PricePrecisionInterface|null
+     */
+    private $pricePrecision;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
@@ -79,10 +85,11 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param Currency\FilterFactory $currencyFilterFactory
      * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
-     * @param CurrencyConfig $currencyConfig
+     * @param CurrencyConfig|null $currencyConfig
+     * @param PricePrecisionInterface|null $pricePrecision
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -96,7 +103,8 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        CurrencyConfig $currencyConfig = null
+        CurrencyConfig $currencyConfig = null,
+        ?PricePrecisionInterface $pricePrecision = null
     ) {
         parent::__construct(
             $context,
@@ -111,6 +119,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         $this->_currencyFilterFactory = $currencyFilterFactory;
         $this->_localeCurrency = $localeCurrency;
         $this->currencyConfig = $currencyConfig ?: ObjectManager::getInstance()->get(CurrencyConfig::class);
+        $this->pricePrecision = $pricePrecision ?? ObjectManager::getInstance()->get(PricePrecisionInterface::class);
     }
 
     /**
@@ -277,7 +286,13 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      */
     public function format($price, $options = [], $includeContainer = true, $addBrackets = false)
     {
-        return $this->formatPrecision($price, 2, $options, $includeContainer, $addBrackets);
+        return $this->formatPrecision(
+            $price,
+            $this->pricePrecision->getPrecision(),
+            $options,
+            $includeContainer,
+            $addBrackets
+        );
     }
 
     /**

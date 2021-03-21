@@ -11,10 +11,11 @@ use Magento\Directory\Model\Currency;
 use Magento\Directory\Model\CurrencyFactory;
 use Magento\Directory\Model\PriceCurrency;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Pricing\Price\PricePrecisionInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
+use Monolog\Logger;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -23,36 +24,42 @@ class PriceCurrencyTest extends TestCase
     /**
      * @var PriceCurrency
      */
-    protected $priceCurrency;
+    private $priceCurrency;
 
     /**
      * @var StoreManagerInterface|MockObject
      */
-    protected $storeManager;
+    private $storeManagerMock;
 
     /**
      * @var CurrencyFactory|MockObject
      */
-    protected $currencyFactory;
+    private $currencyFactoryMock;
+
+    /**
+     * @var PricePrecisionInterface|MockObject
+     */
+    private $pricePrecisionMock;
 
     protected function setUp(): void
     {
-        $this->storeManager = $this->getMockBuilder(StoreManager::class)
+        $this->storeManagerMock = $this->getMockBuilder(StoreManager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->currencyFactory = $this->getMockBuilder(CurrencyFactory::class)
+        $this->currencyFactoryMock = $this->getMockBuilder(CurrencyFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $objectManager = new ObjectManager($this);
-        $this->priceCurrency = $objectManager->getObject(
-            PriceCurrency::class,
-            [
-                'storeManager' => $this->storeManager,
-                'currencyFactory' => $this->currencyFactory
-            ]
+        $this->pricePrecisionMock = $this->getMockBuilder(PricePrecisionInterface::class)
+            ->getMockForAbstractClass();
+
+        $this->priceCurrency = new PriceCurrency(
+            $this->storeManagerMock,
+            $this->currencyFactoryMock,
+            new Logger(''),
+            $this->pricePrecisionMock
         );
     }
 
@@ -78,7 +85,7 @@ class PriceCurrencyTest extends TestCase
         $baseCurrency = $this->getBaseCurrencyMock($amount, $convertedAmount, $currency);
         $store = $this->getStoreMock($baseCurrency);
 
-        $this->storeManager->expects($this->once())
+        $this->storeManagerMock->expects($this->once())
             ->method('getStore')
             ->with($storeCode)
             ->willReturn($store);
@@ -97,7 +104,7 @@ class PriceCurrencyTest extends TestCase
             ->method('load')
             ->with($currency)->willReturnSelf();
 
-        $this->currencyFactory->expects($this->once())
+        $this->currencyFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($currentCurrency);
 
@@ -130,7 +137,7 @@ class PriceCurrencyTest extends TestCase
     public function testFormat()
     {
         $amount = 5.6;
-        $precision = PriceCurrencyInterface::DEFAULT_PRECISION;
+        $precision = 2;
         $includeContainer = false;
         $store = null;
         $formattedAmount = '5.6 grn';
@@ -153,7 +160,7 @@ class PriceCurrencyTest extends TestCase
     public function testConvertAndFormat()
     {
         $amount = 5.6;
-        $precision = PriceCurrencyInterface::DEFAULT_PRECISION;
+        $precision = 2;
         $includeContainer = false;
         $store = null;
         $convertedAmount = 9.3;
@@ -249,10 +256,14 @@ class PriceCurrencyTest extends TestCase
         $baseCurrency = $this->getBaseCurrencyMock($amount, $convertedAmount, $currency);
         $store = $this->getStoreMock($baseCurrency);
 
-        $this->storeManager->expects($this->once())
+        $this->storeManagerMock->expects($this->once())
             ->method('getStore')
             ->with($storeCode)
             ->willReturn($store);
+
+        $this->pricePrecisionMock->expects($this->once())
+            ->method('getPrecision')
+            ->willReturn(2);
 
         $this->assertEquals(
             $roundedConvertedAmount,

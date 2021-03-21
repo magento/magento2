@@ -15,6 +15,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Pricing\Price\PricePrecisionInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
@@ -325,6 +326,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     private $regionResource;
 
     /**
+     * @var PricePrecisionInterface
+     */
+    private $pricePrecision;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -359,6 +365,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param ScopeConfigInterface|null $scopeConfig
      * @param RegionFactory|null $regionFactory
      * @param RegionResource|null $regionResource
+     * @param PricePrecisionInterface|null $pricePrecision
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -395,7 +402,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         SearchCriteriaBuilder $searchCriteriaBuilder = null,
         ScopeConfigInterface $scopeConfig = null,
         RegionFactory $regionFactory = null,
-        RegionResource $regionResource = null
+        RegionResource $regionResource = null,
+        PricePrecisionInterface $pricePrecision = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_orderConfig = $orderConfig;
@@ -427,6 +435,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $this->regionFactory = $regionFactory ?: ObjectManager::getInstance()->get(RegionFactory::class);
         $this->regionResource = $regionResource ?: ObjectManager::getInstance()->get(RegionResource::class);
         $this->regionItems = [];
+        $this->pricePrecision = $pricePrecision ?: ObjectManager::getInstance()->get(PricePrecisionInterface::class);
 
         parent::__construct(
             $context,
@@ -1770,7 +1779,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function formatPrice($price, $addBrackets = false)
     {
-        return $this->formatPricePrecision($price, 2, $addBrackets);
+        return $this->formatPricePrecision($price, $this->pricePrecision->getPrecision(), $addBrackets);
     }
 
     /**
@@ -1818,7 +1827,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function formatBasePrice($price)
     {
-        return $this->formatBasePricePrecision($price, 2);
+        return $this->formatBasePricePrecision($price, $this->pricePrecision->getPrecision());
     }
 
     /**
