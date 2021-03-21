@@ -18,12 +18,12 @@ use PHPUnit\Framework\TestCase;
 class FormattedPriceInfoBuilderTest extends TestCase
 {
     /**
-     * @var PriceCurrencyInterface|MockObject ;
+     * @var PriceCurrencyInterface|MockObject;
      */
     private $priceCurrencyMock;
 
     /**
-     * @var FormattedPriceInfoInterfaceFactory|MockObject ;
+     * @var FormattedPriceInfoInterfaceFactory|MockObject;
      */
     private $formattedPriceInfoFactoryMock;
 
@@ -69,7 +69,7 @@ class FormattedPriceInfoBuilderTest extends TestCase
             ->with(
                 '1233123',
                 true,
-                PriceCurrencyInterface::DEFAULT_PRECISION,
+                null,
                 $storeId,
                 $storeCurrencyCode
             )

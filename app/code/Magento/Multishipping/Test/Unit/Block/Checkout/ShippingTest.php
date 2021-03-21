@@ -141,7 +141,7 @@ class ShippingTest extends TestCase
             ->with(
                 $shippingPrice,
                 true,
-                PriceCurrencyInterface::DEFAULT_PRECISION,
+                null,
                 $storeMock
             );
 

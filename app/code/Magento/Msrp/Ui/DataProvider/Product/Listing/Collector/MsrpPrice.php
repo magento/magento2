@@ -105,7 +105,7 @@ class MsrpPrice implements ProductRenderCollectorInterface
             $this->priceCurrency->format(
                 $this->adjustmentCalculator->getAmount($product->getMsrp(), $product)->getValue(),
                 true,
-                PriceCurrencyInterface::DEFAULT_PRECISION,
+                null,
                 $productRender->getStoreId(),
                 $productRender->getCurrencyCode()
             )

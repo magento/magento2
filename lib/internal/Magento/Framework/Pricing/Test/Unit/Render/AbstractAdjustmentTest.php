@@ -61,7 +61,7 @@ class AbstractAdjustmentTest extends TestCase
     {
         $amount = '100';
         $includeContainer = true;
-        $precision = PriceCurrencyInterface::DEFAULT_PRECISION;
+        $precision = 2;
 
         $result = '100.0 grn';
 

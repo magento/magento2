@@ -266,7 +266,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
         return $this->priceCurrency->format(
             $price,
             true,
-            PriceCurrencyInterface::DEFAULT_PRECISION,
+            null,
             $this->getQuote()->getStore()
         );
     }

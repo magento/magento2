@@ -18,7 +18,7 @@ interface PriceCurrencyInterface
      * @deprecated precision should be retrieved from current locale
      * @see \Magento\Framework\Pricing\Price\PricePrecisionInterface::getPrecision
      */
-    const DEFAULT_PRECISION = null;
+    const DEFAULT_PRECISION = 2;
 
     /**
      * Convert price value

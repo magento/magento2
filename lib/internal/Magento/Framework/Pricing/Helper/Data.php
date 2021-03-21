@@ -62,7 +62,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $value = $this->priceCurrency->convertAndFormat(
                 $value,
                 $includeContainer,
-                PriceCurrencyInterface::DEFAULT_PRECISION,
+                null,
                 $store
             );
         } else {

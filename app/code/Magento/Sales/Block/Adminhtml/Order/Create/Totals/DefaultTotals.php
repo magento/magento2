@@ -57,7 +57,7 @@ class DefaultTotals extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals
         return $this->priceCurrency->format(
             $value,
             true,
-            PriceCurrencyInterface::DEFAULT_PRECISION,
+            null,
             $this->getStore()
         );
     }

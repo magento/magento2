@@ -125,7 +125,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->priceCurrency->format(
             $price,
             true,
-            PriceCurrencyInterface::DEFAULT_PRECISION,
+            null,
             $this->getQuote()->getStore()
         );
     }

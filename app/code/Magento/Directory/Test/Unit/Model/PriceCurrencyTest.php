@@ -137,7 +137,7 @@ class PriceCurrencyTest extends TestCase
     public function testFormat()
     {
         $amount = 5.6;
-        $precision = PriceCurrencyInterface::DEFAULT_PRECISION;
+        $precision = 2;
         $includeContainer = false;
         $store = null;
         $formattedAmount = '5.6 grn';
@@ -160,7 +160,7 @@ class PriceCurrencyTest extends TestCase
     public function testConvertAndFormat()
     {
         $amount = 5.6;
-        $precision = PriceCurrencyInterface::DEFAULT_PRECISION;
+        $precision = 2;
         $includeContainer = false;
         $store = null;
         $convertedAmount = 9.3;

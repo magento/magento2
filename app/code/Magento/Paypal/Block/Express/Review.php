@@ -250,7 +250,7 @@ class Review extends \Magento\Framework\View\Element\Template
         return $this->priceCurrency->convertAndFormat(
             $price,
             true,
-            PriceCurrencyInterface::DEFAULT_PRECISION,
+            null,
             $this->_quote->getStore()
         );
     }
