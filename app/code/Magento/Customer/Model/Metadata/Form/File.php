@@ -323,6 +323,9 @@ class File extends AbstractData
         if (!empty($this->_value) && !empty($value['delete'])) {
             $this->fileProcessor->removeUploadedFile($this->_value);
             return $value;
+        } else if ($this->_entityTypeCode == 'customer' && empty($value) && !empty($this->_value)) {
+            $this->fileProcessor->removeUploadedFile($this->_value);
+            return $value;
         }
 
         if ($value && is_string($value) && $this->fileProcessor->isExist($value)) {
