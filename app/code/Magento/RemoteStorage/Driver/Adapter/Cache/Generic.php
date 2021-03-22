@@ -127,7 +127,7 @@ class Generic implements CacheInterface
             $this->setFromStorage($fileMeta);
         }
 
-        return $this->cacheData[$path] !== false;
+        return array_key_exists($path, $this->cacheData) ? $this->cacheData[$path] !== false : null;
     }
 
     /**
