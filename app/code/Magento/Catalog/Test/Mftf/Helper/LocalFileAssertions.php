@@ -135,6 +135,22 @@ class LocalFileAssertions extends Helper
     }
 
     /**
+     * Asserts that a file with the given glob pattern exists in the given path
+     *
+     * @param string $path
+     * @param string $pattern
+     * @param string $message
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function assertGlobbedFileExists($path, $pattern, $message = ""): void
+    {
+        $realPath = $this->expandPath($path);
+        $files = $this->driver->search($pattern, $realPath);
+        $this->assertNotEmpty($files, $message);
+    }
+
+    /**
      * Assert a file does not exist
      *
      * @param string $filePath
@@ -193,6 +209,25 @@ class LocalFileAssertions extends Helper
     {
         $realPath = $this->expandPath($filePath);
         $this->assertStringContainsString($text, $this->driver->fileGetContents($realPath), $message);
+    }
+
+    /**
+     * Asserts that a file with the given glob pattern at the given path contains a given string
+     *
+     * @param string $path
+     * @param string $pattern
+     * @param string $text
+     * @param int $fileIndex
+     * @param string $message
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function assertGlobbedFileContainsString($path, $pattern, $text, $fileIndex = 0, $message = ""): void
+    {
+        $realPath = $this->expandPath($path);
+        $files = $this->driver->search($pattern, $realPath);
+        $this->assertStringContainsString($text, $this->driver->fileGetContents($files[$fileIndex] ?? ''), $message);
     }
 
     /**
