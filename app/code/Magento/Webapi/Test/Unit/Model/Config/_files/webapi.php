@@ -70,6 +70,7 @@ return [
                         'value' => '%customer_id%',
                     ],
                 ],
+                'description' => ''
             ],
         ],
         '/V1/customers/me' => [
@@ -88,6 +89,7 @@ return [
                         'value' => null,
                     ],
                 ],
+                'description' => ''
             ],
             'PUT' => [
                 'secure' => true,
@@ -104,6 +106,7 @@ return [
                         'value' => null,
                     ],
                 ],
+                'description' => ''
             ],
         ],
         '/V1/customers' => [
@@ -118,6 +121,7 @@ return [
                 ],
                 'parameters' => [
                 ],
+                'description' => ''
             ],
         ],
         '/V1/customers/:id' => [
@@ -132,6 +136,7 @@ return [
                 ],
                 'parameters' => [
                 ],
+                'description' => ''
             ],
             'DELETE' => [
                 'secure' => false,
@@ -145,6 +150,7 @@ return [
                 ],
                 'parameters' => [
                 ],
+                'description' => ''
             ],
         ],
     ],

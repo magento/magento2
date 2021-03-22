@@ -87,7 +87,7 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(\Magento\Framework\Webapi\Rest\Request $request)
     {
@@ -99,11 +99,13 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
 
         $entitiesParamsArray = $this->inputParamsResolver->resolve();
         $topicName = $this->getTopicName($request);
+        $topicDescription = $this->getTopicDescription($request);
 
         try {
             $asyncResponse = $this->asyncBulkPublisher->publishMass(
                 $topicName,
-                $entitiesParamsArray
+                $entitiesParamsArray,
+                $topicDescription
             );
         } catch (BulkException $bulkException) {
             $asyncResponse = $bulkException->getData();
@@ -119,8 +121,11 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
     }
 
     /**
+     * Get topic name from request
+     *
      * @param \Magento\Framework\Webapi\Rest\Request $request
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function getTopicName($request)
     {
@@ -133,7 +138,24 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get topic description from request
+     *
+     * @param \Magento\Framework\Webapi\Rest\Request $request
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function getTopicDescription($request)
+    {
+        $route = $this->inputParamsResolver->getRoute();
+
+        return $this->webapiAsyncConfig->getTopicDescription(
+            $route->getRoutePath(),
+            $request->getHttpMethod()
+        );
+    }
+
+    /**
+     * @inheritdoc
      */
     public function canProcess(\Magento\Framework\Webapi\Rest\Request $request)
     {
@@ -148,6 +170,8 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
     }
 
     /**
+     * Check if path is bulk
+     *
      * @param \Magento\Framework\Webapi\Rest\Request $request
      * @return bool
      */

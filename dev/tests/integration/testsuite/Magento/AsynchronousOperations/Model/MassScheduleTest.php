@@ -23,6 +23,8 @@ use Magento\TestFramework\MessageQueue\PreconditionFailedException;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\AsynchronousOperations\Model\ResourceModel\Bulk\Collection as BulkCollection;
+use Magento\Webapi\Model\Config\Reader as ConfigReader;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -74,8 +76,15 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
      */
     private $registry;
 
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
+    protected $fileResolverMock;
+
+    /** @var ConfigReader */
+    protected $configReader;
+
     protected function setUp(): void
     {
+        $this->fileResolverMock = $this->createMock(\Magento\Framework\Config\FileResolverInterface::class);
         $this->objectManager = Bootstrap::getObjectManager();
         $this->registry = $this->objectManager->get(Registry::class);
         $this->massSchedule = $this->objectManager->create(MassSchedule::class);
@@ -88,6 +97,10 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
             'logFilePath' => $this->logFilePath,
             'appInitParams' => \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInitParams()
         ]);
+        $this->configReader = $this->objectManager->create(
+            \Magento\Webapi\Model\Config\Reader::class,
+            ['fileResolver' => $this->fileResolverMock]
+        );
 
         try {
             $this->publisherConsumerController->initialize();
@@ -126,6 +139,8 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
     public function sendBulk($products)
     {
         $this->skus = [];
+        $expectedDescription = 'Save Products Test Description';
+        $description = $this->readDescription();
         foreach ($products as $data) {
             if (isset($data['product'])) {
                 $this->skus[] = $data['product']->getSku();
@@ -135,7 +150,8 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->massSchedule->publishMass(
             'async.magento.catalog.api.productrepositoryinterface.save.post',
-            $products
+            $products,
+            $description
         );
 
         //assert bulk accepted with no errors
@@ -143,6 +159,13 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
 
         //assert number of products sent to queue
         $this->assertCount(count($this->skus), $result->getRequestItems());
+
+        //assert topic description
+        $this->assertEquals(
+            $expectedDescription,
+            $this->getDescription($result->getBulkUuid()),
+            'Description is wrong'
+        );
     }
 
     protected function tearDown(): void
@@ -192,6 +215,18 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
             ->load();
         $size = $collection->getSize();
         return $size == $count;
+    }
+
+    public function getDescription($uuid)
+    {
+        $bulkDescription = '';
+        $collection = $this->objectManager->create(BulkCollection::class)
+            ->addFieldToFilter('uuid', ['in' => $uuid])
+            ->load();
+        if (!empty($collection->getFirstItem()->getData())) {
+            $bulkDescription = $collection->getFirstItem()->getDescription();
+        }
+        return $bulkDescription;
     }
 
     /**
@@ -304,5 +339,15 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
                 ]
             ],
         ];
+    }
+
+    public function readDescription()
+    {
+        $configFiles = [
+            file_get_contents(realpath(__DIR__ . '/../_files/webapiA.xml'))
+        ];
+        $this->fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($configFiles));
+        $value = $this->configReader->read();
+        return $value['routes']['/V1/products']['POST']['description'];
     }
 }

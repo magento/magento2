@@ -30,6 +30,7 @@ interface ConfigInterface
     const SERVICE_PARAM_KEY_INTERFACE = 'interface';
     const SERVICE_PARAM_KEY_METHOD = 'method';
     const SERVICE_PARAM_KEY_TOPIC = 'topic';
+    const SERVICE_PARAM_KEY_DESCRIPTION = 'description';
     const DEFAULT_HANDLER_NAME = 'async';
     const SYSTEM_TOPIC_NAME = 'async.system.required.wrapper.topic';
     const SYSTEM_TOPIC_CONFIGURATION =  [
@@ -48,7 +49,7 @@ interface ConfigInterface
      * @return array
      * @since 100.2.3
      */
-    public function getServices();
+    public function getServices(): array;
 
     /**
      * Get topic name from webapi_async_config services config array by route url and http method
@@ -59,5 +60,15 @@ interface ConfigInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @since 100.2.3
      */
-    public function getTopicName($routeUrl, $httpMethod);
+    public function getTopicName(string $routeUrl, string $httpMethod): string;
+
+    /**
+     * Get topic description from webapi_async_config services config array by route url and http method
+     *
+     * @param string $routeUrl
+     * @param string $httpMethod GET|POST|PUT|DELETE
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getTopicDescription(string $routeUrl, string $httpMethod): string;
 }

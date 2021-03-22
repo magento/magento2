@@ -112,15 +112,24 @@ class MassSchedule
      *
      * @param string $topicName
      * @param array $entitiesArray
+     * @param string $topicDescription
      * @param string $groupId
      * @param string $userId
      * @return AsyncResponseInterface
      * @throws BulkException
      * @throws LocalizedException
      */
-    public function publishMass($topicName, array $entitiesArray, $groupId = null, $userId = null)
-    {
+    public function publishMass(
+        $topicName,
+        array $entitiesArray,
+        $topicDescription = '',
+        $groupId = null,
+        $userId = null
+    ) {
         $bulkDescription = __('Topic %1', $topicName);
+        if ($topicDescription !== '') {
+            $bulkDescription = $topicDescription;
+        }
 
         if ($userId == null) {
             $userId = $this->userContext->getUserId();

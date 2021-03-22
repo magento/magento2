@@ -55,6 +55,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 $soapMethod = trim($soapOperationNode->nodeValue);
             }
             $url = trim($route->attributes->getNamedItem('url')->nodeValue);
+            $description = '';
+            if ($descriptionNode = $route->attributes->getNamedItem('description')) {
+                $description = trim($descriptionNode->nodeValue);
+            }
             $version = $this->convertVersion($url);
 
             $serviceClassData = [];
@@ -104,6 +108,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 ],
                 self::KEY_ACL_RESOURCES => $resourceReferences,
                 self::KEY_DATA_PARAMETERS => $data,
+                self::KEY_DESCRIPTION => $description
             ];
 
             $serviceSecure = false;

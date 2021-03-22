@@ -59,7 +59,7 @@ class Config implements ConfigInterface
     /**
      * @inheritdoc
      */
-    public function getServices()
+    public function getServices(): array
     {
         if (null === $this->asyncServices) {
             $services = $this->cache->load(self::CACHE_ID);
@@ -77,7 +77,29 @@ class Config implements ConfigInterface
     /**
      * @inheritdoc
      */
-    public function getTopicName($routeUrl, $httpMethod)
+    public function getTopicName(string $routeUrl, string $httpMethod): string
+    {
+        return $this->getServiceParameter($routeUrl, $httpMethod, self::SERVICE_PARAM_KEY_TOPIC);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getTopicDescription(string $routeUrl, string $httpMethod): string
+    {
+        return $this->getServiceParameter($routeUrl, $httpMethod, self::SERVICE_PARAM_KEY_DESCRIPTION);
+    }
+
+    /**
+     * Get service parameter by name
+     *
+     * @param string $routeUrl
+     * @param string $httpMethod
+     * @param string $attributeName
+     * @return string
+     * @throws LocalizedException
+     */
+    private function getServiceParameter(string $routeUrl, string $httpMethod, string $attributeName): string
     {
         $services = $this->getServices();
         $lookupKey = $this->generateLookupKeyByRouteData(
@@ -91,7 +113,7 @@ class Config implements ConfigInterface
             );
         }
 
-        return $services[$lookupKey][self::SERVICE_PARAM_KEY_TOPIC];
+        return $services[$lookupKey][$attributeName];
     }
 
     /**
@@ -101,7 +123,7 @@ class Config implements ConfigInterface
      *
      * @return array
      */
-    private function generateTopicsDataFromWebapiConfig()
+    private function generateTopicsDataFromWebapiConfig(): array
     {
         $webApiConfig = $this->webApiConfig->getServices();
         $services = [];
@@ -110,6 +132,11 @@ class Config implements ConfigInterface
                 if ($httpMethod !== \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET) {
                     $serviceInterface = $httpMethodData[Converter::KEY_SERVICE][Converter::KEY_SERVICE_CLASS];
                     $serviceMethod = $httpMethodData[Converter::KEY_SERVICE][Converter::KEY_SERVICE_METHOD];
+
+                    $topicDescription = '';
+                    if (isset($httpMethodData[Converter::KEY_DESCRIPTION])) {
+                        $topicDescription = $httpMethodData[Converter::KEY_DESCRIPTION];
+                    }
 
                     $lookupKey = $this->generateLookupKeyByRouteData(
                         $routeUrl,
@@ -123,9 +150,10 @@ class Config implements ConfigInterface
                     );
 
                     $services[$lookupKey] = [
-                        self::SERVICE_PARAM_KEY_INTERFACE => $serviceInterface,
-                        self::SERVICE_PARAM_KEY_METHOD    => $serviceMethod,
-                        self::SERVICE_PARAM_KEY_TOPIC     => $topicName,
+                        self::SERVICE_PARAM_KEY_INTERFACE   => $serviceInterface,
+                        self::SERVICE_PARAM_KEY_METHOD      => $serviceMethod,
+                        self::SERVICE_PARAM_KEY_TOPIC       => $topicName,
+                        self::SERVICE_PARAM_KEY_DESCRIPTION => $topicDescription
                     ];
                 }
             }
@@ -144,7 +172,7 @@ class Config implements ConfigInterface
      * @param string $httpMethod
      * @return string
      */
-    private function generateLookupKeyByRouteData($routeUrl, $httpMethod)
+    private function generateLookupKeyByRouteData(string $routeUrl, string $httpMethod): string
     {
         return self::TOPIC_PREFIX . $this->generateKey($routeUrl, $httpMethod, '/', false);
     }
@@ -161,7 +189,7 @@ class Config implements ConfigInterface
      * @param string $httpMethod
      * @return string
      */
-    private function generateTopicNameFromService($serviceInterface, $serviceMethod, $httpMethod)
+    private function generateTopicNameFromService(string $serviceInterface, string $serviceMethod, string $httpMethod): string
     {
         $typeName = strtolower(sprintf('%s.%s', $serviceInterface, $serviceMethod));
         return strtolower(self::TOPIC_PREFIX . $this->generateKey($typeName, $httpMethod, '\\', false));
@@ -176,7 +204,7 @@ class Config implements ConfigInterface
      * @param bool $lcfirst
      * @return string
      */
-    private function generateKey($typeName, $methodName, $delimiter = '\\', $lcfirst = true)
+    private function generateKey(string $typeName, string $methodName, string $delimiter = '\\', bool $lcfirst = true): string
     {
         $parts = explode($delimiter, trim($typeName, $delimiter));
         foreach ($parts as &$part) {
