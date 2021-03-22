@@ -13,11 +13,11 @@ Attribute group - `Advanced Pricing`.
 - `msrp` - Manufacturer's Suggested Retail Price
 - `msrp_display_actual_price_type` -Display Actual Price
 
-Before disabling or uninstalling this module, note that the following modules depends on this module:
-
-- `Magento_MsrpConfigurableProduct`
-- `Magento_MsrpGroupedProduct`
-- `Magento_ConfigurableProduct`
+**Pay attention** if described attributes not removed when the module is removed/disabled, it would trigger errors
+because they use models and blocks from Magento_Msrp module: 
+- `\Magento\Msrp\Block\Adminhtml\Product\Helper\Form\Type`
+- `\Magento\Msrp\Model\Product\Attribute\Source\Type\Price`
+- `\Magento\Msrp\Block\Adminhtml\Product\Helper\Form\Type\Price`
 
 For information about a module installation in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
 

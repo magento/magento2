@@ -32,7 +32,7 @@ Yo can check this configuration and find more examples in the `etc/frontend/di.x
 More information about [type configuration](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/di-xml-file.html).
 
 
-Extension developers can interact with the Magento_Msrp module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/plugins.html).
+Extension developers can interact with the Magento_Multishipping module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/plugins.html).
 
 [The Magento dependency injection mechanism](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/depend-inj.html) enables you to override the functionality of the Magento_Msrp module.
 
@@ -43,6 +43,31 @@ This module observes the following event:
 `etc/frontend/`
 
  - `checkout_cart_save_before` in the `Magento\Multishipping\Observer\DisableMultishippingObserver` file. 
+
+The module dispatches the following events:
+
+- `multishipping_checkout_controller_success_action` event in the
+  class `\Magento\Multishipping\Controller\Checkout\Success::execute()` method. Parameters:
+    - `order_ids` is order ids created during checkout
+- `checkout_controller_multishipping_shipping_post` event in the
+  class `\Magento\Multishipping\Controller\Checkout\ShippingPost::execute()` method. Parameters:
+    - `request` is a request object `Magento\Framework\App\RequestInterface`.
+    - `quote` is a quote object for current checkout `Magento\Quote\Model\Quote`.
+- `checkout_type_multishipping_set_shipping_items` event in the
+  class `\Magento\Multishipping\Model\Checkout\Type\Multishipping::setShippingItemsInformation()` method. Parameters:
+    - `quote` is a quote object for current checkout `Magento\Quote\Model\Quote`.
+- `checkout_type_multishipping_create_orders_single` event in the
+  class `\Magento\Multishipping\Model\Checkout\Type\Multishipping::createOrders()` method. Parameters:
+    - `order` is a prepared order object for creating `\Magento\Sales\Model\Order`.
+    - `address` is an address array.
+    - `quote` is a quote object for current checkout `Magento\Quote\Model\Quote`.
+- `checkout_submit_all_after` event in the
+  class `\Magento\Multishipping\Model\Checkout\Type\Multishipping::createOrders()` method. Parameters:
+    - `orders` is order object array `\Magento\Sales\Model\Order`  that was created.
+    - `quote` is a quote object for current checkout `Magento\Quote\Model\Quote`.
+- `checkout_multishipping_refund_all` event in the
+  class `\Magento\Multishipping\Model\Checkout\Type\Multishipping::createOrders()` method. Parameters:
+    - `orders` is order object array `\Magento\Sales\Model\Order`  that was created.
 
 For information about an event in Magento 2, see [Events and observers](http://devdocs.magento.com/guides/v2.3/extension-dev-guide/events-and-observers.html#events).
 

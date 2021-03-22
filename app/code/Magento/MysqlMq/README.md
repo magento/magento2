@@ -2,6 +2,10 @@
 
 **Magento_MysqlMq** provides message queue implementation based on MySQL.
 
+Module contain recurring script, declared in `Magento\MysqlMq\Setup\Recurring` 
+class. This script is executed by Magento post each schema installation or upgrade
+stage and populates the queue table.
+
 ## Installation
 
 Module creates the following tables:
