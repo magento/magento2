@@ -11,8 +11,6 @@ namespace Magento\Customer\Model\Plugin;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Integration\Model\Oauth\Token;
 
 /**
  * Update customer by id from request param
@@ -25,21 +23,11 @@ class UpdateCustomer
     private $request;
 
     /**
-     * @var Token
-     */
-    private $token;
-
-    /**
      * @param RestRequest $request
-     * @param Token|null $token
      */
-    public function __construct(
-        RestRequest $request,
-        Token $token = null
-    ) {
+    public function __construct(RestRequest $request)
+    {
         $this->request = $request;
-        $this->token = $token ?: ObjectManager::getInstance()
-            ->get(Token::class);
     }
 
     /**
@@ -56,17 +44,9 @@ class UpdateCustomer
         ?string $passwordHash = null
     ): array {
         $customerId = $this->request->getParam('customerId');
-        $cookie = $this->request->getHeader('cookie');
-        $headerToken = $this->request->getHeader('Authorization');
-        if ($customerId && !str_contains($cookie, 'PHPSESSID')) {
-            if (str_contains($headerToken, 'Bearer')) {
-                $token = "Bearer " . $this->token->loadByCustomerId($customerId)->getData('token');
-                if ($headerToken === $token) {
-                    $customer = $this->getUpdatedCustomer($customerRepository->getById($customerId), $customer);
-                }
-            } else {
-                $customer = $this->getUpdatedCustomer($customerRepository->getById($customerId), $customer);
-            }
+        $bodyParams = $this->request->getBodyParams();
+        if (!isset($bodyParams['customer']['Id']) && $customerId) {
+            $customer = $this->getUpdatedCustomer($customerRepository->getById($customerId), $customer);
         }
 
         return [$customer, $passwordHash];
