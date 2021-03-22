@@ -394,6 +394,7 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
      */
     public function testGetOtherCustomerInfo()
     {
+        $this->_markTestAsRestOnly();
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => "/V1/customers/me?customerId=1",
