@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "19632df97fc399d5451d9982e8272aa8",
+    "content-hash": "e2ff6736c6c6963ad37abd1496394213",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.174.2",
+            "version": "3.175.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "80cc136f47fa808032f411fff70e26f461852510"
+                "reference": "31baa9e0c4330f01eb74b8a7ef086e9d34f8391e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/80cc136f47fa808032f411fff70e26f461852510",
-                "reference": "80cc136f47fa808032f411fff70e26f461852510",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/31baa9e0c4330f01eb74b8a7ef086e9d34f8391e",
+                "reference": "31baa9e0c4330f01eb74b8a7ef086e9d34f8391e",
                 "shasum": ""
             },
             "require": {
@@ -89,7 +89,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2021-03-17T18:13:11+00:00"
+            "time": "2021-03-19T18:13:22+00:00"
         },
         {
             "name": "brick/math",
@@ -972,16 +972,16 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "1.7.0",
+            "version": "1.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "53330f47520498c0ae1f61f7e2c90f55690c06a3"
+                "reference": "35ea11d335fd638b5882ff1725228b3d35496ab1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/53330f47520498c0ae1f61f7e2c90f55690c06a3",
-                "reference": "53330f47520498c0ae1f61f7e2c90f55690c06a3",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/35ea11d335fd638b5882ff1725228b3d35496ab1",
+                "reference": "35ea11d335fd638b5882ff1725228b3d35496ab1",
                 "shasum": ""
             },
             "require": {
@@ -1039,7 +1039,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2020-09-30T07:37:11+00:00"
+            "time": "2021-03-21T16:25:00+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -6905,6 +6905,67 @@
                 "graphql"
             ],
             "time": "2020-07-02T05:49:25+00:00"
+        },
+        {
+            "name": "wikimedia/less.php",
+            "version": "1.8.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wikimedia/less.php.git",
+                "reference": "e238ad228d74b6ffd38209c799b34e9826909266"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wikimedia/less.php/zipball/e238ad228d74b6ffd38209c799b34e9826909266",
+                "reference": "e238ad228d74b6ffd38209c799b34e9826909266",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.9"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "7.5.14"
+            },
+            "bin": [
+                "bin/lessc"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Less": "lib/"
+                },
+                "classmap": [
+                    "lessc.inc.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Josh Schmidt",
+                    "homepage": "https://github.com/oyejorge"
+                },
+                {
+                    "name": "Matt Agar",
+                    "homepage": "https://github.com/agar"
+                },
+                {
+                    "name": "Martin Jantošovič",
+                    "homepage": "https://github.com/Mordred"
+                }
+            ],
+            "description": "PHP port of the Javascript version of LESS http://lesscss.org (Originally maintained by Josh Schmidt)",
+            "keywords": [
+                "css",
+                "less",
+                "less.js",
+                "lesscss",
+                "php",
+                "stylesheet"
+            ],
+            "time": "2019-11-06T18:30:11+00:00"
         }
     ],
     "packages-dev": [
