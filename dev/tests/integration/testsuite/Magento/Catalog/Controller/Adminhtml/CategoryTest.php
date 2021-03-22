@@ -911,7 +911,7 @@ class CategoryTest extends AbstractBackendController
             $this->equalTo(
                 [
                     'URL key "backend" matches a reserved endpoint name '
-                    . '(admin, soap, rest, graphql, standard, backend). Use another URL key.'
+                    . '(backend). Use another URL key.'
                 ]
             ),
             MessageInterface::TYPE_ERROR

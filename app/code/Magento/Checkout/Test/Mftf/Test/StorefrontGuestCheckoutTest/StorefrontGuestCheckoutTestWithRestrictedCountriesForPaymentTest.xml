@@ -24,9 +24,7 @@
             </createData>
             <magentoCLI stepKey="allowSpecificValue" command="config:set payment/checkmo/allowspecific 1"/>
             <magentoCLI stepKey="specificCountryValue" command="config:set payment/checkmo/specificcountry GB"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
             <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
                 <argument name="tags" value=""/>
             </actionGroup>

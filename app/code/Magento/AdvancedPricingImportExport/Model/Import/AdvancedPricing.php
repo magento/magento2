@@ -5,8 +5,10 @@
  */
 namespace Magento\AdvancedPricingImportExport\Model\Import;
 
+use Magento\AdvancedPricingImportExport\Model\CurrencyResolver;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
@@ -15,6 +17,7 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 {
@@ -42,6 +45,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     private const VALIDATOR_TEAR_PRICE = 'validator_tier_price';
     private const VALIDATOR_TIER_PRICE = 'validator_tier_price';
 
+    private const ERROR_DUPLICATE_TIER_PRICE = 'duplicateTierPrice';
+
     /**
      * Validation failure message template definitions.
      *
@@ -57,8 +62,10 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         ValidatorInterface::ERROR_INVALID_TIER_PRICE_TYPE => 'Value for \'tier_price_value_type\' ' .
             'attribute contains incorrect value, acceptable values are Fixed, Discount',
         ValidatorInterface::ERROR_TIER_DATA_INCOMPLETE => 'Tier Price data is incomplete',
-        ValidatorInterface::ERROR_INVALID_ATTRIBUTE_DECIMAL =>
-            'Value for \'%s\' attribute contains incorrect value, acceptable values are in decimal format',
+        ValidatorInterface::ERROR_INVALID_ATTRIBUTE_DECIMAL => 'Value for \'%s\' attribute contains incorrect value,' .
+            ' acceptable values are in decimal format',
+        self::ERROR_DUPLICATE_TIER_PRICE => 'We found a duplicate website, tier price, customer group' .
+            ' and quantity.'
     ];
 
     /**
@@ -156,6 +163,26 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     private $productEntityLinkField;
 
     /**
+     * @var array
+     */
+    private $websiteScopeTierPrice = [];
+
+    /**
+     * @var array
+     */
+    private $globalScopeTierPrice = [];
+
+    /**
+     * @var array
+     */
+    private $allProductIds = [];
+
+    /**
+     * @var CurrencyResolver
+     */
+    private $currencyResolver;
+
+    /**
      * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
@@ -172,8 +199,9 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param AdvancedPricing\Validator $validator
      * @param AdvancedPricing\Validator\Website $websiteValidator
      * @param AdvancedPricing\Validator\TierPrice $tierPriceValidator
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param CurrencyResolver|null $currencyResolver
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
@@ -190,7 +218,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         ImportProduct $importProduct,
         AdvancedPricing\Validator $validator,
         AdvancedPricing\Validator\Website $websiteValidator,
-        AdvancedPricing\Validator\TierPrice $tierPriceValidator
+        AdvancedPricing\Validator\TierPrice $tierPriceValidator,
+        ?CurrencyResolver $currencyResolver = null
     ) {
         $this->dateTime = $dateTime;
         $this->jsonHelper = $jsonHelper;
@@ -209,6 +238,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $this->_validators[self::VALIDATOR_WEBSITE] = $websiteValidator;
         $this->_validators[self::VALIDATOR_TIER_PRICE] = $tierPriceValidator;
         $this->errorAggregator = $errorAggregator;
+        $this->currencyResolver = $currencyResolver ?? ObjectManager::getInstance()->get(CurrencyResolver::class);
 
         foreach (array_merge($this->errorMessageTemplates, $this->_messageTemplates) as $errorCode => $message) {
             $this->getErrorAggregator()->addErrorMessageTemplate($errorCode, $message);
@@ -270,6 +300,11 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         if (false === $sku) {
             $this->addRowError(ValidatorInterface::ERROR_ROW_IS_ORPHAN, $rowNum);
         }
+
+        if (!$this->getErrorAggregator()->isRowInvalid($rowNum)) {
+            $this->validateRowForDuplicate($rowData, $rowNum);
+        }
+
         return !$this->getErrorAggregator()->isRowInvalid($rowNum);
     }
 
@@ -633,5 +668,161 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                 ->getLinkField();
         }
         return $this->productEntityLinkField;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _saveValidatedBunches()
+    {
+        if (\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND === $this->getBehavior()
+            && !$this->_catalogData->isPriceGlobal()
+        ) {
+            $source = $this->_getSource();
+            $source->rewind();
+            while ($source->valid()) {
+                try {
+                    $rowData = $source->current();
+                } catch (\InvalidArgumentException $exception) {
+                    $source->next();
+                    continue;
+                }
+                $this->validateRow($rowData, $source->key());
+                $source->next();
+            }
+            $this->validateRowsForDuplicate(self::TABLE_TIER_PRICE);
+        }
+        return parent::_saveValidatedBunches();
+    }
+
+    /**
+     * Validate all row data with existing prices in the database for duplicate
+     *
+     * A row is considered a duplicate if the pair (product_id, all_groups, customer_group_id, qty) exists for
+     * both global and website scopes. And the base currency is the same for both global and website scopes.
+     *
+     * @param string $table
+     */
+    private function validateRowsForDuplicate(string $table): void
+    {
+        if (!empty($this->allProductIds)) {
+            $priceDataCollection = $this->getPrices(array_keys($this->allProductIds), $table);
+            $defaultBaseCurrency = $this->currencyResolver->getDefaultBaseCurrency();
+            $websiteCodeBaseCurrencyMap = $this->currencyResolver->getWebsitesBaseCurrency();
+            $websiteIdCodeMap = array_flip($this->_storeResolver->getWebsiteCodeToId());
+            foreach ($priceDataCollection as $priceData) {
+                $isDefaultScope = (int) $priceData['website_id'] === 0;
+                $baseCurrency = $isDefaultScope
+                    ? $defaultBaseCurrency
+                    : $websiteCodeBaseCurrencyMap[$websiteIdCodeMap[$priceData['website_id']] ?? null] ?? null;
+                $rowNums = [];
+                $key = $this->getUniqueKey($priceData, $baseCurrency);
+                if ($isDefaultScope) {
+                    if (isset($this->websiteScopeTierPrice[$key])) {
+                        $rowNums = $this->websiteScopeTierPrice[$key];
+                    }
+                } else {
+                    if (isset($this->globalScopeTierPrice[$key])) {
+                        $rowNums = $this->globalScopeTierPrice[$key];
+                    }
+                }
+                foreach ($rowNums as $rowNum) {
+                    $this->addRowError(self::ERROR_DUPLICATE_TIER_PRICE, $rowNum);
+                }
+            }
+        }
+    }
+
+    /**
+     * Validate row data for duplicate
+     *
+     * A row is considered a duplicate if the pair (product_id, all_groups, customer_group_id, qty) exists for
+     * both global and website scopes. And the base currency is the same for both global and website scopes.
+     *
+     * @param array $rowData
+     * @param int $rowNum
+     */
+    private function validateRowForDuplicate(array $rowData, int $rowNum)
+    {
+        $productId = $this->retrieveOldSkus()[$rowData[self::COL_SKU]] ?? null;
+        if ($productId && !$this->_catalogData->isPriceGlobal()) {
+            $productEntityLinkField = $this->getProductEntityLinkField();
+            $priceData = [
+                $productEntityLinkField => $productId,
+                'website_id' => (int) $this->getWebSiteId($rowData[self::COL_TIER_PRICE_WEBSITE]),
+                'all_groups' => $rowData[self::COL_TIER_PRICE_CUSTOMER_GROUP] == self::VALUE_ALL_GROUPS ? 1 : 0,
+                'customer_group_id' => $this->getCustomerGroupId($rowData[self::COL_TIER_PRICE_CUSTOMER_GROUP]),
+                'qty' => $rowData[self::COL_TIER_PRICE_QTY],
+            ];
+            $defaultBaseCurrency = $this->currencyResolver->getDefaultBaseCurrency();
+            $websiteCodeBaseCurrencyMap = $this->currencyResolver->getWebsitesBaseCurrency();
+            $websiteIdCodeMap = array_flip($this->_storeResolver->getWebsiteCodeToId());
+            $baseCurrency = $priceData['website_id'] === 0
+                ? $defaultBaseCurrency
+                : $websiteCodeBaseCurrencyMap[$websiteIdCodeMap[$priceData['website_id']] ?? null] ?? null;
+
+            $this->allProductIds[$productId][] = $rowNum;
+            $key = $this->getUniqueKey($priceData, $baseCurrency);
+            if ($priceData['website_id'] === 0) {
+                $this->globalScopeTierPrice[$key][] = $rowNum;
+                if (isset($this->websiteScopeTierPrice[$key])) {
+                    $this->addRowError(self::ERROR_DUPLICATE_TIER_PRICE, $rowNum);
+                }
+            } else {
+                $this->websiteScopeTierPrice[$key][] = $rowNum;
+                if (isset($this->globalScopeTierPrice[$key])) {
+                    $this->addRowError(self::ERROR_DUPLICATE_TIER_PRICE, $rowNum);
+                }
+            }
+        }
+    }
+
+    /**
+     * Get the unique key of provided price
+     *
+     * @param array $priceData
+     * @param string $baseCurrency
+     * @return string
+     */
+    private function getUniqueKey(array $priceData, string $baseCurrency): string
+    {
+        $productEntityLinkField = $this->getProductEntityLinkField();
+        return sprintf(
+            '%s-%s-%s-%s-%.4f',
+            $baseCurrency,
+            $priceData[$productEntityLinkField],
+            $priceData['all_groups'],
+            $priceData['customer_group_id'],
+            $priceData['qty']
+        );
+    }
+
+    /**
+     * Get existing prices in the database
+     *
+     * @param int[] $productIds
+     * @param string $table
+     * @return array
+     */
+    private function getPrices(array $productIds, string $table)
+    {
+        $productEntityLinkField = $this->getProductEntityLinkField();
+        return $this->_connection->fetchAll(
+            $this->_connection->select()
+                ->from(
+                    $this->_resourceFactory->create()->getTable($table),
+                    [
+                        $productEntityLinkField,
+                        'all_groups',
+                        'customer_group_id',
+                        'qty',
+                        'website_id'
+                    ]
+                )
+                ->where(
+                    $productEntityLinkField . ' IN (?)',
+                    $productIds
+                )
+        );
     }
 }

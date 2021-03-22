@@ -6,27 +6,38 @@
 
 namespace Magento\Catalog\Controller\Product;
 
-use Magento\Framework\Message\MessageInterface;
+use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Data\Form\FormKey;
+use Magento\Framework\Message\MessageInterface;
+use Magento\TestFramework\TestCase\AbstractController;
+use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Visitor;
+use Laminas\Stdlib\ParametersFactory;
 
 /**
+ * Test compare product.
+ *
  * @magentoDataFixture Magento/Catalog/controllers/_files/products.php
- *
  * @magentoDbIsolation disabled
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
+class CompareTest extends AbstractController
 {
-    /**
-     * @var \Magento\Catalog\Model\ProductRepository
-     */
+    /** @var ProductRepository */
     protected $productRepository;
 
-    /**
-     * @var \Magento\Framework\Data\Form\FormKey
-     */
+    /** @var FormKey */
     private $formKey;
+
+    /** @var Session */
+    private $customerSession;
+
+    /** @var Visitor */
+    private $visitor;
+
+    /** @var ParametersFactory */
+    private $parametersFactory;
 
     /**
      * @inheritDoc
@@ -34,16 +45,31 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     protected function setUp(): void
     {
         parent::setUp();
-        $this->formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
-        $this->productRepository = $this->_objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
+
+        $this->formKey = $this->_objectManager->get(FormKey::class);
+        $this->productRepository = $this->_objectManager->get(ProductRepository::class);
+        $this->customerSession = $this->_objectManager->get(Session::class);
+        $this->visitor = $this->_objectManager->get(Visitor::class);
+        $this->parametersFactory = $this->_objectManager->get(ParametersFactory::class);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
+    {
+        $this->customerSession->logout();
+        $this->visitor->setId(null);
+
+        parent::tearDown();
     }
 
     /**
      * Test adding product to compare list.
      *
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return void
      */
-    public function testAddAction()
+    public function testAddAction(): void
     {
         $this->_requireVisitorWithNoProducts();
         $product = $this->productRepository->get('simple_product_1');
@@ -99,9 +125,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * Test removing a product from compare list.
      *
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return void
      */
-    public function testRemoveAction()
+    public function testRemoveAction(): void
     {
         $this->_requireVisitorWithTwoProducts();
         $product = $this->productRepository->get('simple_product_2');
@@ -139,9 +165,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * Test removing a product from compare list of a registered customer.
      *
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return void
      */
-    public function testRemoveActionWithSession()
+    public function testRemoveActionWithSession(): void
     {
         $this->_requireCustomerWithTwoProducts();
         $product = $this->productRepository->get('simple_product_1');
@@ -161,8 +187,10 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
 
     /**
      * Test getting a list of compared product.
+     *
+     * @return void
      */
-    public function testIndexActionDisplay()
+    public function testIndexActionDisplay(): void
     {
         $this->_requireVisitorWithTwoProducts();
 
@@ -190,8 +218,10 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
 
     /**
      * Test clearing a list of compared products.
+     *
+     * @return void
      */
-    public function testClearAction()
+    public function testClearAction(): void
     {
         $this->_requireVisitorWithTwoProducts();
 
@@ -212,8 +242,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
      * Test escaping a session message.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple_xss.php
+     * @return void
      */
-    public function testRemoveActionProductNameXss()
+    public function testRemoveActionProductNameXss(): void
     {
         $this->_prepareCompareListWithProductNameXss();
         $product = $this->productRepository->get('product-with-xss');
@@ -226,6 +257,37 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
             ),
             MessageInterface::TYPE_SUCCESS
         );
+    }
+
+    /**
+     * Add not existing product to list of compared.
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @return void
+     */
+    public function testAddNotExistingProductToCompareList(): void
+    {
+        $this->customerSession->loginById(1);
+        $this->prepareReferer();
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setParams(['product' => 787586534]);
+        $this->dispatch('catalog/product_compare/add/');
+        $this->assertSessionMessages($this->isEmpty());
+        $this->_assertCompareListEquals([]);
+        $this->assertRedirect($this->stringContains('not_existing'));
+    }
+
+    /**
+     * Prepare referer to test.
+     *
+     * @return void
+     */
+    private function prepareReferer(): void
+    {
+        $parameters = $this->parametersFactory->create();
+        $parameters->set('HTTP_REFERER', 'http://localhost/not_existing');
+        $this->getRequest()->setServer($parameters);
     }
 
     /**
@@ -246,10 +308,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * Preparing compare list.
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return void
      */
-    protected function _prepareCompareListWithProductNameXss()
+    protected function _prepareCompareListWithProductNameXss(): void
     {
         /** @var $visitor \Magento\Customer\Model\Visitor */
         $visitor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -275,9 +336,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * Preparing compare list.
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return void
      */
-    protected function _requireVisitorWithNoProducts()
+    protected function _requireVisitorWithNoProducts(): void
     {
         /** @var $visitor \Magento\Customer\Model\Visitor */
         $visitor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -300,10 +361,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * Preparing compare list.
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return void
      */
-    protected function _requireVisitorWithTwoProducts()
+    protected function _requireVisitorWithTwoProducts(): void
     {
         /** @var $visitor \Magento\Customer\Model\Visitor */
         $visitor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -339,10 +399,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * Preparing a compare list.
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return void
      */
-    protected function _requireCustomerWithTwoProducts()
+    protected function _requireCustomerWithTwoProducts(): void
     {
         $customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Customer\Model\Customer::class);
@@ -405,8 +464,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
      * Assert that current visitor has exactly expected products in compare list
      *
      * @param array $expectedProductIds
+     * @return void
      */
-    protected function _assertCompareListEquals(array $expectedProductIds)
+    protected function _assertCompareListEquals(array $expectedProductIds): void
     {
         /** @var $compareItems \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection */
         $compareItems = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

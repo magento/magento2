@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAssertBillingAddressInBillingInfoStepActionGroup">
+        <annotations>
+            <description>Assert that Billing Address block contains provided Address data.</description>
+        </annotations>
+        <arguments>
+            <argument name="address" type="entity" defaultValue="US_Address_CA"/>
+        </arguments>
+
+        <see selector="{{PaymentMethodSection.billingAddressBlock}}" userInput="{{address.firstname}}" stepKey="seeFirstname"/>
+        <see selector="{{PaymentMethodSection.billingAddressBlock}}" userInput="{{address.lastname}}" stepKey="seeLastname"/>
+        <see selector="{{PaymentMethodSection.billingAddressBlock}}" userInput="{{address.company}}" stepKey="seeCompany"/>
+        <see selector="{{PaymentMethodSection.billingAddressBlock}}" userInput="{{address.street[0]}}" stepKey="seeStreet"/>
+        <see selector="{{PaymentMethodSection.billingAddressBlock}}" userInput="{{address.city}}" stepKey="seeCity"/>
+        <see selector="{{PaymentMethodSection.billingAddressBlock}}" userInput="{{address.state}}" stepKey="seeState"/>
+        <see selector="{{PaymentMethodSection.billingAddressBlock}}" userInput="{{address.postcode}}" stepKey="seePostcode"/>
+        <see selector="{{PaymentMethodSection.billingAddressBlock}}" userInput="{{address.country}}" stepKey="seeCountry"/>
+        <see selector="{{PaymentMethodSection.billingAddressBlock}}" userInput="{{address.telephone}}" stepKey="seeTelephone"/>
+    </actionGroup>
+</actionGroups>
