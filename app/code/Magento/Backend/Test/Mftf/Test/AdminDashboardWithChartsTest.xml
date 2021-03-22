@@ -8,16 +8,19 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminDashboardWithChartsTest">
+    <test name="AdminDashboardWithChartsTest" deprecated="Use AdminCheckDashboardWithChartsTest instead">
         <annotations>
             <features value="Backend"/>
             <stories value="Google Charts on Magento dashboard"/>
-            <title value="Admin should see Google chart on Magento dashboard"/>
+            <title value="DEPRECATED. Admin should see Google chart on Magento dashboard"/>
             <description value="Google chart on Magento dashboard page is displaying properly"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-98934"/>
             <useCaseId value="MAGETWO-98584"/>
             <group value="backend"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminCheckDashboardWithChartsTest instead</issueId>
+            </skip> 
         </annotations>
         <before>
             <magentoCLI command="config:set admin/dashboard/enable_charts 1" stepKey="setEnableCharts"/>
