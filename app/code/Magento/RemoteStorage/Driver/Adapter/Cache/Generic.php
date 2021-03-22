@@ -82,7 +82,7 @@ class Generic implements CacheInterface
      */
     public function updateMetadata(string $path, array $objectMetadata, bool $persist = false): void
     {
-        if (!$this->exists($path)) {
+        if ($this->exists($path) === null) {
             $this->cacheData[$path] = $this->pathUtil->pathInfo($path);
         }
 
