@@ -67,7 +67,8 @@ class ConfigTest extends TestCase
                         'service' => [
                             'class' => ProductRepositoryInterface::class,
                             'method' => 'save',
-                        ]
+                        ],
+                        'description' => ''
                     ]
                 ]
             ]
