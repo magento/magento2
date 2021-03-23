@@ -19,7 +19,11 @@ interface CacheInterface
     public const CACHE_TAG = 'flysystem';
 
     /**
-     * Check if file data exists in cache.
+     * Check if path is cached as existing path.
+     * Returns:
+     *  - true - path exists and there is a cache record for it
+     *  - false - path is cached as non-existing in filesystem
+     *  - null - no cached record on path
      *
      * @param string $path
      * @return bool|null
@@ -88,5 +92,5 @@ interface CacheInterface
      *
      * @param string $path
      */
-    public function resetData(string $path): void;
+    public function storeFileNotExists(string $path): void;
 }

@@ -82,12 +82,7 @@ class Generic implements CacheInterface
      */
     public function updateMetadata(string $path, array $objectMetadata, bool $persist = false): void
     {
-        if ($this->exists($path) === null) {
-            $this->cacheData[$path] = $this->pathUtil->pathInfo($path);
-        }
-
-        $this->cacheData[$path] = array_merge($this->cacheData[$path], $objectMetadata);
-
+        $this->cacheData[$path] = array_merge($this->pathUtil->pathInfo($path), $objectMetadata);
         if ($persist) {
             $this->cacheAdapter->save(
                 $this->serializer->serialize([$path => $this->cacheData[$path]]),
@@ -102,7 +97,7 @@ class Generic implements CacheInterface
     /**
      * @inheritdoc
      */
-    public function resetData(string $path): void
+    public function storeFileNotExists(string $path): void
     {
         $this->cacheData[$path] = false;
         $this->cacheAdapter->save(
@@ -168,7 +163,7 @@ class Generic implements CacheInterface
      */
     public function deleteFile(string $path): void
     {
-        $this->resetData($path);
+        $this->storeFileNotExists($path);
     }
 
     /**

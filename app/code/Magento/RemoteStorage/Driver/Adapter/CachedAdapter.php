@@ -160,7 +160,7 @@ class CachedAdapter implements FilesystemAdapter
         }
 
         if (! $exists) {
-            $this->cache->resetData($path);
+            $this->cache->storeFileNotExists($path);
         } else {
             $cacheEntry = is_array($exists) ? $exists : ['path' => $path];
             $this->cache->updateMetadata($path, $cacheEntry, true);
