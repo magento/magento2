@@ -15,7 +15,7 @@
             <title value="Captcha on checkout page test"/>
             <description value="Test creation of order on storefront checkout page with captcha."/>
             <severity value="AVERAGE"/>
-            <testCaseId value="MC-41199"/>
+            <testCaseId value="MC-41461"/>
             <useCaseId value="MC-41281"/>
             <group value="captcha"/>
         </annotations>
@@ -83,8 +83,8 @@
         <actionGroup ref="FillShippingZipForm" stepKey="fillShippingZipForm">
             <argument name="address" value="US_Address_CA"/>
         </actionGroup>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
-        <waitForPageLoad stepKey="waitForProceedToCheckout"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForPageToLoad action for preserving Backward Compatibility" stepKey="waitForPageToLoad"/>
 
         <!-- Login as customer on checkout page -->
         <actionGroup ref="LoginAsCustomerOnCheckoutPageActionGroup" stepKey="customerLogin">
@@ -97,20 +97,21 @@
         </actionGroup>
 
         <!-- Click next button to open payment section -->
-        <click selector="{{CheckoutShippingGuestInfoSection.next}}" stepKey="clickNext"/>
-        <waitForPageLoad stepKey="waitForShipmentPageLoad"/>
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForShipmentPageLoad"/>
 
         <!-- Select payment method -->
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
         <click selector="{{StorefrontCheckoutPaymentMethodsSection.bankTransfer}}" stepKey="selectBankTransferMethod"/>
 
         <!-- Enter captcha value -->
-        <fillField stepKey="fillCaptchaField" userInput="{{PreconfiguredCaptcha.value}}" selector="{{StorefrontCaptchaOnOnepageCheckoutPyamentSection.captchaField}}"/>
+        <fillField userInput="{{PreconfiguredCaptcha.value}}" selector="{{StorefrontCaptchaOnOnepageCheckoutPyamentSection.captchaField}}" stepKey="fillCaptchaField" />
 
-        <!-- Check order summary in checkout -->
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderButton"/>
-        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="orderIsSuccessfullyPlaced"/>
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <!-- Place Order -->
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="customerPlaceOrder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
 
         <!-- Assert order grand total -->
         <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="navigateToCustomerDashboardPage"/>
