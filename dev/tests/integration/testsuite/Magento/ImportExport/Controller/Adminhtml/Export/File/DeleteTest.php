@@ -24,7 +24,7 @@ class DeleteTest extends AbstractBackendController
     /**
      * @var WriteInterface
      */
-    private $varDirectory;
+    protected $varDirectory;
 
     /**
      * @var string
@@ -51,7 +51,7 @@ class DeleteTest extends AbstractBackendController
         $this->fileSystem = $this->_objectManager->get(Filesystem::class);
         $this->sourceFilePath = __DIR__ . '/../../Import/_files' . DIRECTORY_SEPARATOR . $this->fileName;
         //Refers to tests 'var' directory
-        $this->varDirectory = $this->fileSystem->getDirectoryRead(DirectoryList::VAR_DIR);
+        $this->varDirectory = $this->fileSystem->getDirectoryRead(DirectoryList::VAR_IMPORT_EXPORT);
     }
 
     /**
@@ -85,7 +85,7 @@ class DeleteTest extends AbstractBackendController
      * @param $destinationFilePath
      * @return void
      */
-    private function copyFile($destinationFilePath): void
+    protected function copyFile($destinationFilePath): void
     {
         //Refers to application root directory
         $rootDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::ROOT);

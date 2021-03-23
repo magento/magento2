@@ -24,7 +24,7 @@ type ExchangeRate {
 }
 
 type Country {
-    id: String
+    id: String @doc(description: "The unique ID for a `Country` object.")
     two_letter_abbreviation: String
     three_letter_abbreviation: String
     full_name_locale: String
@@ -33,7 +33,7 @@ type Country {
 }
 
 type Region {
-    id: Int
+    id: Int @doc(description: "The unique ID for a `Region` object.")
     code: String
     name: String
 }

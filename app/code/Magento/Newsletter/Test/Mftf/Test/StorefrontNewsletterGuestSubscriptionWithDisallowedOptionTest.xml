@@ -14,6 +14,7 @@
             <stories value="Disabled Guest Newsletter Subscription"/>
             <title value="Newsletter Subscription for guest is disabled and cannot be performed"/>
             <description value="Guest cannot subscribe to Newsletter if it is disallowed in configurations"/>
+            <severity value="AVERAGE"/>
             <group value="newsletter"/>
             <group value="configuration"/>
             <testCaseId value="MC-35728"/>

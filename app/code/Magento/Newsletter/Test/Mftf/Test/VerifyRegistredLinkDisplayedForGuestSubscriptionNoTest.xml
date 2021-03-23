@@ -23,6 +23,11 @@
             <magentoCLI command="config:set newsletter/subscription/allow_guest_subscribe 0"
                         stepKey="setConfigGuestSubscriptionDisable"/>
         </before>
-        <actionGroup ref="StorefrontCreateNewSubscriberActionGroup" stepKey="createSubscriber"/>
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
+        <submitForm selector="{{BasicFrontendNewsletterFormSection.subscribeForm}}"
+                    parameterArray="['email' => '{{_defaultNewsletter.senderEmail}}']"
+                    button="{{BasicFrontendNewsletterFormSection.subscribeButton}}" stepKey="submitForm"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementVisible stepKey="waitForErrorAppears" selector="{{StorefrontMessagesSection.error}}"/>
     </test>
 </tests>

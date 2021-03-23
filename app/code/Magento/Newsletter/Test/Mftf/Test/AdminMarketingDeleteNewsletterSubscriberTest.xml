@@ -14,6 +14,7 @@
             <stories value="Subscribers Deleting"/>
             <title value="Admin deletes newsletter subscribers"/>
             <description value="Admin should be able delete newsletter subscribers"/>
+            <severity value="CRITICAL"/>
             <group value="newsletter"/>
         </annotations>
         <before>

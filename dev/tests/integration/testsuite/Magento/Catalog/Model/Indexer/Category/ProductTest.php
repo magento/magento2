@@ -184,7 +184,36 @@ class ProductTest extends TestCase
         }
     }
 
-    public function testCategoryCreate()
+
+    /**
+     * Verify that indexer still valid after deleting inactive category
+     *
+     * @magentoAppArea adminhtml
+     * @magentoDataFixture Magento/Catalog/_files/categories_disabled.php
+     *
+     * @return void
+     */
+    public function testDeleteInactiveCategory(): void
+    {
+        $this->indexer->reindexAll();
+        $isInvalidIndexer = $this->indexer->isInvalid();
+
+        $this->categoryRepository->deleteByIdentifier(8);
+
+        $state = $this->indexer->getState();
+        $state->loadByIndexer($this->indexer->getId());
+        $status = $state->getStatus();
+
+        $this->assertFalse($isInvalidIndexer);
+        $this->assertEquals(StateInterface::STATUS_VALID, $status);
+    }
+
+    /**
+     * Create category
+     *
+     * @return void
+     */
+    public function testCategoryCreate(): void
     {
         $this->testReindexAll();
         $categories = $this->getCategories(4);
@@ -242,36 +271,6 @@ class ProductTest extends TestCase
         $status = $state->getStatus();
 
         $this->assertFalse($indexerShouldBeValid);
-        $this->assertEquals(StateInterface::STATUS_INVALID, $status);
-    }
-
-    /**
-     * Test invalidate reindex after change product position on category
-     *
-     * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento/Catalog/_files/category_with_different_price_products.php
-     *
-     * @return void
-     */
-    public function testCatalogCategoryProductIndexInvalidateAfterChangeProductPosition(): void
-    {
-        $this->indexer->setScheduled(true);
-        $indexerShouldBeValid = $this->indexer->isValid();
-
-        $category = $this->getCategoryByName->execute('Category 999');
-
-        $category->setPostedProducts([
-            $this->productResource->getIdBySku('simple1000') => 1,
-            $this->productResource->getIdBySku('simple1001') => 2
-        ]);
-
-        $this->categoryResource->save($category);
-
-        $state = $this->indexer->getState();
-        $state->loadByIndexer($this->indexer->getId());
-        $status = $state->getStatus();
-
-        $this->assertTrue($indexerShouldBeValid);
         $this->assertEquals(StateInterface::STATUS_INVALID, $status);
     }
 

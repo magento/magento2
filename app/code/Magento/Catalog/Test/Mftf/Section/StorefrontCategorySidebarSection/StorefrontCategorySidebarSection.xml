@@ -14,8 +14,10 @@
         <element name="filterOption" type="text" selector=".filter-options-content .item"/>
         <element name="optionQty" type="text" selector=".filter-options-content .item .count"/>
         <element name="filterOptionByLabel" type="button" selector=" div.filter-options-item div[data-option-label='{{optionLabel}}']" parameterized="true"/>
-        <element name="removeFilter" type="button" selector="div.filter-current .remove"/>
+        <element name="removeFilter" type="button" selector="div.filter-current .remove" timeout="30"/>
         <element name="activeFilterOptions" type="text" selector=".filter-options-item.active .items"/>
         <element name="activeFilterOptionItemByPosition" type="text" selector=".filter-options-item.active .items li:nth-child({{itemPosition}}) a" parameterized="true"/>
+        <element name="enabledFilterOptionItemByLabel" type="text" selector="//div[@class='filter-options']//li[@class='item']//a[contains(text(), '{{optionLabel}}')]" parameterized="true" timeout="30"/>
+        <element name="disabledFilterOptionItemByLabel" type="text" selector="//div[@class='filter-options']//li[@class='item' and contains(text(), '{{optionLabel}}')]" parameterized="true" timeout="30"/>
     </section>
 </sections>

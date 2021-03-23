@@ -7,22 +7,23 @@
 namespace Magento\Dhl\Model;
 
 use Magento\Catalog\Model\Product\Type;
+use Magento\Dhl\Model\Validator\XmlValidator;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Async\CallbackDeferred;
+use Magento\Framework\HTTP\AsyncClient\HttpException;
 use Magento\Framework\HTTP\AsyncClient\HttpResponseDeferredInterface;
 use Magento\Framework\HTTP\AsyncClient\Request;
 use Magento\Framework\HTTP\AsyncClientInterface;
 use Magento\Framework\Module\Dir;
-use Magento\Sales\Exception\DocumentValidationException;
-use Magento\Sales\Model\Order\Shipment;
+use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
+use Magento\Sales\Exception\DocumentValidationException;
+use Magento\Sales\Model\Order\Shipment;
 use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Rate\Result\ProxyDeferredFactory;
-use Magento\Framework\Xml\Security;
-use Magento\Dhl\Model\Validator\XmlValidator;
 
 /**
  * DHL International (API v1.4)
@@ -676,6 +677,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             'H' => __('Economy select'),
             'J' => __('Jumbo box'),
             'M' => __('Express 10:30'),
+            'N' => __('Domestic express'),
             'V' => __('Europack'),
             'Y' => __('Express 12:00'),
         ];
@@ -825,10 +827,9 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                 $fullItems[] = array_fill(0, $qty, $this->_getWeight($itemWeight));
             }
         }
-        if ($fullItems) {
-            $fullItems = array_merge(...$fullItems);
-            sort($fullItems);
-        }
+
+        $fullItems = array_merge([], ...$fullItems);
+        sort($fullItems);
 
         return $fullItems;
     }
@@ -1064,8 +1065,15 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                     function () use ($deferredResponses, $responseBodies) {
                         //Loading rates not found in cache
                         foreach ($deferredResponses as $deferredResponseData) {
+                            $responseResult = null;
+                            try {
+                                $responseResult = $deferredResponseData['deferred']->get();
+                            } catch (HttpException $exception) {
+                                $this->_logger->critical($exception);
+                            }
+                            $responseBody = $responseResult ? $responseResult->getBody() : '';
                             $responseBodies[] = [
-                                'body' => $deferredResponseData['deferred']->get()->getBody(),
+                                'body' => $responseBody,
                                 'date' => $deferredResponseData['date'],
                                 'request' => $deferredResponseData['request'],
                                 'from_cache' => false
@@ -1084,7 +1092,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param string $request
      * @return string
-     * @deprecated Use asynchronous client.
+     * @deprecated 100.3.3 Use asynchronous client.
      * @see _getQuotes()
      */
     protected function _getQuotesFromServer($request)
@@ -1396,7 +1404,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param \Magento\Framework\DataObject $request
      * @return $this|\Magento\Framework\DataObject|boolean
-     * @deprecated
+     * @deprecated 100.2.3
      */
     public function proccessAdditionalValidation(\Magento\Framework\DataObject $request)
     {
@@ -1748,7 +1756,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             foreach ($package['items'] as $item) {
                 $content[] = $item['name'];
             }
-            $nodePiece->addChild('PieceContents', substr(implode(',', $content), 0, 34));
+            $nodePiece->addChild('PieceContents', $this->string->substr(implode(',', $content), 0, 34));
         }
 
         $nodeShipmentDetails->addChild('Weight', sprintf('%.3f', $rawRequest->getPackageWeight()));
@@ -1767,9 +1775,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
          */
         $nodeShipmentDetails->addChild('DoorTo', 'DD');
         $nodeShipmentDetails->addChild('DimensionUnit', substr($this->_getDimensionUnit(), 0, 1));
-        if ($package['params']['container'] == self::DHL_CONTENT_TYPE_NON_DOC) {
-            $packageType = 'CP';
-        }
+        $contentType = isset($package['params']['container']) ? $package['params']['container'] : '';
+        $packageType = $contentType === self::DHL_CONTENT_TYPE_NON_DOC ? 'CP' : 'EE';
         $nodeShipmentDetails->addChild('PackageType', $packageType);
         if ($this->isDutiable($rawRequest->getOrigCountryId(), $rawRequest->getDestCountryId())) {
             $nodeShipmentDetails->addChild('IsDutiable', 'Y');
@@ -2029,7 +2036,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $isDomestic = (string)$this->getCountryParams($destCountryCode)->getData('domestic');
 
         if (($origCountry == $destCountry && $isDomestic)
-            || ($this->_carrierHelper->isCountryInEU($origCountryCode)
+            || (
+                $this->_carrierHelper->isCountryInEU($origCountryCode)
                 && $this->_carrierHelper->isCountryInEU($destCountryCode)
             )
         ) {

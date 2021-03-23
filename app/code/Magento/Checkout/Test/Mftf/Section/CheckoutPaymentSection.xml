@@ -15,6 +15,8 @@
         <element name="billingNewAddressForm" type="text" selector="[data-form='billing-new-address']"/>
         <element name="billingAddressNotSameCheckbox" type="checkbox" selector="#billing-address-same-as-shipping-checkmo"/>
         <element name="editAddress" type="button" selector="button.action.action-edit-address"/>
+        <element name="addressDropdown" type="select" selector="[name=billing_address_id]"/>
+        <element name="addressDropdownSelected" type="select" selector="[name=billing_address_id] option:checked"/>
         <element name="placeOrderDisabled" type="button" selector="#checkout-payment-method-load button.disabled"/>
         <element name="update" type="button" selector=".payment-method._active .payment-method-billing-address .action.action-update"/>
         <element name="guestFirstName" type="input" selector=".payment-method._active .billing-address-form input[name='firstname']"/>
@@ -30,6 +32,7 @@
         <element name="cartItemsArea" type="button" selector="div.block.items-in-cart"/>
         <element name="cartItemsAreaActive" type="textarea" selector="div.block.items-in-cart.active" timeout="30"/>
         <element name="checkMoneyOrderPayment" type="radio" selector="input#checkmo.radio" timeout="30"/>
+        <element name="purchaseOrderPayment" type="radio" selector="input#purchaseorder.radio" timeout="30"/>
         <element name="placeOrder" type="button" selector=".payment-method._active button.action.primary.checkout" timeout="30"/>
         <element name="placeOrderWithoutTimeout" type="button" selector=".payment-method._active button.action.primary.checkout"/>
         <element name="paymentSectionTitle" type="text" selector="//*[@id='checkout-payment-method-load']//div[@data-role='title']" />

@@ -9,6 +9,7 @@ namespace Magento\UrlRewriteGraphQl\Model\Resolver;
 
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -37,15 +38,23 @@ class EntityUrl implements ResolverInterface
     private $redirectType;
 
     /**
+     * @var Uid
+     */
+    private $idEncoder;
+
+    /**
      * @param UrlFinderInterface $urlFinder
      * @param CustomUrlLocatorInterface $customUrlLocator
+     * @param Uid $idEncoder
      */
     public function __construct(
         UrlFinderInterface $urlFinder,
-        CustomUrlLocatorInterface $customUrlLocator
+        CustomUrlLocatorInterface $customUrlLocator,
+        Uid $idEncoder
     ) {
         $this->urlFinder = $urlFinder;
         $this->customUrlLocator = $customUrlLocator;
+        $this->idEncoder = $idEncoder;
     }
 
     /**
@@ -64,7 +73,9 @@ class EntityUrl implements ResolverInterface
 
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
         $result = null;
-        $url = $args['url'];
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $urlParts = parse_url($args['url']);
+        $url = $urlParts['path'] ?? $args['url'];
         if (substr($url, 0, 1) === '/' && $url !== '/') {
             $url = ltrim($url, '/');
         }
@@ -76,11 +87,15 @@ class EntityUrl implements ResolverInterface
             $relativeUrl = $finalUrlRewrite->getRequestPath();
             $resultArray = $this->rewriteCustomUrls($finalUrlRewrite, $storeId) ?? [
                 'id' => $finalUrlRewrite->getEntityId(),
+                'entity_uid' => $this->idEncoder->encode((string)$finalUrlRewrite->getEntityId()),
                 'canonical_url' => $relativeUrl,
                 'relative_url' => $relativeUrl,
                 'redirectCode' => $this->redirectType,
                 'type' => $this->sanitizeType($finalUrlRewrite->getEntityType())
             ];
+            if (!empty($urlParts['query'])) {
+                $resultArray['relative_url'] .= '?' . $urlParts['query'];
+            }
 
             if (empty($resultArray['id'])) {
                 throw new GraphQlNoSuchEntityException(
@@ -110,6 +125,7 @@ class EntityUrl implements ResolverInterface
                     ? $finalCustomUrlRewrite->getRequestPath() : $finalUrlRewrite->getRequestPath();
             return [
                 'id' => $finalUrlRewrite->getEntityId(),
+                'entity_uid' => $this->idEncoder->encode((string)$finalUrlRewrite->getEntityId()),
                 'canonical_url' => $relativeUrl,
                 'relative_url' => $relativeUrl,
                 'redirectCode' => $finalCustomUrlRewrite->getRedirectType(),

@@ -149,7 +149,7 @@ QUERY;
     public function testSetNewShippingAddressOnCartWithVirtualProduct()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The Cart includes virtual product(s) only, so a shipping address is not used.');
+        $this->expectExceptionMessage('Shipping address is not allowed on cart: cart contains no items for shipment.');
 
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
@@ -1949,5 +1949,18 @@ mutation {
   }
 }
 QUERY;
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoConfigFixture default_store checkout/options/guest_checkout 0
+     */
+    public function testSetNewShippingAddressAndPlaceOrderWithGuestCheckoutDisabled()
+    {
+        $this->testSetNewShippingAddressAndPlaceOrder();
     }
 }

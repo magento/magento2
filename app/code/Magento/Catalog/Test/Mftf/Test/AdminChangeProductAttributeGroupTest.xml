@@ -9,6 +9,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminChangeProductAttributeGroupTest">
         <annotations>
+            <stories value="Preserving attribute value after attribute group is changed"/>
             <title value="Preserving attribute value after attribute group is changed"/>
             <description value="Attribute value should be preserved after changing attribute group"/>
             <severity value="CRITICAL"/>

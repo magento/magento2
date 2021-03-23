@@ -41,8 +41,7 @@
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
 
         <!-- Open 3rd Level category -->
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
-        <waitForPageLoad stepKey="waitForCategoryToLoad"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createThreeLevelNestedCategories.name$$)}}" stepKey="selectCategory"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
 
@@ -53,8 +52,7 @@
         <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="updateredirecturl" stepKey="updateUrlKey"/>
         <checkOption selector="{{AdminCategorySEOSection.UrlKeyRedirectCheckbox}}" stepKey="checkPermanentRedirectCheckBox"/>
         <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="selectSearchEngineOptimization1"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveUpdatedCategory"/>
-        <waitForPageLoad stepKey="waitForCategoryToSave"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveUpdatedCategory"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
 
         <!-- Get Category ID -->
@@ -79,8 +77,8 @@
         <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Request Path')}}" userInput="$$createDefaultCategory.name$$/$$createTwoLevelNestedCategories.name$$/updateredirecturl.html" stepKey="seeTheRedirectPath"/>
 
         <!-- Verify third level category's Redirect path, Target Path and Redirect type for old URL -->
-        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickOnResetButton1"/>
-        <waitForPageLoad stepKey="waitForPageToLoad4"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickOnResetButton1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad4"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters1"/>
         <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="$$createThreeLevelNestedCategories.name$$" stepKey="fillOldUrlInRedirectPathFilter"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters1"/>

@@ -58,9 +58,7 @@
 
         <!--Select shipping method and finalize checkout-->
         <click selector="{{CheckoutShippingSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
-        <waitForElement selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
-        <waitForPageLoad stepKey="waitForShippingMethodLoad"/>
-        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
         <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
 
@@ -75,7 +73,7 @@
 			<actualResult type="const">$grabQty</actualResult>
 			<expectedResult type="const">2</expectedResult>
         </assertEquals>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
 
         <!--Check that form is filled with customer data-->
         <grabValueFrom selector="{{CheckoutShippingSection.email}}" stepKey="grabEmail1"/>

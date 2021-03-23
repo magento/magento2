@@ -9,6 +9,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -18,10 +19,21 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
  * @inheritdoc
  *
  * Format a product's media gallery information to conform to GraphQL schema representation
- * @deprecated
+ * @deprecated 100.3.3
  */
 class MediaGalleryEntries implements ResolverInterface
 {
+    /** @var Uid */
+    private $uidEncoder;
+
+    /**
+     * Uid $uidEncoder
+     */
+    public function __construct(Uid $uidEncoder)
+    {
+        $this->uidEncoder = $uidEncoder;
+    }
+
     /**
      * @inheritdoc
      *
@@ -53,6 +65,7 @@ class MediaGalleryEntries implements ResolverInterface
         if (!empty($product->getMediaGalleryEntries())) {
             foreach ($product->getMediaGalleryEntries() as $key => $entry) {
                 $mediaGalleryEntries[$key] = $entry->getData();
+                $mediaGalleryEntries[$key]['uid'] = $this->uidEncoder->encode((string) $entry->getId());
                 if ($entry->getExtensionAttributes() && $entry->getExtensionAttributes()->getVideoContent()) {
                     $mediaGalleryEntries[$key]['video_content']
                         = $entry->getExtensionAttributes()->getVideoContent()->getData();

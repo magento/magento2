@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product;
 
@@ -19,6 +18,7 @@ use Magento\Catalog\Model\Product\Option\Type\Select;
 use Magento\Catalog\Model\Product\Option\Type\Text;
 use Magento\Catalog\Model\Product\Option\Value;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection;
+use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Catalog\Pricing\Price\CalculateCustomOptionCatalogRule;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -146,7 +146,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * @param ProductCustomOptionValuesInterfaceFactory|null $customOptionValuesFactory
      * @param array $optionGroups
      * @param array $optionTypesToGroups
-     * @param CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule
+     * @param CalculateCustomOptionCatalogRule|null $calculateCustomOptionCatalogRule
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -208,7 +208,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Get resource instance
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     * @deprecated 101.1.0 because resource models should be used directly
+     * @deprecated 102.0.0 because resource models should be used directly
      */
     protected function _getResource()
     {
@@ -258,7 +258,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      *
      * @param string $type
      * @return bool
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function hasValues($type = null)
     {
@@ -474,13 +474,21 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      */
     public function getPrice($flag = false)
     {
-        if ($flag) {
-            return $this->calculateCustomOptionCatalogRule->execute(
+        if ($flag && $this->getPriceType() === self::$typePercent) {
+            $price = $this->calculateCustomOptionCatalogRule->execute(
                 $this->getProduct(),
                 (float)$this->getData(self::KEY_PRICE),
                 $this->getPriceType() === Value::TYPE_PERCENT
             );
+
+            if ($price === null) {
+                $basePrice = $this->getProduct()->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getValue();
+                $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
+            }
+
+            return $price;
         }
+
         return $this->_getData(self::KEY_PRICE);
     }
 
@@ -966,7 +974,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     private function getOptionRepository()
     {
         if (null === $this->optionRepository) {
-            $this->optionRepository = ObjectManager::getInstance()
+            $this->optionRepository = \Magento\Framework\App\ObjectManager::getInstance()
                 ->get(\Magento\Catalog\Model\Product\Option\Repository::class);
         }
         return $this->optionRepository;
@@ -980,7 +988,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     private function getMetadataPool()
     {
         if (null === $this->metadataPool) {
-            $this->metadataPool = ObjectManager::getInstance()
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
                 ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;

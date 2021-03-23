@@ -27,7 +27,8 @@ define([
             // clone address form data to new object
             var addressData = $.extend(true, {}, formData),
                 region,
-                regionName = addressData.region;
+                regionName = addressData.region,
+                customAttributes;
 
             if (mageUtils.isObject(addressData.street)) {
                 addressData.street = this.objectToArray(addressData.street);
@@ -64,10 +65,20 @@ define([
                 addressData['custom_attributes'] = _.map(
                     addressData['custom_attributes'],
                     function (value, key) {
-                        return {
+                        customAttributes = {
                             'attribute_code': key,
                             'value': value
                         };
+
+                        if (typeof value === 'boolean') {
+                            customAttributes = {
+                                'attribute_code': key,
+                                'value': value,
+                                'label': value === true ? 'Yes' : 'No'
+                            };
+                        }
+
+                        return customAttributes;
                     }
                 );
             }
@@ -84,7 +95,8 @@ define([
         quoteAddressToFormAddressData: function (addrs) {
             var self = this,
                 output = {},
-                streetObject;
+                streetObject,
+                customAttributesObject;
 
             $.each(addrs, function (key) {
                 if (addrs.hasOwnProperty(key) && !$.isFunction(addrs[key])) {
@@ -99,6 +111,16 @@ define([
                 });
                 output.street = streetObject;
             }
+
+            //jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+            if ($.isArray(addrs.customAttributes)) {
+                customAttributesObject = {};
+                addrs.customAttributes.forEach(function (value) {
+                    customAttributesObject[value.attribute_code] = value.value;
+                });
+                output.custom_attributes = customAttributesObject;
+            }
+            //jscs:enable requireCamelCaseOrUpperCaseIdentifiers
 
             return output;
         },

@@ -6,10 +6,24 @@
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
+use Magento\CatalogSearch\Model\ResourceModel\EngineInterface;
+use Magento\CatalogSearch\Model\ResourceModel\EngineProvider;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DataObject;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\EntityMetadata;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Zend_Db;
 
 /**
  * Catalog search full test search data provider.
@@ -24,7 +38,7 @@ class DataProvider
     /**
      * Searchable attributes cache
      *
-     * @var \Magento\Eav\Model\Entity\Attribute[]
+     * @var Attribute[]
      */
     private $searchableAttributes;
 
@@ -50,40 +64,40 @@ class DataProvider
     private $productEmulators = [];
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
+     * @var CollectionFactory
      */
     private $productAttributeCollectionFactory;
 
     /**
      * Eav config
      *
-     * @var \Magento\Eav\Model\Config
+     * @var Config
      */
     private $eavConfig;
 
     /**
      * Catalog product type
      *
-     * @var \Magento\Catalog\Model\Product\Type
+     * @var Type
      */
     private $catalogProductType;
 
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
     private $eventManager;
 
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     private $storeManager;
 
     /**
-     * @var \Magento\CatalogSearch\Model\ResourceModel\EngineInterface
+     * @var EngineInterface
      */
     private $engine;
 
@@ -93,12 +107,12 @@ class DataProvider
     private $resource;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @var AdapterInterface
      */
     private $connection;
 
     /**
-     * @var \Magento\Framework\EntityManager\EntityMetadata
+     * @var EntityMetadata
      */
     private $metadata;
 
@@ -126,24 +140,24 @@ class DataProvider
 
     /**
      * @param ResourceConnection $resource
-     * @param \Magento\Catalog\Model\Product\Type $catalogProductType
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttributeCollectionFactory
-     * @param \Magento\CatalogSearch\Model\ResourceModel\EngineProvider $engineProvider
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
+     * @param Type $catalogProductType
+     * @param Config $eavConfig
+     * @param CollectionFactory $prodAttributeCollectionFactory
+     * @param EngineProvider $engineProvider
+     * @param ManagerInterface $eventManager
+     * @param StoreManagerInterface $storeManager
+     * @param MetadataPool $metadataPool
      * @param int $antiGapMultiplier
      */
     public function __construct(
         ResourceConnection $resource,
-        \Magento\Catalog\Model\Product\Type $catalogProductType,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttributeCollectionFactory,
-        \Magento\CatalogSearch\Model\ResourceModel\EngineProvider $engineProvider,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
+        Type $catalogProductType,
+        Config $eavConfig,
+        CollectionFactory $prodAttributeCollectionFactory,
+        EngineProvider $engineProvider,
+        ManagerInterface $eventManager,
+        StoreManagerInterface $storeManager,
+        MetadataPool $metadataPool,
         int $antiGapMultiplier = 5
     ) {
         $this->resource = $resource;
@@ -224,7 +238,7 @@ class DataProvider
         $batch
     ) {
         $websiteId = (int)$this->storeManager->getStore($storeId)->getWebsiteId();
-        $lastProductId = (int) $lastProductId;
+        $lastProductId = (int)$lastProductId;
 
         $select = $this->connection->select()
             ->useStraightJoin(true)
@@ -242,7 +256,7 @@ class DataProvider
         $this->joinAttribute($select, 'status', $storeId, [Status::STATUS_ENABLED]);
 
         if ($productIds !== null) {
-            $select->where('e.entity_id IN (?)', $productIds);
+            $select->where('e.entity_id IN (?)', $productIds, Zend_Db::INT_TYPE);
         }
         $select->where('e.entity_id > ?', $lastProductId);
         $select->order('e.entity_id');
@@ -308,14 +322,17 @@ class DataProvider
      */
     public function getSearchableAttributes($backendType = null)
     {
+        /** TODO: Remove this block in the next minor release and add a new public method instead */
+        if ($this->eavConfig->getEntityType(Product::ENTITY)->getNeedRefreshSearchAttributesList()) {
+            $this->clearSearchableAttributesList();
+        }
         if (null === $this->searchableAttributes) {
             $this->searchableAttributes = [];
 
-            /** @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection $productAttributes */
             $productAttributes = $this->productAttributeCollectionFactory->create();
             $productAttributes->addToIndexFilter(true);
 
-            /** @var \Magento\Eav\Model\Entity\Attribute[] $attributes */
+            /** @var Attribute[] $attributes */
             $attributes = $productAttributes->getItems();
 
             /** @deprecated */
@@ -329,7 +346,7 @@ class DataProvider
                 ['engine' => $this->engine, 'attributes' => $attributes]
             );
 
-            $entity = $this->eavConfig->getEntityType(\Magento\Catalog\Model\Product::ENTITY)->getEntity();
+            $entity = $this->eavConfig->getEntityType(Product::ENTITY)->getEntity();
 
             foreach ($attributes as $attribute) {
                 $attribute->setEntity($entity);
@@ -356,6 +373,18 @@ class DataProvider
     }
 
     /**
+     * Remove searchable attributes list.
+     *
+     * @return void
+     */
+    private function clearSearchableAttributesList(): void
+    {
+        $this->searchableAttributes = null;
+        $this->searchableAttributesByBackendType = [];
+        $this->eavConfig->getEntityType(Product::ENTITY)->unsNeedRefreshSearchAttributesList();
+    }
+
+    /**
      * Retrieve searchable attribute by Id or code
      *
      * @param int|string $attribute
@@ -369,7 +398,7 @@ class DataProvider
             return $attributes[$attribute];
         }
 
-        return $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attribute);
+        return $this->eavConfig->getAttribute(Product::ENTITY, $attribute);
     }
 
     /**
@@ -386,6 +415,7 @@ class DataProvider
         } else {
             $expr = $field;
         }
+
         return $expr;
     }
 
@@ -410,7 +440,8 @@ class DataProvider
                 [$linkField, 'entity_id']
             )->where(
                 'cpe.entity_id IN (?)',
-                $productIds
+                $productIds,
+                Zend_Db::INT_TYPE
             )
         );
         foreach ($attributeTypes as $backendType => $attributeIds) {
@@ -478,6 +509,7 @@ class DataProvider
 
             $this->productTypes[$typeId] = $this->catalogProductType->factory($productEmulator);
         }
+
         return $this->productTypes[$typeId];
     }
 
@@ -512,6 +544,7 @@ class DataProvider
             if ($relation->getWhere() !== null) {
                 $select->where($relation->getWhere());
             }
+
             return $this->connection->fetchCol($select);
         }
 
@@ -527,10 +560,11 @@ class DataProvider
     private function getProductEmulator($typeId)
     {
         if (!isset($this->productEmulators[$typeId])) {
-            $productEmulator = new \Magento\Framework\DataObject();
+            $productEmulator = new DataObject();
             $productEmulator->setTypeId($typeId);
             $this->productEmulators[$typeId] = $productEmulator;
         }
+
         return $this->productEmulators[$typeId];
     }
 
@@ -572,7 +606,7 @@ class DataProvider
         foreach ($indexData as $entityId => $attributeData) {
             foreach ($attributeData as $attributeId => $attributeValues) {
                 $value = $this->getAttributeValue($attributeId, $attributeValues, $storeId);
-                if ($value !== null && $value !== false && $value != '') {
+                if ($value !== null && $value !== false && $value !== '') {
                     if (!isset($index[$attributeId])) {
                         $index[$attributeId] = [];
                     }
@@ -659,6 +693,7 @@ class DataProvider
                 $attributeOptionValue .= $this->attributeOptions[$optionKey][$attrValueId] . ' ';
             }
         }
+
         return empty($attributeOptionValue) ? null : trim($attributeOptionValue);
     }
 

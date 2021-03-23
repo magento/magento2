@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckingPaymentMethodRadioButtonPresentAfterReloadOrderPageTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Create order in Admin"/>
+            <title value="Checking payment method radio button is presented after reloading the order page"/>
+            <description value="Checking payment method radio button is presented after reloading the order page"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-40878"/>
+            <useCaseId value="MC-40013"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <!-- Enable Check/Money order payment method -->
+            <magentoCLI command="config:set {{EnablePaymentCheckMOConfigData.path}} {{EnablePaymentCheckMOConfigData.value}}" stepKey="enableCheckMoneyOrderPayment"/>
+            <!-- Enable Bank Transfer Payment method -->
+            <magentoCLI command="config:set {{EnablePaymentBankTransferConfigData.path}} {{EnablePaymentBankTransferConfigData.value}}" stepKey="enableBankTransferPayment"/>
+            <!-- Create simple product  -->
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!-- Login to Admin page -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Disable Bank Transfer Payment method -->
+            <magentoCLI command="config:set {{DisablePaymentBankTransferConfigData.path}} {{DisablePaymentBankTransferConfigData.value}}" stepKey="disableBankTransferPayment"/>
+            <!-- Delete entities -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Logout from Admin page -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Create new order -->
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$createCustomer$"/>
+        </actionGroup>
+
+        <!-- Add Simple product to order -->
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToTheOrder">
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+
+        <!-- Assert label with radio button presents on the page -->
+        <actionGroup ref="AssertAdminPaymentMethodRadioButtonExistsOnCreateOrderPageActionGroup" stepKey="assertCheckMORadioButtonIsPresent"/>
+        <actionGroup ref="AssertAdminPaymentMethodRadioButtonExistsOnCreateOrderPageActionGroup" stepKey="assertBankTransferRadioButtonIsPresent">
+            <argument name="paymentMethodName" value="Bank Transfer Payment"/>
+        </actionGroup>
+
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
+
+        <!-- Assert label with radio button presents after reload the page -->
+        <actionGroup ref="AssertAdminPaymentMethodRadioButtonExistsOnCreateOrderPageActionGroup" stepKey="assertCheckMORadioButtonIsPresentAfterReload"/>
+        <actionGroup ref="AssertAdminPaymentMethodRadioButtonExistsOnCreateOrderPageActionGroup" stepKey="assertBankTransferRadioButtonIsPresentAfterReload">
+            <argument name="paymentMethodName" value="Bank Transfer Payment"/>
+        </actionGroup>
+    </test>
+</tests>

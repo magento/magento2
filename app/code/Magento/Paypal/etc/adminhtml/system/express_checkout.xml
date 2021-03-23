@@ -13,7 +13,7 @@
         <comment>Add PayPal as an additional payment method to your checkout page.</comment>
         <attribute type="activity_path">payment/paypal_express/active</attribute>
         <group id="configuration_details" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
-            <comment>https://docs.magento.com/m2/ce/user_guide/payment/paypal-express-checkout.html</comment>
+            <comment>https://docs.magento.com/user-guide/payment/paypal-express-checkout.html</comment>
             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
         </group>
         <group id="express_checkout_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
@@ -623,7 +623,7 @@
                         <label>Header Image URL</label>
                         <config_path>paypal/style/paypal_hdrimg</config_path>
                         <tooltip>
-                            <![CDATA[The image at the top left of the checkout page. Max size is 750x90-pixel. <strong style="color:red">https</strong> is highly encouraged.]]>
+                            <![CDATA[The image at the top left of the checkout page. Max size is 750x90-pixel. <strong class="colorRed">https</strong> is highly encouraged.]]>
                         </tooltip>
                         <attribute type="shared">1</attribute>
                     </field>
