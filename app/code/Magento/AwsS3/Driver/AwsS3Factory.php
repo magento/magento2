@@ -103,7 +103,7 @@ class AwsS3Factory implements DriverFactoryInterface
                     'adapter' => $adapter,
                     'cache' => $cache
                 ]),
-                'objectUrl' => $client->getObjectUrl($config['bucket'], '.'),
+                'objectUrl' => $client->getObjectUrl($config['bucket'], trim($prefix, '\\/') . '/.'),
                 'metadataProvider' => $this->metadataProviderFactory->create($adapter, $cache),
             ]
         );
