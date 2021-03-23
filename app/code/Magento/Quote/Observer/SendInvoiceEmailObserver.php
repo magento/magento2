@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Observer;
 
 use Magento\Framework\Event\Observer;
@@ -76,7 +78,7 @@ class SendInvoiceEmailObserver implements ObserverInterface
                 if ($invoice) {
                     $this->invoiceSender->send($invoice);
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->logger->critical($e);
             }
         }
