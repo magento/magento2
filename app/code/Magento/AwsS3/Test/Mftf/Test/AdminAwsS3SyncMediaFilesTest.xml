@@ -82,10 +82,10 @@
         <magentoCLI command="remote-storage:sync" timeout="120" stepKey="syncRemoteStorage"/>
 
         <!-- Verify Images Are in AWS S3 -->
-        <helper class="\Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileExists" stepKey="assertS3Image1Exists">
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileExists" stepKey="assertS3Image1Exists">
             <argument name="filePath">media/catalog/product/{$firstCharacterImage1FileName}/{$secondCharacterImage1FileName}/$createProductImage1.entry[content][name]$</argument>
         </helper>
-        <helper class="\Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileExists" stepKey="assertS3Image2Exists">
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileExists" stepKey="assertS3Image2Exists">
             <argument name="filePath">media/catalog/product/{$firstCharacterImage2FileName}/{$secondCharacterImage2FileName}/$createProductImage2.entry[content][name]$</argument>
         </helper>
         <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertDirectoryNotEmpty" stepKey="assertS3CacheDirectoryNotEmpty">
@@ -134,7 +134,7 @@
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertPathDoesNotExist" stepKey="assertLocalImage2IsDeleted">
             <argument name="path">pub/media/catalog/product/{$firstCharacterImage2FileName}/{$secondCharacterImage2FileName}/$createProductImage2.entry[content][name]$</argument>
         </helper>
-        <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteLocalCacheDirectory">
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteLocalCacheDirectory">
             <argument name="path">pub/media/catalog/product/cache/</argument>
         </helper>
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertPathDoesNotExist" stepKey="assertLocalCacheDirectoryDeleted">
@@ -161,13 +161,15 @@
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertPathDoesNotExist" stepKey="assertLocalCacheDirectoryDeleted2">
             <argument name="path">pub/media/catalog/product/cache/</argument>
         </helper>
+
+        <!-- Open Product on Storefront, Assert S3 Images Get Cached Images Exist, Assert Local File System Images Are Still Non-Existent -->
         <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductOnStorefront3">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
-        <helper class="\Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileExists" stepKey="assertS3Image1Exists2">
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileExists" stepKey="assertS3Image1Exists2">
             <argument name="filePath">media/catalog/product/{$firstCharacterImage1FileName}/{$secondCharacterImage1FileName}/$createProductImage1.entry[content][name]$</argument>
         </helper>
-        <helper class="\Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileExists" stepKey="assertS3Image2Exists2">
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileExists" stepKey="assertS3Image2Exists2">
             <argument name="filePath">media/catalog/product/{$firstCharacterImage2FileName}/{$secondCharacterImage2FileName}/$createProductImage2.entry[content][name]$</argument>
         </helper>
         <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertDirectoryNotEmpty" stepKey="assertS3CacheDirectoryNotEmpty2">
@@ -182,6 +184,8 @@
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertPathDoesNotExist" stepKey="assertLocalCacheDirectoryGone">
             <argument name="path">pub/media/catalog/product/cache/</argument>
         </helper>
+
+        <!-- Verify Product Images Render Correctly When Images Initially Only Exist in S3 -->
         <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageActive($createProductImage2.entry[content][name]$)}}" stepKey="seeFirstImage3"/>
         <grabAttributeFrom userInput="src" selector="{{StorefrontProductMediaSection.productImageActive($createProductImage2.entry[content][name]$)}}" stepKey="firstImageSrc3"/>
         <helper class="Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertImageContentIsEqual" stepKey="assertFirstImageContent3">
