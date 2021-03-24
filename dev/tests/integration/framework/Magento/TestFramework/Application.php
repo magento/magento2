@@ -173,7 +173,7 @@ class Application
      * @param string $appMode
      * @param AutoloaderInterface $autoloadWrapper
      * @param bool|null $loadTestExtensionAttributes
-     * @param string|null $postInstallSetupConfigFile
+     * @param string|null $postInstallSetupCommandsFile
      */
     public function __construct(
         \Magento\Framework\Shell $shell,
@@ -184,7 +184,7 @@ class Application
         $appMode,
         AutoloaderInterface $autoloadWrapper,
         $loadTestExtensionAttributes = false,
-        $postInstallSetupConfigFile = null
+        $postInstallSetupCommandsFile = null
     ) {
         if (getcwd() != BP . '/dev/tests/integration') {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
@@ -192,7 +192,7 @@ class Application
         }
         $this->_shell = $shell;
         $this->installConfigFile = $installConfigFile;
-        $this->postInstallSetupCommandsFile = $postInstallSetupConfigFile;
+        $this->postInstallSetupCommandsFile = $postInstallSetupCommandsFile;
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $this->_globalConfigDir = realpath($globalConfigDir);
         $this->_appMode = $appMode;
@@ -589,7 +589,7 @@ class Application
                 // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 array_merge(
                     [BP . '/bin/magento'],
-                    [escapeshellcmd($command)],
+                    [$command],
                     $argumentsAndOptions
                 ),
             );

@@ -56,9 +56,6 @@ try {
     }
 
     $postInstallSetupConfigFile = $settings->getAsConfigFile('TESTS_POST_INSTALL_SETUP_COMMAND_CONFIG_FILE');
-    if (!file_exists($postInstallSetupConfigFile)) {
-        $postInstallSetupConfigFile .= '.dist';
-    }
 
     $globalConfigFile = $settings->getAsConfigFile('TESTS_GLOBAL_CONFIG_FILE');
     // phpcs:ignore Magento2.Functions.DiscouragedFunction
