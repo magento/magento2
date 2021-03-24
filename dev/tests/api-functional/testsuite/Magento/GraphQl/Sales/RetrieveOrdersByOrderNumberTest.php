@@ -438,15 +438,16 @@ QUERY;
         );
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
-        $actualOrdersFromResponse = $response['customer']['orders']['items'];
+        $customerOrderItemsInResponse = $response['customer']['orders']['items'];
         $expectedOrderNumbers = ['100000008', '100000007','100000006', '100000005', '100000004','100000002'];
 
 
         foreach ($expectedOrderNumbers as $key => $data) {
+            $orderItemInResponse = $customerOrderItemsInResponse[$key];
             $this->assertEquals(
-                $actualOrdersFromResponse['order_number'],
+                $orderItemInResponse['number'],
                 $expectedOrderNumbers[$key],
-                "order_number is different than the expected for order - " . $actualOrdersFromResponse['order_number']
+                "The order number is different than the expected for order - " . $orderItemInResponse['number']
             );
         }
     }
