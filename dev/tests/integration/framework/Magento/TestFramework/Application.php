@@ -50,11 +50,25 @@ class Application
     private $installConfigFile;
 
     /**
+     * Configuration file that contains array of post-installation commands to run through bin/magento CLI tool.
+     *
+     * @var string|null
+     */
+    private $postInstallSetupCommandsFile;
+
+    /**
      * The loaded installation parameters.
      *
      * @var array
      */
     protected $installConfig;
+
+    /**
+     * The loaded post-installation commands.
+     *
+     * @var array
+     */
+    private $postInstallSetupCommands;
 
     /**
      * Application *.xml configuration files.
@@ -159,6 +173,7 @@ class Application
      * @param string $appMode
      * @param AutoloaderInterface $autoloadWrapper
      * @param bool|null $loadTestExtensionAttributes
+     * @param string|null $postInstallSetupConfigFile
      */
     public function __construct(
         \Magento\Framework\Shell $shell,
@@ -168,7 +183,8 @@ class Application
         $globalConfigDir,
         $appMode,
         AutoloaderInterface $autoloadWrapper,
-        $loadTestExtensionAttributes = false
+        $loadTestExtensionAttributes = false,
+        $postInstallSetupConfigFile = null
     ) {
         if (getcwd() != BP . '/dev/tests/integration') {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
@@ -176,6 +192,7 @@ class Application
         }
         $this->_shell = $shell;
         $this->installConfigFile = $installConfigFile;
+        $this->postInstallSetupCommandsFile = $postInstallSetupConfigFile;
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $this->_globalConfigDir = realpath($globalConfigDir);
         $this->_appMode = $appMode;
@@ -260,6 +277,22 @@ class Application
             $this->installConfig = include $this->installConfigFile;
         }
         return $this->installConfig;
+    }
+
+    /**
+     * Gets post-installation commands.
+     *
+     * @return array
+     */
+    protected function getPostInstallSetupCommands()
+    {
+        if (null === $this->postInstallSetupCommandsFile) {
+            $this->postInstallSetupCommands = [];
+        } elseif (null === $this->postInstallSetupCommands) {
+            // phpcs:ignore Magento2.Security.IncludeFile
+            $this->postInstallSetupCommands = include $this->postInstallSetupCommandsFile;
+        }
+        return $this->postInstallSetupCommands;
     }
 
     /**
@@ -524,6 +557,43 @@ class Application
             PHP_BINARY . ' -f %s setup:install -vvv ' . implode(' ', array_keys($installParams)),
             array_merge([BP . '/bin/magento'], array_values($installParams))
         );
+
+        // run post-install setup commands
+        $postInstallSetupCommands = $this->getPostInstallSetupCommands();
+
+        foreach ($postInstallSetupCommands as $postInstallSetupCommand) {
+            if (isset($postInstallSetupCommand['host']) && strpos($postInstallSetupCommand['host'], '{{') === 0) {
+                continue;
+            }
+
+            $command = $postInstallSetupCommand['command'];
+            $argumentsAndOptions = array_diff_key($postInstallSetupCommand, array_flip(['command']));
+
+            $argumentsAndOptionsPlaceholders = [];
+
+            foreach (array_keys($argumentsAndOptions) as $key) {
+                $isArgument = is_numeric($key);
+
+                if ($isArgument) {
+                    $argumentsAndOptionsPlaceholders[] = '%s';
+                } else {
+                    $argumentsAndOptionsPlaceholders[] = "--$key=%s";
+                }
+            }
+
+            $argumentsAndOptionsPlaceholders[] = "--magento-init-params=%s";
+            $argumentsAndOptions[] = $this->getInitParamsQuery();
+
+            $this->_shell->execute(
+                PHP_BINARY . ' -f %s %s -vvv ' . implode(' ', array_values($argumentsAndOptionsPlaceholders)),
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+                array_merge(
+                    [BP . '/bin/magento'],
+                    [escapeshellcmd($command)],
+                    $argumentsAndOptions
+                ),
+            );
+        }
 
         // enable only specified list of caches
         $initParamsQuery = $this->getInitParamsQuery();

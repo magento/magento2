@@ -1,0 +1,16 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// List of bin/magento CLI commands to run after setup:install
+return [
+    /*
+    [
+        'command' => 'maintenance:allow-ips',
+        '127.0.0.1',
+        'add' => true,
+    ]
+    */
+];
