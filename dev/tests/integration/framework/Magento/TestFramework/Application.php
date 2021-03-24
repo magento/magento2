@@ -167,7 +167,7 @@ class Application
      *
      * @param \Magento\Framework\Shell $shell
      * @param string $installDir
-     * @param array $installConfigFile
+     * @param string $installConfigFile
      * @param string $globalConfigFile
      * @param string $globalConfigDir
      * @param string $appMode
