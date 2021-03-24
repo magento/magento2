@@ -407,6 +407,53 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Sales/_files/orders_with_customer.php
+     */
+    public function testGetCustomerOrdersWithChangedDirect()
+    {
+        $query =
+            <<<QUERY
+{
+  customer
+  {
+   orders(changeSortDirection:true){
+    items
+    {
+      id
+      number
+      status
+      order_date
+    }
+   }
+ }
+}
+QUERY;
+
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
+        $this->assertArrayHasKey('orders', $response['customer']);
+        $this->assertArrayHasKey('items', $response['customer']['orders']);
+        $actualOrdersFromResponse = $response['customer']['orders']['items'];
+        $expectedOrderNumbers = ['100000008', '100000007','100000006', '100000005', '100000004','100000002'];
+
+
+        foreach ($expectedOrderNumbers as $key => $data) {
+            $this->assertEquals(
+                $actualOrdersFromResponse['order_number'],
+                $expectedOrderNumbers[$key],
+                "order_number is different than the expected for order - " . $actualOrdersFromResponse['order_number']
+            );
+        }
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Sales/_files/orders_with_customer.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testGetMultipleCustomerOrdersQueryWithDefaultPagination()
