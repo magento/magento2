@@ -137,7 +137,7 @@ class CustomerOrders implements ResolverInterface
         if (isset($args['pageSize'])) {
             $this->searchCriteriaBuilder->setPageSize($args['pageSize']);
         }
-        if ($args['changeSortDirection']) {
+        if (isset($args['changeSortDirection']) && $args['changeSortDirection']) {
             $this->addSortOrder($this->searchCriteriaBuilder);
         }
         return $this->orderRepository->getList($this->searchCriteriaBuilder->create());
