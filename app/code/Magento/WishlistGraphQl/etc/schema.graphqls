@@ -35,7 +35,7 @@ type Wishlist {
 }
 
 interface WishlistItemInterface @typeResolver(class: "Magento\\WishlistGraphQl\\Model\\Resolver\\Type\\WishlistItemType") {
-    id: ID!  @doc(description: "The unique ID for a `WishlistItemInterface` object")
+    id: ID! @doc(description: "The unique ID for a `WishlistItemInterface` object")
     quantity: Float!  @doc(description: "The quantity of this wish list item")
     description: String  @doc(description: "The description of the item")
     added_at: String!  @doc(description: "The date and time the item was added to the wish list")
@@ -60,6 +60,30 @@ type Mutation {
     addProductsToWishlist(wishlistId: ID!, wishlistItems: [WishlistItemInput!]!): AddProductsToWishlistOutput @doc(description: "Adds one or more products to the specified wish list. This mutation supports all product types") @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\AddProductsToWishlist")
     removeProductsFromWishlist(wishlistId: ID!, wishlistItemsIds: [ID!]!): RemoveProductsFromWishlistOutput @doc(description: "Removes one or more products from the specified wish list") @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\RemoveProductsFromWishlist")
     updateProductsInWishlist(wishlistId: ID!, wishlistItems: [WishlistItemUpdateInput!]!): UpdateProductsInWishlistOutput  @doc(description: "Updates one or more products in the specified wish list") @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\UpdateProductsInWishlist")
+    addWishlistItemsToCart(
+        wishlistId: ID!, @doc(description: "The unique ID of the wish list")
+        wishlistItemIds: [ID!] @doc(description: "An array of IDs representing products to be added to the cart. If no IDs are specified, all items in the wishlist will be added to the cart")
+    ): AddWishlistItemsToCartOutput @resolver(class: "Magento\\WishlistGraphQl\\Model\\Resolver\\Wishlist\\AddToCart") @doc(description: "Add items in the specified wishlist to the customer's cart")
+}
+
+type AddWishlistItemsToCartOutput {
+    wishlist: Wishlist! @doc(description: "Contains the wish list with all items that were successfully added")
+    status: Boolean! @doc(description: "Indicates whether the attempt to add items to the customer's cart was successful")
+    add_wishlist_items_to_cart_user_errors: [WishlistCartUserInputError!]! @doc(description: "An array of errors encountered while adding products to the customer's cart")
+}
+
+type WishlistCartUserInputError {
+    message: String! @doc(description: "A localized error message")
+    code: WishlistCartUserInputErrorType! @doc(description: "An error code that describes the error encountered")
+    wishlistId: ID! @doc(description: "The unique ID of the `Wishlist` object containing an error")
+    wishlistItemId: ID! @doc(description: "The unique ID of the wish list item containing an error")
+}
+
+enum WishlistCartUserInputErrorType {
+    PRODUCT_NOT_FOUND
+    NOT_SALABLE
+    INSUFFICIENT_STOCK
+    UNDEFINED
 }
 
 input WishlistItemInput @doc(description: "Defines the items to add to a wish list") {
