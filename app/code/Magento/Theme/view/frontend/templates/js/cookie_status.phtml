@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 /**
- * @var Magento\Framework\View\Element\Template $this
+ * @var Magento\Framework\View\Element\Template $block
  */
 ?>
 
-<div id="cookie-status">
-    <?= $this->escapeHtml(__('The store will not work correctly in the case when cookies are disabled.')); ?>
+<div class="cookie-status-message" id="cookie-status">
+    <?= $block->escapeHtml(__('The store will not work correctly in the case when cookies are disabled.')); ?>
 </div>
 <script type="text/x-magento-init">
     {
