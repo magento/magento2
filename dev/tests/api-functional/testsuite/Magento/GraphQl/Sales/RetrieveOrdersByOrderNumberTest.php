@@ -76,6 +76,7 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
             'quantity_ordered'=> 2,
             'product_sku'=> 'simple',
             'product_name'=> 'Simple Product',
+            'parent_sku' => null,
             'product_sale_price'=> ['currency'=> 'USD', 'value'=> 10]
         ];
         $actualOrderItemsFromResponse = $customerOrderItemsInResponse['items'][0];
@@ -1321,6 +1322,7 @@ QUERY;
         quantity_ordered
         product_sku
         product_name
+        parent_sku
         product_sale_price{currency value}
       }
       total {
