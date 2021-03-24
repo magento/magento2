@@ -22,6 +22,7 @@
     <preference for="Magento\Customer\Api\Data\AttributeMetadataInterface"
                 type="Magento\Customer\Model\Data\AttributeMetadata" />
     <preference for="Magento\Customer\Api\Data\GroupInterface" type="Magento\Customer\Model\Data\Group" />
+    <preference for="Magento\Customer\Api\Data\GroupExcludedWebsiteInterface" type="Magento\Customer\Model\Data\GroupExcludedWebsite" />
     <preference for="Magento\Customer\Api\Data\OptionInterface" type="Magento\Customer\Model\Data\Option" />
     <preference for="Magento\Customer\Api\Data\ValidationRuleInterface"
                 type="Magento\Customer\Model\Data\ValidationRule" />
@@ -62,6 +63,8 @@
     <preference for="Magento\Customer\Model\Group\RetrieverInterface"
                 type="Magento\Customer\Model\Group\Retriever"/>
     <preference for="Magento\Customer\Api\SessionCleanerInterface" type="Magento\Customer\Model\Session\SessionCleaner"/>
+    <preference for="Magento\Customer\Api\GroupExcludedWebsiteRepositoryInterface"
+                type="Magento\Customer\Model\ResourceModel\GroupExcludedWebsiteRepository" />
     <type name="Magento\Customer\Model\Session">
         <arguments>
             <argument name="configShare" xsi:type="object">Magento\Customer\Model\Config\Share\Proxy</argument>
@@ -542,5 +545,11 @@
                 </item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Customer\Api\GroupRepositoryInterface">
+        <plugin name="saveCustomerGroupExcludedWebsite" type="Magento\Customer\Model\Plugin\SaveCustomerGroupExcludedWebsite"/>
+        <plugin name="deleteCustomerGroupExcludedWebsite" type="Magento\Customer\Model\Plugin\DeleteCustomerGroupExcludedWebsite"/>
+        <plugin name="getByIdCustomerGroupExcludedWebsite" type="Magento\Customer\Model\Plugin\GetByIdCustomerGroupExcludedWebsite"/>
+        <plugin name="getListCustomerGroupExcludedWebsite" type="Magento\Customer\Model\Plugin\GetListCustomerGroupExcludedWebsite"/>
     </type>
 </config>
