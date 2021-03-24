@@ -207,7 +207,7 @@ class LocalFileAssertions extends Helper
     public function assertFileNotEmpty($filePath, $message = ''): void
     {
         $realPath = $this->expandPath($filePath);
-        $this->assertNotEmpty($this->driver->fileGetContents($realPath), "Failed asserting $filePath is empty. " . $message);
+        $this->assertNotEmpty($this->driver->fileGetContents($realPath), "Failed asserting $filePath is not empty. " . $message);
     }
 
     /**

@@ -217,7 +217,7 @@ class S3FileAssertions extends Helper
      */
     public function assertFileNotEmpty($filePath, $message = ''): void
     {
-        $this->assertNotEmpty($this->driver->fileGetContents($filePath), "Failed asserting $filePath is empty. " . $message);
+        $this->assertNotEmpty($this->driver->fileGetContents($filePath), "Failed asserting $filePath is not empty. " . $message);
     }
 
     /**
