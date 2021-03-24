@@ -11,7 +11,7 @@ namespace Magento\Analytics\Model\Config\Source;
  * Prepares and provides options for a selector of verticals which is located
  * in the corresponding configuration menu of the Admin area.
  */
-class Vertical implements \Magento\Framework\Option\ArrayInterface
+class Vertical implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * The list of possible verticals.

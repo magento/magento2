@@ -12,7 +12,6 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\Route\ConfigInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\Session\Generic;
-use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url;
 use Magento\Framework\Url\HostChecker;
@@ -62,11 +61,6 @@ class UrlTest extends TestCase
     protected $queryParamsResolverMock;
 
     /**
-     * @var SidResolverInterface|MockObject
-     */
-    protected $sidResolverMock;
-
-    /**
      * @var Generic|MockObject
      */
     protected $sessionMock;
@@ -113,7 +107,6 @@ class UrlTest extends TestCase
         $this->scopeResolverMock = $this->getMockForAbstractClass(ScopeResolverInterface::class);
         $this->scopeMock = $this->getMockForAbstractClass(ScopeInterface::class);
         $this->queryParamsResolverMock = $this->getMockForAbstractClass(QueryParamsResolverInterface::class);
-        $this->sidResolverMock = $this->getMockForAbstractClass(SidResolverInterface::class);
         $this->sessionMock = $this->createMock(Generic::class);
         $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
@@ -457,7 +450,6 @@ class UrlTest extends TestCase
         $model = $this->getUrlModel([
             'session' => $this->sessionMock,
             'request' => $requestMock,
-            'sidResolver' => $this->sidResolverMock,
             'scopeResolver' => $this->scopeResolverMock,
             'routeParamsResolverFactory' => $this->getRouteParamsResolverFactory(false),
             'queryParamsResolver' => $this->queryParamsResolverMock,
@@ -475,17 +467,13 @@ class UrlTest extends TestCase
             [
                 'routeParamsResolverFactory' => $this->getRouteParamsResolverFactory(),
                 'session' => $this->sessionMock,
-                'sidResolver' => $this->sidResolverMock,
                 'queryParamsResolver' => $this->queryParamsResolverMock,
             ]
         );
 
-        $this->sidResolverMock->expects($this->any())->method('getUseSessionInUrl')->willReturn(true);
         $this->sessionMock->expects($this->any())->method('getSessionIdForHost')->willReturn(false);
-        $this->sidResolverMock->expects($this->any())->method('getUseSessionVar')->willReturn(true);
         $this->routeParamsResolverMock->expects($this->any())->method('hasData')->with('secure_is_forced')
             ->willReturn(true);
-        $this->sidResolverMock->expects($this->never())->method('getSessionIdQueryParam');
         $this->queryParamsResolverMock->expects($this->once())
             ->method('getQuery')
             ->willReturn('foo=bar');
@@ -499,16 +487,11 @@ class UrlTest extends TestCase
             [
                 'routeParamsResolverFactory' => $this->getRouteParamsResolverFactory(false),
                 'session' => $this->sessionMock,
-                'sidResolver' => $this->sidResolverMock,
                 'queryParamsResolver' => $this->queryParamsResolverMock,
             ]
         );
-
-        $this->sidResolverMock->expects($this->never())->method('getUseSessionInUrl')->willReturn(true);
         $this->sessionMock->expects($this->never())->method('getSessionIdForHost')
             ->willReturn('session-id');
-        $this->sidResolverMock->expects($this->never())->method('getUseSessionVar')->willReturn(false);
-        $this->sidResolverMock->expects($this->never())->method('getSessionIdQueryParam');
         $this->queryParamsResolverMock->expects($this->once())
             ->method('getQuery')
             ->willReturn('foo=bar');
@@ -673,7 +656,6 @@ class UrlTest extends TestCase
             [
                 'session' => $this->sessionMock,
                 'request' => $requestMock,
-                'sidResolver' => $this->sidResolverMock,
                 'scopeResolver' => $this->scopeResolverMock,
                 'routeParamsResolverFactory' => $this->getRouteParamsResolverFactory(),
             ]
@@ -688,8 +670,6 @@ class UrlTest extends TestCase
         $this->scopeResolverMock->expects($this->any())
             ->method('getScope')
             ->willReturn($this->scopeMock);
-        $this->sidResolverMock->expects($this->never())
-            ->method('getSessionIdQueryParam');
 
         $this->assertEquals($result, $model->sessionUrlVar($html));
     }
@@ -701,7 +681,6 @@ class UrlTest extends TestCase
             [
                 'session' => $this->sessionMock,
                 'request' => $requestMock,
-                'sidResolver' => $this->sidResolverMock,
                 'scopeResolver' => $this->scopeResolverMock,
                 'routeParamsResolverFactory' => $this->getRouteParamsResolverFactory(),
             ]
@@ -714,8 +693,6 @@ class UrlTest extends TestCase
         $this->scopeResolverMock->expects($this->any())
             ->method('getScope')
             ->willReturn($this->scopeMock);
-        $this->sidResolverMock->expects($this->never())->method('getSessionIdQueryParam')
-            ->willReturn('SID');
         $this->sessionMock->expects($this->never())->method('getSessionId')
             ->willReturn('session-id');
 

@@ -61,7 +61,6 @@ library magento/framework App/Helper/Context.php
 library magento/framework View/DesignLoader.php
 library magento/framework View/Page/Config.php
 library magento/framework View/Page/Title.php
-library magento/framework Session/SidResolverInterface.php
 
 library magento/framework Filesystem/Driver/Http.php
 

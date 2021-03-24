@@ -15,7 +15,6 @@ use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Session\Generic;
-use Magento\Framework\Session\SidResolverInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\Store;
@@ -65,7 +64,6 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
      * @param StoreRepositoryInterface $storeRepository
      * @param StoreResolverInterface $storeResolver
      * @param Generic $session
-     * @param SidResolverInterface $sidResolver
      * @param HashGenerator $hashGenerator
      * @param StoreManagerInterface|null $storeManager
      * @param RedirectDataGenerator|null $redirectDataGenerator
@@ -78,7 +76,6 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
         StoreRepositoryInterface $storeRepository,
         StoreResolverInterface $storeResolver,
         Generic $session,
-        SidResolverInterface $sidResolver,
         HashGenerator $hashGenerator,
         StoreManagerInterface $storeManager = null,
         ?RedirectDataGenerator $redirectDataGenerator = null,

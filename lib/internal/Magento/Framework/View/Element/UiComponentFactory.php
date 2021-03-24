@@ -8,14 +8,13 @@ namespace Magento\Framework\View\Element;
 
 use Magento\Framework\Config\DataInterface;
 use Magento\Framework\Config\DataInterfaceFactory;
+use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Data\Argument\InterpreterInterface;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Framework\View\Element\UiComponent\Config\ManagerInterface;
-use Magento\Framework\View\Element\UiComponent\ContextFactory;
 use Magento\Framework\Phrase;
+use Magento\Framework\View\Element\UiComponent\ContextFactory;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\Sanitizer;
 use Magento\Framework\View\Element\UiComponent\Factory\ComponentFactoryInterface;
@@ -29,6 +28,16 @@ use Magento\Framework\View\Element\UiComponent\Factory\ComponentFactoryInterface
  */
 class UiComponentFactory extends DataObject
 {
+    /**
+     * The key arguments in the data component
+     */
+    private const COMPONENT_ARGUMENTS_KEY = 'arguments';
+
+    /**
+     * The key attributes in the data component
+     */
+    private const COMPONENT_ATTRIBUTES_KEY = 'attributes';
+
     /**
      * Object manager
      *
@@ -47,14 +56,6 @@ class UiComponentFactory extends DataObject
      * @var ContextFactory
      */
     protected $contextFactory;
-
-    /**
-     * UI component manager
-     *
-     * @deprecated 101.0.0
-     * @var ManagerInterface
-     */
-    protected $componentManager;
 
     /**
      * @var ComponentFactoryInterface[]
@@ -78,7 +79,6 @@ class UiComponentFactory extends DataObject
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param ManagerInterface $componentManager
      * @param InterpreterInterface $argumentInterpreter
      * @param ContextFactory $contextFactory
      * @param array $data
@@ -89,7 +89,6 @@ class UiComponentFactory extends DataObject
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        ManagerInterface $componentManager,
         InterpreterInterface $argumentInterpreter,
         ContextFactory $contextFactory,
         array $data = [],
@@ -99,7 +98,6 @@ class UiComponentFactory extends DataObject
         ?Sanitizer $sanitizer = null
     ) {
         $this->objectManager = $objectManager;
-        $this->componentManager = $componentManager;
         $this->argumentInterpreter = $argumentInterpreter;
         $this->contextFactory = $contextFactory;
         $this->componentChildFactories = $componentChildFactories;
@@ -159,9 +157,9 @@ class UiComponentFactory extends DataObject
         $components = array_filter($components);
         $componentArguments['components'] = $components;
 
-       /**
-        * Prevent passing ACL restricted blocks to htmlContent constructor
-        */
+        /**
+         * Prevent passing ACL restricted blocks to htmlContent constructor
+         */
         if (isset($componentArguments['block']) && !$componentArguments['block']) {
             return null;
         }
@@ -182,10 +180,10 @@ class UiComponentFactory extends DataObject
      */
     protected function argumentsResolver($identifier, array $componentData)
     {
-        $attributes = $componentData[ManagerInterface::COMPONENT_ATTRIBUTES_KEY];
+        $attributes = $componentData[self::COMPONENT_ATTRIBUTES_KEY];
         $className = $attributes['class'];
         unset($attributes['class']);
-        $arguments = $componentData[ManagerInterface::COMPONENT_ARGUMENTS_KEY];
+        $arguments = $componentData[self::COMPONENT_ARGUMENTS_KEY];
 
         if (!isset($arguments['data'])) {
             $arguments['data'] = [];
@@ -298,7 +296,7 @@ class UiComponentFactory extends DataObject
             $rawComponentData = $this->definitionData->get($config['componentType']);
             list(, $componentArguments) = $this->argumentsResolver($identifier, $rawComponentData);
             $arguments = array_replace_recursive($componentArguments, ['data' => ['config' => $config]]);
-            $rawComponentData[ManagerInterface::COMPONENT_ARGUMENTS_KEY] = $arguments;
+            $rawComponentData[self::COMPONENT_ARGUMENTS_KEY] = $arguments;
 
             $bundleChildren[$identifier] = $rawComponentData;
             $bundleChildren[$identifier]['children'] = [];
@@ -414,7 +412,7 @@ class UiComponentFactory extends DataObject
                 );
                 list(, $componentArguments) = $this->argumentsResolver($name, $rawComponentData);
                 $arguments = array_replace_recursive($componentArguments, $data['arguments']);
-                $rawComponentData[ManagerInterface::COMPONENT_ARGUMENTS_KEY] = $arguments;
+                $rawComponentData[self::COMPONENT_ARGUMENTS_KEY] = $arguments;
 
                 $bundleComponents[$name] = $rawComponentData;
                 $bundleComponents[$name]['children'] = [];

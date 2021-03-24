@@ -10,7 +10,7 @@ use Magento\Sales\Api\TransactionRepositoryInterface;
 /**
  * Sales transaction types option array
  */
-class TypeList implements \Magento\Framework\Option\ArrayInterface
+class TypeList implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var TransactionRepositoryInterface

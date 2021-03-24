@@ -10,7 +10,6 @@ namespace Magento\Newsletter\Test\Unit\Model\Queue;
 
 use Magento\Email\Model\Template;
 use Magento\Email\Model\Template\Filter;
-use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\EmailMessageInterface;
 use Magento\Framework\Mail\EmailMessageInterfaceFactory;
@@ -19,6 +18,7 @@ use Magento\Framework\Mail\MessageInterface;
 use Magento\Framework\Mail\MessageInterfaceFactory;
 use Magento\Framework\Mail\MimePartInterface;
 use Magento\Framework\Mail\MimePartInterfaceFactory;
+use Magento\Framework\Mail\TemplateTypesInterface;
 use Magento\Framework\Mail\Template\FactoryInterface;
 use Magento\Framework\Mail\Template\SenderResolverInterface;
 use Magento\Framework\Mail\TransportInterfaceFactory;

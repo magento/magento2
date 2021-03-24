@@ -13,7 +13,7 @@ use Magento\Catalog\Model\Product\Attribute\Source\Layout;
 /**
  * Returns layout list for Web>Default Layouts>Default Product Layout/Default Category Layout
  */
-class LayoutList implements \Magento\Framework\Option\ArrayInterface
+class LayoutList implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var array

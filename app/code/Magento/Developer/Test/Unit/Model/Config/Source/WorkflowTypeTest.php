@@ -6,7 +6,7 @@
 namespace Magento\Developer\Test\Unit\Model\Config\Source;
 
 use Magento\Developer\Model\Config\Source\WorkflowType;
-use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\Phrase;
 use PHPUnit\Framework\TestCase;
 
@@ -24,7 +24,7 @@ class WorkflowTypeTest extends TestCase
 
     public function testToOptionArray()
     {
-        $this->assertInstanceOf(ArrayInterface::class, $this->model);
+        $this->assertInstanceOf(OptionSourceInterface::class, $this->model);
         $this->assertCount(2, $this->model->toOptionArray());
         $option = current($this->model->toOptionArray());
 

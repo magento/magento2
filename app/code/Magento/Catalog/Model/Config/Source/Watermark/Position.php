@@ -11,7 +11,7 @@
  */
 namespace Magento\Catalog\Model\Config\Source\Watermark;
 
-class Position implements \Magento\Framework\Option\ArrayInterface
+class Position implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * Get available options

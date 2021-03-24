@@ -8,7 +8,7 @@ namespace Magento\Paypal\Model\System\Config\Source;
 /**
  * Source model for available payment actions
  */
-class PaymentActions implements \Magento\Framework\Option\ArrayInterface
+class PaymentActions implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var \Magento\Paypal\Model\ConfigFactory

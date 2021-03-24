@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Framework\View\Test\Unit\UiComponent\Factory;
 
 use Magento\Framework\View\Element\AbstractBlock;
-use Magento\Framework\View\Element\UiComponent\Config\ManagerInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\Factory\HtmlContentFactory;
 use Magento\Framework\View\Layout;
@@ -17,6 +16,11 @@ use PHPUnit\Framework\TestCase;
 
 class HtmlContentFactoryTest extends TestCase
 {
+    /**
+     * The key arguments in the data component
+     */
+    private const COMPONENT_ARGUMENTS_KEY = 'arguments';
+
     /**
      * @var Layout|MockObject
      */
@@ -55,7 +59,7 @@ class HtmlContentFactoryTest extends TestCase
     public function testCreate()
     {
         $blockName = 'blockName';
-        $bundleComponents[ManagerInterface::COMPONENT_ARGUMENTS_KEY]['block']['name'] = $blockName;
+        $bundleComponents[self::COMPONENT_ARGUMENTS_KEY]['block']['name'] = $blockName;
         $this->layout->expects($this->once())
             ->method('getBlock')
             ->with($blockName)
@@ -71,6 +75,6 @@ class HtmlContentFactoryTest extends TestCase
                 ]
             )
         );
-        $this->assertEquals($this->block, $bundleComponents[ManagerInterface::COMPONENT_ARGUMENTS_KEY]['block']);
+        $this->assertEquals($this->block, $bundleComponents[self::COMPONENT_ARGUMENTS_KEY]['block']);
     }
 }

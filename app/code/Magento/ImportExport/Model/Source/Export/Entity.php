@@ -11,7 +11,7 @@ namespace Magento\ImportExport\Model\Source\Export;
  * @api
  * @since 100.0.2
  */
-class Entity implements \Magento\Framework\Option\ArrayInterface
+class Entity implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var \Magento\ImportExport\Model\Export\ConfigInterface

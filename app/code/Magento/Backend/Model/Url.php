@@ -90,7 +90,6 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      * @param \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo
      * @param \Magento\Framework\Url\ScopeResolverInterface $scopeResolver
      * @param \Magento\Framework\Session\Generic $session
-     * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\Url\RouteParamsResolverFactory $routeParamsResolverFactory
      * @param \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -114,7 +113,6 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
         \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo,
         \Magento\Framework\Url\ScopeResolverInterface $scopeResolver,
         \Magento\Framework\Session\Generic $session,
-        \Magento\Framework\Session\SidResolverInterface $sidResolver,
         \Magento\Framework\Url\RouteParamsResolverFactory $routeParamsResolverFactory,
         \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -139,7 +137,6 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
             $urlSecurityInfo,
             $scopeResolver,
             $session,
-            $sidResolver,
             $routeParamsResolverFactory,
             $queryParamsResolver,
             $scopeConfig,

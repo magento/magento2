@@ -53,14 +53,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     protected $_session;
 
     /**
-     * SID Resolver
-     *
-     * @var \Magento\Framework\Session\SidResolverInterface
-     * @deprecated 102.0.5 Not used anymore.
-     */
-    protected $_sidResolver;
-
-    /**
      * Block name in layout
      *
      * @var string
@@ -206,7 +198,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         $this->_cache = $context->getCache();
         $this->_design = $context->getDesignPackage();
         $this->_session = $context->getSession();
-        $this->_sidResolver = $context->getSidResolver();
         $this->_scopeConfig = $context->getScopeConfig();
         $this->_assetRepo = $context->getAssetRepository();
         $this->_viewConfig = $context->getViewConfig();

@@ -11,7 +11,7 @@ namespace Magento\Framework\Mail;
  * @api
  * @since 100.0.2
  */
-interface TemplateInterface extends \Magento\Framework\App\TemplateTypesInterface
+interface TemplateInterface extends TemplateTypesInterface
 {
     /**
      * Get processed template

@@ -164,17 +164,7 @@
             <argument name="urlPlaceholder" xsi:type="string">{{base_url}}</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Module\Output\Config">
-        <arguments>
-        <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Session\Config">
-        <arguments>
-        <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Session\SidResolver">
         <arguments>
         <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>

@@ -7,7 +7,7 @@
  */
 namespace Magento\Newsletter\Block\Subscribe\Grid\Options;
 
-class StoreOptionHash implements \Magento\Framework\Option\ArrayInterface
+class StoreOptionHash implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * System Store Model

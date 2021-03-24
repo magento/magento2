@@ -9,7 +9,7 @@ namespace Magento\Newsletter\Test\Unit\Block\Adminhtml\Template;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\State;
-use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\Mail\TemplateTypesInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Newsletter\Block\Adminhtml\Template\Preview;

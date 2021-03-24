@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\Mail\TemplateTypesInterface;
 
 /** @var \Magento\Newsletter\Model\Template $template */
 $template = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

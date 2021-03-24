@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Mail\Template;
 
-use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Mail\AddressConverter;
@@ -21,6 +20,7 @@ use Magento\Framework\Mail\MimeInterface;
 use Magento\Framework\Mail\MimeMessageInterfaceFactory;
 use Magento\Framework\Mail\MimePartInterfaceFactory;
 use Magento\Framework\Mail\TemplateInterface;
+use Magento\Framework\Mail\TemplateTypesInterface;
 use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\Mail\TransportInterfaceFactory;
 use Magento\Framework\ObjectManagerInterface;

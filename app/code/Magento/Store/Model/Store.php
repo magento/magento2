@@ -277,12 +277,6 @@ class Store extends AbstractExtensibleModel implements
     protected $_config;
 
     /**
-     * @var \Magento\Framework\Session\SidResolverInterface
-     * @deprecated 101.0.5 Not used anymore.
-     */
-    protected $_sidResolver;
-
-    /**
      * @var string
      */
     protected $_currencyInstalled;
@@ -346,7 +340,6 @@ class Store extends AbstractExtensibleModel implements
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
@@ -376,7 +369,6 @@ class Store extends AbstractExtensibleModel implements
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Session\SidResolverInterface $sidResolver,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
@@ -399,7 +391,6 @@ class Store extends AbstractExtensibleModel implements
         $this->_isCustomEntryPoint = $isCustomEntryPoint;
         $this->filesystem = $filesystem;
         $this->_storeManager = $storeManager;
-        $this->_sidResolver = $sidResolver;
         $this->_httpContext = $httpContext;
         $this->_session = $session;
         $this->currencyFactory = $currencyFactory;

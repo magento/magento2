@@ -17,7 +17,6 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\State;
 use Magento\Framework\Session\Config\ConfigInterface;
 use Magento\Framework\Session\SaveHandlerInterface;
-use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\Session\Storage;
 use Magento\Framework\Session\StorageInterface;
 use Magento\Framework\Session\ValidatorInterface;
@@ -82,11 +81,6 @@ class QuoteTest extends TestCase
      * @var ConfigInterface|MockObject
      */
     protected $sessionConfigMock;
-
-    /**
-     * @var SidResolverInterface|MockObject
-     */
-    protected $sidResolverMock;
 
     /**
      * @var Http|MockObject
@@ -163,12 +157,6 @@ class QuoteTest extends TestCase
         $this->quoteRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
 
         $this->requestMock = $this->createMock(Http::class);
-        $this->sidResolverMock = $this->getMockForAbstractClass(
-            SidResolverInterface::class,
-            [],
-            '',
-            false
-        );
         $this->sessionConfigMock = $this->getMockForAbstractClass(
             ConfigInterface::class,
             [],
@@ -208,7 +196,6 @@ class QuoteTest extends TestCase
             ->setConstructorArgs(
                 [
                     'request' => $this->requestMock,
-                    'sidResolver' => $this->sidResolverMock,
                     'sessionConfig' => $this->sessionConfigMock,
                     'saveHandler' => $this->saveHandlerMock,
                     'validator' => $this->validatorMock,

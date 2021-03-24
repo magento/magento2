@@ -5,6 +5,8 @@
  */
 namespace Magento\Email\Block\Adminhtml\Template\Grid\Renderer;
 
+use Magento\Framework\Mail\TemplateTypesInterface;
+
 /**
  * Adminhtml system templates grid block type item renderer
  *
@@ -18,8 +20,8 @@ class Type extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      * @var array
      */
     protected static $_types = [
-        \Magento\Framework\App\TemplateTypesInterface::TYPE_HTML => 'HTML',
-        \Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT => 'Text',
+        TemplateTypesInterface::TYPE_HTML => 'HTML',
+        TemplateTypesInterface::TYPE_TEXT => 'Text',
     ];
 
     /**

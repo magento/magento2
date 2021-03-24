@@ -132,7 +132,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         // @TODO: remove this code when class Magento\Framework\Data\Collection will fixed
         $componentRegistrar = new ComponentRegistrar();
         include_once $componentRegistrar->getPath(ComponentRegistrar::LIBRARY, 'magento/framework')
-            . '/Option/ArrayInterface.php';
+            . '/Data/OptionSourceInterface.php';
         $blackList = Files::init()->readLists(__DIR__ . '/_files/blacklist*.txt');
         $dataProvider = Files::init()->getPhpFiles(Files::INCLUDE_LIBS | Files::AS_DATA_SET);
 

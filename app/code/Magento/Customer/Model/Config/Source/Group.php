@@ -9,7 +9,7 @@ use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Model\Customer\Attribute\Source\GroupSourceLoggedInOnlyInterface;
 use Magento\Framework\App\ObjectManager;
 
-class Group implements \Magento\Framework\Option\ArrayInterface
+class Group implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var array
