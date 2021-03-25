@@ -2507,8 +2507,6 @@ return [
     ['getProductMedia', 'Magento\Swatches\Helper\Data'],
     ['createSwatchProduct', 'Magento\Swatches\Helper\Data'],
     ['create', 'Magento\Quote\Model\QuoteRepository'],
-    ['set', 'Magento\Quote\Api\GuestShippingMethodManagementInterface', 'Magento\Quote\Model\GuestCart\GuestShippingMethodManagementInterface::set'],
-    ['get', 'Magento\Quote\Api\GuestShippingMethodManagementInterface', 'Magento\Quote\Model\GuestCart\GuestShippingMethodManagementInterface::get'],
     ['get', 'Magento\Quote\Api\ShippingMethodManagementInterface', 'Magento\Quote\Model\ShippingMethodManagementInterface::get'],
     ['set', 'Magento\Quote\Api\ShippingMethodManagementInterface', 'Magento\Quote\Model\ShippingMethodManagementInterface::get'],
     ['getTypeSwitcherData', 'Magento\Catalog\Block\Adminhtml\Product'],
