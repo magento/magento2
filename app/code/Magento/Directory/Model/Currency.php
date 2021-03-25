@@ -346,6 +346,9 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         $numberFormatter = $this->numberFormatterFactory->create(
             ['locale' => $this->localeResolver->getLocale(), 'style' => \NumberFormatter::CURRENCY]
         );
+        if (array_key_exists('display', $options) && $options['display'] === \Magento\Framework\Currency::NO_SYMBOL) {
+            $numberFormatter->setSymbol(\NumberFormatter::CURRENCY_SYMBOL, '');
+        }
         return $numberFormatter->formatCurrency($price, $this->getCode());
     }
 
