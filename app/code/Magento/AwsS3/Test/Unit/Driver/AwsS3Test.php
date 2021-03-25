@@ -217,28 +217,25 @@ class AwsS3Test extends TestCase
     public function testIsDirectory(
         string $path,
         string $normalizedPath,
-        bool $has,
         array $metadata,
         bool $expected,
         iterable $listContents,
-        \Exception $metadataException = null
+        \Throwable $listContentsException = null
     ): void {
-        $this->adapterMock->method('fileExists')
-            ->with($normalizedPath)
-            ->willReturn($has);
-        $this->adapterMock->method('listContents')
-            ->with($normalizedPath)
-            ->willReturn($listContents);
-        if (!$metadataException) {
+        if (!empty($metadata)) {
             $this->metadataProviderMock->method('getMetadata')
                 ->with($normalizedPath)
                 ->willReturn($metadata);
-        } else {
-            $this->metadataProviderMock->method('getMetadata')
-                ->with($normalizedPath)
-                ->willThrowException($metadataException);
         }
-
+        if ($listContentsException) {
+            $this->adapterMock->method('listContents')
+                ->with($normalizedPath)
+                ->willThrowException($listContentsException);
+        } else {
+            $this->adapterMock->method('listContents')
+                ->with($normalizedPath)
+                ->willReturn($listContents);
+        }
         self::assertSame($expected, $this->driver->isDirectory($path));
     }
 
@@ -251,16 +248,14 @@ class AwsS3Test extends TestCase
             'empty metadata' => [
                 'some_directory/',
                 'some_directory',
-                false,
                 [],
                 false,
                 new \ArrayIterator([]),
-                new UnableToRetrieveMetadata('Can not fetch metadata.')
+                new \Exception('Closed iterator'),
             ],
             [
                 'some_directory',
                 'some_directory',
-                true,
                 [
                     'type' => AwsS3::TYPE_DIR
                 ],
@@ -270,7 +265,6 @@ class AwsS3Test extends TestCase
             [
                 self::URL . 'some_directory',
                 'some_directory',
-                true,
                 [
                     'type' => AwsS3::TYPE_DIR
                 ],
@@ -278,30 +272,22 @@ class AwsS3Test extends TestCase
                 new \ArrayIterator(['some_directory']),
             ],
             [
-                self::URL . 'some_directory',
-                'some_directory',
-                true,
+                '',
+                '',
                 [
-                    'type' => AwsS3::TYPE_FILE
+                    'type' => AwsS3::TYPE_DIR
                 ],
-                false,
-                new \ArrayIterator(['some_directory']),
-            ],
-            [
-                '',
-                '',
                 true,
-                [],
-                true,
-                new \ArrayIterator(['some_directory']),
+                new \ArrayIterator(['']),
             ],
             [
                 '/',
                 '',
+                [
+                    'type' => AwsS3::TYPE_DIR
+                ],
                 true,
-                [],
-                true,
-                new \ArrayIterator(['some_directory']),
+                new \ArrayIterator(['']),
             ],
         ];
     }
@@ -433,19 +419,18 @@ class AwsS3Test extends TestCase
         $expression = '/*';
         $path = 'path';
         $subPaths = [
-            new \League\Flysystem\DirectoryAttributes('path/1'),
-            new \League\Flysystem\DirectoryAttributes('path/2')
+            new \League\Flysystem\DirectoryAttributes('path/1/'),
+            new \League\Flysystem\DirectoryAttributes('path/2/')
         ];
-        $expectedResult = [self::URL . 'path/1', self::URL . 'path/2'];
-        $this->metadataProviderMock->expects(self::atLeastOnce())->method('getMetadata')
+        $expectedResult = [self::URL . 'path/1/', self::URL . 'path/2/'];
+        $this->metadataProviderMock->expects(self::any())->method('getMetadata')
             ->willReturnMap([
                 ['path', ['type' => AwsS3::TYPE_DIR]],
                 ['path/1', ['type' => AwsS3::TYPE_FILE]],
                 ['path/2', ['type' => AwsS3::TYPE_FILE]],
             ]);
         $this->adapterMock->expects(self::atLeastOnce())->method('listContents')
-            ->with($path, false)
-            ->willReturn($subPaths);
+            ->willReturn(new \ArrayIterator($subPaths));
 
         self::assertEquals($expectedResult, $this->driver->search($expression, $path));
     }
@@ -468,7 +453,7 @@ class AwsS3Test extends TestCase
                 ['path/1.jpg', ['type' => AwsS3::TYPE_FILE]],
                 ['path/2.png', ['type' => AwsS3::TYPE_FILE]],
             ]);
-        $this->adapterMock->expects(self::atLeastOnce())->method('listContents')->with($path, false)
+        $this->adapterMock->expects(self::atLeastOnce())->method('listContents')
             ->willReturn($subPaths);
 
         self::assertEquals($expectedResult, $this->driver->search($expression, $path));

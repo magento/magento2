@@ -443,16 +443,34 @@ class AwsS3 implements RemoteDriverInterface
             return true;
         }
 
+        $path = $this->normalizeRelativePath($path, true);
+
         try {
-            return iterator_count(
-                $this->adapter->listContents(
-                    $this->normalizeRelativePath($path, true),
-                    false)
-                ) > 0;
-        } catch (\Throwable $e) {
-            // catch closed iterator
-            return false;
+            return $this->isMetadataTypeDirectory($path);
+        } catch (UnableToRetrieveMetadata $e) {
+            try {
+                return iterator_count($this->adapter->listContents($path, false)) > 0;
+            } catch (\Throwable $e) {
+                // catch closed iterator
+                return false;
+            }
         }
+    }
+
+    /**
+     * Check is given path a directory in metadata.
+     *
+     * @param string $path
+     * @return bool
+     * @throws UnableToRetrieveMetadata
+     */
+    private function isMetadataTypeDirectory($path)
+    {
+        $meta = $this->metadataProvider->getMetadata($path);
+        if (isset($meta['type']) && $meta['type'] === self::TYPE_DIR) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -553,7 +571,7 @@ class AwsS3 implements RemoteDriverInterface
             $metaInfo = $this->metadataProvider->getMetadata($path);
         } catch (UnableToRetrieveMetadata $exception) {
             if ($this->directoryExists($path)) {
-                $result['type'] = 'dir';
+                $result['type'] = self::TYPE_DIR;
             }
             return $result;
         }
