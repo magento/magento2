@@ -12,7 +12,6 @@ use Magento\Checkout\Model\Session;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 use Magento\Multishipping\Model\DisableMultishipping;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
@@ -73,7 +72,8 @@ class CartPlugin
     {
         /** @var Quote $quote */
         $quote = $this->checkoutSession->getQuote();
-        if ($quote->isMultipleShippingAddresses() || $quote->getIsMultiShipping()) {
+        if ($quote->isMultipleShippingAddresses()
+            || ($request->getActionName() !== "add" && $quote->getIsMultiShipping())) {
             $this->disableMultishipping->execute($quote);
             foreach ($quote->getAllShippingAddresses() as $address) {
                 $quote->removeAddress($address->getId());
