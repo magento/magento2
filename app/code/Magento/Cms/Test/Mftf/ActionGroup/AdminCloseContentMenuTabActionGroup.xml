@@ -7,10 +7,10 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminCloseContentTabActionGroup">
+    <actionGroup name="AdminCloseContentMenuTabActionGroup">
         <annotations>
             <description>Close tab 'Content' on main menu.</description>
         </annotations>
-        <conditionalClick selector="{{AdminMenuSection.menuItem('magento-backend-content')}}" dependentSelector="{{AdminMenuSection.close}}" visible="true" stepKey="closeContentTab"/>
+        <conditionalClick selector="{{AdminMenuSection.menuItem('magento-backend-content')}}" dependentSelector="{{AdminMenuSection.contentMenuClose}}" visible="true" stepKey="closeContentTab"/>
     </actionGroup>
 </actionGroups>

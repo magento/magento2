@@ -7,11 +7,11 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminOpenContentTabActionGroup">
+    <actionGroup name="AdminOpenContentMenuTabActionGroup">
         <annotations>
             <description>Open tab 'Content' on main menu.</description>
         </annotations>
-        <conditionalClick selector="{{AdminMenuSection.menuItem('magento-backend-content')}}" dependentSelector="{{AdminMenuSection.close}}" visible="false" stepKey="openContentTab"/>
-        <waitForElementVisible selector="{{AdminMenuSection.close}}" stepKey="waitForSelectElement"/>
+        <conditionalClick selector="{{AdminMenuSection.menuItem('magento-backend-content')}}" dependentSelector="{{AdminMenuSection.contentMenuClose}}" visible="false" stepKey="openContentTab"/>
+        <waitForElementVisible selector="{{AdminMenuSection.contentMenuClose}}" stepKey="waitForSelectElement"/>
     </actionGroup>
 </actionGroups>
