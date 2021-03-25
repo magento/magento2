@@ -44,7 +44,7 @@ interface CacheInterface
     public function flushCache(): void;
 
     /**
-     * Save data to storage.
+     * Purges data enqueued for deletion.
      */
     public function purgeQueue(): void;
 
@@ -88,7 +88,7 @@ interface CacheInterface
     public function updateMetadata(string $path, array $objectMetadata, bool $persist = false): void;
 
     /**
-     * Reset data in cache for object.
+     * Store flag that path does not exist in the filesystem.
      *
      * @param string $path
      */
