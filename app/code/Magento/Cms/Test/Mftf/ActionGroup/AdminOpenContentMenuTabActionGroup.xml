@@ -12,6 +12,5 @@
             <description>Open tab 'Content' on main menu.</description>
         </annotations>
         <conditionalClick selector="{{AdminMenuSection.menuItem('magento-backend-content')}}" dependentSelector="{{AdminMenuSection.contentMenuClose}}" visible="false" stepKey="openContentTab"/>
-        <waitForElementVisible selector="{{AdminMenuSection.contentMenuClose}}" stepKey="waitForSelectElement"/>
     </actionGroup>
 </actionGroups>
