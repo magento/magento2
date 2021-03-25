@@ -121,6 +121,7 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSimpleProductQuantity"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSimpleProductStockStatus"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSimpleProductWeight"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickCategoriesDropDownToVerify"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectedCategories"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeVisibility"/>
         <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSection1"/>
@@ -133,6 +134,7 @@
             <argument name="categoryName" value="$$categoryEntity.name$$"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCategoryPageLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSimpleProductNameOnCategoryPage"/>
         <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertFirstBundleProduct">
             <argument name="productName" value="{{simpleProductRegularPrice32501InStock.name}}"/>
         </actionGroup>
