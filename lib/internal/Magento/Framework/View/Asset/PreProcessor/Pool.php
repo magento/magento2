@@ -8,6 +8,7 @@ namespace Magento\Framework\View\Asset\PreProcessor;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Asset\PreProcessorInterface;
+use Magento\Framework\View\Asset\PreProcessor\SortInterface;
 
 /**
  * A registry of asset preprocessors (not to confuse with the "Registry" pattern)
@@ -30,7 +31,7 @@ class Pool
     private $instances;
 
     /**
-     * @var Helper\SortInterface
+     * @var SortInterface
      */
     private $sorter;
 
@@ -48,13 +49,13 @@ class Pool
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
-     * @param Helper\SortInterface $sorter
+     * @param SortInterface $sorter
      * @param string $defaultPreprocessor
      * @param array $preprocessors
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        Helper\SortInterface $sorter,
+        SortInterface $sorter,
         $defaultPreprocessor,
         array $preprocessors = []
     ) {
