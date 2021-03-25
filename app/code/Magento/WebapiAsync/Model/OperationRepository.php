@@ -9,7 +9,7 @@ namespace Magento\WebapiAsync\Model;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
-use Magento\AsynchronousOperations\Model\OperationRepositoryInterface;
+use Magento\AsynchronousOperations\Model\ResourceModel\Operation\OperationRepository\OperationRepositoryInterface;
 use Magento\Framework\MessageQueue\MessageValidator;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\EntityManager\EntityManager;
