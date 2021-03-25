@@ -193,6 +193,20 @@ class S3FileAssertions extends Helper
     }
 
     /**
+     * Assert a file does not exist on the remote storage system
+     *
+     * @param string $filePath
+     * @param string $message
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function assertFileDoesNotExist($filePath, $message = ''): void
+    {
+        $this->assertFalse($this->driver->isExists($filePath), $message);
+    }
+
+    /**
      * Assert a file on the remote storage system has no contents
      *
      * @param string $filePath
@@ -263,22 +277,7 @@ class S3FileAssertions extends Helper
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function assertFileDoesNotContainString($filePath, $text, $message = ""): void
-    {
-        $this->assertStringNotContainsString($text, $this->driver->fileGetContents($filePath), $message);
-    }
-
-    /**
-     * Assert a file on the remote storage system does not contain a given string
-     *
-     * @param string $filePath
-     * @param string $text
-     * @param string $message
-     * @return void
-     *
-     * @throws \Magento\Framework\Exception\FileSystemException
-     */
-    public function assertFileDoesNotContain($filePath, $text, $message = ''): void
+    public function assertFileDoesNotContainString($filePath, $text, $message = ''): void
     {
         $this->assertStringNotContainsString($text, $this->driver->fileGetContents($filePath), "Failed asserting $filePath does not contain $text. " . $message);
     }

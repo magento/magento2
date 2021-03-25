@@ -181,6 +181,21 @@ class LocalFileAssertions extends Helper
     }
 
     /**
+     * Assert a file does not exist
+     *
+     * @param string $filePath
+     * @param string $message
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function assertFileDoesNotExist($filePath, $message = ''): void
+    {
+        $realPath = $this->expandPath($filePath);
+        $this->assertFalse($this->driver->isExists($realPath), $message);
+    }
+
+    /**
      * Assert a file has no contents
      *
      * @param string $filePath
