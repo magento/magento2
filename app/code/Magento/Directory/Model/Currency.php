@@ -9,6 +9,7 @@ namespace Magento\Directory\Model;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Directory\Model\Currency\Filter;
+use Magento\Framework\Locale\ResolverInterface as LocalResolverInterface;
 
 /**
  * Currency model
@@ -72,6 +73,16 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     private $currencyConfig;
 
     /**
+     * @var LocalResolverInterface
+     */
+    private $localeResolver;
+
+    /**
+     * @var \Magento\Framework\NumberFormatterFactory
+     */
+    private $numberFormatterFactory;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
@@ -79,10 +90,12 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param Currency\FilterFactory $currencyFilterFactory
      * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
-     * @param CurrencyConfig $currencyConfig
+     * @param CurrencyConfig|null $currencyConfig
+     * @param LocalResolverInterface|null $localeResolver
+     * @param \Magento\Framework\NumberFormatterFactory|null $numberFormatterFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -96,7 +109,9 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        CurrencyConfig $currencyConfig = null
+        CurrencyConfig $currencyConfig = null,
+        LocalResolverInterface $localeResolver = null,
+        \Magento\Framework\NumberFormatter $numberFormatterFactory = null
     ) {
         parent::__construct(
             $context,
@@ -111,6 +126,8 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         $this->_currencyFilterFactory = $currencyFilterFactory;
         $this->_localeCurrency = $localeCurrency;
         $this->currencyConfig = $currencyConfig ?: ObjectManager::getInstance()->get(CurrencyConfig::class);
+        $this->localeResolver = $localeResolver ?: ObjectManager::getInstance()->get(LocalResolverInterface::class);
+        $this->numberFormatterFactory = $numberFormatterFactory ?: ObjectManager::getInstance()->get(\Magento\Framework\NumberFormatterFactory::class);
     }
 
     /**
@@ -326,7 +343,10 @@ class Currency extends \Magento\Framework\Model\AbstractModel
          * %F - the argument is treated as a float, and presented as a floating-point number (non-locale aware).
          */
         $price = sprintf("%F", $price);
-        return $this->_localeCurrency->getCurrency($this->getCode())->toCurrency($price, $options);
+        $numberFormatter = $this->numberFormatterFactory->create(
+            ['locale' => $this->localeResolver->getLocale(), 'style' => \NumberFormatter::CURRENCY]
+        );
+        return $numberFormatter->formatCurrency($price, $this->getCode());
     }
 
     /**
