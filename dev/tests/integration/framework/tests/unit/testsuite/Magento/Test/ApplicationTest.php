@@ -16,9 +16,12 @@ use Magento\Framework\Config\Scope;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Shell;
 use Magento\TestFramework\Application;
+use Magento\TestFramework\Helper\Bootstrap as TestFrameworkBootstrap;
+use Magento\TestFramework\Db\Mysql;
+use ReflectionClass;
 
 /**
- * Provide tests for \Magento\TestFramework\Application.
+ * Provides tests for \Magento\TestFramework\Application.
  */
 class ApplicationTest extends \PHPUnit\Framework\TestCase
 {
@@ -35,26 +38,41 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
     private $tempDir;
 
     /**
+     * @var Shell|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $shell;
+
+    /**
+     * @var ClassLoaderWrapper|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $autoloadWrapper;
+
+    /**
+     * @var string
+     */
+    private $appMode;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        /** @var Shell|\PHPUnit\Framework\MockObject\MockObject $shell */
-        $shell = $this->createMock(Shell::class);
-        /** @var ClassLoaderWrapper|\PHPUnit\Framework\MockObject\MockObject $autoloadWrapper */
-        $autoloadWrapper = $this->getMockBuilder(ClassLoaderWrapper::class)
+        $this->shell = $this->createMock(Shell::class);
+
+        $this->autoloadWrapper = $this->getMockBuilder(ClassLoaderWrapper::class)
             ->disableOriginalConstructor()->getMock();
+
         $this->tempDir = '/temp/dir';
-        $appMode = \Magento\Framework\App\State::MODE_DEVELOPER;
+        $this->appMode = \Magento\Framework\App\State::MODE_DEVELOPER;
 
         $this->subject = new Application(
-            $shell,
+            $this->shell,
             $this->tempDir,
             'config.php',
             'global-config.php',
             '',
-            $appMode,
-            $autoloadWrapper
+            $this->appMode,
+            $this->autoloadWrapper
         );
     }
 
@@ -80,6 +98,54 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
             $initParams[State::PARAM_MODE],
             'Wrong application mode configured'
         );
+    }
+
+    /**
+     * Test installation and post-installation shell commands
+     */
+    public function testInstall()
+    {
+        $realApplication = TestFrameworkBootstrap::getInstance()->getBootstrap()->getApplication();
+
+        $reflectionRealApplication = new ReflectionClass($realApplication);
+
+        $globalConfigDirProperty = $reflectionRealApplication->getProperty('_globalConfigDir');
+        $globalConfigDirProperty->setAccessible(true);
+        $globalConfigDir = $globalConfigDirProperty->getValue($realApplication);
+
+        $globalConfigFileProperty = $reflectionRealApplication->getProperty('globalConfigFile');
+        $globalConfigFileProperty->setAccessible(true);
+        $globalConfigFile = $globalConfigFileProperty->getValue($realApplication);
+
+        $installConfigFileProperty = $reflectionRealApplication->getProperty('installConfigFile');
+        $installConfigFileProperty->setAccessible(true);
+        $installConfigFile = $installConfigFileProperty->getValue($realApplication);
+
+        $subject = new Application(
+            $this->shell,
+            $realApplication->getTempDir(),
+            $installConfigFile,
+            $globalConfigFile,
+            $globalConfigDir,
+            $this->appMode,
+            $this->autoloadWrapper
+        );
+
+        $dbMock = $this->getMockBuilder(Mysql::class)->disableOriginalConstructor()->getMock();
+
+        $reflectionSubject = new ReflectionClass($subject);
+        $dbProperty = $reflectionSubject->getProperty('_db');
+        $dbProperty->setAccessible(true);
+        $dbProperty->setValue($subject, $dbMock);
+
+        $dbMock
+            ->expects($this->any())
+            ->method('isDbDumpExists')
+            ->willReturn(false);
+
+        // TODO - shell mock expectations with various post-installation permutations
+
+        $subject->install(false);
     }
 
     /**
@@ -136,7 +202,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                 $areaList
             );
 
-        \Magento\TestFramework\Helper\Bootstrap::setObjectManager($objectManager);
+        TestFrameworkBootstrap::setObjectManager($objectManager);
 
         $this->subject->loadArea($areaCode);
     }
