@@ -2507,8 +2507,6 @@ return [
     ['getProductMedia', 'Magento\Swatches\Helper\Data'],
     ['createSwatchProduct', 'Magento\Swatches\Helper\Data'],
     ['create', 'Magento\Quote\Model\QuoteRepository'],
-    ['get', 'Magento\Quote\Api\ShippingMethodManagementInterface', 'Magento\Quote\Model\ShippingMethodManagementInterface::get'],
-    ['set', 'Magento\Quote\Api\ShippingMethodManagementInterface', 'Magento\Quote\Model\ShippingMethodManagementInterface::get'],
     ['getTypeSwitcherData', 'Magento\Catalog\Block\Adminhtml\Product'],
     ['_afterLoad', 'Magento\CatalogRule\Model\ResourceModel\Rule'],
     ['_afterSave', 'Magento\CatalogRule\Model\ResourceModel\Rule'],

@@ -88,9 +88,9 @@ class ShippingMethodManagementTest extends WebapiAbstract
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
-        /** @var \Magento\Quote\Model\ShippingMethodManagementInterface $shippingMethodManagementService */
+        /** @var ShippingMethodManagementInterface $shippingMethodManagementService */
         $shippingMethodManagementService = $this->objectManager->create(
-            \Magento\Quote\Model\ShippingMethodManagementInterface::class
+            ShippingMethodManagementInterface::class
         );
         $shippingMethodManagementService->set($this->quote->getId(), 'flatrate', 'flatrate');
 

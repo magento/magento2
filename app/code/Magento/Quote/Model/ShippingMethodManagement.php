@@ -20,6 +20,7 @@ use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\EstimateAddressInterface;
 use Magento\Quote\Api\Data\ShippingMethodInterface;
 use Magento\Quote\Api\ShipmentEstimationInterface;
+use Magento\Quote\Api\ShippingMethodManagementInterface;
 use Magento\Quote\Model\Cart\ShippingMethodConverter;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Rate;
@@ -33,8 +34,7 @@ use Magento\Quote\Model\ResourceModel\Quote\Address as QuoteAddressResource;
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class ShippingMethodManagement implements
-    \Magento\Quote\Api\ShippingMethodManagementInterface,
-    \Magento\Quote\Model\ShippingMethodManagementInterface,
+    ShippingMethodManagementInterface,
     ShipmentEstimationInterface
 {
     /**
