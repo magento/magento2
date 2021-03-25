@@ -162,7 +162,7 @@
             <argument name="path">pub/media/catalog/product/cache/</argument>
         </helper>
 
-        <!-- Open Product on Storefront, Assert S3 Images Get Cached Images Exist, Assert Local File System Images Are Still Non-Existent -->
+        <!-- Open Product on Storefront, Assert S3 Images Exist & Get Cached, Assert Local File System Images & Cache Are Still Non-Existent -->
         <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductOnStorefront3">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
