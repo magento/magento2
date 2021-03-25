@@ -8,7 +8,9 @@ namespace Magento\Quote\Model\GuestCart;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Api\Data\AddressInterface;
+use Magento\Quote\Api\Data\EstimateAddressInterface;
 use Magento\Quote\Api\GuestShipmentEstimationInterface;
+use Magento\Quote\Api\GuestShippingMethodManagementInterface;
 use Magento\Quote\Api\ShipmentEstimationInterface;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
 use Magento\Quote\Model\QuoteIdMask;
@@ -18,7 +20,7 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
  * Shipping method management class for guest carts.
  */
 class GuestShippingMethodManagement implements
-    \Magento\Quote\Api\GuestShippingMethodManagementInterface,
+    GuestShippingMethodManagementInterface,
     GuestShipmentEstimationInterface
 {
     /**
@@ -83,7 +85,7 @@ class GuestShippingMethodManagement implements
     /**
      * {@inheritDoc}
      */
-    public function estimateByAddress($cartId, \Magento\Quote\Api\Data\EstimateAddressInterface $address)
+    public function estimateByAddress($cartId, EstimateAddressInterface $address)
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
