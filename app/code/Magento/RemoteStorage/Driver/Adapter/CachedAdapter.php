@@ -15,7 +15,7 @@ use Magento\RemoteStorage\Driver\Adapter\Cache\CacheInterface;
 /**
  * Cached adapter implementation for filesystem storage.
  */
-class CachedAdapter implements FilesystemAdapter
+class CachedAdapter implements CachedAdapterInterface
 {
     /**
      * @var FilesystemAdapter
@@ -159,7 +159,7 @@ class CachedAdapter implements FilesystemAdapter
             }
         }
 
-        if (! $exists) {
+        if (!$exists) {
             $this->cache->storeFileNotExists($path);
         } else {
             $cacheEntry = is_array($exists) ? $exists : ['path' => $path];

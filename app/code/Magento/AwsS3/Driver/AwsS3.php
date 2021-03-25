@@ -279,7 +279,7 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function readDirectoryRecursively($path = null): array
     {
-        return $this->readPath($this->normalizeRelativePath($path), true);
+        return $this->readPath($path, true);
     }
 
     /**
@@ -287,7 +287,7 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function readDirectory($path): array
     {
-        return $this->readPath($this->normalizeRelativePath($path), false);
+        return $this->readPath($path, false);
     }
 
     /**
@@ -402,12 +402,19 @@ class AwsS3 implements RemoteDriverInterface
 
     /**
      * Check is specified path a file.
+     *
+     * @param string $path
+     * @return bool
      */
     private function isTypeFile($path)
     {
-        $metadata = $this->metadataProvider->getMetadata($this->normalizeRelativePath($path));
-        if ($metadata && isset($metadata['type'])) {
-            return $metadata['type'] === 'file';
+        try {
+            $metadata = $this->metadataProvider->getMetadata($this->normalizeRelativePath($path, true));
+            if ($metadata && isset($metadata['type'])) {
+                return $metadata['type'] === self::TYPE_FILE;
+            }
+        } catch (UnableToRetrieveMetadata $e) {
+            return false;
         }
         return false;
     }
@@ -420,15 +427,7 @@ class AwsS3 implements RemoteDriverInterface
         if (!$path || $path === '/') {
             return false;
         }
-
-        $path = $this->normalizeRelativePath($path, true);
-
-        try {
-            return $this->isTypeFile($path);
-        } catch (\League\Flysystem\FilesystemException $e) {
-            $this->logger->error($e->getMessage());
-        }
-        return false;
+        return $this->isTypeFile($path);
     }
 
     /**
@@ -440,26 +439,20 @@ class AwsS3 implements RemoteDriverInterface
             return true;
         }
 
-        $path = $this->normalizeRelativePath($path, true);
-
         if (!$path) {
             return true;
         }
 
         try {
-            return !$this->isTypeFile($path);
-        } catch (UnableToRetrieveMetadata $e) {
-            try {
-                return iterator_count($this->adapter->listContents($path, false)) > 0;
-            } catch (\Throwable $e) {
-                // catch closed iterator
-                return false;
-            }
-        } catch (\League\Flysystem\FilesystemException $e) {
-            $this->logger->error($e->getMessage());
+            return iterator_count(
+                $this->adapter->listContents(
+                    $this->normalizeRelativePath($path, true),
+                    false)
+                ) > 0;
+        } catch (\Throwable $e) {
+            // catch closed iterator
+            return false;
         }
-
-        return false;
     }
 
     /**
@@ -884,7 +877,7 @@ class AwsS3 implements RemoteDriverInterface
             }
         }
 
-        return $this->streams[$path] ?? null;
+        return $this->streams[$path];
     }
 
     /**

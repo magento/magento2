@@ -11,8 +11,8 @@ use Aws\S3\S3Client;
 use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\RemoteStorage\Driver\Adapter\Cache\CacheInterface;
-use Magento\RemoteStorage\Driver\Adapter\CachedAdapter;
+use Magento\RemoteStorage\Driver\Adapter\Cache\CacheInterfaceFactory;
+use Magento\RemoteStorage\Driver\Adapter\CachedAdapterInterfaceFactory;
 use Magento\RemoteStorage\Driver\Adapter\MetadataProviderFactoryInterface;
 use Magento\RemoteStorage\Driver\DriverException;
 use Magento\RemoteStorage\Driver\DriverFactoryInterface;
@@ -40,18 +40,34 @@ class AwsS3Factory implements DriverFactoryInterface
     private $metadataProviderFactory;
 
     /**
+     * @var CacheInterfaceFactory
+     */
+    private $cacheInterfaceFactory;
+
+    /**
+     * @var CachedAdapterInterfaceFactory
+     */
+    private $cachedAdapterInterfaceFactory;
+
+    /**
      * @param ObjectManagerInterface $objectManager
      * @param Config $config
      * @param MetadataProviderFactoryInterface $metadataProviderFactory
+     * @param CacheInterfaceFactory $cacheInterfaceFactory
+     * @param CachedAdapterInterfaceFactory $cachedAdapterInterfaceFactory
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         Config $config,
-        MetadataProviderFactoryInterface $metadataProviderFactory
+        MetadataProviderFactoryInterface $metadataProviderFactory,
+        CacheInterfaceFactory $cacheInterfaceFactory,
+        CachedAdapterInterfaceFactory $cachedAdapterInterfaceFactory
     ) {
         $this->objectManager = $objectManager;
         $this->config = $config;
         $this->metadataProviderFactory = $metadataProviderFactory;
+        $this->cacheInterfaceFactory = $cacheInterfaceFactory;
+        $this->cachedAdapterInterfaceFactory = $cachedAdapterInterfaceFactory;
     }
 
     /**
@@ -94,12 +110,12 @@ class AwsS3Factory implements DriverFactoryInterface
 
         $client = new S3Client($config);
         $adapter = new AwsS3V3Adapter($client, $config['bucket'], $prefix);
-        $cache = $this->objectManager->get(CacheInterface::class);
+        $cache = $this->cacheInterfaceFactory->create();
 
         return $this->objectManager->create(
             AwsS3::class,
             [
-                'adapter' => $this->objectManager->create(CachedAdapter::class, [
+                'adapter' => $this->cachedAdapterInterfaceFactory->create([
                     'adapter' => $adapter,
                     'cache' => $cache
                 ]),
