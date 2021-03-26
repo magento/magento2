@@ -9,6 +9,7 @@ namespace Magento\Directory\Model;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Directory\Model\Currency\Filter;
+use Magento\Framework\Locale\Currency as LocaleCurrency;
 use Magento\Framework\Locale\ResolverInterface as LocalResolverInterface;
 
 /**
@@ -343,12 +344,31 @@ class Currency extends \Magento\Framework\Model\AbstractModel
          * %F - the argument is treated as a float, and presented as a floating-point number (non-locale aware).
          */
         $price = sprintf("%F", $price);
+
+        $customerOptions = new \Magento\Framework\DataObject([]);
+        $this->_eventManager->dispatch(
+            'currency_display_options_forming',
+            ['currency_options' => $customerOptions, 'base_code' => $this->getCode()]
+        );
+        $options = array_merge($options, $customerOptions->toArray());
+
         $numberFormatter = $this->numberFormatterFactory->create(
             ['locale' => $this->localeResolver->getLocale(), 'style' => \NumberFormatter::CURRENCY]
         );
-        if (array_key_exists('display', $options) && $options['display'] === \Magento\Framework\Currency::NO_SYMBOL) {
+
+        if (array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)
+            && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL) {
             $numberFormatter->setSymbol(\NumberFormatter::CURRENCY_SYMBOL, '');
         }
+        if (array_key_exists('precision', $options)) {
+            $numberFormatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $options['precision']);
+        }
+        if (array_key_exists(LocaleCurrency::CURRENCY_OPTION_SYMBOL, $options)) {
+            $numberFormatter->setSymbol(
+                \NumberFormatter::CURRENCY_SYMBOL, $options[LocaleCurrency::CURRENCY_OPTION_SYMBOL]
+            );
+        }
+
         return $numberFormatter->formatCurrency($price, $this->getCode());
     }
 
