@@ -13,6 +13,7 @@ namespace Magento\Framework\Config\File;
  */
 class ConfigFilePool
 {
+    const APP_CACHE = 'app_cache';
     const APP_CONFIG = 'app_config';
     const APP_ENV = 'app_env';
 
@@ -32,6 +33,7 @@ class ConfigFilePool
      * @var array
      */
     private $applicationConfigFiles = [
+        self::APP_CACHE => 'cache.php',
         self::APP_CONFIG => 'config.php',
         self::APP_ENV => 'env.php',
     ];

@@ -29,6 +29,7 @@ class ConfigFilePoolTest extends TestCase
     public function testGetPaths()
     {
         $expected['new_key'] = 'new_config.php';
+        $expected[ConfigFilePool::APP_CACHE] = 'cache.php';
         $expected[ConfigFilePool::APP_CONFIG] = 'config.php';
         $expected[ConfigFilePool::APP_ENV] = 'env.php';
 
