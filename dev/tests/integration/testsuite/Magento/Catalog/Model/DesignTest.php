@@ -13,6 +13,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\TranslateInterface;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\DesignInterface;
+use Magento\Framework\View\Result\Page;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Theme\Model\Theme;
 use PHPUnit\Framework\TestCase;
@@ -115,6 +116,34 @@ class DesignTest extends TestCase
                 ]
             ],
         ];
+    }
+
+    /**
+     * Verify ability to add category inherited page layout handles for product.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @return void
+     */
+    public function testAddCategoryPageLayoutHandlesForProduct(): void
+    {
+        $resultPage = Bootstrap::getObjectManager()->create(Page::class);
+        $product = $this->productRepository->get('simple');
+        $category = $this->getMockBuilder(Category::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getParentDesignCategory'])
+            ->getMock();
+        $category->expects(self::once())->method('getParentDesignCategory')->willReturnSelf();
+        $category->setId(1);
+        $category->setCustomLayoutUpdateFile('testFile');
+        $category->setCustomApplyToProducts(1);
+        $product->setCategory($category);
+        $settings = $this->model->getDesignSettings($product);
+        $resultPage->addPageLayoutHandles($settings->getPageLayoutHandles());
+        $handles = $resultPage->getLayout()->getUpdate()->getHandles();
+        self::assertEquals(
+            'catalog_category_view_selectable_1_testFile',
+            $handles[1]
+        );
     }
 
     /**
