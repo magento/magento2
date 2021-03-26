@@ -10,14 +10,17 @@ namespace Magento\GraphQl\UrlRewrite;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\UrlRewrite\Model\ResourceModel\UrlRewrite as UrlRewriteResourceModel;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
-use Magento\UrlRewrite\Model\UrlRewrite;
+use Magento\UrlRewrite\Model\UrlRewrite as UrlRewriteModel;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteService;
 
 /**
- * Test the GraphQL endpoint's URLResolver query to verify url route information is correctly returned.
+ * Test the GraphQL endpoint's Route query to verify url route information is correctly returned.
  */
 class RouteTest extends GraphQlAbstract
 {
@@ -116,9 +119,9 @@ class RouteTest extends GraphQlAbstract
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
 
-        /** @var UrlRewrite $urlRewrite */
-        $urlRewrite = $this->objectManager->create(UrlRewrite::class);
-        $urlRewrite->load($urlPath, 'request_path');
+        /** @var UrlRewriteModel $urlRewriteModel */
+        $urlRewriteModel = $this->objectManager->create(UrlRewriteModel::class);
+        $urlRewriteModel->load($urlPath, 'request_path');
 
         $response = $this->getRouteQueryResponse($urlPath);
         $this->assertNotNull($response['route']);
@@ -285,10 +288,10 @@ QUERY;
 
     /**
      * @param $productSku
-     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite
+     * @return UrlRewriteService
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function getProductUrlRewriteData($productSku): \Magento\UrlRewrite\Service\V1\Data\UrlRewrite
+    private function getProductUrlRewriteData($productSku): UrlRewriteService
     {
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
@@ -299,13 +302,205 @@ QUERY;
 
         /** @var  UrlFinderInterface $urlFinder */
         $urlFinder = $this->objectManager->get(UrlFinderInterface::class);
-        /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite $actualUrls */
+        /** @var UrlRewriteService $actualUrls */
         $actualUrls = $urlFinder->findOneByData(
             [
                 'request_path' => $urlPath,
                 'store_id' => $storeId
             ]
         );
-         return $actualUrls;
+        return $actualUrls;
+    }
+
+    /**
+     * Test for custom type which point to the invalid product/category/cms page.
+     *
+     * @magentoApiDataFixture Magento/UrlRewrite/_files/url_rewrite_not_existing_entity.php
+     */
+    public function testNonExistentEntityUrlRewrite()
+    {
+        $urlPath = 'non-exist-entity.html';
+
+        $query = <<<QUERY
+{
+  route(url:"{$urlPath}")
+  {
+   relative_url
+   type
+   redirect_code
+  }
+}
+QUERY;
+
+        $this->expectExceptionMessage(
+            "No such entity found with matching URL key: " . $urlPath
+        );
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * Test for url rewrite to clean cache on rewrites update
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_with_category.php
+     * @magentoApiDataFixture Magento/Cms/_files/pages.php
+     *
+     * @dataProvider urlRewriteEntitiesDataProvider
+     * @param string $requestPath
+     * @throws AlreadyExistsException
+     */
+    public function testUrlRewriteCleansCacheOnChange(string $requestPath)
+    {
+
+        /** @var UrlRewriteResourceModel $urlRewriteResourceModel */
+        $urlRewriteResourceModel = $this->objectManager->create(UrlRewriteResourceModel::class);
+        $storeId = 1;
+        $query = function ($requestUrl) {
+            return <<<QUERY
+{
+  route(url:"{$requestUrl}")
+  {
+   relative_url
+   type
+   redirect_code
+  }
+}
+QUERY;
+        };
+
+        // warming up route API response cache for entity and validate proper response
+        $apiResponse = $this->graphQlQuery($query($requestPath));
+        $this->assertEquals($requestPath, $apiResponse['route']['relative_url']);
+
+        $urlRewrite = $this->getUrlRewriteModelByRequestPath($requestPath, $storeId);
+
+        // renaming entity request path and validating that API will not return cached response
+        $urlRewrite->setRequestPath('test' . $requestPath);
+        $urlRewriteResourceModel->save($urlRewrite);
+        $apiResponse = $this->graphQlQuery($query($requestPath));
+        $this->assertNull($apiResponse['route']);
+
+        // rolling back changes
+        $urlRewrite->setRequestPath($requestPath);
+        $urlRewriteResourceModel->save($urlRewrite);
+    }
+
+    public function urlRewriteEntitiesDataProvider(): array
+    {
+        return [
+            [
+                'simple-product-in-stock.html'
+            ],
+            [
+                'category-1.html'
+            ],
+            [
+                'page100'
+            ]
+        ];
+    }
+
+    /**
+     * Test for custom url rewrite to clean cache on update combinations
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_with_category.php
+     * @magentoApiDataFixture Magento/Cms/_files/pages.php
+     *
+     * @throws AlreadyExistsException
+     */
+    public function testUrlRewriteCleansCacheForCustomRewrites()
+    {
+
+        /** @var UrlRewriteResourceModel $urlRewriteResourceModel */
+        $urlRewriteResourceModel = $this->objectManager->create(UrlRewriteResourceModel::class);
+        $storeId = 1;
+        $query = function ($requestUrl) {
+            return <<<QUERY
+{
+  route(url:"{$requestUrl}")
+  {
+   relative_url
+   type
+   redirect_code
+  }
+}
+QUERY;
+        };
+
+        $customRequestPath = 'test.html';
+        $customSecondRequestPath = 'test2.html';
+        $entitiesRequestPaths = [
+            'simple-product-in-stock.html',
+            'category-1.html',
+            'page100'
+        ];
+
+        // create custom url rewrite
+        $urlRewriteModel = $this->objectManager->create(UrlRewriteModel::class);
+        $urlRewriteModel->setEntityType('custom')
+            ->setRedirectType(302)
+            ->setStoreId($storeId)
+            ->setDescription(null)
+            ->setIsAutogenerated(0);
+
+        // create second custom url rewrite and target it to previous one to check
+        // if proper final target url will be resolved
+        $secondUrlRewriteModel = $this->objectManager->create(UrlRewriteModel::class);
+        $secondUrlRewriteModel->setEntityType('custom')
+            ->setRedirectType(302)
+            ->setStoreId($storeId)
+            ->setRequestPath($customSecondRequestPath)
+            ->setTargetPath($customRequestPath)
+            ->setDescription(null)
+            ->setIsAutogenerated(0);
+        $urlRewriteResourceModel->save($secondUrlRewriteModel);
+
+        foreach ($entitiesRequestPaths as $entityRequestPath) {
+            // updating custom rewrite for each entity
+            $urlRewriteModel->setRequestPath($customRequestPath)
+                ->setTargetPath($entityRequestPath);
+            $urlRewriteResourceModel->save($urlRewriteModel);
+
+            // confirm that API returns non-cached response for the first custom rewrite
+            $apiResponse = $this->graphQlQuery($query($customRequestPath));
+            $this->assertEquals($entityRequestPath, $apiResponse['route']['relative_url']);
+
+            // confirm that API returns non-cached response for the second custom rewrite
+            $apiResponse = $this->graphQlQuery($query($customSecondRequestPath));
+            $this->assertEquals($entityRequestPath, $apiResponse['route']['relative_url']);
+        }
+
+        $urlRewriteResourceModel->delete($secondUrlRewriteModel);
+
+        // delete custom rewrite and validate that API will not return cached response
+        $urlRewriteResourceModel->delete($urlRewriteModel);
+        $apiResponse = $this->graphQlQuery($query($customRequestPath));
+        $this->assertNull($apiResponse['route']);
+    }
+
+    /**
+     * Return UrlRewrite model instance by request_path
+     *
+     * @param string $requestPath
+     * @param int $storeId
+     * @return UrlRewriteModel
+     */
+    private function getUrlRewriteModelByRequestPath(string $requestPath, int $storeId): UrlRewriteModel
+    {
+        /** @var  UrlFinderInterface $urlFinder */
+        $urlFinder = $this->objectManager->get(UrlFinderInterface::class);
+
+        /** @var UrlRewriteService $urlRewriteService */
+        $urlRewriteService = $urlFinder->findOneByData(
+            [
+                'request_path' => $requestPath,
+                'store_id' => $storeId
+            ]
+        );
+
+        /** @var UrlRewriteModel $urlRewrite */
+        $urlRewrite = $this->objectManager->create(UrlRewriteModel::class);
+        $urlRewrite->load($urlRewriteService->getUrlRewriteId());
+
+        return $urlRewrite;
     }
 }
