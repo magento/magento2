@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminVerifyStorefrontPropertiesTabActiveActionGroup">
+        <annotations>
+            <description>Switch to storefront properties and expected this tab remain active after form saved and reloaded</description>
+        </annotations>
+
+        <!-- Verify properties storefront tab visible -->
+        <seeElement selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="seeTabAttributePropertiesVisible" />
+
+        <!-- Click on "Storefront Properties" tab on left menu -->
+        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="clickStorefrontPropertiesTab"/>
+
+        <!-- Click on save continue -->
+        <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSave"/>
+
+        <!-- wait page reload done -->
+        <waitForPageLoad stepKey="waitForPageProductAttributeLoad"/>
+
+        <!-- Verify tab still active -->
+        <seeElement selector="//li[@id='list_product_attribute_tabs_front'][contains(@class, 'admin__page-nav-item ui-state-default ui-corner-top ui-tabs-active ui-state-active')]" stepKey="seeTabAttributePropertiesActive" />
+    </actionGroup>
+</actionGroups>
