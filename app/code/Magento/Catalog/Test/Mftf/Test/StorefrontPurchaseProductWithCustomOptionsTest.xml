@@ -169,8 +169,9 @@
         <see selector="{{AdminOrderTotalSection.subTotal}}" userInput="{$finalProductPrice}" stepKey="seeOrderSubTotal"/>
 
         <!-- Go to Customer Order Page and Checking the correctness of displayed custom options for user parameters on Order -->
-
-        <amOnPage url="{{StorefrontCustomerOrderViewPage.url({$grabOrderNumber})}}" stepKey="amOnOrderPage"/>
+        <actionGroup ref="StorefrontGoToOrderViewPageActionGroup" stepKey="goToOrderViewPage">
+            <argument name="orderIncrementId" value="$grabOrderNumber" />
+        </actionGroup>
 
         <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($$createProduct.name$$, ProductOptionField.title, ProductOptionField.title)}}" userInput="{{ProductOptionField.title}}" stepKey="seeStorefontOrderProductOptionField1" />
         <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($$createProduct.name$$, ProductOptionArea.title, ProductOptionArea.title)}}" userInput="{{ProductOptionArea.title}}" stepKey="seeStorefontOrderProductOptionArea1"/>

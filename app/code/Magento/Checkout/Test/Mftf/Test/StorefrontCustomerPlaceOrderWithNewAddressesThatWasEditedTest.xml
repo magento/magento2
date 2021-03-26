@@ -86,7 +86,9 @@
         <see userInput="{{UK_Not_Default_Address.postcode}}"
              selector="{{StorefrontCustomerAddressesSection.addressesList}}" stepKey="checkNewAddressesPostcode"/>
         <!--Order review page has address that was created during checkout-->
-        <amOnPage url="{{StorefrontCustomerOrderViewPage.url({$grabOrderNumber})}}" stepKey="goToOrderReviewPage"/>
+        <actionGroup ref="StorefrontGoToOrderViewPageActionGroup" stepKey="goToOrderViewPage">
+            <argument name="orderIncrementId" value="$grabOrderNumber" />
+        </actionGroup>
         <see userInput="{{UK_Not_Default_Address.street[0]}} {{UK_Not_Default_Address.city}}, {{UK_Not_Default_Address.postcode}}"
              selector="{{StorefrontCustomerOrderViewSection.shippingAddress}}" stepKey="checkShippingAddress"/>
         <see userInput="{{US_Address_TX_Default_Billing.street[0]}}"
