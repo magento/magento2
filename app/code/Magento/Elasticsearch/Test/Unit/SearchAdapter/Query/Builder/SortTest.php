@@ -130,21 +130,42 @@ class SortTest extends TestCase
                 [
                     [
                         'field' => 'entity_id',
-                        'direction' => 'DESC'
+                        'direction' => 'ASC'
                     ]
                 ],
                 false,
                 false,
                 false,
-                null,
-                []
+                'entity_id',
+                [
+                    [
+                        '_id' => [
+                            'order' => 'asc'
+                        ]
+                    ]
+                ]
             ],
             [
                 [
                     [
                         'field' => 'entity_id',
                         'direction' => 'DESC'
-                    ],
+                    ]
+                ],
+                false,
+                false,
+                false,
+                'entity_id',
+                [
+                    [
+                        '_id' => [
+                            'order' => 'desc'
+                        ]
+                    ]
+                ]
+            ],
+            [
+                [
                     [
                         'field' => 'price',
                         'direction' => 'DESC'
@@ -165,10 +186,6 @@ class SortTest extends TestCase
             [
                 [
                     [
-                        'field' => 'entity_id',
-                        'direction' => 'DESC'
-                    ],
-                    [
                         'field' => 'price',
                         'direction' => 'DESC'
                     ],
@@ -187,10 +204,6 @@ class SortTest extends TestCase
             ],
             [
                 [
-                    [
-                        'field' => 'entity_id',
-                        'direction' => 'DESC'
-                    ],
                     [
                         'field' => 'name',
                         'direction' => 'DESC'
@@ -210,10 +223,6 @@ class SortTest extends TestCase
             ],
             [
                 [
-                    [
-                        'field' => 'entity_id',
-                        'direction' => 'DESC'
-                    ],
                     [
                         'field' => 'not_eav_attribute',
                         'direction' => 'DESC'

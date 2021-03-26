@@ -18,6 +18,6 @@
         <element name="productVisibility" type="select" selector="//*[@name='product[visibility]']"/>
         <element name="productSelectAll" type="checkbox" selector="input.admin__control-checkbox"/>
         <element name="productsGridEmpty" type="text" selector="#catalog_category_products_table .data-grid-tr-no-data .empty-text"/>
-        <element name="positionField" type="input" selector="//tbody/tr[{{var}}]//input[@name='position']" timeout="30" parameterized="true"/>
+        <element name="rowPositionInput" type="input" selector="//tbody/tr[{{var}}]//input[@name='position']" timeout="30" parameterized="true"/>
     </section>
 </sections>

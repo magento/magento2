@@ -14,6 +14,6 @@
             <argument name="position" type="string"/>
         </arguments>
 
-        <fillField selector="{{AdminCategoryProductsGridSection.positionField(positionInGrid)}}" userInput="{{position}}" stepKey="fillPositionOnCategory" />
+        <fillField selector="{{AdminCategoryProductsGridSection.rowPositionInput(positionInGrid)}}" userInput="{{position}}" stepKey="fillPositionOnCategory" />
     </actionGroup>
 </actionGroups>
