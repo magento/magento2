@@ -52,6 +52,7 @@ class RouteTest extends GraphQlAbstract
         $this->assertEquals($requestPath, $response['route']['relative_url']);
         $this->assertEquals(strtoupper(str_replace('-', '_', $expectedEntityType)), $response['route']['type']);
         $this->assertEquals(0, $response['route']['redirect_code']);
+        $this->assertEquals($page->getIdentifier(), $response['route']['identifier']);
 
         // querying by non seo friendly url path should return seo friendly relative url
         $query = $this->createQuery($targetPath);
@@ -59,6 +60,7 @@ class RouteTest extends GraphQlAbstract
         $this->assertEquals($requestPath, $response['route']['relative_url']);
         $this->assertEquals(strtoupper(str_replace('-', '_', $expectedEntityType)), $response['route']['type']);
         $this->assertEquals(0, $response['route']['redirect_code']);
+        $this->assertEquals($page->getIdentifier(), $response['route']['identifier']);
     }
 
     /**
@@ -75,6 +77,7 @@ class RouteTest extends GraphQlAbstract
         $response = $this->graphQlQuery($query);
         $this->assertNotEmpty($response['route']);
         $this->assertEquals($requestPath, $response['route']['relative_url']);
+        $this->assertEquals($page->getIdentifier(), $response['route']['identifier']);
     }
 
     /**
@@ -97,6 +100,7 @@ class RouteTest extends GraphQlAbstract
         $this->assertEquals($homePageIdentifier, $response['route']['relative_url']);
         $this->assertEquals('CMS_PAGE', $response['route']['type']);
         $this->assertEquals(0, $response['route']['redirect_code']);
+        $this->assertEquals($page->getIdentifier(), $response['route']['identifier']);
     }
 
     /**
@@ -109,9 +113,13 @@ class RouteTest extends GraphQlAbstract
 {
   route(url:"{$path}")
   {
-   relative_url
-   type
-   redirect_code
+    relative_url
+    type
+    redirect_code
+    __typename
+    ...on CmsPage {
+      identifier
+    }
   }
 }
 QUERY;

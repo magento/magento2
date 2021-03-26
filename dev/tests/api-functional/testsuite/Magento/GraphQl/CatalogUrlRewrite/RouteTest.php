@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\GraphQl\CatalogUrlRewrite;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -22,12 +24,16 @@ class RouteTest extends GraphQlAbstract
     /** @var ObjectManager */
     private $objectManager;
 
+    /** @var Uid */
+    private $idDecoder;
+
     /**
      * {@inheritdoc}
      */
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
+        $this->idDecoder = $this->objectManager->get(Uid::class);
     }
 
     /**
@@ -115,7 +121,7 @@ QUERY;
                 'store_id' => $storeId
             ]
         );
-        // even of non seo friendly path requested, the seo friendly path should be preferred
+        // even if non seo friendly path requested, the seo friendly path should be preferred
         $relativePath = $actualUrls->getRequestPath();
         $expectedType = $actualUrls->getEntityType();
         $nonSeoFriendlyPath = $actualUrls->getTargetPath();
@@ -481,6 +487,7 @@ QUERY;
      * @param string $relativePath
      * @param string $expectedType
      * @param int $redirectCode
+     * @throws GraphQlInputException
      */
     private function queryUrlAndAssertResponse(
         int $productId,
@@ -494,14 +501,25 @@ QUERY;
 {
   route(url:"{$urlKey}")
   {
-   relative_url
-   type
-   redirect_code
-  }
+       relative_url
+       type
+       redirect_code
+       __typename
+         ...on SimpleProduct {
+          uid
+        }
+         ...on ConfigurableProduct {
+          uid
+        }
+        ...on CategoryTree {
+            uid
+        }
+    }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('route', $response);
+        $this->assertEquals($productId, $this->idDecoder->decode($response['route']['uid']));
         $this->assertEquals($relativePath, $response['route']['relative_url']);
         $this->assertEquals(strtoupper($expectedType), $response['route']['type']);
         $this->assertEquals($redirectCode, $response['route']['redirect_code']);
