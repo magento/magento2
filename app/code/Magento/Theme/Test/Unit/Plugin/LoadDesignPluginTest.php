@@ -3,9 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Plugin;
 
-use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\View\DesignLoader;
@@ -18,7 +19,7 @@ class LoadDesignPluginTest extends TestCase
     public function testBeforeExecute()
     {
         /** @var MockObject|ActionInterface $actionMock */
-        $actionMock = $this->createMock(Action::class);
+        $actionMock = $this->createMock(ActionInterface::class);
 
         /** @var MockObject|DesignLoader $designLoaderMock */
         $designLoaderMock = $this->createMock(DesignLoader::class);
