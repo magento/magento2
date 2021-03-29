@@ -10,6 +10,7 @@ namespace Magento\RemoteStorage\Driver\Adapter;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\UnableToRetrieveMetadata;
+use Magento\AwsS3\Driver\AwsS3;
 use Magento\RemoteStorage\Driver\Adapter\Cache\CacheInterface;
 
 /**
@@ -47,13 +48,19 @@ class MetadataProvider implements MetadataProviderInterface
     public function getMetadata(string $path): array
     {
         $metadata = $this->cache->getMetadata($path);
-        if ($metadata && is_array($metadata) && ($metadata['type'] == 'dir' || $this->isMetadataComplete($metadata))) {
+        if ($metadata && is_array($metadata)
+            && ($metadata['type'] == AwsS3::TYPE_DIR || $this->isMetadataComplete($metadata))
+        ) {
             return $metadata;
         }
         try {
             $meta = $this->adapter->lastModified($path);
         } catch (\InvalidArgumentException | FilesystemException $e) {
-            throw UnableToRetrieveMetadata::lastModified($path, $e->getMessage(), $e);
+            throw new UnableToRetrieveMetadata(
+                "Unable to retrieve metadata for file at location: {$path}. {$e->getMessage()}",
+                0,
+                $e
+            );
         }
         $data = [
             'path' => $path,
