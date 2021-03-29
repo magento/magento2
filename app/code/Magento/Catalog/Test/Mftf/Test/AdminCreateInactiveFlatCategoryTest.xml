@@ -69,7 +69,7 @@
         <actionGroup ref="AdminOpenIndexManagementPageActionGroup" stepKey="openIndexManagementPage"/>
         <see stepKey="seeIndexStatus"  selector="{{AdminIndexManagementSection.indexerStatus('Category Flat Data')}}" userInput="Ready"/>
         <!--Verify Category In Store Front-->
-        <amOnPage url="/$$createCategory.name$$.html"  stepKey="openCategoryPage1"/>
+        <amOnPage url="/$$createCategory.custom_attributes[url_key]$$.html"  stepKey="openCategoryPage1"/>
         <waitForPageLoad stepKey="waitForCategoryStoreFrontPageToLoad"/>
         <!--Verify category is not visible in First Store View -->
         <click stepKey="selectStoreSwitcher" selector="{{StorefrontHeaderSection.storeViewSwitcher}}"/>

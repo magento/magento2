@@ -105,7 +105,7 @@
         <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProduct2">
             <argument name="productName" value="$$product2.name$$"/>
         </actionGroup>
-        <!--Assert that product2 is not present in the search result-->
+        <!--Assert that product3 is not present in the search result-->
         <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProduct3">
             <argument name="productName" value="$$product3.name$$"/>
         </actionGroup>
@@ -114,8 +114,9 @@
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="search2">
             <argument name="phrase" value="simple"/>
         </actionGroup>
-        <!--Assert that product1 is not present in the search result-->
-        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProduct1">
+        <!--Assert that product1 is present in the search result-->
+        <comment userInput="BIC workaround" stepKey="dontSeeProduct1"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProduct1c">
             <argument name="productName" value="$$product1.name$$"/>
         </actionGroup>
         <!--Assert that product2 is present in the search result-->
