@@ -446,7 +446,7 @@ class AwsS3 implements RemoteDriverInterface
         $path = $this->normalizeRelativePath($path, true);
 
         try {
-            return $this->isMetadataTypeDirectory($path);
+            return $this->isTypeDirectory($path);
         } catch (UnableToRetrieveMetadata $e) {
             try {
                 return iterator_count($this->adapter->listContents($path, false)) > 0;
@@ -464,7 +464,7 @@ class AwsS3 implements RemoteDriverInterface
      * @return bool
      * @throws UnableToRetrieveMetadata
      */
-    private function isMetadataTypeDirectory($path)
+    private function isTypeDirectory($path)
     {
         $meta = $this->metadataProvider->getMetadata($path);
         if (isset($meta['type']) && $meta['type'] === self::TYPE_DIR) {

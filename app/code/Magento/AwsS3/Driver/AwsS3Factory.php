@@ -13,7 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\RemoteStorage\Driver\Adapter\Cache\CacheInterfaceFactory;
 use Magento\RemoteStorage\Driver\Adapter\CachedAdapterInterfaceFactory;
-use Magento\RemoteStorage\Driver\Adapter\MetadataProviderFactoryInterface;
+use Magento\RemoteStorage\Driver\Adapter\MetadataProviderInterfaceFactory;
 use Magento\RemoteStorage\Driver\DriverException;
 use Magento\RemoteStorage\Driver\DriverFactoryInterface;
 use Magento\RemoteStorage\Driver\RemoteDriverInterface;
@@ -35,7 +35,7 @@ class AwsS3Factory implements DriverFactoryInterface
     private $config;
 
     /**
-     * @var MetadataProviderFactoryInterface
+     * @var MetadataProviderInterfaceFactory
      */
     private $metadataProviderFactory;
 
@@ -50,24 +50,32 @@ class AwsS3Factory implements DriverFactoryInterface
     private $cachedAdapterInterfaceFactory;
 
     /**
+     * @var string|null
+     */
+    private $cachePrefix;
+
+    /**
      * @param ObjectManagerInterface $objectManager
      * @param Config $config
-     * @param MetadataProviderFactoryInterface $metadataProviderFactory
+     * @param MetadataProviderInterfaceFactory $metadataProviderFactory
      * @param CacheInterfaceFactory $cacheInterfaceFactory
      * @param CachedAdapterInterfaceFactory $cachedAdapterInterfaceFactory
+     * @param string|null $cachePrefix
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         Config $config,
-        MetadataProviderFactoryInterface $metadataProviderFactory,
+        MetadataProviderInterfaceFactory $metadataProviderFactory,
         CacheInterfaceFactory $cacheInterfaceFactory,
-        CachedAdapterInterfaceFactory $cachedAdapterInterfaceFactory
+        CachedAdapterInterfaceFactory $cachedAdapterInterfaceFactory,
+        string $cachePrefix = null
     ) {
         $this->objectManager = $objectManager;
         $this->config = $config;
         $this->metadataProviderFactory = $metadataProviderFactory;
         $this->cacheInterfaceFactory = $cacheInterfaceFactory;
         $this->cachedAdapterInterfaceFactory = $cachedAdapterInterfaceFactory;
+        $this->cachePrefix = $cachePrefix;
     }
 
     /**
@@ -110,17 +118,26 @@ class AwsS3Factory implements DriverFactoryInterface
 
         $client = new S3Client($config);
         $adapter = new AwsS3V3Adapter($client, $config['bucket'], $prefix);
-        $cache = $this->cacheInterfaceFactory->create();
+        $cache = $this->cacheInterfaceFactory->create(
+            $this->cachePrefix ? ['prefix' => $this->cachePrefix] : []
+        );
 
         return $this->objectManager->create(
             AwsS3::class,
             [
-                'adapter' => $this->cachedAdapterInterfaceFactory->create([
-                    'adapter' => $adapter,
-                    'cache' => $cache
-                ]),
+                'adapter' => $this->cachedAdapterInterfaceFactory->create(
+                    [
+                        'adapter' => $adapter,
+                        'cache' => $cache
+                    ]
+                ),
                 'objectUrl' => $client->getObjectUrl($config['bucket'], trim($prefix, '\\/') . '/.'),
-                'metadataProvider' => $this->metadataProviderFactory->create($adapter, $cache),
+                'metadataProvider' => $this->metadataProviderFactory->create(
+                    [
+                        'adapter' => $adapter,
+                        'cache' => $cache
+                    ]
+                ),
             ]
         );
     }
