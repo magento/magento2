@@ -63,7 +63,7 @@
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccess"/>
 
         <!-- navigate to the created product page -->
-        <amOnPage url="/{{SimpleProduct3.name}}.html" stepKey="goToCreatedProduct"/>
+        <amOnPage url="/{{SimpleProduct3.urlKey}}.html" stepKey="goToCreatedProduct"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
 
         <!-- Check to make sure all of the created names are there -->

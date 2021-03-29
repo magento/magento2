@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAwsS3ExportDownloadableProductWithFileLinksTest" extends="AdminExportDownloadableProductWithFileLinksTest">
+        <annotations>
+            <features value="AwsS3"/>
+            <stories value="Export Products"/>
+            <title value="S3 - Export Downloadable Products with File Links"/>
+            <description value="Verifies that a user can export a Downloadable product with downloadable and sample file
+            links. Verifies that the exported file and the downloadable copy of the exported file contain the expected
+            product (a filter is applied when exporting such that ONLY the downloadable product row should be in the
+            export), the correct downloadable link with files, and the correct downloadable sample links with files.
+            Note that MFTF cannot simply download a file and have access to it due to the test not having access to the
+            server that is running the test browser. Therefore, this test verifies that the Download button can be
+            successfully clicked, grabs the request URL from the Download button, executes the request on the magento
+            machine via a curl request, and verifies the contents of the downloaded file. Uses S3 for the file system."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-38558"/>
+            <group value="importExport"/>
+            <group value="remote_storage_aws_s3"/>
+        </annotations>
+
+        <before>
+            <!-- Enable AWS S3 Remote Storage -->
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage" before="createCategory"/>
+        </before>
+
+        <after>
+            <helper class="\Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="deleteDirectory" stepKey="deleteExportFileDirectory">
+                <argument name="path">import_export/export</argument>
+            </helper>
+
+            <!-- Disable AWS S3 Remote Storage -->
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage" after="logout"/>
+        </after>
+
+        <!-- Validate Export File on S3 -->
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileExists" stepKey="assertExportFileExists">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsDownloadableProduct">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">$$createProduct.name$$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsDownloadableLink">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">title=$addDownloadableLink.link[title]$,sort_order=$addDownloadableLink.link[sort_order]$,sample_type=$addDownloadableLink.link[sample_type]$,sample_file=/a/d/$addDownloadableLink.link[sample_file_content][name]$,price=$addDownloadableLink.link[price]$0000,number_of_downloads=$addDownloadableLink.link[number_of_downloads]$,is_shareable=$addDownloadableLink.link[is_shareable]$,link_type=$addDownloadableLink.link[link_type]$,link_file=/m/a/$addDownloadableLink.link[link_file_content][name]$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsDownloadableSampleLink">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">title=$addDownloadableSamples.sample[title]$,sample_type=$addDownloadableSamples.sample[sample_type]$,sample_file=/t/e/$addDownloadableSamples.sample[sample_file_content][name]$</argument>
+        </helper>
+
+        <!-- Delete Export File -->
+        <helper class="\Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileDoesNotExist" stepKey="assertExportFileDeleted">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+        </helper>
+    </test>
+</tests>
