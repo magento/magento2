@@ -75,8 +75,8 @@ class DatetimeTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/product_two_websites.php
      * @magentoDataFixture Magento/Catalog/_files/product_datetime_attribute.php
      *
-     * @magentoConfigFixture default_store general/locale/timezone Europe/Moscow
-     * @magentoConfigFixture fixture_second_store_store general/locale/timezone Europe/Kiev
+     * @magentoConfigFixture default_store general/locale/timezone Asia/Tokyo
+     * @magentoConfigFixture fixture_second_store_store general/locale/timezone Asia/Shanghai
      *
      * @return void
      */
