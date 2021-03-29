@@ -13,4 +13,9 @@
         <data key="optional">Optional</data>
         <data key="required">Required</data>
     </entity>
+    <entity name="ShowGender">
+        <data key="no">No</data>
+        <data key="optional">Optional</data>
+        <data key="required">Required</data>
+    </entity>
 </entities>

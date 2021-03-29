@@ -18,7 +18,7 @@
             <group value="ui"/>
         </annotations>
         <before>
-            <magentoCLI command="setup:static-content:deploy fr_FR -f" stepKey="deployStaticContentWithFrenchLocale"/>
+            <magentoCLI command="setup:static-content:deploy fr_FR" stepKey="deployStaticContentWithFrenchLocale"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminInterfaceLocaleToFrance">
                 <argument name="InterfaceLocaleByValue" value="fr_FR"/>
