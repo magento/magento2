@@ -150,7 +150,7 @@ class S3FileAssertions extends Helper
      */
     public function assertFileExists($filePath, $message = ''): void
     {
-        $this->assertTrue($this->driver->isExists($filePath), $message);
+        $this->assertTrue($this->driver->isExists($filePath), "Failed asserting $filePath exists. " . $message);
     }
 
     /**
@@ -162,10 +162,38 @@ class S3FileAssertions extends Helper
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function assertGlobbedFileExists($path, $pattern, $message = ""): void
+    public function assertGlobbedFileExists($path, $pattern, $message = ''): void
     {
         $files = $this->driver->search($pattern, $path);
-        $this->assertNotEmpty($files, $message);
+        $this->assertNotEmpty($files, "Failed asserting file matching glob pattern \"$pattern\" at location \"$path\" is not empty. " . $message);
+    }
+
+    /**
+     * Asserts that a file or directory exists on the remote storage system
+     *
+     * @param string $path
+     * @param string $message
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function assertPathExists($path, $message = ''): void
+    {
+        $this->assertTrue($this->driver->isExists($path), "Failed asserting $path exists. " . $message);
+    }
+
+    /**
+     * Asserts that a file or directory does not exist on the remote storage system
+     *
+     * @param string $path
+     * @param string $message
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function assertPathDoesNotExist($path, $message = ''): void
+    {
+        $this->assertFalse($this->driver->isExists($path), "Failed asserting $path does not exist. " . $message);
     }
 
     /**
@@ -191,9 +219,9 @@ class S3FileAssertions extends Helper
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function assertFileEmpty($filePath, $message = ""): void
+    public function assertFileEmpty($filePath, $message = ''): void
     {
-        $this->assertEmpty($this->driver->fileGetContents($filePath), $message);
+        $this->assertEmpty($this->driver->fileGetContents($filePath), "Failed asserting $filePath is empty. " . $message);
     }
 
     /**
@@ -205,9 +233,9 @@ class S3FileAssertions extends Helper
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function assertFileNotEmpty($filePath, $message = ""): void
+    public function assertFileNotEmpty($filePath, $message = ''): void
     {
-        $this->assertNotEmpty($this->driver->fileGetContents($filePath), $message);
+        $this->assertNotEmpty($this->driver->fileGetContents($filePath), "Failed asserting $filePath is not empty. " . $message);
     }
 
     /**
@@ -220,9 +248,9 @@ class S3FileAssertions extends Helper
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function assertFileContainsString($filePath, $text, $message = ""): void
+    public function assertFileContainsString($filePath, $text, $message = ''): void
     {
-        $this->assertStringContainsString($text, $this->driver->fileGetContents($filePath), $message);
+        $this->assertStringContainsString($text, $this->driver->fileGetContents($filePath), "Failed asserting $filePath contains $text. " . $message);
     }
 
     /**
@@ -237,10 +265,10 @@ class S3FileAssertions extends Helper
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function assertGlobbedFileContainsString($path, $pattern, $text, $fileIndex = 0, $message = ""): void
+    public function assertGlobbedFileContainsString($path, $pattern, $text, $fileIndex = 0, $message = ''): void
     {
         $files = $this->driver->search($pattern, $path);
-        $this->assertStringContainsString($text, $this->driver->fileGetContents($files[$fileIndex] ?? ''), $message);
+        $this->assertStringContainsString($text, $this->driver->fileGetContents($files[$fileIndex] ?? ''), "Failed asserting file of index \"$fileIndex\" matching glob pattern \"$pattern\" at location \"$path\" contains $text. " . $message);
     }
 
     /**
@@ -253,9 +281,9 @@ class S3FileAssertions extends Helper
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function assertFileDoesNotContain($filePath, $text, $message = ""): void
+    public function assertFileDoesNotContainString($filePath, $text, $message = ''): void
     {
-        $this->assertStringNotContainsString($text, $this->driver->fileGetContents($filePath), $message);
+        $this->assertStringNotContainsString($text, $this->driver->fileGetContents($filePath), "Failed asserting $filePath does not contain $text. " . $message);
     }
 
     /**
@@ -267,8 +295,22 @@ class S3FileAssertions extends Helper
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function assertDirectoryEmpty($path, $message = ""): void
+    public function assertDirectoryEmpty($path, $message = ''): void
     {
-        $this->assertEmpty($this->driver->readDirectory($path), $message);
+        $this->assertEmpty($this->driver->readDirectory($path), "Failed asserting $path is empty. " . $message);
+    }
+
+    /**
+     * Asserts that a directory on the remote storage system is not empty
+     *
+     * @param string $path
+     * @param string $message
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function assertDirectoryNotEmpty($path, $message = ''): void
+    {
+        $this->assertNotEmpty($this->driver->readDirectory($path), "Failed asserting $path is not empty. " . $message);
     }
 }
