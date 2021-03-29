@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAwsS3ImportTaxRatesTest" extends="AdminImportTaxRatesTest">
+        <annotations>
+            <features value="AwsS3"/>
+            <stories value="Import Tax"/>
+            <title value="S3 - Import and Update Tax Rates"/>
+            <description value="Imports tax rates from the System > Data Transfer > Import/Export Tax Rates page and
+            from the Tax Rule page, to create new tax rates and update existing tax rates. Verifies results on the Tax
+            Rates grid page. Uses S3 for the file system."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-38621"/>
+            <group value="importExport"/>
+            <group value="tax"/>
+            <group value="remote_storage_aws_s3"/>
+        </annotations>
+
+        <before>
+            <!-- Enable AWS S3 Remote Storage -->
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage" before="revertInitialTaxRateCA"/>
+        </before>
+
+        <after>
+            <!-- Disable AWS S3 Remote Storage -->
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage" after="logoutFromAdmin"/>
+        </after>
+    </test>
+</tests>

@@ -90,9 +90,7 @@
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
 
             <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <!-- Delete category and products -->
@@ -130,7 +128,7 @@
         </actionGroup>
 
         <!-- Customer placed the order with 20 products -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="onCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <scrollTo selector="{{StorefrontCategoryMainSection.perPage}}" stepKey="scrollToLimiter"/>
         <selectOption userInput="36" selector="{{StorefrontCategoryMainSection.perPage}}" stepKey="selectLimitOnPage"/>

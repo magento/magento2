@@ -11,7 +11,7 @@
     <test name="AdminExportSimpleProductAssignedToMainWebsiteAndConfigurableProductAssignedToCustomWebsiteTest">
         <annotations>
             <features value="CatalogImportExport"/>
-            <stories value="Export products"/>
+            <stories value="Export Products"/>
             <title value="Export Simple Product assigned to Main Website and Configurable Product assigned to Custom Website"/>
             <description value="Admin should be able to export Simple Product assigned to Main Website and Configurable Product assigned to Custom Website"/>
             <severity value="CRITICAL"/>
