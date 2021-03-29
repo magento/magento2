@@ -11,7 +11,7 @@
     <section name="AdminOrderFormItemsOrderedSection">
         <element name="addProductsBySku" type="button" selector="//section[@id='order-items']//span[contains(text(),'Add Products By SKU')]"/>
         <element name="configureButtonBySku" type="button" selector="//div[@class='sku-configure-button']//span[contains(text(),'Configure')]"/>
-        <element name="configureProductOk" type="button" selector="//div[@class='page-main-actions']//span[contains(text(),'OK')]"/>
+        <element name="configureProductOk" type="button" selector="//div[@class='page-main-actions']//span[contains(text(),'OK')]" timeout="30"/>
         <element name="configureProductQtyField" type="input" selector="//*[@id='super-product-table']/tbody/tr[{{arg}}]/td[5]/input[1]" parameterized="true"/>
         <element name="addProductToOrder" type="input" selector="//*[@title='Add Products to Order']" timeout="30"/>
         <element name="itemsOrderedSummaryText" type="textarea" selector="//table[@class='data-table admin__table-primary order-tables']/tfoot/tr"/>
