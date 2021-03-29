@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\RemoteStorage\Driver\Adapter;
 
 use League\Flysystem\FilesystemAdapter;
+use League\Flysystem\FilesystemException;
+use League\Flysystem\UnableToRetrieveMetadata;
 use Magento\RemoteStorage\Driver\Adapter\Cache\CacheInterface;
 
 /**
@@ -48,7 +50,11 @@ class MetadataProvider implements MetadataProviderInterface
         if ($metadata && is_array($metadata) && ($metadata['type'] == 'dir' || $this->isMetadataComplete($metadata))) {
             return $metadata;
         }
-        $meta = $this->adapter->lastModified($path);
+        try {
+            $meta = $this->adapter->lastModified($path);
+        } catch (\InvalidArgumentException | FilesystemException $e) {
+            throw UnableToRetrieveMetadata::lastModified($path, $e->getMessage(), $e);
+        }
         $data = [
             'path' => $path,
             'type' => $meta->type(),
