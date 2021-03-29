@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AsynchronousOperations\Model;
 
+use Magento\AsynchronousOperations\Model\ResourceModel\Operation\OperationRepository\OperationRepositoryInterface;
 use Magento\AsynchronousOperations\Api\Data\AsyncResponseInterface;
 use Magento\AsynchronousOperations\Api\Data\AsyncResponseInterfaceFactory;
 use Magento\AsynchronousOperations\Api\Data\ItemStatusInterface;

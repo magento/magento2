@@ -5,14 +5,12 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AsynchronousOperations\Model;
+namespace Magento\AsynchronousOperations\Model\ResourceModel\Operation\OperationRepository;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 
 /**
  * Repository interface to create operation
- * @deprecated
- * @see \Magento\AsynchronousOperations\Model\ResourceModel\Operation\OperationRepositoryInterface
  */
 interface OperationRepositoryInterface
 {
@@ -28,8 +26,6 @@ interface OperationRepositoryInterface
      * @param string $groupId
      * @param int $operationId
      * @return OperationInterface
-     * @deprecated
-     * @see \Magento\AsynchronousOperations\Model\ResourceModel\Operation\OperationRepositoryInterface::create()
      */
     public function create($topicName, $entityParams, $groupId, $operationId): OperationInterface;
 }
