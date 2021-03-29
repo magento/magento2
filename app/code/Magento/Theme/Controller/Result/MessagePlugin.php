@@ -11,6 +11,8 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Translate\Inline\ParserInterface;
 use Magento\Framework\Translate\InlineInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Plugin for putting messages to cookies
@@ -53,6 +55,11 @@ class MessagePlugin
      * @var InlineInterface
      */
     private $inlineTranslate;
+    
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    private $scopeConfig;
 
     /**
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
@@ -68,7 +75,8 @@ class MessagePlugin
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\View\Element\Message\InterpretationStrategyInterface $interpretationStrategy,
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        InlineInterface $inlineTranslate = null
+        InlineInterface $inlineTranslate = null,
+        ScopeConfigInterface $scopeConfig = null
     ) {
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
@@ -77,6 +85,7 @@ class MessagePlugin
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         $this->interpretationStrategy = $interpretationStrategy;
         $this->inlineTranslate = $inlineTranslate ?: ObjectManager::getInstance()->get(InlineInterface::class);
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -129,10 +138,16 @@ class MessagePlugin
                     $message['text'] = $this->convertMessageText($message['text']);
                 }
             }
+            
+            // Get the cookie path defined in the Magento configuration.
+            $cookiePath = $this->scopeConfig->getValue(
+                \Magento\Config\Model\Config\Backend\Admin\Custom::XML_PATH_WEB_COOKIE_COOKIE_PATH,
+                ScopeInterface::SCOPE_STORE
+            );
 
             $publicCookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata();
             $publicCookieMetadata->setDurationOneYear();
-            $publicCookieMetadata->setPath('/');
+            $publicCookieMetadata->setPath($cookiePath);
             $publicCookieMetadata->setHttpOnly(false);
             $publicCookieMetadata->setSameSite('Strict');
 
