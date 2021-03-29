@@ -124,7 +124,7 @@
         <waitForPageLoad stepKey="waitForPageTitleToBeSaved"/>
         <!--Open Category Store Front Page-->
         <comment userInput="Open Category Store Front Page" stepKey="commentOpenCategoryOnStorefront"/>
-        <amOnPage url="{{_defaultCategory.name}}.html" stepKey="goToStorefront"/>
+        <amOnPage url="{{_defaultCategory.urlKey}}.html" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeCategoryOnNavigation"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="selectCategory"/>
