@@ -49,7 +49,7 @@
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!--Open product page-->
-        <amOnPage url="{{StorefrontProductPage.url($$createProductDefault.name$$)}}" stepKey="goToProductDefaultPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProductDefault.custom_attributes[url_key]$$)}}" stepKey="goToProductDefaultPage"/>
         <waitForPageLoad stepKey="waitForProductPage"/>
         <!--Click on 'Add to Compare' link-->
         <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="clickOnAddToCompare">
@@ -60,7 +60,7 @@
             <argument name="productVar" value="$$createProductDefault$$"/>
         </actionGroup>
         <!--Open product with custom attribute page-->
-        <amOnPage url="{{StorefrontProductPage.url($$createProductCustom.name$$)}}" stepKey="goToProductCustomPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProductCustom.custom_attributes[url_key]$$)}}" stepKey="goToProductCustomPage"/>
         <waitForPageLoad stepKey="waitForProductCustomPage"/>
         <!--Click on 'Add to Compare' link-->
         <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="clickOnAddToCompareCustom">

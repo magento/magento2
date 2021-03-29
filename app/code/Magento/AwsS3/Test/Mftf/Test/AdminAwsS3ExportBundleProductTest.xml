@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAwsS3ExportBundleProductTest" extends="AdminExportBundleProductTest">
+        <annotations>
+            <features value="AwsS3"/>
+            <stories value="Export Products"/>
+            <title value="S3 - Export Bundle Products"/>
+            <description value="Verifies that a user can export Bundle and Simple child products for Bundled products
+            with a dynamic price, a fixed price, and a custom attribute. Verifies that the exported file and the
+            downloadable copy of the exported file contain the expected products. Note that MFTF cannot simply download
+            a file and have access to it due to the test not having access to the server that is running the test
+            browser. Therefore, this test verifies that the Download button can be successfully clicked, grabs the
+            request URL from the Download button, executes the request on the magento machine via a curl request, and
+            verifies the contents of the downloaded file. Uses S3 for the file system."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-38558"/>
+            <group value="importExport"/>
+            <group value="remote_storage_aws_s3"/>
+        </annotations>
+
+        <before>
+            <!-- Enable AWS S3 Remote Storage -->
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage" before="firstSimpleProductForDynamic"/>
+        </before>
+
+        <after>
+            <helper class="\Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="deleteDirectory" stepKey="deleteExportFileDirectory">
+                <argument name="path">import_export/export</argument>
+            </helper>
+
+            <!-- Disable AWS S3 Remote Storage -->
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage" after="logout"/>
+        </after>
+
+        <!-- Validate Export File on File System: Dynamic Bundle Product -->
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileExists" stepKey="assertExportFileExists">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFirstSimpleProductForDynamicBundledProduct">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">$$firstSimpleProductForDynamic.name$$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsSecondSimpleProductForDynamicBundledProduct">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">$$secondSimpleProductForDynamic.name$$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsDynamicBundleProduct">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">$$createDynamicBundleProduct.name$$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsDynamicBundleProductOption1">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">name=$createFirstBundleOption.option[title]$,type=$createFirstBundleOption.option[type]$,required=$createFirstBundleOption.option[required]$,sku=$$firstSimpleProductForDynamic.sku$$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsDynamicBundleProductOption2">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">name=$createFirstBundleOption.option[title]$,type=$createFirstBundleOption.option[type]$,required=$createFirstBundleOption.option[required]$,sku=$$secondSimpleProductForDynamic.sku$$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsDynamicPriceBundleProduct">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">0.000000,,,,$$createDynamicBundleProduct.sku$$</argument>
+        </helper>
+
+        <!-- Validate Export File on File System: Fixed Bundle Product -->
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFirstSimpleProductForFixedBundledProduct">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">$$firstSimpleProductForFixed.name$$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsSecondSimpleProductForFixedBundledProduct">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">$$secondSimpleProductForFixed.name$$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFixedBundleProduct">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">$$createFixedBundleProduct.name$$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFixedBundleProductOption1">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">name=$createSecondBundleOption.option[title]$,type=$createSecondBundleOption.option[type]$,required=$createSecondBundleOption.option[required]$,sku=$$firstSimpleProductForFixed.sku$$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFixedBundleProductOption2">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">name=$createSecondBundleOption.option[title]$,type=$createSecondBundleOption.option[type]$,required=$createSecondBundleOption.option[required]$,sku=$$secondSimpleProductForFixed.sku$$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFixedPriceBundleProduct">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">$$createFixedBundleProduct.price$$0000,,,,$$createFixedBundleProduct.sku$$</argument>
+        </helper>
+
+        <!-- Validate Export File on File System: Fixed Bundle Product with Attribute -->
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFirstSimpleProductForFixedBundledProductWithAttribute">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">$$firstSimpleProductForFixedWithAttribute.name$$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsSecondSimpleProductForFixedBundledProductWithAttribute">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">$$secondSimpleProductForFixedWithAttribute.name$$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFixedBundleProductWithAttribute">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">$$createFixedBundleProductWithAttribute.name$$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFixedBundleProductWithAttributeOption1">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">name=$createBundleOptionWithAttribute.option[title]$,type=$createBundleOptionWithAttribute.option[type]$,required=$createBundleOptionWithAttribute.option[required]$,sku=$$firstSimpleProductForFixedWithAttribute.sku$$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFixedBundleProductWithAttributeOption2">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">name=$createBundleOptionWithAttribute.option[title]$,type=$createBundleOptionWithAttribute.option[type]$,required=$createBundleOptionWithAttribute.option[required]$,sku=$$secondSimpleProductForFixedWithAttribute.sku$$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFixedPriceBundleProductWithAttribute">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">$$createFixedBundleProductWithAttribute.price$$0000,,,,$$createFixedBundleProductWithAttribute.sku$$</argument>
+        </helper>
+
+        <!-- Delete Export File -->
+        <helper class="\Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileDoesNotExist" stepKey="assertExportFileDeleted">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+        </helper>
+    </test>
+</tests>
