@@ -13,6 +13,7 @@
                 <conversion_language>en</conversion_language>
                 <conversion_format>2</conversion_format>
                 <conversion_color>FFFFFF</conversion_color>
+                <conversion_label>Thank you for shopping!</conversion_label>
                 <conversion_value_type>1</conversion_value_type>
                 <conversion_value>0</conversion_value>
                 <send_currency>0</send_currency>
