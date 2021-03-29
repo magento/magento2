@@ -3,9 +3,8 @@
 /** @var \Magento\GoogleAnalytics\Helper\Data $helper */
 $helper = $block->getHelper();
 $accountId = $helper->getAccountId();
-// $accountId = $block->getConfig(\Magento\GoogleAnalytics\Helper\Data::XML_PATH_ACCOUNT) 
 ?>
-<!-- BEGIN GOOGLE ANALYTICS INIT CODE -->
+<!-- BEGIN GOOGLE ANALYTICS CODE -->
 <script type="text/x-magento-init">
 {
     "*": {
@@ -19,4 +18,4 @@ $accountId = $helper->getAccountId();
     }
 }
 </script>
-<!-- END GOOGLE ANALYTICS INIT CODE -->
+<!-- END GOOGLE ANALYTICS CODE -->

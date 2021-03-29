@@ -22,12 +22,12 @@ class AccountType implements \Magento\Framework\Option\ArrayInterface
     {
         return [
             [
-                'value' => \Magento\GoogleAnalytics\Helper\Data::ACCOUNT_TYPE_UNIVERSAL_ANALYTICS,
-                'label' => __('Universal Analytics'),
-            ],
-            [
                 'value' => \Magento\GoogleAnalytics\Helper\Data::ACCOUNT_TYPE_GOOGLE_ANALYTICS,
                 'label' => __('Google Analytics 4'),
+            ],
+            [
+                'value' => \Magento\GoogleAnalytics\Helper\Data::ACCOUNT_TYPE_UNIVERSAL_ANALYTICS,
+                'label' => __('Universal Analytics'),
             ]
         ];
     }

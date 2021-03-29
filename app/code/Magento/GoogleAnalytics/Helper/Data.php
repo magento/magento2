@@ -23,7 +23,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     const XML_PATH_ACCOUNT_TYPE = 'google/analytics/account_type';
 
-    // const XML_PATH_ACCOUNT = 'google/analytics/account';
     const XML_PATH_TRACKING_ID = 'google/analytics/tracking_id';
 
     const XML_PATH_MEASUREMENT_ID = 'google/analytics/measurement_id';
@@ -32,14 +31,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     const XML_PATH_ANONYMIZE_DEFAULT_YES = 'google/analytics/anonymize_default_yes';
     
-    // const GTAG_GLOBAL_SITE_TAG_SRC = 'https://www.googletagmanager.com/gtag/js?id='; 
-
     /**
     * Account Types
     */
-    const ACCOUNT_TYPE_UNIVERSAL_ANALYTICS = 0;
+    const ACCOUNT_TYPE_GOOGLE_ANALYTICS = 0;
 
-    const ACCOUNT_TYPE_GOOGLE_ANALYTICS = 1;
+    const ACCOUNT_TYPE_UNIVERSAL_ANALYTICS = 1;
 
     /**
      * Anonymize IP Default Yes

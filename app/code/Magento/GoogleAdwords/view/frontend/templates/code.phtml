@@ -4,7 +4,7 @@ $helper = $block->getHelper();
 if ($helper->isGoogleAdwordsConfigurable()) {
     ?>
 <script>
-if (gtag) {
+if (window.gtag) {
   gtag('config', '<?= $helper->getConversionId() ?>');
 } else {
   // Inject Global Site Tag 

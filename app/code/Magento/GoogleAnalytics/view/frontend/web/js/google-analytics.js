@@ -22,7 +22,6 @@ define([
             allowedCookies,
             allowedWebsites,
             accountId,
-            accountType,
             anonymizedIp;
 
         if (config.isCookieRestrictionModeEnabled) {
@@ -42,28 +41,35 @@ define([
         if (allowServices) {
             /* Global site tag (gtag.js) - Google Analytics */
             accountId = config.pageTrackingData.accountId;
-            accountType = config.pageTrackingData.accountType;
             anonymizedIp = config.pageTrackingData.isAnonymizedIpActive;
-
-            (function(d,s,u){
-            var gtagScript = d.createElement(s);
-            gtagScript.type = 'text/javascript';
-            gtagScript.async = true;
-            gtagScript.src = u;
-            d.head.insertBefore(gtagScript, d.head.children[0]);
-            })(document, 'script', 'https://www.googletagmanager.com/gtag/js?id=' + accountId);
-
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('set', DEVELOPER_ID, true);
-            gtag('config', accountId, { 'anonymize_ip': anonymizedIp });
-
-            // Purchase Event
-            if (config.ordersTrackingData.hasOwnProperty('currency')) {
-                var purchaseObject = config.ordersTrackingData.orders[0];
-                purchaseObject['items'] = config.ordersTrackingData.products;
-                gtag('event', 'purchase', purchaseObject);
+            if (window.gtag) {
+                gtag('config', accountId, { 'anonymize_ip': anonymizedIp });
+                // Purchase Event
+                if (config.ordersTrackingData.hasOwnProperty('currency')) {
+                    var purchaseObject = config.ordersTrackingData.orders[0];
+                    purchaseObject['items'] = config.ordersTrackingData.products;
+                    gtag('event', 'purchase', purchaseObject);
+                }
+            } else {
+                (function(d,s,u){
+                    var gtagScript = d.createElement(s);
+                    gtagScript.type = 'text/javascript';
+                    gtagScript.async = true;
+                    gtagScript.src = u;
+                    d.head.insertBefore(gtagScript, d.head.children[0]);
+                    })(document, 'script', 'https://www.googletagmanager.com/gtag/js?id=' + accountId);
+        
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('set', DEVELOPER_ID, true);
+                gtag('config', accountId, { 'anonymize_ip': anonymizedIp });
+                // Purchase Event
+                if (config.ordersTrackingData.hasOwnProperty('currency')) {
+                    var purchaseObject = config.ordersTrackingData.orders[0];
+                    purchaseObject['items'] = config.ordersTrackingData.products;
+                    gtag('event', 'purchase', purchaseObject);
+                }
             }
         }
     }
