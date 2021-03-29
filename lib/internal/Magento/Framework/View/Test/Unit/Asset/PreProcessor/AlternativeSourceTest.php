@@ -17,7 +17,7 @@ use Magento\Framework\View\Asset\PreProcessor\AlternativeSource;
 use Magento\Framework\View\Asset\PreProcessor\AlternativeSource\AssetBuilder;
 use Magento\Framework\View\Asset\PreProcessor\Chain;
 use Magento\Framework\View\Asset\PreProcessor\FilenameResolverInterface;
-use Magento\Framework\View\Asset\PreProcessor\Helper\SortInterface;
+use Magento\Framework\View\Asset\PreProcessor\SortInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

@@ -3,12 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\View\Asset\PreProcessor\Helper;
+namespace Magento\Framework\View\Asset\PreProcessor;
 
 /**
  * Class Sort
- * @deprecated
- * @see \Magento\Framework\View\Asset\PreProcessor\Sort
  */
 class Sort implements SortInterface
 {
@@ -34,8 +32,6 @@ class Sort implements SortInterface
 
     /**
      * @inheritdoc
-     * @deprecated
-     * @see \Magento\Framework\View\Asset\PreProcessor\Sort::sort()
      */
     public function sort(array $array)
     {

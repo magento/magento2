@@ -5,14 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Framework\View\Test\Unit\Asset\PreProcessor\Helper;
+namespace Magento\Framework\View\Test\Unit\Asset\PreProcessor;
 
-use Magento\Framework\View\Asset\PreProcessor\Helper\Sort;
+use Magento\Framework\View\Asset\PreProcessor\Sort;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @deprecated
- * @see \Magento\Framework\View\Test\Unit\Asset\PreProcessor\SortTest
+ *
+ * @see \Magento\Framework\View\Asset\PreProcessor\Sorter2
  */
 class SortTest extends TestCase
 {
@@ -21,8 +21,6 @@ class SortTest extends TestCase
      * @param array $expected
      *
      * @dataProvider dataProviderTestSorting
-     * @deprecated
-     * @see \Magento\Framework\View\Test\Unit\Asset\PreProcessor\SortTest::testSorting()
      */
     public function testSorting(array $arrayData, array $expected, $message)
     {
@@ -37,8 +35,6 @@ class SortTest extends TestCase
      * @return array
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @deprecated
-     * @see \Magento\Framework\View\Test\Unit\Asset\PreProcessor\SortTest::dataProviderTestSorting()
      */
     public function dataProviderTestSorting()
     {
