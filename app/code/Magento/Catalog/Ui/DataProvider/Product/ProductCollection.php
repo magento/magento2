@@ -33,7 +33,7 @@ class ProductCollection extends \Magento\Catalog\Model\ResourceModel\Product\Col
      */
     public function getSize()
     {
-        if ((bool)$this->_scopeConfig->getValue('admin/grid/show_approximate_products_amount_grid')) {
+        if ($this->_scopeConfig->getValue('admin/grid/show_approximate_products_amount_grid')) {
             $sql = $this->getSelectCountSql();
             return $this->analyzeCount($sql);
         }
