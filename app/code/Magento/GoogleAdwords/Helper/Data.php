@@ -154,30 +154,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Get conversion path to js src
-     *
-     * @return string
-     */
-    // public function getConversionJsSrc()
-    // {
-    //     return (string)$this->scopeConfig->getValue(self::XML_PATH_CONVERSION_JS_SRC, 'default');
-    // }
-
-    /**
-     * Get conversion img src
-     *
-     * @return string
-     */
-    // public function getConversionImgSrc()
-    // {
-    //     return sprintf(
-    //         $this->scopeConfig->getValue(self::XML_PATH_CONVERSION_IMG_SRC, 'default'),
-    //         $this->getConversionId(),
-    //         $this->getConversionLabel()
-    //     );
-    // }
-
-    /**
      * Get conversion img src
      *
      * @return string

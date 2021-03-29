@@ -65,8 +65,6 @@
                     <zh_TW>zh_Hant</zh_TW>
                     <iw>he</iw>
                 </language_convert>
-                <!-- <conversion_js_src>https://www.googleadservices.com/pagead/conversion.js</conversion_js_src>
-                <conversion_img_src>https://www.googleadservices.com/pagead/conversion/%s/?label=%s&amp;guid=ON&amp;script=0</conversion_img_src> -->
             </adwords>
         </google>
     </default>

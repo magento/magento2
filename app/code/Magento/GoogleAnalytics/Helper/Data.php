@@ -31,6 +31,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_ANONYMIZE = 'google/analytics/anonymize';
 
     const XML_PATH_ANONYMIZE_DEFAULT_YES = 'google/analytics/anonymize_default_yes';
+    
+    // const GTAG_GLOBAL_SITE_TAG_SRC = 'https://www.googletagmanager.com/gtag/js?id='; 
 
     /**
     * Account Types
@@ -109,7 +111,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Get Tracking or Measurement Id
+     * Get Account Id, depending on property type Tracking Id (UA) or Measurement Id (GA4)
      *
      * @return string
      */
@@ -128,5 +130,37 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         }
 
+    }
+
+    /**
+     * Get Developer Id for Gtag
+     *
+     * @return string
+     */
+    public function getDeveloperId()
+    {
+        return self::DEVELOPER_ID;
+    }
+
+    /**
+     * Get Global Site Tag Src
+     *
+     * @return string
+     */
+    public function getConversionGtagGlobalSiteTagSrc()
+    {
+        $siteSrc = self::GTAG_GLOBAL_SITE_TAG_SRC;
+        $accountId = $this->getAccountId();
+        return $siteSrc . $accountId;
+    }
+
+    /**
+     * Format Data
+     *
+     * @return Float
+     */
+    public function formatToDec($numberString)
+    {
+        return number_format($numberString, 2);
     }
 }

@@ -34,7 +34,7 @@ class Factory
     /**
      * Create Universal Analytics Tracking Id Validator
      *
-     * @param string $currentColor
+     * @param string $trackingId
      * @return \Magento\Framework\Validator
      */
     public function createTrackingIdValidator($trackingId)
@@ -73,7 +73,7 @@ class Factory
     /**
      * Create Google Analytics Measurement Id Validator
      *
-     * @param string $currentColor
+     * @param string $measurementId
      * @return \Magento\Framework\Validator
      */
     public function createMeasurementIdValidator($measurementId)
@@ -92,7 +92,7 @@ class Factory
                         'type' => '',
                         'class' => \Magento\Framework\Validator\Regex::class,
                         'options' => [
-                            'arguments' => ['pattern' => '/^G-[A-Z0-9-]*$/i'],
+                            'arguments' => ['pattern' => '/^G-[A-Z0-9]*/i'],
                             'methods' => [
                                 [
                                     'method' => 'setMessages',

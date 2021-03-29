@@ -27,7 +27,6 @@
                 <field id="tracking_id" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Tracking ID</label>
                     <comment>Universal Analytics (ex. UA-XXXXXXXX)</comment>
-                    <!-- <backend_model>Magento\GoogleAnalytics\Model\Config\Backend\TrackingId</backend_model> -->
                     <validate>required-entry</validate>
                     <depends>
                         <field id="*/*/active">1</field>
@@ -37,7 +36,6 @@
                 <field id="measurement_id" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Measurement ID</label>
                     <comment>Google Analytics (ex. G-XXXXXXXX)</comment>
-                    <!-- <backend_model>Magento\GoogleAnalytics\Model\Config\Backend\MeasurementId</backend_model> -->
                     <validate>required-entry</validate>
                     <depends>
                         <field id="*/*/active">1</field>

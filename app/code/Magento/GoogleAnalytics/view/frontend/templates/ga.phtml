@@ -1,22 +1,11 @@
-<?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
-?>
-<?php 
-/** 
- * @var $block \Magento\GoogleAnalytics\Block\Ga
- * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
- * */
-?>
+<?php /** @var $block \Magento\GoogleAnalytics\Block\Ga */ ?>
 <?php 
 /** @var \Magento\GoogleAnalytics\Helper\Data $helper */
 $helper = $block->getHelper();
 $accountId = $helper->getAccountId();
 // $accountId = $block->getConfig(\Magento\GoogleAnalytics\Helper\Data::XML_PATH_ACCOUNT) 
 ?>
-<!-- BEGIN GOOGLE ANALYTICS CODE -->
+<!-- BEGIN GOOGLE ANALYTICS INIT CODE -->
 <script type="text/x-magento-init">
 {
     "*": {
@@ -24,10 +13,10 @@ $accountId = $helper->getAccountId();
             "isCookieRestrictionModeEnabled": <?= (int)$block->isCookieRestrictionModeEnabled() ?>,
             "currentWebsite": <?= (int)$block->getCurrentWebsiteId() ?>,
             "cookieName": "<?= /* @noEscape */ \Magento\Cookie\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>",
-            "ordersTrackingData": <?= /* @noEscape */ json_encode($block->getOrdersTrackingData()) ?>,
-            "pageTrackingData": <?= /* @noEscape */ json_encode($block->getPageTrackingData($accountId)) ?>
+            "pageTrackingData": <?= /* @noEscape */ json_encode($block->getPageTrackingData($accountId)) ?>,
+            "ordersTrackingData": <?= /* @noEscape */ json_encode($block->getOrdersTrackingData()) ?>
         }
     }
 }
 </script>
-<!-- END GOOGLE ANALYTICS CODE -->
+<!-- END GOOGLE ANALYTICS INIT CODE -->

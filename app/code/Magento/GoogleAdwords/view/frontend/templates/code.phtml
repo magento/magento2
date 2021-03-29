@@ -1,14 +1,27 @@
 <?php
 /** @var \Magento\GoogleAdwords\Helper\Data $helper */
 $helper = $block->getHelper();
-if ($helper->isGoogleAdwordsActive()) { ?>
-<!-- Event snippet for Magento Testing conversion page -->
+if ($helper->isGoogleAdwordsConfigurable()) {
+    ?>
 <script>
-console.log("GoogleAdwords - START conversion");
-gtag('event', 'conversion', {'send_to': '<?= $helper->getConversionId() ?>' + '/' + '<?= $helper->getConversionLabel() ?>'});
-console.log("GoogleAdwords - END conversion");
+if (gtag) {
+  gtag('config', '<?= $helper->getConversionId() ?>');
+} else {
+  // Inject Global Site Tag 
+  var gtagScript = document.createElement('script');
+  gtagScript.type = 'text/javascript';
+  gtagScript.async = true;
+  gtagScript.src = '<?= $helper->getConversionGtagGlobalSiteTagSrc() ?>';
+  document.head.appendChild(gtagScript);
+  
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('set', '<?= $helper->getDeveloperId() ?>', true);
+  gtag('config', '<?= $helper->getConversionId() ?>');
+}
+if (<?= $helper->isGoogleAdwordsActive() ?>) {
+    gtag('event', 'conversion', {'send_to': '<?= $helper->getConversionId() ?>' + '/' + '<?= $helper->getConversionLabel() ?>'});
+}
 </script>
 <?php } ?>
-
-
-<!-- END Google Code for Sale Conversion Page -->
