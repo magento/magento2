@@ -72,7 +72,7 @@
         "php-amqplib/php-amqplib": "~2.10.0",
         "phpseclib/mcrypt_compat": "1.0.8",
         "phpseclib/phpseclib": "2.0.*",
-        "ramsey/uuid": "~3.8.0",
+        "ramsey/uuid": "~4.1.0",
         "symfony/console": "~4.4.0",
         "symfony/event-dispatcher": "~4.4.0",
         "symfony/process": "~4.4.0",
@@ -82,7 +82,8 @@
         "wikimedia/less.php": "^3.0.0"
     },
     "require-dev": {
-        "allure-framework/allure-phpunit": "~1.2.0",
+        "allure-framework/allure-codeception": "1.5.0 as 1.4.5",
+        "allure-framework/allure-phpunit": "dev-master as 1.3.2",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
         "friendsofphp/php-cs-fixer": "~2.18.1",
         "lusitanian/oauth": "~0.8.10",
