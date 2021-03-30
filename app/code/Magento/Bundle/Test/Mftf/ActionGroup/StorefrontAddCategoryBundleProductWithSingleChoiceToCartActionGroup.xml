@@ -34,5 +34,9 @@
         <click selector="{{StorefrontMinicartSection.itemQuantityUpdate(product.name)}}" stepKey="updateQty"/>
         <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
         <waitForText userInput="{{quantity}}" selector="{{StorefrontMinicartSection.productCount}}" time="30" stepKey="assertProductCount"/>
+
+        <!-- Close minicart -->
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnMiniCartToClose"/>
+        <waitForPageLoad stepKey="waitForPageToLoad3"/>
     </actionGroup>
 </actionGroups>
