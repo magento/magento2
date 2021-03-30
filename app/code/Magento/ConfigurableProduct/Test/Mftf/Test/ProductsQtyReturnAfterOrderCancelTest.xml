@@ -21,7 +21,7 @@
             <group value="ConfigurableProduct"/>
             <skip>
                 <issueId value="DEPRECATED">Use AdminCheckProductQtyAfterOrderCancellingTest instead</issueId>
-            </skip> 
+            </skip>
         </annotations>
 
         <before>
@@ -47,7 +47,7 @@
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="100" stepKey="changeProductQuantity"/>
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveChanges"/>
 
-        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="navigateToProductPage"/>
+        <amOnPage url="$$createConfigProduct.custom_attributes[url_key]$$.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPage"/>
         <fillField selector="{{StorefrontProductInfoMainSection.qty}}" userInput="4" stepKey="fillQuantity"/>
 
