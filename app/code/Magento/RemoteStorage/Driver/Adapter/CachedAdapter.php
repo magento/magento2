@@ -189,22 +189,11 @@ class CachedAdapter implements CachedAdapterInterface
     }
 
     /**
-     * Get metadata.
-     *
-     * @param string $path
-     * @return array
-     */
-    private function getMetadata($path)
-    {
-        return $this->metadataProvider->getMetadata($path);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function fileSize(string $path): FileAttributes
     {
-        $result = $this->getMetadata($path);
+        $result = $this->metadataProvider->getMetadata($path);
         return new FileAttributes($path, (int)$result['size']);
     }
 
@@ -213,7 +202,7 @@ class CachedAdapter implements CachedAdapterInterface
      */
     public function mimeType(string $path): FileAttributes
     {
-        $result = $this->getMetadata($path);
+        $result = $this->metadataProvider->getMetadata($path);
         return new FileAttributes($path, null, null, null, $result['mimetype']);
     }
 
@@ -222,7 +211,7 @@ class CachedAdapter implements CachedAdapterInterface
      */
     public function lastModified(string $path): FileAttributes
     {
-        $result = $this->getMetadata($path);
+        $result = $this->metadataProvider->getMetadata($path);
         return new FileAttributes($path, null, null, (int)$result['timestamp']);
     }
 
@@ -231,7 +220,7 @@ class CachedAdapter implements CachedAdapterInterface
      */
     public function visibility(string $path): FileAttributes
     {
-        $result = $this->getMetadata($path);
+        $result = $this->metadataProvider->getMetadata($path);
         return new FileAttributes($path, null, $result['visibility']);
     }
 }
