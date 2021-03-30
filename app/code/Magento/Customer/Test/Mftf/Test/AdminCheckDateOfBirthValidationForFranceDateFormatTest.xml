@@ -23,8 +23,9 @@
             <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminInterfaceLocaleToFrance">
                 <argument name="InterfaceLocaleByValue" value="fr_FR"/>
             </actionGroup>
-            <actionGroup ref="AdminCustomerShowDateOfBirthActionGroup" stepKey="showDateOfBirth">
-                <argument name="value" value="{{ShowDateOfBirth.optional}}"/>
+            <magentoCLI command="config:set {{ShowDateOfBirth.path}} {{ShowDateOfBirth.valueOptional}}" stepKey="setShowDob"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config"/>
             </actionGroup>
         </before>
 
@@ -32,8 +33,9 @@
             <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminInterfaceLocaleToDefaultValue">
                 <argument name="InterfaceLocaleByValue" value="en_US"/>
             </actionGroup>
-            <actionGroup ref="AdminCustomerShowDateOfBirthActionGroup" stepKey="hideDateOfBirth">
-                <argument name="value" value="{{ShowDateOfBirth.no}}"/>
+            <magentoCLI command="config:set {{ShowDateOfBirth.path}} {{ShowDateOfBirth.valueNo}}" stepKey="resetShowDob"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches2">
+                <argument name="tags" value="config"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

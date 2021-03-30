@@ -12,10 +12,15 @@
         <data key="no">No</data>
         <data key="optional">Optional</data>
         <data key="required">Required</data>
+        <data key="path">customer/address/dob_show</data>
+        <data key="valueNo">''</data>
+        <data key="valueOptional">opt</data>
+        <data key="valueRequired">req</data>
     </entity>
     <entity name="ShowGender">
-        <data key="no">No</data>
-        <data key="optional">Optional</data>
-        <data key="required">Required</data>
+        <data key="path">customer/address/gender_show</data>
+        <data key="valueNo">''</data>
+        <data key="valueOptional">opt</data>
+        <data key="valueRequired">req</data>
     </entity>
 </entities>

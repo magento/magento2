@@ -22,8 +22,9 @@
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
-            <actionGroup ref="AdminCustomerShowGenderActionGroup" stepKey="showGender">
-                <argument name="value" value="{{ShowGender.optional}}"/>
+            <magentoCLI command="config:set {{ShowGender.path}} {{ShowGender.valueOptional}}" stepKey="setShowGender"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config"/>
             </actionGroup>
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value="customer_grid"/>
@@ -34,8 +35,9 @@
             <!-- Reset customer grid filter -->
             <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="goToCustomersGridPage"/>
             <actionGroup ref="AdminResetFilterInCustomerGrid" stepKey="resetFilter"/>
-            <actionGroup ref="AdminCustomerShowGenderActionGroup" stepKey="showGender">
-                <argument name="value" value="{{ShowGender.no}}"/>
+            <magentoCLI command="config:set {{ShowGender.path}} {{ShowGender.valueNo}}" stepKey="resetShowGender"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches2">
+                <argument name="tags" value="config"/>
             </actionGroup>
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value="customer_grid"/>

@@ -13,7 +13,5 @@
         <element name="shareCustomerAccount" type="select" selector="#customer_account_share_scope"/>
         <element name="showDateOfBirth" type="select" selector="#customer_address_dob_show"/>
         <element name="showDateOfBirthInherit" type="select" selector="#customer_address_dob_show_inherit"/>
-        <element name="showGender" type="select" selector="#customer_address_gender_show"/>
-        <element name="showGenderInherit" type="select" selector="#customer_address_gender_show_inherit"/>
     </section>
 </sections>
