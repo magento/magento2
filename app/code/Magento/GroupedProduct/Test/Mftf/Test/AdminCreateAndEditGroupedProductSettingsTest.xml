@@ -90,7 +90,7 @@
 
         <!-- Open grouped product page -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
-            <argument name="productUrl" value="{{GroupedProduct.sku}}"/>
+            <argument name="productUrl" value="{{GroupedProduct.urlKey}}"/>
         </actionGroup>
 
         <!-- Assert product design settings "left bar is present at product page with 2 columns" -->
@@ -153,7 +153,7 @@
 
         <!-- Verify Url Key after changing -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
-            <argument name="productUrl" value="{{ApiGroupedProduct.name}}"/>
+            <argument name="productUrl" value="{{ApiGroupedProduct.urlKey}}"/>
         </actionGroup>
 
         <!-- Assert product design settings "right bar is present at the  product page with 2 columns" -->
