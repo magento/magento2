@@ -131,50 +131,13 @@ class DataTest extends TestCase
         $this->assertEquals($returnLanguage, $this->_helper->convertLanguageCodeToLocaleCode($language));
     }
 
-    public function testGetConversionImgSrc()
-    {
-        $conversionId = 123;
-        $label = 'LabEl';
-        $imgSrc = sprintf(
-            'https://www.googleadservices.com/pagead/conversion/%s/?label=%s&amp;guid=ON&amp;script=0',
-            $conversionId,
-            $label
-        );
-        $this->_scopeConfigMock->expects(
-            $this->at(0)
-        )->method(
-            'getValue'
-        )->with(
-            Data::XML_PATH_CONVERSION_IMG_SRC,
-            'default'
-        )->willReturn(
-            $imgSrc
-        );
-        $this->assertEquals($imgSrc, $this->_helper->getConversionImgSrc());
-    }
-
-    public function testGetConversionJsSrc()
-    {
-        $jsSrc = 'some-js-src';
-        $this->_scopeConfigMock->expects(
-            $this->once()
-        )->method(
-            'getValue'
-        )->with(
-            Data::XML_PATH_CONVERSION_JS_SRC
-        )->willReturn(
-            $jsSrc
-        );
-        $this->assertEquals($jsSrc, $this->_helper->getConversionJsSrc());
-    }
-
     /**
      * @return array
      */
     public function dataProviderForTestStoreConfig()
     {
         return [
-            ['getConversionId', Data::XML_PATH_CONVERSION_ID, 123],
+            ['getConversionId', Data::XML_PATH_CONVERSION_ID, 'AW-123'],
             ['getConversionLanguage', Data::XML_PATH_CONVERSION_LANGUAGE, 'en'],
             ['getConversionFormat', Data::XML_PATH_CONVERSION_FORMAT, '2'],
             ['getConversionColor', Data::XML_PATH_CONVERSION_COLOR, 'ffffff'],

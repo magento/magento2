@@ -127,28 +127,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Get Developer Id for Gtag
-     *
-     * @return string
-     */
-    public function getDeveloperId()
-    {
-        return self::DEVELOPER_ID;
-    }
-
-    /**
-     * Get Global Site Tag Src
-     *
-     * @return string
-     */
-    public function getConversionGtagGlobalSiteTagSrc()
-    {
-        $siteSrc = self::GTAG_GLOBAL_SITE_TAG_SRC;
-        $accountId = $this->getAccountId();
-        return $siteSrc . $accountId;
-    }
-
-    /**
      * Format Data
      *
      * @return Float
