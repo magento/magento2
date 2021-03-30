@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d2e4a15e0d3d9592a30de64b63bdc8ac",
+    "content-hash": "ff5cc6a865e0beb63581e48d2cb838a7",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -6156,6 +6156,11 @@
                 "steps",
                 "testing"
             ],
+            "support": {
+                "email": "allure@qameta.io",
+                "issues": "https://github.com/allure-framework/allure-codeception/issues",
+                "source": "https://github.com/allure-framework/allure-codeception"
+            },
             "time": "2021-03-26T16:11:53+00:00"
         },
         {
@@ -8015,26 +8020,26 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "3.3.0",
+            "version": "dev-update-allure-codeception",
             "source": {
                 "type": "git",
-                "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "ea93feb4da34749f40bb74b780ca4fb47508a35e"
+                "url": "https://github.com/ihor-sviziev/magento2-functional-testing-framework.git",
+                "reference": "db586720e9bdcfbcb1e62a798e5b669f1157da9b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/ea93feb4da34749f40bb74b780ca4fb47508a35e",
-                "reference": "ea93feb4da34749f40bb74b780ca4fb47508a35e",
+                "url": "https://api.github.com/repos/ihor-sviziev/magento2-functional-testing-framework/zipball/db586720e9bdcfbcb1e62a798e5b669f1157da9b",
+                "reference": "db586720e9bdcfbcb1e62a798e5b669f1157da9b",
                 "shasum": ""
             },
             "require": {
-                "allure-framework/allure-codeception": "~1.4.0",
+                "allure-framework/allure-codeception": "~1.5.0",
                 "aws/aws-sdk-php": "^3.132",
                 "codeception/codeception": "~4.1.4",
                 "codeception/module-asserts": "^1.1",
                 "codeception/module-sequence": "^1.0",
                 "codeception/module-webdriver": "^1.0",
-                "composer/composer": "^1.9",
+                "composer/composer": "^1.9||^2.0",
                 "csharpru/vault-php": "^4.1.0",
                 "csharpru/vault-php-guzzle6-transport": "^2.0",
                 "ext-curl": "*",
@@ -8092,7 +8097,19 @@
                     "MFTF\\": "dev/tests/functional/tests/MFTF"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "tests\\": "dev/tests"
+                }
+            },
+            "scripts": {
+                "tests": [
+                    "bin/phpunit-checks"
+                ],
+                "static": [
+                    "bin/static-checks"
+                ]
+            },
             "license": [
                 "AGPL-3.0"
             ],
@@ -8103,7 +8120,10 @@
                 "magento",
                 "testing"
             ],
-            "time": "2021-02-15T21:57:12+00:00"
+            "support": {
+                "source": "https://github.com/ihor-sviziev/magento2-functional-testing-framework/tree/update-allure-codeception"
+            },
+            "time": "2021-03-30T06:19:45+00:00"
         },
         {
             "name": "mustache/mustache",
@@ -11491,21 +11511,16 @@
     ],
     "aliases": [
         {
-            "alias": "1.4.5",
-            "alias_normalized": "1.4.5.0",
-            "version": "1.5.0.0",
-            "package": "allure-framework/allure-codeception"
-        },
-        {
-            "alias": "1.3.2",
-            "alias_normalized": "1.3.2.0",
+            "package": "allure-framework/allure-phpunit",
             "version": "9999999-dev",
-            "package": "allure-framework/allure-phpunit"
+            "alias": "1.3.2",
+            "alias_normalized": "1.3.2.0"
         }
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "allure-framework/allure-phpunit": 20
+        "allure-framework/allure-phpunit": 20,
+        "magento/magento2-functional-testing-framework": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
@@ -11529,5 +11544,5 @@
         "lib-libxml": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.0.0"
 }
