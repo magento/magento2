@@ -126,7 +126,7 @@ class AddressesPostTest extends AbstractController
             $this->fail($e->getMessage());
         }
         /** @var CustomerSession $customerSession */
-        $customerSession = $this->_objectManager->create(CustomerSession::class, [$logger]);
+        $customerSession = $this->_objectManager->get(CustomerSession::class, [$logger]);
         $customerSession->setCustomerDataAsLoggedIn($customer);
     }
 
