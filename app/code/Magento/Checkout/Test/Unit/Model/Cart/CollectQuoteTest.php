@@ -17,7 +17,7 @@ use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\EstimateAddressInterface;
 use Magento\Quote\Api\Data\EstimateAddressInterfaceFactory;
-use Magento\Quote\Api\ShippingMethodManagementInterface;
+use Magento\Quote\Model\ShippingMethodManagementInterface;
 use Magento\Quote\Model\Quote;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;

@@ -67,7 +67,7 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
     protected $shippingAddressManagement;
 
     /**
-     * @var \Magento\Quote\Api\ShippingMethodManagementInterface
+     * @var \Magento\Quote\Model\ShippingMethodManagementInterface
      */
     protected $shippingEstimateManagement;
 
@@ -101,7 +101,7 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
             \Magento\Quote\Api\BillingAddressManagementInterface::class
         );
         $this->shippingEstimateManagement = $this->objectManager->create(
-            \Magento\Quote\Api\ShippingMethodManagementInterface::class
+            \Magento\Quote\Model\ShippingMethodManagementInterface::class
         );
         $this->totalsInformationManagement = $this->objectManager->create(
             \Magento\Checkout\Api\TotalsInformationManagementInterface::class

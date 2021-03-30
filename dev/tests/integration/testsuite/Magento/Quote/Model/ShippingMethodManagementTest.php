@@ -21,7 +21,7 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\AddressInterfaceFactory;
 use Magento\Quote\Api\Data\EstimateAddressInterface;
 use Magento\Quote\Model\GuestCart\GuestShippingMethodManagementInterface;
-use Magento\Quote\Api\ShippingMethodManagementInterface;
+use Magento\Quote\Model\ShippingMethodManagementInterface;
 use Magento\Quote\Observer\Frontend\Quote\Address\CollectTotalsObserver;
 use Magento\Quote\Observer\Frontend\Quote\Address\VatValidator;
 use Magento\Store\Model\ScopeInterface;

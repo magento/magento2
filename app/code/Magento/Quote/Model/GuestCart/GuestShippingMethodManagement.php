@@ -10,7 +10,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\GuestShipmentEstimationInterface;
 use Magento\Quote\Api\ShipmentEstimationInterface;
-use Magento\Quote\Api\ShippingMethodManagementInterface;
+use Magento\Quote\Model\ShippingMethodManagementInterface;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 

@@ -10,6 +10,8 @@ namespace Magento\Quote\Api;
  * Interface ShippingMethodManagementInterface
  * @api
  * @since 100.0.2
+ * @deprecated
+ * @see \Magento\Quote\Model\ShippingMethodManagementInterface
  */
 interface ShippingMethodManagementInterface
 {
@@ -20,6 +22,7 @@ interface ShippingMethodManagementInterface
      * @param \Magento\Quote\Api\Data\EstimateAddressInterface $address The estimate address
      * @return \Magento\Quote\Api\Data\ShippingMethodInterface[] An array of shipping methods.
      * @deprecated 100.0.7
+     * @see \Magento\Quote\Model\ShippingMethodManagementInterface::estimateByAddress()
      */
     public function estimateByAddress($cartId, \Magento\Quote\Api\Data\EstimateAddressInterface $address);
 
@@ -29,6 +32,8 @@ interface ShippingMethodManagementInterface
      * @param int $cartId The shopping cart ID.
      * @param int $addressId The estimate address id
      * @return \Magento\Quote\Api\Data\ShippingMethodInterface[] An array of shipping methods.
+     * @deprecated
+     * @see \Magento\Quote\Model\ShippingMethodManagementInterface::estimateByAddressId()
      */
     public function estimateByAddressId($cartId, $addressId);
 
@@ -39,6 +44,8 @@ interface ShippingMethodManagementInterface
      * @return \Magento\Quote\Api\Data\ShippingMethodInterface[] An array of shipping methods.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified quote does not exist.
      * @throws \Magento\Framework\Exception\StateException The shipping address is missing.
+     * @deprecated
+     * @see \Magento\Quote\Model\ShippingMethodManagementInterface::getList()
      */
     public function getList($cartId);
 }

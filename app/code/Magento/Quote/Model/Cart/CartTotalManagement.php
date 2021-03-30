@@ -13,7 +13,7 @@ use Magento\Quote\Api\CartTotalManagementInterface;
 class CartTotalManagement implements CartTotalManagementInterface
 {
     /**
-     * @var \Magento\Quote\Api\ShippingMethodManagementInterface
+     * @var \Magento\Quote\Model\ShippingMethodManagementInterface
      */
     protected $shippingMethodManagement;
 
@@ -33,13 +33,13 @@ class CartTotalManagement implements CartTotalManagementInterface
     protected $dataProcessor;
 
     /**
-     * @param \Magento\Quote\Api\ShippingMethodManagementInterface $shippingMethodManagement
+     * @param \Magento\Quote\Model\ShippingMethodManagementInterface $shippingMethodManagement
      * @param \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
      * @param \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository
      * @param \Magento\Quote\Model\Cart\TotalsAdditionalDataProcessor $dataProcessor
      */
     public function __construct(
-        \Magento\Quote\Api\ShippingMethodManagementInterface $shippingMethodManagement,
+        \Magento\Quote\Model\ShippingMethodManagementInterface $shippingMethodManagement,
         \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement,
         \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository,
         \Magento\Quote\Model\Cart\TotalsAdditionalDataProcessor $dataProcessor

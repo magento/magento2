@@ -28,7 +28,7 @@ class CollectQuote
     protected $estimatedAddressFactory;
 
     /**
-     * @var \Magento\Quote\Api\ShippingMethodManagementInterface
+     * @var \Magento\Quote\Model\ShippingMethodManagementInterface
      */
     protected $shippingMethodManager;
 
@@ -42,7 +42,7 @@ class CollectQuote
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Quote\Api\Data\EstimateAddressInterfaceFactory $estimatedAddressFactory
-     * @param \Magento\Quote\Api\ShippingMethodManagementInterface $shippingMethodManager
+     * @param \Magento\Quote\Model\ShippingMethodManagementInterface $shippingMethodManager
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @codeCoverageIgnore
      */
@@ -51,7 +51,7 @@ class CollectQuote
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
         \Magento\Quote\Api\Data\EstimateAddressInterfaceFactory $estimatedAddressFactory,
-        \Magento\Quote\Api\ShippingMethodManagementInterface $shippingMethodManager,
+        \Magento\Quote\Model\ShippingMethodManagementInterface $shippingMethodManager,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
     ) {
         $this->customerSession = $customerSession;

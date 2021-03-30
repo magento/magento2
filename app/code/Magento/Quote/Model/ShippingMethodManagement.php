@@ -33,7 +33,6 @@ use Magento\Quote\Model\ResourceModel\Quote\Address as QuoteAddressResource;
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class ShippingMethodManagement implements
-    \Magento\Quote\Api\ShippingMethodManagementInterface,
     \Magento\Quote\Model\ShippingMethodManagementInterface,
     ShipmentEstimationInterface
 {

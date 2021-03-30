@@ -26,7 +26,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Quote\Api\CartItemRepositoryInterface as QuoteItemRepository;
 use Magento\Quote\Api\CartTotalRepositoryInterface;
 use Magento\Quote\Api\Data\AddressInterface;
-use Magento\Quote\Api\ShippingMethodManagementInterface as ShippingMethodManager;
+use Magento\Quote\Model\ShippingMethodManagementInterface as ShippingMethodManager;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Ui\Component\Form\Element\Multiline;
