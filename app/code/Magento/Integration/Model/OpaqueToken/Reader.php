@@ -50,6 +50,9 @@ class Reader implements UserTokenReaderInterface
         if (!$tokenModel->getId()) {
             throw new UserTokenException('Token does not exist');
         }
+        if ($tokenModel->getRevoked()) {
+            throw new UserTokenException('Token was revoked');
+        }
         $userType = $tokenModel->getUserType();
         if ($userType !== CustomUserContext::USER_TYPE_ADMIN && $userType !== CustomUserContext::USER_TYPE_CUSTOMER) {
             throw new UserTokenException('Invalid token found');
