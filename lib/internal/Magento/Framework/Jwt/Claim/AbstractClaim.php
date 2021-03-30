@@ -39,9 +39,9 @@ abstract class AbstractClaim implements ClaimInterface
      * Parse NumericDate and return DateTime with UTC timezone.
      *
      * @param string $date
-     * @return \DateTimeInterface
+     * @return \DateTimeImmutable
      */
-    public static function parseNumericDate(string $date): \DateTimeInterface
+    public static function parseNumericDate(string $date): \DateTimeImmutable
     {
         $dt = \DateTime::createFromFormat('Y-m-d\TH:i:sT', $date);
         $dt->setTimezone(new \DateTimeZone('UTC'));
