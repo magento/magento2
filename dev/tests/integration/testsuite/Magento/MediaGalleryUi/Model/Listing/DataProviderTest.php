@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGallery\Model\Listing;
+namespace Magento\MediaGalleryUi\Model\Listing;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\ObjectManagerInterface;
@@ -43,13 +43,12 @@ class DataProviderTest extends TestCase
     }
 
     /**
-     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
      * @magentoDataFixture Magento/MediaGallery/_files/media_asset_loaded_year_ago.php
      *
      * @return void
      */
-    public function testFilterByData(): void
+    public function testFilterByDate(): void
     {
         $filter = [
             'created_at' => [
