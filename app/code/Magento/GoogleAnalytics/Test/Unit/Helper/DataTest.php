@@ -63,7 +63,7 @@ class DataTest extends TestCase
     {
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with(HelperData::XML_PATH_ACCOUNT, ScopeInterface::SCOPE_STORE)
+            ->with(HelperData::XML_PATH_ACCOUNT_TYPE, ScopeInterface::SCOPE_STORE)
             ->willReturn($value);
 
         $this->scopeConfigMock->expects($this->any())
@@ -82,9 +82,10 @@ class DataTest extends TestCase
     public function gaDataProvider(): array
     {
         return [
-            ['GA-XXXX', true, true],
-            ['GA-XXXX', false, false],
-            ['', true, false]
+            ['0', true, true],
+            ['0', false, false],
+            ['1', true, true],
+            ['1', false, false]
         ];
     }
 
@@ -98,6 +99,10 @@ class DataTest extends TestCase
      */
     public function testIsAnonymizedIpActive($value, $result): void
     {
+        $this->scopeConfigMock->expects($this->once())
+            ->method('isGoogleAnalyticsAccount')
+            ->with(HelperData::XML_PATH_ANONYMIZE, ScopeInterface::SCOPE_STORE)
+            ->willReturn($value);
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(HelperData::XML_PATH_ANONYMIZE, ScopeInterface::SCOPE_STORE)
@@ -115,6 +120,94 @@ class DataTest extends TestCase
         return [
             ['Yes' => '1', 'result' => true],
             ['No' => '0', 'result' => false]
+        ];
+    }
+    /**
+     * Test for getAccountType()
+     *
+     * @param int $value
+     * @param bool $result
+     * @return void
+     * @dataProvider accountType
+     */
+    public function testGetAccountType($value, $result): void
+    {
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with(HelperData::XML_PATH_ACCOUNT_TYPE, ScopeInterface::SCOPE_STORE)
+            ->willReturn($value);
+        $this->assertEquals($result, $this->helper->getAccountType());
+    }
+
+    /**
+     * Data provider for getAccountType()
+     *
+     * @return array
+     */
+    public function accountType(): array
+    {
+        return [
+            ['Google Analytics 4' => 0, 'result' => 0],
+            ['Universal Analytics' => 1, 'result' => 1]
+        ];
+    }
+
+    /**
+     * Test for isGoogleAnalyticsAccount()
+     *
+     * @param int $value
+     * @param bool $result
+     * @return void
+     * @dataProvider googleAnalyticsAccountType
+     */
+    public function testIsGoogleAnalyticsAccount($value, $result): void
+    {
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with(HelperData::XML_PATH_ACCOUNT_TYPE, ScopeInterface::SCOPE_STORE)
+            ->willReturn($value);
+        $this->assertEquals($result, $this->helper->isGoogleAnalyticsAccount());
+    }
+
+    /**
+     * Data provider for getAccountType()
+     *
+     * @return array
+     */
+    public function googleAnalyticsAccountType(): array
+    {
+        return [
+            ['Google Analytics 4' => 0, 'result' => true],
+            ['Universal Analytics' => 1, 'result' => false],
+        ];
+    }
+    /**
+     * Test for isUniversalAnalyticsAccount()
+     *
+     * @param int $value
+     * @param bool $result
+     * @return void
+     * @dataProvider universalAnalyticsAccountType
+     */
+    public function testIsUniversalAnalyticsAccount($value, $result): void
+    {
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with(HelperData::XML_PATH_ACCOUNT_TYPE, ScopeInterface::SCOPE_STORE)
+            ->willReturn($value);
+        $this->assertEquals($result, $this->helper->isUniversalAnalyticsAccount());
+    }
+
+    /**
+     * Data provider for getAccountType()
+     *
+     * @return array
+     */
+    public function universalAnalyticsAccountType(): array
+    {
+        return [
+            ['Google Analytics 4' => 0, 'result' => false],
+            ['Universal Analytics' => 1, 'result' => true],
         ];
     }
 }

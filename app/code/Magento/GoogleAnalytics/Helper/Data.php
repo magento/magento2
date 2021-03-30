@@ -51,11 +51,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isGoogleAnalyticsAvailable($store = null)
     {
-
-        // $accountId = $this->scopeConfig->getValue(self::XML_PATH_ACCOUNT, ScopeInterface::SCOPE_STORE, $store);
         $accountId = $this->getAccountId();
-        return $accountId && $this->scopeConfig->isSetFlag(
-            self::XML_PATH_ACTIVE, ScopeInterface::SCOPE_STORE, $store);
+        return $accountId && $this->scopeConfig->isSetFlag(self::XML_PATH_ACTIVE, ScopeInterface::SCOPE_STORE, $store);
     }
 
     /**

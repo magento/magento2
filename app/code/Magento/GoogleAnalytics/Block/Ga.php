@@ -133,8 +133,7 @@ class Ga extends \Magento\Framework\View\Element\Template
         return [
             'optPageUrl' => $this->getOptPageUrl(),
             'isAnonymizedIpActive' => $this->_googleAnalyticsData->isAnonymizedIpActive(),
-            'accountId' => $this->escapeHtmlAttr($accountId, false),
-            'accountType' => $this->_googleAnalyticsData->getAccountType()
+            'accountId' => $this->escapeHtmlAttr($accountId, false)
         ];
     }
 

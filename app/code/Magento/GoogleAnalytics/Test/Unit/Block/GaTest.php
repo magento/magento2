@@ -152,6 +152,7 @@ class GaTest extends TestCase
 
     public function testOrderTrackingData()
     {
+        $this->googleAnalyticsDataMock->expects($this->once())->method('isUniversalAnalyticsAccount')->willReturn(true);
         $this->salesOrderCollectionMock->expects($this->once())
             ->method('create')
             ->willReturn($this->createCollectionMock());
@@ -161,11 +162,11 @@ class GaTest extends TestCase
         $expectedResult = [
             'orders' => [
                 [
-                    'id' => 100,
-                    'affiliation' => 'test',
-                    'revenue' => 10,
-                    'tax' => 2,
-                    'shipping' => 1
+                    'transaction_id' => 100,
+                    'affiliation' => 'test1111',
+                    'revenue' => 10.00,
+                    'tax' => 2.00,
+                    'shipping' => 1.00
                 ]
             ],
             'products' => [
@@ -186,7 +187,7 @@ class GaTest extends TestCase
     public function testGetPageTrackingData()
     {
         $pageName = '/page/name';
-        $accountId = 100;
+        $accountId = "100";
         $expectedResult = [
             'optPageUrl' => ", '" . $pageName . "'",
             'isAnonymizedIpActive' => true,

@@ -16,6 +16,7 @@
                 </field>
                 <field id="conversion_id" translate="label" type="text" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Conversion ID (required)</label>
+                    <comment>(ex. AW-XXXXXXXX)</comment>
                     <validate>required-entry</validate>
                     <depends>
                         <field id="*/*/active">1</field>
@@ -41,7 +42,7 @@
                         <field id="*/*/active">1</field>
                     </depends>
                 </field>
-                <field id="conversion_label" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="conversion_label" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Conversion Label (optional)</label>
                     <depends>
                         <field id="*/*/active">1</field>

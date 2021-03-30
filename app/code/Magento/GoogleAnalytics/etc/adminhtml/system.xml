@@ -26,7 +26,7 @@
                 </field>
                 <field id="measurement_id" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Measurement ID</label>
-                    <comment>Google Analytics (ex. G-XXXXXXXX)</comment>
+                    <comment>(ex. G-XXXXXXXX)</comment>
                     <validate>required-entry</validate>
                     <depends>
                         <field id="*/*/active">1</field>
@@ -35,24 +35,24 @@
                 </field>
                 <field id="tracking_id" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Tracking ID</label>
-                    <comment>Universal Analytics (ex. UA-XXXXXXXX)</comment>
+                    <comment>(ex. UA-XXXXXXXX)</comment>
                     <validate>required-entry</validate>
                     <depends>
                         <field id="*/*/active">1</field>
                         <field id="*/*/account_type">1</field>
                     </depends>
                 </field>
-                <field id="anonymize" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="anonymize_default_yes" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Anonymize IP</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\GoogleAnalytics\Model\Config\Source\DefaultYes</source_model>
                     <depends>
                         <field id="*/*/active">1</field>
                         <field id="*/*/account_type">0</field>
                     </depends>
                 </field>
-                <field id="anonymize_default_yes" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="anonymize" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Anonymize IP</label>
-                    <source_model>Magento\GoogleAnalytics\Model\Config\Source\DefaultYes</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <depends>
                         <field id="*/*/active">1</field>
                         <field id="*/*/account_type">1</field>
