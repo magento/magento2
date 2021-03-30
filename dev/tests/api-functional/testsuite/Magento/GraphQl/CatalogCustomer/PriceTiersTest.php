@@ -121,7 +121,7 @@ class PriceTiersTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Catalog/_files/second_product_simple.php
      * @magentoApiDataFixture Magento/Catalog/_files/three_simple_products_with_tier_price.php
      */
-    public function testGetCorrectDisplaingTierPriceForProducts()
+    public function testProductTierPricesAreCorrectlyReturned()
     {
         $productSku = 'simple';
         $query =  <<<QUERY
