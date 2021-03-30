@@ -157,7 +157,7 @@
 
     <!-- Managing Guest Cart Shipment Method -->
     <route url="/V1/guest-carts/:cartId/shipping-methods" method="GET">
-        <service class="Magento\Quote\Api\GuestShippingMethodManagementInterface" method="getList"/>
+        <service class="Magento\Quote\Model\GuestCart\GuestShippingMethodManagementInterface" method="getList"/>
         <resources>
             <resource ref="anonymous" />
         </resources>

@@ -9,6 +9,8 @@ namespace Magento\Quote\Api;
  * Shipping method management interface for guest carts.
  * @api
  * @since 100.0.2
+ * @deprecated
+ * @see \Magento\Quote\Model\GuestCart\GuestShippingMethodManagementInterface
  */
 interface GuestShippingMethodManagementInterface
 {
@@ -19,6 +21,8 @@ interface GuestShippingMethodManagementInterface
      * @return \Magento\Quote\Api\Data\ShippingMethodInterface[] An array of shipping methods.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified quote does not exist.
      * @throws \Magento\Framework\Exception\StateException The shipping address is missing.
+     * @deprecated
+     * @see \Magento\Quote\Model\GuestCart\GuestShippingMethodManagementInterface::getList()
      */
     public function getList($cartId);
 
@@ -29,6 +33,7 @@ interface GuestShippingMethodManagementInterface
      * @param \Magento\Quote\Api\Data\EstimateAddressInterface $address The estimate address
      * @return \Magento\Quote\Api\Data\ShippingMethodInterface[] An array of shipping methods.
      * @deprecated 100.0.7
+     * @see \Magento\Quote\Model\GuestCart\GuestShippingMethodManagementInterface::getList()
      */
     public function estimateByAddress($cartId, \Magento\Quote\Api\Data\EstimateAddressInterface $address);
 }
