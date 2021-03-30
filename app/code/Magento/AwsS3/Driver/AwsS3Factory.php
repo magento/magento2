@@ -119,7 +119,15 @@ class AwsS3Factory implements DriverFactoryInterface
         $client = new S3Client($config);
         $adapter = new AwsS3V3Adapter($client, $config['bucket'], $prefix);
         $cache = $this->cacheInterfaceFactory->create(
-            $this->cachePrefix ? ['prefix' => $this->cachePrefix] : []
+            // Custom cache prefix required to distinguish cache records for different sources.
+            // phpcs:ignore Magento2.Security.InsecureFunction
+            $this->cachePrefix ? ['prefix' => $this->cachePrefix] : ['prefix' => md5($config['bucket'] . $prefix)]
+        );
+        $metadataProvider = $this->metadataProviderFactory->create(
+            [
+                'adapter' => $adapter,
+                'cache' => $cache
+            ]
         );
 
         return $this->objectManager->create(
@@ -128,16 +136,12 @@ class AwsS3Factory implements DriverFactoryInterface
                 'adapter' => $this->cachedAdapterInterfaceFactory->create(
                     [
                         'adapter' => $adapter,
-                        'cache' => $cache
+                        'cache' => $cache,
+                        'metadataProvider' => $metadataProvider
                     ]
                 ),
                 'objectUrl' => $client->getObjectUrl($config['bucket'], trim($prefix, '\\/') . '/.'),
-                'metadataProvider' => $this->metadataProviderFactory->create(
-                    [
-                        'adapter' => $adapter,
-                        'cache' => $cache
-                    ]
-                ),
+                'metadataProvider' => $metadataProvider,
             ]
         );
     }

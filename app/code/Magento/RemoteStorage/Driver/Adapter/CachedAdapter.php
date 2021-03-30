@@ -28,11 +28,6 @@ class CachedAdapter implements CachedAdapterInterface
     private $cache;
 
     /**
-     * @var MetadataProviderInterfaceFactory
-     */
-    private $metadataProviderFactory;
-
-    /**
      * @var MetadataProviderInterface
      */
     private $metadataProvider;
@@ -42,16 +37,16 @@ class CachedAdapter implements CachedAdapterInterface
      *
      * @param FilesystemAdapter $adapter
      * @param CacheInterface $cache
-     * @param MetadataProviderInterfaceFactory $metadataProviderFactory
+     * @param MetadataProviderInterface $metadataProvider
      */
     public function __construct(
         FilesystemAdapter $adapter,
         CacheInterface $cache,
-        MetadataProviderInterfaceFactory $metadataProviderFactory
+        MetadataProviderInterface $metadataProvider
     ) {
         $this->adapter = $adapter;
         $this->cache = $cache;
-        $this->metadataProviderFactory = $metadataProviderFactory;
+        $this->metadataProvider = $metadataProvider;
     }
 
     /**
@@ -201,14 +196,6 @@ class CachedAdapter implements CachedAdapterInterface
      */
     private function getMetadata($path)
     {
-        if (!$this->metadataProvider) {
-            $this->metadataProvider = $this->metadataProviderFactory->create(
-                [
-                    'adapter' => $this->adapter,
-                    'cache' => $this->cache
-                ]
-            );
-        }
         return $this->metadataProvider->getMetadata($path);
     }
 
