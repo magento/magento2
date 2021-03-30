@@ -39,6 +39,10 @@
         <data key="name">TestFooBar</data>
         <data key="sku" unique="suffix">foobar</data>
     </entity>
+    <entity name="ApiSimpleProductWithDoubleSpaces" type="product" extends="ApiSimpleProduct">
+        <data key="name">Simple Product  Double Space</data>
+        <data key="sku" unique="suffix">simple-product  double-space</data>
+    </entity>
     <entity name="ApiSimpleProductWithSpecCharInName" type="product" extends="ApiSimpleProduct">
         <data key="name">Pursuit Lumaflex&#38;trade; Tone Band</data>
         <data key="sku" unique="suffix">x&#38;trade;</data>
