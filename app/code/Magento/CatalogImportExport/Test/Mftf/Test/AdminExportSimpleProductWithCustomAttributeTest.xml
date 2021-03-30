@@ -11,7 +11,7 @@
     <test name="AdminExportSimpleProductWithCustomAttributeTest">
         <annotations>
             <features value="CatalogImportExport"/>
-            <stories value="Export products"/>
+            <stories value="Export Products"/>
             <title value="Export Simple Product with custom attribute"/>
             <description value="Admin should be able to export Simple Product with custom attribute"/>
             <severity value="CRITICAL"/>
