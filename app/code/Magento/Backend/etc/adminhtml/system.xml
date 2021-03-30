@@ -448,14 +448,6 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
-            <group id="grid" translate="grid" type="text" sortOrder="45" showInDefault="1">
-                <label>Admin Grids</label>
-                <field id="show_approximate_products_amount_grid" translate="label"
-                       type="select" sortOrder="1" showInDefault="1" canRestore="1">
-                    <label>Show approximate products amount in a product grid</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-            </group>
         </section>
         <section id="web" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Web</label>

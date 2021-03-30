@@ -31,11 +31,6 @@
                 <max_height>1200</max_height>
             </upload_configuration>
         </system>
-        <admin>
-            <grid>
-                <show_approximate_products_amount_grid>0</show_approximate_products_amount_grid>
-            </grid>
-        </admin>
         <general>
             <validator_data>
                 <input_types>
