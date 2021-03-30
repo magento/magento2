@@ -12,6 +12,9 @@ use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
+use Magento\Catalog\Model\Product as ProductModel;
+use Magento\CatalogUrlRewrite\Model\Product\Validator as ProductUrlRewriteValidator;
 
 /**
  * Product validate
@@ -58,6 +61,11 @@ class Validate extends Product implements HttpPostActionInterface, HttpGetAction
     private $storeManager;
 
     /**
+     * @var ProductUrlRewriteValidator
+     */
+    private $productUrlRewriteValidator;
+
+    /**
      * @param Action\Context $context
      * @param Builder $productBuilder
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
@@ -65,6 +73,7 @@ class Validate extends Product implements HttpPostActionInterface, HttpGetAction
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param ProductUrlRewriteValidator $productUrlRewriteValidator
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -73,7 +82,8 @@ class Validate extends Product implements HttpPostActionInterface, HttpGetAction
         \Magento\Catalog\Model\Product\Validator $productValidator,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
-        \Magento\Catalog\Model\ProductFactory $productFactory
+        \Magento\Catalog\Model\ProductFactory $productFactory,
+        ProductUrlRewriteValidator $productUrlRewriteValidator
     ) {
         $this->_dateFilter = $dateFilter;
         $this->productValidator = $productValidator;
@@ -81,6 +91,7 @@ class Validate extends Product implements HttpPostActionInterface, HttpGetAction
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
         $this->productFactory = $productFactory;
+        $this->productUrlRewriteValidator = $productUrlRewriteValidator;
     }
 
     /**
@@ -130,11 +141,18 @@ class Validate extends Product implements HttpPostActionInterface, HttpGetAction
             $resource->getAttribute('news_from_date')->setMaxValue($product->getNewsToDate());
             $resource->getAttribute('custom_design_from')->setMaxValue($product->getCustomDesignTo());
 
+            $this->validateUrlKeyUniqueness($product);
             $this->productValidator->validate($product, $this->getRequest(), $response);
         } catch (\Magento\Eav\Model\Entity\Attribute\Exception $e) {
             $response->setError(true);
             $response->setAttribute($e->getAttributeCode());
             $response->setMessages([$e->getMessage()]);
+        } catch (UrlAlreadyExistsException $e) {
+            $this->messageManager->addExceptionMessage($e);
+            $layout = $this->layoutFactory->create();
+            $layout->initMessages();
+            $response->setError(true);
+            $response->setHtmlMessage($layout->getMessagesBlock()->getGroupedHtml());
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $response->setError(true);
             $response->setMessages([$e->getMessage()]);
@@ -147,6 +165,32 @@ class Validate extends Product implements HttpPostActionInterface, HttpGetAction
         }
 
         return $this->resultJsonFactory->create()->setData($response);
+    }
+
+    /**
+     * Validates Url Key uniqueness.
+     *
+     * @param ProductModel $product
+     * @throws UrlAlreadyExistsException
+     */
+    private function validateUrlKeyUniqueness(ProductModel $product): void
+    {
+        $conflictingUrlRewrites = $this->productUrlRewriteValidator->findUrlKeyConflicts($product);
+
+        if ($conflictingUrlRewrites) {
+            $data = [];
+
+            foreach ($conflictingUrlRewrites as $urlRewrite) {
+                $data[$urlRewrite->getUrlRewriteId()] = $urlRewrite->toArray();
+            }
+
+            throw new UrlAlreadyExistsException(
+                __('URL key for specified store already exists.'),
+                null,
+                0,
+                $data
+            );
+        }
     }
 
     /**
