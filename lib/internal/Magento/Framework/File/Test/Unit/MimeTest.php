@@ -56,7 +56,7 @@ class MimeTest extends TestCase
     protected function setUp(): void
     {
         $this->localDriverMock = $this->getMockForAbstractClass(Filesystem\DriverInterface::class);
-        $this->remoteDriverMock = $this->getMockForAbstractClass(Filesystem\ExtendedDriverInterface::class);
+        $this->remoteDriverMock = $this->getMockForAbstractClass(Filesystem\DriverInterface::class);
 
         $this->localDirectoryMock = $this->getMockForAbstractClass(Filesystem\Directory\WriteInterface::class);
         $this->localDirectoryMock->method('getDriver')

@@ -1144,7 +1144,7 @@ class File implements DriverInterface
      *
      * @return bool
      */
-    private function isFileAnImage(string $mimeType): bool
+    protected function isFileAnImage(string $mimeType): bool
     {
         return strstr($mimeType, 'image/');
     }

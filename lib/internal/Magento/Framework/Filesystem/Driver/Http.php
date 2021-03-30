@@ -8,6 +8,7 @@
 
 namespace Magento\Framework\Filesystem\Driver;
 
+use League\Flysystem\AdapterInterface;
 use Magento\Framework\Exception\FileSystemException;
 
 /**
@@ -21,6 +22,11 @@ class Http extends File
      * @var string
      */
     protected $scheme = 'http';
+
+    /**
+     * @var AdapterInterface
+     */
+    private $adapter;
 
     /**
      * Checks if path exists
@@ -226,6 +232,46 @@ class Http extends File
         }
 
         return $this->getScheme() . $basePath . $path;
+    }
+
+    /**
+     * Retrieve file metadata.
+     *
+     * @param string $path
+     *
+     * @return array
+     * @throws FileSystemException
+     */
+    public function getMetadata(string $path): array
+    {
+        if (!$this->isExists($path)) {
+            throw new FileSystemException(__("File '$path' doesn't exist"));
+        }
+
+        $fileStat = $this->stat($path);
+        $mimeType = $fileStat['type'] ?? '';
+
+        $file = new \SplFileInfo($path);
+
+        if ($this->isFileAnImage($mimeType)) {
+            $imageInfo = getimagesize($this->getScheme() . $path);
+            $mimeType = $imageInfo['mime'] ?? $mimeType;
+        }
+
+        return [
+            'path' => $file->getPath(),
+            'dirname' => dirname($file->getPath()),
+            'basename' => $file->getBasename(),
+            'extension' => $file->getExtension(),
+            'filename' => $file->getFilename(),
+            'timestamp' => isset($fileStat['mtime']) ? strtotime($fileStat['mtime']) : 0,
+            'size' => $fileStat['size'] ?? 0,
+            'mimetype' => $mimeType,
+            'extra' => [
+                'image-width' => $imageInfo[0] ?? 0,
+                'image-height' => $imageInfo[1] ?? 0
+            ]
+        ];
     }
 
     /**
