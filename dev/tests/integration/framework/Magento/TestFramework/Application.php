@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem\Glob;
 use Magento\Framework\Mail;
 use Magento\TestFramework;
 use Psr\Log\LoggerInterface;
+use DomainException;
 
 /**
  * Encapsulates application installation, initialization and uninstall.
@@ -562,6 +563,10 @@ class Application
         $postInstallSetupCommands = $this->getPostInstallSetupCommands();
 
         foreach ($postInstallSetupCommands as $postInstallSetupCommand) {
+            if (!isset($postInstallSetupCommand['command'])) {
+                throw new DomainException('"command" must be present in post install setup command arrays');
+            }
+
             if (isset($postInstallSetupCommand['host']) && strpos($postInstallSetupCommand['host'], '{{') === 0) {
                 continue;
             }
@@ -590,7 +595,7 @@ class Application
                 array_merge(
                     [BP . '/bin/magento'],
                     [$command],
-                    $argumentsAndOptions
+                    array_values($argumentsAndOptions)
                 ),
             );
         }

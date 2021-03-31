@@ -6,6 +6,7 @@
 
 namespace Magento\Test;
 
+use DomainException;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\App\Bootstrap;
@@ -102,33 +103,33 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test installation and post-installation shell commands
+     *
+     * @param string $installConfigFilePath
+     * @param string $globalConfigFilePath
+     * @param string|null $postInstallSetupCommandsFilePath
+     * @param array $expectedShellExecutionCalls
+     * @param bool $isExceptionExpected
+     * @dataProvider installDataProvider
      */
-    public function testInstall()
-    {
-        $realApplication = TestFrameworkBootstrap::getInstance()->getBootstrap()->getApplication();
-
-        $reflectionRealApplication = new ReflectionClass($realApplication);
-
-        $globalConfigDirProperty = $reflectionRealApplication->getProperty('_globalConfigDir');
-        $globalConfigDirProperty->setAccessible(true);
-        $globalConfigDir = $globalConfigDirProperty->getValue($realApplication);
-
-        $globalConfigFileProperty = $reflectionRealApplication->getProperty('globalConfigFile');
-        $globalConfigFileProperty->setAccessible(true);
-        $globalConfigFile = $globalConfigFileProperty->getValue($realApplication);
-
-        $installConfigFileProperty = $reflectionRealApplication->getProperty('installConfigFile');
-        $installConfigFileProperty->setAccessible(true);
-        $installConfigFile = $installConfigFileProperty->getValue($realApplication);
+    public function testInstall(
+        string $installConfigFilePath,
+        string $globalConfigFilePath,
+        ?string $postInstallSetupCommandsFilePath,
+        array $expectedShellExecutionCalls,
+        bool $isExceptionExpected = false
+    ) {
+        $tmpDir = sys_get_temp_dir();
 
         $subject = new Application(
             $this->shell,
-            $realApplication->getTempDir(),
-            $installConfigFile,
-            $globalConfigFile,
-            $globalConfigDir,
+            $tmpDir,
+            $installConfigFilePath,
+            $globalConfigFilePath,
+            $tmpDir,
             $this->appMode,
-            $this->autoloadWrapper
+            $this->autoloadWrapper,
+            false,
+            $postInstallSetupCommandsFilePath
         );
 
         $dbMock = $this->getMockBuilder(Mysql::class)->disableOriginalConstructor()->getMock();
@@ -141,11 +142,117 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
         $dbMock
             ->expects($this->any())
             ->method('isDbDumpExists')
-            ->willReturn(false);
+            ->willReturnOnConsecutiveCalls(
+                false,
+                true
+            );
 
-        // TODO - shell mock expectations with various post-installation permutations
+        foreach ($expectedShellExecutionCalls as $index => $expectedShellExecutionArguments) {
+            $this->shell
+                ->expects($this->at($index))
+                ->method('execute')
+                ->with(...$expectedShellExecutionArguments);
+        }
+
+        if ($isExceptionExpected) {
+            $this->expectException(DomainException::class);
+            $this->expectExceptionMessage('"command" must be present in post install setup command arrays');
+        }
 
         $subject->install(false);
+    }
+
+
+    /**
+     * Data Provider for testInstall
+     *
+     * @return array
+     */
+    public function installDataProvider()
+    {
+        $installShellCommandExpectation = [
+            PHP_BINARY . ' -f %s setup:install -vvv ' .
+            '--db-host=%s --db-user=%s --db-password=%s --db-name=%s --db-prefix=%s ' .
+            '--magento-init-params=%s',
+            [
+                BP . '/bin/magento',
+                '/tmp/mysql.sock',
+                'root',
+                '',
+                'magento_integration_tests',
+                '',
+                $this->getInitParamsQuery(sys_get_temp_dir()),
+            ]
+        ];
+
+        return [
+            [
+                dirname(__FILE__) . '/_files/install-config-mysql1.php',
+                dirname(__FILE__) . '/_files/config-global-1.php',
+                null,
+                [
+                    $installShellCommandExpectation
+                ]
+            ],
+            [
+                dirname(__FILE__) . '/_files/install-config-mysql1.php',
+                dirname(__FILE__) . '/_files/config-global-1.php',
+                dirname(__FILE__) . '/_files/post-install-setup-command-config1.php',
+                [
+                    $installShellCommandExpectation,
+                    [
+                        PHP_BINARY . ' -f %s %s -vvv ' .
+                        '--host=%s --dbname=%s --username=%s --password=%s --magento-init-params=%s',
+                        [
+                            BP . '/bin/magento',
+                            'setup:db-schema:add-slave',
+                            '/tmp/mysql.sock',
+                            'magento_replica',
+                            'root',
+                            'secret',
+                            $this->getInitParamsQuery(sys_get_temp_dir()),
+                        ]
+                    ]
+                ]
+            ],
+            [
+                dirname(__FILE__) . '/_files/install-config-mysql1.php',
+                dirname(__FILE__) . '/_files/config-global-1.php',
+                dirname(__FILE__) . '/_files/post-install-setup-command-config2.php',
+                [
+                    $installShellCommandExpectation,
+                ]
+            ],
+            [
+                dirname(__FILE__) . '/_files/install-config-mysql1.php',
+                dirname(__FILE__) . '/_files/config-global-1.php',
+                dirname(__FILE__) . '/_files/post-install-setup-command-config3.php',
+                [
+                    $installShellCommandExpectation,
+                    [
+                        PHP_BINARY . ' -f %s %s -vvv %s %s --option1=%s --option2=%s --magento-init-params=%s',
+                        [
+                            BP . '/bin/magento',
+                            'fake:command',
+                            'foo',
+                            'bar',
+                            'baz',
+                            'qux',
+                            $this->getInitParamsQuery(sys_get_temp_dir()),
+                        ]
+                    ]
+                ]
+            ],
+            [
+                dirname(__FILE__) . '/_files/install-config-mysql1.php',
+                dirname(__FILE__) . '/_files/config-global-1.php',
+                dirname(__FILE__) . '/_files/post-install-setup-command-config4.php',
+                [
+                    $installShellCommandExpectation
+                ],
+                true
+            ],
+        ];
     }
 
     /**
@@ -231,5 +338,27 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                 'area_code' => Area::AREA_GRAPHQL,
             ],
         ];
+    }
+
+    /**
+     * Generate magento-init-params query responsible for dictating application paths to the magento command line
+     *
+     * @param string $dir The base application directory
+     * @return string
+     */
+    private function getInitParamsQuery(string $dir)
+    {
+        return str_replace(
+            '%s',
+            $dir,
+            'MAGE_DIRS[etc][path]=%s/etc&MAGE_DIRS[var][path]=%s/var&' .
+            'MAGE_DIRS[var_export][path]=%s/var/export&MAGE_DIRS[media][path]=%s/pub/media&' .
+            'MAGE_DIRS[static][path]=%s/pub/static&' .
+            'MAGE_DIRS[view_preprocessed][path]=%s/var/view_preprocessed/pub/static&' .
+            'MAGE_DIRS[code][path]=%s/generated/code&MAGE_DIRS[cache][path]=%s/var/cache&' .
+            'MAGE_DIRS[log][path]=%s/var/log&MAGE_DIRS[session][path]=%s/var/session&' .
+            'MAGE_DIRS[tmp][path]=%s/var/tmp&MAGE_DIRS[upload][path]=%s/var/upload&' .
+            'MAGE_DIRS[pub][path]=%s/pub&MAGE_DIRS[import_export][path]=%s/var&MAGE_MODE=developer'
+        );
     }
 }
