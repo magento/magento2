@@ -13,7 +13,7 @@
             </argument>
         </arguments>
     </type>
-   <type name="Magento\Config\Model\Config\TypePool">-->
+   <type name="Magento\Config\Model\Config\TypePool">
        <arguments>
            <argument name="sensitive" xsi:type="array">
                <item name="google/analytics/measurement_id" xsi:type="string">1</item>
