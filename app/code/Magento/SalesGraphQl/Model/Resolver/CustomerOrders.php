@@ -138,23 +138,12 @@ class CustomerOrders implements ResolverInterface
             $this->searchCriteriaBuilder->setPageSize($args['pageSize']);
         }
         if (isset($args['changeSortDirection']) && $args['changeSortDirection']) {
-            $this->addSortOrder($this->searchCriteriaBuilder);
+            $sortOrder = $this->sortOrderBuilder
+                ->setField(OrderInterface::ENTITY_ID)
+                ->setDirection(SortOrder::SORT_DESC)
+                ->create();
+            $this->searchCriteriaBuilder->setSortOrders([$sortOrder]);
         }
         return $this->orderRepository->getList($this->searchCriteriaBuilder->create());
-    }
-
-    /**
-     * Sort by entity_id DESC
-     *
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     */
-    private function addSortOrder(SearchCriteriaBuilder $searchCriteriaBuilder): void
-    {
-        $defaultSortOrders[] = $this->sortOrderBuilder
-            ->setField(OrderInterface::ENTITY_ID)
-            ->setDirection(SortOrder::SORT_DESC)
-            ->create();
-
-        $searchCriteriaBuilder->setSortOrders($defaultSortOrders);
     }
 }

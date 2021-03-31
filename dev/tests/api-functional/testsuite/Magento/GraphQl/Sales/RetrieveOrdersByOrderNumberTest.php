@@ -407,24 +407,23 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Sales/_files/orders_with_customer.php
+     * @return void
+     * @throws AuthenticationException
      */
     public function testGetCustomerOrdersWithChangedDirect()
     {
-        $query =
-            <<<QUERY
+        $query = <<<QUERY
 {
-  customer
-  {
-   orders(changeSortDirection:true){
-    items
-    {
-      id
-      number
-      status
-      order_date
+    customer {
+        orders(changeSortDirection:true) {
+            items {
+                id
+                number
+                status
+                order_date
+            }
+        }
     }
-   }
- }
 }
 QUERY;
 
@@ -440,7 +439,6 @@ QUERY;
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $customerOrderItemsInResponse = $response['customer']['orders']['items'];
         $expectedOrderNumbers = ['100000008', '100000007','100000006', '100000005', '100000004','100000002'];
-
 
         foreach ($expectedOrderNumbers as $key => $data) {
             $orderItemInResponse = $customerOrderItemsInResponse[$key];
