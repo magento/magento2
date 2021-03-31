@@ -112,8 +112,11 @@ class MaliciousCodeTest extends TestCase
             'Nested malicious tags' => [
                 '<scri<script>pt>alert(1);</scri<script>pt>',
                 'alert(1);',
+            ],
+            'Nested scripts' => [
                 '<?php echo "test"?>',
-            ]
+                '',
+            ],
         ];
     }
 
