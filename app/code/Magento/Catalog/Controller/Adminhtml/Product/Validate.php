@@ -13,7 +13,6 @@ use Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
-use Magento\Catalog\Model\Product as ProductModel;
 use Magento\CatalogUrlRewrite\Model\Product\Validator as ProductUrlRewriteValidator;
 
 /**
@@ -141,7 +140,7 @@ class Validate extends Product implements HttpPostActionInterface, HttpGetAction
             $resource->getAttribute('news_from_date')->setMaxValue($product->getNewsToDate());
             $resource->getAttribute('custom_design_from')->setMaxValue($product->getCustomDesignTo());
 
-            $this->validateUrlKeyUniqueness($product);
+            $this->productUrlRewriteValidator->validateUrlKey($product);
             $this->productValidator->validate($product, $this->getRequest(), $response);
         } catch (\Magento\Eav\Model\Entity\Attribute\Exception $e) {
             $response->setError(true);
@@ -165,32 +164,6 @@ class Validate extends Product implements HttpPostActionInterface, HttpGetAction
         }
 
         return $this->resultJsonFactory->create()->setData($response);
-    }
-
-    /**
-     * Validates Url Key uniqueness.
-     *
-     * @param ProductModel $product
-     * @throws UrlAlreadyExistsException
-     */
-    private function validateUrlKeyUniqueness(ProductModel $product): void
-    {
-        $conflictingUrlRewrites = $this->productUrlRewriteValidator->findUrlKeyConflicts($product);
-
-        if ($conflictingUrlRewrites) {
-            $data = [];
-
-            foreach ($conflictingUrlRewrites as $urlRewrite) {
-                $data[$urlRewrite->getUrlRewriteId()] = $urlRewrite->toArray();
-            }
-
-            throw new UrlAlreadyExistsException(
-                __('URL key for specified store already exists.'),
-                null,
-                0,
-                $data
-            );
-        }
     }
 
     /**

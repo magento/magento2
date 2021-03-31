@@ -9,6 +9,7 @@ namespace Magento\CatalogUrlRewrite\Model\Product;
 
 use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
+use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
@@ -50,12 +51,12 @@ class Validator
     }
 
     /**
-     * Find Url Key conflicts of a product.
+     * Validate Url Key of a Product.
      *
      * @param Product $product
-     * @return array Array of conflicting Url Keys.
+     * @throws UrlAlreadyExistsException
      */
-    public function findUrlKeyConflicts(Product $product): array
+    public function validateUrlKey(Product $product): void
     {
         if (!$product->getUrlKey()) {
             $urlKey = $this->productUrlPathGenerator->getUrlKey($product);
@@ -67,7 +68,7 @@ class Validator
         $storeIdsToPathForSave = [];
         $searchData = [
             UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
-            UrlRewrite::REQUEST_PATH => []
+            UrlRewrite::REQUEST_PATH => [],
         ];
 
         foreach ($stores as $store) {
@@ -81,17 +82,25 @@ class Validator
         }
 
         $urlRewrites = $this->urlFinder->findAllByData($searchData);
-        $conflicts = [];
+        $exceptionData = [];
 
         foreach ($urlRewrites as $urlRewrite) {
             if (in_array($urlRewrite->getRequestPath(), $storeIdsToPathForSave)
                 && isset($storeIdsToPathForSave[$urlRewrite->getStoreId()])
-                && $storeIdsToPathForSave[$urlRewrite->getStoreId()] == $urlRewrite->getRequestPath()
-                && $product->getId() != $urlRewrite->getEntityId()) {
-                $conflicts[] = $urlRewrite;
+                && $storeIdsToPathForSave[$urlRewrite->getStoreId()] === $urlRewrite->getRequestPath()
+                && $product->getId() !== $urlRewrite->getEntityId()
+            ) {
+                $exceptionData[$urlRewrite->getUrlRewriteId()] = $urlRewrite->toArray();
             }
         }
 
-        return $conflicts;
+        if ($exceptionData) {
+            throw new UrlAlreadyExistsException(
+                __('URL key for specified store already exists.'),
+                null,
+                0,
+                $exceptionData
+            );
+        }
     }
 }
