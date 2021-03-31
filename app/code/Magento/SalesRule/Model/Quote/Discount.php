@@ -281,7 +281,12 @@ class Discount extends AbstractTotal
         AddressInterface $address,
         array &$addressDiscountAggregator
     ) {
-        $discountBreakdown = $item->getExtensionAttributes()->getDiscounts();
+        $itemExtAttr = $item->getExtensionAttributes();
+        if ($itemExtAttr && get_class($itemExtAttr) === Magento\SalesRule\Api\Data\RuleDiscountInterface::class) {
+            $discountBreakdown = $itemExtAttr->getDiscounts();
+        } else {
+            $discountBreakdown = null;
+        }
         if ($discountBreakdown) {
             foreach ($discountBreakdown as $value) {
                 /* @var DiscountDataInterface $discount */

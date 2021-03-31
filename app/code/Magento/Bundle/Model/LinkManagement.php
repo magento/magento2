@@ -11,6 +11,7 @@ use Magento\Bundle\Api\Data\LinkInterface;
 use Magento\Bundle\Api\Data\LinkInterfaceFactory;
 use Magento\Bundle\Api\Data\OptionInterface;
 use Magento\Bundle\Api\ProductLinkManagementInterface;
+use Magento\Bundle\Helper\Model\Link;
 use Magento\Bundle\Model\Product\Type;
 use Magento\Bundle\Model\ResourceModel\Bundle;
 use Magento\Bundle\Model\ResourceModel\BundleFactory;
@@ -73,6 +74,11 @@ class LinkManagement implements ProductLinkManagementInterface
     private $metadataPool;
 
     /**
+     * @var Link
+     */
+    private $linkHelper;
+
+    /**
      * @param ProductRepositoryInterface $productRepository
      * @param LinkInterfaceFactory $linkFactory
      * @param SelectionFactory $bundleSelection
@@ -81,6 +87,7 @@ class LinkManagement implements ProductLinkManagementInterface
      * @param StoreManagerInterface $storeManager
      * @param DataObjectHelper $dataObjectHelper
      * @param MetadataPool $metadataPool
+     * @param Link $linkHelper
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
@@ -90,7 +97,8 @@ class LinkManagement implements ProductLinkManagementInterface
         CollectionFactory $optionCollection,
         StoreManagerInterface $storeManager,
         DataObjectHelper $dataObjectHelper,
-        MetadataPool $metadataPool
+        MetadataPool $metadataPool,
+        Link  $linkHelper
     ) {
         $this->productRepository = $productRepository;
         $this->linkFactory = $linkFactory;
@@ -100,6 +108,7 @@ class LinkManagement implements ProductLinkManagementInterface
         $this->storeManager = $storeManager;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->metadataPool = $metadataPool;
+        $this->linkHelper = $linkHelper;
     }
 
     /**
@@ -429,9 +438,10 @@ class LinkManagement implements ProductLinkManagementInterface
 
         /** @var LinkInterface $link */
         $link = $this->linkFactory->create();
+        $selectionData = $this->linkHelper->cleanExtensionAttribute($selection->getData());
         $this->dataObjectHelper->populateWithArray(
             $link,
-            $selection->getData(),
+            $selectionData,
             LinkInterface::class
         );
         $link->setIsDefault($selection->getIsDefault())

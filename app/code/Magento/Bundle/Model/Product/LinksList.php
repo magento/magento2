@@ -6,10 +6,16 @@
  */
 namespace Magento\Bundle\Model\Product;
 
+use Magento\Bundle\Api\Data\LinkInterface;
+use Magento\Bundle\Api\Data\LinkInterfaceFactory;
+use Magento\Bundle\Helper\Model\Link;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\Api\DataObjectHelper;
+
 class LinksList
 {
     /**
-     * @var \Magento\Bundle\Api\Data\LinkInterfaceFactory
+     * @var LinkInterfaceFactory
      */
     protected $linkFactory;
 
@@ -19,52 +25,62 @@ class LinksList
     protected $type;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper
+     * @var DataObjectHelper
      */
     protected $dataObjectHelper;
 
     /**
-     * @param \Magento\Bundle\Api\Data\LinkInterfaceFactory $linkFactory
+     * @var Link
+     */
+    private $linkHelper;
+
+    /**
+     * @param LinkInterfaceFactory $linkFactory
      * @param Type $type
-     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param DataObjectHelper $dataObjectHelper
+     * @param Link $linkHelper
      */
     public function __construct(
-        \Magento\Bundle\Api\Data\LinkInterfaceFactory $linkFactory,
-        \Magento\Bundle\Model\Product\Type $type,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+        LinkInterfaceFactory $linkFactory,
+        Type $type,
+        DataObjectHelper $dataObjectHelper,
+        Link  $linkHelper
     ) {
         $this->linkFactory = $linkFactory;
         $this->type = $type;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->linkHelper = $linkHelper;
     }
 
     /**
      * Bundle Product Items Data
      *
-     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @param ProductInterface $product
      * @param int $optionId
-     * @return \Magento\Bundle\Api\Data\LinkInterface[]
+     * @return LinkInterface[]
      */
-    public function getItems(\Magento\Catalog\Api\Data\ProductInterface $product, $optionId)
+    public function getItems(ProductInterface $product, $optionId)
     {
         $selectionCollection = $this->type->getSelectionsCollection([$optionId], $product);
 
         $productLinks = [];
-        /** @var \Magento\Catalog\Model\Product $selection */
+        /** @var ProductInterface|\Magento\Catalog\Model\Product $selection */
         foreach ($selectionCollection as $selection) {
             $bundledProductPrice = $selection->getSelectionPriceValue();
             if ($bundledProductPrice <= 0) {
                 $bundledProductPrice = $selection->getPrice();
             }
             $selectionPriceType = $product->getPriceType() ? $selection->getSelectionPriceType() : null;
-            $selectionPrice = $bundledProductPrice ? $bundledProductPrice : null;
+            $selectionPrice = $bundledProductPrice ?: null;
 
-            /** @var \Magento\Bundle\Api\Data\LinkInterface $productLink */
+            $selectionData = $this->linkHelper->cleanExtensionAttribute($selection->getData());
+
+            /** @var LinkInterface $productLink */
             $productLink = $this->linkFactory->create();
             $this->dataObjectHelper->populateWithArray(
                 $productLink,
-                $selection->getData(),
-                \Magento\Bundle\Api\Data\LinkInterface::class
+                $selectionData,
+                LinkInterface::class
             );
             $productLink->setIsDefault($selection->getIsDefault())
                 ->setId($selection->getSelectionId())
