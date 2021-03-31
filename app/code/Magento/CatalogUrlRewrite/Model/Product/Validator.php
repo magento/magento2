@@ -51,18 +51,13 @@ class Validator
     }
 
     /**
-     * Validate Url Key of a Product.
+     * Validate Url Key of a Product has no conflicts.
      *
      * @param Product $product
      * @throws UrlAlreadyExistsException
      */
-    public function validateUrlKey(Product $product): void
+    public function validateUrlKeyConflicts(Product $product): void
     {
-        if (!$product->getUrlKey()) {
-            $urlKey = $this->productUrlPathGenerator->getUrlKey($product);
-            $product->setUrlKey($urlKey);
-        }
-
         $stores = $this->storeManager->getStores();
 
         $storeIdsToPathForSave = [];

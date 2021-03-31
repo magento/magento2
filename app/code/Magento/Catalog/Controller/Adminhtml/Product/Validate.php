@@ -14,6 +14,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 use Magento\CatalogUrlRewrite\Model\Product\Validator as ProductUrlRewriteValidator;
+use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 
 /**
  * Product validate
@@ -60,6 +61,11 @@ class Validate extends Product implements HttpPostActionInterface, HttpGetAction
     private $storeManager;
 
     /**
+     * @var ProductUrlPathGenerator
+     */
+    private $productUrlPathGenerator;
+
+    /**
      * @var ProductUrlRewriteValidator
      */
     private $productUrlRewriteValidator;
@@ -73,6 +79,7 @@ class Validate extends Product implements HttpPostActionInterface, HttpGetAction
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param ProductUrlRewriteValidator $productUrlRewriteValidator
+     * @param ProductUrlPathGenerator $productUrlPathGenerator
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -82,7 +89,8 @@ class Validate extends Product implements HttpPostActionInterface, HttpGetAction
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        ProductUrlRewriteValidator $productUrlRewriteValidator
+        ProductUrlRewriteValidator $productUrlRewriteValidator,
+        ProductUrlPathGenerator $productUrlPathGenerator
     ) {
         $this->_dateFilter = $dateFilter;
         $this->productValidator = $productValidator;
@@ -91,6 +99,7 @@ class Validate extends Product implements HttpPostActionInterface, HttpGetAction
         $this->layoutFactory = $layoutFactory;
         $this->productFactory = $productFactory;
         $this->productUrlRewriteValidator = $productUrlRewriteValidator;
+        $this->productUrlPathGenerator = $productUrlPathGenerator;
     }
 
     /**
@@ -140,7 +149,11 @@ class Validate extends Product implements HttpPostActionInterface, HttpGetAction
             $resource->getAttribute('news_from_date')->setMaxValue($product->getNewsToDate());
             $resource->getAttribute('custom_design_from')->setMaxValue($product->getCustomDesignTo());
 
-            $this->productUrlRewriteValidator->validateUrlKey($product);
+            if (!$product->getUrlKey()) {
+                $urlKey = $this->productUrlPathGenerator->getUrlKey($product);
+                $product->setUrlKey($urlKey);
+            }
+            $this->productUrlRewriteValidator->validateUrlKeyConflicts($product);
             $this->productValidator->validate($product, $this->getRequest(), $response);
         } catch (\Magento\Eav\Model\Entity\Attribute\Exception $e) {
             $response->setError(true);
