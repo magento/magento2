@@ -129,7 +129,7 @@ class AwsS3Factory implements DriverFactoryInterface
                 'cache' => $cache
             ]
         );
-
+        $objectUrl = rtrim($client->getObjectUrl($config['bucket'], './'), '/') . trim($prefix, '\\/') . '/';
         return $this->objectManager->create(
             AwsS3::class,
             [
@@ -140,7 +140,7 @@ class AwsS3Factory implements DriverFactoryInterface
                         'metadataProvider' => $metadataProvider
                     ]
                 ),
-                'objectUrl' => $client->getObjectUrl($config['bucket'], trim($prefix, '\\/') . '/.'),
+                'objectUrl' => $objectUrl,
                 'metadataProvider' => $metadataProvider,
             ]
         );
