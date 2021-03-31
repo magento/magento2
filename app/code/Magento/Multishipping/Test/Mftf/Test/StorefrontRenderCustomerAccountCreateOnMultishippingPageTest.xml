@@ -16,6 +16,7 @@
             <description value="The create customer form should be correctly rendered on multiple shipping page."/>
             <severity value="MINOR"/>
             <group value="Multishipment"/>
+            <testCaseId value="MC-41669"/>
         </annotations>
         <before>
             <createData stepKey="category" entity="SimpleSubCategory"/>
@@ -33,7 +34,7 @@
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProduct1">
             <argument name="productName" value="$$product.name$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontOpenMultipleShippingRegisterPageActionGroup" stepKey="checkoutWithMultipleAddresses"/>
+        <actionGroup ref="StorefrontOpenMultipleShippingRegisterPageActionGroup" stepKey="goToCustomerRegisterPage"/>
         <actionGroup ref="StorefrontOpenMinicartAndCheckSimpleProductActionGroup" stepKey="checkProductInMiniCart">
             <argument name="product" value="$$product$$"/>
         </actionGroup>
