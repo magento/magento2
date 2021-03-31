@@ -28,8 +28,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_MEASUREMENT_ID = 'google/analytics/measurement_id';
 
     const XML_PATH_ANONYMIZE = 'google/analytics/anonymize';
-
-    const XML_PATH_ANONYMIZE_DEFAULT_YES = 'google/analytics/anonymize_default_yes';
     
     /**
     * Account Types
