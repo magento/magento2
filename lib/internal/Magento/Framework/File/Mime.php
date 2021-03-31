@@ -115,7 +115,7 @@ class Mime
 
         $mimeType = '';
         if ($driver instanceof Filesystem\DriverInterface) {
-            $mimeType = $driver->getMetadata($file)['mimetype'];
+            $mimeType = $driver->getMetadata($file)['mimetype'] ?? '';
         }
 
         if (!$mimeType) {
