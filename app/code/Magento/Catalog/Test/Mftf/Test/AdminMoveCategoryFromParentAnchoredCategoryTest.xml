@@ -59,7 +59,7 @@
         <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
 
         <!--Verify category displayed in store front page-->
-        <amOnPage url="/$$createDefaultCategory.name$$/{{SimpleSubCategory.name}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
+        <amOnPage url="/$$createDefaultCategory.custom_attributes[url_key]$$/{{SimpleSubCategory.urlKey}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
         <waitForPageLoad  stepKey="waitForStoreFrontPageLoad"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeDefaultCategoryOnStoreNavigationBar"/>
         <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="dontSeeSubCategoryOnStoreNavigationBar"/>
@@ -88,7 +88,7 @@
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You moved the category." stepKey="seeSuccessMoveMessage"/>
 
         <!--Open category in store front page-->
-        <amOnPage url="/{{SimpleSubCategory.name}}.html" stepKey="seeTheCategoryInStoreFrontPage1"/>
+        <amOnPage url="/{{SimpleSubCategory.urlKey}}.html" stepKey="seeTheCategoryInStoreFrontPage1"/>
         <waitForPageLoad  stepKey="waitForStoreFrontPageLoad1"/>
 
         <!--Verify breadcrumbs after the move in store front page-->
@@ -99,7 +99,7 @@
         </assertEquals>
 
        <!--Open category store front page -->
-        <amOnPage url="{{StorefrontCategoryPage.url(SimpleSubCategory.name)}}"  stepKey="amOnCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url(SimpleSubCategory.urlKey)}}"  stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
 
         <!--Verify Category in store front-->
