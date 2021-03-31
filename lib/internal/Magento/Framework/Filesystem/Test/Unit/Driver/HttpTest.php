@@ -215,4 +215,70 @@ class HttpTest extends TestCase
         self::$fsockopen = $fsockopenResult;
         $this->assertEquals($fsockopenResult, (new Http())->fileOpen('example.com', 'r'));
     }
+
+    /**
+     * Test for getMetaData
+     *
+     * @dataProvider dataProviderForTestGetMetaData
+     * @param string $filePath
+     * @param array $headers
+     * @param array $expected
+     *
+     * @throws FileSystemException
+     */
+    public function testGetMetadata($filePath, $headers, $expected): void
+    {
+        self::$headers = $headers;
+        $http = new Http();
+        if (strpos($headers[0], '200 OK') === false) {
+            $this->expectException(FileSystemException::class);
+            $this->expectExceptionMessage('File \'' . $filePath . '\' doesn\'t exist');
+            $http->getMetadata($filePath);
+        } else {
+            $metadata = $http->getMetadata($filePath);
+            $this->assertEquals($metadata, $expected);
+        }
+    }
+
+    /**
+     * Data provider for testGetMetaData
+     *
+     * @return array
+     */
+    public function dataProviderForTestGetMetaData(): array
+    {
+        return [
+            'existing file' => [
+                'file_path' => 'example.com/file/1.pdf',
+                'headers' => [
+                    0 => 'HTTP/1.0 200 OK',
+                    'Content-Length' => 128,
+                    'Content-Type' => 'application/pdf',
+                    'Last-Modified' => 'Sat, 31 Mar 2021 01:36:20 GMT',
+                    'Content-Disposition' => 1024,
+                ],
+                'expected' => [
+                    'path' => 'example.com/file',
+                    'dirname' => 'example.com',
+                    'basename' => '1.pdf',
+                    'extension' => 'pdf',
+                    'filename' => '1.pdf',
+                    'timestamp' => 1617413780,
+                    'size' => 128,
+                    'mimetype' => 'application/pdf',
+                    'extra' => [
+                        'image-width' => 0,
+                        'image-height' => 0
+                    ]
+                ]
+            ],
+            'non-existent file' => [
+                'file_path' => 'example.com/file/2.pdf',
+                'headers' => [
+                    0 => 'HTTP/1.0 404 Not Found'
+                ],
+                'expected' => []
+            ]
+        ];
+    }
 }
