@@ -31,7 +31,7 @@
         <waitForElementVisible selector="{{StorefrontMinicartSection.quantity}}" stepKey="waitForElementQty"/>
         <pressKey selector="{{StorefrontMinicartSection.itemQuantity(product.name)}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::BACKSPACE]" stepKey="deleteFiled"/>
         <fillField selector="{{StorefrontMinicartSection.itemQuantity(product.name)}}"  userInput="{{quantity}}" stepKey="changeQty"/>
-        <click selector="{{StorefrontMinicartSection.itemQuantityUpdate(product.name)}}" stepKey="updateQty"/>
+        <conditionalClick selector="{{StorefrontMinicartSection.itemQuantityUpdate(product.name)}}" dependentSelector="{{StorefrontMinicartSection.itemQuantityUpdate(product.name)}}" stepKey="updateQty"/>
         <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
         <waitForText userInput="{{quantity}}" selector="{{StorefrontMinicartSection.productCount}}" time="30" stepKey="assertProductCount"/>
 
