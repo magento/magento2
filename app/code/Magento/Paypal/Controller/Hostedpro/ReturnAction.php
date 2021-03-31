@@ -26,11 +26,7 @@ class ReturnAction extends Action implements CsrfAwareActionInterface, HttpPostA
      */
     public function execute()
     {
-        $session = $this->_objectManager->get(\Magento\Checkout\Model\Session::class);
-        //TODO: some actions with order
-        if ($session->getLastRealOrderId()) {
-            $this->_redirect('checkout/onepage/success');
-        }
+        $this->_redirect('checkout/onepage/success');
     }
 
     /**

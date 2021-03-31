@@ -212,10 +212,15 @@ class CreateTest extends TestCase
             ->method('restoreData')
             ->willReturn(['group_id' => 1]);
 
+        $requestMock = $this->getMockBuilder(RequestInterface::class)
+            ->setMethods(['getPostValue'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $requestMock->expects($this->atLeastOnce())->method('getPostValue')->willReturn(null);
         $customerForm->method('prepareRequest')
-            ->willReturn($this->getMockForAbstractClass(RequestInterface::class));
+            ->willReturn($requestMock);
 
-        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customer = $this->createMock(CustomerInterface::class);
         $this->customerMapper->expects(self::atLeastOnce())
             ->method('toFlatArray')
             ->willReturn(['group_id' => 1]);

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontSelectCustomerAddressOnPaymentStepInCheckoutActionGroup">
+        <annotations>
+            <description>Selects the specified address after 'Change Address' pop up has been opened on the Storefront Checkout page on the 'Payment' step.</description>
+        </annotations>
+        <arguments>
+            <argument name="address" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{CheckoutBillingAddressSearchSection.selectButton(address)}}" stepKey="waitForAddress"/>
+        <click selector="{{CheckoutBillingAddressSearchSection.selectButton(address)}}" stepKey="clickSelectForAddress"/>
+        <waitForElementNotVisible selector="{{CheckoutShippingAddressSearchSection.popupSelectShippingAddress}}" stepKey="waitForPopupClosed"/>
+    </actionGroup>
+</actionGroups>

@@ -773,15 +773,10 @@ class ProcessCronQueueObserverTest extends TestCase
             ->setMethods(['execute'])->getMock();
         $testCronJob->expects($this->atLeastOnce())->method('execute')->with($schedule);
 
-        $this->objectManagerMock->expects(
-            $this->once()
-        )->method(
-            'create'
-        )->with(
-            'CronJob'
-        )->willReturn(
-            $testCronJob
-        );
+        $this->objectManagerMock->expects($this->once())
+            ->method('create')
+            ->with('CronJob')
+            ->willReturn($testCronJob);
 
         $this->cronQueueObserver->execute($this->observerMock);
     }
@@ -1049,9 +1044,36 @@ class ProcessCronQueueObserverTest extends TestCase
         $this->scheduleCollectionMock->expects($this->any())->method('load')->willReturnSelf();
 
         $scheduleMock->expects($this->any())->method('getCollection')->willReturn($this->scheduleCollectionMock);
-        $scheduleMock->expects($this->exactly(9))->method('getResource')->willReturn($this->scheduleResourceMock);
-        $this->scheduleFactoryMock->expects($this->exactly(10))->method('create')->willReturn($scheduleMock);
+        $scheduleMock->expects($this->exactly(10))->method('getResource')->willReturn($this->scheduleResourceMock);
+        $this->scheduleFactoryMock->expects($this->exactly(11))->method('create')->willReturn($scheduleMock);
 
+        $connectionMock = $this->prepareConnectionMock($tableName);
+
+        $this->scheduleResourceMock->expects($this->exactly(6))
+            ->method('getTable')
+            ->with($tableName)
+            ->willReturn($tableName);
+        $this->scheduleResourceMock->expects($this->exactly(15))
+            ->method('getConnection')
+            ->willReturn($connectionMock);
+
+        $this->retrierMock->expects($this->exactly(5))
+            ->method('execute')
+            ->willReturnCallback(
+                function ($callback) {
+                    return $callback();
+                }
+            );
+
+        $this->cronQueueObserver->execute($this->observerMock);
+    }
+
+    /**
+     * @param string $tableName
+     * @return AdapterInterface|MockObject
+     */
+    private function prepareConnectionMock(string $tableName)
+    {
         $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $connectionMock->expects($this->exactly(5))
@@ -1080,22 +1102,30 @@ class ProcessCronQueueObserverTest extends TestCase
             )
             ->willReturn(1);
 
-        $this->scheduleResourceMock->expects($this->exactly(5))
-            ->method('getTable')
-            ->with($tableName)
-            ->willReturn($tableName);
-        $this->scheduleResourceMock->expects($this->exactly(14))
-            ->method('getConnection')
-            ->willReturn($connectionMock);
-
-        $this->retrierMock->expects($this->exactly(5))
-            ->method('execute')
-            ->willReturnCallback(
-                function ($callback) {
-                    return $callback();
-                }
+        $connectionMock->expects($this->any())
+            ->method('quoteInto')
+            ->withConsecutive(
+                ['status = ?', \Magento\Cron\Model\Schedule::STATUS_RUNNING],
+                ['job_code IN (?)', ['test_job1']],
+            )
+            ->willReturnOnConsecutiveCalls(
+                "status = 'running'",
+                "job_code IN ('test_job1')"
             );
 
-        $this->cronQueueObserver->execute($this->observerMock);
+        $connectionMock->expects($this->once())
+            ->method('update')
+            ->with(
+                $tableName,
+                ['status' => 'error', 'messages' => 'Time out'],
+                [
+                    "status = 'running'",
+                    "job_code IN ('test_job1')",
+                    'scheduled_at < UTC_TIMESTAMP() - INTERVAL 1 DAY'
+                ]
+            )
+            ->willReturn(0);
+
+        return $connectionMock;
     }
 }
