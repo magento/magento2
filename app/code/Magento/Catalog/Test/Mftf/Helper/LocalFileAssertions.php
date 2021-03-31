@@ -131,7 +131,7 @@ class LocalFileAssertions extends Helper
     public function assertFileExists($filePath, $message = ''): void
     {
         $realPath = $this->expandPath($filePath);
-        $this->assertTrue($this->driver->isExists($realPath), $message);
+        $this->assertTrue($this->driver->isExists($realPath), "Failed asserting $filePath exists. " . $message);
     }
 
     /**
@@ -143,11 +143,41 @@ class LocalFileAssertions extends Helper
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function assertGlobbedFileExists($path, $pattern, $message = ""): void
+    public function assertGlobbedFileExists($path, $pattern, $message = ''): void
     {
         $realPath = $this->expandPath($path);
         $files = $this->driver->search($pattern, $realPath);
-        $this->assertNotEmpty($files, $message);
+        $this->assertNotEmpty($files, "Failed asserting file matching glob pattern \"$pattern\" at location \"$path\" is not empty. " . $message);
+    }
+
+    /**
+     * Asserts that a file or directory exists
+     *
+     * @param string $path
+     * @param string $message
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function assertPathExists($path, $message = ''): void
+    {
+        $realPath = $this->expandPath($path);
+        $this->assertTrue($this->driver->isExists($realPath), "Failed asserting $path exists. " . $message);
+    }
+
+    /**
+     * Asserts that a file or directory does not exist
+     *
+     * @param string $path
+     * @param string $message
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function assertPathDoesNotExist($path, $message = ''): void
+    {
+        $realPath = $this->expandPath($path);
+        $this->assertFalse($this->driver->isExists($realPath), "Failed asserting $path does not exist. " . $message);
     }
 
     /**
@@ -174,10 +204,10 @@ class LocalFileAssertions extends Helper
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function assertFileEmpty($filePath, $message = ""): void
+    public function assertFileEmpty($filePath, $message = ''): void
     {
         $realPath = $this->expandPath($filePath);
-        $this->assertEmpty($this->driver->fileGetContents($realPath), $message);
+        $this->assertEmpty($this->driver->fileGetContents($realPath), "Failed asserting $filePath is empty. " . $message);
     }
 
     /**
@@ -189,10 +219,10 @@ class LocalFileAssertions extends Helper
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function assertFileNotEmpty($filePath, $message = ""): void
+    public function assertFileNotEmpty($filePath, $message = ''): void
     {
         $realPath = $this->expandPath($filePath);
-        $this->assertNotEmpty($this->driver->fileGetContents($realPath), $message);
+        $this->assertNotEmpty($this->driver->fileGetContents($realPath), "Failed asserting $filePath is not empty. " . $message);
     }
 
     /**
@@ -205,10 +235,10 @@ class LocalFileAssertions extends Helper
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function assertFileContainsString($filePath, $text, $message = ""): void
+    public function assertFileContainsString($filePath, $text, $message = ''): void
     {
         $realPath = $this->expandPath($filePath);
-        $this->assertStringContainsString($text, $this->driver->fileGetContents($realPath), $message);
+        $this->assertStringContainsString($text, $this->driver->fileGetContents($realPath), "Failed asserting $filePath contains $text. " . $message);
     }
 
     /**
@@ -223,11 +253,11 @@ class LocalFileAssertions extends Helper
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function assertGlobbedFileContainsString($path, $pattern, $text, $fileIndex = 0, $message = ""): void
+    public function assertGlobbedFileContainsString($path, $pattern, $text, $fileIndex = 0, $message = ''): void
     {
         $realPath = $this->expandPath($path);
         $files = $this->driver->search($pattern, $realPath);
-        $this->assertStringContainsString($text, $this->driver->fileGetContents($files[$fileIndex] ?? ''), $message);
+        $this->assertStringContainsString($text, $this->driver->fileGetContents($files[$fileIndex] ?? ''), "Failed asserting file of index \"$fileIndex\" matching glob pattern \"$pattern\" at location \"$path\" contains $text. " . $message);
     }
 
     /**
@@ -240,10 +270,10 @@ class LocalFileAssertions extends Helper
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function assertFileDoesNotContain($filePath, $text, $message = ""): void
+    public function assertFileDoesNotContainString($filePath, $text, $message = ''): void
     {
         $realPath = $this->expandPath($filePath);
-        $this->assertStringNotContainsString($text, $this->driver->fileGetContents($realPath), $message);
+        $this->assertStringNotContainsString($text, $this->driver->fileGetContents($realPath), "Failed asserting $filePath does not contain $text. " . $message);
     }
 
     /**
@@ -255,10 +285,25 @@ class LocalFileAssertions extends Helper
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function assertDirectoryEmpty($path, $message = ""): void
+    public function assertDirectoryEmpty($path, $message = ''): void
     {
         $realPath = $this->expandPath($path);
-        $this->assertEmpty($this->driver->readDirectory($realPath), $message);
+        $this->assertEmpty($this->driver->readDirectory($realPath), "Failed asserting $path is empty. " . $message);
+    }
+
+    /**
+     * Asserts that a directory is not empty
+     *
+     * @param string $path
+     * @param string $message
+     * @return void
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function assertDirectoryNotEmpty($path, $message = ''): void
+    {
+        $realPath = $this->expandPath($path);
+        $this->assertNotEmpty($this->driver->readDirectory($realPath), "Failed asserting $path is not empty. " . $message);
     }
 
     /**
