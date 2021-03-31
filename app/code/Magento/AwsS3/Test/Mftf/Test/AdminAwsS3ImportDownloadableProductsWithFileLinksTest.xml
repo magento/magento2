@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAwsS3ImportDownloadableProductsWithFileLinksTest" extends="AdminImportDownloadableProductsWithFileLinksTest">
+        <annotations>
+            <features value="AwsS3"/>
+            <stories value="Import Products"/>
+            <title value="S3 - Import Downloadable Products with File Links"/>
+            <description value="Imports a .csv file containing a downloadable product with file links. Verifies that
+            products are imported successfully."/>
+            <severity value="MAJOR"/>
+            <group value="importExport"/>
+            <group value="Downloadable"/>
+            <group value="remote_storage_aws_s3"/>
+        </annotations>
+
+        <before>
+            <!-- Locally Copy Import Files to Unique Media Import Directory -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportFiles" after="createCustomer">
+                <argument name="path">pub/media/import/{{ImportProduct_Downloadable_FileLinks.name}}</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyImportFile" after="createDirectoryForImportFiles">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_FileLinks.fileName}}</argument>
+                <argument name="destination">pub/media/import/{{ImportProduct_Downloadable_FileLinks.name}}/{{ImportProduct_Downloadable_FileLinks.fileName}}</argument>
+            </helper>
+            <remove keyForRemoval="createDirectoryForImportImages"/>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyBaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_FileLinks.baseImage}}</argument>
+                <argument name="destination">pub/media/import/{{ImportProduct_Downloadable_FileLinks.name}}/{{ImportProduct_Downloadable_FileLinks.baseImage}}</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copySmallImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_FileLinks.smallImage}}</argument>
+                <argument name="destination">pub/media/import/{{ImportProduct_Downloadable_FileLinks.name}}/{{ImportProduct_Downloadable_FileLinks.smallImage}}</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyThumbnailImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_FileLinks.thumbnailImage}}</argument>
+                <argument name="destination">pub/media/import/{{ImportProduct_Downloadable_FileLinks.name}}/{{ImportProduct_Downloadable_FileLinks.thumbnailImage}}</argument>
+            </helper>
+
+            <!-- Enable AWS S3 Remote Storage & Sync -->
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage" after="copyThumbnailImage"/>
+            <magentoCLI command="remote-storage:sync" timeout="120" stepKey="syncRemoteStorage" after="enableRemoteStorage"/>
+
+            <!-- Copy to Import Directory in AWS S3 -->
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="createDirectory" stepKey="createDirectoryForImportFilesInS3" after="syncRemoteStorage">
+                <argument name="path">var/import/images/{{ImportProduct_Downloadable_FileLinks.name}}</argument>
+            </helper>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="copy" stepKey="copyBaseImageInS3" after="createDirectoryForImportFilesInS3">
+                <argument name="source">media/import/{{ImportProduct_Downloadable_FileLinks.name}}/{{ImportProduct_Downloadable_FileLinks.baseImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Downloadable_FileLinks.name}}/{{ImportProduct_Downloadable_FileLinks.baseImage}}</argument>
+            </helper>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="copy" stepKey="copySmallImageInS3" after="copyBaseImageInS3">
+                <argument name="source">media/import/{{ImportProduct_Downloadable_FileLinks.name}}/{{ImportProduct_Downloadable_FileLinks.smallImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Downloadable_FileLinks.name}}/{{ImportProduct_Downloadable_FileLinks.smallImage}}</argument>
+            </helper>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="copy" stepKey="copyThumbnailImageInS3" after="copySmallImageInS3">
+                <argument name="source">media/import/{{ImportProduct_Downloadable_FileLinks.name}}/{{ImportProduct_Downloadable_FileLinks.thumbnailImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Downloadable_FileLinks.name}}/{{ImportProduct_Downloadable_FileLinks.thumbnailImage}}</argument>
+            </helper>
+        </before>
+
+        <after>
+            <!-- Delete S3 Data -->
+            <remove keyForRemoval="deleteProductImageDirectory"/>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="deleteDirectory" stepKey="deleteImportFilesDirectoryS3" after="deleteCustomer">
+                <argument name="path">media/import/{{ImportProduct_Downloadable_FileLinks.name}}</argument>
+            </helper>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="deleteDirectory" stepKey="deleteImportImagesFilesDirectoryS3" after="deleteImportFilesDirectoryS3">
+                <argument name="path">var/import/images/{{ImportProduct_Downloadable_FileLinks.name}}</argument>
+            </helper>
+
+            <!-- Disable AWS S3 Remote Storage & Delete Local Data -->
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage" after="logoutFromAdmin"/>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteImportFilesDirectoryLocal" after="disableRemoteStorage">
+                <argument name="path">pub/media/import/{{ImportProduct_Downloadable_FileLinks.name}}</argument>
+            </helper>
+        </after>
+
+        <!-- Import Downloadable Product -->
+        <actionGroup ref="AdminFillImportFormActionGroup" stepKey="fillImportForm">
+            <argument name="importFile" value="{{ImportProduct_Downloadable_FileLinks.fileName}}"/>
+            <argument name="imagesFileDirectory" value="{{ImportProduct_Downloadable_FileLinks.name}}"/>
+        </actionGroup>
+    </test>
+</tests>

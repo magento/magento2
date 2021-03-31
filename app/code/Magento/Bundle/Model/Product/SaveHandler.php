@@ -12,8 +12,11 @@ use Magento\Bundle\Model\Option\SaveAction;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Bundle\Api\ProductOptionRepositoryInterface as OptionRepository;
 use Magento\Bundle\Api\ProductLinkManagementInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Bundle product save handler
@@ -41,21 +44,30 @@ class SaveHandler implements ExtensionInterface
     private $metadataPool;
 
     /**
+     * @var CheckOptionLinkIfExist
+     */
+    private $checkOptionLinkIfExist;
+
+    /**
      * @param OptionRepository $optionRepository
      * @param ProductLinkManagementInterface $productLinkManagement
      * @param SaveAction $optionSave
      * @param MetadataPool $metadataPool
+     * @param CheckOptionLinkIfExist|null $checkOptionLinkIfExist
      */
     public function __construct(
         OptionRepository $optionRepository,
         ProductLinkManagementInterface $productLinkManagement,
         SaveAction $optionSave,
-        MetadataPool $metadataPool
+        MetadataPool $metadataPool,
+        ?CheckOptionLinkIfExist $checkOptionLinkIfExist = null
     ) {
         $this->optionRepository = $optionRepository;
         $this->productLinkManagement = $productLinkManagement;
         $this->optionSave = $optionSave;
         $this->metadataPool = $metadataPool;
+        $this->checkOptionLinkIfExist = $checkOptionLinkIfExist ??
+            ObjectManager::getInstance()->get(CheckOptionLinkIfExist::class);
     }
 
     /**
@@ -105,13 +117,18 @@ class SaveHandler implements ExtensionInterface
      * @param OptionInterface $option
      *
      * @return void
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     protected function removeOptionLinks($entitySku, $option)
     {
         $links = $option->getProductLinks();
         if (!empty($links)) {
             foreach ($links as $link) {
-                $this->productLinkManagement->removeChild($entitySku, $option->getId(), $link->getSku());
+                $linkCanBeDeleted = $this->checkOptionLinkIfExist->execute($entitySku, $option, $link);
+                if ($linkCanBeDeleted) {
+                    $this->productLinkManagement->removeChild($entitySku, $option->getId(), $link->getSku());
+                }
             }
         }
     }
