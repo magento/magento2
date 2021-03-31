@@ -75,7 +75,7 @@
             <argument name="Customer" value="$$multiple_address_customer$$"/>
         </actionGroup>
 
-        <amOnPage url="{{StorefrontCategoryPage.url($$simplecategory.name$$)}}" stepKey="onCategoryPage1"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$simplecategory.custom_attributes[url_key]$$)}}" stepKey="onCategoryPage1"/>
         <waitForPageLoad stepKey="waitForCatalogPageLoad1"/>
         <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverProduct1"/>
         <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="addToCart1"/>
@@ -94,7 +94,7 @@
         <waitForPageLoad stepKey="waitForOrderSuccessPage1"/>
         <see stepKey="seeSuccessMessage1" selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:"/>
 
-        <amOnPage url="{{StorefrontCategoryPage.url($$simplecategory.name$$)}}" stepKey="onCategoryPage2"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$simplecategory.custom_attributes[url_key]$$)}}" stepKey="onCategoryPage2"/>
         <waitForPageLoad stepKey="waitForCatalogPageLoad2"/>
         <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverProduct2"/>
         <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="addToCart2"/>
