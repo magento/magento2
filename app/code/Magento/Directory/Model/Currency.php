@@ -118,7 +118,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         array $data = [],
         CurrencyConfig $currencyConfig = null,
         LocalResolverInterface $localeResolver = null,
-        \Magento\Framework\NumberFormatter $numberFormatterFactory = null
+        \Magento\Framework\NumberFormatterFactory $numberFormatterFactory = null
     ) {
         parent::__construct(
             $context,
@@ -366,11 +366,24 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      */
     private function useNumberFormatter(array $options): bool
     {
-        return (empty($options) || array_key_exists(LocaleCurrency::CURRENCY_OPTION_SYMBOL, $options)
-                || (array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)
-                    && ($options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL
-                    || $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::USE_SYMBOL))
-            || array_key_exists('precision', $options));
+        $allowedOptions = [
+            'precision',
+            LocaleCurrency::CURRENCY_OPTION_DISPLAY,
+            LocaleCurrency::CURRENCY_OPTION_SYMBOL
+        ];
+
+        if (!empty(array_diff(array_keys($options), $allowedOptions))) {
+            return false;
+        }
+
+        if (array_key_exists('display', $options)
+            && $options['display'] !== \Magento\Framework\Currency::NO_SYMBOL
+            && $options['display'] !== \Magento\Framework\Currency::USE_SYMBOL
+        ) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -396,7 +409,9 @@ class Currency extends \Magento\Framework\Model\AbstractModel
 
         $this->setOptions($options);
 
-        $formattedCurrency = $this->numberFormatter->formatCurrency($price, $this->getCode());
+        $formattedCurrency = $this->numberFormatter->formatCurrency(
+            $price, $this->getCode() ?? LocaleCurrency::DEFAULT_CURRENCY
+        );
 
         if (array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)
             && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL) {

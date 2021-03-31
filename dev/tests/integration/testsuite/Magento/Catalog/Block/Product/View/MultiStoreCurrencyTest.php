@@ -52,7 +52,7 @@ class MultiStoreCurrencyTest extends AbstractCurrencyTest
     public function testMultiStoreRenderPrice(): void
     {
         $this->localeResolver->setLocale('zh_CN');
-        $this->assertProductStorePrice('simple2', '￥70.00');
+        $this->assertProductStorePrice('simple2', '¥70.00');
 
         $this->reloadProductPriceInfo();
         $this->localeResolver->setLocale('uk_UA');
@@ -76,7 +76,7 @@ class MultiStoreCurrencyTest extends AbstractCurrencyTest
     public function testMultiStoreRenderSpecialPrice(): void
     {
         $this->localeResolver->setLocale('zh_CN');
-        $this->assertProductStorePrice('simple', 'Special Price ￥41.93 Regular Price ￥70.00');
+        $this->assertProductStorePrice('simple', 'Special Price ¥41.93 Regular Price ¥70.00');
 
         $this->reloadProductPriceInfo();
         $this->localeResolver->setLocale('uk_UA');
@@ -102,7 +102,7 @@ class MultiStoreCurrencyTest extends AbstractCurrencyTest
         $this->localeResolver->setLocale('zh_CN');
         $this->assertProductStorePrice(
             'simple-product-tax-none',
-            'Buy 2 for ￥280.00 each and save 80%',
+            'Buy 2 for ¥280.00 each and save 80%',
             'default',
             self::TIER_PRICE_BLOCK_NAME
         );

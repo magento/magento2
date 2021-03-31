@@ -9,6 +9,8 @@ namespace Magento\Directory\Test\Unit\Model;
 
 use Magento\Directory\Model\Currency;
 use Magento\Framework\Locale\CurrencyInterface;
+use Magento\Framework\Locale\ResolverInterface as LocalResolverInterface;
+use Magento\Framework\NumberFormatterFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -27,15 +29,37 @@ class CurrencyTest extends TestCase
      */
     protected $localeCurrencyMock;
 
+    /**
+     * @var LocalResolverInterface
+     */
+    private $localeResolver;
+
+    /**
+     * @var NumberFormatterFactory
+     */
+    private $numberFormatterFactory;
+
     protected function setUp(): void
     {
         $this->localeCurrencyMock = $this->getMockForAbstractClass(CurrencyInterface::class);
+        $currencyFilterFactory = $this->getMockBuilder(\Magento\Directory\Model\Currency\FilterFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->localeResolver = $this->getMockBuilder(LocalResolverInterface::class)
+            ->getMockForAbstractClass();
+        $this->numberFormatterFactory = $this->getMockBuilder(NumberFormatterFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->currency = $objectManager->getObject(
             Currency::class,
             [
                 'localeCurrency' => $this->localeCurrencyMock,
+                'currencyFilterFactory' => $currencyFilterFactory,
+                'localeResolver' => $this->localeResolver,
+                'numberFormatterFactory' => $this->numberFormatterFactory,
                 'data' => [
                     'currency_code' => $this->currencyCode,
                 ]
@@ -43,66 +67,127 @@ class CurrencyTest extends TestCase
         );
     }
 
-    public function testGetCurrencySymbol()
+    public function testGetCurrencySymbol(): void
     {
         $currencySymbol = '$';
 
         $currencyMock = $this->getMockBuilder(\Magento\Framework\Currency::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $currencyMock->expects($this->once())
+        $currencyMock->expects(self::once())
             ->method('getSymbol')
             ->willReturn($currencySymbol);
 
-        $this->localeCurrencyMock->expects($this->once())
+        $this->localeCurrencyMock->expects(self::once())
             ->method('getCurrency')
             ->with($this->currencyCode)
             ->willReturn($currencyMock);
-        $this->assertEquals($currencySymbol, $this->currency->getCurrencySymbol());
+        self::assertEquals($currencySymbol, $this->currency->getCurrencySymbol());
     }
 
     /**
      * @dataProvider getOutputFormatDataProvider
-     * @param $withCurrency
-     * @param $noCurrency
      * @param $expected
+     * @param $locale
      */
-    public function testGetOutputFormat($withCurrency, $noCurrency, $expected)
+    public function testGetOutputFormat($expected, $locale): void
     {
-        $currencyMock = $this->getMockBuilder(\Magento\Framework\Currency::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $currencyMock->expects($this->at(0))
-            ->method('toCurrency')
-            ->willReturn($withCurrency);
-        $currencyMock->expects($this->at(1))
-            ->method('toCurrency')
-            ->willReturn($noCurrency);
-        $this->localeCurrencyMock->expects($this->atLeastOnce())
-            ->method('getCurrency')
-            ->with($this->currencyCode)
-            ->willReturn($currencyMock);
-        $this->assertEquals($expected, $this->currency->getOutputFormat());
+        $this->localeResolver->method('getLocale')->willReturn($locale);
+        $this->numberFormatterFactory
+            ->method('create')
+            ->with(['locale' => $locale, 'style' => 2])
+            ->willReturn(new \NumberFormatter($locale, 2));
+        self::assertEquals($expected, $this->currency->getOutputFormat());
     }
 
     /**
-     * Return data sets for testGetCurrencySymbol()
+     * Return data sets for testGetOutputFormat()
      *
      * @return array
      */
-    public function getOutputFormatDataProvider()
+    public function getOutputFormatDataProvider(): array
     {
         return [
             'no_unicode' => [
-                'withCurrency' => '$0.00',
-                'noCurrency' => '0.00',
                 'expected' => '$%s',
+                'locale' => 'en_US'
             ],
             'arabic_unicode' => [
-                'withCurrency' => json_decode('"\u200E"') . '$0.00',
-                'noCurrency' => json_decode('"\u200E"') . '0.00',
                 'expected' => json_decode('"\u200E"') . '$%s',
+                'locale' => 'fa_IR'
             ]
+        ];
+    }
+
+    /**
+     * @dataProvider getFormatTxtNumberFormatterDataProvider
+     * @param string $price
+     * @param array $options
+     * @param string $locale
+     * @param string $expected
+     */
+    public function testFormatTxtWithNumberFormatter(
+        string $price,
+        array $options,
+        string $locale,
+        string $expected
+    ): void {
+        $this->localeResolver->expects(self::once())->method('getLocale')->willReturn($locale);
+        $this->numberFormatterFactory
+            ->expects(self::once())
+            ->method('create')
+            ->with(['locale' => $locale, 'style' => 2])
+            ->willReturn(new \NumberFormatter($locale, 2));
+
+        self::assertEquals($expected, $this->currency->formatTxt($price, $options));
+    }
+
+    /**
+     * Return data sets for testFormatTxtWithNumberFormatter()
+     *
+     * @return array
+     */
+    public function getFormatTxtNumberFormatterDataProvider(): array
+    {
+        return [
+            ['9999', [], 'en_US', '$9,999.00'],
+            ['9999', ['display' => \Magento\Framework\Currency::NO_SYMBOL, 'precision' => 2], 'en_US', '9,999.00'],
+            ['9999', ['display' => \Magento\Framework\Currency::NO_SYMBOL], 'en_US', '9,999.00'],
+            ['9999', ['precision' => 1], 'en_US', '$9,999.0']
+        ];
+    }
+
+    /**
+     * @dataProvider getFormatTxtZendCurrencyDataProvider
+     * @param string $price
+     * @param array $options
+     * @param string $expected
+     * @throws \Zend_Currency_Exception
+     */
+    public function testFormatTxtWithZendCurrency(string $price, array $options, string $expected): void
+    {
+        $this->localeCurrencyMock
+            ->expects(self::once())
+            ->method('getCurrency')
+            ->with($this->currencyCode)
+            ->willReturn(new \Zend_Currency($options, 'en_US'));
+
+        self::assertEquals($expected, $this->currency->formatTxt($price, $options));
+    }
+
+    /**
+     * Return data sets for testFormatTxtWithZendCurrency()
+     *
+     * @return array
+     */
+    public function getFormatTxtZendCurrencyDataProvider(): array
+    {
+        return [
+            ['9999', ['display' => \Magento\Framework\Currency::USE_SYMBOL, 'foo' => 'bar'], '$9,999.00'],
+            ['9999', ['display' => \Magento\Framework\Currency::USE_SHORTNAME, 'foo' => 'bar'], 'USD9,999.00'],
+            ['9999', ['currency' => 'USD'], '$9,999.00'],
+            ['9999', ['currency' => 'CNY'], 'CN¥9,999.00'],
+            ['9999', ['locale' => 'fr_FR'], '9 999,00 $']
         ];
     }
 }
