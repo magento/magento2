@@ -26,7 +26,7 @@ class ClaimsPayload implements ClaimsPayloadInterface
     {
         $this->claims = [];
         foreach ($claims as $claim) {
-            $this->claims[$claim->getName()] = $claims;
+            $this->claims[$claim->getName()] = $claim;
         }
     }
 

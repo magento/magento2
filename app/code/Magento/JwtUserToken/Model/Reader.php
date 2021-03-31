@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\JwtUserToken\Model;
 
-use Magento\Framework\Jwt\Claim\AbstractClaim;
-use Magento\Framework\Jwt\EncryptionSettingsInterface;
 use Magento\Framework\Jwt\Exception\JwtException;
 use Magento\Framework\Jwt\HeaderInterface;
 use Magento\Framework\Jwt\HeaderParameterInterface;
@@ -20,16 +18,16 @@ use Magento\Framework\Jwt\Payload\ClaimsPayloadInterface;
 use Magento\Integration\Api\Data\UserToken;
 use Magento\Integration\Api\Exception\UserTokenException;
 use Magento\Integration\Api\UserTokenReaderInterface;
-use Magento\Integration\Model\CustomUserContext;
 use Magento\JwtUserToken\Model\Data\Header;
 use Magento\JwtUserToken\Model\Data\JwtTokenData;
+use Magento\JwtUserToken\Model\Data\JwtUserContext;
 
 class Reader implements UserTokenReaderInterface
 {
     /**
-     * @var EncryptionSettingsInterface
+     * @var JwtSettingsProviderInterface
      */
-    private $jwtSettings;
+    private $settingsProvider;
 
     /**
      * @var JwtManagerInterface
@@ -38,12 +36,12 @@ class Reader implements UserTokenReaderInterface
 
     /**
      * @param JwtManagerInterface $jwtManager
-     * @param EncryptionSettingsInterface $settings
+     * @param JwtSettingsProviderInterface $settingsProvider
      */
-    public function __construct(JwtManagerInterface $jwtManager, EncryptionSettingsInterface $settings)
+    public function __construct(JwtManagerInterface $jwtManager, JwtSettingsProviderInterface $settingsProvider)
     {
         $this->jwtManager = $jwtManager;
-        $this->jwtSettings = $settings;
+        $this->settingsProvider = $settingsProvider;
     }
 
     /**
@@ -52,7 +50,7 @@ class Reader implements UserTokenReaderInterface
     public function read(string $token): UserToken
     {
         try {
-            $jwt = $this->jwtManager->read($token, [$this->jwtSettings]);
+            $jwt = $this->jwtManager->read($token, $this->settingsProvider->prepareAllAccepted());
         } catch (JwtException $exception) {
             throw new UserTokenException('Failed to read JWT token', $exception);
         }
@@ -87,11 +85,11 @@ class Reader implements UserTokenReaderInterface
         if (empty($claims['iat']) || empty($claims['iat']->getValue())) {
             throw new UserTokenException('IssuedAt (iat) time not provided by the received JWT');
         }
-        $iat = AbstractClaim::parseNumericDate($claims['iat']->getValue());
+        $iat = \DateTimeImmutable::createFromFormat('U', (string) $claims['iat']->getValue());
         if (empty($claims['exp']) || empty($claims['exp']->getValue())) {
             throw new UserTokenException('ExpiresAt (exp) time not provided by the received JWT');
         }
-        $exp = AbstractClaim::parseNumericDate($claims['exp']->getValue());
+        $exp = \DateTimeImmutable::createFromFormat('U', (string) $claims['exp']->getValue());
 
         return new UserToken(
             new JwtUserContext((int) $claims['uid']->getValue(), (int) $claims['utypid']->getValue()),

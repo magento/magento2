@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\Integration\Model\OpaqueToken;
 
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Integration\Api\Data\UserTokenParameters;
+use Magento\Integration\Api\Data\UserTokenParametersInterface;
 use Magento\Integration\Api\Exception\UserTokenException;
 use Magento\Integration\Api\UserTokenIssuerInterface;
 use Magento\Integration\Model\Oauth\Token;
@@ -36,7 +36,7 @@ class Issuer implements UserTokenIssuerInterface
     /**
      * @inheritDoc
      */
-    public function create(UserContextInterface $userContext, UserTokenParameters $params): string
+    public function create(UserContextInterface $userContext, UserTokenParametersInterface $params): string
     {
         /** @var Token $token */
         $token = $this->tokenModelFactory->create();

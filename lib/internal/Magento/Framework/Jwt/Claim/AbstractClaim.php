@@ -43,7 +43,7 @@ abstract class AbstractClaim implements ClaimInterface
      */
     public static function parseNumericDate(string $date): \DateTimeImmutable
     {
-        $dt = \DateTime::createFromFormat('Y-m-d\TH:i:sT', $date);
+        $dt = \DateTime::createFromFormat('Y-m-d\TH:i:s T', $date);
         $dt->setTimezone(new \DateTimeZone('UTC'));
 
         return \DateTimeImmutable::createFromMutable($dt);

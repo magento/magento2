@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\Integration\Api;
 
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Integration\Api\Data\UserTokenParameters;
+use Magento\Integration\Api\Data\UserTokenParametersInterface;
 use Magento\Integration\Api\Exception\UserTokenException;
 
 /**
@@ -21,9 +21,9 @@ interface UserTokenIssuerInterface
      * Create token for a user.
      *
      * @param UserContextInterface $userContext
-     * @param UserTokenParameters $params
+     * @param UserTokenParametersInterface $params
      * @return string
      * @throws UserTokenException
      */
-    public function create(UserContextInterface $userContext, UserTokenParameters $params): string;
+    public function create(UserContextInterface $userContext, UserTokenParametersInterface $params): string;
 }

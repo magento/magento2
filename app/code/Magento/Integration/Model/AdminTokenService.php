@@ -12,26 +12,18 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Integration\Api\Exception\UserTokenException;
 use Magento\Integration\Api\UserTokenIssuerInterface;
 use Magento\Integration\Api\UserTokenRevokerInterface;
-use Magento\Integration\Model\CredentialsValidator;
 use Magento\Integration\Model\Oauth\Token as Token;
 use Magento\Integration\Model\Oauth\TokenFactory as TokenModelFactory;
 use Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory as TokenCollectionFactory;
 use Magento\User\Model\User as UserModel;
 use Magento\Integration\Model\Oauth\Token\RequestThrottler;
-use Magento\Integration\Api\Data\UserTokenParametersFactory;
+use Magento\Integration\Model\UserToken\UserTokenParametersFactory;
 
 /**
  * Class to handle token generation for Admins
  */
 class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInterface
 {
-    /**
-     * Token Model
-     *
-     * @var TokenModelFactory
-     */
-    private $tokenModelFactory;
-
     /**
      * User Model
      *
@@ -40,16 +32,9 @@ class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInt
     private $userModel;
 
     /**
-     * @var \Magento\Integration\Model\CredentialsValidator
+     * @var CredentialsValidator
      */
     private $validatorHelper;
-
-    /**
-     * Token Collection Factory
-     *
-     * @var TokenCollectionFactory
-     */
-    private $tokenModelCollectionFactory;
 
     /**
      * @var RequestThrottler
@@ -77,7 +62,7 @@ class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInt
      * @param TokenModelFactory $tokenModelFactory
      * @param UserModel $userModel
      * @param TokenCollectionFactory $tokenModelCollectionFactory
-     * @param \Magento\Integration\Model\CredentialsValidator $validatorHelper
+     * @param CredentialsValidator $validatorHelper
      * @param UserTokenParametersFactory|null $tokenParamsFactory
      * @param UserTokenIssuerInterface|null $tokenIssuer
      * @param UserTokenRevokerInterface|null $tokenRevoker
@@ -91,9 +76,7 @@ class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInt
         ?UserTokenIssuerInterface $tokenIssuer = null,
         ?UserTokenRevokerInterface $tokenRevoker = null
     ) {
-        $this->tokenModelFactory = $tokenModelFactory;
         $this->userModel = $userModel;
-        $this->tokenModelCollectionFactory = $tokenModelCollectionFactory;
         $this->validatorHelper = $validatorHelper;
         $this->tokenParametersFactory = $tokenParamsFactory
             ?? ObjectManager::getInstance()->get(UserTokenParametersFactory::class);

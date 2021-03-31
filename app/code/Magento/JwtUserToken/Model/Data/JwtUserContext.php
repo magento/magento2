@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\JwtUserToken\Model;
+namespace Magento\JwtUserToken\Model\Data;
 
 use Magento\Authorization\Model\UserContextInterface;
 

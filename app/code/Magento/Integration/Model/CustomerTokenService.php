@@ -9,7 +9,7 @@ namespace Magento\Integration\Model;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Integration\Api\Data\UserTokenParametersFactory;
+use Magento\Integration\Model\UserToken\UserTokenParametersFactory;
 use Magento\Integration\Api\Exception\UserTokenException;
 use Magento\Integration\Api\UserTokenIssuerInterface;
 use Magento\Integration\Api\UserTokenRevokerInterface;

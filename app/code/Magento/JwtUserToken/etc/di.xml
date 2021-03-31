@@ -6,5 +6,9 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\Jwt\JwtManagerInterface" type="Magento\JwtFrameworkAdapter\Model\JwtManager" />
+    <preference for="Magento\Integration\Api\UserTokenIssuerInterface" type="Magento\JwtUserToken\Model\Issuer" />
+    <preference for="Magento\Integration\Api\UserTokenReaderInterface" type="Magento\JwtUserToken\Model\Reader" />
+    <preference for="Magento\Integration\Api\UserTokenRevokerInterface" type="Magento\JwtUserToken\Model\Revoker" />
+    <preference for="Magento\JwtUserToken\Model\JwtSettingsProviderInterface" type="Magento\JwtUserToken\Model\ConfigurableJwtSettingsProvider" />
+    <preference for="Magento\JwtUserToken\Api\ConfigReaderInterface" type="Magento\JwtUserToken\Model\Config\ConfigReader" />
 </config>

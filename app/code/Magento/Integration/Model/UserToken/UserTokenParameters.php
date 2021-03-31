@@ -6,15 +6,16 @@
 
 declare(strict_types=1);
 
-namespace Magento\Integration\Api\Data;
+namespace Magento\Integration\Model\UserToken;
 
-use Magento\Framework\Api\ExtensibleDataInterface;
-use \Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Integration\Api\Data\UserTokenParametersInterface;
+use Magento\Integration\Api\Data\UserTokenParametersExtensionInterface;
 
 /**
- * Parameters for new tokens.
+ * @inheritDoc
  */
-class UserTokenParameters implements ExtensibleDataInterface
+class UserTokenParameters implements UserTokenParametersInterface
 {
     /**
      * @var \Magento\Framework\Api\ExtensionAttributesInterface|null|UserTokenParametersExtensionInterface
@@ -33,11 +34,6 @@ class UserTokenParameters implements ExtensibleDataInterface
 
     }
 
-    /**
-     * Force issued timestamp as given.
-     *
-     * @return \DateTimeInterface|null
-     */
     public function getForcedIssuedTime(): ?\DateTimeInterface
     {
         return $this->forceIssued;
