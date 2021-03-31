@@ -3,10 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\View\Asset\PreProcessor\Helper;
+namespace Magento\Framework\View\Asset\PreProcessor;
 
 /**
  * Interface SortInterface
+ *
+ * @api
  */
 interface SortInterface
 {

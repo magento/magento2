@@ -5,12 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AsynchronousOperations\Model;
+namespace Magento\AsynchronousOperations\Model\ResourceModel\Operation\OperationRepository;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 
 /**
  * Repository interface to create operation
+ *
+ * @api
  */
 interface OperationRepositoryInterface
 {

@@ -9,7 +9,7 @@ namespace Magento\Framework\View\Test\Unit\Asset\PreProcessor;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Asset\PreProcessor\Chain;
-use Magento\Framework\View\Asset\PreProcessor\Helper\SortInterface;
+use Magento\Framework\View\Asset\PreProcessor\SortInterface;
 use Magento\Framework\View\Asset\PreProcessor\Pool;
 use Magento\Framework\View\Asset\PreProcessorInterface;
 use PHPUnit\Framework\MockObject\MockObject;

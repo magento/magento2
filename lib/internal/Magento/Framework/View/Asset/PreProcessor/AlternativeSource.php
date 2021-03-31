@@ -10,6 +10,7 @@ use Magento\Framework\View\Asset\ContentProcessorInterface;
 use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\LockerProcessInterface;
 use Magento\Framework\View\Asset\PreProcessor\AlternativeSource\AssetBuilder;
+use Magento\Framework\View\Asset\PreProcessor\SortInterface;
 
 /**
  * Class AlternativeSource
@@ -24,7 +25,7 @@ class AlternativeSource implements AlternativeSourceInterface
     const PROCESSOR_CLASS = 'class';
 
     /**
-     * @var Helper\SortInterface
+     * @var SortInterface
      */
     private $sorter;
 
@@ -69,7 +70,7 @@ class AlternativeSource implements AlternativeSourceInterface
      * @param FilenameResolverInterface $filenameResolver
      * @param ObjectManagerInterface $objectManager
      * @param LockerProcessInterface $lockerProcess
-     * @param Helper\SortInterface $sorter
+     * @param SortInterface $sorter
      * @param AssetBuilder $assetBuilder
      * @param string $lockName
      * @param array $alternatives
@@ -78,7 +79,7 @@ class AlternativeSource implements AlternativeSourceInterface
         FilenameResolverInterface $filenameResolver,
         ObjectManagerInterface $objectManager,
         LockerProcessInterface $lockerProcess,
-        Helper\SortInterface $sorter,
+        SortInterface $sorter,
         AssetBuilder $assetBuilder,
         $lockName,
         array $alternatives = []
