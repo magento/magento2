@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontRenderCustomerAccountCreateOnMultiShippingPageTest">
+        <annotations>
+            <features value="Multishipment"/>
+            <stories value="Correctly render the new customer account form on multiple shipping page"/>
+            <title value="Correctly render the new customer account form on multiple shipping page"/>
+            <description value="The create customer form should be correctly rendered on multiple shipping page."/>
+            <severity value="MINOR"/>
+            <group value="Multishipment"/>
+        </annotations>
+        <before>
+            <createData stepKey="category" entity="SimpleSubCategory"/>
+            <createData stepKey="product" entity="SimpleProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData stepKey="deleteCategory" createDataKey="category"/>
+            <deleteData stepKey="deleteProduct" createDataKey="product"/>
+        </after>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductOnStorefront2">
+            <argument name="product" value="$$product$$"/>
+        </actionGroup>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProduct1">
+            <argument name="productName" value="$$product.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenMultipleShippingRegisterPageActionGroup" stepKey="checkoutWithMultipleAddresses"/>
+        <actionGroup ref="StorefrontOpenMinicartAndCheckSimpleProductActionGroup" stepKey="checkProductInMiniCart">
+            <argument name="product" value="$$product$$"/>
+        </actionGroup>
+    </test>
+</tests>
