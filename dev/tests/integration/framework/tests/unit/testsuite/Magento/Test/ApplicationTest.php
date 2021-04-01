@@ -164,7 +164,6 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
         $subject->install(false);
     }
 
-
     /**
      * Data Provider for testInstall
      *
