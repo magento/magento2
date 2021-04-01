@@ -132,6 +132,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
             $postInstallSetupCommandsFilePath
         );
 
+        // bypass db dump logic
         $dbMock = $this->getMockBuilder(Mysql::class)->disableOriginalConstructor()->getMock();
 
         $reflectionSubject = new ReflectionClass($subject);
@@ -147,6 +148,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                 true
             );
 
+        // Add expected shell execution calls
         foreach ($expectedShellExecutionCalls as $index => $expectedShellExecutionArguments) {
             $this->shell
                 ->expects($this->at($index))
@@ -186,7 +188,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
         ];
 
         return [
-            [
+            'no post install setup command file' => [
                 dirname(__FILE__) . '/_files/install-config-mysql1.php',
                 dirname(__FILE__) . '/_files/config-global-1.php',
                 null,
@@ -194,7 +196,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                     $installShellCommandExpectation
                 ]
             ],
-            [
+            'valid post install setup command' => [
                 dirname(__FILE__) . '/_files/install-config-mysql1.php',
                 dirname(__FILE__) . '/_files/config-global-1.php',
                 dirname(__FILE__) . '/_files/post-install-setup-command-config1.php',
@@ -215,7 +217,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                     ]
                 ]
             ],
-            [
+            'post install setup command with placeholder value for "host"' => [
                 dirname(__FILE__) . '/_files/install-config-mysql1.php',
                 dirname(__FILE__) . '/_files/config-global-1.php',
                 dirname(__FILE__) . '/_files/post-install-setup-command-config2.php',
@@ -223,7 +225,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                     $installShellCommandExpectation,
                 ]
             ],
-            [
+            'post install setup command with both options and arguments' => [
                 dirname(__FILE__) . '/_files/install-config-mysql1.php',
                 dirname(__FILE__) . '/_files/config-global-1.php',
                 dirname(__FILE__) . '/_files/post-install-setup-command-config3.php',
@@ -243,7 +245,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                     ]
                 ]
             ],
-            [
+            'post install setup command missing required value for "command"' => [
                 dirname(__FILE__) . '/_files/install-config-mysql1.php',
                 dirname(__FILE__) . '/_files/config-global-1.php',
                 dirname(__FILE__) . '/_files/post-install-setup-command-config4.php',
