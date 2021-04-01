@@ -32,7 +32,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
     * Account Types
     */
-    const ACCOUNT_TYPE_GOOGLE_ANALYTICS = 0;
+    const ACCOUNT_TYPE_GOOGLE_ANALYTICS4 = 0;
 
     const ACCOUNT_TYPE_UNIVERSAL_ANALYTICS = 1;
 
@@ -62,7 +62,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isAnonymizedIpActive($store = null)
     {
-        if ($this->isGoogleAnalyticsAccount()) {
+        if ($this->isGoogleAnalytics4Account()) {
             return true;
         } else {
             return (bool)$this->scopeConfig->getValue(
@@ -71,25 +71,26 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     }
 
-    /**
-    * Get Account Type
-    *
-    * @return int
-    */
-    public function getAccountType()
-    {
- 	    return $this->scopeConfig->getValue(
- 	        self::XML_PATH_ACCOUNT_TYPE,\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
-    }
+    // /**
+    // * Get Account Type
+    // *
+    // * @return int
+    // */
+    // public function getAccountType()
+    // {
+ 	//     return $this->scopeConfig->getValue(
+ 	//         self::XML_PATH_ACCOUNT_TYPE,\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+    // }
 
     /**
      * Checks if Account Type is Google Analytics Account
      *
      * @return bool
      */
-    public function isGoogleAnalyticsAccount()
+    public function isGoogleAnalytics4Account()
     {
-        return $this->getAccountType() == self::ACCOUNT_TYPE_GOOGLE_ANALYTICS;
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_ACCOUNT_TYPE,\Magento\Store\Model\ScopeInterface::SCOPE_STORE) == self::ACCOUNT_TYPE_GOOGLE_ANALYTICS4;
     }
 
     /**
@@ -99,7 +100,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isUniversalAnalyticsAccount()
     {
-        return $this->getAccountType() == self::ACCOUNT_TYPE_UNIVERSAL_ANALYTICS;
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_ACCOUNT_TYPE,\Magento\Store\Model\ScopeInterface::SCOPE_STORE) == self::ACCOUNT_TYPE_UNIVERSAL_ANALYTICS;
     }
 
     /**
@@ -109,7 +111,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getAccountId()
     {
-        if ($this->isGoogleAnalyticsAccount()) {
+        if ($this->isGoogleAnalytics4Account()) {
             return (string)$this->scopeConfig->getValue(
                 self::XML_PATH_MEASUREMENT_ID,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
