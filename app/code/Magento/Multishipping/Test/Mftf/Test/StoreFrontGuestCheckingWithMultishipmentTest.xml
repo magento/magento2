@@ -10,37 +10,35 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StoreFrontGuestCheckingWithMultishipmentTest">
         <annotations>
-            <features value="Multishipment"/>
+            <features value="Multishipping"/>
             <stories value="Multiple Shipping"/>
             <title value="Guest can register through multi shipment checkout"/>
             <description value="Check that guest can register through multi shipment checkout"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-41679"/>
             <useCaseId value="MC-41668"/>
-            <group value="Multishipment"/>
+            <group value="multishipping"/>
         </annotations>
         <before>
-            <createData stepKey="category" entity="SimpleSubCategory"/>
-            <createData stepKey="product1" entity="SimpleProduct">
-                <requiredEntity createDataKey="category"/>
-            </createData>
-            <createData stepKey="product2" entity="SimpleProduct">
-                <requiredEntity createDataKey="category"/>
-            </createData>
+            <createData entity="SimpleProduct2" stepKey="product1"/>
+            <createData entity="SimpleProduct2" stepKey="product2"/>
             <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRateShipping"/>
             <actionGroup ref="CliEnableCheckMoneyOrderPaymentMethodActionGroup" stepKey="enableCheckMoneyOrderPaymentMethod"/>
         </before>
         <after>
-            <deleteData stepKey="deleteCategory" createDataKey="category"/>
-            <deleteData stepKey="deleteProduct1" createDataKey="product1"/>
-            <deleteData stepKey="deleteProduct2" createDataKey="product2"/>
+            <deleteData createDataKey="product1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="product2" stepKey="deleteProduct2"/>
             <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShipping"/>
         </after>
-        <amOnPage url="$product1.custom_attributes[url_key]$.html" stepKey="goToProduct1"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToProduct1Page">
+            <argument name="productUrl" value="$product1.custom_attributes[url_key]$"/>
+        </actionGroup>
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProduct1">
             <argument name="productName" value="$product1.name$"/>
         </actionGroup>
-        <amOnPage url="$product2.custom_attributes[url_key]$.html" stepKey="goToProduct2"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToProduct2Page">
+            <argument name="productUrl" value="$product2.custom_attributes[url_key]$"/>
+        </actionGroup>
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProduct2">
             <argument name="productName" value="$product2.name$"/>
         </actionGroup>
