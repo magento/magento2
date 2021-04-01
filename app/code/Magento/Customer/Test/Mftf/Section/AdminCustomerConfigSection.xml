@@ -13,5 +13,6 @@
         <element name="shareCustomerAccount" type="select" selector="#customer_account_share_scope"/>
         <element name="showDateOfBirth" type="select" selector="#customer_address_dob_show"/>
         <element name="showDateOfBirthInherit" type="select" selector="#customer_address_dob_show_inherit"/>
+        <element name="showAddressInformationInherit" type="select" selector="#customer_address_show_address_fields_inherit"/>
     </section>
 </sections>

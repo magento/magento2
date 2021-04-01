@@ -7,6 +7,7 @@ namespace Magento\Customer\Block\Form;
 
 use Magento\Customer\Helper\Address;
 use Magento\Customer\Model\AccountManagement;
+use Magento\Directory\Block\Data;
 use Magento\Framework\App\ObjectManager;
 use Magento\Newsletter\Model\Config;
 use Magento\Store\Model\ScopeInterface;
@@ -18,8 +19,10 @@ use Magento\Store\Model\ScopeInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Register extends \Magento\Directory\Block\Data
+class Register extends Data
 {
+    private const XML_PATH_SHOW_ADDRESS_FIELDS = 'customer/address/show_address_fields';
+
     /**
      * @var \Magento\Customer\Model\Session
      */
@@ -228,5 +231,20 @@ class Register extends \Magento\Directory\Block\Data
     public function getRequiredCharacterClassesNumber()
     {
         return $this->_scopeConfig->getValue(AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER);
+    }
+
+    /**
+     * Returns whether to show address fields or not
+     *
+     * @return bool
+     */
+    public function isShowAddressFields(): bool
+    {
+        $result = false;
+        if ($this->getShowAddressFields() || $this->getConfig(self::XML_PATH_SHOW_ADDRESS_FIELDS)) {
+            $result = true;
+        }
+
+        return $result;
     }
 }

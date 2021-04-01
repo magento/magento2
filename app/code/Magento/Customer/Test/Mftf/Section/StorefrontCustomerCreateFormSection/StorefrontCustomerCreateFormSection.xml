@@ -8,10 +8,22 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCustomerCreateFormSection">
+        <element name="prefixField" type="input" selector="#prefix"/>
+        <element name="suffixField" type="input" selector="#suffix"/>
         <element name="firstnameField" type="input" selector="#firstname"/>
         <element name="lastnameField" type="input" selector="#lastname"/>
         <element name="lastnameLabel" type="text" selector="//label[@for='lastname']"/>
         <element name="dobField" type="input" selector="#dob"/>
+        <element name="taxvatField" type="input" selector="#taxvat"/>
+        <element name="genderField" type="select" selector="#gender"/>
+        <element name="telephoneField" type="input" selector="#telephone"/>
+        <element name="faxField" type="input" selector="#fax"/>
+        <element name="companyField" type="input" selector="#company"/>
+        <element name="streetField" type="input" selector="#street_1"/>
+        <element name="cityField" type="input" selector="#city"/>
+        <element name="regionField" type="select" selector="#region_id"/>
+        <element name="countryField" type="select" selector="#country"/>
+        <element name="postcodeField" type="input" selector="#zip"/>
         <element name="signUpForNewsletter" type="checkbox" selector="//div/input[@name='is_subscribed']"/>
         <element name="emailField" type="input" selector="#email_address"/>
         <element name="passwordField" type="input" selector="#password"/>
