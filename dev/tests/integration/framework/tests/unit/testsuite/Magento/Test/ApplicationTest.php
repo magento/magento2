@@ -159,6 +159,14 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
         if ($isExceptionExpected) {
             $this->expectException(DomainException::class);
             $this->expectExceptionMessage('"command" must be present in post install setup command arrays');
+        } else {
+            $this->shell
+                ->expects($this->at($index + 1))
+                ->method('execute')
+                ->with(
+                    PHP_BINARY . ' -f %s cache:disable -vvv --bootstrap=%s',
+                    [BP . '/bin/magento', $this->getInitParamsQuery($tmpDir)]
+                );
         }
 
         $subject->install(false);
