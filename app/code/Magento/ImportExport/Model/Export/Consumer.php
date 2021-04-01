@@ -70,7 +70,7 @@ class Consumer
         try {
             $data = $this->exportManager->export($exportInfo);
             $fileName = $exportInfo->getFileName();
-            $directory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+            $directory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
             $directory->writeFile('export/' . $fileName, $data);
 
             $this->notifier->addMajor(

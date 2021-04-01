@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminEditCustomerWithAssociatedNewsletterQueueTest">
+        <annotations>
+            <stories value="Edit customer if there is associated newsletter queue"/>
+            <title value="Edit customer if there is associated newsletter queue"/>
+            <description value="Edit customer if there is associated newsletter queue"/>
+            <severity value="BLOCKER"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+            <createData entity="Simple_US_Customer_Multiple_Addresses_No_Default_Address" stepKey="customer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+
+            <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToNewsletterGridPage">
+                <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
+                <argument name="submenuUiId" value="{{AdminMenuMarketingCommunicationsNewsletterTemplate.dataUiId}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminSearchNewsletterTemplateOnGridActionGroup" stepKey="findCreatedNewsletterTemplateInGrid">
+                <argument name="name" value="{{_defaultNewsletter.name}}"/>
+                <argument name="subject" value="{{_defaultNewsletter.subject}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminMarketingOpenNewsletterTemplateFromGridActionGroup" stepKey="openTemplate"/>
+            <actionGroup ref="AdminMarketingDeleteNewsletterTemplateActionGroup" stepKey="deleteTemplate"/>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomersGridPage"/>
+        <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openEditCustomerPage">
+            <argument name="customer" value="Simple_US_Customer_Multiple_Addresses_No_Default_Address"/>
+        </actionGroup>
+        <actionGroup ref="AdminSubscribeCustomerToNewsletters" stepKey="subscribeToNewsletter"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToNewsletterTemplatePage">
+            <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuMarketingCommunicationsNewsletterTemplate.dataUiId}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminNavigateToCreateNewsletterTemplatePageActionGroup" stepKey="navigateToCreateNewsletterTemplatePage"/>
+        <actionGroup ref="AdminCreateNewsletterTemplateActionGroup" stepKey="createNewsletterTemplate">
+            <argument name="name" value="{{_defaultNewsletter.name}}"/>
+            <argument name="subject" value="{{_defaultNewsletter.subject}}"/>
+            <argument name="senderName" value="{{_defaultNewsletter.senderName}}"/>
+            <argument name="senderEmail" value="{{_defaultNewsletter.senderEmail}}"/>
+            <argument name="templateContent" value="{{_defaultNewsletter.textAreaContent}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminSearchNewsletterTemplateOnGridActionGroup" stepKey="findCreatedNewsletterTemplate">
+            <argument name="name" value="{{_defaultNewsletter.name}}"/>
+            <argument name="subject" value="{{_defaultNewsletter.subject}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminQueueNewsletterActionGroup" stepKey="addNewsletterToQueue">
+            <argument name="startAt" value="Dec 21, 2022 11:04:20 AM"/>
+        </actionGroup>
+
+        <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="editCustomerForm">
+            <argument name="customer" value="Simple_US_Customer_Multiple_Addresses_No_Default_Address"/>
+        </actionGroup>
+        <actionGroup stepKey="editCustomerAddress" ref="AdminEditCustomerAddressesFromActionGroup">
+            <argument name="customerAddress" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveCustomerAndAssertSuccessMessage" stepKey="saveCustomer"/>
+
+    </test>
+</tests>

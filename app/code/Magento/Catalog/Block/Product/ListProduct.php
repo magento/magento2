@@ -367,7 +367,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
                 $identities[] = $item->getIdentities();
             }
         }
-        $identities = array_merge(...$identities);
+        $identities = array_merge([], ...$identities);
 
         return $identities;
     }
@@ -461,7 +461,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
             // if the product is associated with any category
             if ($categories->count()) {
                 // show products from this category
-                $this->setCategoryId(current($categories->getIterator())->getId());
+                $this->setCategoryId($categories->getIterator()->current()->getId());
             }
         }
 

@@ -225,7 +225,8 @@ class Authentication
 
         // Checks, whether secret key is required for admin access or request uri is explicitly set
         if ($this->_url->useSecretKey()) {
-            $requestUri = $this->_url->getUrl('*/*/*', ['_current' => true]);
+            $requestParts = explode('/', trim($request->getRequestUri(), '/'), 2);
+            $requestUri = $this->_url->getUrl(array_pop($requestParts));
         } elseif ($request) {
             $requestUri = $request->getRequestUri();
         }

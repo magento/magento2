@@ -36,6 +36,8 @@
         </before>
 
         <after>
+            <!-- Logout customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
             <deleteData createDataKey="product" stepKey="deleteFirstProduct"/>
             <deleteData createDataKey="secondProduct" stepKey="deleteSecondProduct"/>
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
@@ -49,7 +51,7 @@
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsFilters"/>
             <!--Logout everywhere-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <comment userInput="BIC workaround" stepKey="customerLogout"/>
         </after>
 
         <!-- Change products visibility on store-view level -->
