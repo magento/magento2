@@ -276,8 +276,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                     \Zend_Db::INT_TYPE
                 );
                 $condition2 = '`t1`.`store_id` = 0';
+                $quotedField = $this->_conn->quoteIdentifier($ifValueId);
                 $condition3 = $this->_conn->quoteInto(
-                    'IFNULL(`t2`.`value`, `t1`.`value`) LIKE ?',
+                    $quotedField . ' LIKE ?',
                     $this->_resourceHelper->addLikeEscape($this->_searchQuery, $likeOptions)
                 );
 
@@ -285,7 +286,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 // phpcs:ignore Magento2.SQL.RawQuery
                 $select = sprintf(
                     'SELECT `t1`.`%s` FROM `%s` AS `t1` FORCE INDEX(%s) LEFT JOIN `%s` AS `t2`
-                        ON %s WHERE %s AND %s AND %s',
+                        ON %s WHERE %s AND %s AND (%s)',
                     $linkField,
                     $table,
                     $preparedIndexEnforcements[$table],
