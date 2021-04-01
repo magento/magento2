@@ -410,7 +410,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         $this->setOptions($options);
 
         $formattedCurrency = $this->numberFormatter->formatCurrency(
-            $price, $this->getCode() ?? LocaleCurrency::DEFAULT_CURRENCY
+            $price, $this->getCode() ?? $this->numberFormatter->getTextAttribute(\NumberFormatter::CURRENCY_CODE)
         );
 
         if (array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)
