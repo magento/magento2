@@ -91,8 +91,8 @@ class Issuer implements UserTokenIssuerInterface
 
         if ($jwtParams = $params->getExtensionAttributes()->getJwtParams()) {
             /** @var JwtTokenParameters $jwtParams */
-            $protectedHeaders = array_merge($protectedHeaders, $jwtParams->getProtectedHeaderParameters());
-            $publicHeaders = array_merge($publicHeaders, $jwtParams->getPublicHeaderParameters());
+            $protectedHeaders = array_merge($jwtParams->getProtectedHeaderParameters(), $protectedHeaders);
+            $publicHeaders = array_merge($jwtParams->getPublicHeaderParameters(), $publicHeaders);
             $claims = array_merge($jwtParams->getClaims(), $claims);
         }
 

@@ -1,0 +1,12 @@
+{
+    "jwt_auth_revoked": {
+        "column": {
+            "user_type_id": true,
+            "user_id": true,
+            "revoke_before": true
+        },
+        "constraint": {
+            "JWT_AUTH_REVOKED_USER_TYPE_ID_USER_ID": true
+        }
+    }
+}
