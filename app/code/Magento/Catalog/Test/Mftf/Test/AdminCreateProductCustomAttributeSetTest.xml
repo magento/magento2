@@ -79,7 +79,7 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
 
         <!-- Check the storefront -->
-        <amOnPage url="{{_defaultProduct.name}}.html" stepKey="goToProductPage"/>
+        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <seeInTitle userInput="{{_defaultProduct.name}}" stepKey="seeProductNameInTitlte"/>
         <see userInput="{{_defaultProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
