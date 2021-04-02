@@ -39,7 +39,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Anonymize IP Default Yes
      */
-    const DEFAULT_YES = 0;
+    const DEFAULT_YES = 1;
 
     /**
      * Whether GA is ready to use
@@ -49,8 +49,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isGoogleAnalyticsAvailable($store = null)
     {
-        $accountId = $this->getAccountId();
-        return $accountId && $this->scopeConfig->isSetFlag(self::XML_PATH_ACTIVE, ScopeInterface::SCOPE_STORE, $store);
+        return $this->scopeConfig->isSetFlag(self::XML_PATH_ACTIVE, ScopeInterface::SCOPE_STORE, $store) && $this->getAccountId();
     }
 
     /**
@@ -65,22 +64,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         if ($this->isGoogleAnalytics4Account()) {
             return true;
         } else {
-            return (bool)$this->scopeConfig->getValue(
-                self::XML_PATH_ANONYMIZE, ScopeInterface::SCOPE_STORE, $store);
+            return (bool)$this->scopeConfig->getValue(self::XML_PATH_ANONYMIZE, ScopeInterface::SCOPE_STORE, $store);
         }
 
     }
-
-    // /**
-    // * Get Account Type
-    // *
-    // * @return int
-    // */
-    // public function getAccountType()
-    // {
- 	//     return $this->scopeConfig->getValue(
- 	//         self::XML_PATH_ACCOUNT_TYPE,\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
-    // }
 
     /**
      * Checks if Account Type is Google Analytics Account
@@ -90,7 +77,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function isGoogleAnalytics4Account()
     {
         return $this->scopeConfig->getValue(
-            self::XML_PATH_ACCOUNT_TYPE,\Magento\Store\Model\ScopeInterface::SCOPE_STORE) == self::ACCOUNT_TYPE_GOOGLE_ANALYTICS4;
+            self::XML_PATH_ACCOUNT_TYPE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE) == self::ACCOUNT_TYPE_GOOGLE_ANALYTICS4;
     }
 
     /**
