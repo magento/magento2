@@ -32,7 +32,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct1"/>
         </after>
-        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.sku$$)}}" stepKey="openProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="openProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
         <waitForText userInput="You added $$createSimpleProduct.name$$ to your shopping cart." stepKey="waitForText"/>
@@ -46,8 +46,10 @@
         <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.captchaField}}" stepKey="seeCaptchaField"/>
         <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.captchaImg}}" stepKey="seeCaptchaImage"/>
         <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.captchaReload}}" stepKey="seeCaptchaReloadButton"/>
-        <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
+
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForPageLoad2" />
+
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickCart2"/>
         <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout2"/>
         <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.email}}" stepKey="waitEmailFieldVisible2"/>

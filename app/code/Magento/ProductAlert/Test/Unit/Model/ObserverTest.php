@@ -21,6 +21,8 @@ use Magento\ProductAlert\Model\Email;
 use Magento\ProductAlert\Model\EmailFactory;
 use Magento\ProductAlert\Model\Observer;
 use Magento\ProductAlert\Model\ProductSalability;
+USE Magento\ProductAlert\Model\ResourceModel\Price\Collection as PriceCollection;
+USE Magento\ProductAlert\Model\ResourceModel\Stock\Collection as StockCollection;
 use Magento\Sitemap\Model\ResourceModel\Sitemap\Collection;
 use Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory;
 use Magento\Sitemap\Model\Sitemap;
@@ -141,7 +143,12 @@ class ObserverTest extends TestCase
     private $productSalabilityMock;
 
     /**
-     * @return void
+     * @var int
+     */
+    private $bunchSize = 100;
+
+    /**
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -175,16 +182,12 @@ class ObserverTest extends TestCase
         $this->emailMock = $this->getMockBuilder(Email::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->priceColFactoryMock = $this->getMockBuilder(
+        $this->priceColFactoryMock = $this->createMock(
             \Magento\ProductAlert\Model\ResourceModel\Price\CollectionFactory::class
-        )->disableOriginalConstructor()
-            ->setMethods(['create', 'addWebsiteFilter', 'setCustomerOrder'])
-            ->getMock();
-        $this->stockColFactoryMock = $this->getMockBuilder(
+        );
+        $this->stockColFactoryMock = $this->createMock(
             \Magento\ProductAlert\Model\ResourceModel\Stock\CollectionFactory::class
-        )->disableOriginalConstructor()
-            ->setMethods(['create', 'addWebsiteFilter', 'setCustomerOrder', 'addStatusFilter'])
-            ->getMock();
+        );
 
         $this->websiteMock = $this->createPartialMock(
             Website::class,
@@ -223,27 +226,32 @@ class ObserverTest extends TestCase
                 'stockColFactory' => $this->stockColFactoryMock,
                 'customerRepository' => $this->customerRepositoryMock,
                 'productRepository' => $this->productRepositoryMock,
-                'productSalability' => $this->productSalabilityMock
+                'productSalability' => $this->productSalabilityMock,
+                'bunchSize' => $this->bunchSize
             ]
         );
     }
 
     public function testGetWebsitesThrowsException()
     {
-        $this->expectException('Exception');
+        $message = 'get website exception';
+        $this->expectException(\Exception::class);
+        $this->expectErrorMessage($message);
+
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
-
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
-
-        $this->storeManagerMock->expects($this->once())->method('getWebsites')->willThrowException(new \Exception());
+        $this->storeManagerMock->expects($this->once())
+            ->method('getWebsites')
+            ->willThrowException(new \Exception($message));
 
         $this->observer->process();
     }
 
     public function testProcessPriceThrowsException()
     {
-        $this->expectException('Exception');
-        $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
+        $message = 'create collection exception';
+        $this->expectException(\Exception::class);
+        $this->expectErrorMessage($message);
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
 
@@ -253,46 +261,40 @@ class ObserverTest extends TestCase
 
         $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(true);
 
-        $this->priceColFactoryMock->expects($this->once())->method('create')->willThrowException(new \Exception());
+        $this->priceColFactoryMock->expects($this->once())
+            ->method('create')
+            ->willThrowException(new \Exception($message));
 
         $this->observer->process();
     }
 
     public function testProcessPriceCustomerRepositoryThrowsException()
     {
-        $this->expectException('Exception');
-        $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
+        $message = 'no such entity exception';
+        $this->expectException(\Exception::class);
+        $this->expectErrorMessage($message);
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
-
         $this->storeManagerMock->expects($this->once())->method('getWebsites')->willReturn([$this->websiteMock]);
-        $this->websiteMock->expects($this->any())->method('getDefaultGroup')->willReturn($this->storeMock);
-        $this->storeMock->expects($this->any())->method('getDefaultStore')->willReturnSelf();
-
+        $this->websiteMock->method('getDefaultGroup')->willReturn($this->storeMock);
+        $this->storeMock->method('getDefaultStore')->willReturnSelf();
         $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(true);
 
-        $this->priceColFactoryMock->expects($this->once())->method('create')->willReturnSelf();
-        $this->priceColFactoryMock->expects($this->once())->method('addWebsiteFilter')->willReturnSelf();
-        $items = [
-            new DataObject([
-                'customer_id' => '42'
-            ])
-        ];
-
-        $this->priceColFactoryMock->expects($this->once())
-            ->method('setCustomerOrder')
-            ->willReturn(new \ArrayIterator($items));
-
-        $this->customerRepositoryMock->expects($this->once())->method('getById')->willThrowException(new \Exception());
+        $collectionMock = $this->createCollectionMock(PriceCollection::class);
+        $this->priceColFactoryMock->expects($this->once())->method('create')->willReturn($collectionMock);
+        $this->customerRepositoryMock->expects($this->once())
+            ->method('getById')
+            ->willThrowException(new \Exception($message));
 
         $this->observer->process();
     }
 
     public function testProcessPriceEmailThrowsException()
     {
-        $this->expectException('Exception');
+        $message = 'send exception';
+        $this->expectException(\Exception::class);
+        $this->expectErrorMessage($message);
         $id = 1;
-        $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
 
@@ -305,17 +307,8 @@ class ObserverTest extends TestCase
 
         $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(true);
 
-        $this->priceColFactoryMock->expects($this->once())->method('create')->willReturnSelf();
-        $this->priceColFactoryMock->expects($this->once())->method('addWebsiteFilter')->willReturnSelf();
-        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
-        $items = [
-            new DataObject([
-                'customer_id' => $id
-            ])
-        ];
-        $this->priceColFactoryMock->expects($this->once())
-            ->method('setCustomerOrder')
-            ->willReturn(new \ArrayIterator($items));
+        $collectionMock = $this->createCollectionMock(PriceCollection::class, $id);
+        $this->priceColFactoryMock->expects($this->once())->method('create')->willReturn($collectionMock);
 
         $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
         $this->customerRepositoryMock->expects($this->once())->method('getById')->willReturn($customerMock);
@@ -324,15 +317,16 @@ class ObserverTest extends TestCase
         $this->productMock->expects($this->once())->method('getFinalPrice')->willReturn('655.99');
         $this->productRepositoryMock->expects($this->once())->method('getById')->willReturn($this->productMock);
 
-        $this->emailMock->expects($this->once())->method('send')->willThrowException(new \Exception());
+        $this->emailMock->expects($this->once())->method('send')->willThrowException(new \Exception($message));
 
         $this->observer->process();
     }
 
     public function testProcessStockThrowsException()
     {
-        $this->expectException('Exception');
-        $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
+        $message = 'create collection exception';
+        $this->expectException(\Exception::class);
+        $this->expectErrorMessage($message);
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
 
@@ -343,15 +337,18 @@ class ObserverTest extends TestCase
         $this->scopeConfigMock->expects($this->at(0))->method('getValue')->willReturn(false);
         $this->scopeConfigMock->expects($this->at(1))->method('getValue')->willReturn(true);
 
-        $this->stockColFactoryMock->expects($this->once())->method('create')->willThrowException(new \Exception());
+        $this->stockColFactoryMock->expects($this->once())
+            ->method('create')
+            ->willThrowException(new \Exception($message));
 
         $this->observer->process();
     }
 
     public function testProcessStockCustomerRepositoryThrowsException()
     {
-        $this->expectException('Exception');
-        $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
+        $message = 'no such entity exception';
+        $this->expectException(\Exception::class);
+        $this->expectErrorMessage($message);
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
 
@@ -362,28 +359,27 @@ class ObserverTest extends TestCase
         $this->scopeConfigMock->expects($this->at(0))->method('getValue')->willReturn(false);
         $this->scopeConfigMock->expects($this->at(1))->method('getValue')->willReturn(true);
 
-        $this->stockColFactoryMock->expects($this->once())->method('create')->willReturnSelf();
-        $this->stockColFactoryMock->expects($this->once())->method('addWebsiteFilter')->willReturnSelf();
-        $this->stockColFactoryMock->expects($this->once())->method('addStatusFilter')->willReturnSelf();
-        $items = [
-            new DataObject([
-                'customer_id' => '42'
-            ])
-        ];
-
-        $this->stockColFactoryMock->expects($this->once())
+        $collectionMock = $this->createCollectionMock(StockCollection::class);
+        $collectionMock->expects($this->once())
+            ->method('addStatusFilter')
+            ->willReturnSelf();
+        $collectionMock->expects($this->once())
             ->method('setCustomerOrder')
-            ->willReturn(new \ArrayIterator($items));
+            ->willReturnSelf();
+        $this->stockColFactoryMock->expects($this->once())->method('create')->willReturn($collectionMock);
 
-        $this->customerRepositoryMock->expects($this->once())->method('getById')->willThrowException(new \Exception());
+        $this->customerRepositoryMock->expects($this->once())
+            ->method('getById')
+            ->willThrowException(new \Exception($message));
 
         $this->observer->process();
     }
 
     public function testProcessStockEmailThrowsException()
     {
-        $this->expectException('Exception');
-        $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
+        $message = 'send exception';
+        $this->expectException(\Exception::class);
+        $this->expectErrorMessage($message);
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
 
@@ -396,18 +392,14 @@ class ObserverTest extends TestCase
         $this->scopeConfigMock->expects($this->at(0))->method('getValue')->willReturn(false);
         $this->scopeConfigMock->expects($this->at(1))->method('getValue')->willReturn(true);
 
-        $this->stockColFactoryMock->expects($this->once())->method('create')->willReturnSelf();
-        $this->stockColFactoryMock->expects($this->once())->method('addWebsiteFilter')->willReturnSelf();
-        $this->stockColFactoryMock->expects($this->once())->method('addStatusFilter')->willReturnSelf();
-        $items = [
-            new DataObject([
-                'customer_id' => '42'
-            ])
-        ];
-
-        $this->stockColFactoryMock->expects($this->once())
+        $collectionMock = $this->createCollectionMock(StockCollection::class);
+        $collectionMock->expects($this->once())
+            ->method('addStatusFilter')
+            ->willReturnSelf();
+        $collectionMock->expects($this->once())
             ->method('setCustomerOrder')
-            ->willReturn(new \ArrayIterator($items));
+            ->willReturnSelf();
+        $this->stockColFactoryMock->expects($this->once())->method('create')->willReturn($collectionMock);
 
         $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
         $this->customerRepositoryMock->expects($this->once())->method('getById')->willReturn($customerMock);
@@ -416,8 +408,48 @@ class ObserverTest extends TestCase
         $this->productSalabilityMock->expects($this->once())->method('isSalable')->willReturn(false);
         $this->productRepositoryMock->expects($this->once())->method('getById')->willReturn($this->productMock);
 
-        $this->emailMock->expects($this->once())->method('send')->willThrowException(new \Exception());
+        $this->emailMock->expects($this->once())->method('send')->willThrowException(new \Exception($message));
 
         $this->observer->process();
+    }
+
+    /**
+     * Create mock for collection
+     *
+     * @param string $type
+     * @param int $customerId
+     * @return MockObject
+     */
+    private function createCollectionMock(string $type, int $customerId = 1): MockObject
+    {
+        $items = [
+            new DataObject(['customer_id' => $customerId])
+        ];
+        $collectionMock = $this->createMock($type);
+        $collectionMock->expects($this->once())
+            ->method('addWebsiteFilter')
+            ->willReturnSelf();
+        $collectionMock->expects($this->once())
+            ->method('setCustomerOrder')
+            ->willReturnSelf();
+        $collectionMock->expects($this->once())
+            ->method('addOrder')
+            ->with('product_id')
+            ->willReturnSelf();
+        $collectionMock->expects($this->once())
+            ->method('setPageSize')
+            ->with($this->bunchSize)
+            ->willReturnSelf();
+        $collectionMock->method('getLastPageNumber')
+            ->willReturn(1);
+        $collectionMock->expects($this->once())
+            ->method('clear');
+        $collectionMock->expects($this->once())
+            ->method('setCurPage')
+            ->with(1);
+        $collectionMock->method('getIterator')
+            ->willReturn(new \ArrayIterator($items));
+
+        return $collectionMock;
     }
 }

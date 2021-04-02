@@ -211,7 +211,8 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $metadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
             ->setPath(self::COOKIE_PATH)
-            ->setHttpOnly(true);
+            ->setHttpOnly(true)
+            ->setSameSite('Lax');
         $this->cookieManager->setPublicCookie(self::COOKIE_NAME, $cookieValue, $metadata);
     }
 

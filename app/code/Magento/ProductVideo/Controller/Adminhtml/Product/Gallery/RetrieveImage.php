@@ -180,7 +180,8 @@ class RetrieveImage extends \Magento\Backend\App\Action implements HttpPostActio
         $result['name'] = $fileInfo['basename'];
         $result['type'] = $this->imageAdapter->getMimeType();
         $result['error'] = 0;
-        $result['size'] = filesize($this->appendAbsoluteFileSystemPath($fileName));
+        $result['size'] = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA)
+            ->getDriver()->stat(($this->appendAbsoluteFileSystemPath($fileName)))['size'];
         $result['url'] = $this->mediaConfig->getTmpMediaUrl($tmpFileName);
         $result['file'] = $tmpFileName;
         return $result;

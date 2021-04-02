@@ -11,6 +11,8 @@ use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Forward;
 use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Backend\Model\View\Result\Page;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -21,6 +23,7 @@ use Magento\Framework\View\Result\PageFactory;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Shipping\Block\Adminhtml\View;
 use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
+use Magento\Shipping\Controller\Adminhtml\Order\Shipment\View as OrderShipmentView;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -86,6 +89,17 @@ class ViewTest extends TestCase
 
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\Shipment\View
+     * @var RedirectFactory|MockObject
+     */
+    protected $resultRedirectFactoryMock;
+
+    /**
+     * @var Redirect|MockObject
+     */
+    protected $resultRedirectMock;
+
+    /**
+     * @var OrderShipmentView
      */
     protected $controller;
 
@@ -130,16 +144,25 @@ class ViewTest extends TestCase
             ['updateBackButtonUrl']
         );
 
+        $this->resultRedirectFactoryMock = $this->getMockBuilder(RedirectFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $objectManager = new ObjectManager($this);
         $context = $objectManager->getObject(
             Context::class,
             [
                 'request' => $this->requestMock,
-                'objectManager' => $this->objectManagerMock
+                'objectManager' => $this->objectManagerMock,
+                'resultRedirectFactory' => $this->resultRedirectFactoryMock
             ]
         );
         $this->controller = $objectManager->getObject(
-            \Magento\Shipping\Controller\Adminhtml\Order\Shipment\View::class,
+            OrderShipmentView::class,
             [
                 'context' => $context,
                 'shipmentLoader' => $this->shipmentLoaderMock,
@@ -216,15 +239,12 @@ class ViewTest extends TestCase
         $tracking = [];
 
         $this->loadShipment($orderId, $shipmentId, $shipment, $tracking, null, false);
-        $this->resultForwardFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->resultForwardMock);
-        $this->resultForwardMock->expects($this->once())
-            ->method('forward')
-            ->with('noroute')
-            ->willReturnSelf();
-
-        $this->assertEquals($this->resultForwardMock, $this->controller->execute());
+        $this->prepareRedirect();
+        $this->setPath('sales/shipment');
+        $this->assertInstanceOf(
+            Redirect::class,
+            $this->controller->execute()
+        );
     }
 
     /**
@@ -254,5 +274,26 @@ class ViewTest extends TestCase
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
             ->willReturn($returnShipment);
+    }
+
+    /**
+     * prepareRedirect
+     */
+    protected function prepareRedirect()
+    {
+        $this->resultRedirectFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultRedirectMock);
+    }
+
+    /**
+     * @param string $path
+     * @param array $params
+     */
+    protected function setPath($path, $params = [])
+    {
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with($path, $params);
     }
 }
