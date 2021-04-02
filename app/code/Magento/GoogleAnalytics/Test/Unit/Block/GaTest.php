@@ -102,38 +102,6 @@ class GaTest extends TestCase
         );
     }
 
-    // public function testOrderTrackingCode()
-    // {
-    //     $this->salesOrderCollectionMock->expects($this->once())
-    //         ->method('create')
-    //         ->willReturn($this->createCollectionMock());
-    //     $this->storeMock->expects($this->once())->method('getFrontendName')->willReturn('test');
-    //     $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
-
-    //     $expectedCode = "ga('require', 'ec', 'ec.js');
-    //         ga('set', 'currencyCode', 'USD');
-    //         ga('ec:addProduct', {
-    //                                 'id': 'sku0',
-    //                                 'name': 'testName0',
-    //                                 'price': '0.00',
-    //                                 'quantity': 1
-    //                             });
-    //         ga('ec:setAction', 'purchase', {
-    //                             'id': '100',
-    //                             'affiliation': 'test',
-    //                             'revenue': '10',
-    //                             'tax': '2',
-    //                             'shipping': '1'
-    //                         });
-    //         ga('send', 'pageview');";
-
-    //     $this->gaBlock->setOrderIds([1, 2]);
-    //     $this->assertEquals(
-    //         $this->packString($expectedCode),
-    //         $this->packString($this->gaBlock->getOrdersTrackingCode())
-    //     );
-    // }
-
     public function testIsCookieRestrictionModeEnabled()
     {
         $this->cookieHelperMock->expects($this->once())->method('isCookieRestrictionModeEnabled')->willReturn(false);
