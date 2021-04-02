@@ -5,8 +5,9 @@
 
 define([
     'mageUtils',
-    'moment'
-], function (utils, moment) {
+    'moment',
+    'jquery'
+], function (utils, moment, $) {
     'use strict';
 
     describe('mageUtils', function () {
@@ -680,6 +681,23 @@ define([
                     expect(m.format(momentFormat)).toBe(expectedValue);
                 }
             }
+        });
+
+        it('Check ajaxSubmit method', function () {
+            var options = {
+                data: {}
+            },
+            config = {
+                ajaxSaveType: 'default'
+            },
+            d = new $.Deferred();
+
+            spyOn($, 'ajax').and.callFake(function () {
+                d.reject();
+
+                return d.promise();
+            });
+            expect(utils.ajaxSubmit(options, config)).toBeDefined();
         });
     });
 });
