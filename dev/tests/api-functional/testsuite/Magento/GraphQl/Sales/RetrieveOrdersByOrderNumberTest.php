@@ -410,7 +410,7 @@ QUERY;
      * @return void
      * @throws AuthenticationException
      */
-    public function testGetCustomerOrdersWithChangedDirect()
+    public function testGetCustomerDescendingSortedOrders()
     {
         $query = <<<QUERY
 {
@@ -445,7 +445,7 @@ QUERY;
             $this->assertEquals(
                 $orderItemInResponse['number'],
                 $expectedOrderNumbers[$key],
-                "The order number is different than the expected for order - " . $orderItemInResponse['number']
+                "The order number is different than the expected for order - {$orderItemInResponse['number']}"
             );
         }
     }
