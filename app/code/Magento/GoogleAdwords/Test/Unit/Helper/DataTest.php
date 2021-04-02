@@ -49,7 +49,7 @@ class DataTest extends TestCase
     {
         return [
             [true, 1234, true],
-            [true, 'conversionId', false],
+            [true, 'conversionId', true],
             [true, '', false],
             [false, '', false]
         ];
