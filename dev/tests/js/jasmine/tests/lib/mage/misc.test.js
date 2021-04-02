@@ -697,7 +697,8 @@ define([
 
                 return d.promise();
             });
-            expect(utils.ajaxSubmit(options, config)).toBeDefined();
+            utils.ajaxSubmit(options, config);
+            expect($.ajax).toHaveBeenCalled();
         });
     });
 });
