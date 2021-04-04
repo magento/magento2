@@ -83,7 +83,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
     protected function _getNodeJson($node, $level = 1)
     {
         $item = [];
-        $item['text'] = $this->escapeHtml($node->getName());
+        $item['text'] = $this->_escaper->escapeHtml($node->getName());
         if ($this->_withProductCount) {
             $item['text'] .= ' (' . $node->getProductCount() . ')';
         }

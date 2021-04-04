@@ -3,14 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-use Magento\Catalog\Helper\Data;
 
-/** @var \Magento\Backend\Block\Template $block */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
-?>
+/**
+ * @var \Magento\Backend\Block\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Json\Helper\Data $jsonHelper
+ */
 
-<?php
-/** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
 $jsonHelper = $block->getData('jsonHelper');
 $scriptString = <<<script
 require([
@@ -215,7 +215,7 @@ function switchDefaultValueField()
 script;
 foreach ($jsonHelper->getAttributeHiddenFields() as $type => $fields):
             $scriptString .= <<<script
-            case '{$block->escapeJs($type)}':
+            case '{$escaper->escapeJs($type)}':
                 var isFrontTabHidden = false;
 script;
     foreach ($fields as $one):
@@ -234,7 +234,7 @@ script;
         elseif ($one == '_scope'):
             $scriptString .= 'scopeVisibility = false;';
         else:
-            $scriptString .= "setRowVisibility('" . $block->escapeJs($one) . "', false);";
+            $scriptString .= "setRowVisibility('" . $escaper->escapeJs($one) . "', false);";
         endif;
     endforeach;
     $scriptString .= <<<script

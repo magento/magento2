@@ -121,7 +121,7 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
                 }
             ';
         } else {
-            $chooserJsObject = $this->escapeJs($this->getId());
+            $chooserJsObject = $this->_escaper->escapeJs($this->getId());
             $js = '
                 function (node, e) {
                     ' .

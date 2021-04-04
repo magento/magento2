@@ -44,7 +44,7 @@ class SelectGroupDataProvider
                     'label_for_created_option' => '<label class="label" for="select_%s">',
                     'title' => '<span>Test option drop-down title 1</span>',
                     'required_element' => '/<select/',
-                    'option_value_item' => '/<option value="%s"  price="10" >%s \+\s{11}\$10.00.*/',
+                    'option_value_item' => '/<option value="%s"  price="10" >%s \+\s*\$10.00.*/',
                     'not_contain_arr' => [
                         '/<select.*multiple="multiple"/',
                     ],
@@ -62,12 +62,13 @@ class SelectGroupDataProvider
                     Value::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_FIXED,
                     Value::KEY_SKU => 'test-option-drop-down-title-2-value-1',
                 ],
+
                 [
                     'block_with_required_class' => '<div class="field">',
                     'label_for_created_option' => '<label class="label" for="select_%s">',
                     'title' => '<span>Test option drop-down title 2</span>',
                     'required_element' => '/<select/',
-                    'option_value_item' => '/<option value="%s"  price="10" >%s \+\s{11}\$10.00.*/',
+                    'option_value_item' => '/<option value="%s"  price="10" >%s \+\s*\$10.00.*/',
                     'not_contain_arr' => [
                         '/<select.*multiple="multiple"/',
                     ],
@@ -90,7 +91,7 @@ class SelectGroupDataProvider
                     'label_for_created_option' => '<label class="label" for="select_%s">',
                     'title' => '<span>Test option drop-down title 3</span>',
                     'required_element' => '/<select/',
-                    'option_value_item' => '/<option value="%s"  price="50" >%s \+\s{11}\$50.00.*/',
+                    'option_value_item' => '/<option value="%s"  price="50" >%s \+\s*\$50.00.*/',
                     'not_contain_arr' => [
                         '/<select.*multiple="multiple"/',
                     ],
@@ -113,7 +114,7 @@ class SelectGroupDataProvider
                     'label_for_created_option' => '<label class="label" for="select_%s">',
                     'title' => '<span>Test option drop-down title 4</span>',
                     'required_element' => '/<select/',
-                    'option_value_item' => '/<option value="%s"  price="5" >%s \+\s{11}\$5.00.*/',
+                    'option_value_item' => '/<option value="%s"  price="5" >%s \+\s*\$5.00.*/',
                     'not_contain_arr' => [
                         '/<select.*multiple="multiple"/',
                     ],
@@ -296,7 +297,7 @@ class SelectGroupDataProvider
                     'label_for_created_option' => '<label class="label" for="select_%s">',
                     'title' => '<span>Test option multiselect title 1</span>',
                     'required_element' => '/<select.*multiple="multiple"/',
-                    'option_value_item' => '/<option value="%s"  price="10" >%s \+\s{11}\$10.00.*/',
+                    'option_value_item' => '/<option value="%s"  price="10" >%s \+\s*\$10.00.*/',
                 ],
             ],
             'type_multiselect_not_required' => [
@@ -316,7 +317,7 @@ class SelectGroupDataProvider
                     'label_for_created_option' => '<label class="label" for="select_%s">',
                     'title' => '<span>Test option multiselect title 2</span>',
                     'required_element' => '/<select.*multiple="multiple"/',
-                    'option_value_item' => '/<option value="%s"  price="10" >%s \+\s{11}\$10.00.*/',
+                    'option_value_item' => '/<option value="%s"  price="10" >%s \+\s*\$10.00.*/',
                 ],
             ],
             'type_multiselect_value_fixed_price' => [
@@ -336,7 +337,7 @@ class SelectGroupDataProvider
                     'label_for_created_option' => '<label class="label" for="select_%s">',
                     'title' => '<span>Test option multiselect title 3</span>',
                     'required_element' => '/<select.*multiple="multiple"/',
-                    'option_value_item' => '/<option value="%s"  price="50" >%s \+\s{11}\$50.00.*/',
+                    'option_value_item' => '/<option value="%s"  price="50" >%s \+\s*\$50.00.*/',
                 ],
             ],
             'type_multiselect_value_percent_price' => [
@@ -356,7 +357,7 @@ class SelectGroupDataProvider
                     'label_for_created_option' => '<label class="label" for="select_%s">',
                     'title' => '<span>Test option multiselect title 4</span>',
                     'required_element' => '/<select.*multiple="multiple"/',
-                    'option_value_item' => '/<option value="%s"  price="5" >%s \+\s{11}\$5.00.*/',
+                    'option_value_item' => '/<option value="%s"  price="5" >%s \+\s*\$5.00.*/',
                 ],
             ],
         ];

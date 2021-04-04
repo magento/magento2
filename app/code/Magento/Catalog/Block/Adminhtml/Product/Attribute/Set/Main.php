@@ -132,7 +132,7 @@ class Main extends \Magento\Backend\Block\Template
                 \Magento\Backend\Block\Widget\Button::class,
                 [
                     'label' => __('Delete'),
-                    'onclick' => 'deleteConfirm(\'' . $this->escapeJs(
+                    'onclick' => 'deleteConfirm(\'' . $this->_escaper->escapeJs(
                         __(
                             'You are about to delete all products in this attribute set. '
                             . 'Are you sure you want to do that?'
@@ -233,7 +233,7 @@ class Main extends \Magento\Backend\Block\Template
         /* @var $node \Magento\Eav\Model\Entity\Attribute\Group */
         foreach ($groups as $node) {
             $item = [];
-            $item['text'] = $this->escapeHtml($node->getAttributeGroupName());
+            $item['text'] = $this->_escaper->escapeHtml($node->getAttributeGroupName());
             $item['id'] = $node->getAttributeGroupId();
             $item['cls'] = 'folder';
             $item['allowDrop'] = true;
@@ -280,7 +280,7 @@ class Main extends \Magento\Backend\Block\Template
 
         foreach ($attributes as $child) {
             $attr = [
-                'text' => $this->escapeHtml($child->getAttributeCode()),
+                'text' => $this->_escaper->escapeHtml($child->getAttributeCode()),
                 'id' => $child->getAttributeId(),
                 'cls' => 'leaf',
                 'allowDrop' => false,

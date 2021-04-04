@@ -169,7 +169,7 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
      */
     public function prepareSku($sku)
     {
-        return $this->escapeHtml($this->string->splitInjection($sku));
+        return $this->_escaper->escapeHtml($this->string->splitInjection($sku));
     }
 
     /**

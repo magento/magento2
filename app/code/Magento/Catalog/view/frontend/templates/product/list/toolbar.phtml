@@ -3,16 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-?>
-<?php
-/**
- * Product list toolbar
- *
- * @var $block \Magento\Catalog\Block\Product\ProductList\Toolbar
- */
 
 // phpcs:disable Magento2.Security.IncludeFile.FoundIncludeFile
 // phpcs:disable PSR2.Methods.FunctionCallSignature.SpaceBeforeOpenBracket
+
+/**
+ * Product list toolbar
+ *
+ * @var \Magento\Catalog\Block\Product\ProductList\Toolbar $block
+ */
 ?>
 <?php if ($block->getCollection()->getSize()) :?>
     <?php $widget = $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonDecode($block->getWidgetOptionsJson());

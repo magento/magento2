@@ -5,9 +5,13 @@
  */
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+
+/**
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <?php $_product = $block->getProduct() ?>
 <?php if ($block->canEmailToFriend()) :?>
-    <a href="<?= $block->escapeUrl($this->helper(Magento\Catalog\Helper\Product::class)->getEmailToFriendUrl($_product)) ?>"
-       class="action mailto friend"><span><?= $block->escapeHtml(__('Email')) ?></span></a>
+    <a href="<?= $escaper->escapeUrl($this->helper(Magento\Catalog\Helper\Product::class)->getEmailToFriendUrl($_product)) ?>"
+       class="action mailto friend"><span><?= $escaper->escapeHtml(__('Email')) ?></span></a>
 <?php endif; ?>

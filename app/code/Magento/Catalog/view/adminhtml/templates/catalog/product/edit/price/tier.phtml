@@ -6,8 +6,11 @@
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 
-/* @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Tier */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/**
+ * @var \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Tier $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 $element = $block->getElement();
 ?>
 <?php $_htmlId      = $block->getElement()->getHtmlId() ?>
@@ -25,21 +28,21 @@ $element = $block->getElement();
 $jsonHelper = $block->getData('jsonHelper'); ?>
 <div class="field" id="attribute-<?= /* @noEscape */ $_htmlId ?>-container"
      data-attribute-code="<?= /* @noEscape */ $_htmlId ?>"
-     data-apply-to="<?= $block->escapeHtml(
+     data-apply-to="<?= $escaper->escapeHtml(
          $jsonHelper->jsonEncode($element->hasEntityAttribute() ? $element->getEntityAttribute()->getApplyTo() : [])
      )?>">
-    <label class="label"><span><?= $block->escapeHtml($block->getElement()->getLabel()) ?></span></label>
+    <label class="label"><span><?= $escaper->escapeHtml($block->getElement()->getLabel()) ?></span></label>
     <div class="control">
         <table class="admin__control-table tiers_table" id="tiers_table">
             <thead>
                 <tr>
-                    <th class="col-websites"><?= $block->escapeHtml(__('Web Site')) ?></th>
-                    <th class="col-customer-group"><?= $block->escapeHtml(__('Customer Group')) ?></th>
-                    <th class="col-qty required"><?= $block->escapeHtml(__('Quantity')) ?></th>
+                    <th class="col-websites"><?= $escaper->escapeHtml(__('Web Site')) ?></th>
+                    <th class="col-customer-group"><?= $escaper->escapeHtml(__('Customer Group')) ?></th>
+                    <th class="col-qty required"><?= $escaper->escapeHtml(__('Quantity')) ?></th>
                     <th class="col-price required">
-                        <?= $block->escapeHtml($block->getPriceColumnHeader(__('Item Price'))) ?>
+                        <?= $escaper->escapeHtml($block->getPriceColumnHeader(__('Item Price'))) ?>
                     </th>
-                    <th class="col-delete"><?= $block->escapeHtml(__('Action')) ?></th>
+                    <th class="col-delete"><?= $escaper->escapeHtml(__('Action')) ?></th>
                 </tr>
                 <?php if (!$_showWebsite): ?>
                     <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display:none', 'th.col-websites'); ?>
@@ -66,16 +69,16 @@ require([
 //<![CDATA[
 var tierPriceRowTemplate = '<tr>'
     + '<td class="col-websites">'
-    + '<select class="{$block->escapeHtmlAttr($_htmlClass)} required-entry"
+    + '<select class="{$escaper->escapeHtmlAttr($_htmlClass)} required-entry"
      name="{$htmlName}[<%- data.index %>][website_id]" id="tier_price_row_<%- data.index %>_website">'
 script;
 foreach ($block->getWebsites() as $_websiteId => $_info):
     $scriptString .= <<<script
-    + '<option value="{$block->escapeHtmlAttr($_websiteId)}">{$block->escapeHtml($_info['name'])}
+    + '<option value="{$escaper->escapeHtmlAttr($_websiteId)}">{$escaper->escapeHtml($_info['name'])}
 script;
     if (!empty($_info['currency'])):
         $scriptString .= <<<script
-            [{$block->escapeHtml($_info['currency'])}]
+            [{$escaper->escapeHtml($_info['currency'])}]
 script;
     endif;
     $scriptString .= <<<script
@@ -84,31 +87,31 @@ script;
     endforeach;
     $scriptString .= <<<script
     + '</select></td>'
-    + '<td class="col-customer-group"><select class="{$block->escapeJs($_htmlClass)} custgroup required-entry"
+    + '<td class="col-customer-group"><select class="{$escaper->escapeJs($_htmlClass)} custgroup required-entry"
      name="{$htmlName}[<%- data.index %>][cust_group]" id="tier_price_row_<%- data.index %>_cust_group">'
 script;
 foreach ($block->getCustomerGroups() as $_groupId => $_groupName):
     $scriptString .= <<<script
-    + '<option value="{$block->escapeJs($_groupId)}">{$block->escapeJs($_groupName)}</option>'
+    + '<option value="{$escaper->escapeJs($_groupId)}">{$escaper->escapeJs($_groupName)}</option>'
 script;
     endforeach;
     $scriptString .= <<<script
     + '</select></td>'
     + '<td class="col-qty">'
-        + '<input class="{$block->escapeJs($_htmlClass)} qty required-entry validate-greater-than-zero"
+        + '<input class="{$escaper->escapeJs($_htmlClass)} qty required-entry validate-greater-than-zero"
          type="text" name="{$htmlName}[<%- data.index %>][price_qty]" value="<%- data.qty %>"
           id="tier_price_row_<%- data.index %>_qty" />'
-        + '<span>{$block->escapeHtml(__("and above"))}</span>'
+        + '<span>{$escaper->escapeHtml(__("and above"))}</span>'
     + '</td>'
-    + '<td class="col-price"><input class="{$block->escapeJs($_htmlClass)} required-entry
-     {$block->escapeJs($_priceValueValidation)}" type="text" name="{$htmlName}[<%- data.index %>][price]"
+    + '<td class="col-price"><input class="{$escaper->escapeJs($_htmlClass)} required-entry
+     {$escaper->escapeJs($_priceValueValidation)}" type="text" name="{$htmlName}[<%- data.index %>][price]"
       value="<%- data.price %>" id="tier_price_row_<%- data.index %>_price" /></td>'
     + '<td class="col-delete"><input type="hidden" name="{$htmlName}[<%- data.index %>][delete]" class="delete"
      value="" id="tier_price_row_<%- data.index %>_delete" />'
-    + '<button title="{$block->escapeJs(__('Delete Tier'))}" type="button"
+    + '<button title="{$escaper->escapeJs(__('Delete Tier'))}" type="button"
      class="action- scalable delete icon-btn delete-product-option"
       id="tier_price_row_<%- data.index %>_delete_button">'
-    + '<span>{$block->escapeJs(__("Delete"))}</span></button></td>'
+    + '<span>{$escaper->escapeJs(__("Delete"))}</span></button></td>'
     + '</tr>';
 script;
 
@@ -156,7 +159,7 @@ script;
             data.readOnly = arguments[4];
         }
 
-        Element.insert($('{$block->escapeJs($_htmlId)}_container'), {
+        Element.insert($('{$escaper->escapeJs($_htmlId)}_container'), {
             bottom : this.template({
                 data: data
             })
@@ -186,12 +189,12 @@ script;
 script;
     if ($_readonly):
         $scriptString .= <<<script
-        $('{$block->escapeJs($_htmlId)}_container').select('input', 'select').each(this.disableElement);
-        $('{$block->escapeJs($_htmlId)}_container').up('table').select('button').each(this.disableElement);
+        $('{$escaper->escapeJs($_htmlId)}_container').select('input', 'select').each(this.disableElement);
+        $('{$escaper->escapeJs($_htmlId)}_container').up('table').select('button').each(this.disableElement);
 script;
     else:
         $scriptString .= <<<script
-        $('{$block->escapeJs($_htmlId)}_container').select('input', 'select').each(function(el) {
+        $('{$escaper->escapeJs($_htmlId)}_container').select('input', 'select').each(function(el) {
             Event.observe(el, 'change', el.setHasChanges.bind(el));
         });
 script;
@@ -219,14 +222,14 @@ script;
     <?php $readonly = (int)!empty($_item['readonly']);
     $price_qty = $_item['price_qty']*1;
      $scriptString .= <<<script
-tierPriceControl.addItem('{$block->escapeJs($_item['website_id'])}', '{$block->escapeJs($_item['cust_group'])}',
- '{$price_qty}', '{$block->escapeJs($_item['price'])}', {$readonly});
+tierPriceControl.addItem('{$escaper->escapeJs($_item['website_id'])}', '{$escaper->escapeJs($_item['cust_group'])}',
+ '{$price_qty}', '{$escaper->escapeJs($_item['price'])}', {$readonly});
 script;
     ?>
 <?php endforeach; ?>
 <?php if ($_readonly):?>
     <?php $scriptString .= <<<script
-$('{$block->escapeJs($_htmlId)}_container').up('table').select('button').each(tierPriceControl.disableElement);
+$('{$escaper->escapeJs($_htmlId)}_container').up('table').select('button').each(tierPriceControl.disableElement);
 script;
     ?>
 <?php endif; ?>

@@ -4,8 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/**
+ * @var \Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <div class="attribute-set">
 
@@ -33,12 +36,12 @@ script;
     </div>
     <div class="attribute-set-col fieldset-wrapper">
         <div class="fieldset-wrapper-title">
-            <span class="title"><?= $block->escapeHtml(__('Groups')) ?></span>
+            <span class="title"><?= $escaper->escapeHtml(__('Groups')) ?></span>
         </div>
         <?php if (!$block->getIsReadOnly()):?>
             <?= /* @noEscape */ $block->getAddGroupButton() ?>&nbsp;
             <?= /* @noEscape */ $block->getDeleteGroupButton() ?>
-            <p class="note-block"><?= $block->escapeHtml(__('Double click on a group to rename it.')) ?></p>
+            <p class="note-block"><?= $escaper->escapeHtml(__('Double click on a group to rename it.')) ?></p>
         <?php endif; ?>
 
         <?= $block->getSetsFilterHtml() ?>
@@ -46,7 +49,7 @@ script;
     </div>
     <div class="attribute-set-col fieldset-wrapper">
         <div class="fieldset-wrapper-title">
-            <span class="title"><?= $block->escapeHtml(__('Unassigned Attributes')) ?></span>
+            <span class="title"><?= $escaper->escapeHtml(__('Unassigned Attributes')) ?></span>
         </div>
         <div id="tree-div2" class="attribute-set-tree"></div>
         <?= /* @noEscape */ $secureRenderer->renderTag(
@@ -58,7 +61,7 @@ script;
         <?php $readOnly = ($block->getIsReadOnly() ? 'false' : 'true');
         $groupTree = /* @noEscape */ $block->getGroupTreeJson();
         $attributeTreeJson = /* @noEscape */ $block->getAttributeTreeJson();
-        $systemAttributeWarning = $block->escapeJs(
+        $systemAttributeWarning = $escaper->escapeJs(
             __('This group contains system attributes. Please move system attributes to another group and try again.')
         );
         $scriptString = <<<script
@@ -108,7 +111,7 @@ script;
 
                             this.ge = new Ext.tree.TreeEditor(tree, {
                                 allowBlank:false,
-                                blankText:'{$block->escapeJs(__('A name is required.'))}',
+                                blankText:'{$escaper->escapeJs(__('A name is required.'))}',
                                 selectOnFocus:true,
                                 cls:'folder'
                             });
@@ -277,7 +280,7 @@ script;
                         SystemNodesExists : function(currentNode) {
                             if (!currentNode) {
                                 alert({
-                                    content: '{$block->escapeJs(__('Please select a node.'))}'
+                                    content: '{$escaper->escapeJs(__('Please select a node.'))}'
                                 });
                                 return;
                             }
@@ -298,8 +301,8 @@ script;
 
                         addGroup : function() {
                             prompt({
-                                title: "{$block->escapeJs($block->escapeHtml(__('Add New Group')))}",
-                                content: "{$block->escapeJs($block->escapeHtml(__('Please enter a new group name.')))}",
+                                title: "{$escaper->escapeJs($escaper->escapeHtml(__('Add New Group')))}",
+                                content: "{$escaper->escapeJs($escaper->escapeHtml(__('Please enter a new group name.')))}",
                                 value: "",
                                 validation: true,
                                 validationRules: ['required-entry'],
@@ -365,7 +368,7 @@ script;
                             for (var i=0; i < TreePanels.root.childNodes.length; i++) {
                                 if (TreePanels.root.childNodes[i].text.toLowerCase() == name.toLowerCase() &&
                                     TreePanels.root.childNodes[i].id != exceptNodeId) {
-                                    errorText = '{$block->escapeJs(
+                                    errorText = '{$escaper->escapeJs(
                                         __('An attribute group named "/name/" already exists.')
                                     )}';
                                     alert({
@@ -395,7 +398,7 @@ script;
                                 editSet.req.form_key = FORM_KEY;
                             }
                             var req = {data : Ext.util.JSON.encode(editSet.req)};
-                            var con = new Ext.lib.Ajax.request('POST', '{$block->escapeJs($block->getMoveUrl())}',
+                            var con = new Ext.lib.Ajax.request('POST', '{$escaper->escapeJs($block->getMoveUrl())}',
                              {success:editSet.success,failure:editSet.failure}, req);
                         },
 
@@ -414,7 +417,7 @@ script;
 
                         failure : function(o) {
                             alert({
-                                content: '{$block->escapeJs(__('Sorry, we\'re unable to complete this request.'))}'
+                                content: '{$escaper->escapeJs(__('Sorry, we\'re unable to complete this request.'))}'
                             });
                         },
 
@@ -431,7 +434,7 @@ script;
                         rightBeforeAppend : function(tree, nodeThis, node, newParent) {
                             if (node.attributes.is_user_defined == 0) {
                                 alert({
-                                    content: '{$block->escapeJs(
+                                    content: '{$escaper->escapeJs(
                                         __('You can\'t remove attributes from this attribute set.')
                                     )}'
                                 });
@@ -449,7 +452,7 @@ script;
 
                             if (node.attributes.is_unassignable == 0) {
                                 alert({
-                                    content: '{$block->escapeJs(
+                                    content: '{$escaper->escapeJs(
                                         __('You can\'t remove attributes from this attribute set.')
                                     )}'
                                 });
@@ -475,7 +478,7 @@ script;
                         rightRemove : function(tree, nodeThis, node) {
                             if( nodeThis.firstChild == null && node.id != 'empty' ) {
                                 var newNode = new Ext.tree.TreeNode({
-                                    text : '{$block->escapeJs(__('Empty'))}',
+                                    text : '{$escaper->escapeJs(__('Empty'))}',
                                     id : 'empty',
                                     cls : 'folder',
                                     is_user_defined : 1,

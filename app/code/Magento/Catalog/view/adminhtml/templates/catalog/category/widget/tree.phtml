@@ -4,11 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/**
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
-
 <?php $_divId = 'tree' . $block->getId() ?>
-<div id="<?= $block->escapeHtmlAttr($_divId) ?>" class="tree"></div>
+<div id="<?= $escaper->escapeHtmlAttr($_divId) ?>" class="tree"></div>
 <!--[if IE]>
 <script id="ie-deferred-loader" defer="defer" src="//:"></script>
 <![endif]-->
@@ -21,7 +23,7 @@ $scriptString = <<<script
 
 require(['jquery', 'prototype', 'extjs/ext-tree-checkbox'], function(jQuery){
 
-var tree{$block->escapeJs($block->getId())};
+var tree{$escaper->escapeJs($block->getId())};
 
 var useMassaction = {$isUseMassaction};
 
@@ -74,7 +76,7 @@ script;
 $scriptString .= <<<script
 
     var categoryLoader = new Ext.tree.TreeLoader({
-       dataUrl: '{$block->escapeJs($block->escapeUrl($block->getLoadTreeUrl()))}'
+       dataUrl: '{$escaper->escapeJs($escaper->escapeUrl($block->getLoadTreeUrl()))}'
     });
 
     categoryLoader.processResponse = function (response, parent, callback) {
@@ -103,7 +105,7 @@ $scriptString .= <<<script
                 // Add empty node to reset category filter
                 if(!emptyNodeAdded) {
                     var empty = Object.clone(_node);
-                    empty.text = '{$block->escapeJs(__('None'))}';
+                    empty.text = '{$escaper->escapeJs(__('None'))}';
                     empty.children = [];
                     empty.id = 'none';
                     empty.path = '1/none';
@@ -177,10 +179,10 @@ $scriptString .= <<<script
         treeLoader.baseParams.id = node.attributes.id;
         treeLoader.baseParams.store = node.attributes.store;
         treeLoader.baseParams.form_key = FORM_KEY;
-        $('{$block->escapeJs($_divId)}').fire('category:beforeLoad', {treeLoader:treeLoader});
+        $('{$escaper->escapeJs($_divId)}').fire('category:beforeLoad', {treeLoader:treeLoader});
     });
 
-    tree{$block->escapeJs($block->getId())} = new Ext.tree.TreePanel.Enhanced('{$block->escapeJs($_divId)}', {
+    tree{$escaper->escapeJs($block->getId())} = new Ext.tree.TreePanel.Enhanced('{$escaper->escapeJs($_divId)}', {
         animate:          false,
         loader:           categoryLoader,
         enableDD:         false,
@@ -192,9 +194,9 @@ $scriptString .= <<<script
     });
 
     if (useMassaction) {
-        tree{$block->escapeJs($block->getId())}.on('check', function(node) {
-            $('{$block->escapeJs($_divId)}').fire('node:changed', {node:node});
-        }, tree{$block->escapeJs($block->getId())});
+        tree{$escaper->escapeJs($block->getId())}.on('check', function(node) {
+            $('{$escaper->escapeJs($_divId)}').fire('node:changed', {node:node});
+        }, tree{$escaper->escapeJs($block->getId())});
     }
 
     // set the root node
@@ -206,7 +208,7 @@ $scriptString .= <<<script
         category_id: {$intCategoryId}
     };
 
-    tree{$block->escapeJs($block->getId())}.loadTree({parameters:parameters, data:{$block->getTreeJson()}},true);
+    tree{$escaper->escapeJs($block->getId())}.loadTree({parameters:parameters, data:{$block->getTreeJson()}},true);
 
 });
 

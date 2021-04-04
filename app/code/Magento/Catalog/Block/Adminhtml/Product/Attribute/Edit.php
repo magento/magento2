@@ -122,7 +122,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
             if (is_array($frontendLabel)) {
                 $frontendLabel = $frontendLabel[0];
             }
-            return __('Edit Product Attribute "%1"', $this->escapeHtml($frontendLabel));
+            return __('Edit Product Attribute "%1"', $this->_escaper->escapeHtml($frontendLabel));
         }
         return __('New Product Attribute');
     }

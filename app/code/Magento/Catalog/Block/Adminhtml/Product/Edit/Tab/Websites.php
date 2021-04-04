@@ -140,14 +140,14 @@ class Websites extends \Magento\Backend\Block\Store\Switcher
                 if (!$this->hasWebsite($_website->getId())) {
                     continue;
                 }
-                $optGroupLabel = $this->escapeHtml($_website->getName());
+                $optGroupLabel = $this->_escaper->escapeHtml($_website->getName());
                 $this->_storeFromHtml .= '<optgroup label="' . $optGroupLabel . '"></optgroup>';
                 foreach ($this->getGroupCollection($_website) as $_group) {
-                    $optGroupName = $this->escapeHtml($_group->getName());
+                    $optGroupName = $this->_escaper->escapeHtml($_group->getName());
                     $this->_storeFromHtml .= '<optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;' . $optGroupName . '">';
                     foreach ($this->getStoreCollection($_group) as $_store) {
                         $this->_storeFromHtml .= '<option value="' . $_store->getId() . '">&nbsp;&nbsp;&nbsp;&nbsp;';
-                        $this->_storeFromHtml .= $this->escapeHtml($_store->getName()) . '</option>';
+                        $this->_storeFromHtml .= $this->_escaper->escapeHtml($_store->getName()) . '</option>';
                     }
                 }
                 $this->_storeFromHtml .= '</optgroup>';
