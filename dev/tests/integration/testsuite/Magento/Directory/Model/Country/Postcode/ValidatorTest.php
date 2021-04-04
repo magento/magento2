@@ -80,8 +80,10 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         return [
             ['countryId' => 'CA', 'postcode' => 'A1B2C3'],
             ['countryId' => 'CA', 'postcode' => 'A1B 2C3'],
+            ['countryId' => 'CA', 'postcode' => 'A1B'],
             ['countryId' => 'CA', 'postcode' => 'Z9Y 8X7'],
             ['countryId' => 'CA', 'postcode' => 'Z9Y8X7'],
+            ['countryId' => 'CA', 'postcode' => 'Z9Y'],
         ];
     }
 

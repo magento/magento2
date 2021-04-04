@@ -76,7 +76,7 @@
                                               action="<?= $escaper->escapeUrl($this->helper(Magento\Catalog\Helper\Product\Compare::class)->getAddToCartUrl($item)) ?>"
                                               method="post">
                                             <?= $block->getBlockHtml('formkey') ?>
-                                            <button type="submit" class="action tocart primary">
+                                            <button type="submit" class="action tocart primary" disabled>
                                                 <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
                                             </button>
                                         </form>
@@ -147,15 +147,13 @@
                 </tbody>
             </table>
         </div>
-        <?php if (!$block->isRedirectToCartEnabled()) :?>
-            <script type="text/x-magento-init">
-            {
-                "[data-role=tocart-form]": {
-                    "catalogAddToCart": {}
-                }
+        <script type="text/x-magento-init">
+        {
+            "[data-role=tocart-form]": {
+                "catalogAddToCart": {}
             }
-            </script>
-        <?php endif; ?>
+        }
+        </script>
 <?php else :?>
     <div class="message info empty"><div><?= $escaper->escapeHtml(__('You have no items to compare.')) ?></div></div>
 <?php endif; ?>

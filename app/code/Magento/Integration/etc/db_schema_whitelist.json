@@ -54,6 +54,7 @@
             "consumer_id": true
         },
         "constraint": {
+            "PRIMARY": true,
             "OAUTH_NONCE_CONSUMER_ID_OAUTH_CONSUMER_ENTITY_ID": true,
             "OAUTH_NONCE_NONCE_CONSUMER_ID": true
         },
