@@ -5,7 +5,7 @@
  */
 namespace Magento\Eav\Model\Attribute\Data;
 
-use Magento\Framework\Filesystem\ExtendedDriverInterface;
+use Magento\RemoteStorage\Driver\RemoteDriverInterface;
 
 /**
  * EAV Entity Attribute Image File Data Model
@@ -29,7 +29,7 @@ class Image extends \Magento\Eav\Model\Attribute\Data\File
     {
         $label = __($this->getAttribute()->getStoreLabel());
         $rules = $this->getAttribute()->getValidateRules();
-        $localStorage = !$this->_directory->getDriver() instanceof ExtendedDriverInterface;
+        $localStorage = !$this->_directory->getDriver() instanceof RemoteDriverInterface;
         $imageProp = $localStorage
             ? @getimagesize($value['tmp_name'])
             : $this->_directory->getDriver()->getMetadata($value['tmp_name']);

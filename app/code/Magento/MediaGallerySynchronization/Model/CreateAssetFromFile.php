@@ -15,6 +15,7 @@ use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use Magento\MediaGallerySynchronization\Model\Filesystem\GetFileInfo;
 use Magento\MediaGallerySynchronizationApi\Model\CreateAssetFromFileInterface;
+use Magento\RemoteStorage\Driver\RemoteDriverInterface;
 
 /**
  * Create media asset object based on the file information
@@ -75,7 +76,7 @@ class CreateAssetFromFile implements CreateAssetFromFileInterface
         $absolutePath = $this->getMediaDirectory()->getAbsolutePath($path);
         $driver = $this->getMediaDirectory()->getDriver();
 
-        if ($driver instanceof Filesystem\ExtendedDriverInterface) {
+        if ($driver instanceof RemoteDriverInterface) {
             $meta = $driver->getMetadata($absolutePath);
         } else {
             /**

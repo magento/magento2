@@ -22,6 +22,7 @@ class HttpsTest extends TestCase
 
     public function testFileOpen()
     {
+        HttpTest::$fsockopen = self::$fSockOpen;
         $this->assertEquals(self::$fSockOpen, (new Https())->fileOpen('example.com', 'r'));
     }
 }

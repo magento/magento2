@@ -94,6 +94,11 @@ class Mime
     ];
 
     /**
+     * @var Mime
+     */
+    private static $instance = null;
+
+    /**
      * Get mime type of a file
      *
      * @param string $path Absolute file path
@@ -123,6 +128,20 @@ class Mime
         }
 
         return $result;
+    }
+
+    /**
+     * Get Mime instance
+     *
+     * @return static
+     */
+    public static function getMimeInstance(): Mime
+    {
+        if (null === static::$instance) {
+            static::$instance = new static();
+        }
+
+        return static::$instance;
     }
 
     /**

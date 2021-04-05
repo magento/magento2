@@ -56,7 +56,7 @@ class MimeTest extends TestCase
     protected function setUp(): void
     {
         $this->localDriverMock = $this->getMockForAbstractClass(Filesystem\DriverInterface::class);
-        $this->remoteDriverMock = $this->getMockForAbstractClass(Filesystem\ExtendedDriverInterface::class);
+        $this->remoteDriverMock = $this->getMockForAbstractClass(Filesystem\DriverInterface::class);
 
         $this->localDirectoryMock = $this->getMockForAbstractClass(Filesystem\Directory\WriteInterface::class);
         $this->localDirectoryMock->method('getDriver')
@@ -83,7 +83,8 @@ class MimeTest extends TestCase
             ->method('isExists')
             ->with('nonexistent.file')
             ->willReturn(true);
-
+        $this->localDriverMock->method('getMetadata')
+            ->willThrowException(new FileSystemException(__('File \'nonexistent.file\' doesn\'t exist')));
         $file = 'nonexistent.file';
         $this->object->getMimeType($file);
     }
@@ -103,7 +104,8 @@ class MimeTest extends TestCase
             ->method('isExists')
             ->with($file)
             ->willReturn(true);
-
+        $this->localDriverMock->method('getMetadata')
+            ->willReturn(['mimetype' => $expectedType]);
         $actualType = $this->object->getMimeType($file);
         self::assertSame($expectedType, $actualType);
     }

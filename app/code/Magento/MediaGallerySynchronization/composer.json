@@ -6,7 +6,8 @@
         "magento/framework": "*",
         "magento/module-media-gallery-api": "*",
         "magento/module-media-gallery-synchronization-api": "*",
-        "magento/framework-message-queue": "*"
+        "magento/framework-message-queue": "*",
+        "magento/module-remote-storage": "*"
     },
     "type": "magento2-module",
     "license": [

@@ -11,7 +11,8 @@
         "magento/module-catalog": "*",
         "magento/module-config": "*",
         "magento/module-media-storage": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-remote-storage": "*"
     },
     "type": "magento2-module",
     "license": [

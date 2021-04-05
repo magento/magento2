@@ -15,7 +15,7 @@ use Magento\Framework\Filesystem;
  * Utility for mime type retrieval
  *
  * @deprecated
- * @see Filesystem\ExtendedDriverInterface::getMetadata()
+ * @see Filesystem\DriverInterface::getMetadata()
  */
 class Mime
 {
@@ -113,12 +113,16 @@ class Mime
             throw new FileSystemException(__("File '$file' doesn't exist"));
         }
 
-        if ($driver instanceof Filesystem\ExtendedDriverInterface) {
-            return $driver->getMetadata($file)['mimetype'];
+        $mimeType = '';
+        if ($driver instanceof Filesystem\DriverInterface) {
+            $mimeType = $driver->getMetadata($file)['mimetype'] ?? '';
         }
 
-        $mime = new Filesystem\Driver\File\Mime();
+        if (!$mimeType) {
+            $mime = new Filesystem\Driver\File\Mime();
+            $mimeType = $mime->getMimeType($file);
+        }
 
-        return $mime->getMimeType($file);
+        return $mimeType;
     }
 }

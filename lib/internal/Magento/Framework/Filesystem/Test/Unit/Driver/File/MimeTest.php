@@ -52,6 +52,15 @@ class MimeTest extends TestCase
     }
 
     /**
+     * Test for getMimeInstance
+     */
+    public function testGetMimeInstance(): void
+    {
+        $mime = Mime::getMimeInstance();
+        $this->assertInstanceOf(Mime::class, $mime);
+    }
+
+    /**
      * @return array
      */
     public function getMimeTypeDataProvider(): array
