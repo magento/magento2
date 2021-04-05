@@ -567,10 +567,6 @@ class Application
                 throw new DomainException('"command" must be present in post install setup command arrays');
             }
 
-            if (isset($postInstallSetupCommand['host']) && strpos($postInstallSetupCommand['host'], '{{') === 0) {
-                continue;
-            }
-
             $command = $postInstallSetupCommand['command'];
             $argumentsAndOptions = array_diff_key($postInstallSetupCommand, array_flip(['command']));
 

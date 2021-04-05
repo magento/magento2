@@ -224,14 +224,6 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                     ]
                 ]
             ],
-            'post install setup command with placeholder value for "host"' => [
-                dirname(__FILE__) . '/_files/install-config-mysql1.php',
-                dirname(__FILE__) . '/_files/config-global-1.php',
-                dirname(__FILE__) . '/_files/post-install-setup-command-config2.php',
-                [
-                    $installShellCommandExpectation,
-                ]
-            ],
             'post install setup command with both options and arguments' => [
                 dirname(__FILE__) . '/_files/install-config-mysql1.php',
                 dirname(__FILE__) . '/_files/config-global-1.php',
