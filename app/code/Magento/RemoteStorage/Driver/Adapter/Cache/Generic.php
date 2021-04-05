@@ -188,9 +188,18 @@ class Generic implements CacheInterface
     {
         if (isset($this->cacheData[$path]['type'])) {
             return $this->cacheData[$path];
+        } else {
+            $meta = $this->cacheAdapter->load($this->prefix . $path);
+            if (!$meta) {
+                return null;
+            }
+            $meta = $this->serializer->unserialize($meta);
+            if (!$meta[$path]) {
+                return null;
+            }
+            $this->cacheData[$path] = $meta[$path];
+            return $this->cacheData[$path];
         }
-
-        return null;
     }
 
     /**

@@ -42,6 +42,22 @@ class MetadataProvider implements MetadataProviderInterface
     }
 
     /**
+     * Check is the given path an existing directory.
+     *
+     * @param string $path
+     * @return bool
+     */
+    private function isDirectory($path): bool
+    {
+        try {
+            return iterator_count($this->adapter->listContents($path, false)) > 0;
+        } catch (\Throwable $e) {
+            // catch closed iterator
+            return false;
+        }
+    }
+
+    /**
      * @inheritdoc
      */
     public function getMetadata(string $path): array
@@ -54,6 +70,27 @@ class MetadataProvider implements MetadataProviderInterface
         }
         try {
             $meta = $this->adapter->lastModified($path);
+        } catch (UnableToRetrieveMetadata $e) {
+            if ($this->isDirectory($path)) {
+                $data = [
+                    'path' => $path,
+                    'type' => 'dir',
+                    'size' => null,
+                    'timestamp' => null,
+                    'visibility' => null,
+                    'mimetype' => null,
+                    'dirname' => dirname($path),
+                    'basename' => basename($path),
+                ];
+                $this->cache->updateMetadata($path, $data, true);
+                return $data;
+            } else {
+                throw new UnableToRetrieveMetadata(
+                    "Unable to retrieve metadata for file at location: {$path}. {$e->getMessage()}",
+                    0,
+                    $e
+                );
+            }
         } catch (\InvalidArgumentException | FilesystemException $e) {
             throw new UnableToRetrieveMetadata(
                 "Unable to retrieve metadata for file at location: {$path}. {$e->getMessage()}",

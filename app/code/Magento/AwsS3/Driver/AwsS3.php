@@ -445,16 +445,7 @@ class AwsS3 implements RemoteDriverInterface
 
         $path = $this->normalizeRelativePath($path, true);
 
-        try {
-            return $this->isTypeDirectory($path);
-        } catch (UnableToRetrieveMetadata $e) {
-            try {
-                return iterator_count($this->adapter->listContents($path, false)) > 0;
-            } catch (\Throwable $e) {
-                // catch closed iterator
-                return false;
-            }
-        }
+        return $this->isTypeDirectory($path);
     }
 
     /**
@@ -462,11 +453,14 @@ class AwsS3 implements RemoteDriverInterface
      *
      * @param string $path
      * @return bool
-     * @throws UnableToRetrieveMetadata
      */
     private function isTypeDirectory($path)
     {
-        $meta = $this->metadataProvider->getMetadata($path);
+        try {
+            $meta = $this->metadataProvider->getMetadata($path);
+        } catch (UnableToRetrieveMetadata $e) {
+            return false;
+        }
         if (isset($meta['type']) && $meta['type'] === self::TYPE_DIR) {
             return true;
         }
