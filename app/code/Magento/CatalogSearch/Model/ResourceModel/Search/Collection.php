@@ -211,9 +211,23 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $result = [];
         foreach (self::INDEX_USAGE_ENFORCEMENTS as $table => $index) {
             $table = $this->getTable($table);
-            $result[$table] = $index;
+            if ($this->isIndexExists($table, $index)) {
+                $result[$table] = $index;
+            }
         }
         return $result;
+    }
+
+    /**
+     * Check if index exists in the table
+     *
+     * @param string $table
+     * @param string $index
+     * @return bool
+     */
+    private function isIndexExists(string $table, string $index) : bool
+    {
+        return array_key_exists($index, $this->_conn->getIndexList($table));
     }
 
     /**
