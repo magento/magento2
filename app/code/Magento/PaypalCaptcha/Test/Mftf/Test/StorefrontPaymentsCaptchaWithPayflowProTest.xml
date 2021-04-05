@@ -70,9 +70,8 @@
         </actionGroup>
 
         <!-- Add product to cart and proceed to checkout payments method step -->
-        <actionGroup ref="AddProductToCheckoutPageActionGroup" stepKey="goToCheckoutPaypalPayflowPro">
+        <actionGroup ref="AddProductToCheckoutPageWithPayPalPayflowProActionGroup" stepKey="goToCheckoutPaypalPayflowPro">
             <argument name="Category" value="$createCategory$"/>
-            <argument name="PayPalPaymentMethod" value="{{StorefrontPaypalCheckoutSection.creditCard}}"/>
         </actionGroup>
 
         <!-- Fill credit card form with card number, expiration and CVV  -->
