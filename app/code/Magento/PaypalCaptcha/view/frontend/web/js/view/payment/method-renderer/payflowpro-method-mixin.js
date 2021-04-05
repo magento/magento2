@@ -15,7 +15,7 @@ define([
         placeOrder: function () {
             skipRefreshCaptcha.skip(true);
             this._super();
-        },
+        }
     };
 
     return function (payflowProMethod) {

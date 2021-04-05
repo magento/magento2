@@ -14,6 +14,7 @@
         </annotations>
         <arguments>
             <argument name="Category"/>
+            <argument name="PayPalPaymentMethod" type="string" defaultValue="{{CheckoutPaymentSection.PayPalPaymentRadio}}"/>
         </arguments>
 
         <amOnPage url="{{StorefrontCategoryPage.url(Category.name)}}" stepKey="onCategoryPage"/>
@@ -30,6 +31,6 @@
         <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" stepKey="waitForNextButton"/>
         <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPlaceOrderButton"/>
-        <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="clickPayPalCheckbox"/>
+        <click selector="{{PayPalPaymentMethod}}" stepKey="clickPayPalCheckbox"/>
     </actionGroup>
 </actionGroups>
