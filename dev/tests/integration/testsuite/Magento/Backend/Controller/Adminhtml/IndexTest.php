@@ -9,7 +9,7 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @magentoAppArea adminhtml
- * @magentoDbIsolation enabled
+ * @magentoDbIsolation disabled
  */
 class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
