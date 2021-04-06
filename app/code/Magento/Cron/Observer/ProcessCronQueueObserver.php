@@ -254,10 +254,12 @@ class ProcessCronQueueObserver implements ObserverInterface
                 && $this->getCronGroupConfigurationValue($groupId, 'use_separate_process') == 1
             ) {
                 $this->_shell->execute(
-                    $phpPath . ' %s cron:run --group=' . $groupId . ' --' . Cli::INPUT_KEY_BOOTSTRAP . '='
+                    '%s %s cron:run --group=%s --' . Cli::INPUT_KEY_BOOTSTRAP . '='
                     . self::STANDALONE_PROCESS_STARTED . '=1',
                     [
-                        BP . '/bin/magento'
+                        $phpPath,
+                        BP . '/bin/magento',
+                        $groupId,
                     ]
                 );
                 continue;
