@@ -69,7 +69,7 @@ class ImageTest extends TestCase
             ->willReturnArgument(0);
         $this->backendHelperMock->expects($this->once())
             ->method('getUrl')
-            ->with('customer/index/viewfile', ['image' => $value])
+            ->with('customer/index/viewfile', ['file' => $value])
             ->willReturn($url);
 
         $this->assertStringContainsString($url, $this->image->getElementHtml());

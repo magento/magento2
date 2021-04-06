@@ -32,6 +32,8 @@
                 <argument name="templateName" value="{{EmailTemplate.templateName}}"/>
             </actionGroup>
             <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clearFilters"/>
+            <actionGroup ref="DeleteEmailTemplateActionGroup" stepKey="deleteTemplate"/>
+            <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clearFilters"/>
             <!--Logout from Admin Area-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>

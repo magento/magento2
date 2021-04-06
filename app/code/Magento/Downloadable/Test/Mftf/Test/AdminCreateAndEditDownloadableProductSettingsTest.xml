@@ -57,7 +57,7 @@
 
         <!-- Open product page -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
-            <argument name="productUrl" value="{{DownloadableProduct.name}}"/>
+            <argument name="productUrl" value="{{DownloadableProduct.urlKey}}"/>
         </actionGroup>
 
         <!-- Assert product design settings "layout 1 column" -->
