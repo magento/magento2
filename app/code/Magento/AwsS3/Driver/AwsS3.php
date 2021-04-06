@@ -442,9 +442,6 @@ class AwsS3 implements RemoteDriverInterface
         if (!$path) {
             return true;
         }
-
-        $path = $this->normalizeRelativePath($path, true);
-
         return $this->isTypeDirectory($path);
     }
 
@@ -457,7 +454,7 @@ class AwsS3 implements RemoteDriverInterface
     private function isTypeDirectory($path)
     {
         try {
-            $meta = $this->metadataProvider->getMetadata($path);
+            $meta = $this->metadataProvider->getMetadata($this->normalizeRelativePath($path, true));
         } catch (UnableToRetrieveMetadata $e) {
             return false;
         }

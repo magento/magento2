@@ -63,9 +63,7 @@ class MetadataProvider implements MetadataProviderInterface
     public function getMetadata(string $path): array
     {
         $metadata = $this->cache->getMetadata($path);
-        if ($metadata && is_array($metadata)
-            && ($metadata['type'] == 'dir' || $this->isMetadataComplete($metadata))
-        ) {
+        if (isset($metadata['type']) && ($metadata['type'] == 'dir' || $this->isMetadataComplete($metadata))) {
             return $metadata;
         }
         try {
