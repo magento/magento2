@@ -303,12 +303,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 //force index statement not implemented in framework
                 // phpcs:ignore Magento2.SQL.RawQuery
                 $select = sprintf(
-                    'SELECT `t1`.`%s` FROM `%s` AS `t1` FORCE INDEX(%s) LEFT JOIN `%s` AS `t2`
+                    'SELECT `t1`.`%s` FROM `%s` AS `t1` FORCE INDEX(%s)
+                        LEFT JOIN `%s` AS `t2` FORCE INDEX(%s)
                         ON %s WHERE %s AND %s AND (%s)',
                     $linkField,
                     $table,
                     $preparedIndexEnforcements[$table],
                     $table,
+                    $preparedIndexEnforcements[$table],
                     $joinCondition,
                     $condition1,
                     $condition2,
