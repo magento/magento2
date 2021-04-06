@@ -25,10 +25,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**#@+
      * Google AdWords conversion src
      */
-    // const XML_PATH_CONVERSION_JS_SRC = 'google/adwords/conversion_js_src';
-
-    // const XML_PATH_CONVERSION_IMG_SRC = 'google/adwords/conversion_img_src';
-
     const GTAG_GLOBAL_SITE_TAG_SRC = 'https://www.googletagmanager.com/gtag/js?id=';
 
     /**#@-*/

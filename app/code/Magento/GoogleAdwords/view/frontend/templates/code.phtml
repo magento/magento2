@@ -10,22 +10,6 @@ $helper = $block->getHelper();
 if ($helper->isGoogleAdwordsConfigurable()) {
     ?>
 <script>
-if (window.gtag) {
-  gtag('config', '<?= $helper->getConversionId() ?>');
-} else {
-  // Inject Global Site Tag
-  var gtagScript = document.createElement('script');
-  gtagScript.type = 'text/javascript';
-  gtagScript.async = true;
-  gtagScript.src = '<?= $helper->getConversionGtagGlobalSiteTagSrc() ?>';
-  document.head.appendChild(gtagScript);
-
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('set', '<?= $helper->getDeveloperId() ?>', true);
-  gtag('config', '<?= $helper->getConversionId() ?>');
-}
 if (<?= $helper->isGoogleAdwordsActive() ?>) {
     gtag('event', 'conversion', {'send_to': '<?= $helper->getConversionId() ?>' + '/' + '<?= $helper->getConversionLabel() ?>'});
 }

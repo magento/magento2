@@ -58,7 +58,6 @@ define([
                     gtagScript.src = u;
                     d.head.insertBefore(gtagScript, d.head.children[0]);
                     })(document, 'script', 'https://www.googletagmanager.com/gtag/js?id=' + accountId);
-        
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
