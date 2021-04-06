@@ -5,16 +5,21 @@
  */
 namespace Magento\Sales\Model\Order\Address;
 
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Sales\Model\Order\Address\Renderer as OrderAddressRenderer;
 use Magento\Config\Model\ResourceModel\Config as ConfigResourceModel;
 use Magento\Framework\App\Config;
-use Magento\Store\Model\Store;
-use Magento\Sales\Model\Order\Address as OrderAddress;
+use Magento\Framework\Locale\TranslatedLists;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Address as OrderAddress;
+use Magento\Sales\Model\Order\Address\Renderer as OrderAddressRenderer;
+use Magento\Store\Model\Store;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
-class RendererTest extends \PHPUnit\Framework\TestCase
+/**
+ * Test for \Magento\Sales\Model\Order\Address\Renderer.
+ */
+class RendererTest extends TestCase
 {
     /**
      * @var ObjectManagerInterface
@@ -102,5 +107,31 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($addressTemplates['oneline'], $this->orderAddressRenderer->format($address, 'oneline'));
         $this->assertEquals($addressTemplates['html'], $this->orderAddressRenderer->format($address, 'html'));
         $this->assertEquals($addressTemplates['pdf'], $this->orderAddressRenderer->format($address, 'pdf'));
+    }
+
+    /**
+     * Order country will be translated to locale on which was placed an order
+     *
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Sales/_files/order_fixture_store.php
+     *
+     * @return void
+     */
+    public function testRenderOrderAddressCountry(): void
+    {
+        /** @var TranslatedLists $localeResolver */
+        $this->objectManager->create(TranslatedLists::class, ['locale' => 'ko_KR']);
+
+        /** @var Order $order */
+        $order = $this->objectManager->create(Order::class)
+            ->loadByIncrementId('100000004');
+
+        /** @var OrderAddress $address */
+        $address = $order->getBillingAddress();
+
+        $this->assertStringContainsString(
+            'United States',
+            $this->orderAddressRenderer->format($address, 'html')
+        );
     }
 }

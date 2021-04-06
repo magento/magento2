@@ -2569,4 +2569,6 @@ return [
             'Magento\Framework\MessageQueue\ConsumerInterface'
         ],
     ['isOrderIncrementIdUsed', 'Magento\Quote\Model\ResourceModel\Quote', 'Magento\Sales\Model\OrderIncrementIdChecker::isIncrementIdUsed'],
+    ['update', 'Magento\Authorization\Model\Rules', 'Magento\Authorization\Model\Rules::update'],
+    ['update', 'Magento\Authorization\Model\Role', 'Magento\Authorization\Model\Role::update'],
 ];

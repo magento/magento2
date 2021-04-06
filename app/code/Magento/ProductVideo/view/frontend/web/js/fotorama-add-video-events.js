@@ -714,6 +714,7 @@ define([
                 }
 
                 $('.' + this.FTAR).addClass(this.isFullscreen ? 'fotorama__arr--shown' : 'fotorama__arr--hidden');
+                $('.' + this.FTVC).addClass('fotorama-show-control');
             }
         },
 

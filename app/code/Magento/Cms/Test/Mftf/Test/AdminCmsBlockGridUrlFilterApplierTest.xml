@@ -20,6 +20,8 @@
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenCmsBlocksGridActionGroup" stepKey="goToCMSBlockPage"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
             <createData entity="Sales25offBlock" stepKey="createBlock"/>
         </before>
         <after>

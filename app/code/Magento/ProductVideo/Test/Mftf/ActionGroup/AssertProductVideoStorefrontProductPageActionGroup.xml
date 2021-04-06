@@ -17,6 +17,7 @@
             <argument name="videoType" type="string" defaultValue="youtube"/>
         </arguments>
 
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productVideo(videoType)}}" stepKey="waitVideoElementVisible"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productVideo(videoType)}}" stepKey="seeProductVideoDataType"/>
     </actionGroup>
 </actionGroups>

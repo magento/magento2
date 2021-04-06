@@ -16,9 +16,10 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
- * @inheritdoc
- *
  * Fixed the id related data in the product data
+ *
+ * @deprecated Use UID
+ * @see \Magento\CatalogGraphQl\Model\Resolver\Product\EntityIdToUid
  */
 class EntityIdToId implements ResolverInterface
 {

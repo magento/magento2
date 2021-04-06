@@ -9,6 +9,15 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminReindexAndFlushCache">
         <annotations>
+            <!--
+                PLEASE NOTE:
+                The action group runs commands to reindex ALL indexers and to flush ALL cache types.
+                It's better to specify needed index (for reindexing) / cache type (for cache flushing).
+                Please use the following action groups:
+                - CliIndexerReindexActionGroup - run reindex by CLI with specified indexers
+                - CliCacheCleanActionGroup - run cache:clean by CLI with specified cache tags
+                - CliCacheFlushActionGroup - run cache:flush by CLI with specified cache tags
+             -->
             <description>Run reindex and flush cache.</description>
         </annotations>
 
