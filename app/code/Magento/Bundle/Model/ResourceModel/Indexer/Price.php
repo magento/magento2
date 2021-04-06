@@ -200,7 +200,7 @@ class Price implements DimensionalIndexerInterface
     private function getBundlePriceTable()
     {
         if ($this->tmpBundlePriceTable === null) {
-            $this->tmpBundlePriceTable = 'catalog_product_index_price_bundle_temp';
+            $this->tmpBundlePriceTable = $this->getTable('catalog_product_index_price_bundle_temp');
             $this->getConnection()->createTemporaryTableLike(
                 $this->tmpBundlePriceTable,
                 $this->getTable('catalog_product_index_price_bundle_tmp'),
@@ -219,7 +219,7 @@ class Price implements DimensionalIndexerInterface
     private function getBundleSelectionTable()
     {
         if ($this->tmpBundleSelectionTable === null) {
-            $this->tmpBundleSelectionTable = 'catalog_product_index_price_bundle_sel_temp';
+            $this->tmpBundleSelectionTable = $this->getTable('catalog_product_index_price_bundle_sel_temp');
             $this->getConnection()->createTemporaryTableLike(
                 $this->tmpBundleSelectionTable,
                 $this->getTable('catalog_product_index_price_bundle_sel_tmp'),
@@ -238,7 +238,7 @@ class Price implements DimensionalIndexerInterface
     private function getBundleOptionTable()
     {
         if ($this->tmpBundleOptionTable === null) {
-            $this->tmpBundleOptionTable = 'catalog_product_index_price_bundle_opt_temp';
+            $this->tmpBundleOptionTable = $this->getTable('catalog_product_index_price_bundle_opt_temp');
             $this->getConnection()->createTemporaryTableLike(
                 $this->tmpBundleOptionTable,
                 $this->getTable('catalog_product_index_price_bundle_opt_tmp'),
