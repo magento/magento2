@@ -114,7 +114,9 @@ class MaliciousCodeTest extends TestCase
                 'alert(1);',
             ],
             'Nested scripts' => [
-                '<?php echo "test"?>',
+                '<?php echo "test" ?>',
+                '',
+                '<?= "test" ?>',
                 '',
             ],
         ];
