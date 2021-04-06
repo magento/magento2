@@ -327,7 +327,7 @@ function (
                 payload = {
                     addressInformation: {
                         'shipping_address': quote.shippingAddress(),
-                        'billing_address': quote.billingAddress(),
+                        'billing_address': quote.billingAddress()
                     }
                 };
             }
