@@ -31,35 +31,35 @@
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
 
             <!-- Copy Images to Import Directory for Product Images -->
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportImages">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportImages">
                 <argument name="path">var/import/images/{{ImportProduct_Downloadable_UrlLinks.name}}</argument>
             </helper>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyBaseImage">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyBaseImage">
                 <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_UrlLinks.baseImage}}</argument>
                 <argument name="destination">var/import/images/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.baseImage}}</argument>
             </helper>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copySmallImage">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copySmallImage">
                 <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_UrlLinks.smallImage}}</argument>
                 <argument name="destination">var/import/images/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.smallImage}}</argument>
             </helper>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyThumbnailImage">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyThumbnailImage">
                 <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_UrlLinks.thumbnailImage}}</argument>
                 <argument name="destination">var/import/images/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.thumbnailImage}}</argument>
             </helper>
 
             <!-- Copy Images to Import Directory for Downloadable Links -->
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportDownloadableLinkFiles">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportDownloadableLinkFiles">
                 <argument name="path">pub/media/import/{{ImportProduct_Downloadable_UrlLinks.name}}</argument>
             </helper>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyBaseImage2">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyBaseImage2">
                 <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_UrlLinks.baseImage}}</argument>
                 <argument name="destination">pub/media/import/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.baseImage}}</argument>
             </helper>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copySmallImage2">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copySmallImage2">
                 <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_UrlLinks.smallImage}}</argument>
                 <argument name="destination">pub/media/import/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.smallImage}}</argument>
             </helper>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyThumbnailImage3">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyThumbnailImage3">
                 <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_UrlLinks.thumbnailImage}}</argument>
                 <argument name="destination">pub/media/import/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.thumbnailImage}}</argument>
             </helper>
@@ -76,10 +76,10 @@
             </actionGroup>
             <deleteData createDataKey="createImportCategory" stepKey="deleteImportCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
                 <argument name="path">var/import/images/{{ImportProduct_Downloadable_UrlLinks.name}}</argument>
             </helper>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteDownloadableLinkFilesDirectory">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteDownloadableLinkFilesDirectory">
                 <argument name="path">pub/media/import/{{ImportProduct_Downloadable_UrlLinks.name}}</argument>
             </helper>
             <deleteData url="/V1/products/{{ImportProduct_Downloadable_UrlLinks.urlKey}}" stepKey="deleteImportedDownloadableProduct"/>
