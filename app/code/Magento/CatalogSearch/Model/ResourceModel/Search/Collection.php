@@ -17,9 +17,10 @@ namespace Magento\CatalogSearch\Model\ResourceModel\Search;
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection implements
     \Magento\Search\Model\SearchCollectionInterface
 {
-    private const INDEX_USAGE_ENFORCEMENTS = [
-        'catalog_product_entity_text' => 'CATALOG_PRODUCT_ENTITY_TEXT_ROW_ID_ATTRIBUTE_ID_STORE_ID'
-    ];
+    /**
+     * @var array
+     */
+    private $indexUsageEnforcements;
 
     /**
      * Attribute collection
@@ -65,6 +66,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param array $indexUsageEnforcements
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -88,7 +90,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        array $indexUsageEnforcements = []
     ) {
         $this->_attributeCollectionFactory = $attributeCollectionFactory;
         parent::__construct(
@@ -113,6 +116,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $groupManagement,
             $connection
         );
+        $this->indexUsageEnforcements = $indexUsageEnforcements;
     }
 
     /**
@@ -209,7 +213,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private function prepareIndexEnforcements() : array
     {
         $result = [];
-        foreach (self::INDEX_USAGE_ENFORCEMENTS as $table => $index) {
+        foreach ($this->indexUsageEnforcements as $table => $index) {
             $table = $this->getTable($table);
             if ($this->isIndexExists($table, $index)) {
                 $result[$table] = $index;
