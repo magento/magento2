@@ -7,13 +7,14 @@
 return [
     [
         'command' => 'fake:command',
+        'config' => [
+            // arguments
+            'foo',
+            'bar',
 
-        // arguments
-        'foo',
-        'bar',
-
-        // options
-        'option1' => 'baz',
-        'option2' => 'qux',
+            // options
+            '--option1' => 'baz',
+            '-option2' => 'qux',
+        ]
     ],
 ];

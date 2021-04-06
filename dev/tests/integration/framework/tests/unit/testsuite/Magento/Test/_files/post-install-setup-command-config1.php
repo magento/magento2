@@ -7,9 +7,11 @@
 return [
     [
         'command' => 'setup:db-schema:add-slave',
-        'host' => '/tmp/mysql.sock',
-        'dbname' => 'magento_replica',
-        'username' => 'root',
-        'password' => 'secret',
+        'config' => [
+            '--host' => '/tmp/mysql.sock',
+            '--dbname' => 'magento_replica',
+            '--username' => 'root',
+            '--password' => 'secret',
+        ]
     ],
 ];

@@ -568,7 +568,7 @@ class Application
             }
 
             $command = $postInstallSetupCommand['command'];
-            $argumentsAndOptions = array_diff_key($postInstallSetupCommand, array_flip(['command']));
+            $argumentsAndOptions = $postInstallSetupCommand['config'];
 
             $argumentsAndOptionsPlaceholders = [];
 
@@ -578,7 +578,7 @@ class Application
                 if ($isArgument) {
                     $argumentsAndOptionsPlaceholders[] = '%s';
                 } else {
-                    $argumentsAndOptionsPlaceholders[] = "--$key=%s";
+                    $argumentsAndOptionsPlaceholders[] = "$key=%s";
                 }
             }
 

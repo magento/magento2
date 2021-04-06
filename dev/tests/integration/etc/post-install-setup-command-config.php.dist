@@ -4,15 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-// List of bin/magento CLI commands to run after setup:install
+// List of bin/magento setup CLI commands to run after setup:install
 return [
     /*
     [
-        'command' => 'setup:db-schema:add-slave',
-        'host' => 'localhost',
-        'dbname' => 'db-replica-dbname',
-        'username' => 'db-replica-username',
-        'password' => 'db-replica-password',
+        'command' => 'setup:config:set',
+        'config' => [
+            '--remote-storage-driver' => 'aws-s3',
+            '--remote-storage-bucket' => 'myBucket',
+            '--remote-storage-region' => 'us-east-1',
+        ]
     ]
     */
 ];
