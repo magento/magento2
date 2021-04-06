@@ -65,7 +65,7 @@
         <arguments>
             <argument name="tasks" xsi:type="array">
                 <item name="cronMagento" xsi:type="array">
-                    <item name="command" xsi:type="string">{magentoRoot}bin/magento cron:run | grep -v "Ran jobs by schedule" >> {magentoLog}magento.cron.log</item>
+                    <item name="command" xsi:type="string">{magentoRoot}bin/magento cron:run >> {magentoLog}magento.cron.log</item>
                     <item name="optional" xsi:type="boolean">false</item>
                 </item>
             </argument>
