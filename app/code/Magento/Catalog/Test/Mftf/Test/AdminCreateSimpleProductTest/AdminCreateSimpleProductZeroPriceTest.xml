@@ -18,10 +18,14 @@
             <group value="product"/>
         </annotations>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-        <amOnPage url="{{AdminProductCreatePage.url(SimpleProduct.visibility, SimpleProduct.type_id)}}" stepKey="goToCreateProduct"/>
-        <waitForPageLoad stepKey="wait1"/>
-        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="fillName"/>
-        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="0" stepKey="fillPrice"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToCreateProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait1"/>
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillName">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillProductPriceFieldAndPressEnterOnProductEditPageActionGroup" stepKey="fillPrice">
+            <argument name="price" value="0"/>
+        </actionGroup>
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSave"/>
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="viewProduct">
             <argument name="productUrl" value="{{SimpleProduct.urlKey}}"/>
