@@ -88,7 +88,9 @@ class FastStorageRevokedWrapper implements RevokedRepositoryInterface
         }
         $this->cache->save(
             (string) $revoked->getBeforeTimestamp(),
-            sprintf(self::CACHE_ID, $revoked->getUserTypeId(), $revoked->getUserId())
+            sprintf(self::CACHE_ID, $revoked->getUserTypeId(), $revoked->getUserId()),
+            [],
+            $ttlMin * 60
         );
     }
 }

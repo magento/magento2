@@ -57,6 +57,9 @@ class ConfigurableJwtSettingsProvider implements JwtSettingsProviderInterface
         $this->configReader = $configReader;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function prepareSettingsFor(UserContextInterface $userContext): EncryptionSettingsInterface
     {
         return $this->prepareAllAccepted()[0];

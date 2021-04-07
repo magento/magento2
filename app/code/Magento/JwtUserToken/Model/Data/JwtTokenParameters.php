@@ -19,17 +19,17 @@ class JwtTokenParameters
     /**
      * @var HeaderParameterInterface[]
      */
-    private $protectedHeaderParameters;
+    private $protectedHeaderParameters = [];
 
     /**
      * @var HeaderParameterInterface[]
      */
-    private $publicHeaderParameters;
+    private $publicHeaderParameters = [];
 
     /**
      * @var ClaimInterface[]
      */
-    private $claims;
+    private $claims = [];
 
     /**
      * @return HeaderParameterInterface[]
