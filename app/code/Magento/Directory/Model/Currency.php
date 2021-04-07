@@ -401,7 +401,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
             'currency_display_options_forming',
             ['currency_options' => $customerOptions, 'base_code' => $this->getCode()]
         );
-        $options = array_merge($options, $customerOptions->toArray());
+        $options += $customerOptions->toArray();
 
         $this->numberFormatter = $this->numberFormatterFactory->create(
             ['locale' => $this->localeResolver->getLocale(), 'style' => \NumberFormatter::CURRENCY]
@@ -413,8 +413,9 @@ class Currency extends \Magento\Framework\Model\AbstractModel
             $price, $this->getCode() ?? $this->numberFormatter->getTextAttribute(\NumberFormatter::CURRENCY_CODE)
         );
 
-        if (array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)
-            && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL) {
+        if ((array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)
+                && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL)
+            || array_key_exists(LocaleCurrency::CURRENCY_OPTION_SYMBOL, $options)) {
             $formattedCurrency = str_replace(' ', '', $formattedCurrency);
         }
 
@@ -429,17 +430,17 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      */
     private function setOptions(array $options): void
     {
+        if (array_key_exists(LocaleCurrency::CURRENCY_OPTION_SYMBOL, $options)) {
+            $this->numberFormatter->setSymbol(
+                \NumberFormatter::CURRENCY_SYMBOL, $options[LocaleCurrency::CURRENCY_OPTION_SYMBOL]
+            );
+        }
         if (array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)
             && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL) {
             $this->numberFormatter->setSymbol(\NumberFormatter::CURRENCY_SYMBOL, '');
         }
         if (array_key_exists('precision', $options)) {
             $this->numberFormatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $options['precision']);
-        }
-        if (array_key_exists(LocaleCurrency::CURRENCY_OPTION_SYMBOL, $options)) {
-            $this->numberFormatter->setSymbol(
-                \NumberFormatter::CURRENCY_SYMBOL, $options[LocaleCurrency::CURRENCY_OPTION_SYMBOL]
-            );
         }
     }
 

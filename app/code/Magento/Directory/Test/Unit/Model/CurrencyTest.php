@@ -153,7 +153,14 @@ class CurrencyTest extends TestCase
             ['9999', [], 'en_US', '$9,999.00'],
             ['9999', ['display' => \Magento\Framework\Currency::NO_SYMBOL, 'precision' => 2], 'en_US', '9,999.00'],
             ['9999', ['display' => \Magento\Framework\Currency::NO_SYMBOL], 'en_US', '9,999.00'],
-            ['9999', ['precision' => 1], 'en_US', '$9,999.0']
+            ['9999', ['precision' => 1], 'en_US', '$9,999.0'],
+            ['9999', ['precision' => 2, 'symbol' => '#'], 'en_US', '#9,999.00'],
+            [
+                '9999.99',
+                ['precision' => 2, 'symbol' => '#', 'display' => \Magento\Framework\Currency::NO_SYMBOL],
+                'en_US',
+                '9,999.99'
+            ],
         ];
     }
 
