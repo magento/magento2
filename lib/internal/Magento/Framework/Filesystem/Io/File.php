@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Framework\Filesystem\Io;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -13,6 +15,7 @@ use Magento\Framework\Phrase;
  * Filesystem client
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @api
  */
 class File extends AbstractIo
 {
