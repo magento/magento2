@@ -811,7 +811,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         /** @var Schedule $schedule */
         foreach ($pendingJobs as $schedule) {
             if (isset($processedJobs[$schedule->getJobCode()])) {
-                // process only on job per run
+                // process only one of each job per run
                 continue;
             }
             $jobConfig = isset($jobsRoot[$schedule->getJobCode()]) ? $jobsRoot[$schedule->getJobCode()] : null;
