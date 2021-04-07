@@ -118,6 +118,8 @@ class MaliciousCodeTest extends TestCase
                 '',
                 '<?= "test" ?>',
                 '',
+                '<?   ="test" ?>',
+                '',
             ],
         ];
     }
