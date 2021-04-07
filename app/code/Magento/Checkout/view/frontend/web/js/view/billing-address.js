@@ -18,14 +18,7 @@ define([
     'Magento_Checkout/js/action/set-billing-address',
     'Magento_Ui/js/model/messageList',
     'mage/translate',
-    'Magento_Checkout/js/model/billing-address-postcode-validator',
-    'mage/storage',
-    'Magento_Checkout/js/model/resource-url-manager',
-    'Magento_Checkout/js/model/payment-service',
-    'Magento_Checkout/js/model/payment/method-converter',
-    'Magento_Checkout/js/model/shipping-save-processor/payload-extender',
-    'Magento_Checkout/js/model/full-screen-loader',
-    'Magento_Checkout/js/model/error-processor'
+    'Magento_Checkout/js/model/billing-address-postcode-validator'
 ],
 function (
     ko,
@@ -42,14 +35,7 @@ function (
     setBillingAddressAction,
     globalMessageList,
     $t,
-    billingAddressPostcodeValidator,
-    storage,
-    resourceUrlManager,
-    paymentService,
-    methodConverter,
-    payloadExtender,
-    fullScreenLoader,
-    errorProcessor
+    billingAddressPostcodeValidator
 ) {
     'use strict';
 
@@ -179,7 +165,7 @@ function (
                     checkoutData.setNewCustomerBillingAddress(addressData);
                 }
             }
-            this.updatePaymentMethods();
+            setBillingAddressAction(globalMessageList);
             this.updateAddresses();
         },
 
@@ -237,11 +223,7 @@ function (
          * Trigger action to update shipping and billing addresses
          */
         updateAddresses: function () {
-            if (window.checkoutConfig.reloadOnBillingAddress ||
-                !window.checkoutConfig.displayBillingOnPaymentMethod
-            ) {
-                setBillingAddressAction(globalMessageList);
-            }
+            setBillingAddressAction(globalMessageList);
         },
 
         /**
@@ -304,53 +286,6 @@ function (
             }
 
             return label;
-        },
-
-        /**
-         * Updates payment methods list
-         *
-         * @returns {*}
-         */
-        updatePaymentMethods: function () {
-            var payload;
-
-            if (quote.shippingMethod() !== null) {
-                payload = {
-                    addressInformation: {
-                        'shipping_address': quote.shippingAddress(),
-                        'billing_address': quote.billingAddress(),
-                        'shipping_method_code': quote.shippingMethod()['method_code'],
-                        'shipping_carrier_code': quote.shippingMethod()['carrier_code']
-                    }
-                };
-            } else {
-                payload = {
-                    addressInformation: {
-                        'shipping_address': quote.shippingAddress(),
-                        'billing_address': quote.billingAddress()
-                    }
-                };
-            }
-
-            payloadExtender(payload);
-
-            fullScreenLoader.startLoader();
-
-            return storage.post(
-                resourceUrlManager.getUrlForSetShippingInformation(quote),
-                JSON.stringify(payload)
-            ).done(
-                function (response) {
-                    quote.setTotals(response.totals);
-                    paymentService.setPaymentMethods(methodConverter(response['payment_methods']));
-                    fullScreenLoader.stopLoader();
-                }
-            ).fail(
-                function (response) {
-                    errorProcessor.process(response);
-                    fullScreenLoader.stopLoader();
-                }
-            );
         }
     });
 });

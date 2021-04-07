@@ -45,7 +45,7 @@
             <argument name="customerVar" value="CustomerEntityOne"/>
             <argument name="customerAddressVar" value="CustomerAddressSimple"/>
         </actionGroup>
-        <dontSeeElement selector="{{CheckoutPaymentSection.paymentMethodName('Check / Money order')}}" stepKey="assertNoCheckMoneyOrderPaymentMethod"/>
+        <dontSee selector="{{CheckoutPaymentSection.paymentMethodTitle}}" userInput="Check / Money order" stepKey="assertNoCheckMoneyOrderPaymentMethod"/>
         <waitForElementVisible selector="{{CheckoutPaymentSection.billingAddressNotSameBankTransferCheckbox}}" stepKey="waitForBillingAddressNotSameAsShippingCheckbox"/>
         <uncheckOption selector="{{CheckoutPaymentSection.billingAddressNotSameBankTransferCheckbox}}" stepKey="uncheckSameBillingAndShippingAddress"/>
         <conditionalClick selector="{{CheckoutPaymentSection.editAddress}}" dependentSelector="{{CheckoutShippingSection.editAddressButton}}" visible="true" stepKey="clickEditBillingAddressButton"/>
@@ -55,6 +55,6 @@
         <actionGroup ref="StorefrontFillBillingAddressActionGroup" stepKey="fillBillingAddress"/>
         <click selector="{{CheckoutPaymentSection.update}}" stepKey="clickOnUpdateButton"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear" />
-        <seeElement selector="{{CheckoutPaymentSection.paymentMethodName('Check / Money order')}}" stepKey="assertCheckMoneyOrderPaymentMethod"/>
+        <see selector="{{CheckoutPaymentSection.paymentMethodTitle}}" userInput="Check / Money order" stepKey="sdadasdasdsdaasd"/>
     </test>
 </tests>
