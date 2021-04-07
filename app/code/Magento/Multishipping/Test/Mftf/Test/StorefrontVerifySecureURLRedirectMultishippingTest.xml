@@ -30,7 +30,7 @@
             <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
                 <argument name="Customer" value="$$customer$$"/>
             </actionGroup>
-            <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="goToCategoryPage"/>
+            <amOnPage url="{{StorefrontCategoryPage.url($$category.custom_attributes[url_key]$$)}}" stepKey="goToCategoryPage"/>
             <waitForPageLoad stepKey="waitForPageLoad"/>
             <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="moveMouseOverProduct"/>
             <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="clickAddToCartButton"/>

@@ -36,7 +36,7 @@
         <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
 
         <!--Check product in category listing-->
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategoryOne.name$$)}}" stepKey="navigateToCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategoryOne.custom_attributes[url_key]$$)}}" stepKey="navigateToCategoryPage"/>
         <waitForPageLoad stepKey="waitforCategoryPageToLoad"/>
         <see selector="{{StorefrontCategoryProductSection.ProductTitleByName(productWithHTMLEntityOne.name)}}" userInput="{{productWithHTMLEntityOne.name}}" stepKey="seeCorrectNameProd1CategoryPage"/>
         <see selector="{{StorefrontCategoryProductSection.ProductTitleByName(productWithHTMLEntityTwo.name)}}" userInput="{{productWithHTMLEntityTwo.name}}" stepKey="seeCorrectNameProd2CategoryPage"/>
