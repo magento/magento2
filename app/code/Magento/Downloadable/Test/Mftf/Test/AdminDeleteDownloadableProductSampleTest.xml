@@ -30,56 +30,34 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="downloadable:domains:remove static.magento.com" stepKey="removeDownloadableDomain"/>
         </after>
-
-        <!-- Create downloadable product -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
         <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="createProduct">
             <argument name="productType" value="downloadable"/>
         </actionGroup>
-
-        <!-- Fill downloadable product values -->
         <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillDownloadableProductForm">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
-
-        <!-- Add downloadable product to category -->
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}"
                                     parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
-
-        <!-- Fill downloadable link information before the creation link -->
         <actionGroup ref="AdminAddDownloadableLinkInformationActionGroup" stepKey="addDownloadableLinkInformation"/>
-
-        <!-- Links can be purchased separately -->
         <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}"
                      stepKey="checkOptionPurchaseSeparately"/>
-
-        <!-- Add downloadable link -->
         <actionGroup ref="AddDownloadableProductLinkWithMaxDownloadsActionGroup" stepKey="addDownloadableProductLink">
             <argument name="link" value="downloadableLinkWithMaxDownloads"/>
         </actionGroup>
-
-        <!-- Add Sample File -->
         <actionGroup ref="AddDownloadableSampleFileActionGroup" stepKey="addDownloadSampleFile">
             <argument name="sample" value="downloadableSampleFile"/>
         </actionGroup>
-
-        <!-- Add Sample Url -->
         <actionGroup ref="AddDownloadableSampleUrlActionGroup" stepKey="addDownloadableSampleUrl">
             <argument name="sample" value="downloadableSampleUrl"/>
         </actionGroup>
-
-        <!-- Save product -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
-
-        <!-- Check if Samples are present -->
         <actionGroup ref="VerifySamplePresentActionGroup" stepKey="verifySampleFilePresent">
             <argument name="index" value="0"/>
         </actionGroup>
         <actionGroup ref="VerifySamplePresentActionGroup" stepKey="verifySampleUrlPresent">
             <argument name="index" value="1"/>
         </actionGroup>
-
-        <!-- Remove Samples -->
         <actionGroup ref="RemoveSampleActionGroup" stepKey="removeSampleUrl">
             <argument name="index" value="1"/>
         </actionGroup>
@@ -87,8 +65,6 @@
             <argument name="index" value="0"/>
         </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductAfterSamplesRemoved"/>
-
-        <!-- Check if Samples are absent -->
         <actionGroup ref="VerifySampleAbsentActionGroup" stepKey="verifySamplesAbsent">
             <argument name="index" value="0"/>
         </actionGroup>
