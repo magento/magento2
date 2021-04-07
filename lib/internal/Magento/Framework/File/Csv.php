@@ -13,8 +13,6 @@ use Magento\Framework\Filesystem\Driver\File;
 /**
  * Csv parse
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- *
  * @api
  */
 class Csv
