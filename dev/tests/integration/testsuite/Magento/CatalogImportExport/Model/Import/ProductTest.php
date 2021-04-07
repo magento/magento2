@@ -1721,15 +1721,23 @@ class ProductTest extends TestCase
     }
 
     /**
+     * Test import product with product links and empty value
+     *
+     * @param string $pathToFile
+     * @param bool $expectedResultCrossell
+     * @param bool $expectedResultUpsell
+     *
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_product_links_data.php
      * @magentoAppArea adminhtml
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
+     * @dataProvider getEmptyLinkedData
      */
-    public function testProductLinksWithEmptyValue()
-    {
-        // import data from CSV file
-        $pathToFile = __DIR__ . '/_files/products_to_import_with_product_links_with_empty_value.csv';
+    public function testProductLinksWithEmptyValue(
+        string $pathToFile,
+        bool $expectedResultCrossell,
+        bool $expectedResultUpsell
+    ): void {
         $filesystem = BootstrapHelper::getObjectManager()->create(Filesystem::class);
 
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
@@ -1759,8 +1767,29 @@ class ProductTest extends TestCase
         $product = BootstrapHelper::getObjectManager()->create(Product::class);
         $product->load($productId);
 
-        $this->assertEmpty($product->getCrossSellProducts());
-        $this->assertEmpty($product->getUpSellProducts());
+        $this->assertEquals(empty($product->getCrossSellProducts()), $expectedResultCrossell);
+        $this->assertEquals(empty($product->getUpSellProducts()), $expectedResultUpsell);
+    }
+
+    /**
+     * Get data for empty linked product
+     *
+     * @return array[]
+     */
+    public function getEmptyLinkedData(): array
+    {
+        return [
+            [
+                __DIR__ . '/_files/products_to_import_with_product_links_with_empty_value.csv',
+                true,
+                true,
+            ],
+            [
+                __DIR__ . '/_files/products_to_import_with_product_links_with_empty_data.csv',
+                false,
+                true,
+            ],
+        ];
     }
 
     /**
@@ -3495,6 +3524,44 @@ class ProductTest extends TestCase
         $this->assertEquals(
             "Wrong URL/path used for attribute additional_images",
             $errors->getErrorByRowNumber(0)[0]->getErrorMessage()
+        );
+    }
+
+    /**
+     * Test that product tax classes "none", "0" are imported correctly
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
+     * @magentoAppIsolation enabled
+     */
+    public function testImportProductWithTaxClassNone(): void
+    {
+        $pathToFile = __DIR__ . '/_files/product_tax_class_none_import.csv';
+        $importModel = $this->createImportModel($pathToFile);
+        $this->assertErrorsCount(0, $importModel->validateData());
+        $importModel->importData();
+        $simpleProduct = $this->getProductBySku('simple');
+        $this->assertSame('0', (string) $simpleProduct->getTaxClassId());
+        $simpleProduct = $this->getProductBySku('simple2');
+        $this->assertSame('0', (string) $simpleProduct->getTaxClassId());
+    }
+
+    /**
+     * @param int $count
+     * @param ProcessingErrorAggregatorInterface $errors
+     */
+    private function assertErrorsCount(int $count, ProcessingErrorAggregatorInterface $errors): void
+    {
+        $this->assertEquals(
+            $count,
+            $errors->getErrorsCount(),
+            array_reduce(
+                $errors->getAllErrors(),
+                function ($output, $error) {
+                    return "$output\n{$error->getErrorMessage()}";
+                },
+                ''
+            )
         );
     }
 }

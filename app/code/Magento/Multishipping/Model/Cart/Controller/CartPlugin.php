@@ -73,7 +73,7 @@ class CartPlugin
     {
         /** @var Quote $quote */
         $quote = $this->checkoutSession->getQuote();
-        if ($quote->isMultipleShippingAddresses() && $this->isCheckoutComplete()) {
+        if ($quote->isMultipleShippingAddresses()) {
             $this->disableMultishipping->execute($quote);
             foreach ($quote->getAllShippingAddresses() as $address) {
                 $quote->removeAddress($address->getId());
@@ -90,16 +90,6 @@ class CartPlugin
             $quote->setTotalsCollectedFlag(false);
             $this->cartRepository->save($quote);
         }
-    }
-
-    /**
-     * Checks whether the checkout flow is complete
-     *
-     * @return bool
-     */
-    private function isCheckoutComplete() : bool
-    {
-        return (bool) ($this->checkoutSession->getStepData(State::STEP_SHIPPING)['is_complete'] ?? true);
     }
 
     /**
