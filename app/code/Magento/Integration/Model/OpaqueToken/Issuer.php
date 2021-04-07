@@ -39,12 +39,12 @@ class Issuer implements UserTokenIssuerInterface
     public function create(UserContextInterface $userContext, UserTokenParametersInterface $params): string
     {
         /** @var Token $token */
-        $token = $this->tokenModelFactory->create();
+        $token = $this->tokenFactory->create();
 
         if ($userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER) {
-            $token = $token->createCustomerToken($userContext->getUserId())->getToken();
+            $token = $token->createCustomerToken($userContext->getUserId());
         } elseif ($userContext->getUserType() === UserContextInterface::USER_TYPE_ADMIN) {
-            $token = $token->createAdminToken($userContext->getUserId())->getToken();
+            $token = $token->createAdminToken($userContext->getUserId());
         } else {
             throw new UserTokenException('Can only create tokens for customers and admin users');
         }

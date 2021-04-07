@@ -53,7 +53,7 @@ class Reader implements UserTokenReaderInterface
         if ($tokenModel->getRevoked()) {
             throw new UserTokenException('Token was revoked');
         }
-        $userType = $tokenModel->getUserType();
+        $userType = (int) $tokenModel->getUserType();
         if ($userType !== CustomUserContext::USER_TYPE_ADMIN && $userType !== CustomUserContext::USER_TYPE_CUSTOMER) {
             throw new UserTokenException('Invalid token found');
         }
@@ -72,7 +72,7 @@ class Reader implements UserTokenReaderInterface
         );
         $lifetimeHours = $userType === CustomUserContext::USER_TYPE_ADMIN
             ? $this->helper->getAdminTokenLifetime() : $this->helper->getCustomerTokenLifetime();
-        $expires = $issued->add(new \DateInterval("P{$lifetimeHours}H"));
+        $expires = $issued->add(new \DateInterval("PT{$lifetimeHours}H"));
 
         return new UserToken(new CustomUserContext((int) $userId, (int) $userType), new Data($issued, $expires));
     }

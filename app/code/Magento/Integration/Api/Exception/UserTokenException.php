@@ -26,6 +26,7 @@ class UserTokenException extends \InvalidArgumentException
         ?UserContextInterface $forContext = null
     ) {
         parent::__construct($message, 0, $previous);
+        $this->context = $forContext;
     }
 
     public function getUserContext(): ?UserContextInterface
