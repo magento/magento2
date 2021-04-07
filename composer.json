@@ -89,7 +89,7 @@
         "friendsofphp/php-cs-fixer": "~2.18.1",
         "lusitanian/oauth": "~0.8.10",
         "magento/magento-coding-standard": "*",
-        "magento/magento2-functional-testing-framework": "dev-update-allure-codeception",
+        "magento/magento2-functional-testing-framework": "dev-php8-develop",
         "pdepend/pdepend": "~2.7.1",
         "phpcompatibility/php-compatibility": "^9.3",
         "phpmd/phpmd": "^2.8.0",
@@ -334,10 +334,6 @@
     "conflict": {
         "gene/bluefoot": "*"
     },
-    "repositories": [{
-        "type": "vcs",
-        "url": "https://github.com/ihor-sviziev/magento2-functional-testing-framework.git"
-    }],
     "extra": {
         "component_paths": {
             "trentrichardson/jquery-timepicker-addon": "lib/web/jquery/jquery-ui-timepicker-addon.js",
