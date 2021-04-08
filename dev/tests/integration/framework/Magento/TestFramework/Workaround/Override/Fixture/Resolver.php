@@ -7,14 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Workaround\Override\Fixture;
 
-use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Annotation\AdminConfigFixture;
 use Magento\TestFramework\Annotation\ConfigFixture;
 use Magento\TestFramework\Annotation\DataFixture;
 use Magento\TestFramework\Annotation\DataFixtureBeforeTransaction;
+use Magento\TestFramework\Fixture\DataFixtureDirectivesParser;
+use Magento\TestFramework\Fixture\Proxy\DataFixtureFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\ConfigInterface;
 use Magento\TestFramework\Workaround\Override\Fixture\Applier\AdminConfigFixture as AdminConfigFixtureApplier;
@@ -50,12 +51,18 @@ class Resolver implements ResolverInterface
     private $currentFixtureType = null;
 
     /**
+     * @var DataFixtureFactory
+     */
+    private $dataFixtureFactory;
+
+    /**
      * @param ConfigInterface $config
      */
     public function __construct(ConfigInterface $config)
     {
         $this->config = $config;
         $this->objectManager = Bootstrap::getObjectManager();
+        $this->dataFixtureFactory = $this->objectManager->create(DataFixtureFactory::class);
     }
 
     /**
@@ -117,9 +124,8 @@ class Resolver implements ResolverInterface
         }
         /** @var DataFixtureApplier $dataFixtureApplier */
         $dataFixtureApplier = $this->getApplier($this->getCurrentTest(), $this->currentFixtureType);
-        $fixture = $this->processFixturePath($this->currentTest, $dataFixtureApplier->replace($path));
-
-        is_callable($fixture) ? call_user_func($fixture) : require $fixture;
+        $fixture = $this->dataFixtureFactory->create(['name' => $dataFixtureApplier->replace($path)]);
+        $fixture->apply($this->objectManager->create(DataObject::class));
     }
 
     /**
@@ -143,11 +149,7 @@ class Resolver implements ResolverInterface
         $skipConfig = $this->config->getSkipConfiguration($test);
 
         if (!$skipConfig['skip']) {
-            $fixtures = $this->getApplier($test, $fixtureType)->apply($fixtures);
-
-            foreach ($fixtures as $fixture) {
-                $result[] = $this->processFixturePath($test, $fixture);
-            }
+            $result = $this->getApplier($test, $fixtureType)->apply($fixtures);
         }
 
         return $result;
@@ -180,16 +182,6 @@ class Resolver implements ResolverInterface
     }
 
     /**
-     * Get ComponentRegistrar object
-     *
-     * @return ComponentRegistrarInterface
-     */
-    protected function getComponentRegistrar(): ComponentRegistrarInterface
-    {
-        return $this->objectManager->get(ComponentRegistrar::class);
-    }
-
-    /**
      * Get applier with prepared config by annotation type
      *
      * @param TestCase $test
@@ -213,65 +205,5 @@ class Resolver implements ResolverInterface
         );
 
         return $applier;
-    }
-
-    /**
-     * Converts fixture path.
-     *
-     * @param TestCase $test
-     * @param string $fixture
-     * @return string|array
-     * @throws LocalizedException
-     */
-    private function processFixturePath(TestCase $test, string $fixture)
-    {
-        if (strpos($fixture, '\\') !== false) {
-            // usage of a single directory separator symbol streamlines search across the source code
-            throw new LocalizedException(__('Directory separator "\\" is prohibited in fixture declaration.'));
-        }
-
-        $fixtureMethod = [get_class($test), $fixture];
-        if (is_callable($fixtureMethod)) {
-            $result = $fixtureMethod;
-        } elseif ($this->isModuleAnnotation($fixture)) {
-            $result = $this->getModulePath($fixture);
-        } else {
-            $result = INTEGRATION_TESTS_DIR . '/testsuite/' . $fixture;
-        }
-
-        return $result;
-    }
-
-    /**
-     * Check is the Annotation like Magento_InventoryApi::Test/_files/products.php
-     *
-     * @param string $fixture
-     * @return bool
-     */
-    private function isModuleAnnotation(string $fixture): bool
-    {
-        return (strpos($fixture, '::') !== false);
-    }
-
-    /**
-     * Resolve the fixture module annotation path.
-     *
-     * @param string $fixture
-     * @return string
-     * @throws LocalizedException
-     * @SuppressWarnings(PHPMD.StaticAccess)
-     */
-    private function getModulePath(string $fixture): string
-    {
-        $componentRegistrar = $this->getComponentRegistrar();
-        [$moduleName, $fixtureFile] = explode('::', $fixture, 2);
-
-        $modulePath = $componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
-
-        if ($modulePath === null) {
-            throw new LocalizedException(__('Can\'t find registered Module with name %1 .', $moduleName));
-        }
-
-        return $modulePath . '/' . ltrim($fixtureFile, '/');
     }
 }

@@ -11,6 +11,8 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Annotation\DataFixture;
 use Magento\TestFramework\Event\Param\Transaction;
+use Magento\TestFramework\Fixture\DataFixturePathResolver;
+use Magento\TestFramework\Fixture\Proxy\DataFixtureFactory;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Annotation\TestsIsolation;
@@ -45,11 +47,30 @@ class DataFixtureTest extends TestCase
             ->getMock();
         /** @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject $objectManager */
         $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->setMethods(['get'])
+            ->setMethods(['get', 'create'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $objectManager->expects($this->atLeastOnce())->method('get')->with(TestsIsolation::class)
-            ->willReturn($this->testsIsolationMock);
+
+        $fixturePathResolver = new DataFixturePathResolver(new ComponentRegistrar());
+        $sharedInstances = [
+            TestsIsolation::class => $this->testsIsolationMock,
+            //DataFixtureDirectivesParser::class => new DataFixtureDirectivesParser(),
+            DataFixtureFactory::class => new DataFixtureFactory($objectManager, $fixturePathResolver),
+        ];
+        $objectManager->expects($this->atLeastOnce())
+            ->method('get')
+            ->willReturnCallback(
+                function (string $type) use ($sharedInstances) {
+                    return $sharedInstances[$type] ?? new $type();
+                }
+            );
+        $objectManager->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturnCallback(
+                function (string $type, array $arguments = []) use ($sharedInstances) {
+                    return new $type(...array_values($arguments));
+                }
+            );
         \Magento\TestFramework\Helper\Bootstrap::setObjectManager($objectManager);
 
         $directory = __DIR__;
@@ -59,12 +80,23 @@ class DataFixtureTest extends TestCase
     }
 
     /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
+    {
+        putenv('sample_fixture_one');
+        putenv('sample_fixture_two');
+        putenv('sample_fixture_three');
+    }
+
+    /**
      * Dummy fixture
      *
      * @return void
      */
     public static function sampleFixtureOne(): void
     {
+        putenv('sample_fixture_one=1');
     }
 
     /**
@@ -74,6 +106,7 @@ class DataFixtureTest extends TestCase
      */
     public static function sampleFixtureTwo(): void
     {
+        putenv('sample_fixture_two=2');
     }
 
     /**
@@ -83,6 +116,7 @@ class DataFixtureTest extends TestCase
      */
     public static function sampleFixtureTwoRollback(): void
     {
+        putenv('sample_fixture_two');
     }
 
     /**
@@ -104,7 +138,7 @@ class DataFixtureTest extends TestCase
 
     /**
      * @magentoDataFixture sampleFixtureTwo
-     * @magentoDataFixture path/to/fixture/script.php
+     * @magentoDataFixture Magento/Test/Annotation/_files/sample_fixture_three.php
      *
      * @return void
      */
@@ -126,7 +160,7 @@ class DataFixtureTest extends TestCase
     /**
      * @magentoDbIsolation disabled
      * @magentoDataFixture sampleFixtureTwo
-     * @magentoDataFixture path/to/fixture/script.php
+     * @magentoDataFixture Magento/Test/Annotation/_files/sample_fixture_three.php
      *
      * @return void
      */
@@ -147,7 +181,7 @@ class DataFixtureTest extends TestCase
 
     /**
      * @magentoDataFixture sampleFixtureTwo
-     * @magentoDataFixture path/to/fixture/script.php
+     * @magentoDataFixture Magento/Test/Annotation/_files/sample_fixture_three.php
      *
      * @return void
      */
@@ -172,32 +206,22 @@ class DataFixtureTest extends TestCase
     public function testStartTransactionClassAnnotation(): void
     {
         $this->createResolverMock();
-        $this->object->expects($this->once())
-            ->method('_applyOneFixture')
-            ->with([__CLASS__, 'sampleFixtureOne']);
         $this->object->startTransaction($this);
+        $this->assertEquals('1', getenv('sample_fixture_one'));
     }
 
     /**
      * @magentoDataFixture sampleFixtureTwo
-     * @magentoDataFixture path/to/fixture/script.php
+     * @magentoDataFixture Magento/Test/Annotation/_files/sample_fixture_three.php
      *
      * @return void
      */
     public function testStartTransactionMethodAnnotation(): void
     {
         $this->createResolverMock();
-        $this->object->expects($this->at(0))
-            ->method('_applyOneFixture')
-            ->with([__CLASS__, 'sampleFixtureTwo']);
-        $this->object->expects(
-            $this->at(1)
-        )->method(
-            '_applyOneFixture'
-        )->with(
-            $this->stringEndsWith('path/to/fixture/script.php')
-        );
         $this->object->startTransaction($this);
+        $this->assertEquals('2', getenv('sample_fixture_two'));
+        $this->assertEquals('3', getenv('sample_fixture_three'));
     }
 
     /**
@@ -210,19 +234,15 @@ class DataFixtureTest extends TestCase
     {
         $this->createResolverMock();
         $this->object->startTransaction($this);
-        $this->object->expects(
-            $this->once()
-        )->method(
-            '_applyOneFixture'
-        )->with(
-            [__CLASS__, 'sampleFixtureTwoRollback']
-        );
+        $this->assertEquals('1', getenv('sample_fixture_one'));
+        $this->assertEquals('2', getenv('sample_fixture_two'));
         $this->object->rollbackTransaction();
+        $this->assertEquals('1', getenv('sample_fixture_one'));
+        $this->assertFalse(getenv('sample_fixture_two'));
     }
 
     /**
-     * @magentoDataFixture path/to/fixture/script.php
-     * @magentoDataFixture Magento/Test/Annotation/_files/sample_fixture_two.php
+     * @magentoDataFixture Magento/Test/Annotation/_files/sample_fixture_three.php
      *
      * @return void
      */
@@ -230,18 +250,13 @@ class DataFixtureTest extends TestCase
     {
         $this->createResolverMock();
         $this->object->startTransaction($this);
-        $this->object->expects(
-            $this->once()
-        )->method(
-            '_applyOneFixture'
-        )->with(
-            $this->stringEndsWith('sample_fixture_two_rollback.php')
-        );
+        $this->assertEquals('3', getenv('sample_fixture_three'));
         $this->object->rollbackTransaction();
+        $this->assertFalse(getenv('sample_fixture_three'));
     }
 
     /**
-     * @magentoDataFixture Foo_DataFixtureDummy::Test/Integration/foo.php
+     * @magentoDataFixture Foo_DataFixtureDummy::Annotation/_files/sample_fixture_three.php
      *
      * @return void
      * @SuppressWarnings(PHPMD.StaticAccess)
@@ -251,12 +266,11 @@ class DataFixtureTest extends TestCase
         ComponentRegistrar::register(
             ComponentRegistrar::MODULE,
             'Foo_DataFixtureDummy',
-            __DIR__
+            dirname(__DIR__)
         );
         $this->createResolverMock();
-        $this->object->expects($this->once())->method('_applyOneFixture')
-            ->with(__DIR__ . '/Test/Integration/foo.php');
         $this->object->startTransaction($this);
+        $this->assertEquals('3', getenv('sample_fixture_three'));
     }
 
     /**
@@ -269,36 +283,13 @@ class DataFixtureTest extends TestCase
     {
         $mock = $this->getMockBuilder(Resolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['applyDataFixtures', 'getComponentRegistrar'])
+            ->onlyMethods(['applyDataFixtures'])
             ->getMock();
-        $mock->expects($this->any())->method('getComponentRegistrar')
-            ->willReturn(new ComponentRegistrar());
         $reflection = new \ReflectionClass(Resolver::class);
         $reflectionProperty = $reflection->getProperty('instance');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue(Resolver::class, $mock);
-        $reflectionMethod = $reflection->getMethod('processFixturePath');
-        $reflectionMethod->setAccessible(true);
-        $annotatedFixtures = $this->getFixturesAnnotations();
-        $resolvedFixtures = [];
-        foreach ($annotatedFixtures as $fixture) {
-            $resolvedFixtures[] = $reflectionMethod->invoke($mock, $this, $fixture);
-        }
         $mock->method('applyDataFixtures')
-            ->willReturn($resolvedFixtures);
-    }
-
-    /**
-     * Prepare mock method return value
-     *
-     * @return array
-     */
-    private function getFixturesAnnotations(): array
-    {
-        $reflection = new \ReflectionClass(DataFixture::class);
-        $reflectionMethod = $reflection->getMethod('getAnnotations');
-        $reflectionMethod->setAccessible(true);
-
-        return $reflectionMethod->invoke($this->object, $this)['magentoDataFixture'];
+            ->willReturnArgument(1);
     }
 }

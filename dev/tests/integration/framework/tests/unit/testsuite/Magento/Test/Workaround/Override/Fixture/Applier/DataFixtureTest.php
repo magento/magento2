@@ -80,7 +80,7 @@ class DataFixtureTest extends TestCase
     {
         return [
             'sort_fixtures_before_all' => [
-                'existing_fixtures' => ['fixture'],
+                'existing_fixtures' => [['name' => 'fixture']],
                 'config' => [
                     [
                         'path' => 'added_fixture',
@@ -90,10 +90,10 @@ class DataFixtureTest extends TestCase
                         'remove' => false,
                     ]
                 ],
-                'expected_order' => ['added_fixture', 'fixture'],
+                'expected_order' => [['name' => 'added_fixture'], ['name' => 'fixture']],
             ],
             'sort_fixtures_after_all' => [
-                'existing_fixtures' => ['fixture'],
+                'existing_fixtures' => [['name' => 'fixture']],
                 'config' => [
                     [
                         'path' => 'added_fixture',
@@ -103,10 +103,10 @@ class DataFixtureTest extends TestCase
                         'remove' => false,
                     ]
                 ],
-                'expected_order' => ['fixture', 'added_fixture'],
+                'expected_order' => [['name' => 'fixture'], ['name' => 'added_fixture']],
             ],
             'sort_fixture_before_specific' => [
-                'existing_fixtures' => ['fixture1', 'fixture2'],
+                'existing_fixtures' => [['name' => 'fixture1'], ['name' => 'fixture2']],
                 'config' => [
                     [
                         'path' => 'added_fixture',
@@ -116,10 +116,10 @@ class DataFixtureTest extends TestCase
                         'remove' => false,
                     ]
                 ],
-                'expected_order' => ['fixture1', 'added_fixture', 'fixture2'],
+                'expected_order' => [['name' => 'fixture1'], ['name' => 'added_fixture'], ['name' => 'fixture2']],
             ],
             'sort_fixture_after_specific' => [
-                'existing_fixtures' => ['fixture1', 'fixture2', 'fixture3'],
+                'existing_fixtures' => [['name' => 'fixture1'], ['name' => 'fixture2'], ['name' => 'fixture3']],
                 'config' => [
                     [
                         'path' => 'added_fixture',
@@ -129,7 +129,12 @@ class DataFixtureTest extends TestCase
                         'remove' => false,
                     ]
                 ],
-                'expected_order' => ['fixture1', 'fixture2', 'added_fixture', 'fixture3'],
+                'expected_order' => [
+                    ['name' => 'fixture1'],
+                    ['name' => 'fixture2'],
+                    ['name' => 'added_fixture'],
+                    ['name' => 'fixture3']
+                ],
             ],
         ];
     }
@@ -155,7 +160,7 @@ class DataFixtureTest extends TestCase
     {
         return [
             'remove_fixture' => [
-                'existing_fixtures' => ['fixture', 'fixture2'],
+                'existing_fixtures' => [['name' => 'fixture'], ['name' => 'fixture2']],
                 'config' => [
                     [
                         'path' => 'fixture',
@@ -165,10 +170,10 @@ class DataFixtureTest extends TestCase
                         'remove' => true,
                     ]
                 ],
-                'expected_order' => ['fixture2'],
+                'expected_order' => [['name' => 'fixture2']],
             ],
             'remove_one_of_same_fixtures' => [
-                'existing_fixtures' => ['fixture', 'fixture', 'fixture2'],
+                'existing_fixtures' => [['name' => 'fixture'], ['name' => 'fixture'], ['name' => 'fixture2']],
                 'config' => [
                     [
                         'path' => 'fixture',
@@ -178,10 +183,10 @@ class DataFixtureTest extends TestCase
                         'remove' => true,
                     ]
                 ],
-                'expected_order' => ['fixture', 'fixture2'],
+                'expected_order' => [['name' => 'fixture'], ['name' => 'fixture2']],
             ],
             'remove_all_of_same_fixtures' => [
-                'existing_fixtures' => ['fixture', 'fixture', 'fixture2'],
+                'existing_fixtures' => [['name' => 'fixture'], ['name' => 'fixture'], ['name' => 'fixture2']],
                 'config' => [
                     [
                         'path' => 'fixture',
@@ -198,7 +203,7 @@ class DataFixtureTest extends TestCase
                         'remove' => true,
                     ]
                 ],
-                'expected_order' => ['fixture2'],
+                'expected_order' => [['name' => 'fixture2']],
             ],
         ];
     }
@@ -224,7 +229,7 @@ class DataFixtureTest extends TestCase
     {
         return [
             'replace_one_fixture' => [
-                'existing_fixtures' => ['fixture', 'fixture2'],
+                'existing_fixtures' => [['name' => 'fixture'], ['name' => 'fixture2']],
                 'config' => [
                     [
                         'path' => 'fixture',
@@ -234,10 +239,10 @@ class DataFixtureTest extends TestCase
                         'remove' => false,
                     ]
                 ],
-                'expected_order' => ['new_fixture', 'fixture2'],
+                'expected_order' => [['name' => 'new_fixture'], ['name' => 'fixture2']],
             ],
             'replace_all_fixture' => [
-                'existing_fixtures' => ['fixture', 'fixture', 'fixture2'],
+                'existing_fixtures' => [['name' => 'fixture'], ['name' => 'fixture'], ['name' => 'fixture2']],
                 'config' => [
                     [
                         'path' => 'fixture',
@@ -247,7 +252,7 @@ class DataFixtureTest extends TestCase
                         'remove' => false,
                     ]
                 ],
-                'expected_order' => ['new_fixture', 'new_fixture', 'fixture2'],
+                'expected_order' => [['name' => 'new_fixture'], ['name' => 'new_fixture'], ['name' => 'fixture2']],
             ],
         ];
     }

@@ -7,8 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Annotation;
 
+use Magento\Framework\DataObject;
+use Magento\TestFramework\Fixture\DataFixtureDirectivesParser;
+use Magento\TestFramework\Fixture\Proxy\DataFixtureFactory;
+use Magento\TestFramework\Fixture\Proxy\DataFixtureInterface;
+use Magento\TestFramework\Fixture\DataFixtureResultStorage;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -19,7 +24,7 @@ abstract class AbstractDataFixture
     /**
      * Fixtures that have been applied
      *
-     * @var array
+     * @var DataFixtureInterface[]
      */
     protected $_appliedFixtures = [];
 
@@ -46,7 +51,13 @@ abstract class AbstractDataFixture
         $resolver = Resolver::getInstance();
         $resolver->setCurrentFixtureType($annotationKey);
         $annotations = $scope === null ? $this->getAnnotations($test) : $test->getAnnotations()[$scope];
-        $existingFixtures = $annotations[$annotationKey] ?? [];
+        $existingFixtures = [];
+        $objectManager = Bootstrap::getObjectManager();
+        $fixtureDirectivesParser = $objectManager->get(DataFixtureDirectivesParser::class);
+        foreach ($annotations[$annotationKey] ?? [] as $fixture) {
+            $existingFixtures[] = $fixtureDirectivesParser->parse($fixture);
+        }
+
         /* Need to be applied even test does not have added fixtures because fixture can be added via config */
         $this->fixtures[$annotationKey][$this->getTestKey($test)] = $resolver->applyDataFixtures(
             $test,
@@ -72,35 +83,6 @@ abstract class AbstractDataFixture
     }
 
     /**
-     * Execute single fixture script
-     *
-     * @param string|array $fixture
-     * @return void
-     * @throws \Exception
-     */
-    protected function _applyOneFixture($fixture)
-    {
-        try {
-            if (is_callable($fixture)) {
-                call_user_func($fixture);
-            } else {
-                require $fixture;
-            }
-        } catch (\Exception $e) {
-            throw new Exception(
-                sprintf(
-                    "Error in fixture: %s.\n %s\n %s",
-                    json_encode($fixture),
-                    $e->getMessage(),
-                    $e->getTraceAsString()
-                ),
-                500,
-                $e
-            );
-        }
-    }
-
-    /**
      * Execute fixture scripts if any
      *
      * @param array $fixtures
@@ -109,17 +91,23 @@ abstract class AbstractDataFixture
      */
     protected function _applyFixtures(array $fixtures, TestCase $test)
     {
-        /** @var \Magento\TestFramework\Annotation\TestsIsolation $testsIsolation */
-        $testsIsolation = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\TestFramework\Annotation\TestsIsolation::class
-        );
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var TestsIsolation $testsIsolation */
+        $testsIsolation = $objectManager->get(TestsIsolation::class);
         $dbIsolationState = $this->getDbIsolationState($test);
         $testsIsolation->createDbSnapshot($test, $dbIsolationState);
-
+        $dataFixtureFactory = $objectManager->get(DataFixtureFactory::class);
         /* Execute fixture scripts */
-        foreach ($fixtures as $oneFixture) {
-            $this->_applyOneFixture($oneFixture);
-            $this->_appliedFixtures[] = $oneFixture;
+        foreach ($fixtures as $key => $directives) {
+            if (is_callable([get_class($test), $directives['name']])) {
+                $directives['name'] = [get_class($test), $directives['name']];
+            }
+            $fixture = $dataFixtureFactory->create($directives);
+            $data = $objectManager->create(DataObject::class, ['data' => $directives['data'] ?? []]);
+            $key = $directives['identifier'] ?? $key;
+            $result = $fixture->apply($data);
+            DataFixtureResultStorage::getInstance()->persist("$key", $result);
+            $this->_appliedFixtures[$key] = $fixture;
         }
         $resolver = Resolver::getInstance();
         $resolver->setCurrentFixtureType(null);
@@ -135,32 +123,19 @@ abstract class AbstractDataFixture
     {
         $resolver = Resolver::getInstance();
         $resolver->setCurrentFixtureType($this->getAnnotation());
-        $appliedFixtures = array_reverse($this->_appliedFixtures);
-        foreach ($appliedFixtures as $fixture) {
-            if (is_callable($fixture)) {
-                $fixture[1] .= 'Rollback';
-                if (is_callable($fixture)) {
-                    $this->_applyOneFixture($fixture);
-                }
-            } else {
-                $fileInfo = pathinfo($fixture);
-                $extension = '';
-                if (isset($fileInfo['extension'])) {
-                    $extension = '.' . $fileInfo['extension'];
-                }
-                $rollbackScript = $fileInfo['dirname'] . '/' . $fileInfo['filename'] . '_rollback' . $extension;
-                if (file_exists($rollbackScript)) {
-                    $this->_applyOneFixture($rollbackScript);
-                }
-            }
+        $appliedFixtures = array_reverse($this->_appliedFixtures, true);
+        foreach ($appliedFixtures as $key => $fixture) {
+            $result = DataFixtureResultStorage::getInstance()->get("$key");
+            $fixture->revert($result);
         }
         $this->_appliedFixtures = [];
+        DataFixtureResultStorage::getInstance()->flush();
         $resolver->setCurrentFixtureType(null);
 
         if (null !== $test) {
-            /** @var \Magento\TestFramework\Annotation\TestsIsolation $testsIsolation */
-            $testsIsolation = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                \Magento\TestFramework\Annotation\TestsIsolation::class
+            /** @var TestsIsolation $testsIsolation */
+            $testsIsolation = Bootstrap::getObjectManager()->get(
+                TestsIsolation::class
             );
             $dbIsolationState = $this->getDbIsolationState($test);
             $testsIsolation->checkTestIsolation($test, $dbIsolationState);
