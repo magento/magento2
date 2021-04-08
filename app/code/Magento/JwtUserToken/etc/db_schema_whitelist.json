@@ -6,7 +6,7 @@
             "revoke_before": true
         },
         "constraint": {
-            "JWT_AUTH_REVOKED_USER_TYPE_ID_USER_ID": true
+            "PRIMARY": true
         }
     }
 }

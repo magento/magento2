@@ -45,7 +45,7 @@ class Reader implements UserTokenReaderInterface
     {
         /** @var Token $tokenModel */
         $tokenModel = $this->tokenFactory->create();
-        $tokenModel = $tokenModel->loadByToken($token);
+        $tokenModel = $tokenModel->load($token, 'token');
 
         if (!$tokenModel->getId()) {
             throw new UserTokenException('Token does not exist');

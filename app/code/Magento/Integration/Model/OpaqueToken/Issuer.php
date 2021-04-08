@@ -14,6 +14,7 @@ use Magento\Integration\Api\Exception\UserTokenException;
 use Magento\Integration\Api\UserTokenIssuerInterface;
 use Magento\Integration\Model\Oauth\Token;
 use Magento\Integration\Model\Oauth\TokenFactory as TokenModelFactory;
+use Magento\Framework\Oauth\Helper\Oauth as OauthHelper;
 
 /**
  * Issues opaque tokens (legacy).
@@ -26,11 +27,17 @@ class Issuer implements UserTokenIssuerInterface
     private $tokenFactory;
 
     /**
+     * @var OauthHelper
+     */
+    private $helper;
+
+    /**
      * @param TokenModelFactory $tokenFactory
      */
-    public function __construct(TokenModelFactory $tokenFactory)
+    public function __construct(TokenModelFactory $tokenFactory, OauthHelper $helper)
     {
         $this->tokenFactory = $tokenFactory;
+        $this->helper = $helper;
     }
 
     /**
@@ -42,20 +49,24 @@ class Issuer implements UserTokenIssuerInterface
         $token = $this->tokenFactory->create();
 
         if ($userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER) {
-            $token = $token->createCustomerToken($userContext->getUserId());
+            $token->setAdminId($userContext->getUserId());
         } elseif ($userContext->getUserType() === UserContextInterface::USER_TYPE_ADMIN) {
             $token = $token->createAdminToken($userContext->getUserId());
         } else {
             throw new UserTokenException('Can only create tokens for customers and admin users');
         }
-
+        $token->setUserType($userContext->getUserType());
+        $token->setType(Token::TYPE_ACCESS);
+        $token->setToken($this->helper->generateToken());
+        $token->setSecret($this->helper->generateTokenSecret());
         if ($params->getForcedIssuedTime()) {
             if ($params->getForcedIssuedTime()->getTimezone()->getName() !== 'UTC') {
                 throw new UserTokenException('Invalid forced issued time provided');
             }
             $token->setCreatedAt($params->getForcedIssuedTime()->format('Y-m-d H:i:s'));
-            $token->save();
         }
+        $token = $token->save();
+
 
         return $token->getToken();
     }
