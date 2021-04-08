@@ -418,6 +418,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
         }
         $this->setId(PHP_INT_MAX);
         $this->setToken($token);
+        $this->setCreatedAt($data->getData()->getIssued()->format('Y-m-d H:i:s'));
 
         return $this;
     }
