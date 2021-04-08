@@ -31,23 +31,25 @@ class HttpVerbValidator implements HttpRequestValidatorInterface
         /** @var Http $request */
         if (false === $request->isPost()) {
             $query = $request->getParam('query', '');
-            $operationType = null;
-            $queryAst = \GraphQL\Language\Parser::parse(new \GraphQL\Language\Source($query ?: '', 'GraphQL'));
-            \GraphQL\Language\Visitor::visit(
-                $queryAst,
-                [
-                    'leave' => [
-                        NodeKind::OPERATION_DEFINITION => function (Node $node) use (&$operationType) {
-                            $operationType = $node->operation;
-                        }
+            if (!empty($query)) {
+                $operationType = null;
+                $queryAst = \GraphQL\Language\Parser::parse(new \GraphQL\Language\Source($query ?: '', 'GraphQL'));
+                \GraphQL\Language\Visitor::visit(
+                    $queryAst,
+                    [
+                        'leave' => [
+                            NodeKind::OPERATION_DEFINITION => function (Node $node) use (&$operationType) {
+                                $operationType = $node->operation;
+                            }
+                        ]
                     ]
-                ]
-            );
-
-            if (strtolower($operationType) === 'mutation') {
-                throw new GraphQlInputException(
-                    new \Magento\Framework\Phrase('Mutation requests allowed only for POST requests')
                 );
+
+                if (strtolower($operationType) === 'mutation') {
+                    throw new GraphQlInputException(
+                        new \Magento\Framework\Phrase('Mutation requests allowed only for POST requests')
+                    );
+                }
             }
         }
     }
