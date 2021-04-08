@@ -56,11 +56,11 @@ class DataProviderTest extends TestCase
      */
     public function testGetData()
     {
-        $this->stringUtils->saveTranslate(static::STRING_TO_TRANSLATE, static::STRING_TRANSLATION);
+        $this->stringUtils->saveTranslate(self::STRING_TO_TRANSLATE, self::STRING_TRANSLATION);
         $this->translate->setLocale('en_US')->loadData('frontend', true);
         $dictionary = $this->translationDataProvider->getData('Magento/luma');
-        $this->assertArrayHasKey(static::STRING_TO_TRANSLATE, $dictionary);
-        $this->assertEquals(static::STRING_TRANSLATION, $dictionary[static::STRING_TO_TRANSLATE]);
+        $this->assertArrayHasKey(self::STRING_TO_TRANSLATE, $dictionary);
+        $this->assertEquals(self::STRING_TRANSLATION, $dictionary[self::STRING_TO_TRANSLATE]);
     }
 
     /**
@@ -69,7 +69,7 @@ class DataProviderTest extends TestCase
     protected function tearDown(): void
     {
         try {
-            $this->stringUtils->deleteTranslate(static::STRING_TO_TRANSLATE);
+            $this->stringUtils->deleteTranslate(self::STRING_TO_TRANSLATE);
         } catch (NoSuchEntityException $exception) {
             // translate already deleted
         }
