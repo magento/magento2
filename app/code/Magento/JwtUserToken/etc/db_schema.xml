@@ -12,7 +12,7 @@
         <column xsi:type="int" name="user_id" unsigned="true" nullable="false" comment="User ID"/>
         <column xsi:type="bigint" name="revoke_before" nullable="false" unsigned="true"
                 comment="Not accepting tokens issued before this timestamp" />
-        <constraint xsi:type="unique" referenceId="JWT_AUTH_REVOKED_USER">
+        <constraint xsi:type="primary" referenceId="JWT_AUTH_REVOKED_USER">
             <column name="user_type_id" />
             <column name="user_id" />
         </constraint>
