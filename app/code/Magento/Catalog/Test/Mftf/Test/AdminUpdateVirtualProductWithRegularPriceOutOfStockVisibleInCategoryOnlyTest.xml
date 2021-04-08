@@ -96,7 +96,7 @@
         <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{updateVirtualProductRegularPrice5OutOfStock.urlKey}}" stepKey="seeUrlKey"/>
 
         <!--Verify customer don't see updated virtual product link(from above step) on category page -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.name$$)}}" stepKey="openCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.custom_attributes[url_key]$$)}}" stepKey="openCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
         <dontSee selector="{{StorefrontCategoryMainSection.productLink}}" userInput="{{updateVirtualProductRegularPrice5OutOfStock.name}}" stepKey="dontseeVirtualProductNameOnCategoryPage"/>
 

@@ -51,7 +51,7 @@
 
         <!-- Assert product in storefront product page -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openCreatedProductPage">
-            <argument name="productUrl" value="$$createProduct.name$$"/>
+            <argument name="productUrl" value="$$createProduct.custom_attributes[url_key]$$"/>
         </actionGroup>
 
         <!-- Assert Fotorama arrows aren't visible -->
