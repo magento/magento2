@@ -23,6 +23,7 @@
         "ext-mbstring": "*",
         "ext-openssl": "*",
         "ext-pdo_mysql": "*",
+        "ext-posix": "*",
         "ext-simplexml": "*",
         "ext-soap": "*",
         "ext-xsl": "*",

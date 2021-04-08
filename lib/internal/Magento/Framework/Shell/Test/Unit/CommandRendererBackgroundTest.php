@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Shell\Test\Unit;
 
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\OsInfo;
 use Magento\Framework\Shell\CommandRendererBackground;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -15,11 +17,23 @@ use PHPUnit\Framework\TestCase;
 class CommandRendererBackgroundTest extends TestCase
 {
     /**
+     * Test path to Magento's var/log directory
+     *
+     * @var string
+     */
+    protected $logPath = '/path/to/magento/var/log/';
+
+    /**
      * Test data for command
      *
      * @var string
      */
     protected $testCommand = 'php -r test.php';
+
+    /**
+     * @var Filesystem|MockObject
+     */
+    protected $filesystem;
 
     /**
      * @var OsInfo|MockObject
@@ -30,23 +44,37 @@ class CommandRendererBackgroundTest extends TestCase
     {
         $this->osInfo = $this->getMockBuilder(OsInfo::class)
             ->getMock();
+
+        $directoryMock = $this->getMockBuilder(ReadInterface::class)
+            ->getMock();
+        $directoryMock->expects($this->any())
+            ->method('getAbsolutePath')
+            ->willReturn($this->logPath);
+
+        $this->filesystem = $this->getMockBuilder(Filesystem::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->filesystem->expects($this->any())
+            ->method('getDirectoryRead')
+            ->willReturn($directoryMock);
     }
 
     /**
      * @dataProvider commandPerOsTypeDataProvider
      * @param bool $isWindows
      * @param string $expectedResults
+     * @param string[] $arguments
      */
-    public function testRender($isWindows, $expectedResults)
+    public function testRender($isWindows, $expectedResults, $arguments)
     {
         $this->osInfo->expects($this->once())
             ->method('isWindows')
             ->willReturn($isWindows);
 
-        $commandRenderer = new CommandRendererBackground($this->osInfo);
+        $commandRenderer = new CommandRendererBackground($this->filesystem, $this->osInfo);
         $this->assertEquals(
             $expectedResults,
-            $commandRenderer->render($this->testCommand)
+            $commandRenderer->render($this->testCommand, $arguments)
         );
     }
 
@@ -58,8 +86,21 @@ class CommandRendererBackgroundTest extends TestCase
     public function commandPerOsTypeDataProvider()
     {
         return [
-            'windows' => [true, 'start /B "magento background task" ' . $this->testCommand . ' 2>&1'],
-            'unix'    => [false, $this->testCommand . ' > /dev/null &'],
+            'windows' => [
+                true,
+                'start /B "magento background task" ' . $this->testCommand . ' 2>&1',
+                [],
+            ],
+            'unix-without-group-name' => [
+                false,
+                $this->testCommand . ' >> /dev/null 2>&1 &',
+                [],
+            ],
+            'unix-with-group-name' => [
+                false,
+                $this->testCommand . " >> '{$this->logPath}magento.cron.group-name.log' 2>&1 &",
+                ['php-executable', 'script-path', 'group-name'],
+            ],
         ];
     }
 }
