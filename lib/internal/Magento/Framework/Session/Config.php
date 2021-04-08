@@ -5,12 +5,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Session;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Session\Config\ConfigInterface;
+use Magento\Framework\Session\Config\Validator\CookieSameSiteValidator;
 
 /**
  * Magento session configuration
@@ -208,6 +211,7 @@ class Config implements ConfigInterface
         $unsecureURL = $this->_scopeConfig->getValue('web/unsecure/base_url', $this->_scopeType);
         $isFullySecuredURL = $secureURL == $unsecureURL;
         $this->setCookieSecure($isFullySecuredURL && $this->_httpRequest->isSecure());
+        $this->setCookieSameSite('Lax');
     }
 
     /**
@@ -571,5 +575,37 @@ class Config implements ConfigInterface
         } else {
             throw new \BadMethodCallException(sprintf('Method "%s" does not exist in %s', $method, get_class($this)));
         }
+    }
+
+    /**
+     * Set session.cookie_samesite
+     *
+     * @param string $cookieSameSite
+     * @return $this
+     */
+    public function setCookieSameSite(string $cookieSameSite = 'Lax'): ConfigInterface
+    {
+        $validator = $this->_validatorFactory->create(
+            [],
+            CookieSameSiteValidator::class
+        );
+        if (!$validator->isValid($cookieSameSite) ||
+            !$this->getCookieSecure() && strtolower($cookieSameSite) === 'none') {
+            throw new \InvalidArgumentException(
+                'Invalid Samesite attribute.'
+            );
+        }
+        $this->setOption('session.cookie_samesite', $cookieSameSite);
+        return $this;
+    }
+
+    /**
+     * Get session.cookie_samesite
+     *
+     * @return string
+     */
+    public function getCookieSameSite(): string
+    {
+        return (string)$this->getOption('session.cookie_samesite');
     }
 }

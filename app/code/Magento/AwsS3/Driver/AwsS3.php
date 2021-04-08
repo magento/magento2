@@ -304,6 +304,7 @@ class AwsS3 implements RemoteDriverInterface
      * Resolves relative path.
      *
      * @param string $path Absolute path
+     * @param bool $fixPath
      * @return string Relative path
      */
     private function normalizeRelativePath(string $path, bool $fixPath = false): string
@@ -358,7 +359,7 @@ class AwsS3 implements RemoteDriverInterface
             return false;
         }
 
-        $path = $this->normalizeRelativePath($path, true);;
+        $path = $this->normalizeRelativePath($path, true);
 
         if ($this->adapter->has($path) && ($meta = $this->adapter->getMetadata($path))) {
             return ($meta['type'] ?? null) === self::TYPE_FILE;

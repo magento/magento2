@@ -17,6 +17,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Async\CallbackDeferred;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\HTTP\AsyncClient\HttpException;
 use Magento\Framework\HTTP\AsyncClient\HttpResponseDeferredInterface;
 use Magento\Framework\HTTP\AsyncClient\Request;
 use Magento\Framework\HTTP\AsyncClientInterface;
@@ -33,6 +34,7 @@ use Magento\Shipping\Model\Carrier\CarrierInterface;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Rate\Result\ProxyDeferredFactory;
 use Magento\Shipping\Model\Rate\ResultFactory as RateFactory;
+use Magento\Shipping\Model\Shipment\Request as Shipment;
 use Magento\Shipping\Model\Simplexml\Element;
 use Magento\Shipping\Model\Simplexml\ElementFactory;
 use Magento\Shipping\Model\Tracking\Result\ErrorFactory as TrackErrorFactory;
@@ -40,7 +42,6 @@ use Magento\Shipping\Model\Tracking\Result\StatusFactory as TrackStatusFactory;
 use Magento\Shipping\Model\Tracking\ResultFactory as TrackFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Ups\Helper\Config;
-use Magento\Shipping\Model\Shipment\Request as Shipment;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Throwable;
@@ -806,16 +807,24 @@ XMLRequest;
         $httpResponse = $this->asyncHttpClient->request(
             new Request($url, Request::METHOD_POST, ['Content-Type' => 'application/xml'], $xmlRequest)
         );
-
+        $debugData['request'] = $xmlParams;
         return $this->deferredProxyFactory->create(
             [
                 'deferred' => new CallbackDeferred(
-                    function () use ($httpResponse) {
-                        if ($httpResponse->get()->getStatusCode() >= 400) {
-                            $xmlResponse = '';
-                        } else {
-                            $xmlResponse = $httpResponse->get()->getBody();
+                    function () use ($httpResponse, $debugData) {
+                        $responseResult = null;
+                        $xmlResponse = '';
+                        try {
+                            $responseResult = $httpResponse->get();
+                        } catch (HttpException $e) {
+                            $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
+                            $this->_logger->critical($e);
                         }
+                        if ($responseResult) {
+                            $xmlResponse = $responseResult->getStatusCode() >= 400 ? '' : $responseResult->getBody();
+                        }
+                        $debugData['result'] = $xmlResponse;
+                        $this->_debug($debugData);
 
                         return $this->_parseXmlResponse($xmlResponse);
                     }
@@ -1119,6 +1128,7 @@ XMLAuth;
         /** @var HttpResponseDeferredInterface[] $trackingResponses */
         $trackingResponses = [];
         $tracking = '';
+        $debugData = [];
         foreach ($trackings as $tracking) {
             /**
              * RequestOption==>'1' to request all activities
@@ -1135,7 +1145,7 @@ XMLAuth;
     <IncludeFreight>01</IncludeFreight>
 </TrackRequest>
 XMLAuth;
-
+            $debugData[$tracking] = ['request' => $this->filterDebugData($this->_xmlAccessRequest) . $xmlRequest];
             $trackingResponses[$tracking] = $this->asyncHttpClient->request(
                 new Request(
                     $url,
@@ -1149,6 +1159,8 @@ XMLAuth;
             $httpResponse = $response->get();
             $xmlResponse = $httpResponse->getStatusCode() >= 400 ? '' : $httpResponse->getBody();
 
+            $debugData[$tracking]['result'] = $xmlResponse;
+            $this->_debug($debugData);
             $this->_parseXmlTrackingResponse($tracking, $xmlResponse);
         }
 

@@ -26,12 +26,18 @@
         <arguments>
             <argument name="directoryCodes" xsi:type="array">
                 <item name="media" xsi:type="const">Magento\Framework\App\Filesystem\DirectoryList::MEDIA</item>
-                <item name="var_export" xsi:type="const">Magento\Framework\App\Filesystem\DirectoryList::VAR_EXPORT</item>
+                <item name="var_import_export" xsi:type="const">Magento\Framework\App\Filesystem\DirectoryList::VAR_IMPORT_EXPORT</item>
             </argument>
         </arguments>
     </virtualType>
     <virtualType name="fullRemoteFilesystem" type="Magento\RemoteStorage\Filesystem" />
+    <virtualType name="stdFilesystem" type="Magento\Framework\Filesystem" />
     <preference for="Magento\Framework\Filesystem" type="customRemoteFilesystem"/>
+    <type name="Magento\RemoteStorage\Driver\Cache\CacheFactory">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">stdFilesystem</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Filesystem\Directory\TargetDirectory">
         <arguments>
             <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>

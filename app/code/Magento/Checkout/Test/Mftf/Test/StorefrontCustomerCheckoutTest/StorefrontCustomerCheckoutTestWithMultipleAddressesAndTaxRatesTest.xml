@@ -42,13 +42,8 @@
 
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
 
-            <!--TODO: REMOVE AFTER FIX MC-21717 -->
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value="full_page"/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <!-- Go to the tax rule page and delete the row we created-->
@@ -80,9 +75,9 @@
             <argument name="Customer" value="$$multiple_address_customer$$"/>
         </actionGroup>
 
-        <amOnPage url="{{StorefrontCategoryPage.url($$simplecategory.name$$)}}" stepKey="onCategoryPage1"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$simplecategory.custom_attributes[url_key]$$)}}" stepKey="onCategoryPage1"/>
         <waitForPageLoad stepKey="waitForCatalogPageLoad1"/>
-        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct1"/>
+        <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverProduct1"/>
         <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="addToCart1"/>
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded1"/>
         <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$simpleproduct1.name$$ to your shopping cart." stepKey="seeAddedToCartMessage1"/>
@@ -99,9 +94,9 @@
         <waitForPageLoad stepKey="waitForOrderSuccessPage1"/>
         <see stepKey="seeSuccessMessage1" selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:"/>
 
-        <amOnPage url="{{StorefrontCategoryPage.url($$simplecategory.name$$)}}" stepKey="onCategoryPage2"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$simplecategory.custom_attributes[url_key]$$)}}" stepKey="onCategoryPage2"/>
         <waitForPageLoad stepKey="waitForCatalogPageLoad2"/>
-        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct2"/>
+        <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverProduct2"/>
         <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="addToCart2"/>
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded2"/>
         <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$simpleproduct1.name$$ to your shopping cart." stepKey="seeAddedToCartMessage2"/>

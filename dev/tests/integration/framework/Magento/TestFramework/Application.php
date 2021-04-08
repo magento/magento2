@@ -731,6 +731,7 @@ class Application
             DirectoryList::TMP => [$path => "{$var}/tmp"],
             DirectoryList::UPLOAD => [$path => "{$var}/upload"],
             DirectoryList::PUB => [$path => "{$this->installDir}/pub"],
+            DirectoryList::VAR_IMPORT_EXPORT => [$path => "{$this->installDir}/var"],
         ];
         return $customDirs;
     }

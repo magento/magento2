@@ -1721,15 +1721,23 @@ class ProductTest extends TestCase
     }
 
     /**
+     * Test import product with product links and empty value
+     *
+     * @param string $pathToFile
+     * @param bool $expectedResultCrossell
+     * @param bool $expectedResultUpsell
+     *
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_product_links_data.php
      * @magentoAppArea adminhtml
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
+     * @dataProvider getEmptyLinkedData
      */
-    public function testProductLinksWithEmptyValue()
-    {
-        // import data from CSV file
-        $pathToFile = __DIR__ . '/_files/products_to_import_with_product_links_with_empty_value.csv';
+    public function testProductLinksWithEmptyValue(
+        string $pathToFile,
+        bool $expectedResultCrossell,
+        bool $expectedResultUpsell
+    ): void {
         $filesystem = BootstrapHelper::getObjectManager()->create(Filesystem::class);
 
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
@@ -1759,8 +1767,29 @@ class ProductTest extends TestCase
         $product = BootstrapHelper::getObjectManager()->create(Product::class);
         $product->load($productId);
 
-        $this->assertEmpty($product->getCrossSellProducts());
-        $this->assertEmpty($product->getUpSellProducts());
+        $this->assertEquals(empty($product->getCrossSellProducts()), $expectedResultCrossell);
+        $this->assertEquals(empty($product->getUpSellProducts()), $expectedResultUpsell);
+    }
+
+    /**
+     * Get data for empty linked product
+     *
+     * @return array[]
+     */
+    public function getEmptyLinkedData(): array
+    {
+        return [
+            [
+                __DIR__ . '/_files/products_to_import_with_product_links_with_empty_value.csv',
+                true,
+                true,
+            ],
+            [
+                __DIR__ . '/_files/products_to_import_with_product_links_with_empty_data.csv',
+                false,
+                true,
+            ],
+        ];
     }
 
     /**
@@ -2342,6 +2371,67 @@ class ProductTest extends TestCase
             implode(',', [$multiselectOptions[1]->getValue(), $multiselectOptions[2]->getValue()]),
             $product2->getData('multiselect_attribute')
         );
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_text_attribute.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     * @dataProvider importWithJsonAndMarkupTextAttributeDataProvider
+     * @param string $productSku
+     * @param string $expectedResult
+     * @return void
+     */
+    public function testImportWithJsonAndMarkupTextAttribute(string $productSku, string $expectedResult): void
+    {
+        // added by _files/product_import_with_json_and_markup_attributes.csv
+        $this->importedProducts = [
+            'SkuProductWithJson',
+            'SkuProductWithMarkup',
+        ];
+
+        $importParameters =[
+            'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+            'entity' => 'catalog_product',
+            \Magento\ImportExport\Model\Import::FIELDS_ENCLOSURE => 0
+        ];
+        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/products_to_import_with_json_and_markup_attributes.csv',
+                'directory' => $directory
+            ]
+        );
+        $this->_model->setParameters($importParameters);
+        $this->_model->setSource($source);
+        $errors = $this->_model->validateData();
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->_model->importData();
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Api\ProductRepositoryInterface::class
+        );
+        $product = $productRepository->get($productSku);
+        $this->assertEquals($expectedResult, $product->getData('text_attribute'));
+    }
+
+    /**
+     * @return array
+     */
+    public function importWithJsonAndMarkupTextAttributeDataProvider(): array
+    {
+        return [
+            'import of attribute with json' => [
+                'SkuProductWithJson',
+                '{"type": "basic", "unit": "inch", "sign": "(\")", "size": "1.5\""}'
+            ],
+            'import of attribute with markup' => [
+                'SkuProductWithMarkup',
+                '<div data-content>Element type is basic, measured in inches ' .
+                '(marked with sign (\")) with size 1.5\", mid-price range</div>'
+            ],
+        ];
     }
 
     /**
@@ -3329,5 +3419,149 @@ class ProductTest extends TestCase
         $product = $this->getProductBySku($productSku, $secondStoreCode);
         $imageItems = $product->getMediaGalleryImages()->getItems();
         $this->assertCount(0, $imageItems);
+    }
+
+    /**
+     * Tests that images are imported correctly
+     *
+     * @magentoDataFixture mediaImportImageFixture
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
+     * @dataProvider importImagesDataProvider
+     * @magentoAppIsolation enabled
+     * @param string $importFile
+     * @param string $productSku
+     * @param string $storeCode
+     * @param array $expectedImages
+     * @param array $select
+     */
+    public function testImportImages(
+        string $importFile,
+        string $productSku,
+        string $storeCode,
+        array $expectedImages,
+        array $select = ['file', 'label', 'position']
+    ): void {
+        $this->importDataForMediaTest($importFile);
+        $product = $this->getProductBySku($productSku, $storeCode);
+        $actualImages = array_map(
+            function (\Magento\Framework\DataObject $item) use ($select) {
+                return $item->toArray($select);
+            },
+            $product->getMediaGalleryImages()->getItems()
+        );
+        $this->assertEquals($expectedImages, array_values($actualImages));
+    }
+
+    /**
+     * @return array[]
+     */
+    public function importImagesDataProvider(): array
+    {
+        return [
+            [
+                'import_media_additional_images_storeview.csv',
+                'simple',
+                'default',
+                [
+                    [
+                        'file' => '/m/a/magento_image.jpg',
+                        'label' => 'Image Alt Text',
+                        'position' => 1
+                    ],
+                    [
+                        'file' => '/m/a/magento_additional_image_one.jpg',
+                        'label' => null,
+                        'position' => 2
+                    ],
+                    [
+                        'file' => '/m/a/magento_additional_image_two.jpg',
+                        'label' => null,
+                        'position' => 3
+                    ],
+                ]
+            ],
+            [
+                'import_media_additional_images_storeview.csv',
+                'simple',
+                'fixturestore',
+                [
+                    [
+                        'file' => '/m/a/magento_image.jpg',
+                        'label' => 'Image Alt Text',
+                        'position' => 1
+                    ],
+                    [
+                        'file' => '/m/a/magento_additional_image_one.jpg',
+                        'label' => 'Additional Image Label One',
+                        'position' => 2
+                    ],
+                    [
+                        'file' => '/m/a/magento_additional_image_two.jpg',
+                        'label' => 'Additional Image Label Two',
+                        'position' => 3
+                    ],
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Verify additional images url validation during import.
+     *
+     * @magentoDbIsolation enabled
+     * @return void
+     */
+    public function testImportInvalidAdditionalImages(): void
+    {
+        $pathToFile = __DIR__ . '/_files/import_media_additional_images_with_wrong_url.csv';
+        $filesystem = BootstrapHelper::getObjectManager()->create(Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(Csv::class, ['file' => $pathToFile, 'directory' => $directory]);
+        $errors = $this->_model->setSource($source)->setParameters(['behavior' => Import::BEHAVIOR_APPEND])
+            ->validateData();
+        $this->assertEquals($errors->getErrorsCount(), 1);
+        $this->assertEquals(
+            "Wrong URL/path used for attribute additional_images",
+            $errors->getErrorByRowNumber(0)[0]->getErrorMessage()
+        );
+    }
+
+    /**
+     * Test that product tax classes "none", "0" are imported correctly
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
+     * @magentoAppIsolation enabled
+     */
+    public function testImportProductWithTaxClassNone(): void
+    {
+        $pathToFile = __DIR__ . '/_files/product_tax_class_none_import.csv';
+        $importModel = $this->createImportModel($pathToFile);
+        $this->assertErrorsCount(0, $importModel->validateData());
+        $importModel->importData();
+        $simpleProduct = $this->getProductBySku('simple');
+        $this->assertSame('0', (string) $simpleProduct->getTaxClassId());
+        $simpleProduct = $this->getProductBySku('simple2');
+        $this->assertSame('0', (string) $simpleProduct->getTaxClassId());
+    }
+
+    /**
+     * @param int $count
+     * @param ProcessingErrorAggregatorInterface $errors
+     */
+    private function assertErrorsCount(int $count, ProcessingErrorAggregatorInterface $errors): void
+    {
+        $this->assertEquals(
+            $count,
+            $errors->getErrorsCount(),
+            array_reduce(
+                $errors->getAllErrors(),
+                function ($output, $error) {
+                    return "$output\n{$error->getErrorMessage()}";
+                },
+                ''
+            )
+        );
     }
 }
