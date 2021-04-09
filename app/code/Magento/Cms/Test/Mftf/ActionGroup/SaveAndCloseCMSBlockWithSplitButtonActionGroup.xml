@@ -18,6 +18,7 @@
         <click selector="{{BlockNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveBlock"/>
         <waitForPageLoad stepKey="waitForPageLoadAfterClickingSave"/>
         <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessageAppear"/>
+        <dontSee selector="{{BlockPageActionsSection.saveBlockWarningMessage}}" stepKey="dontSeeWarningMessage"/>
         <see userInput="You saved the block." selector="{{AdminMessagesSection.success}}" stepKey="assertSaveBlockSuccessMessage"/>
     </actionGroup>
 </actionGroups>

@@ -611,7 +611,7 @@ class MethodArgumentsSniff implements Sniff
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      *
-     * @see https://devdocs.magento.com/guides/v2.3/coding-standards/docblock-standard-general.html#format-consistency
+     * @see https://devdocs.magento.com/guides/v2.4/coding-standards/docblock-standard-general.html#format-consistency
      */
     private function validateFormattingConsistency(
         array $paramDefinitions,

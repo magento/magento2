@@ -32,7 +32,7 @@
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
-        
+
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="loginAsAdmin"/>
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
             <argument name="product" value="$$createSimpleProduct$$"/>
@@ -40,6 +40,10 @@
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct1">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
+
+        <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="clickOnAdvancedPricingButtonForAssert"/>
+        <actionGroup ref="AssertAdminProductFormAdvancedPricingAddTierPriceActionGroup" stepKey="assertProductTierPriceInput"/>
+        <actionGroup ref="AdminProductFormDoneAdvancedPricingDialogActionGroup" stepKey="doneButtonAfterAssert"/>
 
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToTopOfPage"/>
         <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="clickOnAdvancedPricingButton"/>
@@ -60,7 +64,7 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1"/>
 
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goProductPageOnStorefront">
-            <argument name="productUrl" value="$$createSimpleProduct.sku$$"/>
+            <argument name="productUrl" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad1"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('99.90')}}" stepKey="assertProductFinalPriceProductPage"/>
