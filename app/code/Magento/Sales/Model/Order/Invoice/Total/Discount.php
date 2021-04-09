@@ -71,9 +71,11 @@ class Discount extends AbstractTotal
         $invoice->setDiscountAmount(-$totalDiscountAmount);
         $invoice->setBaseDiscountAmount(-$baseTotalDiscountAmount);
 
-        $grandTotal = $invoice->getGrandTotal() - $totalDiscountAmount < 0.0001
+        $grandTotalWithoutDiscount = $invoice->getGrandTotal() - $totalDiscountAmount;
+        $grandTotal = $grandTotalWithoutDiscount > 0 && $grandTotalWithoutDiscount < 0.0001
             ? 0 : $invoice->getGrandTotal() - $totalDiscountAmount;
-        $baseGrandTotal = $invoice->getBaseGrandTotal() - $baseTotalDiscountAmount < 0.0001
+        $baseGrandTotalWithoutDiscount = $invoice->getBaseGrandTotal() - $baseTotalDiscountAmount;
+        $baseGrandTotal = $baseGrandTotalWithoutDiscount > 0 && $baseGrandTotalWithoutDiscount < 0.0001
             ? 0 : $invoice->getBaseGrandTotal() - $baseTotalDiscountAmount;
         $invoice->setGrandTotal($grandTotal);
         $invoice->setBaseGrandTotal($baseGrandTotal);
