@@ -43,116 +43,98 @@ class SecretBasedJwksFactory
     }
 
     /**
-     * Create JWK Set for given algorithm.
+     * Create JWKs for given algorithm.
      *
      * @param string $algorithm
-     * @return JwkSet
+     * @return Jwk[]
      * @throws \InvalidArgumentException When algorithm is not recognized.
      */
-    public function createFor(string $algorithm): JwkSet
+    public function createFor(string $algorithm): array
     {
         switch ($algorithm) {
             case Jwk::ALGORITHM_HS256:
-                return new JwkSet(
-                    array_map(
-                        function (string $key): Jwk {
-                            static $i = 0;
+                return array_map(
+                    function (string $key): Jwk {
+                        static $i = 0;
 
-                            return $this->jwkFactory->createHs256($key, (string) $i++);
-                        },
-                        $this->keys
-                    )
+                        return $this->jwkFactory->createHs256($key, (string) ++$i);
+                    },
+                    $this->keys
                 );
             case Jwk::ALGORITHM_HS384:
-                return new JwkSet(
-                    array_map(
-                        function (string $key): Jwk {
-                            static $i = 0;
+                return array_map(
+                    function (string $key): Jwk {
+                        static $i = 0;
 
-                            return $this->jwkFactory->createHs384($key, (string) $i++);
-                        },
-                        $this->keys
-                    )
+                        return $this->jwkFactory->createHs384($key, (string) ++$i);
+                    },
+                    $this->keys
                 );
             case Jwk::ALGORITHM_HS512:
-                return new JwkSet(
-                    array_map(
-                        function (string $key): Jwk {
-                            static $i = 0;
+                return array_map(
+                    function (string $key): Jwk {
+                        static $i = 0;
 
-                            return $this->jwkFactory->createHs512($key, (string) $i++);
-                        },
-                        $this->keys
-                    )
+                        return $this->jwkFactory->createHs512($key, (string) ++$i);
+                    },
+                    $this->keys
                 );
             case Jwk::ALGORITHM_A128KW:
-                return new JwkSet(
-                    array_map(
-                        function (string $key): Jwk {
-                            static $i = 0;
+                return array_map(
+                    function (string $key): Jwk {
+                        static $i = 0;
 
-                            return $this->jwkFactory->createA128KW($key, (string) $i++);
-                        },
-                        $this->keys
-                    )
+                        return $this->jwkFactory->createA128KW($key, (string) ++$i);
+                    },
+                    $this->keys
                 );
             case Jwk::ALGORITHM_A192KW:
-                return new JwkSet(
-                    array_map(
-                        function (string $key): Jwk {
-                            static $i = 0;
+                return array_map(
+                    function (string $key): Jwk {
+                        static $i = 0;
 
-                            return $this->jwkFactory->createA192KW($key, (string) $i++);
-                        },
-                        $this->keys
-                    )
+                        return $this->jwkFactory->createA192KW($key, (string) ++$i);
+                    },
+                    $this->keys
                 );
             case Jwk::ALGORITHM_A256KW:
-                return new JwkSet(
-                    array_map(
-                        function (string $key): Jwk {
-                            static $i = 0;
+                return array_map(
+                    function (string $key): Jwk {
+                        static $i = 0;
 
-                            return $this->jwkFactory->createA256KW($key, (string) $i++);
-                        },
-                        $this->keys
-                    )
+                        return $this->jwkFactory->createA256KW($key, (string) ++$i);
+                    },
+                    $this->keys
                 );
             case Jwk::ALGORITHM_A128GCMKW:
-                return new JwkSet(
-                    array_map(
-                        function (string $key): Jwk {
-                            static $i = 0;
+                return array_map(
+                    function (string $key): Jwk {
+                        static $i = 0;
 
-                            return $this->jwkFactory->createA128Gcmkw($key, (string) $i++);
-                        },
-                        $this->keys
-                    )
+                        return $this->jwkFactory->createA128Gcmkw($key, (string) ++$i);
+                    },
+                    $this->keys
                 );
             case Jwk::ALGORITHM_A192GCMKW:
-                return new JwkSet(
-                    array_map(
-                        function (string $key): Jwk {
-                            static $i = 0;
+                return array_map(
+                    function (string $key): Jwk {
+                        static $i = 0;
 
-                            return $this->jwkFactory->createA192Gcmkw($key, (string) $i++);
-                        },
-                        $this->keys
-                    )
+                        return $this->jwkFactory->createA192Gcmkw($key, (string) ++$i);
+                    },
+                    $this->keys
                 );
             case Jwk::ALGORITHM_A256GCMKW:
-                return new JwkSet(
-                    array_map(
-                        function (string $key): Jwk {
-                            static $i = 0;
+                return array_map(
+                    function (string $key): Jwk {
+                        static $i = 0;
 
-                            return $this->jwkFactory->createA256Gcmkw($key, (string) $i++);
-                        },
-                        $this->keys
-                    )
+                        return $this->jwkFactory->createA256Gcmkw($key, (string) ++$i);
+                    },
+                    $this->keys
                 );
             default:
-                throw new \InvalidArgumentException('Unknown algorithm "' .$algorithm .'"');
+                throw new \InvalidArgumentException('Unknown algorithm "' . $algorithm . '"');
         }
     }
 }
