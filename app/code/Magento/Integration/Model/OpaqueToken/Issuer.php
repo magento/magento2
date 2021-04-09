@@ -49,9 +49,9 @@ class Issuer implements UserTokenIssuerInterface
         $token = $this->tokenFactory->create();
 
         if ($userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER) {
-            $token->setAdminId($userContext->getUserId());
+            $token->setCustomerId($userContext->getUserId());
         } elseif ($userContext->getUserType() === UserContextInterface::USER_TYPE_ADMIN) {
-            $token = $token->createAdminToken($userContext->getUserId());
+            $token->setAdminId($userContext->getUserId());
         } else {
             throw new UserTokenException('Can only create tokens for customers and admin users');
         }
