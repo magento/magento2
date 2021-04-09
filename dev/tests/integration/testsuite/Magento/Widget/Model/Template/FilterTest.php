@@ -34,4 +34,18 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $result = $filter->mediaDirective($construction);
         $this->assertEquals($baseUrl . $image, $result);
     }
+
+    public function testCustomDirective()
+    {
+        // via TestModuleSimpleTemplateDirective
+        $template = '{{mydir "somevalue" param1=yes}}';
+        $expected = 'SEYEULAVEMOS';
+
+        /** @var \Magento\Widget\Model\Template\Filter $filter */
+        $filter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Widget\Model\Template\Filter::class
+        );
+        $result = $filter->filter($template);
+        $this->assertEquals($expected, $result);
+    }
 }
