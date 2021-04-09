@@ -46,11 +46,11 @@ class ValidatorInfo extends Validator
     protected $fileRelativePath;
 
     /**
-     * @var IoFile|null
+     * @var IoFile
      */
     private $ioFile;
     /**
-     * @var NotProtectedExtension|null
+     * @var NotProtectedExtension
      */
     private $fileValidator;
 
