@@ -96,7 +96,7 @@ class CurrencyTest extends TestCase
         $this->numberFormatterFactory
             ->method('create')
             ->with(['locale' => $locale, 'style' => 2])
-            ->willReturn(new \NumberFormatter($locale, 2));
+            ->willReturn(new \Magento\Framework\NumberFormatter($locale, 2));
         self::assertEquals($expected, $this->currency->getOutputFormat());
     }
 
@@ -132,12 +132,12 @@ class CurrencyTest extends TestCase
         string $locale,
         string $expected
     ): void {
-        $this->localeResolver->expects(self::once())->method('getLocale')->willReturn($locale);
+        $this->localeResolver->expects(self::exactly(2))->method('getLocale')->willReturn($locale);
         $this->numberFormatterFactory
             ->expects(self::once())
             ->method('create')
             ->with(['locale' => $locale, 'style' => 2])
-            ->willReturn(new \NumberFormatter($locale, 2));
+            ->willReturn(new \Magento\Framework\NumberFormatter($locale, 2));
 
         self::assertEquals($expected, $this->currency->formatTxt($price, $options));
     }
@@ -153,6 +153,7 @@ class CurrencyTest extends TestCase
             ['9999', [], 'en_US', '$9,999.00'],
             ['9999', ['display' => \Magento\Framework\Currency::NO_SYMBOL, 'precision' => 2], 'en_US', '9,999.00'],
             ['9999', ['display' => \Magento\Framework\Currency::NO_SYMBOL], 'en_US', '9,999.00'],
+            [' 9999', ['display' => \Magento\Framework\Currency::NO_SYMBOL], 'en_US', '9,999.00'],
             ['9999', ['precision' => 1], 'en_US', '$9,999.0'],
             ['9999', ['precision' => 2, 'symbol' => '#'], 'en_US', '#9,999.00'],
             [
