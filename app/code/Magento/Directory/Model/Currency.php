@@ -90,6 +90,11 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     private $numberFormatter;
 
     /**
+     * @var array
+     */
+    private $numberFormatterCache;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
@@ -403,23 +408,39 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         );
         $options += $customerOptions->toArray();
 
-        $this->numberFormatter = $this->numberFormatterFactory->create(
-            ['locale' => $this->localeResolver->getLocale(), 'style' => \NumberFormatter::CURRENCY]
-        );
-
-        $this->setOptions($options);
+        $this->numberFormatter = $this->getNumberFormatter($options);
 
         $formattedCurrency = $this->numberFormatter->formatCurrency(
             $price, $this->getCode() ?? $this->numberFormatter->getTextAttribute(\NumberFormatter::CURRENCY_CODE)
         );
 
-        if ((array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)
-                && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL)
-            || array_key_exists(LocaleCurrency::CURRENCY_OPTION_SYMBOL, $options)) {
-            $formattedCurrency = str_replace(' ', '', $formattedCurrency);
+        if (array_key_exists(LocaleCurrency::CURRENCY_OPTION_SYMBOL, $options)) {
+            // remove only one non-breaking space from custom currency symbol to allow custom NBSP in currency symbol
+            $formattedCurrency = preg_replace('/ /u', '', $formattedCurrency, 1);
         }
 
-        return $formattedCurrency;
+        return preg_replace('/^\s+|\s+$/u', '', $formattedCurrency);
+    }
+
+    /**
+     * Get NumberFormatter object from cache.
+     *
+     * @param array $options
+     * @return \Magento\Framework\NumberFormatter
+     */
+    private function getNumberFormatter(array $options): \Magento\Framework\NumberFormatter
+    {
+        $key = 'currency_' . md5($this->localeResolver->getLocale() . serialize($options));
+        if (!isset($this->numberFormatterCache[$key])) {
+            $this->numberFormatter = $this->numberFormatterFactory->create(
+                ['locale' => $this->localeResolver->getLocale(), 'style' => \NumberFormatter::CURRENCY]
+            );
+
+            $this->setOptions($options);
+            $this->numberFormatterCache[$key] = $this->numberFormatter;
+        }
+
+        return $this->numberFormatterCache[$key];
     }
 
     /**
