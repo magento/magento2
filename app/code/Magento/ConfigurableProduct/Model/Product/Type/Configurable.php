@@ -1290,13 +1290,19 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function getUsedProducts($product, $requiredAttributeIds = null)
     {
-        if (!$product->hasData($this->_usedProducts)) {
-            $collection = $this->getConfiguredUsedProductCollection($product, false, $requiredAttributeIds);
+        $requiredAttributeIds = $requiredAttributeIds ?: [];
+        array_unshift($requiredAttributeIds, $product->getId());
+
+        $cacheKey = $this->getUsedProductsCacheKey($requiredAttributeIds);
+        if (!$product->hasData($this->_usedProducts) || !isset($product->getData($this->_usedProducts)[$cacheKey])) {
+            $collection = $this->getConfiguredUsedProductCollection($product, true, $requiredAttributeIds);
             $usedProducts = array_values($collection->getItems());
-            $product->setData($this->_usedProducts, $usedProducts);
+            $usedProductsCache = $product->getData($this->_usedProducts);
+            $usedProductsCache[$cacheKey] = $usedProducts;
+            $product->setData($this->_usedProducts, $usedProductsCache);
         }
 
-        return $product->getData($this->_usedProducts);
+        return $product->getData($this->_usedProducts)[$cacheKey];
     }
 
     /**

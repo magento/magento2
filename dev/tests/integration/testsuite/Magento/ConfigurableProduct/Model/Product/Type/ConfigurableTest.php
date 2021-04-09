@@ -284,6 +284,24 @@ class ConfigurableTest extends TestCase
     }
 
     /**
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable_with_metadescription.php
+     */
+    public function testGetUsedProductsWithoutAndWithRequiredAttributes()
+    {
+        $products = $this->model->getUsedProducts($this->product);
+        foreach ($products as $product) {
+            self::assertNull($product->getData('meta_description'));
+        }
+
+        $requiredAttributeIds = [86];
+        $products = $this->model->getUsedProducts($this->product, $requiredAttributeIds);
+        foreach ($products as $product) {
+            self::assertNotNull($product->getData('meta_description'));
+        }
+    }
+
+    /**
      * Test getUsedProducts returns array with same indexes regardless collections was cache or not.
      *
      * @magentoAppIsolation enabled
