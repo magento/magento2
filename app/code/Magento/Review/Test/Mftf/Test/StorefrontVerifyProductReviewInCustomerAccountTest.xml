@@ -17,9 +17,7 @@
             <severity value="MINOR"/>
         </annotations>
         <before>
-            <!--Login As Admin-->
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
-            <!--Create product and Category-->
             <createData stepKey="category" entity="SimpleSubCategory"/>
             <createData stepKey="createProduct1" entity="SimpleProduct">
                 <requiredEntity createDataKey="category"/>
@@ -29,41 +27,30 @@
             </createData>
         </before>
         <after>
-            <!-- Delete reviews -->
             <actionGroup ref="AdminOpenReviewsPageActionGroup" stepKey="openAllReviewsPage"/>
             <actionGroup ref="AdminDeleteReviewsByUserNicknameActionGroup" stepKey="deleteCustomerReview"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearNickNameReviewFilters"/>
-            <!-- Delete customer -->
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="CustomerEntityOne.email"/>
             </actionGroup>
-            <!--delete Category and Products -->
             <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
-            <!--Logout-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <!-- Go to frontend and make a user account and login with it -->
         <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
             <argument name="Customer" value="CustomerEntityOne"/>
         </actionGroup>
-        <!-- Go to the product view page -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
             <argument name="productUrl" value="$$createProduct1.custom_attributes[url_key]$$"/>
         </actionGroup>
-        <!-- Click on reviews and add reviews with current user -->
         <actionGroup ref="StorefrontAddProductReviewActionGroup" stepKey="addReview"/>
-        <!-- Go to Pending reviews page and clear filters -->
         <actionGroup ref="AdminOpenPendingReviewsPageActionGroup" stepKey="openReviewsPage"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
-        <!-- Moderate first product reviews: change review status from pending to approved, save -->
         <actionGroup ref="AdminOpenReviewByUserNicknameActionGroup" stepKey="openFirstCustomerReviews"/>
         <actionGroup ref="AdminChangeReviewStatusActionGroup" stepKey="changeFirstReviewStatus"/>
         <actionGroup ref="AdminSaveReviewActionGroup" stepKey="saveModeratedFirstReview"/>
-        <!-- Navigate To Product Reviews Page-->
         <actionGroup ref="StorefrontNavigateToMyProductReviewsPageActionGroup" stepKey="navigateToProductReviewsPage"/>
-        <!-- Assert Product Review Is Present -->
         <actionGroup ref="AssertStorefrontReviewAtProductReviewPageActionGroup" stepKey="assertReviewInCustomerAccount">
             <argument name="description" value="{{simpleProductReview.detail}}"/>
         </actionGroup>
