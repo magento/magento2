@@ -114,7 +114,7 @@
         <see selector="{{AdminProductAttributeGridSection.isComparableColumn}}" userInput="Yes" stepKey="seeComparableColumn"/>
 
         <!--Verify Product Attribute is present in Category Store Front Page -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="goToStorefrontPage"/>
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="goToStorefrontPage"/>
         <waitForPageLoad stepKey="waitForProductFrontPageToLoad"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="clickOnCategory"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
@@ -130,7 +130,7 @@
         <see selector="{{StorefrontProductMoreInformationSection.attributeValue}}"  userInput="{{ProductAttributeOption8.value}}" stepKey="seeAttributeValue"/>
 
         <!--Verify Product Attribute present in search page -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="goToStorefrontPage1"/>
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="goToStorefrontPage1"/>
         <waitForPageLoad stepKey="waitForProductFrontPageToLoad1"/>
         <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{ProductAttributeOption8.value}}" stepKey="fillAttribute"/>
         <waitForPageLoad stepKey="waitForSearchTextBox"/>
