@@ -104,9 +104,9 @@ class RemoteAddress
                     return !in_array(trim($ip), $this->trustedProxies, true);
                 }
             );
-            $remoteAddress = trim(array_pop($ipList));
+            $remoteAddress = trim((string) array_pop($ipList));
         } else {
-            $remoteAddress = trim(reset($ipList));
+            $remoteAddress = trim((string) reset($ipList));
         }
 
         return $remoteAddress ?: null;
