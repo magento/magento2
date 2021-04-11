@@ -81,7 +81,7 @@ if ($exist = ($block->getRecentlyViewedProducts() && $block->getRecentlyViewedPr
                                     <?php endif; ?>
                                 </div>
                                 <?php else : ?>
-                                    <?php if ($_product->getIsSalable()) : ?>
+                                    <?php if ($_product->isAvailable()) : ?>
                                         <div class="stock available"><span><?= $block->escapeHtml(__('In stock')) ?></span></div>
                                     <?php else : ?>
                                         <div class="stock unavailable"><span><?= $block->escapeHtml(__('Out of stock')) ?></span></div>

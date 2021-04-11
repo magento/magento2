@@ -157,6 +157,12 @@ class Grouped implements DimensionalIndexerInterface
                 'tier_price' => new \Zend_Db_Expr('NULL'),
             ]
         );
+        // customer group website limitations
+        $select->joinLeft(
+            ['cgw' => $this->getTable('customer_group_excluded_website')],
+            'i.customer_group_id = cgw.customer_group_id AND i.website_id = cgw.website_id',
+            []
+        );
         $select->group(
             ['e.entity_id', 'i.customer_group_id', 'i.website_id']
         );
@@ -168,6 +174,9 @@ class Grouped implements DimensionalIndexerInterface
         if ($entityIds !== null) {
             $select->where('e.entity_id IN(?)', $entityIds, \Zend_Db::INT_TYPE);
         }
+
+        // exclude websites that are limited for customer group
+        $select->where('cgw.website_id IS NULL');
 
         return $select;
     }

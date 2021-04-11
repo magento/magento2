@@ -273,6 +273,10 @@ class Price implements DimensionalIndexerInterface
             ['cwd' => $this->getTable('catalog_product_index_website')],
             'pw.website_id = cwd.website_id',
             []
+        )->joinLeft(
+            ['cgw' => $this->getTable('customer_group_excluded_website')],
+            'cg.customer_group_id = cgw.customer_group_id AND pw.website_id = cgw.website_id',
+            []
         );
         $select->joinLeft(
             ['tp' => $this->getTable('catalog_product_index_tier_price')],
@@ -364,6 +368,9 @@ class Price implements DimensionalIndexerInterface
         if ($entityIds !== null) {
             $select->where('e.entity_id IN(?)', $entityIds);
         }
+
+        // exclude websites that are limited for customer group
+        $select->where('cgw.website_id IS NULL');
 
         /**
          * Add additional external limitation
@@ -714,6 +721,11 @@ class Price implements DimensionalIndexerInterface
             ['pw' => $this->getTable('store_website')],
             'tp.website_id = 0 OR tp.website_id = pw.website_id',
             ['website_id']
+        )->joinLeft(
+            // customer group website limitations
+            ['cgw' => $this->getTable('customer_group_excluded_website')],
+            'cg.customer_group_id = cgw.customer_group_id AND pw.website_id = cgw.website_id',
+            []
         )->where(
             'pw.website_id != 0'
         )->where(
@@ -728,6 +740,10 @@ class Price implements DimensionalIndexerInterface
         if (!empty($entityIds)) {
             $select->where('e.entity_id IN(?)', $entityIds);
         }
+
+        // exclude websites that are limited for customer group
+        $select->where('cgw.website_id IS NULL');
+
         foreach ($dimensions as $dimension) {
             if (!isset($this->dimensionToFieldMapper[$dimension->getName()])) {
                 throw new \LogicException(
