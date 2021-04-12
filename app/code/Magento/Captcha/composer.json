@@ -10,6 +10,7 @@
         "magento/module-backend": "*",
         "magento/module-checkout": "*",
         "magento/module-customer": "*",
+        "magento/module-sales": "*",
         "magento/module-store": "*",
         "magento/module-authorization": "*",
         "laminas/laminas-captcha": "^2.7.1",
