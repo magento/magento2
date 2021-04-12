@@ -9,29 +9,31 @@ namespace Magento\Framework\Mail\Test\Unit;
 
 use Magento\Framework\Mail\AddressConverter;
 use Magento\Framework\Mail\AddressFactory;
-use Magento\Framework\ObjectManager\Config\Config;
-use Magento\Framework\ObjectManager\Factory\Dynamic\Developer;
-use Magento\Framework\ObjectManager\ObjectManager;
-use Magento\Framework\ObjectManager\Relations\Runtime;
+use Magento\Framework\Mail\Address;
 use PHPUnit\Framework\TestCase;
 
 class AddressConverterTest extends TestCase
 {
     /**
-     * @var ObjectManager
+     * @var Address
      */
-    private $objectManager;
+    private $addressMock;
+
+    /**
+     * @var AddressFactory
+     */
+    private $addressFactoryMock;
+
+    /**
+     * @var AddressConverter
+     */
+    private $addressConverter;
 
     protected function setUp(): void
     {
-        $config = new Config(
-            new Runtime()
-        );
-        $factory = new Developer(
-            $config
-        );
-        $this->objectManager = new ObjectManager($factory, $config);
-        $factory->setObjectManager($this->objectManager);
+        $this->addressMock = $this->createMock(Address::class);
+        $this->addressFactoryMock = $this->createMock(AddressFactory::class);
+        $this->addressConverter = new AddressConverter($this->addressFactoryMock);
     }
 
     /**
@@ -43,11 +45,12 @@ class AddressConverterTest extends TestCase
      */
     public function testConvert(string $email, string $name, string $emailExpected, string $nameExpected)
     {
-        $addressFactory = new AddressFactory($this->objectManager);
-        $addressConverter = new AddressConverter($addressFactory);
-        $address = $addressConverter->convert($email, $name);
-        $this->assertSame($emailExpected, $address->getEmail());
-        $this->assertSame($nameExpected, $address->getName());
+        $this->addressFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(['name' => $nameExpected, 'email' => $emailExpected])
+            ->willReturn($this->addressMock);
+        $address = $this->addressConverter->convert($email, $name);
+        $this->assertInstanceOf(Address::class, $address);
     }
 
     /**
