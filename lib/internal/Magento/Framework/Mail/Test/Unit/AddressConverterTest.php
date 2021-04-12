@@ -9,9 +9,9 @@ namespace Magento\Framework\Mail\Test\Unit;
 
 use Magento\Framework\Mail\AddressConverter;
 use Magento\Framework\Mail\AddressFactory;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManager\Config\Config;
 use Magento\Framework\ObjectManager\Factory\Dynamic\Developer;
+use Magento\Framework\ObjectManager\ObjectManager;
 use Magento\Framework\ObjectManager\Relations\Runtime;
 use PHPUnit\Framework\TestCase;
 
