@@ -1295,7 +1295,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         $cacheKey = $this->getUsedProductsCacheKey($requiredAttributeIds);
         if (!$product->hasData($this->_usedProducts) || !isset($product->getData($this->_usedProducts)[$cacheKey])) {
-            $collection = $this->getConfiguredUsedProductCollection($product, true, $requiredAttributeIds);
+            $collection = $this->getConfiguredUsedProductCollection($product, false, $requiredAttributeIds);
             $usedProducts = array_values($collection->getItems());
             $usedProductsCache = $product->getData($this->_usedProducts);
             $usedProductsCache[$cacheKey] = $usedProducts;
