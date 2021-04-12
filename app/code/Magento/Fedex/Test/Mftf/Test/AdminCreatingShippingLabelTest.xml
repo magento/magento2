@@ -53,9 +53,7 @@
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>
             </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <!--Reset configs-->
@@ -77,9 +75,7 @@
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>
             </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
             <!--Delete created data-->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
