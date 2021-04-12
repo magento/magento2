@@ -40,25 +40,34 @@ class Login extends \Magento\Backend\Controller\Adminhtml\Auth implements HttpGe
     private $backendUrlFactory;
 
     /**
+     * @var Http
+     */
+    private $http;
+
+    /**
      * Constructor
      *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param FrontNameResolver $frontNameResolver
-     * @param UrlFactory $backendUrlFactory
+     * @param FrontNameResolver|null $frontNameResolver
+     * @param BackendAppList|null $backendAppList
+     * @param UrlFactory|null $backendUrlFactory
+     * @param Http|null $http
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         FrontNameResolver $frontNameResolver = null,
         BackendAppList $backendAppList = null,
-        UrlFactory $backendUrlFactory = null
+        UrlFactory $backendUrlFactory = null,
+        Http $http = null
     ) {
         $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context);
         $this->frontNameResolver = $frontNameResolver ?? ObjectManager::getInstance()->get(FrontNameResolver::class);
         $this->backendAppList = $backendAppList ?? ObjectManager::getInstance()->get(BackendAppList::class);
         $this->backendUrlFactory = $backendUrlFactory ?? ObjectManager::getInstance()->get(UrlFactory::class);
+        $this->http = $http ?? ObjectManager::getInstance()->get(Http::class);
     }
 
     /**
@@ -113,7 +122,7 @@ class Login extends \Magento\Backend\Controller\Adminhtml\Auth implements HttpGe
         } else {
             //In case of application authenticating through the admin login, the script name should be removed
             //from the path, because application has own script.
-            $baseUrl = Http::getUrlNoScript($baseUrl);
+            $baseUrl = $this->http->getUrlNoScript($baseUrl);
             $backendFrontName = $backendApp->getCookiePath();
         }
 
