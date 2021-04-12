@@ -4,6 +4,6 @@
  * See COPYING.txt for license details.
  */
 ?>
-<span class="widget block block-category-link-inline">
-    <a <?= /* @noEscape */ $block->getLinkAttributes() ?>><span><?= $block->escapeHtml($block->getLabel()) ?></span></a>
-</span>
+<span class="widget block block-category-link-inline"
+><a <?= /* @noEscape */ $block->getLinkAttributes() ?>><span
+><?= $block->escapeHtml($block->getLabel()) ?></span></a></span><?php /** Avoid last whitespace **/ ?>
