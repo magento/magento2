@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontTextOnCmsPageActionGroup">
+        <arguments>
+            <argument name="cmsTitle" type="string"/>
+            <argument name="cmsContent" type="string"/>
+        </arguments>
+        <seeInTitle userInput="{{cmsTitle}}" stepKey="seePageTitle"/>
+        <see userInput="{{cmsContent}}" stepKey="seePageContent"/>
+    </actionGroup>
+</actionGroups>
