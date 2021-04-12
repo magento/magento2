@@ -31,6 +31,7 @@ class AddressConverterTest extends TestCase
             $config
         );
         $this->objectManager = new ObjectManager($factory, $config);
+        $factory->setObjectManager($this->objectManager);
     }
 
     /**
