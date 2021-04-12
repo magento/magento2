@@ -355,9 +355,9 @@ script;
                 "regionInputId": "#region",
                 "postcodeId": "#zip",
                 "form": "#form-validate",
-                "regionJson": {$regionJson},
-                "defaultRegion": "{$regionId}",
-                "countriesWithOptionalZip": {$countriesWithOptionalZip}
+                "regionJson": <?= $regionJson ?>,
+                "defaultRegion": <?= $regionId ?>,
+                "countriesWithOptionalZip": <?= $countriesWithOptionalZip ?>
             }
         }
     }
