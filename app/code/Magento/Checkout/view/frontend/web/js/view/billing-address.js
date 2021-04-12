@@ -165,6 +165,7 @@ function (
                     checkoutData.setNewCustomerBillingAddress(addressData);
                 }
             }
+            setBillingAddressAction(globalMessageList);
             this.updateAddresses();
         },
 
@@ -222,7 +223,11 @@ function (
          * Trigger action to update shipping and billing addresses
          */
         updateAddresses: function () {
-            setBillingAddressAction(globalMessageList);
+            if (window.checkoutConfig.reloadOnBillingAddress ||
+                !window.checkoutConfig.displayBillingOnPaymentMethod
+            ) {
+                setBillingAddressAction(globalMessageList);
+            }
         },
 
         /**
