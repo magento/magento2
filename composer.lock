@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.178.0",
+            "version": "3.178.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "214e3d98c54277cd8965f1cf307dce39631407bf"
+                "reference": "45692b97e12a2eed540c0afd106f143aad15e622"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/214e3d98c54277cd8965f1cf307dce39631407bf",
-                "reference": "214e3d98c54277cd8965f1cf307dce39631407bf",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/45692b97e12a2eed540c0afd106f143aad15e622",
+                "reference": "45692b97e12a2eed540c0afd106f143aad15e622",
                 "shasum": ""
             },
             "require": {
@@ -89,7 +89,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2021-04-08T18:13:16+00:00"
+            "time": "2021-04-09T18:13:02+00:00"
         },
         {
             "name": "brick/math",
@@ -2931,16 +2931,16 @@
         },
         {
             "name": "league/flysystem",
-            "version": "2.0.4",
+            "version": "2.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "7cbbb7222e8d8a34e71273d243dfcf383ed6779f"
+                "reference": "27ea64cc9d61ae7b6a5f04bebf062d89dd18e8f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/7cbbb7222e8d8a34e71273d243dfcf383ed6779f",
-                "reference": "7cbbb7222e8d8a34e71273d243dfcf383ed6779f",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/27ea64cc9d61ae7b6a5f04bebf062d89dd18e8f7",
+                "reference": "27ea64cc9d61ae7b6a5f04bebf062d89dd18e8f7",
                 "shasum": ""
             },
             "require": {
@@ -2993,20 +2993,20 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2021-02-12T19:37:50+00:00"
+            "time": "2021-04-11T15:03:35+00:00"
         },
         {
             "name": "league/flysystem-aws-s3-v3",
-            "version": "2.0.4",
+            "version": "2.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem-aws-s3-v3.git",
-                "reference": "c89931e9c4b294493234798564cc814ef478fbc6"
+                "reference": "43b4cea4fc0d80378d947c306df96a749cdded35"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem-aws-s3-v3/zipball/c89931e9c4b294493234798564cc814ef478fbc6",
-                "reference": "c89931e9c4b294493234798564cc814ef478fbc6",
+                "url": "https://api.github.com/repos/thephpleague/flysystem-aws-s3-v3/zipball/43b4cea4fc0d80378d947c306df96a749cdded35",
+                "reference": "43b4cea4fc0d80378d947c306df96a749cdded35",
                 "shasum": ""
             },
             "require": {
@@ -3044,7 +3044,7 @@
                 "s3",
                 "storage"
             ],
-            "time": "2021-02-09T21:10:56+00:00"
+            "time": "2021-04-11T09:05:38+00:00"
         },
         {
             "name": "league/mime-type-detection",
