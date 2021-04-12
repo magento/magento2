@@ -46,6 +46,12 @@
         <data key="label">Change password</data>
         <data key="value">user_edit</data>
     </entity>
+    <entity name="StorefrontCaptchaOnOnepageCheckoutConfigData">
+        <data key="path">customer/captcha/forms</data>
+        <data key="scope_id">0</data>
+        <data key="label">Checkout/Placing Order</data>
+        <data key="value">payment_processing_request</data>
+    </entity>
     <entity name="StorefrontCaptchaOnCustomerForgotPasswordConfigData">
         <!-- Magento default value -->
         <data key="path">customer/captcha/forms</data>
