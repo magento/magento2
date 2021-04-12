@@ -268,6 +268,16 @@ class FilterTest extends TestCase
     }
 
     /**
+     * Test exception handling of filter method
+     */
+    public function testFilterExceptionHandler()
+    {
+        $filter = $this->getModel();
+        $filteredValue = $filter->filter(null);
+        $this->assertTrue(is_string($filteredValue));
+    }
+
+    /**
      * Test basic usages of applyInlineCss
      *
      * @param $html
