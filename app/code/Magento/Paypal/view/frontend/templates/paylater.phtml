@@ -1,0 +1,24 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var $block \Magento\Paypal\Block\Bml\Paylater */
+?>
+<div id="pay-later" data-bind="scope: 'payLater'">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+    <script type="text/x-magento-init">
+        {
+            "#pay-later": {
+                "Magento_Ui/js/core/app": <?= /* @noEscape */
+        $block->getJsLayout() ?>
+            }
+        }
+
+    </script>
+</div>
+
+
+
+
