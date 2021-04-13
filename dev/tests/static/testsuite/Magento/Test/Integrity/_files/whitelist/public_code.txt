@@ -1,1 +1,2 @@
 Magento\LoginAsCustomerAssistance\Block\Adminhtml\NotAllowedPopup
+Magento\Paypal\Block\Bml\Paylater
