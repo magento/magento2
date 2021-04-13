@@ -71,9 +71,9 @@
         <switchToNextTab stepKey="switchToNextTab"/>
         <waitForPageLoad stepKey="waitForCMSPage"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seePageTitle"/>
-        <actionGroup ref="AssertStorefrontTextOnCmsPageActionGroup" stepKey="seeProduct">
+        <actionGroup ref="AssertStorefrontProductIsShownOnCmsPageActionGroup" stepKey="seeProduct">
             <argument name="cmsTitle" value="{{_newDefaultCmsPage.title}}"/>
-            <argument name="cmsContent" value="$$createSimpleProduct.name$$"/>
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
         </actionGroup>
         <closeTab stepKey="closeCurrentTab"/>
     </test>
