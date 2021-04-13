@@ -126,6 +126,10 @@ class OnAuthorization extends AbstractExpress implements HttpPostActionInterface
                 $quote = $this->_getQuote();
             }
 
+            if ($customerId != null && ($quote->getCustomerIsGuest() || $customerId !== $quote->getCustomerId())) {
+                throw new LocalizedException(__('Sorry, but something went wrong.'));
+            }
+
             $responseContent = [
                 'success' => true,
                 'error_message' => '',
