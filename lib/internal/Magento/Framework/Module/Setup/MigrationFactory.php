@@ -8,6 +8,8 @@ namespace Magento\Framework\Module\Setup;
 
 /**
  * Factory class for \Magento\Framework\Module\Setup\Migration
+ *
+ * @api
  */
 class MigrationFactory
 {

@@ -3,13 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Tax\Api;
 
 use Magento\Customer\Model\Address;
 
 /**
  * Interface to save data in customer session.
+ *
+ * @api
  */
 interface TaxAddressManagerInterface
 {

@@ -21,6 +21,7 @@ use Magento\Sales\Model\ResourceModel\Order\Invoice as InvoiceResource;
 /**
  * Sends order invoice email to the customer.
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InvoiceSender extends Sender
