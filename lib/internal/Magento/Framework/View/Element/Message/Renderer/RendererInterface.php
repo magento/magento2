@@ -10,6 +10,7 @@ use Magento\Framework\Message\MessageInterface;
 /**
  * Interface \Magento\Framework\View\Element\Message\Renderer\RendererInterface
  *
+ * @api
  */
 interface RendererInterface
 {
