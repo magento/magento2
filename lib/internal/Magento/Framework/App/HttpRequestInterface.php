@@ -7,6 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Framework\App;
 
+/**
+ * Http Request interface
+ *
+ * @api
+ */
 interface HttpRequestInterface
 {
     /**
