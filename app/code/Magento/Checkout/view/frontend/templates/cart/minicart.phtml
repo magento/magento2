@@ -17,7 +17,12 @@
                blockLoader: isLoading">
             <span class="counter-number"><!-- ko text: getCartParam('summary_count') --><!-- /ko --></span>
             <span class="counter-label">
-            <!-- ko if: getCartParam('summary_count') -->
+            <!-- ko if: getCartParam('summary_count') == 1 -->
+                <!-- ko text: getCartParam('summary_count') --><!-- /ko -->
+                <!-- ko i18n: 'item' --><!-- /ko -->
+            <!-- /ko -->
+                        <!-- ko if: getCartParam('summary_count') > 1 -->
+
                 <!-- ko text: getCartParam('summary_count') --><!-- /ko -->
                 <!-- ko i18n: 'items' --><!-- /ko -->
             <!-- /ko -->
