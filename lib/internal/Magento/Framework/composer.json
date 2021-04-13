@@ -28,7 +28,7 @@
         "laminas/laminas-code": "^3.5.1",
         "laminas/laminas-crypt": "^3.4.0",
         "laminas/laminas-http": "^2.6.0",
-        "laminas/laminas-mail": "^2.9.0",
+        "laminas/laminas-mail": "^2.11.0",
         "laminas/laminas-mime": "^2.8.0",
         "laminas/laminas-mvc": "^3.2.0",
         "laminas/laminas-stdlib": "^3.2.1",
