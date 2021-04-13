@@ -36,7 +36,7 @@
         <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seePageTitle" />
         <seeElement selector="{{AdminCategoryContentSection.activeCategoryInTree(_defaultCategory.name)}}" stepKey="seeCategoryInTree"  />
         <!--Verify Category is listed in store front page menu/>-->
-        <amOnPage url="{{StorefrontCategoryPage.url(_defaultCategory.name)}}"  stepKey="amOnCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url(_defaultCategory.urlKey)}}"  stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
         <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seeCategoryPageTitle"/>
     </test>

@@ -38,6 +38,15 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFiltersVirtual"/>
+            <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="addSkuFilterVirtual">
+                <argument name="filterInputName" value="sku"/>
+                <argument name="filterValue" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="applyGridFilterVirtual"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteVirtualProducts">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
             <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="goToCatalogRuleGridPage"/>
             <waitForPageLoad stepKey="waitForCatalogRuleGridPageLoaded"/>
@@ -52,7 +61,7 @@
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="assertSuccess"/>
 
         <!-- Verify that category page shows the discount -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategoryPage1"/>
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="goToCategoryPage1"/>
         <see selector="{{StorefrontCategoryProductSection.ProductTitleByName(ApiSimpleProduct.name)}}" userInput="$$createSimpleProduct.name$$" stepKey="seeSimpleProduct1"/>
         <see selector="{{StorefrontCategoryProductSection.ProductPriceByName(ApiSimpleProduct.name)}}" userInput="$110.70" stepKey="seeSimpleProductDiscount1"/>
         <see selector="{{StorefrontCategoryProductSection.ProductTitleByName(_defaultProduct.name)}}" userInput="{{_defaultProduct.name}}" stepKey="seeConfigurableProduct1"/>
@@ -86,12 +95,10 @@
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
             <argument name="indices" value="catalog_product_price"/>
         </actionGroup>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Verify that category page shows the original prices -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategoryPage2"/>
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="goToCategoryPage2"/>
         <see selector="{{StorefrontCategoryProductSection.ProductTitleByName(ApiSimpleProduct.name)}}" userInput="$$createSimpleProduct.name$$" stepKey="seeSimpleProduct2"/>
         <see selector="{{StorefrontCategoryProductSection.ProductPriceByName(ApiSimpleProduct.name)}}" userInput="$123.00" stepKey="seeSimpleProductDiscount2"/>
         <see selector="{{StorefrontCategoryProductSection.ProductTitleByName(_defaultProduct.name)}}" userInput="{{_defaultProduct.name}}" stepKey="seeConfigurableProduct2"/>

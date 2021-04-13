@@ -30,7 +30,7 @@ $imagesGenerator->generate([
     'image-height' => 90,
     'image-name' => $imageName,
 ]);
-$imagePath = $swatchesMedia->moveImageFromTmp($imageName);
+$imagePath = substr($swatchesMedia->moveImageFromTmp($imageName), 1);
 $swatchesMedia->generateSwatchVariations($imagePath);
 
 // Add attribute data
