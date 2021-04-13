@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "58dc431ff09cc1c3c34d237652770121",
+    "content-hash": "4b724a61ed27b7e76f2f56ae115edad5",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -7563,7 +7563,7 @@
         },
         {
             "name": "allure-framework/allure-phpunit",
-            "version": "dev-master",
+            "version": "1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/allure-framework/allure-phpunit.git",
@@ -7612,6 +7612,11 @@
                 "steps",
                 "testing"
             ],
+            "support": {
+                "email": "allure@qameta.io",
+                "issues": "https://github.com/allure-framework/allure-phpunit/issues",
+                "source": "https://github.com/allure-framework/allure-phpunit"
+            },
             "time": "2021-03-26T15:43:03+00:00"
         },
         {
@@ -12330,17 +12335,9 @@
             "time": "2016-07-21T11:18:01+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "allure-framework/allure-phpunit",
-            "version": "9999999-dev",
-            "alias": "1.3.2",
-            "alias_normalized": "1.3.2.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "allure-framework/allure-phpunit": 20,
         "magento/magento2-functional-testing-framework": 20
     },
     "prefer-stable": true,
