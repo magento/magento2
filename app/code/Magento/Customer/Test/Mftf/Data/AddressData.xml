@@ -243,7 +243,7 @@
         <data key="postcode">12345</data>
     </entity>
     <entity name="updateCustomerFranceAddress" type="address">
-        <data key="firstname">Jaen</data>
+        <data key="firstname">Jean</data>
         <data key="lastname">Reno</data>
         <data key="company">Magento</data>
         <data key="telephone">555-888-111-999</data>

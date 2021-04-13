@@ -15,7 +15,46 @@ use Magento\FunctionalTestingFramework\Helper\Helper;
 class CurlHelpers extends Helper
 {
     /**
-     * Assert a that a curl request's response contains an expected string
+     * Asserts that a curl request's response contains an expected string
+     *
+     * @param string $url
+     * @param string $expectedString
+     * @param string $postBody
+     * @param string $cookieName
+     * @param string $message
+     * @return void
+     *
+     */
+    public function assertCurlResponseContainsString($url, $expectedString, $postBody = null, $cookieName = 'admin', $message = ''): void
+    {
+        $cookie = $this->getCookie($cookieName);
+        $curlResponse = $this->getCurlResponse($url, $cookie, $postBody);
+        $this->assertStringContainsString($expectedString, $curlResponse, $message);
+    }
+
+    /**
+     * Asserts that an MD5 encoded image retrieved via a curl request equals the expected string
+     *
+     * @param string $url
+     * @param string $expectedString
+     * @param string $postBody
+     * @param string $cookieName
+     * @param string $message
+     * @return void
+     *
+     */
+    public function assertImageContentIsEqual($url, $expectedString, $postBody = null, $cookieName = null, $message = ''): void
+    {
+        $cookie = $this->getCookie($cookieName);
+        $imageContent = $this->getCurlResponse($url, $cookie, $postBody);
+        // Must make request twice until bug is resolved: B2B-1789
+        $imageContent = $this->getCurlResponse($url, $cookie, $postBody);
+        $imageContentMD5 = md5($imageContent);
+        $this->assertStringContainsString($expectedString, $imageContentMD5, $message);
+    }
+
+    /**
+     * Assert a that a curl request's response does not contain an expected string
      *
      * @param string $url
      * @param string $expectedString
@@ -24,11 +63,11 @@ class CurlHelpers extends Helper
      * @return void
      *
      */
-    public function assertCurlResponseContainsString($url, $expectedString, $postBody = null, $cookieName = 'admin'): void
+    public function assertCurlResponseDoesNotContainString($url, $expectedString, $postBody = null, $cookieName = 'admin'): void
     {
         $cookie = $this->getCookie($cookieName);
         $curlResponse = $this->getCurlResponse($url, $cookie, $postBody);
-        $this->assertStringContainsString($expectedString, $curlResponse);
+        $this->assertStringNotContainsString($expectedString, $curlResponse);
     }
 
     /**
