@@ -118,8 +118,6 @@ class CouponUsagesTest extends TestCase
         $couponCode = 'one_usage';
         $reservedOrderId = 'test01';
 
-        $this->publisherConsumerController->startConsumers();
-
         /** @var Coupon $coupon */
         $coupon = $this->objectManager->get(Coupon::class);
         $coupon->loadByCode($couponCode);
