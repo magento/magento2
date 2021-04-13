@@ -9,6 +9,8 @@ use Magento\Framework\Filesystem\DriverPool;
 
 /**
  * The factory of the filesystem directory instances for read operations.
+ *
+ * @api
  */
 class ReadFactory
 {
