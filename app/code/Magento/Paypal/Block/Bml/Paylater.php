@@ -19,7 +19,7 @@ class Paylater extends Template
     /**
      * @var \Magento\Paypal\Model\Config
      */
-    protected $_paypalConfig;
+    private $paypalConfig;
 
     /**
      * @param Template\Context $context
@@ -32,7 +32,7 @@ class Paylater extends Template
         array $data = []
     )
     {
-        $this->_paypalConfig = $paypalConfig;
+        $this->paypalConfig = $paypalConfig;
         parent::__construct($context, $data);
     }
 

@@ -13,14 +13,16 @@ define([
     paypalSdk
 ) {
     'use strict';
+
     return Component.extend({
+
         defaults: {
             template: 'Magento_Paypal/paylater',
-            sdkUrl: "",
+            sdkUrl: '',
             attributes: {
                 'data-pp-amount': '',
                 'data-pp-style-logo-position': 'right'
-            },
+            }
         },
 
         /**
@@ -31,27 +33,28 @@ define([
         initialize: function () {
             this._super();
             this.loadPayPalSdk(this.sdkUrl);
+
             return this;
         },
 
         /**
          * Get attribute value from configuration
          *
-         * @param attributeName
+         * @param {String} attributeName
          * @returns {*|null}
          */
         getAttribute: function (attributeName) {
-            return typeof (this.attributes[attributeName]) !== 'undefined' ?
+            return typeof this.attributes[attributeName] !== 'undefined' ?
                 this.attributes[attributeName] : null;
         },
 
         /**
          * Load PP SDK with preconfigured options
          *
-         * @param sdkUrl
+         * @param {String} sdkUrl
          */
         loadPayPalSdk: function (sdkUrl) {
             paypalSdk(sdkUrl);
-        },
+        }
     });
 });
