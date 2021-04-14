@@ -106,6 +106,7 @@ class PaymentTokens implements ResolverInterface
         foreach ($cartDetails as $key => $value) {
             if (array_key_exists($value, self::BASE_CART_TYPES)) {
                 $cartDetails[$key] = self::BASE_CART_TYPES[$value];
+                break;
             }
         }
 
