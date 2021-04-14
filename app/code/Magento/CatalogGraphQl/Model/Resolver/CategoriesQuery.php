@@ -87,7 +87,7 @@ class CategoriesQuery implements ResolverInterface
 
         $rootCategoryIds = $filterResult['category_ids'] ?? [];
 
-        $filterResult['items'] = $this->fetchCategories($rootCategoryIds, $info, $store->getId());
+        $filterResult['items'] = $this->fetchCategories($rootCategoryIds, $info, (int) $store->getId());
         return $filterResult;
     }
 
