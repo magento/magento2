@@ -48,7 +48,8 @@ $paymentTokens = [
         'payment_method_code' => 'fifth',
         'type' => 'card',
         'expires_at' => date('Y-m-d h:i:s', strtotime('+1 month')),
-        'is_active' => 1
+        'is_active' => 1,
+        'details' => '{"cc_type":"VI","cc_exp_year":2023,"cc_exp_month":3,"cc_last_4":"8431"}'
     ],
     [
         'customer_id' => 1,
@@ -56,7 +57,8 @@ $paymentTokens = [
         'payment_method_code' => 'sixth',
         'type' => 'account',
         'expires_at' => date('Y-m-d h:i:s', strtotime('+1 month')),
-        'is_active' => 1
+        'is_active' => 1,
+        'details' => '{"cc_type":"AE","cc_exp_year":2023,"cc_exp_month":3,"cc_last_4":"8431"}'
     ],
 ];
 /** @var array $tokenData */
