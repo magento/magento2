@@ -92,7 +92,7 @@ QUERY;
         $this->assertArrayNotHasKey('gateway_token', $response['customerPaymentTokens']['items'][0]);
         $cartDetails1 = json_decode($response['customerPaymentTokens']['items'][0]['details'], true);
         $cartDetails2 = json_decode($response['customerPaymentTokens']['items'][1]['details'], true);
-        $this->assertSame('Visa', $cartDetails1['cc_type']);
+        $this->assertSame('Visa', $cartDetails1['type']);
         $this->assertSame('American Express', $cartDetails2['cc_type']);
     }
 
