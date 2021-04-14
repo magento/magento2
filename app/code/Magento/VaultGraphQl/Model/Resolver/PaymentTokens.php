@@ -102,14 +102,11 @@ class PaymentTokens implements ResolverInterface
         }
 
         $cartDetails = $this->serializer->unserialize($tokenDetails);
-        if (!isset($cartDetails['cc_type'])) {
-            return $cartDetails;
-        }
 
-        $ccCartType = $cartDetails['cc_type'];
-
-        if (array_key_exists($ccCartType, self::BASE_CART_TYPES)) {
-            $cartDetails['cc_type'] = self::BASE_CART_TYPES[$ccCartType];
+        foreach ($cartDetails as $key => $value) {
+            if (array_key_exists($value, self::BASE_CART_TYPES)) {
+                $cartDetails[$key] = self::BASE_CART_TYPES[$value];
+            }
         }
 
         return $this->serializer->serialize($cartDetails);
