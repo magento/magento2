@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckIsGoogleAnalyticsScriptPresentTest">
+        <annotations>
+            <stories value="Check GoogleAnalytics rendering on the page."/>
+            <title value="Check GoogleAnalytics rendering on the page."/>
+            <description value="Check GoogleAnalytics rendering on the page."/>
+            <severity value="MINOR"/>
+        </annotations>
+
+        <actionGroup ref="AdminEnableGoogleAnalyticsActionGroup" stepKey="enableGoogleAnalytics"/>
+
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
+
+        <seeInPageSource html="Magento_GoogleAnalytics/js/google-analytics" stepKey="seeAnalyticsInPageSource"/>
+    </test>
+</tests>
