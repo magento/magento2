@@ -159,4 +159,16 @@ class FilesTest extends \PHPUnit\Framework\TestCase
         }
         $this->assertSame($expected, $actual);
     }
+
+    /**
+     * Tests if underscores are allowed in extended static files in theme.
+     *
+     * @magentoComponentsDir Magento/Framework/App/Utility/_files/design
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     */
+    public function testAllowUnderscoreInExtendedFiles()
+    {
+        $this->model->getStaticPreProcessingFiles('*.less');
+    }
 }
