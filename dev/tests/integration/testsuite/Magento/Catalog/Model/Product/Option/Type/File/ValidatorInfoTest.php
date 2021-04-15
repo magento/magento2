@@ -182,7 +182,7 @@ class ValidatorInfoTest extends \PHPUnit\Framework\TestCase
             'title' => 'test.jpg',
             'quote_path' => $file,
             'order_path' => $file,
-            'secret_key' => substr(md5(file_get_contents($filePath)), 0, 20),
+            'secret_key' => substr(hash('sha256', file_get_contents($filePath)), 0, 20),
         ];
     }
 }
