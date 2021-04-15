@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminLockedUsersGridSection">
+        <element name="usernameField" type="input" selector="#lockedAdminsGrid_filter_username"/>
+        <element name="searchButton" type="button" selector=".admin__filter-actions button[title=Search]"/>
+        <element name="resetButton" type="button" selector=".action-default.scalable.action-reset.action-tertiary"/>
+        <element name="searchResultFirstRow" type="text" selector=".data-grid&gt;tbody&gt;tr"/>
+        <element name="massActions" type="input" selector="#lockedAdminsGrid_massaction-select"/>
+        <element name="submitButton" type="button" selector=".admin__grid-massaction .action-default.scalable"/>
+    </section>
+</sections>
