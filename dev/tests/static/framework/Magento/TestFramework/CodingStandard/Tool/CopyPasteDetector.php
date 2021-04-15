@@ -54,6 +54,8 @@ class CopyPasteDetector implements ToolInterface, BlacklistInterface
      */
     public function canRun()
     {
+        // exec() have to be here since this is test.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         exec($this->getCommand() . ' --version', $output, $exitCode);
         return $exitCode === 0;
     }
@@ -86,6 +88,8 @@ class CopyPasteDetector implements ToolInterface, BlacklistInterface
         $command = $this->getCommand() . ' --log-pmd ' . escapeshellarg($this->reportFile)
             . ' --names-exclude ' . join(',', $blacklistedFileNames) . ' --min-lines 13 ' . join(' ', $blacklistedDirs)
             . ' ' . implode(' ', $whiteList);
+        // exec() have to be here since this is test.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         exec($command, $output, $exitCode);
 
         return !(bool)$exitCode;

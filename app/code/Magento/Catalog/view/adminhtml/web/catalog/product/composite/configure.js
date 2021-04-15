@@ -453,6 +453,13 @@ define([
         },
 
         /**
+         * Helper to find select element of currently confirmed item
+         */
+        getCurrentConfirmedSelectElement: function () {
+            return $(this.confirmedCurrentId).getElementsByTagName('select');
+        },
+
+        /**
          * Helper to find qty of active form
          */
         getCurrentFormQtyElement: function () {
