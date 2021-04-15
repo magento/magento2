@@ -59,14 +59,18 @@ class DenyListPathValidator implements PathValidatorInterface
             $path,
             $scheme
         );
+        if (!$absolutePath) {
+            $actualPath = $this->driver->getRealPathSafety($fullPath);
+        } else {
+            $actualPath = $this->driver->getRealPathSafety($path);
+        }
 
-        // Bypass deny list if in exception list.
         if (in_array($fullPath, $this->exceptionList, true)) {
             return;
         }
 
         foreach ($this->fileDenyList as $file) {
-            $baseName = pathinfo($fullPath, PATHINFO_BASENAME);
+            $baseName = pathinfo($actualPath, PATHINFO_BASENAME);
             if (str_contains($baseName, $file) || preg_match('#' . "\." . $file . '#', $fullPath)) {
                 throw new ValidatorException(
                     new Phrase('"%1" is not a valid file path', [$path])
