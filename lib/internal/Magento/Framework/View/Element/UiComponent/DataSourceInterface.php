@@ -10,6 +10,8 @@ use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * Interface DataSourceInterface
+ *
+ * @api
  */
 interface DataSourceInterface extends UiComponentInterface
 {

@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\Api\Search;
 
 /**
- * Faceted data
+ * Interface Aggregation fo get faceted data
  *
  * @api
  */

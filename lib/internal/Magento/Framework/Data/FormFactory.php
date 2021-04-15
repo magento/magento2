@@ -8,6 +8,8 @@ namespace Magento\Framework\Data;
 
 /**
  * Form factory class
+ *
+ * @api
  */
 class FormFactory
 {
