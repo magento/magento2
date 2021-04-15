@@ -13,6 +13,6 @@
             <description>Expand Content section on the Admin CMS Page creation/edit.</description>
         </annotations>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="expandContentSection"/>
-        <waitForPageLoad stepKey="waitForSeoSection"/>
+        <waitForPageLoad stepKey="waitForContentSection"/>
     </actionGroup>
 </actionGroups>
