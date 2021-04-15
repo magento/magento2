@@ -53,6 +53,6 @@
         <actionGroup ref="AdminCmsPageSetUrlActionGroup" stepKey="fillPageUrlKey">
             <argument name="urlKey" value="{{_newDefaultCmsPage.identifier}}"/>
         </actionGroup>
-        <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSaveCmsPage" />
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSaveCmsPage"/>
     </test>
 </tests>

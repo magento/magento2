@@ -13,6 +13,6 @@
             <description>Expand SEO section on the Admin CMS Page creation/edit.</description>
         </annotations>
         <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="expandSeoSection"/>
-        <waitForPageLoad stepKey="waitForContentSection"/>
+        <waitForPageLoad stepKey="waitForSeoSection"/>
     </actionGroup>
 </actionGroups>
