@@ -72,7 +72,7 @@ class CouponUsagesTest extends TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->usage = $this->objectManager->get(Usage::class);
-        $this->couponUsage = $this->objectManager->get(DataObject::class);
+        $this->couponUsage = $this->objectManager->create(DataObject::class);
         $this->quoteManagement = $this->objectManager->get(QuoteManagement::class);
         $this->orderService = $this->objectManager->get(OrderService::class);
 
@@ -119,10 +119,10 @@ class CouponUsagesTest extends TestCase
         $reservedOrderId = 'test01';
 
         /** @var Coupon $coupon */
-        $coupon = $this->objectManager->get(Coupon::class);
+        $coupon = $this->objectManager->create(Coupon::class);
         $coupon->loadByCode($couponCode);
         /** @var Quote $quote */
-        $quote = $this->objectManager->get(Quote::class);
+        $quote = $this->objectManager->create(Quote::class);
         $quote->load($reservedOrderId, 'reserved_order_id');
 
         // Make sure coupon usages value is incremented then order is placed.
