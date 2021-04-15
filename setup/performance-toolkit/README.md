@@ -1,6 +1,4 @@
-## Performance Toolkit
-
-## Overview
+# Performance Toolkit
 
 The Performance Toolkit enables you to test the performance of your Magento installations and the impact of your customizations. It allows you to generate sample data for testing performance and to run Apache JMeter scenarios, which imitate users activity. As a result, you get a set of metrics, that you can use to judge how changes affect performance, and the overall load capacity of your server(s).
 
@@ -12,6 +10,7 @@ The Performance Toolkit enables you to test the performance of your Magento inst
 - Unzip the archive.
 
 ### JSON Plugins
+
 - Go to the [JMeter Installing Plugins](https://jmeter-plugins.org/install/Install/) page.
 - Download `plugins-manager.jar` and put it into the `{JMeter path}/lib/ext` directory. Then restart JMeter.
 - Follow the instructions provided on the [JMeter Plugins Manager](https://jmeter-plugins.org/wiki/PluginsManager/) page to open Plugins Manager.
@@ -29,18 +28,19 @@ Splitting generation and indexation processes doesn't reduce total processing ti
     php bin/magento setup:performance:generate-fixtures -s setup/performance-toolkit/profiles/ce/small.xml
     php bin/magento indexer:reindex
 
-For more information about the available profiles and generating fixtures generation, read [Generate data for performance testing](https://devdocs.magento.com/guides/v2.3/config-guide/cli/config-cli-subcommands-perf-data.html).
+For more information about the available profiles and generating fixtures generation, read [Generate data for performance testing](https://devdocs.magento.com/guides/v2.4/config-guide/cli/config-cli-subcommands-perf-data.html).
 
 For run Admin Pool in multithreading mode, please be sure, that:
-  - "Admin Account Sharing" is enabled
 
-    `Follow Stores > Configuration > Advanced > Admin > Security.
-    Set Admin Account Sharing to Yes.`
+- "Admin Account Sharing" is enabled
 
-  - Indexers setup in "Update by schedule" mode: 
+  `Follow Stores > Configuration > Advanced > Admin > Security.
+  Set Admin Account Sharing to Yes.`
 
-    `Follow System > Tool > Index Management
-    Set "Update by schedule" for all idexers`
+- Indexers setup in "Update by schedule" mode:
+
+  `Follow System > Tool > Index Management
+  Set "Update by schedule" for all idexers`
 
 **Note:** Before generating medium or large profiles, it may be necessary to increase the value of `tmp_table_size` and `max_heap_table_size` parameters for MySQL to 512Mb or more. The value of `memory_limit` for PHP should be 1Gb or more.
 
@@ -187,7 +187,6 @@ Parameters for Combined Benchmark pool:
 | cAdminCustomerManagementPercentage                                |  0.4                | Percentage of threads in Combined Benchmark Pool that emulate admin customers management activities. |
 | cAdminEditOrderPercentage                                         |  1                  | Percentage of threads in Combined Benchmark Pool that emulate admin edit order activities.           |
 
-
 Parameters must be passed to the command line with the `J` prefix:
 
 `-J{parameter_name}={parameter_value}`
@@ -205,18 +204,19 @@ To get more details about available JMeter options, read [Non-GUI Mode](http://j
 
 For example, you can run the B2C scenario via console with:
 90 threads for the Frontend Pool where:
+
 - 80% - guest catalog browsing activities.
 - 20% - checkout by customer.
- 
+
 10 threads for the Admin Pool where:
-- 10% - admin products grid browsing activities. 
+
+- 10% - admin products grid browsing activities.
 - 90% - admin product creation activities.
 
     cd {JMeter path}/bin/
     jmeter -n -t {path to performance toolkit}/benchmark.jmx -j ./jmeter.log -l ./jmeter-results.jtl -Jhost=magento2.dev -Jbase_path=/ -Jadmin_path=admin -JfrontendPoolUsers=90 -JadminPoolUsers=10 -JbrowseCatalogByGuestPercentage=80 -JcheckoutByCustomerPercentage=20 -JbrowseProductGridPercentage=10 -JadminProductCreationPercentage=90
 
 As a result, you will get `jmeter.log` and `jmeter-results.jtl`. The`jmeter.log` contains information about the test run and can be helpful in determining the cause of an error.  The JTL file is a text file containing the results of a test run. It can be opened in the GUI mode to perform analysis of the results (see the *Output* section below).
-
 
 The following parameters can be passed to the `benchmark_2015.jmx` scenario:
 
@@ -289,34 +289,48 @@ For more details, read [Summary Report](http://jmeter.apache.org/usermanual/comp
 
 `benchmark.jmx` scenario has the following pools:
 
-**Frontend Pool** (frontendPoolUsers)
+- **Frontend Pool** (frontendPoolUsers)
 
-**Admin Pool** (adminPoolUsers)
+- **Admin Pool** (adminPoolUsers)
 
-**CSR Pool** (csrPoolUsers)
+- **CSR Pool** (csrPoolUsers)
 
-**API Pool** (apiPoolUsers)
+- **API Pool** (apiPoolUsers)
 
-**One Thread Scenarios Pool** (oneThreadScenariosPoolUsers)
+- **One Thread Scenarios Pool** (oneThreadScenariosPoolUsers)
 
-**GraphQL Pool** (graphQLPoolUsers)
+- **GraphQL Pool** (graphQLPoolUsers)
 
-**Combined Benchmark Pool** (combinedBenchmarkPoolUsers)
+- **Combined Benchmark Pool** (combinedBenchmarkPoolUsers)
 
-**Legacy Threads**
+- **Legacy Threads**
+
+- **Legacy Scenario**
+
+#### Legacy Threads
 
 The `benchmark_2015.jmx` script consists of five thread groups: the setup thread and four user threads.
 By default, the percentage ratio between the thread groups is as follows:
+
 - Browsing, adding items to the cart and abandon cart (BrowsAddToCart suffix in reports) - 62%
 - Just browsing (CatProdBrows suffix in reports) - 30%
 - Browsing, adding items to cart and checkout as guest (GuestChkt suffix in reports) -  4%
 - Browsing, adding items to cart and checkout as registered customer (CustomerChkt suffix in reports) - 4%
 
-**Legacy Scenario**
+The `benchmark_2015.jmx` script consists of five thread groups: the setup thread and four user threads.
+By default, the percentage ratio between the thread groups is as follows:
+
+- Browsing, adding items to the cart and abandon cart (BrowsAddToCart suffix in reports) - 62%
+- Just browsing (CatProdBrows suffix in reports) - 30%
+- Browsing, adding items to cart and checkout as guest (GuestChkt suffix in reports) -  4%
+- Browsing, adding items to cart and checkout as registered customer (CustomerChkt suffix in reports) - 4%
+
+#### Legacy Scenario
 
 It is convenient to use *Summary Report* for the results analysis. To evaluate the number of each request per hour, use the value in the *Throughput* column.
 
 To get the summary value of throughput for some action:
+
 1. Find all rows that relate to the desired action
 2. Convert values from *Throughput* column to a common denominator
 3. Sum up the obtained values

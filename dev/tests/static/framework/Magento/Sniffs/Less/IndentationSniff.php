@@ -14,7 +14,7 @@ use PHP_CodeSniffer\Files\File;
  * Ensures styles are indented 4 spaces.
  *
  * @see Squiz_Sniffs_CSS_IndentationSniff
- * @link https://devdocs.magento.com/guides/v2.3/coding-standards/code-standard-less.html#indentation
+ * @link https://devdocs.magento.com/guides/v2.4/coding-standards/code-standard-less.html#indentation
  */
 class IndentationSniff implements Sniff
 {

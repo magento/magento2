@@ -9,6 +9,9 @@
         "magento/module-catalog": "*",
         "magento/module-catalog-graph-ql": "*"
     },
+    "suggest": {
+        "magento/module-configurable-product-graph-ql": "*"
+    },
     "license": [
         "OSL-3.0",
         "AFL-3.0"
