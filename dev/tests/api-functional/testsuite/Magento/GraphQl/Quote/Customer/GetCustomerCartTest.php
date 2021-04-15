@@ -159,6 +159,7 @@ class GetCustomerCartTest extends GraphQlAbstract
      * Querying for the customer cart twice->should return the same cart
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoDbIsolation disabled
      */
     public function testRequestCustomerCartTwice()
     {
