@@ -11,6 +11,8 @@ use Magento\Framework\Api\Search\SearchCriteriaInterface;
 
 /**
  * Interface used to apply each argument to a search criteria
+ *
+ * @api
  */
 interface ArgumentApplierInterface
 {
@@ -28,5 +30,5 @@ interface ArgumentApplierInterface
         string $fieldName,
         string $argumentName,
         array $argument
-    ) : SearchCriteriaInterface;
+    ): SearchCriteriaInterface;
 }

@@ -11,6 +11,8 @@ namespace Magento\Framework\GraphQl\Config\Element;
  * Class representing 'field' GraphQL config element.
  *
  * Fields are used to describe possible values for a type/interface.
+ *
+ * @api
  */
 class Field implements OutputFieldInterface
 {
