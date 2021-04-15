@@ -49,6 +49,8 @@ class CurlHelpers extends Helper
         $imageContent = $this->getCurlResponse($url, $cookie, $postBody);
         // Must make request twice until bug is resolved: B2B-1789
         $imageContent = $this->getCurlResponse($url, $cookie, $postBody);
+        // md5() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $imageContentMD5 = md5($imageContent);
         $this->assertStringContainsString($expectedString, $imageContentMD5, $message);
     }
