@@ -125,7 +125,7 @@ class RemoteAddress
     public function getRemoteAddress(bool $ipToLong = false)
     {
         if ($this->remoteAddress !== null) {
-            return $ipToLong ? ip2long($this->remoteAddress) : $this->remoteAddress;
+            return $ipToLong && $this->remoteAddress ? ip2long($this->remoteAddress) : $this->remoteAddress;
         }
 
         $remoteAddress = $this->readAddress();
@@ -144,7 +144,7 @@ class RemoteAddress
 
         $this->remoteAddress = $remoteAddress;
 
-        return $ipToLong ? ip2long($this->remoteAddress) : $this->remoteAddress;
+        return $ipToLong && $this->remoteAddress ? ip2long($this->remoteAddress) : $this->remoteAddress;
     }
 
     /**
