@@ -3176,7 +3176,8 @@ class Product extends AbstractEntity
         $stockItemDo = $this->stockRegistry->getStockItem($row['product_id'], $row['website_id']);
         $existStockData = $stockItemDo->getData();
 
-        if (isset($rowData['qty']) && $rowData['qty'] == 0 && !isset($rowData['is_in_stock'])) {
+        //If qty is <= 0 and is_in_stock is not set, we should set it to 0
+        if (isset($rowData['qty']) && $rowData['qty'] <= 0 && !isset($rowData['is_in_stock'])) {
             $rowData['is_in_stock'] = 0;
         }
 
@@ -3188,11 +3189,19 @@ class Product extends AbstractEntity
         );
 
         if ($this->stockConfiguration->isQty($this->skuProcessor->getNewSku($sku)['type_id'])) {
-            if (isset($rowData['qty']) && $rowData['qty'] == 0) {
+
+            //if qty is 0 and backorders are not enabled, is_in_stock should become 0.
+            if (isset($rowData['qty']) && $rowData['qty'] <= 0 && !$stockItemDo->getBackorders()) {
                 $row['is_in_stock'] = 0;
             }
+
             $stockItemDo->setData($row);
-            $row['is_in_stock'] = $row['is_in_stock'] ?? $this->stockStateProvider->verifyStock($stockItemDo);
+
+            //if back-orders are not enabled, we can verify the stock.
+            if (!$stockItemDo->getBackorders()) {
+                $row['is_in_stock'] = $row['is_in_stock'] ?? $this->stockStateProvider->verifyStock($stockItemDo);
+            }
+
             if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
                 $date = $this->dateTimeFactory->create('now', new \DateTimeZone('UTC'));
                 $row['low_stock_date'] = $date->format(DateTime::DATETIME_PHP_FORMAT);
