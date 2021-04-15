@@ -54,7 +54,6 @@
             <argument name="toDate" value="01/1/2099"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductNewTo"/>
-
         <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductsSection"/>
         <scrollTo selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="scrollToAddProductsToGroup"/>
         <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup"/>

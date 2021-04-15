@@ -36,9 +36,12 @@
         <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickAddDownloadableProduct">
             <argument name="productType" value="downloadable"/>
         </actionGroup>
-        <actionGroup ref="FillMainDownloadableProductFormActionGroup" stepKey="fillMainProductFormDownloadable">
+        <actionGroup ref="FillMainDownloadableProductFormActionGroup" stepKey="fillProductName">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductSku"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductPrice"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductQuantity"/>
         <actionGroup ref="AdminSetProductAsNewDateActionGroup" stepKey="fillProductNewFrom">
             <argument name="fromDate" value="01/1/2000"/>
             <argument name="toDate" value="01/1/2099"/>
