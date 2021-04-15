@@ -13,6 +13,7 @@
             <stories value="Magento Marketplace displaying."/>
             <title value="Admin should see Magento Marketplace page."/>
             <description value="Admin should see Magento Marketplace page."/>
+            <severity value="MINOR"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
