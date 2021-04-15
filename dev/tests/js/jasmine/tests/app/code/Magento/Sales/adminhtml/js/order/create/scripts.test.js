@@ -184,7 +184,7 @@ define([
                 });
                 $(formEl).find(':radio[value="' + paymentMethod + '"]').prop('checked', true);
                 order.switchPaymentMethod(paymentMethod);
-                order.submit();
+                order.trigger('submit');
                 expect($.ajax).toHaveBeenCalledTimes(1);
                 expect($.ajax).toHaveBeenCalledWith(jasmine.objectContaining(ajaxParams));
             }

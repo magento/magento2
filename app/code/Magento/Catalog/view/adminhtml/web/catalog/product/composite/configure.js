@@ -266,7 +266,7 @@ define([
         onConfirmBtn: function () {
             if (jQuery(this.blockForm).valid()) {
                 if (this.listTypes[this.current.listType].urlConfirm) {
-                    this.submit();
+                    this.trigger('submit');
                 } else {
                     this._processFieldsData('item_confirm');
                     this._closeWindow();
@@ -365,7 +365,7 @@ define([
             if (Object.isFunction(this.beforeSubmitCallback[this.current.listType])) {
                 this.beforeSubmitCallback[this.current.listType]();
             }
-            this.blockForm.submit();
+            this.blockForm.trigger('submit');
 
             // Show loader
             jQuery(this.blockForm).trigger('processStart');

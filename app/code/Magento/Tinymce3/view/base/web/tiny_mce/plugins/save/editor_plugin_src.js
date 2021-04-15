@@ -74,7 +74,7 @@
 				ed.isNotDirty = true;
 
 				if (formObj.onsubmit == null || formObj.onsubmit() != false)
-					formObj.submit();
+					formObj.trigger('submit');
 
 				ed.nodeChanged();
 			} else

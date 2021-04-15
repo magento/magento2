@@ -48,7 +48,7 @@ define([
          */
         _addNewAddress: function () {
             $(this.options.addNewAddressFlag).val(1);
-            this.element.submit();
+            this.element.trigger('submit');
         },
 
         /**

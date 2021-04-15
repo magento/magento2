@@ -241,7 +241,7 @@ define([
 
                 swatchComponents.iframe.off('load');
                 swatchComponents.iframe.load(iframeHandler);
-                swatchComponents.form.submit();
+                swatchComponents.form.trigger('submit');
                 $(this).val('');
             });
 

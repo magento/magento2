@@ -181,7 +181,7 @@ define([
                 form.action = baseUrl;
                 form.method = 'POST';
                 document.body.appendChild(form);
-                form.submit();
+                form.trigger('submit');
             } else {
                 if (paramValue == defaultValue) { //eslint-disable-line eqeqeq
                     delete paramData[paramName];

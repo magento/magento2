@@ -425,7 +425,7 @@ define([
                             });
 
                             $(this).fileupload('process', data).done(function () {
-                                data.submit();
+                                data.trigger('submit');
                             });
                         },
 

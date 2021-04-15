@@ -37,7 +37,7 @@ define([
                  * 'Confirm' action handler.
                  */
                 confirm: function () {
-                    getForm(url).appendTo('body').submit();
+                    getForm(url).appendTo('body').trigger('submit');
                 }
             }
         });

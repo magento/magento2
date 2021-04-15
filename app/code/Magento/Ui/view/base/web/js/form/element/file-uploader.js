@@ -363,7 +363,7 @@ define([
                 }.bind(data));
 
                 target.fileupload('process', data).done(function () {
-                    data.submit();
+                    data.trigger('submit');
                 });
             } else {
                 this.aggregateError(file.name, allowed.message);

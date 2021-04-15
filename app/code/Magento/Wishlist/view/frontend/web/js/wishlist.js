@@ -182,7 +182,7 @@ define([
                 this.element.on('addToCart', $.proxy(function (event, context) {
                     this.element.find('input:checkbox').attr('checked', false);
                     $(context).closest('tr').find('input:checkbox').attr('checked', true);
-                    this.element.submit();
+                    this.element.trigger('submit');
                 }, this));
                 this._checkBoxValidate();
             }
@@ -196,7 +196,7 @@ define([
             this.element.validation({
                 submitHandler: $.proxy(function (form) {
                     if ($(form).find('input:checkbox:checked').length) {
-                        form.submit();
+                        form.trigger('submit');
                     } else {
                         alert({
                             content: this.options.checkBoxValidationMessage
@@ -231,7 +231,7 @@ define([
                     });
 
                 $(html).appendTo('body');
-                $(_this.options.formTmplId).submit();
+                $(_this.options.formTmplId).trigger('submit');
             });
         }
     });

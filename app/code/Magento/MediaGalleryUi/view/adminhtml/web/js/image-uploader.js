@@ -102,7 +102,7 @@ define([
 
                     this.showLoader();
                     this.count(1);
-                    data.submit();
+                    data.trigger('submit');
                 }.bind(this),
 
                 stop: function () {

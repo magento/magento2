@@ -46,7 +46,7 @@ define([
                 submitHandler: function (form) {
 
                     button.attr('disabled', true);
-                    form.submit();
+                    form.trigger('submit');
                 }
             });
 
