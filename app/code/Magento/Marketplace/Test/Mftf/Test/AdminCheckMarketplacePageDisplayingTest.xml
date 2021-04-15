@@ -24,5 +24,6 @@
 
         <actionGroup ref="AdminOpenMarketplacePageActionGroup" stepKey="openMarketplacePage"/>
         <actionGroup ref="AssertAdminPageIsNot404ActionGroup" stepKey="verifyPageIsNot404"/>
+        <actionGroup ref="AssertAdminMarketplacePageContentActionGroup" stepKey="assertContent"/>
     </test>
 </tests>
