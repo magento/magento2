@@ -5,10 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace integration\testsuite\Magento\Indexer\Model\Indexer;
+namespace Magento\Indexer\Model\Indexer;
 
 use Magento\Framework\Indexer\CacheContext;
-use Magento\Indexer\Model\Indexer\DeferredCacheContext;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
