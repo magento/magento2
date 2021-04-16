@@ -139,7 +139,7 @@ define([
             var config = processConfig(valueAccessor(), viewModel, element);
 
             require(['jquery-ui-modules/resizable'], function () {
-                if($.fn.resizable) {
+                if ($.fn.resizable) {
                     $(element).resizable(config);
                 }
             });
