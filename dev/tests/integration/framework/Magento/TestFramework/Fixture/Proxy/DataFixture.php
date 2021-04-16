@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Fixture\Proxy;
 
-use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 
@@ -41,7 +40,7 @@ class DataFixture implements DataFixtureInterface
     /**
      * @inheritdoc
      */
-    public function apply(DataObject $data): ?DataObject
+    public function apply(array $data = []): ?array
     {
         return $this->getInstance()->apply($data);
     }
@@ -49,7 +48,7 @@ class DataFixture implements DataFixtureInterface
     /**
      * @inheritdoc
      */
-    public function revert(?DataObject $data): void
+    public function revert(array $data = []): void
     {
         $fixture = $this->getInstance();
         if ($fixture instanceof RevertibleDataFixtureInterface) {

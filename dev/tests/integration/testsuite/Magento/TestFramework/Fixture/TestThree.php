@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Fixture;
 
-use Magento\Framework\DataObject;
 use Magento\TestFramework\DataFixtureTestStorage;
 
 /**
@@ -31,10 +30,10 @@ class TestThree implements DataFixtureInterface
     /**
      * @inheritdoc
      */
-    public function apply(DataObject $data): ?DataObject
+    public function apply(array $data = []): ?array
     {
         $fixtures = $this->storage->getData('fixtures') ?? [];
-        $fixtures[$data->getData('key')] = $data->getData('value');
+        $fixtures[$data['key']] = $data['value'];
         $this->storage->setData('fixtures', $fixtures);
         return null;
     }

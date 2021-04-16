@@ -103,10 +103,10 @@ abstract class AbstractDataFixture
                 $directives['name'] = [get_class($test), $directives['name']];
             }
             $fixture = $dataFixtureFactory->create($directives);
-            $data = $objectManager->create(DataObject::class, ['data' => $directives['data'] ?? []]);
             $key = $directives['identifier'] ?? $key;
-            $result = $fixture->apply($data);
-            DataFixtureResultStorage::getInstance()->persist("$key", $result);
+            $result = $fixture->apply($directives['data'] ?? []);
+            $resultObj = $result !== null ? $objectManager->create(DataObject::class, ['data' => $result]) : null;
+            DataFixtureResultStorage::getInstance()->persist("$key", $resultObj);
             $this->_appliedFixtures[$key] = $fixture;
         }
         $resolver = Resolver::getInstance();
@@ -126,7 +126,7 @@ abstract class AbstractDataFixture
         $appliedFixtures = array_reverse($this->_appliedFixtures, true);
         foreach ($appliedFixtures as $key => $fixture) {
             $result = DataFixtureResultStorage::getInstance()->get("$key");
-            $fixture->revert($result);
+            $fixture->revert($result ? $result->getData() : []);
         }
         $this->_appliedFixtures = [];
         DataFixtureResultStorage::getInstance()->flush();

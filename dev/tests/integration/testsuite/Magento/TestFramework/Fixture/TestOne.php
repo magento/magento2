@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Fixture;
 
-use Magento\Framework\DataObject;
 use Magento\TestFramework\DataFixtureTestStorage;
 
 /**
@@ -31,21 +30,21 @@ class TestOne implements RevertibleDataFixtureInterface
     /**
      * @inheritdoc
      */
-    public function apply(DataObject $data): ?DataObject
+    public function apply(array $data = []): ?array
     {
         $fixtures = $this->storage->getData('fixtures') ?? [];
-        $result = new DataObject(array_merge([get_class($this) => true], $data->getData()));
-        $this->storage->setData('fixtures', array_merge($fixtures, $result->getData()));
+        $result = array_merge([get_class($this) => true], $data);
+        $this->storage->setData('fixtures', array_merge($fixtures, $result));
         return $result;
     }
 
     /**
      * @inheritdoc
      */
-    public function revert(?DataObject $data): void
+    public function revert(array $data = []): void
     {
         $fixtures = $this->storage->getData('fixtures') ?? [];
-        foreach (array_keys($data->getData()) as $key) {
+        foreach (array_keys($data) as $key) {
             unset($fixtures[$key]);
         }
         $this->storage->setData('fixtures', $fixtures);

@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Fixture\Proxy;
 
-use Magento\Framework\DataObject;
-
 /**
  * Callable data fixture type
  */
@@ -31,7 +29,7 @@ class CallableDataFixture implements DataFixtureInterface
     /**
      * @inheritdoc
      */
-    public function apply(DataObject $data): ?DataObject
+    public function apply(array $data = []): ?array
     {
         call_user_func($this->callback);
         return null;
@@ -40,7 +38,7 @@ class CallableDataFixture implements DataFixtureInterface
     /**
      * @inheritdoc
      */
-    public function revert(?DataObject $data): void
+    public function revert(array $data = []): void
     {
         $rollbackCallback = null;
         if (is_array($this->callback)) {

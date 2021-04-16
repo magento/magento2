@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Fixture\Proxy;
 
-use Magento\Framework\DataObject;
 use PHPUnit\Framework\Exception;
 
 /**
@@ -31,7 +30,7 @@ class LegacyDataFixture implements DataFixtureInterface
     /**
      * @inheritdoc
      */
-    public function apply(DataObject $data): ?DataObject
+    public function apply(array $data = []): ?array
     {
         $this->execute($this->filePath);
         return null;
@@ -40,7 +39,7 @@ class LegacyDataFixture implements DataFixtureInterface
     /**
      * @inheritdoc
      */
-    public function revert(?DataObject $data): void
+    public function revert(array $data = []): void
     {
         $fileInfo = pathinfo($this->filePath);
         $extension = '';

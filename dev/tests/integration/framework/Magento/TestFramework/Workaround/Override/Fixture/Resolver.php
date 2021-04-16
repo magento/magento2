@@ -125,7 +125,7 @@ class Resolver implements ResolverInterface
         /** @var DataFixtureApplier $dataFixtureApplier */
         $dataFixtureApplier = $this->getApplier($this->getCurrentTest(), $this->currentFixtureType);
         $fixture = $this->dataFixtureFactory->create(['name' => $dataFixtureApplier->replace($path)]);
-        $fixture->apply($this->objectManager->create(DataObject::class));
+        $fixture->apply();
     }
 
     /**
