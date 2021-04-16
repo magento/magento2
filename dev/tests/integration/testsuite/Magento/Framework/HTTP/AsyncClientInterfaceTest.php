@@ -40,11 +40,11 @@ class AsyncClientInterfaceTest extends TestCase
         $response2 = $this->client->request($request);
         $this->assertEquals(200, $response2->get()->getStatusCode());
         $this->assertEquals(200, $response1->get()->getStatusCode());
-        $this->assertStringContainsString('Magento', $response1->get()->getBody());
-        $this->assertStringContainsString('Magento', $response2->get()->getBody());
+        $this->assertStringContainsString('Magento Commerce', $response1->get()->getBody());
+        $this->assertStringContainsString('Magento Commerce', $response2->get()->getBody());
         $date1 = new \DateTime($response1->get()->getHeaders()['date']);
         $date2 = new \DateTime($response2->get()->getHeaders()['date']);
-        $this->assertLessThanOrEqual(1, abs($date1->format('U') - $date2->format('U')));
+        $this->assertLessThanOrEqual(1, abs((int)$date1->format('U') - (int)$date2->format('U')));
     }
 
     /**
@@ -56,7 +56,7 @@ class AsyncClientInterfaceTest extends TestCase
         $this->expectException(\Magento\Framework\Async\CancelingDeferredException::class);
         $this->expectExceptionMessage('Deferred is canceled');
 
-        $request = new Request('https://magento.com', Request::METHOD_GET, [], null);
+        $request = new Request('https://magento.com/home-page', Request::METHOD_GET, [], null);
         $response = $this->client->request($request);
         $response->cancel(true);
         $this->assertTrue($response->isCancelled());
@@ -72,7 +72,7 @@ class AsyncClientInterfaceTest extends TestCase
         $this->expectException(\Magento\Framework\Async\CancelingDeferredException::class);
         $this->expectExceptionMessage('Failed to cancel HTTP request');
 
-        $request = new Request('https://magento.com', Request::METHOD_GET, [], null);
+        $request = new Request('https://magento.com/home-page', Request::METHOD_GET, [], null);
         $response = $this->client->request($request);
         $response->cancel();
     }
