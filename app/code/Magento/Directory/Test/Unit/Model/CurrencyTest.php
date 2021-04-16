@@ -11,6 +11,7 @@ use Magento\Directory\Model\Currency;
 use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\Locale\ResolverInterface as LocalResolverInterface;
 use Magento\Framework\NumberFormatterFactory;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -39,6 +40,11 @@ class CurrencyTest extends TestCase
      */
     private $numberFormatterFactory;
 
+    /**
+     * @var Json
+     */
+    private $serializer;
+
     protected function setUp(): void
     {
         $this->localeCurrencyMock = $this->getMockForAbstractClass(CurrencyInterface::class);
@@ -51,6 +57,9 @@ class CurrencyTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
+        $this->serializer = $this->getMockBuilder(Json::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->currency = $objectManager->getObject(
@@ -60,6 +69,7 @@ class CurrencyTest extends TestCase
                 'currencyFilterFactory' => $currencyFilterFactory,
                 'localeResolver' => $this->localeResolver,
                 'numberFormatterFactory' => $this->numberFormatterFactory,
+                'serializer' => $this->serializer,
                 'data' => [
                     'currency_code' => $this->currencyCode,
                 ]
@@ -97,6 +107,12 @@ class CurrencyTest extends TestCase
             ->method('create')
             ->with(['locale' => $locale, 'style' => 2])
             ->willReturn(new \Magento\Framework\NumberFormatter($locale, 2));
+        $this->serializer->method('serialize')->willReturnMap(
+            [
+                [[], '[]'],
+                [['display' => 1], '{"display":1}']
+            ]
+        );
         self::assertEquals($expected, $this->currency->getOutputFormat());
     }
 
@@ -138,6 +154,11 @@ class CurrencyTest extends TestCase
             ->method('create')
             ->with(['locale' => $locale, 'style' => 2])
             ->willReturn(new \Magento\Framework\NumberFormatter($locale, 2));
+        $this->serializer->method('serialize')->willReturnMap(
+            [
+                [[], '[]']
+            ]
+        );
 
         self::assertEquals($expected, $this->currency->formatTxt($price, $options));
     }
@@ -179,6 +200,11 @@ class CurrencyTest extends TestCase
             ->method('getCurrency')
             ->with($this->currencyCode)
             ->willReturn(new \Zend_Currency($options, 'en_US'));
+        $this->serializer->method('serialize')->willReturnMap(
+            [
+                [[], '[]']
+            ]
+        );
 
         self::assertEquals($expected, $this->currency->formatTxt($price, $options));
     }

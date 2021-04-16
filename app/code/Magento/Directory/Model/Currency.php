@@ -12,6 +12,7 @@ use Magento\Directory\Model\Currency\Filter;
 use Magento\Framework\Locale\Currency as LocaleCurrency;
 use Magento\Framework\Locale\ResolverInterface as LocalResolverInterface;
 use Magento\Framework\NumberFormatterFactory;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Currency model
@@ -95,6 +96,11 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     private $numberFormatterCache;
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
@@ -108,6 +114,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @param CurrencyConfig|null $currencyConfig
      * @param LocalResolverInterface|null $localeResolver
      * @param NumberFormatterFactory|null $numberFormatterFactory
+     * @param Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -123,7 +130,8 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         array $data = [],
         CurrencyConfig $currencyConfig = null,
         LocalResolverInterface $localeResolver = null,
-        \Magento\Framework\NumberFormatterFactory $numberFormatterFactory = null
+        \Magento\Framework\NumberFormatterFactory $numberFormatterFactory = null,
+        Json $serializer = null
     ) {
         parent::__construct(
             $context,
@@ -140,6 +148,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         $this->currencyConfig = $currencyConfig ?: ObjectManager::getInstance()->get(CurrencyConfig::class);
         $this->localeResolver = $localeResolver ?: ObjectManager::getInstance()->get(LocalResolverInterface::class);
         $this->numberFormatterFactory = $numberFormatterFactory ?: ObjectManager::getInstance()->get(NumberFormatterFactory::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -356,7 +365,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
          */
         $price = sprintf("%F", $price);
 
-        if ($this->useNumberFormatter($options)) {
+        if ($this->canUseNumberFormatter($options)) {
             return $this->formatCurrency($price, $options);
         }
 
@@ -369,7 +378,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @param array $options
      * @return bool
      */
-    private function useNumberFormatter(array $options): bool
+    private function canUseNumberFormatter(array $options): bool
     {
         $allowedOptions = [
             'precision',
@@ -435,7 +444,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      */
     private function getNumberFormatter(array $options): \Magento\Framework\NumberFormatter
     {
-        $key = 'currency_' . md5($this->localeResolver->getLocale() . serialize($options));
+        $key = 'currency_' . md5($this->localeResolver->getLocale() . $this->serializer->serialize($options));
         if (!isset($this->numberFormatterCache[$key])) {
             $this->numberFormatter = $this->numberFormatterFactory->create(
                 ['locale' => $this->localeResolver->getLocale(), 'style' => \NumberFormatter::CURRENCY]
