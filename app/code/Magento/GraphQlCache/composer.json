@@ -2,16 +2,17 @@
     "name": "magento/module-graph-ql-cache",
     "description": "N/A",
     "type": "magento2-module",
-    "require": {
-        "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
-        "magento/module-page-cache": "*",
-        "magento/module-graph-ql": "*"
-    },
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "version": "100.3.3",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "102.0.*",
+        "magento/module-page-cache": "100.3.*",
+        "magento/module-graph-ql": "100.3.*"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -21,3 +22,4 @@
         }
     }
 }
+

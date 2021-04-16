@@ -1,17 +1,18 @@
 {
     "name": "magento/module-sales-analytics",
     "description": "N/A",
-    "require": {
-        "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
-        "magento/module-sales": "*",
-        "magento/module-analytics": "*"
-    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "version": "100.3.5",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "102.0.*",
+        "magento/module-sales": "102.0.*",
+        "magento/module-analytics": "100.3.*"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -21,3 +22,4 @@
         }
     }
 }
+

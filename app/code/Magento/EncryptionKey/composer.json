@@ -1,20 +1,21 @@
 {
     "name": "magento/module-encryption-key",
     "description": "N/A",
-    "config": {
-        "sort-packages": true
-    },
-    "require": {
-        "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
-        "magento/module-backend": "*",
-        "magento/module-config": "*"
-    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "config": {
+        "sort-packages": true
+    },
+    "version": "100.3.6",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "102.0.*",
+        "magento/module-backend": "101.0.*",
+        "magento/module-config": "101.1.*"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -24,3 +25,4 @@
         }
     }
 }
+
