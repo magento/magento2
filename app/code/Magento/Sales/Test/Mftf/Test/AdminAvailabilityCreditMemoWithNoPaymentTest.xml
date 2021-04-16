@@ -80,7 +80,9 @@
         <seeElement selector="{{AdminOrderFormItemsSection.creditMemo}}" stepKey="seeCreditMemo"/>
         <click selector="{{AdminOrderFormItemsSection.creditMemo}}" stepKey="clickCreditMemoItem"/>
         <waitForPageLoad stepKey="waitForCreditMemoPageLoaded"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Memo" stepKey="seeNewMemoPageTitle"/>
+        <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seeNewMemoPageTitle">
+            <argument name="value" value="New Memo"/>
+        </actionGroup>
         <seeInCurrentUrl url="{{AdminCreditMemoNewPage.url}}" stepKey="seeNewMemoUrlOnPage"/>
     </test>
 </tests>
