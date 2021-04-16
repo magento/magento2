@@ -1102,7 +1102,7 @@ class Filter extends Template
             if ($this->_appState->getMode() == State::MODE_DEVELOPER) {
                 $value = sprintf(__('Error filtering template: %s'), $e->getMessage());
             } else {
-                $value = __("We're sorry, an error has occurred while generating this content.");
+                $value = (string) __("We're sorry, an error has occurred while generating this content.");
             }
             $this->_logger->critical($e);
         }
