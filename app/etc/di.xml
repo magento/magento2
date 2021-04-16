@@ -213,6 +213,7 @@
     <preference for="Magento\Framework\Interception\ConfigLoaderInterface" type="Magento\Framework\Interception\PluginListGenerator" />
     <preference for="Magento\Framework\Interception\ConfigWriterInterface" type="Magento\Framework\Interception\PluginListGenerator" />
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
+    <type name="Magento\Framework\HTTP\ClientInterface" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
         <arguments>
             <argument name="aclBuilder" xsi:type="object">Magento\Framework\Acl\Builder\Proxy</argument>
