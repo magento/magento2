@@ -8,9 +8,13 @@ Before installing this module, note that the Magento_ProductAlert is dependent o
 - `Magento_Catalog`
 - `Magento_Customer`
 
-The Magento_ProductAlert module creates the following table in the database:
+The Magento_ProductAlert module creates the following tables in the database:
 - `product_alert_price`
 - `product_alert_stock`
+
+All database schema changes made by this module are rolled back when the module gets disabled and setup:upgrade command is run.
+
+The Magento_ProductAlert module contains the recurring script. Script's modifications don't need to be manually reverted upon uninstallation. 
 
 For information about a module installation in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
 

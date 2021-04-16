@@ -6,19 +6,6 @@ This module provides customer cart management functionality.
 
 The Magento_Quote module is one of the base Magento 2 modules. You cannot disable or uninstall this module.
 
-The following modules depend on this module:
-- `Magento_Checkout`
-- `Magento_ConfigurableProduct`
-- `Magento_GiftMessage`
-- `Magento_GroupedProduct`
-- `Magento_OfflineShipping`
-- `Magento_Paypal`
-- `Magento_PaypalGraphQl`
-- `Magento_QuoteAnalytics`
-- `Magento_Reports`
-- `Magento_SalesRule`
-- `Magento_Weee`
-
 The Magento_Quote module creates the following table in the database:
 - `quote`
 - `quote_address`
@@ -185,7 +172,7 @@ For information about an event in Magento 2, see [Events and observers](http://d
     
 #### Guest
 
-- `\Magento\Quote\Api\GuestBillingAddressManagementInterfacee`
+- `\Magento\Quote\Api\GuestBillingAddressManagementInterface`
     - assigns a specified billing address to a specified quote
     - gets the billing address for a specified quote
 

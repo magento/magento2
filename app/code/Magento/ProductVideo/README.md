@@ -10,6 +10,8 @@ Before installing this module, note that the Magento_ProductAlert is dependent o
 
 The Magento_ProductVideo module creates the `catalog_product_entity_media_gallery_value_video` table in the database.
 
+All database schema changes made by this module are rolled back when the module gets disabled and setup:upgrade command is run.
+
 For information about a module installation in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
 
 ## Extensibility

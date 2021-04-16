@@ -8,6 +8,8 @@ Before installing this module, note that the Magento_QuoteAnalytics is dependent
 - `Magento_Quote`
 - `Magento_Analytics`
 
+This module does not introduce any database schema modifications or new data.
+
 For information about a module installation in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
 
 ## Additional data

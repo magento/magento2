@@ -1,7 +1,7 @@
 # Magento_Persistent module
 
-This module enables set customer a long-term cookie containing internal id (random hash - to exclude brute
-force) of persistent session. Persistent session data is kept in DB - so it's not deleted in some days and is kept for
+This module enables setting a long-term cookie containing internal id (random hash - to exclude brute
+force) of persistent session for customer. Persistent session data is kept in DB - so it's not deleted in some days and is kept for
 as much time as we need. DB session keeps customerId + some data from real customer session that we want to sync (e.g.
 num items in shopping cart). For registered customer this info is synced to persistent session if choose "Remember me"
 checkbox during first login.
@@ -16,6 +16,8 @@ The Magento_Persistent module creates the `persistent_session` table in the data
 
 This module modifies the following tables in the database:
 - `quote` - adds column `is_persistent`
+
+All database schema changes made by this module are rolled back when the module gets disabled and setup:upgrade command is run.
 
 For information about a module installation in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
 
@@ -42,10 +44,6 @@ The module dispatches the following events:
 For information about an event in Magento 2, see [Events and observers](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/events-and-observers.html#events).
 
 ### Layouts
-
-This module introduces the following layouts in the `view/frontend/layout` directory:
-- `customer_account_create`
-- `customer_account_login`
 
 For more information about a layout in Magento 2, see the [Layout documentation](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).
 
