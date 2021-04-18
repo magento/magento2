@@ -36,7 +36,7 @@ switch ($type = $block->getType()) {
 
     case 'related':
         /** @var \Magento\Catalog\Block\Product\ProductList\Related $block */
-        if ($exist = $block->getItems()->getSize()) {
+        if ($exist = count($block->getItems())) {
             $type = 'related';
             $class = $type;
 
@@ -77,7 +77,7 @@ switch ($type = $block->getType()) {
 
     case 'upsell':
         /** @var \Magento\Catalog\Block\Product\ProductList\Upsell $block */
-        if ($exist = count($block->getItemCollection()->getItems())) {
+        if ($exist = count($block->getItems())) {
             $type = 'upsell';
             $class = $type;
 
