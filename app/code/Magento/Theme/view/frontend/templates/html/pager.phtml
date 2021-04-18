@@ -61,6 +61,7 @@
                 <li class="item">
                     <a class="page previous jump"
                        title=""
+                       aria-label="Skip to page <?= $block->escapeHtml($block->getPreviousJumpPage()) ?>"
                        href="<?= $block->escapeUrl($block->getPreviousJumpUrl()) ?>">
                         <span>...</span>
                     </a>
@@ -87,7 +88,10 @@
 
             <?php if ($block->canShowNextJump()): ?>
                 <li class="item">
-                    <a class="page next jump" title="" href="<?= $block->escapeUrl($block->getNextJumpUrl()) ?>">
+                    <a class="page next jump"
+                       title=""
+                       aria-label="Skip to page <?= $block->escapeHtml($block->getNextJumpPage()) ?>"
+                       href="<?= $block->escapeUrl($block->getNextJumpUrl()) ?>">
                         <span>...</span>
                     </a>
                 </li>
