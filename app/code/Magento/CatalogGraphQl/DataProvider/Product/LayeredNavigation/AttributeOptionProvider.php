@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
 
 /**
@@ -96,7 +97,7 @@ class AttributeOptionProvider
                 'a.attribute_id = options.attribute_id AND option_value.store_id = ?',
                 Store::DEFAULT_STORE_ID
             )->order(
-                'options.sort_order ' . \Zend_Db_Select::SQL_ASC
+                'options.sort_order ' . Select::SQL_ASC
             );
 
         $select->where('option_value.option_id IN (?)', $optionIds);
@@ -114,11 +115,11 @@ class AttributeOptionProvider
     /**
      * Format result
      *
-     * @param \Magento\Framework\DB\Select $select
+     * @param Select $select
      * @return array
      * @throws \Zend_Db_Statement_Exception
      */
-    private function formatResult(\Magento\Framework\DB\Select $select): array
+    private function formatResult(Select $select): array
     {
         $statement = $this->resourceConnection->getConnection()->query($select);
 
