@@ -95,6 +95,8 @@ class AttributeOptionProvider
             )->where(
                 'a.attribute_id = options.attribute_id AND option_value.store_id = ?',
                 Store::DEFAULT_STORE_ID
+            )->order(
+                'options.sort_order ' . \Zend_Db_Select::SQL_ASC
             );
 
         $select->where('option_value.option_id IN (?)', $optionIds);
