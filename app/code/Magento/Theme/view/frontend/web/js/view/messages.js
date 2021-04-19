@@ -27,21 +27,27 @@ define([
          * Extends Component object by storage observable messages.
          */
         initialize: function () {
-            this._super();
+            var _self = this;
+
+            this._super().observe('messages');
+
 
             this.cookieMessages = _.unique($.cookieStorage.get('mage-messages'), 'text');
-            this.messages = customerData.get('messages').extend({
+
+            _self.messages = customerData.get('messages').extend({
                 disposableCustomerData: 'messages'
             });
 
             // Force to clean obsolete messages
-            if (!_.isEmpty(this.messages().messages)) {
+            if (!_.isEmpty(_self.messages().messages)) {
                 customerData.set('messages', {});
+                _self.messages().messages = {};
             }
 
             $.mage.cookies.set('mage-messages', '', {
                 samesite: 'strict',
-                domain: ''
+                domain: !_.isEmpty($.mage.cookies.defaults.domain) ? $.mage.cookies.defaults.domain : '',
+                path: !_.isEmpty($.mage.cookies.defaults.path) ? $.mage.cookies.defaults.path : '/'
             });
         },
 
