@@ -185,7 +185,7 @@ define([
             this.selectAddressEvent = false;
 
             var data = this.serializeData(container);
-            data[el.name] = id;
+            data._object[el.name] = id;
 
             this.resetPaymentMethod();
             if (this.isShippingField(container) && !this.isShippingMethodReseted) {
