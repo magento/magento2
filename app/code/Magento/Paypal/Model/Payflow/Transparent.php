@@ -11,7 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Payment\Helper\Formatter;
 use Magento\Payment\Model\InfoInterface;
-use Magento\Payment\Model\Method\ConfigInterfaceFactory;
+use Magento\Payment\Gateway\ConfigInterfaceFactory;
 use Magento\Payment\Model\Method\TransparentInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Paypal\Model\Payflow\Service\Gateway;

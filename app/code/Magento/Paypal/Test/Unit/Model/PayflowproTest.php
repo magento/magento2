@@ -16,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Model\Info;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Gateway\ConfigInterface;
-use Magento\Payment\Model\Method\ConfigInterfaceFactory;
+use Magento\Payment\Gateway\ConfigInterfaceFactory;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\Payflow\Service\Gateway;
 use Magento\Paypal\Model\PayflowConfig;

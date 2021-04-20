@@ -13,7 +13,7 @@ use Magento\Payment\Gateway\Command\CommandException;
 use Magento\Payment\Helper\Formatter;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Gateway\ConfigInterface;
-use Magento\Payment\Model\Method\ConfigInterfaceFactory;
+use Magento\Payment\Gateway\ConfigInterfaceFactory;
 use Magento\Payment\Model\Method\Online\GatewayInterface;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Paypal\Model\Payflow\Service\Gateway;

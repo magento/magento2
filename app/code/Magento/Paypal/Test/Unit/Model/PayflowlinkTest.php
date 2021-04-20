@@ -10,7 +10,7 @@ namespace Magento\Paypal\Test\Unit\Model;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Payment\Model\Method\ConfigInterfaceFactory;
+use Magento\Payment\Gateway\ConfigInterfaceFactory;
 use Magento\Paypal\Block\Payment\Info;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\Payflow\Request;

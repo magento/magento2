@@ -7,7 +7,7 @@
 namespace Magento\Paypal\Model;
 
 use Magento\Payment\Model\Method\AbstractMethod;
-use Magento\Payment\Model\Method\ConfigInterfaceFactory;
+use Magento\Payment\Gateway\ConfigInterfaceFactory;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;

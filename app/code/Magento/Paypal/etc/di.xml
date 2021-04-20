@@ -81,12 +81,12 @@
             <argument name="alias" xsi:type="string">product.info.addtocart.payflowbml</argument>
         </arguments>
     </virtualType>
-    <virtualType name="payflowproConfigFactory" type="Magento\Payment\Model\Method\ConfigInterfaceFactory">
+    <virtualType name="payflowproConfigFactory" type="Magento\Payment\Gateway\ConfigInterfaceFactory">
         <arguments>
             <argument xsi:type="string" name="instanceName">Magento\Paypal\Model\PayflowConfig</argument>
         </arguments>
     </virtualType>
-    <virtualType name="payflowlinkConfigFactory" type="Magento\Payment\Model\Method\ConfigInterfaceFactory">
+    <virtualType name="payflowlinkConfigFactory" type="Magento\Payment\Gateway\ConfigInterfaceFactory">
         <arguments>
             <argument xsi:type="string" name="instanceName">Magento\Paypal\Model\Config</argument>
         </arguments>
