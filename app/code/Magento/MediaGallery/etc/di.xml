@@ -12,7 +12,6 @@
     <preference for="Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface" type="Magento\MediaGallery\Model\Asset\Command\GetById"/>
     <preference for="Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface" type="Magento\MediaGallery\Model\Asset\Command\Save"/>
     <preference for="Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface" type="Magento\MediaGallery\Model\Asset\Command\GetByPath"/>
-    <preference for="Magento\MediaGalleryApi\Model\Asset\Command\DeleteByPathInterface" type="Magento\MediaGallery\Model\Asset\Command\DeleteByPath"/>
 
     <preference for="Magento\MediaGalleryApi\Model\Keyword\Command\GetAssetKeywordsInterface" type="Magento\MediaGallery\Model\Keyword\Command\GetAssetKeywords"/>
     <preference for="Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface" type="Magento\MediaGallery\Model\Keyword\Command\SaveAssetKeywords"/>
