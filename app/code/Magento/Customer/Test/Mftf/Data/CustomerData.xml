@@ -110,6 +110,32 @@
         <data key="store_id">0</data>
         <data key="website_id">0</data>
     </entity>
+    <entity name="FrenchCustomerOneAssignedToNewCustomerGroup" type="customer">
+        <var key="group_id" entityKey="id" entityType="customerGroup"/>
+        <data key="default_billing">true</data>
+        <data key="default_shipping">true</data>
+        <data key="email" unique="prefix">Alain.Delon@example.com</data>
+        <data key="firstname">Alain</data>
+        <data key="lastname">Delon</data>
+        <data key="fullname">Alain Delon</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+        <requiredEntity type="address">updateCustomerFranceAddress</requiredEntity>
+    </entity>
+    <entity name="FrenchCustomerTwoAssignedToNewCustomerGroup" type="customer">
+        <var key="group_id" entityKey="id" entityType="customerGroup"/>
+        <data key="default_billing">true</data>
+        <data key="default_shipping">true</data>
+        <data key="email" unique="prefix">Jean.Reno@example.com</data>
+        <data key="firstname">Jean</data>
+        <data key="lastname">Reno</data>
+        <data key="fullname">Jean Reno</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+        <requiredEntity type="address">updateCustomerFranceAddress</requiredEntity>
+    </entity>
     <entity name="Simple_US_Customer_Multiple_Addresses" type="customer">
         <data key="group_id">1</data>
         <data key="default_billing">true</data>
