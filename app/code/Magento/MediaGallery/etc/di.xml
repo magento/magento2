@@ -10,8 +10,6 @@
     <preference for="Magento\MediaGalleryApi\Api\Data\AssetInterface" type="Magento\MediaGallery\Model\Asset"/>
     <preference for="Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterface" type="Magento\MediaGallery\Model\AssetKeywords"/>
 
-    <preference for="Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface" type="Magento\MediaGallery\Model\Keyword\Command\SaveAssetKeywords"/>
-
     <preference for="Magento\MediaGalleryApi\Api\CreateDirectoriesByPathsInterface" type="Magento\MediaGallery\Model\Directory\Command\CreateByPaths"/>
     <preference for="Magento\MediaGalleryApi\Api\DeleteDirectoriesByPathsInterface" type="Magento\MediaGallery\Model\Directory\Command\DeleteByPaths"/>
 
