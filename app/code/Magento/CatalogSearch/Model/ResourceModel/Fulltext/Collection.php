@@ -6,8 +6,6 @@
 
 namespace Magento\CatalogSearch\Model\ResourceModel\Fulltext;
 
-use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\DefaultFilterStrategyApplyChecker;
-use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\DefaultFilterStrategyApplyCheckerInterface;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverInterface;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverInterface;
@@ -96,11 +94,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private $searchOrders;
 
     /**
-     * @var DefaultFilterStrategyApplyCheckerInterface
-     */
-    private $defaultFilterStrategyApplyChecker;
-
-    /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -135,7 +128,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param SearchCriteriaResolverFactory|null $searchCriteriaResolverFactory
      * @param SearchResultApplierFactory|null $searchResultApplierFactory
      * @param TotalRecordsResolverFactory|null $totalRecordsResolverFactory
-     * @param DefaultFilterStrategyApplyCheckerInterface|null $defaultFilterStrategyApplyChecker
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -174,8 +166,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Framework\Api\FilterBuilder $filterBuilder = null,
         SearchCriteriaResolverFactory $searchCriteriaResolverFactory = null,
         SearchResultApplierFactory $searchResultApplierFactory = null,
-        TotalRecordsResolverFactory $totalRecordsResolverFactory = null,
-        DefaultFilterStrategyApplyCheckerInterface $defaultFilterStrategyApplyChecker = null
+        TotalRecordsResolverFactory $totalRecordsResolverFactory = null
     ) {
         $this->searchResultFactory = $searchResultFactory ?? \Magento\Framework\App\ObjectManager::getInstance()
                 ->get(\Magento\Framework\Api\Search\SearchResultFactory::class);
@@ -215,8 +206,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             ->get(SearchResultApplierFactory::class);
         $this->totalRecordsResolverFactory = $totalRecordsResolverFactory ?: ObjectManager::getInstance()
             ->get(TotalRecordsResolverFactory::class);
-        $this->defaultFilterStrategyApplyChecker = $defaultFilterStrategyApplyChecker ?: ObjectManager::getInstance()
-            ->get(DefaultFilterStrategyApplyChecker::class);
     }
 
     /**
@@ -419,9 +408,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function setOrder($attribute, $dir = Select::SQL_DESC)
     {
         $this->setSearchOrder($attribute, $dir);
-        if ($this->defaultFilterStrategyApplyChecker->isApplicable()) {
-            parent::setOrder($attribute, $dir);
-        }
 
         return $this;
     }
@@ -436,11 +422,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function addAttributeToSort($attribute, $dir = self::SORT_ORDER_ASC)
     {
-        if ($this->defaultFilterStrategyApplyChecker->isApplicable()) {
-            parent::addAttributeToSort($attribute, $dir);
-        } else {
-            $this->setOrder($attribute, $dir);
-        }
+        $this->setOrder($attribute, $dir);
 
         return $this;
     }
@@ -629,16 +611,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function addCategoryFilter(\Magento\Catalog\Model\Category $category)
     {
         $this->addFieldToFilter('category_ids', $category->getId());
-        /**
-         * This changes need in backward compatible reasons for support dynamic improved algorithm
-         * for price aggregation process.
-         */
-        if ($this->defaultFilterStrategyApplyChecker->isApplicable()) {
-            parent::addCategoryFilter($category);
-        } else {
-            $this->setFlag('has_category_filter', true);
-            $this->_productLimitationPrice();
-        }
+
+        $this->setFlag('has_category_filter', true);
+        $this->_productLimitationPrice();
 
         return $this;
     }
@@ -652,13 +627,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function setVisibility($visibility)
     {
         $this->addFieldToFilter('visibility', $visibility);
-        /**
-         * This changes need in backward compatible reasons for support dynamic improved algorithm
-         * for price aggregation process.
-         */
-        if ($this->defaultFilterStrategyApplyChecker->isApplicable()) {
-            parent::setVisibility($visibility);
-        }
 
         return $this;
     }

@@ -10,8 +10,6 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Advanced;
-use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\DefaultFilterStrategyApplyChecker;
-use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\DefaultFilterStrategyApplyCheckerInterface;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverInterface;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierFactory;
@@ -105,11 +103,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private $searchOrders;
 
     /**
-     * @var DefaultFilterStrategyApplyCheckerInterface
-     */
-    private $defaultFilterStrategyApplyChecker;
-
-    /**
      * @var Advanced
      */
     private $advancedSearchResource;
@@ -148,7 +141,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param SearchResultApplierFactory|null $searchResultApplierFactory
      * @param TotalRecordsResolverFactory|null $totalRecordsResolverFactory
      * @param EngineResolverInterface|null $engineResolver
-     * @param DefaultFilterStrategyApplyCheckerInterface|null $defaultFilterStrategyApplyChecker
      * @param Advanced|null $advancedSearchResource
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -185,7 +177,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         SearchResultApplierFactory $searchResultApplierFactory = null,
         TotalRecordsResolverFactory $totalRecordsResolverFactory = null,
         EngineResolverInterface $engineResolver = null,
-        DefaultFilterStrategyApplyCheckerInterface $defaultFilterStrategyApplyChecker = null,
         Advanced $advancedSearchResource = null
     ) {
         $this->searchRequestName = $searchRequestName;
@@ -201,8 +192,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             ->get(TotalRecordsResolverFactory::class);
         $this->engineResolver = $engineResolver ?: ObjectManager::getInstance()
             ->get(EngineResolverInterface::class);
-        $this->defaultFilterStrategyApplyChecker = $defaultFilterStrategyApplyChecker ?: ObjectManager::getInstance()
-            ->get(DefaultFilterStrategyApplyChecker::class);
         $this->advancedSearchResource = $advancedSearchResource ?: ObjectManager::getInstance()
             ->get(Advanced::class);
         parent::__construct(
@@ -257,9 +246,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
          * for price aggregation process.
          */
         $this->setSearchOrder($attribute, $dir);
-        if ($this->defaultFilterStrategyApplyChecker->isApplicable()) {
-            parent::setOrder($attribute, $dir);
-        }
 
         return $this;
     }
@@ -271,15 +257,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function addCategoryFilter(\Magento\Catalog\Model\Category $category)
     {
         $this->setAttributeFilterData(Category::ENTITY, 'category_ids', $category->getId());
-        /**
-         * This changes need in backward compatible reasons for support dynamic improved algorithm
-         * for price aggregation process.
-         */
-        if ($this->defaultFilterStrategyApplyChecker->isApplicable()) {
-            parent::addCategoryFilter($category);
-        } else {
-            $this->_productLimitationPrice();
-        }
+
+        $this->_productLimitationPrice();
 
         return $this;
     }
@@ -291,13 +270,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function setVisibility($visibility)
     {
         $this->setAttributeFilterData(Product::ENTITY, 'visibility', $visibility);
-        /**
-         * This changes need in backward compatible reasons for support dynamic improved algorithm
-         * for price aggregation process.
-         */
-        if ($this->defaultFilterStrategyApplyChecker->isApplicable()) {
-            parent::setVisibility($visibility);
-        }
 
         return $this;
     }

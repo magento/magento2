@@ -53,7 +53,6 @@
             <argument name="searchCriteriaResolverFactory" xsi:type="object">elasticsearchSearchCriteriaResolverFactory</argument>
             <argument name="searchResultApplierFactory" xsi:type="object">elasticsearchSearchResultApplier\Factory</argument>
             <argument name="totalRecordsResolverFactory" xsi:type="object">elasticsearchTotalRecordsResolver\Factory</argument>
-            <argument name="defaultFilterStrategyApplyChecker" xsi:type="object">Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\DefaultFilterStrategyApplyChecker</argument>
         </arguments>
     </virtualType>
     <virtualType name="elasticsearchFulltextSearchCollectionFactory" type="Magento\CatalogSearch\Model\ResourceModel\Fulltext\SearchCollectionFactory">
@@ -75,7 +74,6 @@
             <argument name="searchCriteriaResolverFactory" xsi:type="object">elasticsearchSearchCriteriaResolverFactory</argument>
             <argument name="searchResultApplierFactory" xsi:type="object">elasticsearchSearchResultApplier\Factory</argument>
             <argument name="totalRecordsResolverFactory" xsi:type="object">elasticsearchTotalRecordsResolver\Factory</argument>
-            <argument name="defaultFilterStrategyApplyChecker" xsi:type="object">Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\DefaultFilterStrategyApplyChecker</argument>
         </arguments>
     </virtualType>
     <virtualType name="elasticsearchCategoryCollectionFactory" type="Magento\CatalogSearch\Model\ResourceModel\Fulltext\SearchCollectionFactory">
@@ -97,7 +95,6 @@
             <argument name="searchCriteriaResolverFactory" xsi:type="object">elasticsearchSearchCriteriaResolverFactory</argument>
             <argument name="searchResultApplierFactory" xsi:type="object">elasticsearchSearchResultApplier\Factory</argument>
             <argument name="totalRecordsResolverFactory" xsi:type="object">elasticsearchTotalRecordsResolver\Factory</argument>
-            <argument name="defaultFilterStrategyApplyChecker" xsi:type="object">Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\DefaultFilterStrategyApplyChecker</argument>
         </arguments>
     </virtualType>
     <virtualType name="elasticsearchAdvancedCollectionFactory" type="Magento\CatalogSearch\Model\ResourceModel\Advanced\CollectionFactory">
