@@ -97,21 +97,16 @@ class ConfigImportCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        try {
-            if ($this->canEmulateAdminhtmlArea()) {
-                // Emulate adminhtml area in order to execute all needed plugins declared only for this area
-                // For instance URL rewrite generation during creating store view
-                $this->adminhtmlAreaProcessor->process(function () use ($input, $output) {
-                    $this->processor->execute($input, $output);
-                });
-            } else {
+        if ($this->canEmulateAdminhtmlArea()) {
+            // Emulate adminhtml area in order to execute all needed plugins declared only for this area
+            // For instance URL rewrite generation during creating store view
+            $this->adminhtmlAreaProcessor->process(function () use ($input, $output) {
                 $this->processor->execute($input, $output);
-            }
-        } catch (RuntimeException $e) {
-            $output->writeln('<error>' . $e->getMessage() . '</error>');
-
-            return Cli::RETURN_FAILURE;
+            });
+        } else {
+            $this->processor->execute($input, $output);
         }
+
 
         return Cli::RETURN_SUCCESS;
     }
