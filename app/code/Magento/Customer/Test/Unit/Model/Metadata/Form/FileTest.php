@@ -393,7 +393,7 @@ class FileTest extends AbstractFormTestCase
             ->with('value')
             ->willReturnSelf();
 
-        $this->assertSame('value', $model->compactValue([]));
+        $this->assertSame([], $model->compactValue([]));
     }
 
     public function testCompactValueDelete()
@@ -625,7 +625,7 @@ class FileTest extends AbstractFormTestCase
             ->with($value)
             ->willReturnSelf();
 
-        $this->assertEquals($value, $model->compactValue([]));
+        $this->assertEquals([], $model->compactValue([]));
     }
 
     public function testCompactValueNoAction()
