@@ -14,7 +14,7 @@
                     <argument name="position" xsi:type="number">0</argument>
                 </arguments>
             </block>
-            <block class="Magento\Paypal\Block\Bml\Paylater" name="paylater.center.logo"
+            <block class="Magento\Paypal\Block\PayLater\Banner" name="paylater.center.logo"
                    template="Magento_Paypal::paylater.phtml">
                 <arguments>
                     <argument name="jsLayout" xsi:type="array">

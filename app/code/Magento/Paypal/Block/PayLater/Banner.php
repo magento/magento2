@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\Paypal\Block\Bml;
+namespace Magento\Paypal\Block\PayLater;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Paypal\Model\Config;
@@ -14,7 +14,7 @@ use Magento\Paypal\Model\Config;
 /**
  * PayPal PayLater component block
  */
-class Paylater extends Template
+class Banner extends Template
 {
     /**
      * @var \Magento\Paypal\Model\Config

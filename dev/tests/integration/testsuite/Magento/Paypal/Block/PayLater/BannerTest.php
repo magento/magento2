@@ -6,18 +6,18 @@
 
 declare(strict_types=1);
 
-namespace Magento\Paypal\Block\Bml;
+namespace Magento\Paypal\Block\Paylater;
 
 use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class PaylaterTest extends \PHPUnit\Framework\TestCase
+class BannerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppArea frontend
      * @dataProvider getJsLayoutDataProvider
-     * @covers       \Magento\Paypal\Block\Bml\Paylater::getJsLayout()
-     * @covers       \Magento\Paypal\Block\Bml\Paylater::getConfig()
+     * @covers       \Magento\Paypal\Block\PayLater\Banner::getJsLayout()
+     * @covers       \Magento\Paypal\Block\PayLater\Banner::getConfig()
      */
     public function testGetJsLayout($layoutConfig, $expectedConfig)
     {
@@ -25,7 +25,7 @@ class PaylaterTest extends \PHPUnit\Framework\TestCase
         $layout = Bootstrap::getObjectManager()->get(LayoutInterface::class);
         $blockConfig['jsLayout']['components']['payLater']['config']['attributes'] = $layoutConfig;
         $block = $layout->createBlock(
-            \Magento\Paypal\Block\Bml\Paylater::class,
+            \Magento\Paypal\Block\PayLater\Banner::class,
             '',
             ['data' => $blockConfig]
         );
@@ -51,14 +51,14 @@ class PaylaterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppArea frontend
-     * @covers \Magento\Paypal\Block\Bml\Paylater::getJsLayout()
-     * @covers \Magento\Paypal\Block\Bml\Paylater::getPayPalSdkUrl()
+     * @covers \Magento\Paypal\Block\PayLater\Banner::getJsLayout()
+     * @covers \Magento\Paypal\Block\PayLater\Banner::getPayPalSdkUrl()
      */
     public function testSdkUrl()
     {
         $layout = Bootstrap::getObjectManager()->get(LayoutInterface::class);
         $block = $layout->createBlock(
-            \Magento\Paypal\Block\Bml\Paylater::class,
+            \Magento\Paypal\Block\PayLater\Banner::class,
             '',
             []
         );
