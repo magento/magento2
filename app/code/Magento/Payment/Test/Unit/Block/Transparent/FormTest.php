@@ -14,7 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Payment\Model\Config;
-use Magento\Payment\Model\Method\ConfigInterface;
+use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Model\Method\TransparentInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Quote\Model\Quote;

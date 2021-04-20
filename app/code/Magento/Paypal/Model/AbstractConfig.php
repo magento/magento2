@@ -6,7 +6,7 @@
 namespace Magento\Paypal\Model;
 
 use Magento\Framework\App\ProductMetadataInterface;
-use Magento\Payment\Model\Method\ConfigInterface;
+use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\ObjectManager;

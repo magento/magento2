@@ -9,7 +9,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\Math\Random;
-use Magento\Payment\Model\Method\ConfigInterface;
+use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Model\Method\Logger;
 use Magento\Payment\Model\Method\Online\GatewayInterface;
 

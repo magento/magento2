@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Response\Validator;
 
 use Magento\Framework\DataObject;
-use Magento\Payment\Model\Method\ConfigInterface;
+use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Paypal\Model\Payflow\Service\Response\Validator\AVSResponse;
 use Magento\Paypal\Model\Payflow\Transparent;
 use PHPUnit\Framework\MockObject\MockObject;

@@ -12,7 +12,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Payment\Model\Method\ConfigInterface as PaymentConfigInterface;
+use Magento\Payment\Gateway\ConfigInterface as PaymentConfigInterface;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory as PaymentConfigInterfaceFactory;
 use Magento\Paypal\Model\Cart as PayPalCart;
 use Magento\Paypal\Model\CartFactory as PayPalCartFactory;

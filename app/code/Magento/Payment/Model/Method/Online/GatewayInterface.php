@@ -6,7 +6,7 @@
 namespace Magento\Payment\Model\Method\Online;
 
 use Magento\Framework\DataObject;
-use Magento\Payment\Model\Method\ConfigInterface;
+use Magento\Payment\Gateway\ConfigInterface;
 
 /**
  * Gateway interface for online payment methods
