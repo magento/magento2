@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Checkout\Model\Cart;
 
 use Magento\Framework\Locale\ResolverInterface;
-use Zend_Locale_Data;
 
 /**
  * Cart request quantity processor
@@ -60,17 +59,18 @@ class RequestQuantityProcessor
      */
     public function prepareQuantity($quantity)
     {
-        $symbols = Zend_Locale_Data::getList($this->localeResolver->getLocale(),'symbols');
+        $formatter = new \NumberFormatter($this->localeResolver->getLocale(), \NumberFormatter::CURRENCY);
+        $decimalSymbol = $formatter->getSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
 
         if (is_array($quantity)) {
             foreach ($quantity as $key => $qty) {
-                if (strpos((string)$qty, '.') !== false && $symbols['decimal'] !== '.') {
-                    $quantity[$key] = str_replace('.', $symbols['decimal'], $qty);
+                if (strpos((string)$qty, '.') !== false && $decimalSymbol !== '.') {
+                    $quantity[$key] = str_replace('.', $decimalSymbol, $qty);
                 }
             }
         } else {
-            if (strpos((string)$quantity, '.') !== false && $symbols['decimal'] !== '.') {
-                $quantity = str_replace('.', $symbols['decimal'], (string)$quantity);
+            if (strpos((string)$quantity, '.') !== false && $decimalSymbol !== '.') {
+                $quantity = str_replace('.', $decimalSymbol, (string)$quantity);
             }
         }
 
