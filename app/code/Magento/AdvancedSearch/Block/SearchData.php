@@ -6,7 +6,7 @@
 namespace Magento\AdvancedSearch\Block;
 
 use Magento\Framework\View\Element\Template;
-use Magento\Search\Model\QueryFactoryInterface;
+use Magento\Search\Model\QueryFactory;
 use Magento\Search\Model\QueryInterface;
 use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
 
@@ -35,14 +35,14 @@ abstract class SearchData extends Template implements SearchDataInterface
     /**
      * @param Template\Context $context
      * @param SuggestedQueriesInterface $searchDataProvider
-     * @param QueryFactoryInterface $queryFactory
+     * @param QueryFactory $queryFactory
      * @param string $title
      * @param array $data
      */
     public function __construct(
         Template\Context $context,
         SuggestedQueriesInterface $searchDataProvider,
-        QueryFactoryInterface $queryFactory,
+        QueryFactory $queryFactory,
         $title,
         array $data = []
     ) {

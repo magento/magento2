@@ -17,7 +17,7 @@ use Magento\Search\Helper\Data;
  * @api
  * @since 100.0.2
  */
-class QueryFactory implements QueryFactoryInterface
+class QueryFactory
 {
     /**
      * Query variable

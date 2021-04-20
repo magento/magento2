@@ -10,7 +10,7 @@ namespace Magento\AdvancedSearch\Test\Unit\Block;
 use Magento\AdvancedSearch\Block\SearchData;
 use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
 use Magento\Framework\View\Element\Template\Context as TemplateContext;
-use Magento\Search\Model\QueryFactoryInterface;
+use Magento\Search\Model\QueryFactory;
 use Magento\Search\Model\QueryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -33,7 +33,7 @@ class SearchDataTest extends TestCase
     private $contextMock;
 
     /**
-     * @var QueryFactoryInterface|MockObject
+     * @var QueryFactory|MockObject
      */
     private $queryFactoryMock;
 
@@ -58,7 +58,7 @@ class SearchDataTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getQueryText'])
             ->getMockForAbstractClass();
-        $this->queryFactoryMock = $this->getMockBuilder(QueryFactoryInterface::class)
+        $this->queryFactoryMock = $this->getMockBuilder(QueryFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['get'])
             ->getMockForAbstractClass();
