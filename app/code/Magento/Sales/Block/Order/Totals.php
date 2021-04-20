@@ -6,6 +6,7 @@
 namespace Magento\Sales\Block\Order;
 
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Invoice;
 
 /**
  * Order totals.
@@ -126,8 +127,13 @@ class Totals extends \Magento\Framework\View\Element\Template
          * Add discount
          */
         if ((double)$this->getSource()->getDiscountAmount() != 0) {
-            if ($this->getSource()->getDiscountDescription()) {
-                $discountLabel = __('Discount (%1)', $source->getDiscountDescription());
+            if ($this->getSource() instanceof Invoice) {
+                $discountSource = $this->getSource()->getOrder();
+            } else {
+                $discountSource = $this->getSource();
+            }
+            if ($this->getSource()->getCouponCode()) {
+                $discountLabel = __('Discount (%1)', $discountSource->getCouponCode());
             } else {
                 $discountLabel = __('Discount');
             }
@@ -135,7 +141,7 @@ class Totals extends \Magento\Framework\View\Element\Template
                 [
                     'code' => 'discount',
                     'field' => 'discount_amount',
-                    'value' => $source->getDiscountAmount(),
+                    'value' => $discountSource->getDiscountAmount(),
                     'label' => $discountLabel,
                 ]
             );
