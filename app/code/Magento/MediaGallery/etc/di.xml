@@ -9,7 +9,6 @@
     <preference for="Magento\MediaGalleryApi\Api\Data\KeywordInterface" type="Magento\MediaGallery\Model\Keyword"/>
     <preference for="Magento\MediaGalleryApi\Api\Data\AssetInterface" type="Magento\MediaGallery\Model\Asset"/>
     <preference for="Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterface" type="Magento\MediaGallery\Model\AssetKeywords"/>
-    <preference for="Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface" type="Magento\MediaGallery\Model\Asset\Command\Save"/>
 
     <preference for="Magento\MediaGalleryApi\Model\Keyword\Command\GetAssetKeywordsInterface" type="Magento\MediaGallery\Model\Keyword\Command\GetAssetKeywords"/>
     <preference for="Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface" type="Magento\MediaGallery\Model\Keyword\Command\SaveAssetKeywords"/>
