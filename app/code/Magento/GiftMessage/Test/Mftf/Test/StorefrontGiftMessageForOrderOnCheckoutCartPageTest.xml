@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontGiftMessageForOrderOnCheckoutCartPageTest">
+        <annotations>
+            <stories value="Gift Message for order present on checkout cart page."/>
+            <title value="Gift Message for order present on checkout cart page."/>
+            <description value="Gift Message for order present on checkout cart page."/>
+            <severity value="MAJOR"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set sales/gift_options/allow_order 1" stepKey="enableGiftMessageForOrder"/>
+
+            <createData entity="SimpleProduct2" stepKey="simpleProduct"/>
+
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <magentoCLI command="config:set sales/gift_options/allow_order 0" stepKey="disableGiftMessageForOrder"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage" />
+        <actionGroup ref="AssertStorefrontGiftMessageOnCheckoutCartPageActionGroup" stepKey="seeGiftMessageFields"/>
+        <actionGroup ref="StorefrontFieldGiftMessageCartFormActionGroup" stepKey="fillGiftMessageFields"/>
+    </test>
+</tests>
+
