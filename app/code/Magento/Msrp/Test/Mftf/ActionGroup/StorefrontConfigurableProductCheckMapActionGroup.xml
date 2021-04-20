@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontConfigurableProductCheckMapActionGroup">
+        <annotations>
+            <description>Check MAP of configurable product options on store-front.</description>
+        </annotations>
+        <arguments>
+            <argument name="configProductUrlKey" type="string"/>
+            <argument name="productMap1" type="string"/>
+            <argument name="productMap2" type="string"/>
+            <argument name="productAttributeOptionValue2" type="string"/>
+            <argument name="productAttributeOptionValue1" type="string"/>
+        </arguments>
+
+        <!--Go to store front and check map for products-->
+        <amOnPage url="{{StorefrontProductPage.url(configProductUrlKey)}}" stepKey="navigateToConfigProductPage"/>
+        <waitForPageLoad stepKey="waitForLoadConfigProductPage"/>
+
+        <!--Check msrp for second child product-->
+        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="{{productAttributeOptionValue2}}" stepKey="selectSecondOption"/>
+        <waitForElement selector="{{StorefrontProductInfoMainSection.mapPrice}}" stepKey="waitForLoad"/>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.mapPrice}}" stepKey="grabSecondProductMapPrice"/>
+        <assertEquals stepKey="assertSecondProductMapPrice">
+            <actualResult type="const">($grabSecondProductMapPrice)</actualResult>
+            <expectedResult type="string">${{productMap2}}</expectedResult>
+        </assertEquals>
+        <seeElement selector="{{StorefrontProductInfoMainSection.clickForPriceLink}}" stepKey="checkClickForPriceLinkForSecondProduct"/>
+
+        <!--Check msrp for first child product-->
+        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="{{productAttributeOptionValue1}}" stepKey="selectFirstOption"/>
+        <waitForElement selector="{{StorefrontProductInfoMainSection.mapPrice}}" stepKey="waitForLoad1"/>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.mapPrice}}" stepKey="grabFirstProductMapPrice"/>
+        <assertEquals stepKey="assertFirstProductMapPrice">
+            <actualResult type="const">($grabFirstProductMapPrice)</actualResult>
+            <expectedResult type="string">${{productMap1}}</expectedResult>
+        </assertEquals>
+        <seeElement selector="{{StorefrontProductInfoMainSection.clickForPriceLink}}" stepKey="checkClickForPriceLinkForFirstProduct"/>
+    </actionGroup>
+</actionGroups>
