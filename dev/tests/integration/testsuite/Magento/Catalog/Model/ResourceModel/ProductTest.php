@@ -6,10 +6,6 @@
 namespace Magento\Catalog\Model\ResourceModel;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Action;
-use Magento\Eav\Api\Data\AttributeSetInterface;
-use Magento\Eav\Model\AttributeSetRepository;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Eav\Model\GetAttributeSetByName;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -56,7 +52,7 @@ class ProductTest extends TestCase
     /**
      * Checks a possibility to retrieve product raw attribute value.
      *
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento\Catalog\Fixture\CreateSimpleProduct
      */
     public function testGetAttributeRawValue()
     {
