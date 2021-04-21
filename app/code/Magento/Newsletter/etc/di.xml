@@ -26,6 +26,7 @@
                 type="Magento\Newsletter\Model\Plugin\CustomerPlugin"/>
     </type>
     <type name="Magento\Newsletter\Model\Subscriber">
+        <plugin name="remove_subscriber_from_queue_after_unsubscribe" type="Magento\Newsletter\Model\Plugin\RemoveSubscriberFromQueue"/>
         <arguments>
             <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
         </arguments>

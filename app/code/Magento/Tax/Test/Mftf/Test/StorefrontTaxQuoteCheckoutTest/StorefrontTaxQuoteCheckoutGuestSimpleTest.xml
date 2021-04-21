@@ -72,7 +72,7 @@
         </after>
 
         <!-- Go to the created product page and add it to the cart -->
-        <amOnPage url="$$simpleProduct1.sku$$.html" stepKey="goToSimpleProductPage"/>
+        <amOnPage url="$$simpleProduct1.custom_attributes[url_key]$$.html" stepKey="goToSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForSimpleProductPage"/>
         <click stepKey="addSimpleProductToCart" selector="{{StorefrontProductActionSection.addToCart}}"/>
         <waitForPageLoad stepKey="waitForProductAdded"/>
