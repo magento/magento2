@@ -436,7 +436,7 @@ require([
                         });
 
                         $(this).fileupload('process', data).done(function () {
-                            data.submit();
+                            data.trigger('submit');
                         });
                     },
                     done: function (e, data) {

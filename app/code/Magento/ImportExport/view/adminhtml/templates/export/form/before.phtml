@@ -89,7 +89,7 @@ require([
                 url += '/fields_enclosure/' + \$F('fields_enclosure');
             }
             form.action = url;
-            form.submit();
+            form.trigger('submit');
             form.action   = oldAction;
         } else {
             alert({

@@ -10,7 +10,7 @@ $redirectUrl = $block->getRedirectUrl();
 ?>
 <html>
 <head></head>
-<body onload="document.forms['proxy_form'].submit()">
+<body onload="document.forms['proxy_form'].trigger('submit')">
 <form id="proxy_form" action="<?= $block->escapeUrl($redirectUrl) ?>"
       method="POST" hidden enctype="application/x-www-form-urlencoded" class="no-display">
     <?php foreach ($params as $name => $value):?>

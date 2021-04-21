@@ -55,7 +55,7 @@ class Filter extends \Magento\Backend\Block\Widget\Form\Generic
                 'class' => 'left-col-block',
                 'no_span' => true,
                 'values' => $collection,
-                'onchange' => 'this.form.submit()'
+                'onchange' => "this.form.trigger('submit')"
             ]
         );
 

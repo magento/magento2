@@ -83,7 +83,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
             [
                 'label' => $_submitLabel,
                 'class' => 'save submit-button primary' . $submitButtonClass,
-                'onclick' => 'disableElements(\'submit-button\');$(\'edit_form\').submit()',
+                'onclick' => 'disableElements(\'submit-button\');$(\'edit_form\').trigger(\'submit\')',
                 'disabled' => $this->_disableSubmitButton
             ]
         );

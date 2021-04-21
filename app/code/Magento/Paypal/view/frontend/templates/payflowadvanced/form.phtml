@@ -19,7 +19,7 @@
     <input type="hidden" name="MODE" value="<?= /* @noEscape */ $block->isTestMode() ? 'TEST' : 'LIVE' ?>"/>
 </form>
 <?php $scriptString = <<<script
-    document.getElementById('token_form').submit();
+    document.getElementById('token_form').trigger('submit');
 script;
 ?>
 <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

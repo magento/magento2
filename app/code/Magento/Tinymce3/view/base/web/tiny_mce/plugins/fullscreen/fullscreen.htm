@@ -68,7 +68,7 @@
 			moveContent();
 
 			if (window.opener.tinyMCE.selectedInstance.formElement.form)
-				window.opener.tinyMCE.selectedInstance.formElement.form.submit();
+				window.opener.tinyMCE.selectedInstance.formElement.form.trigger('submit');
 
 			window.close();
 
