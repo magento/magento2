@@ -78,21 +78,7 @@ class ExtractAssetsFromContent implements ExtractAssetsFromContentInterface
      */
     private function getAssetsByPaths(array $paths): array
     {
-        $assets = [];
-
-        foreach ($paths as $path) {
-            $path = htmlspecialchars_decode($path);
-            $path = trim($path, '"\'');
-            try {
-                /** @var AssetInterface $asset */
-                $asset = $this->getMediaAssetByPath->execute([$this->getPathStartingWithSlash($path)]);
-                $assets[$asset->getId()] = $asset;
-            } catch (\Exception $exception) {
-                $this->logger->critical($exception);
-            }
-        }
-
-        return $assets;
+        return $this->getMediaAssetByPath->execute($paths);
     }
 
     /**
