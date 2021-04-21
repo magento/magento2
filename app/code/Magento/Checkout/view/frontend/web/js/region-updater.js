@@ -208,7 +208,6 @@ define([
 
                 regionList.show();
                 regionInput.hide();
-                this.options.form.find('[type="submit"]').removeAttr('disabled').show();
                 label.attr('for', regionList.attr('id'));
             } else {
                 this._removeSelectOptions(regionList);
@@ -239,6 +238,7 @@ define([
 
             // Add defaultvalue attribute to state/province select element
             regionList.attr('defaultvalue', this.options.defaultRegion);
+            this.options.form.find('[type="submit"]').removeAttr('disabled').show();
         },
 
         /**
