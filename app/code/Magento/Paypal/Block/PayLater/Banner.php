@@ -78,7 +78,7 @@ class Banner extends Template
      */
     private function getConfig()
     {
-        return [];
+        return ['data-pp-style-logo-position' => 'right'];
     }
 
     /**

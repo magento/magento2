@@ -131,6 +131,7 @@ define([
                 }, this);
             }
 
+            this.element.trigger('priceUpdated', this.cache.displayPrices);
             this.element.trigger('reloadPrice');
         },
 

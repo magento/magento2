@@ -4,10 +4,13 @@
  */
 
 define([
+    'jquery',
     'ko',
     'uiElement',
-    'Magento_Paypal/js/in-context/paypal-sdk'
+    'Magento_Paypal/js/in-context/paypal-sdk',
+    'domReady!'
 ], function (
+    $,
     ko,
     Component,
     paypalSdk
@@ -19,11 +22,14 @@ define([
         defaults: {
             template: 'Magento_Paypal/paylater',
             sdkUrl: '',
-            attributes: {
-                'data-pp-amount': '',
-                'data-pp-style-logo-position': 'right'
-            }
+            priceBoxSelector: '.price-box',
+            qtyFieldSelector: '#product_addtocart_form [name="qty"]',
+            displayAmount: true,
+            attributes: {}
         },
+        amount: ko.observable(),
+        qty: 1,
+        price: 0,
 
         /**
          * Initialize
@@ -31,10 +37,61 @@ define([
          * @returns {*}
          */
         initialize: function () {
+            var priceBox, qty;
+
             this._super();
             this.loadPayPalSdk(this.sdkUrl);
 
+            if (this.displayAmount) {
+                priceBox = $(this.priceBoxSelector);
+                this.price = priceBox.priceBox('option').priceConfig.prices.finalPrice.amount;
+                priceBox.on('priceUpdated', this._onPriceChange.bind(this));
+
+                qty = $(this.qtyFieldSelector);
+                qty.on('change', this._onQtyChange.bind(this));
+
+                this._updateAmount();
+            }
+
             return this;
+        },
+
+        /**
+         * Handle changed product qty
+         *
+         * @param {jQuery.Event} event
+         * @private
+         */
+        _onQtyChange: function (event) {
+            var qty = parseFloat($(event.target).val());
+
+            this.qty = !isNaN(qty) && qty ? qty : 1;
+            this._updateAmount();
+        },
+
+        /**
+         * Handle product price change
+         *
+         * @param {jQuery.Event} event
+         * @param {Object} data
+         * @private
+         */
+        _onPriceChange: function (event, data) {
+            this.price = data.finalPrice.amount;
+            this._updateAmount();
+        },
+
+        /**
+         * Calculate and update amount
+         *
+         * @private
+         */
+        _updateAmount: function () {
+            var amount = this.price * this.qty;
+
+            if (amount !== 0) {
+                this.amount(amount);
+            }
         },
 
         /**
