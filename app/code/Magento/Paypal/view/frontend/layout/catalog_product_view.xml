@@ -14,6 +14,23 @@
                     <argument name="position" xsi:type="number">0</argument>
                 </arguments>
             </block>
+            <block class="Magento\Paypal\Block\PayLater\Banner" name="paylater.center.logo"
+                   template="Magento_Paypal::paylater/banner.phtml">
+                <arguments>
+                    <argument name="jsLayout" xsi:type="array">
+                        <item name="components" xsi:type="array">
+                            <item name="payLater" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_Paypal/js/view/paylater</item>
+                                <item name="config" xsi:type="array">
+                                    <item name="attributes" xsi:type="array">
+                                        <item name="data-pp-placement" xsi:type="string">product</item>
+                                    </item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                </arguments>
+            </block>
         </referenceContainer>
         <referenceContainer name="product.info.addtocart">
             <block class="Magento\Paypal\Block\Bml\Banners" name="bml.right.logo" template="Magento_Paypal::bml.phtml">
