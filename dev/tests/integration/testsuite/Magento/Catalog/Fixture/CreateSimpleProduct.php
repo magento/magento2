@@ -7,35 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Fixture;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Webapi\ServiceInputProcessor;
-use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
+use Magento\TestFramework\Fixture\AbstractApiDataFixture;
+use Magento\TestFramework\Fixture\ApiDataFixtureInterface;
 
 /**
  * Create simple product fixture
  */
-class CreateSimpleProduct implements RevertibleDataFixtureInterface
+class CreateSimpleProduct extends AbstractApiDataFixture
 {
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
-     * @var ServiceInputProcessor
-     */
-    private $productHydrator;
-
-    /**
-     * @var array
-     */
-    private $defaultData = [
+    private const DEFAULT_DATA = [
         'type_id' => Type::TYPE_SIMPLE,
         'attribute_set_id' => 4,
         'name' => 'Simple Product',
@@ -62,43 +46,54 @@ class CreateSimpleProduct implements RevertibleDataFixtureInterface
     ];
 
     /**
-     * @param ProductRepositoryInterface $productRepository
-     * @param ServiceInputProcessor $productHydrator
-     */
-    public function __construct(
-        ProductRepositoryInterface $productRepository,
-        ServiceInputProcessor $productHydrator
-    ) {
-        $this->productRepository = $productRepository;
-        $this->productHydrator = $productHydrator;
-    }
-
-    /**
      * @inheritdoc
      */
-    public function apply(array $data = []): ?array
+    public function getService(): array
     {
-        /** @var $product Product */
-        $data = array_merge($this->defaultData, $data);
-        $product = $this->productHydrator->convertValue($data, ProductInterface::class);
-        $this->productRepository->save($product);
-
         return [
-            'product' => $product
+            ApiDataFixtureInterface::SERVICE_CLASS => ProductRepositoryInterface::class,
+            ApiDataFixtureInterface::SERVICE_METHOD => 'save',
         ];
     }
 
     /**
      * @inheritdoc
      */
-    public function revert(array $data = []): void
+    public function getRollbackService(): array
     {
-        try {
-            /** @var $product Product */
-            $product = $data['product'];
-            $this->productRepository->deleteById($product->getSku());
-        } catch (NoSuchEntityException $e) {
-            //ignore
-        }
+        return [
+            ApiDataFixtureInterface::SERVICE_CLASS => ProductRepositoryInterface::class,
+            ApiDataFixtureInterface::SERVICE_METHOD => 'deleteById',
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function processServiceMethodParameters(array $data): array
+    {
+        return [
+            'product' => array_merge_recursive(self::DEFAULT_DATA, $data)
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function processRollbackServiceMethodParameters(array $data): array
+    {
+        return [
+            'sku' => $data['product']->getSku()
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function processServiceResult($data): array
+    {
+        return [
+            'product' => $data
+        ];
     }
 }
