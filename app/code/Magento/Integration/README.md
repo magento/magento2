@@ -7,14 +7,12 @@ model for request and access token management.
 
 ## Installation
 
-Before installing this module, note that the Magento_Integration is dependent on the following modules:
+The Magento_Integration module is one of the base Magento 2 modules. You cannot disable or uninstall this module.
+
+This module is dependent on the following modules:
 - `Magento_Store`
 - `Magento_User`
 - `Magento_Security`
-
-The following modules depend on this module:
-- `Magento_Analytics`
-- `Magento_Webapi`
 
 The Magento_Integration module creates the following tables in the database:
 - `oauth_consumer`
@@ -37,13 +35,13 @@ The module dispatches the following events:
 
 #### Model
 - `customer_login` event in the `\Magento\Integration\Model\CustomerTokenService::createCustomerAccessToken` method. Parameters:
-    - `customer` is a `$customerDataObject` object (`\Magento\Customer\Api\Data\CustomerInterface` class)
+    - `customer` is an object (`\Magento\Customer\Api\Data\CustomerInterface` class)
 
 For information about an event in Magento 2, see [Events and observers](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/events-and-observers.html#events).
 
 ### Layouts
 
-This module introduces the following layouts in the `view/adminhtml/layout` directory:
+This module introduces the following layout handles in the `view/adminhtml/layout` directory:
 - `adminhtml_integration_edit`
 - `adminhtml_integration_grid`
 - `adminhtml_integration_grid_block`
@@ -79,6 +77,16 @@ For more information about a layout in Magento 2, see the [Layout documentation]
     - update an Integration
     - delete an Integration by integration ID
     - get an array of selected resources  for an integration
+  
+- `\Magento\Integration\Api\OauthServiceInterface`:
+    - create a new consumer account
+    - create access token for provided consumer
+    - retrieve access token assigned to the consumer
+    - load consumer by its ID 
+    - load consumer by its key
+    - execute post to integration (consumer) HTTP Post URL. Generate and return oauth_verifier
+    - delete the consumer data associated with the integration including its token and nonce
+    - remove token associated with provided consumer
 
 For information about a public API in Magento 2, see [Public interfaces & APIs](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/api-concepts.html).
 

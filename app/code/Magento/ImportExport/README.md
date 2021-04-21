@@ -9,6 +9,8 @@ The Magento_ImportExport module creates the following tables in the database:
 - `importexport_importdata`
 - `import_history`
 
+All database schema changes made by this module are rolled back when the module gets disabled and setup:upgrade command is run.
+
 For information about a module installation in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
 
 ## Structure
@@ -25,7 +27,7 @@ Extension developers can interact with the Magento_ImportExport module. For more
 
 ### Layouts
 
-This module introduces the following layouts in the `view/frontend/layout` directory:
+This module introduces the following layout handles in the `view/frontend/layout` directory:
 
 - `adminhtml_export_getfilter`
 - `adminhtml_export_index`
@@ -49,10 +51,13 @@ For information about a UI component in Magento 2, see [Overview of UI component
 ### Public APIs
 
 - `Magento\ImportExport\Api\Data\ExportInfoInterface`
-    - export data
+    - getter and setter interface with data needed for export
 
-- `\Magento\ImportExport\Api\ExportManagementInterface`:
-    - get export data
+- `Magento\ImportExport\Api\Data\ExtendedExportInfoInterface`
+    - extends `Magento\ImportExport\Api\Data\ExportInfoInterface`. Contains data for skipped attributes
+
+- `\Magento\ImportExport\Api\ExportManagementInterface`
+    - Executing actual export and returns export data
 
 For information about a public API in Magento 2, see [Public interfaces & APIs](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/api-concepts.html).
 

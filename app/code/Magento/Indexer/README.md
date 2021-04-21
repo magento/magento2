@@ -1,7 +1,7 @@
 # Magento_Indexer module
 
 This module provides Magento Indexing functionality.
-It allows:
+It allows to:
  - read indexers configuration
  - represent indexers in admin
  - regenerate indexes by cron schedule
@@ -43,41 +43,27 @@ The module dispatches the following events:
 #### Model
 
 - `clean_cache_by_tags` event in the `\Magento\Indexer\Model\Indexer\CacheCleaner::cleanCache` method. Parameters:
-    - `object` is a `$this->cacheContext` object (`Magento\Framework\Indexer\CacheContext` class)
+    - `object` is a `cacheContext` object (`Magento\Framework\Indexer\CacheContext` class)
 
 #### Plugin 
 
 - `clean_cache_after_reindex` event in the `\Magento\Indexer\Model\Processor\CleanCache::afterUpdateMview` method. Parameters:
-    - `object` is a `$this->context` object (`Magento\Framework\Indexer\CacheContext` class)
+    - `object` is a `context` object (`Magento\Framework\Indexer\CacheContext` class)
 
 - `clean_cache_by_tags` event in the `\Magento\Indexer\Model\Processor\CleanCache::afterReindexAllInvalid` method. Parameters:
-    - `object` is a `$this->context` object (`Magento\Framework\Indexer\CacheContext` class)
+    - `object` is a `context` object (`Magento\Framework\Indexer\CacheContext` class)
 
 For information about an event in Magento 2, see [Events and observers](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/events-and-observers.html#events).
 
 ### Layouts
 
-This module introduces the following layouts in the `view/adminhtml/layout` directory:
+This module introduces the following layout handles in the `view/adminhtml/layout` directory:
 - `indexer_indexer_list`
 - `indexer_indexer_list_grid`
 
 For more information about layouts in Magento 2, see the [Layout documentation](https://devdocs.magento.com/guides/v2.3/frontend-dev-guide/layouts/layout-overview.html).
 
 ## Additional information
-
-### Magento indexers
-
-List of Magento default indexers:
-- `design_config_grid` - Design Config Grid
-- `customer_grid` - Customer Grid
-- `catalog_category_product` - Category Products
-- `catalog_product_category` - Product Categories
-- `catalogrule_rule` - Catalog Rule Product
-- `catalog_product_attribute` - Product EAV
-- `catalogrule_product` - Catalog Product Rule
-- `cataloginventory_stock` - Stock
-- `catalog_product_price` - Product Price
-- `catalogsearch_fulltext` - Catalog Search
 
 ### Indexer modes
 
@@ -91,11 +77,12 @@ There are 2 modes of the Indexers:
 Magento_Indexers provides console commands:
 - `bin/magento indexer:info` - view a list of all indexers
 - `bin/magento indexer:status [indexer]` - view index status
-- `bin/magento indexer:info` - view list all indexers
 - `bin/magento indexer:reindex [indexer]` - run reindex
 - `bin/magento indexer:reset [indexer]` - reset indexers
 - `bin/magento indexer:show-mode [indexer]` - view the current indexer configuration
 - `bin/magento indexer:set-mode {realtime|schedule} [indexer]` - specify the indexer configuration
+- `bin/magento indexer:set-dimensions-mode [indexer]` - set indexer dimension mode
+- `bin/magento indexer:show-dimensions-mode [indexer]` - set indexer dimension mode
 
 ### Cron options
 
@@ -108,7 +95,7 @@ Cron group configuration can be set at `etc/crontab.xml`:
 
 More information can get at articles:
 - [Learn more about indexing](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/indexing.html)
-- [Learn more about Indexr optimization](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/indexer-batch.html)
+- [Learn more about Indexer optimization](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/indexer-batch.html)
 - [Learn more how to add custom indexer](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/indexing-custom.html)
 - [Learn how to manage indexers](https://devdocs.magento.com/guides/v2.4/config-guide/cli/config-cli-subcommands-index.html)
 - [Learn more about Index Management](https://docs.magento.com/user-guide/system/index-management.html)

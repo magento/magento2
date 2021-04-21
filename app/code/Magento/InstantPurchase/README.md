@@ -18,14 +18,6 @@ Extension developers can interact with the Magento_InstantPurchase module. For m
 
 [The Magento dependency injection mechanism](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/depend-inj.html) enables you to override the functionality of the Magento_InstantPurchase module.
 
-### Layouts
-
-This module introduces the following layouts in the `view/frontend/layout` directory:
-- `catalog_product_view`
-- `catalog_product_view_type_bundle`
-
-For more information about layouts in Magento 2, see the [Layout documentation](https://devdocs.magento.com/guides/v2.3/frontend-dev-guide/layouts/layout-overview.html).
-
 ### Public APIs
 
 - `\Magento\InstantPurchase\Model\BillingAddressChoose\BillingAddressChooserInterface`
@@ -56,6 +48,8 @@ For more information about layouts in Magento 2, see the [Layout documentation](
     - provides mechanism to create string presentation of token for payment method
 
 For information about a public API in Magento 2, see [Public interfaces & APIs](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/api-concepts.html).
+
+## Additional information
 
 ### Instant purchase customization
 
@@ -89,9 +83,7 @@ Basic implementation is a good start point but it's recommended to provide own i
 - `Magento\InstantPurchase\PaymentMethodIntegration\PaymentTokenFormatterInterface` - creates string that describes stored payment method. Basic implementation returns payment method name. It is highly recommended to implement own formatter.
 - `Magento\InstantPurchase\PaymentMethodIntegration\PaymentAdditionalInformationProviderInterface` - allows to add some extra values to payment additional information array. Default implementation returns empty array.
 
-## Additional information
-
-#Prerequisites to display the Instant Purchase button
+### Prerequisites to display the Instant Purchase button
 
 1. Instant purchase enabled for a store at `Store / Configurations / Sales / Sales / Instant Purchase`
 2. Customer is logged in
