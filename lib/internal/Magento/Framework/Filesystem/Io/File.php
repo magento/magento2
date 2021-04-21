@@ -470,7 +470,7 @@ class File extends AbstractIo
      */
     public function write($filename, $src, $mode = null)
     {
-        if (is_string($src) && @is_readable($src)) {
+        if (is_string($src) && ctype_print($src) && @is_readable($src)) {
             $src = realpath($src);
             $srcIsFile = true;
         } elseif (is_string($src) || is_resource($src)) {
