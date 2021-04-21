@@ -24,47 +24,32 @@ class SoapUserContext implements UserContextInterface
     /**
      * @var Request
      */
-    protected $request;
+    private $request;
 
     /**
      * @var Token
      */
-    protected $tokenFactory;
+    private $tokenFactory;
 
     /**
      * @var int
      */
-    protected $userId;
+    private $userId;
 
     /**
      * @var string
      */
-    protected $userType;
+    private $userType;
 
     /**
      * @var bool
      */
-    protected $isRequestProcessed;
+    private $isRequestProcessed;
 
     /**
      * @var IntegrationServiceInterface
      */
-    protected $integrationService;
-
-    /**
-     * @var DateTime
-     */
-    private $dateTime;
-
-    /**
-     * @var Date
-     */
-    private $date;
-
-    /**
-     * @var OauthHelper
-     */
-    private $oauthHelper;
+    private $integrationService;
 
     /**
      * Initialize dependencies.
@@ -79,23 +64,11 @@ class SoapUserContext implements UserContextInterface
     public function __construct(
         Request $request,
         TokenFactory $tokenFactory,
-        IntegrationServiceInterface $integrationService,
-        DateTime $dateTime = null,
-        Date $date = null,
-        OauthHelper $oauthHelper = null
+        IntegrationServiceInterface $integrationService
     ) {
         $this->request = $request;
         $this->tokenFactory = $tokenFactory;
         $this->integrationService = $integrationService;
-        $this->dateTime = $dateTime ?: ObjectManager::getInstance()->get(
-            DateTime::class
-        );
-        $this->date = $date ?: ObjectManager::getInstance()->get(
-            Date::class
-        );
-        $this->oauthHelper = $oauthHelper ?: ObjectManager::getInstance()->get(
-            OauthHelper::class
-        );
     }
 
     /**
