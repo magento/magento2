@@ -38,7 +38,6 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Variable\Model\Source\Variables;
 use Magento\Variable\Model\VariableFactory;
-use Pelago\Emogrifier;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -115,11 +114,6 @@ class FilterTest extends TestCase
     private $configVariables;
 
     /**
-     * @var Emogrifier
-     */
-    private $emogrifier;
-
-    /**
      * @var CssInliner
      */
     private $cssInliner;
@@ -143,6 +137,11 @@ class FilterTest extends TestCase
      * @var MockObject|StrategyResolver
      */
     private $variableResolver;
+
+    /**
+     * @var MockObject|VariableResolverInterface
+     */
+    private $variableResolverInterface;
 
     /**
      * @var array
@@ -194,8 +193,6 @@ class FilterTest extends TestCase
         $this->backendUrlBuilder = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
-        $this->emogrifier = $this->objectManager->getObject(Emogrifier::class);
 
         $this->configVariables = $this->getMockBuilder(Variables::class)
             ->disableOriginalConstructor()
@@ -257,18 +254,27 @@ class FilterTest extends TestCase
                     $this->layoutFactory,
                     $this->appState,
                     $this->backendUrlBuilder,
-                    $this->emogrifier,
                     $this->configVariables,
-                    [],
-                    $this->cssInliner,
-                    $this->directiveProcessors,
                     $this->variableResolver,
                     $this->cssProcessor,
-                    $this->pubDirectory
+                    $this->pubDirectory,
+                    $this->cssInliner,
+                    [],
+                    $this->directiveProcessors
                 ]
             )
             ->setMethods($mockedMethods)
             ->getMock();
+    }
+
+    /**
+     * Test exception handling of filter method
+     */
+    public function testFilterExceptionHandler()
+    {
+        $filter = $this->getModel();
+        $filteredValue = $filter->filter(null);
+        $this->assertTrue(is_string($filteredValue));
     }
 
     /**

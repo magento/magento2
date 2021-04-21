@@ -139,7 +139,9 @@ class Plugin
                     'data' => [
                         'text' => __('Task "%1": ', $bulk->getDescription()) . $text,
                         'severity' => MessageInterface::SEVERITY_MAJOR,
-                        'identity' => $this->encryptor->hash('bulk' . $bulkUuid, Encryptor::HASH_VERSION_SHA256),
+                        // md5() here is not for cryptographic use.
+                        // phpcs:ignore Magento2.Security.InsecureFunction
+                        'identity' => md5('bulk' . $bulkUuid),
                         'uuid' => $bulkUuid,
                         'status' => $bulkStatus,
                         'created_at' => $bulk->getStartTime()

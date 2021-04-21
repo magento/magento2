@@ -28,7 +28,6 @@ class StoreResolverTest extends \PHPUnit\Framework\TestCase
         $storeResolver = $this->objectManager->get(\Magento\Store\Model\StoreResolver::class);
 
         $storesDataRead = $methodReadStoresData->invoke($storeResolver);
-        CacheCleaner::cleanAll();
         $storesData = $methodGetStoresData->invoke($storeResolver);
         $storesDataCached = $methodGetStoresData->invoke($storeResolver);
         $this->assertEquals($storesDataRead, $storesData);

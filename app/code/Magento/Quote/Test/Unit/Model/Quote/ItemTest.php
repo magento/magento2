@@ -20,6 +20,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\Compare;
 use Magento\Quote\Model\Quote\Item\Option;
+use Magento\Quote\Model\Quote\Item\Option\Comparator;
 use Magento\Quote\Model\Quote\Item\OptionFactory;
 use Magento\Sales\Model\Status\ListFactory;
 use Magento\Sales\Model\Status\ListStatus;
@@ -148,7 +149,8 @@ class ItemTest extends TestCase
                 'statusListFactory' => $statusListFactory,
                 'itemOptionFactory' => $this->itemOptionFactory,
                 'quoteItemCompare' => $this->compareHelper,
-                'serializer' => $this->serializer
+                'serializer' => $this->serializer,
+                'itemOptionComparator' => new Comparator()
             ]
         );
     }
