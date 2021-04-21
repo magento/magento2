@@ -12,7 +12,7 @@ use Magento\Directory\Helper\Data;
 use Magento\Directory\Model\ResourceModel\Country\Collection;
 use Magento\Directory\Model\ResourceModel\Country\CollectionFactory;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Model\StoreResolver;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -76,7 +76,7 @@ class DirectoryDataProcessorTest extends TestCase
             \Magento\Directory\Model\ResourceModel\Region\Collection::class
         );
         $this->storeResolverMock = $this->createMock(
-            StoreResolverInterface::class
+            StoreResolver::class
         );
         $this->directoryDataHelperMock = $this->createMock(Data::class);
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)

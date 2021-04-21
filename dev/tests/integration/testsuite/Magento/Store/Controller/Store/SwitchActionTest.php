@@ -13,7 +13,7 @@ use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Encryption\UrlCoder;
 use Magento\Framework\Interception\InterceptorInterface;
-use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Model\StoreResolver;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\StoreSwitcher\ContextInterface;
@@ -68,7 +68,7 @@ class SwitchActionTest extends AbstractController
     /** @var StoreResource */
     private $storeResource;
 
-    /** @var StoreInterfaceFactory */
+    /** @var StoreResolver */
     private $storeFactory;
 
     /**
@@ -90,7 +90,7 @@ class SwitchActionTest extends AbstractController
         $this->redirect = $this->_objectManager->get(RedirectInterface::class);
         $this->categoryRepository = $this->_objectManager->get(CategoryRepositoryInterface::class);
         $this->storeResource = $this->_objectManager->get(StoreResource::class);
-        $this->storeFactory = $this->_objectManager->get(StoreInterfaceFactory::class);
+        $this->storeFactory = $this->_objectManager->get(StoreResolver::class);
     }
 
     /**
@@ -151,7 +151,7 @@ class SwitchActionTest extends AbstractController
         $this->getRequest()->setParams(
             [
                 '___from_store' => $fromStore->getCode(),
-                StoreResolverInterface::PARAM_NAME => $targetStore->getCode(),
+                StoreManagerInterface::PARAM_NAME => $targetStore->getCode(),
                 ActionInterface::PARAM_NAME_URL_ENCODED => $urlEncoder->encode('/'),
                 'data' => $redirectData->getData(),
                 'time_stamp' => $redirectData->getTimestamp(),

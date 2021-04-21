@@ -7,7 +7,7 @@ namespace Magento\Checkout\Block\Checkout;
 
 use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Model\StoreResolver;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -51,7 +51,7 @@ class DirectoryDataProcessor implements \Magento\Checkout\Block\Checkout\LayoutP
     /**
      * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollection
      * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollection
-     * @param StoreResolverInterface $storeResolver @deprecated
+     * @param StoreResolver $storeResolver @deprecated
      * @param DirectoryHelper $directoryHelper
      * @param StoreManagerInterface $storeManager
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -59,7 +59,7 @@ class DirectoryDataProcessor implements \Magento\Checkout\Block\Checkout\LayoutP
     public function __construct(
         \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollection,
         \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollection,
-        StoreResolverInterface $storeResolver,
+        StoreResolver $storeResolver,
         DirectoryHelper $directoryHelper,
         StoreManagerInterface $storeManager = null
     ) {

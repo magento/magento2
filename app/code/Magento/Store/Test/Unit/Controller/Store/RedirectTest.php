@@ -17,7 +17,6 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Api\StoreRepositoryInterface;
-use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Controller\Store\Redirect;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -61,7 +60,7 @@ class RedirectTest extends TestCase
     private $requestMock;
 
     /**
-     * @var StoreResolverInterface|MockObject
+     * @var StoreResolver|MockObject
      */
     private $storeResolverMock;
 
@@ -124,7 +123,7 @@ class RedirectTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['redirect'])
             ->getMockForAbstractClass();
-        $this->storeResolverMock = $this->getMockBuilder(StoreResolverInterface::class)
+        $this->storeResolverMock = $this->getMockBuilder(StoreResolver::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCurrentStoreId'])
             ->getMockForAbstractClass();
@@ -211,7 +210,7 @@ class RedirectTest extends TestCase
             ->expects($this->exactly(3))
             ->method('getParam')
             ->withConsecutive(
-                [StoreResolver::PARAM_NAME],
+                [StoreManagerInterface::PARAM_NAME],
                 ['___from_store'],
                 [ActionInterface::PARAM_NAME_URL_ENCODED]
             )->willReturnOnConsecutiveCalls(
@@ -269,7 +268,7 @@ class RedirectTest extends TestCase
             ->expects($this->exactly(2))
             ->method('getParam')
             ->withConsecutive(
-                [StoreResolver::PARAM_NAME],
+                [StoreManagerInterface::PARAM_NAME],
                 ['___from_store']
             )->willReturnOnConsecutiveCalls(
                 $storeCode,
@@ -309,7 +308,7 @@ class RedirectTest extends TestCase
             ->expects($this->exactly(2))
             ->method('getParam')
             ->withConsecutive(
-                [StoreResolver::PARAM_NAME],
+                [StoreManagerInterface::PARAM_NAME],
                 ['___from_store']
             )->willReturnOnConsecutiveCalls(
                 null,

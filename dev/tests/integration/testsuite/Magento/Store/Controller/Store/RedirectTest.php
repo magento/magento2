@@ -9,7 +9,7 @@ namespace Magento\Store\Controller\Store;
 
 use Magento\Framework\Interception\InterceptorInterface;
 use Magento\Framework\Session\SidResolverInterface;
-use Magento\Store\Model\StoreResolver;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\StoreSwitcher\RedirectDataPreprocessorInterface;
 use Magento\Store\Model\StoreSwitcher\RedirectDataSerializerInterface;
 use Magento\TestFramework\TestCase\AbstractController;
@@ -67,7 +67,7 @@ class RedirectTest extends AbstractController
         $data = ['key1' => 'value1', 'key2' => 1];
         $this->preprocessorMock->method('process')
             ->willReturn($data);
-        $this->getRequest()->setParam(StoreResolver::PARAM_NAME, 'fixture_second_store');
+        $this->getRequest()->setParam(StoreManagerInterface::PARAM_NAME, 'fixture_second_store');
         $this->getRequest()->setParam('___from_store', 'default');
         $this->dispatch('/stores/store/redirect');
         $header = $this->getResponse()->getHeader('Location');
@@ -111,7 +111,7 @@ class RedirectTest extends AbstractController
      */
     public function testNoSid(): void
     {
-        $this->getRequest()->setParam(StoreResolver::PARAM_NAME, 'fixture_second_store');
+        $this->getRequest()->setParam(StoreManagerInterface::PARAM_NAME, 'fixture_second_store');
         $this->getRequest()->setParam('___from_store', 'test');
 
         $this->dispatch('/stores/store/redirect');

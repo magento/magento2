@@ -11,7 +11,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\Data\StoreConfigInterface;
 use Magento\Store\Api\StoreConfigManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
-use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Model\StoreResolver;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
@@ -42,8 +42,8 @@ class StoreConfigResolverTest extends GraphQlAbstract
     {
         /** @var  StoreConfigManagerInterface $storeConfigManager */
         $storeConfigManager = $this->objectManager->get(StoreConfigManagerInterface::class);
-        /** @var StoreResolverInterface $storeResolver */
-        $storeResolver = $this->objectManager->get(StoreResolverInterface::class);
+        /** @var StoreResolver $storeResolver */
+        $storeResolver = $this->objectManager->get(StoreResolver::class);
         /** @var StoreRepositoryInterface $storeRepository */
         $storeRepository = $this->objectManager->get(StoreRepositoryInterface::class);
         $storeId = $storeResolver->getCurrentStoreId();

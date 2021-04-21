@@ -10,7 +10,7 @@ namespace Magento\Store\Model;
 /**
  * Class used to resolve store from url path or get parameters or cookie.
  */
-class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
+class StoreResolver
 {
     /**
      * Cache tag

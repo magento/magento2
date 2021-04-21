@@ -10,7 +10,7 @@ namespace Magento\Store\Test\Unit\Model;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
-use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Model\StoreResolver;
 use Magento\Store\Model\StoreManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -28,7 +28,7 @@ class StoreManagerTest extends TestCase
     protected $storeRepositoryMock;
 
     /**
-     * @var StoreResolverInterface|MockObject
+     * @var StoreResolver|MockObject
      */
     protected $storeResolverMock;
 
@@ -39,7 +39,7 @@ class StoreManagerTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMockForAbstractClass();
-        $this->storeResolverMock = $this->getMockBuilder(StoreResolverInterface::class)
+        $this->storeResolverMock = $this->getMockBuilder(StoreResolver::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMockForAbstractClass();

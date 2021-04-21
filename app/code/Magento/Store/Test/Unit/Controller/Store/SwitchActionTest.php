@@ -132,7 +132,7 @@ class SwitchActionTest extends TestCase
 
         $this->requestMock->expects($this->any())->method('getParam')->willReturnMap(
             [
-                [StoreResolver::PARAM_NAME, null, $storeToSwitchToCode],
+                [StoreManagerInterface::PARAM_NAME, null, $storeToSwitchToCode],
                 ['___from_store', null, $defaultStoreViewCode]
             ]
         );

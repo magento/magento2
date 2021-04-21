@@ -17,7 +17,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Session\Generic;
 use Magento\Framework\Session\SidResolverInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
-use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\StoreResolver;
@@ -38,7 +37,7 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
     private $storeRepository;
 
     /**
-     * @var StoreResolverInterface
+     * @var StoreResolver
      */
     private $storeResolver;
 
@@ -63,7 +62,7 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
     /**
      * @param Context $context
      * @param StoreRepositoryInterface $storeRepository
-     * @param StoreResolverInterface $storeResolver
+     * @param StoreResolver $storeResolver
      * @param Generic $session
      * @param SidResolverInterface $sidResolver
      * @param HashGenerator $hashGenerator
@@ -76,7 +75,7 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
     public function __construct(
         Context $context,
         StoreRepositoryInterface $storeRepository,
-        StoreResolverInterface $storeResolver,
+        StoreResolver $storeResolver,
         Generic $session,
         SidResolverInterface $sidResolver,
         HashGenerator $hashGenerator,
@@ -104,7 +103,7 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
     {
         /** @var Store $currentStore */
         $currentStore = $this->storeRepository->getById($this->storeResolver->getCurrentStoreId());
-        $targetStoreCode = $this->_request->getParam(StoreResolver::PARAM_NAME);
+        $targetStoreCode = $this->_request->getParam(StoreManagerInterface::PARAM_NAME);
         $fromStoreCode = $this->_request->getParam('___from_store');
 
         if ($targetStoreCode === null) {
@@ -129,7 +128,7 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
             );
             $query = [
                 '___from_store' => $fromStore->getCode(),
-                StoreResolverInterface::PARAM_NAME => $targetStoreCode,
+                StoreManagerInterface::PARAM_NAME => $targetStoreCode,
                 ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl,
                 'data' => $redirectData->getData(),
                 'time_stamp' => $redirectData->getTimestamp(),

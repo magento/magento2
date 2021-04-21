@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Store\Model\StoreSwitcher;
 
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\StoreSwitcherInterface;
 use Magento\Framework\Url\Helper\Data as UrlHelper;
 
@@ -46,7 +46,7 @@ class CleanTargetUrl implements StoreSwitcherInterface
     {
         $targetUrl = $redirectUrl;
         $targetUrl = $this->urlHelper->removeRequestParam($targetUrl, '___from_store');
-        $targetUrl = $this->urlHelper->removeRequestParam($targetUrl, StoreResolverInterface::PARAM_NAME);
+        $targetUrl = $this->urlHelper->removeRequestParam($targetUrl, StoreManagerInterface::PARAM_NAME);
 
         return $targetUrl;
     }
