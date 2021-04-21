@@ -13,7 +13,6 @@ use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Encryption\UrlCoder;
 use Magento\Framework\Interception\InterceptorInterface;
-use Magento\Store\Model\StoreResolver;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\StoreSwitcher\ContextInterface;
@@ -68,7 +67,7 @@ class SwitchActionTest extends AbstractController
     /** @var StoreResource */
     private $storeResource;
 
-    /** @var StoreResolver */
+    /** @var StoreInterfaceFactory */
     private $storeFactory;
 
     /**
@@ -90,7 +89,7 @@ class SwitchActionTest extends AbstractController
         $this->redirect = $this->_objectManager->get(RedirectInterface::class);
         $this->categoryRepository = $this->_objectManager->get(CategoryRepositoryInterface::class);
         $this->storeResource = $this->_objectManager->get(StoreResource::class);
-        $this->storeFactory = $this->_objectManager->get(StoreResolver::class);
+        $this->storeFactory = $this->_objectManager->get(StoreInterfaceFactory::class);
     }
 
     /**
