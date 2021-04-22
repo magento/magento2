@@ -86,7 +86,7 @@ class Attribute implements LayerBuilderInterface
                 $attribute['attribute_code'] ?? $bucketName
             );
 
-            $options = $this->getSortedOptions($bucket,$attribute['options'] ?? []);
+            $options = $this->getSortedOptions($bucket,$attribute['options'] ?: []);
             foreach ($options as $option) {
                 $result[$bucketName]['options'][] = $this->layerFormatter->buildItem(
                     $option['label'],
@@ -180,6 +180,15 @@ class Attribute implements LayerBuilderInterface
             $optionValue = $metrics['value'];
             $optionLabel = $optionLabels[$optionValue] ?? $optionValue;
             $options[$optionValue] = $metrics + ['label' => $optionLabel];
+        }
+
+        /**
+         * Delete options without bucket values
+         */
+        foreach ($options as $optionId => $option) {
+            if (!is_array($options[$optionId])) {
+               unset($options[$optionId]);
+            }
         }
 
         return array_values($options);

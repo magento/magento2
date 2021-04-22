@@ -134,7 +134,9 @@ class AttributeOptionProvider
                     'options' => [],
                 ];
             }
-            $result[$option['attribute_code']]['options'][$option['option_id']] = $option['option_label'];
+            if (!empty($option['option_id'])) {
+                $result[$option['attribute_code']]['options'][$option['option_id']] = $option['option_label'];
+            }
         }
 
         return $result;
