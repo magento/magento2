@@ -78,7 +78,13 @@ class ExtractAssetsFromContent implements ExtractAssetsFromContentInterface
      */
     private function getAssetsByPaths(array $paths): array
     {
-        return $this->getMediaAssetByPath->execute($paths);
+        $resultPaths = [];
+        foreach ($paths as $path) {
+            $path = htmlspecialchars_decode($path);
+            $resultPaths[] = trim($path, '"\'');
+        }
+
+        return $this->getMediaAssetByPath->execute($resultPaths);
     }
 
     /**
