@@ -136,16 +136,20 @@
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButtonRelatedProduct"/>
 
         <!--Go to store front and check msrp for products-->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrlKey" value="$$createConfigProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontConfigurableProductCheckMapActionGroup" stepKey="checkMapForConfigurableProductOption2">
+            <argument name="productMap" value="{{SimpleProductMap2.price}}"/>
+            <argument name="productAttributeOptionValue" value="$$getConfigAttributeOption2.value$$"/>
+        </actionGroup>
         <actionGroup ref="StorefrontConfigurableProductCheckMapActionGroup" stepKey="checkMapForConfigurableProduct">
-            <argument name="configProductUrlKey" value="$$createConfigProduct.custom_attributes[url_key]$$"/>
-            <argument name="productMap1" value="{{SimpleProductMap1.price}}"/>
-            <argument name="productAttributeOptionValue1" value="$$getConfigAttributeOption1.value$$"/>
-            <argument name="productMap2" value="{{SimpleProductMap2.price}}"/>
-            <argument name="productAttributeOptionValue2" value="$$getConfigAttributeOption2.value$$"/>
+            <argument name="productMap" value="{{SimpleProductMap1.price}}"/>
+            <argument name="productAttributeOptionValue" value="$$getConfigAttributeOption1.value$$"/>
         </actionGroup>
 
         <!--Check related product map price -->
-        <actionGroup ref="StorefrontAssertRelatedProductMapOnProductPageActionGroup" stepKey="checkMapForRelatedProduct">
+        <actionGroup ref="StorefrontAssertRelatedProductMapOnProductPageActionGroup" stepKey="checkMapForRelatedProductOption1">
             <argument name="relatedProductMap" value="{{SimpleProductMap3.price}}"/>
             <argument name="productName" value="$createRelatedProduct.name$"/>
         </actionGroup>
