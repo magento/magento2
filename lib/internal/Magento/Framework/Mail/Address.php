@@ -9,6 +9,8 @@ namespace Magento\Framework\Mail;
 
 /**
  * Class Address
+ *
+ * @api
  */
 class Address
 {
