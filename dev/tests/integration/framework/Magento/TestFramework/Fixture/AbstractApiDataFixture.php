@@ -43,16 +43,17 @@ abstract class AbstractApiDataFixture implements RevertibleDataFixtureInterface,
      */
     public function apply(array $data = []): ?array
     {
+        $data = $this->processServiceMethodParameters($data);
         $service = $this->getService();
         $serviceInstance = $this->objectManager->get($service[ApiDataFixtureInterface::SERVICE_CLASS]);
         $params = $this->serviceInputProcessor->process(
             $service[ApiDataFixtureInterface::SERVICE_CLASS],
             $service[ApiDataFixtureInterface::SERVICE_METHOD],
-            $this->processServiceMethodParameters($data)
+            $data
         );
-        $data = call_user_func_array([$serviceInstance, $service[ApiDataFixtureInterface::SERVICE_METHOD]], $params);
+        $result = call_user_func_array([$serviceInstance, $service[ApiDataFixtureInterface::SERVICE_METHOD]], $params);
 
-        return $this->processServiceResult($data);
+        return $this->processServiceResult($data, $result);
     }
 
     /**
@@ -60,12 +61,13 @@ abstract class AbstractApiDataFixture implements RevertibleDataFixtureInterface,
      */
     public function revert(array $data = []): void
     {
+        $data = $this->processRollbackServiceMethodParameters($data);
         $service = $this->getRollbackService();
         $serviceInstance = $this->objectManager->get($service[ApiDataFixtureInterface::SERVICE_CLASS]);
         $params = $this->serviceInputProcessor->process(
             $service[ApiDataFixtureInterface::SERVICE_CLASS],
             $service[ApiDataFixtureInterface::SERVICE_METHOD],
-            $this->processRollbackServiceMethodParameters($data)
+            $data
         );
         try {
             call_user_func_array([$serviceInstance, $service[ApiDataFixtureInterface::SERVICE_METHOD]], $params);

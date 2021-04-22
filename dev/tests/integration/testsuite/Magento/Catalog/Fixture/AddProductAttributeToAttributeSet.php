@@ -8,14 +8,16 @@ declare(strict_types=1);
 namespace Magento\Catalog\Fixture;
 
 use Magento\Catalog\Model\Product;
-use Magento\Eav\Model\Config;
 use Magento\Eav\Setup\EavSetup;
-use Magento\TestFramework\Fixture\DataFixtureInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Webapi\ServiceInputProcessor;
+use Magento\TestFramework\Fixture\AbstractApiDataFixture;
+use Magento\TestFramework\Fixture\ApiDataFixtureInterface;
 
 /**
  * Add product attribute to attribute set fixture
  */
-class AddProductAttributeToAttributeSet implements DataFixtureInterface
+class AddProductAttributeToAttributeSet extends AbstractApiDataFixture
 {
     /**
      * @var EavSetup
@@ -23,33 +25,76 @@ class AddProductAttributeToAttributeSet implements DataFixtureInterface
     private $eavSetup;
 
     /**
-     * @var Config
-     */
-    private $eavConfig;
-
-    /**
+     * @param ObjectManagerInterface $objectManager
+     * @param ServiceInputProcessor $serviceInputProcessor
      * @param EavSetup $eavSetup
-     * @param Config $eavConfig
      */
     public function __construct(
-        EavSetup $eavSetup,
-        Config $eavConfig
+        ObjectManagerInterface $objectManager,
+        ServiceInputProcessor $serviceInputProcessor,
+        EavSetup $eavSetup
     ) {
+        parent::__construct($objectManager, $serviceInputProcessor);
         $this->eavSetup = $eavSetup;
-        $this->eavConfig = $eavConfig;
     }
 
     /**
      * @inheritdoc
      */
-    public function apply(array $data = []): ?array
+    public function getService(): array
     {
-        $attributeSetId = $data['attribute_set_id'] ?? $this->eavSetup->getAttributeSetId(Product::ENTITY, 'Default');
-        $groupId = $data['group_id'] ?? $this->eavSetup->getDefaultAttributeGroupId(Product::ENTITY, $attributeSetId);
-        $attributeCode = $data['attribute_code'] ?? 'fixture_attribute';
-        $this->eavSetup->addAttributeToGroup(Product::ENTITY, $attributeSetId, $groupId, $attributeCode);
-        $this->eavConfig->clear();
+        return [
+            ApiDataFixtureInterface::SERVICE_CLASS => \Magento\Catalog\Api\ProductAttributeManagementInterface::class,
+            ApiDataFixtureInterface::SERVICE_METHOD => 'assign',
+        ];
+    }
 
-        return [];
+    /**
+     * @inheritdoc
+     */
+    public function getRollbackService(): array
+    {
+        return [
+            ApiDataFixtureInterface::SERVICE_CLASS => \Magento\Catalog\Api\ProductAttributeManagementInterface::class,
+            ApiDataFixtureInterface::SERVICE_METHOD => 'unassign',
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function processServiceMethodParameters(array $data): array
+    {
+        $attributeSetId = $this->eavSetup->getAttributeSetId(Product::ENTITY, 'Default');
+        $attributeGroupId = $this->eavSetup->getDefaultAttributeGroupId(Product::ENTITY, $attributeSetId);
+        $default = [
+            'attribute_set_id' => $attributeSetId,
+            'attribute_group_id' => $attributeGroupId,
+            'attribute_code' => 'fixture_attribute',
+            'sort_order' => 0,
+        ];
+        return array_merge(
+            $default,
+            $data
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function processRollbackServiceMethodParameters(array $data): array
+    {
+        return [
+            'attribute_set_id' => $data['attribute_set_id'],
+            'attribute_code' => $data['attribute_code'],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function processServiceResult(array $data, $result): array
+    {
+        return $data;
     }
 }

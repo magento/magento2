@@ -115,6 +115,9 @@ try {
     Magento\TestFramework\Workaround\Override\Fixture\Resolver::setInstance(
         new  \Magento\TestFramework\Workaround\Override\Fixture\Resolver($overrideConfig)
     );
+    Magento\TestFramework\Fixture\DataFixtureStorageManager::setStorage(
+        new Magento\TestFramework\Fixture\DataFixtureStorage()
+    );
     /* Unset declared global variables to release the PHPUnit from maintaining their values between tests */
     unset($testsBaseDir, $settings, $shell, $application, $bootstrap, $overrideConfig);
 } catch (\Exception $e) {

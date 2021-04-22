@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Annotation;
 
-use Magento\TestFramework\Fixture\DataFixtureResultStorage;
 use Magento\TestFramework\DataFixtureTestStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -78,17 +78,17 @@ class DataFixtureTest extends TestCase
                 'test1' => 'value1',
                 'test11' => 'value11',
             ],
-            DataFixtureResultStorage::getInstance()->get('test1')->getData()
+            DataFixtureStorageManager::getStorage()->get('test1')->getData()
         );
         $this->assertEquals(
             [
                 'Magento\TestFramework\Fixture\TestTwo' => true,
                 'test2' => 'value2',
             ],
-            DataFixtureResultStorage::getInstance()->get('test2')->getData()
+            DataFixtureStorageManager::getStorage()->get('test2')->getData()
         );
         $this->assertNull(
-            DataFixtureResultStorage::getInstance()->get('test3')
+            DataFixtureStorageManager::getStorage()->get('test3')
         );
         $this->assertEquals(
             [

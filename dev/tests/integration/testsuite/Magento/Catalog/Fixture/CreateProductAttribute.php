@@ -11,6 +11,9 @@ use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\TestFramework\Fixture\AbstractApiDataFixture;
 use Magento\TestFramework\Fixture\ApiDataFixtureInterface;
 
+/**
+ * Create product attribute fixture
+ */
 class CreateProductAttribute extends AbstractApiDataFixture
 {
     private const DEFAULT_DATA = [
@@ -90,10 +93,10 @@ class CreateProductAttribute extends AbstractApiDataFixture
     /**
      * @inheritdoc
      */
-    public function processServiceResult($data): array
+    public function processServiceResult(array $data, $result): array
     {
         return [
-            'attribute' => $data
+            'attribute' => $result
         ];
     }
 }

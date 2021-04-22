@@ -48,8 +48,9 @@ interface ApiDataFixtureInterface
     /**
      * Process service result
      *
-     * @param mixed $data
+     * @param array $data
+     * @param mixed $result
      * @return array
      */
-    public function processServiceResult($data): array;
+    public function processServiceResult(array $data, $result): array;
 }

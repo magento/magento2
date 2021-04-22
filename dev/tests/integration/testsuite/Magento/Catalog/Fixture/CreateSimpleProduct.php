@@ -88,12 +88,13 @@ class CreateSimpleProduct extends AbstractApiDataFixture
     }
 
     /**
+     * @param $result
      * @inheritdoc
      */
-    public function processServiceResult($data): array
+    public function processServiceResult(array $data, $result): array
     {
         return [
-            'product' => $data
+            'product' => $result
         ];
     }
 }

@@ -9,9 +9,9 @@ namespace Magento\TestFramework\Annotation;
 
 use Magento\Framework\DataObject;
 use Magento\TestFramework\Fixture\DataFixtureDirectivesParser;
-use Magento\TestFramework\Fixture\Proxy\DataFixtureFactory;
-use Magento\TestFramework\Fixture\Proxy\DataFixtureInterface;
-use Magento\TestFramework\Fixture\DataFixtureResultStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\Type\Factory;
+use Magento\TestFramework\Fixture\DataFixtureTypeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 use PHPUnit\Framework\TestCase;
@@ -24,7 +24,7 @@ abstract class AbstractDataFixture
     /**
      * Fixtures that have been applied
      *
-     * @var DataFixtureInterface[]
+     * @var DataFixtureTypeInterface[]
      */
     protected $_appliedFixtures = [];
 
@@ -96,7 +96,7 @@ abstract class AbstractDataFixture
         $testsIsolation = $objectManager->get(TestsIsolation::class);
         $dbIsolationState = $this->getDbIsolationState($test);
         $testsIsolation->createDbSnapshot($test, $dbIsolationState);
-        $dataFixtureFactory = $objectManager->get(DataFixtureFactory::class);
+        $dataFixtureFactory = $objectManager->get(Factory::class);
         /* Execute fixture scripts */
         foreach ($fixtures as $key => $directives) {
             if (is_callable([get_class($test), $directives['name']])) {
@@ -106,7 +106,7 @@ abstract class AbstractDataFixture
             $key = $directives['identifier'] ?? $key;
             $result = $fixture->apply($directives['data'] ?? []);
             $resultObj = $result !== null ? $objectManager->create(DataObject::class, ['data' => $result]) : null;
-            DataFixtureResultStorage::getInstance()->persist("$key", $resultObj);
+            DataFixtureStorageManager::getStorage()->persist("$key", $resultObj);
             $this->_appliedFixtures[$key] = $fixture;
         }
         $resolver = Resolver::getInstance();
@@ -125,11 +125,11 @@ abstract class AbstractDataFixture
         $resolver->setCurrentFixtureType($this->getAnnotation());
         $appliedFixtures = array_reverse($this->_appliedFixtures, true);
         foreach ($appliedFixtures as $key => $fixture) {
-            $result = DataFixtureResultStorage::getInstance()->get("$key");
+            $result = DataFixtureStorageManager::getStorage()->get("$key");
             $fixture->revert($result ? $result->getData() : []);
         }
         $this->_appliedFixtures = [];
-        DataFixtureResultStorage::getInstance()->flush();
+        DataFixtureStorageManager::getStorage()->flush();
         $resolver->setCurrentFixtureType(null);
 
         if (null !== $test) {

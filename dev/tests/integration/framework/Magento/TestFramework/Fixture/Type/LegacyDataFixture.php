@@ -5,14 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\TestFramework\Fixture\Proxy;
+namespace Magento\TestFramework\Fixture\Type;
 
+use Magento\TestFramework\Fixture\DataFixtureTypeInterface;
+use Magento\TestFramework\Fixture\LegacyDataFixturePathResolver;
 use PHPUnit\Framework\Exception;
 
 /**
  * File based data fixture
  */
-class LegacyDataFixture implements DataFixtureInterface
+class LegacyDataFixture implements DataFixtureTypeInterface
 {
     /**
      * @var string
@@ -20,11 +22,14 @@ class LegacyDataFixture implements DataFixtureInterface
     private $filePath;
 
     /**
+     * @param LegacyDataFixturePathResolver $fixturePathResolver
      * @param string $filePath
      */
-    public function __construct(string $filePath)
-    {
-        $this->filePath = $filePath;
+    public function __construct(
+        LegacyDataFixturePathResolver $fixturePathResolver,
+        string $filePath
+    ) {
+        $this->filePath = $fixturePathResolver->resolve($filePath);
     }
 
     /**

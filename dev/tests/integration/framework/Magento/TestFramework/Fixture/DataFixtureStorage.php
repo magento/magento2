@@ -10,15 +10,10 @@ namespace Magento\TestFramework\Fixture;
 use Magento\Framework\DataObject;
 
 /**
- * Data fixture result storage service
+ * Data fixture storage model
  */
-class DataFixtureResultStorage
+class DataFixtureStorage
 {
-    /**
-     * @var DataFixtureResultStorage
-     */
-    private static $instance;
-
     /**
      * @var array
      */
@@ -52,19 +47,5 @@ class DataFixtureResultStorage
     public function flush(): void
     {
         $this->fixtures = [];
-    }
-
-    /**
-     * Get the unique instance of the storage
-     *
-     * @return DataFixtureResultStorage
-     */
-    public static function getInstance(): DataFixtureResultStorage
-    {
-        if (self::$instance === null) {
-            self::$instance = new DataFixtureResultStorage();
-        }
-
-        return self::$instance;
     }
 }

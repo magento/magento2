@@ -5,15 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\TestFramework\Fixture\Proxy;
+namespace Magento\TestFramework\Fixture\Type;
 
 use Magento\Framework\ObjectManagerInterface;
+use Magento\TestFramework\Fixture\DataFixtureTypeInterface;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 
 /**
  * Class based data fixture
  */
-class DataFixture implements DataFixtureInterface
+class DataFixture implements DataFixtureTypeInterface
 {
     /**
      * @var ObjectManagerInterface

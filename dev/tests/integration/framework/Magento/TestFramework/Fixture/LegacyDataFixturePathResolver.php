@@ -14,7 +14,7 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Fixture path resolver for file based data fixture
  */
-class DataFixturePathResolver
+class LegacyDataFixturePathResolver
 {
     /**
      * @var ComponentRegistrarInterface

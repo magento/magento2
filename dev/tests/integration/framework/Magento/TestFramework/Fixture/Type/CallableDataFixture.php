@@ -5,12 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\TestFramework\Fixture\Proxy;
+namespace Magento\TestFramework\Fixture\Type;
+
+use Magento\TestFramework\Fixture\DataFixtureTypeInterface;
 
 /**
  * Callable data fixture type
  */
-class CallableDataFixture implements DataFixtureInterface
+class CallableDataFixture implements DataFixtureTypeInterface
 {
     /**
      * @var callable

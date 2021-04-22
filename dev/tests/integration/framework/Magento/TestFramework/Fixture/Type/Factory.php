@@ -5,15 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\TestFramework\Fixture\Proxy;
+namespace Magento\TestFramework\Fixture\Type;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\TestFramework\Fixture\DataFixturePathResolver;
+use Magento\TestFramework\Fixture\DataFixtureTypeInterface;
 
 /**
- * Factory for data fixture
+ * Factory for data fixture type
  */
-class DataFixtureFactory
+class Factory
 {
     /**
      * @var ObjectManagerInterface
@@ -21,29 +21,21 @@ class DataFixtureFactory
     private $objectManager;
 
     /**
-     * @var DataFixturePathResolver
-     */
-    private $fixturePathResolver;
-
-    /**
      * @param ObjectManagerInterface $objectManager
-     * @param DataFixturePathResolver $fixturePathResolver
      */
     public function __construct(
-        ObjectManagerInterface $objectManager,
-        DataFixturePathResolver $fixturePathResolver
+        ObjectManagerInterface $objectManager
     ) {
         $this->objectManager = $objectManager;
-        $this->fixturePathResolver = $fixturePathResolver;
     }
 
     /**
      * Create new instance of data fixture
      *
      * @param array $directives
-     * @return DataFixtureInterface
+     * @return DataFixtureTypeInterface
      */
-    public function create(array $directives): DataFixtureInterface
+    public function create(array $directives): DataFixtureTypeInterface
     {
         if (is_callable($directives['name'])) {
             $result = $this->objectManager->create(
@@ -63,7 +55,7 @@ class DataFixtureFactory
             $result = $this->objectManager->create(
                 LegacyDataFixture::class,
                 [
-                    'filePath' => $this->fixturePathResolver->resolve($directives['name']),
+                    'filePath' => $directives['name'],
                 ]
             );
         }

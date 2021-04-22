@@ -11,8 +11,8 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Annotation\DataFixture;
 use Magento\TestFramework\Event\Param\Transaction;
-use Magento\TestFramework\Fixture\DataFixturePathResolver;
-use Magento\TestFramework\Fixture\Proxy\DataFixtureFactory;
+use Magento\TestFramework\Fixture\LegacyDataFixturePathResolver;
+use Magento\TestFramework\Fixture\Type\Factory;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Annotation\TestsIsolation;
@@ -51,11 +51,11 @@ class DataFixtureTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $fixturePathResolver = new DataFixturePathResolver(new ComponentRegistrar());
+        $fixturePathResolver = new LegacyDataFixturePathResolver(new ComponentRegistrar());
         $sharedInstances = [
             TestsIsolation::class => $this->testsIsolationMock,
             //DataFixtureDirectivesParser::class => new DataFixtureDirectivesParser(),
-            DataFixtureFactory::class => new DataFixtureFactory($objectManager, $fixturePathResolver),
+            Factory::class => new Factory($objectManager, $fixturePathResolver),
         ];
         $objectManager->expects($this->atLeastOnce())
             ->method('get')

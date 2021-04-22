@@ -8,12 +8,27 @@ declare(strict_types=1);
 namespace Magento\TestFramework\Fixture;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Data fixture directives parser service
  */
 class DataFixtureDirectivesParser
 {
+    /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * @param Json $serializer
+     */
+    public function __construct(
+        Json $serializer
+    ) {
+        $this->serializer = $serializer;
+    }
+
     /**
      * Parse data fixture directives
      *
@@ -39,7 +54,7 @@ class DataFixtureDirectivesParser
                 list($directive, $value) = explode(':', $pair, 2);
                 switch ($directive) {
                     case 'with':
-                        $data = json_decode($json, true);
+                        $data = $this->serializer->unserialize($json);
                         break;
                     case 'as':
                         $id = $value;
