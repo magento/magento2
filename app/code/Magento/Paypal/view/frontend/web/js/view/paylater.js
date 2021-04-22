@@ -8,6 +8,7 @@ define([
     'ko',
     'uiElement',
     'Magento_Paypal/js/in-context/paypal-sdk',
+    'priceBox',
     'domReady!'
 ], function (
     $,
@@ -44,8 +45,12 @@ define([
 
             if (this.displayAmount) {
                 priceBox = $(this.priceBoxSelector);
-                this.price = priceBox.priceBox('option').priceConfig.prices.finalPrice.amount;
-                priceBox.on('priceUpdated', this._onPriceChange.bind(this));
+                if (priceBox.priceBox('option') &&
+                    priceBox.priceBox('option').prices
+                ) {
+                    this.price = priceBox.priceBox('option').prices.finalPrice.amount;
+                    priceBox.on('priceUpdated', this._onPriceChange.bind(this));
+                }
 
                 qty = $(this.qtyFieldSelector);
                 qty.on('change', this._onQtyChange.bind(this));

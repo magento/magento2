@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\Paypal\Block\Paylater;
+namespace Magento\Paypal\Block\PayLater;
 
 use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -44,7 +44,7 @@ class BannerTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 ['data-pp-placement' => 'test-page'],
-                ['attributes' => ['data-pp-placement' => 'test-page']]
+                ['attributes' => ['data-pp-placement' => 'test-page', 'data-pp-style-logo-position' => 'right']]
             ],
         ];
     }
