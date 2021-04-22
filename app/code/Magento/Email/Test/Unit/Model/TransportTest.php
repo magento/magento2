@@ -5,17 +5,18 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Framework\Mail\Test\Unit;
+namespace Magento\Email\Test\Unit\Model;
 
 use Laminas\Mail\Transport\Exception\RuntimeException;
+use Magento\Email\Model\Transport;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Mail\Message;
-use Magento\Framework\Mail\Transport;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Provides tests for framework email transport functionality.
+ * Tests for email transport functionality.
  */
 class TransportTest extends TestCase
 {
@@ -30,6 +31,11 @@ class TransportTest extends TestCase
     private $transport;
 
     /**
+     * @var ScopeConfigInterface|MockObject
+     */
+    private $scopeConfigMock;
+
+    /**
      * @inheridoc
      */
     protected function setUp(): void
@@ -38,8 +44,12 @@ class TransportTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['error'])
             ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->transport = new Transport(
             new Message(),
+            $this->scopeConfigMock,
             null,
             $this->loggerMock
         );
@@ -48,7 +58,6 @@ class TransportTest extends TestCase
     /**
      * Verify exception is properly handled in case one occurred when message sent.
      *
-     * @covers \Magento\Framework\Mail\Transport::sendMessage
      * @return void
      */
     public function testSendMessageBrokenMessage(): void
