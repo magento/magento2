@@ -291,16 +291,16 @@ class File
             && isset($file['content'])
             && !empty($file['content'])
         ) {
-            try {
-                $filename = isset(
-                    $file['directory']
-                ) && !empty($file['directory']) ? $file['directory'] . '/' . $file['filename'] : $file['filename'];
+            $filename = isset(
+                $file['directory']
+            ) && !empty($file['directory']) ? $file['directory'] . '/' . $file['filename'] : $file['filename'];
 
+            try {
                 return $this->_fileUtility->saveFile($filename, $file['content'], $overwrite);
             } catch (\Exception $e) {
                 $this->_logger->critical($e);
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Unable to save file "%1" at "%2"', $file['filename'], $file['directory'])
+                    __('Unable to save file "%1" at "%2"', $file['filename'], $filename)
                 );
             }
         } else {
