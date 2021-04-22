@@ -7,14 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Workaround\Override\Fixture;
 
-use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Annotation\AdminConfigFixture;
 use Magento\TestFramework\Annotation\ConfigFixture;
 use Magento\TestFramework\Annotation\DataFixture;
 use Magento\TestFramework\Annotation\DataFixtureBeforeTransaction;
-use Magento\TestFramework\Fixture\DataFixtureDirectivesParser;
 use Magento\TestFramework\Fixture\Type\Factory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\ConfigInterface;

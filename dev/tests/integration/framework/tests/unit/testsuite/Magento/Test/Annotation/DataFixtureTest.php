@@ -9,10 +9,16 @@ namespace Magento\Test\Annotation;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\TestFramework\Annotation\DataFixture;
 use Magento\TestFramework\Event\Param\Transaction;
+use Magento\TestFramework\Fixture\DataFixtureDirectivesParser;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DataFixtureTypeInterface;
 use Magento\TestFramework\Fixture\LegacyDataFixturePathResolver;
 use Magento\TestFramework\Fixture\Type\Factory;
+use Magento\TestFramework\Fixture\Type\LegacyDataFixture;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Annotation\TestsIsolation;
@@ -21,6 +27,7 @@ use Magento\TestFramework\Annotation\TestsIsolation;
  * Test class for \Magento\TestFramework\Annotation\DataFixture.
  *
  * @magentoDataFixture sampleFixtureOne
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataFixtureTest extends TestCase
 {
@@ -51,11 +58,13 @@ class DataFixtureTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $fixturePathResolver = new LegacyDataFixturePathResolver(new ComponentRegistrar());
+        DataFixtureStorageManager::setStorage(new DataFixtureStorage());
+
         $sharedInstances = [
             TestsIsolation::class => $this->testsIsolationMock,
-            //DataFixtureDirectivesParser::class => new DataFixtureDirectivesParser(),
-            Factory::class => new Factory($objectManager, $fixturePathResolver),
+            DataFixtureDirectivesParser::class => new DataFixtureDirectivesParser(new Json()),
+            Factory::class => new Factory($objectManager),
+            LegacyDataFixture::class => $this->createMock(DataFixtureTypeInterface::class),
         ];
         $objectManager->expects($this->atLeastOnce())
             ->method('get')
@@ -68,6 +77,9 @@ class DataFixtureTest extends TestCase
             ->method('create')
             ->willReturnCallback(
                 function (string $type, array $arguments = []) use ($sharedInstances) {
+                    if ($type === LegacyDataFixture::class) {
+                        array_unshift($arguments, new LegacyDataFixturePathResolver(new ComponentRegistrar()));
+                    }
                     return new $type(...array_values($arguments));
                 }
             );
