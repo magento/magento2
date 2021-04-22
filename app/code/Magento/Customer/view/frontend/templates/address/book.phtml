@@ -9,18 +9,18 @@
 <div class="block block-addresses-default">
     <div class="block-title"><strong><?= $block->escapeHtml(__('Default Addresses')) ?></strong></div>
     <div class="block-content">
-        <?php if ($_pAddsses = $block->getDefaultBilling()) : ?>
+        <?php if ($address = $block->getDefaultBilling()): ?>
             <div class="box box-address-billing">
                 <strong class="box-title">
                     <span><?= $block->escapeHtml(__('Default Billing Address')) ?></span>
                 </strong>
                 <div class="box-content">
                     <address>
-                        <?= $block->getAddressHtml($block->getAddressById($_pAddsses)) ?>
+                        <?= $block->getAddressHtml($block->getAddressById($address)) ?>
                     </address>
                 </div>
                 <div class="box-actions">
-                    <a class="action edit" href="<?= $block->escapeUrl($block->getAddressEditUrl($_pAddsses)) ?>">
+                    <a class="action edit" href="<?= $block->escapeUrl($block->getAddressEditUrl($address)) ?>">
                         <span><?= $block->escapeHtml(__('Change Billing Address')) ?></span>
                     </a>
                 </div>
@@ -34,18 +34,18 @@
             </div>
         <?php endif ?>
 
-        <?php if ($_pAddsses = $block->getDefaultShipping()) : ?>
+        <?php if ($address = $block->getDefaultShipping()): ?>
             <div class="box box-address-shipping">
                 <strong class="box-title">
                     <span><?= $block->escapeHtml(__('Default Shipping Address')) ?></span>
                 </strong>
                 <div class="box-content">
                     <address>
-                        <?= $block->getAddressHtml($block->getAddressById($_pAddsses)) ?>
+                        <?= $block->getAddressHtml($block->getAddressById($address)) ?>
                     </address>
                 </div>
                 <div class="box-actions">
-                    <a class="action edit" href="<?= $block->escapeUrl($block->getAddressEditUrl($_pAddsses)) ?>">
+                    <a class="action edit" href="<?= $block->escapeUrl($block->getAddressEditUrl($address)) ?>">
                         <span><?= $block->escapeHtml(__('Change Shipping Address')) ?></span>
                     </a>
                 </div>
