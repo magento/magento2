@@ -8,13 +8,13 @@ declare(strict_types=1);
 namespace Magento\Catalog\Fixture;
 
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
-use Magento\TestFramework\Fixture\AbstractApiDataFixture;
-use Magento\TestFramework\Fixture\ApiDataFixtureInterface;
+use Magento\TestFramework\Fixture\Api\ServiceFactory;
+use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 
 /**
  * Create product attribute fixture
  */
-class CreateProductAttribute extends AbstractApiDataFixture
+class CreateProductAttribute implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_DATA = [
         'is_wysiwyg_enabled' => false,
@@ -49,54 +49,46 @@ class CreateProductAttribute extends AbstractApiDataFixture
     ];
 
     /**
-     * @inheritdoc
+     * @var ServiceFactory
      */
-    public function getService(): array
-    {
-        return [
-            ApiDataFixtureInterface::SERVICE_CLASS => ProductAttributeRepositoryInterface::class,
-            ApiDataFixtureInterface::SERVICE_METHOD => 'save',
-        ];
+    private $serviceFactory;
+
+    /**
+     * @param ServiceFactory $serviceFactory
+     */
+    public function __construct(
+        ServiceFactory $serviceFactory
+    ) {
+        $this->serviceFactory = $serviceFactory;
     }
 
     /**
      * @inheritdoc
      */
-    public function getRollbackService(): array
+    public function apply(array $data = []): ?array
     {
-        return [
-            ApiDataFixtureInterface::SERVICE_CLASS => ProductAttributeRepositoryInterface::class,
-            ApiDataFixtureInterface::SERVICE_METHOD => 'deleteById',
-        ];
-    }
+        $service = $this->serviceFactory->create(ProductAttributeRepositoryInterface::class, 'save');
+        $result = $service->execute(
+            [
+                'attribute' => array_merge(self::DEFAULT_DATA, $data)
+            ]
+        );
 
-    /**
-     * @inheritdoc
-     */
-    public function processServiceMethodParameters(array $data): array
-    {
-        return [
-            'attribute' => array_merge(self::DEFAULT_DATA, $data)
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function processRollbackServiceMethodParameters(array $data): array
-    {
-        return [
-            'attributeCode' => $data['attribute']->getAttributeCode()
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function processServiceResult(array $data, $result): array
-    {
         return [
             'attribute' => $result
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function revert(array $data = []): void
+    {
+        $service = $this->serviceFactory->create(ProductAttributeRepositoryInterface::class, 'deleteById');
+        $service->execute(
+            [
+                'attributeCode' => $data['attribute']->getAttributeCode()
+            ]
+        );
     }
 }

@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\TestFramework\Annotation;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Fixture\DataFixtureDirectivesParser;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\Type\Factory;
@@ -126,7 +127,11 @@ abstract class AbstractDataFixture
         $appliedFixtures = array_reverse($this->_appliedFixtures, true);
         foreach ($appliedFixtures as $key => $fixture) {
             $result = DataFixtureStorageManager::getStorage()->get("$key");
-            $fixture->revert($result ? $result->getData() : []);
+            try {
+                $fixture->revert($result ? $result->getData() : []);
+            } catch (NoSuchEntityException $exception) {
+                //ignore
+            }
         }
         $this->_appliedFixtures = [];
         DataFixtureStorageManager::getStorage()->flush();

@@ -11,13 +11,13 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
-use Magento\TestFramework\Fixture\AbstractApiDataFixture;
-use Magento\TestFramework\Fixture\ApiDataFixtureInterface;
+use Magento\TestFramework\Fixture\Api\ServiceFactory;
+use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 
 /**
  * Create simple product fixture
  */
-class CreateSimpleProduct extends AbstractApiDataFixture
+class CreateSimpleProduct implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_DATA = [
         'type_id' => Type::TYPE_SIMPLE,
@@ -46,55 +46,46 @@ class CreateSimpleProduct extends AbstractApiDataFixture
     ];
 
     /**
-     * @inheritdoc
+     * @var ServiceFactory
      */
-    public function getService(): array
-    {
-        return [
-            ApiDataFixtureInterface::SERVICE_CLASS => ProductRepositoryInterface::class,
-            ApiDataFixtureInterface::SERVICE_METHOD => 'save',
-        ];
+    private $serviceFactory;
+
+    /**
+     * @param ServiceFactory $serviceFactory
+     */
+    public function __construct(
+        ServiceFactory $serviceFactory
+    ) {
+        $this->serviceFactory = $serviceFactory;
     }
 
     /**
      * @inheritdoc
      */
-    public function getRollbackService(): array
+    public function apply(array $data = []): ?array
     {
-        return [
-            ApiDataFixtureInterface::SERVICE_CLASS => ProductRepositoryInterface::class,
-            ApiDataFixtureInterface::SERVICE_METHOD => 'deleteById',
-        ];
-    }
+        $service = $this->serviceFactory->create(ProductRepositoryInterface::class, 'save');
+        $result = $service->execute(
+            [
+                'product' => array_merge(self::DEFAULT_DATA, $data)
+            ]
+        );
 
-    /**
-     * @inheritdoc
-     */
-    public function processServiceMethodParameters(array $data): array
-    {
-        return [
-            'product' => array_merge_recursive(self::DEFAULT_DATA, $data)
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function processRollbackServiceMethodParameters(array $data): array
-    {
-        return [
-            'sku' => $data['product']->getSku()
-        ];
-    }
-
-    /**
-     * @param $result
-     * @inheritdoc
-     */
-    public function processServiceResult(array $data, $result): array
-    {
         return [
             'product' => $result
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function revert(array $data = []): void
+    {
+        $service = $this->serviceFactory->create(ProductRepositoryInterface::class, 'deleteById');
+        $service->execute(
+            [
+                'sku' => $data['product']->getSku()
+            ]
+        );
     }
 }
