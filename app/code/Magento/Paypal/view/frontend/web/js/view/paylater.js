@@ -45,6 +45,7 @@ define([
 
             if (this.displayAmount) {
                 priceBox = $(this.priceBoxSelector);
+
                 if (priceBox.priceBox('option') &&
                     priceBox.priceBox('option').prices
                 ) {
