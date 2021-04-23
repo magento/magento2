@@ -211,7 +211,7 @@ define([
 
             position = count + 1;
 
-            if (lastElement && (lastElement.length === 1)) {
+            if (lastElement && lastElement.length === 1) {
                 position = parseInt(lastElement.data('imageData').position || count, 10) + 1;
             }
             imageData = $.extend({
