@@ -325,7 +325,7 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
         )->setSource(
             $source
         )->validateData();
-        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->assertTrue($errors->getErrorsCount() === 0);
         $productImport->importData();
 
         foreach ($data as $datum) {
@@ -343,6 +343,7 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
                     $item->getRequestPath() === $datum['request_path'] . $this->suffix
                 ) {
                     $rewriteExists = true;
+                    break;
                 }
 
             }
