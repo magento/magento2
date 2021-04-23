@@ -248,6 +248,8 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
             $this->unlock($id);
         }
 
+        // mt_rand() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         if (!mt_rand(0, 100) && $this->checkIfLocalCacheSpaceExceeded()) {
             $this->local->clean();
         }
