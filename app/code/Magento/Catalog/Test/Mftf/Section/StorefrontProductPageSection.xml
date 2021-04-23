@@ -16,6 +16,7 @@
         <element name="alertMessage" type="text" selector=".page.messages [role=alert]"/>
         <element name="messagesBlock" type="text" selector=".page.messages" timeout="30"/>
         <element name="addToWishlist" type="button" selector="//a[@class='action towishlist']" timeout="30"/>
+        <element name="email" type="button" selector=".action.mailto.friend"/>
         <element name="customTextOptionInput" type="input" selector=".input-text.product-custom-option"/>
         <element name="charCounter" type="text" selector=".character-counter"/>
         <element name="tax" type="input" selector=".totals-tax .amount .price"/>
