@@ -17,6 +17,8 @@
             <block class="Magento\Paypal\Block\PayLater\Banner" name="paylater.center.logo"
                    template="Magento_Paypal::paylater/banner.phtml">
                 <arguments>
+                    <argument name="placement" xsi:type="string">product</argument>
+                    <argument name="position" xsi:type="string">header</argument>
                     <argument name="jsLayout" xsi:type="array">
                         <item name="components" xsi:type="array">
                             <item name="payLater" xsi:type="array">

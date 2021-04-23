@@ -9,7 +9,8 @@ declare(strict_types=1);
 namespace Magento\Paypal\Block\PayLater;
 
 use Magento\Framework\View\Element\Template;
-use Magento\Paypal\Model\Config;
+use Magento\Paypal\Model\PayLaterConfig;
+use Magento\Paypal\Model\SdkUrlBuilder;
 
 /**
  * PayPal PayLater component block
@@ -17,23 +18,29 @@ use Magento\Paypal\Model\Config;
 class Banner extends Template
 {
     /**
-     * @var \Magento\Paypal\Model\Config
+     * @var PayLaterConfig
      */
-    private $paypalConfig;
+    private $payLaterConfig;
+    private $position;
+    private $placement;
+    private SdkUrlBuilder $sdkUrl;
 
     /**
      * @param Template\Context $context
-     * @param Config $paypalConfig
+     * @param PayLaterConfig $payLaterConfig
      * @param array $data
      */
     public function __construct(
         Template\Context $context,
-        Config $paypalConfig,
+        PayLaterConfig $payLaterConfig,
+        /*SdkUrlBuilder $sdkUrl,*/
         array $data = []
-    )
-    {
-        $this->paypalConfig = $paypalConfig;
+    ) {
         parent::__construct($context, $data);
+        $this->placement = $data['placement'] ??  '';
+        $this->position = $data['position'] ??  '';
+        $this->payLaterConfig = $payLaterConfig;
+        /*$this->sdkUrl = $sdkUrl;*/
     }
 
     /**
@@ -56,7 +63,7 @@ class Banner extends Template
     {
         $this->jsLayout['components']['payLater']['config']['sdkUrl'] = $this->getPayPalSdkUrl();
         $attributes = $this->jsLayout['components']['payLater']['config']['attributes'] ?? [];
-        $attributes = array_replace($attributes, $this->getConfig());
+        $attributes = array_replace($attributes, $this->getStyleAttributesConfig());
         $this->jsLayout['components']['payLater']['config']['attributes'] = $attributes;
         return parent::getJsLayout();
     }
@@ -68,7 +75,8 @@ class Banner extends Template
      */
     private function getPayPalSdkUrl()
     {
-        return "https://www.paypal.com/sdk/js?client-id=sb&components=messages,buttons";
+        $sandBox = "https://www.paypal.com/sdk/js?client-id=sb&components=messages,buttons";
+        return $sandBox;
     }
 
     /**
@@ -76,9 +84,12 @@ class Banner extends Template
      *
      * @return string[]
      */
-    private function getConfig()
+    private function getStyleAttributesConfig()
     {
-        return ['data-pp-style-logo-position' => 'right'];
+        return array_replace(
+            ['data-pp-style-logo-position' => 'center'],
+            $this->payLaterConfig->getStyleConfig($this->placement)
+        );
     }
 
     /**
@@ -88,6 +99,7 @@ class Banner extends Template
      */
     private function isEnabled()
     {
-        return true;
+        $enabled = $this->payLaterConfig->isEnabled($this->placement);
+        return $enabled && $this->payLaterConfig->getPositionConfig($this->placement) == $this->position;
     }
 }
