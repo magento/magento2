@@ -38,9 +38,9 @@
             }
 
             .field-tooltip-content {
-                &:extend(.abs-add-box-sizing all);
                 &:extend(.abs-checkout-tooltip-content-position-top all);
                 .lib-css(width, @checkout-shipping-policy-tooltip__width);
+                box-sizing: border-box;
                 top: @indent__l;
             }
         }

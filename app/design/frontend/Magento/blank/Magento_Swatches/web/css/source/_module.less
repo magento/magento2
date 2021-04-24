@@ -127,12 +127,15 @@
 
         &-option {
             .lib-css(border, @swatch-option__border);
+            align-items: center;
             cursor: pointer;
+            display: flex;
             float: left;
-            height: 20px;
+            height: 24px;
+            justify-content: center;
             margin: 0 @indent__s @indent__xs 0;
             max-width: 100%;
-            min-width: 30px;
+            min-width: 36px;
             overflow: hidden;
             padding: 1px 2px;
             position: relative;
@@ -150,7 +153,8 @@
                 font-weight: @font-weight__bold;
                 line-height: 20px;
                 margin-right: 7px;
-                min-width: 22px;
+                min-height: 30px;
+                min-width: 40px;
                 padding: 4px 8px;
 
                 &.selected {
@@ -229,8 +233,8 @@
                 .lib-css(background, @swatch-option-tooltip__background);
                 display: none;
                 max-height: 100%;
-                min-height: 20px;
-                min-width: 20px;
+                min-height: 27px;
+                min-width: 30px;
                 padding: @indent__xs;
                 position: absolute;
                 text-align: center;

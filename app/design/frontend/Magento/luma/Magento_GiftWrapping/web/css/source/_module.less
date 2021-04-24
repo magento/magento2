@@ -87,7 +87,6 @@
             span {
                 &:before {
                     .lib-css(border, @gift-wrapping-preview__active__border-width solid @gift-wrapping-preview__active__border-color);
-                    box-sizing: border-box;
                     content: '';
                     display: block;
                     height: 100%;
@@ -288,14 +287,12 @@
     .gift-options-cart-item,
     .cart-gift-item {
         .gift-wrapping {
-            box-sizing: border-box;
             float: left;
             padding-right: @indent__base;
             width: 50%;
 
             & + .gift-message {
                 .lib-css(border-left, @gift-wrapping__border-width solid @gift-wrapping__border-color);
-                box-sizing: border-box;
                 float: left;
                 padding-left: 4.5rem;
                 width: 50%;

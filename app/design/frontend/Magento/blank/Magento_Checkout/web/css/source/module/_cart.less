@@ -15,8 +15,8 @@
 
     //  Summary block
     .cart-summary {
-        &:extend(.abs-add-box-sizing all);
         .lib-css(background, @sidebar__background-color);
+        box-sizing: border-box;
         margin-bottom: @indent__m;
         padding: 1px 15px @indent__m;
 
@@ -346,7 +346,7 @@
 
         .widget {
             float: left;
-            
+
             &.block {
                 margin-bottom: @indent__base;
             }

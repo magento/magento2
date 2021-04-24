@@ -38,7 +38,6 @@
 
     //  Summary block
     .cart-summary {
-        &:extend(.abs-add-box-sizing all);
         .lib-css(background, @sidebar__background-color);
         margin-bottom: @indent__m;
         padding: 1px 0 @indent__m;
@@ -241,8 +240,8 @@
 
             .actions-toolbar {
                 &:extend(.abs-add-clearfix all);
+                margin-bottom: 15px;
                 min-height: 20px;
-                padding-bottom: 15px;
                 position: relative;
 
                 > .action-edit,
@@ -460,7 +459,6 @@
                 &.price,
                 &.subtotal,
                 &.msrp {
-                    box-sizing: border-box;
                     display: block;
                     float: left;
                     white-space: nowrap;
@@ -716,7 +714,6 @@
         &:extend(.abs-discount-block-desktop all);
         .lib-layout-column(2, 1, @layout-column-checkout__width-main);
         border: 0;
-        box-sizing: border-box;
         padding-right: 4%;
 
         .block {
@@ -747,7 +744,6 @@
     .block {
         &.crosssell {
             .lib-layout-column(2, 1, @layout-column-checkout__width-main);
-            &:extend(.abs-add-box-sizing-desktop all);
             padding: 0 4% 0 0;
 
             .products-grid .product-item {
