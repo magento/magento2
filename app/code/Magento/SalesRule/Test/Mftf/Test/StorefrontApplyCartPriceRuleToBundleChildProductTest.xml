@@ -14,7 +14,8 @@
             <title value="Checking Cart Price Rule for bundle products"/>
             <description value="Checking Cart Price Rule for bundle products"/>
             <severity value="AVERAGE"/>
-            <testCaseId value="MC-35548"/>
+            <testCaseId value="MC-36654"/>
+            <useCaseId value="MC-35548"/>
             <group value="salesRule"/>
         </annotations>
         <before>
@@ -66,6 +67,7 @@
             <actionGroup ref="ChangeUseForPromoRuleConditionsProductAttributeActionGroup" stepKey="changeAttributePromoRule">
                 <argument name="option" value="1"/>
             </actionGroup>
+            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteCartPriceRules"/>
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value="cataloginventory_stock"/>
             </actionGroup>
@@ -103,7 +105,7 @@
         <actionGroup ref="StorefrontSelectBundleProductDropDownOptionActionGroup" stepKey="addSimpleProduct1">
             <argument name="productName" value="$createSimpleProduct1.name$"/>
         </actionGroup>
-        <click stepKey="selectProduct3" selector="{{StorefrontBundledSection.productCheckbox('2','1')}}"/>
+        <checkOption selector="{{StorefrontBundledSection.checkboxOptionThreeProducts(CheckboxOption.title, '1')}}" stepKey="selectFirstCheckboxOption"/>
         <actionGroup ref="StorefrontAddToTheCartButtonActionGroup" stepKey="addToTheCartBundleProduct"/>
         <see selector="{{StorefrontMessagesSection.success}}" userInput="You added $createBundleProduct.name$ to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
         <!-- Click "mini cart" icon-->
@@ -128,7 +130,7 @@
         <actionGroup ref="StorefrontSelectBundleProductDropDownOptionActionGroup" stepKey="addSimpleProduct2">
             <argument name="productName" value="$createSimpleProduct2.name$"/>
         </actionGroup>
-        <click stepKey="selectProduct3_2" selector="{{StorefrontBundledSection.productCheckbox('2','1')}}"/>
+        <checkOption selector="{{StorefrontBundledSection.checkboxOptionThreeProducts(CheckboxOption.title, '1')}}" stepKey="selectFirstCheckboxOption2"/>
         <actionGroup ref="StorefrontAddToTheCartButtonActionGroup" stepKey="addToTheCartBundleProduct2"/>
         <!--Click "mini cart" icon-->
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart2"/>
