@@ -154,15 +154,18 @@ class Match implements QueryInterface
                 continue;
             }
             $matchCondition = $match['matchCondition'] ?? $condition;
+            $fields = [];
+            $fields[$resolvedField] = [
+                'query' => $transformedValue,
+                'boost' => $match['boost'] ?? 1,
+            ];
+            if (isset($match['analyzer'])) {
+                $fields[$resolvedField]['analyzer'] = $match['analyzer'];
+            }
             $conditions[] = [
                 'condition' => $queryValue['condition'],
                 'body' => [
-                    $matchCondition => [
-                        $resolvedField => [
-                            'query' => $transformedValue,
-                            'boost' => $match['boost'] ?? 1,
-                        ],
-                    ],
+                    $matchCondition => $fields,
                 ],
             ];
         }
