@@ -54,7 +54,7 @@ class PaymentTokens implements ResolverInterface
      */
     public function __construct(
         PaymentTokenManagement $paymentTokenManagement,
-        JsonSerializer $serializer
+        JsonSerializer $serializer = null
     ) {
         $this->paymentTokenManagement = $paymentTokenManagement;
         $this->serializer = $serializer;
