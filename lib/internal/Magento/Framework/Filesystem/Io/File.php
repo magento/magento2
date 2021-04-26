@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-declare(strict_types=1);
-
 namespace Magento\Framework\Filesystem\Io;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -444,7 +442,7 @@ class File extends AbstractIo
     public function read($filename, $dest = null)
     {
         $result = false;
-        
+
         $this->_cwd();
         if ($dest === null) {
             $result = @file_get_contents($filename);
@@ -470,7 +468,7 @@ class File extends AbstractIo
      */
     public function write($filename, $src, $mode = null)
     {
-        if (is_string($src) && ctype_print($src) && @is_readable($src)) {
+        if (is_string($src) && @is_readable($src)) {
             $src = realpath($src);
             $srcIsFile = true;
         } elseif (is_string($src) || is_resource($src)) {
