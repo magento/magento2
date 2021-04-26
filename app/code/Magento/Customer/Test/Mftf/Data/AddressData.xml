@@ -159,6 +159,7 @@
         </array>
         <data key="city">London</data>
         <data key="country_id">GB</data>
+        <data key="country">United Kingdom</data>
         <data key="telephone">512-345-6789</data>
         <data key="province">JS</data>
     </entity>
