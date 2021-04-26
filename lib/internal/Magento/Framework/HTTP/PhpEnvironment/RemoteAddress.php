@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-declare(strict_types=1);
-
 namespace Magento\Framework\HTTP\PhpEnvironment;
 
 use Magento\Framework\App\RequestInterface;
@@ -104,9 +102,9 @@ class RemoteAddress
                     return !in_array(trim($ip), $this->trustedProxies, true);
                 }
             );
-            $remoteAddress = trim((string) array_pop($ipList));
+            $remoteAddress = trim(array_pop($ipList));
         } else {
-            $remoteAddress = trim((string) reset($ipList));
+            $remoteAddress = trim(reset($ipList));
         }
 
         return $remoteAddress ?: null;
@@ -125,7 +123,7 @@ class RemoteAddress
     public function getRemoteAddress(bool $ipToLong = false)
     {
         if ($this->remoteAddress !== null) {
-            return $ipToLong && $this->remoteAddress ? ip2long($this->remoteAddress) : $this->remoteAddress;
+            return $ipToLong ? ip2long($this->remoteAddress) : $this->remoteAddress;
         }
 
         $remoteAddress = $this->readAddress();
@@ -144,7 +142,7 @@ class RemoteAddress
 
         $this->remoteAddress = $remoteAddress;
 
-        return $ipToLong && $this->remoteAddress ? ip2long($this->remoteAddress) : $this->remoteAddress;
+        return $ipToLong ? ip2long($this->remoteAddress) : $this->remoteAddress;
     }
 
     /**
