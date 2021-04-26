@@ -26,7 +26,8 @@
         <element name="shippingBlock" type="text" selector="#checkout-step-shipping"/>
 
         <!--Order Summary-->
-        <element name="itemInCart" type="button" selector="//div[@class='title']"/>
+        <element name="itemInCart" type="button" selector="div.items-in-cart div.title" timeout="30"/>
+        <element name="itemInCartActive" type="button" selector="div.items-in-cart.active div.title" timeout="30"/>
         <element name="productName" type="text" selector="//strong[@class='product-item-name']"/>
     </section>
 </sections>
