@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Model\System\Config\Source\PayLater;
 
+/**
+ * Source model for PayLater banner position
+ */
 class Position
 {
     /**
@@ -17,8 +20,8 @@ class Position
     public function getPositionsCPP(): array
     {
         return [
-            '0' => __('Header (center)'),
-            '1' => __('Near PayPal Credit checkout button')
+            'header' => __('Header (center)'),
+            'sidebar' => __('Near PayPal Credit checkout button')
         ];
     }
 }

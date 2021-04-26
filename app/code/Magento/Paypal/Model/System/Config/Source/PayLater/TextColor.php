@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Model\System\Config\Source\PayLater;
 
+/**
+ * Source model for PayLater banner text color
+ */
 class TextColor
 {
     /**
