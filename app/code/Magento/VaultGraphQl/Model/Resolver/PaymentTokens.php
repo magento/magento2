@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\VaultGraphQl\Model\Resolver;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -50,14 +51,14 @@ class PaymentTokens implements ResolverInterface
 
     /**
      * @param PaymentTokenManagement $paymentTokenManagement
-     * @param JsonSerializer $serializer
+     * @param JsonSerializer|null $serializer
      */
     public function __construct(
         PaymentTokenManagement $paymentTokenManagement,
         JsonSerializer $serializer = null
     ) {
         $this->paymentTokenManagement = $paymentTokenManagement;
-        $this->serializer = $serializer;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(JsonSerializer::class);
     }
 
     /**
