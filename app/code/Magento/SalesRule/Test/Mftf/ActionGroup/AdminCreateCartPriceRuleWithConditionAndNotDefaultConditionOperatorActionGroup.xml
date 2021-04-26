@@ -15,7 +15,7 @@
         <arguments>
             <argument name="childAttribute" type="string" defaultValue="SKU"/>
             <argument name="conditionOperator" type="string" defaultValue="is"/>
-            <argument name="actionValue" type="string" defaultValue="2"/>
+            <argument name="actionValue" type="string" defaultValue="{{ApiSimpleProduct.sku}}"/>
         </arguments>
         <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" after="fillDiscountAmount" stepKey="clickOnActionTab"/>
         <click selector="{{AdminCartPriceRulesFormSection.conditions}}" after="clickOnActionTab" stepKey="clickConditionDropDownMenu"/>
