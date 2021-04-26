@@ -5,6 +5,8 @@
  */
 namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images;
 
+use Magento\Framework\Filesystem;
+
 /**
  * Directory tree renderer for Cms Wysiwyg Images
  *
@@ -33,10 +35,16 @@ class Tree extends \Magento\Backend\Block\Template
     private $serializer;
 
     /**
+     * @var Filesystem
+     */
+    private $fileSystem;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Cms\Helper\Wysiwyg\Images $cmsWysiwygImages
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @param Filesystem $fileSystem
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @throws \RuntimeException
      */
@@ -44,6 +52,7 @@ class Tree extends \Magento\Backend\Block\Template
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Cms\Helper\Wysiwyg\Images $cmsWysiwygImages,
         \Magento\Framework\Registry $registry,
+        Filesystem $fileSystem,
         array $data = [],
         \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
@@ -51,6 +60,7 @@ class Tree extends \Magento\Backend\Block\Template
         $this->_cmsWysiwygImages = $cmsWysiwygImages;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->fileSystem = $fileSystem;
         parent::__construct($context, $data);
     }
 
@@ -76,7 +86,7 @@ class Tree extends \Magento\Backend\Block\Template
                 'path' => substr($item->getFilename(), strlen($storageRoot)),
                 'cls' => 'folder',
             ];
-            $nestedDirectories = $this->getMediaDirectory()->readRecursively($item->getFilename());
+            $nestedDirectories = $this->getFilteredNestedDirectories($storageRoot, $item->getFilename());
             $hasNestedDirectories = count($nestedDirectories) > 0;
 
             // if no nested directories inside dir, add 'leaf' state so that jstree hides dropdown arrow next to dir
@@ -87,6 +97,27 @@ class Tree extends \Magento\Backend\Block\Template
             $jsonArray[] = $data;
         }
         return $this->serializer->serialize($jsonArray);
+    }
+
+    /**
+     * Get nested directories without files
+     *
+     * @param string $storageRoot
+     * @param string $fileName
+     * @return array
+     */
+    private function getFilteredNestedDirectories(string $storageRoot, string $fileName): array
+    {
+        $result = [];
+        $pathList = $this->getMediaDirectory()->read($fileName);
+        foreach ($pathList as $directoryPath) {
+            $directory = $this->fileSystem->getDirectoryReadByPath($storageRoot . $directoryPath);
+            if (!$directory->isDirectory()) {
+                continue;
+            }
+            $result[] = $directoryPath;
+        }
+        return $result;
     }
 
     /**
