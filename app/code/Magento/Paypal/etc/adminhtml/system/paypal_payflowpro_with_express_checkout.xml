@@ -158,6 +158,7 @@
                     <field id="paylater_productpage_logotype" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_productpage/paylater_productpage_logotype"/>
                     <field id="paylater_productpage_logoposition" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_productpage/paylater_productpage_logoposition"/>
                     <field id="paylater_productpage_textcolor" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_productpage/paylater_productpage_textcolor"/>
+                    <field id="paylater_productpage_textsize" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_productpage/paylater_productpage_textsize"/>
                     <field id="paylater_productpage_ratio" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_productpage/paylater_productpage_ratio"/>
                     <field id="paylater_productpage_color" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_productpage/paylater_productpage_color"/>
                 </group>

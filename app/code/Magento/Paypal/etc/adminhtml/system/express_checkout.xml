@@ -382,7 +382,17 @@
                             <field id="paylater_productpage_stylelayout">text</field>
                         </depends>
                     </field>
-                    <field id="paylater_productpage_ratio" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="70">
+                    <field id="paylater_productpage_textsize" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="70">
+                        <label>Text Size</label>
+                        <config_path>payment/paypal_paylater/productpage_textsize</config_path>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\TextSize::getTextSizesCPP</source_model>
+                        <attribute type="shared">1</attribute>
+                        <depends>
+                            <field id="paylater_productpage_display">1</field>
+                            <field id="paylater_productpage_stylelayout">text</field>
+                        </depends>
+                    </field>
+                    <field id="paylater_productpage_ratio" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="80">
                         <label>Ratio</label>
                         <config_path>payment/paypal_paylater/productpage_ratio</config_path>
                         <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\Ratio::getRatiosCPP</source_model>
@@ -392,7 +402,7 @@
                             <field id="paylater_productpage_stylelayout">flex</field>
                         </depends>
                     </field>
-                    <field id="paylater_productpage_color" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="70">
+                    <field id="paylater_productpage_color" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="90">
                         <label>Color</label>
                         <config_path>payment/paypal_paylater/productpage_color</config_path>
                         <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\Color::getColorsCPP</source_model>

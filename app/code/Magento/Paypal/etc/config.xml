@@ -195,6 +195,7 @@
                 <productpage_logotype>primary</productpage_logotype>
                 <productpage_logoposition>left</productpage_logoposition>
                 <productpage_textcolor>black</productpage_textcolor>
+                <productpage_textsize>12</productpage_textsize>
             </paypal_paylater>
         </payment>
     </default>
