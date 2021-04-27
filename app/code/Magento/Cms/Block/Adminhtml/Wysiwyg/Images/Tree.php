@@ -89,24 +89,23 @@ class Tree extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Get nested directories without files
+     * Check if directory has nested directories
      *
      * @param string $storageRoot
      * @param string $fileName
-     * @return array
+     * @return bool
      */
-    private function hasNestedDirectories(string $storageRoot, string $fileName): array
+    private function hasNestedDirectories(string $storageRoot, string $fileName): bool
     {
-        $result = [];
         $pathList = $this->getMediaDirectory()->read($fileName);
         foreach ($pathList as $directoryPath) {
-            $directory = $this->_filesystem->getDirectoryReadByPath($storageRoot . $directoryPath);
-            if (!$directory->isDirectory()) {
-                continue;
+            $file = $this->_filesystem->getDirectoryReadByPath($storageRoot . $directoryPath);
+            if ($file->isDirectory()) {
+                return true;
             }
-            $result[] = $directoryPath;
         }
-        return $result;
+
+        return false;
     }
 
     /**
