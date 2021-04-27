@@ -20,7 +20,7 @@ define([
             selector: '[data-role=checkout-messages]',
             isHidden: false,
             hideTimeout: 5000,
-            hideSpeed: 1500,
+            hideSpeed: 500,
             listens: {
                 isHidden: 'onHiddenChange'
             }
