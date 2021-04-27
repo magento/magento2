@@ -13,8 +13,7 @@ define([
     'jquery-ui-modules/widget',
     'mage/decorate',
     'mage/collapsible',
-    'mage/cookies',
-    'jquery-ui-modules/effect-fade'
+    'mage/cookies'
 ], function ($, authenticationPopup, customerData, alert, confirm, _) {
     'use strict';
 
@@ -145,7 +144,7 @@ define([
                 itemQty = elem.data('item-qty');
 
             if (this._isValidQty(itemQty, elem.val())) {
-                $('#update-cart-item-' + itemId).show('fade', 300);
+                $('#update-cart-item-' + itemId).fadeIn(300);
             } else if (elem.val() == 0) { //eslint-disable-line eqeqeq
                 this._hideItemButton(elem);
             } else {
@@ -185,7 +184,7 @@ define([
         _hideItemButton: function (elem) {
             var itemId = elem.data('cart-item');
 
-            $('#update-cart-item-' + itemId).hide('fade', 300);
+            $('#update-cart-item-' + itemId).fadeOut(300);
         },
 
         /**
