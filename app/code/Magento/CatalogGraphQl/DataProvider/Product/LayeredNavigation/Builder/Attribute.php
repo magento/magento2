@@ -8,11 +8,12 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder;
 
 use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\AttributeOptionProvider;
+use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Formatter\LayerFormatter;
 use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\LayerBuilderInterface;
+use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Framework\Api\Search\AggregationValueInterface;
 use Magento\Framework\Api\Search\BucketInterface;
-use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Formatter\LayerFormatter;
 
 /**
  * @inheritdoc
@@ -50,18 +51,26 @@ class Attribute implements LayerBuilderInterface
     ];
 
     /**
+     * @var Yesno
+     */
+    private $yesNo;
+
+    /**
      * @param AttributeOptionProvider $attributeOptionProvider
      * @param LayerFormatter $layerFormatter
+     * @param Yesno $yesNo
      * @param array $bucketNameFilter
      */
     public function __construct(
         AttributeOptionProvider $attributeOptionProvider,
         LayerFormatter $layerFormatter,
+        Yesno $yesNo,
         $bucketNameFilter = []
     ) {
         $this->attributeOptionProvider = $attributeOptionProvider;
         $this->layerFormatter = $layerFormatter;
         $this->bucketNameFilter = \array_merge($this->bucketNameFilter, $bucketNameFilter);
+        $this->yesNo = $yesNo;
     }
 
     /**
@@ -89,7 +98,7 @@ class Attribute implements LayerBuilderInterface
             foreach ($bucket->getValues() as $value) {
                 $metrics = $value->getMetrics();
                 $result[$bucketName]['options'][] = $this->layerFormatter->buildItem(
-                    $attribute['options'][$metrics['value']] ?? $metrics['value'],
+                    $this->getOptionLabel($attribute, $metrics),
                     $metrics['value'],
                     $metrics['count']
                 );
@@ -97,6 +106,23 @@ class Attribute implements LayerBuilderInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Get option label
+     *
+     * @param array $attribute
+     * @param array $metrics
+     * @return mixed
+     */
+    private function getOptionLabel(array $attribute, array $metrics)
+    {
+        if ($attribute['frontend_input'] === 'boolean') {
+            $yesNoOptions = $this->yesNo->toArray();
+            return $yesNoOptions[$metrics['value']];
+        }
+
+        return $attribute['options'][$metrics['value']] ?? $metrics['value'];
     }
 
     /**

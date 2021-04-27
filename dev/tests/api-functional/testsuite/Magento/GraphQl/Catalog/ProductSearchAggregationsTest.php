@@ -14,68 +14,66 @@ class ProductSearchAggregationsTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_boolean_attribute.php
      */
-    public function testAggregationBooleanAttribute()
+    public function testAggregationBooleanAttribute(): void
     {
-        $this->markTestSkipped('MC-22184: Elasticsearch returns incorrect aggregation options for booleans');
-
         $query = $this->getGraphQlQuery(
             '"search_product_1", "search_product_2", "search_product_3", "search_product_4" ,"search_product_5"'
         );
 
         $result = $this->graphQlQuery($query);
 
-        $this->assertArrayNotHasKey('errors', $result);
-        $this->assertArrayHasKey('items', $result['products']);
-        $this->assertCount(5, $result['products']['items']);
-        $this->assertArrayHasKey('aggregations', $result['products']);
+        self::assertArrayNotHasKey('errors', $result);
+        self::assertArrayHasKey('items', $result['products']);
+        self::assertCount(5, $result['products']['items']);
+        self::assertArrayHasKey('aggregations', $result['products']);
 
         $booleanAggregation = array_filter(
             $result['products']['aggregations'],
             function ($a) {
-                return $a['attribute_code'] == 'boolean_attribute';
+                return $a['attribute_code'] === 'boolean_attribute';
             }
         );
-        $this->assertNotEmpty($booleanAggregation);
+        self::assertNotEmpty($booleanAggregation);
         $booleanAggregation = reset($booleanAggregation);
-        $this->assertEquals('Boolean Attribute', $booleanAggregation['label']);
-        $this->assertEquals('boolean_attribute', $booleanAggregation['attribute_code']);
-        $this->assertContainsEquals(['label' => '1', 'value'=> '1', 'count' => '3'], $booleanAggregation['options']);
+        self::assertEquals('Boolean Attribute', $booleanAggregation['label']);
+        self::assertEquals('boolean_attribute', $booleanAggregation['attribute_code']);
+        self::assertContainsEquals(['label' => 'Yes', 'value'=> '1', 'count' => '3'], $booleanAggregation['options']);
 
-        $this->assertEquals(2, $booleanAggregation['count']);
-        $this->assertCount(2, $booleanAggregation['options']);
-        $this->assertContainsEquals(['label' => '0', 'value'=> '0', 'count' => '2'], $booleanAggregation['options']);
+        self::assertEquals(2, $booleanAggregation['count']);
+        self::assertCount(2, $booleanAggregation['options']);
+        self::assertContainsEquals(['label' => 'No', 'value'=> '0', 'count' => '2'], $booleanAggregation['options']);
     }
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products_for_search.php
      */
-    public function testAggregationPriceRanges()
+    public function testAggregationPriceRanges(): void
     {
         $query = $this->getGraphQlQuery(
             '"search_product_1", "search_product_2", "search_product_3", "search_product_4" ,"search_product_5"'
         );
         $result = $this->graphQlQuery($query);
 
-        $this->assertArrayNotHasKey('errors', $result);
-        $this->assertArrayHasKey('aggregations', $result['products']);
+        self::assertArrayNotHasKey('errors', $result);
+        self::assertArrayHasKey('aggregations', $result['products']);
 
         $priceAggregation = array_filter(
             $result['products']['aggregations'],
             function ($a) {
-                return $a['attribute_code'] == 'price';
+                return $a['attribute_code'] === 'price';
             }
         );
-        $this->assertNotEmpty($priceAggregation);
+        self::assertNotEmpty($priceAggregation);
         $priceAggregation = reset($priceAggregation);
-        $this->assertEquals('Price', $priceAggregation['label']);
-        $this->assertEquals(4, $priceAggregation['count']);
+        self::assertEquals('Price', $priceAggregation['label']);
+        self::assertEquals(4, $priceAggregation['count']);
         $expectedOptions = [
             ['label' => '10-20', 'value'=> '10_20', 'count' => '2'],
             ['label' => '20-30', 'value'=> '20_30', 'count' => '1'],
             ['label' => '30-40', 'value'=> '30_40', 'count' => '1'],
             ['label' => '40-50', 'value'=> '40_50', 'count' => '1']
         ];
-        $this->assertEquals($expectedOptions, $priceAggregation['options']);
+        self::assertEquals($expectedOptions, $priceAggregation['options']);
     }
 
     /**
@@ -83,39 +81,48 @@ class ProductSearchAggregationsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Directory/_files/usd_cny_rate.php
      * @magentoConfigFixture default_store currency/options/allow CNY,USD
      */
-    public function testAggregationPriceRangesWithCurrencyHeader()
+    public function testAggregationPriceRangesWithCurrencyHeader(): void
     {
         $headerMap['Content-Currency'] = 'CNY';
         $query = $this->getGraphQlQuery(
             '"search_product_1", "search_product_2", "search_product_3", "search_product_4" ,"search_product_5"'
         );
         $result = $this->graphQlQuery($query, [], '', $headerMap);
-        $this->assertArrayNotHasKey('errors', $result);
-        $this->assertArrayHasKey('aggregations', $result['products']);
+        self::assertArrayNotHasKey('errors', $result);
+        self::assertArrayHasKey('aggregations', $result['products']);
         $priceAggregation = array_filter(
             $result['products']['aggregations'],
             function ($a) {
-                return $a['attribute_code'] == 'price';
+                return $a['attribute_code'] === 'price';
             }
         );
-        $this->assertNotEmpty($priceAggregation);
+        self::assertNotEmpty($priceAggregation);
         $priceAggregation = reset($priceAggregation);
-        $this->assertEquals('Price', $priceAggregation['label']);
-        $this->assertEquals(4, $priceAggregation['count']);
+        self::assertEquals('Price', $priceAggregation['label']);
+        self::assertEquals(4, $priceAggregation['count']);
         $expectedOptions = [
             ['label' => '70-140', 'value'=> '70_140', 'count' => '2'],
             ['label' => '140-210', 'value'=> '140_210', 'count' => '1'],
             ['label' => '210-280', 'value'=> '210_280', 'count' => '1'],
             ['label' => '280-350', 'value'=> '280_350', 'count' => '1']
         ];
-        $this->assertEquals($expectedOptions, $priceAggregation['options']);
+        self::assertEquals($expectedOptions, $priceAggregation['options']);
     }
 
-    private function getGraphQlQuery(string $skus)
+    /**
+     * Get query
+     *
+     * @param string $skus
+     * @return string
+     */
+    private function getGraphQlQuery(string $skus): string
     {
         return <<<QUERY
 {
     products(filter: {sku: {in: [{$skus}]}}){
+    items{
+      sku
+    }
     aggregations{
       label
       attribute_code
