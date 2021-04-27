@@ -88,6 +88,19 @@
         <data key="height">1000</data>
         <data key="path">wysiwyg</data>
     </entity>
+    <entity name="ImageUploadMedium" type="uploadImage">
+        <data key="title" unique="suffix">Medium Image</data>
+        <data key="price">1.00</data>
+        <data key="file_type">Upload File</data>
+        <data key="shareable">Yes</data>
+        <data key="value">medium.jpg</data>
+        <data key="file">medium.jpg</data>
+        <data key="fileName">medium</data>
+        <data key="extension">jpg</data>
+        <data key="content">Image content. Yeah.</data>
+        <data key="height">508</data>
+        <data key="path">wysiwyg</data>
+    </entity>
     <entity name="ImageFolder" type="uploadImage">
         <data key="name" unique="suffix">Test</data>
     </entity>
