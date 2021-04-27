@@ -16,14 +16,21 @@ class BannerTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoAppArea frontend
      * @dataProvider getJsLayoutDataProvider
+     * @magentoConfigFixture current_store payment/paypal_paylater/test1page_stylelayout flex
+     * @magentoConfigFixture current_store payment/paypal_paylater/test1page_ratio 20x1
+     * @magentoConfigFixture current_store payment/paypal_paylater/test1page_color blue
+     * @magentoConfigFixture current_store payment/paypal_paylater/test2page_stylelayout text
+     * @magentoConfigFixture current_store payment/paypal_paylater/test2page_logotype primary
+     * @magentoConfigFixture current_store payment/paypal_paylater/test2page_logoposition left
+     * @magentoConfigFixture current_store payment/paypal_paylater/test2page_textcolor white
+     * @magentoConfigFixture current_store payment/paypal_paylater/test2page_textsize 10
      * @covers       \Magento\Paypal\Block\PayLater\Banner::getJsLayout()
-     * @covers       \Magento\Paypal\Block\PayLater\Banner::getConfig()
+     * @covers       \Magento\Paypal\Block\PayLater\Banner::getStyleAttributesConfig()
      */
-    public function testGetJsLayout($layoutConfig, $expectedConfig)
+    public function testGetJsLayout($blockConfig, $expectedConfig)
     {
         /** @var LayoutInterface $layout */
         $layout = Bootstrap::getObjectManager()->get(LayoutInterface::class);
-        $blockConfig['jsLayout']['components']['payLater']['config']['attributes'] = $layoutConfig;
         $block = $layout->createBlock(
             \Magento\Paypal\Block\PayLater\Banner::class,
             '',
@@ -43,8 +50,60 @@ class BannerTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                ['data-pp-placement' => 'test-page'],
-                ['attributes' => ['data-pp-placement' => 'test-page']]
+                [
+                    'placement' => 'test1',
+                    'position' => 'header',
+                    'jslayout' => [
+                        'components' => [
+                            'payLater' => [
+                                'config' => [
+                                    'attributes' => [
+                                        'data-pp-placement' => 'test1'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    'attributes' => [
+                        'data-pp-style-layout' => 'flex',
+                        'data-pp-style-logo-type' => null,
+                        'data-pp-style-logo-position' => null,
+                        'data-pp-style-text-color' => null,
+                        'data-pp-style-text-size' => null,
+                        'data-pp-style-color' => 'blue',
+                        'data-pp-style-ratio' => '20x1',
+                    ]
+                ]
+            ],
+            [
+                [
+                    'placement' => 'test2',
+                    'position' => 'sidebar',
+                    'jslayout' => [
+                        'components' => [
+                            'payLater' => [
+                                'config' => [
+                                    'attributes' => [
+                                        'data-pp-placement' => 'test2'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    'attributes' => [
+                        'data-pp-style-layout' => 'text',
+                        'data-pp-style-logo-type' => 'primary',
+                        'data-pp-style-logo-position' => 'left',
+                        'data-pp-style-text-color' => 'white',
+                        'data-pp-style-text-size' => '10',
+                        'data-pp-style-color' => null,
+                        'data-pp-style-ratio' => null,
+                    ]
+                ]
             ],
         ];
     }
