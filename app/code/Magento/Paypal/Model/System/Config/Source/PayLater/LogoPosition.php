@@ -7,22 +7,24 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Model\System\Config\Source\PayLater;
 
+use Magento\Framework\Data\OptionSourceInterface;
+
 /**
  * Source model for PayLater banner logo position
  */
-class LogoPosition
+class LogoPosition implements OptionSourceInterface
 {
     /**
-     * PayLater logo positions source getter for Catalog Product Page
+     * PayLater logo positions source
      *
      * @return array
      */
-    public function getLogoPositionsCPP(): array
+    public function toOptionArray(): array
     {
         return [
-            'left' => __('Left'),
-            'right' => __('Right'),
-            'top' => __('Top')
+            ['value' => 'left', 'label' => __('Left')],
+            ['value' => 'right', 'label' => __('Right')],
+            ['value' => 'top', 'label' => __('Top')]
         ];
     }
 }

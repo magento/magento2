@@ -7,23 +7,25 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Model\System\Config\Source\PayLater;
 
+use Magento\Framework\Data\OptionSourceInterface;
+
 /**
  * Source model for PayLater banner logo type
  */
-class LogoType
+class LogoType implements OptionSourceInterface
 {
     /**
-     * PayLater logo types source getter for Catalog Product Page
+     * PayLater logo types source
      *
      * @return array
      */
-    public function getLogoTypesCPP(): array
+    public function toOptionArray(): array
     {
         return [
-            'primary' => __('Primary'),
-            'alternative' => __('Alternative'),
-            'inline' => __('Inline'),
-            'none' => __('None')
+            ['value' => 'primary', 'label' => __('Primary')],
+            ['value' => 'alternative', 'label' => __('Alternative')],
+            ['value' => 'inline', 'label' => __('Inline')],
+            ['value' => 'none', 'label' => __('None')]
         ];
     }
 }

@@ -7,24 +7,26 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Model\System\Config\Source\PayLater;
 
+use Magento\Framework\Data\OptionSourceInterface;
+
 /**
  * Source model for PayLater banner color
  */
-class Color
+class Color implements OptionSourceInterface
 {
     /**
-     * PayLater colors source getter for Catalog Product Page
+     * PayLater colors source
      *
      * @return array
      */
-    public function getColorsCPP(): array
+    public function toOptionArray(): array
     {
         return [
-            'blue' => __('Blue'),
-            'black' => __('Black'),
-            'white' => __('White'),
-            'white-no-border' => __('White No Border'),
-            'gray' => __('Gray')
+            ['value' => 'blue', 'label' => __('Blue')],
+            ['value' => 'black', 'label' => __('Black')],
+            ['value' => 'white', 'label' => __('White')],
+            ['value' => 'white-no-border', 'label' => __('White No Border')],
+            ['value' => 'gray', 'label' => __('Gray')]
         ];
     }
 }

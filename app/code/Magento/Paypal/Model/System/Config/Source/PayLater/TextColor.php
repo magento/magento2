@@ -7,21 +7,23 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Model\System\Config\Source\PayLater;
 
+use Magento\Framework\Data\OptionSourceInterface;
+
 /**
  * Source model for PayLater banner text color
  */
-class TextColor
+class TextColor implements OptionSourceInterface
 {
     /**
-     * PayLater text colors source getter for Catalog Product Page
+     * PayLater text colors source
      *
      * @return array
      */
-    public function getTextColorsCPP(): array
+    public function toOptionArray(): array
     {
         return [
-            'black' => __('Black'),
-            'white' => __('White')
+            ['value' => 'black', 'label' => __('Black')],
+            ['value' => 'white', 'label' => __('White')]
         ];
     }
 }

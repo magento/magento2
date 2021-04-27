@@ -7,23 +7,25 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Model\System\Config\Source\PayLater;
 
+use Magento\Framework\Data\OptionSourceInterface;
+
 /**
  * Source model for PayLater banner ratio
  */
-class Ratio
+class Ratio implements OptionSourceInterface
 {
     /**
-     * PayLater ratios source getter for Catalog Product Page
+     * PayLater ratios source
      *
      * @return array
      */
-    public function getRatiosCPP(): array
+    public function toOptionArray(): array
     {
         return [
-            '1x1' => '1x1',
-            '1x4' => '1x4',
-            '8x1' => '8x1',
-            '20x1' => '20x1'
+            ['value' => '1x1', 'label' => '1x1'],
+            ['value' => '1x4', 'label' => '1x4'],
+            ['value' => '8x1', 'label' => '8x1'],
+            ['value' => '20x1', 'label' => '20x1']
         ];
     }
 }

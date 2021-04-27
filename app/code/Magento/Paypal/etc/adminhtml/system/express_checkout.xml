@@ -345,7 +345,7 @@
                     <field id="paylater_productpage_stylelayout" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="30">
                         <label>Style Layout</label>
                         <config_path>payment/paypal_paylater/productpage_stylelayout</config_path>
-                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\StyleLayout::getStyleLayoutsCPP</source_model>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\StyleLayout</source_model>
                         <attribute type="shared">1</attribute>
                         <depends>
                             <field id="paylater_productpage_display">1</field>
@@ -354,7 +354,7 @@
                     <field id="paylater_productpage_logotype" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="40">
                         <label>Logo Type</label>
                         <config_path>payment/paypal_paylater/productpage_logotype</config_path>
-                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\LogoType::getLogoTypesCPP</source_model>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\LogoType</source_model>
                         <attribute type="shared">1</attribute>
                         <depends>
                             <field id="paylater_productpage_display">1</field>
@@ -364,7 +364,7 @@
                     <field id="paylater_productpage_logoposition" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="50">
                         <label>Logo Position</label>
                         <config_path>payment/paypal_paylater/productpage_logoposition</config_path>
-                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\LogoPosition::getLogoPositionsCPP</source_model>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\LogoPosition</source_model>
                         <attribute type="shared">1</attribute>
                         <depends>
                             <field id="paylater_productpage_display">1</field>
@@ -375,7 +375,7 @@
                     <field id="paylater_productpage_textcolor" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="60">
                         <label>Text Color</label>
                         <config_path>payment/paypal_paylater/productpage_textcolor</config_path>
-                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\TextColor::getTextColorsCPP</source_model>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\TextColor</source_model>
                         <attribute type="shared">1</attribute>
                         <depends>
                             <field id="paylater_productpage_display">1</field>
@@ -385,7 +385,7 @@
                     <field id="paylater_productpage_textsize" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="70">
                         <label>Text Size</label>
                         <config_path>payment/paypal_paylater/productpage_textsize</config_path>
-                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\TextSize::getTextSizesCPP</source_model>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\TextSize</source_model>
                         <attribute type="shared">1</attribute>
                         <depends>
                             <field id="paylater_productpage_display">1</field>
@@ -395,7 +395,7 @@
                     <field id="paylater_productpage_ratio" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="80">
                         <label>Ratio</label>
                         <config_path>payment/paypal_paylater/productpage_ratio</config_path>
-                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\Ratio::getRatiosCPP</source_model>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\Ratio</source_model>
                         <attribute type="shared">1</attribute>
                         <depends>
                             <field id="paylater_productpage_display">1</field>
@@ -405,7 +405,7 @@
                     <field id="paylater_productpage_color" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="90">
                         <label>Color</label>
                         <config_path>payment/paypal_paylater/productpage_color</config_path>
-                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\Color::getColorsCPP</source_model>
+                        <source_model>Magento\Paypal\Model\System\Config\Source\PayLater\Color</source_model>
                         <attribute type="shared">1</attribute>
                         <depends>
                             <field id="paylater_productpage_display">1</field>

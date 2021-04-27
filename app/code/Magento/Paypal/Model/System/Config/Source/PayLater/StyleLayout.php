@@ -7,21 +7,23 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Model\System\Config\Source\PayLater;
 
+use Magento\Framework\Data\OptionSourceInterface;
+
 /**
  * Source model for PayLater banner style layout
  */
-class StyleLayout
+class StyleLayout implements OptionSourceInterface
 {
     /**
-     * PayLater style layouts source getter for Catalog Product Page
+     * PayLater style layouts source
      *
      * @return array
      */
-    public function getStyleLayoutsCPP(): array
+    public function toOptionArray(): array
     {
         return [
-            'text' => __('Text'),
-            'flex' => __('Flex')
+            ['value' => 'text', 'label' => __('Text')],
+            ['value' => 'flex', 'label' => __('Flex')]
         ];
     }
 }
