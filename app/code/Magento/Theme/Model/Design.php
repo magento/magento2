@@ -111,6 +111,8 @@ class Design extends AbstractModel implements IdentityInterface, DesignInterface
             $date = $this->_dateTime->formatDate($this->_localeDate->scopeTimeStamp($storeId), false);
         }
 
+        // md5() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $changeCacheId = 'design_change_' . md5($storeId . $date);
         $result = $this->_cacheManager->load($changeCacheId);
         if ($result === false) {
