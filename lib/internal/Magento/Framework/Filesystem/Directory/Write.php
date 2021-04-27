@@ -3,9 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Filesystem\Directory;
 
+use Magento\Framework\Config\Dom\ValidationException;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem\DriverInterface;
@@ -54,6 +56,7 @@ class Write extends Read implements WriteInterface
      */
     protected function assertWritable($path)
     {
+        $this->validatePath($path);
         if ($this->isWritable($path) === false) {
             $path = $this->getAbsolutePath($path);
             throw new FileSystemException(new Phrase('The path "%1" is not writable.', [$path]));
@@ -109,6 +112,7 @@ class Write extends Read implements WriteInterface
     public function renameFile($path, $newPath, WriteInterface $targetDirectory = null)
     {
         $this->validatePath($path);
+        $this->validatePath($newPath);
         $this->assertIsFile($path);
         $targetDirectory = $targetDirectory ?: $this;
         if (!$targetDirectory->isExist($this->driver->getParentDirectory($newPath))) {
@@ -132,6 +136,7 @@ class Write extends Read implements WriteInterface
     public function copyFile($path, $destination, WriteInterface $targetDirectory = null)
     {
         $this->validatePath($path);
+        $this->validatePath($destination);
         $this->assertIsFile($path);
 
         $targetDirectory = $targetDirectory ?: $this;
@@ -157,6 +162,7 @@ class Write extends Read implements WriteInterface
     public function createSymlink($path, $destination, WriteInterface $targetDirectory = null)
     {
         $this->validatePath($path);
+        $this->validatePath($destination);
         $targetDirectory = $targetDirectory ?: $this;
         $parentDirectory = $this->driver->getParentDirectory($destination);
         if (!$targetDirectory->isExist($parentDirectory)) {
@@ -234,8 +240,9 @@ class Write extends Read implements WriteInterface
         foreach ($entitiesList as $entityPath) {
             if ($this->driver->isFile($entityPath)) {
                 try {
+                    $this->validatePath($entityPath);
                     $this->driver->deleteFile($entityPath);
-                } catch (FileSystemException $e) {
+                } catch (FileSystemException | ValidatorException $e) {
                     $exceptionMessages[] = $e->getMessage();
                 }
             }
@@ -349,11 +356,12 @@ class Write extends Read implements WriteInterface
      */
     public function writeFile($path, $content, $mode = 'w+')
     {
-         $file = $this->openFile($path, $mode);
-         $result = $file->write($content);
-         $file->close();
+        $this->validatePath($path);
+        $file = $this->openFile($path, $mode);
+        $result = $file->write($content);
+        $file->close();
 
-         return $result;
+        return $result;
     }
 
     /**
