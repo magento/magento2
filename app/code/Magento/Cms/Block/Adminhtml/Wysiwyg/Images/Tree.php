@@ -76,8 +76,7 @@ class Tree extends \Magento\Backend\Block\Template
                 'path' => substr($item->getFilename(), strlen($storageRoot)),
                 'cls' => 'folder',
             ];
-            $nestedDirectories = $this->getFilteredNestedDirectories($storageRoot, $item->getFilename());
-            $hasNestedDirectories = count($nestedDirectories) > 0;
+            $hasNestedDirectories = $this->hasNestedDirectories($storageRoot, $item->getFilename());
 
             // if no nested directories inside dir, add 'leaf' state so that jstree hides dropdown arrow next to dir
             if (!$hasNestedDirectories) {
@@ -96,7 +95,7 @@ class Tree extends \Magento\Backend\Block\Template
      * @param string $fileName
      * @return array
      */
-    private function getFilteredNestedDirectories(string $storageRoot, string $fileName): array
+    private function hasNestedDirectories(string $storageRoot, string $fileName): array
     {
         $result = [];
         $pathList = $this->getMediaDirectory()->read($fileName);
