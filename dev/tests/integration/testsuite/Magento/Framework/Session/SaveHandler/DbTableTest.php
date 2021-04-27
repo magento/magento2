@@ -121,10 +121,14 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
      */
     public function testWriteReadDestroy()
     {
+        // We have to use serialize here.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $data = serialize($this->_sessionData[self::SESSION_NEW]);
         $this->_model->write(self::SESSION_ID, $data);
         $this->assertEquals($data, $this->_model->read(self::SESSION_ID));
 
+        // We have to use serialize here.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $data = serialize($this->_sessionData[self::SESSION_EXISTS]);
         $this->_model->write(self::SESSION_ID, $data);
         $this->assertEquals($data, $this->_model->read(self::SESSION_ID));
@@ -151,6 +155,8 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
      */
     public function testWriteEncoded()
     {
+        // We have to use serialize here.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $data = serialize($this->_sessionData[self::SESSION_NEW]);
         $this->_model->write(self::SESSION_ID, $data);
 
@@ -179,6 +185,7 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
     {
         // we can't use object data as a fixture because not encoded serialized object
         // might cause DB adapter fatal error, so we have to use array as a fixture
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $sessionData = serialize($this->_sourceData[self::SESSION_NEW]);
         return [
             'session_encoded' => ['$sessionData' => base64_encode($sessionData)],
@@ -201,6 +208,8 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
         $this->_connection->insertOnDuplicate($this->_sessionTable, $sessionRecord, [self::COLUMN_SESSION_DATA]);
 
         $sessionData = $this->_model->read(self::SESSION_ID);
+        // We have to use unserialize here.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $this->assertEquals($this->_sourceData[self::SESSION_NEW], unserialize($sessionData));
     }
 }
