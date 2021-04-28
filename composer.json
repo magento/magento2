@@ -82,7 +82,7 @@
         "web-token/jwt-framework": "^v2.2.7"
     },
     "require-dev": {
-        "allure-framework/allure-phpunit": "~1.2.0",
+        "allure-framework/allure-phpunit": "~1.3.1",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
         "friendsofphp/php-cs-fixer": "~2.18.1",
         "lusitanian/oauth": "~0.8.10",
