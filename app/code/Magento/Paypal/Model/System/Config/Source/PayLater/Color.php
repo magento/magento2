@@ -10,7 +10,7 @@ namespace Magento\Paypal\Model\System\Config\Source\PayLater;
 use Magento\Framework\Data\OptionSourceInterface;
 
 /**
- * Source model for PayLater banner color
+ * Source model for PayLater flex banner color
  */
 class Color implements OptionSourceInterface
 {
@@ -26,7 +26,9 @@ class Color implements OptionSourceInterface
             ['value' => 'black', 'label' => __('Black')],
             ['value' => 'white', 'label' => __('White')],
             ['value' => 'white-no-border', 'label' => __('White No Border')],
-            ['value' => 'gray', 'label' => __('Gray')]
+            ['value' => 'gray', 'label' => __('Gray')],
+            ['value' => 'monochrome', 'label' => __('Monochrome')],
+            ['value' => 'grayscale', 'label' => __('Grayscale')]
         ];
     }
 }

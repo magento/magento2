@@ -23,7 +23,9 @@ class TextColor implements OptionSourceInterface
     {
         return [
             ['value' => 'black', 'label' => __('Black')],
-            ['value' => 'white', 'label' => __('White')]
+            ['value' => 'white', 'label' => __('White')],
+            ['value' => 'monochrome', 'label' => __('Monochrome')],
+            ['value' => 'grayscale', 'label' => __('Grayscale')]
         ];
     }
 }
