@@ -71,7 +71,6 @@ define([
                 this.element.trigger('addItem', imageData);
             }, this));
 
-
             this._updateImagesRoles();
             this._contentUpdated();
 
