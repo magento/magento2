@@ -136,6 +136,8 @@ class Merged implements \Iterator
             $paths[] = $version;
         }
 
+        // md5() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $filePath = md5(implode('|', $paths)) . '.' . $this->contentType;
         return $this->assetRepo->createArbitrary($filePath, self::getRelativeDir());
     }

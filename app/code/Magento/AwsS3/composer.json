@@ -8,9 +8,8 @@
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "*",
         "magento/module-remote-storage": "*",
-        "league/flysystem": "^1.0",
-        "league/flysystem-aws-s3-v3": "^1.0",
-        "league/flysystem-cached-adapter": "^1.0"
+        "league/flysystem": "^2.0",
+        "league/flysystem-aws-s3-v3": "^2.0"
     },
     "type": "magento2-module",
     "license": [
