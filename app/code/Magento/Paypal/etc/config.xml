@@ -187,6 +187,16 @@
                 <display_ec>0</display_ec>
                 <verify_peer>1</verify_peer>
             </hosted_pro>
+            <paypal_paylater>
+                <enabled>0</enabled>
+                <productpage_display>0</productpage_display>
+                <productpage_position>header</productpage_position>
+                <productpage_stylelayout>text</productpage_stylelayout>
+                <productpage_logotype>primary</productpage_logotype>
+                <productpage_logoposition>left</productpage_logoposition>
+                <productpage_textcolor>black</productpage_textcolor>
+                <productpage_textsize>12</productpage_textsize>
+            </paypal_paylater>
         </payment>
     </default>
 </config>
